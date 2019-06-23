@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptOrderdetailHisMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptOrderdetailHis" >
+	<result column="addtime" property="addtime"/>
+	<result column="carrierid" property="carrierid"/>
+	<result column="consigneeid" property="consigneeid"/>
+	<result column="customerid" property="customerid"/>
+	<result column="c_address1" property="cAddress1"/>
+	<result column="c_address2" property="cAddress2"/>
+	<result column="c_city" property="cCity"/>
+	<result column="c_province" property="cProvince"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="h_edi_02" property="hEdi02"/>
+	<result column="h_edi_04" property="hEdi04"/>
+	<result column="issuepartyid" property="issuepartyid"/>
+	<result column="lastshipmenttime" property="lastshipmenttime"/>
+	<result column="orderno" property="orderno"/>
+	<result column="price" property="price"/>
+	<result column="qtyordered" property="qtyordered"/>
+	<result column="qtyshipped" property="qtyshipped"/>
+	<result column="sku" property="sku"/>
+	<result column="soreference1" property="soreference1"/>
+	<result column="soreference2" property="soreference2"/>
+	<result column="sostatus" property="sostatus"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="waveno" property="waveno"/>
+	<result column="addtimetext" property="addtimetext"/>
+	<result column="lastshipmenttimetext" property="lastshipmenttimetext"/>
+	
+</resultMap>
+       
+<!-- Rpt_Orderdetail_His table all fields -->
+<sql id="Base_Column_List" >
+	 addtime,carrierid,consigneeid,customerid,c_address1,c_address2,c_city,c_province,descr_c,h_edi_02,h_edi_04,issuepartyid,lastshipmenttime,orderno,price,qtyordered,qtyshipped,sku,soreference1,soreference2,sostatus,userdefine5,warehouseid,waveno,addtimetext,lastshipmenttimetext
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.addtime != null and condition.addtime != '' and  condition.addtimetext != null and condition.addtimetext != ''" >
+	    and to_char(to_date(addtime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.addtime} and #{condition.addtimetext}
+	</if>
+	<if test="condition.carrierid != null and condition.carrierid != ''" >
+	    and carrierid =  #{condition.carrierid}
+	</if>
+	<if test="condition.consigneeid != null and condition.consigneeid != ''" >
+	    and consigneeid =  #{condition.consigneeid}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.cAddress1 != null and condition.cAddress1 != ''" >
+	    and c_address1 =  #{condition.cAddress1}
+	</if>
+	<if test="condition.cAddress2 != null and condition.cAddress2 != ''" >
+	    and c_address2 =  #{condition.cAddress2}
+	</if>
+	<if test="condition.cCity != null and condition.cCity != ''" >
+	    and c_city =  #{condition.cCity}
+	</if>
+	<if test="condition.cProvince != null and condition.cProvince != ''" >
+	    and c_province =  #{condition.cProvince}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.hEdi02 != null and condition.hEdi02 != ''" >
+	    and h_edi_02 =  #{condition.hEdi02}
+	</if>
+	<if test="condition.hEdi04 != null and condition.hEdi04 != ''" >
+	    and h_edi_04 =  #{condition.hEdi04}
+	</if>
+	<if test="condition.issuepartyid != null and condition.issuepartyid != ''" >
+	    and issuepartyid =  #{condition.issuepartyid}
+	</if>
+	<if test="condition.lastshipmenttime != null and condition.lastshipmenttime != '' and condition.lastshipmenttimetext != null and condition.lastshipmenttimetext != ''" >
+	     and to_char(to_date(lastshipmenttime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.lastshipmenttime} and #{condition.lastshipmenttimetext}
+	</if>
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.qtyordered != null and condition.qtyordered != ''" >
+	    and qtyordered =  #{condition.qtyordered}
+	</if>
+	<if test="condition.qtyshipped != null and condition.qtyshipped != ''" >
+	    and qtyshipped =  #{condition.qtyshipped}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.soreference1 != null and condition.soreference1 != ''" >
+	    and soreference1 =  #{condition.soreference1}
+	</if>
+	<if test="condition.soreference2 != null and condition.soreference2 != ''" >
+	    and soreference2 =  #{condition.soreference2}
+	</if>
+	<if test="condition.sostatus != null and condition.sostatus != ''" >
+	    and sostatus =  #{condition.sostatus}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.waveno != null and condition.waveno != ''" >
+	    and waveno =  #{condition.waveno}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_Orderdetail_His(addtime,carrierid,consigneeid,customerid,c_address1,c_address2,c_city,c_province,descr_c,h_edi_02,h_edi_04,issuepartyid,lastshipmenttime,orderno,price,qtyordered,qtyshipped,sku,soreference1,soreference2,sostatus,userdefine5,warehouseid,waveno)
+ values(#{addtime},#{carrierid},#{consigneeid},#{customerid},#{cAddress1},#{cAddress2},#{cCity},#{cProvince},#{descrC},#{hEdi02},#{hEdi04},#{issuepartyid},#{lastshipmenttime},#{orderno},#{price},#{qtyordered},#{qtyshipped},#{sku},#{soreference1},#{soreference2},#{sostatus},#{userdefine5},#{warehouseid},#{waveno})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_Orderdetail_His set carrierid=#{carrierid},consigneeid=#{consigneeid},customerid=#{customerid},c_address1=#{cAddress1},c_address2=#{cAddress2},c_city=#{cCity},c_province=#{cProvince},descr_c=#{descrC},h_edi_02=#{hEdi02},h_edi_04=#{hEdi04},issuepartyid=#{issuepartyid},lastshipmenttime=#{lastshipmenttime},orderno=#{orderno},price=#{price},qtyordered=#{qtyordered},qtyshipped=#{qtyshipped},sku=#{sku},soreference1=#{soreference1},soreference2=#{soreference2},sostatus=#{sostatus},userdefine5=#{userdefine5},warehouseid=#{warehouseid},waveno=#{waveno} where addtime=#{addtime}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_Orderdetail_His set 
+	<trim  suffixOverrides="," >
+	<if test="carrierid != null  ">
+		carrierid=#{carrierid},
+	</if>
+	<if test="consigneeid != null  ">
+		consigneeid=#{consigneeid},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="cAddress1 != null  ">
+		c_address1=#{cAddress1},
+	</if>
+	<if test="cAddress2 != null  ">
+		c_address2=#{cAddress2},
+	</if>
+	<if test="cCity != null  ">
+		c_city=#{cCity},
+	</if>
+	<if test="cProvince != null  ">
+		c_province=#{cProvince},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="hEdi02 != null  ">
+		h_edi_02=#{hEdi02},
+	</if>
+	<if test="hEdi04 != null  ">
+		h_edi_04=#{hEdi04},
+	</if>
+	<if test="issuepartyid != null  ">
+		issuepartyid=#{issuepartyid},
+	</if>
+	<if test="lastshipmenttime != null  ">
+		lastshipmenttime=#{lastshipmenttime},
+	</if>
+	<if test="orderno != null  ">
+		orderno=#{orderno},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="qtyordered != null  ">
+		qtyordered=#{qtyordered},
+	</if>
+	<if test="qtyshipped != null  ">
+		qtyshipped=#{qtyshipped},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="soreference1 != null  ">
+		soreference1=#{soreference1},
+	</if>
+	<if test="soreference2 != null  ">
+		soreference2=#{soreference2},
+	</if>
+	<if test="sostatus != null  ">
+		sostatus=#{sostatus},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	<if test="waveno != null  ">
+		waveno=#{waveno},
+	</if>
+	</trim> where addtime=#{addtime}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_Orderdetail_His where addtime = #{addtime}
+</delete>
+ 
+<!-- 根据id查询 订单明细查询(历史) -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_Orderdetail_His where addtime = #{addtime}
+</select>
+
+<!-- 订单明细查询(历史) 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_Orderdetail_His 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询订单明细查询(历史)列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Orderdetail_His 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+     -->
+</select>
+
+<!-- 查询订单装箱清单-按箱分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Orderdetail_His 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by orderno
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

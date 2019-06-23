@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasCustomerMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasCustomer" >
+	<result column="customerid" property="customerid"/>
+	<result column="customer_type" property="customerType"/>
+	<result column="active_flag" property="activeFlag"/>
+	<result column="address1" property="address1"/>
+	<result column="address2" property="address2"/>
+	<result column="address3" property="address3"/>
+	<result column="address4" property="address4"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="city" property="city"/>
+	<result column="contact1" property="contact1"/>
+	<result column="contact1_email" property="contact1Email"/>
+	<result column="contact1_fax" property="contact1Fax"/>
+	<result column="contact1_tel1" property="contact1Tel1"/>
+	<result column="contact1_tel2" property="contact1Tel2"/>
+	<result column="contact1_title" property="contact1Title"/>
+	<result column="contact2" property="contact2"/>
+	<result column="contact2_email" property="contact2Email"/>
+	<result column="contact2_fax" property="contact2Fax"/>
+	<result column="contact2_tel1" property="contact2Tel1"/>
+	<result column="contact2_tel2" property="contact2Tel2"/>
+	<result column="contact2_title" property="contact2Title"/>
+	<result column="contact3" property="contact3"/>
+	<result column="contact3_email" property="contact3Email"/>
+	<result column="contact3_fax" property="contact3Fax"/>
+	<result column="contact3_tel1" property="contact3Tel1"/>
+	<result column="contact3_tel2" property="contact3Tel2"/>
+	<result column="contact3_title" property="contact3Title"/>
+	<result column="country" property="country"/>
+	<result column="currency" property="currency"/>
+	<result column="defaultallocationrule" property="defaultallocationrule"/>
+	<result column="defaultpackid" property="defaultpackid"/>
+	<result column="defaultputawayrule" property="defaultputawayrule"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="defaultreplenishrule" property="defaultreplenishrule"/>
+	<result column="defaultreportuom" property="defaultreportuom"/>
+	<result column="defaultshipmentuom" property="defaultshipmentuom"/>
+	<result column="defaultskulotid" property="defaultskulotid"/>
+	<result column="defaultsoftallocationrule" property="defaultsoftallocationrule"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="easycode" property="easycode"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="overrcvpercentage" property="overrcvpercentage"/>
+	<result column="overreceiving" property="overreceiving"/>
+	<result column="province" property="province"/>
+	<result column="qcrule" property="qcrule"/>
+	<result column="r_owner" property="rOwner"/>
+	<result column="reservecode" property="reservecode"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="routecode" property="routecode"/>
+	<result column="udf1" property="udf1"/>
+	<result column="udf2" property="udf2"/>
+	<result column="udf3" property="udf3"/>
+	<result column="udf4" property="udf4"/>
+	<result column="udf5" property="udf5"/>
+	<result column="zip" property="zip"/>
+	<result column="customerTypeName" property="customerTypeName"/>
+</resultMap>
+       
+<!-- Bas_Customer table all fields -->
+<sql id="Base_Column_List" >
+	customerid,
+	customer_type,
+	active_flag,
+	address1,
+	address2,
+	address3,
+	address4,
+	addtime,
+	addwho,
+	city,
+	contact1,
+	contact1_email,
+	contact1_fax,
+	contact1_tel1,
+	contact1_tel2,
+	contact1_title,
+	contact2,
+	contact2_email,
+	contact2_fax,
+	contact2_tel1,
+	contact2_tel2,
+	contact2_title,
+	contact3,
+	contact3_email,
+	contact3_fax,
+	contact3_tel1,
+	contact3_tel2,
+	contact3_title,
+	country,
+	currency,
+	defaultallocationrule,
+	defaultpackid,
+	defaultputawayrule,
+	defaultreceivinguom,
+	defaultreplenishrule,
+	defaultreportuom,
+	defaultshipmentuom,
+	defaultskulotid,
+	defaultsoftallocationrule,
+	descr_c,
+	descr_e,
+	easycode,
+	edittime,
+	editwho,
+	overrcvpercentage,
+	overreceiving,
+	province,
+	qcrule,
+	r_owner,
+	reservecode,
+	rotationid,
+	routecode,
+	udf1,
+	udf2,
+	udf3,
+	udf4,
+	udf5,
+	zip
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.customerType != null and condition.customerType != ''" >
+	    and customer_type =  #{condition.customerType,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag =  #{condition.activeFlag,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+			and customer_type = 'OW'
+		</if>
+	</if>
+</trim>
+</sql>
+   
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	insert into Bas_Customer(
+	customerid,
+	customer_type,
+	<if test="descrC != null  ">
+		descr_c,
+	</if>
+	<if test="descrE != null  ">
+		descr_e,
+	</if>
+	<if test="address1 != null  ">
+		address1,
+	</if>
+	<if test="contact1 != null  ">
+		contact1,
+	</if>
+	<if test="contact1Tel1 != null  ">
+		contact1_tel1,
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag,
+	</if>
+	<if test="overrcvpercentage != null  ">
+		overrcvpercentage,
+	</if>
+	<if test="overreceiving != null  ">
+		overreceiving,
+	</if>
+	easycode,
+	addtime,
+	addwho,
+	edittime,
+	editwho,
+	defaultsoftallocationrule,<!-- STANDARD -->
+	defaultallocationrule,<!-- STANDARD -->
+	defaultputawayrule,<!-- STANDARD -->
+	defaultskulotid,<!-- STANDARD -->
+	rotationid,<!-- STANDARD -->
+	defaultpackid,<!-- STANDARD -->
+	defaultreceivinguom,<!-- EA -->
+	defaultreportuom,<!-- EA -->
+	defaultshipmentuom,<!-- EA -->
+	currency,<!-- RMB -->
+	reservecode,<!-- IN -->
+	calculatecode,<!-- SETUP -->
+	sn_asn_cls,<!-- N -->
+	sn_asn_so,<!-- N -->
+	sn_so_cls,<!-- N -->
+	asn_snd_eml,<!-- N -->
+	asn_lnk_po,<!-- N -->
+	so_snd_eml,<!-- N -->
+	idx_load_consignee,<!-- N -->
+	idx_load_sku,<!-- N -->
+	idx_load_supplier,<!-- N -->
+	billwithasntype,<!-- N -->
+	billwithsotype,<!-- N -->
+	copypricetolotatt09<!-- N -->
+	)
+	values(
+	#{customerid},
+	#{customerType},
+	<if test="descrC != null  ">
+		#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		#{descrE},
+	</if>
+	<if test="address1 != null  ">
+		#{address1},
+	</if>
+	<if test="contact1 != null  ">
+		#{contact1},
+	</if>
+	<if test="contact1Tel1 != null  ">
+		#{contact1Tel1},
+	</if>
+	<if test="activeFlag != null  ">
+		#{activeFlag},
+	</if>
+	<if test="overrcvpercentage != null  ">
+		#{overrcvpercentage},
+	</if>
+	<if test="overreceiving != null  ">
+		#{overreceiving},
+	</if>
+	'',
+	sysdate,
+	#{addwho},
+	sysdate,
+	#{editwho},
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'EA',
+	'EA',
+	'EA',
+	'RMB',
+	'IN',
+	'SETUP',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N'
+	)
+</insert>
+
+<!-- 根据id，修改记录-->  
+<update id="update" parameterType="Object" >
+	update Bas_Customer set
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	<if test="address1 != null  ">
+		address1=#{address1},
+	</if>
+	<if test="contact1 != null  ">
+		contact1=#{contact1},
+	</if>
+	<if test="contact1Tel1 != null  ">
+		contact1_tel1=#{contact1Tel1},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="overrcvpercentage != null  ">
+		overrcvpercentage=#{overrcvpercentage},
+	</if>
+	<if test="overreceiving != null  ">
+		overreceiving=#{overreceiving},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	edittime=sysdate
+	where customerid=#{customerid,jdbcType=VARCHAR}
+	and customer_type=#{customerType,jdbcType=VARCHAR}
+</update>
+ 
+<!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Bas_Customer set 
+	<trim  suffixOverrides="," >
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	<if test="address1 != null  ">
+		address1=#{address1},
+	</if>
+	<if test="address2 != null  ">
+		address2=#{address2},
+	</if>
+	<if test="address3 != null  ">
+		address3=#{address3},
+	</if>
+	<if test="address4 != null  ">
+		address4=#{address4},
+	</if>
+	<if test="addtime != null  ">
+		addtime=sysdate,
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="city != null  ">
+		city=#{city},
+	</if>
+	<if test="contact1 != null  ">
+		contact1=#{contact1},
+	</if>
+	<if test="contact1Email != null  ">
+		contact1_email=#{contact1Email},
+	</if>
+	<if test="contact1Fax != null  ">
+		contact1_fax=#{contact1Fax},
+	</if>
+	<if test="contact1Tel1 != null  ">
+		contact1_tel1=#{contact1Tel1},
+	</if>
+	<if test="contact1Tel2 != null  ">
+		contact1_tel2=#{contact1Tel2},
+	</if>
+	<if test="contact1Title != null  ">
+		contact1_title=#{contact1Title},
+	</if>
+	<if test="contact2 != null  ">
+		contact2=#{contact2},
+	</if>
+	<if test="contact2Email != null  ">
+		contact2_email=#{contact2Email},
+	</if>
+	<if test="contact2Fax != null  ">
+		contact2_fax=#{contact2Fax},
+	</if>
+	<if test="contact2Tel1 != null  ">
+		contact2_tel1=#{contact2Tel1},
+	</if>
+	<if test="contact2Tel2 != null  ">
+		contact2_tel2=#{contact2Tel2},
+	</if>
+	<if test="contact2Title != null  ">
+		contact2_title=#{contact2Title},
+	</if>
+	<if test="contact3 != null  ">
+		contact3=#{contact3},
+	</if>
+	<if test="contact3Email != null  ">
+		contact3_email=#{contact3Email},
+	</if>
+	<if test="contact3Fax != null  ">
+		contact3_fax=#{contact3Fax},
+	</if>
+	<if test="contact3Tel1 != null  ">
+		contact3_tel1=#{contact3Tel1},
+	</if>
+	<if test="contact3Tel2 != null  ">
+		contact3_tel2=#{contact3Tel2},
+	</if>
+	<if test="contact3Title != null  ">
+		contact3_title=#{contact3Title},
+	</if>
+	<if test="country != null  ">
+		country=#{country},
+	</if>
+	<if test="currency != null  ">
+		currency=#{currency},
+	</if>
+	<if test="defaultallocationrule != null  ">
+		defaultallocationrule=#{defaultallocationrule},
+	</if>
+	<if test="defaultpackid != null  ">
+		defaultpackid=#{defaultpackid},
+	</if>
+	<if test="defaultputawayrule != null  ">
+		defaultputawayrule=#{defaultputawayrule},
+	</if>
+	<if test="defaultreceivinguom != null  ">
+		defaultreceivinguom=#{defaultreceivinguom},
+	</if>
+	<if test="defaultreplenishrule != null  ">
+		defaultreplenishrule=#{defaultreplenishrule},
+	</if>
+	<if test="defaultreportuom != null  ">
+		defaultreportuom=#{defaultreportuom},
+	</if>
+	<if test="defaultshipmentuom != null  ">
+		defaultshipmentuom=#{defaultshipmentuom},
+	</if>
+	<if test="defaultskulotid != null  ">
+		defaultskulotid=#{defaultskulotid},
+	</if>
+	<if test="defaultsoftallocationrule != null  ">
+		defaultsoftallocationrule=#{defaultsoftallocationrule},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="easycode != null  ">
+		easycode=#{easycode},
+	</if>
+	<if test="edittime != null  ">
+		edittime=sysdate,
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="overrcvpercentage != null  ">
+		overrcvpercentage=#{overrcvpercentage},
+	</if>
+	<if test="overreceiving != null  ">
+		overreceiving=#{overreceiving},
+	</if>
+	<if test="province != null  ">
+		province=#{province},
+	</if>
+	<if test="qcrule != null  ">
+		qcrule=#{qcrule},
+	</if>
+	<if test="reservecode != null  ">
+		reservecode=#{reservecode},
+	</if>
+	<if test="rotationid != null  ">
+		rotationid=#{rotationid},
+	</if>
+	<if test="routecode != null  ">
+		routecode=#{routecode},
+	</if>
+	<if test="rOwner != null  ">
+		r_owner=#{rOwner},
+	</if>
+	<if test="udf1 != null  ">
+		udf1=#{udf1},
+	</if>
+	<if test="udf2 != null  ">
+		udf2=#{udf2},
+	</if>
+	<if test="udf3 != null  ">
+		udf3=#{udf3},
+	</if>
+	<if test="udf4 != null  ">
+		udf4=#{udf4},
+	</if>
+	<if test="udf5 != null  ">
+		udf5=#{udf5},
+	</if>
+	<if test="zip != null  ">
+		zip=#{zip},
+	</if>
+	</trim>
+	where customerid=#{customerid,jdbcType=VARCHAR}
+	and customer_type=#{customerType,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from Bas_Customer where customerid=#{customerid,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 客户档案 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	from bas_customer
+	where customerid=#{customerid,jdbcType=VARCHAR}
+	and customer_type=#{customerType,jdbcType=VARCHAR}
+	<if test="customerSet != null" >
+		<if test="customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</select>
+
+<!-- 客户档案 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Bas_Customer 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询客户档案列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
+	from (select <include refid="Base_Column_List"/>
+	from Bas_Customer 
+	<include refid="Example_Where_Clause"/>
+    ) a, Bas_Codes b
+    where a.customer_type = b.code
+    and b.codeid = 'CUS_TYP'
+</select>
+  	
+<!-- 查询客户档案分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
+	from (select <include refid="Base_Column_List"/>
+	from Bas_Customer 
+	<include refid="Example_Where_Clause"/>
+    ) a, Bas_Codes b
+    where a.customer_type = b.code
+    and b.codeid = 'CUS_TYP'
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询客户类型名称 -->
+<select id="queryCustomerTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as customerType,codename_c as customerTypeName
+	from Bas_Codes
+	where codeid = 'CUS_TYP'
+    order by show_sequence
+</select>
+
+<!-- 删除客户记录判断 -->
+<select id="basCustomerCheck" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPBAS_Check(#{warehouseid,mode=IN,jdbcType=VARCHAR},'Delete','BAS_CUSTOMER',#{customerid,mode=IN,jdbcType=VARCHAR},#{customertype,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+  	
+</mapper>   

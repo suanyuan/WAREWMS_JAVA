@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasSkuMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasSku" >
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="active_flag" property="activeFlag"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="allocationrule" property="allocationrule"/>
+	<result column="alternate_sku1" property="alternateSku1"/>
+	<result column="alternate_sku2" property="alternateSku2"/>
+	<result column="alternate_sku3" property="alternateSku3"/>
+	<result column="alternate_sku4" property="alternateSku4"/>
+	<result column="alternate_sku5" property="alternateSku5"/>
+	<result column="cube" property="cube"/>
+	<result column="defaulthold" property="defaulthold"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="defaultshipmentuom" property="defaultshipmentuom"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="firstinbounddate" property="firstinbounddate"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="inboundlifedays" property="inboundlifedays"/>
+	<result column="lotid" property="lotid"/>
+	<result column="netweight" property="netweight"/>
+	<result column="onestepallocation" property="onestepallocation"/>
+	<result column="outboundlifedays" property="outboundlifedays"/>
+	<result column="overrcvpercentage" property="overrcvpercentage"/>
+	<result column="overreceiving" property="overreceiving"/>
+	<result column="packid" property="packid"/>
+	<result column="price" property="price"/>
+	<result column="putawayrule" property="putawayrule"/>
+	<result column="qtymax" property="qtymax"/>
+	<result column="qtymin" property="qtymin"/>
+	<result column="replenishrule" property="replenishrule"/>
+	<result column="reservecode" property="reservecode"/>
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="reservedfield02" property="reservedfield02"/>
+	<result column="reservedfield03" property="reservedfield03"/>
+	<result column="reservedfield04" property="reservedfield04"/>
+	<result column="reservedfield05" property="reservedfield05"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="skuhigh" property="skuhigh"/>
+	<result column="skulength" property="skulength"/>
+	<result column="skuwidth" property="skuwidth"/>
+	<result column="sku_group1" property="skuGroup1"/>
+	<result column="sku_group2" property="skuGroup2"/>
+	<result column="sku_group3" property="skuGroup3"/>
+	<result column="sku_group4" property="skuGroup4"/>
+	<result column="sku_group5" property="skuGroup5"/>
+	<result column="softallocationrule" property="softallocationrule"/>
+	<result column="tare" property="tare"/>
+	<result column="qty" property="qty"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyonhold" property="qtyonhold"/>
+</resultMap>
+
+<resultMap id="SkuInfoMap" type="com.wms.entity.BasSku" >
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="alternate_sku1" property="alternateSku1"/>
+	<result column="packid" property="packid"/>
+	<result column="cube" property="cube"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="price" property="price"/>
+</resultMap>
+       
+<!-- Bas_Sku table all fields -->
+<sql id="Base_Column_List" >
+	customerid,
+	sku,
+	active_flag,
+	addtime,
+	addwho,
+	allocationrule,
+	alternate_sku1,
+	alternate_sku2,
+	alternate_sku3,
+	alternate_sku4,
+	alternate_sku5,
+	cube,
+	defaulthold,
+	defaultreceivinguom,
+	defaultshipmentuom,
+	descr_c,
+	descr_e,
+	edittime,
+	editwho,
+	firstinbounddate,
+	grossweight,
+	inboundlifedays,
+	lotid,
+	netweight,
+	onestepallocation,
+	outboundlifedays,
+	overrcvpercentage,
+	overreceiving,
+	packid,
+	price,
+	putawayrule,
+	qtymax,
+	qtymin,
+	replenishrule,
+	reservecode,
+	reservedfield01,
+	reservedfield02,
+	reservedfield03,
+	reservedfield04,
+	reservedfield05,
+	rotationid,
+	skuhigh,
+	skulength,
+	skuwidth,
+	sku_group1,
+	sku_group2,
+	sku_group3,
+	sku_group4,
+	sku_group5,
+	softallocationrule,
+	tare
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid = upper(#{condition.customerid})
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku = upper(#{condition.sku})
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag = #{condition.activeFlag}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	insert into Bas_Sku(
+	customerid,
+	sku,
+	<if test="descrC != null  ">
+		descr_c,
+	</if>
+	<if test="descrE != null  ">
+		descr_e,
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag,
+	</if>
+	<if test="alternateSku1 != null  ">
+		alternate_sku1,
+	</if>
+	<if test="alternateSku2 != null  ">
+		alternate_sku2,
+	</if>
+	<if test="alternateSku3 != null  ">
+		alternate_sku3,
+	</if>
+	<if test="reservedfield01 != null  ">
+		reservedfield01,
+	</if>
+	<if test="reservedfield02 != null  ">
+		reservedfield02,
+	</if>
+	<if test="reservedfield03 != null  ">
+		reservedfield03,
+	</if>
+	<if test="packid != null  ">
+		packid,
+	</if>
+	<if test="grossweight != null  ">
+		grossweight,
+	</if>
+	<if test="cube != null  ">
+		cube,
+	</if>
+	<if test="price != null  ">
+		price,
+	</if>
+	netweight,
+	tare,
+	skuhigh,
+	skulength,
+	skuwidth,
+	addtime,
+	addwho,
+	edittime,
+	editwho,
+	lotid,
+	softallocationrule,
+	allocationrule,
+	rotationid,
+	replenishrule,
+	putawayrule,
+	defaulthold,
+	defaultreceivinguom,
+	defaultshipmentuom,
+	inboundlifedays,
+	outboundlifedays,
+	onestepallocation,
+	overrcvpercentage,
+	overreceiving,
+	qtymax,
+	qtymin,
+	reservecode,
+	shelflifetype,
+	sku_group1
+	)
+	values(
+	upper(#{customerid}),
+	upper(#{sku}),
+	<if test="descrC != null  ">
+		#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		#{descrE},
+	</if>
+	<if test="activeFlag != null  ">
+		#{activeFlag},
+	</if>
+	<if test="alternateSku1 != null  ">
+		#{alternateSku1},
+	</if>
+	<if test="alternateSku2 != null  ">
+		#{alternateSku2},
+	</if>
+	<if test="alternateSku3 != null  ">
+		#{alternateSku3},
+	</if>
+	<if test="reservedfield01 != null  ">
+		#{reservedfield01},
+	</if>
+	<if test="reservedfield02 != null  ">
+		#{reservedfield02},
+	</if>
+	<if test="reservedfield03 != null  ">
+		#{reservedfield03},
+	</if>
+	<if test="packid != null  ">
+		#{packid},
+	</if>
+	<if test="grossweight != null  ">
+		#{grossweight},
+	</if>
+	<if test="cube != null  ">
+		#{cube},
+	</if>
+	<if test="price != null  ">
+		#{price},
+	</if>
+	0,
+	0,
+	0,
+	0,
+	0,
+	sysdate,
+	#{addwho},
+	sysdate,
+	#{editwho},
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'STANDARD',
+	'OK',
+	'EA',
+	'EA',
+	0,
+	0,
+	'Y',
+	0,
+	'N',
+	99999999,
+	0,
+	'IN',
+	'N',
+	#{sku}
+	)
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Bas_Sku 
+     set active_flag=#{activeFlag},
+         alternate_sku1=#{alternateSku1},
+         alternate_sku2=#{alternateSku2},
+         alternate_sku3=#{alternateSku3},
+         cube=#{cube},
+         descr_c=#{descrC},
+         descr_e=#{descrE},
+         edittime=#{edittime},
+         editwho=#{editwho},
+         grossweight=#{grossweight},
+         packid=#{packid},
+         price=#{price},
+         reservedfield01=#{reservedfield01},
+         reservedfield02=#{reservedfield02},
+         reservedfield03=#{reservedfield03}
+   where customerid=upper(#{customerid})
+     and sku=upper(#{sku})
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Bas_Sku set 
+	<trim  suffixOverrides="," >
+	<if test="activeFlag != null  ">
+		activeFlag=#{activeFlag},
+	</if>
+	<if test="alternateSku1 != null  ">
+		alternate_sku1=#{alternateSku1},
+	</if>
+	<if test="alternateSku2 != null  ">
+		alternate_sku2=#{alternateSku2},
+	</if>
+	<if test="alternateSku3 != null  ">
+		alternate_sku3=#{alternateSku3},
+	</if>
+	<if test="alternateSku4 != null  ">
+		alternate_sku4=#{alternateSku4},
+	</if>
+	<if test="alternateSku5 != null  ">
+		alternate_sku5=#{alternateSku5},
+	</if>
+	<if test="cube != null  ">
+		cube=#{cube},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="reservedfield01 != null  ">
+		reservedfield01=#{reservedfield01},
+	</if>
+	<if test="reservedfield02 != null  ">
+		reservedfield02=#{reservedfield02},
+	</if>
+	<if test="reservedfield03 != null  ">
+		reservedfield03=#{reservedfield03},
+	</if>
+	<if test="reservedfield04 != null  ">
+		reservedfield04=#{reservedfield04},
+	</if>
+	<if test="reservedfield05 != null  ">
+		reservedfield05=#{reservedfield05},
+	</if>
+	<if test="reservedfield06 != null  ">
+		reservedfield06=#{reservedfield06},
+	</if>
+	<if test="reservedfield07 != null  ">
+		reservedfield07=#{reservedfield07},
+	</if>
+	<if test="reservedfield08 != null  ">
+		reservedfield08=#{reservedfield08},
+	</if>
+	<if test="reservedfield09 != null  ">
+		reservedfield09=#{reservedfield09},
+	</if>
+	<if test="reservedfield10 != null  ">
+		reservedfield10=#{reservedfield10},
+	</if>
+	<if test="reservedfield11 != null  ">
+		reservedfield11=#{reservedfield11},
+	</if>
+	<if test="reservedfield12 != null  ">
+		reservedfield12=#{reservedfield12},
+	</if>
+	<if test="reservedfield13 != null  ">
+		reservedfield13=#{reservedfield13},
+	</if>
+	<if test="reservedfield14 != null  ">
+		reservedfield14=#{reservedfield14},
+	</if>
+	<if test="reservedfield15 != null  ">
+		reservedfield15=#{reservedfield15},
+	</if>
+	<if test="reservedfield16 != null  ">
+		reservedfield16=#{reservedfield16},
+	</if>
+	<if test="reservedfield17 != null  ">
+		reservedfield17=#{reservedfield17},
+	</if>
+	<if test="reservedfield18 != null  ">
+		reservedfield18=#{reservedfield18},
+	</if>
+	<if test="skuGroup1 != null  ">
+		sku_group1=#{skuGroup1},
+	</if>
+	<if test="skuGroup2 != null  ">
+		sku_group2=#{skuGroup2},
+	</if>
+	<if test="skuGroup3 != null  ">
+		sku_group3=#{skuGroup3},
+	</if>
+	<if test="skuGroup4 != null  ">
+		sku_group4=#{skuGroup4},
+	</if>
+	<if test="skuGroup5 != null  ">
+		sku_group5=#{skuGroup5},
+	</if>
+	<if test="skuGroup6 != null  ">
+		sku_group6=#{skuGroup6},
+	</if>
+	<if test="skuGroup7 != null  ">
+		sku_group7=#{skuGroup7},
+	</if>
+	<if test="skuGroup8 != null  ">
+		sku_group8=#{skuGroup8},
+	</if>
+	<if test="skuGroup9 != null  ">
+		sku_group9=#{skuGroup9},
+	</if>
+	</trim> where customerid=#{customerid} and sku=#{sku}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from Bas_Sku where customerid = upper(#{customerid}) and sku = upper(#{sku})
+</delete>
+ 
+<!-- 根据id查询 商品档案 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	from Bas_Sku
+	where customerid = upper(#{customerid,jdbcType=VARCHAR})
+	and sku = upper(#{sku,jdbcType=VARCHAR})
+</select>
+
+<!-- 商品档案 -->
+<select id="queryByAll"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Bas_Sku where 1 = 1
+</select>
+
+<!-- 商品档案 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Bas_Sku 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询商品档案分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select *
+	  from (select a.*,
+	               ifnull(b.qty, 0) as qty,
+	               ifnull(b.qtyallocated, 0) as qtyallocated,
+	               ifnull(b.qtyonhold, 0) as qtyonhold,
+	               row_number() over(order by a.customerid, a.sku) as row_num
+	          from (select <include refid="Base_Column_List"/>
+	                  from Bas_Sku
+	                 <include refid="Example_Where_Clause"/>) a,
+	               (select customerid,
+	                       sku,
+	                       sum(qty) as qty,
+	                       sum(qtyallocated) as qtyallocated,
+	                       sum(qtyonhold) as qtyonhold
+	                  from Inv_Lot_Loc_Id
+	                 group by customerid, sku) b
+	         where a.customerid = b.customerid(+)
+	           and a.sku = b.sku(+))
+	 where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询商品档案列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Bas_Sku 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by customerid,sku
+</select>
+
+<!-- 查询商品重量、体积、价格信息 -->
+<select id="queryBySkuInfo" resultMap="SkuInfoMap"  parameterType="Object">
+	select customerid,sku,alternate_sku1,packid,cube,grossweight,price
+	from (
+	select customerid,
+	sku,
+	alternate_sku1,
+	packid,
+	ifnull(cube,0) * #{qty,jdbcType=NUMERIC} as cube,
+	ifnull(grossweight,0) * #{qty,jdbcType=NUMERIC} as grossweight,
+	ifnull(price,0) * #{qty,jdbcType=NUMERIC} as price
+	from Bas_Sku
+	where customerid=upper(#{customerid,jdbcType=VARCHAR})
+	and sku=upper(#{sku,jdbcType=VARCHAR}))
+</select>
+
+<!-- 删除商品记录判断 -->
+<select id="basSkuCheck" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPBAS_Check(#{warehouseid,mode=IN,jdbcType=VARCHAR},'Delete','BAS_SKU',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+</mapper>   

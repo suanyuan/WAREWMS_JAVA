@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ViewInvHoldMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ViewInvHold" >
+	<result column="customerid" property="customerid"/>
+	<result column="customername" property="customername"/>
+	<result column="fromtime" property="fromtime"/>
+	<result column="holdby" property="holdby"/>
+	<result column="holdby_name" property="holdbyName"/>
+	<result column="holdcode" property="holdcode"/>
+	<result column="holdcode_name" property="holdcodeName"/>
+	<result column="holdflag" property="holdflag"/>
+	<result column="inventoryholdid" property="inventoryholdid"/>
+	<result column="locationid" property="locationid"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="offfromtime" property="offfromtime"/>
+	<result column="reason" property="reason"/>
+	<result column="sku" property="sku"/>
+	<result column="skudescrc" property="skudescrc"/>
+	<result column="traceid" property="traceid"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="whooff" property="whooff"/>
+	<result column="whoon" property="whoon"/>
+</resultMap>
+       
+<!-- View_Inv_Hold table all fields -->
+<sql id="Base_Column_List" >
+	 customerid,customername,fromtime,holdby,holdby_name,holdcode,holdcode_name,holdflag,inventoryholdid,locationid,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotnum,offfromtime,reason,sku,skudescrc,traceid,warehouseid,whooff,whoon
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.customername != null and condition.customername != ''" >
+	    and customername =  #{condition.customername}
+	</if>
+	<if test="condition.holdby != null and condition.holdby != ''" >
+	    and holdby =  #{condition.holdby}
+	</if>
+	<if test="condition.holdbyName != null and condition.holdbyName != ''" >
+	    and holdby_name =  #{condition.holdbyName}
+	</if>
+	<if test="condition.holdcode != null and condition.holdcode != ''" >
+	    and holdcode =  #{condition.holdcode}
+	</if>
+	<if test="condition.holdcodeName != null and condition.holdcodeName != ''" >
+	    and holdcode_name =  #{condition.holdcodeName}
+	</if>
+	<if test="condition.holdflag != null and condition.holdflag != ''" >
+	    and holdflag =  #{condition.holdflag}
+	</if>
+	<if test="condition.inventoryholdid != null and condition.inventoryholdid != ''" >
+	    and inventoryholdid =  #{condition.inventoryholdid}
+	</if>
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+	    and lotatt06 =  #{condition.lotatt06}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt09 != null and condition.lotatt09 != ''" >
+	    and lotatt09 =  #{condition.lotatt09}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.reason != null and condition.reason != ''" >
+	    and reason =  #{condition.reason}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.skudescrc != null and condition.skudescrc != ''" >
+	    and skudescrc =  #{condition.skudescrc}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and traceid =  #{condition.traceid}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.whooff != null and condition.whooff != ''" >
+	    and whooff =  #{condition.whooff}
+	</if>
+	<if test="condition.whoon != null and condition.whoon != ''" >
+	    and whoon =  #{condition.whoon}
+	</if>
+	<if test="condition.fromtime != null and condition.lotatt11 != null" >
+	    and fromtime between #{condition.fromtime} and #{condition.lotatt11}
+	</if>
+	<if test="condition.offfromtime != null and condition.offfromtime != '' and condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and offfromtime between #{condition.offfromtime} and #{condition.lotatt12}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+<!-- 根据id查询 库存事务 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from View_Inv_Hold where INVENTORYHOLDID = #{inventoryholdid}
+</select>
+
+<!-- 库存事务 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from View_Inv_Hold 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询库存余量按批次库位列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from view_inv_hold 
+	<include refid="Example_Where_Clause"/>
+    order by inventoryholdid desc
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 库存冻结 -->
+<select id="invHold" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Hold_Release(#{warehouseid,mode=IN,jdbcType=VARCHAR},'HOLD','5','',#{lotnum,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{customerid,mode=IN,jdbcType=VARCHAR},#{traceid,mode=IN,jdbcType=VARCHAR},#{location,mode=IN,jdbcType=VARCHAR},#{holdcode,mode=IN,jdbcType=VARCHAR},#{reason,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{whoon,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<!-- 库存释放 -->
+<select id="invRelease" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Hold_Release(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CANCELHOLD','',#{inventoryholdid,mode=IN,jdbcType=VARCHAR},'','','','','','','','','','','','CN',#{whooff,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+  	
+</mapper>   

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptOrdershipmentSkuMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptOrdershipmentSku" >
+	<result column="cnt" property="cnt"/>
+	<result column="codename_c" property="codenameC"/>
+	<result column="cube" property="cube"/>
+	<result column="customerid" property="customerid"/>
+	<result column="deliveryno" property="deliveryno"/>
+	<result column="issuepartyid" property="issuepartyid"/>
+	<result column="lastshipmenttime" property="lastshipmenttime"/>
+	<result column="orderno" property="orderno"/>
+	<result column="ordertype" property="ordertype"/>
+	<result column="qty_each" property="qtyEach"/>
+	<result column="soreference1" property="soreference1"/>
+	<result column="soreference2" property="soreference2"/>
+	<result column="sostatus" property="sostatus"/>
+	<result column="traceid" property="traceid"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="lastshipmenttimetext" property="lastshipmenttimetext"/>
+</resultMap>
+       
+<!-- Rpt_Ordershipment_Sku table all fields -->
+<sql id="Base_Column_List" >
+	 cnt,codename_c,cube,customerid,deliveryno,issuepartyid,lastshipmenttime,orderno,ordertype,qty_each,soreference1,soreference2,sostatus,traceid,warehouseid,lastshipmenttimetext
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.cnt != null and condition.cnt != ''" >
+	    and cnt =  #{condition.cnt}
+	</if>
+	<if test="condition.codenameC != null and condition.codenameC != ''" >
+	    and codename_c =  #{condition.codenameC}
+	</if>
+	<if test="condition.cube != null and condition.cube != ''" >
+	    and cube =  #{condition.cube}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.deliveryno != null and condition.deliveryno != ''" >
+	    and deliveryno =  #{condition.deliveryno}
+	</if>
+	<if test="condition.issuepartyid != null and condition.issuepartyid != ''" >
+	    and issuepartyid =  #{condition.issuepartyid}
+	</if>
+	<if test="condition.lastshipmenttime != null and condition.lastshipmenttime != '' and  condition.lastshipmenttimetext != null and condition.lastshipmenttimetext != ''" >
+	    and to_char(to_date(lastshipmenttime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.lastshipmenttime} and #{condition.lastshipmenttimetext}
+	</if>
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
+	</if>
+	<if test="condition.ordertype != null and condition.ordertype != ''" >
+	    and ordertype =  #{condition.ordertype}
+	</if>
+	<if test="condition.qtyEach != null and condition.qtyEach != ''" >
+	    and qty_each =  #{condition.qtyEach}
+	</if>
+	<if test="condition.soreference1 != null and condition.soreference1 != ''" >
+	    and soreference1 =  #{condition.soreference1}
+	</if>
+	<if test="condition.soreference2 != null and condition.soreference2 != ''" >
+	    and soreference2 =  #{condition.soreference2}
+	</if>
+	<if test="condition.sostatus != null and condition.sostatus != ''" >
+	    and sostatus =  #{condition.sostatus}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and traceid =  #{condition.traceid}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_Ordershipment_Sku(cnt,codename_c,cube,customerid,deliveryno,issuepartyid,lastshipmenttime,orderno,ordertype,qty_each,soreference1,soreference2,sostatus,traceid,warehouseid)
+ values(#{cnt},#{codenameC},#{cube},#{customerid},#{deliveryno},#{issuepartyid},#{lastshipmenttime},#{orderno},#{ordertype},#{qtyEach},#{soreference1},#{soreference2},#{sostatus},#{traceid},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_Ordershipment_Sku set codename_c=#{codenameC},cube=#{cube},customerid=#{customerid},deliveryno=#{deliveryno},issuepartyid=#{issuepartyid},lastshipmenttime=#{lastshipmenttime},orderno=#{orderno},ordertype=#{ordertype},qty_each=#{qtyEach},soreference1=#{soreference1},soreference2=#{soreference2},sostatus=#{sostatus},traceid=#{traceid},warehouseid=#{warehouseid} where cnt=#{cnt}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_Ordershipment_Sku set 
+	<trim  suffixOverrides="," >
+	<if test="codenameC != null  ">
+		codename_c=#{codenameC},
+	</if>
+	<if test="cube != null  ">
+		cube=#{cube},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="deliveryno != null  ">
+		deliveryno=#{deliveryno},
+	</if>
+	<if test="issuepartyid != null  ">
+		issuepartyid=#{issuepartyid},
+	</if>
+	<if test="lastshipmenttime != null  ">
+		lastshipmenttime=#{lastshipmenttime},
+	</if>
+	<if test="orderno != null  ">
+		orderno=#{orderno},
+	</if>
+	<if test="ordertype != null  ">
+		ordertype=#{ordertype},
+	</if>
+	<if test="qtyEach != null  ">
+		qty_each=#{qtyEach},
+	</if>
+	<if test="soreference1 != null  ">
+		soreference1=#{soreference1},
+	</if>
+	<if test="soreference2 != null  ">
+		soreference2=#{soreference2},
+	</if>
+	<if test="sostatus != null  ">
+		sostatus=#{sostatus},
+	</if>
+	<if test="traceid != null  ">
+		traceid=#{traceid},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where cnt=#{cnt}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_Ordershipment_Sku where cnt = #{cnt}
+</delete>
+ 
+<!-- 根据id查询 发运信息查询-SKU -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_Ordershipment_Sku where cnt = #{cnt}
+</select>
+
+<!-- 发运信息查询-SKU 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_Ordershipment_Sku 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询发运信息查询-SKU列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Ordershipment_Sku 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+     -->
+</select>
+
+<!-- 查询订单2B发运信息分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Ordershipment_Sku 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by customerid,orderno
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+	
+</mapper>   

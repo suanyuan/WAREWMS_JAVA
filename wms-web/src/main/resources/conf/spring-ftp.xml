@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+      						http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="ftpClient" class="com.enterprisedt.net.ftp.FileTransferClient"/>
+	<bean id="myftpService" class="com.wms.service.FTPService">
+		<property name="host" value="${ftpUrl}"/>
+		<property name="port" value="${ftpPort}"/>
+		<property name="username" value="${ftpUsername}"/>
+		<property name="password" value="${ftpPassword}"/>
+		<property name="timeout" value="${ftpTimeout}"/>
+		<property name="ftpClient" ref="ftpClient"/>
+	</bean>
+</beans>

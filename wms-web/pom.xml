@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.wms.framework</groupId>
+		<artifactId>wms-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../wms-parent</relativePath>
+	</parent>
+	<groupId>com.wms.web</groupId>
+	<artifactId>wms-web</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>wms-web</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.wms.service</groupId>
+			<artifactId>wms-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.wms.utils</groupId>
+			<artifactId>wms-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	
+</project>

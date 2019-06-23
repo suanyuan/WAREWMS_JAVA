@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasLocationMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasLocation" >
+	<result column="locationid" property="locationid"/>
+	<result column="length" property="length"/>
+	<result column="width" property="width"/>
+	<result column="height" property="height"/>
+	<result column="locationusage" property="locationusage"/>
+	<result column="putawayzone" property="putawayzone"/>
+	<result column="locationattribute" property="locationattribute"/>
+	<result column="locationcategory" property="locationcategory"/>
+	<result column="logicalsequence" property="logicalsequence"/>
+	<result column="locgroup2" property="locgroup2"/>
+	<result column="cubiccapacity" property="cubiccapacity"/>
+	<result column="weightcapacity" property="weightcapacity"/>
+	<result column="status" property="status"/>
+	<result column="facility_id" property="facilityId"/>
+	<result column="locgroup1" property="locgroup1"/>
+	<result column="pickzone" property="pickzone"/>
+	<result column="loclevel" property="loclevel"/>
+	<result column="xcoord" property="xcoord"/>
+	<result column="ycoord" property="ycoord"/>
+	<result column="zcoord" property="zcoord"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="countcapacity" property="countcapacity"/>
+	<result column="environment" property="environment"/>
+	<result column="demand" property="demand"/>
+	<result column="mix_flag" property="mixFlag"/>
+	<result column="loseid_flag" property="loseidFlag"/>
+	<result column="mix_lotflag" property="mixLotflag"/>
+	<result column="locationhandling" property="locationhandling"/>
+	<result column="plcount" property="plcount"/>
+	<result column="picklogicalsequence" property="picklogicalsequence"/>
+	<result column="cscount" property="cscount"/>
+	<result column="xdistance" property="xdistance"/>
+	<result column="ydistance" property="ydistance"/>
+	<result column="locationusageName" property="locationusageName"/>
+	<result column="locationhandlingName" property="locationhandlingName"/>
+	<result column="locationcategoryName" property="locationcategoryName"/>
+	<result column="locationattributeName" property="locationattributeName"/>
+	<result column="demandName" property="demandName"/>
+	<result column="pickzoneName" property="pickzoneName"/>
+	<result column="putawayzoneName" property="putawayzoneName"/>
+</resultMap>
+       
+<!-- Bas_Location table all fields -->
+<sql id="Base_Column_List" >
+	 locationid,length,width,height,locationusage,putawayzone,locationattribute,locationcategory,logicalsequence,locgroup2,cubiccapacity,weightcapacity,status,facility_id,locgroup1,pickzone,loclevel,xcoord,ycoord,zcoord,addtime,addwho,edittime,editwho,countcapacity,environment,demand,mix_flag,loseid_flag,mix_lotflag,locationhandling,plcount,picklogicalsequence,cscount,xdistance,ydistance
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.length != null and condition.length != ''" >
+	    and length =  #{condition.length}
+	</if>
+	<if test="condition.width != null and condition.width != ''" >
+	    and width =  #{condition.width}
+	</if>
+	<if test="condition.height != null and condition.height != ''" >
+	    and height =  #{condition.height}
+	</if>
+	<if test="condition.locationusage != null and condition.locationusage != ''" >
+	    and locationusage =  #{condition.locationusage}
+	</if>
+	<if test="condition.putawayzone != null and condition.putawayzone != ''" >
+	    and putawayzone =  #{condition.putawayzone}
+	</if>
+	<if test="condition.locationattribute != null and condition.locationattribute != ''" >
+	    and locationattribute =  #{condition.locationattribute}
+	</if>
+	<if test="condition.locationcategory != null and condition.locationcategory != ''" >
+	    and locationcategory =  #{condition.locationcategory}
+	</if>
+	<if test="condition.logicalsequence != null and condition.logicalsequence != ''" >
+	    and logicalsequence =  #{condition.logicalsequence}
+	</if>
+	<if test="condition.locgroup2 != null and condition.locgroup2 != ''" >
+	    and locgroup2 =  #{condition.locgroup2}
+	</if>
+	<if test="condition.cubiccapacity != null and condition.cubiccapacity != ''" >
+	    and cubiccapacity =  #{condition.cubiccapacity}
+	</if>
+	<if test="condition.weightcapacity != null and condition.weightcapacity != ''" >
+	    and weightcapacity =  #{condition.weightcapacity}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.facilityId != null and condition.facilityId != ''" >
+	    and facility_id =  #{condition.facilityId}
+	</if>
+	<if test="condition.locgroup1 != null and condition.locgroup1 != ''" >
+	    and locgroup1 =  #{condition.locgroup1}
+	</if>
+	<if test="condition.pickzone != null and condition.pickzone != ''" >
+	    and pickzone =  #{condition.pickzone}
+	</if>
+	<if test="condition.loclevel != null and condition.loclevel != ''" >
+	    and loclevel =  #{condition.loclevel}
+	</if>
+	<if test="condition.xcoord != null and condition.xcoord != ''" >
+	    and xcoord =  #{condition.xcoord}
+	</if>
+	<if test="condition.ycoord != null and condition.ycoord != ''" >
+	    and ycoord =  #{condition.ycoord}
+	</if>
+	<if test="condition.zcoord != null and condition.zcoord != ''" >
+	    and zcoord =  #{condition.zcoord}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.countcapacity != null and condition.countcapacity != ''" >
+	    and countcapacity =  #{condition.countcapacity}
+	</if>
+	<if test="condition.environment != null and condition.environment != ''" >
+	    and environment =  #{condition.environment}
+	</if>
+	<if test="condition.demand != null and condition.demand != ''" >
+	    and demand =  #{condition.demand}
+	</if>
+	<if test="condition.mixFlag != null and condition.mixFlag != ''" >
+	    and mix_flag =  #{condition.mixFlag}
+	</if>
+	<if test="condition.loseidFlag != null and condition.loseidFlag != ''" >
+	    and loseid_flag =  #{condition.loseidFlag}
+	</if>
+	<if test="condition.mixLotflag != null and condition.mixLotflag != ''" >
+	    and mix_lotflag =  #{condition.mixLotflag}
+	</if>
+	<if test="condition.locationhandling != null and condition.locationhandling != ''" >
+	    and locationhandling =  #{condition.locationhandling}
+	</if>
+	<if test="condition.plcount != null and condition.plcount != ''" >
+	    and plcount =  #{condition.plcount}
+	</if>
+	<if test="condition.picklogicalsequence != null and condition.picklogicalsequence != ''" >
+	    and picklogicalsequence =  #{condition.picklogicalsequence}
+	</if>
+	<if test="condition.cscount != null and condition.cscount != ''" >
+	    and cscount =  #{condition.cscount}
+	</if>
+	<if test="condition.xdistance != null and condition.xdistance != ''" >
+	    and xdistance =  #{condition.xdistance}
+	</if>
+	<if test="condition.ydistance != null and condition.ydistance != ''" >
+	    and ydistance =  #{condition.ydistance}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Bas_Location(
+                          locationid,
+                          length,
+                          width,
+                          height,
+                          locationusage,
+                          putawayzone,
+                          locationattribute,
+                          locationcategory,
+                          logicalsequence,
+                          locgroup2,
+                          cubiccapacity,
+                          weightcapacity,
+                          status,
+                          facility_id,
+                          locgroup1,
+                          pickzone,
+                          loclevel,
+                          xcoord,
+                          ycoord,
+                          zcoord,
+                          addtime,
+                          addwho,
+                          edittime,
+                          editwho,
+                          countcapacity,
+                          environment,
+                          demand,
+                          mix_flag,
+                          loseid_flag,
+                          mix_lotflag,
+                          locationhandling,
+                          plcount,
+                          picklogicalsequence,
+                          cscount,
+                          xdistance,
+                          ydistance)
+                       values(
+                          #{locationid},
+                           <if test="length != null  ">
+		                       #{length},
+	                       </if>
+	                      <if test="width != null  ">
+		                       #{width},
+	                      </if>
+						  <if test="height != null  ">
+							   #{height},
+						  </if>
+                          #{locationusage},
+                          #{putawayzone},
+                          #{locationattribute},
+                          #{locationcategory},
+                          #{logicalsequence},
+                          '',
+                           <if test="cubiccapacity != null  ">
+							   #{cubiccapacity},
+						  </if>
+                           <if test="weightcapacity != null  ">
+							   #{weightcapacity},
+						  </if>
+                          'OK',
+                          '001',
+                          '',
+                          #{pickzone},
+						  0,
+						  0,
+						  0,
+						  0,
+                          sysdate,
+                          #{addwho},
+                          sysdate,
+                          #{editwho},
+                          <if test="countcapacity != null  ">
+							   #{countcapacity},
+						  </if>
+						  '',
+                          #{demand},
+                          #{mixFlag},
+                          #{loseidFlag},
+                          #{mixLotflag},
+                          #{locationhandling},
+                          <if test="plcount != null  ">
+		                       #{plcount},
+	                      </if>
+						  #{picklogicalsequence},
+						  0,
+						  0,
+						  0
+						  )
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Bas_Location set 
+  <if test="length != null  ">
+		length=#{length},
+	</if>
+	<if test="width != null  ">
+		width=#{width},
+	</if>
+	<if test="height != null  ">
+		height=#{height},
+	</if>
+	<if test="locationusage != null  ">
+		locationusage=#{locationusage},
+	</if>
+	<if test="putawayzone != null  ">
+		putawayzone=#{putawayzone},
+	</if>
+	<if test="locationattribute != null  ">
+		locationattribute=#{locationattribute},
+	</if>
+	<if test="locationcategory != null  ">
+		locationcategory=#{locationcategory},
+	</if>
+	<if test="logicalsequence != null  ">
+		logicalsequence=#{logicalsequence},
+	</if>
+	<if test="locgroup2 != null  ">
+		locgroup2=#{locgroup2},
+	</if>
+	<if test="cubiccapacity != null  ">
+		cubiccapacity=#{cubiccapacity},
+	</if>
+	<if test="weightcapacity != null  ">
+		weightcapacity=#{weightcapacity},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="facilityId != null  ">
+		facility_id=#{facilityId},
+	</if>
+	<if test="locgroup1 != null  ">
+		locgroup1=#{locgroup1},
+	</if>
+	<if test="pickzone != null  ">
+		pickzone=#{pickzone},
+	</if>
+	<if test="loclevel != null  ">
+		loclevel=#{loclevel},
+	</if>
+	<if test="xcoord != null  ">
+		xcoord=#{xcoord},
+	</if>
+	<if test="ycoord != null  ">
+		ycoord=#{ycoord},
+	</if>
+	<if test="zcoord != null  ">
+		zcoord=#{zcoord},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="countcapacity != null  ">
+		countcapacity=#{countcapacity},
+	</if>
+	<if test="environment != null  ">
+		environment=#{environment},
+	</if>
+	<if test="demand != null  ">
+		demand=#{demand},
+	</if>
+	<if test="mixFlag != null  ">
+		mix_flag=#{mixFlag},
+	</if>
+	<if test="loseidFlag != null  ">
+		loseid_flag=#{loseidFlag},
+	</if>
+	<if test="mixLotflag != null  ">
+		mix_lotflag=#{mixLotflag},
+	</if>
+	<if test="locationhandling != null  ">
+		locationhandling=#{locationhandling},
+	</if>
+	<if test="plcount != null  ">
+		plcount=#{plcount},
+	</if>
+	<if test="picklogicalsequence != null  ">
+		picklogicalsequence=#{picklogicalsequence},
+	</if>
+	<if test="cscount != null  ">
+		cscount=#{cscount},
+	</if>
+	<if test="xdistance != null  ">
+		xdistance=#{xdistance},
+	</if>
+	<if test="ydistance != null  ">
+		ydistance=#{ydistance},
+	</if>
+	edittime=sysdate
+	 where locationid=#{locationid,jdbcType=VARCHAR}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Bas_Location set 
+	<trim  suffixOverrides="," >
+	<if test="length != null  ">
+		length=#{length},
+	</if>
+	<if test="width != null  ">
+		width=#{width},
+	</if>
+	<if test="height != null  ">
+		height=#{height},
+	</if>
+	<if test="locationusage != null  ">
+		locationusage=#{locationusage},
+	</if>
+	<if test="putawayzone != null  ">
+		putawayzone=#{putawayzone},
+	</if>
+	<if test="locationattribute != null  ">
+		locationattribute=#{locationattribute},
+	</if>
+	<if test="locationcategory != null  ">
+		locationcategory=#{locationcategory},
+	</if>
+	<if test="logicalsequence != null  ">
+		logicalsequence=#{logicalsequence},
+	</if>
+	<if test="locgroup2 != null  ">
+		locgroup2=#{locgroup2},
+	</if>
+	<if test="cubiccapacity != null  ">
+		cubiccapacity=#{cubiccapacity},
+	</if>
+	<if test="weightcapacity != null  ">
+		weightcapacity=#{weightcapacity},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="facilityId != null  ">
+		facility_id=#{facilityId},
+	</if>
+	<if test="locgroup1 != null  ">
+		locgroup1=#{locgroup1},
+	</if>
+	<if test="pickzone != null  ">
+		pickzone=#{pickzone},
+	</if>
+	<if test="loclevel != null  ">
+		loclevel=#{loclevel},
+	</if>
+	<if test="xcoord != null  ">
+		xcoord=#{xcoord},
+	</if>
+	<if test="ycoord != null  ">
+		ycoord=#{ycoord},
+	</if>
+	<if test="zcoord != null  ">
+		zcoord=#{zcoord},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=sysdate,
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="countcapacity != null  ">
+		countcapacity=#{countcapacity},
+	</if>
+	<if test="environment != null  ">
+		environment=#{environment},
+	</if>
+	<if test="demand != null  ">
+		demand=#{demand},
+	</if>
+	<if test="mixFlag != null  ">
+		mix_flag=#{mixFlag},
+	</if>
+	<if test="loseidFlag != null  ">
+		loseid_flag=#{loseidFlag},
+	</if>
+	<if test="mixLotflag != null  ">
+		mix_lotflag=#{mixLotflag},
+	</if>
+	<if test="locationhandling != null  ">
+		locationhandling=#{locationhandling},
+	</if>
+	<if test="plcount != null  ">
+		plcount=#{plcount},
+	</if>
+	<if test="picklogicalsequence != null  ">
+		picklogicalsequence=#{picklogicalsequence},
+	</if>
+	<if test="cscount != null  ">
+		cscount=#{cscount},
+	</if>
+	<if test="xdistance != null  ">
+		xdistance=#{xdistance},
+	</if>
+	<if test="ydistance != null  ">
+		ydistance=#{ydistance},
+	</if>
+	</trim> where locationid=#{locationid,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from Bas_Location where locationid = #{locationid,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 库位 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Bas_Location 
+	 where locationid = #{locationid,jdbcType=VARCHAR}
+</select>
+
+<!-- 库位 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Bas_Location 
+	<include refid="Example_Where_Clause"/>
+</select>
+
+<!-- 查询库位档案分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,
+	(select codename_c from Bas_Codes where codeid = 'LOC_USG' and a.locationusage=code) as locationusageName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_CAT' and a.locationcategory=code) as locationcategoryName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_ATT' and a.locationattribute=code) as locationattributeName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_HDL' and a.locationhandling=code) as locationhandlingName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_DMD' and a.demand=code) as demandName,
+	(select descr from Bas_Zone where a.putawayzone=zone) as putawayzoneName,
+	(select descr from Bas_Zone where a.pickzone=zone) as pickzoneName,
+	rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Bas_Location 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by locationid) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+<!-- 查询库位列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select a.*,
+	(select codename_c from Bas_Codes where codeid = 'LOC_USG' and a.locationusage=code) as locationusageName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_CAT' and a.locationcategory=code) as locationcategoryName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_ATT' and a.locationattribute=code) as locationattributeName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_HDL' and a.locationhandling=code) as locationhandlingName,
+	(select codename_c from Bas_Codes where codeid = 'LOC_DMD' and a.demand=code) as demandName,
+	(select descr from Bas_Zone where a.putawayzone=zone) as putawayzoneName,
+	(select descr from Bas_Zone where a.pickzone=zone) as pickzoneName
+	<!--<include refid="Base_Column_List"/>-->
+	from Bas_Location a
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by a.locationid
+</select>
+
+<!-- 查询库位使用名称 -->
+<select id="queryUsgTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as locationusage,codename_c as locationusageName
+	from Bas_Codes
+	where codeid = 'LOC_USG'
+    order by show_sequence
+</select>  
+
+<!-- 查询库位类型名称 -->
+<select id="queryCatTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as locationcategory,codename_c as locationcategoryName
+	from Bas_Codes
+	where codeid = 'LOC_CAT'
+    order by show_sequence
+</select>
+
+<!-- 查询库位属性名称 -->
+<select id="queryAttTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as locationattribute,codename_c as locationattributeName
+	from Bas_Codes
+	where codeid = 'LOC_ATT'
+    order by show_sequence
+</select>	
+
+<!-- 查询库位处理名称 -->
+<select id="queryHdlTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as locationhandling,codename_c as locationhandlingName
+	from Bas_Codes
+	where codeid = 'LOC_HDL'
+    order by show_sequence
+</select>  	
+
+<!-- 查询库周转需求名称 -->
+<select id="queryDmdTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select code as demand,codename_c as demandName
+	from Bas_Codes
+	where codeid = 'LOC_DMD'
+    order by show_sequence
+</select> 
+
+<!-- 查询上架区名称 -->
+<select id="queryPtzoneTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select zone as putawayzone,descr as putawayzoneName
+	from Bas_Zone
+    order by zone
+</select>
+
+<!-- 查询拣货区名称 -->
+<select id="queryPizoneTypeByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select zone as pickzone,descr as pickzoneName
+	from Bas_Zone
+    order by zone
+</select>
+
+<!-- 判断记录判断 -->
+<select id="basLocationCheck" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPBAS_Check('','Delete','BAS_LOCATION',#{locationid,mode=IN,jdbcType=VARCHAR},'','','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+</mapper>   

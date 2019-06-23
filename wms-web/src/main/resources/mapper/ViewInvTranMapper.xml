@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ViewInvTranMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ViewInvTran" >
+	<result column="addtime" property="addtime"/>
+	<result column="doclineno" property="doclineno"/>
+	<result column="docno" property="docno"/>
+	<result column="doctype" property="doctype"/>
+	<result column="doctype_name" property="doctypeName"/>
+	<result column="editwho" property="editwho"/>
+	<result column="fmcustomerid" property="fmcustomerid"/>
+	<result column="fmid" property="fmid"/>
+	<result column="fmlocation" property="fmlocation"/>
+	<result column="fmlotatt01" property="fmlotatt01"/>
+	<result column="fmlotatt02" property="fmlotatt02"/>
+	<result column="fmlotatt03" property="fmlotatt03"/>
+	<result column="fmlotatt04" property="fmlotatt04"/>
+	<result column="fmlotatt05" property="fmlotatt05"/>
+	<result column="fmlotatt06" property="fmlotatt06"/>
+	<result column="fmlotnum" property="fmlotnum"/>
+	<result column="fmpackid" property="fmpackid"/>
+	<result column="fmqty" property="fmqty"/>
+	<result column="fmqty_each" property="fmqtyEach"/>
+	<result column="fmsku" property="fmsku"/>
+	<result column="fmuom" property="fmuom"/>
+	<result column="fmuom_name" property="fmuomName"/>
+	<result column="operator" property="operator"/>
+	<result column="reason" property="reason"/>
+	<result column="reasoncode" property="reasoncode"/>
+	<result column="status" property="status"/>
+	<result column="status_name" property="statusName"/>
+	<result column="tocustomerid" property="tocustomerid"/>
+	<result column="toid" property="toid"/>
+	<result column="tolocation" property="tolocation"/>
+	<result column="tolotatt01" property="tolotatt01"/>
+	<result column="tolotatt02" property="tolotatt02"/>
+	<result column="tolotatt03" property="tolotatt03"/>
+	<result column="tolotatt04" property="tolotatt04"/>
+	<result column="tolotatt05" property="tolotatt05"/>
+	<result column="tolotatt06" property="tolotatt06"/>
+	<result column="tolotnum" property="tolotnum"/>
+	<result column="topackid" property="topackid"/>
+	<result column="toqty" property="toqty"/>
+	<result column="toqty_each" property="toqtyEach"/>
+	<result column="tosku" property="tosku"/>
+	<result column="totalcubic" property="totalcubic"/>
+	<result column="totalgrossweight" property="totalgrossweight"/>
+	<result column="totalnetweight" property="totalnetweight"/>
+	<result column="totalprice" property="totalprice"/>
+	<result column="touom" property="touom"/>
+	<result column="touom_name" property="touomName"/>
+	<result column="transactionid" property="transactionid"/>
+	<result column="transactiontime" property="transactiontime"/>
+	<result column="transactiontype" property="transactiontype"/>
+	<result column="transactiontype_name" property="transactiontypeName"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- View_Inv_Trans table all fields -->
+<sql id="Base_Column_List" >
+	 addtime,doclineno,docno,doctype,doctype_name,editwho,fmcustomerid,fmid,fmlocation,fmlotatt01,fmlotatt02,fmlotatt03,fmlotatt04,fmlotatt05,fmlotatt06,fmlotnum,fmpackid,fmqty,fmqty_each,fmsku,fmuom,fmuom_name,operator,reason,reasoncode,status,status_name,tocustomerid,toid,tolocation,tolotatt01,tolotatt02,tolotatt03,tolotatt04,tolotatt05,tolotatt06,tolotnum,topackid,toqty,toqty_each,tosku,totalcubic,totalgrossweight,totalnetweight,totalprice,touom,touom_name,transactionid,transactiontime,transactiontype,transactiontype_name,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.doclineno != null and condition.doclineno != ''" >
+	    and doclineno =  #{condition.doclineno}
+	</if>
+	<if test="condition.docno != null and condition.docno != ''" >
+	    and docno =  #{condition.docno}
+	</if>
+	<if test="condition.doctype != null and condition.doctype != ''" >
+	    and doctype =  #{condition.doctype}
+	</if>
+	<if test="condition.doctypeName != null and condition.doctypeName != ''" >
+	    and doctype_name =  #{condition.doctypeName}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+	    and fmcustomerid =  #{condition.fmcustomerid}
+	</if>
+	<if test="condition.fmid != null and condition.fmid != ''" >
+	    and fmid =  #{condition.fmid}
+	</if>
+	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
+	    and fmlocation =  #{condition.fmlocation}
+	</if>
+	<if test="condition.fmlotatt01 != null and condition.fmlotatt01 != ''" >
+	    and fmlotatt01 =  #{condition.fmlotatt01}
+	</if>
+	<if test="condition.fmlotatt02 != null and condition.fmlotatt02 != ''" >
+	    and fmlotatt02 =  #{condition.fmlotatt02}
+	</if>
+	<if test="condition.fmlotatt03 != null and condition.fmlotatt03 != ''" >
+	    and fmlotatt03 =  #{condition.fmlotatt03}
+	</if>
+	<if test="condition.fmlotatt04 != null and condition.fmlotatt04 != ''" >
+	    and fmlotatt04 =  #{condition.fmlotatt04}
+	</if>
+	<if test="condition.fmlotatt05 != null and condition.fmlotatt05 != ''" >
+	    and fmlotatt05 =  #{condition.fmlotatt05}
+	</if>
+	<if test="condition.fmlotatt06 != null and condition.fmlotatt06 != ''" >
+	    and fmlotatt06 =  #{condition.fmlotatt06}
+	</if>
+	<if test="condition.fmlotnum != null and condition.fmlotnum != ''" >
+	    and fmlotnum =  #{condition.fmlotnum}
+	</if>
+	<if test="condition.fmpackid != null and condition.fmpackid != ''" >
+	    and fmpackid =  #{condition.fmpackid}
+	</if>
+	<if test="condition.fmqty != null and condition.fmqty != ''" >
+	    and fmqty =  #{condition.fmqty}
+	</if>
+	<if test="condition.fmqtyEach != null and condition.fmqtyEach != ''" >
+	    and fmqty_each =  #{condition.fmqtyEach}
+	</if>
+	<if test="condition.fmsku != null and condition.fmsku != ''" >
+	    and fmsku =  #{condition.fmsku}
+	</if>
+	<if test="condition.fmuom != null and condition.fmuom != ''" >
+	    and fmuom =  #{condition.fmuom}
+	</if>
+	<if test="condition.fmuomName != null and condition.fmuomName != ''" >
+	    and fmuom_name =  #{condition.fmuomName}
+	</if>
+	<if test="condition.operator != null and condition.operator != ''" >
+	    and operator =  #{condition.operator}
+	</if>
+	<if test="condition.reason != null and condition.reason != ''" >
+	    and reason =  #{condition.reason}
+	</if>
+	<if test="condition.reasoncode != null and condition.reasoncode != ''" >
+	    and reasoncode =  #{condition.reasoncode}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.statusName != null and condition.statusName != ''" >
+	    and status_name =  #{condition.statusName}
+	</if>
+	<if test="condition.tocustomerid != null and condition.tocustomerid != ''" >
+	    and tocustomerid =  #{condition.tocustomerid}
+	</if>
+	<if test="condition.toid != null and condition.toid != ''" >
+	    and toid =  #{condition.toid}
+	</if>
+	<if test="condition.tolocation != null and condition.tolocation != ''" >
+	    and tolocation =  #{condition.tolocation}
+	</if>
+	<if test="condition.tolotatt01 != null and condition.tolotatt01 != ''" >
+	    and tolotatt01 =  #{condition.tolotatt01}
+	</if>
+	<if test="condition.tolotatt02 != null and condition.tolotatt02 != ''" >
+	    and tolotatt02 =  #{condition.tolotatt02}
+	</if>
+	<if test="condition.tolotatt03 != null and condition.tolotatt03 != ''" >
+	    and tolotatt03 =  #{condition.tolotatt03}
+	</if>
+	<if test="condition.tolotatt04 != null and condition.tolotatt04 != ''" >
+	    and tolotatt04 =  #{condition.tolotatt04}
+	</if>
+	<if test="condition.tolotatt05 != null and condition.tolotatt05 != ''" >
+	    and tolotatt05 =  #{condition.tolotatt05}
+	</if>
+	<if test="condition.tolotatt06 != null and condition.tolotatt06 != ''" >
+	    and tolotatt06 =  #{condition.tolotatt06}
+	</if>
+	<if test="condition.tolotnum != null and condition.tolotnum != ''" >
+	    and tolotnum =  #{condition.tolotnum}
+	</if>
+	<if test="condition.topackid != null and condition.topackid != ''" >
+	    and topackid =  #{condition.topackid}
+	</if>
+	<if test="condition.toqty != null and condition.toqty != ''" >
+	    and toqty =  #{condition.toqty}
+	</if>
+	<if test="condition.toqtyEach != null and condition.toqtyEach != ''" >
+	    and toqty_each =  #{condition.toqtyEach}
+	</if>
+	<if test="condition.tosku != null and condition.tosku != ''" >
+	    and tosku =  #{condition.tosku}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<if test="condition.totalnetweight != null and condition.totalnetweight != ''" >
+	    and totalnetweight =  #{condition.totalnetweight}
+	</if>
+	<if test="condition.totalprice != null and condition.totalprice != ''" >
+	    and totalprice =  #{condition.totalprice}
+	</if>
+	<if test="condition.touom != null and condition.touom != ''" >
+	    and touom =  #{condition.touom}
+	</if>
+	<if test="condition.touomName != null and condition.touomName != ''" >
+	    and touom_name =  #{condition.touomName}
+	</if>
+	<if test="condition.transactionid != null and condition.transactionid != ''" >
+	    and transactionid =  #{condition.transactionid}
+	</if>
+	<if test="condition.transactiontype != null and condition.transactiontype != ''" >
+	    and transactiontype =  #{condition.transactiontype}
+	</if>
+	<if test="condition.transactiontypeName != null and condition.transactiontypeName != ''" >
+	    and transactiontype_name =  #{condition.transactiontypeName}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.transactiontime != null and condition.addtime != null" >
+	    and transactiontime between #{condition.transactiontime} and #{condition.addtime}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and fmcustomerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+	
+</trim>
+</sql>
+   
+<!-- 根据id查询 库存事务 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from View_Inv_Trans where transactionid = #{transactionid}
+</select>
+
+<!-- 库存事务 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from View_Inv_Trans 
+	<include refid="Example_Where_Clause"/>
+</select>
+
+<!-- 查询库存事务列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Trans 
+	<include refid="Example_Where_Clause"/>
+<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
+<!--        order by fmcustomerid,fmsku,fmlocation -->
+<!--     </if> -->
+    order by transactionid
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询库存事务列表for export -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Trans 
+	<include refid="Example_Where_Clause"/>
+<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
+<!--        order by transactionid -->
+<!--     </if> -->
+	order by transactionid
+</select>
+
+<!--事务类型-->
+<select id="queryByTransactionType" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT Code as transactiontype, CodeName_C as transactiontype_name
+       FROM bas_Codes
+       WHERE (CodeID =  'TRN_TYP')
+    order by show_sequence
+</select>
+
+<!--单据类型-->
+<select id="queryByDocType" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT Code as doctype, CodeName_C as doctype_name
+       FROM BAS_COdes
+       WHERE (CodeID =  'DOC_TYP')
+    order by show_sequence
+</select>
+
+<!--事务状态-->
+<select id="queryByStatus" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT Code as status, CodeName_C as status_name
+       FROM bas_Codes       
+       WHERE (CodeID =  'TRN_STS')
+    order by show_sequence
+</select>
+
+<select id="cancelReceive" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call spasn_cancel_receiving(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{transactionid,mode=IN,jdbcType=VARCHAR},'CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<select id="cancelShipment" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call spso_cancel_shipment(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{transactionid,mode=IN,jdbcType=VARCHAR},'CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+</mapper>   

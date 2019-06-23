@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.SfcUserLoginMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.mybatis.entity.SfcUserLogin" >
+	<result column="birthday" property="birthday"/>
+	<!-- <result column="country_id" property="countryId"/> -->
+	<result column="create_time" property="createTime"/>
+	<result column="email" property="email"/>
+	<result column="enable" property="enable"/>
+	<result column="gender" property="gender"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="merchant_id" property="merchantId"/>
+	<result column="node_id" property="nodeId"/>
+	<result column="parent_node_id" property="parentNodeId"/>
+	<result column="pwd" property="pwd"/>
+	<result column="session_id" property="sessionId"/>
+	<result column="user_id" property="id"/>
+	<result column="user_name" property="userName"/>
+	<result column="user_type" property="userType"/>
+</resultMap>
+
+<resultMap id="WarehouseResultMap" type="com.wms.mybatis.entity.SfcWarehouse" >
+	<result column="warehouse_id" property="id"/>
+	<result column="warehouse_name" property="warehouseName"/>
+	<result column="defaultflag" property="defaultFlag"/>
+</resultMap>
+
+<resultMap id="queryForListMap" type="com.wms.mybatis.entity.SfcUserLogin" >
+	<result column="birthday" property="birthday"/>
+	<!-- <result column="country_id" property="countryId"/> -->
+	<result column="create_time" property="createTime"/>
+	<result column="email" property="email"/>
+	<result column="enable" property="enable"/>
+	<result column="gender" property="gender"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="merchant_id" property="merchantId"/>
+	<result column="node_id" property="nodeId"/>
+	<result column="parent_node_id" property="parentNodeId"/>
+	<result column="pwd" property="pwd"/>
+	<result column="session_id" property="sessionId"/>
+	<result column="user_id" property="id"/>
+	<result column="user_name" property="userName"/>
+	<result column="user_type" property="userType"/>
+	<association property="country" javaType="com.wms.mybatis.entity.SfcCountry">
+        <result column="country_id" property="id"/>
+        <result column="country_name" property="countryName"/>
+        <result column="country_eng_name" property="countryEngName"/>
+    </association>
+	<association property="warehouse" javaType="com.wms.mybatis.entity.SfcWarehouse">
+		<result column="warehouse_id" property="id"/>
+		<result column="warehouse_name" property="warehouseName"/>
+		<result column="defaultflag" property="defaultFlag"/>
+	</association>
+	<collection property="customerSet" javaType="java.util.Set" ofType="com.wms.mybatis.entity.SfcCustomer">
+		<result column="customer_id" property="id"/>
+		<result column="customer_name" property="customerName"/>
+	</collection>
+</resultMap>
+       
+<!-- Sfc_User table all fields -->
+<sql id="Base_Column_List" >
+	 birthday,country_id,create_time,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.birthday != null and condition.birthday != ''" >
+	    and birthday =  #{condition.birthday}
+	</if>
+	<if test="condition.country != null and condition.country != ''" >
+	    and country_id =  #{condition.country.id}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.email != null and condition.email != ''" >
+	    and email =  #{condition.email}
+	</if>
+	<if test="condition.enable != null and condition.enable != ''" >
+	    and enable =  #{condition.enable}
+	</if>
+	<if test="condition.gender != null and condition.gender != ''" >
+	    and gender =  #{condition.gender}
+	</if>
+	<if test="condition.lastLoginTime != null and condition.lastLoginTime != ''" >
+	    and last_login_time =  #{condition.lastLoginTime}
+	</if>
+	<if test="condition.merchantId != null and condition.merchantId != ''" >
+	    and merchant_id =  #{condition.merchantId}
+	</if>
+	<if test="condition.nodeId != null and condition.nodeId != ''" >
+	    and node_id =  #{condition.nodeId}
+	</if>
+	<if test="condition.parentNodeId != null and condition.parentNodeId != ''" >
+	    and parent_node_id =  #{condition.parentNodeId}
+	</if>
+	<if test="condition.pwd != null and condition.pwd != ''" >
+	    and pwd =  #{condition.pwd}
+	</if>
+	<if test="condition.sessionId != null and condition.sessionId != ''" >
+	    and session_id =  #{condition.sessionId}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.id}
+	</if>
+	<if test="condition.userName != null and condition.userName != ''" >
+	    and user_name =  #{condition.userName}
+	</if>
+	<if test="condition.userType != null and condition.userType != ''" >
+	    and user_type =  #{condition.userType}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Sfc_User(birthday,country_id,create_time,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type)
+ values(#{birthday},#{country.id},now(),#{email},#{enable},#{gender},#{lastLoginTime},#{merchantId},#{nodeId},#{parentNodeId},#{pwd},#{sessionId},#{id},#{userName},#{userType})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Sfc_User set country_id=#{country.id},create_time=now(),email=#{email},enable=#{enable},gender=#{gender},last_login_time=#{lastLoginTime},merchant_id=#{merchantId},node_id=#{nodeId},parent_node_id=#{parentNodeId},pwd=#{pwd},session_id=#{sessionId},user_id=#{id},user_name=#{userName},user_type=#{userType} where birthday=#{birthday}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Sfc_User set 
+	<trim  suffixOverrides="," >
+	<if test="birthday != null  ">
+		birthday=#{birthday},
+	</if>
+	<if test="country != null  ">
+		country_id=#{country.id},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="email != null  ">
+		email=#{email},
+	</if>
+	<if test="enable != null  ">
+		enable=#{enable},
+	</if>
+	<if test="gender != null  ">
+		gender=#{gender},
+	</if>
+	<if test="lastLoginTime != null  ">
+		last_login_time=#{lastLoginTime},
+	</if>
+	<if test="merchantId != null  ">
+		merchant_id=#{merchantId},
+	</if>
+	<if test="nodeId != null  ">
+		node_id=#{nodeId},
+	</if>
+	<if test="parentNodeId != null  ">
+		parent_node_id=#{parentNodeId},
+	</if>
+	<if test="pwd != null  ">
+		pwd=#{pwd},
+	</if>
+	<if test="sessionId != null  ">
+		session_id=#{sessionId},
+	</if>
+	<if test="userName != null  ">
+		user_name=#{userName},
+	</if>
+	<if test="userType != null  ">
+		user_type=#{userType},
+	</if>
+	</trim> where user_id=#{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Sfc_User where user_id = #{id}
+</delete>
+ 
+<!-- 根据id查询 用户登录 -->
+<select id="queryById"  resultMap="queryForListMap" parameterType="Object">
+	select a.user_id,
+	       a.user_name,
+	       a.pwd,
+	       a.node_id,
+	       a.parent_node_id,
+	       a.birthday,
+	       a.country_id,
+	       f.country_name,
+	       f.country_eng_name,
+	       a.create_time,
+	       a.email,
+	       a.enable,
+	       a.gender,
+	       a.last_login_time,
+	       a.merchant_id,
+	       a.session_id,
+	       a.user_type,
+	       ifnull(b.warehouse_id,g.warehouse_id) as warehouse_id,
+	       ifnull(c.descr_c,h.descr_c) as warehouse_name,
+	       ifnull(b.defaultflag, g.defaultflag) as defaultflag,
+	       d.customer_id,
+	       e.descr_c as customer_name
+	  from sfc_user a
+	  left outer join sfc_user_warehouse b on a.user_id = b.user_id and b.warehouse_id = #{warehouseId,jdbcType=VARCHAR}
+	  left outer join bas_customer c on b.warehouse_id = c.customerid and c.customer_type = 'WH'
+	  left outer join sfc_user_customer d on a.user_id = d.user_id
+	  left outer join bas_customer e on d.customer_id = e.customerid and e.customer_type = 'OW'
+	  left outer join sfc_country f on a.country_id = f.country_id
+	  left outer join sfc_user_warehouse g on a.user_id = g.user_id and g.defaultflag = 'Y'
+	  left outer join bas_customer h on g.warehouse_id = h.customerid and h.customer_type = 'WH'
+	 where a.user_id = #{id, jdbcType = VARCHAR}
+</select>
+
+<!-- 用户登录 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Sfc_User 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询用户登录列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Sfc_User 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询用户登录仓库 -->
+<select id="queryWarehouseByUser" resultMap="WarehouseResultMap"  parameterType="Object">
+	select a.warehouse_id,b.descr_c as warehouse_name,a.defaultflag
+	from Sfc_User_Warehouse a, Bas_Customer b
+	where a.warehouse_id = b.customerid
+	and a.user_id = #{id,jdbcType=VARCHAR}
+    order by a.defaultflag Desc
+</select>
+  	
+</mapper>   

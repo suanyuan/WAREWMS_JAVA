@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptOrderPackingboxMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptOrderPackingbox" >
+	<result column="address" property="address"/>
+	<result column="addtime" property="addtime"/>
+	<result column="alternate_sku1" property="alternateSku1"/>
+	<result column="carrierid" property="carrierid"/>
+	<result column="consigneeid" property="consigneeid"/>
+	<result column="customerid" property="customerid"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="orderno" property="orderno"/>
+	<result column="qty" property="qty"/>
+	<result column="sku" property="sku"/>
+	<result column="soreference1" property="soreference1"/>
+	<result column="soreference2" property="soreference2"/>
+	<result column="tel" property="tel"/>
+	<result column="traceid" property="traceid"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- Rpt_Order_Packingbox table all fields -->
+<sql id="Base_Column_List" >
+	 address,addtime,alternate_sku1,carrierid,consigneeid,customerid,descr_c,orderno,qty,sku,soreference1,soreference2,tel,traceid,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.address != null and condition.address != ''" >
+	    and address =  #{condition.address}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.alternateSku1 != null and condition.alternateSku1 != ''" >
+	    and alternate_sku1 =  #{condition.alternateSku1}
+	</if>
+	<if test="condition.carrierid != null and condition.carrierid != ''" >
+	    and carrierid =  #{condition.carrierid}
+	</if>
+	<if test="condition.consigneeid != null and condition.consigneeid != ''" >
+	    and consigneeid =  #{condition.consigneeid}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and qty =  #{condition.qty}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.soreference1 != null and condition.soreference1 != ''" >
+	    and soreference1 =  #{condition.soreference1}
+	</if>
+	<if test="condition.soreference2 != null and condition.soreference2 != ''" >
+	    and soreference2 =  #{condition.soreference2}
+	</if>
+	<if test="condition.tel != null and condition.tel != ''" >
+	    and tel =  #{condition.tel}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and traceid =  #{condition.traceid}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_Order_Packingbox(address,addtime,alternate_sku1,carrierid,consigneeid,customerid,descr_c,orderno,qty,sku,soreference1,soreference2,tel,traceid,warehouseid)
+ values(#{address},#{addtime},#{alternateSku1},#{carrierid},#{consigneeid},#{customerid},#{descrC},#{orderno},#{qty},#{sku},#{soreference1},#{soreference2},#{tel},#{traceid},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_Order_Packingbox set addtime=#{addtime},alternate_sku1=#{alternateSku1},carrierid=#{carrierid},consigneeid=#{consigneeid},customerid=#{customerid},descr_c=#{descrC},orderno=#{orderno},qty=#{qty},sku=#{sku},soreference1=#{soreference1},soreference2=#{soreference2},tel=#{tel},traceid=#{traceid},warehouseid=#{warehouseid} where address=#{address}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_Order_Packingbox set 
+	<trim  suffixOverrides="," >
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="alternateSku1 != null  ">
+		alternate_sku1=#{alternateSku1},
+	</if>
+	<if test="carrierid != null  ">
+		carrierid=#{carrierid},
+	</if>
+	<if test="consigneeid != null  ">
+		consigneeid=#{consigneeid},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="orderno != null  ">
+		orderno=#{orderno},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="soreference1 != null  ">
+		soreference1=#{soreference1},
+	</if>
+	<if test="soreference2 != null  ">
+		soreference2=#{soreference2},
+	</if>
+	<if test="tel != null  ">
+		tel=#{tel},
+	</if>
+	<if test="traceid != null  ">
+		traceid=#{traceid},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where address=#{address}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_Order_Packingbox where address = #{address}
+</delete>
+ 
+<!-- 根据id查询 订单装箱清单-按箱 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_Order_Packingbox where address = #{address}
+</select>
+
+<!-- 订单装箱清单-按箱 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_Order_Packingbox 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询订单装箱清单-按箱列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Order_Packingbox 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+     -->
+</select>
+
+<!-- 查询订单装箱清单-按箱分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Order_Packingbox 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by traceid,sku
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+ 	
+</mapper>   

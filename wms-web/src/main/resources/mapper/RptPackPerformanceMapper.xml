@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptPackPerformanceMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptPackPerformance" >
+	<result column="customerid" property="customerid"/>
+	<result column="fee" property="fee"/>
+	<result column="issuepartyname" property="issuepartyname"/>
+	<result column="mulirate" property="mulirate"/>
+	<result column="order_type" property="orderType"/>
+	<result column="qty" property="qty"/>
+	<result column="sdate" property="sdate"/>
+	<result column="sdatetext" property="sdatetext"/>
+	<result column="ttim" property="ttim"/>
+	<result column="user_id" property="userId"/>
+	<result column="user_name" property="userName"/>
+</resultMap>
+       
+<!-- Rpt_Pack_Performance table all fields -->
+<sql id="Base_Column_List" >
+	 customerid,fee,issuepartyname,mulirate,order_type,qty,sdate,sdatetext,ttim,user_id,user_name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.fee != null and condition.fee != ''" >
+	    and fee =  #{condition.fee}
+	</if>
+	<if test="condition.issuepartyname != null and condition.issuepartyname != ''" >
+	    and issuepartyname =  #{condition.issuepartyname}
+	</if>
+	<if test="condition.mulirate != null and condition.mulirate != ''" >
+	    and mulirate =  #{condition.mulirate}
+	</if>
+	<if test="condition.orderType != null and condition.orderType != ''" >
+	    and order_type =  #{condition.orderType}
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and qty =  #{condition.qty}
+	</if>
+	<if test="condition.sdate != null and condition.sdate != ''" >
+	    and sdate =  #{condition.sdate}
+	</if>
+	<if test="condition.sdatetext != null and condition.sdatetext != ''" >
+	    and sdatetext =  #{condition.sdatetext}
+	</if>
+	<if test="condition.ttim != null and condition.ttim != ''" >
+	    and ttim =  #{condition.ttim}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.userName != null and condition.userName != ''" >
+	    and user_name =  #{condition.userName}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_Pack_Performance(customerid,fee,issuepartyname,mulirate,order_type,qty,sdate,sdatetext,ttim,user_id,user_name)
+ values(#{customerid},#{fee},#{issuepartyname},#{mulirate},#{orderType},#{qty},#{sdate},#{sdatetext},#{ttim},#{userId},#{userName})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_Pack_Performance set fee=#{fee},issuepartyname=#{issuepartyname},mulirate=#{mulirate},order_type=#{orderType},qty=#{qty},sdate=#{sdate},sdatetext=#{sdatetext},ttim=#{ttim},user_id=#{userId},user_name=#{userName} where customerid=#{customerid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_Pack_Performance set 
+	<trim  suffixOverrides="," >
+	<if test="fee != null  ">
+		fee=#{fee},
+	</if>
+	<if test="issuepartyname != null  ">
+		issuepartyname=#{issuepartyname},
+	</if>
+	<if test="mulirate != null  ">
+		mulirate=#{mulirate},
+	</if>
+	<if test="orderType != null  ">
+		order_type=#{orderType},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="sdate != null  ">
+		sdate=#{sdate},
+	</if>
+	<if test="sdatetext != null  ">
+		sdatetext=#{sdatetext},
+	</if>
+	<if test="ttim != null  ">
+		ttim=#{ttim},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="userName != null  ">
+		user_name=#{userName},
+	</if>
+	</trim> where customerid=#{customerid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_Pack_Performance where customerid = #{customerid}
+</delete>
+ 
+<!-- 根据id查询 订单包装复核绩效统计 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_Pack_Performance where customerid = #{customerid}
+</select>
+
+<!-- 订单包装复核绩效统计 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_Pack_Performance 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询订单包装复核绩效统计列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Pack_Performance 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+     -->
+</select>
+
+<!-- 查询订单包装复核绩效统计分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Pack_Performance 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by sdate desc,user_id,customerid
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

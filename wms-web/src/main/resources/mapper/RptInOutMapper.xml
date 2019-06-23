@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptInOutMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptInOut" >
+	<result column="adqty" property="adqty"/>
+	<result column="commodity" property="commodity"/>
+	<result column="customerid" property="customerid"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="fvqty" property="fvqty"/>
+	<result column="ibqty" property="ibqty"/>
+	<result column="ivqty" property="ivqty"/>
+	<result column="obqty" property="obqty"/>
+	<result column="packid" property="packid"/>
+	<result column="packuom1" property="packuom1"/>
+	<result column="sku" property="sku"/>
+	<result column="skutext" property="skutext"/>
+	<result column="sku_descr_c" property="skuDescrC"/>
+	<result column="sku_descr_e" property="skuDescrE"/>
+	<result column="startdate" property="startdate"/>
+	<result column="startdatetext" property="startdatetext"/>
+	<result column="trqty" property="trqty"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userid" property="userid"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- Rpt_In_Out table all fields -->
+<sql id="Base_Column_List" >
+	 adqty,commodity,customerid,descr_c,descr_e,fvqty,ibqty,ivqty,obqty,packid,packuom1,sku,skutext,sku_descr_c,sku_descr_e,startdate,startdatetext,trqty,userdefine1,userdefine2,userdefine3,userid,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.adqty != null and condition.adqty != ''" >
+	    and adqty =  #{condition.adqty}
+	</if>
+	<if test="condition.commodity != null and condition.commodity != ''" >
+	    and commodity =  #{condition.commodity}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.descrE != null and condition.descrE != ''" >
+	    and descr_e =  #{condition.descrE}
+	</if>
+	<if test="condition.fvqty != null and condition.fvqty != ''" >
+	    and fvqty =  #{condition.fvqty}
+	</if>
+	<if test="condition.ibqty != null and condition.ibqty != ''" >
+	    and ibqty =  #{condition.ibqty}
+	</if>
+	<if test="condition.ivqty != null and condition.ivqty != ''" >
+	    and ivqty =  #{condition.ivqty}
+	</if>
+	<if test="condition.obqty != null and condition.obqty != ''" >
+	    and obqty =  #{condition.obqty}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.packuom1 != null and condition.packuom1 != ''" >
+	    and packuom1 =  #{condition.packuom1}
+	</if>
+	<if test="condition.sku != null and condition.sku != '' and condition.skutext != null and condition.skutext != ''" >
+	    and sku between #{condition.sku} and #{condition.skutext}
+	</if>
+	<if test="condition.skuDescrC != null and condition.skuDescrC != ''" >
+	    and sku_descr_c =  #{condition.skuDescrC}
+	</if>
+	<if test="condition.skuDescrE != null and condition.skuDescrE != ''" >
+	    and sku_descr_e =  #{condition.skuDescrE}
+	</if> 
+	<if test="condition.startdate != null and condition.startdate != ''" >
+	    and startdate =  #{condition.startdate}
+	</if>
+	<if test="condition.startdatetext != null and condition.startdatetext != ''" >
+	    and startdatetext =  #{condition.startdatetext}
+	</if>
+	<if test="condition.trqty != null and condition.trqty != ''" >
+	    and trqty =  #{condition.trqty}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userid != null and condition.userid != ''" >
+	    and userid =  #{condition.userid}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_In_Out(adqty,commodity,customerid,descr_c,descr_e,fvqty,ibqty,ivqty,obqty,packid,packuom1,sku,skutext,sku_descr_c,sku_descr_e,startdate,startdatetext,trqty,userdefine1,userdefine2,userdefine3,userid,warehouseid)
+ values(#{adqty},#{commodity},#{customerid},#{descrC},#{descrE},#{fvqty},#{ibqty},#{ivqty},#{obqty},#{packid},#{packuom1},#{sku},#{skutext},#{skuDescrC},#{skuDescrE},#{startdate},#{startdatetext},#{trqty},#{userdefine1},#{userdefine2},#{userdefine3},#{userid},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_In_Out set commodity=#{commodity},customerid=#{customerid},descr_c=#{descrC},descr_e=#{descrE},fvqty=#{fvqty},ibqty=#{ibqty},ivqty=#{ivqty},obqty=#{obqty},packid=#{packid},packuom1=#{packuom1},sku=#{sku},skutext=#{skutext},sku_descr_c=#{skuDescrC},sku_descr_e=#{skuDescrE},startdate=#{startdate},startdatetext=#{startdatetext},trqty=#{trqty},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userid=#{userid},warehouseid=#{warehouseid} where adqty=#{adqty}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_In_Out set 
+	<trim  suffixOverrides="," >
+	<if test="commodity != null  ">
+		commodity=#{commodity},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="fvqty != null  ">
+		fvqty=#{fvqty},
+	</if>
+	<if test="ibqty != null  ">
+		ibqty=#{ibqty},
+	</if>
+	<if test="ivqty != null  ">
+		ivqty=#{ivqty},
+	</if>
+	<if test="obqty != null  ">
+		obqty=#{obqty},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="packuom1 != null  ">
+		packuom1=#{packuom1},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="skutext != null  ">
+		skutext=#{skutext},
+	</if>
+	<if test="skuDescrC != null  ">
+		sku_descr_c=#{skuDescrC},
+	</if>
+	<if test="skuDescrE != null  ">
+		sku_descr_e=#{skuDescrE},
+	</if>
+	<if test="startdate != null  ">
+		startdate=#{startdate},
+	</if>
+	<if test="startdatetext != null  ">
+		startdatetext=#{startdatetext},
+	</if>
+	<if test="trqty != null  ">
+		trqty=#{trqty},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userid != null  ">
+		userid=#{userid},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where adqty=#{adqty}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_In_Out where adqty = #{adqty}
+</delete>
+ 
+<!-- 根据id查询 进出存合并报表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_In_Out where adqty = #{adqty}
+</select>
+
+<!-- 进出存合并报表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_In_Out 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询进出存合并报表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_In_Out 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    -->
+</select>
+
+<!-- 查询进出存合并报表分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_In_Out 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by customerid,sku
+    ) a 
+	) 
+	where 1=1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!--生成记录到表TMP_Combined_Report -->
+<select id="comReport" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPREP_Combined_Report(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{customerid,mode=IN,jdbcType=VARCHAR},'','','',#{startdate,mode=IN,jdbcType=VARCHAR},#{startdatetext,mode=IN,jdbcType=VARCHAR},'N','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+  	
+</mapper>   

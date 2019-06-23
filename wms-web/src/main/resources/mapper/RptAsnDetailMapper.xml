@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.RptAsnDetailMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.RptAsnDetail" >
+	<result column="addtime" property="addtime"/>
+	<result column="asnno" property="asnno"/>
+	<result column="asnreference1" property="asnreference1"/>
+	<result column="codename_c" property="codenameC"/>
+	<result column="codename_c1" property="codenameC1"/>
+	<result column="cube" property="cube"/>
+	<result column="customerid" property="customerid"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="edittime" property="edittime"/>
+	<result column="expectedqty" property="expectedqty"/>
+	<result column="lastreceivingtime" property="lastreceivingtime"/>
+	<result column="notes" property="notes"/>
+	<result column="receivedqty" property="receivedqty"/>
+	<result column="receivedtime" property="receivedtime"/>
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="sku" property="sku"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="addtimetext" property="addtimetext"/>
+	<result column="edittimetext" property="edittimetext"/>
+</resultMap>
+       
+<!-- Rpt_Asn_Detail table all fields -->
+<sql id="Base_Column_List" >
+	 addtime,asnno,asnreference1,codename_c,codename_c1,cube,customerid,descr_c,edittime,expectedqty,lastreceivingtime,notes,receivedqty,receivedtime,reservedfield01,sku,userdefine2,warehouseid,addtimetext,edittimetext
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.addtime != null and condition.addtime != '' and  condition.addtimetext != null and condition.addtimetext != ''" >
+	    and to_char(to_date(addtime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.addtime} and #{condition.addtimetext}
+	</if>
+	<if test="condition.asnno != null and condition.asnno != ''" >
+	    and asnno =  #{condition.asnno}
+	</if>
+	<if test="condition.asnreference1 != null and condition.asnreference1 != ''" >
+	    and asnreference1 =  #{condition.asnreference1}
+	</if>
+	<if test="condition.codenameC != null and condition.codenameC != ''" >
+	    and codename_c =  #{condition.codenameC}
+	</if>
+	<if test="condition.codenameC1 != null and condition.codenameC1 != ''" >
+	    and codename_c1 =  #{condition.codenameC1}
+	</if>
+	<if test="condition.cube != null and condition.cube != ''" >
+	    and cube =  #{condition.cube}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != '' and  condition.edittimetext != null and condition.edittimetext != ''" >
+	    and to_char(to_date(edittime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.edittime} and #{condition.edittimetext}
+	</if>
+	<if test="condition.expectedqty != null and condition.expectedqty != ''" >
+	    and expectedqty =  #{condition.expectedqty}
+	</if>
+	<if test="condition.lastreceivingtime != null and condition.lastreceivingtime != ''" >
+	    and lastreceivingtime =  #{condition.lastreceivingtime}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.receivedqty != null and condition.receivedqty != ''" >
+	    and receivedqty =  #{condition.receivedqty}
+	</if>
+	<if test="condition.receivedtime != null and condition.receivedtime != ''" >
+	    and receivedtime =  #{condition.receivedtime}
+	</if>
+	<if test="condition.reservedfield01 != null and condition.reservedfield01 != ''" >
+	    and reservedfield01 =  #{condition.reservedfield01}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and customerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Rpt_Asn_Detail(addtime,asnno,asnreference1,codename_c,codename_c1,cube,customerid,descr_c,edittime,expectedqty,lastreceivingtime,notes,receivedqty,receivedtime,reservedfield01,sku,userdefine2,warehouseid)
+ values(#{addtime},#{asnno},#{asnreference1},#{codenameC},#{codenameC1},#{cube},#{customerid},#{descrC},#{edittime},#{expectedqty},#{lastreceivingtime},#{notes},#{receivedqty},#{receivedtime},#{reservedfield01},#{sku},#{userdefine2},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Rpt_Asn_Detail set asnno=#{asnno},asnreference1=#{asnreference1},codename_c=#{codenameC},codename_c1=#{codenameC1},cube=#{cube},customerid=#{customerid},descr_c=#{descrC},edittime=#{edittime},expectedqty=#{expectedqty},lastreceivingtime=#{lastreceivingtime},notes=#{notes},receivedqty=#{receivedqty},receivedtime=#{receivedtime},reservedfield01=#{reservedfield01},sku=#{sku},userdefine2=#{userdefine2},warehouseid=#{warehouseid} where addtime=#{addtime}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Rpt_Asn_Detail set 
+	<trim  suffixOverrides="," >
+	<if test="asnno != null  ">
+		asnno=#{asnno},
+	</if>
+	<if test="asnreference1 != null  ">
+		asnreference1=#{asnreference1},
+	</if>
+	<if test="codenameC != null  ">
+		codename_c=#{codenameC},
+	</if>
+	<if test="codenameC1 != null  ">
+		codename_c1=#{codenameC1},
+	</if>
+	<if test="cube != null  ">
+		cube=#{cube},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="expectedqty != null  ">
+		expectedqty=#{expectedqty},
+	</if>
+	<if test="lastreceivingtime != null  ">
+		lastreceivingtime=#{lastreceivingtime},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="receivedqty != null  ">
+		receivedqty=#{receivedqty},
+	</if>
+	<if test="receivedtime != null  ">
+		receivedtime=#{receivedtime},
+	</if>
+	<if test="reservedfield01 != null  ">
+		reservedfield01=#{reservedfield01},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where addtime=#{addtime}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Rpt_Asn_Detail where addtime = #{addtime}
+</delete>
+ 
+<!-- 根据id查询 入库明细 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Rpt_Asn_Detail where addtime = #{addtime}
+</select>
+
+<!-- 入库明细 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Rpt_Asn_Detail 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询入库明细列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Asn_Detail 
+	<include refid="Example_Where_Clause"/>
+	<!-- 
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+     -->
+</select>
+
+<!-- 查询入库明细分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Rpt_Asn_Detail 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by customerid,asnno
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

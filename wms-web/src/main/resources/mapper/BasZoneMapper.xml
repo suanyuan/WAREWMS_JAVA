@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasZoneMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasZone" >
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="allow_cs_rpl" property="allowCsRpl"/>
+	<result column="allow_ea_rpl" property="allowEaRpl"/>
+	<result column="baselocation" property="baselocation"/>
+	<result column="cubage" property="cubage"/>
+	<result column="descr" property="descr"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="facility_id" property="facilityId"/>
+	<result column="picktoloc" property="picktoloc"/>
+	<result column="putawaytoloc" property="putawaytoloc"/>
+	<result column="route" property="route"/>
+	<result column="zone" property="zone"/>
+	<result column="zonegroup" property="zonegroup"/>
+	<result column="zonegroupName" property="zonegroupName"/>
+</resultMap>
+       
+<!-- Bas_Zone table all fields -->
+<sql id="Base_Column_List" >
+	 addtime,addwho,allow_cs_rpl,allow_ea_rpl,baselocation,cubage,descr,edittime,editwho,facility_id,picktoloc,putawaytoloc,route,zone,zonegroup
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.allowCsRpl != null and condition.allowCsRpl != ''" >
+	    and allow_cs_rpl =  #{condition.allowCsRpl}
+	</if>
+	<if test="condition.allowEaRpl != null and condition.allowEaRpl != ''" >
+	    and allow_ea_rpl =  #{condition.allowEaRpl}
+	</if>
+	<if test="condition.baselocation != null and condition.baselocation != ''" >
+	    and baselocation =  #{condition.baselocation}
+	</if>
+	<if test="condition.cubage != null and condition.cubage != ''" >
+	    and cubage =  #{condition.cubage}
+	</if>
+	<if test="condition.descr != null and condition.descr != ''" >
+	    and descr =  #{condition.descr}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.facilityId != null and condition.facilityId != ''" >
+	    and facility_id =  #{condition.facilityId}
+	</if>
+	<if test="condition.picktoloc != null and condition.picktoloc != ''" >
+	    and picktoloc =  #{condition.picktoloc}
+	</if>
+	<if test="condition.putawaytoloc != null and condition.putawaytoloc != ''" >
+	    and putawaytoloc =  #{condition.putawaytoloc}
+	</if>
+	<if test="condition.route != null and condition.route != ''" >
+	    and route =  #{condition.route}
+	</if>
+	<if test="condition.zone != null and condition.zone != ''" >
+	    and zone =  #{condition.zone}
+	</if>
+	<if test="condition.zonegroup != null and condition.zonegroup != ''" >
+	    and zonegroup =  #{condition.zonegroup}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+    insert into Bas_Zone(addtime,
+                       addwho,
+                       allow_cs_rpl,
+                       allow_ea_rpl,
+                       baselocation,
+                       cubage,
+                       descr,
+                       edittime,
+                       editwho,
+                       facility_id,
+                       picktoloc,
+                       putawaytoloc,
+                       route,
+                       zone,
+                       zonegroup)
+                 values
+                       (
+                       sysdate,
+                       #{addwho},
+                       'N',
+                       'N',
+                       '',
+                       0,
+                       #{descr},
+                       sysdate,
+                       #{editwho},
+                       '',
+                       '',
+                       '',
+                       '',
+                       #{zone},
+                       #{zonegroup}
+                       )
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Bas_Zone set
+  <if test="addwho != null  ">
+		addwho=#{addwho},
+  </if>
+  <if test="allowCsRpl != null  ">
+		allow_cs_rpl=#{allowCsRpl},
+	</if>
+ <if test="allowEaRpl != null  ">
+		allow_ea_rpl=#{allowEaRpl},
+	</if>
+	<if test="baselocation != null  ">
+		baselocation=#{baselocation},
+	</if>
+	<if test="cubage != null  ">
+		cubage=#{cubage},
+	</if>
+  <if test="descr != null  ">
+		descr=#{descr},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+  <if test="facilityId != null  ">
+		facility_id=#{facilityId},
+	</if>
+	<if test="picktoloc != null  ">
+		picktoloc=#{picktoloc},
+	</if>
+	<if test="putawaytoloc != null  ">
+		putawaytoloc=#{putawaytoloc},
+	</if>
+	<if test="route != null  ">
+		route=#{route},
+	</if>
+	<if test="zone != null  ">
+		zone=#{zone},
+	</if>
+	<if test="zonegroup != null  ">
+		zonegroup=#{zonegroup},
+	</if>
+	edittime=sysdate
+  where zone=#{zone,jdbcType=VARCHAR}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Bas_Zone set 
+	<trim  suffixOverrides="," >
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="allowCsRpl != null  ">
+		allow_cs_rpl=#{allowCsRpl},
+	</if>
+	<if test="allowEaRpl != null  ">
+		allow_ea_rpl=#{allowEaRpl},
+	</if>
+	<if test="baselocation != null  ">
+		baselocation=#{baselocation},
+	</if>
+	<if test="cubage != null  ">
+		cubage=#{cubage},
+	</if>
+	<if test="descr != null  ">
+		descr=#{descr},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="facilityId != null  ">
+		facility_id=#{facilityId},
+	</if>
+	<if test="picktoloc != null  ">
+		picktoloc=#{picktoloc},
+	</if>
+	<if test="putawaytoloc != null  ">
+		putawaytoloc=#{putawaytoloc},
+	</if>
+	<if test="route != null  ">
+		route=#{route},
+	</if>
+	<if test="zone != null  ">
+		zone=#{zone},
+	</if>
+	<if test="zonegroup != null  ">
+		zonegroup=#{zonegroup},
+	</if>
+	</trim> where addtime=#{addtime}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Bas_Zone where zone = #{zone,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 库区 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Bas_Zone where zone = #{zone,jdbcType=VARCHAR}
+</select>
+
+<!-- 库区 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Bas_Zone 
+	<include refid="Example_Where_Clause"/>
+</select>
+
+<!-- 查询库区档案分页列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,
+	(select descr from Bas_ZoneGroup where a.zonegroup=zonegroup) as zonegroupName,
+	rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Bas_Zone 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by zone) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+<!-- 查询库区列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select a.*,
+	(select descr from Bas_ZoneGroup where a.zonegroup=zonegroup) as zonegroupName
+	from Bas_Zone a
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+    -->
+    order by a.zone
+</select>
+
+<!-- 查询区域名称 -->
+<select id="queryZonegroupByAll" resultMap="BaseResultMap"  parameterType="Object">
+	select zonegroup,descr as zonegroupName
+	from Bas_ZoneGroup
+    order by zonegroup
+</select>
+
+<!-- 判断记录判断 -->
+<select id="basZoneCheck" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPBAS_Check('','Delete','BAS_ZONE',#{locationid,mode=IN,jdbcType=VARCHAR},'','','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+</mapper>   

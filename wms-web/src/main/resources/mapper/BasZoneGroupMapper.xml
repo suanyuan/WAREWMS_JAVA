@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasZoneGroupMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasZonegroup" >
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="descr" property="descr"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="zonegroup" property="zonegroup"/>
+</resultMap>
+       
+<!-- Bas_ZoneGroup table all fields -->
+<sql id="Base_Column_List" >
+	 addtime,addwho,descr,edittime,editwho,warehouseid,zonegroup
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.descr != null and condition.descr != ''" >
+	    and descr =  #{condition.descr}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.zonegroup != null and condition.zonegroup != ''" >
+	    and zonegroup =  #{condition.zonegroup}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into Bas_ZoneGroup(addtime,addwho,descr,edittime,editwho,warehouseid,zonegroup)
+ values(#{addtime},#{addwho},#{descr},#{edittime},#{editwho},#{warehouseid},#{zonegroup})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update Bas_ZoneGroup set descr=#{descr},edittime=#{edittime},editwho=#{editwho},warehouseid=#{warehouseid} where zonegroup=#{zonegroup}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update Bas_ZoneGroup set 
+	<trim  suffixOverrides="," >
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="descr != null  ">
+		descr=#{descr},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	<if test="zonegroup != null  ">
+		zonegroup=#{zonegroup},
+	</if>
+	</trim> where addtime=#{addtime}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from Bas_ZoneGroup where zonegroup=#{zonegroup}
+</delete>
+ 
+<!-- 根据id查询 区域 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from Bas_ZoneGroup where zonegroup=#{zonegroup}
+</select>
+
+<!-- 区域 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Bas_ZoneGroup 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询区域列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from Bas_ZoneGroup 
+	<include refid="Example_Where_Clause"/>
+	<!-- <if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if> -->
+    order by zonegroup
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+ 
+</mapper>

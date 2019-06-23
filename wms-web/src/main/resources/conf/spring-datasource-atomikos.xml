@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:tx="http://www.springframework.org/schema/tx" 
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:context="http://www.springframework.org/schema/context" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-3.0.xsd
+							http://www.springframework.org/schema/aop 
+							http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+							http://www.springframework.org/schema/tx
+							http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<!-- 引入属性文件 -->
+	<bean id="propertyPlaceholderConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+	    <property name="locations">  
+	        <list>  
+	            <value>classpath:config.properties</value>  
+	        </list>  
+	    </property>  
+	</bean>  
+	
+	<!-- 自動掃描dao和service -->
+	<context:component-scan base-package="com.wms.service,com.wms.dao,com.crm.dao,com.wms.dao" />
+	
+	<bean id="abstractXADataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init"  destroy-method="close" abstract="true"> 
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"/> 
+        <property name="poolSize" value="10" /> 
+        <property name="minPoolSize" value="10"/> 
+        <property name="maxPoolSize" value="30"/> 
+        <property name="borrowConnectionTimeout" value="60"/> 
+        <property name="reapTimeout" value="20"/> 
+        <property name="maxIdleTime" value="60"/> 
+        <property name="maintenanceInterval" value="60" />
+        <property name="loginTimeout" value="60"/>
+        <property name="logWriter" value="60"/>
+        <property name="testQuery">
+            <value>select 1</value>
+        </property>
+    </bean> 
+    
+	<bean id="dataSource" parent="abstractXADataSource">
+		<property name="uniqueResourceName" value="${databaseName}"/>
+		<property name="xaProperties">
+			<props>
+				<prop key="databaseName">${databaseName}</prop>
+				<prop key="user">${username}</prop>
+				<prop key="password">${password}</prop>
+				<prop key="url">${url}</prop>
+			</props>
+		</property>
+	</bean> 
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+			</props>
+		</property>
+
+		<!-- hbm方式配置 -->
+		<property name="packagesToScan" value="com.wms.entity" />
+	</bean>
+	
+	<bean id="crmDataSource" parent="abstractXADataSource">
+		<property name="uniqueResourceName" value="${crmDatabaseName}"/>
+		<property name="xaProperties">
+			<props>
+				<prop key="databaseName">${crmDatabaseName}</prop>
+				<prop key="user">${crmUsername}</prop>
+				<prop key="password">${crmPassword}</prop>
+				<prop key="url">${crmUrl}</prop>
+			</props>
+		</property>
+	</bean> 
+	<bean id="crmSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="crmDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+			</props>
+		</property>
+
+		<!-- hbm方式配置 -->
+		<property name="packagesToScan" value="com.crm.entity" />
+	</bean>
+	
+	<bean id="wmsDataSource" parent="abstractXADataSource">
+		<property name="uniqueResourceName" value="${wmsDatabaseName}"/>
+		<property name="xaProperties">
+			<props>
+				<prop key="databaseName">${wmsDatabaseName}</prop>
+				<prop key="user">${wmsUsername}</prop>
+				<prop key="password">${wmsPassword}</prop>
+				<prop key="url">${wmsUrl}</prop>
+			</props>
+		</property>
+	</bean> 
+	<bean id="wmsSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="wmsDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+			</props>
+		</property>
+
+		<!-- hbm方式配置 -->
+		<property name="packagesToScan" value="com.wms.entity" />
+	</bean>
+	
+	<bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close">
+		<property name="forceShutdown" value="true"/>
+	</bean>
+	<bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+		<property name="transactionTimeout" value="300"/>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="atomikosTransactionManager"/>
+		<property name="userTransaction" ref="atomikosUserTransaction"/>
+		<property name="allowCustomIsolationLevels" value="true" />
+	</bean> 
+
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" 			propagation="REQUIRED" />
+			<tx:method name="append*" 		propagation="REQUIRED" />
+			<tx:method name="save*" 		propagation="REQUIRED" />
+			<tx:method name="update*" 		propagation="REQUIRED" />
+			<tx:method name="modify*" 		propagation="REQUIRED" />
+			<tx:method name="edit*" 		propagation="REQUIRED" />
+			<tx:method name="delete*" 		propagation="REQUIRED" />
+			<tx:method name="remove*" 		propagation="REQUIRED" />
+			<tx:method name="init" 			propagation="REQUIRED" />
+			<tx:method name="delAndInit" 	propagation="REQUIRED" />
+
+			<tx:method name="get*" 			propagation="REQUIRED" 	read-only="true" />
+			<tx:method name="find*" 		propagation="REQUIRED" 	read-only="true" />
+			<tx:method name="load*" 		propagation="REQUIRED" 	read-only="true" />
+			<tx:method name="search*" 		propagation="REQUIRED" 	read-only="true" />
+			<tx:method name="*Datagrid" 	propagation="REQUIRED" 	read-only="true" />
+
+			<tx:method name="*" 			propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="transactionPointcut" expression="execution(* com.wms.service.*.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />
+	</aop:config>
+</beans>

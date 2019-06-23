@@ -1,0 +1,51 @@
+package com.wms.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.wms.dao.ViewInvLocationDao;
+import com.wms.entity.ViewInvLocation;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.ViewInvLocationVO;
+import com.wms.vo.Json;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.vo.form.ViewInvLocationForm;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.ViewInvLocationMybatisDao;
+import com.wms.query.ViewInvLocationQuery;
+
+@Service("viewInvLocationService")
+public class ViewInvLocationService extends BaseService {
+
+	@Autowired
+	private ViewInvLocationMybatisDao viewInvLocationMybatisDao;
+
+	public EasyuiDatagrid<ViewInvLocationVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvLocationQuery query) {
+		EasyuiDatagrid<ViewInvLocationVO> datagrid = new EasyuiDatagrid<ViewInvLocationVO>();
+		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<ViewInvLocation> viewInvLocationList = viewInvLocationMybatisDao.queryByPageList(mybatisCriteria);
+		ViewInvLocationVO viewInvLocationVO = null;
+		List<ViewInvLocationVO> viewInvLocationVOList = new ArrayList<ViewInvLocationVO>();
+		for (ViewInvLocation viewInvLocation : viewInvLocationList) {
+			viewInvLocationVO = new ViewInvLocationVO();
+			BeanUtils.copyProperties(viewInvLocation, viewInvLocationVO);
+			viewInvLocationVOList.add(viewInvLocationVO);
+		}
+		datagrid.setTotal((long)viewInvLocationMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(viewInvLocationVOList);
+		return datagrid;
+	}
+
+}

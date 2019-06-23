@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ViewInvLocationMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ViewInvLocation" >
+	<result column="fmcustomerid" property="fmcustomerid"/>
+	<result column="fmlocation" property="fmlocation"/>
+	<result column="fmqty" property="fmqty"/>
+	<result column="fmsku" property="fmsku"/>
+	<result column="fmuom_name" property="fmuomName"/>
+	<result column="i_mv" property="iMv"/>
+	<result column="i_pa" property="iPa"/>
+	<result column="i_rp" property="iRp"/>
+	<result column="o_mv" property="oMv"/>
+	<result column="o_rp" property="oRp"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyavailed" property="qtyavailed"/>
+	<result column="qtyholded" property="qtyholded"/>
+	<result column="skudescrc" property="skudescrc"/>
+	<result column="skudescre" property="skudescre"/>
+	<result column="totalcubic" property="totalcubic"/>
+	<result column="totalgrossweight" property="totalgrossweight"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- View_Inv_Location table all fields -->
+<sql id="Base_Column_List" >
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+	    and fmcustomerid =  #{condition.fmcustomerid}
+	</if>
+	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
+	    and fmlocation =  #{condition.fmlocation}
+	</if>
+	<if test="condition.fmqty != null and condition.fmqty != ''" >
+	    and fmqty =  #{condition.fmqty}
+	</if>
+	<if test="condition.fmsku != null and condition.fmsku != ''" >
+	    and fmsku =  #{condition.fmsku}
+	</if>
+	<if test="condition.fmuomName != null and condition.fmuomName != ''" >
+	    and fmuom_name =  #{condition.fmuomName}
+	</if>
+	<if test="condition.iMv != null and condition.iMv != ''" >
+	    and i_mv =  #{condition.iMv}
+	</if>
+	<if test="condition.iPa != null and condition.iPa != ''" >
+	    and i_pa =  #{condition.iPa}
+	</if>
+	<if test="condition.iRp != null and condition.iRp != ''" >
+	    and i_rp =  #{condition.iRp}
+	</if>
+	<if test="condition.oMv != null and condition.oMv != ''" >
+	    and o_mv =  #{condition.oMv}
+	</if>
+	<if test="condition.oRp != null and condition.oRp != ''" >
+	    and o_rp =  #{condition.oRp}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtyavailed != null and condition.qtyavailed != ''" >
+	    and qtyavailed =  #{condition.qtyavailed}
+	</if>
+	<if test="condition.qtyholded != null and condition.qtyholded != ''" >
+	    and qtyholded =  #{condition.qtyholded}
+	</if>
+	<if test="condition.skudescrc != null and condition.skudescrc != ''" >
+	    and skudescrc =  #{condition.skudescrc}
+	</if>
+	<if test="condition.skudescre != null and condition.skudescre != ''" >
+	    and skudescre =  #{condition.skudescre}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and fmcustomerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
+   
+<!-- 库存余量按库位 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from View_Inv_Location 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询库存余量按批次库位列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Location 
+	<include refid="Example_Where_Clause"/>
+<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
+<!--        order by fmcustomerid,fmsku,fmlocation -->
+<!--     </if> -->
+    order by fmcustomerid,fmsku,fmlocation
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询库存余量按批次库位列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Location 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by fmcustomerid,fmsku,fmlocation
+    </if>
+</select>
+  	
+</mapper>   

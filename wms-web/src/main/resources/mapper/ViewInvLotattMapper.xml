@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ViewInvLotattMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ViewInvLotatt" >
+	<result column="allocationrule" property="allocationrule"/>
+	<result column="alternatesku1" property="alternatesku1"/>
+	<result column="alternatesku2" property="alternatesku2"/>
+	<result column="alternatesku3" property="alternatesku3"/>
+	<result column="alternatesku4" property="alternatesku4"/>
+	<result column="alternatesku5" property="alternatesku5"/>
+	<result column="configlist01" property="configlist01"/>
+	<result column="configlist02" property="configlist02"/>
+	<result column="fmcustomerid" property="fmcustomerid"/>
+	<result column="fmid" property="fmid"/>
+	<result column="fmlocation" property="fmlocation"/>
+	<result column="fmlotnum" property="fmlotnum"/>
+	<result column="fmqty" property="fmqty"/>
+	<result column="fmsku" property="fmsku"/>
+	<result column="fmuom_name" property="fmuomName"/>
+	<result column="imageaddress" property="imageaddress"/>
+	<result column="i_mv" property="iMv"/>
+	<result column="i_pa" property="iPa"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt01text" property="lotatt01text"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt02text" property="lotatt02text"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt03text" property="lotatt03text"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt04text" property="lotatt04text"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt05text" property="lotatt05text"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt06text" property="lotatt06text"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt07text" property="lotatt07text"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt08text" property="lotatt08text"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt09text" property="lotatt09text"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt10text" property="lotatt10text"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt11text" property="lotatt11text"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt12text" property="lotatt12text"/>
+	<result column="lpn" property="lpn"/>
+	<result column="netweight" property="netweight"/>
+	<result column="o_mv" property="oMv"/>
+	<result column="pkey" property="pkey"/>
+	<result column="price" property="price"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyavailed" property="qtyavailed"/>
+	<result column="qtyholded" property="qtyholded"/>
+	<result column="qtyrpin" property="qtyrpin"/>
+	<result column="qtyrpout" property="qtyrpout"/>
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="reservedfield02" property="reservedfield02"/>
+	<result column="reservedfield03" property="reservedfield03"/>
+	<result column="reservedfield04" property="reservedfield04"/>
+	<result column="reservedfield05" property="reservedfield05"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="skudescrc" property="skudescrc"/>
+	<result column="skudescre" property="skudescre"/>
+	<result column="skugroup1" property="skugroup1"/>
+	<result column="skugroup2" property="skugroup2"/>
+	<result column="skugroup3" property="skugroup3"/>
+	<result column="skugroup4" property="skugroup4"/>
+	<result column="skugroup5" property="skugroup5"/>
+	<result column="softallocationrule" property="softallocationrule"/>
+	<result column="toadjqty" property="toadjqty"/>
+	<result column="totalcubic" property="totalcubic"/>
+	<result column="totalgrossweight" property="totalgrossweight"/>
+	<result column="uom" property="uom"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- View_Inv_Lotatt table all fields -->
+<sql id="Base_Column_List" >
+	 allocationrule,alternatesku1,alternatesku2,alternatesku3,alternatesku4,alternatesku5,configlist01,configlist02,fmcustomerid,fmid,fmlocation,fmlotnum,fmqty,fmsku,fmuom_name,imageaddress,i_mv,i_pa,lotatt01,lotatt01text,lotatt02,lotatt02text,lotatt03,lotatt03text,lotatt04,lotatt04text,lotatt05,lotatt05text,lotatt06,lotatt06text,lotatt07,lotatt07text,lotatt08,lotatt08text,lotatt09,lotatt09text,lotatt10,lotatt10text,lotatt11,lotatt11text,lotatt12,lotatt12text,lpn,netweight,o_mv,pkey,price,qtyallocated,qtyavailed,qtyholded,qtyrpin,qtyrpout,reservedfield01,reservedfield02,reservedfield03,reservedfield04,reservedfield05,rotationid,skudescrc,skudescre,skugroup1,skugroup2,skugroup3,skugroup4,skugroup5,softallocationrule,toadjqty,totalcubic,totalgrossweight,uom,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.allocationrule != null and condition.allocationrule != ''" >
+	    and allocationrule =  #{condition.allocationrule}
+	</if>
+	<if test="condition.alternatesku1 != null and condition.alternatesku1 != ''" >
+	    and alternatesku1 =  #{condition.alternatesku1}
+	</if>
+	<if test="condition.alternatesku2 != null and condition.alternatesku2 != ''" >
+	    and alternatesku2 =  #{condition.alternatesku2}
+	</if>
+	<if test="condition.alternatesku3 != null and condition.alternatesku3 != ''" >
+	    and alternatesku3 =  #{condition.alternatesku3}
+	</if>
+	<if test="condition.alternatesku4 != null and condition.alternatesku4 != ''" >
+	    and alternatesku4 =  #{condition.alternatesku4}
+	</if>
+	<if test="condition.alternatesku5 != null and condition.alternatesku5 != ''" >
+	    and alternatesku5 =  #{condition.alternatesku5}
+	</if>
+	<if test="condition.configlist01 != null and condition.configlist01 != ''" >
+	    and configlist01 =  #{condition.configlist01}
+	</if>
+	<if test="condition.configlist02 != null and condition.configlist02 != ''" >
+	    and configlist02 =  #{condition.configlist02}
+	</if>
+	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+	    and fmcustomerid =  #{condition.fmcustomerid}
+	</if>
+	<if test="condition.fmid != null and condition.fmid != ''" >
+	    and fmid =  #{condition.fmid}
+	</if>
+	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
+	    and fmlocation =  #{condition.fmlocation}
+	</if>
+	<if test="condition.fmlotnum != null and condition.fmlotnum != ''" >
+	    and fmlotnum =  #{condition.fmlotnum}
+	</if>
+	<if test="condition.fmqty != null and condition.fmqty != ''" >
+	    and fmqty =  #{condition.fmqty}
+	</if>
+	<if test="condition.fmsku != null and condition.fmsku != ''" >
+	    and fmsku =  #{condition.fmsku}
+	</if>
+	<if test="condition.fmuomName != null and condition.fmuomName != ''" >
+	    and fmuom_name =  #{condition.fmuomName}
+	</if>
+	<if test="condition.imageaddress != null and condition.imageaddress != ''" >
+	    and imageaddress =  #{condition.imageaddress}
+	</if>
+	<if test="condition.iMv != null and condition.iMv != ''" >
+	    and i_mv =  #{condition.iMv}
+	</if>
+	<if test="condition.iPa != null and condition.iPa != ''" >
+	    and i_pa =  #{condition.iPa}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != '' and condition.lotatt01text != null and condition.lotatt01text != ''" >
+	    and to_char(to_date(lotatt01,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt01} and #{condition.lotatt01text}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != '' and condition.lotatt02text != null and condition.lotatt02text != ''" >
+	    and to_char(to_date(lotatt02,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt02} and #{condition.lotatt02text}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != '' and condition.lotatt03text != null and condition.lotatt03text != ''" >
+	    and to_char(to_date(lotatt03,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt03} and #{condition.lotatt03text}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt04text != null and condition.lotatt04text != ''" >
+	    and lotatt04text =  #{condition.lotatt04text}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt05text != null and condition.lotatt05text != ''" >
+	    and lotatt05text =  #{condition.lotatt05text}
+	</if>
+	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+	    and lotatt06 =  #{condition.lotatt06}
+	</if>
+	<if test="condition.lotatt06text != null and condition.lotatt06text != ''" >
+	    and lotatt06text =  #{condition.lotatt06text}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt07text != null and condition.lotatt07text != ''" >
+	    and lotatt07text =  #{condition.lotatt07text}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt08text != null and condition.lotatt08text != ''" >
+	    and lotatt08text =  #{condition.lotatt08text}
+	</if>
+	<if test="condition.lotatt09 != null and condition.lotatt09 != ''" >
+	    and lotatt09 =  #{condition.lotatt09}
+	</if>
+	<if test="condition.lotatt09text != null and condition.lotatt09text != ''" >
+	    and lotatt09text =  #{condition.lotatt09text}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt10text != null and condition.lotatt10text != ''" >
+	    and lotatt10text =  #{condition.lotatt10text}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.lotatt11text != null and condition.lotatt11text != ''" >
+	    and lotatt11text =  #{condition.lotatt11text}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and lotatt12 =  #{condition.lotatt12}
+	</if>
+	<if test="condition.lotatt12text != null and condition.lotatt12text != ''" >
+	    and lotatt12text =  #{condition.lotatt12text}
+	</if>
+	<if test="condition.lpn != null and condition.lpn != ''" >
+	    and lpn =  #{condition.lpn}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.oMv != null and condition.oMv != ''" >
+	    and o_mv =  #{condition.oMv}
+	</if>
+	<if test="condition.pkey != null and condition.pkey != ''" >
+	    and pkey =  #{condition.pkey}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtyavailed != null and condition.qtyavailed != ''" >
+	    and qtyavailed =  #{condition.qtyavailed}
+	</if>
+	<if test="condition.qtyholded != null and condition.qtyholded != ''" >
+	    and qtyholded =  #{condition.qtyholded}
+	</if>
+	<if test="condition.qtyrpin != null and condition.qtyrpin != ''" >
+	    and qtyrpin =  #{condition.qtyrpin}
+	</if>
+	<if test="condition.qtyrpout != null and condition.qtyrpout != ''" >
+	    and qtyrpout =  #{condition.qtyrpout}
+	</if>
+	<if test="condition.reservedfield01 != null and condition.reservedfield01 != ''" >
+	    and reservedfield01 =  #{condition.reservedfield01}
+	</if>
+	<if test="condition.reservedfield02 != null and condition.reservedfield02 != ''" >
+	    and reservedfield02 =  #{condition.reservedfield02}
+	</if>
+	<if test="condition.reservedfield03 != null and condition.reservedfield03 != ''" >
+	    and reservedfield03 =  #{condition.reservedfield03}
+	</if>
+	<if test="condition.reservedfield04 != null and condition.reservedfield04 != ''" >
+	    and reservedfield04 =  #{condition.reservedfield04}
+	</if>
+	<if test="condition.reservedfield05 != null and condition.reservedfield05 != ''" >
+	    and reservedfield05 =  #{condition.reservedfield05}
+	</if>
+	<if test="condition.rotationid != null and condition.rotationid != ''" >
+	    and rotationid =  #{condition.rotationid}
+	</if>
+	<if test="condition.skudescrc != null and condition.skudescrc != ''" >
+	    and skudescrc =  #{condition.skudescrc}
+	</if>
+	<if test="condition.skudescre != null and condition.skudescre != ''" >
+	    and skudescre =  #{condition.skudescre}
+	</if>
+	<if test="condition.skugroup1 != null and condition.skugroup1 != ''" >
+	    and skugroup1 =  #{condition.skugroup1}
+	</if>
+	<if test="condition.skugroup2 != null and condition.skugroup2 != ''" >
+	    and skugroup2 =  #{condition.skugroup2}
+	</if>
+	<if test="condition.skugroup3 != null and condition.skugroup3 != ''" >
+	    and skugroup3 =  #{condition.skugroup3}
+	</if>
+	<if test="condition.skugroup4 != null and condition.skugroup4 != ''" >
+	    and skugroup4 =  #{condition.skugroup4}
+	</if>
+	<if test="condition.skugroup5 != null and condition.skugroup5 != ''" >
+	    and skugroup5 =  #{condition.skugroup5}
+	</if>
+	<if test="condition.softallocationrule != null and condition.softallocationrule != ''" >
+	    and softallocationrule =  #{condition.softallocationrule}
+	</if>
+	<if test="condition.toadjqty != null and condition.toadjqty != ''" >
+	    and toadjqty =  #{condition.toadjqty}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<if test="condition.uom != null and condition.uom != ''" >
+	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and fmcustomerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+	
+</trim>
+</sql>
+   
+
+<!-- 根据id查询 库存余量按批次库位 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="java.util.Map">
+	select <include refid="Base_Column_List" /> 
+	 from View_Inv_Lotatt where fmid = #{fmid} and fmlocation = #{fmlocation} and fmlotnum = #{fmlotnum}
+</select>
+
+<!-- 库存余量按批次库位 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from View_Inv_Lotatt 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询库存余量按批次库位列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*,rownum as row_num from (
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Lotatt 
+	<include refid="Example_Where_Clause"/>
+<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
+<!--        order by fmcustomerid,fmsku,fmlocation -->
+<!--     </if> -->
+    order by fmcustomerid,fmsku,fmlocation
+    ) a 
+	) 
+	where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询库存余量按批次库位列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from View_Inv_Lotatt 
+	<include refid="Example_Where_Clause"/>
+<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
+       order by fmcustomerid,fmsku,fmlocation
+<!--     </if> -->
+</select>
+
+<!-- 库存调整 
+目标数量lotatt11
+调整原因 lotatt12
+原因描述lotatt12text
+-->
+<select id="invAdj" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Adjustment_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},to_char(SYSDATE,'yyyy-mm-dd hh24:mi'),'0.000','0.000','0','0.00000','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<!-- 库存移动 
+目标库位lotatt11text
+移动数量lotatt11
+移动原因 lotatt12
+原因描述lotatt12text
+-->
+<select id="invMov" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Movement_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11text,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},to_char(SYSDATE,'yyyy-mm-dd hh24:mi'),'CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<!-- 库存冻结 
+冻结原因 lotatt12
+原因描述lotatt12text
+-->
+<select id="invHold" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Hold_Release(#{warehouseid,mode=IN,jdbcType=VARCHAR},'HOLD','5','',#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+   
+</mapper>   
