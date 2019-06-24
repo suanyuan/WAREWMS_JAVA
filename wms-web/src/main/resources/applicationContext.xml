@@ -5,19 +5,20 @@
 			http://www.springframework.org/schema/beans
 			http://www.springframework.org/schema/beans/spring-beans.xsd">
 		
-	<import resource="classpath:\conf\spring-i18n.xml"/>	
+	<import resource="classpath:/conf/spring-i18n.xml"/>
 	<!-- for Atomikos XATransaction -->
 <!-- 	<import resource="classpath:\conf\spring-datasource-atomikos.xml"/> -->
 	<!-- for Hibernate -->
-	<import resource="classpath:\conf\spring-datasource.xml"/>
-	<import resource="classpath:\conf\spring-interceptor.xml"/>
+	<import resource="classpath:/conf/spring-datasource.xml"/>
+	<import resource="classpath:/conf/spring-interceptor.xml"/>
 <!-- 	<import resource="classpath:\conf\spring-quartz.xml"/> -->
-	<import resource="classpath:\conf\spring-ehcache.xml"/>
-	<import resource="classpath:\conf\spring-captcha.xml"/>
-	<import resource="classpath:\conf\spring-security.xml"/>
-	<import resource="classpath:\conf\spring-mail.xml"/>
-	<import resource="classpath:\conf\spring-ftp.xml"/>
-	<import resource="classpath:\conf\spring-mybatis.xml"/>
+	<import resource="classpath:/conf/spring-ehcache.xml"/>
+	<import resource="classpath:/conf/spring-captcha.xml"/>
+	<import resource="classpath:/conf/spring-security.xml"/>
+	<import resource="classpath:/conf/spring-mail.xml"/>
+	<import resource="classpath:/conf/spring-ftp.xml"/>
+	<import resource="classpath:/conf/spring-mybatis.xml"/>
+	<import resource="classpath:/conf/spring-redis.xml"/>
 <!-- 	<import resource="classpath:\batch\batch001.xml"/> -->
 <!-- 	<import resource="classpath:\conf\spring-batch.xml"/> -->
 	

@@ -72,7 +72,21 @@ $(function () {
 	}
 	ezuiTabs = $('#ezuiTabs').tabs({
 		fit : true,
-		border : false
+		border : false,
+		tools: [{
+                  iconCls: 'icon-reload',
+                  border: false,
+                  handler: function () {
+                     var current_tab = $('#ezuiTabs').tabs('getSelected');
+                     $('#ezuiTabs').tabs('update',{
+                          tab:current_tab,
+                          options : {
+                               content : current_tab[0].innerHTML,
+                          }
+                     });
+                     current_tab.panel('refresh');
+                  }
+               }]
 	});
 	if('${sessionScope.userInfo}'){
 		addTab({url : "<c:url value='/home.html'/>", title : "首页",closable : false});
@@ -286,12 +300,12 @@ var openForgetPwdDialog = function(){
 			<table class="tableForm">
 				<tr>
 					<th>帐号</th>
-					<td><input type="text" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true" /></td>
+					<td><input autofocus="autofocus" type="text" value="admin" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<th>密码</th>
 					<td>
-						<input type="password" name="password" class="easyui-textbox" size='19' data-options="required:true"/>
+						<input type="password" value="123456" name="password" class="easyui-textbox" size='19' data-options="required:true"/>
 					</td>
 				</tr>
 				<tr>

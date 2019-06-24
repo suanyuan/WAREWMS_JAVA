@@ -4,14 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 
-import com.wms.entity.BasSku;
-import com.wms.entity.BasZonegroup;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.ViewInvHold;
-import com.wms.entity.ViewInvLocation;
-import com.wms.entity.ViewInvLotatt;
-import com.wms.entity.ViewInvTran;
+import com.wms.entity.*;
 
 public class CodeGenerator {
 	//windows路径
@@ -43,8 +36,8 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-//		CodeGenerator generator = new CodeGenerator(new BasDistributionRule());
-//		generator.genData();
+		CodeGenerator generator = new CodeGenerator(new GspSecondRecord());
+		generator.genData();
 	}
 	
 	private Object obj;
@@ -156,6 +149,9 @@ public class CodeGenerator {
 		for (Field field : fields) {
 			field.setAccessible(true);
 			typeName = field.getType().toString();
+			if(isQuery){ //TODO 参数类型全部修改string否则接收会报错
+				typeName = "String";
+			}
 			if(typeName.indexOf("[L") >= 0){
 				typeName = typeName.split("L")[1].replace(";", "") + "[]";
 			}else{
