@@ -1,4 +1,6 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <form id='ezuiForm' method='post'>
     <input type='hidden' id='gspBusinessLicenseId' name='gspBusinessLicenseId'/>
     <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId'/>
@@ -62,9 +64,37 @@
         <tr>
             <th>营业执照照片</th>
             <td>
-                <input name='attachmentUrl' class="easyui-filebox" size="80" data-options="required:true,buttonText:'选择'">
+                <input id="attachmentUrl" name='attachmentUrl'>
                 <a id="btn" href="#" class="easyui-linkbutton" data-options="">浏览</a>
             </td>
         </tr>
     </table>
 </form>
+<script>
+    $(function () {
+        $('#attachmentUrl').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            required: true,
+            onChange:function(data){
+                doUpload(data);
+            }
+        });
+
+    })
+
+    function doUpload(data) {
+        console.log(data);
+        $.ajaxFileUpload({
+            url: '<c:url value="/common/upload_fileLocal"/>', //执行上传处理的文件地址
+            secureuri: false, //是否加密，一般是false，默认值为false
+            fileElementId: 'filebox_file_id_1', //这里 的filebox的id为 filebox_file_id_1而不是fileName
+            type: 'post', //请求方式，如果传递额外数据，必须是post
+            success: function (data) {//成功的回调函数，内部处理会加上html标签
+                console.log(data);
+            }
+        });
+        $('#attachmentUrl').filebox('clear');//上传成功后清空里面的值
+    }
+</script>

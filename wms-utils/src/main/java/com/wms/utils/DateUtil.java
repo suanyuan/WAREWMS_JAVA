@@ -21,7 +21,7 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 public class DateUtil {
 
 	/**
-	 * Date => 中華民國年月日
+	 * Date =>
 	 * 
 	 * @param splitPattern
 	 * @return

@@ -8,6 +8,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery-easyui/locale/easyui-lang-zh_CN.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/syUtils.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/swUtils.js"/>"></script>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <c:set var="themeValue">
 	<c:out value="${cookie.easyuiThemeName.value}" default="default"/>
 </c:set>
