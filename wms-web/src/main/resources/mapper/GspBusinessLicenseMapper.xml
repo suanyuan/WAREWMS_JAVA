@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspBusinessLicenseMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.GspBusinessLicense" >
+	<result column="business_id" property="businessId"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="license_number" property="licenseNumber"/>
+	<result column="social_credit_code" property="socialCreditCode"/>
+	<result column="license_name" property="licenseName"/>
+	<result column="license_type" property="licenseType"/>
+	<result column="residence" property="residence"/>
+	<result column="juridical_person" property="juridicalPerson"/>
+	<result column="registered_capital" property="registeredCapital"/>
+	<result column="establishment_date" property="establishmentDate"/>
+	<result column="business_start_date" property="businessStartDate"/>
+	<result column="business_end_date" property="businessEndDate"/>
+	<result column="is_long" property="isLong"/>
+	<result column="business_scope" property="businessScope"/>
+	<result column="issue_date" property="issueDate"/>
+	<result column="registration_authority" property="registrationAuthority"/>
+	<result column="attachment_url" property="attachmentUrl"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+</resultMap>
+       
+<!-- gsp_business_license table all fields -->
+<sql id="Base_Column_List" >
+	 business_id,enterprise_id,license_number,social_credit_code,license_name,license_type,residence,juridical_person,registered_capital,establishment_date,business_start_date,business_end_date,is_long,business_scope,issue_date,registration_authority,attachment_url,create_id,create_date,edit_id,edit_date,is_use
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.businessId != null and condition.businessId != ''" >
+	    and business_id =  #{condition.businessId}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+	    and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.licenseNumber != null and condition.licenseNumber != ''" >
+	    and license_number =  #{condition.licenseNumber}
+	</if>
+	<if test="condition.socialCreditCode != null and condition.socialCreditCode != ''" >
+	    and social_credit_code =  #{condition.socialCreditCode}
+	</if>
+	<if test="condition.licenseName != null and condition.licenseName != ''" >
+	    and license_name =  #{condition.licenseName}
+	</if>
+	<if test="condition.licenseType != null and condition.licenseType != ''" >
+	    and license_type =  #{condition.licenseType}
+	</if>
+	<if test="condition.residence != null and condition.residence != ''" >
+	    and residence =  #{condition.residence}
+	</if>
+	<if test="condition.juridicalPerson != null and condition.juridicalPerson != ''" >
+	    and juridical_person =  #{condition.juridicalPerson}
+	</if>
+	<if test="condition.registeredCapital != null and condition.registeredCapital != ''" >
+	    and registered_capital =  #{condition.registeredCapital}
+	</if>
+	<if test="condition.establishmentDate != null and condition.establishmentDate != ''" >
+	    and establishment_date =  #{condition.establishmentDate}
+	</if>
+	<if test="condition.businessStartDate != null and condition.businessStartDate != ''" >
+	    and business_start_date =  #{condition.businessStartDate}
+	</if>
+	<if test="condition.businessEndDate != null and condition.businessEndDate != ''" >
+	    and business_end_date =  #{condition.businessEndDate}
+	</if>
+	<if test="condition.isLong != null and condition.isLong != ''" >
+	    and is_long =  #{condition.isLong}
+	</if>
+	<if test="condition.businessScope != null and condition.businessScope != ''" >
+	    and business_scope =  #{condition.businessScope}
+	</if>
+	<if test="condition.issueDate != null and condition.issueDate != ''" >
+	    and issue_date =  #{condition.issueDate}
+	</if>
+	<if test="condition.registrationAuthority != null and condition.registrationAuthority != ''" >
+	    and registration_authority =  #{condition.registrationAuthority}
+	</if>
+	<if test="condition.attachmentUrl != null and condition.attachmentUrl != ''" >
+	    and attachment_url =  #{condition.attachmentUrl}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+	    and is_use =  #{condition.isUse}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into gsp_business_license(business_id,enterprise_id,license_number,social_credit_code,license_name,license_type,residence,juridical_person,registered_capital,establishment_date,business_start_date,business_end_date,is_long,business_scope,issue_date,registration_authority,attachment_url,create_id,create_date,edit_id,edit_date,is_use)
+ values(#{businessId},#{enterpriseId},#{licenseNumber},#{socialCreditCode},#{licenseName},#{licenseType},#{residence},#{juridicalPerson},#{registeredCapital},#{establishmentDate},#{businessStartDate},#{businessEndDate},#{isLong},#{businessScope},#{issueDate},#{registrationAuthority},#{attachmentUrl},#{createId},#{createDate},#{editId},#{editDate},#{isUse})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update gsp_business_license set enterprise_id=#{enterpriseId},license_number=#{licenseNumber},social_credit_code=#{socialCreditCode},license_name=#{licenseName},license_type=#{licenseType},residence=#{residence},juridical_person=#{juridicalPerson},registered_capital=#{registeredCapital},establishment_date=#{establishmentDate},business_start_date=#{businessStartDate},business_end_date=#{businessEndDate},is_long=#{isLong},business_scope=#{businessScope},issue_date=#{issueDate},registration_authority=#{registrationAuthority},attachment_url=#{attachmentUrl},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where business_id=#{businessId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update gsp_business_license set 
+	<trim  suffixOverrides="," >
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
+	</if>
+	<if test="licenseNumber != null  ">
+		license_number=#{licenseNumber},
+	</if>
+	<if test="socialCreditCode != null  ">
+		social_credit_code=#{socialCreditCode},
+	</if>
+	<if test="licenseName != null  ">
+		license_name=#{licenseName},
+	</if>
+	<if test="licenseType != null  ">
+		license_type=#{licenseType},
+	</if>
+	<if test="residence != null  ">
+		residence=#{residence},
+	</if>
+	<if test="juridicalPerson != null  ">
+		juridical_person=#{juridicalPerson},
+	</if>
+	<if test="registeredCapital != null  ">
+		registered_capital=#{registeredCapital},
+	</if>
+	<if test="establishmentDate != null  ">
+		establishment_date=#{establishmentDate},
+	</if>
+	<if test="businessStartDate != null  ">
+		business_start_date=#{businessStartDate},
+	</if>
+	<if test="businessEndDate != null  ">
+		business_end_date=#{businessEndDate},
+	</if>
+	<if test="isLong != null  ">
+		is_long=#{isLong},
+	</if>
+	<if test="businessScope != null  ">
+		business_scope=#{businessScope},
+	</if>
+	<if test="issueDate != null  ">
+		issue_date=#{issueDate},
+	</if>
+	<if test="registrationAuthority != null  ">
+		registration_authority=#{registrationAuthority},
+	</if>
+	<if test="attachmentUrl != null  ">
+		attachment_url=#{attachmentUrl},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="isUse != null  ">
+		is_use=#{isUse},
+	</if>
+	</trim> where business_id=#{businessId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from gsp_business_license where business_id = #{businessId}
+</delete>
+ 
+<!-- 根据id查询 营业执照 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from gsp_business_license where business_id = #{businessId}
+</select>
+
+<!-- 营业执照 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from gsp_business_license 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询营业执照列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from gsp_business_license 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

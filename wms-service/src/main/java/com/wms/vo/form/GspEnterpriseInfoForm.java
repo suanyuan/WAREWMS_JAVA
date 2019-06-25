@@ -13,11 +13,6 @@ public class GspEnterpriseInfoForm {
 	private String contacts;
 	private String contactsPhone;
 	private String remark;
-	private Long createId;
-	private java.util.Date createDate;
-	private Long editId;
-	private java.util.Date editDate;
-	private String isUse;
 
 	public Long getEnterpriseId() {
 		return enterpriseId;
@@ -81,48 +76,6 @@ public class GspEnterpriseInfoForm {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	public Long getCreateId() {
-		return createId;
-	}
-
-	public void setCreateId(Long createId) {
-		this.createId = createId;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Long getEditId() {
-		return editId;
-	}
-
-	public void setEditId(Long editId) {
-		this.editId = editId;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
-		return editDate;
-	}
-
-	public void setEditDate(java.util.Date editDate) {
-		this.editDate = editDate;
-	}
-
-	public String getIsUse() {
-		return isUse;
-	}
-
-	public void setIsUse(String isUse) {
-		this.isUse = isUse;
 	}
 
 }

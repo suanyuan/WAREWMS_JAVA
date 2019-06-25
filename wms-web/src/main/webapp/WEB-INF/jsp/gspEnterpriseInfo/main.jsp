@@ -139,59 +139,68 @@ var del = function(){
 	}
 };
 var commit = function(){
+    var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
-    //var infoObj = new Object();
-    //var infoObj = new Object();
+    var operateobj = new Object();
+    var secondREcord = new Object();
+
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
     $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
         businessObj[""+$(this).attr("name")+""] = $(this).val();
     })
+    $("#ezuiFormOperate input[class='textbox-value'][type!='file']").each(function (index) {
+        operateobj[""+$(this).attr("name")+""] = $(this).val();
+    })
+    $("#ezuiFormRecord input[class='textbox-value'][type!='file']").each(function (index) {
+        secondREcord[""+$(this).attr("name")+""] = $(this).val();
+    })
+    gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
+    gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
+    gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
+    gspEnterpriceFrom["gspSecondRecordForm"] = secondREcord;
+    var url = '';
+    if (processType == 'edit') {
+        url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
+    }else{
+        url = sy.bp()+"/gspEnterpriseInfoController.do?add";
+    }
+    //验证字段
+    if($("#ezuiFormInfo").form('validate')){
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
+        $.ajax({
+            url : url,
+            data : {"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                var msg='';
+                try {
+                    var result = $.parseJSON(data);
+                    if(result.success){
+                        msg = result.msg;
+                        ezuiDatagrid.datagrid('reload');
+                        ezuiDialog.dialog('close');
+                    }else{
+                        msg = '<font color="red">' + result.msg + '</font>';
+                    }
+                } catch (e) {
+                    msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                    msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+                } finally {
+                    $.messager.show({
+                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                    });
+                    $.messager.progress('close');
+                }
+            }
+        });
+    }else{
+        return false;
+    }
 
-	console.log(businessObj);
-	/*var url = '';
-	if (processType == 'edit') {
-		url = '<c:url value="/gspEnterpriseInfoController.do?edit"/>';
-	}else{
-		url = '<c:url value="/gspEnterpriseInfoController.do?add"/>';
-	}
-	ezuiForm.form('submit', {
-		url : url,
-		onSubmit : function(){
-
-			if(ezuiForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg;
-					ezuiDatagrid.datagrid('reload');
-					ezuiDialog.dialog('close');
-				}else{
-					msg = '<font color="red">' + result.msg + '</font>';
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				$.messager.show({
-					msg : msg, title : '<spring:message code="common.message.prompt"/>'
-				});
-				$.messager.progress('close');
-			}
-		}
-	});*/
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {

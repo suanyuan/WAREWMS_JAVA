@@ -2,6 +2,8 @@ package com.wms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,64 +21,34 @@ import com.wms.query.GspBusinessLicenseQuery;
 public class GspBusinessLicenseService extends BaseService {
 
 	@Autowired
-	private GspBusinessLicenseDao gspBusinessLicenseDao;
-
-	public EasyuiDatagrid<GspBusinessLicenseVO> getPagedDatagrid(EasyuiDatagridPager pager, GspBusinessLicenseQuery query) {
-		EasyuiDatagrid<GspBusinessLicenseVO> datagrid = new EasyuiDatagrid<GspBusinessLicenseVO>();
-		List<GspBusinessLicense> gspBusinessLicenseList = gspBusinessLicenseDao.getPagedDatagrid(pager, query);
-		GspBusinessLicenseVO gspBusinessLicenseVO = null;
-		List<GspBusinessLicenseVO> gspBusinessLicenseVOList = new ArrayList<GspBusinessLicenseVO>();
-		for (GspBusinessLicense gspBusinessLicense : gspBusinessLicenseList) {
-			gspBusinessLicenseVO = new GspBusinessLicenseVO();
-			BeanUtils.copyProperties(gspBusinessLicense, gspBusinessLicenseVO);
-			gspBusinessLicenseVOList.add(gspBusinessLicenseVO);
-		}
-		datagrid.setTotal(gspBusinessLicenseDao.countAll(query));
-		datagrid.setRows(gspBusinessLicenseVOList);
-		return datagrid;
-	}
+	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
 
 	public Json addGspBusinessLicense(GspBusinessLicenseForm gspBusinessLicenseForm) throws Exception {
 		Json json = new Json();
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
-		gspBusinessLicenseDao.save(gspBusinessLicense);
+		gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editGspBusinessLicense(GspBusinessLicenseForm gspBusinessLicenseForm) {
 		Json json = new Json();
-		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseDao.findById(gspBusinessLicenseForm.getBusinessId().toString());
+		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(gspBusinessLicenseForm.getBusinessId().toString());
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
-		gspBusinessLicenseDao.update(gspBusinessLicense);
+		gspBusinessLicenseMybatisDao.update(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteGspBusinessLicense(String id) {
 		Json json = new Json();
-		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseDao.findById(id);
+		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(id);
 		if(gspBusinessLicense != null){
-			gspBusinessLicenseDao.delete(gspBusinessLicense);
+			gspBusinessLicenseMybatisDao.delete(gspBusinessLicense);
 		}
 		json.setSuccess(true);
 		return json;
-	}
-
-	public List<EasyuiCombobox> getGspBusinessLicenseCombobox() {
-		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-		EasyuiCombobox combobox = null;
-		List<GspBusinessLicense> gspBusinessLicenseList = gspBusinessLicenseDao.findAll();
-		if(gspBusinessLicenseList != null && gspBusinessLicenseList.size() > 0){
-			for(GspBusinessLicense gspBusinessLicense : gspBusinessLicenseList){
-				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(gspBusinessLicense.getBusinessId()));
-				combobox.setValue(gspBusinessLicense.getLicenseName());
-				comboboxList.add(combobox);
-			}
-		}
-		return comboboxList;
 	}
 
 }

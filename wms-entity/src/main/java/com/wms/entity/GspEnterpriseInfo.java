@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 public class GspEnterpriseInfo  implements Serializable {
 
-	private Long enterpriseId;
+	private String enterpriseId;
 
 	private String enterpriseNo;
 

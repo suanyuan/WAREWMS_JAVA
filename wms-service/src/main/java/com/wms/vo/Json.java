@@ -38,4 +38,26 @@ public class Json implements Serializable {
 		this.success = success;
 	}
 
+	public static Json success(String msg){
+		Json json = new Json();
+		json.setMsg(msg);
+		json.setSuccess(true);
+		return json;
+	}
+
+	public static Json success(String msg,Object data){
+		Json json = new Json();
+		json.setMsg(msg);
+		json.setObj(data);
+		json.setSuccess(true);
+		return json;
+	}
+
+	public static Json error(String msg){
+		Json json = new Json();
+		json.setMsg(msg);
+		json.setSuccess(false);
+		return json;
+	}
+
 }

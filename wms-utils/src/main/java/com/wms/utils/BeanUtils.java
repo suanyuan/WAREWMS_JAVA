@@ -1,9 +1,11 @@
 package com.wms.utils;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 
@@ -35,5 +37,19 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 				}
 			}
 		}
+	}
+
+	public static boolean isEmptyFrom(Object bean) throws Exception{
+		PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+		PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(bean);
+		for (int i = 0; i < descriptors.length; i++) {
+			String name = descriptors[i].getName();
+			if (!"class".equals(name)) {
+				if(propertyUtilsBean.getNestedProperty(bean, name) == null){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

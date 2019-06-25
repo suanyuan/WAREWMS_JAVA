@@ -11,7 +11,7 @@ public class GspOperateLicense  implements Serializable {
 
 	private Long operateId;
 
-	private Long enterpriseId;
+	private String enterpriseId;
 
 	private String licenseNo;
 
