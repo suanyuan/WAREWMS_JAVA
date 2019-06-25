@@ -243,7 +243,7 @@ where 1=1
 	           and a.sku = c.sku(+)
 	           and a.orderno = #{orderno}
 	           and a.sku = #{sku,jdbcType=VARCHAR}
-	           and a.qty >= nvl(c.qty, 0) + #{qty,jdbcType=NUMERIC}
+	           and a.qty >= ifnull(c.qty, 0) + #{qty,jdbcType=NUMERIC}
 	         order by a.allocationdetailsid)
 	 where rownum <= 1
 	 ]]>

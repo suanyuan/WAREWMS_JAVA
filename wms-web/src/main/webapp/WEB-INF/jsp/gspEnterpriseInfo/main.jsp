@@ -139,7 +139,19 @@ var del = function(){
 	}
 };
 var commit = function(){
-	var url = '';
+    var infoObj = new Object();
+    var businessObj = new Object();
+    //var infoObj = new Object();
+    //var infoObj = new Object();
+    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+        infoObj[""+$(this).attr("name")+""] = $(this).val();
+    })
+    $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
+        businessObj[""+$(this).attr("name")+""] = $(this).val();
+    })
+
+	console.log(businessObj);
+	/*var url = '';
 	if (processType == 'edit') {
 		url = '<c:url value="/gspEnterpriseInfoController.do?edit"/>';
 	}else{
@@ -148,6 +160,7 @@ var commit = function(){
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
+
 			if(ezuiForm.form('validate')){
 				$.messager.progress({
 					text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -178,7 +191,7 @@ var commit = function(){
 				$.messager.progress('close');
 			}
 		}
-	});
+	});*/
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {

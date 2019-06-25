@@ -1,5 +1,8 @@
 package com.wms.mybatis.dao;
 
+import org.apache.commons.beanutils.PropertyUtilsBean;
+
+import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,9 +79,10 @@ public class MybatisCriteria {
 	}
 
 	public String getLimitClause() {
-		int minRow = (this.currentPage - 1) * this.pageSize + 1;
-		int maxRow = this.currentPage * this.pageSize;
-		limitClause = " and row_num between " + minRow + " and " + maxRow;
+		//int minRow = (this.currentPage - 1) * this.pageSize + 1;
+		//int maxRow = this.currentPage * this.pageSize;
+		//limitClause = " and row_num between " + minRow + " and " + maxRow;
+		limitClause = " LIMIT " + (currentPage-1) + "," + pageSize;
 		return limitClause;
 	}
 
@@ -134,4 +138,16 @@ public class MybatisCriteria {
 		this.pageSize = pageSize;
 	}
 
+	public void setCondition(Object o) throws Exception{
+		PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+		PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(o);
+		for (int i = 0; i < descriptors.length; i++) {
+			String name = descriptors[i].getName();
+			if (!"class".equals(name)) {
+				if(propertyUtilsBean.getNestedProperty(o, name)!=null){
+					condition.put(name,propertyUtilsBean.getNestedProperty(o, name));
+				}
+			}
+		}
+	}
 }

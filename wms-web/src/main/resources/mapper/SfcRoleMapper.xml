@@ -75,12 +75,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
 	<selectKey keyProperty="id" resultType="String" order="BEFORE">
-        select lower(substr(sys_guid(), 1, 8) || '-' ||
-					 substr(sys_guid(), 9, 4) || '-' ||
-					 substr(sys_guid(), 13, 4) || '-' ||
-					 substr(sys_guid(), 17, 4) || '-' ||
-					 substr(sys_guid(), 20, 12))
-		from dual
+		select replace(uuid(),"-","") 	from dual
     </selectKey>
 	insert into sfc_role(
 	<if test="roleName != null  ">

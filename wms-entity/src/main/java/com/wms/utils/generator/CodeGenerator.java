@@ -179,6 +179,9 @@ public class CodeGenerator {
 			field.setAccessible(true);
 			if(!"serialVersionUID".equals(field.getName())){
 				typeName = field.getType().toString();
+				if(isQuery){ //TODO 参数类型全部修改string否则接收会报错
+					typeName = "String";
+				}
 				if(typeName.indexOf("[L") >= 0){
 					typeName = typeName.split("L")[1].replace(";", "") + "[]";
 				}else{

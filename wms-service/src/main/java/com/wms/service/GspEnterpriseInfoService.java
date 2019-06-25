@@ -5,6 +5,8 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspEnterpriseInfo;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspEnterpriseInfoQuery;
 import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.vo.Json;
@@ -20,10 +22,10 @@ import java.util.List;
 public class GspEnterpriseInfoService extends BaseService {
 
 	@Autowired
-	private GspEnterpriseInfoDao gspEnterpriseInfoDao;
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
-	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) {
-		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
+	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
+		/*EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
 		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoDao.getPagedDatagrid(pager, query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
@@ -34,6 +36,23 @@ public class GspEnterpriseInfoService extends BaseService {
 		}
 		datagrid.setTotal(gspEnterpriseInfoDao.countAll(query));
 		datagrid.setRows(gspEnterpriseInfoVOList);
+		return datagrid;*/
+		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCurrentPage(pager.getPage());
+		criteria.setPageSize(pager.getRows());
+		criteria.setCondition(query);
+		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
+		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryByList(criteria);
+		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
+			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
+			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
+			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
+		}
+		int total = gspEnterpriseInfoMybatisDao.queryByCount(criteria);
+		datagrid.setTotal(Long.parseLong(total+""));
+		datagrid.setRows(gspEnterpriseInfoVOList);
 		return datagrid;
 	}
 
@@ -41,25 +60,25 @@ public class GspEnterpriseInfoService extends BaseService {
 		Json json = new Json();
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
 		BeanUtils.copyProperties(gspEnterpriseInfoForm, gspEnterpriseInfo);
-		gspEnterpriseInfoDao.save(gspEnterpriseInfo);
+		gspEnterpriseInfoMybatisDao.add(gspEnterpriseInfo);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) {
 		Json json = new Json();
-		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoDao.findById(gspEnterpriseInfoForm.getEnterpriseId().toString());
+		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspEnterpriseInfoForm.getEnterpriseId());
 		BeanUtils.copyProperties(gspEnterpriseInfoForm, gspEnterpriseInfo);
-		gspEnterpriseInfoDao.update(gspEnterpriseInfo);
+		gspEnterpriseInfoMybatisDao.update(gspEnterpriseInfo);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteGspEnterpriseInfo(String id) {
 		Json json = new Json();
-		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoDao.findById(id);
+		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(id);
 		if(gspEnterpriseInfo != null){
-			gspEnterpriseInfoDao.delete(gspEnterpriseInfo);
+			gspEnterpriseInfoMybatisDao.delete(gspEnterpriseInfo);
 		}
 		json.setSuccess(true);
 		return json;
@@ -68,7 +87,7 @@ public class GspEnterpriseInfoService extends BaseService {
 	public List<EasyuiCombobox> getGspEnterpriseInfoCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoDao.findAll();
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryListByAll();
 		if(gspEnterpriseInfoList != null && gspEnterpriseInfoList.size() > 0){
 			for(GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList){
 				combobox = new EasyuiCombobox();
