@@ -20,7 +20,7 @@ public class GspEnterpriseInfoDao extends BaseDao<GspEnterpriseInfo, String, Gsp
 		criteria.setFirstResult((pager.getPage() - 1) * pager.getRows());
 		criteria.setMaxResults(pager.getRows());
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.addOrder(Order.desc("createDate"));
+		//criteria.addOrder(Order.desc("createDate"));
 		return criteria.list();
 	}
 

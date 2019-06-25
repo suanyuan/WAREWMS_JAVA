@@ -6,6 +6,7 @@ import com.wms.utils.DateUtil;
 import com.wms.utils.PropertyUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +27,20 @@ import java.util.UUID;
  * Date: 2019/6/24
  */
 @Controller
-@RequestMapping("common")
+@RequestMapping("commonController")
 public class CommonController {
+
+    private static String uploadUrl = "/Users/quendi/fileUpload";
+
     /**
      * 上传文件
      *
      * @param request
      * @return
      */
-    @RequestMapping(value = "upload_fileLocal", method= RequestMethod.POST, headers="Content-Type=multipart/form-data")
+    @RequestMapping(params = "uploadFileLocal", method= RequestMethod.POST, headers="Content-Type=multipart/form-data")
     @ResponseBody
-    public UploadResult upload_fileLocal(HttpServletRequest request , @RequestParam(value="file",required=false) MultipartFile file) {
-        String uploadUrl = PropertyUtils.getString("uploadUrl");
+    public UploadResult uploadFileLocal(HttpServletRequest request , @RequestParam(value="file",required=false) MultipartFile file) {
         UploadResult uploadResult = new UploadResult();
         InputStream stream = null;
         uploadResult.setSuccess(false);

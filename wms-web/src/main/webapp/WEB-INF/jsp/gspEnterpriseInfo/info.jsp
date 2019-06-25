@@ -1,5 +1,5 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
-<form id='ezuiForm' method='post'>
+<form id='ezuiFormInfo' method='post'>
     <input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
     <table>
         <tr style="display: none">

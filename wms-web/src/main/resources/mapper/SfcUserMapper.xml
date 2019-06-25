@@ -464,7 +464,7 @@ where 1=1
 
 <!-- 查询默认仓库列表 -->
 <select id="queryDefaultWarehouseListByUser" resultMap="WarehouseResultMap"  parameterType="Object">
-	select a.customerid as warehouse_id,a.descr_c as warehouse_name,nvl(b.defaultflag,'N') as defaultflag
+	select a.customerid as warehouse_id,a.descr_c as warehouse_name,ifnull(b.defaultflag,'N') as defaultflag
 	from Bas_Customer a
 	left outer join sfc_user_warehouse b on a.customerid = b.warehouse_id and b.user_id = #{id,jdbcType=VARCHAR} 
 	where a.customer_type = 'WH'

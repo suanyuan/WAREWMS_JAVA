@@ -7,7 +7,7 @@
          					http://www.springframework.org/schema/mvc
 							http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 	
-	<!-- 攔截器 -->
+	<!-- 攔截器
 	<bean id="serviceLogInterceptor" class="com.wms.interceptor.ServiceLogInterceptor"/> 
 	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<property name="proxyTargetClass" value="true"/>
@@ -21,5 +21,5 @@
 				<value>serviceLogInterceptor</value>
 			</list>
 		</property>
-	</bean>
+	</bean>-->
 </beans>
