@@ -23,6 +23,13 @@ public class GspEnterpriseInfoService extends BaseService {
 
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	@Autowired
+	private GspBusinessLicenseService gspBusinessLicenseService;
+	@Autowired
+	private GspOperateLicenseService gspOperateLicenseService;
+	@Autowired
+	private GspSecondRecordService gspSecondRecordService;
+
 
 	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
 		/*EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();

@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.beans.PropertyDescriptor;
 import java.util.HashMap;
@@ -138,16 +139,22 @@ public class MybatisCriteria {
 		this.pageSize = pageSize;
 	}
 
-	public void setCondition(Object o) throws Exception{
-		PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
-		PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(o);
-		for (int i = 0; i < descriptors.length; i++) {
-			String name = descriptors[i].getName();
-			if (!"class".equals(name)) {
-				if(propertyUtilsBean.getNestedProperty(o, name)!=null){
-					condition.put(name,propertyUtilsBean.getNestedProperty(o, name));
+	public void setCondition(Object o){
+		try{
+			PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+			PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(o);
+			for (int i = 0; i < descriptors.length; i++) {
+				String name = descriptors[i].getName();
+				if (!"class".equals(name)) {
+					if(propertyUtilsBean.getNestedProperty(o, name)!=null){
+						condition.put(name,propertyUtilsBean.getNestedProperty(o, name));
+					}
 				}
 			}
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
+
 	}
 }

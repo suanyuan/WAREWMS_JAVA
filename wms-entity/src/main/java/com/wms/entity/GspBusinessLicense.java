@@ -11,7 +11,7 @@ public class GspBusinessLicense  implements Serializable {
 
 	private Long businessId;
 
-	private Long enterpriseId;
+	private String enterpriseId;
 
 	private String licenseNumber;
 

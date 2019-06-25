@@ -5,7 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspEnterpriseInfoVO {
 
-	private Long enterpriseId;
+	private String enterpriseId;
 	private String enterpriseNo;
 	private String shorthandName;
 	private String enterpriseName;
@@ -19,11 +19,11 @@ public class GspEnterpriseInfoVO {
 	private java.util.Date editDate;
 	private String isUse;
 
-	public Long getEnterpriseId() {
+	public String getEnterpriseId() {
 		return enterpriseId;
 	}
 
-	public void setEnterpriseId(Long enterpriseId) {
+	public void setEnterpriseId(String enterpriseId) {
 		this.enterpriseId = enterpriseId;
 	}
 

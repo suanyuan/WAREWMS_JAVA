@@ -3,10 +3,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSON;
+import com.wms.service.GspEnterpriceService;
+import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspEnterpriseInfoService;
@@ -27,6 +31,10 @@ public class GspEnterpriseInfoController {
 	@Autowired
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
 
+	//企业信息主题业务
+	@Autowired
+	private GspEnterpriceService gspEnterpriceService;
+
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -43,15 +51,17 @@ public class GspEnterpriseInfoController {
 	}
 
 	@Login
-	@RequestMapping(params = "add")
+	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
-		Json json = gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
+	public Json add(@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
+		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
 		return json;
+
 	}
 
 	@Login
