@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>标杆物流管理系统</title>
+<title>WAREWMS仓储管理系统</title>
 <c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
 <c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
 <script type="text/javascript" charset="UTF-8">
