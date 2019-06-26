@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocMovementHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocMovementHeader" >
+	<result column="mdocno" property="mdocno"/>
+	<result column="mdoctype" property="mdoctype"/>
+	<result column="customerid" property="customerid"/>
+	<result column="mdoccreationtime" property="mdoccreationtime"/>
+	<result column="movementtime" property="movementtime"/>
+	<result column="reasoncode" property="reasoncode"/>
+	<result column="reason" property="reason"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="status" property="status"/>
+	<result column="zonegroup" property="zonegroup"/>
+	<result column="fmwarehouseid" property="fmwarehouseid"/>
+	<result column="towarehouseid" property="towarehouseid"/>
+	<result column="userdefinea" property="userdefinea"/>
+	<result column="userdefineb" property="userdefineb"/>
+	<result column="source" property="source"/>
+	<result column="sourceno" property="sourceno"/>
+	<result column="fromloc" property="fromloc"/>
+</resultMap>
+       
+<!-- doc_movement_header table all fields -->
+<sql id="Base_Column_List" >
+	 mdocno,mdoctype,customerid,mdoccreationtime,movementtime,reasoncode,reason,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,status,zonegroup,fmwarehouseid,towarehouseid,userdefinea,userdefineb,source,sourceno,fromloc
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.mdocno != null and condition.mdocno != ''" >
+	    and mdocno =  #{condition.mdocno}
+	</if>
+	<if test="condition.mdoctype != null and condition.mdoctype != ''" >
+	    and mdoctype =  #{condition.mdoctype}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.mdoccreationtime != null and condition.mdoccreationtime != ''" >
+	    and mdoccreationtime =  #{condition.mdoccreationtime}
+	</if>
+	<if test="condition.movementtime != null and condition.movementtime != ''" >
+	    and movementtime =  #{condition.movementtime}
+	</if>
+	<if test="condition.reasoncode != null and condition.reasoncode != ''" >
+	    and reasoncode =  #{condition.reasoncode}
+	</if>
+	<if test="condition.reason != null and condition.reason != ''" >
+	    and reason =  #{condition.reason}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.zonegroup != null and condition.zonegroup != ''" >
+	    and zonegroup =  #{condition.zonegroup}
+	</if>
+	<if test="condition.fmwarehouseid != null and condition.fmwarehouseid != ''" >
+	    and fmwarehouseid =  #{condition.fmwarehouseid}
+	</if>
+	<if test="condition.towarehouseid != null and condition.towarehouseid != ''" >
+	    and towarehouseid =  #{condition.towarehouseid}
+	</if>
+	<if test="condition.userdefinea != null and condition.userdefinea != ''" >
+	    and userdefinea =  #{condition.userdefinea}
+	</if>
+	<if test="condition.userdefineb != null and condition.userdefineb != ''" >
+	    and userdefineb =  #{condition.userdefineb}
+	</if>
+	<if test="condition.source != null and condition.source != ''" >
+	    and source =  #{condition.source}
+	</if>
+	<if test="condition.sourceno != null and condition.sourceno != ''" >
+	    and sourceno =  #{condition.sourceno}
+	</if>
+	<if test="condition.fromloc != null and condition.fromloc != ''" >
+	    and fromloc =  #{condition.fromloc}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_movement_header(mdocno,mdoctype,customerid,mdoccreationtime,movementtime,reasoncode,reason,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,status,zonegroup,fmwarehouseid,towarehouseid,userdefinea,userdefineb,source,sourceno,fromloc)
+ values(#{mdocno},#{mdoctype},#{customerid},#{mdoccreationtime},#{movementtime},#{reasoncode},#{reason},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addtime},#{addwho},#{edittime},#{editwho},#{status},#{zonegroup},#{fmwarehouseid},#{towarehouseid},#{userdefinea},#{userdefineb},#{source},#{sourceno},#{fromloc})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_movement_header set mdoctype=#{mdoctype},customerid=#{customerid},mdoccreationtime=#{mdoccreationtime},movementtime=#{movementtime},reasoncode=#{reasoncode},reason=#{reason},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},status=#{status},zonegroup=#{zonegroup},fmwarehouseid=#{fmwarehouseid},towarehouseid=#{towarehouseid},userdefinea=#{userdefinea},userdefineb=#{userdefineb},source=#{source},sourceno=#{sourceno},fromloc=#{fromloc} where mdocno=#{mdocno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_movement_header set 
+	<trim  suffixOverrides="," >
+	<if test="mdoctype != null  ">
+		mdoctype=#{mdoctype},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="mdoccreationtime != null  ">
+		mdoccreationtime=#{mdoccreationtime},
+	</if>
+	<if test="movementtime != null  ">
+		movementtime=#{movementtime},
+	</if>
+	<if test="reasoncode != null  ">
+		reasoncode=#{reasoncode},
+	</if>
+	<if test="reason != null  ">
+		reason=#{reason},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="zonegroup != null  ">
+		zonegroup=#{zonegroup},
+	</if>
+	<if test="fmwarehouseid != null  ">
+		fmwarehouseid=#{fmwarehouseid},
+	</if>
+	<if test="towarehouseid != null  ">
+		towarehouseid=#{towarehouseid},
+	</if>
+	<if test="userdefinea != null  ">
+		userdefinea=#{userdefinea},
+	</if>
+	<if test="userdefineb != null  ">
+		userdefineb=#{userdefineb},
+	</if>
+	<if test="source != null  ">
+		source=#{source},
+	</if>
+	<if test="sourceno != null  ">
+		sourceno=#{sourceno},
+	</if>
+	<if test="fromloc != null  ">
+		fromloc=#{fromloc},
+	</if>
+	</trim> where mdocno=#{mdocno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_movement_header where mdocno = #{mdocno}
+</delete>
+ 
+<!-- 根据id查询 移动单头档 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_movement_header where mdocno = #{mdocno}
+</select>
+
+<!-- 移动单头档 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_movement_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询移动单头档列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_movement_header 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   
