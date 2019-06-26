@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.dao.GspEnterpriseInfoDao;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -7,7 +8,10 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.entity.SfcUser;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.GspEnterpriseInfoQuery;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.GspEnterpriseInfoForm;
@@ -64,9 +68,12 @@ public class GspEnterpriseInfoService extends BaseService {
 	}
 
 	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
+		SfcUserLogin userLogin =  SfcUserLoginUtil.getLoginUser();
 		Json json = new Json();
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
 		BeanUtils.copyProperties(gspEnterpriseInfoForm, gspEnterpriseInfo);
+		gspEnterpriseInfo.setIsUse(Constant.IS_USE_YES);
+		gspEnterpriseInfo.setCreateId(userLogin.getId());
 		gspEnterpriseInfoMybatisDao.add(gspEnterpriseInfo);
 		json.setSuccess(true);
 		return json;
@@ -76,7 +83,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		Json json = new Json();
 		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspEnterpriseInfoForm.getEnterpriseId());
 		BeanUtils.copyProperties(gspEnterpriseInfoForm, gspEnterpriseInfo);
-		gspEnterpriseInfoMybatisDao.update(gspEnterpriseInfo);
+		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 		json.setSuccess(true);
 		return json;
 	}
@@ -89,6 +96,11 @@ public class GspEnterpriseInfoService extends BaseService {
 		}
 		json.setSuccess(true);
 		return json;
+	}
+
+	public GspEnterpriseInfo getGspEnterpriseInfo(String id) {
+		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(id);
+		return gspEnterpriseInfo;
 	}
 
 	public List<EasyuiCombobox> getGspEnterpriseInfoCombobox() {

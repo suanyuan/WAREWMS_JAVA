@@ -34,7 +34,7 @@ public class GspSecondRecordService extends BaseService {
 		Json json = new Json();
 		GspSecondRecord gspSecondRecord = gspSecondRecordMybatisDao.queryById(gspSecondRecordForm.getRecordId());
 		BeanUtils.copyProperties(gspSecondRecordForm, gspSecondRecord);
-		gspSecondRecordMybatisDao.update(gspSecondRecord);
+		gspSecondRecordMybatisDao.updateBySelective(gspSecondRecord);
 		json.setSuccess(true);
 		return json;
 	}
@@ -47,5 +47,10 @@ public class GspSecondRecordService extends BaseService {
 		}
 		json.setSuccess(true);
 		return json;
+	}
+
+	public GspSecondRecord getGspSecondRecord(String id) {
+		GspSecondRecord gspSecondRecord = gspSecondRecordMybatisDao.queryById(id);
+		return gspSecondRecord;
 	}
 }

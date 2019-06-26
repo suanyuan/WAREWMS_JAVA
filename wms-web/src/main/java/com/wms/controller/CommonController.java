@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -95,5 +94,19 @@ public class CommonController {
 
         }
         return null;
+    }
+
+    public List<Map<String,String>> getIsUseCombobox() {
+        List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
+        Map<String,String> map = new HashMap<>();
+        map.put("","");
+        mapList.add(map);
+        Map<String,String> mapUse = new HashMap<>();
+        mapUse.put("1","启用");
+        mapList.add(mapUse);
+        Map<String,String> mapUnUse = new HashMap<>();
+        mapUnUse.put("0","禁用");
+        mapList.add(mapUnUse);
+        return mapList;
     }
 }

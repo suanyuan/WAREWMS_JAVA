@@ -782,7 +782,7 @@ where 1=1
 
 <!--订单明细行号-->
 <select id="getOrderlinenoById" resultType="java.lang.Long"  parameterType="Object">
-	select nvl(max(orderLineno),0) from Doc_Order_Details where orderno = #{orderno,jdbcType=VARCHAR}
+	select ifnull(max(orderLineno),0) from Doc_Order_Details where orderno = #{orderno,jdbcType=VARCHAR}
 </select>
   	
 </mapper>   

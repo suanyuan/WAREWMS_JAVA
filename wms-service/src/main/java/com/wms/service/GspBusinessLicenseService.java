@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class GspBusinessLicenseService extends BaseService {
 		Json json = new Json();
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
+		gspBusinessLicense.setCreateId(getLoginUserId());
 		gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
@@ -36,7 +38,7 @@ public class GspBusinessLicenseService extends BaseService {
 		Json json = new Json();
 		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(gspBusinessLicenseForm.getBusinessId().toString());
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
-		gspBusinessLicenseMybatisDao.update(gspBusinessLicense);
+		gspBusinessLicenseMybatisDao.updateBySelective(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
 	}
@@ -49,6 +51,21 @@ public class GspBusinessLicenseService extends BaseService {
 		}
 		json.setSuccess(true);
 		return json;
+	}
+
+	public GspBusinessLicense getGspBusinessLicense(String id) {
+		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(id);
+		return gspBusinessLicense;
+	}
+
+	public GspBusinessLicense getGspBusinessLicenseBy(GspBusinessLicenseQuery gspBusinessLicenseQuery){
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(gspBusinessLicenseQuery);
+		List<GspBusinessLicense> licenses = gspBusinessLicenseMybatisDao.queryByList(mybatisCriteria);
+		if(licenses!=null && licenses.size()>0){
+			return licenses.get(0);
+		}
+		return null;
 	}
 
 }

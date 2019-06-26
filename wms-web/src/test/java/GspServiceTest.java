@@ -1,7 +1,8 @@
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.tools.FieldUtil;
-import org.apache.commons.beanutils.BeanUtils;
+import com.wms.utils.BeanUtils;
+import com.wms.vo.form.GspBusinessLicenseForm;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,12 @@ public class GspServiceTest {
             e.printStackTrace();
         }
 
+    }
 
+    @Test
+    public void beanTest() throws Exception{
+        GspBusinessLicenseForm gspBusinessLicenseForm = new GspBusinessLicenseForm();
+        gspBusinessLicenseForm.setEnterpriseId("asdas");
+        System.out.println(BeanUtils.isEmptyFrom(gspBusinessLicenseForm));
     }
 }
