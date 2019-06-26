@@ -14,23 +14,23 @@ import java.util.Map;
  * Date: 2019/6/23
  */
 @Controller
-@RequestMapping("testPdaApidddddd")
+@RequestMapping("testPdaApi")
 public class TestPdaApi {
 
     @RequestMapping(params = "requestTest", method = RequestMethod.GET)
     @ResponseBody
-    public Object testApi(int pageNum){
+    public Object testApi(){
         Map<String, String> map = new HashMap<>();
         map.put("name", "Gizmo");
         map.put("age", "18");
         map.put("sex", "male");
-        if (pageNum == 0) {
-
-            map.put("status", "Failed");
-        }else {
-
-            map.put("status", "Success");
-        }
+//        if (pageNum == 0) {
+//
+//            map.put("status", "Failed");
+//        }else {
+//
+//            map.put("status", "Success");
+//        }
 
         return map;
     }

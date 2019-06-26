@@ -28,17 +28,17 @@ public class ActTransactionLogService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
-		ActTransactionLogVO gspEnterpriseInfoVO = null;
-		List<ActTransactionLogVO> gspEnterpriseInfoVOList = new ArrayList<ActTransactionLogVO>();
-		List<ActTransactionLogVO> gspEnterpriseInfoList = actTransactionLogMybatisDao.queryByList(criteria);
-		for (ActTransactionLogVO gspEnterpriseInfo : gspEnterpriseInfoList) {
-			gspEnterpriseInfoVO = new ActTransactionLogVO();
-			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
+		ActTransactionLogVO actTransactionLogVO = null;
+		List<ActTransactionLogVO> actTransactionLogVOList = new ArrayList<ActTransactionLogVO>();
+		List<ActTransactionLog> actTransactionLogList = actTransactionLogMybatisDao.queryByList(criteria);
+		for (ActTransactionLog actTransactionLog : actTransactionLogList) {
+			actTransactionLogVO = new ActTransactionLogVO();
+			BeanUtils.copyProperties(actTransactionLog, actTransactionLogVO);
+			actTransactionLogVOList.add(actTransactionLogVO);
 		}
 		int total = actTransactionLogMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
-		datagrid.setRows(gspEnterpriseInfoVOList);
+		datagrid.setRows(actTransactionLogVOList);
 		return datagrid;
 	}
 
@@ -69,5 +69,7 @@ public class ActTransactionLogService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+
+
 
 }

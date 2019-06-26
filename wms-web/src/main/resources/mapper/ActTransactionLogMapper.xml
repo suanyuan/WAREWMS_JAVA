@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ActTransactionLogMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ActTransactionLog" >
+	<result column="transactionid" property="transactionid"/>
+	<result column="transactiontype" property="transactiontype"/>
+	<result column="fmcustomerid" property="fmcustomerid"/>
+	<result column="fmsku" property="fmsku"/>
+	<result column="docno" property="docno"/>
+	<result column="doclineno" property="doclineno"/>
+	<result column="doctype" property="doctype"/>
+	<result column="fmlotnum" property="fmlotnum"/>
+	<result column="fmlocation" property="fmlocation"/>
+	<result column="fmid" property="fmid"/> 
+	<result column="fmpackid" property="fmpackid"/>
+	<result column="fmuom" property="fmuom"/>
+	<result column="fmqty" property="fmqty"/>
+	<result column="fmqty_each" property="fmqtyEach"/>
+	<result column="status" property="status"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="totalprice" property="totalprice"/>
+	<result column="totalnetweight" property="totalnetweight"/>
+	<result column="totalgrossweight" property="totalgrossweight"/>
+	<result column="totalcubic" property="totalcubic"/>
+	<result column="transactiontime" property="transactiontime"/>
+	<result column="tocustomerid" property="tocustomerid"/>
+	<result column="tosku" property="tosku"/>
+	<result column="reasoncode" property="reasoncode"/>
+	<result column="reason" property="reason"/>
+	<result column="editransactiontime" property="editransactiontime"/>
+	<result column="toid" property="toid"/>
+	<result column="tolocation" property="tolocation"/>
+	<result column="operator" property="operator"/>
+	<result column="topackid" property="topackid"/>
+	<result column="touom" property="touom"/>
+	<result column="toqty" property="toqty"/>
+	<result column="toqty_each" property="toqtyEach"/>
+	<result column="tolotnum" property="tolotnum"/>
+	<result column="qc_taskid" property="qcTaskid"/>
+	<result column="qc_sequence" property="qcSequence"/>
+	<result column="qc_flag" property="qcFlag"/>
+	<result column="pa_taskid" property="paTaskid"/>
+	<result column="pa_sequence" property="paSequence"/>
+	<result column="pa_flag" property="paFlag"/>
+	<result column="edicanceltransactiontime" property="edicanceltransactiontime"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="edisendflag" property="edisendflag"/>
+</resultMap>
+       
+<!-- act_transaction_log table all fields -->
+<sql id="Base_Column_List" >
+	 transactionid,transactiontype,fmcustomerid,fmsku,docno,doclineno,doctype,fmlotnum,fmlocation,fmid,fmpackid,fmuom,fmqty,fmqty_each,status,addtime,addwho,edittime,editwho,totalprice,totalnetweight,totalgrossweight,totalcubic,transactiontime,tocustomerid,tosku,reasoncode,reason,editransactiontime,toid,tolocation,operator,topackid,touom,toqty,toqty_each,tolotnum,qc_taskid,qc_sequence,qc_flag,pa_taskid,pa_sequence,pa_flag,edicanceltransactiontime,warehouseid,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,edisendflag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.transactionid != null and condition.transactionid != ''" >
+	    and transactionid =  #{condition.transactionid}
+	</if>
+	<if test="condition.transactiontype != null and condition.transactiontype != ''" >
+	    and transactiontype =  #{condition.transactiontype}
+	</if>
+	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+	    and fmcustomerid =  #{condition.fmcustomerid}
+	</if>
+	<if test="condition.fmsku != null and condition.fmsku != ''" >
+	    and fmsku =  #{condition.fmsku}
+	</if>
+	<if test="condition.docno != null and condition.docno != ''" >
+	    and docno =  #{condition.docno}
+	</if>
+	<if test="condition.doclineno != null and condition.doclineno != ''" >
+	    and doclineno =  #{condition.doclineno}
+	</if>
+	<if test="condition.doctype != null and condition.doctype != ''" >
+	    and doctype =  #{condition.doctype}
+	</if>
+	<if test="condition.fmlotnum != null and condition.fmlotnum != ''" >
+	    and fmlotnum =  #{condition.fmlotnum}
+	</if>
+	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
+	    and fmlocation =  #{condition.fmlocation}
+	</if>
+	<if test="condition.fmid != null and condition.fmid != ''" >
+	    and fmid =  #{condition.fmid}
+	</if>
+	<if test="condition.fmpackid != null and condition.fmpackid != ''" >
+	    and fmpackid =  #{condition.fmpackid}
+	</if>
+	<if test="condition.fmuom != null and condition.fmuom != ''" >
+	    and fmuom =  #{condition.fmuom}
+	</if>
+	<if test="condition.fmqty != null and condition.fmqty != ''" >
+	    and fmqty =  #{condition.fmqty}
+	</if>
+	<if test="condition.fmqtyEach != null and condition.fmqtyEach != ''" >
+	    and fmqty_each =  #{condition.fmqtyEach}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.totalprice != null and condition.totalprice != ''" >
+	    and totalprice =  #{condition.totalprice}
+	</if>
+	<if test="condition.totalnetweight != null and condition.totalnetweight != ''" >
+	    and totalnetweight =  #{condition.totalnetweight}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.transactiontime != null and condition.transactiontime != ''" >
+	    and transactiontime =  #{condition.transactiontime}
+	</if>
+	<if test="condition.tocustomerid != null and condition.tocustomerid != ''" >
+	    and tocustomerid =  #{condition.tocustomerid}
+	</if>
+	<if test="condition.tosku != null and condition.tosku != ''" >
+	    and tosku =  #{condition.tosku}
+	</if>
+	<if test="condition.reasoncode != null and condition.reasoncode != ''" >
+	    and reasoncode =  #{condition.reasoncode}
+	</if>
+	<if test="condition.reason != null and condition.reason != ''" >
+	    and reason =  #{condition.reason}
+	</if>
+	<if test="condition.editransactiontime != null and condition.editransactiontime != ''" >
+	    and editransactiontime =  #{condition.editransactiontime}
+	</if>
+	<if test="condition.toid != null and condition.toid != ''" >
+	    and toid =  #{condition.toid}
+	</if>
+	<if test="condition.tolocation != null and condition.tolocation != ''" >
+	    and tolocation =  #{condition.tolocation}
+	</if>
+	<if test="condition.operator != null and condition.operator != ''" >
+	    and operator =  #{condition.operator}
+	</if>
+	<if test="condition.topackid != null and condition.topackid != ''" >
+	    and topackid =  #{condition.topackid}
+	</if>
+	<if test="condition.touom != null and condition.touom != ''" >
+	    and touom =  #{condition.touom}
+	</if>
+	<if test="condition.toqty != null and condition.toqty != ''" >
+	    and toqty =  #{condition.toqty}
+	</if>
+	<if test="condition.toqtyEach != null and condition.toqtyEach != ''" >
+	    and toqty_each =  #{condition.toqtyEach}
+	</if>
+	<if test="condition.tolotnum != null and condition.tolotnum != ''" >
+	    and tolotnum =  #{condition.tolotnum}
+	</if>
+	<if test="condition.qcTaskid != null and condition.qcTaskid != ''" >
+	    and qc_taskid =  #{condition.qcTaskid}
+	</if>
+	<if test="condition.qcSequence != null and condition.qcSequence != ''" >
+	    and qc_sequence =  #{condition.qcSequence}
+	</if>
+	<if test="condition.qcFlag != null and condition.qcFlag != ''" >
+	    and qc_flag =  #{condition.qcFlag}
+	</if>
+	<if test="condition.paTaskid != null and condition.paTaskid != ''" >
+	    and pa_taskid =  #{condition.paTaskid}
+	</if>
+	<if test="condition.paSequence != null and condition.paSequence != ''" >
+	    and pa_sequence =  #{condition.paSequence}
+	</if>
+	<if test="condition.paFlag != null and condition.paFlag != ''" >
+	    and pa_flag =  #{condition.paFlag}
+	</if>
+	<if test="condition.edicanceltransactiontime != null and condition.edicanceltransactiontime != ''" >
+	    and edicanceltransactiontime =  #{condition.edicanceltransactiontime}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.edisendflag != null and condition.edisendflag != ''" >
+	    and edisendflag =  #{condition.edisendflag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into act_transaction_log(transactionid,transactiontype,fmcustomerid,fmsku,docno,doclineno,doctype,fmlotnum,fmlocation,fmid,fmpackid,fmuom,fmqty,fmqty_each,status,addtime,addwho,edittime,editwho,totalprice,totalnetweight,totalgrossweight,totalcubic,transactiontime,tocustomerid,tosku,reasoncode,reason,editransactiontime,toid,tolocation,operator,topackid,touom,toqty,toqty_each,tolotnum,qc_taskid,qc_sequence,qc_flag,pa_taskid,pa_sequence,pa_flag,edicanceltransactiontime,warehouseid,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,edisendflag)
+ values(#{transactionid},#{transactiontype},#{fmcustomerid},#{fmsku},#{docno},#{doclineno},#{doctype},#{fmlotnum},#{fmlocation},#{fmid},#{fmpackid},#{fmuom},#{fmqty},#{fmqtyEach},#{status},#{addtime},#{addwho},#{edittime},#{editwho},#{totalprice},#{totalnetweight},#{totalgrossweight},#{totalcubic},#{transactiontime},#{tocustomerid},#{tosku},#{reasoncode},#{reason},#{editransactiontime},#{toid},#{tolocation},#{operator},#{topackid},#{touom},#{toqty},#{toqtyEach},#{tolotnum},#{qcTaskid},#{qcSequence},#{qcFlag},#{paTaskid},#{paSequence},#{paFlag},#{edicanceltransactiontime},#{warehouseid},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{edisendflag})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update act_transaction_log set transactiontype=#{transactiontype},fmcustomerid=#{fmcustomerid},fmsku=#{fmsku},docno=#{docno},doclineno=#{doclineno},doctype=#{doctype},fmlotnum=#{fmlotnum},fmlocation=#{fmlocation},fmid=#{fmid},fmpackid=#{fmpackid},fmuom=#{fmuom},fmqty=#{fmqty},fmqty_each=#{fmqtyEach},status=#{status},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},totalprice=#{totalprice},totalnetweight=#{totalnetweight},totalgrossweight=#{totalgrossweight},totalcubic=#{totalcubic},transactiontime=#{transactiontime},tocustomerid=#{tocustomerid},tosku=#{tosku},reasoncode=#{reasoncode},reason=#{reason},editransactiontime=#{editransactiontime},toid=#{toid},tolocation=#{tolocation},operator=#{operator},topackid=#{topackid},touom=#{touom},toqty=#{toqty},toqty_each=#{toqtyEach},tolotnum=#{tolotnum},qc_taskid=#{qcTaskid},qc_sequence=#{qcSequence},qc_flag=#{qcFlag},pa_taskid=#{paTaskid},pa_sequence=#{paSequence},pa_flag=#{paFlag},edicanceltransactiontime=#{edicanceltransactiontime},warehouseid=#{warehouseid},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},edisendflag=#{edisendflag} where transactionid=#{transactionid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update act_transaction_log set 
+	<trim  suffixOverrides="," >
+	<if test="transactiontype != null  ">
+		transactiontype=#{transactiontype},
+	</if>
+	<if test="fmcustomerid != null  ">
+		fmcustomerid=#{fmcustomerid},
+	</if>
+	<if test="fmsku != null  ">
+		fmsku=#{fmsku},
+	</if>
+	<if test="docno != null  ">
+		docno=#{docno},
+	</if>
+	<if test="doclineno != null  ">
+		doclineno=#{doclineno},
+	</if>
+	<if test="doctype != null  ">
+		doctype=#{doctype},
+	</if>
+	<if test="fmlotnum != null  ">
+		fmlotnum=#{fmlotnum},
+	</if>
+	<if test="fmlocation != null  ">
+		fmlocation=#{fmlocation},
+	</if>
+	<if test="fmid != null  ">
+		fmid=#{fmid},
+	</if>
+	<if test="fmpackid != null  ">
+		fmpackid=#{fmpackid},
+	</if>
+	<if test="fmuom != null  ">
+		fmuom=#{fmuom},
+	</if>
+	<if test="fmqty != null  ">
+		fmqty=#{fmqty},
+	</if>
+	<if test="fmqtyEach != null  ">
+		fmqty_each=#{fmqtyEach},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="totalprice != null  ">
+		totalprice=#{totalprice},
+	</if>
+	<if test="totalnetweight != null  ">
+		totalnetweight=#{totalnetweight},
+	</if>
+	<if test="totalgrossweight != null  ">
+		totalgrossweight=#{totalgrossweight},
+	</if>
+	<if test="totalcubic != null  ">
+		totalcubic=#{totalcubic},
+	</if>
+	<if test="transactiontime != null  ">
+		transactiontime=#{transactiontime},
+	</if>
+	<if test="tocustomerid != null  ">
+		tocustomerid=#{tocustomerid},
+	</if>
+	<if test="tosku != null  ">
+		tosku=#{tosku},
+	</if>
+	<if test="reasoncode != null  ">
+		reasoncode=#{reasoncode},
+	</if>
+	<if test="reason != null  ">
+		reason=#{reason},
+	</if>
+	<if test="editransactiontime != null  ">
+		editransactiontime=#{editransactiontime},
+	</if>
+	<if test="toid != null  ">
+		toid=#{toid},
+	</if>
+	<if test="tolocation != null  ">
+		tolocation=#{tolocation},
+	</if>
+	<if test="operator != null  ">
+		operator=#{operator},
+	</if>
+	<if test="topackid != null  ">
+		topackid=#{topackid},
+	</if>
+	<if test="touom != null  ">
+		touom=#{touom},
+	</if>
+	<if test="toqty != null  ">
+		toqty=#{toqty},
+	</if>
+	<if test="toqtyEach != null  ">
+		toqty_each=#{toqtyEach},
+	</if>
+	<if test="tolotnum != null  ">
+		tolotnum=#{tolotnum},
+	</if>
+	<if test="qcTaskid != null  ">
+		qc_taskid=#{qcTaskid},
+	</if>
+	<if test="qcSequence != null  ">
+		qc_sequence=#{qcSequence},
+	</if>
+	<if test="qcFlag != null  ">
+		qc_flag=#{qcFlag},
+	</if>
+	<if test="paTaskid != null  ">
+		pa_taskid=#{paTaskid},
+	</if>
+	<if test="paSequence != null  ">
+		pa_sequence=#{paSequence},
+	</if>
+	<if test="paFlag != null  ">
+		pa_flag=#{paFlag},
+	</if>
+	<if test="edicanceltransactiontime != null  ">
+		edicanceltransactiontime=#{edicanceltransactiontime},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="edisendflag != null  ">
+		edisendflag=#{edisendflag},
+	</if>
+	</trim> where transactionid=#{transactionid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from act_transaction_log where transactionid = #{transactionid}
+</delete>
+ 
+<!-- 根据id查询 库存事务 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from act_transaction_log where transactionid = #{transactionid}
+</select>
+
+<!-- 库存事务 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from act_transaction_log 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询库存事务列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from act_transaction_log 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   
