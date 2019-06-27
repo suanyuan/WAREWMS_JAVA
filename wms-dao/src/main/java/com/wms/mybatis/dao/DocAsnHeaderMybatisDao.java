@@ -7,6 +7,8 @@ import java.util.Map;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.dao.BaseDao;
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 
  * <br>
@@ -28,5 +30,10 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 	public String close(Map<String, Object> map);
 	
 	public String cancel(Map<String, Object> map);
-	
+
+	/**
+	 * 查询未完成的收货任务单
+	 * @return pda-收货任务单lsit
+	 */
+	List<DocAsnHeader> queryUndoneList(@Param("start") int start, @Param("pageSize") int pageSize);
 }

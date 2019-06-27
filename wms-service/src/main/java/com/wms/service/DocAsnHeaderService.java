@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.krysalis.barcode4j.BarcodeException;
@@ -327,4 +328,17 @@ public class DocAsnHeaderService extends BaseService {
 		return docAsnHeader;
 	}
 
+	public List<PdaDocAsnHeaderVO> queryUndoneList(int pageNum, int pageSize) {
+
+	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList((pageNum - 1)*pageSize, pageSize);
+	    List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = new ArrayList<>();
+	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = null;
+	    for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+
+	        pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
+	        BeanUtils.copyProperties(docAsnHeader, pdaDocAsnHeaderVO);
+	        pdaDocAsnHeaderVOList.add(pdaDocAsnHeaderVO);
+        }
+	    return pdaDocAsnHeaderVOList;
+	}
 }

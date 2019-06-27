@@ -24,13 +24,7 @@ public class TestPdaApi {
         map.put("name", "Gizmo");
         map.put("age", "18");
         map.put("sex", "male");
-//        if (pageNum == 0) {
-//
-//            map.put("status", "Failed");
-//        }else {
-//
-//            map.put("status", "Success");
-//        }
+
 
         return map;
     }

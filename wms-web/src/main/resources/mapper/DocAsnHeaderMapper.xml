@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mybatis.dao.DocAsnHeaderMybatisDao" > 
+<mapper namespace="com.wms.mybatis.dao.DocAsnHeaderMybatisDao" >
 <!-- Result Map-->
 <resultMap id="DocAsnHeaderMap" type="com.wms.entity.DocAsnHeader" >
 	<result column="actualarrivetime" property="actualarrivetime"/>
@@ -240,8 +240,8 @@
 <sql id="Base_Column_List" >
 	 actualarrivetime,addtime,addwho,archiveflag,asncreationtime,asnno,asnreference1,asnreference2,asnreference3,asnreference4,asnreference5,asnstatus,asntype,asn_print_flag,billingclass_group,billingid,billingname,bytrace_flag,b_address1,b_address2,b_address3,b_address4,b_city,b_contact,b_country,b_fax,b_mail,b_province,b_tel1,b_tel2,b_zip,carrieraddress1,carrieraddress2,carrieraddress3,carrieraddress4,carriercity,carriercontact,carriercountry,carrierfax,carrierid,carriermail,carriername,carrierprovince,carriertel1,carriertel2,carrierzip,countryofdestination,countryoforigin,createsource,customerid,deliveryterms,deliverytermsdescr,deliveryvehicleno,deliveryvehicletype,door,driver,edisendflag,edisendtime,edisendtime2,edisendtime3,edisendtime4,edisendtime5,edittime,editwho,expectedarrivetime1,expectedarrivetime2,followup,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,h_edi_11,issuepartyid,issuepartyname,i_address1,i_address2,i_address3,i_address4,i_city,i_contact,i_country,i_fax,i_mail,i_province,i_tel1,i_tel2,i_zip,lastreceivingtime,medicalxmltime,notes,packmaterialconsume,paymentterms,paymenttermsdescr,placeofdelivery,placeofdischarge,placeofloading,pono,priority,qcstatus,receiveid,releasestatus,reserve_flag,return_print_flag,serialnocatch,supplierid,supplier_address1,supplier_address2,supplier_address3,supplier_address4,supplier_city,supplier_contact,supplier_country,supplier_fax,supplier_mail,supplier_name,supplier_province,supplier_tel1,supplier_tel2,supplier_zip,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6,userdefinea,userdefineb,warehouseid,zonegroup
 </sql>
-   
-   
+
+
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
 where 1=1
@@ -279,11 +279,11 @@ where 1=1
 	<if test="condition.asnreference5 != null and condition.asnreference5 != ''" >
 	    and asnreference5 =  #{condition.asnreference5}
 	</if>
-	
+
 	<if test="condition.asnstatus != null and condition.asnstatus != '' and condition.userdefinea != null and condition.userdefinea != ''" >
 	    and asnstatus between #{condition.asnstatus} and #{condition.userdefinea}
 	</if>
-	
+
 	<if test="condition.asntype != null and condition.asntype != ''" >
 	    and asntype =  #{condition.asntype}
 	</if>
@@ -632,7 +632,7 @@ where 1=1
 	<if test="condition.userdefine6 != null and condition.userdefine6 != ''" >
 	    and userdefine6 =  #{condition.userdefine6}
 	</if>
-	
+
 	<if test="condition.userdefineb != null and condition.userdefineb != ''" >
 	    and userdefineb =  #{condition.userdefineb}
 	</if>
@@ -659,7 +659,7 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
+
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -733,7 +733,7 @@ insert into doc_asn_header
              'Y')
 </insert>
 
-<!-- 根据id，修改记录-->  
+<!-- 根据id，修改记录-->
 <update id="update" parameterType="Object" >
 	update Doc_Asn_Header set
 	asntype=#{asntype},
@@ -763,10 +763,10 @@ insert into doc_asn_header
 	editwho=#{editwho}
 	where asnno=#{asnno,jdbcType=VARCHAR}
 </update>
- 
+
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
-	update Doc_Asn_Header set 
+	update Doc_Asn_Header set
 	<trim  suffixOverrides="," >
 	<if test="addtime != null  ">
 		addtime=#{addtime},
@@ -1177,16 +1177,16 @@ insert into doc_asn_header
 <delete id="delete" parameterType="Object">
 	delete from Doc_Asn_Header where asnno = #{asnno}
 </delete>
- 
+
 <!-- 根据id查询 入库单管理 -->
 <select id="queryById"  resultMap="DocAsnHeaderMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	 from Doc_Asn_Header where asnno = #{asnno}
 </select>
 
 <!--订单列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Doc_Asn_Header 
+	select count(1) from Doc_Asn_Header
 	<include refid="Example_Where_Clause"/>
 </select>
 
@@ -1194,9 +1194,9 @@ insert into doc_asn_header
 <select id="queryByPageList" resultMap="DocAsnHeaderMap"  parameterType="Object">
 	select * from (
 	select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, row_number() over(order by a.asnno desc) as row_num
-	from (select 
+	from (select
 	<include refid="Base_Column_List"/>
-	from Doc_Asn_Header 
+	from Doc_Asn_Header
 	<include refid="Example_Where_Clause"/>
 	) a,
     Bas_Codes b,
@@ -1219,7 +1219,7 @@ insert into doc_asn_header
 <select id="queryByDetailCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from Doc_Asn_Details where asnno = #{condition.asnno,jdbcType=VARCHAR}
 </select>
-  	
+
 <!--查询入库单明细-->
 <select id="queryByPageDetailList" resultMap="DocAsnDetailMap"  parameterType="Object">
 	select * from (
@@ -1274,4 +1274,14 @@ insert into doc_asn_header
 	   {call spasn_close_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{asnno,mode=IN,jdbcType=VARCHAR},'99','N','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
-</mapper>   
+    <!--通过通知状态查询列表-->
+    <select id="queryUndoneList" resultMap="DocAsnHeaderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_asn_header
+        where asnstatus = '00' or asnstatus = '30'
+        order by asncreationtime desc
+        limit #{start}, #{pageSize}
+    </select>
+
+</mapper>
