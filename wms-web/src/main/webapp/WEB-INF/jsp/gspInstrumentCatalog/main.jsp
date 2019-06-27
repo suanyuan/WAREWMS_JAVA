@@ -71,6 +71,32 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+
+    $('#classifyId').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogClassify',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#version').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogVersion',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#fromClassify').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogClassify',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#fromVersion').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogVersion',
+        valueField:'id',
+        textField:'value'
+    });
+
+
 });
 var add = function(){
 	processType = 'add';
@@ -108,7 +134,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'gspInstrumentCatalogController.do?delete',
-					data : {id : row.id},
+					data : {id : row.instrumentCatalogId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -201,8 +227,8 @@ var doSearch = function(){
 							<th>编号：</th><td><input type='text' id='instrumentCatalogNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>名称：</th><td><input type='text' id='instrumentCatalogName' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th style="display: none;">待输入名称3：</th><td><input type='text' id='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>分类：</th><td><input type='text' id='classifyId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>版本：</th><td><input type='text' id='version' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>分类：</th><td><input type='text' id='classifyId' size='16' data-options=''/></td>
+							<th>版本：</th><td><input type='text' id='version' size='16' data-options=''/></td>
 							<!--<th >待输入名称6：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>-->
@@ -239,11 +265,11 @@ var doSearch = function(){
 				</tr>
 				<tr>
 					<th>分类</th>
-					<td><input type='text' name='classifyId' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+					<td><input type='text' id="fromClassify" name='classifyId' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
 					<th>版本</th>
-					<td><input type='text' name='version' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+					<td><input type='text' id="fromVersion" name='version' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
 					<th>备注</th>

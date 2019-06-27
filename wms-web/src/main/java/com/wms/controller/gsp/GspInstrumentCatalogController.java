@@ -49,8 +49,8 @@ public class GspInstrumentCatalogController {
 		Json json = gspInstrumentCatalogService.addGspInstrumentCatalog(gspInstrumentCatalogForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -61,8 +61,8 @@ public class GspInstrumentCatalogController {
 		Json json = gspInstrumentCatalogService.editGspInstrumentCatalog(gspInstrumentCatalogForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -73,8 +73,8 @@ public class GspInstrumentCatalogController {
 		Json json = gspInstrumentCatalogService.deleteGspInstrumentCatalog(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

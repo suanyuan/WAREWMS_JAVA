@@ -1,10 +1,13 @@
 package com.wms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.wms.mybatis.dao.GspInstrumentCatalogMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,9 @@ public class GspInstrumentCatalogService extends BaseService {
 		Json json = new Json();
 		GspInstrumentCatalog gspInstrumentCatalog = new GspInstrumentCatalog();
 		BeanUtils.copyProperties(gspInstrumentCatalogForm, gspInstrumentCatalog);
+		gspInstrumentCatalog.setInstrumentCatalogId(RandomUtil.getUUID());
+		gspInstrumentCatalog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspInstrumentCatalog.setCretaeDate(new Date());
 		gspInstrumentCatalogMybatisDao.add(gspInstrumentCatalog);
 		json.setSuccess(true);
 		return json;
@@ -57,6 +63,8 @@ public class GspInstrumentCatalogService extends BaseService {
 		Json json = new Json();
 		GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogMybatisDao.queryById(gspInstrumentCatalogForm.getInstrumentCatalogId());
 		BeanUtils.copyProperties(gspInstrumentCatalogForm, gspInstrumentCatalog);
+		gspInstrumentCatalog.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		gspInstrumentCatalog.setEditDate(new Date());
 		gspInstrumentCatalogMybatisDao.update(gspInstrumentCatalog);
 		json.setSuccess(true);
 		return json;
