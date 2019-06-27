@@ -12,6 +12,7 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var dialogUrl = "/gspEnterpriseInfoController.do?toDetail";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
@@ -32,15 +33,15 @@ $(function() {
 		rownumbers:true,
 		singleSelect:true,
 		idField : 'id',
+        rowStyler: function (index, row) {
+            if(row.isUse == "失效"){  return 'color:red;';}
+        },
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
 			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
 			{field: 'enterpriseType',		title: '企业类型',	width: 61 },
-			{field: 'contacts',		title: '联系人',	width: 61 },
-			{field: 'contactsPhone',		title: '联系人电话',	width: 61 },
-			{field: 'remark',		title: '备注',	width: 61 },
             {field: 'createId',		title: '录入人',	width: 61 },
             {field: 'createDate',		title: '录入时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
@@ -67,7 +68,7 @@ $(function() {
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
-		href:'/gspEnterpriseInfoController.do?toDetail',
+		href:dialogUrl,
 		fit:true,
         cache: false,
 		onClose : function() {
@@ -78,28 +79,13 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspEnterpriseInfoId').val(0);
-	ezuiDialog.dialog('open');
+	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			enterpriseId : row.enterpriseId,
-			enterpriseNo : row.enterpriseNo,
-			shorthandName : row.shorthandName,
-			enterpriseName : row.enterpriseName,
-			enterpriseType : row.enterpriseType,
-			contacts : row.contacts,
-			contactsPhone : row.contactsPhone,
-			remark : row.remark,
-			createId : row.createId,
-			createDate : row.createDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse
-		});
-		ezuiDialog.dialog('open');
+		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -113,7 +99,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'gspEnterpriseInfoController.do?delete',
-					data : {id : row.id},
+					data : {id : row.enterpriseId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -167,6 +153,11 @@ var commit = function(){
     }else{
         url = sy.bp()+"/gspEnterpriseInfoController.do?add";
     }
+    var enterpriceId = "";
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row){
+        enterpriceId = row.enterpriceId;
+	}
     //验证字段
     if($("#ezuiFormInfo").form('validate')){
         $.messager.progress({
@@ -174,7 +165,7 @@ var commit = function(){
         });
         $.ajax({
             url : url,
-            data : {"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
+            data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
                 console.log(result);
                 var msg='';
@@ -238,8 +229,8 @@ var doSearch = function(){
 							<td>
 								<select id="isUse" class="easyui-combobox"  style="width:100px;">
 									<option value=""></option>
-									<option value="10">是</option>
-									<option value="0">否</option>
+									<option value="10">有效</option>
+									<option value="0">失效</option>
 								</select>
 							</td>
 						</tr>

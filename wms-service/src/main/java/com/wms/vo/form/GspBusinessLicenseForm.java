@@ -22,6 +22,7 @@ public class GspBusinessLicenseForm {
 	private java.util.Date issueDate;
 	private String registrationAuthority;
 	private String attachmentUrl;
+	private String isUse;
 
 	public Long getBusinessId() {
 		return businessId;
@@ -163,4 +164,11 @@ public class GspBusinessLicenseForm {
 		this.attachmentUrl = attachmentUrl;
 	}
 
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
 }

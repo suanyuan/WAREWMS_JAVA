@@ -59,6 +59,12 @@ public class GspEnterpriseInfoService extends BaseService {
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
+			if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
+				gspEnterpriseInfoVO.setIsUse("有效");
+			}else {
+				gspEnterpriseInfoVO.setIsUse("失效");
+			}
+
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
 		int total = gspEnterpriseInfoMybatisDao.queryByCount(criteria);
@@ -116,6 +122,15 @@ public class GspEnterpriseInfoService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public void updateGspEnterpriseInfoActiveTag(String id,String tag) {
+		GspEnterpriseInfoForm form = new GspEnterpriseInfoForm();
+		form.setEnterpriseId(id);
+		form.setIsUse(tag);
+		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
+		BeanUtils.copyProperties(form,gspEnterpriseInfo);
+		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 	}
 
 }

@@ -67,7 +67,7 @@ public class CommonController {
         return uploadResult;
     }
 
-    @RequestMapping("/get_fileLocal")
+    @RequestMapping(params = "fileDownLoad")
     public ResponseEntity<byte[]> fileDownLoad(
             HttpServletResponse response,
             @RequestParam String fileUrl,

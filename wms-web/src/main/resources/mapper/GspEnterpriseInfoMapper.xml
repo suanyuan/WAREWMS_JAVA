@@ -85,7 +85,7 @@ where 1=1
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
-<update id="updateBySelective" parameterType="Object" >
+<update id="updateBySelective" parameterType="Object">
 	update gsp_enterprise_info set 
 	<trim  suffixOverrides="," >
 	<if test="enterpriseNo != null  ">

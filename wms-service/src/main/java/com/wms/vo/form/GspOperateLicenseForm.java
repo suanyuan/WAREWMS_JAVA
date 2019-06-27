@@ -17,6 +17,7 @@ public class GspOperateLicenseForm {
 	private java.util.Date approveDate;
 	private String registrationAuthority;
 	private String operateType;
+	private String isUse;
 
 	public Long getOperateId() {
 		return operateId;
@@ -116,4 +117,11 @@ public class GspOperateLicenseForm {
 		this.operateType = operateType;
 	}
 
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
 }

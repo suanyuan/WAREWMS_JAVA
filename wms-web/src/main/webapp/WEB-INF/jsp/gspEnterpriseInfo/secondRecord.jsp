@@ -65,19 +65,28 @@
             }
         });
 
+        var row = ezuiDatagrid.datagrid('getSelected');
+        if(row){
+            $.ajax({
+                url : 'gspEnterpriseInfoController.do?getSecondRecord',
+                data : {"enterpriseId" : row.enterpriseId},
+                type : 'POST',
+                dataType : 'JSON',
+                success : function(result){
+                    if(result.success){
+                        $("#ezuiFormRecord input[id!=''][data='1']").each(function (index) {
+                            $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""])
+                        })
+                        $("#recordUrl").val(result.obj.attachmentUrl);
+                        $("#recordFile").val(result.obj.attachmentUrl);
+                    }
+                }
+            });
+        }
+
     })
 
     function doUpload(data) {
-        /*console.log(data);
-        $.ajaxFileUpload({
-            url: sy.bp()+"/commonController.do?uploadFileLocal", //执行上传处理的文件地址
-            secureuri: false, //是否加密，一般是false，默认值为false
-            fileElementId: 'filebox_file_id_1', //这里 的filebox的id为 filebox_file_id_1而不是fileName
-            type: 'json', //请求方式，如果传递额外数据，必须是post
-            success: function (data) {//成功的回调函数，内部处理会加上html标签
-                console.log(data);
-            }
-        });*/
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -98,6 +107,5 @@
                 console.log(er);
             }
         });
-        //$('#file').filebox('clear');//上传成功后清空里面的值
     }
 </script>

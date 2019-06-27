@@ -1,17 +1,14 @@
 package com.wms.service;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.wms.mybatis.dao.MybatisCriteria;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wms.mybatis.dao.GspSecondRecordMybatisDao;
 import com.wms.entity.GspSecondRecord;
-import com.wms.vo.GspSecondRecordVO;
 import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspSecondRecordForm;
 import com.wms.query.GspSecondRecordQuery;
 
@@ -52,5 +49,22 @@ public class GspSecondRecordService extends BaseService {
 	public GspSecondRecord getGspSecondRecord(String id) {
 		GspSecondRecord gspSecondRecord = gspSecondRecordMybatisDao.queryById(id);
 		return gspSecondRecord;
+	}
+
+	public GspSecondRecord getGspSecondRecordBy(GspSecondRecordQuery gspSecondRecordQuery){
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(gspSecondRecordQuery);
+		List<GspSecondRecord> list = gspSecondRecordMybatisDao.queryByList(mybatisCriteria);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+
+	public void updateGspSecondRecordActiveTag(String id,String tag) {
+		GspSecondRecordForm form = new GspSecondRecordForm();
+		form.setEnterpriseId(id);
+		form.setIsUse(tag);
+		gspSecondRecordMybatisDao.updateBySelective(form);
 	}
 }
