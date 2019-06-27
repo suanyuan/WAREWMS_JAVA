@@ -5,7 +5,7 @@ import java.util.Date;
 public class PdaDocAsnHeaderVO {
 
     /**
-     * 预期到货通知编号
+     * 预期到货通知编号 ≈ 收货任务单号
      */
     private String asnno;
 
@@ -23,6 +23,11 @@ public class PdaDocAsnHeaderVO {
      * 预期到货通知类型
      */
     private String asntype;
+
+    /**
+     * 客户单号
+     */
+    private String asnreference1;
 
     public String getAsnno() {
         return asnno;
@@ -54,5 +59,13 @@ public class PdaDocAsnHeaderVO {
 
     public void setAsntype(String asntype) {
         this.asntype = asntype;
+    }
+
+    public String getAsnreference1() {
+        return asnreference1;
+    }
+
+    public void setAsnreference1(String asnreference1) {
+        this.asnreference1 = asnreference1;
     }
 }
