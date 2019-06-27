@@ -797,13 +797,19 @@ insert into doc_asn_details
 	               a.lotatt04,
 	               a.lotatt05,
 	               a.lotatt06,
-	               row_number() over(order by a.asnlineno) as row_num
-	          from Doc_Asn_Details a, Bas_Sku b, Bas_Codes c
-	         where a.customerid = b.customerid(+)
-	           and a.sku = b.sku(+)
-	           and a.linestatus = c.code
+                   a.lotatt07,
+                   a.lotatt08,
+                   a.lotatt09,
+                   a.lotatt10,
+                   a.lotatt11,
+                   a.lotatt12,
+				   (@rowNum:=@rowNum+1) as row_num
+	          from Doc_Asn_Details a
+                   LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid AND a.sku = b.sku,
+                   Bas_Codes c,(Select (@rowNum :=0)) d
+	         where a.linestatus = c.code
 	           and c.codeid = 'ASN_STS'
-	           and a.asnno = #{condition.asnno,jdbcType=VARCHAR})
+	           and a.asnno = #{condition.asnno,jdbcType=VARCHAR}) as t
 	 where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

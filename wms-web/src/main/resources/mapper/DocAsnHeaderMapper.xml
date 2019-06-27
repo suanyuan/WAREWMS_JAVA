@@ -1193,22 +1193,23 @@ insert into doc_asn_header
 <!-- 查询入库单管理列表 -->
 <select id="queryByPageList" resultMap="DocAsnHeaderMap"  parameterType="Object">
 	select * from (
-	select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, row_number() over(order by a.asnno desc) as row_num
+	select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, (@rowNum :=@rowNum + 1) as row_num
 	from (select
 	<include refid="Base_Column_List"/>
 	from Doc_Asn_Header
 	<include refid="Example_Where_Clause"/>
-	) a,
+	) as a,
     Bas_Codes b,
     Bas_Codes c,
-    Bas_Codes d
+    Bas_Codes d,
+    (SELECT(@rowNum := 0)) e
 	where a.asnstatus = b.code
     and b.codeid = 'ASN_STS'
     and a.asntype = c.code
     and c.codeid = 'ASN_TYP'
     and a.releasestatus = d.code
 	and d.codeid = 'RLS_STS'
-	)
+	) as t
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
