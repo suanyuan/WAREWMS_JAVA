@@ -1,6 +1,7 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.result.PdaResult;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
@@ -32,9 +33,10 @@ public class PdaDocAsnController {
 
         Map<String, Object> resultMap = new HashMap<>();
         List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(pageNum, Constant.pageSize);
-        resultMap.put("data", pdaDocAsnHeaderVOList);
-        resultMap.put(Constant.SUCCESS, true);
-        resultMap.put(Constant.MSG, Constant.SUCCESS_MSG);
+
+        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
+        resultMap.put(Constant.DATA, pdaDocAsnHeaderVOList);
+        resultMap.put(Constant.RESULT, result);
         return resultMap;
     }
 
@@ -44,9 +46,10 @@ public class PdaDocAsnController {
 
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDetailByLotatt(asnno, lotatt);
-        resultMap.put("data", pdaDocAsnDetailVO);
-        resultMap.put(Constant.SUCCESS, true);
-        resultMap.put(Constant.MSG, Constant.SUCCESS_MSG);
+
+        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
+        resultMap.put(Constant.DATA, pdaDocAsnDetailVO);
+        resultMap.put(Constant.RESULT, result);
         return resultMap;
     }
 }

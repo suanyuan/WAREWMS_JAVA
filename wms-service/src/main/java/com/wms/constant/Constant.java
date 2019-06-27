@@ -14,15 +14,11 @@ public class Constant {
 
 //  PDA专属 (╯‵□′)╯︵┻━┻ ********************* <<<<<<<<<<<
 
-    public static final String SUCCESS = "success";
+    public static final String DATA = "data";
 
-    public static final String ERROR_CODE = "error_code";
-
-    public static final String REQUEST_ID = "request_id";
-
-    public static final String MSG = "msg";
-
-    public static final int pageSize = 10;
+    public static final String RESULT = "result";
 
     public static final String SUCCESS_MSG = "获取成功";
+
+    public static final int pageSize = 10;
 }

@@ -1281,7 +1281,7 @@ insert into doc_asn_header
         <include refid="Base_Column_List"/>
         from doc_asn_header
         where asnstatus = '00' or asnstatus = '30'
-        order by asncreationtime desc
+        order by addtime desc
         limit #{start}, #{pageSize}
     </select>
 
