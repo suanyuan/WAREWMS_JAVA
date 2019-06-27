@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasCodesMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasCodes" >
+	<result column="codeid" property="codeid"/>
+	<result column="code" property="code"/>
+	<result column="codename_c" property="codenameC"/>
+	<result column="codename_e" property="codenameE"/>
+	<result column="show_sequence" property="showSequence"/>
+	<result column="udf1" property="udf1"/>
+	<result column="udf2" property="udf2"/>
+	<result column="udf3" property="udf3"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="udf_opr_chk" property="udfOprChk"/>
+</resultMap>
+       
+<!-- bas_codes table all fields -->
+<sql id="Base_Column_List" >
+	 codeid,code,codename_c,codename_e,show_sequence,udf1,udf2,udf3,addtime,addwho,edittime,editwho,udf_opr_chk
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.codeid != null and condition.codeid != ''" >
+	    and codeid =  #{condition.codeid}
+	</if>
+	<if test="condition.code != null and condition.code != ''" >
+	    and code =  #{condition.code}
+	</if>
+	<if test="condition.codenameC != null and condition.codenameC != ''" >
+	    and codename_c =  #{condition.codenameC}
+	</if>
+	<if test="condition.codenameE != null and condition.codenameE != ''" >
+	    and codename_e =  #{condition.codenameE}
+	</if>
+	<if test="condition.showSequence != null and condition.showSequence != ''" >
+	    and show_sequence =  #{condition.showSequence}
+	</if>
+	<if test="condition.udf1 != null and condition.udf1 != ''" >
+	    and udf1 =  #{condition.udf1}
+	</if>
+	<if test="condition.udf2 != null and condition.udf2 != ''" >
+	    and udf2 =  #{condition.udf2}
+	</if>
+	<if test="condition.udf3 != null and condition.udf3 != ''" >
+	    and udf3 =  #{condition.udf3}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.udfOprChk != null and condition.udfOprChk != ''" >
+	    and udf_opr_chk =  #{condition.udfOprChk}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_codes(codeid,code,codename_c,codename_e,show_sequence,udf1,udf2,udf3,addtime,addwho,edittime,editwho,udf_opr_chk)
+ values(#{codeid},#{code},#{codenameC},#{codenameE},#{showSequence},#{udf1},#{udf2},#{udf3},#{addtime},#{addwho},#{edittime},#{editwho},#{udfOprChk})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_codes set code=#{code},codename_c=#{codenameC},codename_e=#{codenameE},show_sequence=#{showSequence},udf1=#{udf1},udf2=#{udf2},udf3=#{udf3},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},udf_opr_chk=#{udfOprChk} where codeid=#{codeid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_codes set 
+	<trim  suffixOverrides="," >
+	<if test="code != null  ">
+		code=#{code},
+	</if>
+	<if test="codenameC != null  ">
+		codename_c=#{codenameC},
+	</if>
+	<if test="codenameE != null  ">
+		codename_e=#{codenameE},
+	</if>
+	<if test="showSequence != null  ">
+		show_sequence=#{showSequence},
+	</if>
+	<if test="udf1 != null  ">
+		udf1=#{udf1},
+	</if>
+	<if test="udf2 != null  ">
+		udf2=#{udf2},
+	</if>
+	<if test="udf3 != null  ">
+		udf3=#{udf3},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="udfOprChk != null  ">
+		udf_opr_chk=#{udfOprChk},
+	</if>
+	</trim> where codeid=#{codeid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_codes where codeid = #{codeid}
+</delete>
+ 
+<!-- 根据id查询 字典信息 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_codes where codeid = #{codeid}
+</select>
+
+<!-- 字典信息 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_codes 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询字典信息列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_codes 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

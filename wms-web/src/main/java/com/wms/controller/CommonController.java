@@ -1,12 +1,15 @@
 package com.wms.controller;
 
 import com.google.common.io.Files;
+import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.result.UploadResult;
+import com.wms.service.BasCodesService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PropertyUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,9 @@ import java.util.*;
 public class CommonController {
 
     private static String uploadUrl = "/Users/quendi/fileUpload";
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 上传文件
@@ -109,4 +115,17 @@ public class CommonController {
         mapList.add(mapUnUse);
         return mapList;
     }
+
+    @RequestMapping(params = "getCatalogClassify")
+    @ResponseBody
+    public List<EasyuiCombobox> getCatalogClassify(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_CLASSIFY);
+    }
+
+    @RequestMapping(params = "getCatalogVersion")
+    @ResponseBody
+    public List<EasyuiCombobox> getCatalogVersion(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_VERSION);
+    }
+
 }

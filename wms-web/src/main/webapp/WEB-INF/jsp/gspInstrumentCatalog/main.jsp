@@ -65,6 +65,8 @@ $(function() {
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
+		width:500,
+		height:500,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
 		}
@@ -181,10 +183,6 @@ var doSearch = function(){
 		instrumentCatalogRemark : $('#instrumentCatalogRemark').val(),
 		classifyId : $('#classifyId').val(),
 		version : $('#version').val(),
-		createId : $('#createId').val(),
-		cretaeDate : $('#cretaeDate').val(),
-		editId : $('#editId').val(),
-		editDate : $('#editDate').val(),
 		isUse : $('#isUse').val()
 	});
 };
@@ -199,17 +197,17 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th style="display: none;">待输入名称0：</th><td><input type='text'  id='instrumentCatalogId' class='easyui-textbox' size='16' data-options=''/></td>
+							<!--<th style="display: none;">待输入名称0：</th><td><input type='text'  id='instrumentCatalogId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<th>编号：</th><td><input type='text' id='instrumentCatalogNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>名称：</th><td><input type='text' id='instrumentCatalogName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th style="display: none;">待输入名称3：</th><td><input type='text' id='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称4：</th><td><input type='text' id='classifyId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称5：</th><td><input type='text' id='version' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称6：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称9：</th><td><input type='text' id='editDate' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称10：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
+							<!--<th style="display: none;">待输入名称3：</th><td><input type='text' id='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<th>分类：</th><td><input type='text' id='classifyId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>版本：</th><td><input type='text' id='version' class='easyui-textbox' size='16' data-options=''/></td>
+							<!--<th >待输入名称6：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<!--<th >待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<!--<th >待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<!--<th >待输入名称9：</th><td><input type='text' id='editDate' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -232,48 +230,24 @@ var doSearch = function(){
 			<input type='hidden' id='gspInstrumentCatalogId' name='gspInstrumentCatalogId'/>
 			<table>
 				<tr>
-					<th>待输入0</th>
-					<td><input type='text' name='instrumentCatalogId' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>编号</th>
+					<td><input type='text' name='instrumentCatalogNo' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
-					<th>待输入1</th>
-					<td><input type='text' name='instrumentCatalogNo' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>名称</th>
+					<td><input type='text' name='instrumentCatalogName' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
-					<th>待输入2</th>
-					<td><input type='text' name='instrumentCatalogName' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>分类</th>
+					<td><input type='text' name='classifyId' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
-					<th>待输入3</th>
-					<td><input type='text' name='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>版本</th>
+					<td><input type='text' name='version' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
-					<th>待输入4</th>
-					<td><input type='text' name='classifyId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入5</th>
-					<td><input type='text' name='version' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入6</th>
-					<td><input type='text' name='createId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='cretaeDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='editId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='editDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='isUse' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>备注</th>
+					<td><input type='text' name='instrumentCatalogRemark' class='easyui-textbox' size='16' style="height: 150px;" data-options='multiline:true,width:200'/></td>
 				</tr>
 			</table>
 		</form>
