@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.vo.pda.PdaDocAsnDetailVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,5 +133,22 @@ public class DocAsnDetailService extends BaseService {
 		}
 		return comboboxList;
 	}
+
+    /**
+     * 通过效期反推获取收货明细
+     * @param asnno 收货任务单号
+     * @param lotatt 批次属性-效期 lotatt06
+     * @return 收货明细
+     */
+	public PdaDocAsnDetailVO queryDetailByLotatt(String asnno, String lotatt) {
+
+	    PdaDocAsnDetailVO pdaDocAsnDetailVO = new PdaDocAsnDetailVO();
+	    DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryDetailByLotatt(asnno, lotatt);
+	    if (docAsnDetail != null) {
+
+            BeanUtils.copyProperties(docAsnDetail, pdaDocAsnDetailVO);
+        }
+	    return pdaDocAsnDetailVO;
+    }
 
 }

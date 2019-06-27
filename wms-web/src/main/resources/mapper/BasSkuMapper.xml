@@ -456,7 +456,7 @@ where 1=1
 </delete>
  
 <!-- 根据id查询 商品档案 -->
-<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+<select id="queryById"  resultMap="BaseResultMap" parameterType="java.util.Map">
 	select <include refid="Base_Column_List" /> 
 	from Bas_Sku
 	where customerid = upper(#{customerid,jdbcType=VARCHAR})

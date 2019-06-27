@@ -1,8 +1,9 @@
 package com.wms.api;
 
+import com.wms.constant.Constant;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
-import com.wms.utils.pda_utils.Constants;
+import com.wms.vo.pda.PdaDocAsnDetailVO;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +31,22 @@ public class PdaDocAsnController {
     public Map<String, Object> queryUndoneList(@RequestParam(defaultValue = "1") int pageNum) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(pageNum, 10);
-        resultMap.put("datas", pdaDocAsnHeaderVOList);
-        resultMap.put(Constants.SUCCESS, true);
-        resultMap.put(Constants.MSG, "获取成功");
+        List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(pageNum, Constant.pageSize);
+        resultMap.put("data", pdaDocAsnHeaderVOList);
+        resultMap.put(Constant.SUCCESS, true);
+        resultMap.put(Constant.MSG, Constant.SUCCESS_MSG);
         return resultMap;
     }
 
-//    public Map<String, Object> query
+    @RequestMapping(params = "docAsnDetail", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDetailByLotatt(String asnno, String lotatt) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDetailByLotatt(asnno, lotatt);
+        resultMap.put("data", pdaDocAsnDetailVO);
+        resultMap.put(Constant.SUCCESS, true);
+        resultMap.put(Constant.MSG, Constant.SUCCESS_MSG);
+        return resultMap;
+    }
 }

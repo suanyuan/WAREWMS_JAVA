@@ -15,5 +15,6 @@ public interface BasSkuMybatisDao extends BaseDao {
 	public String basSkuCheck(Map<String, Object> map);
 
 	public BasSku queryBySkuInfo(BasSkuQuery skuQuery);
-	
+
+	BasSku queryById(Map<String, Object> map);
 }
