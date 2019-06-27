@@ -45,11 +45,11 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 		for (int i = 0; i < descriptors.length; i++) {
 			String name = descriptors[i].getName();
 			if (!"class".equals(name)) {
-				if(propertyUtilsBean.getNestedProperty(bean, name) == null){
-					return true;
+				if(propertyUtilsBean.getNestedProperty(bean, name) != null){
+					return false;
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 }

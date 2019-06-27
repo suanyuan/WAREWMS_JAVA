@@ -5,7 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspEnterpriseInfoForm {
 
-	private Long enterpriseId;
+	private String enterpriseId;
 	private String enterpriseNo;
 	private String shorthandName;
 	private String enterpriseName;
@@ -14,11 +14,11 @@ public class GspEnterpriseInfoForm {
 	private String contactsPhone;
 	private String remark;
 
-	public Long getEnterpriseId() {
+	public String getEnterpriseId() {
 		return enterpriseId;
 	}
 
-	public void setEnterpriseId(Long enterpriseId) {
+	public void setEnterpriseId(String enterpriseId) {
 		this.enterpriseId = enterpriseId;
 	}
 

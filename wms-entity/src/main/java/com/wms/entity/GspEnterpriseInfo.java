@@ -25,11 +25,11 @@ public class GspEnterpriseInfo  implements Serializable {
 
 	private String remark;
 
-	private Long createId;
+	private String createId;
 
 	private java.util.Date createDate;
 
-	private Long editId;
+	private String editId;
 
 	private java.util.Date editDate;
 

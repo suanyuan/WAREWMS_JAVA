@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,9 @@ public class BaseService {
 			json.setSuccess(false);
 		}
 		return json;
+	}
+
+	public String getLoginUserId(){
+		return SfcUserLoginUtil.getLoginUser().getId();
 	}
 }

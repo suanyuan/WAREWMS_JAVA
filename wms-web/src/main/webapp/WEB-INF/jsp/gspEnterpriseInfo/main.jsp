@@ -176,9 +176,9 @@ var commit = function(){
             url : url,
             data : {"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
+                console.log(result);
                 var msg='';
-                try {
-                    var result = $.parseJSON(data);
+                try{
                     if(result.success){
                         msg = result.msg;
                         ezuiDatagrid.datagrid('reload');
@@ -186,8 +186,8 @@ var commit = function(){
                     }else{
                         msg = '<font color="red">' + result.msg + '</font>';
                     }
-                } catch (e) {
-                    msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                }catch (e) {
+                    //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
                     msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
                 } finally {
                     $.messager.show({

@@ -35,7 +35,7 @@ public class GspOperateLicenseService extends BaseService {
 		Json json = new Json();
 		GspOperateLicense gspOperateLicense = gspBusinessLicenseMybatisDao.queryById(gspOperateLicenseForm.getOperateId());
 		BeanUtils.copyProperties(gspOperateLicenseForm, gspOperateLicense);
-		gspBusinessLicenseMybatisDao.update(gspOperateLicense);
+		gspBusinessLicenseMybatisDao.updateBySelective(gspOperateLicense);
 		json.setSuccess(true);
 		return json;
 	}
@@ -48,6 +48,11 @@ public class GspOperateLicenseService extends BaseService {
 		}
 		json.setSuccess(true);
 		return json;
+	}
+
+	public GspOperateLicense getGspOperateLicense(String id) {
+		GspOperateLicense gspOperateLicense = gspBusinessLicenseMybatisDao.queryById(id);
+		return gspOperateLicense;
 	}
 
 }
