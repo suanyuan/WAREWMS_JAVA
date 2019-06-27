@@ -68,4 +68,11 @@ public class GspBusinessLicenseService extends BaseService {
 		return null;
 	}
 
+	public void updateGspBusinessLicenseActiveTag(String id,String tag) {
+		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
+		form.setEnterpriseId(id);
+		form.setIsUse(tag);
+		gspBusinessLicenseMybatisDao.updateBySelective(form);
+	}
+
 }

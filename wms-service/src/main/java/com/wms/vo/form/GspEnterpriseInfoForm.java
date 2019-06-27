@@ -13,6 +13,7 @@ public class GspEnterpriseInfoForm {
 	private String contacts;
 	private String contactsPhone;
 	private String remark;
+	private String isUse;
 
 	public String getEnterpriseId() {
 		return enterpriseId;
@@ -78,4 +79,11 @@ public class GspEnterpriseInfoForm {
 		this.remark = remark;
 	}
 
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
 }

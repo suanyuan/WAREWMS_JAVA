@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.query.GspBusinessLicenseQuery;
+import com.wms.service.GspBusinessLicenseService;
 import com.wms.service.GspEnterpriceService;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class GspEnterpriseInfoController {
 	@Autowired
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
 
-	//企业信息主题业务
+	//企业信息主体业务
 	@Autowired
 	private GspEnterpriceService gspEnterpriceService;
 
@@ -53,7 +55,7 @@ public class GspEnterpriseInfoController {
 	@Login
 	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+	public Json add(@RequestParam(value="enterpriceId",required=true) String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
 		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
 		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
@@ -65,10 +67,11 @@ public class GspEnterpriseInfoController {
 	}
 
 	@Login
-	@RequestMapping(params = "edit")
+	@RequestMapping(params = "edit",method = RequestMethod.POST)
 	@ResponseBody
-	public Json edit(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
-		Json json = gspEnterpriseInfoService.editGspEnterpriseInfo(gspEnterpriseInfoForm);
+	public Json edit(@RequestParam(value="enterpriceId",required=true) String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
+		Json json = gspEnterpriceService.editGspEnterprice(enterpriceId,gspEnterpriceFrom);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -80,12 +83,13 @@ public class GspEnterpriseInfoController {
 	@RequestMapping(params = "delete")
 	@ResponseBody
 	public Json delete(String id) {
-		Json json = gspEnterpriseInfoService.deleteGspEnterpriseInfo(id);
+		return gspEnterpriceService.deleteGspEnterprice(id);
+		/*Json json = gspEnterpriseInfoService.deleteGspEnterpriseInfo(id);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		return json;
+		return json;*/
 	}
 
 	@Login
@@ -140,5 +144,33 @@ public class GspEnterpriseInfoController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", enterpriseId);
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
+	}
+
+	@Login
+	@RequestMapping(params = "getInfo")
+	@ResponseBody
+	public Object getInfo(String enterpriseId) {
+		return gspEnterpriceService.getGspEnterpriceInfo(enterpriseId);
+	}
+
+	@Login
+	@RequestMapping(params = "getBusness")
+	@ResponseBody
+	public Object getBusness(String enterpriseId) {
+		return gspEnterpriceService.getGspBusinessLicense(enterpriseId);
+	}
+
+	@Login
+	@RequestMapping(params = "getOperate")
+	@ResponseBody
+	public Object getOperate(String enterpriseId) {
+		return gspEnterpriceService.getGspOperateLicense(enterpriseId);
+	}
+
+	@Login
+	@RequestMapping(params = "getSecondRecord")
+	@ResponseBody
+	public Object getSecondRecord(String enterpriseId) {
+		return gspEnterpriceService.getGspSecondRecord(enterpriseId);
 	}
 }

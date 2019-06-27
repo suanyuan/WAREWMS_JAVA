@@ -16,6 +16,7 @@ public class GspSecondRecordForm {
 	private String recordUrl;
 	private java.util.Date approveDate;
 	private String registrationAuthority;
+	private String isUse;
 
 	public Long getRecordId() {
 		return recordId;
@@ -106,4 +107,11 @@ public class GspSecondRecordForm {
 		this.registrationAuthority = registrationAuthority;
 	}
 
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
 }

@@ -15,3 +15,8 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/js/jquery-easyui/themes/icon.css"/>"/>
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/lightbox/css/lightbox.min.css"/>'>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/swCss.css"/>"/>
+<script>
+	function showUrl(url) {
+		window.open(sy.bp()+"/commonController.do?fileDownLoad");
+    }
+</script>

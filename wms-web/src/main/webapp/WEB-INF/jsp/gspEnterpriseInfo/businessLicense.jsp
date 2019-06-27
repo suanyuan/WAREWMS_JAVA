@@ -7,65 +7,65 @@
     <table>
         <tr>
             <th>证照编号</th>
-            <td><input type='text' name='licenseNumber' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="licenseNumber" name='licenseNumber' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>统一社会信用代码</th>
-            <td><input type='text' name='socialCreditCode' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="socialCreditCode" name='socialCreditCode' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>名称</th>
-            <td><input type='text' name='licenseName' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="licenseName" name='licenseName' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>类型</th>
-            <td><input type='text' name='licenseType' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><input type='text' name='residence' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>法定代表人</th>
-            <td><input type='text' name='juridicalPerson' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>注册资本</th>
-            <td><input type='text' name='registeredCapital' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="registeredCapital" name='registeredCapital' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>成立日期</th>
-            <td><input type='text' name='establishmentDate' class='easyui-datebox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>营业期限起始时间</th>
-            <td><input type='text' name='businessStartDate' class='easyui-datebox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>营业期限结束时间</th>
-            <td><input type='text' name='businessEndDate' class='easyui-datebox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>是否长期</th>
-            <td><input type='text' name='isLong' class='easyui-numberbox' size='100' data-options='required:true,min:0,max:100'/></td>
+            <td><input type='text' data="1" id="isLong" name='isLong' class='easyui-numberbox' data-options='required:true,min:0,max:100'/></td>
         </tr>
         <tr>
             <th>经营范围</th>
-            <td><input type='text' name='businessScope' style="height: 150px;" class='easyui-textbox' size='100' data-options='required:true,multiline:true'/></td>
+            <td><input type='text' data="1" id="businessScope" name='businessScope' style="height: 150px;" class='easyui-textbox' data-options='required:true,multiline:true'/></td>
         </tr>
         <tr>
             <th>发证日期</th>
-            <td><input type='text' name='issueDate' class='easyui-datebox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>登记机关</th>
-            <td><input type='text' name='registrationAuthority' class='easyui-textbox' size='100' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>营业执照照片</th>
             <td>
                 <input id="file" name='file'>
-                <a id="btn" href="#" class="easyui-linkbutton" data-options="">浏览</a>
+                <a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
                 <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl"/>
             </td>
         </tr>
@@ -77,7 +77,7 @@
         $('#file').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
-            buttonText: '浏览',  //按钮说明文字
+            buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
                 if(data){
@@ -86,6 +86,24 @@
             }
         });
 
+        var row = ezuiDatagrid.datagrid('getSelected');
+        if(row){
+            $.ajax({
+                url : 'gspEnterpriseInfoController.do?getBusness',
+                data : {"enterpriseId" : row.enterpriseId},
+                type : 'POST',
+                dataType : 'JSON',
+                success : function(result){
+                    if(result.success){
+                        $("#ezuiFormBusiness input[id!=''][data='1']").each(function (index) {
+                            $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""])
+                        })
+                        $("#attachmentUrl").val(result.obj.attachmentUrl);
+                        $("#file").val(result.obj.attachmentUrl);
+                    }
+                }
+            });
+        }
     })
 
     function doUpload(data) {
@@ -120,4 +138,5 @@
         });
         //$('#file').filebox('clear');//上传成功后清空里面的值
     }
+
 </script>
