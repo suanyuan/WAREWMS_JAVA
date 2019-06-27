@@ -6,8 +6,14 @@ package com.wms.constant;
  * Date: 2019/6/26
  */
 public class Constant {
-    public static String IS_USE_YES = "1";
-    public static String IS_USE_NO = "0";
+
+//  数据是否有效
+    public static final String IS_USE_YES = "1"; //有效
+    public static final String IS_USE_NO = "0";  //无效
+
+//  codeid
+    public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
+    public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
 
 
 
