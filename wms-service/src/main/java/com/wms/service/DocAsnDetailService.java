@@ -147,7 +147,7 @@ public class DocAsnDetailService extends BaseService {
 	    if (docAsnDetail != null) {
 
             BeanUtils.copyProperties(docAsnDetail, pdaDocAsnDetailVO);
-
+            pdaDocAsnDetailVO.setModel(docAsnDetail.getBasSku().getDescrE());
         }
 	    return pdaDocAsnDetailVO;
     }

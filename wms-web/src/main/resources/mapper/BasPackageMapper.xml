@@ -81,7 +81,7 @@ where 1=1
 <!-- 根据id查询 包装 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from Bas_Package where addtime = #{addtime}
+	 from Bas_Package where packid = #{packid}
 </select>
 
 <!-- 包装 列表总数-->

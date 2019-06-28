@@ -96,7 +96,7 @@
     
     <resultMap id="ExtendDetailMap" type="com.wms.entity.DocAsnDetail" extends="DocAsnDetailMap">
         <association property="basSku" column="{sku=sku,customerid=customerid}" javaType="com.wms.entity.BasSku" select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
-        <association property="basPackage" column="packid" javaType="com.wms.entity.BasPackage" select="com.wms.mybatis.dao.BasPackageMybatisDao.queryByPackId"/>
+        <association property="basPackage" column="packid" javaType="com.wms.entity.BasPackage" select="com.wms.mybatis.dao.BasPackageMybatisDao.queryById"/>
     </resultMap>
        
 <!-- Doc_Asn_Details table all fields -->

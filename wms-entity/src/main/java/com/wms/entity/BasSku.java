@@ -54,8 +54,14 @@ public class BasSku implements Serializable {
 
 	private String defaultshipmentuom;
 
+    /**
+     * 中文产品名称
+     */
 	private String descrC;
 
+    /**
+     * 规格/型号
+     */
 	private String descrE;
 
 	@Temporal(TemporalType.TIMESTAMP)
