@@ -11,4 +11,5 @@ target
 *.njsproj
 *.sln
 .settings
+out
 

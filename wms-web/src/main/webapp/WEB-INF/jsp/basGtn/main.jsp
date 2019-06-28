@@ -16,12 +16,12 @@ $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/basPackageController.do?showDatagrid"/>',
+		url : '<c:url value="/basGtnController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '待输入标题',
 		pageSize : 50,
-		pageList : [50, 100, 200],
+		pageList : [10, 50, 100],
 		fit: true,
 		border: false,
 		fitColumns : true,
@@ -33,11 +33,8 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'packid',		title: '包装代码',	width: 160 },
-			{field: 'descr',		title: '包装描述',	width: 160 },
-			{field: 'packuom1',		title: '主单位',	width: 160 },
-			{field: 'qty1',		title: '数量',	width: 160 },
-			{field: 'descr1',		title: '单位描述',	width: 160 }
+			{field: 'sku',		title: '产品代码',	width: 400 },
+			{field: 'gtncode',		title: 'GTN码',	width: 400 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -51,7 +48,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/basPackageController.do?getBtn"/>', ezuiMenu);
+			ajaxBtn($('#menuId').val(), '<c:url value="/basGtnController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -66,7 +63,7 @@ $(function() {
 });
 var add = function(){
 	processType = 'add';
-	$('#basPackageId').val(0);
+	$('#basGtnId').val(0);
 	ezuiDialog.dialog('open');
 };
 var edit = function(){
@@ -74,11 +71,8 @@ var edit = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		ezuiForm.form('load',{
-            packid : row.packid,
-            descr : row.descr,
-            packuom1 : row.packuom1,
-            qty1 : row.qty1,
-            descr1 : row.descr1
+			sku : row.sku,
+			gtncode : row.gtncode
 		});
 		ezuiDialog.dialog('open');
 	}else{
@@ -89,13 +83,12 @@ var edit = function(){
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	alert(row.packid)
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
-					url : 'basPackageController.do?delete',
-					data : {id : row.packid},
+					url : 'basGtnController.do?delete',
+					data : {id : row.sku},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -123,9 +116,9 @@ var del = function(){
 var commit = function(){
 	var url = '';
 	if (processType == 'edit') {
-		url = '<c:url value="/basPackageController.do?edit"/>';
+		url = '<c:url value="/basGtnController.do?edit"/>';
 	}else{
-		url = '<c:url value="/basPackageController.do?add"/>';
+		url = '<c:url value="/basGtnController.do?add"/>';
 	}
 	ezuiForm.form('submit', {
 		url : url,
@@ -164,9 +157,8 @@ var commit = function(){
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-        packid : $('#packid').val(),
-        descr: $('#descr').val(),
-
+		sku : $('#sku').val(),
+		gtncode : $('#gtncode').val()
 	});
 };
 </script>
@@ -180,9 +172,8 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>包装代码</th><td><input type='text' id='packid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>包装描述</th><td><input type='text' id='descr' class='easyui-textbox' size='16' data-options=''/></td>
-
+							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>GTN码</th><td><input type='text' id='gtncode' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -193,7 +184,7 @@ var doSearch = function(){
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -202,27 +193,15 @@ var doSearch = function(){
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='basPackageId' name='basPackageId'/>
+			<input type='hidden' id='basGtnId' name='basGtnId'/>
 			<table>
 				<tr>
-					<th>包装代码</th>
-					<td><input type='text' name='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>产品代码</th>
+					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>包装描述</th>
-					<td><input type='text' name='descr' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>主单位</th>
-					<td><input type='text' name='packuom1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>数量</th>
-					<td><input type='number' name='qty1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>单位描述</th>
-					<td><input type='text' name='descr1' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>GTN码</th>
+					<td><input type='text' name='gtncode' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 			</table>
 		</form>

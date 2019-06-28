@@ -25,13 +25,14 @@ public class GspInstrumentCatalogService extends BaseService {
 
 	@Autowired
 	private GspInstrumentCatalogMybatisDao gspInstrumentCatalogMybatisDao;
+	@Autowired
+	private BasCodesService basCodesService;
 
 	public EasyuiDatagrid<GspInstrumentCatalogVO> getPagedDatagrid(EasyuiDatagridPager pager, GspInstrumentCatalogQuery query) {
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
-
 		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;

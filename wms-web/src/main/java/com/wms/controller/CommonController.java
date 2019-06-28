@@ -116,12 +116,20 @@ public class CommonController {
         return mapList;
     }
 
+    /**
+     * 管理分类
+     * @return
+     */
     @RequestMapping(params = "getCatalogClassify")
     @ResponseBody
     public List<EasyuiCombobox> getCatalogClassify(){
         return basCodesService.getBy(Constant.CODE_CATALOG_CLASSIFY);
     }
 
+    /**
+     * 版本2002/2017
+     * @return
+     */
     @RequestMapping(params = "getCatalogVersion")
     @ResponseBody
     public List<EasyuiCombobox> getCatalogVersion(){

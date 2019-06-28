@@ -2,94 +2,20 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.dao.BasPackageDao" > 
+<mapper namespace="com.wms.mybatis.dao.BasPackageMybatisDao" >
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.BasPackage" >
-	<result column="addtime" property="addtime"/>
-	<result column="addwho" property="addwho"/>
-	<result column="cartonizeuom1" property="cartonizeuom1"/>
-	<result column="cartonizeuom2" property="cartonizeuom2"/>
-	<result column="cartonizeuom3" property="cartonizeuom3"/>
-	<result column="cartonizeuom4" property="cartonizeuom4"/>
-	<result column="cartonizeuom5" property="cartonizeuom5"/>
-	<result column="cubeuom1" property="cubeuom1"/>
-	<result column="cubeuom2" property="cubeuom2"/>
-	<result column="cubeuom3" property="cubeuom3"/>
-	<result column="cubeuom4" property="cubeuom4"/>
-	<result column="cubeuom5" property="cubeuom5"/>
-	<result column="descr" property="descr"/>
-	<result column="descr1" property="descr1"/>
-	<result column="descr2" property="descr2"/>
-	<result column="descr3" property="descr3"/>
-	<result column="descr4" property="descr4"/>
-	<result column="descr5" property="descr5"/>
-	<result column="edittime" property="edittime"/>
-	<result column="editwho" property="editwho"/>
-	<result column="heightuom1" property="heightuom1"/>
-	<result column="heightuom2" property="heightuom2"/>
-	<result column="heightuom3" property="heightuom3"/>
-	<result column="heightuom4" property="heightuom4"/>
-	<result column="heightuom5" property="heightuom5"/>
-	<result column="in_label1" property="inLabel1"/>
-	<result column="in_label2" property="inLabel2"/>
-	<result column="in_label3" property="inLabel3"/>
-	<result column="in_label4" property="inLabel4"/>
-	<result column="in_label5" property="inLabel5"/>
-	<result column="lengthuom1" property="lengthuom1"/>
-	<result column="lengthuom2" property="lengthuom2"/>
-	<result column="lengthuom3" property="lengthuom3"/>
-	<result column="lengthuom4" property="lengthuom4"/>
-	<result column="lengthuom5" property="lengthuom5"/>
-	<result column="out_label1" property="outLabel1"/>
-	<result column="out_label2" property="outLabel2"/>
-	<result column="out_label3" property="outLabel3"/>
-	<result column="out_label4" property="outLabel4"/>
-	<result column="out_label5" property="outLabel5"/>
 	<result column="packid" property="packid"/>
-	<result column="packmaterial1" property="packmaterial1"/>
-	<result column="packmaterial2" property="packmaterial2"/>
-	<result column="packmaterial3" property="packmaterial3"/>
-	<result column="packmaterial4" property="packmaterial4"/>
-	<result column="packmaterial5" property="packmaterial5"/>
+	<result column="descr" property="descr"/>
 	<result column="packuom1" property="packuom1"/>
-	<result column="packuom2" property="packuom2"/>
-	<result column="packuom3" property="packuom3"/>
-	<result column="packuom4" property="packuom4"/>
-	<result column="packuom5" property="packuom5"/>
-	<result column="pack_material2" property="packMaterial2"/>
-	<result column="pallethi" property="pallethi"/>
-	<result column="palletti" property="palletti"/>
-	<result column="palletwoodheight" property="palletwoodheight"/>
-	<result column="palletwoodlength" property="palletwoodlength"/>
-	<result column="palletwoodwidth" property="palletwoodwidth"/>
 	<result column="qty1" property="qty1"/>
-	<result column="qty2" property="qty2"/>
-	<result column="qty3" property="qty3"/>
-	<result column="qty4" property="qty4"/>
-	<result column="qty5" property="qty5"/>
-	<result column="qty_material2" property="qtyMaterial2"/>
-	<result column="rpl_label1" property="rplLabel1"/>
-	<result column="rpl_label2" property="rplLabel2"/>
-	<result column="rpl_label3" property="rplLabel3"/>
-	<result column="rpl_label4" property="rplLabel4"/>
-	<result column="sn_1" property="sn1"/>
-	<result column="sn_2" property="sn2"/>
-	<result column="sn_3" property="sn3"/>
-	<result column="weightuom1" property="weightuom1"/>
-	<result column="weightuom2" property="weightuom2"/>
-	<result column="weightuom3" property="weightuom3"/>
-	<result column="weightuom4" property="weightuom4"/>
-	<result column="weightuom5" property="weightuom5"/>
-	<result column="widthuom1" property="widthuom1"/>
-	<result column="widthuom2" property="widthuom2"/>
-	<result column="widthuom3" property="widthuom3"/>
-	<result column="widthuom4" property="widthuom4"/>
-	<result column="widthuom5" property="widthuom5"/>
+	<result column="descr1" property="descr1"/>
+
 </resultMap>
        
 <!-- Bas_Package table all fields -->
 <sql id="Base_Column_List" >
-	 addtime,addwho,cartonizeuom1,cartonizeuom2,cartonizeuom3,cartonizeuom4,cartonizeuom5,cubeuom1,cubeuom2,cubeuom3,cubeuom4,cubeuom5,descr,descr1,descr2,descr3,descr4,descr5,edittime,editwho,heightuom1,heightuom2,heightuom3,heightuom4,heightuom5,in_label1,in_label2,in_label3,in_label4,in_label5,lengthuom1,lengthuom2,lengthuom3,lengthuom4,lengthuom5,out_label1,out_label2,out_label3,out_label4,out_label5,packid,packmaterial1,packmaterial2,packmaterial3,packmaterial4,packmaterial5,packuom1,packuom2,packuom3,packuom4,packuom5,pack_material2,pallethi,palletti,palletwoodheight,palletwoodlength,palletwoodwidth,qty1,qty2,qty3,qty4,qty5,qty_material2,rpl_label1,rpl_label2,rpl_label3,rpl_label4,sn_1,sn_2,sn_3,weightuom1,weightuom2,weightuom3,weightuom4,weightuom5,widthuom1,widthuom2,widthuom3,widthuom4,widthuom5
+	 packid,descr,packuom1,qty1,descr1
 </sql>
    
    
@@ -97,259 +23,27 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
-	<if test="condition.addtime != null and condition.addtime != ''" >
-	    and addtime =  #{condition.addtime}
-	</if>
-	<if test="condition.addwho != null and condition.addwho != ''" >
-	    and addwho =  #{condition.addwho}
-	</if>
-	<if test="condition.cartonizeuom1 != null and condition.cartonizeuom1 != ''" >
-	    and cartonizeuom1 =  #{condition.cartonizeuom1}
-	</if>
-	<if test="condition.cartonizeuom2 != null and condition.cartonizeuom2 != ''" >
-	    and cartonizeuom2 =  #{condition.cartonizeuom2}
-	</if>
-	<if test="condition.cartonizeuom3 != null and condition.cartonizeuom3 != ''" >
-	    and cartonizeuom3 =  #{condition.cartonizeuom3}
-	</if>
-	<if test="condition.cartonizeuom4 != null and condition.cartonizeuom4 != ''" >
-	    and cartonizeuom4 =  #{condition.cartonizeuom4}
-	</if>
-	<if test="condition.cartonizeuom5 != null and condition.cartonizeuom5 != ''" >
-	    and cartonizeuom5 =  #{condition.cartonizeuom5}
-	</if>
-	<if test="condition.cubeuom1 != null and condition.cubeuom1 != ''" >
-	    and cubeuom1 =  #{condition.cubeuom1}
-	</if>
-	<if test="condition.cubeuom2 != null and condition.cubeuom2 != ''" >
-	    and cubeuom2 =  #{condition.cubeuom2}
-	</if>
-	<if test="condition.cubeuom3 != null and condition.cubeuom3 != ''" >
-	    and cubeuom3 =  #{condition.cubeuom3}
-	</if>
-	<if test="condition.cubeuom4 != null and condition.cubeuom4 != ''" >
-	    and cubeuom4 =  #{condition.cubeuom4}
-	</if>
-	<if test="condition.cubeuom5 != null and condition.cubeuom5 != ''" >
-	    and cubeuom5 =  #{condition.cubeuom5}
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid like  '%${condition.packid}%'
 	</if>
 	<if test="condition.descr != null and condition.descr != ''" >
-	    and descr =  #{condition.descr}
+	    and descr  like  '%${condition.descr}%'
 	</if>
-	<if test="condition.descr1 != null and condition.descr1 != ''" >
-	    and descr1 =  #{condition.descr1}
-	</if>
-	<if test="condition.descr2 != null and condition.descr2 != ''" >
-	    and descr2 =  #{condition.descr2}
-	</if>
-	<if test="condition.descr3 != null and condition.descr3 != ''" >
-	    and descr3 =  #{condition.descr3}
-	</if>
-	<if test="condition.descr4 != null and condition.descr4 != ''" >
-	    and descr4 =  #{condition.descr4}
-	</if>
-	<if test="condition.descr5 != null and condition.descr5 != ''" >
-	    and descr5 =  #{condition.descr5}
-	</if>
-	<if test="condition.edittime != null and condition.edittime != ''" >
-	    and edittime =  #{condition.edittime}
-	</if>
-	<if test="condition.editwho != null and condition.editwho != ''" >
-	    and editwho =  #{condition.editwho}
-	</if>
-	<if test="condition.heightuom1 != null and condition.heightuom1 != ''" >
-	    and heightuom1 =  #{condition.heightuom1}
-	</if>
-	<if test="condition.heightuom2 != null and condition.heightuom2 != ''" >
-	    and heightuom2 =  #{condition.heightuom2}
-	</if>
-	<if test="condition.heightuom3 != null and condition.heightuom3 != ''" >
-	    and heightuom3 =  #{condition.heightuom3}
-	</if>
-	<if test="condition.heightuom4 != null and condition.heightuom4 != ''" >
-	    and heightuom4 =  #{condition.heightuom4}
-	</if>
-	<if test="condition.heightuom5 != null and condition.heightuom5 != ''" >
-	    and heightuom5 =  #{condition.heightuom5}
-	</if>
-	<if test="condition.inLabel1 != null and condition.inLabel1 != ''" >
-	    and in_label1 =  #{condition.inLabel1}
-	</if>
-	<if test="condition.inLabel2 != null and condition.inLabel2 != ''" >
-	    and in_label2 =  #{condition.inLabel2}
-	</if>
-	<if test="condition.inLabel3 != null and condition.inLabel3 != ''" >
-	    and in_label3 =  #{condition.inLabel3}
-	</if>
-	<if test="condition.inLabel4 != null and condition.inLabel4 != ''" >
-	    and in_label4 =  #{condition.inLabel4}
-	</if>
-	<if test="condition.inLabel5 != null and condition.inLabel5 != ''" >
-	    and in_label5 =  #{condition.inLabel5}
-	</if>
-	<if test="condition.lengthuom1 != null and condition.lengthuom1 != ''" >
-	    and lengthuom1 =  #{condition.lengthuom1}
-	</if>
-	<if test="condition.lengthuom2 != null and condition.lengthuom2 != ''" >
-	    and lengthuom2 =  #{condition.lengthuom2}
-	</if>
-	<if test="condition.lengthuom3 != null and condition.lengthuom3 != ''" >
-	    and lengthuom3 =  #{condition.lengthuom3}
-	</if>
-	<if test="condition.lengthuom4 != null and condition.lengthuom4 != ''" >
-	    and lengthuom4 =  #{condition.lengthuom4}
-	</if>
-	<if test="condition.lengthuom5 != null and condition.lengthuom5 != ''" >
-	    and lengthuom5 =  #{condition.lengthuom5}
-	</if>
-	<if test="condition.outLabel1 != null and condition.outLabel1 != ''" >
-	    and out_label1 =  #{condition.outLabel1}
-	</if>
-	<if test="condition.outLabel2 != null and condition.outLabel2 != ''" >
-	    and out_label2 =  #{condition.outLabel2}
-	</if>
-	<if test="condition.outLabel3 != null and condition.outLabel3 != ''" >
-	    and out_label3 =  #{condition.outLabel3}
-	</if>
-	<if test="condition.outLabel4 != null and condition.outLabel4 != ''" >
-	    and out_label4 =  #{condition.outLabel4}
-	</if>
-	<if test="condition.outLabel5 != null and condition.outLabel5 != ''" >
-	    and out_label5 =  #{condition.outLabel5}
-	</if>
-	<if test="condition.packid != null and condition.packid != ''" >
-	    and packid =  #{condition.packid}
-	</if>
-	<if test="condition.packmaterial1 != null and condition.packmaterial1 != ''" >
-	    and packmaterial1 =  #{condition.packmaterial1}
-	</if>
-	<if test="condition.packmaterial2 != null and condition.packmaterial2 != ''" >
-	    and packmaterial2 =  #{condition.packmaterial2}
-	</if>
-	<if test="condition.packmaterial3 != null and condition.packmaterial3 != ''" >
-	    and packmaterial3 =  #{condition.packmaterial3}
-	</if>
-	<if test="condition.packmaterial4 != null and condition.packmaterial4 != ''" >
-	    and packmaterial4 =  #{condition.packmaterial4}
-	</if>
-	<if test="condition.packmaterial5 != null and condition.packmaterial5 != ''" >
-	    and packmaterial5 =  #{condition.packmaterial5}
-	</if>
-	<if test="condition.packuom1 != null and condition.packuom1 != ''" >
-	    and packuom1 =  #{condition.packuom1}
-	</if>
-	<if test="condition.packuom2 != null and condition.packuom2 != ''" >
-	    and packuom2 =  #{condition.packuom2}
-	</if>
-	<if test="condition.packuom3 != null and condition.packuom3 != ''" >
-	    and packuom3 =  #{condition.packuom3}
-	</if>
-	<if test="condition.packuom4 != null and condition.packuom4 != ''" >
-	    and packuom4 =  #{condition.packuom4}
-	</if>
-	<if test="condition.packuom5 != null and condition.packuom5 != ''" >
-	    and packuom5 =  #{condition.packuom5}
-	</if>
-	<if test="condition.packMaterial2 != null and condition.packMaterial2 != ''" >
-	    and pack_material2 =  #{condition.packMaterial2}
-	</if>
-	<if test="condition.pallethi != null and condition.pallethi != ''" >
-	    and pallethi =  #{condition.pallethi}
-	</if>
-	<if test="condition.palletti != null and condition.palletti != ''" >
-	    and palletti =  #{condition.palletti}
-	</if>
-	<if test="condition.palletwoodheight != null and condition.palletwoodheight != ''" >
-	    and palletwoodheight =  #{condition.palletwoodheight}
-	</if>
-	<if test="condition.palletwoodlength != null and condition.palletwoodlength != ''" >
-	    and palletwoodlength =  #{condition.palletwoodlength}
-	</if>
-	<if test="condition.palletwoodwidth != null and condition.palletwoodwidth != ''" >
-	    and palletwoodwidth =  #{condition.palletwoodwidth}
-	</if>
-	<if test="condition.qty1 != null and condition.qty1 != ''" >
-	    and qty1 =  #{condition.qty1}
-	</if>
-	<if test="condition.qty2 != null and condition.qty2 != ''" >
-	    and qty2 =  #{condition.qty2}
-	</if>
-	<if test="condition.qty3 != null and condition.qty3 != ''" >
-	    and qty3 =  #{condition.qty3}
-	</if>
-	<if test="condition.qty4 != null and condition.qty4 != ''" >
-	    and qty4 =  #{condition.qty4}
-	</if>
-	<if test="condition.qty5 != null and condition.qty5 != ''" >
-	    and qty5 =  #{condition.qty5}
-	</if>
-	<if test="condition.qtyMaterial2 != null and condition.qtyMaterial2 != ''" >
-	    and qty_material2 =  #{condition.qtyMaterial2}
-	</if>
-	<if test="condition.rplLabel1 != null and condition.rplLabel1 != ''" >
-	    and rpl_label1 =  #{condition.rplLabel1}
-	</if>
-	<if test="condition.rplLabel2 != null and condition.rplLabel2 != ''" >
-	    and rpl_label2 =  #{condition.rplLabel2}
-	</if>
-	<if test="condition.rplLabel3 != null and condition.rplLabel3 != ''" >
-	    and rpl_label3 =  #{condition.rplLabel3}
-	</if>
-	<if test="condition.rplLabel4 != null and condition.rplLabel4 != ''" >
-	    and rpl_label4 =  #{condition.rplLabel4}
-	</if>
-	<if test="condition.sn1 != null and condition.sn1 != ''" >
-	    and sn_1 =  #{condition.sn1}
-	</if>
-	<if test="condition.sn2 != null and condition.sn2 != ''" >
-	    and sn_2 =  #{condition.sn2}
-	</if>
-	<if test="condition.sn3 != null and condition.sn3 != ''" >
-	    and sn_3 =  #{condition.sn3}
-	</if>
-	<if test="condition.weightuom1 != null and condition.weightuom1 != ''" >
-	    and weightuom1 =  #{condition.weightuom1}
-	</if>
-	<if test="condition.weightuom2 != null and condition.weightuom2 != ''" >
-	    and weightuom2 =  #{condition.weightuom2}
-	</if>
-	<if test="condition.weightuom3 != null and condition.weightuom3 != ''" >
-	    and weightuom3 =  #{condition.weightuom3}
-	</if>
-	<if test="condition.weightuom4 != null and condition.weightuom4 != ''" >
-	    and weightuom4 =  #{condition.weightuom4}
-	</if>
-	<if test="condition.weightuom5 != null and condition.weightuom5 != ''" >
-	    and weightuom5 =  #{condition.weightuom5}
-	</if>
-	<if test="condition.widthuom1 != null and condition.widthuom1 != ''" >
-	    and widthuom1 =  #{condition.widthuom1}
-	</if>
-	<if test="condition.widthuom2 != null and condition.widthuom2 != ''" >
-	    and widthuom2 =  #{condition.widthuom2}
-	</if>
-	<if test="condition.widthuom3 != null and condition.widthuom3 != ''" >
-	    and widthuom3 =  #{condition.widthuom3}
-	</if>
-	<if test="condition.widthuom4 != null and condition.widthuom4 != ''" >
-	    and widthuom4 =  #{condition.widthuom4}
-	</if>
-	<if test="condition.widthuom5 != null and condition.widthuom5 != ''" >
-	    and widthuom5 =  #{condition.widthuom5}
-	</if>
+
+
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into Bas_Package(addtime,addwho,cartonizeuom1,cartonizeuom2,cartonizeuom3,cartonizeuom4,cartonizeuom5,cubeuom1,cubeuom2,cubeuom3,cubeuom4,cubeuom5,descr,descr1,descr2,descr3,descr4,descr5,edittime,editwho,heightuom1,heightuom2,heightuom3,heightuom4,heightuom5,in_label1,in_label2,in_label3,in_label4,in_label5,lengthuom1,lengthuom2,lengthuom3,lengthuom4,lengthuom5,out_label1,out_label2,out_label3,out_label4,out_label5,packid,packmaterial1,packmaterial2,packmaterial3,packmaterial4,packmaterial5,packuom1,packuom2,packuom3,packuom4,packuom5,pack_material2,pallethi,palletti,palletwoodheight,palletwoodlength,palletwoodwidth,qty1,qty2,qty3,qty4,qty5,qty_material2,rpl_label1,rpl_label2,rpl_label3,rpl_label4,sn_1,sn_2,sn_3,weightuom1,weightuom2,weightuom3,weightuom4,weightuom5,widthuom1,widthuom2,widthuom3,widthuom4,widthuom5)
- values(#{addtime},#{addwho},#{cartonizeuom1},#{cartonizeuom2},#{cartonizeuom3},#{cartonizeuom4},#{cartonizeuom5},#{cubeuom1},#{cubeuom2},#{cubeuom3},#{cubeuom4},#{cubeuom5},#{descr},#{descr1},#{descr2},#{descr3},#{descr4},#{descr5},#{edittime},#{editwho},#{heightuom1},#{heightuom2},#{heightuom3},#{heightuom4},#{heightuom5},#{inLabel1},#{inLabel2},#{inLabel3},#{inLabel4},#{inLabel5},#{lengthuom1},#{lengthuom2},#{lengthuom3},#{lengthuom4},#{lengthuom5},#{outLabel1},#{outLabel2},#{outLabel3},#{outLabel4},#{outLabel5},#{packid},#{packmaterial1},#{packmaterial2},#{packmaterial3},#{packmaterial4},#{packmaterial5},#{packuom1},#{packuom2},#{packuom3},#{packuom4},#{packuom5},#{packMaterial2},#{pallethi},#{palletti},#{palletwoodheight},#{palletwoodlength},#{palletwoodwidth},#{qty1},#{qty2},#{qty3},#{qty4},#{qty5},#{qtyMaterial2},#{rplLabel1},#{rplLabel2},#{rplLabel3},#{rplLabel4},#{sn1},#{sn2},#{sn3},#{weightuom1},#{weightuom2},#{weightuom3},#{weightuom4},#{weightuom5},#{widthuom1},#{widthuom2},#{widthuom3},#{widthuom4},#{widthuom5})
+  insert into Bas_Package(packid,descr,packuom1,qty1,descr1)
+ values(#{packid},#{descr},#{packuom1},#{qty1},#{descr1})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update Bas_Package set addwho=#{addwho},cartonizeuom1=#{cartonizeuom1},cartonizeuom2=#{cartonizeuom2},cartonizeuom3=#{cartonizeuom3},cartonizeuom4=#{cartonizeuom4},cartonizeuom5=#{cartonizeuom5},cubeuom1=#{cubeuom1},cubeuom2=#{cubeuom2},cubeuom3=#{cubeuom3},cubeuom4=#{cubeuom4},cubeuom5=#{cubeuom5},descr=#{descr},descr1=#{descr1},descr2=#{descr2},descr3=#{descr3},descr4=#{descr4},descr5=#{descr5},edittime=#{edittime},editwho=#{editwho},heightuom1=#{heightuom1},heightuom2=#{heightuom2},heightuom3=#{heightuom3},heightuom4=#{heightuom4},heightuom5=#{heightuom5},in_label1=#{inLabel1},in_label2=#{inLabel2},in_label3=#{inLabel3},in_label4=#{inLabel4},in_label5=#{inLabel5},lengthuom1=#{lengthuom1},lengthuom2=#{lengthuom2},lengthuom3=#{lengthuom3},lengthuom4=#{lengthuom4},lengthuom5=#{lengthuom5},out_label1=#{outLabel1},out_label2=#{outLabel2},out_label3=#{outLabel3},out_label4=#{outLabel4},out_label5=#{outLabel5},packid=#{packid},packmaterial1=#{packmaterial1},packmaterial2=#{packmaterial2},packmaterial3=#{packmaterial3},packmaterial4=#{packmaterial4},packmaterial5=#{packmaterial5},packuom1=#{packuom1},packuom2=#{packuom2},packuom3=#{packuom3},packuom4=#{packuom4},packuom5=#{packuom5},pack_material2=#{packMaterial2},pallethi=#{pallethi},palletti=#{palletti},palletwoodheight=#{palletwoodheight},palletwoodlength=#{palletwoodlength},palletwoodwidth=#{palletwoodwidth},qty1=#{qty1},qty2=#{qty2},qty3=#{qty3},qty4=#{qty4},qty5=#{qty5},qty_material2=#{qtyMaterial2},rpl_label1=#{rplLabel1},rpl_label2=#{rplLabel2},rpl_label3=#{rplLabel3},rpl_label4=#{rplLabel4},sn_1=#{sn1},sn_2=#{sn2},sn_3=#{sn3},weightuom1=#{weightuom1},weightuom2=#{weightuom2},weightuom3=#{weightuom3},weightuom4=#{weightuom4},weightuom5=#{weightuom5},widthuom1=#{widthuom1},widthuom2=#{widthuom2},widthuom3=#{widthuom3},widthuom4=#{widthuom4},widthuom5=#{widthuom5} where addtime=#{addtime}
+  update Bas_Package set descr=#{descr},packuom1=#{packuom1},qty1=#{qty1},descr1=#{descr1} where packid=#{packid}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -371,234 +65,17 @@ where 1=1
 	<if test="cartonizeuom4 != null  ">
 		cartonizeuom4=#{cartonizeuom4},
 	</if>
-	<if test="cartonizeuom5 != null  ">
-		cartonizeuom5=#{cartonizeuom5},
-	</if>
-	<if test="cubeuom1 != null  ">
-		cubeuom1=#{cubeuom1},
-	</if>
-	<if test="cubeuom2 != null  ">
-		cubeuom2=#{cubeuom2},
-	</if>
-	<if test="cubeuom3 != null  ">
-		cubeuom3=#{cubeuom3},
-	</if>
-	<if test="cubeuom4 != null  ">
-		cubeuom4=#{cubeuom4},
-	</if>
-	<if test="cubeuom5 != null  ">
-		cubeuom5=#{cubeuom5},
-	</if>
 	<if test="descr != null  ">
 		descr=#{descr},
 	</if>
-	<if test="descr1 != null  ">
-		descr1=#{descr1},
-	</if>
-	<if test="descr2 != null  ">
-		descr2=#{descr2},
-	</if>
-	<if test="descr3 != null  ">
-		descr3=#{descr3},
-	</if>
-	<if test="descr4 != null  ">
-		descr4=#{descr4},
-	</if>
-	<if test="descr5 != null  ">
-		descr5=#{descr5},
-	</if>
-	<if test="edittime != null  ">
-		edittime=#{edittime},
-	</if>
-	<if test="editwho != null  ">
-		editwho=#{editwho},
-	</if>
-	<if test="heightuom1 != null  ">
-		heightuom1=#{heightuom1},
-	</if>
-	<if test="heightuom2 != null  ">
-		heightuom2=#{heightuom2},
-	</if>
-	<if test="heightuom3 != null  ">
-		heightuom3=#{heightuom3},
-	</if>
-	<if test="heightuom4 != null  ">
-		heightuom4=#{heightuom4},
-	</if>
-	<if test="heightuom5 != null  ">
-		heightuom5=#{heightuom5},
-	</if>
-	<if test="inLabel1 != null  ">
-		in_label1=#{inLabel1},
-	</if>
-	<if test="inLabel2 != null  ">
-		in_label2=#{inLabel2},
-	</if>
-	<if test="inLabel3 != null  ">
-		in_label3=#{inLabel3},
-	</if>
-	<if test="inLabel4 != null  ">
-		in_label4=#{inLabel4},
-	</if>
-	<if test="inLabel5 != null  ">
-		in_label5=#{inLabel5},
-	</if>
-	<if test="lengthuom1 != null  ">
-		lengthuom1=#{lengthuom1},
-	</if>
-	<if test="lengthuom2 != null  ">
-		lengthuom2=#{lengthuom2},
-	</if>
-	<if test="lengthuom3 != null  ">
-		lengthuom3=#{lengthuom3},
-	</if>
-	<if test="lengthuom4 != null  ">
-		lengthuom4=#{lengthuom4},
-	</if>
-	<if test="lengthuom5 != null  ">
-		lengthuom5=#{lengthuom5},
-	</if>
-	<if test="outLabel1 != null  ">
-		out_label1=#{outLabel1},
-	</if>
-	<if test="outLabel2 != null  ">
-		out_label2=#{outLabel2},
-	</if>
-	<if test="outLabel3 != null  ">
-		out_label3=#{outLabel3},
-	</if>
-	<if test="outLabel4 != null  ">
-		out_label4=#{outLabel4},
-	</if>
-	<if test="outLabel5 != null  ">
-		out_label5=#{outLabel5},
-	</if>
-	<if test="packid != null  ">
-		packid=#{packid},
-	</if>
-	<if test="packmaterial1 != null  ">
-		packmaterial1=#{packmaterial1},
-	</if>
-	<if test="packmaterial2 != null  ">
-		packmaterial2=#{packmaterial2},
-	</if>
-	<if test="packmaterial3 != null  ">
-		packmaterial3=#{packmaterial3},
-	</if>
-	<if test="packmaterial4 != null  ">
-		packmaterial4=#{packmaterial4},
-	</if>
-	<if test="packmaterial5 != null  ">
-		packmaterial5=#{packmaterial5},
-	</if>
-	<if test="packuom1 != null  ">
-		packuom1=#{packuom1},
-	</if>
-	<if test="packuom2 != null  ">
-		packuom2=#{packuom2},
-	</if>
-	<if test="packuom3 != null  ">
-		packuom3=#{packuom3},
-	</if>
-	<if test="packuom4 != null  ">
-		packuom4=#{packuom4},
-	</if>
-	<if test="packuom5 != null  ">
-		packuom5=#{packuom5},
-	</if>
-	<if test="packMaterial2 != null  ">
-		pack_material2=#{packMaterial2},
-	</if>
-	<if test="pallethi != null  ">
-		pallethi=#{pallethi},
-	</if>
-	<if test="palletti != null  ">
-		palletti=#{palletti},
-	</if>
-	<if test="palletwoodheight != null  ">
-		palletwoodheight=#{palletwoodheight},
-	</if>
-	<if test="palletwoodlength != null  ">
-		palletwoodlength=#{palletwoodlength},
-	</if>
-	<if test="palletwoodwidth != null  ">
-		palletwoodwidth=#{palletwoodwidth},
-	</if>
-	<if test="qty1 != null  ">
-		qty1=#{qty1},
-	</if>
-	<if test="qty2 != null  ">
-		qty2=#{qty2},
-	</if>
-	<if test="qty3 != null  ">
-		qty3=#{qty3},
-	</if>
-	<if test="qty4 != null  ">
-		qty4=#{qty4},
-	</if>
-	<if test="qty5 != null  ">
-		qty5=#{qty5},
-	</if>
-	<if test="qtyMaterial2 != null  ">
-		qty_material2=#{qtyMaterial2},
-	</if>
-	<if test="rplLabel1 != null  ">
-		rpl_label1=#{rplLabel1},
-	</if>
-	<if test="rplLabel2 != null  ">
-		rpl_label2=#{rplLabel2},
-	</if>
-	<if test="rplLabel3 != null  ">
-		rpl_label3=#{rplLabel3},
-	</if>
-	<if test="rplLabel4 != null  ">
-		rpl_label4=#{rplLabel4},
-	</if>
-	<if test="sn1 != null  ">
-		sn_1=#{sn1},
-	</if>
-	<if test="sn2 != null  ">
-		sn_2=#{sn2},
-	</if>
-	<if test="sn3 != null  ">
-		sn_3=#{sn3},
-	</if>
-	<if test="weightuom1 != null  ">
-		weightuom1=#{weightuom1},
-	</if>
-	<if test="weightuom2 != null  ">
-		weightuom2=#{weightuom2},
-	</if>
-	<if test="weightuom3 != null  ">
-		weightuom3=#{weightuom3},
-	</if>
-	<if test="weightuom4 != null  ">
-		weightuom4=#{weightuom4},
-	</if>
-	<if test="weightuom5 != null  ">
-		weightuom5=#{weightuom5},
-	</if>
-	<if test="widthuom1 != null  ">
-		widthuom1=#{widthuom1},
-	</if>
-	<if test="widthuom2 != null  ">
-		widthuom2=#{widthuom2},
-	</if>
-	<if test="widthuom3 != null  ">
-		widthuom3=#{widthuom3},
-	</if>
-	<if test="widthuom4 != null  ">
-		widthuom4=#{widthuom4},
-	</if>
-	<if test="widthuom5 != null  ">
-		widthuom5=#{widthuom5},
-	</if>
+
+
 	</trim> where addtime=#{addtime}
 </update>
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from Bas_Package where addtime = #{addtime}
+	delete 	 from Bas_Package where packid = #{packid}
 </delete>
  
 <!-- 根据id查询 包装 -->

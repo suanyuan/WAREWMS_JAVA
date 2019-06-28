@@ -9,44 +9,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.BasPackageService;
+import com.wms.service.BasGtnService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
-import com.wms.vo.BasPackageVO;
+import com.wms.vo.BasGtnVO;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.BasPackageForm;
-import com.wms.query.BasPackageQuery;
+import com.wms.vo.form.BasGtnForm;
+import com.wms.query.BasGtnQuery;
 
 @Controller
-@RequestMapping("basPackageController")
-public class BasPackageController {
+@RequestMapping("basGtnController")
+public class BasGtnController {
 
 	@Autowired
-	private BasPackageService basPackageService;
+	private BasGtnService basGtnService;
 
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
-		return new ModelAndView("basPackage/main", model);
+		return new ModelAndView("basGtn/main", model);
 	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<BasPackageVO> showDatagrid(EasyuiDatagridPager pager, BasPackageQuery query) {
-		return basPackageService.getPagedDatagrid(pager, query);
+	public EasyuiDatagrid<BasGtnVO> showDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
+		return basGtnService.getPagedDatagrid(pager, query);
 	}
 
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(BasPackageForm basPackageForm) throws Exception {
-		Json json = basPackageService.addBasPackage(basPackageForm);
+	public Json add(BasGtnForm basGtnForm) throws Exception {
+		Json json = basGtnService.addBasGtn(basGtnForm);
 		if(json == null){
 			json = new Json();
 
@@ -58,13 +58,12 @@ public class BasPackageController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(BasPackageForm basPackageForm) throws Exception {
-		Json json = basPackageService.editBasPackage(basPackageForm);
+	public Json edit(BasGtnForm basGtnForm) throws Exception {
+		Json json = basGtnService.editBasGtn(basGtnForm);
 		if(json == null){
 			json = new Json();
-
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -72,10 +71,10 @@ public class BasPackageController {
 	@RequestMapping(params = "delete")
 	@ResponseBody
 	public Json delete(String id) {
-		Json json = basPackageService.deleteBasPackage(id);
+		Json json = basGtnService.deleteBasGtn(id);
 		if(json == null){
 			json = new Json();
-
+			//json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
@@ -85,14 +84,14 @@ public class BasPackageController {
 	@RequestMapping(params = "getBtn")
 	@ResponseBody
 	public Json getBtn(String id, HttpSession session) {
-		return basPackageService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+		return basGtnService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
 	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody
 	public List<EasyuiCombobox> getCombobox() {
-		return basPackageService.getBasPackageCombobox();
+		return basGtnService.getBasGtnCombobox();
 	}
 
 }
