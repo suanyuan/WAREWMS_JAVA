@@ -230,6 +230,8 @@ public class DocAsnDetail implements Serializable {
 
     private BasSku basSku;
 
+    private BasPackage basPackage;
+
 	public DocAsnDetail() {
 	}
 	
@@ -962,5 +964,13 @@ public class DocAsnDetail implements Serializable {
 
     public void setBasSku(BasSku basSku) {
         this.basSku = basSku;
+    }
+
+    public BasPackage getBasPackage() {
+        return basPackage;
+    }
+
+    public void setBasPackage(BasPackage basPackage) {
+        this.basPackage = basPackage;
     }
 }

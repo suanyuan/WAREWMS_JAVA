@@ -332,7 +332,7 @@ public class DocAsnHeaderService extends BaseService {
 
 	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList((pageNum - 1)*pageSize, pageSize);
 	    List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = new ArrayList<>();
-	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = null;
+	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
 	    for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 
 	        pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
@@ -341,4 +341,15 @@ public class DocAsnHeaderService extends BaseService {
         }
 	    return pdaDocAsnHeaderVOList;
 	}
+
+	public PdaDocAsnHeaderVO queryById(String asnno) {
+
+	    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
+	    if (docAsnHeader != null) {
+
+	        BeanUtils.copyProperties(docAsnHeader, pdaDocAsnHeaderVO);
+        }
+        return pdaDocAsnHeaderVO;
+    }
 }

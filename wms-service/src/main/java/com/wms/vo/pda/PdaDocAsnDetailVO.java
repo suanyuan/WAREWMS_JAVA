@@ -1,5 +1,8 @@
 package com.wms.vo.pda;
 
+import com.wms.entity.BasPackage;
+import com.wms.entity.BasSku;
+
 public class PdaDocAsnDetailVO {
 
     /**
@@ -36,6 +39,10 @@ public class PdaDocAsnDetailVO {
      * 序列号
      */
     private String lotatt02;
+
+    private BasSku basSku;
+
+    private BasPackage basPackage;
 
     public String getAsnno() {
         return asnno;
@@ -91,5 +98,21 @@ public class PdaDocAsnDetailVO {
 
     public void setLotatt02(String lotatt02) {
         this.lotatt02 = lotatt02;
+    }
+
+    public BasSku getBasSku() {
+        return basSku;
+    }
+
+    public void setBasSku(BasSku basSku) {
+        this.basSku = basSku;
+    }
+
+    public BasPackage getBasPackage() {
+        return basPackage;
+    }
+
+    public void setBasPackage(BasPackage basPackage) {
+        this.basPackage = basPackage;
     }
 }
