@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.vo.GspProductRegisterSpecsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,4 +96,25 @@ public class GspProductRegisterController {
 		return gspProductRegisterService.getGspProductRegisterCombobox();
 	}
 
+
+	@Login
+	@RequestMapping(params = "toDetail")
+	public ModelAndView toDetail(String id){
+		Map<String,Object> map = new HashMap<>();
+		map.put("gspProductRegisterId",id);
+		return new ModelAndView("gspProductRegister/detail",map);
+	}
+
+	/**
+	 * 查询产品注册证规格子表
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showSpecsList")
+	@ResponseBody
+	public EasyuiDatagrid<GspProductRegisterSpecsVO> showSpecsList(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
+		return gspProductRegisterService.queryProductPageListByRegisterId(pager,query);
+	}
 }

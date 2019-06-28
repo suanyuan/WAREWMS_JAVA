@@ -12,6 +12,7 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var dialogUrl = "/gspProductRegisterController.do?toDetail";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
@@ -36,22 +37,16 @@ $(function() {
 			{field: 'productRegisterId',		title: '主键',	width: 28 ,hidden:true},
 			{field: 'productRegisterNo',		title: '注册证编号',	width: 28 },
             {field: 'classifyId',		title: '管理分类',	width: 28 },
-            {field: 'classifyCatalog',		title: '分类目录',	width: 28 }
-			{field: 'productName',		title: '产品名称',	width: 28 },
-			{field: 'productRegisterName',		title: '注册人名称',	width: 28 },
-			{field: 'productRegisterAddress',		title: '注册人住所',	width: 28 },
-			{field: 'productProductionAddress',		title: '生产地址',	width: 28 },
+            {field: 'classifyCatalog',		title: '分类目录',	width: 28 },
+			{field: 'productNameMain',		title: '产品名称',	width: 28 },
 			{field: 'approveDate',		title: '批准日期',	width: 28 },
 			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 28 },
 			{field: 'productRegisterVersion',		title: '注册证版本',	width: 28 },
-			{field: 'version',		title: '待输入栏位17',	width: 28 },
-			{field: 'checkerId',		title: '待输入栏位18',	width: 28 },
-			{field: 'checkDate',		title: '待输入栏位19',	width: 28 },
-			{field: 'createId',		title: '待输入栏位20',	width: 28 },
-			{field: 'createDate',		title: '待输入栏位21',	width: 28 },
-			{field: 'editId',		title: '待输入栏位22',	width: 28 },
-			{field: 'editDate',		title: '待输入栏位23',	width: 28 },
-			{field: 'isUse',		title: '待输入栏位24',	width: 28 }
+			{field: 'checkerId',		title: '审核人',	width: 28 },
+			{field: 'checkDate',		title: '审核时间',	width: 28 },
+			{field: 'createId',		title: '创建人',	width: 28 },
+			{field: 'createDate',		title: '创建时间',	width: 28 },
+			{field: 'isUse',		title: '是否有效',	width: 28 }
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -71,12 +66,15 @@ $(function() {
 		}
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-		buttons : '#ezuiDialogBtn',
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        fit:true,
+        cache: false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
 	}).dialog('close');
 });
 var add = function(){
@@ -88,36 +86,7 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			productRegisterId : row.productRegisterId,
-			productRegisterNo : row.productRegisterNo,
-			productName : row.productName,
-			productRegisterName : row.productRegisterName,
-			productRegisterAddress : row.productRegisterAddress,
-			productProductionAddress : row.productProductionAddress,
-			agentName : row.agentName,
-			applyScope : row.applyScope,
-			mainPart : row.mainPart,
-			expectUse : row.expectUse,
-			storageConditions : row.storageConditions,
-			productExpiryDate : row.productExpiryDate,
-			otherContent : row.otherContent,
-			remark : row.remark,
-			approveDate : row.approveDate,
-			productRegisterExpiryDate : row.productRegisterExpiryDate,
-			productRegisterVersion : row.productRegisterVersion,
-			version : row.version,
-			checkerId : row.checkerId,
-			checkDate : row.checkDate,
-			createId : row.createId,
-			createDate : row.createDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse,
-			attachmentUrl : row.attachmentUrl,
-			classifyId : row.classifyId,
-			classifyCatalog : row.classifyCatalog
-		});
+
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -201,36 +170,43 @@ var commit = function(){
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		productRegisterId : $('#productRegisterId').val(),
 		productRegisterNo : $('#productRegisterNo').val(),
-		productName : $('#productName').val(),
-		productRegisterName : $('#productRegisterName').val(),
-		productRegisterAddress : $('#productRegisterAddress').val(),
-		productProductionAddress : $('#productProductionAddress').val(),
-		agentName : $('#agentName').val(),
-		applyScope : $('#applyScope').val(),
-		mainPart : $('#mainPart').val(),
-		expectUse : $('#expectUse').val(),
-		storageConditions : $('#storageConditions').val(),
-		productExpiryDate : $('#productExpiryDate').val(),
-		otherContent : $('#otherContent').val(),
-		remark : $('#remark').val(),
-		approveDate : $('#approveDate').val(),
-		productRegisterExpiryDate : $('#productRegisterExpiryDate').val(),
-		productRegisterVersion : $('#productRegisterVersion').val(),
-		version : $('#version').val(),
-		checkerId : $('#checkerId').val(),
-		checkDate : $('#checkDate').val(),
-		createId : $('#createId').val(),
-		createDate : $('#createDate').val(),
-		editId : $('#editId').val(),
-		editDate : $('#editDate').val(),
-		isUse : $('#isUse').val(),
-		attachmentUrl : $('#attachmentUrl').val(),
-		classifyId : $('#classifyId').val(),
-		classifyCatalog : $('#classifyCatalog').val()
+		productNameMain : $('#productNameMain').val(),
+        classifyId : $('#classifyId').val(),
+        classifyCatalog : $('#classifyCatalog').val(),
+        version : $('#version').val(),
+        createDateBegin : $("#createDateBegin").val(),
+        createDateEnd : $("#createDateEnd").val(),
+		isUse : $('#isUse').val()
 	});
 };
+
+$(function () {
+    $('#productRegisterVersion').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogVersion',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#classifyId').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogClassify',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#classifyCatalog').combobox({
+        url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $('#isUse').combobox({
+        url:sy.bp()+'/commonController.do?getIsUseCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+})
+
 </script>
 </head>
 <body>
@@ -242,14 +218,16 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>管理分类：</th><td><input type='text' id='classifyId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>分类目录：</th><td><input type='text' id='classifyCatalog' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>注册证编号：</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品名称：</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>版本：</th><td><input type='text' id='productRegisterVersion' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品名称：</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>管理分类：</th><td><input type='text' id='classifyId' size='16' data-options=''/></td>
+							<th>分类目录：</th><td><input type='text' id='classifyCatalog' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>版本：</th><td><input type='text' id='productRegisterVersion' size='16' data-options=''/></td>
+							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -268,123 +246,7 @@ var doSearch = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId'/>
-			<table>
-				<tr>
-					<th>待输入0</th>
-					<td><input type='text' name='productRegisterId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入1</th>
-					<td><input type='text' name='productRegisterNo' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入2</th>
-					<td><input type='text' name='productName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入3</th>
-					<td><input type='text' name='productRegisterName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入4</th>
-					<td><input type='text' name='productRegisterAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入5</th>
-					<td><input type='text' name='productProductionAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入6</th>
-					<td><input type='text' name='agentName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='applyScope' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='mainPart' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='expectUse' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='storageConditions' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入11</th>
-					<td><input type='text' name='productExpiryDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入12</th>
-					<td><input type='text' name='otherContent' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入13</th>
-					<td><input type='text' name='remark' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入14</th>
-					<td><input type='text' name='approveDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入15</th>
-					<td><input type='text' name='productRegisterExpiryDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入16</th>
-					<td><input type='text' name='productRegisterVersion' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入17</th>
-					<td><input type='text' name='version' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入18</th>
-					<td><input type='text' name='checkerId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入19</th>
-					<td><input type='text' name='checkDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入20</th>
-					<td><input type='text' name='createId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入21</th>
-					<td><input type='text' name='createDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入22</th>
-					<td><input type='text' name='editId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入23</th>
-					<td><input type='text' name='editDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入24</th>
-					<td><input type='text' name='isUse' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入25</th>
-					<td><input type='text' name='attachmentUrl' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入26</th>
-					<td><input type='text' name='classifyId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入27</th>
-					<td><input type='text' name='classifyCatalog' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-			</table>
-		</form>
+
 	</div>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mybatis.dao.GSPProductRegisterMybatisDao" >
+<mapper namespace="com.wms.mybatis.dao.GspProductRegisterMybatisDao" >
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.GspProductRegister" >
 	<result column="product_register_id" property="productRegisterId"/>
 	<result column="product_register_no" property="productRegisterNo"/>
-	<result column="product_name" property="productName"/>
+	<result column="product_name_main" property="productNameMain"/>
 	<result column="product_register_name" property="productRegisterName"/>
 	<result column="product_register_address" property="productRegisterAddress"/>
 	<result column="product_production_address" property="productProductionAddress"/>
@@ -37,7 +37,7 @@
        
 <!-- GSP_Product_Register table all fields -->
 <sql id="Base_Column_List" >
-	 product_register_id,product_register_no,product_name,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog
+	 product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog
 </sql>
    
    
@@ -49,13 +49,13 @@ where 1=1
 	    and product_register_id =  #{condition.productRegisterId}
 	</if>
 	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-	    and product_register_no =  #{condition.productRegisterNo}
+	    and product_register_no like  #{condition.productRegisterNo}
 	</if>
-	<if test="condition.productName != null and condition.productName != ''" >
-	    and product_name =  #{condition.productName}
+	<if test="condition.productNameMain != null and condition.productNameMain != ''" >
+	    and product_name_main like  #{condition.productNameMain}
 	</if>
 	<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
-	    and product_register_name =  #{condition.productRegisterName}
+	    and product_register_name like  #{condition.productRegisterName}
 	</if>
 	<if test="condition.productRegisterAddress != null and condition.productRegisterAddress != ''" >
 	    and product_register_address =  #{condition.productRegisterAddress}
@@ -135,13 +135,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into GSP_Product_Register(product_register_id,product_register_no,product_name,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog)
- values(#{productRegisterId},#{productRegisterNo},#{productName},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog})
+  insert into GSP_Product_Register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog)
+ values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update GSP_Product_Register set product_register_no=#{productRegisterNo},product_name=#{productName},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog} where product_register_id=#{productRegisterId}
+  update GSP_Product_Register set product_register_no=#{productRegisterNo},product_name_main=#{productNameMain},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog} where product_register_id=#{productRegisterId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -151,8 +151,8 @@ where 1=1
 	<if test="productRegisterNo != null  ">
 		product_register_no=#{productRegisterNo},
 	</if>
-	<if test="productName != null  ">
-		product_name=#{productName},
+	<if test="productNameMain != null  ">
+		product_name_main=#{productNameMain},
 	</if>
 	<if test="productRegisterName != null  ">
 		product_register_name=#{productRegisterName},

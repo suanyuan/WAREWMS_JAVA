@@ -94,7 +94,7 @@ where 1=1
 	    and edit_date like  '%${condition.editDate}%'
 	</if>
 	<if test="condition.isUse != null and condition.isUse != ''" >
-	    and is_use =  #{condition.isUse}
+	    and t1.is_use =  #{condition.isUse}
 	</if>
 
 </trim>
@@ -217,7 +217,7 @@ where 1=1
 <!-- 根据id查询 产品注册证规格 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from gsp_product_register_specs where specs_id = #{specsId}
+	 from gsp_product_register_specs t1 where specs_id = #{specsId}
 </select>
 
 <!-- 产品注册证规格 列表总数-->

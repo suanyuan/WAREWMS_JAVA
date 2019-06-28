@@ -4,8 +4,6 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.entity.BasCodes;
 import com.wms.mybatis.dao.BasCodesMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.vo.BaseCodesVO;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +38,7 @@ public class BasCodesService {
         if(list!=null && list.size()>0){
             EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
             easyuiCombobox.setId("");
-            easyuiCombobox.setValue("");
+            easyuiCombobox.setValue("全部");
             easyuiCombobox.setSelected(true);
             baseCodesVOList.add(easyuiCombobox);
             for(BasCodes b : list){

@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.wms.constant.Constant;
-import com.wms.mybatis.dao.GSPProductRegisterMybatisDao;
+import com.wms.entity.GspProductRegisterSpecs;
+import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.vo.GspProductRegisterSpecsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +28,9 @@ import com.wms.query.GspProductRegisterQuery;
 public class GspProductRegisterService extends BaseService {
 
 	@Autowired
-	private GSPProductRegisterMybatisDao gspProductRegisterMybatisDao;
+	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+	@Autowired
+	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 
 	public EasyuiDatagrid<GspProductRegisterVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
 		EasyuiDatagrid<GspProductRegisterVO> datagrid = new EasyuiDatagrid<GspProductRegisterVO>();
@@ -93,6 +99,36 @@ public class GspProductRegisterService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public EasyuiDatagrid<GspProductRegisterSpecsVO> queryProductPageListByRegisterId(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
+		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		query.setIsUse(Constant.IS_USE_YES);
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("create_date desc");
+
+		List<GspProductRegisterSpecs> list = gspProductRegisterSpecsMybatisDao.queryByList(mybatisCriteria);
+		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
+		List<GspProductRegisterSpecsVO> voList = new ArrayList<>();
+		if(list!=null){
+			for(GspProductRegisterSpecs specs : list){
+				gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
+				gspProductRegisterSpecsVO.setSpecsId(specs.getSpecsId());
+				gspProductRegisterSpecsVO.setProductCode(specs.getProductCode());
+				gspProductRegisterSpecsVO.setProductName(specs.getProductName());
+				gspProductRegisterSpecsVO.setSpecsName(specs.getSpecsName());
+				gspProductRegisterSpecsVO.setProductModel(specs.getProductModel());
+				voList.add(gspProductRegisterSpecsVO);
+			}
+		}
+		int count = gspProductRegisterSpecsMybatisDao.queryByCount(mybatisCriteria);
+		datagrid.setTotal(Long.parseLong(count+""));
+		datagrid.setRows(voList);
+		return datagrid;
+
 	}
 
 }
