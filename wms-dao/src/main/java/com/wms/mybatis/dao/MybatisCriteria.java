@@ -80,10 +80,10 @@ public class MybatisCriteria {
 	}
 
 	public String getLimitClause() {
-		//int minRow = (this.currentPage - 1) * this.pageSize + 1;
-		//int maxRow = this.currentPage * this.pageSize;
+		int minRow = (this.currentPage - 1) * this.pageSize ;
+		int maxRow = this.currentPage * this.pageSize;
 		//limitClause = " and row_num between " + minRow + " and " + maxRow;
-		limitClause = " LIMIT " + (currentPage-1) + "," + pageSize;
+		limitClause = " LIMIT " + (minRow) + "," + maxRow;
 		return limitClause;
 	}
 

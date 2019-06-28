@@ -28,13 +28,14 @@ public class BasPackageService extends BaseService {
 
 	public EasyuiDatagrid<BasPackageVO> getPagedDatagrid(EasyuiDatagridPager pager, BasPackageQuery query) {
 		EasyuiDatagrid<BasPackageVO> datagrid = new EasyuiDatagrid<BasPackageVO>();
-		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
-		mybatisCriteria.setCurrentPage(pager.getPage());
-		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		List<BasPackage> basPackageList = basPackageMybatisDao.queryByPageList(mybatisCriteria);
+		MybatisCriteria criteria = new MybatisCriteria();
+//
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+		criteria.setCurrentPage(pager.getPage());
+		criteria.setPageSize(pager.getRows());
+		criteria.setCondition(query);
+		List<BasPackage> basPackageList = basPackageMybatisDao.queryByList(criteria);
 		BasPackageVO basPackageVO = null;
 		List<BasPackageVO> basPackageVOList = new ArrayList<BasPackageVO>();
 		for (BasPackage basPackage : basPackageList) {
@@ -42,7 +43,7 @@ public class BasPackageService extends BaseService {
 			BeanUtils.copyProperties(basPackage, basPackageVO);
 			basPackageVOList.add(basPackageVO);
 		}
-		datagrid.setTotal((long) basPackageMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setTotal((long) basPackageMybatisDao.queryByCount(criteria));
 		datagrid.setRows(basPackageVOList);
 		return datagrid;
 	}
@@ -50,30 +51,33 @@ public class BasPackageService extends BaseService {
 	public Json addBasPackage(BasPackageForm basPackageForm) throws Exception {
 		Json json = new Json();
 		BasPackage basPackage = new BasPackage();
+		//System.out.println(basPackageForm.getPackid()+"=====================================");
 		BeanUtils.copyProperties(basPackageForm, basPackage);
-		basPackageMybatisDao.add(basPackage);
+		basPackageMybatisDao.add(basPackageForm);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editBasPackage(BasPackageForm basPackageForm) {
 		Json json = new Json();
-		BasPackageQuery basPackageQuery = new BasPackageQuery();
-		basPackageQuery.setPackid(basPackageForm.getPackid());
-		BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
-		BeanUtils.copyProperties(basPackageForm, basPackage);
-		basPackageMybatisDao.update(basPackage);
+		//BasPackageQuery basPackageQuery = new BasPackageQuery();
+		//basPackageQuery.setPackid(basPackageForm.getPackid());
+		//BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
+		//BeanUtils.copyProperties(basPackageForm, basPackage);
+		basPackageMybatisDao.update(basPackageForm);
 		json.setSuccess(true);
+
 		return json;
 	}
 
 	public Json deleteBasPackage(String packid) {
 		Json json = new Json();
-		BasPackageQuery basPackageQuery = new BasPackageQuery();
-		basPackageQuery.setPackid(packid);
-		BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
-		if(basPackage != null){
-			basPackageMybatisDao.delete(basPackage);
+		//BasPackageQuery basPackageQuery = new BasPackageQuery();
+		//basPackageQuery.setPackid(packid);
+		//BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
+		//System.out.println(packid+"==============================================");
+		if(packid != null){
+			basPackageMybatisDao.delete(packid);
 		}
 		json.setSuccess(true);
 		return json;

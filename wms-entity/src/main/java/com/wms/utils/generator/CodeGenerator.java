@@ -8,23 +8,23 @@ import com.wms.entity.*;
 
 public class CodeGenerator {
 	//windows路径
-//	private static final String VO_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String FORM_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String QUERY_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String DAO_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String SERVICE_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String CONTROLLER_PATH = "D:\\InsertList\\CodeGenerator\\";
-//	private static final String JSP_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String VO_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String FORM_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String QUERY_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String DAO_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String SERVICE_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String CONTROLLER_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String JSP_PATH = "D:\\InsertList\\CodeGenerator\\";
 
 	//mac路径
 
-	private static final String VO_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String FORM_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String QUERY_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String DAO_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String SERVICE_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String CONTROLLER_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
-	private static final String JSP_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String VO_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String FORM_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String QUERY_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String DAO_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String SERVICE_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String CONTROLLER_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
+//	private static final String JSP_PATH = "/Users/quendi/tmp/InsertList/CodeGenerator/";
 
 	private static final String VO_PACKAGE_NAME = "com.wms.vo";
 	private static final String FORM_PACKAGE_NAME = "com.wms.vo.form";
@@ -36,7 +36,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new GspInstrumentCatalog());
+		CodeGenerator generator = new CodeGenerator(new GspProductRegisterSpecs());
 		generator.genData();
 	}
 	

@@ -27,6 +27,5 @@
 			<groupId>com.wms.utils</groupId>
 			<artifactId>wms-utils</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+		</dependency>	</dependencies>
 </project>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasGtnMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasGtn" >
+	<result column="SKU" property="sku"/>
+	<result column="GTNCODE" property="gtncode"/>
+</resultMap>
+       
+<!-- bas_gtn table all fields -->
+<sql id="Base_Column_List" >
+	 SKU,GTNCODE
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and SKU like  '%${condition.sku}%'
+	</if>
+	<if test="condition.gtncode != null and condition.gtncode != ''" >
+	    and GTNCODE like  '%${condition.gtncode}%'
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_gtn(SKU,GTNCODE)
+ values(#{sku},#{gtncode})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_gtn set GTNCODE=#{gtncode}  where SKU=#{sku}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_gtn set 
+	<trim  suffixOverrides="," >
+	<if test="gTNCODE != null  ">
+		GTNCODE=#{gTNCODE},
+	</if>
+	</trim> where SKU=#{sKU}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_gtn where SKU = #{sku}
+</delete>
+ 
+<!-- 根据id查询 GTN码维护 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_gtn where SKU = #{sKU}
+</select>
+
+<!-- GTN码维护 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_gtn 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询GTN码维护列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_gtn 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   
