@@ -102,18 +102,27 @@ public class CommonController {
         return null;
     }
 
-    public List<Map<String,String>> getIsUseCombobox() {
-        List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
-        Map<String,String> map = new HashMap<>();
-        map.put("","");
-        mapList.add(map);
-        Map<String,String> mapUse = new HashMap<>();
-        mapUse.put("1","启用");
-        mapList.add(mapUse);
-        Map<String,String> mapUnUse = new HashMap<>();
-        mapUnUse.put("0","禁用");
-        mapList.add(mapUnUse);
-        return mapList;
+    /**
+     * 是否启用
+     * @return
+     */
+    @RequestMapping(params = "getIsUseCombobox")
+    @ResponseBody
+    public List<EasyuiCombobox> getIsUseCombobox() {
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        easyuiCombobox.setId("");
+        easyuiCombobox.setValue("全部");
+        easyuiCombobox.setSelected(true);
+        EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
+        easyuiComboboxUse.setId("1");
+        easyuiComboboxUse.setValue("启用");
+        easyuiComboboxList.add(easyuiComboboxUse);
+        EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
+        easyuiComboboxUnUse.setId("0");
+        easyuiComboboxUnUse.setValue("禁用");
+        easyuiComboboxList.add(easyuiComboboxUnUse);
+        return easyuiComboboxList;
     }
 
     /**

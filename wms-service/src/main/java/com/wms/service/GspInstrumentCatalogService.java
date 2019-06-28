@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wms.constant.Constant;
 import com.wms.mybatis.dao.GspInstrumentCatalogMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
@@ -84,7 +85,11 @@ public class GspInstrumentCatalogService extends BaseService {
 	public List<EasyuiCombobox> getGspInstrumentCatalogCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByAll();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		GspInstrumentCatalogQuery query = new GspInstrumentCatalogQuery();
+		query.setIsUse(Constant.IS_USE_YES);
+		mybatisCriteria.setCondition(query);
+		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		if(gspInstrumentCatalogList != null && gspInstrumentCatalogList.size() > 0){
 			for(GspInstrumentCatalog gspInstrumentCatalog : gspInstrumentCatalogList){
 				combobox = new EasyuiCombobox();
