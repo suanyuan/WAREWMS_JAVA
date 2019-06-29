@@ -477,28 +477,16 @@ where 1=1
   	
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
-	select *
-	  from (select a.*,
-	               ifnull(b.qty, 0) as qty,
-	               ifnull(b.qtyallocated, 0) as qtyallocated,
-	               ifnull(b.qtyonhold, 0) as qtyonhold,
-	               row_number() over(order by a.customerid, a.sku) as row_num
-	          from (select <include refid="Base_Column_List"/>
-	                  from Bas_Sku
-	                 <include refid="Example_Where_Clause"/>) a,
-	               (select customerid,
-	                       sku,
-	                       sum(qty) as qty,
-	                       sum(qtyallocated) as qtyallocated,
-	                       sum(qtyonhold) as qtyonhold
-	                  from Inv_Lot_Loc_Id
-	                 group by customerid, sku) b
-	         where a.customerid = b.customerid(+)
-	           and a.sku = b.sku(+))
-	 where 1 = 1
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
+	select
+	<include refid="Base_Column_List"/>
+	from Bas_Sku
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
 </select>
 
 <!-- 查询商品档案列表 -->

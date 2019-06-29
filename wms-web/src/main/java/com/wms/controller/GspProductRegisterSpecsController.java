@@ -3,9 +3,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -36,6 +39,13 @@ public class GspProductRegisterSpecsController {
 	}
 
 	@Login
+	@RequestMapping(params = "toAdd")
+	public ModelAndView toAdd(String specsId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("specsId", specsId);
+		return new ModelAndView("gspProductRegisterSpecs/add", model);
+	}
+	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> showDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
@@ -45,24 +55,29 @@ public class GspProductRegisterSpecsController {
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) throws Exception {
+	public Json add(@RequestParam(value="gspProductRegisterSpecsForm",required=true) String gspProductRegisterSpecsFormStr) throws Exception {
+
+		GspProductRegisterSpecsForm gspProductRegisterSpecsForm = JSON.parseObject(gspProductRegisterSpecsFormStr,GspProductRegisterSpecsForm.class);
 		Json json = gspProductRegisterSpecsService.addGspProductRegisterSpecs(gspProductRegisterSpecsForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) throws Exception {
+	public Json edit(@RequestParam(value="gspProductRegisterSpecsForm",required=true) String gspProductRegisterSpecsFormStr) throws Exception {
+		GspProductRegisterSpecsForm gspProductRegisterSpecsForm = JSON.parseObject(gspProductRegisterSpecsFormStr,GspProductRegisterSpecsForm.class);
 		Json json = gspProductRegisterSpecsService.editGspProductRegisterSpecs(gspProductRegisterSpecsForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -73,9 +88,17 @@ public class GspProductRegisterSpecsController {
 		Json json = gspProductRegisterSpecsService.deleteGspProductRegisterSpecs(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "getInfo")
+	@ResponseBody
+	public Object getInfo(String specsId) {
+		return gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(specsId);
 	}
 
 	@Login

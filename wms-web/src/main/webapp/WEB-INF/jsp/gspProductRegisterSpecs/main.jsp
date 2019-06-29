@@ -12,6 +12,7 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var dialogUrl = "/gspProductRegisterSpecsController.do?toAdd";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
@@ -34,7 +35,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 
-            // {field: 'specsId',		title: '主键',	width: 25 },
+			{field: 'specsId',		title: '主键',	width: 25 },
             // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
 
 
@@ -87,58 +88,61 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-		buttons : '#ezuiDialogBtn',
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
-	}).dialog('close');
+    ezuiDialog = $('#ezuiDialog').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        fit:true,
+        cache: false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    }).dialog('close');
 });
 var add = function(){
 	processType = 'add';
 	$('#gspProductRegisterSpecsId').val(0);
-	ezuiDialog.dialog('open');
+	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			specsId : row.specsId,
-			productRegisterId : row.productRegisterId,
-			specsName : row.specsName,
-			productCode : row.productCode,
-			productName : row.productName,
-			productRemark : row.productRemark,
-			productModel : row.productModel,
-			productionAddress : row.productionAddress,
-			barCode : row.barCode,
-			unit : row.unit,
-			packingUnit : row.packingUnit,
-			categories : row.categories,
-			conversionRate : row.conversionRate,
-			llong : row.llong,
-			wide : row.wide,
-			hight : row.hight,
-			productLine : row.productLine,
-			manageCategories : row.manageCategories,
-			packing_Require : row.packing_Require,
-			storageCondition : row.storageCondition,
-			transportCondition : row.transportCondition,
-			createId : row.createId,
-			createDate : row.createDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse,
-			alternatName1 : row.alternatName1,
-			alternatName2 : row.alternatName2,
-			alternatName3 : row.alternatName3,
-			alternatName4 : row.alternatName4,
-			alternatName5 : row.alternatName5
-		});
-		ezuiDialog.dialog('open');
+		// ezuiForm.form('load',{
+		// 	specsId : row.specsId,
+		// 	productRegisterId : row.productRegisterId,
+		// 	specsName : row.specsName,
+		// 	productCode : row.productCode,
+		// 	productName : row.productName,
+		// 	productRemark : row.productRemark,
+		// 	productModel : row.productModel,
+		// 	productionAddress : row.productionAddress,
+		// 	barCode : row.barCode,
+		// 	unit : row.unit,
+		// 	packingUnit : row.packingUnit,
+		// 	categories : row.categories,
+		// 	conversionRate : row.conversionRate,
+		// 	llong : row.llong,
+		// 	wide : row.wide,
+		// 	hight : row.hight,
+		// 	productLine : row.productLine,
+		// 	manageCategories : row.manageCategories,
+		// 	packing_Require : row.packing_Require,
+		// 	storageCondition : row.storageCondition,
+		// 	transportCondition : row.transportCondition,
+		// 	createId : row.createId,
+		// 	createDate : row.createDate,
+		// 	editId : row.editId,
+		// 	editDate : row.editDate,
+		// 	isUse : row.isUse,
+		// 	alternatName1 : row.alternatName1,
+		// 	alternatName2 : row.alternatName2,
+		// 	alternatName3 : row.alternatName3,
+		// 	alternatName4 : row.alternatName4,
+		// 	alternatName5 : row.alternatName5
+		// });
+		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -152,7 +156,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'gspProductRegisterSpecsController.do?delete',
-					data : {id : row.id},
+					data : {id : row.specsId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -178,15 +182,57 @@ var del = function(){
 	}
 };
 var commit = function(){
-	var url = '';
+    console.log("qwe");
+    var infoObj = new Object();
+    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+        infoObj[""+$(this).attr("name")+""] = $(this).val();
+    })
+	console.log(infoObj);
+    var url = '';
+    if (processType == 'edit') {
+        var row = ezuiDatagrid.datagrid('getSelected');
+        infoObj["specsId"] = row.specsId;
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
+    }else{
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
+    }
+    $.ajax({
+        url : url,
+        data : {"gspProductRegisterSpecsForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
+        success : function(result){
+            console.log(result);
+            var msg='';
+            try{
+                if(result.success){
+                    msg = result.msg;
+                    ezuiDatagrid.datagrid('reload');
+                    ezuiDialog.dialog('close');
+                }else{
+                    msg = '<font color="red">' + result.msg + '</font>';
+                }
+            }catch (e) {
+                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                $.messager.show({
+                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                });
+                $.messager.progress('close');
+            }
+        }
+    });
+
+	/*var url = '';
 	if (processType == 'edit') {
-		url = '<c:url value="/gspProductRegisterSpecsController.do?edit"/>';
+		url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
 	}else{
-		url = '<c:url value="/gspProductRegisterSpecsController.do?add"/>';
+		url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
 	}
+	console.log(ezuiForm);
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
+		    console.log("1111111111");
 			if(ezuiForm.form('validate')){
 				$.messager.progress({
 					text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -217,7 +263,7 @@ var commit = function(){
 				$.messager.progress('close');
 			}
 		}
-	});
+	});*/
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
@@ -299,135 +345,7 @@ var doSearch = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='gspProductRegisterSpecsId' name='gspProductRegisterSpecsId'/>
-			<table>
-				<tr>
-					<th>待输入0</th>
-					<td><input type='text' name='specsId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入1</th>
-					<td><input type='text' name='productRegisterId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入2</th>
-					<td><input type='text' name='specsName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入3</th>
-					<td><input type='text' name='productCode' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入4</th>
-					<td><input type='text' name='productName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入5</th>
-					<td><input type='text' name='productRemark' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入6</th>
-					<td><input type='text' name='productModel' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='productionAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='barCode' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='unit' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='packingUnit' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入11</th>
-					<td><input type='text' name='categories' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入12</th>
-					<td><input type='text' name='conversionRate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入13</th>
-					<td><input type='text' name='llong' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入14</th>
-					<td><input type='text' name='wide' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入15</th>
-					<td><input type='text' name='hight' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入16</th>
-					<td><input type='text' name='productLine' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入17</th>
-					<td><input type='text' name='manageCategories' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入18</th>
-					<td><input type='text' name='packing_Require' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入19</th>
-					<td><input type='text' name='storageCondition' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入20</th>
-					<td><input type='text' name='transportCondition' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入21</th>
-					<td><input type='text' name='createId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入22</th>
-					<td><input type='text' name='createDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入23</th>
-					<td><input type='text' name='editId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入24</th>
-					<td><input type='text' name='editDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入25</th>
-					<td><input type='text' name='isUse' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入26</th>
-					<td><input type='text' name='alternatName1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入27</th>
-					<td><input type='text' name='alternatName2' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入28</th>
-					<td><input type='text' name='alternatName3' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入29</th>
-					<td><input type='text' name='alternatName4' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入30</th>
-					<td><input type='text' name='alternatName5' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-			</table>
-		</form>
+		//////
 	</div>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>

@@ -86,13 +86,14 @@ public class BasPackageService extends BaseService {
 	public List<EasyuiCombobox> getBasPackageCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<BasPackage> basPackageList = basPackageMybatisDao.queryByAll();
+		List<BasPackage> basPackageList = basPackageMybatisDao.queryListByAll();
 		if(basPackageList != null && basPackageList.size() > 0){
 			for(BasPackage basPackage : basPackageList){
 				combobox = new EasyuiCombobox();
 				combobox.setId(String.valueOf(basPackage.getPackid()));
-				combobox.setValue(basPackage.getPackid());
+				combobox.setValue(basPackage.getDescr());
 				comboboxList.add(combobox);
+				System.out.println(combobox);
 			}
 		}
 		return comboboxList;

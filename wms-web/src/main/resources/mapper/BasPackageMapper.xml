@@ -103,5 +103,10 @@ where 1=1
        ${limitClause}
     </if>
 </select>
-  	
+	<!-- 查询包装列表 -->
+	<select id="queryListByAll" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		*
+		from Bas_Package
+	</select>
 </mapper>   

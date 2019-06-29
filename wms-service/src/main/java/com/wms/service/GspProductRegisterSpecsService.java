@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.utils.RandomUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,29 +66,42 @@ public class GspProductRegisterSpecsService extends BaseService {
 		Json json = new Json();
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
-		gspProductRegisterSpecsDao.save(gspProductRegisterSpecs);
+		gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
+		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) {
 		Json json = new Json();
-		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsDao.findById(gspProductRegisterSpecsForm.getSpecsId());
+		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
-		gspProductRegisterSpecsDao.update(gspProductRegisterSpecs);
+		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsDao.findById(gspProductRegisterSpecsForm.getSpecsId());
+		//BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
+		gspProductRegisterSpecsMybatisDao.update(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteGspProductRegisterSpecs(String id) {
 		Json json = new Json();
-		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsDao.findById(id);
-		if(gspProductRegisterSpecs != null){
-			gspProductRegisterSpecsDao.delete(gspProductRegisterSpecs);
+		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.findById(id);
+		if(id != null){
+			gspProductRegisterSpecsMybatisDao.delete(id);
 		}
 		json.setSuccess(true);
 		return json;
 	}
+
+
+	public Json getGspProductRegisterSpecsInfo(String id){
+		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(id);
+		if(gspProductRegisterSpecs == null){
+			return Json.error("企业信息不存在！");
+		}
+		return Json.success("",gspProductRegisterSpecs);
+	}
+
 
 	public List<EasyuiCombobox> getGspProductRegisterSpecsCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();

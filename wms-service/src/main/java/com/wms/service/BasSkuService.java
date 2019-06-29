@@ -65,11 +65,11 @@ public class BasSkuService extends BaseService {
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setCondition(query);
 		List<BasSku> basSkuList = basSkuMybatisDao.queryByPageList(mybatisCriteria);
 		BasSkuVO basSkuVO = null;
 		List<BasSkuVO> basSkuVOList = new ArrayList<BasSkuVO>();
