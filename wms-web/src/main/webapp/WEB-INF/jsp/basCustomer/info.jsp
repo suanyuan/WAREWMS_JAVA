@@ -1,6 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
-<form id='add' method='post'>
+<form id='ezuiFormInfo' method='post'>
     <input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
+    <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId'/>
     <table>
         <tr style="display: none">
             <td><input type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>

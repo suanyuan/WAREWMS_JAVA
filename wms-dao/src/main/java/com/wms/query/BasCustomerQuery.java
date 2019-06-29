@@ -1,14 +1,196 @@
 package com.wms.query;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.wms.mybatis.entity.SfcCustomer;
 
 public class BasCustomerQuery implements IQuery {
 
-	private java.lang.String customerid;
-	private java.lang.String customerType;
-	private java.lang.String activeFlag;
+	private String receivingAddressId;
+	private String enterpriseNo;
+
+	private String customerid;
+	private String supContractNo;
+
+	private String customerType;
+
+	private String operateType;
+	private String descrC;
+	private String shorthandName;
+	private String activeFlag;
+	private String enterpriseName;
+	private String operateTypeName;
+	private String enterpriseId;
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private String clientStartDate;
+
+	private String clientEndDate;
+
+	private String clientTerm;
+
+	private String isChineseLabel;
+
+	private String clientId;
+
+	private String clientNo;
+
+	private String clientName;
+
+
+
+	private String remark;
+
+	public String getReceivingAddressId() {
+		return receivingAddressId;
+	}
+
+	public void setReceivingAddressId(String receivingAddressId) {
+		this.receivingAddressId = receivingAddressId;
+	}
+
+	public String getSupContractNo() {
+		return supContractNo;
+	}
+
+	public void setSupContractNo(String supContractNo) {
+		this.supContractNo = supContractNo;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getOperateTypeName() {
+		return operateTypeName;
+	}
+
+	public void setOperateTypeName(String operateTypeName) {
+		this.operateTypeName = operateTypeName;
+	}
+
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public String getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(String clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public String getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(String clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
+	public String getIsChineseLabel() {
+		return isChineseLabel;
+	}
+
+	public void setIsChineseLabel(String isChineseLabel) {
+		this.isChineseLabel = isChineseLabel;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public String getClientNo() {
+		return clientNo;
+	}
+
+	public void setClientNo(String clientNo) {
+		this.clientNo = clientNo;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getrOwner() {
+		return rOwner;
+	}
+
+	public void setrOwner(String rOwner) {
+		this.rOwner = rOwner;
+	}
+
+
 	private java.lang.String address1;
 	private java.lang.String address2;
 	private java.lang.String address3;
@@ -45,7 +227,7 @@ public class BasCustomerQuery implements IQuery {
 	private java.lang.String defaultshipmentuom;
 	private java.lang.String defaultskulotid;
 	private java.lang.String defaultsoftallocationrule;
-	private java.lang.String descrC;
+
 	private java.lang.String descrE;
 	private java.lang.String easycode;
 	private java.util.Date edittime;
@@ -556,4 +738,27 @@ public class BasCustomerQuery implements IQuery {
 		this.customerSet = customerSet;
 	}
 
+	public String getOperateType() {
+		return operateType;
+	}
+
+	public void setOperateType(String operateType) {
+		this.operateType = operateType;
+	}
+
+	public String getShortHandName() {
+		return shorthandName;
+	}
+
+	public void setShortHandName(String shortHandName) {
+		this.shorthandName = shortHandName;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 }

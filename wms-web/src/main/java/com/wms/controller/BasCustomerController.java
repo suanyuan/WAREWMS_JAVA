@@ -51,6 +51,14 @@ public class BasCustomerController {
 	}
 
 	@Login
+	@RequestMapping(params = "toCustomer")
+	public ModelAndView toCustomer(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("basCustomer/customer", model);
+	}
+
+	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<BasCustomerVO> showDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
@@ -84,8 +92,8 @@ public class BasCustomerController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String customerid, String customertype) {
-		Json json = basCustomerService.deleteBasCustomer(customerid,customertype);
+	public Json delete(String enterpriseId, String customerType) {
+		Json json = basCustomerService.deleteBasCustomer(enterpriseId,customerType);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -105,6 +113,67 @@ public class BasCustomerController {
 	@ResponseBody
 	public List<EasyuiCombobox> getCustomerTypeCombobox() {
 		return basCustomerService.getCustomerTypeCombobox();
+	}
+	@Login
+	@RequestMapping(params = "getOperateTypeCombobox")
+	@ResponseBody
+	public List<EasyuiCombobox> getOperateTypeCombobox() {
+		return basCustomerService.getOperateTypeCombobox();
+	}
+
+
+    @Login
+    @RequestMapping(params = "toDetail")
+    public ModelAndView toDetail(String enterpriseId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", enterpriseId);
+        return new ModelAndView("basCustomer/detail", model);
+    }
+
+    @Login
+    @RequestMapping(params = "toInfo")
+    public ModelAndView toInfo(String enterpriseId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", enterpriseId);
+        return new ModelAndView("basCustomer/info", model);
+    }
+
+    @Login
+    @RequestMapping(params = "toBusinessLicense")
+    public ModelAndView toBusinessLicense(String enterpriseId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", enterpriseId);
+        return new ModelAndView("basCustomer/businessLicense", model);
+    }
+
+    @Login
+    @RequestMapping(params = "toOperateLicense")
+    public ModelAndView toOperateLicense(String enterpriseId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", enterpriseId);
+        return new ModelAndView("basCustomer/operateLicense", model);
+    }
+
+    @Login
+    @RequestMapping(params = "toSecondRecord")
+    public ModelAndView toSecondRecord(String enterpriseId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", enterpriseId);
+        return new ModelAndView("basCustomer/secondRecord", model);
+    }
+	@Login
+	@RequestMapping(params = "toReceivingAddress")
+	public ModelAndView toReceivingAddress(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/receivingAddress", model);
+	}
+
+	@Login
+	@RequestMapping(params = "getReceivingAddress")
+	@ResponseBody
+	public Object getReceivingAddress(String enterpriseId,String receivingAddressId) {
+		return basCustomerService.getReceivingAddressInfo(enterpriseId,receivingAddressId);
 	}
 
 }

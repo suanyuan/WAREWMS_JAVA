@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasCarrierLicenseMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasCarrierLicense" >
+	<result column="carrier_license_id" property="carrierLicenseId"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="road_number" property="roadNumber"/>
+	<result column="road_number_term" property="roadNumberTerm"/>
+	<result column="road_authority_permit" property="roadAuthorityPermit"/>
+	<result column="road_business_scope" property="roadBusinessScope"/>
+	<result column="carrier_no" property="carrierNo"/>
+	<result column="carrier_date" property="carrierDate"/>
+	<result column="carrier_end_date" property="carrierEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+	<result column="carrier_authority_permit" property="carrierAuthorityPermit"/>
+	<result column="carrier_business_scope" property="carrierBusinessScope"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="active_flag" property="activeFlag"/>
+</resultMap>
+       
+<!-- bas_carrier_license table all fields -->
+<sql id="Base_Column_List" >
+	 carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.carrierLicenseId != null and condition.carrierLicenseId != ''" >
+	    and carrier_license_id =  #{condition.carrierLicenseId}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+		and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.roadNumber != null and condition.roadNumber != ''" >
+	    and road_number =  #{condition.roadNumber}
+	</if>
+	<if test="condition.roadNumberTerm != null and condition.roadNumberTerm != ''" >
+	    and road_number_term =  #{condition.roadNumberTerm}
+	</if>
+	<if test="condition.roadAuthorityPermit != null and condition.roadAuthorityPermit != ''" >
+	    and road_authority_permit =  #{condition.roadAuthorityPermit}
+	</if>
+	<if test="condition.roadBusinessScope != null and condition.roadBusinessScope != ''" >
+	    and road_business_scope =  #{condition.roadBusinessScope}
+	</if>
+	<if test="condition.carrierNo != null and condition.carrierNo != ''" >
+	    and carrier_no =  #{condition.carrierNo}
+	</if>
+	<if test="condition.carrierDate != null and condition.carrierDate != ''" >
+	    and carrier_date =  #{condition.carrierDate}
+	</if>
+	<if test="condition.carrierEndDate != null and condition.carrierEndDate != ''" >
+	    and carrier_end_date =  #{condition.carrierEndDate}
+	</if>
+	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
+	    and client_term =  #{condition.clientTerm}
+	</if>
+	<if test="condition.carrierAuthorityPermit != null and condition.carrierAuthorityPermit != ''" >
+	    and carrier_authority_permit =  #{condition.carrierAuthorityPermit}
+	</if>
+	<if test="condition.carrierBusinessScope != null and condition.carrierBusinessScope != ''" >
+	    and carrier_business_scope =  #{condition.carrierBusinessScope}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag =  #{condition.activeFlag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{clientTerm},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},#{createDate},#{editId},#{editDate},#{activeFlag})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_carrier_license set road_number=#{roadNumber},road_number_term=#{roadNumberTerm},road_authority_permit=#{roadAuthorityPermit},road_business_scope=#{roadBusinessScope},carrier_no=#{carrierNo},carrier_date=#{carrierDate},carrier_end_date=#{carrierEndDate},client_term=#{clientTerm},carrier_authority_permit=#{carrierAuthorityPermit},carrier_business_scope=#{carrierBusinessScope},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},active_flag=#{activeFlag} where carrier_license_id=#{carrierLicenseId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_carrier_license set 
+	<trim  suffixOverrides="," >
+	<if test="roadNumber != null  ">
+		road_number=#{roadNumber},
+	</if>
+		<if test="enterpriseId != null  ">
+			enterprise_id=#{enterpriseId},
+	</if>
+	<if test="roadNumberTerm != null  ">
+		road_number_term=#{roadNumberTerm},
+	</if>
+	<if test="roadAuthorityPermit != null  ">
+		road_authority_permit=#{roadAuthorityPermit},
+	</if>
+	<if test="roadBusinessScope != null  ">
+		road_business_scope=#{roadBusinessScope},
+	</if>
+	<if test="carrierNo != null  ">
+		carrier_no=#{carrierNo},
+	</if>
+	<if test="carrierDate != null  ">
+		carrier_date=#{carrierDate},
+	</if>
+	<if test="carrierEndDate != null  ">
+		carrier_end_date=#{carrierEndDate},
+	</if>
+	<if test="clientTerm != null  ">
+		client_term=#{clientTerm},
+	</if>
+	<if test="carrierAuthorityPermit != null  ">
+		carrier_authority_permit=#{carrierAuthorityPermit},
+	</if>
+	<if test="carrierBusinessScope != null  ">
+		carrier_business_scope=#{carrierBusinessScope},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	</trim> where carrier_license_id=#{carrierLicenseId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_carrier_license where carrier_license_id = #{carrierLicenseId}
+</delete>
+ 
+<!-- 根据id查询 承运商 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_carrier_license where enterprise_id = #{enterpriseId}
+</select>
+
+<!-- 承运商 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_carrier_license 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询承运商列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_carrier_license 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

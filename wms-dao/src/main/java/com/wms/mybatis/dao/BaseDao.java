@@ -2,8 +2,6 @@ package com.wms.mybatis.dao;
 
 import java.util.List;
 
-import com.wms.mybatis.dao.MybatisCriteria;
-
 public interface BaseDao {
 	
 	public <T> void add(T t);
@@ -25,4 +23,6 @@ public interface BaseDao {
 	public <T> T queryByAll();
 	
 	public <T> List<T> queryListByAll();
+
+	public Long  queryTotalCount();
 }

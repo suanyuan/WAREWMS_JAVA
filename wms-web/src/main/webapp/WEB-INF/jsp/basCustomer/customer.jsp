@@ -35,10 +35,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'customerId',		title: '客户',	width: 16 },
-            {field: 'descrC',		title: '客户名称',	width: 16 },
 
-            {field: 'customerType',		title: '客户类型 ',	width: 30 },
             {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
             {field: 'shorthandName',		title: '简称 ',	width: 30 },
             {field: 'enterpriseName',		title: '企业名称 ',	width: 30 },
@@ -48,16 +45,14 @@ $(function() {
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-			{field: 'supContractNo',		title: '合同编号 ',	width: 30 },
-			{field: 'contractUrl',		title: '合同文件 ',	width: 20 },
-			{field: 'clientContent',		title: '委托内容 ',	width: 40 },
-			{field: 'clientStartDate',		title: '委托开始时间 ',	width: 16 },
-			{field: 'clientEndDate',		title: '委托结束时间 ',	width: 20 },
+
 			/*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
 				return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-			{field: 'clientTerm',		title: '委托期限',	width: 12 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 12},
+            {field: 'addwho',		title: '录入人',	width: 50 },
+            {field: 'addtime',		title: '录入时间',	width: 50 },
+            {field: 'editwho',		title: '修改人',	width: 50 },
+            {field: 'edittime',		title: '修改时间',	width: 50 },
             {field: 'activeFlag',		title: '激活 ',	width: 12}
 		]],
 		onDblClickCell: function(index,field,value){
@@ -114,11 +109,11 @@ var edit = function(){
 		$("#ezuiForm #customerid").textbox({
 			editable:false
 		});
-		$("#ezuiForm #customerType").combo('readonly', true);
-		$("#ezuiForm #operateType").combo('readonly', true);
+	/*	$("#ezuiForm #customerType").combo('readonly', true);
+		$("#ezuiForm #operateType").combo('readonly', true);*/
 		ezuiForm.form('load',{
 			customerid : row.customerid,
-			customerType : row.customerType,
+
 			descrC : row.descrC,
             enterpriseNo:row.enterpriseNo,
             shorthandName:row.shorthandName,
@@ -160,7 +155,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'basCustomerController.do?delete',
-					data : {enterpriseId : row.enterpriseId, customerType : row.customerType},
+					data : {enterpriseId : row.enterpriseId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -247,10 +242,10 @@ var doSearch = function(){
         clientEndDate : $('#clientEndDate').val(),
         supContractNo : $('#supContractNo').val(),
 
-		customerType : $('#customerType').combobox('getValue'),
-        operateType : $('#operateType').combobox('getValue'),
-		activeFlag : $('#activeFlag').combobox('getValue'),
-        isChineseLabel : $('#isChineseLabel').combobox('getValue'),
+        /* isChineseLabel : $('#isChineseLabel').combobox('getValue'),
+         customerType : $('#customerType').combobox('getValue'),
+         operateType : $('#operateType').combobox('getValue'),*/
+        activeFlag : $('#activeFlag').combobox('getValue'),
         descrC : $('#descrC').val()
 
 	});
@@ -267,38 +262,12 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>客户ID：</th><td><input type='text' id='customerid' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>客户名称：</th><td><input type='text' id='descrC' class='easyui-textbox' size='4' data-options=''/></td>
+
 							<th>企业信息代码：</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>简称：</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>企业名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>合同编号：</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='4' data-options=''/></td>
-						<tr>
-							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='4' data-options=''/></td>
-							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='4' data-options=''/></td>
 
-						</tr>
-							<th>客户类型：</th><td><input type='text' id='customerType' class='easyui-combobox' size='4' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
-																																	valueField: 'id',
-																																	textField: 'value'"/></td>
 
-							<th>类型：</th><td><input type='text' id='operateType' class='easyui-combobox' size='4' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	url:'<c:url value="/basCustomerController.do?getOperateTypeCombobox"/>',
-																																	valueField: 'id',
-																																	textField: 'value'"/></td>
-
-						<th>是否贴中文标签：</th>
-
-						<td>
-							<select id="isChineseLabel" name="isChineseLabel" class="easyui-combobox"  style="width:100px;">
-								<option value=""></option>
-								<option value="Y">是</option>
-								<option value="N">否</option>
-							</select>
-						</td>
 
 							<%--<th>是否贴中文标签：</th><td><input type='text' id="isChineseLabel"  name="activeFlag"  class="easyui-combobox" size='4' data-options="panelHeight:'auto',
 																																	editable:false,

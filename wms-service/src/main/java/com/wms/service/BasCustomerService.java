@@ -1,26 +1,28 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasCustomer;
+import com.wms.entity.GspCustomer;
+import com.wms.entity.GspEnterpriseInfo;
+import com.wms.entity.GspReceivingAddress;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.BasCustomerQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.BasCustomerForm;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.query.BasCustomerQuery;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("basCustomerService")
 public class BasCustomerService extends BaseService {
@@ -30,11 +32,13 @@ public class BasCustomerService extends BaseService {
 
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
+
 		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByPageList(mybatisCriteria);
 		BasCustomerVO basCustomerVO = null;
@@ -50,19 +54,29 @@ public class BasCustomerService extends BaseService {
 	}
 
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
-		Json json = new Json();
-		BasCustomer basCustomer = new BasCustomer();
 		StringBuilder resultMsg = new StringBuilder();
-		BeanUtils.copyProperties(basCustomerForm, basCustomer);
-		
 		this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
 
+			Json json = new Json();
+
+
 		if (resultMsg.length() == 0) {
+			BasCustomer basCustomer = new BasCustomer();
+			GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
+			GspCustomer gspCustomer = new GspCustomer();
+			BeanUtils.copyProperties(basCustomerForm,gspEnterpriseInfo);
+			BeanUtils.copyProperties(basCustomerForm, basCustomer);
+			BeanUtils.copyProperties(basCustomerForm, gspCustomer);
 			//获取操作工号
 			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
 			//
 			basCustomerMybatisDao.add(basCustomer);
+			basCustomerMybatisDao.add(gspCustomer);
+			basCustomerMybatisDao.add(gspEnterpriseInfo);
+
+
 		} else {
 			json.setSuccess(false);
 			json.setMsg(resultMsg.toString());
@@ -99,29 +113,18 @@ public class BasCustomerService extends BaseService {
 		}
 	}	
 
-	public Json deleteBasCustomer(String customerid, String customertype) {
+	public Json deleteBasCustomer(String enterpriseId, String customertype) {
 		Json json = new Json();
 		BasCustomerQuery customerQuery = new BasCustomerQuery();
-		customerQuery.setCustomerid(customerid);
+		customerQuery.setEnterpriseId(enterpriseId);
 		customerQuery.setCustomerType(customertype);
-		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("customerid", customerid);
-		map.put("customertype", customertype);
-		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
+
 		BasCustomer basCustomer = basCustomerMybatisDao.queryById(customerQuery);
-		if(basCustomer != null){
-			basCustomerMybatisDao.basCustomerCheck(map);
-			String result = map.get("result").toString();
-			if (result.equals("000")) {
-				basCustomerMybatisDao.delete(basCustomer);
-			} else {
-				json.setSuccess(false);
-				json.setMsg(result);
-				return json;
-			}
+		if (basCustomer != null) {
+			basCustomerMybatisDao.delete(basCustomer);
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
 		}
-		json.setSuccess(true);
-		json.setMsg("资料处理成功！");
 		return json;
 	}
 
@@ -138,6 +141,32 @@ public class BasCustomerService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+	public List<EasyuiCombobox> getOperateTypeCombobox() {
+		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+		EasyuiCombobox combobox = null;
+		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryOperateTypeByAll();
+		if(basCustomerList != null && basCustomerList.size() > 0){
+			for(BasCustomer basCustomer : basCustomerList){
+				combobox = new EasyuiCombobox();
+				combobox.setId(basCustomer.getOperateType());
+				combobox.setValue(basCustomer.getOperateTypeName());
+				comboboxList.add(combobox);
+			}
+		}
+		return comboboxList;
+	}
+	/**
+	 * 获取收货地址基础信息
+	 * @param enterpriseId 企业信息流水号
+	 * @return
+	 */
+	public Json getReceivingAddressInfo(String enterpriseId, String receivingAddressId){
+		 GspReceivingAddress gspReceivingAddress = basCustomerMybatisDao.getReceivingAddressInfo(receivingAddressId);
+		if(gspReceivingAddress == null){
+			return Json.error("收货地址信息不存在！");
+		}
+		return Json.success("",gspReceivingAddress);
 	}
 
 }

@@ -4,7 +4,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasCustomerVO {
-
+private String enterpriseId;
+private String receivingAddressId;
 	private java.lang.String customerid;
 	private java.lang.String customerType;
 	private java.lang.String activeFlag;
@@ -64,6 +65,30 @@ public class BasCustomerVO {
 	private java.lang.String udf5;
 	private java.lang.String zip;
 	private java.lang.String customerTypeName;
+
+	public String getReceivingAddressId() {
+		return receivingAddressId;
+	}
+
+	public void setReceivingAddressId(String receivingAddressId) {
+		this.receivingAddressId = receivingAddressId;
+	}
+
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
+
+	public String getrOwner() {
+		return rOwner;
+	}
+
+	public void setrOwner(String rOwner) {
+		this.rOwner = rOwner;
+	}
 
 	public java.lang.String getCustomerid() {
 		return customerid;

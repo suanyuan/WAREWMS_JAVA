@@ -3,7 +3,11 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class BasCustomerForm {
+
+	private String receivingAddressId;
 
 	private java.lang.String customerid;
 	private java.lang.String customerType;
@@ -64,6 +68,176 @@ public class BasCustomerForm {
 	private java.lang.String udf5;
 	private java.lang.String zip;
 	private java.lang.String customerTypeName;
+	private String operateType;
+	private String enterpriseNo;
+	private String shortHandName;
+	private String enterpriseName;
+
+	private String enterpriseType;
+
+	private String contacts;
+
+	private String contactsPhone;
+
+	private String remark;
+	private String enterpriseId;
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private java.util.Date clientStartDate;
+
+	private java.util.Date clientEndDate;
+
+	private Long clientTerm;
+
+	private Long isChineseLabel;
+
+	public String getrOwner() {
+		return rOwner;
+	}
+
+	public void setrOwner(String rOwner) {
+		this.rOwner = rOwner;
+	}
+
+	public String getOperateType() {
+		return operateType;
+	}
+
+	public void setOperateType(String operateType) {
+		this.operateType = operateType;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShortHandName() {
+		return shortHandName;
+	}
+
+	public void setShortHandName(String shortHandName) {
+		this.shortHandName = shortHandName;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getReceivingAddressId() {
+		return receivingAddressId;
+	}
+
+	public void setReceivingAddressId(String receivingAddressId) {
+		this.receivingAddressId = receivingAddressId;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getContactsPhone() {
+		return contactsPhone;
+	}
+
+	public void setContactsPhone(String contactsPhone) {
+		this.contactsPhone = contactsPhone;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public Long getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(Long clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
+	public Long getIsChineseLabel() {
+		return isChineseLabel;
+	}
+
+	public void setIsChineseLabel(Long isChineseLabel) {
+		this.isChineseLabel = isChineseLabel;
+	}
 
 	public java.lang.String getCustomerid() {
 		return customerid;
