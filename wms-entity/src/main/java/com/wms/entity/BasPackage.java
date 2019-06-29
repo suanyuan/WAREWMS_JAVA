@@ -139,6 +139,9 @@ public class BasPackage implements Serializable {
 
 	private BigDecimal qtyMaterial2;
 
+    /**
+     * 件-数量换算
+     */
 	private BigDecimal qty1;
 
 	private BigDecimal qty2;

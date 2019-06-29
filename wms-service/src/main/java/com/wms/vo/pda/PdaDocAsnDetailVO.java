@@ -11,24 +11,9 @@ public class PdaDocAsnDetailVO {
     private String asnno;
 
     /**
-     * 客户单号
-     */
-    private String clientno;
-
-    /**
      * 产品代码
      */
     private String sku;
-
-    /**
-     * 产品名称-中文
-     */
-    private String skudescrc;
-
-    /**
-     * 规格/型号 匹配自产品(BasSku.java)
-     */
-    private String model;
 
     /**
      * 生产批号
@@ -52,36 +37,12 @@ public class PdaDocAsnDetailVO {
         this.asnno = asnno;
     }
 
-    public String getClientno() {
-        return clientno;
-    }
-
-    public void setClientno(String clientno) {
-        this.clientno = clientno;
-    }
-
     public String getSku() {
         return sku;
     }
 
     public void setSku(String sku) {
         this.sku = sku;
-    }
-
-    public String getSkudescrc() {
-        return skudescrc;
-    }
-
-    public void setSkudescrc(String skudescrc) {
-        this.skudescrc = skudescrc;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     public String getLotatt01() {
