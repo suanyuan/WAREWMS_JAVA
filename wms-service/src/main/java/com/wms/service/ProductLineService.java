@@ -69,11 +69,9 @@ public class ProductLineService extends BaseService {
 
 		productLine.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		productLine.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-		Date date = new Date();
+
 		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		productLine.setCreateDate(date);
-		productLine.setEditDate(new Date());
 
 		productLine.setIsUse("1");
 		productLineMybatisDao.insert(productLine);
@@ -115,7 +113,7 @@ public class ProductLineService extends BaseService {
 		ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
 
 		BeanUtils.copyProperties(productLineForm, productLine);
-		productLine.setEditDate(new Date());
+
 		//productLine.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		productLine.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 
@@ -131,7 +129,7 @@ public class ProductLineService extends BaseService {
 		ProductLine productLine = productLineMybatisDao.queryById(id);
 
 		if(productLine != null){
-			productLine.setEditDate(new Date());
+
 			productLine.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			productLineMybatisDao.delete(productLine);
 		}
