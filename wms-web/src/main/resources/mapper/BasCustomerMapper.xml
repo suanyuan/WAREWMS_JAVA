@@ -605,6 +605,7 @@ where 1=1
 
 	<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		select * from  (SELECT a.CUSTOMERID,
+
 		a.FOLLOWUP,
 		a.receiving_address_id,
 		a.enterprise_id,
