@@ -23,7 +23,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String hight;
 	private java.lang.String productLine;
 	private java.lang.String manageCategories;
-	private java.lang.String packing_Require;
+	private java.lang.String packingRequire;
 	private java.lang.String storageCondition;
 	private java.lang.String transportCondition;
 	private java.lang.String createId;
@@ -36,6 +36,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
 
 	public java.lang.String getSpecsId() {
 		return specsId;
@@ -182,11 +183,11 @@ public class GspProductRegisterSpecsForm {
 	}
 
 	public java.lang.String getPacking_Require() {
-		return packing_Require;
+		return packingRequire;
 	}
 
 	public void setPacking_Require(java.lang.String packing_Require) {
-		this.packing_Require = packing_Require;
+		this.packingRequire = packing_Require;
 	}
 
 	public java.lang.String getStorageCondition() {

@@ -44,22 +44,27 @@ $(function() {
 			/* {field: 'instockDetail',		title: '打印操作',	width: 7,formatter:function(value,rowData,rowIndex){
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
 			}}, */
-			{field: 'customerid',		title: '客户代码',	width: 12/* ,formatter:function(value,rowData,rowIndex){
+            {field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == 'Y' ? '是' : '否';
+                }},
+            {field: 'addTime',		title: '增加时间',	width: 24},
+			{field: 'addwho',		title: '增加人',	width: 12/* ,formatter:function(value,rowData,rowIndex){
 				return rowData.basSkuPK.customerid;
             } */},
-			{field: 'sku',		title: '产品',	width: 24},
-			{field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
-				return rowData.activeFlag == 'Y' ? '是' : '否';
-            }},
-			{field: 'descrC',		title: '中文名称',	width: 42 },
-			{field: 'descrE',		title: '英文名称',	width: 30 },
-			{field: 'alternateSku1',		title: '条形码',	width: 24 },
-			{field: 'packid',		title: '包装代码',	width: 18 },
-			{field: 'reservedfield01',		title: '单位',	width: 12 },
-			{field: 'firstinbounddate',		title: '首次入库',	width: 27 },
-			{field: 'cube',		title: '体积',	width: 12 },
-			{field: 'grossweight',		title: '重量',	width: 12 },
-			{field: 'price',		title: '单价',	width: 12 }
+			{field: 'customerid',		title: '货主',	width: 24},
+
+			{field: 'descrC',		title: '规格名称',	width: 42 },
+			{field: 'descrE',		title: '型号',	width: 30 },
+			{field: 'edittime',		title: '编辑时间',	width: 24 },
+			{field: 'editwho',		title: '编辑人',	width: 18 },
+			{field: 'firstop',		title: '首营状态',	width: 12 },
+			{field: 'packid',		title: '包装规格代码',	width: 27 },
+			{field: 'reservedfield01',		title: '商品名称',	width: 12 },
+			{field: 'reservedfield02',		title: '商品描述',	width: 12 },
+			{field: 'reservedfield03',		title: '注册证号',	width: 12 },
+            {field: 'sku',		title: '代码',	width: 12 },
+            {field: 'sku_group1',		title: '产品线',	width: 12 },
+            {field: 'sku_group2',		title: '附卡类别',	width: 12 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -542,10 +547,46 @@ var downloadTemplate = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>客户代码</th>
+							<tr>
+							<th>货主</th>
 							<td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品：</th>
+							<th>代码</th>
 							<td><input type='text' id='sku'  name="sku" class='easyui-textbox' size='16' /></td>
+							<th>增加时间</th>
+							<td><input type='text' id='addTime' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>增加人</th>
+							<td><input type='text' id='addwho'  name="sku" class='easyui-textbox' size='16' /></td>
+					</tr>
+						<tr>
+
+							<th>规格名称</th>
+							<td><input type='text' id='descrC' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>型号</th>
+							<td><input type='text' id='descrE'  name="sku" class='easyui-textbox' size='16' /></td>
+							<th>编辑时间</th>
+							<td><input type='text' id='edittime' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编辑人</th>
+							<td><input type='text' id='editwho'  name="sku" class='easyui-textbox' size='16' /></td>
+
+						</tr>
+						<tr>
+							<th>首营状态</th>
+							<td><input type='text' id='firstop' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>包装规格代码</th>
+							<td><input type='text' id='packid'  name="sku" class='easyui-textbox' size='16' /></td>
+							<th>商品名称</th>
+							<td><input type='text' id='reservedfield01'  name="sku" class='easyui-textbox' size='16' /></td>
+							<th>商品描述</th>
+							<td><input type='text' id='reservedfield02' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+
+							<th>注册证号</th>
+							<td><input type='text' id='reservedfield03'  name="sku" class='easyui-textbox' size='16' /></td>
+							<th>产品线</th>
+							<td><input type='text' id='sku_group1' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>附卡类别</th>
+							<td><input type='text' id='sku_group2'  name="sku" class='easyui-textbox' size='16' /></td>
 							<th>是否激活：</th><td>
 							<input type="text" id="activeFlag"  name="activeFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
@@ -557,6 +598,8 @@ var downloadTemplate = function(){
 																																]"/> 
 							
 							<td>
+
+						</tr>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
@@ -566,9 +609,9 @@ var downloadTemplate = function(){
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>详情</a>
+					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
+					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -580,9 +623,9 @@ var downloadTemplate = function(){
 			<input type='hidden' id='basSkuId' name='basSkuId'/>
 			<table>
 				<tr>
-				<th>客户代码</th>
+				<th>货主</th>
 				<td><input type='text' name='customerid'  id='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				<th>产品</th>
+				<th>代码</th>
 				<td><input type='text' name='sku' id="sku" class='easyui-textbox' size='16' data-options='required:true'/></td>
 				<th>是否激活</th>
 				<td><input type='text' name='activeFlag' id="activeFlag" class='easyui-combobox' size='16' data-options="required:true,
@@ -594,44 +637,86 @@ var downloadTemplate = function(){
 																																{id: 'Y', value: '是'}, 
 																																{id: 'N', value: '否'}
 																															]"/></td>
-				</tr>
-				<tr>
-				<th>中文名称</th>
+
+
+				<th>规格名称</th>
 				<td colspan="3"><input type='text' name='descrC' class='easyui-textbox' size='44' data-options="required:true"/></td>
-				</tr>
-				<tr>
-				<th>英文代码</th>
+				<th>型号</th>
 				<td colspan="3"><input type='text' name='descrE' class='easyui-textbox' size='44' /></td>
 				</tr>
+
+
 				<tr>
-				<th>包装代码</th>
+				<th>包装规格代码</th>
 				<td><input type='text' name='packid'  id='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				<th>条形码</th>
-				<td><input type='text' name='alternateSku1' class='easyui-textbox' size='16' /></td>
-				<th>单位</th>
+				<th>商品名称</th>
 				<td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
+
+				<th>增加时间</th>
+				<td><input type='text' name='addTime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				<th>增加人</th>
+				<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
+
+				<th>编辑时间</th>
+				<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
 				</tr>
+
+
 				<tr>
-				<th>重量</th>
-				<td><input type='text' name='grossweight' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
-				<th>体积</th>
-				<td><input type='text' name='cube' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
-				<th>单价</th>
-				<td><input type='text' name='price' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:2'/></td>
-				</tr>
-				<tr>
-				<th>别名2</th>
-				<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
-				<th>别名3</th>
-				<td><input type='text' name='alternateSku3' class='easyui-textbox' size='16' /></td>
-				</tr>
-				<tr>
-				<th>自定义2</th>
+				<th>编辑人</th>
+				<td><input type='text' name='editwho' class='easyui-textbox' size='16' /></td>
+				<th>首营状态</th>
+				<td><input type='text' name='firstop' class='easyui-textbox' size='16' /></td>
+				<th>商品描述</th>
 				<td><input type='text' name='reservedfield02' class='easyui-textbox' size='16' /></td>
-				<th>自定义3</th>
+				<th>注册证号</th>
 				<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
-				<th>分配规则（D）</th>
-				<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
+				<th>产品线</th>
+				<td><input type='text' name='sku_group1' class='easyui-textbox' size='16' /></td>
+				</tr>
+
+				<tr>
+				<th>附卡类别</th>
+				<td><input type='text' name='sku_group2' class='easyui-textbox' size='16' /></td>
+				<th>自赋码1</th>
+				<td><input type='text' name='alternate_sku1' class='easyui-textbox' size='16' /></td>
+				<th>自赋码2/th>
+				<td><input type='text' name='alternate_sku2' class='easyui-textbox' size='16' /></td>
+				<th>自赋码3</th>
+				<td><input type='text' name='alternate_sku3' class='easyui-textbox' size='16' /></td>
+				<th>自赋码4</th>
+				<td><input type='text' name='alternate_sku4' class='easyui-textbox' size='16' /></td>
+				</tr>
+
+				<tr>
+				<th>自赋码5</th>
+				<td><input type='text' name='alternate_sku5' class='easyui-textbox' size='16' /></td>
+				<th>单位</th>
+				<td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='16' /></td>
+				<th>管理分类/th>
+				<td><input type='text' name='reservedfield04' class='easyui-textbox' size='16' /></td>
+				<th>分类目录</th>
+				<td><input type='text' name='reservedfield05' class='easyui-textbox' size='16' /></td>
+				<th>包装要求</th>
+				<td><input type='text' name='sku_group3' class='easyui-textbox' size='16' /></td>
+				</tr>
+
+				<tr>
+				<th>存储条件</th>
+				<td><input type='text' name='sku_group4' class='easyui-textbox' size='16' /></td>
+				<th>运输条件</th>
+				<td><input type='text' name='sku_group5' class='easyui-textbox' size='16' /></td>
+				<th>高/th>
+				<td><input type='text' name='skuhigh' class='easyui-textbox' size='16' /></td>
+				<th>长</th>
+				<td><input type='text' name='skulength' class='easyui-textbox' size='16' /></td>
+				<th>宽</th>
+				<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>
+
+
+
+
+
 				</tr>
 				<!-- <tr>
 				<th>时间控件</th><td><input type='text' name='edittime' class='easyui-datebox' data-options='required:true,editable:false'/></td>
@@ -640,14 +725,14 @@ var downloadTemplate = function(){
 			</table>
 		</form>
 	</div>
-	<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>
+	<%--<div id='ezuiDialogBtn'>--%>
+		<%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
+		<%--<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
+	<%--</div>--%>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
-		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
-		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
-		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
+		<div onclick='add();' id='' data-options='plain:true,iconCls:"icon-add"'>详情<spring:message code='common.button.add'/></div>
+		<%--<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>--%>
+		<%--<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>--%>
 	</div>
 	
 	<!-- 客户选择弹框 -->
@@ -692,10 +777,10 @@ var downloadTemplate = function(){
 	</div>
 	</div>
 	</div>
-	<div id='ezuiCustDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>
+	<%--<div id='ezuiCustDialogBtn'>--%>
+		<%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
+		<%--<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
+	<%--</div>--%>
 	
 	
 	<!-- 导入start -->
