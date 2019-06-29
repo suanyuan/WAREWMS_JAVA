@@ -1,27 +1,24 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocAsnDetail;
+import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.DocAsnDetailQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.DocAsnDetailVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocAsnDetailForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocOrderDetail;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.DocAsnDetailVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocAsnDetailForm;
-import com.wms.query.DocAsnDetailQuery;
-import com.wms.query.DocOrderDetailQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("docAsnDetailService")
 public class DocAsnDetailService extends BaseService {
@@ -147,7 +144,6 @@ public class DocAsnDetailService extends BaseService {
 	    if (docAsnDetail != null) {
 
             BeanUtils.copyProperties(docAsnDetail, pdaDocAsnDetailVO);
-            pdaDocAsnDetailVO.setModel(docAsnDetail.getBasSku().getDescrE());
         }
 	    return pdaDocAsnDetailVO;
     }

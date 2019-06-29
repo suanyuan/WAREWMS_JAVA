@@ -76,9 +76,46 @@ public class PdaDocAsnController {
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDetailByLotatt(asnno, lotatt);
 
+        if (pdaDocAsnDetailVO.getBasPackage() == null || pdaDocAsnDetailVO.getBasSku() == null) {
+
+            PdaResult result =
+                    new PdaResult(PdaResult.CODE_FAILURE,
+                            pdaDocAsnDetailVO.getBasPackage() == null ?
+                                    "无包装信息" :
+                                    "无产品信息");
+            resultMap.put(Constant.RESULT, result);
+            return resultMap;
+        }
+
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, pdaDocAsnDetailVO);
         resultMap.put(Constant.RESULT, result);
         return resultMap;
+    }
+
+    /**
+     * 收货提交
+     * @param asnno 收货任务单号
+     * @param sku 产品代码
+     * @param piece 收货件数
+     * @return ~
+     */
+    @RequestMapping(params = "submit", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> submit(String asnno, String sku, int piece) {
+
+        return null;
+    }
+
+    /**
+     * 结束收货
+     * @param asnno 收货任务单号
+     * @return ~
+     */
+    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> submit(String asnno) {
+
+        return null;
     }
 }
