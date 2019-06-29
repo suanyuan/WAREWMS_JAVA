@@ -145,4 +145,34 @@ public class CommonController {
         return basCodesService.getBy(Constant.CODE_CATALOG_VERSION);
     }
 
+    /**
+     * 首营状态
+     * @return
+     */
+    @RequestMapping(params = "getCatalogFirstState")
+    @ResponseBody
+    public List<EasyuiCombobox> getCatalogFirstState(){
+        //TODO 数据库内容待添加
+        return basCodesService.getBy(Constant.CODE_CATALOG_FIRSTSTATE);
+    }
+
+    /**
+     * 是否
+     * @return
+     */
+    @RequestMapping(params = "getYesOrNoCombobox")
+    @ResponseBody
+    public List<EasyuiCombobox> getYesOrNoCombobox() {
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
+        easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);
+        easyuiComboboxUse.setValue("是");
+        easyuiComboboxList.add(easyuiComboboxUse);
+        EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
+        easyuiComboboxUnUse.setId(Constant.CODE_YES_OR_NO);
+        easyuiComboboxUnUse.setValue("否");
+        easyuiComboboxList.add(easyuiComboboxUnUse);
+        return easyuiComboboxList;
+    }
 }

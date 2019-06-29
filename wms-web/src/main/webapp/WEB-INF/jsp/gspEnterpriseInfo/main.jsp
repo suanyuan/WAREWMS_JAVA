@@ -85,7 +85,7 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+		ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.enterpriseId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

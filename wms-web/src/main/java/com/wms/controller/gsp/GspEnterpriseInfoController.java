@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.entity.GspBusinessLicense;
+import com.wms.entity.GspEnterpriseInfo;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.service.GspBusinessLicenseService;
 import com.wms.service.GspEnterpriceService;
@@ -109,41 +111,49 @@ public class GspEnterpriseInfoController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(String enterpriseId) {
+	public ModelAndView toDetail(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("enterpriseId", id);
 		return new ModelAndView("gspEnterpriseInfo/detail", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toInfo")
-	public ModelAndView toInfo(String enterpriseId) {
+	public ModelAndView toInfo(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("enterpriseId", id);
+		Json json = gspEnterpriceService.getGspEnterpriceInfo(id);
+		model.put("gspEnterpriseInfo",json.getObj());
 		return new ModelAndView("gspEnterpriseInfo/info", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toBusinessLicense")
-	public ModelAndView toBusinessLicense(String enterpriseId) {
+	public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("enterpriseId", id);
+		Json json = gspEnterpriceService.getGspBusinessLicense(id);
+		model.put("gspBusinessLicense",json.getObj());
 		return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toOperateLicense")
-	public ModelAndView toOperateLicense(String enterpriseId) {
+	public ModelAndView toOperateLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("enterpriseId", id);
+		Json json = gspEnterpriceService.getGspOperateLicense(id);
+		model.put("gspOperateLicense",json.getObj());
 		return new ModelAndView("gspEnterpriseInfo/operateLicense", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toSecondRecord")
-	public ModelAndView toSecondRecord(String enterpriseId) {
+	public ModelAndView toSecondRecord(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("enterpriseId", id);
+		Json json = gspEnterpriceService.getGspSecondRecord(id);
+		model.put("gspSecondRecord",json.getObj());
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
 	}
 

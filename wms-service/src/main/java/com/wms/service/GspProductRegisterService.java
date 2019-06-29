@@ -11,6 +11,7 @@ import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.utils.RandomUtil;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspProductRegisterForm;
 import com.wms.query.GspProductRegisterQuery;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service("gspProductRegisterService")
 public class GspProductRegisterService extends BaseService {
@@ -32,6 +34,12 @@ public class GspProductRegisterService extends BaseService {
 	@Autowired
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 
+	/**
+	 * 查询分页数据
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	public EasyuiDatagrid<GspProductRegisterVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
 		EasyuiDatagrid<GspProductRegisterVO> datagrid = new EasyuiDatagrid<GspProductRegisterVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -57,6 +65,7 @@ public class GspProductRegisterService extends BaseService {
 		Json json = new Json();
 		GspProductRegister gspProductRegister = new GspProductRegister();
 		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
+		gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
 		gspProductRegisterMybatisDao.add(gspProductRegister);
 		json.setSuccess(true);
 		return json;
@@ -101,6 +110,12 @@ public class GspProductRegisterService extends BaseService {
 		return comboboxList;
 	}
 
+	/**
+	 * 查询产品注册证规格
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> queryProductPageListByRegisterId(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
 		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -128,7 +143,41 @@ public class GspProductRegisterService extends BaseService {
 		datagrid.setTotal(Long.parseLong(count+""));
 		datagrid.setRows(voList);
 		return datagrid;
-
 	}
 
+	public GspProductRegister queryById(String id){
+		return gspProductRegisterMybatisDao.queryById(id);
+	}
+
+	/**
+	 * 绑定产品
+	 * @param gspProductRegisterId
+	 * @param specId
+	 * @return
+	 */
+	public Json bindProduct(String gspProductRegisterId,String specId){
+		if(gspProductRegisterId.equals("")){
+			return Json.error("产品注册证为空");
+		}
+
+		if(specId.equals("")){
+			return Json.error("请选择需要绑定的产品");
+		}
+
+		try{
+			String[] arr = specId.split(",");
+			for(String str : arr){
+				System.out.println(str);
+				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
+				gspProductRegisterSpecs.setSpecsId(str);
+				gspProductRegisterSpecs.setProductRegisterId(gspProductRegisterId);
+				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
+			}
+			return Json.success("绑定成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.error("绑定失败");
+		}
+	}
 }

@@ -34,13 +34,13 @@ where 1=1
 	    and enterprise_id =  #{condition.enterpriseId}
 	</if>
 	<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
-	    and enterprise_no =  #{condition.enterpriseNo}
+	    and enterprise_no like CONCAT('%',#{condition.enterpriseNo},'%')
 	</if>
 	<if test="condition.shorthandName != null and condition.shorthandName != ''" >
-	    and shorthand_name =  #{condition.shorthandName}
+	    and shorthand_name like CONCAT('%',#{condition.shorthandName},'%')
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-	    and enterprise_name =  #{condition.enterpriseName}
+	    and enterprise_name like  CONCAT('%',#{condition.enterpriseName},'%')
 	</if>
 	<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
 	    and enterprise_type =  #{condition.enterpriseType}

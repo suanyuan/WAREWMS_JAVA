@@ -168,7 +168,7 @@ where 1=1
 		manage_categories=#{manageCategories},
 	</if>
 	<if test="packing require != null  ">
-		packing_ require=#{packing require},
+		packing_require=#{packingRequire},
 	</if>
 	<if test="storageCondition != null  ">
 		storage_condition=#{storageCondition},

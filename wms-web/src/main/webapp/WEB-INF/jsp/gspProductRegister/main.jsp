@@ -68,7 +68,6 @@ $(function() {
 	ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
         title : '<spring:message code="common.dialog.title"/>',
-        buttons : '#ezuiDialogBtn',
         href:dialogUrl,
         fit:true,
         cache: false,
@@ -86,8 +85,7 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-
-		ezuiDialog.dialog('open');
+        ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -126,48 +124,7 @@ var del = function(){
 		});
 	}
 };
-var commit = function(){
-	var url = '';
-	if (processType == 'edit') {
-		url = '<c:url value="/gspProductRegisterController.do?edit"/>';
-	}else{
-		url = '<c:url value="/gspProductRegisterController.do?add"/>';
-	}
-	ezuiForm.form('submit', {
-		url : url,
-		onSubmit : function(){
-			if(ezuiForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg;
-					ezuiDatagrid.datagrid('reload');
-					ezuiDialog.dialog('close');
-				}else{
-					msg = '<font color="red">' + result.msg + '</font>';
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				$.messager.show({
-					msg : msg, title : '<spring:message code="common.message.prompt"/>'
-				});
-				$.messager.progress('close');
-			}
-		}
-	});
-};
+
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		productRegisterNo : $('#productRegisterNo').val(),
@@ -247,10 +204,6 @@ $(function () {
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
 
-	</div>
-	<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>

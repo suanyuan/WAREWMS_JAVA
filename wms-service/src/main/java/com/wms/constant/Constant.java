@@ -14,6 +14,11 @@ public class Constant {
 //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
+    public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
+
+//是否
+    public static final String CODE_YES_OR_YES = "1";
+    public static final String CODE_YES_OR_NO = "0";
 
 
 

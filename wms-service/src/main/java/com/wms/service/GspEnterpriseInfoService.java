@@ -110,9 +110,13 @@ public class GspEnterpriseInfoService extends BaseService {
 	}
 
 	public List<EasyuiCombobox> getGspEnterpriseInfoCombobox() {
+        MybatisCriteria criteria = new MybatisCriteria();
+        GspEnterpriseInfoQuery query = new GspEnterpriseInfoQuery();
+        query.setIsUse(Constant.IS_USE_YES);
+        criteria.setCondition(query);
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryListByAll();
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryByList(criteria);
 		if(gspEnterpriseInfoList != null && gspEnterpriseInfoList.size() > 0){
 			for(GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList){
 				combobox = new EasyuiCombobox();

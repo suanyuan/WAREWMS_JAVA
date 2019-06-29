@@ -17,15 +17,15 @@
 <body>
 
 <div id="tap" class="easyui-tabs">
-    <div title="基本信息" style="padding:20px;" data-options="href:'gspEnterpriseInfoController.do?toInfo'">
+    <div title="基本信息" style="padding:20px;" data-options="href:'gspEnterpriseInfoController.do?toInfo&id=${enterpriseId}'">
     </div>
-    <div title="营业执照信息" data-options="href:'gspEnterpriseInfoController.do?toBusinessLicense'" style="overflow:auto;padding:20px;display:none;">
+    <div title="营业执照信息" data-options="href:'gspEnterpriseInfoController.do?toBusinessLicense&id=${enterpriseId}'" style="overflow:auto;padding:20px;display:none;">
         tab2
     </div>
-    <div title="经营/生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toOperateLicense'" style="display:none;">
+    <div title="经营/生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toOperateLicense&id=${enterpriseId}'" style="display:none;">
         tab3
     </div>
-    <div title="备案凭证" data-options="href:'gspEnterpriseInfoController.do?toSecondRecord'" style="display:none;">
+    <div title="备案凭证" data-options="href:'gspEnterpriseInfoController.do?toSecondRecord&id=${enterpriseId}'" style="display:none;">
         tab3
     </div>
 </div>
