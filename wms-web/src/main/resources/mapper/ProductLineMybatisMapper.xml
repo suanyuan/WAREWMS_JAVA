@@ -148,7 +148,7 @@ where is_use=true
 <!-- 插入记录 -->
 <insert id="insert" parameterType="Object" >
   insert into product_line(product_line_id,enterprise_name,name,expression,create_id,create_date,edit_id,edit_date,is_use)
- values(null,#{enterpriseName},#{name},#{expression},#{createId},#{createDate},#{editId},#{editDate},#{isUse})
+ values(null,#{enterpriseName},#{name},#{expression},#{createId},now(),#{editId},now(),#{isUse})
 </insert>
   	
 </mapper>   
