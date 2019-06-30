@@ -2,7 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <form id='ezuiFormRecord' method='post'>
-    <input type='hidden' id='gspSecondRecordId' name='gspSecondRecordId' value="${gspSecondRecord.gspSecondRecordId}"/>
+    <input type='hidden' id='gspSecondRecordId' name='gspSecondRecordId' value="${gspSecondRecord.recordId}"/>
     <table>
         <tr>
             <th>备案编号</th>

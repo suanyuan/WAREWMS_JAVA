@@ -172,6 +172,12 @@
             textField:'value'
         });
 
+        $('input[name="isChineseLabel"]').combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value'
+        });
+
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
             method:'POST',
@@ -259,9 +265,7 @@
     function choseSelect() {
         var row = enterpriseDatagrid.datagrid("getSelected");
         if(row){
-            console.log(row.enterpriseId);
             $("#enterpriseId").val(row.enterpriseId);
-            console.log($("#enterpriseId").val());
             $("#enterpriseName").textbox("setValue",row.enterpriseName);
             $("#clientNo").textbox("setValue",row.enterpriseNo);
             $("#clientName").textbox("setValue",row.shorthandName);
@@ -277,6 +281,7 @@
     function formatOper(value,row,index){
         return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
+
     function doSubmit() {
         var url = '';
         if (processType == 'edit') {

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class GspCustomer  implements Serializable {
+public class GspCustomer implements Serializable {
 
 	private String clientId;
 

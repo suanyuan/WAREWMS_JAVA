@@ -2,7 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <form id='ezuiFormOperate' method='post'>
-    <input type='hidden' id='gspOperateLicenseId' name='gspOperateLicenseId' value="${gspOperateLicense.gspOperateLicenseId}"/>
+    <input type='hidden' id='gspOperateLicenseId' name='gspOperateLicenseId' value="${gspOperateLicense.operateId}"/>
     <table>
         <tr>
             <th>企业名称</th>

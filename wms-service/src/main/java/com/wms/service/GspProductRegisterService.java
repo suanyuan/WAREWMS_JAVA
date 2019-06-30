@@ -125,7 +125,7 @@ public class GspProductRegisterService extends BaseService {
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setOrderByClause("create_date desc");
 
-		List<GspProductRegisterSpecs> list = gspProductRegisterSpecsMybatisDao.queryByList(mybatisCriteria);
+		List<GspProductRegisterSpecs> list = gspProductRegisterSpecsMybatisDao.queryByListUnBind(mybatisCriteria);
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> voList = new ArrayList<>();
 		if(list!=null){
@@ -139,7 +139,7 @@ public class GspProductRegisterService extends BaseService {
 				voList.add(gspProductRegisterSpecsVO);
 			}
 		}
-		int count = gspProductRegisterSpecsMybatisDao.queryByCount(mybatisCriteria);
+		int count = gspProductRegisterSpecsMybatisDao.queryByCountUnBind(mybatisCriteria);
 		datagrid.setTotal(Long.parseLong(count+""));
 		datagrid.setRows(voList);
 		return datagrid;
@@ -178,6 +178,32 @@ public class GspProductRegisterService extends BaseService {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Json.error("绑定失败");
+		}
+	}
+
+	/**
+	 * 解除产品绑定
+	 * @param specId
+	 * @return
+	 */
+	public Json unBindProduct(String specId){
+		if(specId.equals("")){
+			return Json.error("请选择需要解除绑定的产品");
+		}
+		try{
+			String[] arr = specId.split(",");
+			for(String str : arr){
+				System.out.println(str);
+				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
+				gspProductRegisterSpecs.setSpecsId(str);
+				gspProductRegisterSpecs.setProductRegisterId("");
+				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
+			}
+			return Json.success("解除绑定成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.error("解除绑定失败");
 		}
 	}
 }

@@ -57,7 +57,7 @@ public class GspEnterpriseInfoController {
 	@Login
 	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(@RequestParam(value="enterpriceId",required=true) String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+	public Json add(@RequestParam(value="enterpriceId",defaultValue = "") String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
 		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
 		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
@@ -155,6 +155,14 @@ public class GspEnterpriseInfoController {
 		Json json = gspEnterpriceService.getGspSecondRecord(id);
 		model.put("gspSecondRecord",json.getObj());
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
+	}
+
+	@Login
+	@RequestMapping(params = "toSearchDialog")
+	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("target",target);
+		return new ModelAndView("gspEnterpriseInfo/search", model);
 	}
 
 	@Login

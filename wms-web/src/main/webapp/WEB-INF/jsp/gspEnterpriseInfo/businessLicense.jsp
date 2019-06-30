@@ -2,8 +2,8 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <form id='ezuiFormBusiness' method='post'>
-    <input type='hidden' id='gspBusinessLicenseId' name='gspBusinessLicenseId' value="${gspBusinessLicense.gspBusinessLicenseId}"/>
-    <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.gspEnterpriseId}"/>
+    <input type='hidden' id='gspBusinessLicenseId' name='gspBusinessLicenseId' value="${gspBusinessLicense.businessId}"/>
+    <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.enterpriseId}"/>
     <table>
         <tr>
             <th>证照编号</th>

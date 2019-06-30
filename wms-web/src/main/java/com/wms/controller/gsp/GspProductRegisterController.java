@@ -137,4 +137,11 @@ public class GspProductRegisterController {
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> showSpecsList(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
 		return gspProductRegisterService.queryProductPageListByRegisterId(pager,query);
 	}
+
+	@Login
+	@RequestMapping(params = "unBind")
+	@ResponseBody
+	public Object unBind(@RequestParam(defaultValue = "") String id){
+		return gspProductRegisterService.unBindProduct(id);
+	}
 }
