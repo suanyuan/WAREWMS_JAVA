@@ -14,31 +14,35 @@
                 <form id='ezuiFormDetail' method='post'>
                 <fieldset>
                     <legend>产品注册证信息</legend>
-                        <input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId' value="${gspProductRegisterId}"/>
-                        <table>
+                        <input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId' value="${gspProductRegister.productRegisterId}"/>
+                        <table width="100%">
                             <tr>
                                 <th>注册证编号</th>
                                 <td><input type='text' name='productRegisterNo' class='easyui-textbox' value="${gspProductRegister.productRegisterNo}" data-options='required:true'/></td>
+                                <th>所属企业</th>
+                                <td>
+                                    <input type="hidden" name="enterpriseId" class="textbox-value" value="${gspProductRegister.enterpriseId}"/>
+                                    <input type='text' id='enterpriseName' value="" data-options='required:true,width:150,editable:false'/>
+                                    <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+                                </td>
                                 <th>管理分类</th>
                                 <td><input type='text' name='classifyId' class='easyui-textbox' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
                                 <th>分类目录</th>
                                 <td><input type='text' name='classifyCatalog' class='easyui-textbox' value="${gspProductRegister.classifyCatalog}" data-options='required:true'/></td>
-                                <th>产品名称</th>
-                                <td><input type='text' name='productNameMain' class='easyui-textbox' value="${gspProductRegister.productNameMain}" data-options='required:true'/></td>
                             </tr>
                             <tr>
+                                <th>产品名称</th>
+                                <td><input type='text' name='productNameMain' class='easyui-textbox' value="${gspProductRegister.productNameMain}" data-options='required:true'/></td>
                                 <th>注册人名称</th>
                                 <td><input type='text' name='productRegisterName' class='easyui-textbox' value="${gspProductRegister.productRegisterName}" data-options='required:true'/></td>
                                 <th>注册人住所</th>
                                 <td><input type='text' name='productRegisterAddress' class='easyui-textbox' value="${gspProductRegister.productRegisterAddress}" data-options='required:true'/></td>
                                 <th>生产地址</th>
                                 <td><input type='text' name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options='required:true'/></td>
-                                <th>代理人名称</th>
-                                <td><input type='text' name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options='required:true'/></td>
                             </tr>
                             <tr>
-                                <th>产品储存条件</th>
-                                <td><input type='text' name='storageConditions' class='easyui-textbox' value="${gspProductRegister.storageConditions}"  data-options='required:true'/></td>
+                                <th>代理人名称</th>
+                                <td><input type='text' name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options='required:true'/></td>
                                 <th>有效期至</th>
                                 <td><input type='text' name='productRegisterExpiryDate' class='easyui-textbox' value="${gspProductRegister.productRegisterExpiryDate}" data-options='required:true'/></td>
                                 <th>有效期</th>
@@ -57,8 +61,8 @@
                                 <td><input type='text' name='createDate' class='easyui-textbox' value="${gspProductRegister.createDate}" data-options='required:true'/></td>
                             </tr>
                             <tr>
-                                <th>注册证版本</th>
-                                <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="${gspProductRegister.productRegisterVersion}" data-options='required:true'/></td>
+                                <th>产品储存条件</th>
+                                <td><input type='text' name='storageConditions' class='easyui-textbox' value="${gspProductRegister.storageConditions}"  data-options='required:true'/></td>
                                 <th>其他内容</th>
                                 <td><input type='text' name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options='required:true'/></td>
                                 <th>编辑人</th>
@@ -69,19 +73,21 @@
 
                             <tr>
                                 <th>预期用途</th>
-                                <td colspan="3"><input type='text' name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" style="width: 440px;height: 50px;" data-options='required:true,multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" style="width: 100%;height: 50px;" data-options='required:true,multiline:true'/></td>
                                 <th>适用范围</th>
-                                <td colspan="3"><input type='text' name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" style="width: 440px;height: 50px;" data-options='required:true,multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" style="width: 100%;height: 50px;" data-options='required:true,multiline:true'/></td>
                             </tr>
                             <tr>
                                 <th>主要组成部分</th>
-                                <td colspan="3"><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" style="width: 440px;height: 50px;"  data-options='required:true,multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" style="width: 100%;height: 50px;"  data-options='required:true,multiline:true'/></td>
                                 <th>备注</th>
-                                <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" style="width: 440px;height: 50px;" data-options='required:true,multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" style="width: 100%;height: 50px;" data-options='required:true,multiline:true'/></td>
                             </tr>
                             <tr>
+                                <th>注册证版本</th>
+                                <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="${gspProductRegister.productRegisterVersion}" data-options='required:true'/></td>
                                 <th>注册证附件</th>
-                                <td style="text-align: left;" colspan="7">
+                                <td style="text-align: left;" colspan="5">
                                     <input type='text' id="attachmentUrlFile" name='attachmentUrl'  data-options='required:true'/>
                                     <a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
                                     <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl"/>
@@ -101,6 +107,7 @@
                 </div>
             </form>
     </div>
+    <!--产品查询列表dialog -->
     <div id='ezuiDialogSpec' style='padding: 10px;'>
         <div id='productToolbar' class='datagrid-toolbar' style=''>
             <fieldset>
@@ -123,22 +130,42 @@
 
         </table>
     </div>
+    <!--企业信息列表dialog -->
+    <div id='ezuiDialogEnterprise' style='padding: 10px;'>
+        <div id='ezuiEnterpriseToolbar' class='datagrid-toolbar' style=''>
+            <fieldset>
+                <legend>企业信息</legend>
+                <table>
+                    <tr>
+                        <th>代码</th>
+                        <td><input type='text' id='enterpriseNo' class='easyui-textbox' data-options='width:200'/></td>
+                        <th>简称</th>
+                        <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
+                        <td>
+                            <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                            <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+        <table id="enterpriseGridDetail">
+
+        </table>
+    </div>
+    <!--企业信息详情dialog -->
+    <div id="dialogEnterprise">
+
+    </div>
 </div>
 <script>
     var ezuiFormDetail = $("#ezuiFormDetail");
     var ezuiDialogSpec;
     var dataGridProduct;
-    $('#attachmentUrlFile').filebox({
-        prompt: '选择一个文件',//文本说明文件
-        width: '200', //文本宽度
-        buttonText: '上传',  //按钮说明文字
-        required: true,
-        onChange:function(data){
-            if(data){
-                doUpload(data);
-            }
-        }
-    });
+    var ezuiDialogEnterprise;
+    var enterpriseDatagrid;
+    var dialogEnterprise;
+    var ezuiDatagridDetail;
 
     function doUpload(data) {
         var ajaxFile = new uploadFile({
@@ -164,42 +191,6 @@
         //$('#file').filebox('clear');//上传成功后清空里面的值
     }
 
-    $("#ezuiDatagridDetail").datagrid({
-        url : sy.bp()+'/gspProductRegisterController.do?showSpecsList',
-        method:'POST',
-        toolbar : '#detailToolbar',
-        title: '',
-        pageSize : 50,
-        pageList : [50, 100, 200],
-        border: false,
-        fitColumns : false,
-        nowrap: true,
-        striped: true,
-        collapsible:false,
-        pagination:true,
-        rownumbers:true,
-        idField : 'specsId',
-        columns : [[
-            {field: 'productCode',title: '产品代码' ,width: '25%'},
-            {field: 'productName',title: '产品名称',width: '25%'},
-            {field: 'specsName',title: '规格名称' ,width: '25%'},
-            {field: 'productModel',title: '产品型号',width: '25%'}
-        ]],
-        onDblClickCell: function(index,field,value){
-
-        },
-        onRowContextMenu : function(event, rowIndex, rowData) {
-
-        },
-        onSelect: function(rowIndex, rowData) {
-
-        },
-        onLoadSuccess:function(data){
-            $(this).datagrid('unselectAll');
-            $(this).datagrid("resize",{height:540});
-        }
-    })
-    
     function addDetail() {
         ezuiFormClear($("#ezuiFormDetail"))
     }
@@ -256,10 +247,86 @@
     }
 
     function detailsUnBind(){
-
+        /*var selectRows = ezuiDatagridDetail.datagrid("getSelections");
+        if(selectRows)
+            var arr = selectRows.join(',');
+            $.messager.confirm('', '确认要解除产品绑定吗', function(confirm) {
+                if(confirm){
+                    $.ajax({
+                        url : 'gspProductRegisterController.do?unBind',
+                        data : {id : arr},
+                        type : 'POST',
+                        dataType : 'JSON',
+                        success : function(result){
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        }*/
     }
 
     $(function () {
+        $('#attachmentUrlFile').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '上传',  //按钮说明文字
+            required: true,
+            onChange:function(data){
+                if(data){
+                    doUpload(data);
+                }
+            }
+        });
+
+        ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
+            url : sy.bp()+'/gspProductRegisterController.do?showSpecsList',
+            method:'POST',
+            toolbar : '#detailToolbar',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            collapsible:false,
+            queryParams:{'productRegisterId':'${gspProductRegister.productRegisterId}'},
+            pagination:true,
+            rownumbers:true,
+            idField : 'specsId',
+            columns : [[
+                {field: 'specsId',title:'主键',hidden:true},
+                {field: 'productCode',title: '产品代码' ,width: '25%'},
+                {field: 'productName',title: '产品名称',width: '25%'},
+                {field: 'specsName',title: '规格名称' ,width: '25%'},
+                {field: 'productModel',title: '产品型号',width: '25%'}
+            ]],
+            onDblClickCell: function(index,field,value){
+
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        })
+
         dataGridProduct = $("#dataGridProduct").datagrid({
             url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',
             method:'POST',
@@ -308,6 +375,74 @@
                 ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
+
+        enterpriseDatagrid = $("#enterpriseGridDetail").datagrid({
+            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            method:'POST',
+            toolbar : '#ezuiEnterpriseToolbar',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                isUse : '1'
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'enterpriseId',
+            columns : [[
+                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'shorthandName',		title: '简称',	width: '20%' },
+                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
+                {field: '_operate',		title: '操作',	width: '20%',
+                    formatter: formatOper
+                }
+            ]],
+            onDblClickCell: function(index,field,value){
+                choseSelect();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        })
+
+        ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            cache: false,
+            onClose : function() {
+                
+            }
+        }).dialog('close');
+
+        dialogEnterprise = $('#dialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            fit:true,
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            cache: false,
+            onClose : function() {
+
+            }
+        }).dialog('close');
     })
     
     function choseSelect() {
@@ -332,6 +467,25 @@
                 }
             });
         }
+    }
+    
+    function searchEnterprise() {
+        ezuiDialogEnterprise.dialog("open");
+    }
+
+    function selectEnterprise() {
+        var rows = enterpriseDatagrid.datagrid("getChecked");
+        if(rows){
+            //TODO 查询企业信息反填
+        }
+    }
+
+    function operateGrid(id) {
+        dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
+    }
+
+    function formatOper(value,row,index){
+        return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 </script>
 </body>

@@ -79,7 +79,7 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspProductRegisterId').val(0);
-	ezuiDialog.dialog('open');
+	ezuiDialog.dialog("refresh",dialogUrl).dialog('open');
 };
 var edit = function(){
 	processType = 'edit';

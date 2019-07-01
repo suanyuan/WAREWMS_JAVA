@@ -187,6 +187,14 @@ public class GspEnterpriseInfoController {
 	}
 
 	@Login
+	@RequestMapping(params = "toSearchDialog")
+	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("target",target);
+		return new ModelAndView("gspEnterpriseInfo/search", model);
+	}
+
+	@Login
 	@RequestMapping(params = "getInfo")
 	@ResponseBody
 	public Object getInfo(String enterpriseId) {
