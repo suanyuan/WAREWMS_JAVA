@@ -16,7 +16,7 @@ public class BasCustomerForm {
 	private java.lang.String address2;
 	private java.lang.String address3;
 	private java.lang.String address4;
-	private java.util.Date addtime;
+	private String addtime;
 	private java.lang.String addwho;
 	private java.lang.String city;
 	private java.lang.String contact1;
@@ -51,7 +51,7 @@ public class BasCustomerForm {
 	private java.lang.String descrC;
 	private java.lang.String descrE;
 	private java.lang.String easycode;
-	private java.util.Date edittime;
+	private String edittime;
 	private java.lang.String editwho;
 	private java.math.BigDecimal overrcvpercentage;
 	private java.lang.String overreceiving;
@@ -296,11 +296,11 @@ public class BasCustomerForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
+	public String getAddtime() {
 		return addtime;
 	}
 
-	public void setAddtime(java.util.Date addtime) {
+	public void setAddtime(String addtime) {
 		this.addtime = addtime;
 	}
 
@@ -577,11 +577,11 @@ public class BasCustomerForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
+	public String getEdittime() {
 		return edittime;
 	}
 
-	public void setEdittime(java.util.Date edittime) {
+	public void setEdittime(String edittime) {
 		this.edittime = edittime;
 	}
 

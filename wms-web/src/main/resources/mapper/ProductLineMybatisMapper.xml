@@ -24,7 +24,7 @@
    
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
-where is_use=true
+where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.productLineId != null and condition.productLineId != ''" >
 	    and product_line_id =  #{condition.productLineId}
@@ -60,7 +60,7 @@ where is_use=true
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into product_line(product_line_id,enterprise_name,name,expression,create_id,create_date,edit_id,edit_date,is_use)
- values(#{productLineId},#{enterpriseName},#{name},#{expression},#{createId},now(),#{editId},now(),#{isUse})
+ values(null,#{enterpriseName},#{name},#{expression},#{createId},now(),#{editId},now(),#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -104,7 +104,7 @@ where is_use=true
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	update product_line	 set is_use = 0 where product_line_id = #{productLineId}
+	update product_line	 set is_use = '失效' where product_line_id = #{productLineId}
 </delete>
  
 <!-- 根据id查询 生产线 -->

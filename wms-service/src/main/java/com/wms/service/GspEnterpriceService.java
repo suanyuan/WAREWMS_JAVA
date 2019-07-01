@@ -5,6 +5,7 @@ import com.wms.entity.GspBusinessLicense;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspOperateLicense;
 import com.wms.entity.GspSecondRecord;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspOperateLicenseQuery;
 import com.wms.query.GspSecondRecordQuery;
@@ -40,6 +41,8 @@ public class GspEnterpriceService extends BaseService {
     //备案
     @Autowired
     private GspSecondRecordService gspSecondRecordService;
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
     /**
      * 新增企业信息
@@ -166,6 +169,19 @@ public class GspEnterpriceService extends BaseService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return Json.error("删除失败");
+    }
+    /**
+     * 获取企业基础信息
+     * @param enterpriceId 企业信息流水号
+     * @return
+     */
+    public Json delete(String enterpriceId){
+        GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriceId);
+        if(gspEnterpriseInfo == null){
+            return Json.error("企业信息不存在！");
+        }
+        gspEnterpriseInfoMybatisDao.deleteGspEnterprise(enterpriceId);
+        return Json.success("",true);
     }
 
     /**

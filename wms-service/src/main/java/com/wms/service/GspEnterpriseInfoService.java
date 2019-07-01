@@ -136,5 +136,22 @@ public class GspEnterpriseInfoService extends BaseService {
 		BeanUtils.copyProperties(form,gspEnterpriseInfo);
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 	}
+	public Json addEnterprise(GspEnterpriseInfo gspEnterpriseInfo) throws Exception {
+		Json json = new Json();
 
+
+		gspEnterpriseInfo.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspEnterpriseInfo.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+		gspEnterpriseInfo.setIsUse("有效");
+		gspEnterpriseInfoMybatisDao.add(gspEnterpriseInfo);
+
+
+		json.setSuccess(true);
+		json.setMsg("添加成功");
+		return json;
+	}
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 public class GspBusinessLicense  implements Serializable {
 
-	private Long businessId;
+	private String businessId;
 
 	private String enterpriseId;
 
@@ -33,7 +33,7 @@ public class GspBusinessLicense  implements Serializable {
 
 	private java.util.Date businessEndDate;
 
-	private Long isLong;
+	private String isLong;
 
 	private String businessScope;
 
@@ -45,11 +45,11 @@ public class GspBusinessLicense  implements Serializable {
 
 	private String createId;
 
-	private java.util.Date createDate;
+	private String createDate;
 
 	private String editId;
 
-	private java.util.Date editDate;
+	private String editDate;
 
 	private String isUse;
 

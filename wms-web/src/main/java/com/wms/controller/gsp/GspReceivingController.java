@@ -1,59 +1,52 @@
-package com.wms.controller;
+package com.wms.controller.gsp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
-
-import com.wms.mybatis.dao.ProductLineMybatisDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.ProductLineService;
+import com.wms.service.GspReceivingService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
-import com.wms.vo.ProductLineVO;
+import com.wms.vo.GspReceivingVO;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.ProductLineForm;
-import com.wms.query.ProductLineQuery;
+import com.wms.vo.form.GspReceivingForm;
+import com.wms.query.GspReceivingQuery;
 
 @Controller
-@RequestMapping("productLineController")
-public class ProductLineController {
+@RequestMapping("gspReceivingController")
+public class GspReceivingController {
 
 	@Autowired
-	private ProductLineService productLineService;
-
-
+	private GspReceivingService gspReceivingService;
 
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
-		return new ModelAndView("productLine/main", model);
+		return new ModelAndView("gspReceiving/main", model);
 	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<ProductLineVO> showDatagrid(EasyuiDatagridPager pager, ProductLineQuery query) throws Exception {
-		EasyuiDatagrid<ProductLineVO> pagedDatagrid = productLineService.getPagedDatagrid(pager, query);
-		return pagedDatagrid;
+	public EasyuiDatagrid<GspReceivingVO> showDatagrid(EasyuiDatagridPager pager, GspReceivingQuery query) {
+		return gspReceivingService.getPagedDatagrid(pager, query);
 	}
-
 
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(ProductLineForm productLineForm) throws Exception {
-		Json json = productLineService.addProductLine(productLineForm);
+	public Json add(GspReceivingForm gspReceivingForm) throws Exception {
+		Json json = gspReceivingService.addGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -64,8 +57,8 @@ public class ProductLineController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(ProductLineForm productLineForm) throws Exception {
-		Json json = productLineService.updateProductLine(productLineForm);
+	public Json edit(GspReceivingForm gspReceivingForm) throws Exception {
+		Json json = gspReceivingService.editGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -76,8 +69,8 @@ public class ProductLineController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String productLineId) {
-		Json json = productLineService.deleteProductLine(productLineId);
+	public Json delete(String id) {
+		Json json = gspReceivingService.deleteGspReceiving(id);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -89,14 +82,14 @@ public class ProductLineController {
 	@RequestMapping(params = "getBtn")
 	@ResponseBody
 	public Json getBtn(String id, HttpSession session) {
-		return productLineService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+		return gspReceivingService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
 	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody
 	public List<EasyuiCombobox> getCombobox() {
-		return productLineService.getProductLineCombobox();
+		return gspReceivingService.getGspReceivingCombobox();
 	}
 
 }

@@ -27,11 +27,11 @@ public class GspEnterpriseInfo  implements Serializable {
 
 	private String createId;
 
-	private java.util.Date createDate;
+	private String createDate;
 
 	private String editId;
 
-	private java.util.Date editDate;
+	private String editDate;
 
 	private String isUse;
 
