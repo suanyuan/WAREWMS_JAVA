@@ -220,5 +220,15 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <!--TODO 查询未完成列表-->
+    <select id="queryUndoneList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_trans_putway
+        where asnstatus = '00' or asnstatus = '30'
+        order by addtime desc
+        limit #{start}, #{pageSize}
+    </select>
   	
 </mapper>   

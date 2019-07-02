@@ -14,7 +14,7 @@ public class PdaDocAsnDetailVO extends BaseLotatt {
     /**
      * 行号
      */
-    private int asnlineno;
+    private long asnlineno;
 
     /**
      * 产品代码
@@ -25,11 +25,11 @@ public class PdaDocAsnDetailVO extends BaseLotatt {
 
     private BasPackage basPackage;
 
-    public int getAsnlineno() {
+    public long getAsnlineno() {
         return asnlineno;
     }
 
-    public void setAsnlineno(int asnlineno) {
+    public void setAsnlineno(long asnlineno) {
         this.asnlineno = asnlineno;
     }
 

@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -8,6 +9,7 @@ import com.wms.entity.BasSku;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.InvLotAttQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
@@ -17,25 +19,19 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnDetailForm;
-import com.wms.vo.form.pda.PdaDocAsnDetailForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("docAsnDetailService")
 public class DocAsnDetailService extends BaseService {
 
 	@Autowired
 	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
-
-	@Autowired
-	private BasPackageMybatisDao basPackageMybatisDao;
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
@@ -135,51 +131,6 @@ public class DocAsnDetailService extends BaseService {
 		}
 		return json;
 	}
-
-    /**
-     * 收货提交
-     * @param form pda上传表单数据
-     * @return 结论
-     */
-	public PdaResult receiveGoods(PdaDocAsnDetailForm form) {
-
-	    PdaResult result = new PdaResult();
-//	    if (form != null) {
-//
-//            //通过asnno+asnlineno获取入库明细档
-//            Map<String, Object> detailMap = new HashMap<>();
-//            detailMap.put("asnno", form.getAsnno());
-//            detailMap.put("asnlineno", form.getAsnlineno());
-//            DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(detailMap);
-//
-//            //配置收货存储数据
-//            PdaDocAsnDetailQuery query = new PdaDocAsnDetailQuery();
-//            BeanUtils.copyProperties(docAsnDetail, query);
-//            query.setWarehouseid(form.getWarehouseid());
-//            query.setReceivedqty(form.getReceivedqty());
-//            query.setEditwho("wyt");
-//            query.setReceivinglocation("STAGE01");
-////	        query.setTotalcubic(docAsnDetail.getTotalcubic().toString());
-////	        query.setTotalgrossweight(docAsnDetail.getTotalgrossweight().toString());
-////	        query.setTotalprice(docAsnDetail.getTotalprice().toString());
-//
-//            docAsnDetailsMybatisDao.receiveGoods(query);
-//            if (query.getResult().equals(Constant.PROCEDURE_OK)) {
-//
-//                result.setErrorCode(PdaResult.CODE_SUCCESS);
-//                result.setMsg("收货成功");
-//                return result;
-//            } else {
-//
-//                result.setErrorCode(PdaResult.CODE_FAILURE);
-//                result.setMsg(query.getResult());
-//                return result;
-//            }
-//        }
-        result.setErrorCode(PdaResult.CODE_FAILURE);
-        result.setMsg("收货数据缺失");
-        return result;
-    }
 	
 	public List<EasyuiCombobox> getDocAsnDetailCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
@@ -252,5 +203,52 @@ public class DocAsnDetailService extends BaseService {
             pdaDocAsnDetailVO.setBasSku(basSku);
         }
 	    return pdaDocAsnDetailVO;
+    }
+
+    /**
+     * 收货提交
+     * @param form pda上传表单数据
+     * @return 结论
+     */
+    public PdaResult receiveGoods(PdaDocAsnDetailForm form) {
+
+        if (form == null) {
+
+            return new PdaResult(PdaResult.CODE_FAILURE, "提交数据缺失");
+        }
+        //通过asnno+扫描到的批次属性 获取入库明细档
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByPageList(mybatisCriteria);
+        if (docAsnDetailList.size() == 1) {
+
+            /* 配置收货存储数据
+             * 操作人员需set一下，不然会从docAsnDetail copy出来
+             * receivingTime 代码里获取下
+             * receivinglocation 固定 STAGE01
+             * DocAsnDetail里面有warehouseid，copy之后重设一下,否则会为空
+             * */
+            DocAsnDetail docAsnDetail = docAsnDetailList.get(0);
+            String warehouseid = form.getWarehouseid();
+            BeanUtils.copyProperties(docAsnDetail, form);
+            form.setWarehouseid(warehouseid);
+            form.setEditwho("Gizmo");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            form.setReceivingtime(dateFormat.format(new Date()));
+            form.setReceivinglocation("STAGE01");
+
+            docAsnDetailsMybatisDao.receiveGoods(form);
+            if (form.getResult().equals(Constant.PROCEDURE_OK)) {
+
+                return new PdaResult(PdaResult.CODE_SUCCESS, "收货成功");
+            } else {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, form.getResult());
+            }
+        }else {
+
+            return new PdaResult(PdaResult.CODE_FAILURE, "预入库明细档数据重复或缺失");
+        }
+
     }
 }

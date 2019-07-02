@@ -1285,4 +1285,9 @@ insert into doc_asn_header
         limit #{start}, #{pageSize}
     </select>
 
+    <!--结束收货任务-->
+    <select id="endTask" statementType="CALLABLE" parameterType="java.util.Map">
+        {call spasn_receiving_process_end(#{asnno,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
 </mapper>

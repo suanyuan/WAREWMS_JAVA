@@ -1,11 +1,12 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
+import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
-import com.wms.vo.form.pda.PdaDocAsnDetailForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class PdaDocAsnController {
     public Map<String, Object> queryDocAsnHeader(String asnno) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        PdaDocAsnHeaderVO pdaDocAsnHeaderVO = docAsnHeaderService.queryById(asnno);
+        PdaDocAsnHeaderVO pdaDocAsnHeaderVO = docAsnHeaderService.queryByAsnno(asnno);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, pdaDocAsnHeaderVO);
@@ -95,8 +96,8 @@ public class PdaDocAsnController {
     }
 
     /**
-     * 收货提交 目前只支持收货单号+效期来查询，后期还可添加
-     * @param form 收货数据
+     * 收货提交 单次收货 + 连续收货
+     * @param form 扫码结果
      * @return ~
      */
     @RequestMapping(params = "submit", method = RequestMethod.POST)
@@ -110,13 +111,15 @@ public class PdaDocAsnController {
 
     /**
      * 结束收货
-     * @param asnno 收货任务单号
+     * @param form 收货任务单号
      * @return ~
      */
     @RequestMapping(params = "endTask", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> submit(String asnno) {
+    public Map<String, Object> endTask(PdaDocAsnEndForm form) {
 
-        return null;
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docAsnHeaderService.endTask(form));
+        return resultMap;
     }
 }

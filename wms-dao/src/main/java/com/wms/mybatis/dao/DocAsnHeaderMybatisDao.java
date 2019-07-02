@@ -7,6 +7,7 @@ import java.util.Map;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.dao.BaseDao;
+import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -36,4 +37,10 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 	 * @return pda-收货任务单lsit
 	 */
 	List<DocAsnHeader> queryUndoneList(@Param("start") int start, @Param("pageSize") int pageSize);
+
+    /**
+     * 结束收货 procedure
+     * @param form ~
+     */
+	void endTask(PdaDocAsnEndForm form);
 }

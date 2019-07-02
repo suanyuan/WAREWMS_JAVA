@@ -18,6 +18,8 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
+import com.wms.result.PdaResult;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
@@ -328,6 +330,12 @@ public class DocAsnHeaderService extends BaseService {
 		return docAsnHeader;
 	}
 
+    /**
+     * 查询未完成的预入库通知单
+     * @param pageNum ~
+     * @param pageSize ~
+     * @return ~
+     */
 	public List<PdaDocAsnHeaderVO> queryUndoneList(int pageNum, int pageSize) {
 
 	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList((pageNum - 1)*pageSize, pageSize);
@@ -342,7 +350,12 @@ public class DocAsnHeaderService extends BaseService {
 	    return pdaDocAsnHeaderVOList;
 	}
 
-	public PdaDocAsnHeaderVO queryById(String asnno) {
+    /**
+     * 通过asnno查询header
+     * @param asnno ~
+     * @return ~
+     */
+	public PdaDocAsnHeaderVO queryByAsnno(String asnno) {
 
 	    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
 	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
@@ -351,5 +364,17 @@ public class DocAsnHeaderService extends BaseService {
 	        BeanUtils.copyProperties(docAsnHeader, pdaDocAsnHeaderVO);
         }
         return pdaDocAsnHeaderVO;
+    }
+
+    /**
+     * 结束收货单任务
+     * @param asnno 预入通知单号
+     * @return ~
+     */
+    public PdaResult endTask(PdaDocAsnEndForm form) {
+
+        docAsnHeaderMybatisDao.endTask(form);
+
+        return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
 }

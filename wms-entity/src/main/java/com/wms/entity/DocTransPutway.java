@@ -11,7 +11,7 @@ public class DocTransPutway  implements Serializable {
 
 	private String putwayno;
 
-	private String linestatus;
+	private String putwaystatus;
 
 	private String asnno;
 

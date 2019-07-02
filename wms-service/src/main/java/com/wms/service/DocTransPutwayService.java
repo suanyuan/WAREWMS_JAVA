@@ -10,6 +10,7 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocTransPutwayVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocTransPutwayForm;
+import com.wms.vo.pda.PdaDocTransPutwayVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,25 @@ public class DocTransPutwayService extends BaseService {
 //		}
 //		return comboboxList;
 //	}
+
+    /**
+     * 查询未完成的上架任务单
+     * @param pageNum ~
+     * @param pageSize ~
+     * @return ~
+     */
+    public List<PdaDocTransPutwayVO> queryUndoneList(int pageNum, int pageSize) {
+
+        List<DocTransPutway> docTransPutwayList = docTransPutwayDao.queryUndoneList((pageNum - 1)*pageSize, pageSize);
+        List<PdaDocTransPutwayVO> pdaDocTransPutwayVOList = new ArrayList<>();
+        PdaDocTransPutwayVO pdaDocTransPutwayVO = new PdaDocTransPutwayVO();
+        for (DocTransPutway docTransPutway : docTransPutwayList) {
+
+            pdaDocTransPutwayVO = new PdaDocTransPutwayVO();
+            BeanUtils.copyProperties(docTransPutway, pdaDocTransPutwayVO);
+            pdaDocTransPutwayVOList.add(pdaDocTransPutwayVO);
+        }
+        return pdaDocTransPutwayVOList;
+    }
 
 }

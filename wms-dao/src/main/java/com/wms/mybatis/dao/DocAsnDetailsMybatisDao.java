@@ -1,11 +1,9 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocAsnDetail;
+import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.query.DocAsnDetailQuery;
-import com.wms.query.pda.PdaDocAsnDetailQuery;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +19,5 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
 
 	void testProcedure(Map<String, Object> map);
 
-    void receiveGoods();
+    void receiveGoods(PdaDocAsnDetailForm form);
 }
