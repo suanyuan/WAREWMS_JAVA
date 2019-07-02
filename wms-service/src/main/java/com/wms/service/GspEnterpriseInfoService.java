@@ -15,6 +15,7 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.GspEnterpriseInfoForm;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,12 @@ public class GspEnterpriseInfoService extends BaseService {
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
-		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryByList(criteria);
+		List<GspEnterpriseInfo> gspEnterpriseInfoList;
+		if(StringUtils.isEmpty(query.getType())){
+			gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryByList(criteria);
+		}else{
+			gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryPageListByType(criteria);
+		}
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
@@ -67,11 +73,44 @@ public class GspEnterpriseInfoService extends BaseService {
 
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
-		int total = gspEnterpriseInfoMybatisDao.queryByCount(criteria);
+		Long total = 0L;
+		if(StringUtils.isEmpty(query.getType())){
+			total = Long.parseLong(gspEnterpriseInfoMybatisDao.queryByCount(criteria)+"");
+		}else {
+			total = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);
+		}
+
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(gspEnterpriseInfoVOList);
 		return datagrid;
 	}
+
+	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagridType(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
+		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCurrentPage(pager.getPage());
+		criteria.setPageSize(pager.getRows());
+		criteria.setCondition(query);
+		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
+		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryPageListByType(criteria);
+		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
+			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
+			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
+			if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
+				gspEnterpriseInfoVO.setIsUse("有效");
+			}else {
+				gspEnterpriseInfoVO.setIsUse("失效");
+			}
+
+			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
+		}
+		Long total = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);
+		datagrid.setTotal(total);
+		datagrid.setRows(gspEnterpriseInfoVOList);
+		return datagrid;
+	}
+
 
 	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
 		SfcUserLogin userLogin =  SfcUserLoginUtil.getLoginUser();

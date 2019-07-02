@@ -12,15 +12,14 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
-var dialogUrl = "/gspProductRegisterController.do?toDetail";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/gspProductRegisterController.do?showDatagrid"/>',
+		url : '<c:url value="/firstBusinessApplyController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '',
+		title: '首营审核',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -32,22 +31,18 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'applyId',
 		columns : [[
-			{field: 'productRegisterId',		title: '主键',	width: 28 ,hidden:true},
-			{field: 'productRegisterNo',		title: '注册证编号',	width: 28 },
-            {field: 'classifyId',		title: '管理分类',	width: 28 },
-            {field: 'classifyCatalog',		title: '分类目录',	width: 28 },
-			{field: 'productNameMain',		title: '产品名称',	width: 28 },
-			{field: 'approveDate',		title: '批准日期',	width: 28 },
-			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 28 },
-			{field: 'productRegisterVersion',		title: '注册证版本',	width: 28 },
-			{field: 'checkerId',		title: '审核人',	width: 28 },
-			{field: 'checkDate',		title: '审核时间',	width: 28 },
-			{field: 'createId',		title: '创建人',	width: 28 },
-			{field: 'createDate',		title: '创建时间',	width: 28 },
-			{field: 'isUse',		title: '是否有效',	width: 28 }
-
+			{field: 'applyId',		title: '主键',	width: 100,hidden:true },
+			{field: 'clientName',		title: '委托客户',	width: 100 },
+			{field: 'supplierName',		title: '供应客户',	width: 100 },
+            {field: 'productCode',		title: '产品代码',	width: 100 },
+            {field: 'productName',		title: '产品名称',	width: 100 },
+			{field: 'createId',		title: '创建人',	width: 100 },
+			{field: 'createDate',		title: '创建时间',	width: 100 },
+			{field: 'editId',		title: '编辑人',	width: 100 },
+			{field: 'editDate',		title: '编辑时间',	width: 100 },
+			{field: 'isUse',		title: '是否有效',	width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -61,31 +56,46 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/gspProductRegisterController.do?getBtn"/>', ezuiMenu);
+			ajaxBtn($('#menuId').val(), '<c:url value="/firstBusinessApplyController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
-        modal : true,
-        title : '<spring:message code="common.dialog.title"/>',
-        href:dialogUrl,
-        fit:true,
-        cache: false,
-        onClose : function() {
-            ezuiFormClear(ezuiForm);
-        }
+		modal : true,
+		title : '<spring:message code="common.dialog.title"/>',
+		fit:true,
+		href:sy.bp()+"/firstBusinessApplyController.do?toDetail",
+		onClose : function() {
+			ezuiFormClear(ezuiForm);
+		}
 	}).dialog('close');
+
+    $('#isUse').combobox({
+        url:sy.bp()+'/commonController.do?getIsUseCombobox',
+        valueField:'id',
+        textField:'value'
+    });
 });
 var add = function(){
 	processType = 'add';
-	$('#gspProductRegisterId').val(0);
-	ezuiDialog.dialog("refresh",dialogUrl).dialog('open');
+	$('#firstBusinessApplyId').val(0);
+	ezuiDialog.dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-        ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
+		ezuiForm.form('load',{
+			applyId : row.applyId,
+			clientId : row.clientId,
+			supplierId : row.supplierId,
+			createId : row.createId,
+			createDate : row.createDate,
+			editId : row.editId,
+			editDate : row.editDate,
+			isUse : row.isUse
+		});
+		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -98,7 +108,7 @@ var del = function(){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
-					url : 'gspProductRegisterController.do?delete',
+					url : 'firstBusinessApplyController.do?delete',
 					data : {id : row.id},
 					type : 'POST',
 					dataType : 'JSON',
@@ -124,47 +134,66 @@ var del = function(){
 		});
 	}
 };
-
+var commit = function(){
+	var url = '';
+	if (processType == 'edit') {
+		url = '<c:url value="/firstBusinessApplyController.do?edit"/>';
+	}else{
+		url = '<c:url value="/firstBusinessApplyController.do?add"/>';
+	}
+	ezuiForm.form('submit', {
+		url : url,
+		onSubmit : function(){
+			if(ezuiForm.form('validate')){
+				$.messager.progress({
+					text : '<spring:message code="common.message.data.processing"/>', interval : 100
+				});
+				return true;
+			}else{
+				return false;
+			}
+		},
+		success : function(data) {
+			var msg='';
+			try {
+				var result = $.parseJSON(data);
+				if(result.success){
+					msg = result.msg;
+					ezuiDatagrid.datagrid('reload');
+					ezuiDialog.dialog('close');
+				}else{
+					msg = '<font color="red">' + result.msg + '</font>';
+				}
+			} catch (e) {
+				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+			} finally {
+				$.messager.show({
+					msg : msg, title : '<spring:message code="common.message.prompt"/>'
+				});
+				$.messager.progress('close');
+			}
+		}
+	});
+};
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		productRegisterNo : $('#productRegisterNo').val(),
-		productNameMain : $('#productNameMain').val(),
-        classifyId : $('#classifyId').combobox("getValue"),
-        classifyCatalog : $('#classifyCatalog').combobox("getValue"),
-        version : $('#productRegisterVersion').combobox("getValue"),
-        createDateBegin : $("#createDateBegin").val(),
-        createDateEnd : $("#createDateEnd").val(),
+		applyId : $('#applyId').val(),
+		clientId : $('#clientId').val(),
+		supplierId : $('#supplierId').val(),
+		createId : $('#createId').val(),
+		createDate : $('#createDate').val(),
+		editId : $('#editId').val(),
+		editDate : $('#editDate').val(),
 		isUse : $('#isUse').val()
 	});
 };
-
-$(function () {
-    $('#productRegisterVersion').combobox({
-        url:sy.bp()+'/commonController.do?getCatalogVersion',
-        valueField:'id',
-        textField:'value'
-    });
-
-    $('#classifyId').combobox({
-        url:sy.bp()+'/commonController.do?getCatalogClassify',
-        valueField:'id',
-        textField:'value'
-    });
-
-    $('#classifyCatalog').combobox({
-        url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox',
-        valueField:'id',
-        textField:'value'
-    });
-
-    $('#isUse').combobox({
-        url:sy.bp()+'/commonController.do?getIsUseCombobox',
-        valueField:'id',
-        textField:'value'
-    });
-})
-
 </script>
+<style>
+	table th{
+		text-align: right;
+	}
+</style>
 </head>
 <body>
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
@@ -175,17 +204,16 @@ $(function () {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>注册证编号：</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品名称：</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>管理分类：</th><td><input type='text' id='classifyId' size='16' data-options=''/></td>
-							<th>分类目录：</th><td><input type='text' id='classifyCatalog' size='16' data-options=''/></td>
+							<th>产品代码：</th><td><input type='text' id='applyId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品名称：</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托客户：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应客户：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>版本：</th><td><input type='text' id='productRegisterVersion' size='16' data-options=''/></td>
-							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' size='16' data-options=''/></td>
-							<td>
+							<th>创建时间起始：</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>创建时间结束：</th><td><input type='text' id='editId' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>是否启用：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>

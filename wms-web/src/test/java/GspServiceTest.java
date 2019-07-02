@@ -1,4 +1,6 @@
 import com.wms.entity.GspEnterpriseInfo;
+import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
+import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.beans.PropertyDescriptor;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,6 +35,10 @@ public class GspServiceTest {
 
     @Autowired
     private GspEnterpriseInfoService gspEnterpriseInfoService;
+    @Autowired
+    private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+    @Autowired
+    private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
 
     @Test
     public void test(){
@@ -57,5 +65,17 @@ public class GspServiceTest {
         GspBusinessLicenseForm gspBusinessLicenseForm = new GspBusinessLicenseForm();
         gspBusinessLicenseForm.setEnterpriseId("asdas");
         System.out.println(BeanUtils.isEmptyFrom(gspBusinessLicenseForm));
+    }
+
+    @Test
+    public void testSec(){
+       Map<String,Object> map = new HashMap<>();
+        map.put("warehouseid","WH01");
+        map.put("resultNo","a");
+        map.put("resultCode","101");
+       String str = docAsnHeaderMybatisDao.getIdSequence(map);
+       System.out.println(map.get("resultCode"));
+
+
     }
 }

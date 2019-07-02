@@ -171,7 +171,7 @@ public class GspEnterpriceService extends BaseService {
         return Json.error("删除失败");
     }
     /**
-     * 获取企业基础信息
+     * 删除企业信息
      * @param enterpriceId 企业信息流水号
      * @return
      */

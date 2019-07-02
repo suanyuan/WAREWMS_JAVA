@@ -47,91 +47,91 @@
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-				and product_register_id =  #{condition.productRegisterId}
+				and r.product_register_id =  #{condition.productRegisterId}
 			</if>
 			<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-				and product_register_no =  #{condition.productRegisterNo}
+				and r.product_register_no =  #{condition.productRegisterNo}
 			</if>
 			<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-				and product_name_main =  #{condition.productNameMain}
+				and r.product_name_main =  #{condition.productNameMain}
 			</if>
 			<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
-				and product_register_name =  #{condition.productRegisterName}
+				and r.product_register_name =  #{condition.productRegisterName}
 			</if>
 			<if test="condition.productRegisterAddress != null and condition.productRegisterAddress != ''" >
-				and product_register_address =  #{condition.productRegisterAddress}
+				and r.product_register_address =  #{condition.productRegisterAddress}
 			</if>
 			<if test="condition.productProductionAddress != null and condition.productProductionAddress != ''" >
-				and product_production_address =  #{condition.productProductionAddress}
+				and r.product_production_address =  #{condition.productProductionAddress}
 			</if>
 			<if test="condition.agentName != null and condition.agentName != ''" >
-				and agent_name =  #{condition.agentName}
+				and r.agent_name =  #{condition.agentName}
 			</if>
 			<if test="condition.applyScope != null and condition.applyScope != ''" >
-				and apply_scope =  #{condition.applyScope}
+				and r.apply_scope =  #{condition.applyScope}
 			</if>
 			<if test="condition.mainPart != null and condition.mainPart != ''" >
-				and main_part =  #{condition.mainPart}
+				and r.main_part =  #{condition.mainPart}
 			</if>
 			<if test="condition.expectUse != null and condition.expectUse != ''" >
-				and expect_use =  #{condition.expectUse}
+				and r.expect_use =  #{condition.expectUse}
 			</if>
 			<if test="condition.storageConditions != null and condition.storageConditions != ''" >
-				and storage_conditions =  #{condition.storageConditions}
+				and r.storage_conditions =  #{condition.storageConditions}
 			</if>
 			<if test="condition.productExpiryDate != null and condition.productExpiryDate != ''" >
-				and product_expiry_date =  #{condition.productExpiryDate}
+				and r.product_expiry_date =  #{condition.productExpiryDate}
 			</if>
 			<if test="condition.otherContent != null and condition.otherContent != ''" >
-				and other_content =  #{condition.otherContent}
+				and r.other_content =  #{condition.otherContent}
 			</if>
 			<if test="condition.remark != null and condition.remark != ''" >
-				and remark =  #{condition.remark}
+				and r.remark =  #{condition.remark}
 			</if>
 			<if test="condition.approveDate != null and condition.approveDate != ''" >
-				and approve_date =  #{condition.approveDate}
+				and r.approve_date =  #{condition.approveDate}
 			</if>
 			<if test="condition.productRegisterExpiryDate != null and condition.productRegisterExpiryDate != ''" >
-				and product_register_expiry_date =  #{condition.productRegisterExpiryDate}
+				and r.product_register_expiry_date =  #{condition.productRegisterExpiryDate}
 			</if>
 			<if test="condition.productRegisterVersion != null and condition.productRegisterVersion != ''" >
-				and product_register_version =  #{condition.productRegisterVersion}
+				and r.product_register_version =  #{condition.productRegisterVersion}
 			</if>
 			<if test="condition.version != null and condition.version != ''" >
-				and version =  #{condition.version}
+				and r.version =  #{condition.version}
 			</if>
 			<if test="condition.checkerId != null and condition.checkerId != ''" >
-				and checker_id =  #{condition.checkerId}
+				and r.checker_id =  #{condition.checkerId}
 			</if>
 			<if test="condition.checkDate != null and condition.checkDate != ''" >
-				and check_date =  #{condition.checkDate}
+				and r.check_date =  #{condition.checkDate}
 			</if>
 			<if test="condition.createId != null and condition.createId != ''" >
-				and create_id =  #{condition.createId}
+				and r.create_id =  #{condition.createId}
 			</if>
 			<if test="condition.createDate != null and condition.createDate != ''" >
-				and create_date =  #{condition.createDate}
+				and r.create_date =  #{condition.createDate}
 			</if>
 			<if test="condition.editId != null and condition.editId != ''" >
-				and edit_id =  #{condition.editId}
+				and r.edit_id =  #{condition.editId}
 			</if>
 			<if test="condition.editDate != null and condition.editDate != ''" >
-				and edit_date =  #{condition.editDate}
+				and r.edit_date =  #{condition.editDate}
 			</if>
 			<if test="condition.isUse != null and condition.isUse != ''" >
-				and is_use =  #{condition.isUse}
+				and r.is_use =  #{condition.isUse}
 			</if>
 			<if test="condition.attachmentUrl != null and condition.attachmentUrl != ''" >
-				and attachment_url =  #{condition.attachmentUrl}
+				and r.attachment_url =  #{condition.attachmentUrl}
 			</if>
 			<if test="condition.classifyId != null and condition.classifyId != ''" >
-				and classify_id =  #{condition.classifyId}
+				and r.classify_id =  #{condition.classifyId}
 			</if>
 			<if test="condition.classifyCatalog != null and condition.classifyCatalog != ''" >
-				and classify_catalog =  #{condition.classifyCatalog}
+				and r.classify_catalog =  #{condition.classifyCatalog}
 			</if>
 			<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
-				and enterprise_id =  #{condition.enterpriseId}
+				and r.enterprise_id =  #{condition.enterpriseId}
 			</if>
 		</trim>
 	</sql>
@@ -247,20 +247,27 @@
 	<!-- 根据id查询 产品注册证 -->
 	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
-		from gsp_product_register where product_register_id = #{productRegisterId}
+		from gsp_product_register r where r.product_register_id = #{productRegisterId}
 	</select>
 
 	<!-- 产品注册证 列表总数-->
 	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from gsp_product_register
+		select count(1) from gsp_product_register r left join bas_codes vc on r.version = vc.code
+		left join bas_codes vcs on r.classify_id = vcs.code
+		left join bas_codes vcc on r.classify_catalog = vcc.code
 		<include refid="Example_Where_Clause"/>
 	</select>
 
 	<!-- 查询产品注册证列表 -->
 	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 		select
-		<include refid="Base_Column_List"/>
-		from gsp_product_register
+		product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,
+		product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
+		other_content,remark,approve_date,product_register_expiry_date,product_register_version,vc.codename_c version,checker_id,
+		check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,vcs.codename_c classify_id,vcc.codename_c classify_catalog,enterprise_id
+		from gsp_product_register r left join bas_codes vc on r.version = vc.code
+		left join bas_codes vcs on r.classify_id = vcs.code
+		left join bas_codes vcc on r.classify_catalog = vcc.code
 		<include refid="Example_Where_Clause"/>
 		<if test="orderByClause != null and orderByClause != ''" >
 			order by  ${orderByClause}

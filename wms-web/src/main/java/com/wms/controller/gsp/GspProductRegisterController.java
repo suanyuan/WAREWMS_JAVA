@@ -1,5 +1,6 @@
 package com.wms.controller.gsp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.wms.entity.GspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.vo.GspProductRegisterSpecsVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,6 +137,12 @@ public class GspProductRegisterController {
 	@RequestMapping(params = "showSpecsList")
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> showSpecsList(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
+		if(StringUtils.isEmpty(query.getProductRegisterId())){
+			EasyuiDatagrid<GspProductRegisterSpecsVO> specsVOEasyuiDatagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
+			specsVOEasyuiDatagrid.setRows(new ArrayList<GspProductRegisterSpecsVO>());
+			specsVOEasyuiDatagrid.setTotal(0L);
+			return specsVOEasyuiDatagrid;
+		}
 		return gspProductRegisterService.queryProductPageListByRegisterId(pager,query);
 	}
 

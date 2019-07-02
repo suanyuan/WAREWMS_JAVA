@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.FirstReviewLogMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.FirstReviewLog" >
+	<result column="review_id" property="reviewId"/>
+	<result column="review_type_id" property="reviewTypeId"/>
+	<result column="apply_content" property="applyContent"/>
+	<result column="apply_state" property="applyState"/>
+	<result column="check_id_qc" property="checkIdQc"/>
+	<result column="check_date_qc" property="checkDateQc"/>
+	<result column="check_remark_qc" property="checkRemarkQc"/>
+	<result column="check_id_head" property="checkIdHead"/>
+	<result column="check_date_head" property="checkDateHead"/>
+	<result column="check_remark_head" property="checkRemarkHead"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+</resultMap>
+       
+<!-- first_review_log table all fields -->
+<sql id="Base_Column_List" >
+	 review_id,review_type_id,apply_content,apply_state,check_id_qc,check_date_qc,check_remark_qc,check_id_head,check_date_head,check_remark_head,create_id,create_date,edit_id,edit_date
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.reviewId != null and condition.reviewId != ''" >
+	    and review_id =  #{condition.reviewId}
+	</if>
+	<if test="condition.reviewTypeId != null and condition.reviewTypeId != ''" >
+	    and review_type_id =  #{condition.reviewTypeId}
+	</if>
+	<if test="condition.applyContent != null and condition.applyContent != ''" >
+	    and apply_content =  #{condition.applyContent}
+	</if>
+	<if test="condition.applyState != null and condition.applyState != ''" >
+	    and apply_state =  #{condition.applyState}
+	</if>
+	<if test="condition.checkIdQc != null and condition.checkIdQc != ''" >
+	    and check_id_qc =  #{condition.checkIdQc}
+	</if>
+	<if test="condition.checkDateQc != null and condition.checkDateQc != ''" >
+	    and check_date_qc =  #{condition.checkDateQc}
+	</if>
+	<if test="condition.checkRemarkQc != null and condition.checkRemarkQc != ''" >
+	    and check_remark_qc =  #{condition.checkRemarkQc}
+	</if>
+	<if test="condition.checkIdHead != null and condition.checkIdHead != ''" >
+	    and check_id_head =  #{condition.checkIdHead}
+	</if>
+	<if test="condition.checkDateHead != null and condition.checkDateHead != ''" >
+	    and check_date_head =  #{condition.checkDateHead}
+	</if>
+	<if test="condition.checkRemarkHead != null and condition.checkRemarkHead != ''" >
+	    and check_remark_head =  #{condition.checkRemarkHead}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into first_review_log(review_id,review_type_id,apply_content,apply_state,check_id_qc,check_date_qc,check_remark_qc,check_id_head,check_date_head,check_remark_head,create_id,create_date,edit_id,edit_date)
+ values(#{reviewId},#{reviewTypeId},#{applyContent},#{applyState},#{checkIdQc},#{checkDateQc},#{checkRemarkQc},#{checkIdHead},#{checkDateHead},#{checkRemarkHead},#{createId},now(),#{editId},#{editDate})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update first_review_log set review_type_id=#{reviewTypeId},apply_content=#{applyContent},apply_state=#{applyState},check_id_qc=#{checkIdQc},check_date_qc=#{checkDateQc},check_remark_qc=#{checkRemarkQc},check_id_head=#{checkIdHead},check_date_head=#{checkDateHead},check_remark_head=#{checkRemarkHead},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate} where review_id=#{reviewId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update first_review_log set 
+	<trim  suffixOverrides="," >
+	<if test="reviewTypeId != null  ">
+		review_type_id=#{reviewTypeId},
+	</if>
+	<if test="applyContent != null  ">
+		apply_content=#{applyContent},
+	</if>
+	<if test="applyState != null  ">
+		apply_state=#{applyState},
+	</if>
+	<if test="checkIdQc != null  ">
+		check_id_qc=#{checkIdQc},
+	</if>
+	<if test="checkDateQc != null  ">
+		check_date_qc=#{checkDateQc},
+	</if>
+	<if test="checkRemarkQc != null  ">
+		check_remark_qc=#{checkRemarkQc},
+	</if>
+	<if test="checkIdHead != null  ">
+		check_id_head=#{checkIdHead},
+	</if>
+	<if test="checkDateHead != null  ">
+		check_date_head=#{checkDateHead},
+	</if>
+	<if test="checkRemarkHead != null  ">
+		check_remark_head=#{checkRemarkHead},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	</trim> where review_id=#{reviewId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from first_review_log where review_id = #{reviewId}
+</delete>
+ 
+<!-- 根据id查询 产品首营审核记录表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from first_review_log where review_id = #{reviewId}
+</select>
+
+<!-- 产品首营审核记录表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from first_review_log 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询产品首营审核记录表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from first_review_log 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

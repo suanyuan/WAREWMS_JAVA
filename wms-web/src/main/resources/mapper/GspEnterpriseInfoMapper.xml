@@ -152,7 +152,7 @@ where 1=1
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
-	from gsp_enterprise_info 
+	from gsp_enterprise_info
 	<include refid="Example_Where_Clause"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
@@ -161,5 +161,92 @@ where 1=1
        ${limitClause}
     </if>
 </select>
-  	
+
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause_Type">
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+			and g.enterprise_id =  #{condition.enterpriseId}
+		</if>
+		<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
+			and g.enterprise_no like CONCAT('%',#{condition.enterpriseNo},'%')
+		</if>
+		<if test="condition.shorthandName != null and condition.shorthandName != ''" >
+			and g.shorthand_name like CONCAT('%',#{condition.shorthandName},'%')
+		</if>
+		<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+			and g.enterprise_name like  CONCAT('%',#{condition.enterpriseName},'%')
+		</if>
+		<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
+			and g.enterprise_type =  #{condition.enterpriseType}
+		</if>
+		<if test="condition.contacts != null and condition.contacts != ''" >
+			and g.contacts =  #{condition.contacts}
+		</if>
+		<if test="condition.contactsPhone != null and condition.contactsPhone != ''" >
+			and g.contacts_phone =  #{condition.contactsPhone}
+		</if>
+		<if test="condition.remark != null and condition.remark != ''" >
+			and g.remark =  #{condition.remark}
+		</if>
+		<if test="condition.createId != null and condition.createId != ''" >
+			and g.create_id =  #{condition.createId}
+		</if>
+		<if test="condition.createDate != null and condition.createDate != ''" >
+			and g.create_date =  #{condition.createDate}
+		</if>
+		<if test="condition.editId != null and condition.editId != ''" >
+			and g.edit_id =  #{condition.editId}
+		</if>
+		<if test="condition.editDate != null and condition.editDate != ''" >
+			and g.edit_date =  #{condition.editDate}
+		</if>
+		<if test="condition.isUse != null and condition.isUse != ''" >
+			and g.is_use =  #{condition.isUse}
+		</if>
+		<if test="condition.type != null and condition.type != ''" >
+			<choose>
+				<when test="condition.type == 'customer'">
+					and cus.enterprise_id !=''
+				</when>
+				<when test="condition.type == 'supplier'">
+					and gs.enterprise_id !=''
+				</when>
+			</choose>
+		</if>
+	</trim>
+</sql>
+
+<!-- 查询企业信息列表 -->
+<select id="queryPageListByType" resultMap="BaseResultMap"  parameterType="Object">
+	select
+	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
+	from gsp_enterprise_info g
+	<if test="condition.type == 'customer'">
+		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	</if>
+	<if test="condition.type == 'supplier'">
+		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	</if>
+	<include refid="Example_Where_Clause_Type"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
+</select>
+
+<!-- 企业信息 列表总数-->
+<select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
+	select count(1)
+	from gsp_enterprise_info g left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	<include refid="Example_Where_Clause_Type"/>
+</select>
+
+
+
 </mapper>   

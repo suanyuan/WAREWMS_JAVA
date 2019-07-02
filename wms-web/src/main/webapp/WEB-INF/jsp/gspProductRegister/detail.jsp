@@ -21,7 +21,7 @@
                                 <td><input type='text' name='productRegisterNo' class='easyui-textbox' value="${gspProductRegister.productRegisterNo}" data-options='required:true'/></td>
                                 <th>所属企业</th>
                                 <td>
-                                    <input type="hidden" name="enterpriseId" class="textbox-value" value="${gspProductRegister.enterpriseId}"/>
+                                    <input type="hidden" id="enterpriseId" name="enterpriseId" class="textbox-value" value="${gspProductRegister.enterpriseId}"/>
                                     <input type='text' id='enterpriseName' value="" data-options='required:true,width:150,editable:false'/>
                                     <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
                                 </td>
@@ -143,7 +143,7 @@
                         <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
                         <td>
                             <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                            <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                            <a onclick='selectEnterprise()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                         </td>
                     </tr>
                 </table>
@@ -243,11 +243,20 @@
     };
 
     function detailsBind(){
+        if($("#gspProductRegisterId").val()==""){
+            $.messager.show({
+                msg : "请先添加注册证再绑定产品", title : '<spring:message code="common.message.prompt"/>'
+            });
+            return;
+        }
         ezuiDialogSpec.dialog('open');
     }
 
     function detailsUnBind(){
-        /*var selectRows = ezuiDatagridDetail.datagrid("getSelections");
+        if($("#gspProductRegisterId").val()==""){
+            return;
+        }
+        var selectRows = ezuiDatagridDetail.datagrid("getSelections");
         if(selectRows)
             var arr = selectRows.join(',');
             $.messager.confirm('', '确认要解除产品绑定吗', function(confirm) {
@@ -273,7 +282,7 @@
                     });
                 }
             });
-        }*/
+        }
     }
 
     $(function () {
@@ -323,7 +332,7 @@
             },
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
-                $(this).datagrid("resize",{height:540});
+                $(this).datagrid("resize",{height:520});
             }
         })
 
@@ -407,7 +416,7 @@
                 }
             ]],
             onDblClickCell: function(index,field,value){
-                choseSelect();
+                selectEnterprise();
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 
@@ -459,10 +468,13 @@
                 type : 'POST',
                 dataType : 'JSON',
                 success : function(result){
-                    if(result.success){
+                    if(result){
                         $.messager.show({
                             msg : result.msg, title : '<spring:message code="common.message.prompt"/>'
                         });
+                        if(result.success){
+                            ezuiDialogEnterprise.dialog("close");
+                        }
                     }
                 }
             });
@@ -474,9 +486,13 @@
     }
 
     function selectEnterprise() {
-        var rows = enterpriseDatagrid.datagrid("getChecked");
+        var rows = enterpriseDatagrid.datagrid("getSelected");
+        console.log(rows)
         if(rows){
             //TODO 查询企业信息反填
+            $("#enterpriseId").val(rows.enterpriseId);
+            $("#enterpriseName").val(rows.enterpriseName);
+            ezuiDialogEnterprise.dialog("close");
         }
     }
 

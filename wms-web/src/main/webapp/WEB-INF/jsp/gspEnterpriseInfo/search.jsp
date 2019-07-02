@@ -41,7 +41,8 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1'
+                isUse : '1',
+                type:'${type}'
             },
             fit:true,
             collapsible:false,
