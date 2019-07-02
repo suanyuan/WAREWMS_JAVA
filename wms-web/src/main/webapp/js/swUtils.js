@@ -127,6 +127,9 @@ var ezuiFormClear = function(ezuiForm){
 	$(ezuiForm).find('input[type=file]').each(function(){
 		$(this).val('');
 	});
+    $(ezuiForm).find('input[name=enterpriseId]').each(function(){
+        $(this).val('');
+    });
 	$(ezuiForm).find('input[type=checkbox]').each(function(){
 		$(this).attr('checked',false);
 	});
@@ -134,6 +137,7 @@ var ezuiFormClear = function(ezuiForm){
 		$(this).removeClass('tooltip-f');
 		$(this).removeClass('validatebox-invalid');
 	});
+
 };
 var clearDatagridSelected = function(datagridId){
 	$(datagridId).datagrid('unselectAll');

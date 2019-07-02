@@ -175,4 +175,15 @@ public class CommonController {
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
     }
+
+    /**
+     * 企业类型
+     * @return
+     */
+    @RequestMapping(params = "getEntType")
+    @ResponseBody
+    public List<EasyuiCombobox> getEntType(){
+        //TODO 数据库内容待添加
+        return basCodesService.getBy(Constant.CODE_CATALOG_ENTTYPE);
+    }
 }

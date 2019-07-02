@@ -34,7 +34,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
         rowStyler: function (index, row) {
-            if(row.isUse == "失效"){  return 'color:red;';}
+            if(row.isUse == "无效"){  return 'color:red;';}
         },
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
@@ -75,6 +75,12 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+
+	$("#enterpriseType").combobox({
+        url:sy.bp()+'/commonController.do?getEntType',
+        valueField:'id',
+        textField:'value'
+    });
 });
 var add = function(){
 	processType = 'add';
@@ -198,11 +204,12 @@ var doSearch = function(){
 		enterpriseNo : $('#enterpriseNo').val(),
 		shorthandName : $('#shorthandName').val(),
 		enterpriseName : $('#enterpriseName').val(),
-		enterpriseType : $('#enterpriseType').val(),
+		enterpriseType : $('#enterpriseType').combobox("getValue"),
 		createDate : $('#createDate').val(),
-		isUse : $('#isUse').val()
+		isUse : $('#isUse').combobox("getValue")
 	});
 };
+
 </script>
 </head>
 <body>
@@ -228,9 +235,9 @@ var doSearch = function(){
 							<th>是否启用：</th>
 							<td>
 								<select id="isUse" class="easyui-combobox"  style="width:100px;">
-									<option value=""></option>
-									<option value="10">有效</option>
-									<option value="0">失效</option>
+									<option value="">全部</option>
+									<option value="1">有效</option>
+									<option value="0">无效</option>
 								</select>
 							</td>
 						</tr>

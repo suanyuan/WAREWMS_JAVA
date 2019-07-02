@@ -15,6 +15,11 @@ public class Constant {
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
     public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
+    public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
+
+//  企业类型
+    public static final String CODE_ENT_TYP_JY = "JY";
+    public static final String CODE_ENT_TYP_SC = "SC";
 
 //是否
     public static final String CODE_YES_OR_YES = "1";

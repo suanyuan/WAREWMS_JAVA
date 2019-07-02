@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.FirstBusinessProductApplyMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.FirstBusinessProductApply" >
+	<result column="product_apply_id" property="productApplyId"/>
+	<result column="apply_id" property="applyId"/>
+	<result column="specs_id" property="specsId"/>
+	<result column="is_check" property="isCheck"/>
+	<result column="is_operate" property="isOperate"/>
+	<result column="is_cold" property="isCold"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+</resultMap>
+
+<resultMap id="PageResultMap" type="com.wms.result.FirstBusinessProductApplyResult">
+	<result column="product_apply_id" property="productApplyId"/>
+	<result column="apply_id" property="applyId"/>
+	<result column="specs_id" property="specsId"/>
+	<result column="is_check" property="isCheck"/>
+	<result column="is_operate" property="isOperate"/>
+	<result column="is_cold" property="isCold"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+	<result column="product_code" property="productCode"/>
+	<result column="product_name" property="productName"/>
+	<result column="specs_name" property="specsName"/>
+	<result column="product_model" property="productModel"/>
+</resultMap>
+       
+<!-- first_business_product_apply table all fields -->
+<sql id="Base_Column_List" >
+	 product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.productApplyId != null and condition.productApplyId != ''" >
+	    and product_apply_id =  #{condition.productApplyId}
+	</if>
+	<if test="condition.applyId != null and condition.applyId != ''" >
+	    and apply_id =  #{condition.applyId}
+	</if>
+	<if test="condition.specsId != null and condition.specsId != ''" >
+	    and specs_id =  #{condition.specsId}
+	</if>
+	<if test="condition.isCheck != null and condition.isCheck != ''" >
+	    and is_check =  #{condition.isCheck}
+	</if>
+	<if test="condition.isOperate != null and condition.isOperate != ''" >
+	    and is_operate =  #{condition.isOperate}
+	</if>
+	<if test="condition.isCold != null and condition.isCold != ''" >
+	    and is_cold =  #{condition.isCold}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+	    and is_use =  #{condition.isUse}
+	</if>
+</trim>
+</sql>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause_Page">
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="condition.productApplyId != null and condition.productApplyId != ''" >
+			and t1.product_apply_id =  #{condition.productApplyId}
+		</if>
+		<if test="condition.applyId != null and condition.applyId != ''" >
+			and t1.apply_id =  #{condition.applyId}
+		</if>
+		<if test="condition.specsId != null and condition.specsId != ''" >
+			and t1.specs_id =  #{condition.specsId}
+		</if>
+		<if test="condition.isCheck != null and condition.isCheck != ''" >
+			and t1.is_check =  #{condition.isCheck}
+		</if>
+		<if test="condition.isOperate != null and condition.isOperate != ''" >
+			and t1.is_operate =  #{condition.isOperate}
+		</if>
+		<if test="condition.isCold != null and condition.isCold != ''" >
+			and t1.is_cold =  #{condition.isCold}
+		</if>
+		<if test="condition.createId != null and condition.createId != ''" >
+			and t1.create_id =  #{condition.createId}
+		</if>
+		<if test="condition.createDate != null and condition.createDate != ''" >
+			and t1.create_date =  #{condition.createDate}
+		</if>
+		<if test="condition.editId != null and condition.editId != ''" >
+			and t1.edit_id =  #{condition.editId}
+		</if>
+		<if test="condition.editDate != null and condition.editDate != ''" >
+			and t1.edit_date =  #{condition.editDate}
+		</if>
+		<if test="condition.isUse != null and condition.isUse != ''" >
+			and t1.is_use =  #{condition.isUse}
+		</if>
+	</trim>
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into first_business_product_apply(product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use)
+ values(#{productApplyId},#{applyId},#{specsId},#{isCheck},#{isOperate},#{isCold},#{createId},now(),#{editId},#{editDate},#{isUse})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update first_business_product_apply set apply_id=#{applyId},specs_id=#{specsId},is_check=#{isCheck},is_operate=#{isOperate},is_cold=#{isCold},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where product_apply_id=#{productApplyId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update first_business_product_apply set 
+	<trim  suffixOverrides="," >
+	<if test="applyId != null  ">
+		apply_id=#{applyId},
+	</if>
+	<if test="specsId != null  ">
+		specs_id=#{specsId},
+	</if>
+	<if test="isCheck != null  ">
+		is_check=#{isCheck},
+	</if>
+	<if test="isOperate != null  ">
+		is_operate=#{isOperate},
+	</if>
+	<if test="isCold != null  ">
+		is_cold=#{isCold},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="isUse != null  ">
+		is_use=#{isUse},
+	</if>
+	</trim> where product_apply_id=#{productApplyId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from first_business_product_apply where product_apply_id = #{productApplyId}
+</delete>
+ 
+<!-- 根据id查询 产品首营申请记录 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from first_business_product_apply where product_apply_id = #{productApplyId}
+</select>
+
+<!-- 产品首营申请记录 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from first_business_product_apply 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询产品首营申请记录列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from first_business_product_apply 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询产品首营申请产品列表 -->
+<select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
+	select
+	sp.specs_name,sp.product_model,sp.product_code,sp.product_name,t1.product_apply_id,t1.apply_id,t1.specs_id,t1.is_check,t1.is_operate,t1.is_cold,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use
+	from first_business_product_apply t1 left join gsp_product_register_specs sp on t1.specs_id = sp.specs_id
+	<include refid="Example_Where_Clause_Page"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
+</select>
+
+<!-- 查询产品首营申请产品列表 -->
+<select id="queryPageListCount" resultMap="PageResultMap"  parameterType="Object">
+	select
+		count(*)
+	from first_business_product_apply
+	<include refid="Example_Where_Clause_Page"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
+</select>
+
+</mapper>   
