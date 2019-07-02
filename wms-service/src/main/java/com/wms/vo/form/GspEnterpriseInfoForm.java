@@ -4,6 +4,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspEnterpriseInfoForm {
+	private String basCustomerId;
 
 	private String enterpriseId;
 	private String enterpriseNo;
@@ -14,6 +15,50 @@ public class GspEnterpriseInfoForm {
 	private String contactsPhone;
 	private String remark;
 	private String isUse;
+	private String createId;
+	private String createDate;
+	private String editId;
+	private String editDate;
+
+	public String getBasCustomerId() {
+		return basCustomerId;
+	}
+
+	public void setBasCustomerId(String basCustomerId) {
+		this.basCustomerId = basCustomerId;
+	}
+
+	public String getCreateId() {
+		return createId;
+	}
+
+	public void setCreateId(String createId) {
+		this.createId = createId;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getEditId() {
+		return editId;
+	}
+
+	public void setEditId(String editId) {
+		this.editId = editId;
+	}
+
+	public String getEditDate() {
+		return editDate;
+	}
+
+	public void setEditDate(String editDate) {
+		this.editDate = editDate;
+	}
 
 	public String getEnterpriseId() {
 		return enterpriseId;

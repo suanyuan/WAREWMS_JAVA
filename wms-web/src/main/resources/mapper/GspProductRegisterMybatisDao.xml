@@ -1,266 +1,273 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mybatis.dao.GspProductRegisterMybatisDao" >
-<!-- Result Map-->
-<resultMap id="BaseResultMap" type="com.wms.entity.GspProductRegister" >
-	<result column="product_register_id" property="productRegisterId"/>
-	<result column="product_register_no" property="productRegisterNo"/>
-	<result column="product_name_main" property="productNameMain"/>
-	<result column="product_register_name" property="productRegisterName"/>
-	<result column="product_register_address" property="productRegisterAddress"/>
-	<result column="product_production_address" property="productProductionAddress"/>
-	<result column="agent_name" property="agentName"/>
-	<result column="apply_scope" property="applyScope"/>
-	<result column="main_part" property="mainPart"/>
-	<result column="expect_use" property="expectUse"/>
-	<result column="storage_conditions" property="storageConditions"/>
-	<result column="product_expiry_date" property="productExpiryDate"/>
-	<result column="other_content" property="otherContent"/>
-	<result column="remark" property="remark"/>
-	<result column="approve_date" property="approveDate"/>
-	<result column="product_register_expiry_date" property="productRegisterExpiryDate"/>
-	<result column="product_register_version" property="productRegisterVersion"/>
-	<result column="version" property="version"/>
-	<result column="checker_id" property="checkerId"/>
-	<result column="check_date" property="checkDate"/>
-	<result column="create_id" property="createId"/>
-	<result column="create_date" property="createDate"/>
-	<result column="edit_id" property="editId"/>
-	<result column="edit_date" property="editDate"/>
-	<result column="is_use" property="isUse"/>
-	<result column="attachment_url" property="attachmentUrl"/>
-	<result column="classify_id" property="classifyId"/>
-	<result column="classify_catalog" property="classifyCatalog"/>
-</resultMap>
-       
-<!-- GSP_Product_Register table all fields -->
-<sql id="Base_Column_List" >
-	 product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog
-</sql>
-   
-   
-<!-- 查询条件 -->
-<sql id="Example_Where_Clause">
-where 1=1
-<trim  suffixOverrides="," >
-	<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-	    and product_register_id =  #{condition.productRegisterId}
-	</if>
-	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-	    and product_register_no like  #{condition.productRegisterNo}
-	</if>
-	<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-	    and product_name_main like  #{condition.productNameMain}
-	</if>
-	<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
-	    and product_register_name like  #{condition.productRegisterName}
-	</if>
-	<if test="condition.productRegisterAddress != null and condition.productRegisterAddress != ''" >
-	    and product_register_address =  #{condition.productRegisterAddress}
-	</if>
-	<if test="condition.productProductionAddress != null and condition.productProductionAddress != ''" >
-	    and product_production_address =  #{condition.productProductionAddress}
-	</if>
-	<if test="condition.agentName != null and condition.agentName != ''" >
-	    and agent_name =  #{condition.agentName}
-	</if>
-	<if test="condition.applyScope != null and condition.applyScope != ''" >
-	    and apply_scope =  #{condition.applyScope}
-	</if>
-	<if test="condition.mainPart != null and condition.mainPart != ''" >
-	    and main_part =  #{condition.mainPart}
-	</if>
-	<if test="condition.expectUse != null and condition.expectUse != ''" >
-	    and expect_use =  #{condition.expectUse}
-	</if>
-	<if test="condition.storageConditions != null and condition.storageConditions != ''" >
-	    and storage_conditions =  #{condition.storageConditions}
-	</if>
-	<if test="condition.productExpiryDate != null and condition.productExpiryDate != ''" >
-	    and product_expiry_date =  #{condition.productExpiryDate}
-	</if>
-	<if test="condition.otherContent != null and condition.otherContent != ''" >
-	    and other_content =  #{condition.otherContent}
-	</if>
-	<if test="condition.remark != null and condition.remark != ''" >
-	    and remark =  #{condition.remark}
-	</if>
-	<if test="condition.approveDate != null and condition.approveDate != ''" >
-	    and approve_date =  #{condition.approveDate}
-	</if>
-	<if test="condition.productRegisterExpiryDate != null and condition.productRegisterExpiryDate != ''" >
-	    and product_register_expiry_date =  #{condition.productRegisterExpiryDate}
-	</if>
-	<if test="condition.productRegisterVersion != null and condition.productRegisterVersion != ''" >
-	    and product_register_version =  #{condition.productRegisterVersion}
-	</if>
-	<if test="condition.version != null and condition.version != ''" >
-	    and version =  #{condition.version}
-	</if>
-	<if test="condition.checkerId != null and condition.checkerId != ''" >
-	    and checker_id =  #{condition.checkerId}
-	</if>
-	<if test="condition.checkDate != null and condition.checkDate != ''" >
-	    and check_date =  #{condition.checkDate}
-	</if>
-	<if test="condition.createId != null and condition.createId != ''" >
-	    and create_id =  #{condition.createId}
-	</if>
-	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date =  #{condition.createDate}
-	</if>
-	<if test="condition.editId != null and condition.editId != ''" >
-	    and edit_id =  #{condition.editId}
-	</if>
-	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and edit_date =  #{condition.editDate}
-	</if>
-	<if test="condition.isUse != null and condition.isUse != ''" >
-	    and is_use =  #{condition.isUse}
-	</if>
-	<if test="condition.attachmentUrl != null and condition.attachmentUrl != ''" >
-	    and attachment_url =  #{condition.attachmentUrl}
-	</if>
-	<if test="condition.classifyId != null and condition.classifyId != ''" >
-	    and classify_id =  #{condition.classifyId}
-	</if>
-	<if test="condition.classifyCatalog != null and condition.classifyCatalog != ''" >
-	    and classify_catalog =  #{condition.classifyCatalog}
-	</if>
-</trim>
-</sql>
-   
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.wms.entity.GspProductRegister" >
+		<result column="product_register_id" property="productRegisterId"/>
+		<result column="product_register_no" property="productRegisterNo"/>
+		<result column="product_name_main" property="productNameMain"/>
+		<result column="product_register_name" property="productRegisterName"/>
+		<result column="product_register_address" property="productRegisterAddress"/>
+		<result column="product_production_address" property="productProductionAddress"/>
+		<result column="agent_name" property="agentName"/>
+		<result column="apply_scope" property="applyScope"/>
+		<result column="main_part" property="mainPart"/>
+		<result column="expect_use" property="expectUse"/>
+		<result column="storage_conditions" property="storageConditions"/>
+		<result column="product_expiry_date" property="productExpiryDate"/>
+		<result column="other_content" property="otherContent"/>
+		<result column="remark" property="remark"/>
+		<result column="approve_date" property="approveDate"/>
+		<result column="product_register_expiry_date" property="productRegisterExpiryDate"/>
+		<result column="product_register_version" property="productRegisterVersion"/>
+		<result column="version" property="version"/>
+		<result column="checker_id" property="checkerId"/>
+		<result column="check_date" property="checkDate"/>
+		<result column="create_id" property="createId"/>
+		<result column="create_date" property="createDate"/>
+		<result column="edit_id" property="editId"/>
+		<result column="edit_date" property="editDate"/>
+		<result column="is_use" property="isUse"/>
+		<result column="attachment_url" property="attachmentUrl"/>
+		<result column="classify_id" property="classifyId"/>
+		<result column="classify_catalog" property="classifyCatalog"/>
+		<result column="enterprise_id" property="enterpriseId"/>
+	</resultMap>
 
-<!-- 插入记录 -->
-<insert id="add" parameterType="Object" >
-  insert into GSP_Product_Register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog)
- values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog})
+	<!-- gsp_product_register table all fields -->
+	<sql id="Base_Column_List" >
+	 product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id
+</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
+				and product_register_id =  #{condition.productRegisterId}
+			</if>
+			<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
+				and product_register_no =  #{condition.productRegisterNo}
+			</if>
+			<if test="condition.productNameMain != null and condition.productNameMain != ''" >
+				and product_name_main =  #{condition.productNameMain}
+			</if>
+			<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
+				and product_register_name =  #{condition.productRegisterName}
+			</if>
+			<if test="condition.productRegisterAddress != null and condition.productRegisterAddress != ''" >
+				and product_register_address =  #{condition.productRegisterAddress}
+			</if>
+			<if test="condition.productProductionAddress != null and condition.productProductionAddress != ''" >
+				and product_production_address =  #{condition.productProductionAddress}
+			</if>
+			<if test="condition.agentName != null and condition.agentName != ''" >
+				and agent_name =  #{condition.agentName}
+			</if>
+			<if test="condition.applyScope != null and condition.applyScope != ''" >
+				and apply_scope =  #{condition.applyScope}
+			</if>
+			<if test="condition.mainPart != null and condition.mainPart != ''" >
+				and main_part =  #{condition.mainPart}
+			</if>
+			<if test="condition.expectUse != null and condition.expectUse != ''" >
+				and expect_use =  #{condition.expectUse}
+			</if>
+			<if test="condition.storageConditions != null and condition.storageConditions != ''" >
+				and storage_conditions =  #{condition.storageConditions}
+			</if>
+			<if test="condition.productExpiryDate != null and condition.productExpiryDate != ''" >
+				and product_expiry_date =  #{condition.productExpiryDate}
+			</if>
+			<if test="condition.otherContent != null and condition.otherContent != ''" >
+				and other_content =  #{condition.otherContent}
+			</if>
+			<if test="condition.remark != null and condition.remark != ''" >
+				and remark =  #{condition.remark}
+			</if>
+			<if test="condition.approveDate != null and condition.approveDate != ''" >
+				and approve_date =  #{condition.approveDate}
+			</if>
+			<if test="condition.productRegisterExpiryDate != null and condition.productRegisterExpiryDate != ''" >
+				and product_register_expiry_date =  #{condition.productRegisterExpiryDate}
+			</if>
+			<if test="condition.productRegisterVersion != null and condition.productRegisterVersion != ''" >
+				and product_register_version =  #{condition.productRegisterVersion}
+			</if>
+			<if test="condition.version != null and condition.version != ''" >
+				and version =  #{condition.version}
+			</if>
+			<if test="condition.checkerId != null and condition.checkerId != ''" >
+				and checker_id =  #{condition.checkerId}
+			</if>
+			<if test="condition.checkDate != null and condition.checkDate != ''" >
+				and check_date =  #{condition.checkDate}
+			</if>
+			<if test="condition.createId != null and condition.createId != ''" >
+				and create_id =  #{condition.createId}
+			</if>
+			<if test="condition.createDate != null and condition.createDate != ''" >
+				and create_date =  #{condition.createDate}
+			</if>
+			<if test="condition.editId != null and condition.editId != ''" >
+				and edit_id =  #{condition.editId}
+			</if>
+			<if test="condition.editDate != null and condition.editDate != ''" >
+				and edit_date =  #{condition.editDate}
+			</if>
+			<if test="condition.isUse != null and condition.isUse != ''" >
+				and is_use =  #{condition.isUse}
+			</if>
+			<if test="condition.attachmentUrl != null and condition.attachmentUrl != ''" >
+				and attachment_url =  #{condition.attachmentUrl}
+			</if>
+			<if test="condition.classifyId != null and condition.classifyId != ''" >
+				and classify_id =  #{condition.classifyId}
+			</if>
+			<if test="condition.classifyCatalog != null and condition.classifyCatalog != ''" >
+				and classify_catalog =  #{condition.classifyCatalog}
+			</if>
+			<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+				and enterprise_id =  #{condition.enterpriseId}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object" >
+  insert into gsp_product_register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id)
+ values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog},#{enterpriseId})
 </insert>
 
-<!-- 根据id，修改记录-->  
- <update id="update" parameterType="Object" >
-  update GSP_Product_Register set product_register_no=#{productRegisterNo},product_name_main=#{productNameMain},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog} where product_register_id=#{productRegisterId}
+	<!-- 根据id，修改记录-->
+	<update id="update" parameterType="Object" >
+  update gsp_product_register set product_register_no=#{productRegisterNo},product_name_main=#{productNameMain},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog},enterprise_id=#{enterpriseId} where product_register_id=#{productRegisterId}
  </update>
- 
- <!-- 修改记录，只修改只不为空的字段 -->
-<update id="updateBySelective" parameterType="Object" >
-	update GSP_Product_Register set 
-	<trim  suffixOverrides="," >
-	<if test="productRegisterNo != null  ">
-		product_register_no=#{productRegisterNo},
-	</if>
-	<if test="productNameMain != null  ">
-		product_name_main=#{productNameMain},
-	</if>
-	<if test="productRegisterName != null  ">
-		product_register_name=#{productRegisterName},
-	</if>
-	<if test="productRegisterAddress != null  ">
-		product_register_address=#{productRegisterAddress},
-	</if>
-	<if test="productProductionAddress != null  ">
-		product_production_address=#{productProductionAddress},
-	</if>
-	<if test="agentName != null  ">
-		agent_name=#{agentName},
-	</if>
-	<if test="applyScope != null  ">
-		apply_scope=#{applyScope},
-	</if>
-	<if test="mainPart != null  ">
-		main_part=#{mainPart},
-	</if>
-	<if test="expectUse != null  ">
-		expect_use=#{expectUse},
-	</if>
-	<if test="storageConditions != null  ">
-		storage_conditions=#{storageConditions},
-	</if>
-	<if test="productExpiryDate != null  ">
-		product_expiry_date=#{productExpiryDate},
-	</if>
-	<if test="otherContent != null  ">
-		other_content=#{otherContent},
-	</if>
-	<if test="remark != null  ">
-		remark=#{remark},
-	</if>
-	<if test="approveDate != null  ">
-		approve_date=#{approveDate},
-	</if>
-	<if test="productRegisterExpiryDate != null  ">
-		product_register_expiry_date=#{productRegisterExpiryDate},
-	</if>
-	<if test="productRegisterVersion != null  ">
-		product_register_version=#{productRegisterVersion},
-	</if>
-	<if test="version != null  ">
-		version=#{version},
-	</if>
-	<if test="checkerId != null  ">
-		checker_id=#{checkerId},
-	</if>
-	<if test="checkDate != null  ">
-		check_date=#{checkDate},
-	</if>
-	<if test="createId != null  ">
-		create_id=#{createId},
-	</if>
-	<if test="createDate != null  ">
-		create_date=#{createDate},
-	</if>
-	<if test="editId != null  ">
-		edit_id=#{editId},
-	</if>
-	<if test="editDate != null  ">
-		edit_date=#{editDate},
-	</if>
-	<if test="isUse != null  ">
-		is_use=#{isUse},
-	</if>
-	<if test="attachmentUrl != null  ">
-		attachment_url=#{attachmentUrl},
-	</if>
-	<if test="classifyId != null  ">
-		classify_id=#{classifyId},
-	</if>
-	<if test="classifyCatalog != null  ">
-		classify_catalog=#{classifyCatalog},
-	</if>
-	</trim> where product_register_id=#{productRegisterId}
-</update>
 
-<!-- 删除记录 -->
-<delete id="delete" parameterType="Object">
-	delete 	 from GSP_Product_Register where product_register_id = #{productRegisterId}
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateBySelective" parameterType="Object" >
+		update gsp_product_register set
+		<trim  suffixOverrides="," >
+			<if test="productRegisterNo != null  ">
+				product_register_no=#{productRegisterNo},
+			</if>
+			<if test="productNameMain != null  ">
+				product_name_main=#{productNameMain},
+			</if>
+			<if test="productRegisterName != null  ">
+				product_register_name=#{productRegisterName},
+			</if>
+			<if test="productRegisterAddress != null  ">
+				product_register_address=#{productRegisterAddress},
+			</if>
+			<if test="productProductionAddress != null  ">
+				product_production_address=#{productProductionAddress},
+			</if>
+			<if test="agentName != null  ">
+				agent_name=#{agentName},
+			</if>
+			<if test="applyScope != null  ">
+				apply_scope=#{applyScope},
+			</if>
+			<if test="mainPart != null  ">
+				main_part=#{mainPart},
+			</if>
+			<if test="expectUse != null  ">
+				expect_use=#{expectUse},
+			</if>
+			<if test="storageConditions != null  ">
+				storage_conditions=#{storageConditions},
+			</if>
+			<if test="productExpiryDate != null  ">
+				product_expiry_date=#{productExpiryDate},
+			</if>
+			<if test="otherContent != null  ">
+				other_content=#{otherContent},
+			</if>
+			<if test="remark != null  ">
+				remark=#{remark},
+			</if>
+			<if test="approveDate != null  ">
+				approve_date=#{approveDate},
+			</if>
+			<if test="productRegisterExpiryDate != null  ">
+				product_register_expiry_date=#{productRegisterExpiryDate},
+			</if>
+			<if test="productRegisterVersion != null  ">
+				product_register_version=#{productRegisterVersion},
+			</if>
+			<if test="version != null  ">
+				version=#{version},
+			</if>
+			<if test="checkerId != null  ">
+				checker_id=#{checkerId},
+			</if>
+			<if test="checkDate != null  ">
+				check_date=#{checkDate},
+			</if>
+			<if test="createId != null  ">
+				create_id=#{createId},
+			</if>
+			<if test="createDate != null  ">
+				create_date=#{createDate},
+			</if>
+			<if test="editId != null  ">
+				edit_id=#{editId},
+			</if>
+			<if test="editDate != null  ">
+				edit_date=#{editDate},
+			</if>
+			<if test="isUse != null  ">
+				is_use=#{isUse},
+			</if>
+			<if test="attachmentUrl != null  ">
+				attachment_url=#{attachmentUrl},
+			</if>
+			<if test="classifyId != null  ">
+				classify_id=#{classifyId},
+			</if>
+			<if test="classifyCatalog != null  ">
+				classify_catalog=#{classifyCatalog},
+			</if>
+			<if test="enterpriseId != null  ">
+				enterprise_id=#{enterpriseId},
+			</if>
+		</trim> where product_register_id=#{productRegisterId}
+	</update>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+	delete 	 from gsp_product_register where product_register_id = #{productRegisterId}
 </delete>
- 
-<!-- 根据id查询 产品注册证 -->
-<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from GSP_Product_Register where product_register_id = #{productRegisterId}
-</select>
 
-<!-- 产品注册证 列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from GSP_Product_Register 
-	<include refid="Example_Where_Clause"/>
-</select>
-  	
-<!-- 查询产品注册证列表 -->
-<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from GSP_Product_Register 
-	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-</select>
-  	
+	<!-- 根据id查询 产品注册证 -->
+	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_product_register where product_register_id = #{productRegisterId}
+	</select>
+
+	<!-- 产品注册证 列表总数-->
+	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from gsp_product_register
+		<include refid="Example_Where_Clause"/>
+	</select>
+
+	<!-- 查询产品注册证列表 -->
+	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from gsp_product_register
+		<include refid="Example_Where_Clause"/>
+		<if test="orderByClause != null and orderByClause != ''" >
+			order by  ${orderByClause}
+		</if>
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
+
 </mapper>   

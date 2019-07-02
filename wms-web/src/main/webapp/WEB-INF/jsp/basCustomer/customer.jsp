@@ -18,7 +18,7 @@ $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
+		url : '<c:url value="gspEnterpriseInfoController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -49,11 +49,11 @@ $(function() {
 			/*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
 				return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'addwho',		title: '录入人',	width: 50 },
-            {field: 'addtime',		title: '录入时间',	width: 50 },
-            {field: 'editwho',		title: '修改人',	width: 50 },
-            {field: 'edittime',		title: '修改时间',	width: 50 },
-            {field: 'activeFlag',		title: '激活 ',	width: 12}
+            {field: 'createId',		title: '录入人',	width: 50 },
+            {field: 'createDate',		title: '录入时间',	width: 50 },
+            {field: 'editId',		title: '修改人',	width: 50 },
+            {field: 'editDate',		title: '修改时间',	width: 50 },
+            {field: 'isUse',		title: '激活 ',	width: 12}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -67,7 +67,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/basCustomerController.do?getBtn"/>', ezuiMenu);
+			ajaxBtn($('#menuId').val(), '<c:url value="gspEnterpriseInfoController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -78,9 +78,7 @@ $(function() {
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',
-        href: '/basCustomerController.do?toDetail',
-		fit:true,
-		cache:false,
+
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
 		}
@@ -90,7 +88,7 @@ $(function() {
 /* 新增 */
 var add = function(){
 	processType = 'add';
-	$('#basCustomerId').val(0);
+	$('#enterpriseId').val(0);
 	/*$("#ezuiForm #customerid").textbox({
 		editable:true
 	}).textbox('textbox').css('text-transform','uppercase');*/
@@ -106,32 +104,24 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		$("#ezuiForm #customerid").textbox({
+		/*$("#ezuiForm #customerid").textbox({
 			editable:false
-		});
+		});*/
 	/*	$("#ezuiForm #customerType").combo('readonly', true);
 		$("#ezuiForm #operateType").combo('readonly', true);*/
 		ezuiForm.form('load',{
-			customerid : row.customerid,
 
-			descrC : row.descrC,
+
+
             enterpriseNo:row.enterpriseNo,
             shorthandName:row.shorthandName,
             enterpriseName:row.enterpriseName,
-            enterpriseType:row.enterpriseType,
+
             contacts:row.contacts,
             contactsPhone:row.contactsPhone,
             remark:row.remark,
-            operateType:row.operateType,
-            supContractNo:row.supContractNo,
-            contractUrl:row.contractUrl,
-            clientContent:row.clientContent,
-            clientStartDate:row.clientStartDate,
-            clientEndDate:row.clientEndDate,
-            clientTerm:row.clientTerm,
-            isChineseLabel:row.isChineseLabel,
-			activeFlag : row.activeFlag,
-			receivingAddressId: row.receivingAddressId
+
+
 
 			/*address1 : row.address1,
 			contact1 : row.contact1,
@@ -154,7 +144,7 @@ var del = function(){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.update"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
-					url : 'basCustomerController.do?delete',
+					url : 'gspEnterpriseInfoController.do?deleteEnter',
 					data : {enterpriseId : row.enterpriseId},
 					type : 'POST',
 					dataType : 'JSON',
@@ -190,9 +180,9 @@ var del = function(){
 var commit = function(){
 	var url = '';
 	if (processType == 'edit') {
-		url = '<c:url value="/basCustomerController.do?edit"/>';
+		url = '<c:url value="/gspEnterpriseInfoController.do?edit"/>';
 	}else{
-		url = '<c:url value="/basCustomerController.do?add"/>';
+		url = '<c:url value="/gspEnterpriseInfoController.do?addEnterprise"/>';
 	}
 	ezuiForm.form('submit', {
 		url : url,
@@ -234,19 +224,18 @@ var commit = function(){
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		customerid : $('#customerid').val(),
+
         enterpriseNo : $('#enterpriseNo').val(),
         shorthandName : $('#shorthandName').val(),
         enterpriseName : $('#enterpriseName').val(),
-        clientStartDate : $('#clientStartDate').val(),
-        clientEndDate : $('#clientEndDate').val(),
-        supContractNo : $('#supContractNo').val(),
+        isUse : $('#isUse').val(),
+
+
 
         /* isChineseLabel : $('#isChineseLabel').combobox('getValue'),
          customerType : $('#customerType').combobox('getValue'),
          operateType : $('#operateType').combobox('getValue'),*/
-        activeFlag : $('#activeFlag').combobox('getValue'),
-        descrC : $('#descrC').val()
+
 
 	});
 };
@@ -287,7 +276,7 @@ var doSearch = function(){
 																																	]"/></td>--%>
 						<th>是否激活：</th>
 						<td>
-							<select id="activeFlag" class="easyui-combobox"  style="width:100px;">
+							<select id="isUse" class="easyui-combobox"  style="width:100px;">
 								<option value=""></option>
 								<option value="Y">是</option>
 								<option value="N">否</option>
@@ -301,8 +290,8 @@ var doSearch = function(){
 					</table>
 				</fieldset>
 				<div>
-					<%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
+					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
+					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
@@ -311,34 +300,23 @@ var doSearch = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<%--<form id='ezuiForm' method='post'>
-			<input type='hidden' id='basCustomerId' name='basCustomerId'/>
-
-		&lt;%&ndash;	<table>
-				<tr>
-					<th>客户ID</th>
-					<td><input type='text' name='customerId' id='customerid' class='easyui-textbox' size='8' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>客户名称</th>
-					<td><input type='text' name='descrC' id='descrC' class='easyui-textbox' size='8' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>企业信息代码</th>
-					<td colspan="3"><input type='text' name='enterpriseNo' id='enterpriseNo' class='easyui-textbox' size='23' data-options='required:true'/></td>
+		<form id='ezuiForm' method='post'>
+			<input type='hidden' id='enterpriseId' name='enterpriseId'/>
+			<table>
+                <tr>
+                    <th>企业信息代码</th>
+                    <td colspan="3"><input type='text' name='enterpriseNo'  class='easyui-textbox' size='23' data-options='required:true'/></td>
+                </tr>
+                <tr>
+					<th>企业名称</th>
+					<td><input type='text' name='enterpriseName'  class='easyui-textbox' size='8' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>简称</th>
-					<td colspan="3"><input type='text' name='shorthandName' id='shortHandName' class='easyui-textbox' size='23' data-options='required:true'/></td>
+					<td colspan="3"><input type='text' name='shorthandName'  class='easyui-textbox' size='23' data-options='required:true'/></td>
 				</tr>
-				<tr>
-					<th>企业名称</th>
-					<td colspan="3"><input type='text' name='enterpriseName' id='enterpriseName' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>企业类型</th>
-					<td colspan="3"><input type='text' name='enterpriseType' id='enterpriseType' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
+
+
 				<tr>
 					<th>联系人</th>
 					<td colspan="3"><input type='text' name='contacts' id='contacts' class='easyui-textbox' size='23' data-options='required:true'/></td>
@@ -351,76 +329,10 @@ var doSearch = function(){
 					<th>备注</th>
 					<td colspan="3"><input type='text' name='remark' id='remark' class='easyui-textbox' size='23' data-options='required:true'/></td>
 				</tr>
-				<tr>
-					<th>类型</th>
-					<td colspan="3"><input type='text' name='operateType' id='operateType' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
-
-				<tr>
-					<th>合同编号</th>
-					<td colspan="3"><input type='text' name='supContractNo' id='supContractNo' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>合同文件</th>
-					<td><input type='text' name='contractUrl' id='contractUrl' class='easyui-textbox' size='8' data-options='required:false'/>
-					</td>
-				</tr>
-				&lt;%&ndash;<tr>
-					<th>客户类型</th>
-					<td><input type='text' name='customerType' id='customerType' class='easyui-combobox' size='16' data-options="required:true,
-																																panelHeight:'auto',
-																																editable:false,
-																																url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
-																																valueField: 'id',
-																																textField: 'value'"/>
-					</td>
-				</tr>&ndash;%&gt;
-				<tr>
-					<th>委托内容</th>
-					<td colspan="3"><input type='text' name='clientContent' id='clientContent' class='easyui-textbox' size='23' data-options='required:false'/></td>
-				</tr>
-				<tr>
-					<th>委托开始时间</th>
-					<td colspan="3"><input type='text' name='clientStartDate' id='clientStartDate' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>委托结束时间</th>
-					<td colspan="3"><input type='text' name='clientEndDate' id='clientEndDate' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>委托期限</th>
-					<td colspan="3"><input type='text' name='clientTerm' id='clientTerm' class='easyui-textbox' size='23' data-options='required:true'/></td>
-				</tr>
 
 
-				<tr>
-					<th>是否贴中文标签</th>
-					<td>
-						<input type='text' name='isChineseLabel' id='isChineseLabel' class='easyui-combobox' size='8' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	valueField: 'id',
-																																	textField: 'value',
-																																	data: [
-																																	{id: 'Y', value: '是'}, 
-																																	{id: 'N', value: '否'}
-																																	]"/>
-					</td>
-
-
-					<th>是否激活</th>
-					<td>
-						<input type='text' name='activeFlag' id='activeFlag' class='easyui-combobox' size='8' data-options="panelHeight:'auto',
-																											editable:false,
-																											valueField: 'id',
-																											textField: 'value',
-																											data: [
-																											{id: 'Y', value: '是'},
-																											{id: 'N', value: '否'}
-																											]"/>
-					</td>
-				</tr>			
-			</table>&ndash;%&gt;
-		</form>--%>
+			</table>
+		</form>
 	</div>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>

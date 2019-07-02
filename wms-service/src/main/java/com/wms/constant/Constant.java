@@ -14,6 +14,21 @@ public class Constant {
 //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
+    public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
+
+//是否
+    public static final String CODE_YES_OR_YES = "1";
+    public static final String CODE_YES_OR_NO = "0";
+
+//code
+    public static final String CODE_CATALOG_FIRSTSTATE_NEW = "00"; //首营状态(新建)
+    public static final String CODE_CATALOG_FIRSTSTATE_CHECKING = "10"; //首营状态(审核中)
+    public static final String CODE_CATALOG_FIRSTSTATE_QCCHECKING = "20"; //首营状态(质量部审核)
+    public static final String CODE_CATALOG_FIRSTSTATE_RESPONSIBLE = "30"; //首营状态(负责人审核)
+    public static final String CODE_CATALOG_FIRSTSTATE_PASS = "40"; //首营状态(已通过)
+    public static final String CODE_CATALOG_FIRSTSTATE_FAIL = "50"; //首营状态(未通过)
+    public static final String CODE_CATALOG_FIRSTSTATE_STOP = "60"; //首营状态(已停止)
+    public static final String CODE_CATALOG_FIRSTSTATE_USELESS = "90"; //首营状态(已报废)
 
 
 

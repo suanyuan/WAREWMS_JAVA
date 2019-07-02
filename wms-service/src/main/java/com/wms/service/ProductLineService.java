@@ -73,7 +73,7 @@ public class ProductLineService extends BaseService {
 		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-		productLine.setIsUse("1");
+		productLine.setIsUse("有效");
 		productLineMybatisDao.insert(productLine);
 
 

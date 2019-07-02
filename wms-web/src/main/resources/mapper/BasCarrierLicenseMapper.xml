@@ -92,7 +92,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag)
- values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{clientTerm},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},#{createDate},#{editId},#{editDate},#{activeFlag})
+ values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{clientTerm},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},now(),#{editId},#{editDate},#{activeFlag})
 </insert>
 
 <!-- 根据id，修改记录-->  

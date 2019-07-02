@@ -33,6 +33,7 @@ public class GspProductRegisterVO {
 	private String attachmentUrl;
 	private String classifyId;
 	private String classifyCatalog;
+	private String enterpriseId;
 
 	public String getProductRegisterId() {
 		return productRegisterId;
@@ -263,4 +264,11 @@ public class GspProductRegisterVO {
 		this.classifyCatalog = classifyCatalog;
 	}
 
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
 }

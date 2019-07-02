@@ -90,7 +90,7 @@
 
 
 	</resultMap>
-       
+
 <!-- Bas_Customer table all fields -->
 <sql id="Base_Column_List" >
 
@@ -164,6 +164,9 @@ where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.customerid != null and condition.customerid != ''" >
 	    and customerid =  #{condition.customerid,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.receivingAddressId != null and condition.receivingAddressId != ''" >
+	    and receiving_address_id =  #{condition.receivingAddressId,jdbcType=VARCHAR}
 	</if>
 	<if test="condition.descrC != null and condition.descrC != ''" >
 		and DESCR_C =  #{condition.descrC,jdbcType=VARCHAR}
@@ -667,5 +670,5 @@ where 1=1
 	<select id="getReceivingAddressInfo" resultMap="ResultMap" parameterType="Object">
 		select * from gsp_receiving_address where receiving_address_id=#{receivingAddressId,jdbcType=VARCHAR}
 	</select>
-  	
+
 </mapper>   

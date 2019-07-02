@@ -3,7 +3,9 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.entity.GspBusinessLicense;
 import com.wms.mybatis.dao.BasCarrierLicenseMybatisDao;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,9 +47,16 @@ public class BasCarrierLicenseService extends BaseService {
 	public Json addBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
 		Json json = new Json();
 		BasCarrierLicense basCarrierLicense = new BasCarrierLicense();
+		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+		basCarrierLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		BeanUtils.copyProperties(basCarrierLicenseForm, basCarrierLicense);
+		BeanUtils.copyProperties(basCarrierLicenseForm, gspBusinessLicense);
 		basCarrierLicenseMybatisDao.add(basCarrierLicense);
+
+		basCarrierLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
+
 		return json;
 	}
 

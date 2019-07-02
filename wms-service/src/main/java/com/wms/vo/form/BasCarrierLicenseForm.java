@@ -12,16 +12,190 @@ public class BasCarrierLicenseForm {
 	private String roadAuthorityPermit;
 	private String roadBusinessScope;
 	private String carrierNo;
-	private java.util.Date carrierDate;
-	private java.util.Date carrierEndDate;
+	private String carrierDate;
+	private String carrierEndDate;
 	private String clientTerm;
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
 	private String createId;
-	private java.util.Date createDate;
+	private String createDate;
 	private String editId;
-	private java.util.Date editDate;
+	private String editDate;
 	private String activeFlag;
+
+
+    private String businessId;
+
+
+
+    private String licenseNumber;
+
+    private String socialCreditCode;
+
+    private String licenseName;
+
+    private String licenseType;
+
+    private String residence;
+
+    private String juridicalPerson;
+
+    private String registeredCapital;
+
+    private String establishmentDate;
+
+    private String businessStartDate;
+
+    private String businessEndDate;
+
+    private String isLong;
+
+    private String businessScope;
+
+    private String issueDate;
+
+    private String registrationAuthority;
+
+    private String attachmentUrl;
+
+
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getSocialCreditCode() {
+        return socialCreditCode;
+    }
+
+    public void setSocialCreditCode(String socialCreditCode) {
+        this.socialCreditCode = socialCreditCode;
+    }
+
+    public String getLicenseName() {
+        return licenseName;
+    }
+
+    public void setLicenseName(String licenseName) {
+        this.licenseName = licenseName;
+    }
+
+    public String getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(String licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public String getResidence() {
+        return residence;
+    }
+
+    public void setResidence(String residence) {
+        this.residence = residence;
+    }
+
+    public String getJuridicalPerson() {
+        return juridicalPerson;
+    }
+
+    public void setJuridicalPerson(String juridicalPerson) {
+        this.juridicalPerson = juridicalPerson;
+    }
+
+    public String getRegisteredCapital() {
+        return registeredCapital;
+    }
+
+    public void setRegisteredCapital(String registeredCapital) {
+        this.registeredCapital = registeredCapital;
+    }
+
+    public String getEstablishmentDate() {
+        return establishmentDate;
+    }
+
+    public void setEstablishmentDate(String establishmentDate) {
+        this.establishmentDate = establishmentDate;
+    }
+
+    public String getBusinessStartDate() {
+        return businessStartDate;
+    }
+
+    public void setBusinessStartDate(String businessStartDate) {
+        this.businessStartDate = businessStartDate;
+    }
+
+    public String getBusinessEndDate() {
+        return businessEndDate;
+    }
+
+    public void setBusinessEndDate(String businessEndDate) {
+        this.businessEndDate = businessEndDate;
+    }
+
+    public String getIsLong() {
+        return isLong;
+    }
+
+    public void setIsLong(String isLong) {
+        this.isLong = isLong;
+    }
+
+    public String getBusinessScope() {
+        return businessScope;
+    }
+
+    public void setBusinessScope(String businessScope) {
+        this.businessScope = businessScope;
+    }
+
+    public String getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(String issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public String getRegistrationAuthority() {
+        return registrationAuthority;
+    }
+
+    public void setRegistrationAuthority(String registrationAuthority) {
+        this.registrationAuthority = registrationAuthority;
+    }
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
+
+    public String getIsUse() {
+        return isUse;
+    }
+
+    public void setIsUse(String isUse) {
+        this.isUse = isUse;
+    }
+
+    private String isUse;
 
 	public String getEnterpriseId() {
 		return enterpriseId;
@@ -80,20 +254,20 @@ public class BasCarrierLicenseForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierDate() {
+	public String getCarrierDate() {
 		return carrierDate;
 	}
 
-	public void setCarrierDate(java.util.Date carrierDate) {
+	public void setCarrierDate(String carrierDate) {
 		this.carrierDate = carrierDate;
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierEndDate() {
+	public String getCarrierEndDate() {
 		return carrierEndDate;
 	}
 
-	public void setCarrierEndDate(java.util.Date carrierEndDate) {
+	public void setCarrierEndDate(String carrierEndDate) {
 		this.carrierEndDate = carrierEndDate;
 	}
 
@@ -130,11 +304,11 @@ public class BasCarrierLicenseForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -147,11 +321,11 @@ public class BasCarrierLicenseForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 

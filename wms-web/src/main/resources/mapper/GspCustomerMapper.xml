@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspCustomerMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.GspCustomer" >
+	<result column="client_id" property="clientId"/>
+	<result column="client_no" property="clientNo"/>
+	<result column="client_name" property="clientName"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="remark" property="remark"/>
+	<result column="first_state" property="firstState"/>
+	<result column="is_check" property="isCheck"/>
+	<result column="is_cooperation" property="isCooperation"/>
+	<result column="operate_type" property="operateType"/>
+	<result column="contract_no" property="contractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+	<result column="is_chinese_label" property="isChineseLabel"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+</resultMap>
+       
+<!-- gsp_customer table all fields -->
+<sql id="Base_Column_List" >
+	 client_id,client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.clientId != null and condition.clientId != ''" >
+	    and client_id =  #{condition.clientId}
+	</if>
+	<if test="condition.clientNo != null and condition.clientNo != ''" >
+	    and client_no =  #{condition.clientNo}
+	</if>
+	<if test="condition.clientName != null and condition.clientName != ''" >
+	    and client_name =  #{condition.clientName}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+	    and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.remark != null and condition.remark != ''" >
+	    and remark =  #{condition.remark}
+	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+	    and first_state =  #{condition.firstState}
+	</if>
+	<if test="condition.isCheck != null and condition.isCheck != ''" >
+	    and is_check =  #{condition.isCheck}
+	</if>
+	<if test="condition.isCooperation != null and condition.isCooperation != ''" >
+	    and is_cooperation =  #{condition.isCooperation}
+	</if>
+	<if test="condition.operateType != null and condition.operateType != ''" >
+	    and operate_type =  #{condition.operateType}
+	</if>
+	<if test="condition.contractNo != null and condition.contractNo != ''" >
+	    and contract_no =  #{condition.contractNo}
+	</if>
+	<if test="condition.contractUrl != null and condition.contractUrl != ''" >
+	    and contract_url =  #{condition.contractUrl}
+	</if>
+	<if test="condition.clientContent != null and condition.clientContent != ''" >
+	    and client_content =  #{condition.clientContent}
+	</if>
+	<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+	    and client_start_date =  #{condition.clientStartDate}
+	</if>
+	<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+	    and client_end_date =  #{condition.clientEndDate}
+	</if>
+	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
+	    and client_term =  #{condition.clientTerm}
+	</if>
+	<if test="condition.isChineseLabel != null and condition.isChineseLabel != ''" >
+	    and is_chinese_label =  #{condition.isChineseLabel}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+	    and is_use =  #{condition.isUse}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into gsp_customer(client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use)
+ values(#{clientNo},#{clientName},#{enterpriseId},#{remark},#{firstState},#{isCheck},#{isCooperation},#{operateType},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{createId},now(),#{editId},#{editDate},#{isUse})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update gsp_customer set client_no=#{clientNo},client_name=#{clientName},enterprise_id=#{enterpriseId},remark=#{remark},first_state=#{firstState},is_check=#{isCheck},is_cooperation=#{isCooperation},operate_type=#{operateType},contract_no=#{contractNo},contract_url=#{contractUrl},client_content=#{clientContent},client_start_date=#{clientStartDate},client_end_date=#{clientEndDate},client_term=#{clientTerm},is_chinese_label=#{isChineseLabel},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where client_id=#{clientId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update gsp_customer set 
+	<trim  suffixOverrides="," >
+	<if test="clientNo != null  ">
+		client_no=#{clientNo},
+	</if>
+	<if test="clientName != null  ">
+		client_name=#{clientName},
+	</if>
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
+	</if>
+	<if test="remark != null  ">
+		remark=#{remark},
+	</if>
+	<if test="firstState != null  ">
+		first_state=#{firstState},
+	</if>
+	<if test="isCheck != null  ">
+		is_check=#{isCheck},
+	</if>
+	<if test="isCooperation != null  ">
+		is_cooperation=#{isCooperation},
+	</if>
+	<if test="operateType != null  ">
+		operate_type=#{operateType},
+	</if>
+	<if test="contractNo != null  ">
+		contract_no=#{contractNo},
+	</if>
+	<if test="contractUrl != null  ">
+		contract_url=#{contractUrl},
+	</if>
+	<if test="clientContent != null  ">
+		client_content=#{clientContent},
+	</if>
+	<if test="clientStartDate != null  ">
+		client_start_date=#{clientStartDate},
+	</if>
+	<if test="clientEndDate != null  ">
+		client_end_date=#{clientEndDate},
+	</if>
+	<if test="clientTerm != null  ">
+		client_term=#{clientTerm},
+	</if>
+	<if test="isChineseLabel != null  ">
+		is_chinese_label=#{isChineseLabel},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="isUse != null  ">
+		is_use=#{isUse},
+	</if>
+	</trim> where client_id=#{clientId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from gsp_customer where client_id = #{clientId}
+</delete>
+ 
+<!-- 根据id查询 产品注册证 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from gsp_customer where client_id = #{clientId}
+</select>
+
+<!-- 产品注册证 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from gsp_customer 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询产品注册证列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from gsp_customer 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

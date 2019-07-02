@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ProductLineVO {
 
-	private Long productLineId;
+	private String productLineId;
 	private String enterpriseName;
 	private String name;
 	private String expression;
@@ -14,11 +14,11 @@ public class ProductLineVO {
 	private Date editDate;
 	private String isUse;
 
-	public Long getProductLineId() {
+	public String getProductLineId() {
 		return productLineId;
 	}
 
-	public void setProductLineId(Long productLineId) {
+	public void setProductLineId(String productLineId) {
 		this.productLineId = productLineId;
 	}
 

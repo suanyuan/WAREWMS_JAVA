@@ -6,8 +6,11 @@ import javax.servlet.http.HttpSession;
 
 import com.wms.mybatis.dao.BasCarrierLicenseMybatisDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -69,10 +72,21 @@ public class BasCarrierLicenseController {
 		return basCarrierLicenseService.getPagedDatagrid(pager, query);
 	}
 
+	/*@Login
+	@RequestMapping(params = "add")
+	@ResponseBody
+	public Json add(@Param(value = "basCarrierLicenseForm")String basCarrierLicenseForm) throws Exception {
+		Json json = basCarrierLicenseService.addBasCarrierLicense(basCarrierLicenseForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}*/
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	public Json add( BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
 		Json json = basCarrierLicenseService.addBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();
@@ -84,7 +98,7 @@ public class BasCarrierLicenseController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	public Json edit(String enterpriseId,BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
 		Json json = basCarrierLicenseService.editBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();

@@ -19,20 +19,21 @@ public class GspProductRegisterForm {
 	private String productExpiryDate;
 	private String otherContent;
 	private String remark;
-	private java.util.Date approveDate;
-	private java.util.Date productRegisterExpiryDate;
+	private String approveDate;
+	private String productRegisterExpiryDate;
 	private String productRegisterVersion;
 	private String version;
 	private String checkerId;
-	private java.util.Date checkDate;
+	private String checkDate;
 	private String createId;
-	private java.util.Date createDate;
+	private String createDate;
 	private String editId;
-	private java.util.Date editDate;
+	private String editDate;
 	private String isUse;
 	private String attachmentUrl;
 	private String classifyId;
 	private String classifyCatalog;
+	private String enterpriseId;
 
 	public String getProductRegisterId() {
 		return productRegisterId;
@@ -146,21 +147,19 @@ public class GspProductRegisterForm {
 		this.remark = remark;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getApproveDate() {
+	public String getApproveDate() {
 		return approveDate;
 	}
 
-	public void setApproveDate(java.util.Date approveDate) {
+	public void setApproveDate(String approveDate) {
 		this.approveDate = approveDate;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getProductRegisterExpiryDate() {
+	public String getProductRegisterExpiryDate() {
 		return productRegisterExpiryDate;
 	}
 
-	public void setProductRegisterExpiryDate(java.util.Date productRegisterExpiryDate) {
+	public void setProductRegisterExpiryDate(String productRegisterExpiryDate) {
 		this.productRegisterExpiryDate = productRegisterExpiryDate;
 	}
 
@@ -188,12 +187,11 @@ public class GspProductRegisterForm {
 		this.checkerId = checkerId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCheckDate() {
+	public String getCheckDate() {
 		return checkDate;
 	}
 
-	public void setCheckDate(java.util.Date checkDate) {
+	public void setCheckDate(String checkDate) {
 		this.checkDate = checkDate;
 	}
 
@@ -205,12 +203,11 @@ public class GspProductRegisterForm {
 		this.createId = createId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -222,12 +219,11 @@ public class GspProductRegisterForm {
 		this.editId = editId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 
@@ -263,4 +259,11 @@ public class GspProductRegisterForm {
 		this.classifyCatalog = classifyCatalog;
 	}
 
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
 }

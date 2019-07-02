@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.GspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -59,6 +62,19 @@ public class GspProductRegisterController {
 	}
 
 	@Login
+	@RequestMapping(params = "addSpec",method = RequestMethod.POST)
+	@ResponseBody
+	public Json add(@RequestParam(value="gspProductRegisterId",required=true) String gspProductRegisterId,@RequestParam(value="specId",required=true) String specId) throws Exception {
+		Json json = gspProductRegisterService.bindProduct(gspProductRegisterId,specId);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+
+	}
+
+	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
 	public Json edit(GspProductRegisterForm gspProductRegisterForm) throws Exception {
@@ -99,8 +115,12 @@ public class GspProductRegisterController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(String id){
+	public ModelAndView toDetail(@RequestParam(defaultValue = "") String id){
 		Map<String,Object> map = new HashMap<>();
+		if(!"".equals(id)){
+			GspProductRegister gspProductRegister = gspProductRegisterService.queryById(id);
+			map.put("gspProductRegister",gspProductRegister);
+		}
 		map.put("gspProductRegisterId",id);
 		return new ModelAndView("gspProductRegister/detail",map);
 	}
@@ -116,5 +136,12 @@ public class GspProductRegisterController {
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> showSpecsList(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
 		return gspProductRegisterService.queryProductPageListByRegisterId(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "unBind")
+	@ResponseBody
+	public Object unBind(@RequestParam(defaultValue = "") String id){
+		return gspProductRegisterService.unBindProduct(id);
 	}
 }

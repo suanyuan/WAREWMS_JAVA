@@ -80,7 +80,7 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#basCarrierLicenseId').val(0);
-	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);;
+	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
 var edit = function(){
 	processType = 'edit';
@@ -189,7 +189,7 @@ var commit = function(){
                         msg = '<font color="red">' + result.msg + '</font>';
                     }
                 }catch (e) {
-                    //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                    msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
                     msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
                 } finally {
                     $.messager.show({

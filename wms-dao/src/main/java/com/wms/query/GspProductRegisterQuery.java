@@ -36,4 +36,5 @@ public class GspProductRegisterQuery implements IQuery {
 	private String attachmentUrl;
 	private String classifyId;
 	private String classifyCatalog;
+	private String enterpriseId;
 }
