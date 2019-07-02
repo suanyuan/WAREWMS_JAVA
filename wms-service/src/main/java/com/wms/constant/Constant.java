@@ -27,4 +27,6 @@ public class Constant {
     public static final String SUCCESS_MSG = "获取成功";
 
     public static final int pageSize = 10;
+
+    public static final String PROCEDURE_OK = "000";//存储过程执行成功返回值
 }

@@ -228,8 +228,6 @@ public class DocAsnDetail implements Serializable {
 
 	private String userdefine6;
 
-    private BasSku basSku;
-
     private BasPackage basPackage;
 
 	public DocAsnDetail() {
@@ -957,14 +955,6 @@ public class DocAsnDetail implements Serializable {
 	public void setUserdefine6(String userdefine6) {
 		this.userdefine6 = userdefine6;
 	}
-
-    public BasSku getBasSku() {
-        return basSku;
-    }
-
-    public void setBasSku(BasSku basSku) {
-        this.basSku = basSku;
-    }
 
     public BasPackage getBasPackage() {
         return basPackage;

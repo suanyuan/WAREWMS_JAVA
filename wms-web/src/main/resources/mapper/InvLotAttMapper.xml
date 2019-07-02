@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.InvLotAttMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.InvLotAtt" >
+	<result column="lotnum" property="lotnum"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="receivingtime" property="receivingtime"/>
+	<result column="qcreportfilename" property="qcreportfilename"/>
+</resultMap>
+       
+<!-- inv_lot_att table all fields -->
+<sql id="Base_Column_List" >
+	 lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+	    and lotatt06 =  #{condition.lotatt06}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt09 != null and condition.lotatt09 != ''" >
+	    and lotatt09 =  #{condition.lotatt09}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and lotatt12 =  #{condition.lotatt12}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.receivingtime != null and condition.receivingtime != ''" >
+	    and receivingtime =  #{condition.receivingtime}
+	</if>
+	<if test="condition.qcreportfilename != null and condition.qcreportfilename != ''" >
+	    and qcreportfilename =  #{condition.qcreportfilename}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into inv_lot_att(lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename)
+ values(#{lotnum},#{customerid},#{sku},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{lotatt12},#{addtime},#{addwho},#{edittime},#{editwho},#{receivingtime},#{qcreportfilename})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update inv_lot_att set customerid=#{customerid},sku=#{sku},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},receivingtime=#{receivingtime},qcreportfilename=#{qcreportfilename} where lotnum=#{lotnum}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update inv_lot_att set 
+	<trim  suffixOverrides="," >
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotatt01 != null  ">
+		lotatt01=#{lotatt01},
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02=#{lotatt02},
+	</if>
+	<if test="lotatt03 != null  ">
+		lotatt03=#{lotatt03},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="lotatt05 != null  ">
+		lotatt05=#{lotatt05},
+	</if>
+	<if test="lotatt06 != null  ">
+		lotatt06=#{lotatt06},
+	</if>
+	<if test="lotatt07 != null  ">
+		lotatt07=#{lotatt07},
+	</if>
+	<if test="lotatt08 != null  ">
+		lotatt08=#{lotatt08},
+	</if>
+	<if test="lotatt09 != null  ">
+		lotatt09=#{lotatt09},
+	</if>
+	<if test="lotatt10 != null  ">
+		lotatt10=#{lotatt10},
+	</if>
+	<if test="lotatt11 != null  ">
+		lotatt11=#{lotatt11},
+	</if>
+	<if test="lotatt12 != null  ">
+		lotatt12=#{lotatt12},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="receivingtime != null  ">
+		receivingtime=#{receivingtime},
+	</if>
+	<if test="qcreportfilename != null  ">
+		qcreportfilename=#{qcreportfilename},
+	</if>
+	</trim> where lotnum=#{lotnum}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from inv_lot_att where lotnum = #{lotnum}
+</delete>
+ 
+<!-- 根据id查询 批次属性 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from inv_lot_att where lotnum = #{lotnum}
+</select>
+
+<!-- 批次属性 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from inv_lot_att 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询批次属性列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from inv_lot_att 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

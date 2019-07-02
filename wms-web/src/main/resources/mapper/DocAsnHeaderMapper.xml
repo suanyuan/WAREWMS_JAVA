@@ -699,13 +699,13 @@ insert into doc_asn_header
 		releasestatus<!--释放状态 -->
 		)
       values(#{asnno},
-             sysdate,
+             now(),
              #{expectedarrivetime1},
              '00',
              'PR',
-             sysdate,
+             now(),
              #{addwho},
-             sysdate,
+             now(),
              #{addwho},
              #{customerid},
              #{addwho},
@@ -759,7 +759,7 @@ insert into doc_asn_header
 	<if test="asnreference5 != null  ">
 		asnreference5=#{asnreference5},
 	</if>
-	edittime=sysdate,
+	edittime=now(),
 	editwho=#{editwho}
 	where asnno=#{asnno,jdbcType=VARCHAR}
 </update>

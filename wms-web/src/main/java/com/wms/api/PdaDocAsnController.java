@@ -1,9 +1,11 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
+import com.wms.vo.form.pda.PdaDocAsnDetailForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,16 +67,15 @@ public class PdaDocAsnController {
 
     /**
      * 获取收货任务detail数据
-     * @param asnno 收货任务单号
-     * @param lotatt 批次属性效期 - 06
+     * @param query 查询条件
      * @return detail数据
      */
     @RequestMapping(params = "docAsnDetail", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDetailByLotatt(String asnno, String lotatt) {
+    public Map<String, Object> queryDocAsnDetail(PdaDocAsnDetailQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDetailByLotatt(asnno, lotatt);
+        PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDocAsnDetail(query);
 
         if (pdaDocAsnDetailVO.getBasPackage() == null || pdaDocAsnDetailVO.getBasSku() == null) {
 
@@ -94,17 +95,17 @@ public class PdaDocAsnController {
     }
 
     /**
-     * 收货提交
-     * @param asnno 收货任务单号
-     * @param sku 产品代码
-     * @param piece 收货件数
+     * 收货提交 目前只支持收货单号+效期来查询，后期还可添加
+     * @param form 收货数据
      * @return ~
      */
     @RequestMapping(params = "submit", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> submit(String asnno, String sku, int piece) {
+    public Map<String, Object> submit(PdaDocAsnDetailForm form) {
 
-        return null;
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docAsnDetailService.receiveGoods(form));
+        return resultMap;
     }
 
     /**

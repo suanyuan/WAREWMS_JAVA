@@ -16,6 +16,9 @@ public class PdaResult {
 
     private String msg;
 
+    public PdaResult() {
+    }
+
     public PdaResult(int errorCode, String msg) {
         this.errorCode = errorCode;
         this.msg = msg;

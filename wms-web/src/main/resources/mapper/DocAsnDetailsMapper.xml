@@ -95,7 +95,6 @@
 </resultMap>
     
     <resultMap id="ExtendDetailMap" type="com.wms.entity.DocAsnDetail" extends="DocAsnDetailMap">
-        <association property="basSku" column="{sku=sku,customerid=customerid}" javaType="com.wms.entity.BasSku" select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
         <association property="basPackage" column="packid" javaType="com.wms.entity.BasPackage" select="com.wms.mybatis.dao.BasPackageMybatisDao.queryById"/>
     </resultMap>
        
@@ -433,9 +432,9 @@ insert into doc_asn_details
                0,
                0,
                #{receivinglocation},
-               sysdate,
+               now(),
                #{addwho},
-               sysdate,
+               now(),
                #{addwho},
                #{addwho},
                0,
@@ -494,7 +493,7 @@ insert into doc_asn_details
 	<if test="lotatt06 != null  ">
 		lotatt06=#{lotatt06, jdbcType=VARCHAR},
 	</if>
-	edittime=sysdate,
+	edittime=now(),
 	editwho=#{editwho}
 	where asnno=#{asnno, jdbcType=VARCHAR}
 	and asnlineno=#{asnlineno, jdbcType=NUMERIC}
@@ -779,7 +778,7 @@ insert into doc_asn_details
 </select>
   	
 <!-- 查询入库单明细列表 -->
-<select id="queryByPageList" resultMap="DocAsnDetailMap"  parameterType="Object">
+<select id="queryByPageList" resultMap="ExtendDetailMap"  parameterType="Object">
 	select *
 	  from (select a.customerid,
 	               a.asnno,
@@ -823,22 +822,21 @@ insert into doc_asn_details
 
 <!--入库单明细行号-->
 <select id="getAsnlinenoById" resultType="java.lang.Long"  parameterType="Object">
-	select nvl(max(asnLineno),0) from Doc_Asn_Details where asnno = #{asnno,jdbcType=VARCHAR}
+	select ifnull(max(asnLineno),0) from Doc_Asn_Details where asnno = #{asnno,jdbcType=VARCHAR}
 </select>
 
 <!--按明细行收货 -->
 <select id="receiveByAsn" statementType="CALLABLE" parameterType="java.util.Map">
 	<!--EXEC SPASN_Receiving_Process 'WH01',                                 '3','A16011800001',                   '1',                                  '*','*','00','正常','OK','正常','','XTCS'                                 ,'TEST001',                      '90'只支持完全收货                                                                         ,'0','EA','STANDARD','',''                                 ,'',                                 '2016-01-18',                         '',                                  ''                                   ,''                                  ,'','','','','','','0'                                   ,'0.000'                                     ,'0.000','0.00000',                             '','','','','','TEST001',                                    'TEST001'                                    ,'00','','2016-01-18 14:01',                      'Y','wpsadmin'                         ,'CN','wpsadmin'                         ,''-->
-	   {call SPASN_Receiving_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'3',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{expectedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},'','','','','','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',to_char(sysdate,'YYYY-MM-DD hh24:mi:ss'),'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPASN_Receiving_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'3',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{expectedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},'','','','','','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',to_char(now(),'YYYY-MM-DD hh24:mi:ss'),'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
-    <!--通过效期反推收货明细-->
-    <select id="queryDetailByLotatt" resultMap="ExtendDetailMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        from doc_asn_details
-        where asnno = #{asnno, jdbcType=VARCHAR}
-        and lotatt06 = #{lotatt, jdbcType=VARCHAR}
+    <select id="testProcedure" statementType="CALLABLE" parameterType="java.util.Map">
+        {call SP_test(#{userid,mode=IN,jdbcType=VARCHAR},#{returnCode,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+    <select id="receiveGoods" statementType="CALLABLE" parameterType="java.util.Map">
+        {call spasn_receiving_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'2',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{receivedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},'','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivingtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
     </select>
 
 </mapper>   

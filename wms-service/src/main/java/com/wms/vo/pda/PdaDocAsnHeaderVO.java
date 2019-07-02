@@ -29,6 +29,11 @@ public class PdaDocAsnHeaderVO {
      */
     private String asnreference1;
 
+    /**
+     * 仓库id
+     */
+    private String warehouseid;
+
     public String getAsnno() {
         return asnno;
     }
@@ -67,5 +72,13 @@ public class PdaDocAsnHeaderVO {
 
     public void setAsnreference1(String asnreference1) {
         this.asnreference1 = asnreference1;
+    }
+
+    public String getWarehouseid() {
+        return warehouseid;
+    }
+
+    public void setWarehouseid(String warehouseid) {
+        this.warehouseid = warehouseid;
     }
 }

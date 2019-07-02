@@ -2,8 +2,9 @@ package com.wms.vo.pda;
 
 import com.wms.entity.BasPackage;
 import com.wms.entity.BasSku;
+import com.wms.entity.BaseLotatt;
 
-public class PdaDocAsnDetailVO {
+public class PdaDocAsnDetailVO extends BaseLotatt {
 
     /**
      * 预期到货通知编号 ≈ 收货任务单号
@@ -11,23 +12,26 @@ public class PdaDocAsnDetailVO {
     private String asnno;
 
     /**
+     * 行号
+     */
+    private int asnlineno;
+
+    /**
      * 产品代码
      */
     private String sku;
 
-    /**
-     * 生产批号
-     */
-    private String lotatt01;
-
-    /**
-     * 序列号
-     */
-    private String lotatt02;
-
     private BasSku basSku;
 
     private BasPackage basPackage;
+
+    public int getAsnlineno() {
+        return asnlineno;
+    }
+
+    public void setAsnlineno(int asnlineno) {
+        this.asnlineno = asnlineno;
+    }
 
     public String getAsnno() {
         return asnno;
@@ -43,22 +47,6 @@ public class PdaDocAsnDetailVO {
 
     public void setSku(String sku) {
         this.sku = sku;
-    }
-
-    public String getLotatt01() {
-        return lotatt01;
-    }
-
-    public void setLotatt01(String lotatt01) {
-        this.lotatt01 = lotatt01;
-    }
-
-    public String getLotatt02() {
-        return lotatt02;
-    }
-
-    public void setLotatt02(String lotatt02) {
-        this.lotatt02 = lotatt02;
     }
 
     public BasSku getBasSku() {
