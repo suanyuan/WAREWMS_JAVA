@@ -3,10 +3,15 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.dao.GspBusinessLicenseDao;
 import com.wms.entity.GspBusinessLicense;
 import com.wms.mybatis.dao.BasCarrierLicenseMybatisDao;
+import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wms.dao.BasCarrierLicenseDao;
@@ -27,11 +32,23 @@ public class BasCarrierLicenseService extends BaseService {
 	private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
 
 	@Autowired
+	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+
+	@Autowired
 	private BasCarrierLicenseDao basCarrierLicenseDao;
 
 	public EasyuiDatagrid<BasCarrierLicenseVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCarrierLicenseQuery query) {
 		EasyuiDatagrid<BasCarrierLicenseVO> datagrid = new EasyuiDatagrid<BasCarrierLicenseVO>();
-		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseDao.getPagedDatagrid(pager, query);
+
+
+
+
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseMybatisDao.queryByList(mybatisCriteria);
 		BasCarrierLicenseVO basCarrierLicenseVO = null;
 		List<BasCarrierLicenseVO> basCarrierLicenseVOList = new ArrayList<BasCarrierLicenseVO>();
 		for (BasCarrierLicense basCarrierLicense : basCarrierLicenseList) {
@@ -39,12 +56,12 @@ public class BasCarrierLicenseService extends BaseService {
 			BeanUtils.copyProperties(basCarrierLicense, basCarrierLicenseVO);
 			basCarrierLicenseVOList.add(basCarrierLicenseVO);
 		}
-		datagrid.setTotal(basCarrierLicenseDao.countAll(query));
+		datagrid.setTotal((long) basCarrierLicenseMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(basCarrierLicenseVOList);
 		return datagrid;
 	}
 
-	public Json addBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	/*public Json addBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
 		Json json = new Json();
 		BasCarrierLicense basCarrierLicense = new BasCarrierLicense();
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
@@ -58,22 +75,73 @@ public class BasCarrierLicenseService extends BaseService {
 		json.setSuccess(true);
 
 		return json;
+	}*/
+
+	/**
+	 * 对承运商的新增
+	 * @param basCarrierLicenseForm
+	 * @return
+	 * @throws Exception
+	 */
+	public Json addBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+		Json json = null;
+		try {
+			json = new Json();
+			BasCarrierLicense basCarrierLicense = new BasCarrierLicense();
+			GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+
+			BeanUtils.copyProperties(basCarrierLicenseForm.getBasCarrierLicenseForm(), basCarrierLicense);
+			BeanUtils.copyProperties(basCarrierLicenseForm.getGspBusinessLicenseForm(), gspBusinessLicense);
+			basCarrierLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			basCarrierLicense.setActiveFlag("1");
+
+			gspBusinessLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspBusinessLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspBusinessLicense.setIsUse("1");
+			basCarrierLicenseMybatisDao.add(basCarrierLicense);
+
+			gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
+			json.setSuccess(true);
+		} catch (BeansException e) {
+			e.printStackTrace();
+		}
+
+		return json;
 	}
 
+	/**
+	 * 对承运商的编辑
+	 * @param basCarrierLicenseForm
+	 * @return
+	 */
 	public Json editBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) {
 		Json json = new Json();
-		BasCarrierLicense basCarrierLicense = basCarrierLicenseDao.findById(basCarrierLicenseForm.getCarrierLicenseId());
+		BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(basCarrierLicenseForm.getCarrierLicenseId());
 		BeanUtils.copyProperties(basCarrierLicenseForm, basCarrierLicense);
-		basCarrierLicenseDao.update(basCarrierLicense);
+		basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		basCarrierLicenseMybatisDao.updateBySelective(basCarrierLicense);
+
+
+		GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(basCarrierLicenseForm.getBusinessId());
+
+		BeanUtils.copyProperties(basCarrierLicenseForm,gspBusinessLicense);
+		gspBusinessLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		gspBusinessLicenseMybatisDao.updateBySelective(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
 	}
 
+	/**
+	 * 停止合作承运商
+	 * @param id
+	 * @return
+	 */
 	public Json deleteBasCarrierLicense(String id) {
 		Json json = new Json();
-		BasCarrierLicense basCarrierLicense = basCarrierLicenseDao.findById(id);
+		BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(id);
 		if(basCarrierLicense != null){
-			basCarrierLicenseDao.delete(basCarrierLicense);
+			basCarrierLicenseMybatisDao.delete(basCarrierLicense);
 		}
 		json.setSuccess(true);
 		return json;

@@ -1,11 +1,15 @@
 package com.wms.vo.form;
 
+import com.wms.entity.BasCarrierLicense;
+import com.wms.entity.GspBusinessLicense;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasCarrierLicenseForm {
 
-	private String carrierLicenseId;
+    private GspBusinessLicenseForm gspBusinessLicenseForm;
+    private BasCarrierLicenseForm basCarrierLicenseForm;
+    private String carrierLicenseId;
 	private String enterpriseId;
 	private String roadNumber;
 	private String roadNumberTerm;
@@ -22,6 +26,8 @@ public class BasCarrierLicenseForm {
 	private String editId;
 	private String editDate;
 	private String activeFlag;
+	private String file;
+	private String roadNumberlicenseUrl;
 
 
     private String businessId;
@@ -58,6 +64,37 @@ public class BasCarrierLicenseForm {
 
     private String attachmentUrl;
 
+    public GspBusinessLicenseForm getGspBusinessLicenseForm() {
+        return gspBusinessLicenseForm;
+    }
+
+    public void setGspBusinessLicenseForm(GspBusinessLicenseForm gspBusinessLicenseForm) {
+        this.gspBusinessLicenseForm = gspBusinessLicenseForm;
+    }
+
+    public BasCarrierLicenseForm getBasCarrierLicenseForm() {
+        return basCarrierLicenseForm;
+    }
+
+    public void setBasCarrierLicenseForm(BasCarrierLicenseForm basCarrierLicenseForm) {
+        this.basCarrierLicenseForm = basCarrierLicenseForm;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getRoadNumberlicenseUrl() {
+        return roadNumberlicenseUrl;
+    }
+
+    public void setRoadNumberlicenseUrl(String roadNumberlicenseUrl) {
+        this.roadNumberlicenseUrl = roadNumberlicenseUrl;
+    }
 
     public String getBusinessId() {
         return businessId;

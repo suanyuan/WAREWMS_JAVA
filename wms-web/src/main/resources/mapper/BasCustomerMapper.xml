@@ -552,7 +552,7 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	update  Bas_Customer set ACTIVE_FLAG='N' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	update  Bas_Customer set ACTIVE_FLAG='0' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
  
 <!-- 根据id查询 客户档案 -->
@@ -574,10 +574,10 @@ where 1=1
 
 <!-- 客户档案 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Bas_Customer 
+	select count(1) from Bas_Customer
 	<include refid="Example_Where_Clause"/>
 </select>
-  	
+
 <!-- 查询客户档案列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
@@ -588,7 +588,7 @@ where 1=1
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
 </select>
-  	
+
 <!-- 查询客户档案分页列表
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (

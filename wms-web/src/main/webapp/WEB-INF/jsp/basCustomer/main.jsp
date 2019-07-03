@@ -35,30 +35,29 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'customerId',		title: '客户',	width: 16 },
-            {field: 'descrC',		title: '客户名称',	width: 16 },
-
-            {field: 'customerType',		title: '客户类型 ',	width: 30 },
+			{field: 'customerId',		title: '货主sku产品代码',	width: 40 },
+            {field: 'descrC',		title: '客户名称',	width: 20 },
+            {field: 'customerType',		title: '客户类型 ',	width: 20 },
             {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
-            {field: 'shorthandName',		title: '简称 ',	width: 30 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 30 },
-            {field: 'contacts',		title: '联系人 ',	width: 30 },
+            {field: 'shorthandName',		title: '简称 ',	width: 15 },
+            {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
+            {field: 'contacts',		title: '联系人 ',	width: 15 },
             {field: 'contactsPhone',		title: '联系人电话 ',	width: 30 },
-            {field: 'remark',		title: '备注 ',	width: 30 },
+            {field: 'remark',		title: '备注 ',	width: 15 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-			{field: 'supContractNo',		title: '合同编号 ',	width: 30 },
+			{field: 'supContractNo',		title: '合同编号 ',	width: 20 },
 			{field: 'contractUrl',		title: '合同文件 ',	width: 20 },
-			{field: 'clientContent',		title: '委托内容 ',	width: 40 },
-			{field: 'clientStartDate',		title: '委托开始时间 ',	width: 16 },
-			{field: 'clientEndDate',		title: '委托结束时间 ',	width: 20 },
+			{field: 'clientContent',		title: '委托内容 ',	width: 20 },
+			{field: 'clientStartDate',		title: '委托开始时间 ',	width: 30 },
+			{field: 'clientEndDate',		title: '委托结束时间 ',	width: 30 },
 			/*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
 				return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-			{field: 'clientTerm',		title: '委托期限',	width: 12 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 12},
-            {field: 'activeFlag',		title: '激活 ',	width: 12}
+			{field: 'clientTerm',		title: '委托期限',	width: 20 },
+            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
+            {field: 'activeFlag',		title: '激活 ',	width: 41}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -261,30 +260,32 @@ var doSearch = function(){
 <body>
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
 	<div class='easyui-layout' data-options='fit:true,border:false'>
-		<div data-options='region:"center",border:false' style='overflow: hidden;'>
+		<div data-options='region:"center",border:false' style='overflow: scroll;'>
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>客户ID：</th><td><input type='text' id='customerid' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>客户名称：</th><td><input type='text' id='descrC' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>企业信息代码：</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>简称：</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>企业名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>合同编号：</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='4' data-options=''/></td>
+							<th>货主sku产品代码：</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户名称：</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>企业信息代码：</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>简称：</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
 						<tr>
-							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='4' data-options=''/></td>
-							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='4' data-options=''/></td>
+							<th>企业名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>合同编号：</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>
+
+							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
 
 						</tr>
-							<th>客户类型：</th><td><input type='text' id='customerType' class='easyui-combobox' size='4' data-options="panelHeight:'auto',
+							<th>客户类型：</th><td><input type='text' id='customerType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
 																																	valueField: 'id',
 																																	textField: 'value'"/></td>
 
-							<th>类型：</th><td><input type='text' id='operateType' class='easyui-combobox' size='4' data-options="panelHeight:'auto',
+							<th>类型：</th><td><input type='text' id='operateType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	url:'<c:url value="/basCustomerController.do?getOperateTypeCombobox"/>',
 																																	valueField: 'id',
@@ -295,8 +296,8 @@ var doSearch = function(){
 						<td>
 							<select id="isChineseLabel" name="isChineseLabel" class="easyui-combobox"  style="width:100px;">
 								<option value=""></option>
-								<option value="Y">是</option>
-								<option value="N">否</option>
+								<option value="1">是</option>
+								<option value="0">否</option>
 							</select>
 						</td>
 
@@ -320,8 +321,8 @@ var doSearch = function(){
 						<td>
 							<select id="activeFlag" class="easyui-combobox"  style="width:100px;">
 								<option value=""></option>
-								<option value="Y">是</option>
-								<option value="N">否</option>
+								<option value="1">是</option>
+								<option value="0">否</option>
 							</select>
 						</td>
 						<td>

@@ -163,9 +163,9 @@ public class BasCustomerController {
     }
 	@Login
 	@RequestMapping(params = "toReceivingAddress")
-	public ModelAndView toReceivingAddress(String enterpriseId) {
+	public ModelAndView toReceivingAddress(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", enterpriseId);
+		model.put("menuId", menuId);
 		return new ModelAndView("basCustomer/receivingAddress", model);
 	}
 

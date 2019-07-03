@@ -1,8 +1,5 @@
 package com.wms.vo.form;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
-
 public class GspReceivingForm {
 
 	private String receivingId;
@@ -10,12 +7,57 @@ public class GspReceivingForm {
 	private String clientId;
 	private String supplierId;
 	private String isCheck;
+	private String isCooperation;
 	private String createId;
 	private String createDate;
 	private String editId;
 	private String editDate;
 	private String isUse;
 	private String isReturn;
+	private String deliveryAddress;
+	private String sellerName;
+
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	private String contacts;
+	private String phone;
+	public String getIsCooperation() {
+		return isCooperation;
+	}
+
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public void setIsCooperation(String isCooperation) {
+		this.isCooperation = isCooperation;
+	}
 
 	public String getReceivingId() {
 		return receivingId;

@@ -8,6 +8,7 @@ import com.wms.entity.GspCustomer;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspReceivingAddress;
 import com.wms.mybatis.dao.BasCustomerMybatisDao;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.BasCustomerQuery;
 import com.wms.utils.BeanConvertUtil;
@@ -30,6 +31,10 @@ public class BasCustomerService extends BaseService {
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
 
+
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
 
@@ -46,6 +51,19 @@ public class BasCustomerService extends BaseService {
 		for (BasCustomer basCustomer : basCustomerList) {
 			basCustomerVO = new BasCustomerVO();
 			BeanUtils.copyProperties(basCustomer, basCustomerVO);
+
+
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(basCustomer.getEnterpriseId());
+			if (gspEnterpriseInfo != null) {
+				basCustomerVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+				basCustomerVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
+				basCustomerVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+				basCustomerVO.setContacts(gspEnterpriseInfo.getContacts());
+				basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
+				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
+			}
+
+
 			basCustomerVOList.add(basCustomerVO);
 		}
 		datagrid.setTotal((long) basCustomerMybatisDao.queryByCount(mybatisCriteria));

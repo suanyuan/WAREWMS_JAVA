@@ -12,9 +12,13 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var ezuiFormInfo;
+var dialogUrl = sy.bp()+"/gspReceivingController.do?toDetail";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+    ezuiFormInfo = $('#ezuiFormInfo').form();
+
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/gspReceivingController.do?showDatagrid"/>',
 		method:'POST',
@@ -31,27 +35,30 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'receivingId',
 		columns : [[
 
 
-			{field: 'clientId',		title: '货主ID',	width: 72 },
-			{field: 'supplierId',		title: '供应商ID',	width: 72 },
+			{field: 'receivingId',	hidden:true,		width: 72 },
+			{field: 'clientId',		title: '货主',	width: 72 },
+			{field: 'supplierId',		title: '供应商',	width: 72 },
 			{field: 'isCheck',		title: '是否审查',	width: 72 },
+			{field: 'isReturn',		title: '是否医废',	width: 72 },
 			{field: 'isCooperation',		title: '是否合作',	width: 72 },
 			{field: 'deliveryAddress',		title: '送货地址',	width: 72 },
 			{field: 'contacts',		title: '联系人',	width: 72 },
 			{field: 'phone',		title: '联系电话',	width: 72 },
+			{field: 'sellerName',		title: '销售人',	width: 72 },
 
 			{field: 'createId',		title: '创建人',	width: 72 },
 			{field: 'createDate',		title: '创建日期',	width: 72 },
 			{field: 'editId',		title: '修改人',	width: 72 },
 			{field: 'editDate',		title: '修改日期',	width: 72 },
 			{field: 'isUse',		title: '是否有效',	width: 72 },
-			{field: 'isReturn',		title: '待输入栏位10',	width: 72 }
+
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+            edit();
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -67,17 +74,47 @@ $(function() {
 		}
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-		buttons : '#ezuiDialogBtn',
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
-	}).dialog('close');
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+		href:dialogUrl,
+		fit:true,
+		cache:false,
+        buttons : '#ezuiDialogBtn',
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    }).dialog('close');
+
+
+    enterDialog = $('#ezuiFormInfo').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    }).dialog('close');
+
+
+    $("#isUse").combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+    $("#isCooperation").combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+    $("#isCheck").combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
 });
 var add = function(){
 	processType = 'add';
-	$('#gspReceivingId').val(0);
+	$('#receivingId').val(0);
 	ezuiDialog.dialog('open');
 };
 var edit = function(){
@@ -95,7 +132,9 @@ var edit = function(){
 			editId : row.editId,
 			editDate : row.editDate,
 			isUse : row.isUse,
-			isReturn : row.isReturn
+			isReturn : row.isReturn,
+			sellerName : row.sellerName
+
 		});
 		ezuiDialog.dialog('open');
 	}else{
@@ -111,7 +150,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'gspReceivingController.do?delete',
-					data : {id : row.id},
+					data : {id : row.receivingId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -137,46 +176,7 @@ var del = function(){
 	}
 };
 var commit = function(){
-	var url = '';
-	if (processType == 'edit') {
-		url = '<c:url value="/gspReceivingController.do?edit"/>';
-	}else{
-		url = '<c:url value="/gspReceivingController.do?add"/>';
-	}
-	ezuiForm.form('submit', {
-		url : url,
-		onSubmit : function(){
-			if(ezuiForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg;
-					ezuiDatagrid.datagrid('reload');
-					ezuiDialog.dialog('close');
-				}else{
-					msg = '<font color="red">' + result.msg + '</font>';
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				$.messager.show({
-					msg : msg, title : '<spring:message code="common.message.prompt"/>'
-				});
-				$.messager.progress('close');
-			}
-		}
-	});
+    doSubmit();
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
@@ -184,15 +184,32 @@ var doSearch = function(){
 		enterpriseId : $('#enterpriseId').val(),
 		clientId : $('#clientId').val(),
 		supplierId : $('#supplierId').val(),
-		isCheck : $('#isCheck').val(),
+        deliveryAddress : $('#deliveryAddress').val(),
+		isCheck : $('#isCheck').combobox("getValue"),
 		createId : $('#createId').val(),
 		createDate : $('#createDate').val(),
 		editId : $('#editId').val(),
 		editDate : $('#editDate').val(),
-		isUse : $('#isUse').val(),
-		isReturn : $('#isReturn').val()
+        isUse : $('#isUse').combobox("getValue")
+
 	});
 };
+
+function searchMainEnterprise() {
+    enterpriseDialog_gspCustomer = $('#enterpriseDialog').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        href:sy.bp()+"/gspEnterpriseInfoController.do?toSearchDialog&target=gspCustomer",
+        width:850,
+        height:500,
+        cache:false,
+        onClose : function() {
+
+        }
+    })
+}
+
+
 </script>
 </head>
 <body>
@@ -204,13 +221,13 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>货主ID：</th><td><input type='text' id='receivingId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应商ID：</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>是否审查：</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>是否合作：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>送货地址：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主：</th><td><input type='text' id='clientId' class='easyui-textbox' size='8' data-options=''/></td>
+							<th>供应商：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='8' data-options=''/></td>
+							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='8' data-options=''/></td>
+							<th>是否合作：</th><td><input type='text' id='isCooperation' class='easyui-textbox' size='8' data-options=''/></td>
+							<th>送货地址：</th><td><input type='text' id='deliveryAddress' class='easyui-textbox' size='8' data-options=''/></td>
 
-							<th>是否有效：</th><td><input type='text' id='isReturn' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' name="isUse" class='easyui-textbox' size='8' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -220,7 +237,7 @@ var doSearch = function(){
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
@@ -229,56 +246,87 @@ var doSearch = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<form id='ezuiForm' method='post'>
+		<%--<form id='ezuiForm' method='post'>
 			<input type='hidden' id='gspReceivingId' name='gspReceivingId'/>
+			<input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId'/>
 			<table>
 				<tr>
-					<th>待输入0</th>
+					<th>收货单位</th>
 					<td><input type='text' name='receivingId' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入1</th>
-					<td><input type='text' name='enterpriseId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入2</th>
+					<th>货主</th>
 					<td><input type='text' name='clientId' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入3</th>
+					<th>供应商</th>
 					<td><input type='text' name='supplierId' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入4</th>
+					<th>是否审查</th>
 					<td><input type='text' name='isCheck' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入5</th>
-					<td><input type='text' name='createId' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>是否合作</th>
+					<td><input type='text' name='isCooperation' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入6</th>
-					<td><input type='text' name='createDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>送货地址</th>
+					<td><input type='text' name='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='editId' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>联系人</th>
+					<td><input type='text' name='contacts' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='editDate' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>联系人电话</th>
+					<td><input type='text' name='phone' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='isUse' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='isReturn' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
+
 			</table>
-		</form>
+		</form>--%>
 	</div>
+
+
+	<form id='enterpriseDialog' method='post'>
+		<%--<input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
+		<table>
+			<tr style="display: none">
+				<td><input type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
+			</tr>
+			<tr>
+				<th>企业信息代码</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>简称</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.shorthandName}" id="shorthandName" name='shorthandName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>企业名称</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>企业类型</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' class='easyui-textbox' size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>联系人</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox' size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>联系电话</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox" size='50' data-options='required:true'/></td>
+			</tr>
+			<tr>
+				<th>备注</th>
+				<td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox' size='50' style="height: 150px;" data-options='multiline:true'/></td>
+			</tr>
+		</table>--%>
+	</form>
+
+
+
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>

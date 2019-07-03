@@ -239,7 +239,7 @@ var doSearch = function(){
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
-			<table id='ezuiDatagrid'></table> 
+			<table id='ezuiDatagrid'></table>
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
