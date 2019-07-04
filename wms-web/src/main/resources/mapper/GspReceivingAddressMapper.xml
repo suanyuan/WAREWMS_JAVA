@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspReceivingAddressMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.GspReceivingAddress" >
+	<result column="receiving_address_id" property="receivingAddressId"/>
+	<result column="receiving_id" property="receivingId"/>
+	<result column="seller_name" property="sellerName"/>
+	<result column="country" property="country"/>
+	<result column="province" property="province"/>
+	<result column="city" property="city"/>
+	<result column="district" property="district"/>
+	<result column="delivery_address" property="deliveryAddress"/>
+	<result column="zipcode" property="zipcode"/>
+	<result column="contacts" property="contacts"/>
+	<result column="phone" property="phone"/>
+	<result column="is_default" property="isDefault"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+</resultMap>
+       
+<!-- gsp_receiving_address table all fields -->
+<sql id="Base_Column_List" >
+	 receiving_address_id,receiving_id,seller_name,country,province,city,district,delivery_address,zipcode,contacts,phone,is_default,create_id,create_date,edit_id,edit_date
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.receivingAddressId != null and condition.receivingAddressId != ''" >
+	    and receiving_address_id =  #{condition.receivingAddressId}
+	</if>
+	<if test="condition.receivingId != null and condition.receivingId != ''" >
+	    and receiving_id =  #{condition.receivingId}
+	</if>
+	<if test="condition.sellerName != null and condition.sellerName != ''" >
+	    and seller_name =  #{condition.sellerName}
+	</if>
+	<if test="condition.country != null and condition.country != ''" >
+	    and country =  #{condition.country}
+	</if>
+	<if test="condition.province != null and condition.province != ''" >
+	    and province =  #{condition.province}
+	</if>
+	<if test="condition.city != null and condition.city != ''" >
+	    and city =  #{condition.city}
+	</if>
+	<if test="condition.district != null and condition.district != ''" >
+	    and district =  #{condition.district}
+	</if>
+	<if test="condition.deliveryAddress != null and condition.deliveryAddress != ''" >
+	    and delivery_address =  #{condition.deliveryAddress}
+	</if>
+	<if test="condition.zipcode != null and condition.zipcode != ''" >
+	    and zipcode =  #{condition.zipcode}
+	</if>
+	<if test="condition.contacts != null and condition.contacts != ''" >
+	    and contacts =  #{condition.contacts}
+	</if>
+	<if test="condition.phone != null and condition.phone != ''" >
+	    and phone =  #{condition.phone}
+	</if>
+	<if test="condition.isDefault != null and condition.isDefault != ''" >
+	    and is_default =  #{condition.isDefault}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into gsp_receiving_address(receiving_address_id,receiving_id,seller_name,country,province,city,district,delivery_address,zipcode,contacts,phone,is_default,create_id,create_date,edit_id,edit_date)
+ values(#{receivingAddressId},#{receivingId},#{sellerName},#{country},#{province},#{city},#{district},#{deliveryAddress},#{zipcode},#{contacts},#{phone},#{isDefault},#{createId},#{createDate},#{editId},#{editDate})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update gsp_receiving_address set receiving_id=#{receivingId},seller_name=#{sellerName},country=#{country},province=#{province},city=#{city},district=#{district},delivery_address=#{deliveryAddress},zipcode=#{zipcode},contacts=#{contacts},phone=#{phone},is_default=#{isDefault},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate} where receiving_address_id=#{receivingAddressId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update gsp_receiving_address set 
+	<trim  suffixOverrides="," >
+	<if test="receivingId != null  ">
+		receiving_id=#{receivingId},
+	</if>
+	<if test="sellerName != null  ">
+		seller_name=#{sellerName},
+	</if>
+	<if test="country != null  ">
+		country=#{country},
+	</if>
+	<if test="province != null  ">
+		province=#{province},
+	</if>
+	<if test="city != null  ">
+		city=#{city},
+	</if>
+	<if test="district != null  ">
+		district=#{district},
+	</if>
+	<if test="deliveryAddress != null  ">
+		delivery_address=#{deliveryAddress},
+	</if>
+	<if test="zipcode != null  ">
+		zipcode=#{zipcode},
+	</if>
+	<if test="contacts != null  ">
+		contacts=#{contacts},
+	</if>
+	<if test="phone != null  ">
+		phone=#{phone},
+	</if>
+	<if test="isDefault != null  ">
+		is_default=#{isDefault},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	</trim> where receiving_address_id=#{receivingAddressId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from gsp_receiving_address where receiving_address_id = #{receivingAddressId}
+</delete>
+ 
+<!-- 根据id查询 收货地址 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from gsp_receiving_address where receiving_id = #{receivingId}
+</select>
+
+<!-- 收货地址 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from gsp_receiving_address 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询收货地址列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from gsp_receiving_address 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

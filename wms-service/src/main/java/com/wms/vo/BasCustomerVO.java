@@ -4,8 +4,20 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasCustomerVO {
-private String enterpriseId;
-private String receivingAddressId;
+
+	private String shorthandName;
+
+
+	private String enterpriseName;
+	private String enterpriseNo;
+
+	private String enterpriseType;
+
+	private String contacts;
+
+	private String contactsPhone;
+	private String enterpriseId;
+	private String receivingAddressId;
 	private java.lang.String customerid;
 	private java.lang.String customerType;
 	private java.lang.String activeFlag;
@@ -65,6 +77,54 @@ private String receivingAddressId;
 	private java.lang.String udf5;
 	private java.lang.String zip;
 	private java.lang.String customerTypeName;
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getContactsPhone() {
+		return contactsPhone;
+	}
+
+	public void setContactsPhone(String contactsPhone) {
+		this.contactsPhone = contactsPhone;
+	}
 
 	public String getReceivingAddressId() {
 		return receivingAddressId;

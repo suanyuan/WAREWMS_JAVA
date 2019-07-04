@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.dao.GspReceivingDao" > 
+<mapper namespace="com.wms.mybatis.dao.GspReceivingMybatisDao" >
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.GspReceiving" >
 	<result column="receiving_id" property="receivingId"/>
@@ -43,6 +43,7 @@ where 1=1
 	<if test="condition.isCheck != null and condition.isCheck != ''" >
 	    and is_check =  #{condition.isCheck}
 	</if>
+
 	<if test="condition.createId != null and condition.createId != ''" >
 	    and create_id =  #{condition.createId}
 	</if>
@@ -68,7 +69,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into gsp_receiving(receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return)
- values(#{receivingId},#{enterpriseId},#{clientId},#{supplierId},#{isCheck},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isReturn})
+ values(#{receivingId},#{enterpriseId},#{clientId},#{supplierId},#{isCheck},#{createId},now(),#{editId},now(),#{isUse},#{isReturn})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -102,7 +103,7 @@ where 1=1
 		edit_id=#{editId},
 	</if>
 	<if test="editDate != null  ">
-		edit_date=#{editDate},
+		edit_date=now(),
 	</if>
 	<if test="isUse != null  ">
 		is_use=#{isUse},
@@ -115,7 +116,7 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from gsp_receiving where receiving_id = #{receivingId}
+	update 	 gsp_receiving set is_use = '0' where receiving_id = #{receivingId}
 </delete>
  
 <!-- 根据id查询 收货地址 -->

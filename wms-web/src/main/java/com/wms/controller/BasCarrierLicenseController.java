@@ -4,14 +4,10 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
-import com.wms.mybatis.dao.BasCarrierLicenseMybatisDao;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.BasCarrierLicenseService;
@@ -84,21 +80,25 @@ public class BasCarrierLicenseController {
 		return json;
 	}*/
 	@Login
-	@RequestMapping(params = "add")
+	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add( BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	public Json add(@RequestParam(value="enterpriseId",required=true) String enterpriseId,@RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
+		BasCarrierLicenseForm basCarrierLicenseForm = JSON.parseObject(basCarrierLicenseFormstr, BasCarrierLicenseForm.class);
 		Json json = basCarrierLicenseService.addBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+
 	}
 
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(String enterpriseId,BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	public Json edit(@RequestParam(value="enterpriseId",required=true) String enterpriseId, @RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
+		BasCarrierLicenseForm basCarrierLicenseForm = JSON.parseObject(basCarrierLicenseFormstr, BasCarrierLicenseForm.class);
 		Json json = basCarrierLicenseService.editBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();

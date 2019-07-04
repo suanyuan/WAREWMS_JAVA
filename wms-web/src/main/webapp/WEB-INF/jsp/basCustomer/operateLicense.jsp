@@ -83,6 +83,7 @@
                         })
                         $("#attachmentUrl").val(result.obj.attachmentUrl);
                         $("#licenseUrlFile").val(result.obj.attachmentUrl);
+
                     }
                 }
             });

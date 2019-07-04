@@ -27,6 +27,8 @@ public class GspReceiving  implements Serializable {
 
 	private String editDate;
 
+
+
 	private String isUse;
 
 	private String isReturn;

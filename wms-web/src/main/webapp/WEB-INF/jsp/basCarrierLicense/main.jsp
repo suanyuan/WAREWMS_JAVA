@@ -44,10 +44,10 @@ $(function() {
 			{field: 'carrierAuthorityPermit',		title: '快递业务经营许可证发证机关',	width: 50 },
 			{field: 'carrierBusinessScope',		title: '快递业务经营许可证业务范围',	width: 50 },
 			{field: 'createId',		title: '录入人',	width: 50 },
-			{field: 'createDate',		title: '录入时间',	width: 50 },
+			{field: 'createDate',	title: '录入时间',	width: 50 },
 			{field: 'editId',		title: '修改人',	width: 50 },
 			{field: 'editDate',		title: '修改时间',	width: 50 },
-			{field: 'activeFlag',		title: '是否有效',	width: 50 }
+			{field: 'activeFlag',	title: '是否有效',	width: 50  }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -103,7 +103,9 @@ var edit = function(){
 			editDate : row.editDate,
 			activeFlag : row.activeFlag
 		});
-		ezuiDialog.dialog('open');
+	/*	ezuiDialog.dialog('open');*/
+
+        ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -117,7 +119,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'basCarrierLicenseController.do?delete',
-					data : {id : row.id},
+					data : {id : row.carrierLicenseId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -176,7 +178,7 @@ var commit = function(){
         });
         $.ajax({
             url : url,
-            data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
+            data : {"enterpriseId":enterpriceId,"basCarrierLicenseFormstr":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
                 console.log(result);
                 var msg='';
@@ -223,7 +225,7 @@ var doSearch = function(){
 		createDate : $('#createDate').val(),
 		editId : $('#editId').val(),
 		editDate : $('#editDate').val(),
-		activeFlag : $('#activeFlag').val()
+		activeFlag : $('#activeFlag').combobox("getValue"),
 	});
 };
 </script>
@@ -252,7 +254,15 @@ var doSearch = function(){
 						<tr>
 							<th>修改人：</th><td><input type='text' id='editId' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>修改时间：</th><td><input type='text' id='editDate' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>
+							<%--<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>--%>
+                            <th>是否有效：</th>
+                            <td>
+                                <select id="activeFlag" class="easyui-combobox"  style="width:100px;">
+                                    <option value=""></option>
+                                    <option value="1">有效</option>
+                                    <option value="0">失效</option>
+                                </select>
+                            </td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -262,7 +272,7 @@ var doSearch = function(){
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>

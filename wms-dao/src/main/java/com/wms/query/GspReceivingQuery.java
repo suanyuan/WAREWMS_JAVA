@@ -16,6 +16,15 @@ public class GspReceivingQuery implements IQuery {
 	private String editDate;
 	private String isUse;
 	private String isReturn;
+	private String isCooperation;
+
+	public String getIsCooperation() {
+		return isCooperation;
+	}
+
+	public void setIsCooperation(String isCooperation) {
+		this.isCooperation = isCooperation;
+	}
 
 	public String getReceivingId() {
 		return receivingId;

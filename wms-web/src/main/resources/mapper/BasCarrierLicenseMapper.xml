@@ -14,7 +14,6 @@
 	<result column="carrier_no" property="carrierNo"/>
 	<result column="carrier_date" property="carrierDate"/>
 	<result column="carrier_end_date" property="carrierEndDate"/>
-	<result column="client_term" property="clientTerm"/>
 	<result column="carrier_authority_permit" property="carrierAuthorityPermit"/>
 	<result column="carrier_business_scope" property="carrierBusinessScope"/>
 	<result column="create_id" property="createId"/>
@@ -61,9 +60,6 @@ where 1=1
 	<if test="condition.carrierEndDate != null and condition.carrierEndDate != ''" >
 	    and carrier_end_date =  #{condition.carrierEndDate}
 	</if>
-	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
-	    and client_term =  #{condition.clientTerm}
-	</if>
 	<if test="condition.carrierAuthorityPermit != null and condition.carrierAuthorityPermit != ''" >
 	    and carrier_authority_permit =  #{condition.carrierAuthorityPermit}
 	</if>
@@ -91,13 +87,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag)
- values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{clientTerm},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},now(),#{editId},#{editDate},#{activeFlag})
+  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},now(),#{editId},now(),#{activeFlag})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update bas_carrier_license set road_number=#{roadNumber},road_number_term=#{roadNumberTerm},road_authority_permit=#{roadAuthorityPermit},road_business_scope=#{roadBusinessScope},carrier_no=#{carrierNo},carrier_date=#{carrierDate},carrier_end_date=#{carrierEndDate},client_term=#{clientTerm},carrier_authority_permit=#{carrierAuthorityPermit},carrier_business_scope=#{carrierBusinessScope},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},active_flag=#{activeFlag} where carrier_license_id=#{carrierLicenseId}
+  update bas_carrier_license set road_number=#{roadNumber},road_number_term=#{roadNumberTerm},road_authority_permit=#{roadAuthorityPermit},road_business_scope=#{roadBusinessScope},carrier_no=#{carrierNo},carrier_date=#{carrierDate},carrier_end_date=#{carrierEndDate},carrier_authority_permit=#{carrierAuthorityPermit},carrier_business_scope=#{carrierBusinessScope},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=now(),active_flag=#{activeFlag} where carrier_license_id=#{carrierLicenseId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -128,9 +124,6 @@ where 1=1
 	<if test="carrierEndDate != null  ">
 		carrier_end_date=#{carrierEndDate},
 	</if>
-	<if test="clientTerm != null  ">
-		client_term=#{clientTerm},
-	</if>
 	<if test="carrierAuthorityPermit != null  ">
 		carrier_authority_permit=#{carrierAuthorityPermit},
 	</if>
@@ -146,9 +139,9 @@ where 1=1
 	<if test="editId != null  ">
 		edit_id=#{editId},
 	</if>
-	<if test="editDate != null  ">
-		edit_date=#{editDate},
-	</if>
+
+		edit_date=now(),
+
 	<if test="activeFlag != null  ">
 		active_flag=#{activeFlag},
 	</if>
@@ -157,13 +150,13 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from bas_carrier_license where carrier_license_id = #{carrierLicenseId}
+	update 	 bas_carrier_license set  active_flag = '0' where carrier_license_id = #{carrierLicenseId}
 </delete>
  
 <!-- 根据id查询 承运商 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from bas_carrier_license where enterprise_id = #{enterpriseId}
+	 from bas_carrier_license where carrier_license_id = #{carrierLicenseId}
 </select>
 
 <!-- 承运商 列表总数-->

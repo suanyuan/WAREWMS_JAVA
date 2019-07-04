@@ -100,6 +100,7 @@
                         })
                         $("#attachmentUrl").val(result.obj.attachmentUrl);
                         $("#file").val(result.obj.attachmentUrl);
+
                     }
                 }
             });

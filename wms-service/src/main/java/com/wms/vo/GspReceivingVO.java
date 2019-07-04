@@ -16,6 +16,46 @@ public class GspReceivingVO {
 	private String editDate;
 	private String isUse;
 	private String isReturn;
+	private String contacts;
+	private String phone;
+
+	private String deliveryAddress;
+
+
+
+	private String isCooperation;
+
+    public String getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public String getIsCooperation() {
+		return isCooperation;
+	}
+
+	public void setIsCooperation(String isCooperation) {
+		this.isCooperation = isCooperation;
+	}
 
 	public String getReceivingId() {
 		return receivingId;
