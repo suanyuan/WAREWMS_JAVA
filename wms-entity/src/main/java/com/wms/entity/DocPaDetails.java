@@ -7,11 +7,13 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class DocTransPutway  implements Serializable {
+public class DocPaDetails  implements Serializable {
 
-	private String putwayno;
+	private String pano;
 
-	private String putwaystatus;
+	private String palineno;
+
+	private String linestatus;
 
 	private String asnno;
 

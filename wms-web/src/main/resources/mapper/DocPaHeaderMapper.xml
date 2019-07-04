@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocPaHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocPaHeader" >
+	<result column="PANO" property="pano"/>
+	<result column="ASNNO" property="asnno"/>
+	<result column="CUSTOMERID" property="customerid"/>
+	<result column="PAREFERENCE1" property="pareference1"/>
+	<result column="PAREFERENCE2" property="pareference2"/>
+	<result column="PAREFERENCE3" property="pareference3"/>
+	<result column="PAREFERENCE4" property="pareference4"/>
+	<result column="PAREFERENCE5" property="pareference5"/>
+	<result column="PATYPE" property="patype"/>
+	<result column="PASTATUS" property="pastatus"/>
+	<result column="PACREATIONTIME" property="pacreationtime"/>
+	<result column="USERDEFINE1" property="userdefine1"/>
+	<result column="USERDEFINE2" property="userdefine2"/>
+	<result column="USERDEFINE3" property="userdefine3"/>
+	<result column="USERDEFINE4" property="userdefine4"/>
+	<result column="USERDEFINE5" property="userdefine5"/>
+	<result column="NOTES" property="notes"/>
+	<result column="ADDTIME" property="addtime"/>
+	<result column="ADDWHO" property="addwho"/>
+	<result column="EDITTIME" property="edittime"/>
+	<result column="EDITWHO" property="editwho"/>
+	<result column="PA_PRINT_FLAG" property="paPrintFlag"/>
+	<result column="WAREHOUSEID" property="warehouseid"/>
+</resultMap>
+       
+<!-- doc_pa_header table all fields -->
+<sql id="Base_Column_List" >
+	 PANO,ASNNO,CUSTOMERID,PAREFERENCE1,PAREFERENCE2,PAREFERENCE3,PAREFERENCE4,PAREFERENCE5,PATYPE,PASTATUS,PACREATIONTIME,USERDEFINE1,USERDEFINE2,USERDEFINE3,USERDEFINE4,USERDEFINE5,NOTES,ADDTIME,ADDWHO,EDITTIME,EDITWHO,PA_PRINT_FLAG,WAREHOUSEID
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.pano != null and condition.pano != ''" >
+	    and PANO =  #{condition.pano}
+	</if>
+	<if test="condition.asnno != null and condition.asnno != ''" >
+	    and ASNNO =  #{condition.asnno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and CUSTOMERID =  #{condition.customerid}
+	</if>
+	<if test="condition.pareference1 != null and condition.pareference1 != ''" >
+	    and PAREFERENCE1 =  #{condition.pareference1}
+	</if>
+	<if test="condition.pareference2 != null and condition.pareference2 != ''" >
+	    and PAREFERENCE2 =  #{condition.pareference2}
+	</if>
+	<if test="condition.pareference3 != null and condition.pareference3 != ''" >
+	    and PAREFERENCE3 =  #{condition.pareference3}
+	</if>
+	<if test="condition.pareference4 != null and condition.pareference4 != ''" >
+	    and PAREFERENCE4 =  #{condition.pareference4}
+	</if>
+	<if test="condition.pareference5 != null and condition.pareference5 != ''" >
+	    and PAREFERENCE5 =  #{condition.pareference5}
+	</if>
+	<if test="condition.patype != null and condition.patype != ''" >
+	    and PATYPE =  #{condition.patype}
+	</if>
+	<if test="condition.pastatus != null and condition.pastatus != ''" >
+	    and PASTATUS =  #{condition.pastatus}
+	</if>
+	<if test="condition.pacreationtime != null and condition.pacreationtime != ''" >
+	    and PACREATIONTIME =  #{condition.pacreationtime}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and USERDEFINE1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and USERDEFINE2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and USERDEFINE3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and USERDEFINE4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and USERDEFINE5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and NOTES =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and ADDTIME =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and ADDWHO =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and EDITTIME =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and EDITWHO =  #{condition.editwho}
+	</if>
+	<if test="condition.paPrintFlag != null and condition.paPrintFlag != ''" >
+	    and PA_PRINT_FLAG =  #{condition.paPrintFlag}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and WAREHOUSEID =  #{condition.warehouseid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_pa_header(PANO,ASNNO,CUSTOMERID,PAREFERENCE1,PAREFERENCE2,PAREFERENCE3,PAREFERENCE4,PAREFERENCE5,PATYPE,PASTATUS,PACREATIONTIME,USERDEFINE1,USERDEFINE2,USERDEFINE3,USERDEFINE4,USERDEFINE5,NOTES,ADDTIME,ADDWHO,EDITTIME,EDITWHO,PA_PRINT_FLAG,WAREHOUSEID)
+ values(#{pano},#{asnno},#{customerid},#{pareference1},#{pareference2},#{pareference3},#{pareference4},#{pareference5},#{patype},#{pastatus},#{pacreationtime},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{notes},#{addtime},#{addwho},#{edittime},#{editwho},#{paPrintFlag},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_pa_header set asnno=#{asnno},customerid=#{customerid},pareference1=#{pareference1},pareference2=#{pareference2},pareference3=#{pareference3},pareference4=#{pareference4},pareference5=#{pareference5},patype=#{patype},pastatus=#{pastatus},pacreationtime=#{pacreationtime},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},notes=#{notes},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},PA_PRINT_FLAG=#{paPrintFlag},warehouseid=#{warehouseid} where PANO=#{pANO}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_pa_header set 
+	<trim  suffixOverrides="," >
+	<if test="asnno != null  ">
+		asnno=#{asnno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="pareference1 != null  ">
+		pareference1=#{pareference1},
+	</if>
+	<if test="pareference2 != null  ">
+		pareference2=#{pareference2},
+	</if>
+	<if test="pareference3 != null  ">
+		pareference3=#{pareference3},
+	</if>
+	<if test="pareference4 != null  ">
+		pareference4=#{pareference4},
+	</if>
+	<if test="pareference5 != null  ">
+		pareference5=#{pareference5},
+	</if>
+	<if test="patype != null  ">
+		patype=#{patype},
+	</if>
+	<if test="pastatus != null  ">
+		pastatus=#{pastatus},
+	</if>
+	<if test="pacreationtime != null  ">
+		pacreationtime=#{pacreationtime},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="paPrintFlag != null  ">
+		PA_PRINT_FLAG=#{paPrintFlag},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where pano=#{pano}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_pa_header where PANO = #{pano}
+</delete>
+ 
+<!-- 根据id查询 上架单头档 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_pa_header where PANO = #{pano}
+</select>
+
+<!-- 上架单头档 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_pa_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询上架单头档列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_pa_header 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+    <!--TODO 查询未完成列表-->
+    <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_pa_header
+        where PASTATUS = '00' or PASTATUS = '30'
+        order by ADDTIME desc
+        limit #{start}, #{pageSize}
+    </select>
+
+</mapper>   

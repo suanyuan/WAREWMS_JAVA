@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocPaDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocPaDetails" >
+	<result column="PANO" property="pano"/>
+	<result column="PALINENO" property="palineno"/>
+	<result column="LINESTATUS" property="linestatus"/>
+	<result column="ASNNO" property="asnno"/>
+	<result column="ASNLINENO" property="asnlineno"/>
+	<result column="CUSTOMERID" property="customerid"/>
+	<result column="SKU" property="sku"/>
+	<result column="LOTNUM" property="lotnum"/>
+	<result column="ASNQTY_EXPECTED" property="asnqtyExpected"/>
+	<result column="PUTWAYQTY_EXPECTED" property="putwayqtyExpected"/>
+	<result column="PUTWAYQTY_COMPLETED" property="putwayqtyCompleted"/>
+	<result column="USERDEFINE1" property="userdefine1"/>
+	<result column="USERDEFINE2" property="userdefine2"/>
+	<result column="USERDEFINE3" property="userdefine3"/>
+	<result column="USERDEFINE4" property="userdefine4"/>
+	<result column="USERDEFINE5" property="userdefine5"/>
+	<result column="NOTES" property="notes"/>
+	<result column="ADDTIME" property="addtime"/>
+	<result column="ADDWHO" property="addwho"/>
+	<result column="EDITTIME" property="edittime"/>
+	<result column="EDITWHO" property="editwho"/>
+	<result column="PACKID" property="packid"/>
+	<result column="TRANSACTIONID" property="transactionid"/>
+</resultMap>
+       
+<!-- doc_pa_details table all fields -->
+<sql id="Base_Column_List" >
+	 PANO,PALINENO,LINESTATUS,ASNNO,ASNLINENO,CUSTOMERID,SKU,LOTNUM,ASNQTY_EXPECTED,PUTWAYQTY_EXPECTED,PUTWAYQTY_COMPLETED,USERDEFINE1,USERDEFINE2,USERDEFINE3,USERDEFINE4,USERDEFINE5,NOTES,ADDTIME,ADDWHO,EDITTIME,EDITWHO,PACKID,TRANSACTIONID
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.pano != null and condition.pano != ''" >
+	    and PANO =  #{condition.pano}
+	</if>
+	<if test="condition.palineno != null and condition.palineno != ''" >
+	    and PALINENO =  #{condition.palineno}
+	</if>
+	<if test="condition.linestatus != null and condition.linestatus != ''" >
+	    and LINESTATUS =  #{condition.linestatus}
+	</if>
+	<if test="condition.asnno != null and condition.asnno != ''" >
+	    and ASNNO =  #{condition.asnno}
+	</if>
+	<if test="condition.asnlineno != null and condition.asnlineno != ''" >
+	    and ASNLINENO =  #{condition.asnlineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and CUSTOMERID =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and SKU =  #{condition.sku}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and LOTNUM =  #{condition.lotnum}
+	</if>
+	<if test="condition.asnqtyExpected != null and condition.asnqtyExpected != ''" >
+	    and ASNQTY_EXPECTED =  #{condition.asnqtyExpected}
+	</if>
+	<if test="condition.putwayqtyExpected != null and condition.putwayqtyExpected != ''" >
+	    and PUTWAYQTY_EXPECTED =  #{condition.putwayqtyExpected}
+	</if>
+	<if test="condition.putwayqtyCompleted != null and condition.putwayqtyCompleted != ''" >
+	    and PUTWAYQTY_COMPLETED =  #{condition.putwayqtyCompleted}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and USERDEFINE1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and USERDEFINE2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and USERDEFINE3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and USERDEFINE4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and USERDEFINE5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and NOTES =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and ADDTIME =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and ADDWHO =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and EDITTIME =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and EDITWHO =  #{condition.editwho}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and PACKID =  #{condition.packid}
+	</if>
+	<if test="condition.transactionid != null and condition.transactionid != ''" >
+	    and TRANSACTIONID =  #{condition.transactionid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_pa_details(PANO,PALINENO,LINESTATUS,ASNNO,ASNLINENO,CUSTOMERID,SKU,LOTNUM,ASNQTY_EXPECTED,PUTWAYQTY_EXPECTED,PUTWAYQTY_COMPLETED,USERDEFINE1,USERDEFINE2,USERDEFINE3,USERDEFINE4,USERDEFINE5,NOTES,ADDTIME,ADDWHO,EDITTIME,EDITWHO,PACKID,TRANSACTIONID)
+ values(#{pano},#{palineno},#{linestatus},#{asnno},#{asnlineno},#{customerid},#{sku},#{lotnum},#{asnqtyExpected},#{putwayqtyExpected},#{putwayqtyCompleted},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{notes},#{addtime},#{addwho},#{edittime},#{editwho},#{packid},#{transactionid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_pa_details set PALINENO=#{palineno},linestatus=#{linestatus},asnno=#{asnno},asnlineno=#{asnlineno},customerid=#{customerid},sku=#{sku},lotnum=#{lotnum},asnqty_expected=#{asnqtyexpected},putwayqty_expected=#{putwayqtyexpected},putwayqty_completed=#{putwayqtycompleted},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},notes=#{notes},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},packid=#{packid},transactionid=#{transactionid} where PANO=#{pano}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_pa_details set 
+	<trim  suffixOverrides="," >
+	<if test="palineno != null  ">
+		PALINENO=#{palineno},
+	</if>
+	<if test="linestatus != null  ">
+		linestatus=#{linestatus},
+	</if>
+	<if test="asnno != null  ">
+		asnno=#{asnno},
+	</if>
+	<if test="asnlineno != null  ">
+		asnlineno=#{asnlineno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="asnqtyexpected != null  ">
+		asnqty_expected=#{asnqtyexpected},
+	</if>
+	<if test="putwayqtyexpected != null  ">
+		putwayqty_expected=#{putwayqtyexpected},
+	</if>
+	<if test="putwayqtycompleted != null  ">
+		putwayqty_completed=#{putwayqtycompleted},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="transactionid != null  ">
+		transactionid=#{transactionid},
+	</if>
+	</trim> where PANO=#{pano}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_pa_details where PANO = #{pano}
+</delete>
+ 
+<!-- 根据id查询 上架单明细 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_pa_details where PANO = #{pano}
+</select>
+
+<!-- 上架单明细 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_pa_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询上架单明细列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_pa_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

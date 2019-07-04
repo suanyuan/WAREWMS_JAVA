@@ -7,6 +7,7 @@ import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
+import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,15 @@ public class PdaDocAsnController {
 
     /**
      * 获取未完成的收货任务单
-     * @param pageNum 页码
+     * @param form 页码
      * @return 任务单list
      */
     @RequestMapping(params = "undoneList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryUndoneList(@RequestParam(defaultValue = "1") int pageNum) {
+    public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(pageNum, Constant.pageSize);
+        List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, pdaDocAsnHeaderVOList);

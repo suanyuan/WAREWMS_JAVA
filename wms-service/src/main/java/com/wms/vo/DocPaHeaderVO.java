@@ -1,20 +1,21 @@
-package com.wms.vo.form;
+package com.wms.vo;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
-public class DocTransPutwayForm {
+public class DocPaHeaderVO {
 
-	private String putwayno;
-	private String linestatus;
+	private String pano;
 	private String asnno;
-	private Double asnlineno;
 	private String customerid;
-	private String sku;
-	private String lotnum;
-	private Double asnqtyExpected;
-	private Double putwayqtyExpected;
-	private Double putwayqtyCompleted;
+	private String pareference1;
+	private String pareference2;
+	private String pareference3;
+	private String pareference4;
+	private String pareference5;
+	private String patype;
+	private String pastatus;
+	private java.util.Date pacreationtime;
 	private String userdefine1;
 	private String userdefine2;
 	private String userdefine3;
@@ -25,23 +26,15 @@ public class DocTransPutwayForm {
 	private String addwho;
 	private java.util.Date edittime;
 	private String editwho;
-	private String packid;
-	private String transactionid;
+	private String paPrintFlag;
+	private String warehouseid;
 
-	public String getPutwayno() {
-		return putwayno;
+	public String getPano() {
+		return pano;
 	}
 
-	public void setPutwayno(String putwayno) {
-		this.putwayno = putwayno;
-	}
-
-	public String getLinestatus() {
-		return linestatus;
-	}
-
-	public void setLinestatus(String linestatus) {
-		this.linestatus = linestatus;
+	public void setPano(String pano) {
+		this.pano = pano;
 	}
 
 	public String getAsnno() {
@@ -52,14 +45,6 @@ public class DocTransPutwayForm {
 		this.asnno = asnno;
 	}
 
-	public Double getAsnlineno() {
-		return asnlineno;
-	}
-
-	public void setAsnlineno(Double asnlineno) {
-		this.asnlineno = asnlineno;
-	}
-
 	public String getCustomerid() {
 		return customerid;
 	}
@@ -68,44 +53,69 @@ public class DocTransPutwayForm {
 		this.customerid = customerid;
 	}
 
-	public String getSku() {
-		return sku;
+	public String getPareference1() {
+		return pareference1;
 	}
 
-	public void setSku(String sku) {
-		this.sku = sku;
+	public void setPareference1(String pareference1) {
+		this.pareference1 = pareference1;
 	}
 
-	public String getLotnum() {
-		return lotnum;
+	public String getPareference2() {
+		return pareference2;
 	}
 
-	public void setLotnum(String lotnum) {
-		this.lotnum = lotnum;
+	public void setPareference2(String pareference2) {
+		this.pareference2 = pareference2;
 	}
 
-	public Double getAsnqtyExpected() {
-		return asnqtyExpected;
+	public String getPareference3() {
+		return pareference3;
 	}
 
-	public void setAsnqtyExpected(Double asnqtyExpected) {
-		this.asnqtyExpected = asnqtyExpected;
+	public void setPareference3(String pareference3) {
+		this.pareference3 = pareference3;
 	}
 
-	public Double getPutwayqtyExpected() {
-		return putwayqtyExpected;
+	public String getPareference4() {
+		return pareference4;
 	}
 
-	public void setPutwayqtyExpected(Double putwayqtyExpected) {
-		this.putwayqtyExpected = putwayqtyExpected;
+	public void setPareference4(String pareference4) {
+		this.pareference4 = pareference4;
 	}
 
-	public Double getPutwayqtyCompleted() {
-		return putwayqtyCompleted;
+	public String getPareference5() {
+		return pareference5;
 	}
 
-	public void setPutwayqtyCompleted(Double putwayqtyCompleted) {
-		this.putwayqtyCompleted = putwayqtyCompleted;
+	public void setPareference5(String pareference5) {
+		this.pareference5 = pareference5;
+	}
+
+	public String getPatype() {
+		return patype;
+	}
+
+	public void setPatype(String patype) {
+		this.patype = patype;
+	}
+
+	public String getPastatus() {
+		return pastatus;
+	}
+
+	public void setPastatus(String pastatus) {
+		this.pastatus = pastatus;
+	}
+
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	public java.util.Date getPacreationtime() {
+		return pacreationtime;
+	}
+
+	public void setPacreationtime(java.util.Date pacreationtime) {
+		this.pacreationtime = pacreationtime;
 	}
 
 	public String getUserdefine1() {
@@ -190,20 +200,20 @@ public class DocTransPutwayForm {
 		this.editwho = editwho;
 	}
 
-	public String getPackid() {
-		return packid;
+	public String getPaPrintFlag() {
+		return paPrintFlag;
 	}
 
-	public void setPackid(String packid) {
-		this.packid = packid;
+	public void setPaPrintFlag(String paPrintFlag) {
+		this.paPrintFlag = paPrintFlag;
 	}
 
-	public String getTransactionid() {
-		return transactionid;
+	public String getWarehouseid() {
+		return warehouseid;
 	}
 
-	public void setTransactionid(String transactionid) {
-		this.transactionid = transactionid;
+	public void setWarehouseid(String warehouseid) {
+		this.warehouseid = warehouseid;
 	}
 
 }

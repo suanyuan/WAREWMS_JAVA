@@ -12,6 +12,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.InvLotAttQuery;
+import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
@@ -23,6 +24,7 @@ import com.wms.vo.pda.PdaDocAsnDetailVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -166,7 +168,6 @@ public class DocAsnDetailService extends BaseService {
 //	        query.setLotatt02(stringBuilder.toString());
 //        }
 
-	    //TODO 新增一个查询方法
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByPageList(mybatisCriteria);
@@ -176,29 +177,32 @@ public class DocAsnDetailService extends BaseService {
             BeanUtils.copyProperties(docAsnDetail, pdaDocAsnDetailVO);
 
             //通过GTIN获取SKU
-            String sku = "";
-            BasGtn basGtn = basGtnMybatisDao.queryByGTIN(query.getGTIN());
-            if (basGtn == null) {
+//            String sku = "";
+//            BasGtn basGtn = basGtnMybatisDao.queryByGTIN(query.getGTIN());
+//            if (basGtn == null) {
+//
+//                InvLotAttQuery invLotAttQuery = new InvLotAttQuery();
+//                BeanUtils.copyProperties(query, invLotAttQuery);
+//                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotAttQuery));
+//                List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByList(mybatisCriteria);
+//                if (invLotAttList.size() == 1) {
+//
+//                    InvLotAtt invLotAtt = invLotAttList.get(0);
+//                    sku = invLotAtt.getSku();
+//                }
+//            }else {
+//
+//                sku = basGtn.getSku();
+//            }
+//
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("customerid", docAsnDetail.getCustomerid());
+//            map.put("sku", sku);
+//            BasSku basSku = basSkuMybatisDao.queryById(map);
 
-                //TODO 新增一个查询方法
-                InvLotAttQuery invLotAttQuery = new InvLotAttQuery();
-                BeanUtils.copyProperties(query, invLotAttQuery);
-                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotAttQuery));
-                List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByList(mybatisCriteria);
-                if (invLotAttList.size() == 1) {
-
-                    InvLotAtt invLotAtt = invLotAttList.get(0);
-                    sku = invLotAtt.getSku();
-                }
-            }else {
-
-                sku = basGtn.getSku();
-            }
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("customerid", docAsnDetail.getCustomerid());
-            map.put("sku", sku);
-            BasSku basSku = basSkuMybatisDao.queryById(map);
+            PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
+            BeanUtils.copyProperties(query, basSkuQuery);
+            BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
             pdaDocAsnDetailVO.setBasSku(basSku);
         }
@@ -237,7 +241,12 @@ public class DocAsnDetailService extends BaseService {
             form.setReceivingtime(dateFormat.format(new Date()));
             form.setReceivinglocation("STAGE01");
 
-            docAsnDetailsMybatisDao.receiveGoods(form);
+            try {
+                docAsnDetailsMybatisDao.receiveGoods(form);
+            }catch (Exception e) {
+                e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
+            }
             if (form.getResult().equals(Constant.PROCEDURE_OK)) {
 
                 return new PdaResult(PdaResult.CODE_SUCCESS, "收货成功");

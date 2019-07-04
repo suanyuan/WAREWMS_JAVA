@@ -1,42 +1,51 @@
-package com.wms.vo;
+package com.wms.query;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
-public class DocTransPutwayVO {
+public class DocPaDetailsQuery implements IQuery {
 
-	private String putwayno;
+	private String pano;
+	private String palineno;
 	private String linestatus;
 	private String asnno;
-	private Double asnlineno;
+	private String asnlineno;
 	private String customerid;
 	private String sku;
 	private String lotnum;
-	private Double asnqtyExpected;
-	private Double putwayqtyExpected;
-	private Double putwayqtyCompleted;
+	private String asnqtyExpected;
+	private String putwayqtyExpected;
+	private String putwayqtyCompleted;
 	private String userdefine1;
 	private String userdefine2;
 	private String userdefine3;
 	private String userdefine4;
 	private String userdefine5;
 	private String notes;
-	private java.util.Date addtime;
+	private String addtime;
 	private String addwho;
-	private java.util.Date edittime;
+	private String edittime;
 	private String editwho;
 	private String packid;
 	private String transactionid;
 
-	public String getPutwayno() {
-		return putwayno;
-	}
+    public String getPano() {
+        return pano;
+    }
 
-	public void setPutwayno(String putwayno) {
-		this.putwayno = putwayno;
-	}
+    public void setPano(String pano) {
+        this.pano = pano;
+    }
 
-	public String getLinestatus() {
+    public String getPalineno() {
+        return palineno;
+    }
+
+    public void setPalineno(String palineno) {
+        this.palineno = palineno;
+    }
+
+    public String getLinestatus() {
 		return linestatus;
 	}
 
@@ -52,11 +61,11 @@ public class DocTransPutwayVO {
 		this.asnno = asnno;
 	}
 
-	public Double getAsnlineno() {
+	public String getAsnlineno() {
 		return asnlineno;
 	}
 
-	public void setAsnlineno(Double asnlineno) {
+	public void setAsnlineno(String asnlineno) {
 		this.asnlineno = asnlineno;
 	}
 
@@ -84,27 +93,27 @@ public class DocTransPutwayVO {
 		this.lotnum = lotnum;
 	}
 
-	public Double getAsnqtyExpected() {
+	public String getAsnqtyExpected() {
 		return asnqtyExpected;
 	}
 
-	public void setAsnqtyExpected(Double asnqtyExpected) {
+	public void setAsnqtyExpected(String asnqtyExpected) {
 		this.asnqtyExpected = asnqtyExpected;
 	}
 
-	public Double getPutwayqtyExpected() {
+	public String getPutwayqtyExpected() {
 		return putwayqtyExpected;
 	}
 
-	public void setPutwayqtyExpected(Double putwayqtyExpected) {
+	public void setPutwayqtyExpected(String putwayqtyExpected) {
 		this.putwayqtyExpected = putwayqtyExpected;
 	}
 
-	public Double getPutwayqtyCompleted() {
+	public String getPutwayqtyCompleted() {
 		return putwayqtyCompleted;
 	}
 
-	public void setPutwayqtyCompleted(Double putwayqtyCompleted) {
+	public void setPutwayqtyCompleted(String putwayqtyCompleted) {
 		this.putwayqtyCompleted = putwayqtyCompleted;
 	}
 
@@ -156,12 +165,11 @@ public class DocTransPutwayVO {
 		this.notes = notes;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
+	public String getAddtime() {
 		return addtime;
 	}
 
-	public void setAddtime(java.util.Date addtime) {
+	public void setAddtime(String addtime) {
 		this.addtime = addtime;
 	}
 
@@ -173,12 +181,11 @@ public class DocTransPutwayVO {
 		this.addwho = addwho;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
+	public String getEdittime() {
 		return edittime;
 	}
 
-	public void setEdittime(java.util.Date edittime) {
+	public void setEdittime(String edittime) {
 		this.edittime = edittime;
 	}
 

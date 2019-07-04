@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.result.PdaResult;
+import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
@@ -332,13 +333,14 @@ public class DocAsnHeaderService extends BaseService {
 
     /**
      * 查询未完成的预入库通知单
-     * @param pageNum ~
-     * @param pageSize ~
+     * @param form 分页
      * @return ~
      */
-	public List<PdaDocAsnHeaderVO> queryUndoneList(int pageNum, int pageSize) {
+	public List<PdaDocAsnHeaderVO> queryUndoneList(PageForm form) {
 
-	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList((pageNum - 1)*pageSize, pageSize);
+//	    int pagesize = form.getPageSize();
+//	    int start = form.getStart();
+	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList(form.getStart(), form.getPageSize());
 	    List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = new ArrayList<>();
 	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
 	    for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
@@ -368,7 +370,7 @@ public class DocAsnHeaderService extends BaseService {
 
     /**
      * 结束收货单任务
-     * @param asnno 预入通知单号
+     * @param form 预入通知单号
      * @return ~
      */
     public PdaResult endTask(PdaDocAsnEndForm form) {

@@ -10,10 +10,4 @@ import com.wms.entity.BasGtn;
  */
 public interface BasGtnMybatisDao extends BaseDao {
 
-    /**
-     * 通过GTIN查找 记录
-     * @param GTIN global trade item number
-     * @return ~
-     */
-	BasGtn queryByGTIN(String GTIN);
 }
