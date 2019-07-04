@@ -7,9 +7,11 @@ import com.wms.entity.DocPaDetails;
 import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
+import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocPaDetailsVO;
 import com.wms.vo.Json;
@@ -114,21 +116,18 @@ public class DocPaDetailsService extends BaseService {
 //	        query.setLotatt02(stringBuilder.toString());
 //        }
 
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryByPageList(mybatisCriteria);
-        if (docPaDetailsList.size() == 1) {
+        //获取BasSku
+        PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
+        BeanUtils.copyProperties(query, basSkuQuery);
+        BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
-            DocPaDetails docPaDetails = docPaDetailsList.get(0);
+        DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(query);
+        if (docPaDetails != null) {
+
             BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
-
-            //获取BasSku
-            PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
-            BeanUtils.copyProperties(query, basSkuQuery);
-            BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
-
             docPaDetailVO.setBasSku(basSku);
         }
+
         return docPaDetailVO;
     }
 
@@ -139,6 +138,55 @@ public class DocPaDetailsService extends BaseService {
      */
     public List<PdaDocPaDetailVO> queryDocPaDetailList(String pano) {
 
+
+        return null;
+    }
+
+    /**
+     * 上架提交
+     * @param form pda上传表单数据
+     * @return 结论
+     */
+    public PdaResult putawayGoods(PdaDocPaDetailForm form) {
+
+//        //通过asnno+扫描到的批次属性 获取入库明细档
+//        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+//        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByPageList(mybatisCriteria);
+//        if (docAsnDetailList.size() == 1) {
+//
+//            /* 配置收货存储数据
+//             * 操作人员需set一下，不然会从docAsnDetail copy出来
+//             * receivingTime 代码里获取下
+//             * receivinglocation 固定 STAGE01
+//             * DocAsnDetail里面有warehouseid，copy之后重设一下,否则会为空
+//             * */
+//            DocAsnDetail docAsnDetail = docAsnDetailList.get(0);
+//            String warehouseid = form.getWarehouseid();
+//            BeanUtils.copyProperties(docAsnDetail, form);
+//            form.setWarehouseid(warehouseid);
+//            form.setEditwho("Gizmo");
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            form.setReceivingtime(dateFormat.format(new Date()));
+//            form.setReceivinglocation("STAGE01");
+//
+//            try {
+//                docAsnDetailsMybatisDao.receiveGoods(form);
+//            }catch (Exception e) {
+//                e.printStackTrace();
+//                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
+//            }
+//            if (form.getResult().equals(Constant.PROCEDURE_OK)) {
+//
+//                return new PdaResult(PdaResult.CODE_SUCCESS, "收货成功");
+//            } else {
+//
+//                return new PdaResult(PdaResult.CODE_FAILURE, form.getResult());
+//            }
+//        }else {
+//
+//            return new PdaResult(PdaResult.CODE_FAILURE, "预入库明细档数据重复或缺失");
+//        }
 
         return null;
     }

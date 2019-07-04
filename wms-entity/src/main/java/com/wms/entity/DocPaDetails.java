@@ -17,7 +17,7 @@ public class DocPaDetails  implements Serializable {
 
 	private String asnno;
 
-	private Double asnlineno;
+	private long asnlineno;
 
 	private String customerid;
 
@@ -55,4 +55,8 @@ public class DocPaDetails  implements Serializable {
 
 	private String transactionid;
 
+    /**
+     * 批次属性
+     */
+	private InvLotAtt invLotAtt;
 }

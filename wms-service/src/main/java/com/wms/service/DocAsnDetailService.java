@@ -216,10 +216,6 @@ public class DocAsnDetailService extends BaseService {
      */
     public PdaResult receiveGoods(PdaDocAsnDetailForm form) {
 
-        if (form == null) {
-
-            return new PdaResult(PdaResult.CODE_FAILURE, "提交数据缺失");
-        }
         //通过asnno+扫描到的批次属性 获取入库明细档
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));

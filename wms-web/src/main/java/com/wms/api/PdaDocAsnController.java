@@ -79,6 +79,10 @@ public class PdaDocAsnController {
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDocAsnDetail(query);
 
+        if (pdaDocAsnDetailVO == null) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无上架明细信息"));
+            return resultMap;
+        }
         if (pdaDocAsnDetailVO.getBasPackage() == null || pdaDocAsnDetailVO.getBasSku() == null) {
 
             PdaResult result =

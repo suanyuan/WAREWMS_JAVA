@@ -1,7 +1,7 @@
 package com.wms.vo.pda;
 
-import com.wms.entity.BasPackage;
 import com.wms.entity.BasSku;
+import com.wms.entity.InvLotAtt;
 
 public class PdaDocPaDetailVO {
 
@@ -16,11 +16,11 @@ public class PdaDocPaDetailVO {
     private Double asnqtyExpected;
     private Double putwayqtyExpected;
     private Double putwayqtyCompleted;
-    private String userdefine1;
-    private String userdefine2;
-    private String userdefine3;
-    private String userdefine4;
-    private String userdefine5;
+    private String userdefine1;//上架库位
+    private String userdefine2;//效期
+    private String userdefine3;//批号
+    private String userdefine4;//序号
+    private String userdefine5;//待上架质量状态（合格 || 待检）
     private String notes;
     private String addtime;
     private String addwho;
@@ -31,7 +31,15 @@ public class PdaDocPaDetailVO {
 
     private BasSku basSku;
 
-    private BasPackage basPackage;
+    private InvLotAtt invLotAtt;//批次属性数据
+
+    public InvLotAtt getInvLotAtt() {
+        return invLotAtt;
+    }
+
+    public void setInvLotAtt(InvLotAtt invLotAtt) {
+        this.invLotAtt = invLotAtt;
+    }
 
     public String getPano() {
         return pano;
@@ -223,13 +231,5 @@ public class PdaDocPaDetailVO {
 
     public void setBasSku(BasSku basSku) {
         this.basSku = basSku;
-    }
-
-    public BasPackage getBasPackage() {
-        return basPackage;
-    }
-
-    public void setBasPackage(BasPackage basPackage) {
-        this.basPackage = basPackage;
     }
 }

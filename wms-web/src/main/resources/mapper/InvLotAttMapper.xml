@@ -213,5 +213,14 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <select id="queryForScan" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from inv_lot_att
+        where lotatt02 = #{lotatt02, jdbcType=VARCHAR}
+          and lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+          and lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+    </select>
   	
 </mapper>   

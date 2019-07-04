@@ -1,6 +1,7 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocPaDetailsService;
@@ -77,22 +78,48 @@ public class PdaPutawayController {
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocPaDetailVO docPaDetailVO = docPaDetailsService.queryDocPaDetail(query);
 
-        if (docPaDetailVO.getBasPackage() == null || docPaDetailVO.getBasSku() == null) {
+        if (docPaDetailVO.getBasSku() == null
+                || docPaDetailVO.getInvLotAtt() == null) {
 
             PdaResult result =
                     new PdaResult(PdaResult.CODE_FAILURE,
-                            docPaDetailVO.getBasPackage() == null ?
-                                    "无包装信息" :
-                                    "无产品信息");
+                            docPaDetailVO.getBasSku() == null ?
+                                    "无产品信息" :
+                                    "无批次信息");
             resultMap.put(Constant.RESULT, result);
             return resultMap;
         }
 
-        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, docPaDetailVO);
-        resultMap.put(Constant.RESULT, result);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
     }
 
+    /**
+     * 上架提交 单次上架 + 连续上架
+     * @param form 扫码结果
+     * @return ~
+     */
+    @RequestMapping(params = "submit", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> submit(PdaDocPaDetailForm form) {
 
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docPaDetailsService.putawayGoods(form));
+        return resultMap;
+    }
+
+    /**
+     * 结束收货
+     * @param form 收货任务单号
+     * @return ~
+     */
+//    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> endTask(PdaDocAsnEndForm form) {
+//
+//        Map<String, Object> resultMap = new HashMap<>();
+//        resultMap.put(Constant.RESULT, docAsnHeaderService.endTask(form));
+//        return resultMap;
+//    }
 }
