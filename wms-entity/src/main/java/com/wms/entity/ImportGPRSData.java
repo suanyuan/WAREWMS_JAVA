@@ -1,27 +1,27 @@
-package com.wms.query;
+package com.wms.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.io.Serializable;
 
-public class GspProductRegisterSpecsQuery implements IQuery {
+/**
+ * The persistent class for the DOC_ASN_HEADER database table.
+ * 
+ */
+@Entity
+public class ImportGPRSData implements Serializable {
+	private static final long serialVersionUID = 1L;
 
+	@Id
+	private String seq;
 	private String specsId;
 	private String productRegisterId;
-
-	private String productRegisterNo;
-	private String productNameMain;
-
-	private String createDateStart;
-	private String createDateEnd;
-	private String editDateStart;
-	private String editDateEnd;
-
-
-
 	private String specsName;
 	private String productCode;
 	private String productName;
 	private String productRemark;
+
+
 	private String productModel;
 	private String productionAddress;
 	private String barCode;
@@ -38,8 +38,12 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String storageCondition;
 	private String transportCondition;
 	private String createId;
+
+
 	private String createDate;
+
 	private String editId;
+
 	private String editDate;
 	private String isUse;
 	private String alternatName1;
@@ -47,8 +51,12 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String alternatName3;
 	private String alternatName4;
 	private String alternatName5;
+	public String getSeq() {
+		return seq;
+	}
 
-	public GspProductRegisterSpecsQuery() {
+	public void setSeq(String seq) {
+		this.seq = seq;
 	}
 
 	public String getSpecsId() {
@@ -195,12 +203,12 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 		this.manageCategories = manageCategories;
 	}
 
-	public String getPacking_Require() {
+	public String getPackingRequire() {
 		return packingRequire;
 	}
 
-	public void setPacking_Require(String packing_Require) {
-		this.packingRequire = packing_Require;
+	public void setPackingRequire(String packingRequire) {
+		this.packingRequire = packingRequire;
 	}
 
 	public String getStorageCondition() {
@@ -299,51 +307,10 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 		this.alternatName5 = alternatName5;
 	}
 
-	public String getProductRegisterNo() {
-		return productRegisterNo;
+
+
+	public ImportGPRSData() {
 	}
 
-	public void setProductRegisterNo(String productRegisterNo) {
-		this.productRegisterNo = productRegisterNo;
-	}
 
-	public String getProductNameMain() {
-		return productNameMain;
-	}
-
-	public void setProductNameMain(String productNameMain) {
-		this.productNameMain = productNameMain;
-	}
-
-	public String getCreateDateStart() {
-		return createDateStart;
-	}
-
-	public void setCreateDateStart(String createDateStart) {
-		this.createDateStart = createDateStart;
-	}
-
-	public String getCreateDateEnd() {
-		return createDateEnd;
-	}
-
-	public void setCreateDateEnd(String createDateEnd) {
-		this.createDateEnd = createDateEnd;
-	}
-
-	public String getEditDateStart() {
-		return editDateStart;
-	}
-
-	public void setEditDateStart(String editDateStart) {
-		this.editDateStart = editDateStart;
-	}
-
-	public String getEditDateEnd() {
-		return editDateEnd;
-	}
-
-	public void setEditDateEnd(String editDateEnd) {
-		this.editDateEnd = editDateEnd;
-	}
 }

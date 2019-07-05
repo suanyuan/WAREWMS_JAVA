@@ -71,9 +71,12 @@ public class BasSkuService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
+		System.out.println(query.getAddTimeStart()+"=====query.getAddTimeStart()====== query.getAddTimeStart()======"+query.getAddTimeEnd());
 		List<BasSku> basSkuList = basSkuMybatisDao.queryByPageList(mybatisCriteria);
+
 		BasSkuVO basSkuVO = null;
 		List<BasSkuVO> basSkuVOList = new ArrayList<BasSkuVO>();
+
 		for (BasSku basSku : basSkuList) {
 			basSkuVO = new BasSkuVO();
 			BeanUtils.copyProperties(basSku, basSkuVO);

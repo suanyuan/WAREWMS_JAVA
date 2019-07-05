@@ -1,11 +1,18 @@
 package com.wms.service;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.service.importdata.ImportAsnDataService;
+import com.wms.service.importdata.ImportGspProductRegisterSpecsDataService;
 import com.wms.utils.RandomUtil;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +25,9 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspProductRegisterSpecsForm;
 import com.wms.query.GspProductRegisterSpecsQuery;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
 
 @Service("gspProductRegisterSpecsService")
 public class GspProductRegisterSpecsService extends BaseService {
@@ -26,6 +36,10 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private GspProductRegisterSpecsDao gspProductRegisterSpecsDao;
 	@Autowired
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
+	@Autowired
+	private ImportAsnDataService importAsnDataService;
+	@Autowired
+	private ImportGspProductRegisterSpecsDataService importGspProductRegisterSpecsDataService;
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
 //		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
@@ -48,13 +62,21 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
 		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(criteria);
-		System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		//System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
 		for (GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList) {
-			//System.out.println(gspProductRegisterSpecs.getSpecsName()+"==============================================");
+			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"==============================================");
 			gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 			BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
-			basGtnVOList.add(gspProductRegisterSpecsVO);
-		}
+
+			gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
+			gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
+
+			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"=============================================="+gspProductRegisterSpecsVO.getCreateDate());
+
+		basGtnVOList.add(gspProductRegisterSpecsVO);
+	}
 
 		int total = gspProductRegisterSpecsMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
@@ -80,6 +102,15 @@ public class GspProductRegisterSpecsService extends BaseService {
 		//BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecsMybatisDao.update(gspProductRegisterSpecs);
 		json.setSuccess(true);
+		return json;
+	}
+
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+		Json json = null;
+		MultipartFile excelFile = mhsr.getFile("uploadData");
+		if(excelFile != null && excelFile.getSize() > 0){
+			json = importGspProductRegisterSpecsDataService.importExcelData(excelFile);
+		}
 		return json;
 	}
 

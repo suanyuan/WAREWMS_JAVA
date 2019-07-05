@@ -1,5 +1,6 @@
 package com.wms.query;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.wms.mybatis.entity.SfcCustomer;
@@ -10,6 +11,12 @@ public class BasSkuQuery implements IQuery {
 	private java.lang.String sku;
 	private java.lang.String activeFlag;
 	private java.util.Date addtime;
+
+	private String addTimeStart;
+	private String addTimeEnd;
+	private String edittimeStart;
+	private String edittimeEnd;
+
 	private java.lang.String addwho;
 	private java.lang.String allocationrule;
 	private java.lang.String alternateSku1;
@@ -62,6 +69,9 @@ public class BasSkuQuery implements IQuery {
 	private java.math.BigDecimal qtyonhold;
 	private java.lang.String warehouseid;
 	private Set<SfcCustomer> customerSet;
+
+	public BasSkuQuery() {
+	}
 
 	public java.lang.String getCustomerid() {
 		return customerid;
@@ -511,4 +521,36 @@ public class BasSkuQuery implements IQuery {
 		this.customerSet = customerSet;
 	}
 
+
+	public String getAddTimeStart() {
+		return addTimeStart;
+	}
+
+	public void setAddTimeStart(String addTimeStart) {
+		this.addTimeStart = addTimeStart;
+	}
+
+	public String getAddTimeEnd() {
+		return addTimeEnd;
+	}
+
+	public void setAddTimeEnd(String addTimeEnd) {
+		this.addTimeEnd = addTimeEnd;
+	}
+
+	public String getEdittimeStart() {
+		return edittimeStart;
+	}
+
+	public void setEdittimeStart(String edittimeStart) {
+		this.edittimeStart = edittimeStart;
+	}
+
+	public String getEdittimeEnd() {
+		return edittimeEnd;
+	}
+
+	public void setEdittimeEnd(String edittimeEnd) {
+		this.edittimeEnd = edittimeEnd;
+	}
 }

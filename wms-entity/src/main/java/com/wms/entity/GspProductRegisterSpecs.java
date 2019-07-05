@@ -2,8 +2,11 @@ package com.wms.entity;
 
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -44,9 +47,14 @@ public class GspProductRegisterSpecs implements Serializable {
   private String storageCondition;
   private String transportCondition;
   private String createId;
-  private java.sql.Timestamp createDate;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date createDate;
+
   private String editId;
-  private java.sql.Timestamp editDate;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date editDate;
   private String isUse;
   private String alternatName1;
   private String alternatName2;
@@ -256,11 +264,11 @@ public class GspProductRegisterSpecs implements Serializable {
   }
 
 
-  public java.sql.Timestamp getCreateDate() {
+  public Date getCreateDate() {
     return createDate;
   }
 
-  public void setCreateDate(java.sql.Timestamp createDate) {
+  public void setCreateDate(Date createDate) {
     this.createDate = createDate;
   }
 
@@ -274,11 +282,11 @@ public class GspProductRegisterSpecs implements Serializable {
   }
 
 
-  public java.sql.Timestamp getEditDate() {
+  public Date getEditDate() {
     return editDate;
   }
 
-  public void setEditDate(java.sql.Timestamp editDate) {
+  public void setEditDate(Date editDate) {
     this.editDate = editDate;
   }
 

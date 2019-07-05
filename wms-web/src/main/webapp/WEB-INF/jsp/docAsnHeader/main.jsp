@@ -1434,7 +1434,7 @@ function afterCheckButtion(rowData) {
 	<!-- 导入start -->
 	<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>
-			<table>	
+			<table>
 				<tr>
 					<th>档案</th>
 					<td>

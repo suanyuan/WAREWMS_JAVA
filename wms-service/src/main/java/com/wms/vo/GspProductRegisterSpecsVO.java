@@ -1,6 +1,14 @@
 package com.wms.vo;
 
 
+import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
+
+
 public class GspProductRegisterSpecsVO {
 
 	private java.lang.String specsId;
@@ -29,9 +37,15 @@ public class GspProductRegisterSpecsVO {
 	private java.lang.String storageCondition;
 	private java.lang.String transportCondition;
 	private java.lang.String createId;
-	private java.sql.Timestamp createDate;
+
+    //@Temporal(TemporalType.TIMESTAMP)
+    @JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String createDate;
 	private java.lang.String editId;
-	private java.sql.Timestamp editDate;
+
+    //@Temporal(TemporalType.TIMESTAMP)
+    @JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String editDate;
 	private java.lang.String isUse;
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
@@ -215,13 +229,7 @@ public class GspProductRegisterSpecsVO {
 		this.createId = createId;
 	}
 
-	public java.sql.Timestamp getCreateDate() {
-		return createDate;
-	}
 
-	public void setCreateDate(java.sql.Timestamp createDate) {
-		this.createDate = createDate;
-	}
 
 	public java.lang.String getEditId() {
 		return editId;
@@ -231,13 +239,7 @@ public class GspProductRegisterSpecsVO {
 		this.editId = editId;
 	}
 
-	public java.sql.Timestamp getEditDate() {
-		return editDate;
-	}
 
-	public void setEditDate(java.sql.Timestamp editDate) {
-		this.editDate = editDate;
-	}
 
 	public java.lang.String getIsUse() {
 		return isUse;
@@ -301,5 +303,22 @@ public class GspProductRegisterSpecsVO {
 
     public void setProductRegisterNo(String productRegisterNo) {
         this.productRegisterNo = productRegisterNo;
+    }
+
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getEditDate() {
+        return editDate;
+    }
+
+    public void setEditDate(String editDate) {
+        this.editDate = editDate;
     }
 }

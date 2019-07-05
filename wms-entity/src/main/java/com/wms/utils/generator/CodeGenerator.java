@@ -36,7 +36,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new GspProductRegisterSpecs());
+		CodeGenerator generator = new CodeGenerator(new GspSupplier());
 		generator.genData();
 	}
 	

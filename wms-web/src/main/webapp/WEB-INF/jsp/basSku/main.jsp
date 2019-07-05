@@ -45,12 +45,10 @@ $(function() {
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
 			}}, */
             {field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
-                    return rowData.activeFlag == 'Y' ? '是' : '否';
+                    return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            {field: 'addTime',		title: '增加时间',	width: 24},
-			{field: 'addwho',		title: '增加人',	width: 12/* ,formatter:function(value,rowData,rowIndex){
-				return rowData.basSkuPK.customerid;
-            } */},
+            {field: 'addtime',		title: '增加时间',	width: 24},
+			{field: 'addwho',		title: '增加人',	width: 12},
 			{field: 'customerid',		title: '货主',	width: 24},
 
 			{field: 'descrC',		title: '规格名称',	width: 42 },
@@ -298,10 +296,28 @@ var commit = function(){
 
 /* 查询 */
 var doSearch = function(){
+    //alert( $("#addTimeStart").datebox("getValue")+"===========");
 	ezuiDatagrid.datagrid('load', {
 		activeFlag : $('#activeFlag').combobox('getValue'),
 		customerid : $("#customerid").val(),
-		sku : $("#sku").val()
+		sku : $("#sku").val(),
+        addTimeEnd : $("#addTimeEnd").datebox("getValue"),
+        addTimeStart : $("#addTimeStart").datebox("getValue"),
+        edittimeStart : $("#edittimeStart").datebox("getValue"),
+        edittimeEnd : $("#edittimeEnd").datebox("getValue"),
+        addwho : $("#addwho").val(),
+        descrC : $("#descrC").val(),
+        descrE : $("#descrE").val(),
+        //edittime : $("#edittime").val(),
+        editwho : $("#editwho").val(),
+        firstop : $("#firstop").val(),
+        packid : $("#packid").val(),
+        reservedfield01 : $("#reservedfield01").val(),
+        reservedfield02 : $("#reservedfield02").val(),
+        reservedfield03 : $("#reservedfield03").val(),
+        sku_group1 : $("#sku_group1").val(),
+        sku_group2 : $("#sku_group2").val(),
+        isUse : $('#isUse').val()
 	});
 };
 
@@ -552,60 +568,72 @@ var downloadTemplate = function(){
 							<td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>代码</th>
 							<td><input type='text' id='sku'  name="sku" class='easyui-textbox' size='16' /></td>
-							<th>增加时间</th>
-							<td><input type='text' id='addTime' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
-							<th>增加人</th>
-							<td><input type='text' id='addwho'  name="sku" class='easyui-textbox' size='16' /></td>
-					</tr>
-						<tr>
+							<th>增加时间起始</th>
+							<td><input type='text' id='addTimeStart' name="addTimeStart" class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>增加时间结束</th>
+                            <td><input type='text' id='addTimeEnd' name="addTimeEnd" class='easyui-datebox' size='16' data-options=''/></td>
 
+                            <th>增加人</th>
+							<td><input type='text' id='addwho'  name="addwho" class='easyui-textbox' size='16' /></td>
+                            </tr>
+
+						    <tr>
 							<th>规格名称</th>
-							<td><input type='text' id='descrC' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+							<td><input type='text' id='descrC' name="descrC" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>型号</th>
-							<td><input type='text' id='descrE'  name="sku" class='easyui-textbox' size='16' /></td>
-							<th>编辑时间</th>
-							<td><input type='text' id='edittime' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
-							<th>编辑人</th>
-							<td><input type='text' id='editwho'  name="sku" class='easyui-textbox' size='16' /></td>
+							<td><input type='text' id='descrE'  name="descrE" class='easyui-textbox' size='16' /></td>
+							<th>编辑时间起始</th>
+							<td><input type='text' id='edittimeStart' name="edittimeStart" class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>编辑时间起始</th>
+                            <td><input type='text' id='edittimeEnd' name="edittimeEnd" class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>编辑人</th>
+							<td><input type='text' id='editwho'  name="editwho" class='easyui-textbox' size='16' /></td>
+                            </tr>
 
-						</tr>
-						<tr>
-							<th>首营状态</th>
-							<td><input type='text' id='firstop' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+
+                            <tr>
+                            <th>首营状态</th>
+                            <td><input type='text' id='firstop' name="firstop" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>包装规格代码</th>
-							<td><input type='text' id='packid'  name="sku" class='easyui-textbox' size='16' /></td>
+							<td><input type='text' id='packid'  name="packid" class='easyui-textbox' size='16' /></td>
 							<th>商品名称</th>
-							<td><input type='text' id='reservedfield01'  name="sku" class='easyui-textbox' size='16' /></td>
+							<td><input type='text' id='reservedfield01'  name="reservedfield01" class='easyui-textbox' size='16' /></td>
 							<th>商品描述</th>
-							<td><input type='text' id='reservedfield02' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>
-						<tr>
+							<td><input type='text' id='reservedfield02' name="reservedfield02" class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>注册证号</th>
+                            <td><input type='text' id='reservedfield03'  name="reservedfield03" class='easyui-textbox' size='16' /></td>
 
-							<th>注册证号</th>
-							<td><input type='text' id='reservedfield03'  name="sku" class='easyui-textbox' size='16' /></td>
-							<th>产品线</th>
-							<td><input type='text' id='sku_group1' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
+                            </tr>
+
+
+                            <tr>
+                            <th>产品线</th>
+							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>附卡类别</th>
-							<td><input type='text' id='sku_group2'  name="sku" class='easyui-textbox' size='16' /></td>
+							<td><input type='text' id='sku_group2'  name="sku_group2" class='easyui-textbox' size='16' /></td>
 							<th>是否激活：</th><td>
 							<input type="text" id="activeFlag"  name="activeFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
-																																	{id: 'Y', value: '是'}, 
-																																	{id: 'N', value: '否'}
-																																]"/> 
-							
-							<td>
+																																	{id: '1', value: '是'},
+																																	{id: '0', value: '否'}
+																																]"/></td>
+
+
 
 						</tr>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
-								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
-							</td>
-						</tr>
+
+                        <td colspan="10">
+                            <a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+                            <a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+                            <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+                            <a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+                        </td>
+
+                        </tr>
+
 					</table>
 				</fieldset>
 				<div>
@@ -634,15 +662,13 @@ var downloadTemplate = function(){
 																															valueField: 'id',
 																															textField: 'value',
 																															data: [
-																																{id: 'Y', value: '是'}, 
+																																{id: 'Y', value: '是'},
 																																{id: 'N', value: '否'}
 																															]"/></td>
-
-
 				<th>规格名称</th>
-				<td colspan="3"><input type='text' name='descrC' class='easyui-textbox' size='44' data-options="required:true"/></td>
+				<td ><input type='text' name='descrC' class='easyui-textbox' size='16' data-options="required:true"/></td>
 				<th>型号</th>
-				<td colspan="3"><input type='text' name='descrE' class='easyui-textbox' size='44' /></td>
+				<td ><input type='text' name='descrE' class='easyui-textbox' size='16' data-options="required:true"/></td>
 				</tr>
 
 
@@ -653,7 +679,7 @@ var downloadTemplate = function(){
 				<td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
 				<th>增加时间</th>
-				<td><input type='text' name='addTime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				<td><input type='text' name='addTime' id='addTime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				<th>增加人</th>
 				<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
@@ -680,7 +706,7 @@ var downloadTemplate = function(){
 				<td><input type='text' name='sku_group2' class='easyui-textbox' size='16' /></td>
 				<th>自赋码1</th>
 				<td><input type='text' name='alternate_sku1' class='easyui-textbox' size='16' /></td>
-				<th>自赋码2/th>
+				<th>自赋码2</th>
 				<td><input type='text' name='alternate_sku2' class='easyui-textbox' size='16' /></td>
 				<th>自赋码3</th>
 				<td><input type='text' name='alternate_sku3' class='easyui-textbox' size='16' /></td>
@@ -693,7 +719,7 @@ var downloadTemplate = function(){
 				<td><input type='text' name='alternate_sku5' class='easyui-textbox' size='16' /></td>
 				<th>单位</th>
 				<td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='16' /></td>
-				<th>管理分类/th>
+				<th>管理分类</th>
 				<td><input type='text' name='reservedfield04' class='easyui-textbox' size='16' /></td>
 				<th>分类目录</th>
 				<td><input type='text' name='reservedfield05' class='easyui-textbox' size='16' /></td>
@@ -706,7 +732,7 @@ var downloadTemplate = function(){
 				<td><input type='text' name='sku_group4' class='easyui-textbox' size='16' /></td>
 				<th>运输条件</th>
 				<td><input type='text' name='sku_group5' class='easyui-textbox' size='16' /></td>
-				<th>高/th>
+				<th>高</th>
 				<td><input type='text' name='skuhigh' class='easyui-textbox' size='16' /></td>
 				<th>长</th>
 				<td><input type='text' name='skulength' class='easyui-textbox' size='16' /></td>
@@ -760,8 +786,8 @@ var downloadTemplate = function(){
 																															valueField: 'id',
 																															textField: 'value',
 																															data: [
-																																{id: 'Y', value: '是'}, 
-																																{id: 'N', value: '否'}
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
 																															]"/></td>
 								<td>
 									<a onclick='ezuiCustDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>

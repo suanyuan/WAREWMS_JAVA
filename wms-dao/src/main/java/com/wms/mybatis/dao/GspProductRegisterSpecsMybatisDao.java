@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -9,6 +10,8 @@ import java.util.List;
  * <b>功能：</b>GspProductRegisterSpecsDao<br>
  */
 public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
+
+    public String getIdSequence(Map<String, Object> map);
 
     <T> List<T> queryByListUnBind(MybatisCriteria criteria);
 

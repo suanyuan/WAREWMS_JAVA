@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspProductRegisterSpecsService;
@@ -99,6 +100,13 @@ public class GspProductRegisterSpecsController {
 	@ResponseBody
 	public Object getInfo(String specsId) {
 		return gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(specsId);
+	}
+
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData( MultipartHttpServletRequest mhsr) throws Exception {
+		return gspProductRegisterSpecsService.importExcelData(mhsr);
 	}
 
 	@Login

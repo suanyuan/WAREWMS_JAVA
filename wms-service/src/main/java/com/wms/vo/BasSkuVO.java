@@ -3,11 +3,16 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 public class BasSkuVO {
 
 	private java.lang.String customerid;
 	private java.lang.String sku;
 	private java.lang.String activeFlag;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date addtime;
 	private java.lang.String addwho;
 	private java.lang.String allocationrule;
@@ -22,6 +27,8 @@ public class BasSkuVO {
 	private java.lang.String defaultshipmentuom;
 	private java.lang.String descrC;
 	private java.lang.String descrE;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date edittime;
 	private java.lang.String editwho;
 	private java.util.Date firstinbounddate;

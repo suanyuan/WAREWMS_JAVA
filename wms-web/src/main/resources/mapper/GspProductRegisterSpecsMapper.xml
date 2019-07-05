@@ -62,6 +62,23 @@ where 1=1
 	<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
 		and t1.product_register_id =  ${condition.productRegisterId}
 	</if>
+
+
+	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+		and t1.create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> t1.create_date
+	</if>
+	<if test="condition.editDateStart != null and condition.editDateStart != ''" >
+		and t1.edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
+	</if>
+	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
+		and     #{condition.editDateEnd}  <![CDATA[  >=  ]]> t1.edit_date
+	</if>
+
+
+
 	<if test="condition.specsName != null and condition.specsName != ''" >
 	    and specs_name   like  '%${condition.specsName}%'
 	</if>
@@ -214,11 +231,11 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 </delete>
- 
+
 <!-- 根据id查询 产品注册证规格 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from gsp_product_register_specs t1 where specs_id = #{specsId}
+	select *
+	 from gsp_product_register_specs where specs_id = #{specsId}
 </select>
 
 <!-- 产品注册证规格 列表总数-->
@@ -227,10 +244,10 @@ where 1=1
 	ON t1.product_register_id = t2.product_register_id
 	<include refid="Example_Where_Clause"/>
 </select>
-  	
+
 <!-- 查询产品注册证规格列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
+	select
 	t1.*,t2.product_register_no,t2.product_name_main
 	from gsp_product_register_specs t1 left join gsp_product_register t2
 	ON t1.product_register_id = t2.product_register_id
