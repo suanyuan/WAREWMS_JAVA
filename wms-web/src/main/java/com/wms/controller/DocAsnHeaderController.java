@@ -8,6 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.service.DocPaDetailsService;
+import com.wms.service.DocPaHeaderService;
+import com.wms.service.DocPaService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -40,7 +44,9 @@ public class DocAsnHeaderController {
 
 	@Autowired
 	private DocAsnHeaderService docAsnHeaderService;
-	
+	@Autowired
+	private DocPaService docPaService;
+
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -169,6 +175,13 @@ public class DocAsnHeaderController {
 	@ResponseBody
 	public List<EasyuiCombobox> getReleasestatusCombobox() {
 		return docAsnHeaderService.getReleasestatusCombobox();
+	}
+
+	@Login
+	@RequestMapping(params = "addDocPa",method = RequestMethod.POST)
+	@ResponseBody
+	public Json addDocPa(String asnNos){
+		return docPaService.mergeDocPa(asnNos);
 	}
 
 }

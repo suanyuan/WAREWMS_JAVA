@@ -114,6 +114,7 @@ public class CommonController {
         easyuiCombobox.setId("");
         easyuiCombobox.setValue("全部");
         easyuiCombobox.setSelected(true);
+        easyuiComboboxList.add(easyuiCombobox);
         EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
         easyuiComboboxUse.setId("1");
         easyuiComboboxUse.setValue("启用");
@@ -165,6 +166,9 @@ public class CommonController {
     public List<EasyuiCombobox> getYesOrNoCombobox() {
         List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
         EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        easyuiCombobox.setId("");
+        easyuiCombobox.setValue("全部");
+        easyuiComboboxList.add(easyuiCombobox);
         EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
         easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);
         easyuiComboboxUse.setValue("是");

@@ -26,8 +26,6 @@ public class GspInstrumentCatalogService extends BaseService {
 
 	@Autowired
 	private GspInstrumentCatalogMybatisDao gspInstrumentCatalogMybatisDao;
-	@Autowired
-	private BasCodesService basCodesService;
 
 	public EasyuiDatagrid<GspInstrumentCatalogVO> getPagedDatagrid(EasyuiDatagridPager pager, GspInstrumentCatalogQuery query) {
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();

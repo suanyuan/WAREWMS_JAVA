@@ -40,4 +40,10 @@
 		<property name="maxInMemorySize" value="4096"/>
 		<property name="resolveLazily" value="true"/>  
 	</bean>
+
+	<bean id="jasperReportResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="order" value="0"></property>
+		<property name="location" value="WEB-INF/jasper/jasper-defs.xml"></property>
+	</bean>
+
 </beans>

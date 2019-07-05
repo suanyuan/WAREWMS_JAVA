@@ -92,4 +92,10 @@ public class GspInstrumentCatalogController {
 		return gspInstrumentCatalogService.getGspInstrumentCatalogCombobox();
 	}
 
+	@Login
+	@RequestMapping(params = "showCatalogEnterpriseDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<GspInstrumentCatalogVO> queryGspInstrumentCatalogEnterprise(EasyuiDatagridPager pager, GspInstrumentCatalogQuery query){
+		return gspInstrumentCatalogService.getPagedDatagrid(pager,query);
+	}
 }

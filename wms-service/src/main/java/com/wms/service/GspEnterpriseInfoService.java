@@ -65,11 +65,11 @@ public class GspEnterpriseInfoService extends BaseService {
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
+			/*if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
 				gspEnterpriseInfoVO.setIsUse("有效");
 			}else {
 				gspEnterpriseInfoVO.setIsUse("失效");
-			}
+			}*/
 
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
@@ -97,11 +97,11 @@ public class GspEnterpriseInfoService extends BaseService {
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
+			/*if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
 				gspEnterpriseInfoVO.setIsUse("有效");
 			}else {
 				gspEnterpriseInfoVO.setIsUse("失效");
-			}
+			}*/
 
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}

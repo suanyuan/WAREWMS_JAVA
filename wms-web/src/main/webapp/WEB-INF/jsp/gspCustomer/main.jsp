@@ -219,7 +219,7 @@ var doSearch = function(){
 							<th>类型：</th><td><input type='text' id='operateType' class='easyui-textbox' data-options=''/></td>
 							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' data-options=''/></td>
 							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-combobox' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>是否贴中文标签：</th><td><input type='text' id='isChineseLabel' class='easyui-textbox' data-options=''/></td>
@@ -278,6 +278,25 @@ var doSearch = function(){
         textField:'value'
     });
 
+    $("#isUse").combobox({
+        url:sy.bp()+'/commonController.do?getIsUseCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $("#firstState").combobox({
+        url:sy.bp()+'/commonController.do?getCatalogFirstState',
+        valueField:'id',
+        textField:'value'
+    });
+
+    $("#operateType").combobox({
+        url:sy.bp()+'/commonController.do?getEntType',
+        valueField:'id',
+        textField:'value'
+    });
+
+
     function searchMainEnterprise() {
         enterpriseDialog_gspCustomer = $('#enterpriseDialog').dialog({
             modal : true,
@@ -290,6 +309,19 @@ var doSearch = function(){
 
             }
         })
+		/*
+		//查询条件货主字段初始化
+	$("#fmcustomerid").textbox({
+		icons:[{
+			iconCls:'icon-search',
+			handler: function(e){
+				$("#ezuiCustDataDialog #customerid").textbox('clear');
+				ezuiCustDataClick();
+				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
+		 */
     }
 
     function choseSelect_gspCustomer(id,name) {

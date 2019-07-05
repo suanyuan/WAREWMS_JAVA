@@ -153,10 +153,10 @@
 
         </table>
     </div>
-    <!--企业信息详情dialog -->
+    <!--企业信息详情dialog
     <div id="dialogEnterprise">
 
-    </div>
+    </div>-->
 </div>
 <script>
     var ezuiFormDetail = $("#ezuiFormDetail");
@@ -164,7 +164,7 @@
     var dataGridProduct;
     var ezuiDialogEnterprise;
     var enterpriseDatagrid;
-    var dialogEnterprise;
+    var dialogEnterprise; //TODO 替换成企业信息查询通用
     var ezuiDatagridDetail;
 
     function doUpload(data) {
@@ -257,7 +257,7 @@
             return;
         }
         var selectRows = ezuiDatagridDetail.datagrid("getSelections");
-        if(selectRows)
+        if(selectRows){
             var arr = selectRows.join(',');
             $.messager.confirm('', '确认要解除产品绑定吗', function(confirm) {
                 if(confirm){
@@ -442,7 +442,7 @@
             }
         }).dialog('close');
 
-        dialogEnterprise = $('#dialogEnterprise').dialog({
+        /*dialogEnterprise = $('#dialogEnterprise').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             fit:true,
@@ -451,7 +451,7 @@
             onClose : function() {
 
             }
-        }).dialog('close');
+        }).dialog('close');*/
     })
     
     function choseSelect() {
@@ -480,6 +480,18 @@
             });
         }
     }
+
+    $("#enterpriseName").textbox({
+        width:110,
+        icons:[{
+            iconCls:'icon-search',
+            handler: function(e){
+                $("#ezuiCustDataDialog #customerid").textbox('clear');
+                ezuiCustDataClick();
+                ezuiCustDataDialogSearch();
+            }
+        }]
+    });
     
     function searchEnterprise() {
         ezuiDialogEnterprise.dialog("open");
@@ -497,7 +509,7 @@
     }
 
     function operateGrid(id) {
-        dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
+        //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
     }
 
     function formatOper(value,row,index){

@@ -33,9 +33,7 @@ $(function() {
 		rownumbers:true,
 		singleSelect:true,
 		idField : 'id',
-        rowStyler: function (index, row) {
-            if(row.isUse == "无效"){  return 'color:red;';}
-        },
+        rowStyler: isUseRowStyler,
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
 			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
@@ -46,7 +44,7 @@ $(function() {
             {field: 'createDate',		title: '录入时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
             {field: 'editDate',		title: '修改时间',	width: 61 },
-            {field: 'isUse',		title: '是否有效',	width: 61 }
+            {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -81,6 +79,13 @@ $(function() {
         valueField:'id',
         textField:'value'
     });
+
+    $("#isUse").combobox({
+        url:sy.bp()+'/commonController.do?getIsUseCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
 });
 var add = function(){
 	processType = 'add';
@@ -234,10 +239,7 @@ var doSearch = function(){
 							<th>创建时间：</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>是否启用：</th>
 							<td>
-								<select id="isUse" class="easyui-combobox"  style="width:100px;">
-									<option value="">全部</option>
-									<option value="1">有效</option>
-									<option value="0">无效</option>
+								<select id="isUse" style="width:100px;">
 								</select>
 							</td>
 						</tr>

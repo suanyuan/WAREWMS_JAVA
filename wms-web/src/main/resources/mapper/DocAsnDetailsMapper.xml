@@ -97,6 +97,20 @@
     <resultMap id="ExtendDetailMap" type="com.wms.entity.DocAsnDetail" extends="DocAsnDetailMap">
         <association property="basPackage" column="packid" javaType="com.wms.entity.BasPackage" select="com.wms.mybatis.dao.BasPackageMybatisDao.queryById"/>
     </resultMap>
+
+	<!-- -->
+	<resultMap id="DocPaDTOMap" type="com.wms.dto.DocPaDTO">
+		<result column="asnno" property="asnno"/>
+		<result column="linestatus" property="linestatus"/>
+		<result column="asnlineno" property="asnlineno"/>
+		<result column="customerid" property="customerid"/>
+		<result column="sku" property="sku"/>
+		<result column="lotatt02" property="lotatt02"/>
+		<result column="lotatt04" property="lotatt04"/>
+		<result column="lotatt05" property="lotatt05"/>
+		<result column="lotatt10" property="lotatt10"/>
+		<result column="packid" property="packid"/>
+	</resultMap>
        
 <!-- Doc_Asn_Details table all fields -->
 <sql id="Base_Column_List" >
@@ -838,5 +852,21 @@ insert into doc_asn_details
     <select id="receiveGoods" statementType="CALLABLE" parameterType="java.util.Map">
         {call spasn_receiving_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'2',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{receivedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},'','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivingtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
     </select>
+
+<!--新增订单号 -->
+<select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
+   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','PANO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<!-- 根据id查询 入库单管理明细 -->
+<select id="queryDocPaDTO"  resultMap="DocPaDTOMap">
+	select h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,de.lotatt02,de.lotatt04,de.lotatt05,'DJ' as lotatt10,de.packid
+	from doc_asn_header h left join doc_asn_details de on h.asnno = de.asnno
+	where h.asnno in
+	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+		#{id}
+	</foreach>
+</select>
+
 
 </mapper>   

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -167,6 +168,20 @@ public class BasSkuController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@RequestMapping(params = "toSearchDialog")
+	public ModelAndView toSearchDialog(String target){
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("target",target);
+		return new ModelAndView("basSku/search", model);
+	}
+
+	@Login
+	@RequestMapping(params = "showSearchDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<BasSkuVO> showSearchDatagrid(EasyuiDatagridPager pager, BasSkuQuery query){
+		return basSkuService.getPagedDatagridSearch(pager,query);
 	}
 
 }

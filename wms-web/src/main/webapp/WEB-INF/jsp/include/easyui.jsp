@@ -19,4 +19,20 @@
 	function showUrl(url) {
 		window.open(sy.bp()+"/commonController.do?fileDownLoad");
     }
+    
+    var isUseFormatter = function(value,row,index) {
+	    console.log(value);
+		if(value == "1"){
+		    return "有效";
+		}else{
+            return "失效";
+		}
+    }
+
+    var isUseRowStyler = function(index,row) {
+	    console.log(row);
+		if(row.isUse == "0"){
+            return 'color:red;';
+		}
+    }
 </script>

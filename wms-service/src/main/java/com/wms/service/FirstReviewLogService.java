@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.SfcUserLoginUtil;
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

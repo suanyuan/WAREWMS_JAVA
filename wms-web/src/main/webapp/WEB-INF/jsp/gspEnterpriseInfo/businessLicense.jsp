@@ -7,59 +7,59 @@
     <table>
         <tr>
             <th>证照编号</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.licenseNumber}" id="licenseNumber" name='licenseNumber' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.licenseNumber}" id="licenseNumber" name='licenseNumber' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>统一社会信用代码</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.socialCreditCode}" id="socialCreditCode" name='socialCreditCode' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.socialCreditCode}" id="socialCreditCode" name='socialCreditCode' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>名称</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.licenseName}" id="licenseName" name='licenseName' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.licenseName}" id="licenseName" name='licenseName' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>类型</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>法定代表人</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.juridicalPerson}" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.juridicalPerson}" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>注册资本</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.registeredCapital}" id="registeredCapital" name='registeredCapital' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.registeredCapital}" id="registeredCapital" name='registeredCapital' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>成立日期</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.establishmentDate}" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.establishmentDate}" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>营业期限起始时间</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.businessStartDate}" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.businessStartDate}" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>营业期限结束时间</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.businessEndDate}" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.businessEndDate}" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>是否长期</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.isLong}" id="isLong" name='isLong' class='easyui-numberbox' data-options='required:true,min:0,max:100'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.isLong}" id="isLong" name='isLong' class='easyui-numberbox' data-options='required:true,min:0,max:100,width:200'/></td>
         </tr>
         <tr>
             <th>经营范围</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height: 150px;" class='easyui-textbox' data-options='required:true,multiline:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height: 150px;" class='easyui-textbox' data-options='required:true,multiline:true,width:200'/></td>
         </tr>
         <tr>
             <th>发证日期</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.issueDate}" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.issueDate}" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>登记机关</th>
-            <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>营业执照照片</th>

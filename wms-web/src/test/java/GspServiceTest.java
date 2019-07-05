@@ -74,7 +74,7 @@ public class GspServiceTest {
         map.put("resultNo","a");
         map.put("resultCode","101");
        String str = docAsnHeaderMybatisDao.getIdSequence(map);
-       System.out.println(map.get("resultCode"));
+       System.out.println(map.get("resultNo"));
 
 
     }

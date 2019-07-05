@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.constant.Constant;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -288,6 +289,29 @@ public class BasSkuService extends BaseService {
 		} catch (Exception e) {
 //			logger.error(ExceptionUtil.getExceptionMessage(e));
 		} 
+	}
+
+
+	public EasyuiDatagrid<BasSkuVO> getPagedDatagridSearch(EasyuiDatagridPager pager, BasSkuQuery query) {
+		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+		query.setActiveFlag(Constant.IS_USE_YES);
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		List<BasSku> basSkuList = basSkuMybatisDao.queryByPageList(mybatisCriteria);
+		BasSkuVO basSkuVO = null;
+		List<BasSkuVO> basSkuVOList = new ArrayList<BasSkuVO>();
+		for (BasSku basSku : basSkuList) {
+			basSkuVO = new BasSkuVO();
+			BeanUtils.copyProperties(basSku, basSkuVO);
+			basSkuVOList.add(basSkuVO);
+		}
+		datagrid.setTotal((long) basSkuMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(basSkuVOList);
+		return datagrid;
 	}
 
 }

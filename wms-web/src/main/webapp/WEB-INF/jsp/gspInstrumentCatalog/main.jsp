@@ -19,7 +19,7 @@ $(function() {
 		url : '<c:url value="/gspInstrumentCatalogController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -96,7 +96,11 @@ $(function() {
         textField:'value'
     });
 
-
+    $('#isUse').combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
 });
 var add = function(){
 	processType = 'add';
@@ -207,9 +211,9 @@ var doSearch = function(){
 		instrumentCatalogNo : $('#instrumentCatalogNo').val(),
 		instrumentCatalogName : $('#instrumentCatalogName').val(),
 		instrumentCatalogRemark : $('#instrumentCatalogRemark').val(),
-		classifyId : $('#classifyId').val(),
-		version : $('#version').val(),
-		isUse : $('#isUse').val()
+		classifyId : $('#classifyId').combobox("getValue"),
+		version : $('#version').combobox("getValue"),
+		isUse : $('#isUse').combobox("getValue")
 	});
 };
 </script>
@@ -233,7 +237,7 @@ var doSearch = function(){
 							<!--<th >待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称9：</th><td><input type='text' id='editDate' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

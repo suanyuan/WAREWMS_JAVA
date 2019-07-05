@@ -15,7 +15,7 @@
                     <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
                     <td>
                         <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='parent.choseSelect_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                        <a onclick='choseSelect_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                     </td>
                 </tr>
             </table>

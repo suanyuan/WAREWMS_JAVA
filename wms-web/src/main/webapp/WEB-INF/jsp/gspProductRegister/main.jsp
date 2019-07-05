@@ -134,7 +134,7 @@ var doSearch = function(){
         version : $('#productRegisterVersion').combobox("getValue"),
         createDateBegin : $("#createDateBegin").val(),
         createDateEnd : $("#createDateEnd").val(),
-		isUse : $('#isUse').val()
+		isUse : $('#isUse').combobox("getValue")
 	});
 };
 

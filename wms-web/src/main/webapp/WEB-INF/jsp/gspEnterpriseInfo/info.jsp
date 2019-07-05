@@ -31,29 +31,72 @@
         </tr>
         <tr>
             <th>备注</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox' size='50' style="height: 150px;" data-options='multiline:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox' size='50' style="height: 100px;" data-options='multiline:true'/></td>
         </tr>
     </table>
 </form>
+<div id='catalogToolbar' class='datagrid-toolbar' style=''>
+    <fieldset>
+        <legend>器械目录分类</legend>
+        <table>
+            <tr>
+                <th>版本</th>
+                <td><input type='text' id='version' class='easyui-textbox' size='16' data-options=''/></td>
+                <th>编号</th>
+                <td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+                <th>名称</th>
+                <td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
+                <td>
+                    <a onclick='getBy();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                    <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<table id="catalogDatagrid">
 
+</table>
 <script>
-    /*$(function(){
-        var row = ezuiDatagrid.datagrid('getSelected');
-        if(row){
-            $.ajax({
-                url : 'gspEnterpriseInfoController.do?getInfo',
-                data : {"enterpriseId" : row.enterpriseId},
-                type : 'POST',
-                dataType : 'JSON',
-                success : function(result){
-                    if(result.success){
-                        $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
-                            $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""])
-                        })
-                    }
-                }
-            });
-        }
+    var catalogDatagrid;
+    $(function () {
+        catalogDatagrid = $("#catalogDatagrid").datagrid({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?showCatalogEnterpriseDatagrid',
+            method:'POST',
+            toolbar : '#detailToolbar',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            collapsible:false,
+            queryParams:{'enterpriseId':'${enterpriseId}'},
+            pagination:true,
+            rownumbers:true,
+            idField : 'instrumentCatalogId',
+            columns : [[
+                {field: 'instrumentCatalogId',title:'主键',hidden:true},
+                {field: 'instrumentCatalogNo',title: '编号'},
+                {field: 'instrumentCatalogName',title: '名称'},
+                {field: 'classifyId',title: '分类'},
+                {field: 'version',title: '版本'},
+                {field: 'createDate',title: '创建时间'}
+            ]],
+            onDblClickCell: function(index,field,value){
 
-    })*/
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:520});
+            }
+        })
+    })
 </script>
