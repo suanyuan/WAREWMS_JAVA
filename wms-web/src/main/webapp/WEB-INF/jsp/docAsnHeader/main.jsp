@@ -526,7 +526,7 @@ var cancel = function(){
 
 var mergeOrder = function () {
     var row = ezuiDatagrid.datagrid('getSelections');
-    if(row){
+    if(row) {
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认合并生成上架清单？', function(confirm) {
             if (confirm) {
                 var arr = new Array();
@@ -535,7 +535,7 @@ var mergeOrder = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?addDocPa",
-                    data : {"asnno":arr.join(","),type : 'POST', dataType : 'JSON',async  :true,
+                    data : {"asnno":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
                         success : function(result){
                             console.log(result);
                             var msg='';
@@ -560,7 +560,7 @@ var mergeOrder = function () {
                     });
             }
         })
-	}
+    }
 
 }
 

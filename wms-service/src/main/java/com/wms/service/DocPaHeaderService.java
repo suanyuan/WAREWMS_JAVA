@@ -31,7 +31,7 @@ public class DocPaHeaderService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocPaHeader> docOrderHeaderList = docPaHeaderDao.queryByPageList(mybatisCriteria);
+        List<DocPaHeader> docOrderHeaderList = docPaHeaderDao.queryByList(mybatisCriteria);
         DocPaHeaderVO docOrderHeaderVO = null;
         List<DocPaHeaderVO> docOrderHeaderVOList = new ArrayList<DocPaHeaderVO>();
         for (DocPaHeader docOrderHeader : docOrderHeaderList) {
