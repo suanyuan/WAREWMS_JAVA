@@ -59,6 +59,141 @@ public class ViewInvLocation implements Serializable {
 	private BigDecimal totalgrossweight;
 
 	private String warehouseid;
+	private String lotatt14;
+	private String customerid;
+	private String lotatt03;
+	private String lotatt12;
+	private String lotatt04;
+	private String lotatt05;
+	private String lotatt07;
+	private String lotatt01;
+	private String lotatt02;
+	private String lotatt08;
+	private String lotatt11;
+	private String lotatt10;
+	private String name;
+	private String productRegisterNo;
+	private String enterpriseName;
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
+	}
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
+
+	public String getLotatt03() {
+		return lotatt03;
+	}
+
+	public void setLotatt03(String lotatt03) {
+		this.lotatt03 = lotatt03;
+	}
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
+	public String getLotatt04() {
+		return lotatt04;
+	}
+
+	public void setLotatt04(String lotatt04) {
+		this.lotatt04 = lotatt04;
+	}
+
+	public String getLotatt05() {
+		return lotatt05;
+	}
+
+	public void setLotatt05(String lotatt05) {
+		this.lotatt05 = lotatt05;
+	}
+
+	public String getLotatt07() {
+		return lotatt07;
+	}
+
+	public void setLotatt07(String lotatt07) {
+		this.lotatt07 = lotatt07;
+	}
+
+	public String getLotatt01() {
+		return lotatt01;
+	}
+
+	public void setLotatt01(String lotatt01) {
+		this.lotatt01 = lotatt01;
+	}
+
+	public String getLotatt02() {
+		return lotatt02;
+	}
+
+	public void setLotatt02(String lotatt02) {
+		this.lotatt02 = lotatt02;
+	}
+
+	public String getLotatt08() {
+		return lotatt08;
+	}
+
+	public void setLotatt08(String lotatt08) {
+		this.lotatt08 = lotatt08;
+	}
+
+	public String getLotatt11() {
+		return lotatt11;
+	}
+
+	public void setLotatt11(String lotatt11) {
+		this.lotatt11 = lotatt11;
+	}
+
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getProductRegisterNo() {
+		return productRegisterNo;
+	}
+
+	public void setProductRegisterNo(String productRegisterNo) {
+		this.productRegisterNo = productRegisterNo;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public ViewInvLocation() {
 	}

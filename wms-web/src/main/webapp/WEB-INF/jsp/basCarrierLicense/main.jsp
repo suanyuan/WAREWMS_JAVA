@@ -47,7 +47,9 @@ $(function() {
 			{field: 'createDate',	title: '录入时间',	width: 50 },
 			{field: 'editId',		title: '修改人',	width: 50 },
 			{field: 'editDate',		title: '修改时间',	width: 50 },
-			{field: 'activeFlag',	title: '是否有效',	width: 50  }
+			{field: 'activeFlag',	title: '是否有效',	width: 50 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                } }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

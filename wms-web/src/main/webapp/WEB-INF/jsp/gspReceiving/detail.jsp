@@ -29,16 +29,16 @@
         </tr>
         <tr>
             <th>备注</th>
-            <td><input type='text' name='remark' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' name='remark' id="remark" class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>货主</th>
-            <td><input type='text' name='clientId' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' name='clientId' id="text" class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>供应商</th>
             <td>
-                <input type='text' name='supplierId' class='easyui-textbox' data-options='required:true,width:200'/>
+                <input type='text' name='supplierId' id="supplier" class='easyui-textbox' data-options='required:true,width:200'/>
                 <a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
             </td>
         </tr>
@@ -284,7 +284,7 @@
 
 
         supplierDatagrid = $("#dataGridSupplierDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            url : sy.bp()+'/gspSupplierController.do?showDatagrid',
             method:'POST',
             toolbar : '#TB',
             title: '',
@@ -304,14 +304,19 @@
             singleSelect:true,
             idField : 'enterpriseId',
             columns : [[
-                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
-                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
-                {field: 'shorthandName',		title: '简称',	width: '20%' },
-                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
-                {field: '_operate',		title: '操作',	width: '20%',
-                    formatter: formatOper
-                }
+                {field: 'supplierId',title: '主键',	width: 88 },
+                {field: 'enterpriseId',		title: '企业流水号',	width: 88 },
+                {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                        return rowData.isCheck == '1' ? '是' : '否';
+                    }},
+                {field: 'operateType',		title: '类型（经营/生产）',	width: 88 },
+                {field: 'createId',		title: '创建人',	width: 88 },
+                {field: 'createDate',		title: '创建时间',	width: 88 },
+                {field: 'editId',		title: '编辑人',	width: 88 },
+                {field: 'editDate',		title: '编辑时间',	width: 88 },
+                {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                        return rowData.isUse == '1' ? '是' : '否';
+                    }}
             ]],
             onDblClickCell: function(index,field,value){
                 choseSupplierSelect();
@@ -343,7 +348,7 @@
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             fit:true,
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            href:sy.bp()+"/gspSupplierController.do?toDetail",
             cache: false,
             onClose : function() {
                 ezuiFormClear(ezuiForm);
@@ -438,17 +443,17 @@
     function choseSupplierSelect() {
         var row = supplierDatagrid.datagrid("getSelected");
         if(row){
-            $("#enterpriseId").val(row.enterpriseId);
-            $("#enterpriseName").textbox("setValue",row.enterpriseName);
-            $("#clientNo").textbox("setValue",row.enterpriseNo);
-            $("#clientName").textbox("setValue",row.shorthandName);
+            $("#supplier").textbox("setValue",row.supplierId);
+           /* $("#operateType").textbox("setValue",row.operateType);
+            $("#isUse").textbox("setValue",row.isUse);
+            $("#isCheck").textbox("setValue",row.isCheck);*/
             ezuiDialogSupplierDetail.dialog('close');
         }
     }
     function doSearchSupplier() {
         supplierDatagrid.datagrid('load', {
-            enterpriseNo : $('#enterpriseNo').val(),
-            shorthandName : $('#shorthandName').val(),
+            supplierId : $('#supplierId').val(),
+            operateType : $('#operateType').val(),
             isUse : '1'
         });
     }

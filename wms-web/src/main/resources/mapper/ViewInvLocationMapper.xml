@@ -23,11 +23,27 @@
 	<result column="totalcubic" property="totalcubic"/>
 	<result column="totalgrossweight" property="totalgrossweight"/>
 	<result column="warehouseid" property="warehouseid"/>
+	<result column="customerid" property="customerid"/>
+	<result column="lotatt14" property="lotatt14"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="name" property="name"/>
+	<result column="product_register_no" property="productRegisterNo"/>
+	<result column="enterprise_name" property="enterpriseName"/>
+
 </resultMap>
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt08,lotatt10,lotatt14,customerid,product_register_no,enterprise_name,name
 </sql>
    
    
@@ -86,8 +102,53 @@ where 1=1
 	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
 	    and totalgrossweight =  #{condition.totalgrossweight}
 	</if>
-	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	<!--<if test="condition.warehouseid != null and condition.warehouseid != ''" >
 	    and warehouseid =  #{condition.warehouseid}
+	</if>-->
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and lotatt12 =  #{condition.lotatt12}
+	</if>
+	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+	    and lotatt14 =  #{condition.lotatt14}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+	    and enterprise_name =  #{condition.enterpriseName}
+	</if>
+	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
+	    and product_register_no =  #{condition.productRegisterNo}
 	</if>
 	<if test="condition.customerSet != null" >
 		<if test="condition.customerSet.isEmpty() == false" >
@@ -103,24 +164,24 @@ where 1=1
    
 <!-- 库存余量按库位 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from View_Inv_Location 
+	select count(1) from View_Inv_Location
 	<include refid="Example_Where_Clause"/>
 </select>
   	
 <!-- 查询库存余量按批次库位列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
-	select 
+	select a.* from (
+	select
 	<include refid="Base_Column_List"/>
-	from View_Inv_Location 
+	from view_inv_location
 	<include refid="Example_Where_Clause"/>
 <!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
 <!--        order by fmcustomerid,fmsku,fmlocation -->
 <!--     </if> -->
     order by fmcustomerid,fmsku,fmlocation
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
@@ -131,7 +192,7 @@ where 1=1
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
-	from View_Inv_Location 
+	from view_inv_location
 	<include refid="Example_Where_Clause"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by fmcustomerid,fmsku,fmlocation

@@ -57,7 +57,9 @@ $(function() {
             }},*/
 			{field: 'clientTerm',		title: '委托期限',	width: 20 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
-            {field: 'activeFlag',		title: '激活 ',	width: 41}
+            {field: 'activeFlag',		title: '激活 ',	width: 41,formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == 'Y' ? '是' : '否';
+                }}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

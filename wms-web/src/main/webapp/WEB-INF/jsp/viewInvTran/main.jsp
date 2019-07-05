@@ -150,12 +150,12 @@ var ezuiToolbarClear = function(){
 	$("#transactiontype").combobox('clear');//
 	$("#doctype").combobox('clear');
 	$("#status").combobox('clear');
-	$("#transactiontime").datetimebox({
+	$("#transactiontime").datetimebox('clear');/*$("#transactiontime").datetimebox({
 		value:'1900-01-01 00:00'
-	});
-	$("#addtime").datetimebox({
+	});*/
+	$("#addtime").datetimebox('clear');/*$("#addtime").datetimebox({
 		value:ordertimeDateTo(new Date())
-	});
+	});*/
 	$("#docno").textbox('clear');
 	$("#operator").textbox('clear');
 	$("#editwho").textbox('clear');

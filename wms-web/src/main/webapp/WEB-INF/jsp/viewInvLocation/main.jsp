@@ -28,32 +28,30 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : false,
+		fitColumns :true,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'customerid',
 		columns : [[
-			{field: 'fmcustomerid',		title: '客户编码',	width: 71 },
-			{field: 'fmsku',		title: '商品编码',	width: 91 },
-			{field: 'skudescrc',		title: '商品名称',	width: 151 },
-			{field: 'fmlocation',		title: '库位',	width: 81 },
-			{field: 'fmqty',		title: '库存数量',	width: 71 },
-			{field: 'qtyallocated',		title: '分配数量',	width: 71 },
-			{field: 'qtyavailed',		title: '可用数量',	width: 71 },
-			{field: 'qtyholded',		title: '冻结数量',	width: 71 },
-			{field: 'totalgrossweight',		title: '毛重',	width: 71 },
-			{field: 'totalcubic',		title: '体积',	width: 71 },
-			{field: 'iPa',		title: '待上架数量',	width: 71 },
-			{field: 'iMv',		title: '待移入数量',	width: 71 },
-			{field: 'oMv',		title: '待移出数量',	width: 71 },
-			{field: 'iRp',		title: '补货待上架',	width: 71 },
-			{field: 'oRp',		title: '补货待下架',	width: 71 },
-			{field: 'fmuomName',		title: '单位',	width: 51 },
-			{field: 'warehouseid',		title: '仓库编码',	width: 51 }
+			{field: 'customerid',		title: '货主',	width: 71 },
+			{field: 'lotatt14',		title: '入库单号',	width: 91 },
+			{field: 'lotatt03',		title: '入库日期',	width: 71 },
+			{field: 'lotatt12',		title: '产品名称',	width: 71 },
+			{field: 'lotatt04',		title: '生产批号',	width: 71 },
+			{field: 'lotatt05',		title: '序列号',	width: 71 },
+			{field: 'lotatt07',		title: '灭菌批号',	width: 71 },
+			{field: 'lotatt01',		title: '生产日期',	width: 71 },
+			{field: 'lotatt02',		title: '有效期/失效期',	width: 71 },
+			{field: 'lotatt08',		title: '供应商',	width: 71 },
+			{field: 'lotatt11',		title: '存储条件',	width: 71 },
+			{field: 'enterpriseName',		title: '生产厂家',	width: 71 },
+
+			{field: 'lotatt10',		title: '质量状态',	width: 71 },
+			{field: 'name',		title: '产品线',	width: 71 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -109,23 +107,32 @@ var edit = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		ezuiForm.form('load',{
-			fmcustomerid : row.fmcustomerid,
-			fmlocation : row.fmlocation,
-			fmqty : row.fmqty,
-			fmsku : row.fmsku,
-			fmuomName : row.fmuomName,
-			iMv : row.iMv,
-			iPa : row.iPa,
-			iRp : row.iRp,
-			oMv : row.oMv,
-			oRp : row.oRp,
-			qtyallocated : row.qtyallocated,
-			qtyavailed : row.qtyavailed,
-			qtyholded : row.qtyholded,
-			skudescrc : row.skudescrc,
-			skudescre : row.skudescre,
-			totalcubic : row.totalcubic,
-			totalgrossweight : row.totalgrossweight,
+            customerid : row.customerid,
+            lotatt14 : row.lotatt14,
+            lotatt03 : row.lotatt03,
+            lotatt01 : row.lotatt01,
+            lotatt02 : row.lotatt02,
+            lotatt04 : row.lotatt04,
+            lotatt05 : row.lotatt05,
+            lotatt10 : row.lotatt10,
+            lotatt07 : row.lotatt07,
+            lotatt11 : row.lotatt11,
+            lotatt08 : row.lotatt08,
+            lotatt12 : row.lotatt12,
+            lotatt06 : row.lotatt06,
+            sku : row.sku,
+            qtyallocated : row.qtyallocated,
+            qtyholded : row.qtyholded,
+            fmuomName : row.fmuomName,
+            iPa : row.iPa,
+            iMv : row.iMv,
+            oMv : row.oMv,
+            iRp : row.iRp,
+            oRp : row.oRp,
+            totalcubic : row.totalcubic,
+            totalgrossweight : row.totalgrossweight,
+			name : row.name,
+            enterpriseName : row.enterpriseName,
 			warehouseid : row.warehouseid
 		});
 		ezuiDialog.dialog('open');
@@ -169,7 +176,7 @@ var ezuiCustDataClick = function(){
 	},
 	onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/cosCommonAddressController.do?getBtn"/>', ezuiMenu);
+
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -279,21 +286,21 @@ var doSearch = function(){
 			<input type='hidden' id='viewInvLocationId' name='viewInvLocationId'/>
 			<table>
 				<tr>
-					<th>客户编码</th>
-					<td><input type='text' name='fmcustomerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>商品编码</th>
-					<td><input type='text' name='fmsku' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>商品名称</th>
-					<td><input type='text' name='skudescrc' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>库位</th>
-					<td><input type='text' name='fmlocation' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>货主</th>
+					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>入库单号</th>
+					<td><input type='text' name='lotatt14' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>入库日期</th>
+					<td><input type='text' name='lotatt03' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>产品代码</th>
+					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>库存数量</th>
-					<td><input type='text' name='fmqty' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>可用数量</th>
-					<td><input type='text' name='qtyavailed' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>分配数量</th>
+					<th>产品名称</th>
+					<td><input type='text' name='lotatt12' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>注册证号/备案凭证号</th>
+					<td><input type='text' name='lotatt06' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>规格</th>
 					<td><input type='text' name='qtyallocated' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>冻结数量</th>
 					<td><input type='text' name='qtyholded' class='easyui-textbox' size='16' data-options='required:true'/></td>

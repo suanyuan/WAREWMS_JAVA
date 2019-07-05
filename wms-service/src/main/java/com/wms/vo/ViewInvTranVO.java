@@ -62,7 +62,7 @@ public class ViewInvTranVO {
 	private java.lang.String userdefine4;
 	private java.lang.String userdefine5;
 	private java.lang.String warehouseid;
-	
+
 	public java.lang.String getWarehouseid() {
 		return warehouseid;
 	}

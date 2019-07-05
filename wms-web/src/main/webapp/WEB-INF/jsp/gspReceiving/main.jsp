@@ -44,7 +44,6 @@ $(function() {
 			{field: 'supplierId',		title: '供应商',	width: 72 },
 			{field: 'isCheck',		title: '是否审查',	width: 72 },
 			{field: 'isReturn',		title: '是否医废',	width: 72 },
-			{field: 'isCooperation',		title: '是否合作',	width: 72 },
 			{field: 'deliveryAddress',		title: '送货地址',	width: 72 },
 			{field: 'contacts',		title: '联系人',	width: 72 },
 			{field: 'phone',		title: '联系电话',	width: 72 },
@@ -54,7 +53,9 @@ $(function() {
 			{field: 'createDate',		title: '创建日期',	width: 72 },
 			{field: 'editId',		title: '修改人',	width: 72 },
 			{field: 'editDate',		title: '修改日期',	width: 72 },
-			{field: 'isUse',		title: '是否有效',	width: 72 },
+			{field: 'isUse',		title: '是否有效',	width: 72 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isUse == '1' ? '是' : '否';
+                }},
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -186,6 +187,7 @@ var doSearch = function(){
 		supplierId : $('#supplierId').val(),
         deliveryAddress : $('#deliveryAddress').val(),
 		isCheck : $('#isCheck').combobox("getValue"),
+
 		createId : $('#createId').val(),
 		createDate : $('#createDate').val(),
 		editId : $('#editId').val(),
@@ -224,7 +226,6 @@ function searchMainEnterprise() {
 							<th>货主：</th><td><input type='text' id='clientId' class='easyui-textbox' size='8' data-options=''/></td>
 							<th>供应商：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='8' data-options=''/></td>
 							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>是否合作：</th><td><input type='text' id='isCooperation' class='easyui-textbox' size='8' data-options=''/></td>
 							<th>送货地址：</th><td><input type='text' id='deliveryAddress' class='easyui-textbox' size='8' data-options=''/></td>
 
 							<th>是否有效：</th><td><input type='text' id='isUse' name="isUse" class='easyui-textbox' size='8' data-options=''/></td>

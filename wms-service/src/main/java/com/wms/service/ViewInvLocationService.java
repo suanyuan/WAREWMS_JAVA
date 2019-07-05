@@ -1,25 +1,20 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.ViewInvLocation;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.ViewInvLocationMybatisDao;
+import com.wms.query.ViewInvLocationQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.ViewInvLocationVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wms.dao.ViewInvLocationDao;
-import com.wms.entity.ViewInvLocation;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.ViewInvLocationVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.ViewInvLocationForm;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.ViewInvLocationMybatisDao;
-import com.wms.query.ViewInvLocationQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("viewInvLocationService")
 public class ViewInvLocationService extends BaseService {

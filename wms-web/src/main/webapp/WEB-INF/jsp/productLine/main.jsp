@@ -34,7 +34,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
         rowStyler: function (index, row) {
-            if(row.isUse == "失效"){  return 'color:red;';}
+            if(row.isUse == "0"){  return 'color:red;';}
         },
 		columns : [[
 
@@ -45,7 +45,9 @@ $(function() {
 			{field: 'createDate',		title: '创建日期',	width: 88 },
 			{field: 'editId',		title: '修改人',	width: 88 },
 			{field: 'editDate',		title: '修改日期',	width: 88 },
-			{field: 'isUse',		title: '是否有效',	width: 88 },
+			{field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isUse == '1' ? '是' : '否';
+                }},
 
 		]],
 		onDblClickCell: function(index,field,value){
