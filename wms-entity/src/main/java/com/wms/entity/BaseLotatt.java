@@ -14,6 +14,12 @@ public class BaseLotatt {
     private String lotatt10;//质量状态
     private String lotatt11;//储存条件
     private String lotatt12;//产品名称
+    private String lotatt13;//双证
+    private String lotatt14;//入库单号
+    private String lotatt15;
+    private String lotatt16;
+    private String lotatt17;
+    private String lotatt18;
 
     public String getLotatt01() {
         return lotatt01;
@@ -109,5 +115,53 @@ public class BaseLotatt {
 
     public void setLotatt12(String lotatt12) {
         this.lotatt12 = lotatt12;
+    }
+
+    public String getLotatt13() {
+        return lotatt13;
+    }
+
+    public void setLotatt13(String lotatt13) {
+        this.lotatt13 = lotatt13;
+    }
+
+    public String getLotatt14() {
+        return lotatt14;
+    }
+
+    public void setLotatt14(String lotatt14) {
+        this.lotatt14 = lotatt14;
+    }
+
+    public String getLotatt15() {
+        return lotatt15;
+    }
+
+    public void setLotatt15(String lotatt15) {
+        this.lotatt15 = lotatt15;
+    }
+
+    public String getLotatt16() {
+        return lotatt16;
+    }
+
+    public void setLotatt16(String lotatt16) {
+        this.lotatt16 = lotatt16;
+    }
+
+    public String getLotatt17() {
+        return lotatt17;
+    }
+
+    public void setLotatt17(String lotatt17) {
+        this.lotatt17 = lotatt17;
+    }
+
+    public String getLotatt18() {
+        return lotatt18;
+    }
+
+    public void setLotatt18(String lotatt18) {
+        this.lotatt18 = lotatt18;
     }
 }

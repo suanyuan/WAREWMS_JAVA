@@ -56,6 +56,12 @@
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
+    <result column="lotatt13" property="lotatt13"/>
+    <result column="lotatt14" property="lotatt14"/>
+    <result column="lotatt15" property="lotatt15"/>
+    <result column="lotatt16" property="lotatt16"/>
+    <result column="lotatt17" property="lotatt17"/>
+    <result column="lotatt18" property="lotatt18"/>
 	<result column="notes" property="notes"/>
 	<result column="operator" property="operator"/>
 	<result column="overrcvpercentage" property="overrcvpercentage"/>
@@ -114,7 +120,7 @@
        
 <!-- Doc_Asn_Details table all fields -->
 <sql id="Base_Column_List" >
-	 addtime,addwho,alternativedescr_c,alternativesku,asnlinefilter,asnlineno,asnno,containerid,createsource,customerid,damagedqty_each,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,edittime,editwho,expectedqty,expectedqty_each,holdrejectcode,holdrejectreason,linestatus,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,notes,operator,overrcvpercentage,packid,palletizemethod,palletizeqty_each,plantoloc,polineno,pono,prereceivedqty_each,printlabel,productstatus,productstatus_descr,qcstatus,receivedqty,receivedqty_each,receivedtime,receivinglocation,referencelineno,rejectedqty,rejectedqty_each,reserve_flag,sku,skudescrc,skudescre,totalcubic,totalgrossweight,totalnetweight,totalprice,uom,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6
+	 addtime,addwho,alternativedescr_c,alternativesku,asnlinefilter,asnlineno,asnno,containerid,createsource,customerid,damagedqty_each,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,edittime,editwho,expectedqty,expectedqty_each,holdrejectcode,holdrejectreason,linestatus,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,notes,operator,overrcvpercentage,packid,palletizemethod,palletizeqty_each,plantoloc,polineno,pono,prereceivedqty_each,printlabel,productstatus,productstatus_descr,qcstatus,receivedqty,receivedqty_each,receivedtime,receivinglocation,referencelineno,rejectedqty,rejectedqty_each,reserve_flag,sku,skudescrc,skudescre,totalcubic,totalgrossweight,totalnetweight,totalprice,uom,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6
 </sql>
    
    
@@ -272,6 +278,24 @@ where 1=1
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
 	    and lotatt12 =  #{condition.lotatt12}
 	</if>
+    <if test="condition.lotatt13 != null and condition.lotatt13 != ''" >
+        and lotatt13 =  #{condition.lotatt13}
+    </if>
+    <if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+        and lotatt14 =  #{condition.lotatt14}
+    </if>
+    <if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+        and lotatt15 =  #{condition.lotatt15}
+    </if>
+    <if test="condition.lotatt16 != null and condition.lotatt16 != ''" >
+        and lotatt16 =  #{condition.lotatt16}
+    </if>
+    <if test="condition.lotatt17 != null and condition.lotatt17 != ''" >
+        and lotatt17 =  #{condition.lotatt17}
+    </if>
+    <if test="condition.lotatt18 != null and condition.lotatt18 != ''" >
+        and lotatt18 =  #{condition.lotatt18}
+    </if>
 	<if test="condition.notes != null and condition.notes != ''" >
 	    and notes =  #{condition.notes}
 	</if>
@@ -384,7 +408,7 @@ where 1=1
 </sql>
    
 
-<!-- 插入记录 -->
+<!-- 插入记录 TODO:新增了很多批次号，用到add的时候考虑下要不要加上去 add by Gizmo 2019-07-06 -->
 <insert id="add" parameterType="Object" >
 insert into doc_asn_details
         (asnno,
@@ -507,6 +531,42 @@ insert into doc_asn_details
 	<if test="lotatt06 != null  ">
 		lotatt06=#{lotatt06, jdbcType=VARCHAR},
 	</if>
+    <if test="lotatt07 != null  ">
+        lotatt07=#{lotatt07, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt08 != null  ">
+        lotatt08=#{lotatt08, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt09 != null  ">
+        lotatt09=#{lotatt09, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt10 != null  ">
+        lotatt10=#{lotatt10, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt11 != null  ">
+        lotatt11=#{lotatt11, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt12 != null  ">
+        lotatt12=#{lotatt12, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt13 != null  ">
+        lotatt13=#{lotatt13, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt14 != null  ">
+        lotatt14=#{lotatt14, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt15 != null  ">
+        lotatt15=#{lotatt15, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt16 != null  ">
+        lotatt16=#{lotatt16, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt17 != null  ">
+        lotatt17=#{lotatt17, jdbcType=VARCHAR},
+    </if>
+    <if test="lotatt18 != null  ">
+        lotatt18=#{lotatt18, jdbcType=VARCHAR},
+    </if>
 	edittime=now(),
 	editwho=#{editwho}
 	where asnno=#{asnno, jdbcType=VARCHAR}
@@ -664,6 +724,24 @@ insert into doc_asn_details
 	<if test="lotatt12 != null  ">
 		lotatt12=#{lotatt12},
 	</if>
+        <if test="lotatt13 != null  ">
+            lotatt13=#{lotatt13, jdbcType=VARCHAR},
+        </if>
+        <if test="lotatt14 != null  ">
+            lotatt14=#{lotatt14, jdbcType=VARCHAR},
+        </if>
+        <if test="lotatt15 != null  ">
+            lotatt15=#{lotatt15, jdbcType=VARCHAR},
+        </if>
+        <if test="lotatt16 != null  ">
+            lotatt16=#{lotatt16, jdbcType=VARCHAR},
+        </if>
+        <if test="lotatt17 != null  ">
+            lotatt17=#{lotatt17, jdbcType=VARCHAR},
+        </if>
+        <if test="lotatt18 != null  ">
+            lotatt18=#{lotatt18, jdbcType=VARCHAR},
+        </if>
 	<if test="notes != null  ">
 		notes=#{notes},
 	</if>
@@ -821,6 +899,12 @@ insert into doc_asn_details
                    a.lotatt10,
                    a.lotatt11,
                    a.lotatt12,
+    a.lotatt13,
+    a.lotatt14,
+    a.lotatt15,
+    a.lotatt16,
+    a.lotatt17,
+    a.lotatt18,
 				   (@rowNum:=@rowNum+1) as row_num
 	          from Doc_Asn_Details a
                    LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid AND a.sku = b.sku,
@@ -850,7 +934,7 @@ insert into doc_asn_details
     </select>
 
     <select id="receiveGoods" statementType="CALLABLE" parameterType="java.util.Map">
-        {call spasn_receiving_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'2',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{receivedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},'','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivingtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
+        {call spasn_receiving_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'2',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{receivedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt13,mode=IN,jdbcType=VARCHAR},#{lotatt14,mode=IN,jdbcType=VARCHAR},'','','','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivingtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
     </select>
 
 <!--新增订单号 -->
@@ -860,8 +944,29 @@ insert into doc_asn_details
 
 <!-- 根据id查询 入库单管理明细 -->
 <select id="queryDocPaDTO"  resultMap="DocPaDTOMap">
-	select h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,de.lotatt02,de.lotatt04,de.lotatt05,'DJ' as lotatt10,de.packid
-	from doc_asn_header h left join doc_asn_details de on h.asnno = de.asnno
+	select h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,de.lotatt02,de.lotatt04,de.lotatt05,'DJ' as lotatt10,de.packid, ia.lotnum
+	from doc_asn_header h
+    left join doc_asn_details de on h.asnno = de.asnno
+    left join inv_lot_att ia on
+          IFNULL(ia.lotatt01,'*') = IFNULL(rtrim(de.lotatt01),'*')
+      and IFNULL(ia.lotatt02,'*') = IFNULL(rtrim(de.lotatt02),'*')
+      and IFNULL(ia.lotatt03,'*') = IFNULL(rtrim(de.lotatt03),'*')
+      and IFNULL(ia.lotatt04,'*') = IFNULL(rtrim(de.lotatt04),'*')
+      and IFNULL(ia.lotatt05,'*') = IFNULL(rtrim(de.lotatt05),'*')
+      and IFNULL(ia.lotatt06,'*') = IFNULL(rtrim(de.lotatt06),'*')
+      and IFNULL(ia.lotatt07,'*') = IFNULL(rtrim(de.lotatt07),'*')
+      and IFNULL(ia.lotatt08,'*') = IFNULL(rtrim(de.lotatt08),'*')
+      and IFNULL(ia.lotatt09,'*') = IFNULL(rtrim(de.lotatt09),'*')
+      and IFNULL(ia.lotatt10,'*') = IFNULL(rtrim(de.lotatt10),'*')
+      and IFNULL(ia.lotatt11,'*') = IFNULL(rtrim(de.lotatt11),'*')
+      and IFNULL(ia.lotatt12,'*') = IFNULL(rtrim(de.lotatt12),'*')
+      and IFNULL(ia.lotatt13,'*') = IFNULL(rtrim(de.lotatt13),'*')
+      and IFNULL(ia.lotatt14,'*') = IFNULL(rtrim(de.lotatt14),'*')
+      and IFNULL(ia.lotatt15,'*') = IFNULL(rtrim(de.lotatt15),'*')
+      and IFNULL(ia.lotatt16,'*') = IFNULL(rtrim(de.lotatt16),'*')
+      and IFNULL(ia.lotatt17,'*') = IFNULL(rtrim(de.lotatt17),'*')
+      and IFNULL(ia.lotatt18,'*') = IFNULL(rtrim(de.lotatt18),'*')
+      and ia.customerid = de.customerid and ia.sku = de.sku
 	where h.asnno in
 	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
 		#{id}

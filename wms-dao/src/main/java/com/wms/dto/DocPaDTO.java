@@ -205,6 +205,8 @@ public class DocPaDTO extends DocAsnDetail{
 
     private Date lastreceivingtime;
 
+    private String lotnum;
+
     private Date medicalxmltime;
 
     private String notes;

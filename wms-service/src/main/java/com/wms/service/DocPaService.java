@@ -73,6 +73,7 @@ public class DocPaService {
                     DocPaDetailsForm detailsForm = new DocPaDetailsForm();
                     detailsForm.setPano(panno);
                     detailsForm.setLinestatus(docPaDTO.getLinestatus());
+                    detailsForm.setLotnum(docPaDTO.getLotnum());
                     detailsForm.setAsnno(docPaDTO.getAsnno());
                     detailsForm.setAsnlineno(Double.parseDouble(docPaDTO.getAsnlineno()+""));
                     detailsForm.setCustomerid(docPaDTO.getCustomerid());
