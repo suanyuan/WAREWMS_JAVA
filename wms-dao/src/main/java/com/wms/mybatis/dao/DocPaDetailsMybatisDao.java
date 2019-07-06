@@ -2,7 +2,9 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.DocPaDetails;
+import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.query.pda.PdaDocPaDetailQuery;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -11,10 +13,19 @@ import com.wms.query.pda.PdaDocPaDetailQuery;
  */
 public interface DocPaDetailsMybatisDao extends BaseDao {
 
-    /**
-     * 通过
-     * @param query
-     * @return
-     */
 	DocPaDetails queryDocPaDetail(PdaDocPaDetailQuery query);
+
+    /**
+     * 通过单号 + 行号，mybatis-generate生成的代码是只有asnno，❎
+     * @param pano 单号
+     * @param palineno 行号
+     * @return ~
+     */
+	DocPaDetails queryByLineNo(@Param("pano") String pano, @Param("palineno") long palineno);
+
+    /**
+     * 上架提交
+     * @param form  e
+     */
+	void putawayGoods(PdaDocPaDetailForm form);
 }
