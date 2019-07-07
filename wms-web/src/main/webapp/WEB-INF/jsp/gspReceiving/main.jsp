@@ -224,12 +224,12 @@ function searchMainEnterprise() {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>货主：</th><td><input type='text' id='clientId' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>供应商：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>送货地址：</th><td><input type='text' id='deliveryAddress' class='easyui-textbox' size='8' data-options=''/></td>
+							<th>货主</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应商</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>送货地址</th><td><input type='text' id='deliveryAddress' class='easyui-textbox' size='16' data-options=''/></td>
 
-							<th>是否有效：</th><td><input type='text' id='isUse' name="isUse" class='easyui-textbox' size='8' data-options=''/></td>
+							<th>是否有效</th><td><input type='text' id='isUse' name="isUse" class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
