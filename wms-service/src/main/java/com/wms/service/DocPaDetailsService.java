@@ -141,10 +141,18 @@ public class DocPaDetailsService extends BaseService {
      * @param pano 上架任务单
      * @return ~
      */
-    public List<PdaDocPaDetailVO> queryDocPaDetailList(String pano) {
+    public List<PdaDocPaDetailVO> queryDocPaList(String pano) {
 
-
-        return null;
+        List<DocPaDetails> detailsList = docPaDetailsMybatisDao.queryDocPaList(pano);
+        PdaDocPaDetailVO detailVO;
+        List<PdaDocPaDetailVO> detailVOList = new ArrayList<>();
+        for (DocPaDetails detail:
+             detailsList) {
+            detailVO = new PdaDocPaDetailVO();
+            BeanUtils.copyProperties(detail, detailVO);
+            detailVOList.add(detailVO);
+        }
+        return detailVOList;
     }
 
     /**

@@ -212,7 +212,7 @@ where 1=1
 <!-- 根据id查询 上架单明细 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_pa_details where PANO = #{pano}
+	 from doc_pa_details where PANO = #{pano} and palineno = #{palineno}
 </select>
 
 <!-- 上架单明细 列表总数-->
@@ -261,6 +261,14 @@ where 1=1
 
     <select id="putawayGoods" statementType="CALLABLE" parameterType="java.util.Map">
         {call spasn_putawaying_process(#{pano, jdbcType=VARCHAR},#{palineno, jdbcType=INTEGER},#{lotatt01, jdbcType=VARCHAR},#{asnno, jdbcType=VARCHAR},#{asnlineno, jdbcType=VARCHAR},#{customerid, jdbcType=VARCHAR},#{sku, jdbcType=VARCHAR},#{userdefine1, jdbcType=VARCHAR},#{userdefine2, jdbcType=VARCHAR},#{userdefine3, jdbcType=VARCHAR},#{userdefine4, jdbcType=VARCHAR},#{userdefine5, jdbcType=VARCHAR},#{packid, jdbcType=VARCHAR},#{userid, jdbcType=VARCHAR},#{paqty, jdbcType=DECIMAL},#{warehouseid, jdbcType=VARCHAR},#{language, jdbcType=VARCHAR},#{returncode, jdbcType=VARCHAR})}
+    </select>
+
+    <select id="queryDocPaList" parameterType="java.lang.String" resultMap="ExtendResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_pa_details
+        where PANO = #{pano}
+        order by linestatus asc, userdefine1 asc
     </select>
   	
 </mapper>   

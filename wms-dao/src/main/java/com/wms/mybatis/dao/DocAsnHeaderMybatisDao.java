@@ -41,6 +41,7 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
     /**
      * 结束收货 procedure
      * @param form ~
+     * @return 0 || 1
      */
-	void endTask(PdaDocAsnEndForm form);
+	int endTask(PdaDocAsnEndForm form);
 }

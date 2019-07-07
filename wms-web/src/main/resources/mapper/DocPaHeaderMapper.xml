@@ -228,7 +228,7 @@ where 1=1
     </if>
 </select>
 
-    <!--TODO 查询未完成列表-->
+    <!-- 查询未完成列表-->
     <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List"/>
@@ -237,5 +237,13 @@ where 1=1
         order by ADDTIME desc
         limit #{start}, #{pageSize}
     </select>
+
+    <update id="endTask" parameterType="java.util.Map">
+        update doc_pa_header set
+        asnstatus = '40',
+        edittime = NOW(),
+        editwho = #{editwho, jdbcType=VARCHAR}
+        where pano = #{pano, jdbcType=VARCHAR}
+    </update>
 
 </mapper>   

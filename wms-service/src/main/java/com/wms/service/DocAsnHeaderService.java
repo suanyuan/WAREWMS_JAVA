@@ -10,10 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -375,8 +372,12 @@ public class DocAsnHeaderService extends BaseService {
      */
     public PdaResult endTask(PdaDocAsnEndForm form) {
 
-        docAsnHeaderMybatisDao.endTask(form);
+        form.setEditwho("Gizmo");
+        int result = docAsnHeaderMybatisDao.endTask(form);
 
+        if (result == 0) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 订单号不存在");
+        }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
 }
