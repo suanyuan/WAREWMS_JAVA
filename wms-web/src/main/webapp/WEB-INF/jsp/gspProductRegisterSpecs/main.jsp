@@ -23,7 +23,7 @@ $(function() {
 		url : '<c:url value="/gspProductRegisterSpecsController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -38,7 +38,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 
-			{field: 'specsId',		title: '主键',	width: 25 },
+			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
             // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
 
 
@@ -124,7 +124,7 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspProductRegisterSpecsId').val(0);
-	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+	ezuiDialog.dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
@@ -212,14 +212,14 @@ var commit = function(){
     var url = '';
     if (processType == 'edit') {
         var row = ezuiDatagrid.datagrid('getSelected');
-        infoObj["supplierId"] = row.supplierId;
-        url = sy.bp()+'/gspSupplierController.do?edit';
+        infoObj["specsId"] = row.specsId;
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
     }else{
-        url = sy.bp()+'/gspSupplierController.do?add';
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
     }
     $.ajax({
         url : url,
-        data : {"gspSupplierForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
+        data : {"gspProductRegisterSpecsForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
         success : function(result){
             console.log(result);
             var msg='';

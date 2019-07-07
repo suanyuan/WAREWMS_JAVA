@@ -228,13 +228,7 @@ public class GspProductRegisterSpecs implements Serializable {
   }
 
 
-  public String getPacking_Require() {
-    return packingRequire;
-  }
 
-  public void setPacking_Require(String packing_Require) {
-    this.packingRequire = packing_Require;
-  }
 
 
   public String getStorageCondition() {
@@ -358,5 +352,13 @@ public class GspProductRegisterSpecs implements Serializable {
 
   public void setProductRegisterNo(String productRegisterNo) {
     this.productRegisterNo = productRegisterNo;
+  }
+
+  public String getPackingRequire() {
+    return packingRequire;
+  }
+
+  public void setPackingRequire(String packingRequire) {
+    this.packingRequire = packingRequire;
   }
 }
