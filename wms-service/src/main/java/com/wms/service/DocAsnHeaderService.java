@@ -375,8 +375,12 @@ public class DocAsnHeaderService extends BaseService {
      */
     public PdaResult endTask(PdaDocAsnEndForm form) {
 
-        docAsnHeaderMybatisDao.endTask(form);
+        form.setEditwho("Gizmo");
+        int result = docAsnHeaderMybatisDao.endTask(form);
 
+        if (result == 0) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 订单号不存在");
+        }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
 }

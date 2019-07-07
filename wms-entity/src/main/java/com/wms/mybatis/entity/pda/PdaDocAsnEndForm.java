@@ -1,24 +1,11 @@
 package com.wms.mybatis.entity.pda;
 
-public class PdaDocAsnEndForm {
+import lombok.Data;
 
-    private String result;//procedure执行结果
+@Data
+public class PdaDocAsnEndForm {
 
     private String asnno;//单号
 
-    public String getAsnno() {
-        return asnno;
-    }
-
-    public void setAsnno(String asnno) {
-        this.asnno = asnno;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
+    private String editwho;
 }

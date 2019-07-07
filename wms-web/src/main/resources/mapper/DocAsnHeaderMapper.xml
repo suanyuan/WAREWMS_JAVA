@@ -1286,8 +1286,11 @@ insert into doc_asn_header
     </select>
 
     <!--结束收货任务-->
-    <select id="endTask" statementType="CALLABLE" parameterType="java.util.Map">
-        {call spasn_receiving_process_end(#{asnno,mode=IN,jdbcType=VARCHAR}, #{result,mode=OUT,jdbcType=VARCHAR})}
-    </select>
-
+    <update id="endTask" parameterType="java.util.Map">
+        update doc_asn_header set
+        asnstatus = '40',
+        edittime = NOW(),
+        editwho = #{editwho, jdbcType=VARCHAR}
+        where asnno = #{asnno, jdbcType=VARCHAR}
+    </update>
 </mapper>

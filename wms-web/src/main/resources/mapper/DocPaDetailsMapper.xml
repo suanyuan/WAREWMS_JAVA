@@ -212,7 +212,7 @@ where 1=1
 <!-- 根据id查询 上架单明细 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_pa_details where PANO = #{pano}
+	 from doc_pa_details where PANO = #{pano} and palineno = #{palineno}
 </select>
 
 <!-- 上架单明细 列表总数-->
