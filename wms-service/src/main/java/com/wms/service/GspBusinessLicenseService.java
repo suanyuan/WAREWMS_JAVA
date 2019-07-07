@@ -1,6 +1,5 @@
 package com.wms.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
@@ -8,13 +7,8 @@ import com.wms.mybatis.dao.MybatisCriteria;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.dao.GspBusinessLicenseDao;
 import com.wms.entity.GspBusinessLicense;
-import com.wms.vo.GspBusinessLicenseVO;
 import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspBusinessLicenseForm;
 import com.wms.query.GspBusinessLicenseQuery;
 
@@ -68,9 +62,16 @@ public class GspBusinessLicenseService extends BaseService {
 		return null;
 	}
 
-	public void updateGspBusinessLicenseActiveTag(String id,String tag) {
+	public void updateGspBusinessLicenseActiveTag(String enterpriseId,String tag) {
 		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
-		form.setEnterpriseId(id);
+		form.setEnterpriseId(enterpriseId);
+		form.setIsUse(tag);
+		gspBusinessLicenseMybatisDao.updateBySelective(form);
+	}
+
+	public void updateGspBusinessLicenseTagById(String id,String tag) {
+		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
+		form.setBusinessId(id);
 		form.setIsUse(tag);
 		gspBusinessLicenseMybatisDao.updateBySelective(form);
 	}

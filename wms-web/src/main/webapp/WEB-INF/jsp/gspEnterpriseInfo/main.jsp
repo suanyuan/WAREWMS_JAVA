@@ -74,7 +74,7 @@ $(function() {
 		}
 	}).dialog('close');
 
-	$("#enterpriseType").combobox({
+	$("#enterpriseTypeQuery").combobox({
         url:sy.bp()+'/commonController.do?getEntType',
         valueField:'id',
         textField:'value'
@@ -178,7 +178,6 @@ var commit = function(){
             url : url,
             data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
-                console.log(result);
                 var msg='';
                 try{
                     if(result.success){
@@ -209,7 +208,7 @@ var doSearch = function(){
 		enterpriseNo : $('#enterpriseNo').val(),
 		shorthandName : $('#shorthandName').val(),
 		enterpriseName : $('#enterpriseName').val(),
-		enterpriseType : $('#enterpriseType').combobox("getValue"),
+		enterpriseType : $('#enterpriseTypeQuery').combobox("getValue"),
 		createDate : $('#createDate').val(),
 		isUse : $('#isUse').combobox("getValue")
 	});
@@ -229,7 +228,7 @@ var doSearch = function(){
 							<th>企业信用代码：</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>简称：</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>企业类型：</th><td><input type='text' id='enterpriseType' class='easyui-combobox' size='16' data-options=''/></td>
+							<th>企业类型：</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -259,7 +258,7 @@ var doSearch = function(){
 
 	</div>
 	<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'>提交企业信息</a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>

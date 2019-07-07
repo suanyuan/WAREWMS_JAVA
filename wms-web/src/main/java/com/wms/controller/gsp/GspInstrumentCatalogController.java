@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.wms.service.GspOperateDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,8 @@ public class GspInstrumentCatalogController {
 
 	@Autowired
 	private GspInstrumentCatalogService gspInstrumentCatalogService;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -96,6 +100,22 @@ public class GspInstrumentCatalogController {
 	@RequestMapping(params = "showCatalogEnterpriseDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<GspInstrumentCatalogVO> queryGspInstrumentCatalogEnterprise(EasyuiDatagridPager pager, GspInstrumentCatalogQuery query){
-		return gspInstrumentCatalogService.getPagedDatagrid(pager,query);
+		return gspInstrumentCatalogService.getPagedDatagridEnterprise(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "toSearch")
+	public ModelAndView toSearch(String target,String id){
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("id", id);
+		model.put("target",target);
+		return new ModelAndView("gspInstrumentCatalog/search",model);
+	}
+
+	@Login
+	@RequestMapping(params = "searchCheckByLicenseId")
+	@ResponseBody
+	public Object searchCheckByLicenseId(String licenseId){
+		return null;
 	}
 }

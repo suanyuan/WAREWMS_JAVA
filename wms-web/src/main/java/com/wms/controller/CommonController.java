@@ -32,7 +32,7 @@ import java.util.*;
 @RequestMapping("commonController")
 public class CommonController {
 
-    private static String uploadUrl = "/Users/quendi/fileUpload";
+    private static final String uploadUrl = "/Users/quendi/fileUpload";
 
     @Autowired
     private BasCodesService basCodesService;
@@ -76,19 +76,20 @@ public class CommonController {
     @RequestMapping(params = "fileDownLoad")
     public ResponseEntity<byte[]> fileDownLoad(
             HttpServletResponse response,
-            @RequestParam String fileUrl,
+            @RequestParam String url,
             @RequestParam(defaultValue = "") String fileName) throws Exception{
         if(StringUtils.isEmpty(fileName)){
-            fileName = DateUtil.format(new Date(),"yyyyMMddhh24mmnn")+"."+fileUrl.substring(fileUrl.lastIndexOf(".")+1);
+            fileName = DateUtil.format(new Date(),"yyyyMMddhh24mmss")+"."+url.substring(url.lastIndexOf(".")+1);
+        }else{
+            fileName = url;
         }
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
-        String uploadUrl = PropertyUtils.getString("uploadUrl");
-        File file = new File(uploadUrl+File.separator+fileUrl);
+        File file = new File(uploadUrl+File.separator+url);
         if(file.exists()){
             long fileLength = file.length();
             response.setContentType("application/x-msdownload;");
-            response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("utf-8"), "ISO8859-1"));
+            response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("utf-8"), "UTF-8"));
             response.setHeader("Content-Length", String.valueOf(fileLength));
             bis = new BufferedInputStream(new FileInputStream(file));
             bos = new BufferedOutputStream(response.getOutputStream());
@@ -112,7 +113,7 @@ public class CommonController {
         List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
         EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
         easyuiCombobox.setId("");
-        easyuiCombobox.setValue("全部");
+        easyuiCombobox.setValue("");
         easyuiCombobox.setSelected(true);
         easyuiComboboxList.add(easyuiCombobox);
         EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
@@ -167,7 +168,7 @@ public class CommonController {
         List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
         EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
         easyuiCombobox.setId("");
-        easyuiCombobox.setValue("全部");
+        easyuiCombobox.setValue("");
         easyuiComboboxList.add(easyuiCombobox);
         EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
         easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);

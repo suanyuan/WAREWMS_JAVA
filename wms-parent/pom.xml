@@ -462,6 +462,11 @@
 			<artifactId>itextasian</artifactId>
 			<version>1.5.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.16</version>
+		</dependency>
 	</dependencies>
 		<build>
 		<pluginManagement>

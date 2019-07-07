@@ -70,8 +70,8 @@ public class GspProductRegisterController {
 		Json json = gspProductRegisterService.bindProduct(gspProductRegisterId,specId);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 
 	}

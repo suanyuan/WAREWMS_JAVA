@@ -32,6 +32,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("classify_id");
 		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;
@@ -97,6 +98,27 @@ public class GspInstrumentCatalogService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public EasyuiDatagrid<GspInstrumentCatalogVO> getPagedDatagridEnterprise(EasyuiDatagridPager pager, GspInstrumentCatalogQuery query) {
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("classify_id");
+		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
+		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
+		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;
+		List<GspInstrumentCatalogVO> gspInstrumentCatalogVOList = new ArrayList<GspInstrumentCatalogVO>();
+		for (GspInstrumentCatalog gspInstrumentCatalog : gspInstrumentCatalogList) {
+			gspInstrumentCatalogVO = new GspInstrumentCatalogVO();
+			BeanUtils.copyProperties(gspInstrumentCatalog, gspInstrumentCatalogVO);
+			gspInstrumentCatalogVOList.add(gspInstrumentCatalogVO);
+		}
+		int count = gspInstrumentCatalogMybatisDao.queryByCount(mybatisCriteria);
+		datagrid.setTotal(Long.parseLong(count+""));
+		datagrid.setRows(gspInstrumentCatalogVOList);
+		return datagrid;
 	}
 
 }

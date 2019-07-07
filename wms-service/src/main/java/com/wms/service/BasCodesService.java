@@ -38,7 +38,7 @@ public class BasCodesService {
         if(list!=null && list.size()>0){
             EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
             easyuiCombobox.setId("");
-            easyuiCombobox.setValue("全部");
+            easyuiCombobox.setValue("");
             easyuiCombobox.setSelected(true);
             baseCodesVOList.add(easyuiCombobox);
             for(BasCodes b : list){

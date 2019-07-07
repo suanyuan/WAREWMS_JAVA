@@ -16,6 +16,7 @@ public class GspInstrumentCatalogQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String enterpriseId;
 
 	public String getInstrumentCatalogId() {
 		return instrumentCatalogId;
@@ -105,4 +106,11 @@ public class GspInstrumentCatalogQuery implements IQuery {
 		this.isUse = isUse;
 	}
 
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
 }

@@ -15,6 +15,61 @@ var ezuiDatagrid;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+    var ezuiDialog;
+    function showCheck() {
+        ezuiDialog = $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:300,
+            height:300,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+                $("#remark").textbox("setValue","");
+            }
+        });
+    }
+
+    function doCheck() {
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核吗', function(confirm) {
+            if (confirm) {
+                var row = ezuiDatagrid.datagrid("getSelections");
+                var arr = new Array();
+                for(var i=0;i<row.length;i++){
+                    arr.push(row[i].reviewId);
+                }
+                if(row){
+                    $.ajax({
+                        url : sy.bp()+"/firstReviewLogController.do?check",
+                        data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
+                        success : function(result){
+                            var msg='';
+                            try{
+                                if(result.success){
+                                    msg = result.msg;
+                                    ezuiDatagrid.datagrid('reload');
+                                    ezuiDialog.dialog('close');
+                                }else{
+                                    msg = '<font color="red">' + result.msg + '</font>';
+                                }
+                            }catch (e) {
+                                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                $.messager.progress('close');
+                            }
+                        }
+                    });
+                }
+
+            }
+        })
+
+    }
+
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/firstReviewLogController.do?showDatagrid"/>',
 		method:'POST',
@@ -60,8 +115,8 @@ $(function() {
 			{field: 'editId',		title: '编辑人',	width: 57 },
 			{field: 'editDate',		title: '编辑时间',	width: 57 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
+        onDblClickRow: function(index,row){
+			edit(row);
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -84,11 +139,6 @@ $(function() {
 		}
 	}).dialog('close');
 });
-var add = function(){
-	processType = 'add';
-	$('#firstReviewLogId').val(0);
-	ezuiDialog.dialog('open');
-};
 
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
@@ -122,8 +172,18 @@ var del = function(){
 		});
 	}
 };
-var commit = function(){
+var edit = function(row){
+	if(row){
+        /*$('#ezuiDialog').dialog({
+            modal : true,
+            title : '审核信息',
+            buttons : '#ezuiDialogBtn',
+			urlL:'',
+            onClose : function() {
 
+            }
+        })*/
+	}
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
@@ -174,61 +234,6 @@ var doSearch = function(){
 			</tr>
 		</table>
 	</div>
-<script>
-	var ezuiDialog;
-	function showCheck() {
-        ezuiDialog = $('#ezuiDialog').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:300,
-            height:300,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-                $("#remark").textbox("setValue","");
-            }
-        });
-    }
-
-	function doCheck() {
-        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核吗', function(confirm) {
-            if (confirm) {
-                var row = ezuiDatagrid.datagrid("getSelections");
-                var arr = new Array();
-                for(var i=0;i<row.length;i++){
-                    arr.push(row[i].reviewId);
-				}
-                if(row){
-                    $.ajax({
-                        url : sy.bp()+"/firstReviewLogController.do?check",
-                        data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
-                        success : function(result){
-                            var msg='';
-                            try{
-                                if(result.success){
-                                    msg = result.msg;
-                                    ezuiDatagrid.datagrid('reload');
-                                    ezuiDialog.dialog('close');
-                                }else{
-                                    msg = '<font color="red">' + result.msg + '</font>';
-                                }
-                            }catch (e) {
-                                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-                                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-                            } finally {
-                                $.messager.show({
-                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                                });
-                                $.messager.progress('close');
-                            }
-                        }
-                    });
-				}
-
-            }
-        })
-
-    }
-</script>
+	<div id="showDialog"></div>
 </body>
 </html>
