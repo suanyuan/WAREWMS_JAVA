@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class GspSupplierService extends BaseService {
 	private GspSupplierDao gspSupplierDao;
 	@Autowired
 	private GspSupplierMybatisDao GspSupplierMybatisDao;
-
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<GspSupplierVO> getPagedDatagrid(EasyuiDatagridPager pager, GspSupplierQuery query) {
 //		EasyuiDatagrid<GspSupplierVO> datagrid = new EasyuiDatagrid<GspSupplierVO>();
@@ -47,13 +48,15 @@ public class GspSupplierService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
-		GspSupplierVO basGtnVO = null;
+		GspSupplierVO gspSupplierVO = null;
 		List<GspSupplierVO> basGtnVOList = new ArrayList<GspSupplierVO>();
 		List<GspSupplier> basGtnList = GspSupplierMybatisDao.queryByList(criteria);
-		for (GspSupplier basGtn : basGtnList) {
-			basGtnVO = new GspSupplierVO();
-			BeanUtils.copyProperties(basGtn, basGtnVO);
-			basGtnVOList.add(basGtnVO);
+		for (GspSupplier gspSupplier : basGtnList) {
+			gspSupplierVO = new GspSupplierVO();
+			BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
+			gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+			gspSupplierVO.setEditDate(simpleDateFormat.format(gspSupplier.getEditDate()));
+			basGtnVOList.add(gspSupplierVO);
 		}
 		int total = GspSupplierMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));

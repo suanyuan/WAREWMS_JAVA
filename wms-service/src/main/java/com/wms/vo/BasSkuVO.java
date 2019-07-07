@@ -13,7 +13,7 @@ public class BasSkuVO {
 	private java.lang.String activeFlag;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date addtime;
+	private java.lang.String addtime;
 	private java.lang.String addwho;
 	private java.lang.String allocationrule;
 	private java.lang.String alternateSku1;
@@ -29,7 +29,7 @@ public class BasSkuVO {
 	private java.lang.String descrE;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date edittime;
+	private java.lang.String edittime;
 	private java.lang.String editwho;
 	private java.util.Date firstinbounddate;
 	private java.math.BigDecimal grossweight;
@@ -91,14 +91,7 @@ public class BasSkuVO {
 		this.activeFlag = activeFlag;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(java.util.Date addtime) {
-		this.addtime = addtime;
-	}
 
 	public java.lang.String getAddwho() {
 		return addwho;
@@ -204,14 +197,7 @@ public class BasSkuVO {
 		this.descrE = descrE;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
-		return edittime;
-	}
 
-	public void setEdittime(java.util.Date edittime) {
-		this.edittime = edittime;
-	}
 
 	public java.lang.String getEditwho() {
 		return editwho;
@@ -502,4 +488,19 @@ public class BasSkuVO {
 		this.qtyonhold = qtyonhold;
 	}
 
+	public String getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(String addtime) {
+		this.addtime = addtime;
+	}
+
+	public String getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(String edittime) {
+		this.edittime = edittime;
+	}
 }

@@ -125,7 +125,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		Json json = new Json();
 		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.findById(id);
 		if(id != null){
-			gspProductRegisterSpecsMybatisDao.delete(id);
+			gspProductRegisterSpecsMybatisDao.deleteByid	(id);
 		}
 		json.setSuccess(true);
 		return json;
@@ -133,7 +133,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 
 	public Json getGspProductRegisterSpecsInfo(String id){
-		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(id);
+		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
 

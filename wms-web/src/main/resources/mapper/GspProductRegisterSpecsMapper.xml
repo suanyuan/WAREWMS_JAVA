@@ -100,16 +100,16 @@ where 1=1
 
 
 	<if test="condition.createId != null and condition.createId != ''" >
-	    and create_id like  '%${condition.createId}%'
+	    and t1.create_id like  '%${condition.createId}%'
 	</if>
 	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date like  '%${condition.createDate}%'
+	    and t1.create_date like  '%${condition.createDate}%'
 	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
-	    and edit_id like  '%${condition.editId}%'
+	    and t1.edit_id like  '%${condition.editId}%'
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and edit_date like  '%${condition.editDate}%'
+	    and t1.edit_date like  '%${condition.editDate}%'
 	</if>
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and t1.is_use =  #{condition.isUse}
@@ -233,13 +233,26 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from gsp_product_register_specs where specs_id = #{specsId}
+delete 	 from gsp_product_register_specs where specs_id = #{specsId}
+</delete>
+
+<!-- 记录失效 -->
+<delete id="deleteByid" parameterType="Object">
+	update gsp_product_register_specs set
+	is_use=0  where specs_id=#{specsId}
 </delete>
 
 <!-- 根据id查询 产品注册证规格 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select *
 	 from gsp_product_register_specs where specs_id = #{specsId}
+</select>
+
+<!-- 根据id查询 产品注册证规格关联产品注册证 -->
+<select id="selectById"  resultMap="BaseResultMap" parameterType="Object">
+	select t1.*,t2.product_register_no,t2.product_name_main
+	from gsp_product_register_specs t1 left join gsp_product_register t2
+	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
 
 <!-- 产品注册证规格 列表总数-->

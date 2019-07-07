@@ -34,16 +34,17 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'supplierId',		title: '主键',	width: 88 },
+			{field: 'supplierId',		title: '主键',	width: 88,hidden:true },
 			{field: 'enterpriseId',		title: '企业流水号',	width: 88 },
-			{field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
-                    return rowData.isCheck == '1' ? '是' : '否';
-                }},
+
 			{field: 'operateType',		title: '类型（经营/生产）',	width: 88 },
 			{field: 'createId',		title: '创建人',	width: 88 },
 			{field: 'createDate',		title: '创建时间',	width: 88 },
 			{field: 'editId',		title: '编辑人',	width: 88 },
 			{field: 'editDate',		title: '编辑时间',	width: 88 },
+            {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isCheck == '1' ? '是' : '否';
+                }},
 			{field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }}
@@ -244,10 +245,18 @@ var doSearch = function(){
 							<th>企业流水号</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>创建时间起始</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>创建时间结束</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>类型（经营/生产）</th><td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>类型</th><td><input type="text" id="productionAddress"  name="productionAddress"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '经营', value: '经营'},
+																																	{id: '生产', value: '生产'}
+																																]"/></td>
+							<%--<td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>--%>
 						</tr>
 						<tr>
-							<th>是否审查：</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+							<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -262,7 +271,7 @@ var doSearch = function(){
 								<%--</select></td>--%>
 							<th>编辑时间起始</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>编辑时间结束</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否有效：</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+							<th>是否有效</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',

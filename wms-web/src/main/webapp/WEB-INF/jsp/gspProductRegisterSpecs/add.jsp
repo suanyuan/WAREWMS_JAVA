@@ -9,6 +9,15 @@
             <th>产品注册证表主键</th>
             <td><input type='hidden' data="1" id="productRegisterId" name='productRegisterId' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
+
+        <tr>
+            <th>产品名称</th>
+            <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
+
+            <th>注册证编号</th>
+            <td><input type='text' data="1" id="productRegisterNo" name='productRegisterNo' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
+        </tr>
+
         <tr>
             <th>规格名称</th>
             <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
@@ -157,11 +166,11 @@
             textField:'value'
         });
 
-        $('#productionAddress').combobox({
-            url:sy.bp()+'/basPackageController.do?getCombobox',
-            valueField:'value',
-            textField:'value'
-        });
+        // $('#productionAddress').combobox({
+        //     url:sy.bp()+'/basPackageController.do?getCombobox',
+        //     valueField:'value',
+        //     textField:'value'
+        // });
     })
 
 
