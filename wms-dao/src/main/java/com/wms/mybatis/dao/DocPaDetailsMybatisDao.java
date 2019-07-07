@@ -6,6 +6,8 @@ import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -28,4 +30,11 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      * @param form  e
      */
 	void putawayGoods(PdaDocPaDetailForm form);
+
+    /**
+     * 获取上架明细
+     * @param pano ~
+     * @return ~~
+     */
+	List<DocPaDetails> queryDocPaList(String pano);
 }

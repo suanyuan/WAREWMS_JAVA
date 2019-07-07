@@ -2,6 +2,7 @@ package com.wms.api;
 
 import com.wms.constant.Constant;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
+import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocPaDetailsService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,16 +112,37 @@ public class PdaPutawayController {
     }
 
     /**
-     * 结束收货
-     * @param form 收货任务单号
+     * 结束上架
+     * @param form 上架任务单号
      * @return ~
      */
-//    @RequestMapping(params = "endTask", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Map<String, Object> endTask(PdaDocAsnEndForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put(Constant.RESULT, docAsnHeaderService.endTask(form));
-//        return resultMap;
-//    }
+    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> endTask(PdaDocPaEndForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docPaHeaderService.endTask(form));
+        return resultMap;
+    }
+
+    /**
+     * 获取上架进度明细列表
+     * @param pano ~
+     * @return ~
+     */
+    @RequestMapping(params = "docPaList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocPaList(String pano) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if (pano == null || pano.length() == 0) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "订单号缺失"));
+            return resultMap;
+        }
+        List<PdaDocPaDetailVO> detailVOList = docPaDetailsService.queryDocPaList(pano);
+        resultMap.put(Constant.DATA, detailVOList);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
+
 }

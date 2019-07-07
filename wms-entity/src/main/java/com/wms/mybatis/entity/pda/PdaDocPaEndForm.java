@@ -3,10 +3,9 @@ package com.wms.mybatis.entity.pda;
 import lombok.Data;
 
 @Data
-public class PdaDocAsnEndForm {
+public class PdaDocPaEndForm {
 
-    private String asnno;//单号
+    private String pano;//单号
 
     private String editwho;
-
 }
