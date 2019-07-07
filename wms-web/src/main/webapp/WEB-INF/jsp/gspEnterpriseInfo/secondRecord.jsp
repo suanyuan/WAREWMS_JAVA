@@ -45,7 +45,7 @@
             <td>
                 <input type="hidden" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.attachmentUrl}"/>
                 <input id="recordFile" name='recordFile' value="${gspSecondRecord.attachmentUrl}">
-                <a id="btn" href="#" class="easyui-linkbutton" data-options="">浏览</a>
+                <a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
             </td>
         </tr>
     </table>

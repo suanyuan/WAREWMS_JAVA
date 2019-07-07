@@ -5,7 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspBusinessLicenseForm {
 
-	private Long businessId;
+	private String businessId;
 	private String enterpriseId;
 	private String licenseNumber;
 	private String socialCreditCode;
@@ -24,11 +24,11 @@ public class GspBusinessLicenseForm {
 	private String attachmentUrl;
 	private String isUse;
 
-	public Long getBusinessId() {
+	public String getBusinessId() {
 		return businessId;
 	}
 
-	public void setBusinessId(Long businessId) {
+	public void setBusinessId(String businessId) {
 		this.businessId = businessId;
 	}
 

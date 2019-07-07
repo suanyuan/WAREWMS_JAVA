@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -45,11 +46,11 @@ public class GspBusinessLicense  implements Serializable {
 
 	private String createId;
 
-	private String createDate;
+	private Date createDate;
 
 	private String editId;
 
-	private String editDate;
+	private Date editDate;
 
 	private String isUse;
 

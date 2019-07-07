@@ -1,19 +1,22 @@
 package com.wms.controller.gsp;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
-import com.wms.entity.GspBusinessLicense;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.query.GspBusinessLicenseQuery;
-import com.wms.service.GspBusinessLicenseService;
 import com.wms.service.GspEnterpriceService;
+import com.wms.utils.editor.CustomDateEditor;
+import com.wms.vo.GspBusinessLicenseVO;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -38,6 +41,18 @@ public class GspEnterpriseInfoController {
 	//企业信息主体业务
 	@Autowired
 	private GspEnterpriceService gspEnterpriceService;
+
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		binder.registerCustomEditor(Date.class,"addtime",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"edisendtime5",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime1",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+	}
+
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -221,5 +236,23 @@ public class GspEnterpriseInfoController {
 	@ResponseBody
 	public Object getSecondRecord(String enterpriseId) {
 		return gspEnterpriceService.getGspSecondRecord(enterpriseId);
+	}
+
+	@Login
+	@RequestMapping(params = "addBusinessLicense")
+	@ResponseBody
+	public Object addBusinessLicense(@RequestParam(defaultValue = "")String enterpriseId,
+									 @RequestParam(defaultValue = "") String businessFormStr,
+									 @RequestParam(defaultValue = "") String operateDetailStr,
+									 @RequestParam(defaultValue = "") String gspBusinessLicenseId,
+									 @RequestParam(defaultValue = "") String opType){
+		return gspEnterpriceService.addGspBusinessLicense(enterpriseId,businessFormStr,operateDetailStr,gspBusinessLicenseId,opType);
+	}
+
+	@Login
+	@RequestMapping(params = "businessHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspBusinessLicenseVO> businessHistoryDatagridList(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
+		return gspEnterpriceService.getGspBusinessLicenseHistory(pager,query);
 	}
 }

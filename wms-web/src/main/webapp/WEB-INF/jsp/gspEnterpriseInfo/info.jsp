@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <th>企业类型</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>联系人</th>
@@ -35,30 +35,11 @@
         </tr>
     </table>
 </form>
-<div id='catalogToolbar' class='datagrid-toolbar' style=''>
-    <fieldset>
-        <legend>器械目录分类</legend>
-        <table>
-            <tr>
-                <th>版本</th>
-                <td><input type='text' id='version' class='easyui-textbox' size='16' data-options=''/></td>
-                <th>编号</th>
-                <td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
-                <th>名称</th>
-                <td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
-                <td>
-                    <a onclick='getBy();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                    <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                </td>
-            </tr>
-        </table>
-    </fieldset>
-</div>
-<table id="catalogDatagrid">
+<!--<table id="catalogDatagrid">
 
-</table>
+</table>-->
 <script>
-    var catalogDatagrid;
+    /*var catalogDatagrid;
     $(function () {
         catalogDatagrid = $("#catalogDatagrid").datagrid({
             url : sy.bp()+'/gspInstrumentCatalogController.do?showCatalogEnterpriseDatagrid',
@@ -75,14 +56,15 @@
             queryParams:{'enterpriseId':'${enterpriseId}'},
             pagination:true,
             rownumbers:true,
+            width:400,
             idField : 'instrumentCatalogId',
             columns : [[
                 {field: 'instrumentCatalogId',title:'主键',hidden:true},
-                {field: 'instrumentCatalogNo',title: '编号'},
-                {field: 'instrumentCatalogName',title: '名称'},
-                {field: 'classifyId',title: '分类'},
-                {field: 'version',title: '版本'},
-                {field: 'createDate',title: '创建时间'}
+                {field: 'instrumentCatalogNo',title: '编号',width: '20%'},
+                {field: 'instrumentCatalogName',title: '名称',width: '20%'},
+                {field: 'classifyId',title: '分类',width: '20%'},
+                {field: 'version',title: '版本',width: '20%'},
+                {field: 'createDate',title: '创建时间',width: '20%'}
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -95,8 +77,14 @@
             },
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
-                $(this).datagrid("resize",{height:520});
             }
         })
-    })
+    })*/
+
+    //控件初始化
+    $('#enterpriseType').combobox({
+        url:sy.bp()+'/commonController.do?getEntType',
+        valueField:'id',
+        textField:'value'
+    });
 </script>

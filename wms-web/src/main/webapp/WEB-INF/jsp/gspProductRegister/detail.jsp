@@ -486,9 +486,9 @@
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
-                $("#ezuiCustDataDialog #customerid").textbox('clear');
-                ezuiCustDataClick();
-                ezuiCustDataDialogSearch();
+                //$("#ezuiCustDataDialog #customerid").textbox('clear');
+                //ezuiCustDataClick();
+                //ezuiCustDataDialogSearch();
             }
         }]
     });

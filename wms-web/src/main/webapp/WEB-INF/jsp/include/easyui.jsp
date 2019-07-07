@@ -16,8 +16,11 @@
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/lightbox/css/lightbox.min.css"/>'>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/swCss.css"/>"/>
 <script>
-	function showUrl(url) {
-		window.open(sy.bp()+"/commonController.do?fileDownLoad");
+	function showUrl(url,fileName) {
+	    if(!fileName){
+	        fileName = "";
+		}
+		window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName);
     }
     
     var isUseFormatter = function(value,row,index) {
@@ -30,9 +33,39 @@
     }
 
     var isUseRowStyler = function(index,row) {
-	    console.log(row);
 		if(row.isUse == "0"){
             return 'color:red;';
 		}
+    }
+
+    var showMsg = function(msg,title) {
+        $.messager.show({
+            msg : msg, title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+
+    var getDateStr = function (date) {
+        var month = date.getMonth() + 1;
+        var strDate = date.getFullYear() + '-' + month + '-' + date.getDate();
+        return strDate;
+    }
+
+    var judgeDate = function (dateStr) {
+        return new Date().getTime()-new Date(dateStr).getTime();
+    }
+
+    var dateFormat = function(timestamp){
+        var time = new Date(timestamp);    //先将时间戳转为Date对象，然后才能使用Date的方法
+        var year = time.getFullYear(),
+            month = time.getMonth() + 1 ,  //月份是从0开始的
+            day = time.getDate(),
+            hour = time.getHours(),
+            minute = time.getMinutes(),
+            second = time.getSeconds()
+        return  year+'-'+this.add0(month)+'-'+ this.add0(day)+' '+this.add0(hour)+':'+this.add0(minute)+':'+this.add0(second)
+    }
+
+    var add0 = function(m){
+        return m < 10 ? '0' + m: m
     }
 </script>

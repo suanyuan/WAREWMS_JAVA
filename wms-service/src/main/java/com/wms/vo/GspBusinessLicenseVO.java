@@ -5,8 +5,8 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspBusinessLicenseVO {
 
-	private Long businessId;
-	private Long enterpriseId;
+	private String businessId;
+	private String enterpriseId;
 	private String licenseNumber;
 	private String socialCreditCode;
 	private String licenseName;
@@ -28,19 +28,19 @@ public class GspBusinessLicenseVO {
 	private java.util.Date editDate;
 	private String isUse;
 
-	public Long getBusinessId() {
+	public String getBusinessId() {
 		return businessId;
 	}
 
-	public void setBusinessId(Long businessId) {
+	public void setBusinessId(String businessId) {
 		this.businessId = businessId;
 	}
 
-	public Long getEnterpriseId() {
+	public String getEnterpriseId() {
 		return enterpriseId;
 	}
 
-	public void setEnterpriseId(Long enterpriseId) {
+	public void setEnterpriseId(String enterpriseId) {
 		this.enterpriseId = enterpriseId;
 	}
 

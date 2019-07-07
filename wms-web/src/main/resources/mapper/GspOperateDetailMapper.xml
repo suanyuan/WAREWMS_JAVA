@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspOperateDetailMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.GspOperateDetail" >
+	<result column="license_id" property="licenseId"/>
+	<result column="operate_id" property="operateId"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+	<result column="license_type" property="licenseType"/>
+</resultMap>
+       
+<!-- gsp_operate_detail table all fields -->
+<sql id="Base_Column_List" >
+	 license_id,operate_id,create_id,create_date,edit_id,edit_date,is_use,license_type
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.licenseId != null and condition.licenseId != ''" >
+	    and license_id =  #{condition.licenseId}
+	</if>
+	<if test="condition.operateId != null and condition.operateId != ''" >
+	    and operate_id =  #{condition.operateId}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+	    and is_use =  #{condition.isUse}
+	</if>
+	<if test="condition.licenseType != null and condition.licenseType != ''" >
+	    and license_type =  #{condition.licenseType}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into gsp_operate_detail(license_id,operate_id,create_id,create_date,edit_id,edit_date,is_use,license_type)
+ values(#{licenseId},#{operateId},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{licenseType})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update gsp_operate_detail set operate_id=#{operateId},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},license_type=#{licenseType} where license_id=#{licenseId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update gsp_operate_detail set 
+	<trim  suffixOverrides="," >
+	<if test="operateId != null  ">
+		operate_id=#{operateId},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="isUse != null  ">
+		is_use=#{isUse},
+	</if>
+	<if test="licenseType != null  ">
+		license_type=#{licenseType},
+	</if>
+	</trim> where license_id=#{licenseId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from gsp_operate_detail where license_id = #{licenseId}
+</delete>
+ 
+<!-- 根据id查询 经营范围 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from gsp_operate_detail where license_id = #{licenseId}
+</select>
+
+<!-- 经营范围 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from gsp_operate_detail 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询经营范围列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from gsp_operate_detail 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 根据id，修改记录-->
+<update id="deleteByLicenseId" parameterType="Object" >
+	delete from gsp_operate_detail where license_id = #{licenseId}
+	and license_type = #{licenseType}
+</update>
+  	
+</mapper>   

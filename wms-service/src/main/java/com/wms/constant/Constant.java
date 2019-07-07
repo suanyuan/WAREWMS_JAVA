@@ -11,6 +11,13 @@ public class Constant {
     public static final String IS_USE_YES = "1"; //有效
     public static final String IS_USE_NO = "0";  //无效
 
+    public static final String LICENSE_SUBMIT_ADD = "add";
+    public static final String LICENSE_SUBMIT_UPDATE = "update";
+
+    public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";
+    public static final String LICENSE_TYPE_OPERATE = "OPERATE";
+    public static final String LICENSE_TYPE_RECORD = "RECORD";
+
 //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
@@ -18,8 +25,10 @@ public class Constant {
     public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
 
 //  企业类型
-    public static final String CODE_ENT_TYP_JY = "JY";
-    public static final String CODE_ENT_TYP_SC = "SC";
+    public static final String CODE_ENT_TYP_JY = "JY";//经营
+    public static final String CODE_ENT_TYP_GNSC = "GNSC";//国内生产
+    public static final String CODE_ENT_TYP_GWSC = "GWSC";//国外生产
+
 
 //是否
     public static final String CODE_YES_OR_YES = "1";
