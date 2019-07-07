@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,11 @@ public class GspReceivingAddressService extends BaseService {
 		Json json = new Json();
 		GspReceivingAddress gspReceivingAddress = new GspReceivingAddress();
 		BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
-		gspReceivingAddressDao.save(gspReceivingAddress);
+		gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
+		gspReceivingAddress.setReceivingId(RandomUtil.getUUID());
+		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
 		json.setSuccess(true);
 		return json;
 	}

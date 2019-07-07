@@ -145,7 +145,20 @@ public class BasCustomerService extends BaseService {
 		}
 		return json;
 	}
+	public Json goonBasCustomer(String enterpriseId, String customertype) {
+		Json json = new Json();
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setEnterpriseId(enterpriseId);
+		customerQuery.setCustomerType(customertype);
 
+		BasCustomer basCustomer = basCustomerMybatisDao.queryById(customerQuery);
+		if (basCustomer != null) {
+			basCustomerMybatisDao.goon(basCustomer);
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		}
+		return json;
+	}
 	public List<EasyuiCombobox> getCustomerTypeCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;

@@ -10,6 +10,7 @@
 var processType;
 var ezuiMenu;
 var ezuiForm;
+var enterDialog;
 var ezuiDialog;
 var ezuiDatagrid;
 var ezuiFormInfo;
@@ -247,45 +248,7 @@ function searchMainEnterprise() {
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<%--<form id='ezuiForm' method='post'>
-			<input type='hidden' id='gspReceivingId' name='gspReceivingId'/>
-			<input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId'/>
-			<table>
-				<tr>
-					<th>收货单位</th>
-					<td><input type='text' name='receivingId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>货主</th>
-					<td><input type='text' name='clientId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>供应商</th>
-					<td><input type='text' name='supplierId' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>是否审查</th>
-					<td><input type='text' name='isCheck' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>是否合作</th>
-					<td><input type='text' name='isCooperation' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>送货地址</th>
-					<td><input type='text' name='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>联系人</th>
-					<td><input type='text' name='contacts' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>联系人电话</th>
-					<td><input type='text' name='phone' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
 
-			</table>
-		</form>--%>
 	</div>
 
 
@@ -328,10 +291,10 @@ function searchMainEnterprise() {
 
 
 
-	<div id='ezuiDialogBtn'>
+	<%--<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>
+	</div>--%>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>

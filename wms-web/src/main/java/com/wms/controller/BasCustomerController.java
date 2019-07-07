@@ -100,7 +100,17 @@ public class BasCustomerController {
 		}
 		return json;
 	}
-
+	@Login
+	@RequestMapping(params = "goon")
+	@ResponseBody
+	public Json goon(String enterpriseId, String customerType) {
+		Json json = basCustomerService.goonBasCustomer(enterpriseId,customerType);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
 	@Login
 	@RequestMapping(params = "getBtn")
 	@ResponseBody

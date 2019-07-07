@@ -554,8 +554,13 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	update  Bas_Customer set ACTIVE_FLAG='0' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
- 
-<!-- 根据id查询 客户档案 -->
+
+	<!-- 恢复记录 -->
+	<delete id="goon" parameterType="Object">
+	update  Bas_Customer set ACTIVE_FLAG='1' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+</delete>
+
+	<!-- 根据id查询 客户档案 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
 	from bas_customer
