@@ -3,6 +3,7 @@ import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.CommonMybatisDao;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.service.CommonService;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
@@ -43,6 +44,8 @@ public class GspServiceTest {
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
     @Autowired
     private CommonMybatisDao commonMybatisDao;
+    @Autowired
+    private CommonService commonService;
 
     @Test
     public void test(){
@@ -79,8 +82,8 @@ public class GspServiceTest {
         map.put("resultNo","");
         map.put("resultCode","");
        //String str = docAsnHeaderMybatisDao.getIdSequence(map);
-        commonMybatisDao.getIdSequence(map);
-       System.out.println(map.get("resultNo"));
+        //commonMybatisDao.getIdSequence(map);
+       System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
 
 
     }

@@ -5,6 +5,6 @@
 <mapper namespace="com.wms.mybatis.dao.CommonMybatisDao" >
     <!--新增订单号 -->
     <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
-     {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN',#{no,mode=IN,jdbcType=VARCHAR},#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+        {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN',#{no,mode=IN,jdbcType=VARCHAR},#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
     </select>
 </mapper>

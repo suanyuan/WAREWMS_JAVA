@@ -7,6 +7,6 @@ import java.util.Map;
  * User: andy.qu
  * Date: 2019/7/8
  */
-public interface CommonMybatisDao {
+public interface CommonMybatisDao{
     void getIdSequence(Map<String, Object> map);
 }

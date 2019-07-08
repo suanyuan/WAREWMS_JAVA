@@ -29,6 +29,8 @@ public class GspBusinessLicenseService extends BaseService {
 	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private CommonService commonService;
 
 	public Json addGspBusinessLicense(GspBusinessLicenseForm gspBusinessLicenseForm) throws Exception {
 		Json json = new Json();

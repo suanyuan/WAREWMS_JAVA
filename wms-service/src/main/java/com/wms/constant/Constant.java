@@ -38,6 +38,7 @@ public class Constant {
     public static final String APLCUSNO = "APLCUSNO";
     public static final String APLSUPNO = "APLSUPNO";
     public static final String APLRECNO = "APLRECNO";
+    public static final String APLPRONO = "APLPRONO";
 
     //code
     //首营状态

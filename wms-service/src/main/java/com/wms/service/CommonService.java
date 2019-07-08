@@ -13,12 +13,12 @@ import java.util.Map;
  * Date: 2019/7/8
  */
 @Service("commonService")
-public class CommonService {
+public class CommonService extends BaseService{
 
     @Autowired
     private CommonMybatisDao commonMybatisDao;
 
-    public String getSeq(String seqType,String warehouseid){
+    public String generateSeq(String seqType,String warehouseid){
         Map<String,Object> map = new HashMap<>();
         map.put("warehouseid",warehouseid);
         map.put("no", seqType);
