@@ -25,7 +25,13 @@ public class GspSupplier implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date editDate;
   private String isUse;
-
+  private String firstState;
+  private String enterpriseNo;
+  private String enterpriseName;
+  private String shorthandName;
+  private String enterpriseType;
+  public GspSupplier() {
+  }
 
   public String getSupplierId() {
     return supplierId;
@@ -107,4 +113,43 @@ public class GspSupplier implements Serializable {
     this.isUse = isUse;
   }
 
+  public String getFirstState() {
+    return firstState;
+  }
+
+  public void setFirstState(String firstState) {
+    this.firstState = firstState;
+  }
+
+  public String getEnterpriseNo() {
+    return enterpriseNo;
+  }
+
+  public void setEnterpriseNo(String enterpriseNo) {
+    this.enterpriseNo = enterpriseNo;
+  }
+
+  public String getEnterpriseName() {
+    return enterpriseName;
+  }
+
+  public void setEnterpriseName(String enterpriseName) {
+    this.enterpriseName = enterpriseName;
+  }
+
+  public String getShorthandName() {
+    return shorthandName;
+  }
+
+  public void setShorthandName(String shorthandName) {
+    this.shorthandName = shorthandName;
+  }
+
+  public String getEnterpriseType() {
+    return enterpriseType;
+  }
+
+  public void setEnterpriseType(String enterpriseType) {
+    this.enterpriseType = enterpriseType;
+  }
 }

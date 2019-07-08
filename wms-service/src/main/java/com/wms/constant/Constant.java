@@ -35,10 +35,10 @@ public class Constant {
     public static final String CODE_YES_OR_NO = "0";
 
 //Seq
-    public static final String APLCUSNO = "APLCUSNO";
-    public static final String APLSUPNO = "APLSUPNO";
-    public static final String APLRECNO = "APLRECNO";
-    public static final String APLPRONO = "APLPRONO";
+    public static final String APLCUSNO = "APLCUSNO";//委托客户申请
+    public static final String APLSUPNO = "APLSUPNO";//供应商申请
+    public static final String APLRECNO = "APLRECNO";//收货单位申请
+    public static final String APLPRONO = "APLPRONO";//产品申请
 
     //code
     //首营状态

@@ -16,6 +16,11 @@ public class GspSupplierVO {
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	private java.lang.String editDate;
 	private java.lang.String isUse;
+	private java.lang.String firstState;
+	private java.lang.String enterpriseNo;
+	private java.lang.String enterpriseName;
+	private java.lang.String shorthandName;
+	private java.lang.String enterpriseType;
 
 	public java.lang.String getSupplierId() {
 		return supplierId;
@@ -91,5 +96,45 @@ public class GspSupplierVO {
 
 	public void setEditDate(String editDate) {
 		this.editDate = editDate;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
 	}
 }

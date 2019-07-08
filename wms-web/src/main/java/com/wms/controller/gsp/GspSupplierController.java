@@ -1,10 +1,13 @@
 package com.wms.controller.gsp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,14 +44,21 @@ public class GspSupplierController {
 	@Login
 	@RequestMapping(params = "toAdd")
 	public ModelAndView toAdd(String menuId) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
+		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
+		model.put("createDate",df.format(new Date()));
+
+		//model.put("specsId", specsId);
+		model.put("isUse", 1);
 		return new ModelAndView("gspSupplier/info", model);
 	}
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<GspSupplierVO> showDatagrid(EasyuiDatagridPager pager, GspSupplierQuery query) {
+
 		return gspSupplierService.getPagedDatagrid(pager, query);
 	}
 

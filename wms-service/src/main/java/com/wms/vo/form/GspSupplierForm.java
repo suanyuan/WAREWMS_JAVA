@@ -14,6 +14,37 @@ public class GspSupplierForm {
 	private java.lang.String editId;
 	private java.util.Date editDate;
 	private java.lang.String isUse;
+	private java.lang.String firstState;
+	private java.lang.String enterpriseName;
+	private java.lang.String shorthandName;
+	private java.lang.String enterpriseType;
+	private java.lang.String enterpriseNo;
+	private java.lang.String productionAddress;
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+
 
 	public java.lang.String getSupplierId() {
 		return supplierId;
@@ -89,4 +120,27 @@ public class GspSupplierForm {
 		this.isUse = isUse;
 	}
 
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getProductionAddress() {
+		return productionAddress;
+	}
+
+	public void setProductionAddress(String productionAddress) {
+		this.productionAddress = productionAddress;
+	}
 }

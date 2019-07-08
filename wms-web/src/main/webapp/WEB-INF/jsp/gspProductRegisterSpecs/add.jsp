@@ -143,8 +143,11 @@
 <script>
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
+
         if(row){
+            if(processType == 'edit'){
             $.ajax({
+
                 url : 'gspProductRegisterSpecsController.do?getInfo',
                 data : {"specsId" : row.specsId},
                 type : 'POST',
@@ -157,6 +160,7 @@
                     }
                 }
             });
+            }
         }
 
 

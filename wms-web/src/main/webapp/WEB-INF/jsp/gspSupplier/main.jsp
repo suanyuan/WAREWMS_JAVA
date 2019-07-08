@@ -12,6 +12,7 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var enterpriseDialog;
 var dialogUrl = "/gspSupplierController.do?toAdd";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -20,7 +21,7 @@ $(function() {
 		url : '<c:url value="/gspSupplierController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -34,18 +35,25 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'supplierId',		title: '主键',	width: 88,hidden:true },
-			{field: 'enterpriseId',		title: '企业流水号',	width: 88 },
-
-			{field: 'operateType',		title: '类型（经营/生产）',	width: 88 },
-			{field: 'createId',		title: '创建人',	width: 88 },
-			{field: 'createDate',		title: '创建时间',	width: 88 },
-			{field: 'editId',		title: '编辑人',	width: 88 },
-			{field: 'editDate',		title: '编辑时间',	width: 88 },
             {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isCheck == '1' ? '是' : '否';
                 }},
-			{field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
+			{field: 'supplierId',		title: '主键',	width: 88,hidden:true },
+			{field: 'enterpriseId',		title: '企业流水号',	width: 88 ,hidden:true},
+
+			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
+
+            {field: 'firstState',		title: '首营状态',	width: 88 },
+            {field: 'enterpriseNo',		title: '企业信息代码',	width: 88 },
+            {field: 'shorthandName',		title: '简称',	width: 88 },
+            {field: 'enterpriseName',		title: '企业名称',	width: 88 },
+            {field: 'enterpriseType',		title: '企业类型',	width: 88 },
+            {field: 'createId',		title: '创建人',	width: 88 },
+            {field: 'createDate',		title: '创建时间',	width: 88 },
+            {field: 'editId',		title: '编辑人',	width: 88 },
+            {field: 'editDate',		title: '编辑时间',	width: 88 },
+
+            {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }}
 		]],
@@ -213,21 +221,25 @@ var commit = function(){
 	<%--});--%>
 };
 var doSearch = function(){
-   // alert( $('#isCheck').val());
+   //alert( $('#operateType').combobox("getValue"));
+    //alert( $('#enterpriseIdQuery').val());
 	ezuiDatagrid.datagrid('load', {
 		// supplierId : $('#supplierId').val(),
 		enterpriseId : $('#enterpriseId').val(),
-
-		operateType : $('#operateType').val(),
+        enterpriseIdQuery :$('#enterpriseIdQuery').val(),
+        operateType : $('#operateType').combobox("getValue"),
 		// createId : $('#createId').val(),
-        createDateStart : $('#createDateStart').val(),
-        createDateEnd : $('#createDateEnd').val(),
-        editDateStart : $('#editDateStart').val(),
-        //isCheck : $('#isCheck').combobox('getValue'),
+        createDateStart : $('#createDateStart').datebox("getValue"),
+        createDateEnd : $('#createDateEnd').datebox("getValue"),
+        editDateStart : $('#editDateStart').datebox("getValue"),
+        isCheck : $('#isCheck').combobox('getValue'),
         isUse : $('#isUse').combobox('getValue'),
-        editDateEnd : $('#editDateEnd').val()
+        editDateEnd : $('#editDateEnd').datebox("getValue"),
+        //productionAddress : $('#productionAddress').combobox("getValue"),
+        shorthandName : $('#shorthandName').val(),
 		// editId : $('#editId').val(),
 		//editDate : $('#editDate').val(),
+        enterpriseNo: $('#enterpriseNo').val()
 
 	});
 };
@@ -242,10 +254,23 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>企业流水号</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>创建时间起始</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>创建时间结束</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>类型</th><td><input type="text" id="productionAddress"  name="productionAddress"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+							<%--<th>企业流水号</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>企业代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>企业</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>企业</th>
+							<td>
+								<input type='text' id='enterpriseIdQuery' class='easyui-textbox' data-options='' style="width: 100px;"/>
+								<input type="hidden" class="easyui-textvalue" name="enterpriseId">
+								<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+							</td>
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
+							<%--<td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>--%>
+						</tr>
+						<tr>
+							<th>企业类型</th><td><input type="text" id="operateType"  name="operateType"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -253,32 +278,27 @@ var doSearch = function(){
 																																	{id: '经营', value: '经营'},
 																																	{id: '生产', value: '生产'}
 																																]"/></td>
-							<%--<td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>--%>
-						</tr>
-						<tr>
-							<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	valueField: 'id',
-																																	textField: 'value',
-																																	data: [
-																																	{id: '1', value: '是'},
-																																	{id: '0', value: '否'}]"/></td>
-								<%--<th>是否审查：</th><td>--%>
-								<%--<select id="ischeck" name="ischeck" class="easyui-combobox"  style="width:150px;">--%>
-									<%--<option value=""></option>--%>
-									<%--<option value="1">是</option>--%>
-									<%--<option value="0">否</option>--%>
-								<%--</select></td>--%>
-							<th>编辑时间起始</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>编辑时间结束</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否有效</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	valueField: 'id',
-																																	textField: 'value',
-																																	data: [
-																																	{id: '1', value: '是'},
-																																	{id: '0', value: '否'}
-																																]"/></td>
+							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
+							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
+																																	<%--editable:false,--%>
+																																	<%--valueField: 'id',--%>
+																																	<%--textField: 'value',--%>
+																																	<%--data: [--%>
+																																	<%--{id: '1', value: '是'},--%>
+																																	<%--{id: '0', value: '否'}]"/></td>--%>
+
+							<%--<th>是否有效</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
+																																	<%--editable:false,--%>
+																																	<%--valueField: 'id',--%>
+																																	<%--textField: 'value',--%>
+																																	<%--data: [--%>
+																																	<%--{id: '1', value: '是'},--%>
+																																	<%--{id: '0', value: '否'}--%>
+																																<%--]"/></td>--%>
+							<th>是否有效：</th><td><input type='text' id='isUse' data-options=''/></td>
+							<th>编辑时间</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
 								<%--<th>是否有效：</th><td>--%>
 								<%--<select id="isUse" name="isUse" class="easyui-combobox"  style="width:150px;">--%>
 									<%--<option value=""></option>--%>
@@ -316,5 +336,68 @@ var doSearch = function(){
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 	</div>
+	<div id='enterpriseDialog' style='padding: 10px;'>
+
+	</div>
+<script>
+    var enterpriseDialog_gspSupplier;
+    $("#isCheck").combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+	//
+    // $("#isCooperation").combobox({
+    //     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+    //     valueField:'id',
+    //     textField:'value'
+    // });
+	//
+    // $("#isChineseLabel").combobox({
+    //     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+    //     valueField:'id',
+    //     textField:'value'
+    // });
+	//
+    $("#isUse").combobox({
+        url:sy.bp()+'/commonController.do?getIsUseCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+	//
+    // $("#firstState").combobox({
+    //     url:sy.bp()+'/commonController.do?getCatalogFirstState',
+    //     valueField:'id',
+    //     textField:'value'
+    // });
+	//
+    // $("#operateType").combobox({
+    //     url:sy.bp()+'/commonController.do?getEntType',
+    //     valueField:'id',
+    //     textField:'value'
+    // });
+
+    function searchMainEnterprise() {
+        enterpriseDialog_gspSupplier = $('#enterpriseDialog').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier",
+            width: 850,
+            height: 500,
+            cache: false,
+            onClose: function () {
+
+            }
+        })
+    }
+
+    function choseSelect_gspSupplier(id,name) {
+        $("input[name='enterpriseId']").val(id);
+        $("#enterpriseIdQuery").textbox("setValue",name);
+        enterpriseDialog_gspSupplier.dialog("close");
+    }
+</script>
+
+
 </body>
 </html>

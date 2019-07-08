@@ -1,12 +1,15 @@
 package com.wms.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import com.wms.constant.Constant;
+import com.wms.entity.FirstReviewLog;
+import com.wms.mybatis.dao.FirstReviewLogMybatisDao;
 import com.wms.mybatis.dao.GspSupplierMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspSupplierForm;
 import com.wms.query.GspSupplierQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("gspSupplierService")
 public class GspSupplierService extends BaseService {
@@ -27,6 +31,11 @@ public class GspSupplierService extends BaseService {
 	private GspSupplierDao gspSupplierDao;
 	@Autowired
 	private GspSupplierMybatisDao GspSupplierMybatisDao;
+	@Autowired
+	private CommonService commonService;
+	@Autowired
+	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
+
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<GspSupplierVO> getPagedDatagrid(EasyuiDatagridPager pager, GspSupplierQuery query) {
@@ -42,7 +51,7 @@ public class GspSupplierService extends BaseService {
 //		datagrid.setTotal(gspSupplierDao.countAll(query));
 //		datagrid.setRows(gspSupplierVOList);
 //		return datagrid;
-
+		System.out.println(query.getOperateType()+"========query.getOperateType()=======");
 		EasyuiDatagrid<GspSupplierVO> datagrid = new EasyuiDatagrid<GspSupplierVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -54,21 +63,45 @@ public class GspSupplierService extends BaseService {
 		for (GspSupplier gspSupplier : basGtnList) {
 			gspSupplierVO = new GspSupplierVO();
 			BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
-			gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
-			gspSupplierVO.setEditDate(simpleDateFormat.format(gspSupplier.getEditDate()));
+			if(gspSupplier.getCreateDate()!=null){
+				gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+			}
+			if(gspSupplier.getEditDate()!=null){
+				gspSupplierVO.setEditDate(simpleDateFormat.format(gspSupplier.getEditDate()));
+			}
+
+
 			basGtnVOList.add(gspSupplierVO);
 		}
+
 		int total = GspSupplierMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(basGtnVOList);
 		return datagrid;
 	}
 
+    @Transactional
 	public Json addGspSupplier(GspSupplierForm gspSupplierForm) throws Exception {
 		Json json = new Json();
 		GspSupplier gspSupplier = new GspSupplier();
 		BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
-		gspSupplier.setSupplierId(RandomUtil.getUUID());
+		gspSupplier.setSupplierId(commonService.generateSeq(Constant.APLSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		FirstReviewLog firstReviewLog = new FirstReviewLog();
+		firstReviewLog.setReviewId(RandomUtil.getUUID());
+		firstReviewLog.setReviewTypeId(gspSupplier.getSupplierId());
+		firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		firstReviewLog.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		firstReviewLog.setCreateDate(new Date());
+		firstReviewLog.setEditDate(new Date());
+		if("1".equals(gspSupplier.getIsCheck())){
+			firstReviewLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_NEW);//审核状态 新建 代码00
+		}else if("0".equals(gspSupplier.getIsCheck())){
+			firstReviewLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);//审核状态 已通过 代码40
+			firstReviewLog.setApplyContent("不需要审核直接下发");
+		}
+
+
+		firstReviewLogMybatisDao.add(firstReviewLog);
 		GspSupplierMybatisDao.add(gspSupplier);
 		json.setSuccess(true);
 		return json;
