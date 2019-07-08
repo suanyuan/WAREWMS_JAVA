@@ -144,5 +144,4 @@ public class PdaPutawayController {
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
     }
-
 }

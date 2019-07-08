@@ -218,9 +218,10 @@ where 1=1
         select
         <include refid="Base_Column_List"/>
         from inv_lot_att
-        where lotatt02 = #{lotatt02, jdbcType=VARCHAR}
-          and lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+        where lotatt04 = #{lotatt04, jdbcType=VARCHAR}
           and lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+          and customerid = #{customerid, jdbcType=VARCHAR}
+          and sku = #{sku, jdbcType=VARCHAR}
     </select>
   	
 </mapper>   

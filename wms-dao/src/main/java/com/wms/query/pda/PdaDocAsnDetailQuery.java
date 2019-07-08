@@ -1,7 +1,9 @@
 package com.wms.query.pda;
 
 import com.wms.entity.BaseLotatt;
+import lombok.Data;
 
+@Data
 public class PdaDocAsnDetailQuery extends BaseLotatt {
 
     private String warehouseid; //pda传参
@@ -10,27 +12,7 @@ public class PdaDocAsnDetailQuery extends BaseLotatt {
 
     private String GTIN;//Global Trade Item Num
 
-    public String getGTIN() {
-        return GTIN;
-    }
+    private String customerid;
 
-    public void setGTIN(String GTIN) {
-        this.GTIN = GTIN;
-    }
-
-    public String getWarehouseid() {
-        return warehouseid;
-    }
-
-    public void setWarehouseid(String warehouseid) {
-        this.warehouseid = warehouseid;
-    }
-
-    public String getAsnno() {
-        return asnno;
-    }
-
-    public void setAsnno(String asnno) {
-        this.asnno = asnno;
-    }
+    private String sku;
 }

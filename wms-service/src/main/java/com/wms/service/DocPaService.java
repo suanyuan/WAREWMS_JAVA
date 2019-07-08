@@ -60,7 +60,7 @@ public class DocPaService {
                 docAsnDetailsMybatisDao.getIdSequence(map);
                 String panno = map.get("resultNo").toString();
                 docPaHeaderForm.setPano(panno);
-                docPaHeaderForm.setPastatus("000");
+                docPaHeaderForm.setPastatus("00");
                 docPaHeaderForm.setAddtime(new Date());
                 docPaHeaderForm.setAddwho(login.getId());
                 docPaHeaderForm.setPaPrintFlag(Constant.CODE_YES_OR_NO);
@@ -78,6 +78,7 @@ public class DocPaService {
                     detailsForm.setAsnlineno(Double.parseDouble(docPaDTO.getAsnlineno()+""));
                     detailsForm.setCustomerid(docPaDTO.getCustomerid());
                     detailsForm.setSku(docPaDTO.getSku());
+                    detailsForm.setUserdefine1("STAGE01");
                     detailsForm.setUserdefine2(docPaDTO.getLotatt02());
                     detailsForm.setUserdefine3(docPaDTO.getLotatt04());
                     detailsForm.setUserdefine4(docPaDTO.getLotatt05());
