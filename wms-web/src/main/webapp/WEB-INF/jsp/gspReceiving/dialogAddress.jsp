@@ -32,7 +32,7 @@
 					<td><input type='text' name="district" id='district' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>送货地址</th>
+					<th>地址</th>
 					<td><input type='text' name="deliveryAddress" id='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
@@ -67,7 +67,7 @@
         var infoObj = new Object();
         $("#dialogAddAddressForm input[class='textbox-value']").each(function (index) {
             infoObj[""+$(this).attr("name")+""] = $(this).val();
-        })
+        });
 
         var url = '';
         if (processType == 'edit') {
@@ -139,4 +139,45 @@
             }
         });*/
     }
+
+
+   /* var provinceId = $('#provinceId').combobox({
+        url: '/Sys/SSQManage/GetProvince',
+        editable: false,
+        valueField: 'ProvinceID',
+        textField: 'ProName',
+        onSelect: function (record) {
+            //刷新数据，重新读取省份下的城市，并清空当前输入的值
+            cityId.combobox({
+                disabled: false,
+                url: '/sys/SSQManage/GetCityByProID?ProID=' + record.ProvinceID,
+                valueField: 'CityID',
+                textField: 'CityName'
+            }).combobox('clear');
+            //清空区
+            areaId.combobox({}).combobox('clear');
+        }
+    });
+    var cityId = $('#cityId').combobox({
+        disabled: true,
+        valueField: 'CityID', //值字段
+        textField: 'CityName', //显示的字段
+        url: '/sys/SSQManage/GetCityByProID?ProID=' + $('.Select-Province').combobox('getValue'),
+        onSelect: function (record) {
+            //刷新数据，重新读取市下的区，并清空当前输入的值
+            areaId.combobox({
+                disabled: false,
+                url: '/sys/SSQManage/GetAreaByCityID?CityID=' + record.CityID,
+                valueField: 'AreaID',
+                textField: 'AreaName'
+            }).combobox('clear');
+        }
+    });
+
+    var areaId = $('#areaId').combobox({
+        disabled: true,
+        valueField: 'AreaID', //值字段
+        textField: 'AreaName', //显示的字段
+        url: '/sys/SSQManage/GetAreaByCityID?CityID=' + $('#cityId').combobox('getValue')
+    });*/
 </script>

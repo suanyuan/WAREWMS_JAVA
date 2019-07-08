@@ -1,14 +1,14 @@
 package com.wms.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import com.wms.entity.GspCustomer;
-import com.wms.entity.GspReceivingAddress;
-import com.wms.mybatis.dao.GspCustomerMybatisDao;
-import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
-import com.wms.mybatis.dao.GspReceivingMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.constant.Constant;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -17,7 +17,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wms.dao.GspReceivingDao;
-import com.wms.entity.GspReceiving;
 import com.wms.vo.GspReceivingVO;
 import com.wms.vo.Json;
 import com.wms.easyui.EasyuiCombobox;
@@ -30,7 +29,16 @@ import com.wms.query.GspReceivingQuery;
 public class GspReceivingService extends BaseService {
 
 	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
 	private GspReceivingDao gspReceivingDao;
+
+	@Autowired
+	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 
 	@Autowired
 	private GspReceivingMybatisDao gspReceivingMybatisDao;
@@ -59,12 +67,17 @@ public class GspReceivingService extends BaseService {
 			for (GspReceiving gspReceiving : gspReceivingList) {
 				gspReceivingVO = new GspReceivingVO();
 				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryById(gspReceiving.getReceivingId());
+				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
+
 				BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
-				if (gspReceivingAddress!=null){
+				if (gspReceivingAddress!=null && gspEnterpriseInfo!=null){
 
 					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 					gspReceivingVO.setContacts(gspReceivingAddress.getContacts());
 					gspReceivingVO.setPhone(gspReceivingAddress.getPhone());
+					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+					gspReceivingVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
 					GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
 
 					gspReceivingVO.setIsCooperation(gspCustomer.getIsCooperation());
@@ -82,15 +95,28 @@ public class GspReceivingService extends BaseService {
 
 	public Json addGspReceiving(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
-		GspReceiving gspReceiving = new GspReceiving();
+		try {
 
-		BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
-        gspReceiving.setIsUse("1");
-        gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-        gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-        gspReceiving.setReceivingId(RandomUtil.getUUID());
-        gspReceivingMybatisDao.add(gspReceiving);
 
+			GspReceiving gspReceiving = new GspReceiving();
+
+			BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
+			gspReceiving.setIsUse("1");
+			gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+
+
+			gspReceivingMybatisDao.add(gspReceiving);
+			FirstReviewLog firstReviewLog = new FirstReviewLog();
+			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
+			firstReviewLog.setApplyState("00");
+			firstReviewLog.setReviewId(RandomUtil.getUUID());
+			firstReviewLogMybatisDao.add(firstReviewLog);
+		} catch (BeansException e) {
+			throw new Exception("服务器忙!");
+		}
 
 		json.setSuccess(true);
 		return json;

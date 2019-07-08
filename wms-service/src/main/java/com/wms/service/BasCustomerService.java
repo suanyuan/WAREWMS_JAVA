@@ -80,19 +80,20 @@ public class BasCustomerService extends BaseService {
 
 		if (resultMsg.length() == 0) {
 			BasCustomer basCustomer = new BasCustomer();
-			GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
-			GspCustomer gspCustomer = new GspCustomer();
-			BeanUtils.copyProperties(basCustomerForm,gspEnterpriseInfo);
+
+
+
+
+
 			BeanUtils.copyProperties(basCustomerForm, basCustomer);
-			BeanUtils.copyProperties(basCustomerForm, gspCustomer);
+
 			//获取操作工号
 			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
 			//
 			basCustomerMybatisDao.add(basCustomer);
-			basCustomerMybatisDao.add(gspCustomer);
-			basCustomerMybatisDao.add(gspEnterpriseInfo);
+
 
 
 		} else {
