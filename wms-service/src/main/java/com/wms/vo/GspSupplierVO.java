@@ -10,10 +10,17 @@ public class GspSupplierVO {
 	private java.lang.String isCheck;
 	private java.lang.String operateType;
 	private java.lang.String createId;
-	private java.util.Date createDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String createDate;
 	private java.lang.String editId;
-	private java.util.Date editDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String editDate;
 	private java.lang.String isUse;
+	private java.lang.String firstState;
+	private java.lang.String enterpriseNo;
+	private java.lang.String enterpriseName;
+	private java.lang.String shorthandName;
+	private java.lang.String enterpriseType;
 
 	public java.lang.String getSupplierId() {
 		return supplierId;
@@ -55,14 +62,7 @@ public class GspSupplierVO {
 		this.createId = createId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
-		return createDate;
-	}
 
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
 
 	public java.lang.String getEditId() {
 		return editId;
@@ -72,14 +72,7 @@ public class GspSupplierVO {
 		this.editId = editId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
-		return editDate;
-	}
 
-	public void setEditDate(java.util.Date editDate) {
-		this.editDate = editDate;
-	}
 
 	public java.lang.String getIsUse() {
 		return isUse;
@@ -89,4 +82,59 @@ public class GspSupplierVO {
 		this.isUse = isUse;
 	}
 
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getEditDate() {
+		return editDate;
+	}
+
+	public void setEditDate(String editDate) {
+		this.editDate = editDate;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
 }

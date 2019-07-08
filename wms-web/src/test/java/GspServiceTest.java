@@ -1,6 +1,9 @@
+import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
+import com.wms.mybatis.dao.CommonMybatisDao;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.service.CommonService;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
@@ -39,6 +42,10 @@ public class GspServiceTest {
     private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
     @Autowired
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
+    @Autowired
+    private CommonMybatisDao commonMybatisDao;
+    @Autowired
+    private CommonService commonService;
 
     @Test
     public void test(){
@@ -71,10 +78,12 @@ public class GspServiceTest {
     public void testSec(){
        Map<String,Object> map = new HashMap<>();
         map.put("warehouseid","WH01");
-        map.put("resultNo","a");
-        map.put("resultCode","101");
-       String str = docAsnHeaderMybatisDao.getIdSequence(map);
-       System.out.println(map.get("resultNo"));
+        map.put("no", Constant.APLCUSNO);
+        map.put("resultNo","");
+        map.put("resultCode","");
+       //String str = docAsnHeaderMybatisDao.getIdSequence(map);
+        //commonMybatisDao.getIdSequence(map);
+       System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
 
 
     }

@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class BasSkuService extends BaseService {
 	
 	@Autowired
 	private ImportSkuDataService importSkuDataService;
-
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -80,6 +81,8 @@ public class BasSkuService extends BaseService {
 		for (BasSku basSku : basSkuList) {
 			basSkuVO = new BasSkuVO();
 			BeanUtils.copyProperties(basSku, basSkuVO);
+			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));
+			basSkuVO.setEdittime(simpleDateFormat.format(basSku.getEdittime()));
 			basSkuVOList.add(basSkuVO);
 		}
 		datagrid.setTotal((long) basSkuMybatisDao.queryByCount(mybatisCriteria));

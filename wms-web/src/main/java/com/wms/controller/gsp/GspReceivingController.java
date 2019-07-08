@@ -39,6 +39,13 @@ public class GspReceivingController {
 		return new ModelAndView("gspReceiving/main", model);
 	}
 	@Login
+	@RequestMapping(params = "toDialogAddress")
+	public ModelAndView toDialogAddress(String receivingId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("receivingId", receivingId);
+		return new ModelAndView("gspReceiving/dialogAddress", model);
+	}
+	@Login
 	@RequestMapping(params = "toDetail")
 	public ModelAndView toDetail(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();

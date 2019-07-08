@@ -7,155 +7,21 @@
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <body>
-<form id='ezuiForm' method='post'>
-    <input type='hidden' id='receivingId' name='receivingId' value="${receivingId}" class="textbox-value"/>
-    <input type="hidden" id="enterpriseId" name='enterpriseId' value="${enterpriseId}" class="textbox-value"/>
-    <table>
-
-        <tr>
-            <th>企业</th>
-            <td>
-                <input type='text' id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:200'/>
-                <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
-            </td>
-        </tr>
-        <tr>
-            <th>代码</th>
-            <td><input type='text' id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>简称</th>
-            <td><input type='text' id='clientName' name='clientName' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>备注</th>
-            <td><input type='text' name='remark' id="remark" class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>货主</th>
-            <td><input type='text' name='clientId' id="text" class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>供应商</th>
-            <td>
-                <input type='text' name='supplierId' id="supplier" class='easyui-textbox' data-options='required:true,width:200'/>
-                <a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
-            </td>
-        </tr>
-        <tr>
-            <th>销售人</th>
-            <td><input type='text' name='sellerName' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-       <%-- <tr>
-            <th>首营状态</th>
-            <td><input type='text' name='firstState' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>--%>
-        <tr>
-            <th>是否审核</th>
-            <td><input type='text' name='isCheck' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>
-        <tr>
-            <th>是否医废</th>
-            <td><input type='text' name='isReturn' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>
-        <tr>
-            <th>是否合作</th>
-            <td><input type='text' name='isCooperation' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>
-        <tr>
-            <th>送货地址</th>
-            <td><input type='text' name='deliveryAddress' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>联系人</th>
-            <td><input type='text' name='contacts' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-       <%-- <tr>
-            <th>合同附件</th>
-            <td>
-                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl"/>
-                <input id="contractUrlFile" name='file'>
-                <a id="btn" href="#" class="easyui-linkbutton" data-options="">浏览</a>
-            </td>
-        </tr>--%>
-        <tr>
-            <th>联系人电话</th>
-            <td><input type='text' name='phone' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
-
-        <%--<tr>
-            <th>创建人</th>
-            <td><input type='text' name='createId' value="${createId}" class='easyui-datebox' data-options='required:true,width:200'/></td>
-        </tr>
-        <tr>
-            <th>创建时间</th>
-            <td><input type='text' name='createDate' value="${createDate}" class='easyui-datebox' data-options='required:true,width:200'/></td>
-        </tr>--%>
-    </table>
-</form>
-<div id='ezuiDialogDetail' style='padding: 10px;'>
-    <div id='detailToolbar' class='datagrid-toolbar' style=''>
-        <fieldset>
-            <legend>企业信息</legend>
-            <table>
-                <tr>
-                    <th>代码</th>
-                    <td><input type='text' id='enterpriseNo' class='easyui-textbox' data-options='width:200'/></td>
-                    <th>简称</th>
-                    <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
-                    <td>
-                        <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    </div>
-    <table id="dataGridDetail">
-
-    </table>
-</div>
-
-<div id="dialogEnterprise">
-
-</div>
-
-
-<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
-    <div id='TB' class='datagrid-toolbar' style=''>
-        <fieldset>
-            <legend>供应商信息</legend>
-            <table>
-                <tr>
-                    <th>供应商</th>
-                    <td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>
-                    <th>类型</th>
-                    <td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>
-                    <td>
-                        <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    </div>
-    <table id="dataGridSupplierDetail">
-
-    </table>
-</div>
-
-<div id="dialogSupplier">
-
-</div>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
+
+    var processType;
+    var dialogAddAddress;
     var enterpriseDatagrid;
     var dataGridDetail;
     var supplierDatagrid;
     var ezuiDialogSupplierDetail;
     var dialogEnterprise;
     var dialogSupplier;
+    var  dialogAddAddressForm;
+    var ezuiFormAddress;
     $(function () {
+        ezuiFormAddress=$('#ezuiFormAddress').form();
+        dialogAddAddressForm=$('#dialogAddAddressForm').form();
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
@@ -168,27 +34,6 @@
             }
         });
 
-        function doUpload(data) {
-            var ajaxFile = new uploadFile({
-                "url":sy.bp()+"/commonController.do?uploadFileLocal",
-                "dataType":"json",
-                "timeout":50000,
-                "async":true,
-                "data":{
-                    //多文件
-                    "file":{
-                        //file为name字段 后台可以通过$_FILES["file"]获得
-                        "file":document.getElementsByName("file")[0].files[0]//文件数组
-                    }
-                },
-                onload:function(data){
-                    $("#contractUrl").val(data.comment);
-                },
-                onerror:function(er){
-                    console.log(er);
-                }
-            });
-        }
 
         $('input[name="firstState"]').combobox({
             url:sy.bp()+'/commonController.do?getCatalogFirstState',
@@ -196,7 +41,7 @@
             textField:'value'
         });
 
-        $('input[name="isCheck"]').combobox({
+        $('input[name="isChec"]').combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
@@ -212,6 +57,56 @@
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
+        });
+
+        //订单明细列表（数据窗口）
+
+        ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
+
+            url : '<c:url value="/gspReceivingAddressController.do?showDatagrid&enterpriseId=${enterpriseId}"/>',
+            method : 'POST',
+            toolbar : '',
+            idField : 'receivingId',
+            title : '收货地址列表',
+            pageSize : 200,
+            pageList : [50, 100, 200],
+            border : false,
+            fitColumns : false,
+            nowrap : false,
+            striped : true,
+            collapsible : false,
+            pagination:true,
+            rownumbers : true,
+            singleSelect : true,
+            checkOnSelect:true,
+            selectOnCheck: false,
+            columns : [[
+                {field: 'receivingAddressId',	hidden:true,	title: '待输入栏位0',	width: 10 },
+                {field: 'receivingId',		hidden:true,  title: '待输入栏位1',	width: 90 },
+                {field: 'sellerName',		title: '销售人',	width:60, align: 'center' },
+                {field: 'country',		title: '国家',	width: 50, align: 'center' },
+                {field: 'province',		title: '省',	width: 50, align: 'center' },
+                {field: 'city',		title: '市',	width:50 , align: 'center'},
+                {field: 'district',		title: '区',	width:50 , align: 'center'},
+                {field: 'deliveryAddress',		title: '地址',	width:90 , align: 'center'},
+                {field: 'zipcode',		title: '邮编',	width: 90 , align: 'center'},
+                {field: 'contacts',		title: '联系人',	width: 90 , align: 'center'},
+                {field: 'phone',		title: '联系人电话',	width: 90, align: 'center' },
+                {field: 'isDefault',		title: '是否默认',	width: 90 , align: 'center'},
+                {field: 'createId',		title: '创建人',	width: 90 , align: 'center'},
+                {field: 'createDate',		title: '创建日期',	width: 90, align: 'center' },
+                {field: 'editId',		title: '修改人',	width: 90, align: 'center'},
+                {field: 'editDate',		title: '修改日期',	width: 100,align: 'center' }
+            ]],
+            onDblClickCell: function(index,field,value){
+
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:360});
+            }
         });
 
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
@@ -257,7 +152,8 @@
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:540});
             }
-        })
+        });
+
 
         dataGridDetail = $('#ezuiDialogDetail').dialog({
             modal : true,
@@ -348,14 +244,26 @@
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             fit:true,
-            href:sy.bp()+"/gspSupplierController.do?toDetail",
+          //  href:sy.bp()+"/gspSupplierController.do?toDetail",
             cache: false,
             onClose : function() {
                 ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 
-    })
+        dialogAddAddress = $('#dialogAddAddress').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            href: sy.bp()+"/gspReceivingController.do?toDialogAddress",
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+    });
 
     function searchEnterprise() {
         if(dataGridDetail){
@@ -372,14 +280,13 @@
             isUse : '1'
         });
     }
-    
+
     function choseSelect() {
         var row = enterpriseDatagrid.datagrid("getSelected");
         if(row){
-            $("#enterpriseId").val(row.enterpriseId);
-            $("#enterpriseName").textbox("setValue",row.enterpriseName);
-            $("#clientNo").textbox("setValue",row.enterpriseNo);
-            $("#clientName").textbox("setValue",row.shorthandName);
+            $("#enterpriseN").textbox("setValue",row.enterpriseName);
+            $("#enterpriseNo").textbox("setValue",row.enterpriseNo);
+            $("#s").textbox("setValue",row.shorthandName);
             dataGridDetail.dialog('close');
         }
     }
@@ -396,17 +303,20 @@
     }
 
     function doSubmit() {
+        /*$("#ezuiFormAddress input[id='isCheck']")*/
+        var a = $('#isChec').combobox('getValue');
+      if (a=='1') {
         var url = '';
         if (processType == 'edit') {
             url = '<c:url value="/gspReceivingController.do?edit"/>';
         }else{
             url = '<c:url value="/gspReceivingController.do?add"/>';
         }
-        $("#ezuiForm").form('submit', {
+        $("#ezuiFormAddress").form('submit', {
             url : url,
             onSubmit : function(){
                 console.log("1");
-                if(ezuiForm.form('validate')){
+                if(ezuiFormAddress.form('validate')){
                     $.messager.progress({
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
@@ -437,16 +347,59 @@
                 }
             }
         });
-    }
+    }else {
+          $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否直接下发？',function (confirm) {
+              if (confirm) {
+                  $("#ezuiFormAddress").form('submit', {
+                      url : '/basCustomerController.do?add',
+                      onSubmit : function(){
+                          if(ezuiFormAddress.form('validate')){
+                              $.messager.progress({
+                                  text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                              });
+                              return true;
+                          }else{
+                              return false;
+                          }
+                      },
+                      success : function(data) {
+                          var msg='';
+                          try {
+                              var result = $.parseJSON(data);
+                              if(result.success){
+                                  msg = result.msg;
+                                  ezuiDatagrid.datagrid('reload');
+                                  ezuiDialog.dialog('close');
+                              }else{
+                                  msg = '<font color="red">' + result.msg + '</font>';
+                              }
+                          } catch (e) {
+                              msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                              msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+                          } finally {
+                              $.messager.show({
+                                  msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                              });
+                              $.messager.progress('close');
+                          }
+                      }
+                  });
+              }
+          });
 
+
+
+      }
+
+    }
 
     function choseSupplierSelect() {
         var row = supplierDatagrid.datagrid("getSelected");
         if(row){
             $("#supplier").textbox("setValue",row.supplierId);
-           /* $("#operateType").textbox("setValue",row.operateType);
-            $("#isUse").textbox("setValue",row.isUse);
-            $("#isCheck").textbox("setValue",row.isCheck);*/
+            /* $("#operateType").textbox("setValue",row.operateType);
+             $("#isUse").textbox("setValue",row.isUse);
+             $("#isCheck").textbox("setValue",row.isCheck);*/
             ezuiDialogSupplierDetail.dialog('close');
         }
     }
@@ -464,6 +417,191 @@
         }
 
     }
+
+    var  AddAddress=function () {
+        processType = 'add';
+        $('#receivingId').val(0);
+        dialogAddAddress.dialog('open');
+    }
 </script>
+
+<div id='ezuiDialog' style='padding: 10px;'>
+<form id='ezuiFormAddress' method='post'>
+    <input type='hidden' id='receivingId' name='receivingId' value="${receivingId}" class="textbox-value"/>
+    <input type="hidden" id="enterpriseId" name='enterpriseId' value="${enterpriseId}" class="textbox-value"/>
+    <fieldset style="height: 120px">
+    <table>
+        <tr>
+            <th>企业</th>
+            <td>
+                <input type='text' id="enterpriseN" name='enterpriseName' size="16" class='easyui-textbox' data-options='required:true'/>
+                <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+            </td>
+            <th>代码</th>
+            <td><input type='text' id="enterpriseNo" name='enterpriseNo' size="16" class='easyui-textbox' data-options='required:true'/></td>
+            <th>简称</th>
+            <td><input type='text' id='s' name='shorthandName' size="16" class='easyui-textbox' data-options='required:true'/></td>
+
+            <th>货主</th>
+            <td><input type='text' name='clientId' id="text" size="16" class='easyui-textbox' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>供应商</th>
+            <td>
+                <input type='text' name='supplierId' id="supplier" size="16" class='easyui-textbox' data-options='required:true'/>
+                <a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>
+            </td>
+
+            <th>销售人</th>
+            <td><input type='text' name='sellerName' class='easyui-textbox' size="16" data-options='required:true'/></td>
+            <th>是否需要审核</th>
+            <td><input type='text' name='isChec' id="isChec" class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
+            <th>是否医废</th>
+            <td><input type='text' name='isReturn' class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
+        </tr>
+        <tr>
+            <th>地址</th>
+            <td><input type='text' name='deliveryAddress' class='easyui-textbox ' size="16" data-options='required:true'/></td>
+            <th>联系人</th>
+            <td><input type='text' name='contacts' id="contacts" class='easyui-textbox' size="16" data-options='required:true'/></td>
+            <th>联系人电话</th>
+            <td><input type='text' name='phone' class='easyui-textbox' size="16" data-options='required:true'/></td>
+
+
+            <th>
+                <a onclick='doSubmit();' id='ezuiBtn_commit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+                <a onclick='ezuiDialogClose("#ezuiDialog");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+            </th>
+
+
+        </tr>
+    </table>
+    </fieldset>
+</form>
+
+
+<table id='ezuiDetailsDatagrid'></table>
+
+<form>
+    <div>
+        <a onclick='AddAddress();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.skuAdd'/></a>
+        <a onclick='detailsEdit();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.skuEdit'/></a>
+        <a onclick='detailsDel();' id='ezuiDetailsBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.skuDelete'/></a>
+        <a onclick='clearDatagridSelected("#ezuiDetailsDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+    </div>
+</form>
+
+</div>
+
+<div id='ezuiDialogDetail' style='padding: 10px;'>
+    <div id='detailToolbar' class='datagrid-toolbar' style=''>
+        <fieldset>
+            <legend>企业信息</legend>
+            <table>
+                <tr>
+                    <th>代码</th>
+                    <td><input type='text' id='enterprise' class='easyui-textbox' data-options='width:200'/></td>
+                    <th>简称</th>
+                    <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
+                    <td>
+                        <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <table id="dataGridDetail">
+
+    </table>
+</div>
+
+<div id="dialogEnterprise">
+
+</div>
+
+
+<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
+    <div id='TB' class='datagrid-toolbar' style=''>
+        <fieldset>
+            <legend>供应商信息</legend>
+            <table>
+                <tr>
+                    <th>供应商</th>
+                    <td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>
+                    <th>类型</th>
+                    <td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>
+                    <td>
+                        <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <table id="dataGridSupplierDetail">
+
+    </table>
+</div>
+
+<div id="dialogSupplier">
+
+</div>
+
+<div id="dialogAddAddress" style='padding: 10px;'>
+<%--<form id="dialogAddAddressForm" method="post">
+    <input type='hidden' id='receivingAddressId' name='receivingAddressId'/>
+    <table>
+        <tr>
+            <th>销售人</th>
+            <td><input type='text' name="sellerName" id='sellerName' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>国家</th>
+            <td><input type='text'   name="country" id='country' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>省</th>
+            <td><input type='text' name="province" id='province' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>市</th>
+            <td><input type='text' name="city" id='city' class='easyui-textbox' size='16' data-options='required:true;'/></td>
+        </tr>
+        <tr>
+            <th>区</th>
+            <td><input type='text' name="district" id='district' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>送货地址</th>
+            <td><input type='text' name="deliveryAddress" id='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>邮编</th>
+            <td><input type='text' name="zipcode"  id='zipcode' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>联系人</th>
+            <td><input type='text' name="contacts" id='contacts' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>联系人电话</th>
+            <td><input type='text' name="phone"  id='phone' class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+        <tr>
+            <th>是否默认</th>
+            <td><input type='text' id='isDefault' name="isDefault" class='easyui-textbox' size='16' data-options='required:true'/></td>
+        </tr>
+    </table>
+</form>
+    <div>
+        <td>
+            <a onclick='doSubmitAddress();'  class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+            <a onclick='ezuiDialogClose("#dialogAddAddress");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+        </td>
+    </div>--%>
+
+</div>
+
 </body>
 </html>

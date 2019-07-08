@@ -3,6 +3,8 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class GspProductRegisterSpecsForm {
 
 	private java.lang.String specsId;
@@ -27,9 +29,9 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String storageCondition;
 	private java.lang.String transportCondition;
 	private java.lang.String createId;
-	private java.sql.Timestamp createDate;
+	private java.util.Date createDate;
 	private java.lang.String editId;
-	private java.sql.Timestamp editDate;
+	private java.util.Date editDate;
 	private java.lang.String isUse;
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
@@ -214,13 +216,7 @@ public class GspProductRegisterSpecsForm {
 		this.createId = createId;
 	}
 
-	public java.sql.Timestamp getCreateDate() {
-		return createDate;
-	}
 
-	public void setCreateDate(java.sql.Timestamp createDate) {
-		this.createDate = createDate;
-	}
 
 	public java.lang.String getEditId() {
 		return editId;
@@ -230,13 +226,7 @@ public class GspProductRegisterSpecsForm {
 		this.editId = editId;
 	}
 
-	public java.sql.Timestamp getEditDate() {
-		return editDate;
-	}
 
-	public void setEditDate(java.sql.Timestamp editDate) {
-		this.editDate = editDate;
-	}
 
 	public java.lang.String getIsUse() {
 		return isUse;
@@ -286,4 +276,19 @@ public class GspProductRegisterSpecsForm {
 		this.alternatName5 = alternatName5;
 	}
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getEditDate() {
+        return editDate;
+    }
+
+    public void setEditDate(Date editDate) {
+        this.editDate = editDate;
+    }
 }

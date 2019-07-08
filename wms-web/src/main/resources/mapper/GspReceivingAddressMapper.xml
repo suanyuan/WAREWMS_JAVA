@@ -87,8 +87,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_receiving_address(receiving_address_id,receiving_id,seller_name,country,province,city,district,delivery_address,zipcode,contacts,phone,is_default,create_id,create_date,edit_id,edit_date)
- values(#{receivingAddressId},#{receivingId},#{sellerName},#{country},#{province},#{city},#{district},#{deliveryAddress},#{zipcode},#{contacts},#{phone},#{isDefault},#{createId},#{createDate},#{editId},#{editDate})
+  insert into gsp_receiving_address (receiving_address_id,receiving_id,seller_name,country,province,city,district,delivery_address,zipcode,contacts,phone,is_default,create_id,create_date,edit_id,edit_date)
+ values (#{receivingAddressId},#{receivingId},#{sellerName},#{country},#{province},#{city},#{district},#{deliveryAddress},#{zipcode},#{contacts},#{phone},#{isDefault},#{createId},now(),#{editId},now())
 </insert>
 
 <!-- 根据id，修改记录-->  

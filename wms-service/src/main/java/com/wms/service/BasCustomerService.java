@@ -80,19 +80,20 @@ public class BasCustomerService extends BaseService {
 
 		if (resultMsg.length() == 0) {
 			BasCustomer basCustomer = new BasCustomer();
-			GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
-			GspCustomer gspCustomer = new GspCustomer();
-			BeanUtils.copyProperties(basCustomerForm,gspEnterpriseInfo);
+
+
+
+
+
 			BeanUtils.copyProperties(basCustomerForm, basCustomer);
-			BeanUtils.copyProperties(basCustomerForm, gspCustomer);
+
 			//获取操作工号
 			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
 			//
 			basCustomerMybatisDao.add(basCustomer);
-			basCustomerMybatisDao.add(gspCustomer);
-			basCustomerMybatisDao.add(gspEnterpriseInfo);
+
 
 
 		} else {
@@ -145,7 +146,20 @@ public class BasCustomerService extends BaseService {
 		}
 		return json;
 	}
+	public Json goonBasCustomer(String enterpriseId, String customertype) {
+		Json json = new Json();
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setEnterpriseId(enterpriseId);
+		customerQuery.setCustomerType(customertype);
 
+		BasCustomer basCustomer = basCustomerMybatisDao.queryById(customerQuery);
+		if (basCustomer != null) {
+			basCustomerMybatisDao.goon(basCustomer);
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		}
+		return json;
+	}
 	public List<EasyuiCombobox> getCustomerTypeCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;

@@ -21,4 +21,7 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	public String basCustomerCheck(Map<String, Object> map);
 
 	GspReceivingAddress getReceivingAddressInfo(String receivingAddressId);
+
+
+	public void goon(Object id);
 }

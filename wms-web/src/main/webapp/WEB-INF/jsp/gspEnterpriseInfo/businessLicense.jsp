@@ -34,6 +34,10 @@
                     <td><input type='text' data="1" value="${gspBusinessLicense.establishmentDate}" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
+                    <th>发证日期</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.issueDate}" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+                    <th>登记机关</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>营业期限时间</th>
                     <td colspan="3">
                         <input type='text' data="1" value="${gspBusinessLicense.businessStartDate}" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200'/>
@@ -41,21 +45,18 @@
                         <input type='text' data="1" value="${gspBusinessLicense.businessEndDate}" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180'/>
                         <input id="isLong" type="checkbox" class="checkbox"><label for="isLong">长期</label>
                     </td>
-                    </td>
-                    <th>发证日期</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.issueDate}" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
-                    <th>登记机关</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
-                    <th>经营范围</th>
-                    <td colspan="3"><input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:500,editable:false'/></td>
                     <th>营业执照照片</th>
-                    <td colspan="3">
+                    <td>
                         <input id="file" name='file' value="${gspBusinessLicense.attachmentUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                         <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspBusinessLicense.attachmentUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
+                    </td>
+                    <th>经营范围</th>
+                    <td colspan="5">
+                        <input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:400,editable:false'/>
                         <a onclick='selectBusinessScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
@@ -130,7 +131,7 @@
 
         $('#file').filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '250', //文本宽度
+            width: '200', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
@@ -265,7 +266,7 @@
             title : '<spring:message code="common.dialog.title"/>',
             width:800,
             height:500,
-            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=businessLicense',
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=businessLicense&id=${gspBusinessLicense.businessId}',
             onClose : function() {
 
             }

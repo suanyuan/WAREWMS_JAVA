@@ -23,7 +23,7 @@ $(function() {
 		url : '<c:url value="/gspProductRegisterSpecsController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -38,7 +38,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 
-			{field: 'specsId',		title: '主键',	width: 25 },
+			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
             // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
 
 
@@ -124,7 +124,7 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspProductRegisterSpecsId').val(0);
-	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+	ezuiDialog.dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
@@ -212,14 +212,14 @@ var commit = function(){
     var url = '';
     if (processType == 'edit') {
         var row = ezuiDatagrid.datagrid('getSelected');
-        infoObj["supplierId"] = row.supplierId;
-        url = sy.bp()+'/gspSupplierController.do?edit';
+        infoObj["specsId"] = row.specsId;
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
     }else{
-        url = sy.bp()+'/gspSupplierController.do?add';
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
     }
     $.ajax({
         url : url,
-        data : {"gspSupplierForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
+        data : {"gspProductRegisterSpecsForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
         success : function(result){
             console.log(result);
             var msg='';
@@ -296,7 +296,7 @@ var doSearch = function(){
 		productName : $('#productName').val(),
 		productRemark : $('#productRemark').val(),
 		productModel : $('#productModel').val(),
-		productionAddress : $('#productionAddress').val(),
+		productionAddress : $('#productionAddress').combobox("getValue"),
 
         createDateEnd : $("#createDateEnd").datebox("getValue"),
         createDateStart : $("#createDateStart").datebox("getValue"),
@@ -388,16 +388,21 @@ var toImportData = function(){
 							<th>型号</th><td><input type='text' id='productModel' class='easyui-textbox' size='16' data-options=''/></td>
 
 							<th>创建人</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>创建时间起始</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
-                            <th>创建时间结束</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 
                         </tr>
 						<tr >
-                            <th>产地</th><td><input type='text' id='productionAddress' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>编辑人</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>编辑时间起始</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
-                            <th>编辑时间结束</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-                            <th>是否有效：</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+                            <th>产地</th><td><input type="text" id="productionAddress"  name="productionAddress"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '国内', value: '国内'},
+																																	{id: '国外', value: '国外'}
+																																]"/></td>
+                            <%--<input type='text' id='productionAddress' class='easyui-textbox' size='16' data-options=''/></td>--%>
+                            <th>是否有效</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -405,6 +410,10 @@ var toImportData = function(){
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
+							<th>编辑人</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编辑时间</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
 
 
                         </tr>

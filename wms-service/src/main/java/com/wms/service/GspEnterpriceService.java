@@ -1,33 +1,25 @@
 package com.wms.service;
 
-import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspBusinessLicense;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspOperateLicense;
 import com.wms.entity.GspSecondRecord;
 import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.GspOperateLicenseMybatisDao;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspOperateLicenseQuery;
 import com.wms.query.GspSecondRecordQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.RandomUtil;
-import com.wms.vo.GspBusinessLicenseVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.*;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 企业总业务处理
@@ -57,6 +49,8 @@ public class GspEnterpriceService extends BaseService {
     private GspOperateDetailService gspOperateDetailService;
     @Autowired
     private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+    @Autowired
+    private GspOperateLicenseMybatisDao gspOperateLicenseMybatisDao;
 
 
     /**
@@ -251,106 +245,4 @@ public class GspEnterpriceService extends BaseService {
         return Json.success("",gspSecondRecord);
     }
 
-    /**
-     * 营业执照新增
-     * @param enterpriceId 企业id
-     * @param businessFormStr
-     * @param operateDetailStr
-     * @param gspBusinessLicenseId 营业执照id
-     * @return
-     */
-    public Json addGspBusinessLicense(String enterpriceId,String businessFormStr,String operateDetailStr,String gspBusinessLicenseId,String opType){
-        try{
-            GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
-            List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
-            if(StringUtils.isEmpty(enterpriceId)){
-                return Json.error("请先保存企业基础信息");
-            }
-            if(gspBusinessLicenseForm == null || BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
-                return Json.error("营业执照信息不全！");
-            }
-            if(gspOperateDetailForm == null || BeanUtils.isEmptyFrom(gspOperateDetailForm)){
-                return Json.error("必须选择营业执照经营范围！");
-            }
-            //提交
-            if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
-                //新增
-                if("".equals(gspBusinessLicenseId)){
-                    gspBusinessLicenseId = RandomUtil.getUUID();
-                    gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
-                    gspBusinessLicenseForm.setBusinessId(gspBusinessLicenseId);
-                    gspBusinessLicenseService.addGspBusinessLicense(gspBusinessLicenseForm);
-
-                    if(gspOperateDetailForm.size()>0){
-                        for(GspOperateDetailForm g : gspOperateDetailForm){
-                            g.setEnterpriseId(gspBusinessLicenseId);
-                            gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
-                        }
-                    }
-                }else{//更新
-                    gspBusinessLicenseForm.setBusinessId(gspBusinessLicenseId);
-                    gspBusinessLicenseService.editGspBusinessLicense(gspBusinessLicenseForm);
-                    gspOperateDetailService.deleteGspOperateDetail(gspBusinessLicenseId,Constant.LICENSE_TYPE_BUSINESS);
-                    if(gspOperateDetailForm.size()>0){
-                        for(GspOperateDetailForm g : gspOperateDetailForm){
-                            g.setEnterpriseId(gspBusinessLicenseId);
-                            gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
-                        }
-                    }
-                }
-            }else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
-                //把旧证数据作废
-                gspBusinessLicenseService.updateGspBusinessLicenseTagById(gspBusinessLicenseId,Constant.IS_USE_NO);
-                //保存新证数据
-                String newBusinessLicenseId = RandomUtil.getUUID();
-                gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
-                gspBusinessLicenseForm.setBusinessId(newBusinessLicenseId);
-                gspBusinessLicenseService.addGspBusinessLicense(gspBusinessLicenseForm);
-
-                if(gspOperateDetailForm.size()>0){
-                    for(GspOperateDetailForm g : gspOperateDetailForm){
-                        g.setEnterpriseId(newBusinessLicenseId);
-                        gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
-                    }
-                }
-            }
-            return Json.error("提交营业执照失败");
-        }catch (Exception e){
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Json.error("系统错误");
-        }
-    }
-
-    /**
-     * 查询营业执照历史记录
-     * @param pager
-     * @param query
-     * @return
-     */
-    public EasyuiDatagrid<GspBusinessLicenseVO> getGspBusinessLicenseHistory(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
-        EasyuiDatagrid<GspBusinessLicenseVO> datagrid = new EasyuiDatagrid<>();
-        List<GspBusinessLicenseVO> gspBusinessLicenseVOList = new ArrayList<>();
-        if(query.getEnterpriseId().equals("")){
-            MybatisCriteria criteria = new MybatisCriteria();
-            criteria.setCondition(query);
-            criteria.setCurrentPage(pager.getPage());
-            criteria.setPageSize(pager.getRows());
-            criteria.setOrderByClause("create_date desc");
-
-            List<GspBusinessLicense> businessLicenseVOS = gspBusinessLicenseMybatisDao.queryByList(criteria);
-            for(GspBusinessLicense g : businessLicenseVOS){
-                GspBusinessLicenseVO vo = new GspBusinessLicenseVO();
-                org.springframework.beans.BeanUtils.copyProperties(g,vo);
-                gspBusinessLicenseVOList.add(vo);
-            }
-            int total = gspBusinessLicenseMybatisDao.queryByCount(criteria);
-            datagrid.setTotal(Long.parseLong(total+""));
-            datagrid.setRows(gspBusinessLicenseVOList);
-        }else {
-            datagrid.setTotal(0L);
-            datagrid.setRows(gspBusinessLicenseVOList);
-        }
-        return datagrid;
-    }
 }

@@ -100,16 +100,16 @@ where 1=1
 
 
 	<if test="condition.createId != null and condition.createId != ''" >
-	    and create_id like  '%${condition.createId}%'
+	    and t1.create_id like  '%${condition.createId}%'
 	</if>
 	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date like  '%${condition.createDate}%'
+	    and t1.create_date like  '%${condition.createDate}%'
 	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
-	    and edit_id like  '%${condition.editId}%'
+	    and t1.edit_id like  '%${condition.editId}%'
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and edit_date like  '%${condition.editDate}%'
+	    and t1.edit_date like  '%${condition.editDate}%'
 	</if>
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and t1.is_use =  #{condition.isUse}
@@ -121,13 +121,17 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,product_line,manage_categories,packing_ require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{categories},#{conversionRate},#{long},#{wide},#{hight},#{productLine},#{manageCategories},#{packing require},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5})
+  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5)
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_product_register_specs set product_register_id=#{productRegisterId},specs_name=#{specsName},product_code=#{productCode},product_name=#{productName},product_remark=#{productRemark},product_model=#{productModel},production_address=#{productionAddress},bar_code=#{barCode},unit=#{unit},packing_unit=#{packingUnit},categories=#{categories},conversion_rate=#{conversionRate},long=#{long},wide=#{wide},hight=#{hight},product_line=#{productLine},manage_categories=#{manageCategories},packing_ require=#{packing require},storage_condition=#{storageCondition},transport_condition=#{transportCondition},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},alternat_name1=#{alternatName1},alternat_name2=#{alternatName2},alternat_name3=#{alternatName3},alternat_name4=#{alternatName4},alternat_name5=#{alternatName5} where specs_id=#{specsId}
+  update gsp_product_register_specs set
+     <if test="productRegisterId != null  ">
+     product_register_id=#{productRegisterId},
+     </if>
+     specs_name=#{specsName},product_code=#{productCode},product_name=#{productName},product_remark=#{productRemark},product_model=#{productModel},production_address=#{productionAddress},bar_code=#{barCode},unit=#{unit},packing_unit=#{packingUnit},conversion_rate=#{conversionRate},`long`=#{llong},wide=#{wide},hight=#{hight},packing_require=#{packingRequire},storage_condition=#{storageCondition},transport_condition=#{transportCondition},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},alternat_name1=#{alternatName1},alternat_name2=#{alternatName2},alternat_name3=#{alternatName3},alternat_name4=#{alternatName4},alternat_name5=#{alternatName5} where specs_id=#{specsId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -229,13 +233,26 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from gsp_product_register_specs where specs_id = #{specsId}
+delete 	 from gsp_product_register_specs where specs_id = #{specsId}
+</delete>
+
+<!-- 记录失效 -->
+<delete id="deleteByid" parameterType="Object">
+	update gsp_product_register_specs set
+	is_use=0  where specs_id=#{specsId}
 </delete>
 
 <!-- 根据id查询 产品注册证规格 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select *
 	 from gsp_product_register_specs where specs_id = #{specsId}
+</select>
+
+<!-- 根据id查询 产品注册证规格关联产品注册证 -->
+<select id="selectById"  resultMap="BaseResultMap" parameterType="Object">
+	select t1.*,t2.product_register_no,t2.product_name_main
+	from gsp_product_register_specs t1 left join gsp_product_register t2
+	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
 
 <!-- 产品注册证规格 列表总数-->

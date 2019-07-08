@@ -3,8 +3,10 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.constant.Constant;
 import com.wms.mybatis.dao.GspOperateDetailMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.GspOperateLicenseQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +71,12 @@ public class GspOperateDetailService extends BaseService {
 	}
 
 	public List<GspOperateDetailVO> queryOperateDetailByLicense(String license){
-		return null;
+		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
+		query.setEnterpriseId(license);
+		query.setIsUse(Constant.IS_USE_YES);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		return gspOperateDetailMybatisDao.queryByList(criteria);
 	}
 
 }

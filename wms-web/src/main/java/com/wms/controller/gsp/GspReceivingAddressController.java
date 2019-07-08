@@ -3,9 +3,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSON;
+import com.wms.entity.GspReceivingAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -46,12 +51,13 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(GspReceivingAddressForm gspReceivingAddressForm) throws Exception {
-		Json json = gspReceivingAddressService.addGspReceivingAddress(gspReceivingAddressForm);
+	public Json add(@RequestParam(value = "gspReceivingAddressFormStr") String gspReceivingAddressFormStr) throws Exception {
+        GspReceivingAddressForm gspReceivingAddressForm = JSON.parseObject(gspReceivingAddressFormStr, GspReceivingAddressForm.class);
+        Json json = gspReceivingAddressService.addGspReceivingAddress(gspReceivingAddressForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -62,8 +68,8 @@ public class GspReceivingAddressController {
 		Json json = gspReceivingAddressService.editGspReceivingAddress(gspReceivingAddressForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -74,8 +80,8 @@ public class GspReceivingAddressController {
 		Json json = gspReceivingAddressService.deleteGspReceivingAddress(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

@@ -4,7 +4,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspReceivingVO {
+	private String enterpriseNo;
 
+	private String shorthandName;
+
+	private String enterpriseName;
 	private String receivingId;
 	private String enterpriseId;
 	private String clientId;
@@ -25,7 +29,31 @@ public class GspReceivingVO {
 
 	private String isCooperation;
 
-    public String getContacts() {
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getContacts() {
         return contacts;
     }
 

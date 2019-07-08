@@ -44,13 +44,8 @@ $(function() {
 			/* {field: 'instockDetail',		title: '打印操作',	width: 7,formatter:function(value,rowData,rowIndex){
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
 			}}, */
-            {field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
-                    return rowData.activeFlag == '1' ? '是' : '否';
-                }},
-            {field: 'addtime',		title: '增加时间',	width: 24},
-			{field: 'addwho',		title: '增加人',	width: 12},
-			{field: 'customerid',		title: '货主',	width: 24},
 
+			{field: 'customerid',		title: '货主',	width: 24},
 			{field: 'descrC',		title: '规格名称',	width: 42 },
 			{field: 'descrE',		title: '型号',	width: 30 },
 			{field: 'edittime',		title: '编辑时间',	width: 24 },
@@ -60,6 +55,11 @@ $(function() {
 			{field: 'reservedfield01',		title: '商品名称',	width: 12 },
 			{field: 'reservedfield02',		title: '商品描述',	width: 12 },
 			{field: 'reservedfield03',		title: '注册证号',	width: 12 },
+            {field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }},
+            {field: 'addtime',		title: '增加时间',	width: 24},
+            {field: 'addwho',		title: '增加人',	width: 12},
             {field: 'sku',		title: '代码',	width: 12 },
             {field: 'sku_group1',		title: '产品线',	width: 12 },
             {field: 'sku_group2',		title: '附卡类别',	width: 12 }
@@ -611,7 +611,7 @@ var downloadTemplate = function(){
 							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>附卡类别</th>
 							<td><input type='text' id='sku_group2'  name="sku_group2" class='easyui-textbox' size='16' /></td>
-							<th>是否激活：</th><td>
+							<th>是否激活</th><td>
 							<input type="text" id="activeFlag"  name="activeFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
@@ -40,6 +41,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private ImportAsnDataService importAsnDataService;
 	@Autowired
 	private ImportGspProductRegisterSpecsDataService importGspProductRegisterSpecsDataService;
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
 //		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
@@ -62,16 +64,20 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
 		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(criteria);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
 		//System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
 		for (GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList) {
 			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"==============================================");
 			gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 			BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
+			if(gspProductRegisterSpecs.getCreateDate()!=null){
+				gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
+			}
+			if(gspProductRegisterSpecs.getEditDate()!=null){
+				gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
+			}
 
-			gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
-			gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
 
 			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"=============================================="+gspProductRegisterSpecsVO.getCreateDate());
 
@@ -89,6 +95,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
+//		gspProductRegisterSpecs.setEditDate(new Date());
 		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		return json;
@@ -118,7 +125,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		Json json = new Json();
 		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.findById(id);
 		if(id != null){
-			gspProductRegisterSpecsMybatisDao.delete(id);
+			gspProductRegisterSpecsMybatisDao.deleteByid	(id);
 		}
 		json.setSuccess(true);
 		return json;
@@ -126,11 +133,16 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 
 	public Json getGspProductRegisterSpecsInfo(String id){
-		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(id);
-		if(gspProductRegisterSpecs == null){
+		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
+		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
+		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
+
+		gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
+		gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
+		if(gspProductRegisterSpecsVO == null){
 			return Json.error("企业信息不存在！");
 		}
-		return Json.success("",gspProductRegisterSpecs);
+		return Json.success("",gspProductRegisterSpecsVO);
 	}
 
 

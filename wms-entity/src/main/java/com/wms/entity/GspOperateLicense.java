@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 public class GspOperateLicense  implements Serializable {
 
-	private Long operateId;
+	private String operateId;
 
 	private String enterpriseId;
 
