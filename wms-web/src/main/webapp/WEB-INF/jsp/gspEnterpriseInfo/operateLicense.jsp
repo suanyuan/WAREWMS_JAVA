@@ -10,6 +10,7 @@
     <form id='ezuiFormOperate' method='post' style="padding: 0px;">
         <input type='hidden' id='gspOperateLicenseId' name='gspOperateLicenseId' value="${gspOperateLicense.operateId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
+        <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
             <table>
@@ -98,7 +99,7 @@
             columns : [[
                 {field: 'operateId',title:'主键',hidden:true},
                 {field: 'licenseNo',title: '许可证编号' ,width: '20%'},
-                {field: 'operateMode',title: '经营范围',width: '20%'},
+                {field: 'operateMode',title: '经营方式',width: '20%'},
                 {field: 'isUse',title: '是否有效' ,width: '20%'},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
@@ -341,12 +342,13 @@
             }
         })
         $("#licenseUrl").val(row['licenseUrl'])
-        $("#file").filebox("setValue",row['licenseUrl']);
+        $("#licenseUrlFile").filebox("setValue",row['licenseUrl']);
     }
 
     //换证清空当前数据
-    function operateUpdate() {1
+    function operateUpdate() {
         opType = "update";
+        $("#opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -357,7 +359,7 @@
             }
         })
         $("#licenseUrl").val("")
-        $("#file").filebox("setValue","");
+        $("#licenseUrlFile").filebox("setValue","");
     }
 
 </script>

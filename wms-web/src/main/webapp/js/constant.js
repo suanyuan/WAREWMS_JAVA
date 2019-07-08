@@ -1,0 +1,8 @@
+var CODE_ENT_TYP = {
+    CODE_ENT_TYP_JY : "JY",
+    CODE_ENT_TYP_GNSC : "GNSC",
+    CODE_ENT_TYP_GWSC : "GWSC",
+    CODE_ENT_TYP_KD : "KD",
+    CODE_ENT_TYP_YL : "YL",
+    CODE_ENT_TYP_ZT : "ZT"
+};

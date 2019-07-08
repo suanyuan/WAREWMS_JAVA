@@ -18,11 +18,16 @@
 	<result column="edit_id" property="editId"/>
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
+	<result column="state" property="state"/>
+	<result column="user_define1" property="userDefine1"/>
+	<result column="user_define2" property="userDefine2"/>
+	<result column="user_define3" property="userDefine3"/>
+	<result column="user_define4" property="userDefine4"/>
 </resultMap>
        
 <!-- gsp_enterprise_info table all fields -->
 <sql id="Base_Column_List" >
-	 enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use
+	 enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state,user_define1,user_define2,user_define3,user_define4
 </sql>
    
    
@@ -69,19 +74,28 @@ where 1=1
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and is_use =  #{condition.isUse}
 	</if>
+	<if test="condition.createDateBegin != null and condition.createDateBegin != ''" >
+		and create_date &gt;=  #{condition.createDateBegin}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and create_date &lt;=  #{condition.createDateEnd}
+	</if>
+	<if test="condition.state != null and condition.state != ''" >
+		and state =  #{condition.state}
+	</if>
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_enterprise_info (enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use)
- values(#{enterpriseId},#{enterpriseNo},#{shorthandName},#{enterpriseName},#{enterpriseType},#{contacts},#{contactsPhone},#{remark},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into gsp_enterprise_info (enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state)
+ values(#{enterpriseId},#{enterpriseNo},#{shorthandName},#{enterpriseName},#{enterpriseType},#{contacts},#{contactsPhone},#{remark},#{createId},now(),#{editId},#{editDate},#{isUse},#{state})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_enterprise_info set enterprise_no=#{enterpriseNo},shorthand_name=#{shorthandName},enterprise_name=#{enterpriseName},enterprise_type=#{enterpriseType},contacts=#{contacts},contacts_phone=#{contactsPhone},remark=#{remark},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where enterprise_id=#{enterpriseId}
+  update gsp_enterprise_info set enterprise_no=#{enterpriseNo},shorthand_name=#{shorthandName},enterprise_name=#{enterpriseName},enterprise_type=#{enterpriseType},contacts=#{contacts},contacts_phone=#{contactsPhone},remark=#{remark},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},state=#{state} where enterprise_id=#{enterpriseId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -124,6 +138,9 @@ where 1=1
 	<if test="isUse != null  ">
 		is_use=#{isUse},
 	</if>
+	<if test="state != null  ">
+		state=#{state},
+	</if>
 	</trim> where enterprise_id=#{enterpriseId}
 </update>
 
@@ -133,7 +150,7 @@ where 1=1
 </delete>
 	<!-- 删除记录 -->
 <delete id="deleteGspEnterprise" parameterType="Object">
-	update 	 gsp_enterprise_info set is_use='无效' where enterprise_id = #{enterpriseId}
+	update 	 gsp_enterprise_info set is_use='0' where enterprise_id = #{enterpriseId}
 </delete>
 
 	<!-- 根据id查询 企业信息 -->
@@ -203,9 +220,6 @@ where 1=1
 		<if test="condition.editDate != null and condition.editDate != ''" >
 			and g.edit_date =  #{condition.editDate}
 		</if>
-		<if test="condition.isUse != null and condition.isUse != ''" >
-			and g.is_use =  #{condition.isUse}
-		</if>
 		<if test="condition.type != null and condition.type != ''" >
 			<choose>
 				<when test="condition.type == 'customer'">
@@ -216,14 +230,17 @@ where 1=1
 				</when>
 			</choose>
 		</if>
+		and g.state = '40'
+		and g.is_use = '1'
 	</trim>
 </sql>
 
 <!-- 查询企业信息列表 -->
 <select id="queryPageListByType" resultMap="BaseResultMap"  parameterType="Object">
 	select
-	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
+	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use,bc.codename_c state
 	from gsp_enterprise_info g
+	left join bas_codes bc on g.state = bc.code
 	<if test="condition.type == 'customer'">
 		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
 	</if>
@@ -243,10 +260,14 @@ where 1=1
 <select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
 	select count(1)
 	from gsp_enterprise_info g left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
-	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	left join bas_codes bc on g.state = bc.code
+	<if test="condition.type == 'customer'">
+		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	</if>
+	<if test="condition.type == 'supplier'">
+		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	</if>
 	<include refid="Example_Where_Clause_Type"/>
 </select>
-
-
 
 </mapper>   

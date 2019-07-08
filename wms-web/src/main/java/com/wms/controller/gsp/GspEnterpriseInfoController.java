@@ -11,12 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspOperateLicenseQuery;
-import com.wms.service.GspBusinessLicenseService;
-import com.wms.service.GspEnterpriceService;
-import com.wms.service.GspOperateLicenseService;
+import com.wms.query.GspSecondRecordQuery;
+import com.wms.service.*;
 import com.wms.utils.editor.CustomDateEditor;
-import com.wms.vo.GspBusinessLicenseVO;
-import com.wms.vo.GspOperateLicenseVO;
+import com.wms.vo.*;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,11 +22,8 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.GspEnterpriseInfoService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
-import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -49,6 +44,8 @@ public class GspEnterpriseInfoController {
 	private GspBusinessLicenseService gspBusinessLicenseService;
 	@Autowired
 	private GspOperateLicenseService gspOperateLicenseService;
+	@Autowired
+	private GspSecondRecordService gspSecondRecordService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -211,10 +208,13 @@ public class GspEnterpriseInfoController {
 
 	@Login
 	@RequestMapping(params = "toSearchDialog")
-	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target,@RequestParam(defaultValue = "") String type) {
+	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target,
+									   @RequestParam(defaultValue = "") String type,
+									   @RequestParam(defaultValue = "") String enterpriseType) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("target",target);
 		model.put("type",type);
+		model.put("enterpriseType",enterpriseType);
 		return new ModelAndView("gspEnterpriseInfo/search", model);
 	}
 
@@ -269,5 +269,12 @@ public class GspEnterpriseInfoController {
 	@ResponseBody
 	public EasyuiDatagrid<GspOperateLicenseVO> operateHistoryDatagridList(EasyuiDatagridPager pager, GspOperateLicenseQuery query){
 		return gspOperateLicenseService.getGspOperateLicenseHistory(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "recordHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspSecondRecordVO> recordHistoryDatagridList(EasyuiDatagridPager pager, GspSecondRecordQuery query){
+		return gspSecondRecordService.getGspSecondRecordHistory(pager,query);
 	}
 }

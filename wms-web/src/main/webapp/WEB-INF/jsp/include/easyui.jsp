@@ -8,6 +8,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery-easyui/locale/easyui-lang-zh_CN.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/syUtils.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/swUtils.js"/>"></script>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/constant.js"/>"></script>
 <c:set var="themeValue">
 	<c:out value="${cookie.easyuiThemeName.value}" default="default"/>
 </c:set>
@@ -24,7 +25,6 @@
     }
     
     var isUseFormatter = function(value,row,index) {
-	    console.log(value);
 		if(value == "1"){
 		    return "有效";
 		}else{
@@ -67,5 +67,14 @@
 
     var add0 = function(m){
         return m < 10 ? '0' + m: m
+    }
+
+	var checkObjIsEmpty = function(obj){
+        var hasProp = false;
+        for (var prop in obj){
+            hasProp = true;
+            break;
+        }
+        return hasProp;
     }
 </script>

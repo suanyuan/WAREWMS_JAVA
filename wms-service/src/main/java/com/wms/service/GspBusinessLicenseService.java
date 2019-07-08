@@ -153,7 +153,7 @@ public class GspBusinessLicenseService extends BaseService {
 					}
 				}
 			}
-			return Json.error("提交营业执照失败");
+			return Json.error("保存营业执照失败");
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

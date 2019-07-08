@@ -42,7 +42,8 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                type:'${type}'
+                type:'${type}',
+                enterpriseType:'${enterpriseType}'
             },
             fit:true,
             collapsible:false,

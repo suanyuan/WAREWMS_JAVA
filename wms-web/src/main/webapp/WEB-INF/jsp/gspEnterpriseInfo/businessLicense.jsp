@@ -10,6 +10,8 @@
     <form id='ezuiFormBusiness' method='post' style="padding: 0px;">
         <input type='hidden' id='gspBusinessLicenseId' name='gspBusinessLicenseId' value="${gspBusinessLicense.businessId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.enterpriseId}"/>
+        <input type='hidden' id='choseScope' value=""/>
+        <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
             <table>
@@ -158,14 +160,13 @@
      * 数据提交
      */
     function businessSubmit() {
-        if(opType == "add"){
+        /*if(opType == "add"){
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行换证操作吗，执行该操作原数据将会至为无效！', function(confirm) {
                 if (!confirm) {
 
                 }
             })
-        }
-
+        }*/
         if($("#gspEnterpriseId").val() == ""){
             showMsg("请先保存企业基础信息！");
             return;
@@ -309,6 +310,7 @@
             choseRowArr.push(row.instrumentCatalogId);
            $("#businessScope").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
+        $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
         $(ezuidialogChoseScope).dialog("close");
     }
     
@@ -351,8 +353,9 @@
     }
 
     //换证清空当前数据
-    function businessUpdate() {1
+    function businessUpdate() {
         opType = "update";
+        $("#opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
