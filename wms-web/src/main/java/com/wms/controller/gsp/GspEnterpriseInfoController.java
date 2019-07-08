@@ -10,9 +10,13 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.query.GspBusinessLicenseQuery;
+import com.wms.query.GspOperateLicenseQuery;
+import com.wms.service.GspBusinessLicenseService;
 import com.wms.service.GspEnterpriceService;
+import com.wms.service.GspOperateLicenseService;
 import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.GspBusinessLicenseVO;
+import com.wms.vo.GspOperateLicenseVO;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +45,10 @@ public class GspEnterpriseInfoController {
 	//企业信息主体业务
 	@Autowired
 	private GspEnterpriceService gspEnterpriceService;
+	@Autowired
+	private GspBusinessLicenseService gspBusinessLicenseService;
+	@Autowired
+	private GspOperateLicenseService gspOperateLicenseService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -238,7 +246,7 @@ public class GspEnterpriseInfoController {
 		return gspEnterpriceService.getGspSecondRecord(enterpriseId);
 	}
 
-	@Login
+	/*@Login
 	@RequestMapping(params = "addBusinessLicense")
 	@ResponseBody
 	public Object addBusinessLicense(@RequestParam(defaultValue = "")String enterpriseId,
@@ -247,12 +255,19 @@ public class GspEnterpriseInfoController {
 									 @RequestParam(defaultValue = "") String gspBusinessLicenseId,
 									 @RequestParam(defaultValue = "") String opType){
 		return gspEnterpriceService.addGspBusinessLicense(enterpriseId,businessFormStr,operateDetailStr,gspBusinessLicenseId,opType);
-	}
+	}*/
 
 	@Login
 	@RequestMapping(params = "businessHistoryDatagridList")
 	@ResponseBody
 	public EasyuiDatagrid<GspBusinessLicenseVO> businessHistoryDatagridList(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
-		return gspEnterpriceService.getGspBusinessLicenseHistory(pager,query);
+		return gspBusinessLicenseService.getGspBusinessLicenseHistory(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "operateHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspOperateLicenseVO> operateHistoryDatagridList(EasyuiDatagridPager pager, GspOperateLicenseQuery query){
+		return gspOperateLicenseService.getGspOperateLicenseHistory(pager,query);
 	}
 }

@@ -48,7 +48,7 @@
             queryParams:{'enterpriseId':'${id}'},
             pagination:true,
             rownumbers:true,
-            idField : 'specsId',
+            idField : 'instrumentCatalogId',
             columns : [[
                 {field: 'ck',checkbox:true },
                 {field: 'instrumentCatalogId',		title: '主键',hidden:true },
@@ -70,7 +70,7 @@
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:400});
                 //TODO 选中已选择行
-                //$(this).datagrid('selectRecord');
+                initChecked($(this));
             }
         })
 
@@ -104,6 +104,23 @@
         $("#classify_${target}").combobox("clear")
         $("#productCode_${target}").textbox("clear")
         $("#productName_${target}").textbox("clear")
+    }
+    
+    function initChecked(data) {
+        $.ajax({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
+            data : {
+                "licenseId":'${id}'
+            }
+            ,type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                if(result.length>0){
+                    for(var i=0;i<result.length;i++){
+                        data.datagrid("selectRecord",result[i].operateId);
+                    }
+                }
+            }
+        });
     }
 
 </script>

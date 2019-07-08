@@ -1,10 +1,14 @@
 package com.wms.controller.gsp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.wms.service.GspOperateDetailService;
+import com.wms.vo.GspOperateDetailVO;
+import com.wms.vo.GspOperateLicenseVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,6 +120,9 @@ public class GspInstrumentCatalogController {
 	@RequestMapping(params = "searchCheckByLicenseId")
 	@ResponseBody
 	public Object searchCheckByLicenseId(String licenseId){
-		return null;
+		if(StringUtils.isEmpty(licenseId)){
+			return new ArrayList<GspOperateDetailVO>();
+		}
+		return gspOperateDetailService.queryOperateDetailByLicense(licenseId);
 	}
 }

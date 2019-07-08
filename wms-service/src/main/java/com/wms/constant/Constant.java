@@ -34,15 +34,30 @@ public class Constant {
     public static final String CODE_YES_OR_YES = "1";
     public static final String CODE_YES_OR_NO = "0";
 
-//code
+//Seq
+    public static final String APLCUSNO = "APLCUSNO";
+    public static final String APLSUPNO = "APLSUPNO";
+    public static final String APLRECNO = "APLRECNO";
+
+    //code
+    //首营状态
     public static final String CODE_CATALOG_FIRSTSTATE_NEW = "00"; //首营状态(新建)
     public static final String CODE_CATALOG_FIRSTSTATE_CHECKING = "10"; //首营状态(审核中)
-    public static final String CODE_CATALOG_FIRSTSTATE_QCCHECKING = "20"; //首营状态(质量部审核)
-    public static final String CODE_CATALOG_FIRSTSTATE_RESPONSIBLE = "30"; //首营状态(负责人审核)
-    public static final String CODE_CATALOG_FIRSTSTATE_PASS = "40"; //首营状态(已通过)
-    public static final String CODE_CATALOG_FIRSTSTATE_FAIL = "50"; //首营状态(未通过)
-    public static final String CODE_CATALOG_FIRSTSTATE_STOP = "60"; //首营状态(已停止)
     public static final String CODE_CATALOG_FIRSTSTATE_USELESS = "90"; //首营状态(已报废)
+    public static final String CODE_CATALOG_FIRSTSTATE_STOP = "60"; //首营状态(已停止)
+    public static final String CODE_CATALOG_FIRSTSTATE_PASS = "40"; //首营状态(审核通过)
+
+    //审核状态
+    public static final String CODE_CATALOG_CHECKSTATE_NEW = "00"; //(新建)
+    public static final String CODE_CATALOG_CHECKSTATE_QCCHECKING = "20"; //(质量部审核)
+    public static final String CODE_CATALOG_CHECKSTATE_RESPONSIBLE = "30"; //(负责人审核)
+    public static final String CODE_CATALOG_CHECKSTATE_PASS = "40"; //(已通过)
+    public static final String CODE_CATALOG_CHECKSTATE_FAIL = "50"; //(未通过)
+
+
+
+
+
 
 
 

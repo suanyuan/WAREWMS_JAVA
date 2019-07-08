@@ -5,7 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspOperateLicenseForm {
 
-	private Long operateId;
+	private String operateId;
 	private String enterpriseId;
 	private String licenseNo;
 	private String operateMode;
@@ -19,11 +19,11 @@ public class GspOperateLicenseForm {
 	private String operateType;
 	private String isUse;
 
-	public Long getOperateId() {
+	public String getOperateId() {
 		return operateId;
 	}
 
-	public void setOperateId(Long operateId) {
+	public void setOperateId(String operateId) {
 		this.operateId = operateId;
 	}
 
