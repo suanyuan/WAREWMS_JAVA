@@ -567,11 +567,11 @@ where 1=1
         from bas_sku
         where sku in (
             select
-              DISTINCT A.sku
+              DISTINCT a.sku
             from bas_sku a
             LEFT JOIN bas_gtn_lotatt b ON a.customerid = b.customerid
                                           AND a.sku = b.sku
-            LEFT JOIN bas_gtn c ON a.sku = b.sku
+            LEFT JOIN bas_gtn c ON a.sku = c.sku
             WHERE
                 IFNULL(a.alternate_sku1, '') = #{alternate_sku1, jdbcType=VARCHAR}
                 OR IFNULL(a.alternate_sku2, '') = #{alternate_sku2, jdbcType=VARCHAR}
@@ -580,8 +580,7 @@ where 1=1
                 OR IFNULL(a.alternate_sku5, '') = #{alternate_sku5, jdbcType=VARCHAR}
                 OR IFNULL(c.GTNCODE, '') = #{GTIN, jdbcType=VARCHAR}
                 OR (
-                    IFNULL(b.lotatt02, '') = #{lotatt02, jdbcType=VARCHAR}
-                    AND IFNULL(b.lotatt04, '') = #{lotatt04, jdbcType=VARCHAR}
+                    IFNULL(b.lotatt04, '') = #{lotatt04, jdbcType=VARCHAR}
                     AND IFNULL(b.lotatt05, '') = #{lotatt05, jdbcType=VARCHAR}
                 )
         )

@@ -80,16 +80,15 @@ public class PdaDocAsnController {
         PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDocAsnDetail(query);
 
         if (pdaDocAsnDetailVO == null) {
-            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无上架明细信息"));
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无收货明细信息"));
             return resultMap;
         }
         if (pdaDocAsnDetailVO.getBasPackage() == null || pdaDocAsnDetailVO.getBasSku() == null) {
 
             PdaResult result =
                     new PdaResult(PdaResult.CODE_FAILURE,
-                            pdaDocAsnDetailVO.getBasPackage() == null ?
-                                    "无包装信息" :
-                                    "无产品信息");
+                            pdaDocAsnDetailVO.getBasSku() == null ?
+                                    "无产品信息" : "无包装信息");
             resultMap.put(Constant.RESULT, result);
             return resultMap;
         }

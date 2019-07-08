@@ -240,7 +240,7 @@ where 1=1
 
     <update id="endTask" parameterType="java.util.Map">
         update doc_pa_header set
-        asnstatus = '40',
+        PASTATUS = '40',
         edittime = NOW(),
         editwho = #{editwho, jdbcType=VARCHAR}
         where pano = #{pano, jdbcType=VARCHAR}

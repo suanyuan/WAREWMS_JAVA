@@ -1,7 +1,10 @@
 package com.wms.vo.pda;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class PdaDocAsnHeaderVO {
 
     /**
@@ -34,51 +37,5 @@ public class PdaDocAsnHeaderVO {
      */
     private String warehouseid;
 
-    public String getAsnno() {
-        return asnno;
-    }
-
-    public void setAsnno(String asnno) {
-        this.asnno = asnno;
-    }
-
-    public Date getAsncreationtime() {
-        return asncreationtime;
-    }
-
-    public void setAsncreationtime(Date asncreationtime) {
-        this.asncreationtime = asncreationtime;
-    }
-
-    public String getAsnstatus() {
-        return asnstatus;
-    }
-
-    public void setAsnstatus(String asnstatus) {
-        this.asnstatus = asnstatus;
-    }
-
-    public String getAsntype() {
-        return asntype;
-    }
-
-    public void setAsntype(String asntype) {
-        this.asntype = asntype;
-    }
-
-    public String getAsnreference1() {
-        return asnreference1;
-    }
-
-    public void setAsnreference1(String asnreference1) {
-        this.asnreference1 = asnreference1;
-    }
-
-    public String getWarehouseid() {
-        return warehouseid;
-    }
-
-    public void setWarehouseid(String warehouseid) {
-        this.warehouseid = warehouseid;
-    }
+    private String customerid;
 }

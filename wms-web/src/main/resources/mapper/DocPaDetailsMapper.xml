@@ -32,7 +32,7 @@
 
     <resultMap id="ExtendResultMap" type="com.wms.entity.DocPaDetails" extends="BaseResultMap">
         <association property="invLotAtt"
-                     column="{lotatt02 = USERDEFINE2, lotatt04 = USERDEFINE3, lotatt05 = USERDEFINE4}"
+                     column="{customerid = CUSTOMERID, sku = SKU, lotatt04 = USERDEFINE3, lotatt05 = USERDEFINE4}"
                      javaType="com.wms.entity.InvLotAtt"
                      select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryForScan"/>
     </resultMap>
@@ -242,15 +242,12 @@ where 1=1
         where pano = #{pano, jdbcType = VARCHAR} and palineno = #{palineno, jdbcType = INTEGER}
     </select>
 
-    <!-- userdefine2-效期 userdefine3-生产批号 userdefine4-序列号 -->
+    <!-- userdefine3-生产批号 userdefine4-序列号 -->
     <select id="queryDocPaDetail" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         <include refid="Base_Column_List"/>
         from doc_pa_details
         where pano = #{pano, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
-        <if test="lotatt02 != null and lotatt02 != ''">
-            and userdefine2 = #{lotatt02, jdbcType=VARCHAR}
-        </if>
         <if test="lotatt04 != null and lotatt04 != ''">
             and userdefine3 = #{lotatt04, jdbcType=VARCHAR}
         </if>

@@ -98,7 +98,7 @@ public class DocPaHeaderService extends BaseService {
 
         List<DocPaHeader> docPaHeaderList = docPaHeaderDao.queryUndoneList(form.getStart(), form.getPageSize());
         List<PdaDocPaHeaderVO> pdaDocPaHeaderVOList = new ArrayList<>();
-        PdaDocPaHeaderVO pdaDocPaHeaderVO = new PdaDocPaHeaderVO();
+        PdaDocPaHeaderVO pdaDocPaHeaderVO;
         for (DocPaHeader docPaHeader : docPaHeaderList) {
 
             pdaDocPaHeaderVO = new PdaDocPaHeaderVO();
