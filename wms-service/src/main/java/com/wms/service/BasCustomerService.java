@@ -32,10 +32,7 @@ public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
-
-
-	@Autowired
-	private CommonService commonService;
+	
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
