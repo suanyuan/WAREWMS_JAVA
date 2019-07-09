@@ -29,6 +29,10 @@ public class GspReceiving  implements Serializable {
 
 
 
+	private String firstState;
+
+
+
 	private String isUse;
 
 	private String isReturn;
