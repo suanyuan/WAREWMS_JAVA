@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -16,22 +17,20 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
+import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("basCustomerService")
 public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
-
-
+	@Autowired
+	private CommonService commonService;
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
@@ -101,6 +100,32 @@ public class BasCustomerService extends BaseService {
 			json.setMsg(resultMsg.toString());
 			return json;
 		}
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
+
+
+	public Json supplierAddCustomer(GspSupplierForm gspSupplierForm) {
+		Json json = new Json();
+		BasCustomer basCustomer = new BasCustomer();
+		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		basCustomer.setCustomerType("VE");
+		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		basCustomer.setOperateType(gspSupplierForm.getOperateType());
+		basCustomer.setActiveFlag(gspSupplierForm.getIsUse());
+		basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+
+		//BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
+
+
+
+		//BeanUtils.copyProperties(basCustomerQuery, basCustomer);
+		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setAddtime(new Date());
+		basCustomer.setEdittime(new Date());
+		basCustomerMybatisDao.add(basCustomer);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

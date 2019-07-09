@@ -32,6 +32,20 @@
 		}
     }
 
+    var firstStateFormatter = function(value,row,index) {
+        if(value == "00"){
+            return "新建";
+        }else if(value == "10"){
+            return "审核中";
+        }else if(value == "90"){
+            return "已报废";
+        }else if(value == "60"){
+            return "已停止";
+        }else if(value == "40"){
+            return "审核通过";
+        }
+    }
+
     var isUseRowStyler = function(index,row) {
 		if(row.isUse == "0"){
             return 'color:red;';

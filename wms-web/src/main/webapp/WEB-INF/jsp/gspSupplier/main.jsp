@@ -43,7 +43,9 @@ $(function() {
 
 			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
 
-            {field: 'firstState',		title: '首营状态',	width: 88 },
+            {field: 'firstState',		title: '首营状态',	width: 88 ,formatter:firstStateFormatter
+
+				},
             {field: 'enterpriseNo',		title: '企业信息代码',	width: 88 },
             {field: 'shorthandName',		title: '简称',	width: 88 },
             {field: 'enterpriseName',		title: '企业名称',	width: 88 },
@@ -91,100 +93,160 @@ var add = function(){
 	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
 var edit = function(){
+
+
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	//alert(row.supplierId);
-	if(row){
-		// ezuiForm.form('load',{
-        //     // supplierId : row.supplierId,
-		// 	// enterpriseId : row.enterpriseId,
-		// 	// isCheck : row.isCheck,
-		// 	// operateType : row.operateType,
-		// 	// createId : row.createId,
-		// 	// createDate : row.createDate,
-		// 	// editId : row.editId,
-		// 	// editDate : row.editDate,
-		// 	// isUse : row.isUse
-		// });
-		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
-	}else{
-		$.messager.show({
-			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-		});
+	if(row.firstState=="40" || row.firstState=="10"){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法编辑', title : '提示'
+        });
+	}else {
+        if(row){
+            // ezuiForm.form('load',{
+            //     // supplierId : row.supplierId,
+            // 	// enterpriseId : row.enterpriseId,
+            // 	// isCheck : row.isCheck,
+            // 	// operateType : row.operateType,
+            // 	// createId : row.createId,
+            // 	// createDate : row.createDate,
+            // 	// editId : row.editId,
+            // 	// editDate : row.editDate,
+            // 	// isUse : row.isUse
+            // });
+
+            ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+        }else{
+            $.messager.show({
+                msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+            });
+        }
 	}
+
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
-			if(confirm){
-				$.ajax({
-					url : 'gspSupplierController.do?delete',
-					data : {id : row.supplierId},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							msg = result.msg;
-						} catch (e) {
-							msg = '<spring:message code="common.message.data.delete.failed"/>';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
+	if(row.firstState=="10" || row.firstState=="40"){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法删除', title : '提示'
+        });
 	}else{
-		$.messager.show({
-			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-		});
+        if(row){
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+                if(confirm){
+                    $.ajax({
+                        url : 'gspSupplierController.do?delete',
+                        data : {id : row.supplierId},
+                        type : 'POST',
+                        dataType : 'JSON',
+                        success : function(result){
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        }else{
+            $.messager.show({
+                msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+            });
+        }
+
+
 	}
+
 };
+
+var addOrEdit = function(url,infoObj) {
+    $.ajax({
+        url: url,
+        data: {"gspSupplierForm": JSON.stringify(infoObj)}, type: 'POST', dataType: 'JSON', async: true,
+        success: function (result) {
+            console.log(result);
+            var msg = '';
+            try {
+                if (result.success) {
+                    msg = result.msg;
+                    ezuiDatagrid.datagrid('reload');
+                    ezuiDialog.dialog('close');
+                } else {
+                    msg = '<font color="red">' + result.msg + '</font>';
+                }
+            } catch (e) {
+                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>' + msg;
+            } finally {
+                $.messager.show({
+                    msg: msg, title: '<spring:message code="common.message.prompt"/>'
+                });
+                $.messager.progress('close');
+            }
+        }
+    });
+}
+
+
 var commit = function(){
     var infoObj = new Object();
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
 
+	//console.log(infoObj+"infoObj====="+infoObj.isCheck);
 	var url = '';
 	if (processType == 'edit') {
+		if(infoObj.firstState == "40" || infoObj.firstState == "10" ){
+
+		}
+
+
+
         var row = ezuiDatagrid.datagrid('getSelected');
         infoObj["supplierId"] = row.supplierId;
         url = sy.bp()+'/gspSupplierController.do?edit';
+        addOrEdit(url,infoObj);
+
+
+
+
+
+
 	}else{
-        url = sy.bp()+'/gspSupplierController.do?add';
+	    if(infoObj.isCheck==0){
+            $.messager.confirm('提示', '该申请无需审核 是否直接下发？', function(confirm) {
+                if(confirm){
+                    url = sy.bp()+'/gspSupplierController.do?add';
+                    addOrEdit(url,infoObj);
+
+                    $.ajax({
+                        url: sy.bp()+'/basCustomerController.do?supplierAdd',
+                        data: {"gspSupplierForm": JSON.stringify(infoObj),},
+						type: 'POST',
+						dataType: 'JSON',
+						async: true,
+                        success: function (result) {
+                            
+                        }
+                    });
+                }
+            });
+		}else {
+            url = sy.bp()+'/gspSupplierController.do?add';
+            addOrEdit(url,infoObj);
+		}
 	}
 
-    $.ajax({
-        url : url,
-        data : {"gspSupplierForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
-        success : function(result){
-            console.log(result);
-            var msg='';
-            try{
-                if(result.success){
-                    msg = result.msg;
-                    ezuiDatagrid.datagrid('reload');
-                    ezuiDialog.dialog('close');
-                }else{
-                    msg = '<font color="red">' + result.msg + '</font>';
-                }
-            }catch (e) {
-                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-            } finally {
-                $.messager.show({
-                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                });
-                $.messager.progress('close');
-            }
-        }
-    });
+
 	<%--ezuiForm.form('submit', {--%>
 		<%--url : url,--%>
 		<%--onSubmit : function(){--%>
@@ -278,7 +340,7 @@ var doSearch = function(){
 																																	{id: '经营', value: '经营'},
 																																	{id: '生产', value: '生产'}
 																																]"/></td>
-							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
+							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
 																																	<%--editable:false,--%>
 																																	<%--valueField: 'id',--%>
@@ -295,7 +357,7 @@ var doSearch = function(){
 																																	<%--{id: '1', value: '是'},--%>
 																																	<%--{id: '0', value: '否'}--%>
 																																<%--]"/></td>--%>
-							<th>是否有效：</th><td><input type='text' id='isUse' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' data-options='' size='16'/></td>
 							<th>编辑时间</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 
@@ -390,12 +452,14 @@ var doSearch = function(){
             }
         })
     }
-
     function choseSelect_gspSupplier(id,name) {
+        console.log(id)
+        console.log(name)
         $("input[name='enterpriseId']").val(id);
         $("#enterpriseIdQuery").textbox("setValue",name);
         enterpriseDialog_gspSupplier.dialog("close");
     }
+
 </script>
 
 
