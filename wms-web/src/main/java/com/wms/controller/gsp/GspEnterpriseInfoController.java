@@ -56,6 +56,7 @@ public class GspEnterpriseInfoController {
 		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 
 
@@ -90,7 +91,7 @@ public class GspEnterpriseInfoController {
 	@Login
 	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(@RequestParam(value="enterpriseId",required=true) String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+	public Json add(@RequestParam(value="enterpriseId",required = false,defaultValue = "") String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
 		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
 		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
@@ -171,8 +172,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toInfo(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspEnterpriceInfo(id);
-		model.put("gspEnterpriseInfo",json.getObj());
+		if(!"".equals(id)){
+			Json json = gspEnterpriceService.getGspEnterpriceInfo(id);
+			model.put("gspEnterpriseInfo",json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/info", model);
 	}
 
@@ -181,8 +184,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspBusinessLicense(id);
-		model.put("gspBusinessLicense",json.getObj());
+		if(!"".equals(id)){
+			Json json = gspEnterpriceService.getGspBusinessLicense(id);
+			model.put("gspBusinessLicense",json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
 	}
 
@@ -191,8 +196,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toOperateLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspOperateLicense(id);
-		model.put("gspOperateLicense",json.getObj());
+		if(!"".equals(id)) {
+			Json json = gspEnterpriceService.getGspOperateLicense(id);
+			model.put("gspOperateLicense", json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/operateLicense", model);
 	}
 
@@ -201,8 +208,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toSecondRecord(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspSecondRecord(id);
-		model.put("gspSecondRecord",json.getObj());
+		if(!"".equals(id)) {
+			Json json = gspEnterpriceService.getGspSecondRecord(id);
+			model.put("gspSecondRecord", json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
 	}
 

@@ -43,6 +43,9 @@ public class Constant {
     public static final String APLRECNO = "APLRECNO";//收货单位申请
     public static final String APLPRONO = "APLPRONO";//产品申请
 
+    public static final String BASRECNO = "BASRECNO";//收货单位客户档案编号
+    public static final String BASSUPNO = "BASSUPNO";//供应商客户档案编号
+
     //code
     //首营状态
     public static final String CODE_CATALOG_FIRSTSTATE_NEW = "00"; //首营状态(新建)

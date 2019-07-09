@@ -77,4 +77,15 @@
         }
         return hasProp;
     }
+
+    var entTypeFormatter = function(value,row,index) {
+        switch (value) {
+			case "JY" : return "经营";
+            case "GNSC" : return "国内生产";
+            case "GWSC" : return "国外生产";
+            case "KD" : return "快递";
+            case "YL" : return "医疗单位";
+			case "ZT" : return "主体";
+        }
+    }
 </script>

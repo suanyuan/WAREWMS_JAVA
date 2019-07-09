@@ -76,7 +76,7 @@ public class GspServiceTest {
 
     @Test
     public void testSec(){
-       Map<String,Object> map = new HashMap<>();
+       /*Map<String,Object> map = new HashMap<>();
         map.put("warehouseid","WH01");
         map.put("no", Constant.APLCUSNO);
         map.put("resultNo","");
@@ -84,7 +84,11 @@ public class GspServiceTest {
        //String str = docAsnHeaderMybatisDao.getIdSequence(map);
         //commonMybatisDao.getIdSequence(map);
        System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
+*/
 
 
     }
+
+
+
 }

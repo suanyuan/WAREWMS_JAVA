@@ -45,15 +45,15 @@ $(function() {
 			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
-			{field: 'enterpriseType',		title: '企业类型',	width: 61 },
+			{field: 'enterpriseType',		title: '企业类型',	width: 61 ,formatter: entTypeFormatter},
             {field: 'createId',		title: '录入人',	width: 61 },
             {field: 'createDate',		title: '录入时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
             {field: 'editDate',		title: '修改时间',	width: 61 },
             {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
+        onDblClickRow: function(index,row){
+			edit(row);
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -100,11 +100,13 @@ var add = function(){
 	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
 
-var edit = function(){
+var edit = function(row){
 	processType = 'edit';
-	var row = ezuiDatagrid.datagrid('getSelected');
+	if(!row){
+        var row = ezuiDatagrid.datagrid('getSelected');
+    }
 	if(row){
-		ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.enterpriseId);
+		ezuiDialog.dialog('refresh', dialogUrl+"&id="+row.enterpriseId).dialog('open');
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -184,6 +186,7 @@ var commit = function(){
         showMsg("营业执照信息填写不完全！");
         return;
     }
+    console.log("bus---"+businessObj);
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
@@ -273,7 +276,14 @@ var checkFormData = function (formId,obj) {
         //加载经营范围
         var scopArr = $("#"+formId+" input[id='choseScope']");
         if(scopArr){
-            obj["scopArr"] = $(scopArr).val() || "";
+            //obj["scopArr"] = $(scopArr).val() || "";
+            if($(scopArr).val()!="" && $(scopArr).val()!=undefined){
+                var str = $(scopArr).val();
+                obj["scopArr"] = str;
+            }else{
+                obj["scopArr"] = "";
+            }
+
         }
         //操作类型是否是换证
         var opType = $("#"+formId+" input[id='opType']");

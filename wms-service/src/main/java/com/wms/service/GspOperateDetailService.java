@@ -48,7 +48,10 @@ public class GspOperateDetailService extends BaseService {
 		Json json = new Json();
 		GspOperateDetail gspOperateDetail = new GspOperateDetail();
 		gspOperateDetail.setLicenseType(licenseType);
-		BeanUtils.copyProperties(gspOperateDetailForm, gspOperateDetail);
+		gspOperateDetail.setLicenseId(gspOperateDetailForm.getEnterpriseId());
+		gspOperateDetail.setOperateId(gspOperateDetailForm.getOperateId());
+		gspOperateDetail.setIsUse(Constant.IS_USE_YES);
+		//BeanUtils.copyProperties(gspOperateDetailForm, gspOperateDetail);
 		gspOperateDetailMybatisDao.add(gspOperateDetail);
 		json.setSuccess(true);
 		return json;

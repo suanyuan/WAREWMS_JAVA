@@ -113,7 +113,7 @@ public class GspSecondRecordService extends BaseService {
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增
-				if("".equals(gspSecondRecordId)){
+				if(gspSecondRecordId == null || "".equals(gspSecondRecordId)){
 					gspSecondRecordId = RandomUtil.getUUID();
 					gspSecondRecordForm.setEnterpriseId(enterpriceId);
 					gspSecondRecordForm.setRecordId(gspSecondRecordId);

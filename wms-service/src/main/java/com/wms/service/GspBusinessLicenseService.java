@@ -37,6 +37,7 @@ public class GspBusinessLicenseService extends BaseService {
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
 		gspBusinessLicense.setCreateId(getLoginUserId());
+		gspBusinessLicense.setIsUse(Constant.IS_USE_YES);
 		gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
@@ -114,7 +115,7 @@ public class GspBusinessLicenseService extends BaseService {
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增
-				if("".equals(gspBusinessLicenseId)){
+				if(gspBusinessLicenseId == null || "".equals(gspBusinessLicenseId)){
 					gspBusinessLicenseId = RandomUtil.getUUID();
 					gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
 					gspBusinessLicenseForm.setBusinessId(gspBusinessLicenseId);

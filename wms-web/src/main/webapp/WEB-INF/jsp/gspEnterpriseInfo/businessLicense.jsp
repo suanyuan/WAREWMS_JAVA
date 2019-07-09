@@ -1,6 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
     table th{
         text-align: right;
@@ -33,18 +34,18 @@
                     <th>注册资本</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.registeredCapital}" id="registeredCapital" name='registeredCapital' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>成立日期</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.establishmentDate}" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.establishmentDate}"/>" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
                     <th>发证日期</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.issueDate}" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.issueDate}"/>" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                     <th>登记机关</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>营业期限时间</th>
                     <td colspan="3">
-                        <input type='text' data="1" value="${gspBusinessLicense.businessStartDate}" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200'/>
+                        <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessStartDate}"/>" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200'/>
                         &nbsp;&nbsp;至&nbsp;&nbsp;
-                        <input type='text' data="1" value="${gspBusinessLicense.businessEndDate}" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180'/>
+                        <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessEndDate}"/>" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180'/>
                         <input id="isLong" type="checkbox" class="checkbox"><label for="isLong">长期</label>
                     </td>
                 </tr>
@@ -53,7 +54,7 @@
                     <td>
                         <input id="file" name='file' value="${gspBusinessLicense.attachmentUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
-                        <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspBusinessLicense.attachmentUrl}"/>
+                        <input type="hidden" data="1" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspBusinessLicense.attachmentUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                     <th>经营范围</th>

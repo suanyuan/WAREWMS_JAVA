@@ -34,6 +34,8 @@ public class GspOperateLicenseService extends BaseService {
 		Json json = new Json();
 		GspOperateLicense gspOperateLicense = new GspOperateLicense();
 		BeanUtils.copyProperties(gspOperateLicenseForm, gspOperateLicense);
+		gspOperateLicense.setCreateId(getLoginUserId());
+		gspOperateLicense.setIsUse(Constant.IS_USE_YES);
 		gspOperateLicenseMybatisDao.add(gspOperateLicense);
 		json.setSuccess(true);
 		return json;
@@ -113,7 +115,7 @@ public class GspOperateLicenseService extends BaseService {
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增
-				if("".equals(gspOperateLicenseId)){
+				if(gspOperateLicenseId == null || "".equals(gspOperateLicenseId)){
 					gspOperateLicenseId = RandomUtil.getUUID();
 					gspOperateLicenseForm.setEnterpriseId(enterpriceId);
 					gspOperateLicenseForm.setOperateId(gspOperateLicenseId);

@@ -37,7 +37,7 @@
                 <tr>
                     <th>备案照片</th>
                     <td>
-                        <input type="hidden" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
+                        <input type="hidden" data="1" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
                         <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                     </td>

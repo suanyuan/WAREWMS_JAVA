@@ -39,7 +39,7 @@ public class BasCodesService {
             EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
             easyuiCombobox.setId("");
             easyuiCombobox.setValue("");
-            easyuiCombobox.setSelected(true);
+            //easyuiCombobox.setSelected(true);
             baseCodesVOList.add(easyuiCombobox);
             for(BasCodes b : list){
                 easyuiCombobox = new EasyuiCombobox();
