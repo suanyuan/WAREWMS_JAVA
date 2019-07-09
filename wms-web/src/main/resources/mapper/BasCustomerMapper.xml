@@ -556,7 +556,7 @@ where 1=1
 </delete>
 
 	<!-- 恢复记录 -->
-	<delete id="goon" parameterType="Object">
+<delete id="goon" parameterType="Object">
 	update  Bas_Customer set ACTIVE_FLAG='1' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
 

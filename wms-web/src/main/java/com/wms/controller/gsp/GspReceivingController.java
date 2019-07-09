@@ -5,11 +5,20 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.constant.Constant;
+import com.wms.entity.GspEnterpriseInfo;
+import com.wms.entity.GspReceiving;
+import com.wms.entity.GspReceivingAddress;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
+import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
+import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -30,6 +39,13 @@ public class GspReceivingController {
 
 	@Autowired
 	private GspReceivingService gspReceivingService;
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	@Autowired
+	private GspReceivingAddressMybatisDao gspReceivingAddressMybatisDao;
+
+	@Autowired
+	private GspReceivingMybatisDao gspReceivingMybatisDao;
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -45,13 +61,7 @@ public class GspReceivingController {
 		model.put("receivingId", receivingId);
 		return new ModelAndView("gspReceiving/dialogAddress", model);
 	}
-	@Login
-	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(String menuId) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
-		return new ModelAndView("gspReceiving/detail", model);
-	}
+
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
@@ -112,4 +122,24 @@ public class GspReceivingController {
 		return gspReceivingService.getGspReceivingCombobox();
 	}
 
+
+
+	@Login
+	@RequestMapping(params = "toDetail")
+	public ModelAndView toDetail(@RequestParam(defaultValue = "") String id,@RequestParam(defaultValue = "") String receivingId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		if (StringUtils.isNotEmpty(id)){
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(id);
+			model.put("gspEnterpriseInfo",gspEnterpriseInfo);
+		}
+		if (StringUtils.isNotEmpty(receivingId)){
+			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+			GspReceivingAddress gspReceivingAddress =gspReceivingAddressMybatisDao.queryById(receivingId);
+			model.put("gspReceiving",gspReceiving);
+			model.put("gspReceivingAddress",gspReceivingAddress);
+		}
+		model.put("enterpriseId", id);
+		model.put("receivingId", receivingId);
+		return new ModelAndView("gspReceiving/detail", model);
+	}
 }

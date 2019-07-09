@@ -43,7 +43,7 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
+	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(@RequestParam(value = "enterpriseId",required = false)String enterpriseId, EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
 		EasyuiDatagrid<GspReceivingAddressVO> pagedDatagrid = gspReceivingAddressService.getPagedDatagrid(pager, query);
 		return pagedDatagrid;
 	}

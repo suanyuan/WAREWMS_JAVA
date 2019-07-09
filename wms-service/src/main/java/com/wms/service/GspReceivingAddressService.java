@@ -56,6 +56,8 @@ public class GspReceivingAddressService extends BaseService {
 		gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
+
+		//todo 关联收货单位id
 		gspReceivingAddress.setReceivingId(RandomUtil.getUUID());
 		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
 		json.setSuccess(true);
@@ -73,9 +75,9 @@ public class GspReceivingAddressService extends BaseService {
 
 	public Json deleteGspReceivingAddress(String id) {
 		Json json = new Json();
-		GspReceivingAddress gspReceivingAddress = gspReceivingAddressDao.findById(id);
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryById(id);
 		if(gspReceivingAddress != null){
-			gspReceivingAddressDao.delete(gspReceivingAddress);
+			gspReceivingAddressMybatisDao.delete(gspReceivingAddress);
 		}
 		json.setSuccess(true);
 		return json;

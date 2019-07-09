@@ -74,8 +74,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.addBasCustomer(basCustomerForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -98,8 +98,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.editBasCustomer(basCustomerForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -110,8 +110,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.deleteBasCustomer(enterpriseId,customerType);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 	@Login
@@ -121,8 +121,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.goonBasCustomer(enterpriseId,customerType);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 	@Login

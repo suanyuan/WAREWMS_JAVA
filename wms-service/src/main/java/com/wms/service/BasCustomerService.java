@@ -4,21 +4,18 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasCustomer;
-import com.wms.entity.GspCustomer;
-import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.GspReceivingAddress;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasCustomerQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,14 @@ public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
+
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
+	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
+
+
 	@Autowired
 	private CommonService commonService;
 	@Autowired
@@ -71,37 +76,50 @@ public class BasCustomerService extends BaseService {
 	}
 
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
-		StringBuilder resultMsg = new StringBuilder();
-		this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
+		Json json = null;
+		try {
+			StringBuilder resultMsg = new StringBuilder();
+			this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
 
-			Json json = new Json();
-
-
-		if (resultMsg.length() == 0) {
-			BasCustomer basCustomer = new BasCustomer();
+			json = new Json();
 
 
-
-
-
-			BeanUtils.copyProperties(basCustomerForm, basCustomer);
-
-			//获取操作工号
-			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-
-			//
-			basCustomerMybatisDao.add(basCustomer);
+			if (resultMsg.length() == 0) {
+				BasCustomer basCustomer = new BasCustomer();
 
 
 
-		} else {
-			json.setSuccess(false);
-			json.setMsg(resultMsg.toString());
-			return json;
+
+
+				BeanUtils.copyProperties(basCustomerForm, basCustomer);
+
+				//获取操作工号
+				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setCustomerid(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				basCustomer.setActiveFlag("1");
+				//
+				basCustomerMybatisDao.add(basCustomer);
+				//插入一条首营申请日志记录
+				FirstReviewLog firstReviewLog = new FirstReviewLog();
+				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
+
+				firstReviewLog.setApplyState("40");
+				firstReviewLog.setReviewId(RandomUtil.getUUID());
+				firstReviewLogMybatisDao.add(firstReviewLog);
+
+
+			} else {
+				json.setSuccess(false);
+				json.setMsg(resultMsg.toString());
+				return json;
+			}
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		} catch (BeansException e) {
+			throw new Exception("系统忙！");
 		}
-		json.setSuccess(true);
-		json.setMsg("资料处理成功！");
 		return json;
 	}
 
