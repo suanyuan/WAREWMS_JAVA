@@ -29,8 +29,8 @@
                     <td>
                        <!--  <input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:250'/>-->
                         <select class="easyui-combobox" id="licenseType" name='licenseType' style="width:250px;">
-                            <option value="JY">经营</option>
                             <option value="SC">生产</option>
+                            <option value="JY">经营</option>
                         </select>
                     </td>
                     <th>库房地址</th>
@@ -300,10 +300,10 @@
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#businessScope").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
-            $("#businessScope").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
         $(ezuidialogChoseScopeOperate).dialog("close");
     }

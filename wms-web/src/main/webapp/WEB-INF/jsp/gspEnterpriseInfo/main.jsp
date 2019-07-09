@@ -156,30 +156,6 @@ var commit = function(){
     var url = '';
     var isVal = true;
 
-    //企业基础信息
-    /*$("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
-        infoObj[""+$(this).attr("name")+""] = $(this).val();
-    })
-
-	//营业执照信息
-    $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
-        businessObj[""+$(this).attr("name")+""] = $(this).val();
-    })
-
-	//经营生产许可证
-    $("#ezuiFormOperate input[class='textbox-value'][type!='file']").each(function (index) {
-        operateobj[""+$(this).attr("name")+""] = $(this).val();
-    })
-
-	//备案凭证
-    $("#ezuiFormRecord input[class='textbox-value'][type!='file']").each(function (index) {
-        secondREcord[""+$(this).attr("name")+""] = $(this).val();
-    })
-
-    gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
-    gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
-    gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
-    gspEnterpriceFrom["gspSecondRecordForm"] = secondREcord;*/
 
     if (processType == 'edit') {
         url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
@@ -200,7 +176,7 @@ var commit = function(){
 
 	//判断营业执照信息
 	isVal = checkFormData("ezuiFormBusiness",businessObj);
-	if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && checkObjIsEmpty(businessObj)){
+	if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && !checkObjIsEmpty(businessObj)){
         showMsg("必须填写营业执照信息！");
         return;
 	}
@@ -211,11 +187,11 @@ var commit = function(){
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
-	if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GNSC && checkObjIsEmpty(operateobj)){
+	if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC && !checkObjIsEmpty(operateobj)){
         showMsg("生产类型企业需要填写经营生产许可证！");
         return;
 	}
-    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && isVal == false){
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC && isVal == false){
         showMsg("经营生产许可证填写不完全！");
         return;
     }
@@ -223,11 +199,16 @@ var commit = function(){
 	//第二备案凭证
     checkFormData("ezuiFormRecord",secondRecord);
 
+    gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
+    gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
+    gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
+    gspEnterpriceFrom["gspSecondRecordForm"] = secondRecord;
+	console.log(gspEnterpriceFrom);
 	//提交
-    submitFormData(enterpriceId,gspEnterpriceFrom);
+    submitFormData(enterpriceId,gspEnterpriceFrom,url);
 };
 
-var submitFormData = function (enterpriseId,gspEnterpriceFrom) {
+function submitFormData(enterpriceId,gspEnterpriceFrom,url) {
     $.ajax({
         url : url,
         data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
@@ -242,7 +223,6 @@ var submitFormData = function (enterpriseId,gspEnterpriceFrom) {
                     msg = '<font color="red">' + result.msg + '</font>';
                 }
             }catch (e) {
-                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
                 msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
             } finally {
                 $.messager.show({
@@ -279,19 +259,26 @@ var checkFormData = function (formId,obj) {
                     return;
                 }
                 obj[""+$(this).attr("id")+""] = $(this).combobox("getValue");
+            }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                if(!$(this).combobox("isValid")){
+                    checkResult = false;
+                    $(this).focus();
+                    return;
+                }
+                obj[""+$(this).attr("id")+""] = $(this).numberbox("getValue");
             }
         }
     })
-	if($("#"+formId+" input[type!=hidden]").size>0 && checkResult){
+	if(checkObjIsEmpty(obj) == true && checkResult == true){
         //加载经营范围
         var scopArr = $("#"+formId+" input[id='choseScope']");
         if(scopArr){
-            obj["scopArr"] = $(scopArr).val();
+            obj["scopArr"] = $(scopArr).val() || "";
         }
         //操作类型是否是换证
         var opType = $("#"+formId+" input[id='opType']");
         if(opType){
-            obj["opType"] = $(opType).val();
+            obj["opType"] = $(opType).val() || "";
         }
 	}
 	return checkResult;

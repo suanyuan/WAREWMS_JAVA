@@ -93,14 +93,14 @@ public class GspBusinessLicenseService extends BaseService {
 	/**
 	 * 营业执照新增
 	 * @param enterpriceId 企业id
-	 * @param businessFormStr
+	 * @param gspBusinessLicenseForm
 	 * @param operateDetailStr
 	 * @param gspBusinessLicenseId 营业执照id
 	 * @return
 	 */
-	public Json addGspBusinessLicense(String enterpriceId,String businessFormStr,String operateDetailStr,String gspBusinessLicenseId,String opType){
+	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType){
 		try{
-			GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
+			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
 				return Json.error("请先保存企业基础信息");

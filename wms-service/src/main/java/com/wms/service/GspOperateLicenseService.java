@@ -90,15 +90,15 @@ public class GspOperateLicenseService extends BaseService {
 	/**
 	 * 保存许可证信息方法
 	 * @param enterpriceId 企业信息主键
-	 * @param operateLicenseFormStr 许可证提交json
+	 * @param gspOperateLicenseForm 许可证提交json
 	 * @param operateDetailStr 经营范围json
 	 * @param gspOperateLicenseId 许可证主键
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspOperateLicense(String enterpriceId,String operateLicenseFormStr,String operateDetailStr,String gspOperateLicenseId,String opType){
+	public Json addGspOperateLicense(String enterpriceId,GspOperateLicenseForm gspOperateLicenseForm,String operateDetailStr,String gspOperateLicenseId,String opType){
 		try{
-			GspOperateLicenseForm gspOperateLicenseForm = JSON.parseObject(operateLicenseFormStr,GspOperateLicenseForm.class);
+			//GspOperateLicenseForm gspOperateLicenseForm = JSON.parseObject(operateLicenseFormStr,GspOperateLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
 				return Json.error("请先保存企业基础信息");

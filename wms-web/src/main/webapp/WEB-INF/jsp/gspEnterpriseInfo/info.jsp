@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <th>企业类型</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' class="easyui-combobox" size='50' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>联系人</th>

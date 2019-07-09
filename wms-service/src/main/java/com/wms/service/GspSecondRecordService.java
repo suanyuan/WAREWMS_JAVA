@@ -96,9 +96,9 @@ public class GspSecondRecordService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspSecondRecord(String enterpriceId,String secondRecordFormStr,String operateDetailStr,String gspSecondRecordId,String opType){
+	public Json addGspSecondRecord(String enterpriceId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType){
 		try{
-			GspSecondRecordForm gspSecondRecordForm = JSON.parseObject(secondRecordFormStr,GspSecondRecordForm.class);
+			//GspSecondRecordForm gspSecondRecordForm = JSON.parseObject(secondRecordFormStr,GspSecondRecordForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
 				return Json.error("请先保存企业基础信息");

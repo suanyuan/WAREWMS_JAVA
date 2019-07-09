@@ -66,21 +66,21 @@ public class GspEnterpriceService extends BaseService {
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
             String enterpriseId = RandomUtil.getUUID();
             gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
-            if(BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
+            if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
                 return Json.error("企业基础信息不能为空");
             }
             gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
             if(gspBusinessLicenseForm != null && !BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
-                gspBusinessLicenseService.addGspBusinessLicense(gspBusinessLicenseForm);
+                gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspOperateLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
             if(gspOperateLicenseForm != null && !BeanUtils.isEmptyFrom(gspOperateLicenseForm)){
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
-                gspOperateLicenseService.addGspOperateLicense(gspOperateLicenseForm);
+                gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
             }
             if(gspSecondRecordForm != null && !BeanUtils.isEmptyFrom(gspSecondRecordForm)){
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
-                gspSecondRecordService.addGspSecondRecord(gspSecondRecordForm);
+                gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
             Json.success("保存成功");
         }catch (Exception e){
