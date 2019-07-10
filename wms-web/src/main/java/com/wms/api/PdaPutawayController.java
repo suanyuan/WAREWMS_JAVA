@@ -57,7 +57,7 @@ public class PdaPutawayController {
      */
     @RequestMapping(params = "docPaHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocAsnHeader(String pano) {
+    public Map<String, Object> queryDocPaHeader(String pano) {
 
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocPaHeaderVO pdaDocAsnHeaderVO = docPaHeaderService.queryByPano(pano);

@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasSkuHistoryMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasSkuHistory" >
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="hazard_flag" property="hazardFlag"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="packid" property="packid"/>
+	<result column="tare" property="tare"/>
+	<result column="active_flag" property="activeFlag"/>
+	<result column="lotid" property="lotid"/>
+	<result column="cartongroup" property="cartongroup"/>
+	<result column="putawayzone" property="putawayzone"/>
+	<result column="cube" property="cube"/>
+	<result column="putawaylocation" property="putawaylocation"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="netweight" property="netweight"/>
+	<result column="cycleclass" property="cycleclass"/>
+	<result column="lastcyclecount" property="lastcyclecount"/>
+	<result column="reorderqty" property="reorderqty"/>
+	<result column="price" property="price"/>
+	<result column="shelflifeflag" property="shelflifeflag"/>
+	<result column="inboundlifedays" property="inboundlifedays"/>
+	<result column="softallocationrule" property="softallocationrule"/>
+	<result column="allocationrule" property="allocationrule"/>
+	<result column="shelflifetype" property="shelflifetype"/>
+	<result column="outboundlifedays" property="outboundlifedays"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="alternate_sku4" property="alternateSku4"/>
+	<result column="alternate_sku5" property="alternateSku5"/>
+	<result column="notes" property="notes"/>
+	<result column="putawayrule" property="putawayrule"/>
+	<result column="alternate_sku1" property="alternateSku1"/>
+	<result column="alternate_sku2" property="alternateSku2"/>
+	<result column="alternate_sku3" property="alternateSku3"/>
+	<result column="reservedfield05" property="reservedfield05"/>
+	<result column="sku_group1" property="skuGroup1"/>
+	<result column="sku_group2" property="skuGroup2"/>
+	<result column="sku_group3" property="skuGroup3"/>
+	<result column="sku_group4" property="skuGroup4"/>
+	<result column="sku_group5" property="skuGroup5"/>
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="reservedfield02" property="reservedfield02"/>
+	<result column="reservedfield03" property="reservedfield03"/>
+	<result column="reservedfield04" property="reservedfield04"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="defaultshipmentuom" property="defaultshipmentuom"/>
+	<result column="defaulthold" property="defaulthold"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="copypackidtolotatt12" property="copypackidtolotatt12"/>
+	<result column="qtymin" property="qtymin"/>
+	<result column="qtymax" property="qtymax"/>
+	<result column="shelflife" property="shelflife"/>
+	<result column="hscode" property="hscode"/>
+	<result column="reservedfield06" property="reservedfield06"/>
+	<result column="reservedfield07" property="reservedfield07"/>
+	<result column="reservedfield08" property="reservedfield08"/>
+	<result column="reservedfield09" property="reservedfield09"/>
+	<result column="reservedfield10" property="reservedfield10"/>
+	<result column="reservedfield11" property="reservedfield11"/>
+	<result column="reservedfield12" property="reservedfield12"/>
+	<result column="overrcvpercentage" property="overrcvpercentage"/>
+	<result column="replenishrule" property="replenishrule"/>
+	<result column="specialmaintenance" property="specialmaintenance"/>
+	<result column="lastmaintenancedate" property="lastmaintenancedate"/>
+	<result column="firstop" property="firstop"/>
+	<result column="medicaltype" property="medicaltype"/>
+	<result column="approvalno" property="approvalno"/>
+	<result column="sn_asn_qty" property="snAsnQty"/>
+	<result column="sn_so_qty" property="snSoQty"/>
+	<result column="invchgwithshipment" property="invchgwithshipment"/>
+	<result column="freightclass" property="freightclass"/>
+	<result column="tariffid" property="tariffid"/>
+	<result column="kitflag" property="kitflag"/>
+	<result column="reservecode" property="reservecode"/>
+	<result column="reportuom" property="reportuom"/>
+	<result column="skulength" property="skulength"/>
+	<result column="skuwidth" property="skuwidth"/>
+	<result column="skuhigh" property="skuhigh"/>
+	<result column="qctime" property="qctime"/>
+	<result column="qcrule" property="qcrule"/>
+	<result column="firstinbounddate" property="firstinbounddate"/>
+	<result column="reservedfield13" property="reservedfield13"/>
+	<result column="reservedfield14" property="reservedfield14"/>
+	<result column="reservedfield15" property="reservedfield15"/>
+	<result column="sku_group6" property="skuGroup6"/>
+	<result column="sku_group7" property="skuGroup7"/>
+	<result column="sku_group8" property="skuGroup8"/>
+	<result column="sku_group9" property="skuGroup9"/>
+	<result column="medicinespecicalcontrol" property="medicinespecicalcontrol"/>
+	<result column="serialnocatch" property="serialnocatch"/>
+	<result column="scanwhencasepicking" property="scanwhencasepicking"/>
+	<result column="scanwhenpiecepicking" property="scanwhenpiecepicking"/>
+	<result column="scanwhencheck" property="scanwhencheck"/>
+	<result column="scanwhenreceive" property="scanwhenreceive"/>
+	<result column="scanwhenputaway" property="scanwhenputaway"/>
+	<result column="shelflifealertdays" property="shelflifealertdays"/>
+	<result column="reservedfield17" property="reservedfield17"/>
+	<result column="reservedfield18" property="reservedfield18"/>
+	<result column="reservedfield16" property="reservedfield16"/>
+	<result column="chk_scn_uom" property="chkScnUom"/>
+	<result column="alternative_putawayzone1" property="alternativePutawayzone1"/>
+	<result column="alternative_putawayzone2" property="alternativePutawayzone2"/>
+	<result column="scanwhenpack" property="scanwhenpack"/>
+	<result column="scanwhenmove" property="scanwhenmove"/>
+	<result column="imageaddress" property="imageaddress"/>
+	<result column="onestepallocation" property="onestepallocation"/>
+	<result column="orderbysql" property="orderbysql"/>
+	<result column="secondserialnocatch" property="secondserialnocatch"/>
+	<result column="allowreceiving" property="allowreceiving"/>
+	<result column="allowshipment" property="allowshipment"/>
+	<result column="inboundserialnoqtycontrol" property="inboundserialnoqtycontrol"/>
+	<result column="outboundserialnoqtycontrol" property="outboundserialnoqtycontrol"/>
+	<result column="defaultcartontype" property="defaultcartontype"/>
+	<result column="breakcs" property="breakcs"/>
+	<result column="breakea" property="breakea"/>
+	<result column="breakip" property="breakip"/>
+	<result column="printmedicineqcreport" property="printmedicineqcreport"/>
+	<result column="scanwhenqc" property="scanwhenqc"/>
+	<result column="overreceiving" property="overreceiving"/>
+	<result column="defaultsupplierid" property="defaultsupplierid"/>
+</resultMap>
+       
+<!-- bas_sku_history table all fields -->
+<sql id="Base_Column_List" >
+	 customerid,sku,hazard_flag,descr_e,descr_c,packid,tare,active_flag,lotid,cartongroup,putawayzone,cube,putawaylocation,grossweight,netweight,cycleclass,lastcyclecount,reorderqty,price,shelflifeflag,inboundlifedays,softallocationrule,allocationrule,shelflifetype,outboundlifedays,addtime,addwho,edittime,editwho,alternate_sku4,alternate_sku5,notes,putawayrule,alternate_sku1,alternate_sku2,alternate_sku3,reservedfield05,sku_group1,sku_group2,sku_group3,sku_group4,sku_group5,reservedfield01,reservedfield02,reservedfield03,reservedfield04,defaultreceivinguom,defaultshipmentuom,defaulthold,rotationid,copypackidtolotatt12,qtymin,qtymax,shelflife,hscode,reservedfield06,reservedfield07,reservedfield08,reservedfield09,reservedfield10,reservedfield11,reservedfield12,overrcvpercentage,replenishrule,specialmaintenance,lastmaintenancedate,firstop,medicaltype,approvalno,sn_asn_qty,sn_so_qty,invchgwithshipment,freightclass,tariffid,kitflag,reservecode,reportuom,skulength,skuwidth,skuhigh,qctime,qcrule,firstinbounddate,reservedfield13,reservedfield14,reservedfield15,sku_group6,sku_group7,sku_group8,sku_group9,medicinespecicalcontrol,serialnocatch,scanwhencasepicking,scanwhenpiecepicking,scanwhencheck,scanwhenreceive,scanwhenputaway,shelflifealertdays,reservedfield17,reservedfield18,reservedfield16,chk_scn_uom,alternative_putawayzone1,alternative_putawayzone2,scanwhenpack,scanwhenmove,imageaddress,onestepallocation,orderbysql,secondserialnocatch,allowreceiving,allowshipment,inboundserialnoqtycontrol,outboundserialnoqtycontrol,defaultcartontype,breakcs,breakea,breakip,printmedicineqcreport,scanwhenqc,overreceiving,defaultsupplierid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.hazardFlag != null and condition.hazardFlag != ''" >
+	    and hazard_flag =  #{condition.hazardFlag}
+	</if>
+	<if test="condition.descrE != null and condition.descrE != ''" >
+	    and descr_e =  #{condition.descrE}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.tare != null and condition.tare != ''" >
+	    and tare =  #{condition.tare}
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag =  #{condition.activeFlag}
+	</if>
+	<if test="condition.lotid != null and condition.lotid != ''" >
+	    and lotid =  #{condition.lotid}
+	</if>
+	<if test="condition.cartongroup != null and condition.cartongroup != ''" >
+	    and cartongroup =  #{condition.cartongroup}
+	</if>
+	<if test="condition.putawayzone != null and condition.putawayzone != ''" >
+	    and putawayzone =  #{condition.putawayzone}
+	</if>
+	<if test="condition.cube != null and condition.cube != ''" >
+	    and cube =  #{condition.cube}
+	</if>
+	<if test="condition.putawaylocation != null and condition.putawaylocation != ''" >
+	    and putawaylocation =  #{condition.putawaylocation}
+	</if>
+	<if test="condition.grossweight != null and condition.grossweight != ''" >
+	    and grossweight =  #{condition.grossweight}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.cycleclass != null and condition.cycleclass != ''" >
+	    and cycleclass =  #{condition.cycleclass}
+	</if>
+	<if test="condition.lastcyclecount != null and condition.lastcyclecount != ''" >
+	    and lastcyclecount =  #{condition.lastcyclecount}
+	</if>
+	<if test="condition.reorderqty != null and condition.reorderqty != ''" >
+	    and reorderqty =  #{condition.reorderqty}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.shelflifeflag != null and condition.shelflifeflag != ''" >
+	    and shelflifeflag =  #{condition.shelflifeflag}
+	</if>
+	<if test="condition.inboundlifedays != null and condition.inboundlifedays != ''" >
+	    and inboundlifedays =  #{condition.inboundlifedays}
+	</if>
+	<if test="condition.softallocationrule != null and condition.softallocationrule != ''" >
+	    and softallocationrule =  #{condition.softallocationrule}
+	</if>
+	<if test="condition.allocationrule != null and condition.allocationrule != ''" >
+	    and allocationrule =  #{condition.allocationrule}
+	</if>
+	<if test="condition.shelflifetype != null and condition.shelflifetype != ''" >
+	    and shelflifetype =  #{condition.shelflifetype}
+	</if>
+	<if test="condition.outboundlifedays != null and condition.outboundlifedays != ''" >
+	    and outboundlifedays =  #{condition.outboundlifedays}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.alternateSku4 != null and condition.alternateSku4 != ''" >
+	    and alternate_sku4 =  #{condition.alternateSku4}
+	</if>
+	<if test="condition.alternateSku5 != null and condition.alternateSku5 != ''" >
+	    and alternate_sku5 =  #{condition.alternateSku5}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.putawayrule != null and condition.putawayrule != ''" >
+	    and putawayrule =  #{condition.putawayrule}
+	</if>
+	<if test="condition.alternateSku1 != null and condition.alternateSku1 != ''" >
+	    and alternate_sku1 =  #{condition.alternateSku1}
+	</if>
+	<if test="condition.alternateSku2 != null and condition.alternateSku2 != ''" >
+	    and alternate_sku2 =  #{condition.alternateSku2}
+	</if>
+	<if test="condition.alternateSku3 != null and condition.alternateSku3 != ''" >
+	    and alternate_sku3 =  #{condition.alternateSku3}
+	</if>
+	<if test="condition.reservedfield05 != null and condition.reservedfield05 != ''" >
+	    and reservedfield05 =  #{condition.reservedfield05}
+	</if>
+	<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+	    and sku_group1 =  #{condition.skuGroup1}
+	</if>
+	<if test="condition.skuGroup2 != null and condition.skuGroup2 != ''" >
+	    and sku_group2 =  #{condition.skuGroup2}
+	</if>
+	<if test="condition.skuGroup3 != null and condition.skuGroup3 != ''" >
+	    and sku_group3 =  #{condition.skuGroup3}
+	</if>
+	<if test="condition.skuGroup4 != null and condition.skuGroup4 != ''" >
+	    and sku_group4 =  #{condition.skuGroup4}
+	</if>
+	<if test="condition.skuGroup5 != null and condition.skuGroup5 != ''" >
+	    and sku_group5 =  #{condition.skuGroup5}
+	</if>
+	<if test="condition.reservedfield01 != null and condition.reservedfield01 != ''" >
+	    and reservedfield01 =  #{condition.reservedfield01}
+	</if>
+	<if test="condition.reservedfield02 != null and condition.reservedfield02 != ''" >
+	    and reservedfield02 =  #{condition.reservedfield02}
+	</if>
+	<if test="condition.reservedfield03 != null and condition.reservedfield03 != ''" >
+	    and reservedfield03 =  #{condition.reservedfield03}
+	</if>
+	<if test="condition.reservedfield04 != null and condition.reservedfield04 != ''" >
+	    and reservedfield04 =  #{condition.reservedfield04}
+	</if>
+	<if test="condition.defaultreceivinguom != null and condition.defaultreceivinguom != ''" >
+	    and defaultreceivinguom =  #{condition.defaultreceivinguom}
+	</if>
+	<if test="condition.defaultshipmentuom != null and condition.defaultshipmentuom != ''" >
+	    and defaultshipmentuom =  #{condition.defaultshipmentuom}
+	</if>
+	<if test="condition.defaulthold != null and condition.defaulthold != ''" >
+	    and defaulthold =  #{condition.defaulthold}
+	</if>
+	<if test="condition.rotationid != null and condition.rotationid != ''" >
+	    and rotationid =  #{condition.rotationid}
+	</if>
+	<if test="condition.copypackidtolotatt12 != null and condition.copypackidtolotatt12 != ''" >
+	    and copypackidtolotatt12 =  #{condition.copypackidtolotatt12}
+	</if>
+	<if test="condition.qtymin != null and condition.qtymin != ''" >
+	    and qtymin =  #{condition.qtymin}
+	</if>
+	<if test="condition.qtymax != null and condition.qtymax != ''" >
+	    and qtymax =  #{condition.qtymax}
+	</if>
+	<if test="condition.shelflife != null and condition.shelflife != ''" >
+	    and shelflife =  #{condition.shelflife}
+	</if>
+	<if test="condition.hscode != null and condition.hscode != ''" >
+	    and hscode =  #{condition.hscode}
+	</if>
+	<if test="condition.reservedfield06 != null and condition.reservedfield06 != ''" >
+	    and reservedfield06 =  #{condition.reservedfield06}
+	</if>
+	<if test="condition.reservedfield07 != null and condition.reservedfield07 != ''" >
+	    and reservedfield07 =  #{condition.reservedfield07}
+	</if>
+	<if test="condition.reservedfield08 != null and condition.reservedfield08 != ''" >
+	    and reservedfield08 =  #{condition.reservedfield08}
+	</if>
+	<if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
+	    and reservedfield09 =  #{condition.reservedfield09}
+	</if>
+	<if test="condition.reservedfield10 != null and condition.reservedfield10 != ''" >
+	    and reservedfield10 =  #{condition.reservedfield10}
+	</if>
+	<if test="condition.reservedfield11 != null and condition.reservedfield11 != ''" >
+	    and reservedfield11 =  #{condition.reservedfield11}
+	</if>
+	<if test="condition.reservedfield12 != null and condition.reservedfield12 != ''" >
+	    and reservedfield12 =  #{condition.reservedfield12}
+	</if>
+	<if test="condition.overrcvpercentage != null and condition.overrcvpercentage != ''" >
+	    and overrcvpercentage =  #{condition.overrcvpercentage}
+	</if>
+	<if test="condition.replenishrule != null and condition.replenishrule != ''" >
+	    and replenishrule =  #{condition.replenishrule}
+	</if>
+	<if test="condition.specialmaintenance != null and condition.specialmaintenance != ''" >
+	    and specialmaintenance =  #{condition.specialmaintenance}
+	</if>
+	<if test="condition.lastmaintenancedate != null and condition.lastmaintenancedate != ''" >
+	    and lastmaintenancedate =  #{condition.lastmaintenancedate}
+	</if>
+	<if test="condition.firstop != null and condition.firstop != ''" >
+	    and firstop =  #{condition.firstop}
+	</if>
+	<if test="condition.medicaltype != null and condition.medicaltype != ''" >
+	    and medicaltype =  #{condition.medicaltype}
+	</if>
+	<if test="condition.approvalno != null and condition.approvalno != ''" >
+	    and approvalno =  #{condition.approvalno}
+	</if>
+	<if test="condition.snAsnQty != null and condition.snAsnQty != ''" >
+	    and sn_asn_qty =  #{condition.snAsnQty}
+	</if>
+	<if test="condition.snSoQty != null and condition.snSoQty != ''" >
+	    and sn_so_qty =  #{condition.snSoQty}
+	</if>
+	<if test="condition.invchgwithshipment != null and condition.invchgwithshipment != ''" >
+	    and invchgwithshipment =  #{condition.invchgwithshipment}
+	</if>
+	<if test="condition.freightclass != null and condition.freightclass != ''" >
+	    and freightclass =  #{condition.freightclass}
+	</if>
+	<if test="condition.tariffid != null and condition.tariffid != ''" >
+	    and tariffid =  #{condition.tariffid}
+	</if>
+	<if test="condition.kitflag != null and condition.kitflag != ''" >
+	    and kitflag =  #{condition.kitflag}
+	</if>
+	<if test="condition.reservecode != null and condition.reservecode != ''" >
+	    and reservecode =  #{condition.reservecode}
+	</if>
+	<if test="condition.reportuom != null and condition.reportuom != ''" >
+	    and reportuom =  #{condition.reportuom}
+	</if>
+	<if test="condition.skulength != null and condition.skulength != ''" >
+	    and skulength =  #{condition.skulength}
+	</if>
+	<if test="condition.skuwidth != null and condition.skuwidth != ''" >
+	    and skuwidth =  #{condition.skuwidth}
+	</if>
+	<if test="condition.skuhigh != null and condition.skuhigh != ''" >
+	    and skuhigh =  #{condition.skuhigh}
+	</if>
+	<if test="condition.qctime != null and condition.qctime != ''" >
+	    and qctime =  #{condition.qctime}
+	</if>
+	<if test="condition.qcrule != null and condition.qcrule != ''" >
+	    and qcrule =  #{condition.qcrule}
+	</if>
+	<if test="condition.firstinbounddate != null and condition.firstinbounddate != ''" >
+	    and firstinbounddate =  #{condition.firstinbounddate}
+	</if>
+	<if test="condition.reservedfield13 != null and condition.reservedfield13 != ''" >
+	    and reservedfield13 =  #{condition.reservedfield13}
+	</if>
+	<if test="condition.reservedfield14 != null and condition.reservedfield14 != ''" >
+	    and reservedfield14 =  #{condition.reservedfield14}
+	</if>
+	<if test="condition.reservedfield15 != null and condition.reservedfield15 != ''" >
+	    and reservedfield15 =  #{condition.reservedfield15}
+	</if>
+	<if test="condition.skuGroup6 != null and condition.skuGroup6 != ''" >
+	    and sku_group6 =  #{condition.skuGroup6}
+	</if>
+	<if test="condition.skuGroup7 != null and condition.skuGroup7 != ''" >
+	    and sku_group7 =  #{condition.skuGroup7}
+	</if>
+	<if test="condition.skuGroup8 != null and condition.skuGroup8 != ''" >
+	    and sku_group8 =  #{condition.skuGroup8}
+	</if>
+	<if test="condition.skuGroup9 != null and condition.skuGroup9 != ''" >
+	    and sku_group9 =  #{condition.skuGroup9}
+	</if>
+	<if test="condition.medicinespecicalcontrol != null and condition.medicinespecicalcontrol != ''" >
+	    and medicinespecicalcontrol =  #{condition.medicinespecicalcontrol}
+	</if>
+	<if test="condition.serialnocatch != null and condition.serialnocatch != ''" >
+	    and serialnocatch =  #{condition.serialnocatch}
+	</if>
+	<if test="condition.scanwhencasepicking != null and condition.scanwhencasepicking != ''" >
+	    and scanwhencasepicking =  #{condition.scanwhencasepicking}
+	</if>
+	<if test="condition.scanwhenpiecepicking != null and condition.scanwhenpiecepicking != ''" >
+	    and scanwhenpiecepicking =  #{condition.scanwhenpiecepicking}
+	</if>
+	<if test="condition.scanwhencheck != null and condition.scanwhencheck != ''" >
+	    and scanwhencheck =  #{condition.scanwhencheck}
+	</if>
+	<if test="condition.scanwhenreceive != null and condition.scanwhenreceive != ''" >
+	    and scanwhenreceive =  #{condition.scanwhenreceive}
+	</if>
+	<if test="condition.scanwhenputaway != null and condition.scanwhenputaway != ''" >
+	    and scanwhenputaway =  #{condition.scanwhenputaway}
+	</if>
+	<if test="condition.shelflifealertdays != null and condition.shelflifealertdays != ''" >
+	    and shelflifealertdays =  #{condition.shelflifealertdays}
+	</if>
+	<if test="condition.reservedfield17 != null and condition.reservedfield17 != ''" >
+	    and reservedfield17 =  #{condition.reservedfield17}
+	</if>
+	<if test="condition.reservedfield18 != null and condition.reservedfield18 != ''" >
+	    and reservedfield18 =  #{condition.reservedfield18}
+	</if>
+	<if test="condition.reservedfield16 != null and condition.reservedfield16 != ''" >
+	    and reservedfield16 =  #{condition.reservedfield16}
+	</if>
+	<if test="condition.chkScnUom != null and condition.chkScnUom != ''" >
+	    and chk_scn_uom =  #{condition.chkScnUom}
+	</if>
+	<if test="condition.alternativePutawayzone1 != null and condition.alternativePutawayzone1 != ''" >
+	    and alternative_putawayzone1 =  #{condition.alternativePutawayzone1}
+	</if>
+	<if test="condition.alternativePutawayzone2 != null and condition.alternativePutawayzone2 != ''" >
+	    and alternative_putawayzone2 =  #{condition.alternativePutawayzone2}
+	</if>
+	<if test="condition.scanwhenpack != null and condition.scanwhenpack != ''" >
+	    and scanwhenpack =  #{condition.scanwhenpack}
+	</if>
+	<if test="condition.scanwhenmove != null and condition.scanwhenmove != ''" >
+	    and scanwhenmove =  #{condition.scanwhenmove}
+	</if>
+	<if test="condition.imageaddress != null and condition.imageaddress != ''" >
+	    and imageaddress =  #{condition.imageaddress}
+	</if>
+	<if test="condition.onestepallocation != null and condition.onestepallocation != ''" >
+	    and onestepallocation =  #{condition.onestepallocation}
+	</if>
+	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
+	    and orderbysql =  #{condition.orderbysql}
+	</if>
+	<if test="condition.secondserialnocatch != null and condition.secondserialnocatch != ''" >
+	    and secondserialnocatch =  #{condition.secondserialnocatch}
+	</if>
+	<if test="condition.allowreceiving != null and condition.allowreceiving != ''" >
+	    and allowreceiving =  #{condition.allowreceiving}
+	</if>
+	<if test="condition.allowshipment != null and condition.allowshipment != ''" >
+	    and allowshipment =  #{condition.allowshipment}
+	</if>
+	<if test="condition.inboundserialnoqtycontrol != null and condition.inboundserialnoqtycontrol != ''" >
+	    and inboundserialnoqtycontrol =  #{condition.inboundserialnoqtycontrol}
+	</if>
+	<if test="condition.outboundserialnoqtycontrol != null and condition.outboundserialnoqtycontrol != ''" >
+	    and outboundserialnoqtycontrol =  #{condition.outboundserialnoqtycontrol}
+	</if>
+	<if test="condition.defaultcartontype != null and condition.defaultcartontype != ''" >
+	    and defaultcartontype =  #{condition.defaultcartontype}
+	</if>
+	<if test="condition.breakcs != null and condition.breakcs != ''" >
+	    and breakcs =  #{condition.breakcs}
+	</if>
+	<if test="condition.breakea != null and condition.breakea != ''" >
+	    and breakea =  #{condition.breakea}
+	</if>
+	<if test="condition.breakip != null and condition.breakip != ''" >
+	    and breakip =  #{condition.breakip}
+	</if>
+	<if test="condition.printmedicineqcreport != null and condition.printmedicineqcreport != ''" >
+	    and printmedicineqcreport =  #{condition.printmedicineqcreport}
+	</if>
+	<if test="condition.scanwhenqc != null and condition.scanwhenqc != ''" >
+	    and scanwhenqc =  #{condition.scanwhenqc}
+	</if>
+	<if test="condition.overreceiving != null and condition.overreceiving != ''" >
+	    and overreceiving =  #{condition.overreceiving}
+	</if>
+	<if test="condition.defaultsupplierid != null and condition.defaultsupplierid != ''" >
+	    and defaultsupplierid =  #{condition.defaultsupplierid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_sku_history(customerid,sku,hazard_flag,descr_e,descr_c,packid,tare,active_flag,lotid,cartongroup,putawayzone,cube,putawaylocation,grossweight,netweight,cycleclass,lastcyclecount,reorderqty,price,shelflifeflag,inboundlifedays,softallocationrule,allocationrule,shelflifetype,outboundlifedays,addtime,addwho,edittime,editwho,alternate_sku4,alternate_sku5,notes,putawayrule,alternate_sku1,alternate_sku2,alternate_sku3,reservedfield05,sku_group1,sku_group2,sku_group3,sku_group4,sku_group5,reservedfield01,reservedfield02,reservedfield03,reservedfield04,defaultreceivinguom,defaultshipmentuom,defaulthold,rotationid,copypackidtolotatt12,qtymin,qtymax,shelflife,hscode,reservedfield06,reservedfield07,reservedfield08,reservedfield09,reservedfield10,reservedfield11,reservedfield12,overrcvpercentage,replenishrule,specialmaintenance,lastmaintenancedate,firstop,medicaltype,approvalno,sn_asn_qty,sn_so_qty,invchgwithshipment,freightclass,tariffid,kitflag,reservecode,reportuom,skulength,skuwidth,skuhigh,qctime,qcrule,firstinbounddate,reservedfield13,reservedfield14,reservedfield15,sku_group6,sku_group7,sku_group8,sku_group9,medicinespecicalcontrol,serialnocatch,scanwhencasepicking,scanwhenpiecepicking,scanwhencheck,scanwhenreceive,scanwhenputaway,shelflifealertdays,reservedfield17,reservedfield18,reservedfield16,chk_scn_uom,alternative_putawayzone1,alternative_putawayzone2,scanwhenpack,scanwhenmove,imageaddress,onestepallocation,orderbysql,secondserialnocatch,allowreceiving,allowshipment,inboundserialnoqtycontrol,outboundserialnoqtycontrol,defaultcartontype,breakcs,breakea,breakip,printmedicineqcreport,scanwhenqc,overreceiving,defaultsupplierid)
+ values(#{customerid},#{sku},#{hazardFlag},#{descrE},#{descrC},#{packid},#{tare},#{activeFlag},#{lotid},#{cartongroup},#{putawayzone},#{cube},#{putawaylocation},#{grossweight},#{netweight},#{cycleclass},#{lastcyclecount},#{reorderqty},#{price},#{shelflifeflag},#{inboundlifedays},#{softallocationrule},#{allocationrule},#{shelflifetype},#{outboundlifedays},#{addtime},#{addwho},#{edittime},#{editwho},#{alternateSku4},#{alternateSku5},#{notes},#{putawayrule},#{alternateSku1},#{alternateSku2},#{alternateSku3},#{reservedfield05},#{skuGroup1},#{skuGroup2},#{skuGroup3},#{skuGroup4},#{skuGroup5},#{reservedfield01},#{reservedfield02},#{reservedfield03},#{reservedfield04},#{defaultreceivinguom},#{defaultshipmentuom},#{defaulthold},#{rotationid},#{copypackidtolotatt12},#{qtymin},#{qtymax},#{shelflife},#{hscode},#{reservedfield06},#{reservedfield07},#{reservedfield08},#{reservedfield09},#{reservedfield10},#{reservedfield11},#{reservedfield12},#{overrcvpercentage},#{replenishrule},#{specialmaintenance},#{lastmaintenancedate},#{firstop},#{medicaltype},#{approvalno},#{snAsnQty},#{snSoQty},#{invchgwithshipment},#{freightclass},#{tariffid},#{kitflag},#{reservecode},#{reportuom},#{skulength},#{skuwidth},#{skuhigh},#{qctime},#{qcrule},#{firstinbounddate},#{reservedfield13},#{reservedfield14},#{reservedfield15},#{skuGroup6},#{skuGroup7},#{skuGroup8},#{skuGroup9},#{medicinespecicalcontrol},#{serialnocatch},#{scanwhencasepicking},#{scanwhenpiecepicking},#{scanwhencheck},#{scanwhenreceive},#{scanwhenputaway},#{shelflifealertdays},#{reservedfield17},#{reservedfield18},#{reservedfield16},#{chkScnUom},#{alternativePutawayzone1},#{alternativePutawayzone2},#{scanwhenpack},#{scanwhenmove},#{imageaddress},#{onestepallocation},#{orderbysql},#{secondserialnocatch},#{allowreceiving},#{allowshipment},#{inboundserialnoqtycontrol},#{outboundserialnoqtycontrol},#{defaultcartontype},#{breakcs},#{breakea},#{breakip},#{printmedicineqcreport},#{scanwhenqc},#{overreceiving},#{defaultsupplierid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_sku_history set sku=#{sku},hazard_flag=#{hazardFlag},descr_e=#{descrE},descr_c=#{descrC},packid=#{packid},tare=#{tare},active_flag=#{activeFlag},lotid=#{lotid},cartongroup=#{cartongroup},putawayzone=#{putawayzone},cube=#{cube},putawaylocation=#{putawaylocation},grossweight=#{grossweight},netweight=#{netweight},cycleclass=#{cycleclass},lastcyclecount=#{lastcyclecount},reorderqty=#{reorderqty},price=#{price},shelflifeflag=#{shelflifeflag},inboundlifedays=#{inboundlifedays},softallocationrule=#{softallocationrule},allocationrule=#{allocationrule},shelflifetype=#{shelflifetype},outboundlifedays=#{outboundlifedays},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},alternate_sku4=#{alternateSku4},alternate_sku5=#{alternateSku5},notes=#{notes},putawayrule=#{putawayrule},alternate_sku1=#{alternateSku1},alternate_sku2=#{alternateSku2},alternate_sku3=#{alternateSku3},reservedfield05=#{reservedfield05},sku_group1=#{skuGroup1},sku_group2=#{skuGroup2},sku_group3=#{skuGroup3},sku_group4=#{skuGroup4},sku_group5=#{skuGroup5},reservedfield01=#{reservedfield01},reservedfield02=#{reservedfield02},reservedfield03=#{reservedfield03},reservedfield04=#{reservedfield04},defaultreceivinguom=#{defaultreceivinguom},defaultshipmentuom=#{defaultshipmentuom},defaulthold=#{defaulthold},rotationid=#{rotationid},copypackidtolotatt12=#{copypackidtolotatt12},qtymin=#{qtymin},qtymax=#{qtymax},shelflife=#{shelflife},hscode=#{hscode},reservedfield06=#{reservedfield06},reservedfield07=#{reservedfield07},reservedfield08=#{reservedfield08},reservedfield09=#{reservedfield09},reservedfield10=#{reservedfield10},reservedfield11=#{reservedfield11},reservedfield12=#{reservedfield12},overrcvpercentage=#{overrcvpercentage},replenishrule=#{replenishrule},specialmaintenance=#{specialmaintenance},lastmaintenancedate=#{lastmaintenancedate},firstop=#{firstop},medicaltype=#{medicaltype},approvalno=#{approvalno},sn_asn_qty=#{snAsnQty},sn_so_qty=#{snSoQty},invchgwithshipment=#{invchgwithshipment},freightclass=#{freightclass},tariffid=#{tariffid},kitflag=#{kitflag},reservecode=#{reservecode},reportuom=#{reportuom},skulength=#{skulength},skuwidth=#{skuwidth},skuhigh=#{skuhigh},qctime=#{qctime},qcrule=#{qcrule},firstinbounddate=#{firstinbounddate},reservedfield13=#{reservedfield13},reservedfield14=#{reservedfield14},reservedfield15=#{reservedfield15},sku_group6=#{skuGroup6},sku_group7=#{skuGroup7},sku_group8=#{skuGroup8},sku_group9=#{skuGroup9},medicinespecicalcontrol=#{medicinespecicalcontrol},serialnocatch=#{serialnocatch},scanwhencasepicking=#{scanwhencasepicking},scanwhenpiecepicking=#{scanwhenpiecepicking},scanwhencheck=#{scanwhencheck},scanwhenreceive=#{scanwhenreceive},scanwhenputaway=#{scanwhenputaway},shelflifealertdays=#{shelflifealertdays},reservedfield17=#{reservedfield17},reservedfield18=#{reservedfield18},reservedfield16=#{reservedfield16},chk_scn_uom=#{chkScnUom},alternative_putawayzone1=#{alternativePutawayzone1},alternative_putawayzone2=#{alternativePutawayzone2},scanwhenpack=#{scanwhenpack},scanwhenmove=#{scanwhenmove},imageaddress=#{imageaddress},onestepallocation=#{onestepallocation},orderbysql=#{orderbysql},secondserialnocatch=#{secondserialnocatch},allowreceiving=#{allowreceiving},allowshipment=#{allowshipment},inboundserialnoqtycontrol=#{inboundserialnoqtycontrol},outboundserialnoqtycontrol=#{outboundserialnoqtycontrol},defaultcartontype=#{defaultcartontype},breakcs=#{breakcs},breakea=#{breakea},breakip=#{breakip},printmedicineqcreport=#{printmedicineqcreport},scanwhenqc=#{scanwhenqc},overreceiving=#{overreceiving},defaultsupplierid=#{defaultsupplierid} where customerid=#{customerid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_sku_history set 
+	<trim  suffixOverrides="," >
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="hazardFlag != null  ">
+		hazard_flag=#{hazardFlag},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="tare != null  ">
+		tare=#{tare},
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	<if test="lotid != null  ">
+		lotid=#{lotid},
+	</if>
+	<if test="cartongroup != null  ">
+		cartongroup=#{cartongroup},
+	</if>
+	<if test="putawayzone != null  ">
+		putawayzone=#{putawayzone},
+	</if>
+	<if test="cube != null  ">
+		cube=#{cube},
+	</if>
+	<if test="putawaylocation != null  ">
+		putawaylocation=#{putawaylocation},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="netweight != null  ">
+		netweight=#{netweight},
+	</if>
+	<if test="cycleclass != null  ">
+		cycleclass=#{cycleclass},
+	</if>
+	<if test="lastcyclecount != null  ">
+		lastcyclecount=#{lastcyclecount},
+	</if>
+	<if test="reorderqty != null  ">
+		reorderqty=#{reorderqty},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="shelflifeflag != null  ">
+		shelflifeflag=#{shelflifeflag},
+	</if>
+	<if test="inboundlifedays != null  ">
+		inboundlifedays=#{inboundlifedays},
+	</if>
+	<if test="softallocationrule != null  ">
+		softallocationrule=#{softallocationrule},
+	</if>
+	<if test="allocationrule != null  ">
+		allocationrule=#{allocationrule},
+	</if>
+	<if test="shelflifetype != null  ">
+		shelflifetype=#{shelflifetype},
+	</if>
+	<if test="outboundlifedays != null  ">
+		outboundlifedays=#{outboundlifedays},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="alternateSku4 != null  ">
+		alternate_sku4=#{alternateSku4},
+	</if>
+	<if test="alternateSku5 != null  ">
+		alternate_sku5=#{alternateSku5},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="putawayrule != null  ">
+		putawayrule=#{putawayrule},
+	</if>
+	<if test="alternateSku1 != null  ">
+		alternate_sku1=#{alternateSku1},
+	</if>
+	<if test="alternateSku2 != null  ">
+		alternate_sku2=#{alternateSku2},
+	</if>
+	<if test="alternateSku3 != null  ">
+		alternate_sku3=#{alternateSku3},
+	</if>
+	<if test="reservedfield05 != null  ">
+		reservedfield05=#{reservedfield05},
+	</if>
+	<if test="skuGroup1 != null  ">
+		sku_group1=#{skuGroup1},
+	</if>
+	<if test="skuGroup2 != null  ">
+		sku_group2=#{skuGroup2},
+	</if>
+	<if test="skuGroup3 != null  ">
+		sku_group3=#{skuGroup3},
+	</if>
+	<if test="skuGroup4 != null  ">
+		sku_group4=#{skuGroup4},
+	</if>
+	<if test="skuGroup5 != null  ">
+		sku_group5=#{skuGroup5},
+	</if>
+	<if test="reservedfield01 != null  ">
+		reservedfield01=#{reservedfield01},
+	</if>
+	<if test="reservedfield02 != null  ">
+		reservedfield02=#{reservedfield02},
+	</if>
+	<if test="reservedfield03 != null  ">
+		reservedfield03=#{reservedfield03},
+	</if>
+	<if test="reservedfield04 != null  ">
+		reservedfield04=#{reservedfield04},
+	</if>
+	<if test="defaultreceivinguom != null  ">
+		defaultreceivinguom=#{defaultreceivinguom},
+	</if>
+	<if test="defaultshipmentuom != null  ">
+		defaultshipmentuom=#{defaultshipmentuom},
+	</if>
+	<if test="defaulthold != null  ">
+		defaulthold=#{defaulthold},
+	</if>
+	<if test="rotationid != null  ">
+		rotationid=#{rotationid},
+	</if>
+	<if test="copypackidtolotatt12 != null  ">
+		copypackidtolotatt12=#{copypackidtolotatt12},
+	</if>
+	<if test="qtymin != null  ">
+		qtymin=#{qtymin},
+	</if>
+	<if test="qtymax != null  ">
+		qtymax=#{qtymax},
+	</if>
+	<if test="shelflife != null  ">
+		shelflife=#{shelflife},
+	</if>
+	<if test="hscode != null  ">
+		hscode=#{hscode},
+	</if>
+	<if test="reservedfield06 != null  ">
+		reservedfield06=#{reservedfield06},
+	</if>
+	<if test="reservedfield07 != null  ">
+		reservedfield07=#{reservedfield07},
+	</if>
+	<if test="reservedfield08 != null  ">
+		reservedfield08=#{reservedfield08},
+	</if>
+	<if test="reservedfield09 != null  ">
+		reservedfield09=#{reservedfield09},
+	</if>
+	<if test="reservedfield10 != null  ">
+		reservedfield10=#{reservedfield10},
+	</if>
+	<if test="reservedfield11 != null  ">
+		reservedfield11=#{reservedfield11},
+	</if>
+	<if test="reservedfield12 != null  ">
+		reservedfield12=#{reservedfield12},
+	</if>
+	<if test="overrcvpercentage != null  ">
+		overrcvpercentage=#{overrcvpercentage},
+	</if>
+	<if test="replenishrule != null  ">
+		replenishrule=#{replenishrule},
+	</if>
+	<if test="specialmaintenance != null  ">
+		specialmaintenance=#{specialmaintenance},
+	</if>
+	<if test="lastmaintenancedate != null  ">
+		lastmaintenancedate=#{lastmaintenancedate},
+	</if>
+	<if test="firstop != null  ">
+		firstop=#{firstop},
+	</if>
+	<if test="medicaltype != null  ">
+		medicaltype=#{medicaltype},
+	</if>
+	<if test="approvalno != null  ">
+		approvalno=#{approvalno},
+	</if>
+	<if test="snAsnQty != null  ">
+		sn_asn_qty=#{snAsnQty},
+	</if>
+	<if test="snSoQty != null  ">
+		sn_so_qty=#{snSoQty},
+	</if>
+	<if test="invchgwithshipment != null  ">
+		invchgwithshipment=#{invchgwithshipment},
+	</if>
+	<if test="freightclass != null  ">
+		freightclass=#{freightclass},
+	</if>
+	<if test="tariffid != null  ">
+		tariffid=#{tariffid},
+	</if>
+	<if test="kitflag != null  ">
+		kitflag=#{kitflag},
+	</if>
+	<if test="reservecode != null  ">
+		reservecode=#{reservecode},
+	</if>
+	<if test="reportuom != null  ">
+		reportuom=#{reportuom},
+	</if>
+	<if test="skulength != null  ">
+		skulength=#{skulength},
+	</if>
+	<if test="skuwidth != null  ">
+		skuwidth=#{skuwidth},
+	</if>
+	<if test="skuhigh != null  ">
+		skuhigh=#{skuhigh},
+	</if>
+	<if test="qctime != null  ">
+		qctime=#{qctime},
+	</if>
+	<if test="qcrule != null  ">
+		qcrule=#{qcrule},
+	</if>
+	<if test="firstinbounddate != null  ">
+		firstinbounddate=#{firstinbounddate},
+	</if>
+	<if test="reservedfield13 != null  ">
+		reservedfield13=#{reservedfield13},
+	</if>
+	<if test="reservedfield14 != null  ">
+		reservedfield14=#{reservedfield14},
+	</if>
+	<if test="reservedfield15 != null  ">
+		reservedfield15=#{reservedfield15},
+	</if>
+	<if test="skuGroup6 != null  ">
+		sku_group6=#{skuGroup6},
+	</if>
+	<if test="skuGroup7 != null  ">
+		sku_group7=#{skuGroup7},
+	</if>
+	<if test="skuGroup8 != null  ">
+		sku_group8=#{skuGroup8},
+	</if>
+	<if test="skuGroup9 != null  ">
+		sku_group9=#{skuGroup9},
+	</if>
+	<if test="medicinespecicalcontrol != null  ">
+		medicinespecicalcontrol=#{medicinespecicalcontrol},
+	</if>
+	<if test="serialnocatch != null  ">
+		serialnocatch=#{serialnocatch},
+	</if>
+	<if test="scanwhencasepicking != null  ">
+		scanwhencasepicking=#{scanwhencasepicking},
+	</if>
+	<if test="scanwhenpiecepicking != null  ">
+		scanwhenpiecepicking=#{scanwhenpiecepicking},
+	</if>
+	<if test="scanwhencheck != null  ">
+		scanwhencheck=#{scanwhencheck},
+	</if>
+	<if test="scanwhenreceive != null  ">
+		scanwhenreceive=#{scanwhenreceive},
+	</if>
+	<if test="scanwhenputaway != null  ">
+		scanwhenputaway=#{scanwhenputaway},
+	</if>
+	<if test="shelflifealertdays != null  ">
+		shelflifealertdays=#{shelflifealertdays},
+	</if>
+	<if test="reservedfield17 != null  ">
+		reservedfield17=#{reservedfield17},
+	</if>
+	<if test="reservedfield18 != null  ">
+		reservedfield18=#{reservedfield18},
+	</if>
+	<if test="reservedfield16 != null  ">
+		reservedfield16=#{reservedfield16},
+	</if>
+	<if test="chkScnUom != null  ">
+		chk_scn_uom=#{chkScnUom},
+	</if>
+	<if test="alternativePutawayzone1 != null  ">
+		alternative_putawayzone1=#{alternativePutawayzone1},
+	</if>
+	<if test="alternativePutawayzone2 != null  ">
+		alternative_putawayzone2=#{alternativePutawayzone2},
+	</if>
+	<if test="scanwhenpack != null  ">
+		scanwhenpack=#{scanwhenpack},
+	</if>
+	<if test="scanwhenmove != null  ">
+		scanwhenmove=#{scanwhenmove},
+	</if>
+	<if test="imageaddress != null  ">
+		imageaddress=#{imageaddress},
+	</if>
+	<if test="onestepallocation != null  ">
+		onestepallocation=#{onestepallocation},
+	</if>
+	<if test="orderbysql != null  ">
+		orderbysql=#{orderbysql},
+	</if>
+	<if test="secondserialnocatch != null  ">
+		secondserialnocatch=#{secondserialnocatch},
+	</if>
+	<if test="allowreceiving != null  ">
+		allowreceiving=#{allowreceiving},
+	</if>
+	<if test="allowshipment != null  ">
+		allowshipment=#{allowshipment},
+	</if>
+	<if test="inboundserialnoqtycontrol != null  ">
+		inboundserialnoqtycontrol=#{inboundserialnoqtycontrol},
+	</if>
+	<if test="outboundserialnoqtycontrol != null  ">
+		outboundserialnoqtycontrol=#{outboundserialnoqtycontrol},
+	</if>
+	<if test="defaultcartontype != null  ">
+		defaultcartontype=#{defaultcartontype},
+	</if>
+	<if test="breakcs != null  ">
+		breakcs=#{breakcs},
+	</if>
+	<if test="breakea != null  ">
+		breakea=#{breakea},
+	</if>
+	<if test="breakip != null  ">
+		breakip=#{breakip},
+	</if>
+	<if test="printmedicineqcreport != null  ">
+		printmedicineqcreport=#{printmedicineqcreport},
+	</if>
+	<if test="scanwhenqc != null  ">
+		scanwhenqc=#{scanwhenqc},
+	</if>
+	<if test="overreceiving != null  ">
+		overreceiving=#{overreceiving},
+	</if>
+	<if test="defaultsupplierid != null  ">
+		defaultsupplierid=#{defaultsupplierid},
+	</if>
+	</trim> where customerid=#{customerid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_sku_history where customerid = #{customerid}
+</delete>
+ 
+<!-- 根据id查询 产品档案历史表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_sku_history where customerid = #{customerid}
+</select>
+
+<!-- 产品档案历史表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_sku_history 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询产品档案历史表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_sku_history 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

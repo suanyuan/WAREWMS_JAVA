@@ -4,11 +4,11 @@ import com.wms.entity.BaseLotatt;
 import lombok.Data;
 
 @Data
-public class PdaDocPaDetailQuery extends BaseLotatt {
+public class PdaDocQcDetailQuery extends BaseLotatt {
 
     private String warehouseid; //pda传参
 
-    private String pano;//上架任务单号
+    private String qcno;//验收任务单号
 
     private String customerid;
 

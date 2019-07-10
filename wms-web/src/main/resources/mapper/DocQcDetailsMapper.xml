@@ -241,5 +241,21 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <select id="queryDocQcDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_qc_details
+        where qcno = #{qcno, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR} and userdefine5 = 'DJ'
+        <if test="locationid != null and locationid != ''">
+            and userdefine1 = #{locationid, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt04 != null and lotatt04 != ''">
+            and userdefine3 = #{lotatt04, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt05 != null and lotatt05 != ''">
+            and userdefine4 = #{lotatt05, jdbcType=VARCHAR}
+        </if>
+    </select>
   	
 </mapper>   
