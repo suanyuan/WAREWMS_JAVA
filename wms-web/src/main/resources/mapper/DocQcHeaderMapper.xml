@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocQcHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocQcHeader" >
+	<result column="qcno" property="qcno"/>
+	<result column="pano" property="pano"/>
+	<result column="customerid" property="customerid"/>
+	<result column="qcreference1" property="qcreference1"/>
+	<result column="qcreference2" property="qcreference2"/>
+	<result column="qcreference3" property="qcreference3"/>
+	<result column="qcreference4" property="qcreference4"/>
+	<result column="qcreference5" property="qcreference5"/>
+	<result column="qctype" property="qctype"/>
+	<result column="qcstatus" property="qcstatus"/>
+	<result column="qccreationtime" property="qccreationtime"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="notes" property="notes"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="qc_print_flag" property="qcPrintFlag"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- doc_qc_header table all fields -->
+<sql id="Base_Column_List" >
+	 qcno,pano,customerid,qcreference1,qcreference2,qcreference3,qcreference4,qcreference5,qctype,qcstatus,qccreationtime,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,qc_print_flag,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.qcno != null and condition.qcno != ''" >
+	    and qcno =  #{condition.qcno}
+	</if>
+	<if test="condition.pano != null and condition.pano != ''" >
+	    and pano =  #{condition.pano}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.qcreference1 != null and condition.qcreference1 != ''" >
+	    and qcreference1 =  #{condition.qcreference1}
+	</if>
+	<if test="condition.qcreference2 != null and condition.qcreference2 != ''" >
+	    and qcreference2 =  #{condition.qcreference2}
+	</if>
+	<if test="condition.qcreference3 != null and condition.qcreference3 != ''" >
+	    and qcreference3 =  #{condition.qcreference3}
+	</if>
+	<if test="condition.qcreference4 != null and condition.qcreference4 != ''" >
+	    and qcreference4 =  #{condition.qcreference4}
+	</if>
+	<if test="condition.qcreference5 != null and condition.qcreference5 != ''" >
+	    and qcreference5 =  #{condition.qcreference5}
+	</if>
+	<if test="condition.qctype != null and condition.qctype != ''" >
+	    and qctype =  #{condition.qctype}
+	</if>
+	<if test="condition.qcstatus != null and condition.qcstatus != ''" >
+	    and qcstatus =  #{condition.qcstatus}
+	</if>
+	<if test="condition.qccreationtime != null and condition.qccreationtime != ''" >
+	    and qccreationtime =  #{condition.qccreationtime}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.qcPrintFlag != null and condition.qcPrintFlag != ''" >
+	    and qc_print_flag =  #{condition.qcPrintFlag}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_qc_header(qcno,pano,customerid,qcreference1,qcreference2,qcreference3,qcreference4,qcreference5,qctype,qcstatus,qccreationtime,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,qc_print_flag,warehouseid)
+ values(#{qcno},#{pano},#{customerid},#{qcreference1},#{qcreference2},#{qcreference3},#{qcreference4},#{qcreference5},#{qctype},#{qcstatus},#{qccreationtime},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{notes},#{addtime},#{addwho},#{edittime},#{editwho},#{qcPrintFlag},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_qc_header set pano=#{pano},customerid=#{customerid},qcreference1=#{qcreference1},qcreference2=#{qcreference2},qcreference3=#{qcreference3},qcreference4=#{qcreference4},qcreference5=#{qcreference5},qctype=#{qctype},qcstatus=#{qcstatus},qccreationtime=#{qccreationtime},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},notes=#{notes},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},qc_print_flag=#{qcPrintFlag},warehouseid=#{warehouseid} where qcno=#{qcno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_qc_header set 
+	<trim  suffixOverrides="," >
+	<if test="pano != null  ">
+		pano=#{pano},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="qcreference1 != null  ">
+		qcreference1=#{qcreference1},
+	</if>
+	<if test="qcreference2 != null  ">
+		qcreference2=#{qcreference2},
+	</if>
+	<if test="qcreference3 != null  ">
+		qcreference3=#{qcreference3},
+	</if>
+	<if test="qcreference4 != null  ">
+		qcreference4=#{qcreference4},
+	</if>
+	<if test="qcreference5 != null  ">
+		qcreference5=#{qcreference5},
+	</if>
+	<if test="qctype != null  ">
+		qctype=#{qctype},
+	</if>
+	<if test="qcstatus != null  ">
+		qcstatus=#{qcstatus},
+	</if>
+	<if test="qccreationtime != null  ">
+		qccreationtime=#{qccreationtime},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="qcPrintFlag != null  ">
+		qc_print_flag=#{qcPrintFlag},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where qcno=#{qcno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_qc_header where qcno = #{qcno}
+</delete>
+ 
+<!-- 根据id查询 验收头档 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_qc_header where qcno = #{qcno}
+</select>
+
+<!-- 验收头档 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_qc_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询验收头档列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_qc_header 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

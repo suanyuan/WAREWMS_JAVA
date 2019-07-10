@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocQcDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocQcDetails" >
+	<result column="qcno" property="qcno"/>
+	<result column="qclineno" property="qclineno"/>
+	<result column="linestatus" property="linestatus"/>
+	<result column="palineno" property="palineno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="paqty_expected" property="paqtyExpected"/>
+	<result column="qcqty_expected" property="qcqtyExpected"/>
+	<result column="qcqty_completed" property="qcqtyCompleted"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="qcdescr" property="qcdescr"/>
+	<result column="qcresult" property="qcresult"/>
+	<result column="filecontent" property="filecontent"/>
+	<result column="notes" property="notes"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="packid" property="packid"/>
+	<result column="transactionid" property="transactionid"/>
+</resultMap>
+       
+<!-- doc_qc_details table all fields -->
+<sql id="Base_Column_List" >
+	 qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.qcno != null and condition.qcno != ''" >
+	    and qcno =  #{condition.qcno}
+	</if>
+	<if test="condition.qclineno != null and condition.qclineno != ''" >
+	    and qclineno =  #{condition.qclineno}
+	</if>
+	<if test="condition.linestatus != null and condition.linestatus != ''" >
+	    and linestatus =  #{condition.linestatus}
+	</if>
+	<if test="condition.palineno != null and condition.palineno != ''" >
+	    and palineno =  #{condition.palineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.paqtyExpected != null and condition.paqtyExpected != ''" >
+	    and paqty_expected =  #{condition.paqtyExpected}
+	</if>
+	<if test="condition.qcqtyExpected != null and condition.qcqtyExpected != ''" >
+	    and qcqty_expected =  #{condition.qcqtyExpected}
+	</if>
+	<if test="condition.qcqtyCompleted != null and condition.qcqtyCompleted != ''" >
+	    and qcqty_completed =  #{condition.qcqtyCompleted}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.qcdescr != null and condition.qcdescr != ''" >
+	    and qcdescr =  #{condition.qcdescr}
+	</if>
+	<if test="condition.qcresult != null and condition.qcresult != ''" >
+	    and qcresult =  #{condition.qcresult}
+	</if>
+	<if test="condition.filecontent != null and condition.filecontent != ''" >
+	    and filecontent =  #{condition.filecontent}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.transactionid != null and condition.transactionid != ''" >
+	    and transactionid =  #{condition.transactionid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_qc_details(qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid)
+ values(#{qcno},#{qclineno},#{linestatus},#{palineno},#{customerid},#{sku},#{lotnum},#{paqtyExpected},#{qcqtyExpected},#{qcqtyCompleted},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{qcdescr},#{qcresult},#{filecontent},#{notes},#{addtime},#{addwho},#{edittime},#{editwho},#{packid},#{transactionid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_qc_details set qclineno=#{qclineno},linestatus=#{linestatus},palineno=#{palineno},customerid=#{customerid},sku=#{sku},lotnum=#{lotnum},paqty_expected=#{paqtyExpected},qcqty_expected=#{qcqtyExpected},qcqty_completed=#{qcqtyCompleted},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},qcdescr=#{qcdescr},qcresult=#{qcresult},filecontent=#{filecontent},notes=#{notes},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},packid=#{packid},transactionid=#{transactionid} where qcno=#{qcno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_qc_details set 
+	<trim  suffixOverrides="," >
+	<if test="qclineno != null  ">
+		qclineno=#{qclineno},
+	</if>
+	<if test="linestatus != null  ">
+		linestatus=#{linestatus},
+	</if>
+	<if test="palineno != null  ">
+		palineno=#{palineno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="paqtyExpected != null  ">
+		paqty_expected=#{paqtyExpected},
+	</if>
+	<if test="qcqtyExpected != null  ">
+		qcqty_expected=#{qcqtyExpected},
+	</if>
+	<if test="qcqtyCompleted != null  ">
+		qcqty_completed=#{qcqtyCompleted},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="qcdescr != null  ">
+		qcdescr=#{qcdescr},
+	</if>
+	<if test="qcresult != null  ">
+		qcresult=#{qcresult},
+	</if>
+	<if test="filecontent != null  ">
+		filecontent=#{filecontent},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="transactionid != null  ">
+		transactionid=#{transactionid},
+	</if>
+	</trim> where qcno=#{qcno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_qc_details where qcno = #{qcno}
+</delete>
+ 
+<!-- 根据id查询 验收明细档 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_qc_details where qcno = #{qcno}
+</select>
+
+<!-- 验收明细档 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_qc_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询验收明细档列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_qc_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

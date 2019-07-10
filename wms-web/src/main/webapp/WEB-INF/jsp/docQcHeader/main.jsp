@@ -33,34 +33,29 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'qcno',	hidden:true,	title: '待输入栏位0',	width: 34 },
-			{field: 'asnno',		hidden:true,	title: '待输入栏位1',	width: 34 },
-			{field: 'customerid',		title: '货主sku产品代码',	width: 34 },
-			{field: 'qcreference1',		title: '供应商',	width: 34 },
-			{field: 'qcreference2',		title: '产品代码',	width: 34 },
-			{field: 'qcreference3',		title: '产品名称',	width: 34 },
-			{field: 'qcreference4',		title: '注册证号/备案凭证编号',	width: 34 },
-			{field: 'qcreference5',		title: '规格/型号',	width: 34 },
-			{field: 'qctype',		title: '生产批号',	width: 34 },
-			{field: 'qcstatus',		title: '序列号',	width: 34 },
-			{field: 'qccreationtime',		title: '灭菌批号',	width: 34 },
-			{field: 'userdefine1',		title: '生产日期',	width: 34 },
-			{field: 'userdefine2',		title: '存储条件',	width: 34 },
-			{field: 'userdefine3',		title: '生产厂家',	width: 34 },
-			{field: 'userdefine4',		title: '产地',	width: 34 },
-			{field: 'userdefine5',		title: '到货数量',	width: 34 },
-			{field: 'notes',		title: '验收合格数量',	width: 34 },
-			{field: 'addtime',		title: '验收不合格数量',	width: 34 },
-			{field: 'addwho',		title: '单位',	width: 34 },
-			{field: 'edittime',		title: '验收说明',	width: 34 },
-			{field: 'editwho',		title: '验收结论',	width: 34 },
-			{field: 'qcPrintFlag',		title: '验收日期',	width: 34 },
-			{field: 'warehouseid',		title: '验收人',	width: 34 },
-			{field: 'warehouseid',		title: '合格证明文件上传',	width: 34 },
-			{field: 'warehouseid',		title: '冷链产品随货温度记录上传',	width: 34 },
-			{field: 'warehouseid',		title: '双证记录',	width: 34 },
-			{field: 'warehouseid',		title: '产品线',	width: 34 },
-			{field: 'warehouseid',		title: '备注',	width: 34 }
+			{field: 'qcno',		title: '待输入栏位0',	width: 34 },
+			{field: 'pano',		title: '待输入栏位1',	width: 34 },
+			{field: 'customerid',		title: '待输入栏位2',	width: 34 },
+			{field: 'qcreference1',		title: '待输入栏位3',	width: 34 },
+			{field: 'qcreference2',		title: '待输入栏位4',	width: 34 },
+			{field: 'qcreference3',		title: '待输入栏位5',	width: 34 },
+			{field: 'qcreference4',		title: '待输入栏位6',	width: 34 },
+			{field: 'qcreference5',		title: '待输入栏位7',	width: 34 },
+			{field: 'qctype',		title: '待输入栏位8',	width: 34 },
+			{field: 'qcstatus',		title: '待输入栏位9',	width: 34 },
+			{field: 'qccreationtime',		title: '待输入栏位10',	width: 34 },
+			{field: 'userdefine1',		title: '待输入栏位11',	width: 34 },
+			{field: 'userdefine2',		title: '待输入栏位12',	width: 34 },
+			{field: 'userdefine3',		title: '待输入栏位13',	width: 34 },
+			{field: 'userdefine4',		title: '待输入栏位14',	width: 34 },
+			{field: 'userdefine5',		title: '待输入栏位15',	width: 34 },
+			{field: 'notes',		title: '待输入栏位16',	width: 34 },
+			{field: 'addtime',		title: '待输入栏位17',	width: 34 },
+			{field: 'addwho',		title: '待输入栏位18',	width: 34 },
+			{field: 'edittime',		title: '待输入栏位19',	width: 34 },
+			{field: 'editwho',		title: '待输入栏位20',	width: 34 },
+			{field: 'qcPrintFlag',		title: '待输入栏位21',	width: 34 },
+			{field: 'warehouseid',		title: '待输入栏位22',	width: 34 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -98,7 +93,7 @@ var edit = function(){
 	if(row){
 		ezuiForm.form('load',{
 			qcno : row.qcno,
-			asnno : row.asnno,
+			pano : row.pano,
 			customerid : row.customerid,
 			qcreference1 : row.qcreference1,
 			qcreference2 : row.qcreference2,
@@ -205,7 +200,7 @@ var commit = function(){
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		qcno : $('#qcno').val(),
-		asnno : $('#asnno').val(),
+		pano : $('#pano').val(),
 		customerid : $('#customerid').val(),
 		qcreference1 : $('#qcreference1').val(),
 		qcreference2 : $('#qcreference2').val(),
@@ -241,7 +236,7 @@ var doSearch = function(){
 					<table>
 						<tr>
 							<th>待输入名称0：</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称1：</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>待输入名称1：</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称2：</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称3：</th><td><input type='text' id='qcreference1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称4：</th><td><input type='text' id='qcreference2' class='easyui-textbox' size='16' data-options=''/></td>
@@ -290,7 +285,7 @@ var doSearch = function(){
 				</tr>
 				<tr>
 					<th>待输入1</th>
-					<td><input type='text' name='asnno' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='pano' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入2</th>

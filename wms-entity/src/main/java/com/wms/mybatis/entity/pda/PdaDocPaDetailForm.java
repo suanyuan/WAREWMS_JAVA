@@ -9,7 +9,7 @@ public class PdaDocPaDetailForm {
 
     private String pano;//pda传参
 
-    private long palineno;
+    private String palineno;
 
     private String linestatus;//暂定，没啥用
 

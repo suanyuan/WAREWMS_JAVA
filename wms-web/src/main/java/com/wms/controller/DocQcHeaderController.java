@@ -49,8 +49,8 @@ public class DocQcHeaderController {
 		Json json = docQcHeaderService.addDocQcHeader(docQcHeaderForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -61,8 +61,8 @@ public class DocQcHeaderController {
 		Json json = docQcHeaderService.editDocQcHeader(docQcHeaderForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -73,8 +73,8 @@ public class DocQcHeaderController {
 		Json json = docQcHeaderService.deleteDocQcHeader(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

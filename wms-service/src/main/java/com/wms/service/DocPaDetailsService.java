@@ -19,6 +19,7 @@ import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
 import com.wms.vo.pda.PdaDocPaDetailVO;
 import com.wms.vo.pda.PdaDocPaHeaderVO;
+import org.apache.camel.language.Bean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,22 +141,31 @@ public class DocPaDetailsService extends BaseService {
 
         PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
         PdaDocPaDetailQuery detailQuery = new PdaDocPaDetailQuery();
-        BeanUtils.copyProperties(form, skuQuery);
+
+        skuQuery.setLotatt04(form.getUserdefine3());
+        skuQuery.setLotatt05(form.getUserdefine4());
+        skuQuery.setGTIN(form.getGTIN());
         //sku
         BasSku basSku = basSkuMybatisDao.queryForScan(skuQuery);
 
         if (basSku == null) return new PdaResult(PdaResult.CODE_FAILURE, "产品档案缺失");
 
         //DocPaDetails
+        BeanUtils.copyProperties(form, detailQuery);
+        detailQuery.setLotatt04(form.getUserdefine3());
+        detailQuery.setLotatt05(form.getUserdefine4());
         detailQuery.setSku(basSku.getSku());
         DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(detailQuery);
 
         if (docPaDetails == null) return new PdaResult(PdaResult.CODE_FAILURE, "上架明细数据缺失");
 
         //上架
+        String locationid = form.getUserdefine1();
         BeanUtils.copyProperties(docPaDetails, form);
+        form.setUserdefine1(locationid);
         form.setUserid("Gizmo");
         form.setLanguage("CN");
+        form.setReturncode("");
         try {
             docPaDetailsMybatisDao.putawayGoods(form);
         }catch (Exception e) {

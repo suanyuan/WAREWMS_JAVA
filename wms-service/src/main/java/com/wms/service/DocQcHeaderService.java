@@ -1,82 +1,88 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocQcHeader;
+import com.wms.mybatis.dao.DocQcHeaderMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.DocQcHeaderQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.vo.DocQcHeaderVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocQcHeaderForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.dao.DocQcHeaderDao;
-import com.wms.entity.DocQcHeader;
-import com.wms.vo.DocQcHeaderVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocQcHeaderForm;
-import com.wms.query.DocQcHeaderQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("docQcHeaderService")
 public class DocQcHeaderService extends BaseService {
 
 	@Autowired
-	private DocQcHeaderDao docQcHeaderDao;
+	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
 
 	public EasyuiDatagrid<DocQcHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
-		EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<DocQcHeaderVO>();
-		List<DocQcHeader> docQcHeaderList = docQcHeaderDao.getPagedDatagrid(pager, query);
-		DocQcHeaderVO docQcHeaderVO = null;
-		List<DocQcHeaderVO> docQcHeaderVOList = new ArrayList<DocQcHeaderVO>();
-		for (DocQcHeader docQcHeader : docQcHeaderList) {
-			docQcHeaderVO = new DocQcHeaderVO();
-			BeanUtils.copyProperties(docQcHeader, docQcHeaderVO);
-			docQcHeaderVOList.add(docQcHeaderVO);
-		}
-		datagrid.setTotal(docQcHeaderDao.countAll(query));
-		datagrid.setRows(docQcHeaderVOList);
-		return datagrid;
+        EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryByPageList(mybatisCriteria);
+        DocQcHeaderVO docQcHeaderVO = null;
+        List<DocQcHeaderVO> docQcHeaderVOList = new ArrayList<>();
+        for (DocQcHeader docPaDetails : docQcHeaderList) {
+            docQcHeaderVO = new DocQcHeaderVO();
+            BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
+            docQcHeaderVOList.add(docQcHeaderVO);
+        }
+        datagrid.setTotal((long) docQcHeaderMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setRows(docQcHeaderVOList);
+        return datagrid;
 	}
 
 	public Json addDocQcHeader(DocQcHeaderForm docQcHeaderForm) throws Exception {
 		Json json = new Json();
 		DocQcHeader docQcHeader = new DocQcHeader();
 		BeanUtils.copyProperties(docQcHeaderForm, docQcHeader);
-		docQcHeaderDao.save(docQcHeader);
+        docQcHeaderMybatisDao.add(docQcHeader);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editDocQcHeader(DocQcHeaderForm docQcHeaderForm) {
 		Json json = new Json();
-		DocQcHeader docQcHeader = docQcHeaderDao.findById(docQcHeaderForm.getCustomerid());
+		DocQcHeader docQcHeader = docQcHeaderMybatisDao.queryById(docQcHeaderForm.getQcno());
 		BeanUtils.copyProperties(docQcHeaderForm, docQcHeader);
-		docQcHeaderDao.update(docQcHeader);
+        docQcHeaderMybatisDao.update(docQcHeader);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteDocQcHeader(String id) {
 		Json json = new Json();
-		DocQcHeader docQcHeader = docQcHeaderDao.findById(id);
+		DocQcHeader docQcHeader = docQcHeaderMybatisDao.queryById(id);
 		if(docQcHeader != null){
-			docQcHeaderDao.delete(docQcHeader);
+            docQcHeaderMybatisDao.delete(docQcHeader);
 		}
 		json.setSuccess(true);
 		return json;
 	}
 
-	public List<EasyuiCombobox> getDocQcHeaderCombobox() {
-		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-		EasyuiCombobox combobox = null;
-		List<DocQcHeader> docQcHeaderList = docQcHeaderDao.findAll();
-		if(docQcHeaderList != null && docQcHeaderList.size() > 0){
-			for(DocQcHeader docQcHeader : docQcHeaderList){
-				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(docQcHeader.getCustomerid()));
-				combobox.setValue(docQcHeader.getCustomerid());
-				comboboxList.add(combobox);
-			}
-		}
-		return comboboxList;
-	}
+//	public List<EasyuiCombobox> getDocQcHeaderCombobox() {
+//		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+//		EasyuiCombobox combobox = null;
+//		List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryByAll();
+//		if(docQcHeaderList != null && docQcHeaderList.size() > 0){
+//			for(DocQcHeader docQcHeader : docQcHeaderList){
+//				combobox = new EasyuiCombobox();
+//				combobox.setId(String.valueOf(docQcHeader.getQcno()));
+//				combobox.setValue(docQcHeader.getDocQcHeaderName());
+//				comboboxList.add(combobox);
+//			}
+//		}
+//		return comboboxList;
+//	}
 
 }

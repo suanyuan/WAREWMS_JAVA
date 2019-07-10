@@ -80,6 +80,13 @@ public class PdaPutawayController {
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocPaDetailVO docPaDetailVO = docPaDetailsService.queryDocPaDetail(query);
 
+        if (docPaDetailVO == null || docPaDetailVO.getPano().length() == 0) {
+            PdaResult result =
+                    new PdaResult(PdaResult.CODE_FAILURE, "无任务详情信息");
+            resultMap.put(Constant.RESULT, result);
+            return resultMap;
+        }
+
         if (docPaDetailVO.getBasSku() == null
                 || docPaDetailVO.getInvLotAtt() == null) {
 
