@@ -10,6 +10,7 @@
     <form id='ezuiFormOperate' method='post' style="padding: 0px;">
         <input type='hidden' id='gspOperateLicenseId' name='gspOperateLicenseId' value="${gspOperateLicense.operateId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
+        <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
             <table>
@@ -28,8 +29,8 @@
                     <td>
                        <!--  <input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:250'/>-->
                         <select class="easyui-combobox" id="licenseType" name='licenseType' style="width:250px;">
-                            <option value="JY">经营</option>
                             <option value="SC">生产</option>
+                            <option value="JY">经营</option>
                         </select>
                     </td>
                     <th>库房地址</th>
@@ -46,7 +47,7 @@
                     <td>
                         <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
-                        <input type="hidden" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
+                        <input type="hidden" data="1" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                 </tr>
@@ -98,7 +99,7 @@
             columns : [[
                 {field: 'operateId',title:'主键',hidden:true},
                 {field: 'licenseNo',title: '许可证编号' ,width: '20%'},
-                {field: 'operateMode',title: '经营范围',width: '20%'},
+                {field: 'operateMode',title: '经营方式',width: '20%'},
                 {field: 'isUse',title: '是否有效' ,width: '20%'},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
@@ -299,10 +300,10 @@
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#businessScope").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
-            $("#businessScope").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
         $(ezuidialogChoseScopeOperate).dialog("close");
     }
@@ -341,12 +342,13 @@
             }
         })
         $("#licenseUrl").val(row['licenseUrl'])
-        $("#file").filebox("setValue",row['licenseUrl']);
+        $("#licenseUrlFile").filebox("setValue",row['licenseUrl']);
     }
 
     //换证清空当前数据
-    function operateUpdate() {1
+    function operateUpdate() {
         opType = "update";
+        $("#opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -357,7 +359,7 @@
             }
         })
         $("#licenseUrl").val("")
-        $("#file").filebox("setValue","");
+        $("#licenseUrlFile").filebox("setValue","");
     }
 
 </script>

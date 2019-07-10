@@ -66,21 +66,33 @@ public class GspEnterpriceService extends BaseService {
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
             String enterpriseId = RandomUtil.getUUID();
             gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
-            if(BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
+
+            //组装经营范围
+            if(gspBusinessLicenseForm.getScopArr()!=null && !"".equals(gspBusinessLicenseForm.getScopArr())){
+                gspBusinessLicenseForm.setScopArr(initScope(gspBusinessLicenseForm.getScopArr()));
+            }
+            if(gspOperateLicenseForm.getScopArr()!=null && !"".equals(gspOperateLicenseForm.getScopArr())){
+                gspOperateLicenseForm.setScopArr(initScope(gspOperateLicenseForm.getScopArr()));
+            }
+            if(gspSecondRecordForm.getScopArr()!=null && !"".equals(gspSecondRecordForm.getScopArr())){
+                gspSecondRecordForm.setScopArr(initScope(gspSecondRecordForm.getScopArr()));
+            }
+
+            if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
                 return Json.error("企业基础信息不能为空");
             }
             gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
-            if(gspBusinessLicenseForm != null && !BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
+            if(gspBusinessLicenseForm != null){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
-                gspBusinessLicenseService.addGspBusinessLicense(gspBusinessLicenseForm);
+                gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
-            if(gspOperateLicenseForm != null && !BeanUtils.isEmptyFrom(gspOperateLicenseForm)){
+            if(gspOperateLicenseForm != null){
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
-                gspOperateLicenseService.addGspOperateLicense(gspOperateLicenseForm);
+                gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
             }
-            if(gspSecondRecordForm != null && !BeanUtils.isEmptyFrom(gspSecondRecordForm)){
+            if(gspSecondRecordForm != null){
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
-                gspSecondRecordService.addGspSecondRecord(gspSecondRecordForm);
+                gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
             Json.success("保存成功");
         }catch (Exception e){
@@ -243,6 +255,19 @@ public class GspEnterpriceService extends BaseService {
         query.setIsUse(Constant.IS_USE_YES);
         GspSecondRecord gspSecondRecord = gspSecondRecordService.getGspSecondRecordBy(query);
         return Json.success("",gspSecondRecord);
+    }
+
+    private String initScope(String scope){
+        String[] scopeArr = scope.split(",");
+        StringBuffer resultArr = new StringBuffer();
+        for(String str : scopeArr){
+            resultArr.append("{");
+            resultArr.append("enterpriseId:''");
+            resultArr.append(",operateId:'"+str+"'");
+            resultArr.append("},");
+
+        }
+        return "["+resultArr.substring(0,resultArr.length()-1)+"]";
     }
 
 }

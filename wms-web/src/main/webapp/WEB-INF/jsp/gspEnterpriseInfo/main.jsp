@@ -6,6 +6,12 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+<style>
+	table th{
+		text-align: right;
+	}
+</style>
+
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -39,15 +45,15 @@ $(function() {
 			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
-			{field: 'enterpriseType',		title: '企业类型',	width: 61 },
+			{field: 'enterpriseType',		title: '企业类型',	width: 61 ,formatter: entTypeFormatter},
             {field: 'createId',		title: '录入人',	width: 61 },
             {field: 'createDate',		title: '录入时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
             {field: 'editDate',		title: '修改时间',	width: 61 },
             {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
+        onDblClickRow: function(index,row){
+			edit(row);
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -87,22 +93,28 @@ $(function() {
     });
 
 });
+
 var add = function(){
 	processType = 'add';
 	$('#gspEnterpriseInfoId').val(0);
 	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 };
-var edit = function(){
+
+var edit = function(row){
 	processType = 'edit';
-	var row = ezuiDatagrid.datagrid('getSelected');
+	if(!row){
+        var row = ezuiDatagrid.datagrid('getSelected');
+    }
 	if(row){
-		ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.enterpriseId);
+		ezuiDialog.dialog('refresh', dialogUrl+"&id="+row.enterpriseId).dialog('open');
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
 };
+
+
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
@@ -135,30 +147,18 @@ var del = function(){
 		});
 	}
 };
+
+
 var commit = function(){
     var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
     var operateobj = new Object();
-    var secondREcord = new Object();
-
-    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
-        infoObj[""+$(this).attr("name")+""] = $(this).val();
-    })
-    $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
-        businessObj[""+$(this).attr("name")+""] = $(this).val();
-    })
-    $("#ezuiFormOperate input[class='textbox-value'][type!='file']").each(function (index) {
-        operateobj[""+$(this).attr("name")+""] = $(this).val();
-    })
-    $("#ezuiFormRecord input[class='textbox-value'][type!='file']").each(function (index) {
-        secondREcord[""+$(this).attr("name")+""] = $(this).val();
-    })
-    gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
-    gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
-    gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
-    gspEnterpriceFrom["gspSecondRecordForm"] = secondREcord;
+    var secondRecord = new Object();
     var url = '';
+    var isVal = true;
+
+
     if (processType == 'edit') {
         url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
     }else{
@@ -168,48 +168,140 @@ var commit = function(){
     var row = ezuiDatagrid.datagrid('getSelected');
     if(row){
         enterpriceId = row.enterpriceId;
+    }
+    //判断基本信息
+    isVal = checkFormData("ezuiFormInfo",infoObj);
+	if(isVal == false){
+        showMsg("企业基础信息未填全！");
+        return;
 	}
-    //验证字段
-    if($("#ezuiFormInfo").form('validate')){
-        $.messager.progress({
-            text : '<spring:message code="common.message.data.processing"/>', interval : 100
-        });
-        $.ajax({
-            url : url,
-            data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
-            success : function(result){
-                var msg='';
-                try{
-                    if(result.success){
-                        msg = result.msg;
-                        ezuiDatagrid.datagrid('reload');
-                        ezuiDialog.dialog('close');
-                    }else{
-                        msg = '<font color="red">' + result.msg + '</font>';
-                    }
-                }catch (e) {
-                    //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-                    msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-                } finally {
-                    $.messager.show({
-                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                    });
-                    $.messager.progress('close');
-                }
-            }
-        });
-    }else{
-        return false;
+
+	//判断营业执照信息
+	isVal = checkFormData("ezuiFormBusiness",businessObj);
+	if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && !checkObjIsEmpty(businessObj)){
+        showMsg("必须填写营业执照信息！");
+        return;
+	}
+    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && isVal == false){
+        showMsg("营业执照信息填写不完全！");
+        return;
+    }
+    console.log("bus---"+businessObj);
+
+	//判断经营许可证
+    isVal = checkFormData("ezuiFormOperate",operateobj);
+	if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC && !checkObjIsEmpty(operateobj)){
+        showMsg("生产类型企业需要填写经营生产许可证！");
+        return;
+	}
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC && isVal == false){
+        showMsg("经营生产许可证填写不完全！");
+        return;
     }
 
+	//第二备案凭证
+    checkFormData("ezuiFormRecord",secondRecord);
+
+    gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
+    gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
+    gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
+    gspEnterpriceFrom["gspSecondRecordForm"] = secondRecord;
+	console.log(gspEnterpriceFrom);
+	//提交
+    submitFormData(enterpriceId,gspEnterpriceFrom,url);
 };
+
+function submitFormData(enterpriceId,gspEnterpriceFrom,url) {
+    $.ajax({
+        url : url,
+        data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
+        success : function(result){
+            var msg='';
+            try{
+                if(result.success){
+                    msg = result.msg;
+                    ezuiDatagrid.datagrid('reload');
+                    ezuiDialog.dialog('close');
+                }else{
+                    msg = '<font color="red">' + result.msg + '</font>';
+                }
+            }catch (e) {
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                $.messager.show({
+                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                });
+                $.messager.progress('close');
+            }
+        }
+    });
+}
+
+var checkFormData = function (formId,obj) {
+    var checkResult = true;
+    $("#"+formId+" input[type!=hidden]").each(function (index) {
+        if($(this).attr("class")){
+            if($(this).attr("class").indexOf('easyui-textbox')!=-1){
+                if(!$(this).textbox("isValid")){
+                    checkResult = false;
+                    $(this).focus();
+                    return;
+                }
+                obj[""+$(this).attr("id")+""] = $(this).textbox("getValue");
+            }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
+                if(!$(this).datebox("isValid")){
+                    checkResult = false;
+                    $(this).focus();
+                    return;
+                }
+                obj[""+$(this).attr("id")+""] = $(this).datebox("getValue");
+            }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                if(!$(this).combobox("isValid")){
+                    checkResult = false;
+                    $(this).focus();
+                    return;
+                }
+                obj[""+$(this).attr("id")+""] = $(this).combobox("getValue");
+            }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                if(!$(this).combobox("isValid")){
+                    checkResult = false;
+                    $(this).focus();
+                    return;
+                }
+                obj[""+$(this).attr("id")+""] = $(this).numberbox("getValue");
+            }
+        }
+    })
+	if(checkObjIsEmpty(obj) == true && checkResult == true){
+        //加载经营范围
+        var scopArr = $("#"+formId+" input[id='choseScope']");
+        if(scopArr){
+            //obj["scopArr"] = $(scopArr).val() || "";
+            if($(scopArr).val()!="" && $(scopArr).val()!=undefined){
+                var str = $(scopArr).val();
+                obj["scopArr"] = str;
+            }else{
+                obj["scopArr"] = "";
+            }
+
+        }
+        //操作类型是否是换证
+        var opType = $("#"+formId+" input[id='opType']");
+        if(opType){
+            obj["opType"] = $(opType).val() || "";
+        }
+	}
+	return checkResult;
+}
+
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseNo : $('#enterpriseNo').val(),
-		shorthandName : $('#shorthandName').val(),
-		enterpriseName : $('#enterpriseName').val(),
+		enterpriseNo : $('#enterpriseNo').textbox("getValue"),
+		shorthandName : $('#shorthandName').textbox("getValue"),
+		enterpriseName : $('#enterpriseName').textbox("getValue"),
 		enterpriseType : $('#enterpriseTypeQuery').combobox("getValue"),
-		createDate : $('#createDate').val(),
+		createDateBegin : $('#createDateBegin').datebox("getValue"),
+        createDateEnd : $('#createDateEnd').datebox("getValue"),
 		isUse : $('#isUse').combobox("getValue")
 	});
 };
@@ -225,18 +317,19 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>企业信用代码：</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>简称：</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>企业名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>企业类型：</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' size='16' data-options=''/></td>
+							<th>企业信用代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>企业类型</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 						<tr>
-							<th>创建时间：</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否启用：</th>
+							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>是否启用</th>
 							<td>
 								<select id="isUse" style="width:100px;">
 								</select>

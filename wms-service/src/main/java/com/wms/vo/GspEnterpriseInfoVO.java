@@ -18,6 +18,11 @@ public class GspEnterpriseInfoVO {
 	private Long editId;
 	private java.util.Date editDate;
 	private String isUse;
+	private String state;
+	private String userDefine1;
+	private String userDefine2;
+	private String userDefine3;
+	private String userDefine4;
 
 	public String getEnterpriseId() {
 		return enterpriseId;
@@ -125,4 +130,43 @@ public class GspEnterpriseInfoVO {
 		this.isUse = isUse;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getUserDefine1() {
+		return userDefine1;
+	}
+
+	public void setUserDefine1(String userDefine1) {
+		this.userDefine1 = userDefine1;
+	}
+
+	public String getUserDefine2() {
+		return userDefine2;
+	}
+
+	public void setUserDefine2(String userDefine2) {
+		this.userDefine2 = userDefine2;
+	}
+
+	public String getUserDefine3() {
+		return userDefine3;
+	}
+
+	public void setUserDefine3(String userDefine3) {
+		this.userDefine3 = userDefine3;
+	}
+
+	public String getUserDefine4() {
+		return userDefine4;
+	}
+
+	public void setUserDefine4(String userDefine4) {
+		this.userDefine4 = userDefine4;
+	}
 }

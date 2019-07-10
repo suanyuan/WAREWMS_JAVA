@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 public class GspSecondRecord  implements Serializable {
 
-	private Long recordId;
+	private String recordId;
 
 	private String recordNo;
 

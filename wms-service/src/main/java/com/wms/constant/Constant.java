@@ -28,6 +28,9 @@ public class Constant {
     public static final String CODE_ENT_TYP_JY = "JY";//经营
     public static final String CODE_ENT_TYP_GNSC = "GNSC";//国内生产
     public static final String CODE_ENT_TYP_GWSC = "GWSC";//国外生产
+    public static final String CODE_ENT_TYP_KD = "KD";//快递
+    public static final String CODE_ENT_TYP_YL = "YL";//医疗单位
+    public static final String CODE_ENT_TYP_ZT = "ZT";//主体
 
 
 //是否
@@ -39,6 +42,9 @@ public class Constant {
     public static final String APLSUPNO = "APLSUPNO";//供应商申请
     public static final String APLRECNO = "APLRECNO";//收货单位申请
     public static final String APLPRONO = "APLPRONO";//产品申请
+
+    public static final String BASRECNO = "BASRECNO";//收货单位客户档案编号
+    public static final String BASSUPNO = "BASSUPNO";//供应商客户档案编号
 
     //code
     //首营状态

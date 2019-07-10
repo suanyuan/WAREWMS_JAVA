@@ -118,6 +118,11 @@
                     valueField:'id',
                     textField:'value'
                 });
+                $("#isReturn").combobox({
+                    url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+                    valueField:'id',
+                    textField:'value'
+                });
                 $("#isCooperation").combobox({
                     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
                     valueField:'id',
@@ -134,26 +139,13 @@
                 $('#receivingId').val(0);
                 ezuiDialog.dialog('open');
             };
-            var edit = function(){
+var edit = function(){
                 processType = 'edit';
                 var row = ezuiDatagrid.datagrid('getSelected');
-                if(row){
-                    ezuiForm.form('load',{
-                        receivingId : row.receivingId,
-                        enterpriseId : row.enterpriseId,
-                        clientId : row.clientId,
-                        supplierId : row.supplierId,
-                        isCheck : row.isCheck,
-                        enterpriseNo : row.enterpriseNo,
-                        enterpriseName : row.enterpriseName,
-                        contacts : row.contacts,
-                        phone : row.phone,
-                        deliveryAddress : row.deliveryAddress,
-                        isReturn : row.isReturn,
-                        sellerName : row.sellerName
 
-                    });
-                    ezuiDialog.dialog('open');
+    			if(row){
+
+                    ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.enterpriseId+"&receivingId="+row.receivingId);
                 }else{
                     $.messager.show({
                         msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -225,7 +217,7 @@
             var commit = function(){
                 doSubmit();
             };
-            var doSearch = function(){
+ var doSearch = function(){
                 ezuiDatagrid.datagrid('load', {
                     receivingId : $('#receivingId').val(),
                     enterpriseId : $('#enterpriseId').val(),
@@ -233,6 +225,7 @@
                     supplierId : $('#supplierId').val(),
                     deliveryAddress : $('#deliveryAddress').val(),
                     isCheck : $('#isCheck').combobox("getValue"),
+                    isReturn : $('#isReturn').combobox("getValue"),
 
                     createId : $('#createId').val(),
                     createDate : $('#createDate').val(),
@@ -266,7 +259,7 @@
 							<th>货主</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>是否需要审核</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否医废</th><td><input type='text' id='isReturn' name="isReturn" class='easyui-textbox' size='16' data-options=''/></td>
 
 							<th>是否有效</th><td><input type='text' id='isUse' name="isUse" class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
@@ -278,7 +271,7 @@
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
+					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>--%>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='newAdd();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>

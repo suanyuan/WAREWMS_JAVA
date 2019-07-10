@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.GspSupplier;
+import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -72,11 +74,23 @@ public class BasCustomerController {
 		Json json = basCustomerService.addBasCustomer(basCustomerForm);
 		if(json == null){
 			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+
+
+	@Login
+	@RequestMapping(params = "supplierAdd")
+	@ResponseBody
+	public Json supplierAdd(GspSupplierForm gspSupplierForm) throws Exception {
+		Json json = basCustomerService.supplierAddCustomer(gspSupplierForm);
+		if(json == null){
+			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
 		return json;
 	}
-
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
@@ -84,8 +98,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.editBasCustomer(basCustomerForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -96,8 +110,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.deleteBasCustomer(enterpriseId,customerType);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 	@Login
@@ -107,8 +121,8 @@ public class BasCustomerController {
 		Json json = basCustomerService.goonBasCustomer(enterpriseId,customerType);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 	@Login

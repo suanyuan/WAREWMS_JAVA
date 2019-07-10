@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class GspEnterpriseInfo  implements Serializable {
+public class GspEnterpriseInfo implements Serializable {
 
 	private String enterpriseId;
 
@@ -34,5 +34,15 @@ public class GspEnterpriseInfo  implements Serializable {
 	private String editDate;
 
 	private String isUse;
+
+	private String state;
+
+	private String userDefine1;
+
+	private String userDefine2;
+
+	private String userDefine3;
+
+	private String userDefine4;
 
 }

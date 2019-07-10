@@ -105,9 +105,10 @@ public class GspReceivingService extends BaseService {
 			gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-
+			gspReceiving.setFirstState("00");
 
 			gspReceivingMybatisDao.add(gspReceiving);
+			//插入一条首营申请日志记录
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());

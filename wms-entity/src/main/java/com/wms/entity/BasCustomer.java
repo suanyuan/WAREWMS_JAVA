@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 @Entity
@@ -125,11 +125,27 @@ public class BasCustomer  implements Serializable {
 
 	private String notes;
 
-	private java.sql.Date addtime;
+	private java.util.Date addtime;
 
 	private String addwho;
 
-	private java.sql.Date edittime;
+	public Date getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(Date addtime) {
+		this.addtime = addtime;
+	}
+
+	public Date getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(Date edittime) {
+		this.edittime = edittime;
+	}
+
+	private java.util.Date edittime;
 
 	private String editwho;
 
@@ -771,13 +787,7 @@ public class BasCustomer  implements Serializable {
 		this.notes = notes;
 	}
 
-	public Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(Date addtime) {
-		this.addtime = addtime;
-	}
 
 	public String getAddwho() {
 		return addwho;
@@ -787,13 +797,8 @@ public class BasCustomer  implements Serializable {
 		this.addwho = addwho;
 	}
 
-	public Date getEdittime() {
-		return edittime;
-	}
 
-	public void setEdittime(Date edittime) {
-		this.edittime = edittime;
-	}
+
 
 	public String getEditwho() {
 		return editwho;

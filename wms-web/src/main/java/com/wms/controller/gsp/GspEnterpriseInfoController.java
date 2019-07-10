@@ -11,12 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspOperateLicenseQuery;
-import com.wms.service.GspBusinessLicenseService;
-import com.wms.service.GspEnterpriceService;
-import com.wms.service.GspOperateLicenseService;
+import com.wms.query.GspSecondRecordQuery;
+import com.wms.service.*;
 import com.wms.utils.editor.CustomDateEditor;
-import com.wms.vo.GspBusinessLicenseVO;
-import com.wms.vo.GspOperateLicenseVO;
+import com.wms.vo.*;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,11 +22,8 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.GspEnterpriseInfoService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
-import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -49,6 +44,8 @@ public class GspEnterpriseInfoController {
 	private GspBusinessLicenseService gspBusinessLicenseService;
 	@Autowired
 	private GspOperateLicenseService gspOperateLicenseService;
+	@Autowired
+	private GspSecondRecordService gspSecondRecordService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -59,6 +56,7 @@ public class GspEnterpriseInfoController {
 		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 
 
@@ -93,7 +91,7 @@ public class GspEnterpriseInfoController {
 	@Login
 	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(@RequestParam(value="enterpriseId",required=true) String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
+	public Json add(@RequestParam(value="enterpriseId",required = false,defaultValue = "") String enterpriceId,@RequestParam(value="gspEnterpriceFrom",required=true) String gspEnterpriceFromStr) throws Exception {
 		GspEnterpriceFrom gspEnterpriceFrom = JSON.parseObject(gspEnterpriceFromStr,GspEnterpriceFrom.class);
 		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
@@ -174,8 +172,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toInfo(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspEnterpriceInfo(id);
-		model.put("gspEnterpriseInfo",json.getObj());
+		if(!"".equals(id)){
+			Json json = gspEnterpriceService.getGspEnterpriceInfo(id);
+			model.put("gspEnterpriseInfo",json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/info", model);
 	}
 
@@ -184,8 +184,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspBusinessLicense(id);
-		model.put("gspBusinessLicense",json.getObj());
+		if(!"".equals(id)){
+			Json json = gspEnterpriceService.getGspBusinessLicense(id);
+			model.put("gspBusinessLicense",json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
 	}
 
@@ -194,8 +196,10 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toOperateLicense(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspOperateLicense(id);
-		model.put("gspOperateLicense",json.getObj());
+		if(!"".equals(id)) {
+			Json json = gspEnterpriceService.getGspOperateLicense(id);
+			model.put("gspOperateLicense", json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/operateLicense", model);
 	}
 
@@ -204,17 +208,22 @@ public class GspEnterpriseInfoController {
 	public ModelAndView toSecondRecord(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", id);
-		Json json = gspEnterpriceService.getGspSecondRecord(id);
-		model.put("gspSecondRecord",json.getObj());
+		if(!"".equals(id)) {
+			Json json = gspEnterpriceService.getGspSecondRecord(id);
+			model.put("gspSecondRecord", json.getObj());
+		}
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toSearchDialog")
-	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target,@RequestParam(defaultValue = "") String type) {
+	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target,
+									   @RequestParam(defaultValue = "") String type,
+									   @RequestParam(defaultValue = "") String enterpriseType) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("target",target);
 		model.put("type",type);
+		model.put("enterpriseType",enterpriseType);
 		return new ModelAndView("gspEnterpriseInfo/search", model);
 	}
 
@@ -269,5 +278,12 @@ public class GspEnterpriseInfoController {
 	@ResponseBody
 	public EasyuiDatagrid<GspOperateLicenseVO> operateHistoryDatagridList(EasyuiDatagridPager pager, GspOperateLicenseQuery query){
 		return gspOperateLicenseService.getGspOperateLicenseHistory(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "recordHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspSecondRecordVO> recordHistoryDatagridList(EasyuiDatagridPager pager, GspSecondRecordQuery query){
+		return gspSecondRecordService.getGspSecondRecordHistory(pager,query);
 	}
 }

@@ -8,6 +8,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery-easyui/locale/easyui-lang-zh_CN.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/syUtils.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/swUtils.js"/>"></script>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/constant.js"/>"></script>
 <c:set var="themeValue">
 	<c:out value="${cookie.easyuiThemeName.value}" default="default"/>
 </c:set>
@@ -24,12 +25,25 @@
     }
     
     var isUseFormatter = function(value,row,index) {
-	    console.log(value);
 		if(value == "1"){
 		    return "有效";
 		}else{
             return "失效";
 		}
+    }
+
+    var firstStateFormatter = function(value,row,index) {
+        if(value == "00"){
+            return "新建";
+        }else if(value == "10"){
+            return "审核中";
+        }else if(value == "90"){
+            return "已报废";
+        }else if(value == "60"){
+            return "已停止";
+        }else if(value == "40"){
+            return "审核通过";
+        }
     }
 
     var isUseRowStyler = function(index,row) {
@@ -67,5 +81,25 @@
 
     var add0 = function(m){
         return m < 10 ? '0' + m: m
+    }
+
+	var checkObjIsEmpty = function(obj){
+        var hasProp = false;
+        for (var prop in obj){
+            hasProp = true;
+            break;
+        }
+        return hasProp;
+    }
+
+    var entTypeFormatter = function(value,row,index) {
+        switch (value) {
+			case "JY" : return "经营";
+            case "GNSC" : return "国内生产";
+            case "GWSC" : return "国外生产";
+            case "KD" : return "快递";
+            case "YL" : return "医疗单位";
+			case "ZT" : return "主体";
+        }
     }
 </script>

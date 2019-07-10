@@ -112,7 +112,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into gsp_business_license(business_id,enterprise_id,license_number,social_credit_code,license_name,license_type,residence,juridical_person,registered_capital,establishment_date,business_start_date,business_end_date,is_long,business_scope,issue_date,registration_authority,attachment_url,create_id,create_date,edit_id,edit_date,is_use)
- values(#{businessId},#{enterpriseId},#{licenseNumber},#{socialCreditCode},#{licenseName},#{licenseType},#{residence},#{juridicalPerson},#{registeredCapital},#{establishmentDate},#{businessStartDate},#{businessEndDate},#{isLong},#{businessScope},#{issueDate},#{registrationAuthority},#{attachmentUrl},#{createId},now(),#{editId},#{editDate},#{isUse})
+ values(#{businessId},#{enterpriseId},#{licenseNumber},#{socialCreditCode},#{licenseName},#{licenseType},#{residence},#{juridicalPerson},#{registeredCapital},#{establishmentDate,jdbcType=TIMESTAMP},#{businessStartDate,jdbcType=TIMESTAMP},#{businessEndDate,jdbcType=TIMESTAMP},#{isLong},#{businessScope},#{issueDate},#{registrationAuthority},#{attachmentUrl},#{createId},now(),#{editId},#{editDate,jdbcType=TIMESTAMP},#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  

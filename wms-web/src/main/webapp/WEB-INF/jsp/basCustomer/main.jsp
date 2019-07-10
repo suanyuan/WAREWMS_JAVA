@@ -37,7 +37,23 @@ $(function() {
 		columns : [[
 			{field: 'customerId',		title: '产品代码',	width: 20 },
             {field: 'descrC',		title: '客户名称',	width: 20 },
-            {field: 'customerType',		title: '客户类型 ',	width: 20 },
+            {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
+                    if (rowData.customerType=='CO') {
+                        return rowData.customerType='收货单位';
+					}else if (rowData.customerType=='VE'){
+                        return rowData.customerType='供应商';
+					}else if (rowData.customerType=='CA'){
+                        return rowData.customerType='承运商';
+					}else if (rowData.customerType=='OT'){
+                        return rowData.customerType='其他';
+					}else if (rowData.customerType=='OW'){
+                        return rowData.customerType='货主';
+					}else if (rowData.customerType=='PR'){
+                        return rowData.customerType='生产企业';
+					}else if (rowData.customerType=='WH'){
+                        return rowData.customerType='主体';
+					}
+                } },
             {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
             {field: 'shorthandName',		title: '简称 ',	width: 15 },
             {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
@@ -152,16 +168,34 @@ var edit = function(){
 		});
 	}
 };
+var exchange=function (type) {
+	if (type == "收货单位") {
+	    return type='CO';
+	}else if (type=='供应商'){
+        return type='VE';
+    }else if (type=='承运商'){
+        return type='CA';
+    }else if (type=='其他'){
+        return type='OT';
+    }else if (type=='货主'){
+        return type='OW';
+    }else if (type=='生产企业'){
+        return type='PR';
+    }else if (type=='主体'){
+        return type='WH';
+    }
+};
 
 /* 删除 */
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
+	    var customerType = exchange(row.customerType);
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.update"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
 					url : 'basCustomerController.do?delete',
-					data : {enterpriseId : row.enterpriseId, customerType : row.customerType},
+					data : {enterpriseId : row.enterpriseId, customerType : customerType},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -196,12 +230,12 @@ var del = function(){
 var goon = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row.activeFlag!="1"){
-
+        var type = exchange(row.customerType);
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.goon"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
 					url : 'basCustomerController.do?goon',
-					data : {enterpriseId : row.enterpriseId, customerType : row.customerType},
+					data : {enterpriseId : row.enterpriseId, customerType : type},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -227,7 +261,7 @@ var goon = function(){
 		});
 	}else{
 		$.messager.show({
-			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+			msg : '该客户已是合作客户，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
 };
@@ -306,7 +340,7 @@ var doSearch = function(){
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
-					<table align="center">
+					<table >
 						<tr align="left">
 							<th>产品代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options='' align="left"/></td>
 							<th>客户名称</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>

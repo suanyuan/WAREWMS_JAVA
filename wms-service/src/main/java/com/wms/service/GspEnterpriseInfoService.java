@@ -53,6 +53,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setOrderByClause("create_date desc");
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();

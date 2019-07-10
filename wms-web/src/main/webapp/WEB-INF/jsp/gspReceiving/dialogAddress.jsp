@@ -2,9 +2,9 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <div id='dialogAddAddress' style='padding: 10px;'>
-	<input type='hidden' id='receivingId' name='receivingId'/>
 	<form id='dialogAddAddressForm' method='post' >
 
+	<input type='hidden' id='receiving'  name='receivingId' class='easyui-textvalue' value="${receivingId}"/>
 
 			<table>
 				<tr>
@@ -17,11 +17,8 @@
 				</tr>
 				<tr>
 					<th>省</th>
-					<td><select  name="province" id='province'>
-						<option value="selected">请选择省份</option>
+					<td><input type='text'   name="province" id='province' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
-						</select>
-					</td>
 				</tr>
 				<tr>
 					<th>市</th>
@@ -140,8 +137,7 @@
         });*/
     }
 
-
-   /* var provinceId = $('#provinceId').combobox({
+   /* var province = $('#province').combobox({
         url: '/Sys/SSQManage/GetProvince',
         editable: false,
         valueField: 'ProvinceID',
@@ -158,7 +154,7 @@
             areaId.combobox({}).combobox('clear');
         }
     });
-    var cityId = $('#cityId').combobox({
+    var city = $('#city').combobox({
         disabled: true,
         valueField: 'CityID', //值字段
         textField: 'CityName', //显示的字段
@@ -174,7 +170,7 @@
         }
     });
 
-    var areaId = $('#areaId').combobox({
+    var area = $('#area').combobox({
         disabled: true,
         valueField: 'AreaID', //值字段
         textField: 'AreaName', //显示的字段

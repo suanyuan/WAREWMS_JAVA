@@ -18,6 +18,8 @@ public class GspOperateLicenseForm {
 	private String registrationAuthority;
 	private String operateType;
 	private String isUse;
+	private String scopArr;
+	private String opType;
 
 	public String getOperateId() {
 		return operateId;
@@ -123,5 +125,21 @@ public class GspOperateLicenseForm {
 
 	public void setIsUse(String isUse) {
 		this.isUse = isUse;
+	}
+
+	public String getScopArr() {
+		return scopArr;
+	}
+
+	public void setScopArr(String scopArr) {
+		this.scopArr = scopArr;
+	}
+
+	public String getOpType() {
+		return opType;
+	}
+
+	public void setOpType(String opType) {
+		this.opType = opType;
 	}
 }

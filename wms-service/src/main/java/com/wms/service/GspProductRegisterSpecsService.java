@@ -95,6 +95,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
+
 //		gspProductRegisterSpecs.setEditDate(new Date());
 		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 		json.setSuccess(true);

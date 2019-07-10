@@ -1,6 +1,7 @@
 package com.wms.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,16 +29,18 @@ public class GspBusinessLicense  implements Serializable {
 
 	private String registeredCapital;
 
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private java.util.Date establishmentDate;
-
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private java.util.Date businessStartDate;
-
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private java.util.Date businessEndDate;
 
 	private String isLong;
 
 	private String businessScope;
 
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private java.util.Date issueDate;
 
 	private String registrationAuthority;
@@ -46,10 +49,12 @@ public class GspBusinessLicense  implements Serializable {
 
 	private String createId;
 
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createDate;
 
 	private String editId;
 
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date editDate;
 
 	private String isUse;

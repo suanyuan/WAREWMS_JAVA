@@ -16,6 +16,23 @@ public class GspReceivingForm {
 	private String isReturn;
 	private String deliveryAddress;
 	private String sellerName;
+	private String firstState;
+
+	public String getIsCheck() {
+		return isCheck;
+	}
+
+	public void setIsCheck(String isCheck) {
+		this.isCheck = isCheck;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
 
 	public String getSellerName() {
 		return sellerName;
@@ -91,13 +108,7 @@ public class GspReceivingForm {
 		this.supplierId = supplierId;
 	}
 
-	public String getIsCheck() {
-		return isCheck;
-	}
 
-	public void setIsCheck(String isCheck) {
-		this.isCheck = isCheck;
-	}
 
 	public String getCreateId() {
 		return createId;
