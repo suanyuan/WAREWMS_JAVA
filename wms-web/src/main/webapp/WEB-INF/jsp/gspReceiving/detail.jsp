@@ -19,13 +19,13 @@
         <tr>
             <th>企业</th>
             <td>
-                <input type='text'  name='enterpriseName' value='${gspEnterpriseInfo.enterpriseName}'  size='16' class='easyui-textbox' data-options='required:true'/>
+                <input type='text' id="enterpriseN"  name='enterpriseName' value='${gspEnterpriseInfo.enterpriseName}'  size='16' class='easyui-textbox' data-options='required:true'/>
                 <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
             </td>
             <th>代码</th>
-            <td><input type='text'  name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' id="enterpriseNo"  name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
             <th>简称</th>
-            <td><input type='text'  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' id="s"  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
 
             <th>货主</th>
             <td><input type='text' name='clientId'  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
