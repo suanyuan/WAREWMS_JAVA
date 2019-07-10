@@ -227,5 +227,23 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <!-- 查询未完成列表-->
+    <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_qc_header
+        where qcstatus = '00' or qcstatus = '30'
+        order by ADDTIME desc
+        limit #{start}, #{pageSize}
+    </select>
+
+    <update id="endTask" parameterType="java.util.Map">
+        update doc_qc_header set
+        qcstatus = '40',
+        edittime = NOW(),
+        editwho = #{editwho, jdbcType=VARCHAR}
+        where qcno = #{qcno, jdbcType=VARCHAR}
+    </update>
   	
 </mapper>   

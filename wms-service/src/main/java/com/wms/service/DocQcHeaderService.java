@@ -5,11 +5,15 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocQcHeader;
 import com.wms.mybatis.dao.DocQcHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.entity.pda.PdaDocQcEndForm;
 import com.wms.query.DocQcHeaderQuery;
+import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocQcHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQcHeaderForm;
+import com.wms.vo.form.pda.PageForm;
+import com.wms.vo.pda.PdaDocQcHeaderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,4 +89,54 @@ public class DocQcHeaderService extends BaseService {
 //		return comboboxList;
 //	}
 
+    /**
+     * 查询未完成的验收任务单
+     * @param form 分页
+     * @return ~
+     */
+    public List<PdaDocQcHeaderVO> queryUndoneList(PageForm form) {
+
+        List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryUndoneList(form.getStart(), form.getPageSize());
+        List<PdaDocQcHeaderVO> pdaDocQcHeaderVOList = new ArrayList<>();
+        PdaDocQcHeaderVO pdaDocQcHeaderVO;
+        for (DocQcHeader docQcHeader : docQcHeaderList) {
+
+            pdaDocQcHeaderVO = new PdaDocQcHeaderVO();
+            BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
+            pdaDocQcHeaderVOList.add(pdaDocQcHeaderVO);
+        }
+        return pdaDocQcHeaderVOList;
+    }
+
+    /**
+     * 通过qcno查询header
+     * @param qcno ~
+     * @return ~
+     */
+    public PdaDocQcHeaderVO queryByQcno(String qcno) {
+
+        DocQcHeader docQcHeader = docQcHeaderMybatisDao.queryById(qcno);
+        PdaDocQcHeaderVO pdaDocQcHeaderVO = new PdaDocQcHeaderVO();
+        if (docQcHeader != null) {
+
+            BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
+        }
+        return pdaDocQcHeaderVO;
+    }
+
+    /**
+     * 结束验收单任务
+     * @param form 验收单单号
+     * @return ~
+     */
+    public PdaResult endTask(PdaDocQcEndForm form) {
+
+        form.setEditwho("Gizmo");
+        int result = docQcHeaderMybatisDao.endTask(form);
+
+        if (result == 0) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 订单号不存在");
+        }
+        return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
+    }
 }
