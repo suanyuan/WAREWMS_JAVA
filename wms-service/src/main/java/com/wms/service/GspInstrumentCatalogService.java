@@ -66,7 +66,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		BeanUtils.copyProperties(gspInstrumentCatalogForm, gspInstrumentCatalog);
 		gspInstrumentCatalog.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		gspInstrumentCatalog.setEditDate(new Date());
-		gspInstrumentCatalogMybatisDao.update(gspInstrumentCatalog);
+		gspInstrumentCatalogMybatisDao.updateBySelective(gspInstrumentCatalog);
 		json.setSuccess(true);
 		return json;
 	}

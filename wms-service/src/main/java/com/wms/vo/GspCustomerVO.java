@@ -9,6 +9,7 @@ public class GspCustomerVO {
 	private String clientNo;
 	private String clientName;
 	private String enterpriseId;
+	private String enterpriseName;
 	private String remark;
 	private String firstState;
 	private String isCheck;
@@ -197,4 +198,11 @@ public class GspCustomerVO {
 		this.isUse = isUse;
 	}
 
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 }

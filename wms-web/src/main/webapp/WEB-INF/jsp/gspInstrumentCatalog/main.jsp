@@ -40,10 +40,10 @@ $(function() {
 			{field: 'classifyId',		title: '分类',	width: 72 },
 			{field: 'version',		title: '版本',	width: 72 },
 			{field: 'createId',		title: '创建人',	width: 72 },
-			{field: 'cretaeDate',		title: '创建时间',	width: 72 },
+			{field: 'cretaeDate',		title: '创建时间',	width: 72 ,formatter: dateFormat2},
 			{field: 'editId',		title: '修改人',	width: 72 },
-			{field: 'editDate',		title: '修改时间',	width: 72 },
-			{field: 'isUse',		title: '是否有效',	width: 72 }
+			{field: 'editDate',		title: '修改时间',	width: 72 ,formatter: dateFormat2},
+			{field: 'isUse',		title: '是否有效',	width: 72 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -111,6 +111,7 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
+	    $("#instrumentCatalogId").val(row.instrumentCatalogId);
 		ezuiForm.form('load',{
 			instrumentCatalogId : row.instrumentCatalogId,
 			instrumentCatalogNo : row.instrumentCatalogNo,
@@ -247,7 +248,7 @@ var doSearch = function(){
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+					<!--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>-->
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
@@ -257,7 +258,7 @@ var doSearch = function(){
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='gspInstrumentCatalogId' name='gspInstrumentCatalogId'/>
+			<input type='hidden' id='instrumentCatalogId' name='instrumentCatalogId' />
 			<table>
 				<tr>
 					<th>编号</th>

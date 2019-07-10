@@ -43,7 +43,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
-			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
+			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInf oVO);
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
 		datagrid.setTotal(gspEnterpriseInfoDao.countAll(query));
@@ -114,6 +114,11 @@ public class GspEnterpriseInfoService extends BaseService {
 
 
 	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
+
+		if(checkRep(gspEnterpriseInfoForm.getEnterpriseNo(),gspEnterpriseInfoForm.getEnterpriseName())){
+			return Json.error("该企业信息已存在，企业名称和编号不能重复！");
+		}
+
 		SfcUserLogin userLogin =  SfcUserLoginUtil.getLoginUser();
 		Json json = new Json();
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
@@ -176,6 +181,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		BeanUtils.copyProperties(form,gspEnterpriseInfo);
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 	}
+
 	public Json addEnterprise(GspEnterpriseInfo gspEnterpriseInfo) throws Exception {
 		Json json = new Json();
 
@@ -193,5 +199,27 @@ public class GspEnterpriseInfoService extends BaseService {
 		json.setSuccess(true);
 		json.setMsg("添加成功");
 		return json;
+	}
+
+	/**
+	 * 检查企业id或者名称是否重复
+	 * @param enterpriseNo
+	 * @param enterpriseName
+	 * @return
+	 */
+	private boolean checkRep(String enterpriseNo,String enterpriseName){
+		GspEnterpriseInfoQuery query = new GspEnterpriseInfoQuery();
+		MybatisCriteria criteria = new MybatisCriteria();
+		query.setIsUse(Constant.IS_USE_YES);
+		query.setEnterpriseNo(enterpriseNo);
+		query.setEnterpriseName(enterpriseName);
+		criteria.setCondition(query);
+		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryPageListByType(criteria);
+		if(gspEnterpriseInfoList!=null && gspEnterpriseInfoList.size()>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

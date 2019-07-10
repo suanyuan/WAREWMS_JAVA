@@ -74,12 +74,19 @@ public class GspOperateDetailService extends BaseService {
 	}
 
 	public List<GspOperateDetailVO> queryOperateDetailByLicense(String license){
-		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
-		query.setEnterpriseId(license);
+		List<GspOperateDetailVO> voList = new ArrayList<>();
+		GspOperateDetailQuery query = new GspOperateDetailQuery();
+		query.setLicenseId(license);
 		query.setIsUse(Constant.IS_USE_YES);
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCondition(query);
-		return gspOperateDetailMybatisDao.queryByList(criteria);
+		List<GspOperateDetail> list = gspOperateDetailMybatisDao.queryByList(criteria);
+		for(GspOperateDetail g : list){
+			GspOperateDetailVO v = new GspOperateDetailVO();
+			v.setOperateId(g.getOperateId());
+			voList.add(v);
+		}
+		return voList;
 	}
 
 }

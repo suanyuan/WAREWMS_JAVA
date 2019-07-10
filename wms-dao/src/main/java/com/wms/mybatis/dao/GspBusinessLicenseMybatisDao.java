@@ -6,6 +6,7 @@ package com.wms.mybatis.dao;
  * <b>功能：</b>GspBusinessLicenseDao<br>
  */
 public interface GspBusinessLicenseMybatisDao extends BaseDao {
-	
-	
+
+    void updateGspBusinessLicenseActiveTag(String enterpriseId,String tag);
+
 }

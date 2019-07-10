@@ -22,8 +22,7 @@
                                 <th>所属企业</th>
                                 <td>
                                     <input type="hidden" id="enterpriseId" name="enterpriseId" class="textbox-value" value="${gspProductRegister.enterpriseId}"/>
-                                    <input type='text' id='enterpriseName' value="" data-options='required:true,width:150,editable:false'/>
-                                    <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+                                    <input type='text' id='enterpriseName' value="" />
                                 </td>
                                 <th>管理分类</th>
                                 <td><input type='text' name='classifyId' class='easyui-textbox' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
@@ -142,8 +141,8 @@
                         <th>简称</th>
                         <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
                         <td>
-                            <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                            <a onclick='selectEnterprise()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                            <a id="productQuery" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>查询</a>
+                            <a id="productChose" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>选择</a>
                         </td>
                     </tr>
                 </table>
@@ -410,7 +409,7 @@
                 {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
                 {field: '_operate',		title: '操作',	width: '20%',
                     formatter: formatOper
                 }
@@ -436,22 +435,28 @@
             width:850,
             height:500,
             cache: false,
-            cache: false,
             onClose : function() {
                 
+            },
+            onOpen : function () {
+
             }
         }).dialog('close');
 
-        /*dialogEnterprise = $('#dialogEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            fit:true,
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-            cache: false,
-            onClose : function() {
 
+        /*$("#productChose").linkbutton({
+            iconCls: 'icon-add',
+            onClick:function () {
+                console.log("chose");
             }
-        }).dialog('close');*/
+        })
+
+        $("#productQuery").linkbutton({
+            iconCls: 'icon-search',
+            onClick:function () {
+                console.log("query");
+            }
+        })*/
     })
     
     function choseSelect() {
@@ -482,13 +487,14 @@
     }
 
     $("#enterpriseName").textbox({
-        width:110,
+        width:185,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
                 //$("#ezuiCustDataDialog #customerid").textbox('clear');
                 //ezuiCustDataClick();
                 //ezuiCustDataDialogSearch();
+                searchEnterprise();
             }
         }]
     });

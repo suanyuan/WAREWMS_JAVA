@@ -8,8 +8,9 @@
 </style>
 <div id='detailOperateToolbar' class='datagrid-toolbar' style='padding: 0px;'>
     <form id='ezuiFormOperate' method='post' style="padding: 0px;">
-        <input type='hidden' id='gspOperateLicenseId' name='gspOperateLicenseId' value="${gspOperateLicense.operateId}"/>
+        <input type='hidden' data="1" id='operateId' name='operateId' value="${gspOperateLicense.operateId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
+        <input type='hidden' id='choseScope' value="${choseScope}"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
@@ -91,7 +92,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'${gspOperateLicense.operateId}'},
+            queryParams:{'enterpriseId':'${gspOperateLicense.enterpriseId}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -100,7 +101,7 @@
                 {field: 'operateId',title:'主键',hidden:true},
                 {field: 'licenseNo',title: '许可证编号' ,width: '20%'},
                 {field: 'operateMode',title: '经营方式',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%'},
+                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
@@ -130,6 +131,7 @@
             width: '250', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
+            prompt:'${gspOperateLicense.licenseUrl}',
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -338,6 +340,8 @@
                     $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
                 }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                     $(this).datebox("setValue",row[""+$(this).attr("id")+""]);
+                }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                    $(this).numberbox("setValue",row[""+$(this).attr("id")+""]);
                 }
             }
         })
@@ -355,6 +359,8 @@
                     $(this).textbox("setValue","");
                 }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                     $(this).datebox("setValue","");
+                }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                    $(this).numberbox("setValue","");
                 }
             }
         })

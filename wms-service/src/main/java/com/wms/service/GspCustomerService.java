@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -24,6 +25,8 @@ public class GspCustomerService extends BaseService {
 
 	@Autowired
 	private GspCustomerMybatisDao gspCustomerMybatisDao;
+	@Autowired
+	private GspEnterpriseInfoService gspEnterpriseInfoService;
 
 	public EasyuiDatagrid<GspCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, GspCustomerQuery query) {
 		EasyuiDatagrid<GspCustomerVO> datagrid = new EasyuiDatagrid<GspCustomerVO>();
@@ -89,6 +92,21 @@ public class GspCustomerService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public Json getGspCustomerById(String id){
+		GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(id);
+		if(gspCustomer != null){
+			GspCustomerVO gspCustomerVO = new GspCustomerVO();
+			BeanUtils.copyProperties(gspCustomer,gspCustomerVO);
+			GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(id);
+			if(info!=null){
+				gspCustomerVO.setClientNo(info.getEnterpriseNo());
+				gspCustomerVO.setClientName(info.getShorthandName());
+			}
+			return Json.success("",gspCustomerVO);
+		}
+		return Json.error("");
 	}
 
 }

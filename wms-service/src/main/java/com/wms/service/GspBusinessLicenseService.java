@@ -78,17 +78,16 @@ public class GspBusinessLicenseService extends BaseService {
 	}
 
 	public void updateGspBusinessLicenseActiveTag(String enterpriseId,String tag) {
-		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
-		form.setEnterpriseId(enterpriseId);
-		form.setIsUse(tag);
-		gspBusinessLicenseMybatisDao.updateBySelective(form);
+		gspBusinessLicenseMybatisDao.updateGspBusinessLicenseActiveTag(enterpriseId, tag);
 	}
 
 	public void updateGspBusinessLicenseTagById(String id,String tag) {
 		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
 		form.setBusinessId(id);
 		form.setIsUse(tag);
-		gspBusinessLicenseMybatisDao.updateBySelective(form);
+		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+		BeanUtils.copyProperties(form,gspBusinessLicense);
+		gspBusinessLicenseMybatisDao.updateBySelective(gspBusinessLicense);
 	}
 
 	/**

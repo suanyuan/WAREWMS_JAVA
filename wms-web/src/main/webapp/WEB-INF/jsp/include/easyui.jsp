@@ -23,14 +23,6 @@
 		}
 		window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName);
     }
-    
-    var isUseFormatter = function(value,row,index) {
-		if(value == "1"){
-		    return "有效";
-		}else{
-            return "失效";
-		}
-    }
 
     var firstStateFormatter = function(value,row,index) {
         if(value == "00"){
@@ -76,7 +68,21 @@
             hour = time.getHours(),
             minute = time.getMinutes(),
             second = time.getSeconds()
-        return  year+'-'+this.add0(month)+'-'+ this.add0(day)+' '+this.add0(hour)+':'+this.add0(minute)+':'+this.add0(second)
+        return  year+'-'+ add0(month)+'-'+ add0(day)+' '+add0(hour)+':'+add0(minute)+':'+add0(second)
+    }
+
+    var dateFormat2 = function(timestamp){
+        if(!timestamp || timestamp == ""){
+            return "";
+        }
+        var time = new Date(timestamp);    //先将时间戳转为Date对象，然后才能使用Date的方法
+        var year = time.getFullYear(),
+            month = time.getMonth() + 1 ,  //月份是从0开始的
+            day = time.getDate(),
+            hour = time.getHours(),
+            minute = time.getMinutes(),
+            second = time.getSeconds()
+        return  year+'-'+ add0(month)+'-'+add0(day);
     }
 
     var add0 = function(m){
@@ -92,14 +98,60 @@
         return hasProp;
     }
 
-    var entTypeFormatter = function(value,row,index) {
-        switch (value) {
-			case "JY" : return "经营";
-            case "GNSC" : return "国内生产";
-            case "GWSC" : return "国外生产";
-            case "KD" : return "快递";
-            case "YL" : return "医疗单位";
-			case "ZT" : return "主体";
+    var isUseFormatter = function(value,row,index) {
+        if(value == "1"){
+            return "有效";
+        }else{
+            return "失效";
         }
     }
+
+    var yesOrNoFormatter = function(value,row,index) {
+        if(value == "1"){
+            return "是";
+        }else{
+            return "否";
+        }
+    }
+
+    var entTypeFormatter = function(value,row,index) {
+        switch (value) {
+			case CODE_ENT_TYP.CODE_ENT_TYP_JY : return "经营";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "国内生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GWSC : return "国外生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
+            case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
+			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
+        }
+    }
+
+    var outTimeFormatter = function(value,row,index) {
+        if(value == 0 || value<0){
+            return "已过期";
+        }else{
+            return value+"天后过期";
+        }
+    }
+
+    var firstStateTypeFormatter = function(value,row,index) {
+        switch (value) {
+            case FIRSTSTATE.FIRSTSTATE_00 : return "新建";
+            case FIRSTSTATE.FIRSTSTATE_10 : return "审核中";
+            case FIRSTSTATE.FIRSTSTATE_40 : return "审核通过";
+            case FIRSTSTATE.FIRSTSTATE_50 : return "未通过";
+            case FIRSTSTATE.FIRSTSTATE_60 : return "已停止";
+            case FIRSTSTATE.FIRSTSTATE_90 : return "已报废";
+        }
+    }
+
+    var checkStateTypeFormatter = function(value,row,index) {
+        switch (value) {
+            case CHECKSTATE.CHECKSTATE_00 : return "新建";
+            case CHECKSTATE.CHECKSTATE_20 : return "质量部审核";
+            case CHECKSTATE.CHECKSTATE_30 : return "负责人审核";
+            case CHECKSTATE.CHECKSTATE_40 : return "已通过";
+            case CHECKSTATE.CHECKSTATE_50 : return "未通过";
+        }
+    }
+
 </script>

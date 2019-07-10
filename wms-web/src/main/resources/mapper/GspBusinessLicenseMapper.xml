@@ -221,4 +221,10 @@ where 1=1
     </if>
 </select>
 
+<!-- 删除记录 -->
+<update id="updateGspBusinessLicenseActiveTag" parameterType="Object">
+	update gsp_business_license set is_use=#{tag}  where enterprise_id = #{enterpriseId}
+</update>
+
+
 </mapper>   

@@ -159,11 +159,11 @@ var commit = function(){
     var isVal = true;
 
 
-    if (processType == 'edit') {
+    /*if (processType == 'edit') {
         url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
-    }else{
+    }else{*/
         url = sy.bp()+"/gspEnterpriseInfoController.do?add";
-    }
+    //}
     var enterpriceId = "";
     var row = ezuiDatagrid.datagrid('getSelected');
     if(row){
@@ -186,7 +186,6 @@ var commit = function(){
         showMsg("营业执照信息填写不完全！");
         return;
     }
-    console.log("bus---"+businessObj);
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
@@ -272,7 +271,27 @@ var checkFormData = function (formId,obj) {
             }
         }
     })
+
+
+
 	if(checkObjIsEmpty(obj) == true && checkResult == true){
+
+	    //长期证照
+        if(formId == "ezuiFormBusiness"){
+            var isLong = $("#ezuiFormBusiness input[id='isLong']");
+            if($(isLong).is(':checked')){
+                obj["isLong"] = "1";
+            }else{
+                obj["isLong"] = "0";
+            }
+        }
+
+        //上传附件
+        $("#"+formId+" input[type=hidden][data=1]").each(function () {
+            obj[""+$(this).attr("id")+""] = $(this).val();
+        })
+
+
         //加载经营范围
         var scopArr = $("#"+formId+" input[id='choseScope']");
         if(scopArr){

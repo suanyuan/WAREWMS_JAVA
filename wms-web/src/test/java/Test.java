@@ -1,12 +1,25 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: andy.qu
  * Date: 2019/7/9
  */
 public class Test {
+
     public static void main(String[] args) {
-        String arr = "123,2,4";
-        System.out.println(initScope(arr));
+        //String arr = "123,2,4";
+        //System.out.println(initScope(arr));
+        toStr();
+    }
+
+    private static void toStr(){
+        List<String> list = new ArrayList();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        System.out.println(list.toString().substring(1,list.toString().length()-1));
     }
 
     private static String initScope(String scope){

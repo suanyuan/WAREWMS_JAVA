@@ -8,8 +8,9 @@
 </style>
 <div id='detailRecordToolbar' class='datagrid-toolbar' style='padding: 0px;'>
     <form id='ezuiFormRecord' method='post' style="padding: 0px;">
-        <input type='hidden' id='gspSecondRecordId' name='gspSecondRecordId' value="${gspSecondRecord.recordId}"/>
+        <input type='hidden' data="1" id='recordId' name='recordId' value="${gspSecondRecord.recordId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
+        <input type='hidden' id='choseScope' value="${choseScope}"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
@@ -91,7 +92,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'${gspSecondRecord.recordId}'},
+            queryParams:{'enterpriseId':'${gspSecondRecord.enterpriseId}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -100,7 +101,7 @@
                 {field: 'operateId',title:'主键',hidden:true},
                 {field: 'recordNo',title: '备案编号' ,width: '20%'},
                 {field: 'operateMode',title: '经营方式',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%'},
+                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
@@ -130,6 +131,7 @@
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
             required: true,
+            prompt:'${gspSecondRecord.recordUrl}',
             onChange:function(data){
                 if(data){
                     doUpload(data);

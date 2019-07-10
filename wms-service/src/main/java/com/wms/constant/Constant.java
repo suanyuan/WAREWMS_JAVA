@@ -23,6 +23,8 @@ public class Constant {
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
     public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
     public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
+    public static final String CODE_CATALOG_CUS_TYP = "CUS_TYP";//客户类型
+
 
 //  企业类型
     public static final String CODE_ENT_TYP_JY = "JY";//经营
@@ -31,6 +33,16 @@ public class Constant {
     public static final String CODE_ENT_TYP_KD = "KD";//快递
     public static final String CODE_ENT_TYP_YL = "YL";//医疗单位
     public static final String CODE_ENT_TYP_ZT = "ZT";//主体
+
+//  客户类型
+    public static final String CODE_CUS_TYP_CA = "CA";//承运商
+    public static final String CODE_CUS_TYP_CO = "CO";//收货单位
+    public static final String CODE_CUS_TYP_OT = "OT";//其他
+    public static final String CODE_CUS_TYP_OW = "OW";//货主
+    public static final String CODE_CUS_TYP_PR = "PR";//生产企业
+    public static final String CODE_CUS_TYP_VE = "VE";//供应商
+    public static final String CODE_CUS_TYP_WH = "WH";//主体
+
 
 
 //是否

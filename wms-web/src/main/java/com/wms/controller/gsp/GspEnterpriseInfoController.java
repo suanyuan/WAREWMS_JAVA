@@ -1,14 +1,12 @@
 package com.wms.controller.gsp;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
-import com.wms.entity.GspEnterpriseInfo;
+import com.wms.constant.Constant;
+import com.wms.entity.*;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspOperateLicenseQuery;
 import com.wms.query.GspSecondRecordQuery;
@@ -46,6 +44,8 @@ public class GspEnterpriseInfoController {
 	private GspOperateLicenseService gspOperateLicenseService;
 	@Autowired
 	private GspSecondRecordService gspSecondRecordService;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -57,6 +57,15 @@ public class GspEnterpriseInfoController {
 		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+
+	private String initOperateDetail(List<GspOperateDetailVO> list){
+		List<String> arr = new ArrayList<>();
+		for(GspOperateDetailVO vo : list){
+			arr.add(vo.getOperateId());
+		}
+		String result = arr.toString();
+		return result.substring(1,result.length()-1);
 	}
 
 
@@ -186,7 +195,14 @@ public class GspEnterpriseInfoController {
 		model.put("enterpriseId", id);
 		if(!"".equals(id)){
 			Json json = gspEnterpriceService.getGspBusinessLicense(id);
-			model.put("gspBusinessLicense",json.getObj());
+			if(json.isSuccess() && json.getObj()!=null){
+				GspBusinessLicense businessLicense = (GspBusinessLicense)json.getObj();
+				List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(businessLicense.getBusinessId());
+				if(detailVOS!=null){
+					model.put("choseScope",initOperateDetail(detailVOS));
+				}
+				model.put("gspBusinessLicense",businessLicense);
+			}
 		}
 		return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
 	}
@@ -198,7 +214,14 @@ public class GspEnterpriseInfoController {
 		model.put("enterpriseId", id);
 		if(!"".equals(id)) {
 			Json json = gspEnterpriceService.getGspOperateLicense(id);
-			model.put("gspOperateLicense", json.getObj());
+			if(json.isSuccess() && json.getObj()!=null){
+				GspOperateLicense operateLicense = (GspOperateLicense)json.getObj();
+				List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(operateLicense.getOperateId());
+				if(detailVOS!=null){
+					model.put("choseScope",initOperateDetail(detailVOS));
+				}
+				model.put("gspOperateLicense", operateLicense);
+			}
 		}
 		return new ModelAndView("gspEnterpriseInfo/operateLicense", model);
 	}
@@ -210,7 +233,14 @@ public class GspEnterpriseInfoController {
 		model.put("enterpriseId", id);
 		if(!"".equals(id)) {
 			Json json = gspEnterpriceService.getGspSecondRecord(id);
-			model.put("gspSecondRecord", json.getObj());
+			if(json.isSuccess() && json.getObj()!=null){
+				GspSecondRecord secondRecord = (GspSecondRecord)json.getObj();
+				List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(secondRecord.getRecordId());
+				if(detailVOS!=null){
+					model.put("choseScope",initOperateDetail(detailVOS));
+				}
+				model.put("gspSecondRecord", secondRecord);
+			}
 		}
 		return new ModelAndView("gspEnterpriseInfo/secondRecord", model);
 	}
@@ -285,5 +315,13 @@ public class GspEnterpriseInfoController {
 	@ResponseBody
 	public EasyuiDatagrid<GspSecondRecordVO> recordHistoryDatagridList(EasyuiDatagridPager pager, GspSecondRecordQuery query){
 		return gspSecondRecordService.getGspSecondRecordHistory(pager,query);
+	}
+
+	@Login
+	@RequestMapping(params = "getBusinessLicenseOutTime")
+	@ResponseBody
+	public Object getBusinessLicenseOutTime(){
+		Json json = gspEnterpriceService.getBusinessLicenseOutTime("", Constant.CODE_ENT_TYP_ZT,1);
+		return json;
 	}
 }

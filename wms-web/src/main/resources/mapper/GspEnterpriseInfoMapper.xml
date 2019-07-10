@@ -24,6 +24,17 @@
 	<result column="user_define3" property="userDefine3"/>
 	<result column="user_define4" property="userDefine4"/>
 </resultMap>
+
+<resultMap id="GspEnterpriseBusinessResultMap" type="com.wms.dto.GspEnterpriseBusinessDTO" >
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="enterprise_no" property="enterpriseNo"/>
+	<result column="shorthand_name" property="shorthandName"/>
+	<result column="enterprise_name" property="enterpriseName"/>
+	<result column="enterprise_type" property="enterpriseType"/>
+	<result column="business_start_date" property="businessStartDate"/>
+	<result column="business_end_date" property="businessEndDate"/>
+	<result column="outTime" property="outTime"/>
+</resultMap>
        
 <!-- gsp_enterprise_info table all fields -->
 <sql id="Base_Column_List" >
@@ -268,6 +279,22 @@ where 1=1
 		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
 	</if>
 	<include refid="Example_Where_Clause_Type"/>
+</select>
+
+<!-- 查询营业执照已过期或将要过期的企业-->
+<select id="queryBusinessLicenseOutTime" resultMap="GspEnterpriseBusinessResultMap"  parameterType="Object">
+	select b.business_start_date,g.enterprise_id,g.enterprise_name,g.enterprise_no,g.shorthand_name,IFNULL(DATEDIFF(now(),b.business_end_date),0) outTime
+	from gsp_enterprise_info g left join gsp_business_license b on g.enterprise_id = b.enterprise_id and b.is_use = '1'
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="enterpriseId != null and enterpriseId != ''" >
+			and g.enterprise_id =  #{enterpriseId}
+		</if>
+		<if test="type != null and type != ''" >
+			and g.enterprise_type =  #{type}
+		</if>
+		and IFNULL(DATEDIFF(now(),b.business_end_date),0) &lt;= #{diffCount}
+	</trim>
 </select>
 
 </mapper>   

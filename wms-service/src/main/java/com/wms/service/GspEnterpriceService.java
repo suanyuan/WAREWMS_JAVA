@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import com.wms.constant.Constant;
+import com.wms.dto.GspEnterpriseBusinessDTO;
 import com.wms.entity.GspBusinessLicense;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspOperateLicense;
@@ -15,11 +16,14 @@ import com.wms.utils.BeanUtils;
 import com.wms.utils.RandomUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.List;
 
 /**
  * 企业总业务处理
@@ -46,12 +50,7 @@ public class GspEnterpriceService extends BaseService {
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
-    private GspOperateDetailService gspOperateDetailService;
-    @Autowired
     private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
-    @Autowired
-    private GspOperateLicenseMybatisDao gspOperateLicenseMybatisDao;
-
 
     /**
      * 新增企业信息
@@ -64,8 +63,21 @@ public class GspEnterpriceService extends BaseService {
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
             GspOperateLicenseForm gspOperateLicenseForm = gspEnterpriceFrom.getGspOperateLicenseForm();
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
-            String enterpriseId = RandomUtil.getUUID();
-            gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+
+            if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
+                return Json.error("企业基础信息不能为空");
+            }
+            String enterpriseId = gspEnterpriceFrom.getGspEnterpriseInfoForm().getEnterpriseId();
+            if(StringUtils.isEmpty(enterpriseId)) {
+                gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+                enterpriseId = RandomUtil.getUUID();
+                gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+                gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
+            }else{
+                //TODO 更新首营失效
+                gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+                gspEnterpriseInfoService.editGspEnterpriseInfo(gspEnterpriseInfoForm);
+            }
 
             //组装经营范围
             if(gspBusinessLicenseForm.getScopArr()!=null && !"".equals(gspBusinessLicenseForm.getScopArr())){
@@ -78,10 +90,6 @@ public class GspEnterpriceService extends BaseService {
                 gspSecondRecordForm.setScopArr(initScope(gspSecondRecordForm.getScopArr()));
             }
 
-            if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
-                return Json.error("企业基础信息不能为空");
-            }
-            gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
             if(gspBusinessLicenseForm != null){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
                 gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
@@ -255,6 +263,20 @@ public class GspEnterpriceService extends BaseService {
         query.setIsUse(Constant.IS_USE_YES);
         GspSecondRecord gspSecondRecord = gspSecondRecordService.getGspSecondRecordBy(query);
         return Json.success("",gspSecondRecord);
+    }
+
+    /**
+     * 获取营业执照过期数据
+     * @param enterpriceId 企业id
+     * @param type 类型
+     * @return
+     */
+    public Json getBusinessLicenseOutTime(String enterpriceId,String type,Integer diffCount){
+        List<GspEnterpriseBusinessDTO> list = gspEnterpriseInfoMybatisDao.queryBusinessLicenseOutTime(enterpriceId, type, diffCount);
+        if(list!=null && list.size()>0){
+            return Json.success("",list);
+        }
+        return Json.error("");
     }
 
     private String initScope(String scope){

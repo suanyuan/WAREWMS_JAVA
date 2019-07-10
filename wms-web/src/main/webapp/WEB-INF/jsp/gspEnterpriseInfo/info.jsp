@@ -3,7 +3,7 @@
     <input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
     <table>
         <tr style="display: none">
-            <td><input type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
+            <td><input data="1" type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
         </tr>
         <tr>
             <th>企业信息代码</th>

@@ -48,24 +48,24 @@ $(function() {
 			{field: 'clientName',		title: '简称',	width: 38 },
 			{field: 'enterpriseId',		title: '企业id',	width: 38 ,hidden:true},
 			{field: 'remark',		title: '备注',	width: 38 ,hidden:true},
-			{field: 'firstState',		title: '首营状态',	width: 38 },
-			{field: 'isCheck',		title: '是否审查',	width: 38 },
-			{field: 'isCooperation',		title: '是否合作',	width: 38 },
-			{field: 'operateType',		title: '类型',	width: 38 },
+			{field: 'firstState',		title: '首营状态',	width: 38 ,formatter:firstStateTypeFormatter},
+			{field: 'isCheck',		title: '是否审查',	width: 38 ,formatter: yesOrNoFormatter},
+			{field: 'isCooperation',		title: '是否合作',	width: 38 ,formatter: yesOrNoFormatter},
+			{field: 'operateType',		title: '类型',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
 			{field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
 			{field: 'clientContent',		title: '委托内容',	width: 38 ,hidden:true},
 			{field: 'clientStartDate',		title: '委托开始时间',	width: 38 ,hidden:true},
 			{field: 'clientEndDate',		title: '委托结束时间',	width: 38 ,hidden:true},
 			{field: 'clientTerm',		title: '委托期限',	width: 38 },
-			{field: 'isChineseLabel',		title: '是否长期',	width: 38 },
+			{field: 'isChineseLabel',		title: '是否长期',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 38 },
-			{field: 'createDate',		title: '创建时间',	width: 38 },
+			{field: 'createDate',		title: '创建时间',	width: 38 ,formatter:dateFormat2},
 			{field: 'editId',		title: '修改人',	width: 38 },
-			{field: 'editDate',		title: '修改时间',	width: 38 },
-			{field: 'isUse',		title: '是否有效',	width: 38 }
+			{field: 'editDate',		title: '修改时间',	width: 38  ,formatter:dateFormat2},
+			{field: 'isUse',		title: '是否有效',	width: 38 ,formatter: yesOrNoFormatter}
 		]],
-		onDblClickCell: function(index,field,value){
+		onDblClickRow: function(index,row){
 			edit();
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
@@ -81,51 +81,39 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-		buttons : '#ezuiDialogBtn',
-		href:dialogUrl,
-		fit:true,
-		cache:false,
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
-	}).dialog('close');
+
 });
 var add = function(){
 	processType = 'add';
 	$('#gspCustomerId').val(0);
-	ezuiDialog.dialog('open');
+    ezuiDialog = $('#ezuiDialog').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        fit:true,
+        cache:false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    })
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			clientId : row.clientId,
-			clientNo : row.clientNo,
-			clientName : row.clientName,
-			enterpriseId : row.enterpriseId,
-			remark : row.remark,
-			firstState : row.firstState,
-			isCheck : row.isCheck,
-			isCooperation : row.isCooperation,
-			operateType : row.operateType,
-			contractNo : row.contractNo,
-			contractUrl : row.contractUrl,
-			clientContent : row.clientContent,
-			clientStartDate : row.clientStartDate,
-			clientEndDate : row.clientEndDate,
-			clientTerm : row.clientTerm,
-			isChineseLabel : row.isChineseLabel,
-			createId : row.createId,
-			createDate : row.createDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse
-		});
-		ezuiDialog.dialog('open');
+        //ezuiDialog.dialog('refresh', dialogUrl+"&id="+row.clientId).dialog('open');
+        ezuiDialog = $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+            href:dialogUrl+"&id="+row.clientId,
+            fit:true,
+            cache:false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        })
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -169,8 +157,8 @@ var commit = function(){
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		clientId : $('#clientId').val(),
-		clientNo : $('#clientNo').val(),
+		clientId : $('#clientIdQuery').val(),
+		clientNo : $('#clientNoQuery').val(),
 		clientName : $('#clientName').val(),
 		enterpriseId : $('#enterpriseId').val(),
 		remark : $('#remark').val(),
@@ -203,13 +191,13 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>代码：</th><td><input type='text' id='clientNo' class='easyui-textbox' data-options=''/></td>
-							<th>简称：</th><td><input type='text' id='clientName' class='easyui-textbox' data-options=''/></td>
+							<th>代码：</th><td><input type='text' id='clientNoQuery' class='easyui-textbox' data-options=''/></td>
+							<th>简称：</th><td><input type='text' id='clientNameQuery' class='easyui-textbox' data-options=''/></td>
 							<th>企业：</th>
                             <td>
-                                <input type='text' id='enterpriseIdQuery' class='easyui-textbox' data-options='' style="width: 100px;"/>
+                                <input type='text' id='enterpriseIdQuery' style="width: 100px;"/>
                                 <input type="hidden" class="easyui-textvalue" name="enterpriseId">
-                                <a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+								<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                             </td>
 							<th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>
 							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
@@ -329,6 +317,18 @@ var doSearch = function(){
         $("#enterpriseIdQuery").textbox("setValue",name);
         enterpriseDialog_gspCustomer.dialog("close");
     }
+
+	$(function () {
+		$("#enterpriseIdQuery").textbox({
+			width:135,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchMainEnterprise();
+                }
+            }]
+        })
+    })
 
 </script>
 </body>

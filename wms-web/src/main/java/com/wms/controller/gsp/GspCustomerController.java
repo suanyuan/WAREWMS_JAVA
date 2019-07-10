@@ -41,9 +41,12 @@ public class GspCustomerController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(String menuId) {
+	public ModelAndView toDetail(String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
+		Json json = gspCustomerService.getGspCustomerById(id);
+		if(json.isSuccess()){
+			model.put("customer", json.getObj());
+		}
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate", DateUtil.format(new Date()));
 		return new ModelAndView("gspCustomer/detail", model);
