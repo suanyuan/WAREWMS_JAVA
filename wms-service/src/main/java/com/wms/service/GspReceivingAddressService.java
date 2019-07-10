@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.entity.PCD;
 import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
@@ -96,6 +97,11 @@ public class GspReceivingAddressService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+
+	public List<PCD> findPCDByPid(int pid) {
+		return gspReceivingAddressMybatisDao.findPCDByPid(pid);
 	}
 
 }

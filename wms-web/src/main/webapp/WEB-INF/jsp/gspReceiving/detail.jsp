@@ -12,24 +12,23 @@
 
 <div id='ezuiDialog' style='padding: 10px;'>
 <form id='ezuiFormAddress' method='post'>
-    <input type='hidden' id='receivingId' name='receivingId' value="${gspReceiving.receivingId}" class="textbox-value"/>
-    <input type="hidden" id="enterpriseId" name='enterpriseId' value="${gspReceiving.enterpriseId}" class="textbox-value"/>
-    <input type="hidden" id="customerType" name='customerType' value="CO" class="textbox-value"/>
+    <input type='hidden' id='hiddenreceivingId' name='receivingId' value="${receivingId}" class="textbox-value"/>
+    <input type="hidden" id="hiddencustomerType" name='customerType' value="CO" class="textbox-value"/>
     <fieldset style="height: 100px">
     <table>
         <tr>
             <th>企业</th>
             <td>
-                <input type='text' id="enterpriseN" name='enterpriseName' value='${gspEnterpriseInfo.enterpriseName}'  size='16' class='easyui-textbox' data-options='required:true'/>
+                <input type='text'  name='enterpriseName' value='${gspEnterpriseInfo.enterpriseName}'  size='16' class='easyui-textbox' data-options='required:true'/>
                 <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
             </td>
             <th>代码</th>
-            <td><input type='text' id="enterpriseNo" name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text'  name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
             <th>简称</th>
-            <td><input type='text' id='s' name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text'  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
 
             <th>货主</th>
-            <td><input type='text' name='clientId' id="text" size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' name='clientId'  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>供应商</th>
@@ -41,7 +40,7 @@
             <th>销售人</th>
             <td><input type='text' name='sellerName' class='easyui-textbox' value="${gspReceivingAddress.sellerName}" size="16" data-options='required:true'/></td>
             <th>是否需要审核</th>
-            <td><input type='text' name='isCheck' id="isChec" value="${gspReceiving.isCheck}" class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
+            <td><input type='text' name='isCheck' id="isChec"  value="${gspReceiving.isCheck}" class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
             <th>是否医废</th>
             <td><input type='text' name='isReturn' class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/></td>
         </tr>
@@ -49,14 +48,14 @@
             <th>地址</th>
             <td><input type='text' name='deliveryAddress' class='easyui-textbox ' value="${gspReceivingAddress.deliveryAddress}" size="16" data-options='required:true'/></td>
             <th>联系人</th>
-            <td><input type='text' name='contacts' id="contacts" class='easyui-textbox' value="${gspReceivingAddress.contacts}" size="16" data-options='required:true'/></td>
+            <td><input type='text' name='contacts' class='easyui-textbox' value="${gspReceivingAddress.contacts}" size="16" data-options='required:true'/></td>
             <th>联系人电话</th>
             <td><input type='text' name='phone' class='easyui-textbox' value="${gspReceivingAddress.phone}" size="16" data-options='required:true'/></td>
 
 
             <th>
-                <a onclick='doSubmit();' id='ezuiBtn_commit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-                <a onclick='ezuiDialogClose("#ezuiDialog");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+                <a onclick='dooSubmit();' id='ezuiBtn_commit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+                <a onclick='ezuiDialogClose("#ezuiDialogA");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
             </th>
 
 
@@ -200,6 +199,9 @@
     var dialogSupplier;
     var  dialogAddAddressForm;
     var ezuiFormAddress;
+
+
+
     $(function () {
         ezuiFormAddress=$('#ezuiFormAddress').form();
         dialogAddAddressForm=$('#dialogAddAddressForm').form();
@@ -316,7 +318,7 @@
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
                 {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
-                {field: '_operate',		title: '操作',	width: '20%',
+                {field: 'operate',		title: '操作',	width: '20%',
                     formatter: formatOper
                 }
             ]],
@@ -435,18 +437,6 @@
             }
         }).dialog('close');
 
-        dialogAddAddress = $('#dialogAddAddress').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            href: sy.bp()+"/gspReceivingController.do?toDialogAddress",
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
-
     });
 
     function searchEnterprise() {
@@ -487,7 +477,7 @@
     }
 
 
-    function doSubmit() {
+    function dooSubmit() {
         /*$("#ezuiFormAddress input[id='isCheck']")*/
         var a = $('#isChec').combobox('getValue');
         if (a=='1') {
@@ -515,7 +505,7 @@
                         if(result.success){
                             msg = result.msg;
                             ezuiDatagrid.datagrid('reload');
-                            ezuiDialog.dialog('close');
+                            ezuiDialogA.dialog('close');
                         }else{
                             msg = '<font color="red">' + result.msg + '</font>';
                         }
@@ -552,7 +542,7 @@
                                 if(result.success){
                                     msg = result.msg;
                                     ezuiDatagrid.datagrid('reload');
-                                    ezuiDialog.dialog('close');
+                                    ezuiDialogA.dialog('close');
                                 }else{
                                     msg = '<font color="red">' + result.msg + '</font>';
                                 }
@@ -603,9 +593,19 @@
 
     var  AddAddress=function () {
         processType = 'add';
-        $('#receivingId').val(0);
-        dialogAddAddress.dialog('open');
-    }
+        dialogAddAddress = $('#dialogAddAddress').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            href: sy.bp()+"/gspReceivingController.do?toDialogAddress",
+            cache: false,
+            onClose : function() {
+                /* ezuiFormClear(ezuiForm);*/
+            }
+        })
+        //dialogAddAddress.dialog('open');
+    };
     var AddressDel = function(){
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         if(row){

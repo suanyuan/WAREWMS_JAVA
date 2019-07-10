@@ -16,10 +16,10 @@
             var ezuiMenu;
             var ezuiForm;
             var enterDialog;
-            var ezuiDialog;
+            var ezuiDialogA;
             var ezuiDatagrid;
             var ezuiFormInfo;
-            var dialogUrl = sy.bp()+"/gspReceivingController.do?toDetail";
+            var dialogUrll = sy.bp()+"/gspReceivingController.do?toDetail";
             $(function() {
                 ezuiMenu = $('#ezuiMenu').menu();
                 ezuiForm = $('#ezuiForm').form();
@@ -90,10 +90,10 @@
 
                     }
                 });
-                ezuiDialog = $('#ezuiDialog').dialog({
+                ezuiDialogA = $('#ezuiDialog').dialog({
                     modal : true,
                     title : '<spring:message code="common.dialog.title"/>',
-                    href:dialogUrl,
+                    href:dialogUrll,
                     fit:true,
                     cache:false,
                     buttons : '#ezuiDialogBtn',
@@ -108,7 +108,7 @@
                     title : '<spring:message code="common.dialog.title"/>',
                     buttons : '#ezuiDialogBtn',
                     onClose : function() {
-                        ezuiFormClear(ezuiForm);
+                       /* ezuiFormClear(ezuiForm);*/
                     }
                 }).dialog('close');
 
@@ -137,15 +137,16 @@
             var add = function(){
                 processType = 'add';
                 $('#receivingId').val(0);
-                ezuiDialog.dialog('open');
+               ezuiDialogA.dialog('open');
+
             };
-var edit = function(){
+  var edit = function(){
                 processType = 'edit';
                 var row = ezuiDatagrid.datagrid('getSelected');
 
-    			if(row){
-
-                    ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.enterpriseId+"&receivingId="+row.receivingId);
+        if(row){
+           // ezuiDialogA.dialog('open');
+                    ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
                 }else{
                     $.messager.show({
                         msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -155,7 +156,8 @@ var edit = function(){
 
 
             var newAdd = function(){
-                var row = ezuiDatagrid.datagrid('getSelected');
+                edit();
+                /*var row = ezuiDatagrid.datagrid('getSelected');
                 console.log(row);
                 if(row){
 
@@ -177,10 +179,8 @@ var edit = function(){
                 });
                 ezuiDialog.dialog('open');
             }else{
-                $.messager.show({
-                    msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-                });
-            }
+
+            }*/
             };
             var del = function(){
                 var row = ezuiDatagrid.datagrid('getSelected');
@@ -215,7 +215,7 @@ var edit = function(){
                 }
             };
             var commit = function(){
-                doSubmit();
+                dooSubmit();
             };
  var doSearch = function(){
                 ezuiDatagrid.datagrid('load', {
@@ -286,48 +286,12 @@ var edit = function(){
 
 
 	<form id='enterpriseDialog' method='post'>
-		<%--<input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
-		<table>
-			<tr style="display: none">
-				<td><input type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
-			</tr>
-			<tr>
-				<th>企业信息代码</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>简称</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.shorthandName}" id="shorthandName" name='shorthandName' class='easyui-textbox' size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>企业名称</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>企业类型</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' class='easyui-textbox' size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>联系人</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox' size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>联系电话</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox" size='50' data-options='required:true'/></td>
-			</tr>
-			<tr>
-				<th>备注</th>
-				<td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox' size='50' style="height: 150px;" data-options='multiline:true'/></td>
-			</tr>
-		</table>--%>
+
 	</form>
 
 
 
-	<%--<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>--%>
+
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>

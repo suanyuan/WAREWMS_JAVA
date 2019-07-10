@@ -70,19 +70,22 @@ public class GspReceivingService extends BaseService {
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
 
 				BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
-				if (gspReceivingAddress!=null && gspEnterpriseInfo!=null){
+				if (gspReceivingAddress!=null ){
 
 					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 					gspReceivingVO.setContacts(gspReceivingAddress.getContacts());
 					gspReceivingVO.setPhone(gspReceivingAddress.getPhone());
-					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
-					gspReceivingVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
-					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
+
 					GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
 
 					gspReceivingVO.setIsCooperation(gspCustomer.getIsCooperation());
 				}
+				if ( gspEnterpriseInfo!=null){
+					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+					gspReceivingVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
 
+				}
 				gspReceivingVOList.add(gspReceivingVO);
 			}
 			datagrid.setTotal((long) gspReceivingMybatisDao.queryByCount(mybatisCriteria));

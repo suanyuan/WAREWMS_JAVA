@@ -155,7 +155,7 @@ public class BasCustomerService extends BaseService {
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
 		
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-		basCustomerMybatisDao.update(basCustomer);
+		basCustomerMybatisDao.updateBySelective(basCustomer);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

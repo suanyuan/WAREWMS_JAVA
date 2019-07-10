@@ -126,10 +126,10 @@ public class GspReceivingController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(@RequestParam(defaultValue = "") String id,@RequestParam(defaultValue = "") String receivingId) {
+	public ModelAndView toDetail(@RequestParam(required = false) String enterpriseId,@RequestParam(required = false) String receivingId) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		if (StringUtils.isNotEmpty(id)){
-			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(id);
+		if (StringUtils.isNotEmpty(enterpriseId)){
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(enterpriseId);
 			model.put("gspEnterpriseInfo",gspEnterpriseInfo);
 		}
 		if (StringUtils.isNotEmpty(receivingId)){
@@ -138,7 +138,7 @@ public class GspReceivingController {
 			model.put("gspReceiving",gspReceiving);
 			model.put("gspReceivingAddress",gspReceivingAddress);
 		}
-		model.put("enterpriseId", id);
+		model.put("enterpriseId", enterpriseId);
 		model.put("receivingId", receivingId);
 		return new ModelAndView("gspReceiving/detail", model);
 	}

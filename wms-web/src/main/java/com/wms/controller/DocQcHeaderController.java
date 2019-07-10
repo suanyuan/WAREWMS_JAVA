@@ -85,11 +85,11 @@ public class DocQcHeaderController {
 		return docQcHeaderService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
-	@Login
+/*	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody
 	public List<EasyuiCombobox> getCombobox() {
 		return docQcHeaderService.getDocQcHeaderCombobox();
-	}
+	}*/
 
 }
