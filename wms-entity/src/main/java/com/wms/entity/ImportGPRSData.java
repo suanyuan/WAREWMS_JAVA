@@ -46,6 +46,26 @@ public class ImportGPRSData implements Serializable {
 
 	private String editDate;
 	private String isUse;
+
+	public String getIsCertificate() {
+		return isCertificate;
+	}
+
+	public void setIsCertificate(String isCertificate) {
+		this.isCertificate = isCertificate;
+	}
+
+	public String getIsDoublec() {
+		return isDoublec;
+	}
+
+	public void setIsDoublec(String isDoublec) {
+		this.isDoublec = isDoublec;
+	}
+
+	private java.lang.String isCertificate;
+	private java.lang.String isDoublec;
+
 	private String alternatName1;
 	private String alternatName2;
 	private String alternatName3;

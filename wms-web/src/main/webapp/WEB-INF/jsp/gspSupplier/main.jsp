@@ -235,7 +235,14 @@ var commit = function(){
 						dataType: 'JSON',
 						async: true,
                         success: function (result) {
-                            
+                            if (result.success) {
+                                msg = result.msg;
+                                $.messager.show({
+                                    msg: '下发成功', title: '<spring:message code="common.message.prompt"/>'
+                                });
+                            } else {
+                                msg = '<font color="red">下发失败</font>';
+                            }
                         }
                     });
                 }

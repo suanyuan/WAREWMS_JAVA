@@ -32,7 +32,7 @@ public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
-	
+
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
@@ -126,7 +126,9 @@ public class BasCustomerService extends BaseService {
 		BasCustomer basCustomer = new BasCustomer();
 		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
 		basCustomer.setCustomerType("VE");
+		System.out.println("gspSupplierForm.getEnterpriseId()==============="+gspSupplierForm.getEnterpriseId());
 		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+
 		basCustomer.setOperateType(gspSupplierForm.getOperateType());
 		basCustomer.setActiveFlag(gspSupplierForm.getIsUse());
 		basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));

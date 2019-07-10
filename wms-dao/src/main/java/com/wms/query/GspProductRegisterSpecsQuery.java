@@ -42,11 +42,38 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String isCertificate;
+	private String isDoublec;
 	private String alternatName1;
 	private String alternatName2;
 	private String alternatName3;
 	private String alternatName4;
 	private String alternatName5;
+	public String getPackingRequire() {
+		return packingRequire;
+	}
+
+	public void setPackingRequire(String packingRequire) {
+		this.packingRequire = packingRequire;
+	}
+
+	public String getIsCertificate() {
+		return isCertificate;
+	}
+
+	public void setIsCertificate(String isCertificate) {
+		this.isCertificate = isCertificate;
+	}
+
+	public String getIsDoublec() {
+		return isDoublec;
+	}
+
+	public void setIsDoublec(String isDoublec) {
+		this.isDoublec = isDoublec;
+	}
+
+
 
 	public GspProductRegisterSpecsQuery() {
 	}

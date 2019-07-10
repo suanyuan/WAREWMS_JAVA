@@ -68,6 +68,12 @@ $(function() {
 			{field: 'isUse',		title: '是否有效',	width: 25, formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }},
+            {field: 'isCertificate',		title: '是否有效',	width: 25, formatter:function(value,rowData,rowIndex){
+                    return rowData.isCertificate == '1' ? '是' : '否';
+                }},
+            {field: 'isDoublec',		title: '是否有效',	width: 25, formatter:function(value,rowData,rowIndex){
+                    return rowData.isDoublec == '1' ? '是' : '否';
+                }},
 			// {field: 'alternatName1',		title: '自赋码1',	width: 25 },
 			// {field: 'alternatName2',		title: '自赋码2',	width: 25 },
 			// {field: 'alternatName3',		title: '自赋码3',	width: 25 },
@@ -359,6 +365,35 @@ var commitImportData = function(obj){
         }
     });
 };
+
+/* 下载导入模板 */
+var downloadTemplate = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_downloadTemplate').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        var formId = ajaxDownloadFile(sy.bp()+"/gspProductRegisterSpecsController.do?exportTemplate", param);
+        downloadCheckTimer = window.setInterval(function () {
+            var list = new cookieList('downloadToken');
+            if (list.items() == token){
+                window.clearInterval(downloadCheckTimer);
+                list.clear();
+                $('#'+formId).remove();
+                $('#ezuiBtn_downloadTemplate').linkbutton('enable');
+                $.messager.show({
+                    msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            };
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    };
+};
+/* 导入end */
+
 var toImportData = function(){
     ezuiImportDataDialog.dialog('open');
 };

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
 import com.wms.entity.GspSupplier;
 import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -83,7 +85,9 @@ public class BasCustomerController {
 	@Login
 	@RequestMapping(params = "supplierAdd")
 	@ResponseBody
-	public Json supplierAdd(GspSupplierForm gspSupplierForm) throws Exception {
+	public Json supplierAdd(@RequestParam(value="gspSupplierForm",required=true) String gspSupplierFormStr) throws Exception {
+		GspSupplierForm gspSupplierForm = JSON.parseObject(gspSupplierFormStr,GspSupplierForm.class);
+
 		Json json = basCustomerService.supplierAddCustomer(gspSupplierForm);
 		if(json == null){
 			json = new Json();

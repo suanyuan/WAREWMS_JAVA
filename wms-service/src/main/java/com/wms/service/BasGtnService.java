@@ -80,7 +80,7 @@ public class BasGtnService extends BaseService {
 		System.out.println(basGtnForm.getSku()+"============================="+basGtnForm.getGtncode());
 		//BasGtn basGtn = basGtnDao.findById(basGtnForm.getSku());
 		//BeanUtils.copyProperties(basGtnForm, basGtn);
-		basGtnMybatisDao.update(basGtnForm);
+		basGtnMybatisDao.updateBySelective(basGtnForm);
 		json.setSuccess(true);
 		return json;
 	}

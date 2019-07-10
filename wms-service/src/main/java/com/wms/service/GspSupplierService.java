@@ -113,18 +113,23 @@ public class GspSupplierService extends BaseService {
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
 		//BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
-		GspSupplierMybatisDao.update(gspSupplierForm);
+		GspSupplierMybatisDao.updateBySelective(gspSupplierForm);
 		json.setSuccess(true);
 		return json;
 	}
 	public Json getGspSupplierInfo(String supplierId){
-
+		GspSupplierVO gspSupplierVO = new GspSupplierVO();
 		System.out.println("supplierId==========="+supplierId);
 		GspSupplier gspSupplier = GspSupplierMybatisDao.queryById(supplierId);
+		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
+		gspSupplierVO.setEditDate(simpleDateFormat.format(new Date()));
+		gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+		//System.out.println("gspSupplierVO============="+gspSupplierVO.getCreateDate()+"==========="+gspSupplierVO.getCreateDate());
 		if(gspSupplier == null){
 			return Json.error("不存在！");
 		}
-		return Json.success("",gspSupplier);
+
+		return Json.success("",gspSupplierVO);
 	}
 	public Json deleteGspSupplier(String id) {
 		Json json = new Json();

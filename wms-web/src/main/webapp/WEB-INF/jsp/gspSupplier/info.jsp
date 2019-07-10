@@ -115,12 +115,17 @@ var enterpriseDialog;
                                     //gspBusinessFrom[""+$(this).attr("id")+""] = $(this).textbox("getValue");
                                 }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
                                     $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                    $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }
                             }
 
 
                         })
-
+                        $("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
+                        $("#ezuiFormInfo input[id='editDate'][data='1']").textbox('setValue',result.obj.editDate);
+                        $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
+                        //$("#enterpriseIdQuery1").textbox("setValue",result.Obj.enterpriseName);
                     }
                 }
             });

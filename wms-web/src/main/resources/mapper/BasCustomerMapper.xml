@@ -219,6 +219,9 @@ where 1=1
 	insert into Bas_Customer(
 	customerid,
 	customer_type,
+
+		enterprise_id,
+
 	<if test="descrC != null  ">
 		descr_c,
 	</if>
@@ -243,6 +246,7 @@ where 1=1
 	<if test="overreceiving != null  ">
 		overreceiving,
 	</if>
+
 	easycode,
 	addtime,
 	addwho,
@@ -276,6 +280,9 @@ where 1=1
 	values(
 	#{customerid},
 	#{customerType},
+
+		#{enterpriseId},
+
 	<if test="descrC != null  ">
 		#{descrC},
 	</if>

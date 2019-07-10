@@ -82,6 +82,27 @@
 
         </tr>
         <tr>
+            <th>是否需要双证</th><td><input type="text" data="1" id="isDoublec"    name="isDoublec"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '1', value: '是'},
+																																	{id: '0', value: '否'}
+																																]"/></td>
+            <th>是否需要产品合格证</th><td><input type="text" data="1" id="isCertificate"   name="isCertificate"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '1', value: '是'},
+																																	{id: '0', value: '否'}
+																																]"/></td>
+
+
+
+        </tr>
+        <tr>
             <th>运输条件</th>
             <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
@@ -155,7 +176,18 @@
                 success : function(result){
                     if(result.success){
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
-                            $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""])
+                            if($(this).attr("class")){
+                                if($(this).attr("class").indexOf('easyui-textbox')!=-1){
+                                    $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                    //gspBusinessFrom[""+$(this).attr("id")+""] = $(this).textbox("getValue");
+                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                    $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                    $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }
+                            }
+
+
                         })
                     }
                 }

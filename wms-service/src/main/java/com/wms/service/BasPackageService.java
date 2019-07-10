@@ -64,7 +64,7 @@ public class BasPackageService extends BaseService {
 		//basPackageQuery.setPackid(basPackageForm.getPackid());
 		//BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
 		//BeanUtils.copyProperties(basPackageForm, basPackage);
-		basPackageMybatisDao.update(basPackageForm);
+		basPackageMybatisDao.updateBySelective(basPackageForm);
 		json.setSuccess(true);
 
 		return json;
