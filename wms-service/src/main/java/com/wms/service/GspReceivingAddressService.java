@@ -30,20 +30,23 @@ public class GspReceivingAddressService extends BaseService {
 	@Autowired
 	private GspReceivingAddressMybatisDao gspReceivingAddressMybatisDao;
 
-	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
+	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, String receivingId) {
 		EasyuiDatagrid<GspReceivingAddressVO> datagrid = new EasyuiDatagrid<GspReceivingAddressVO>();
 
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
-		criteria.setCondition(query);
-		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByList(criteria);
+
+		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(receivingId);
 		GspReceivingAddressVO gspReceivingAddressVO = null;
 		List<GspReceivingAddressVO> gspReceivingAddressVOList = new ArrayList<GspReceivingAddressVO>();
+		if (gspReceivingAddressList!=null){
 		for (GspReceivingAddress gspReceivingAddress : gspReceivingAddressList) {
 			gspReceivingAddressVO = new GspReceivingAddressVO();
 			BeanUtils.copyProperties(gspReceivingAddress, gspReceivingAddressVO);
 			gspReceivingAddressVOList.add(gspReceivingAddressVO);
+		}
+
 		}
 		datagrid.setTotal((long) gspReceivingAddressMybatisDao.queryByCount(criteria));
 		datagrid.setRows(gspReceivingAddressVOList);
@@ -58,8 +61,7 @@ public class GspReceivingAddressService extends BaseService {
 		gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
 
-		//todo 关联收货单位id
-		gspReceivingAddress.setReceivingId(RandomUtil.getUUID());
+
 		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
 		json.setSuccess(true);
 		return json;

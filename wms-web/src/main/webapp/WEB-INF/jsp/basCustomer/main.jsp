@@ -35,7 +35,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'customerId',		title: '产品代码',	width: 20 },
+			{field: 'customerId',		title: '客户代码',	width: 20 },
             {field: 'descrC',		title: '客户名称',	width: 20 },
             {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {

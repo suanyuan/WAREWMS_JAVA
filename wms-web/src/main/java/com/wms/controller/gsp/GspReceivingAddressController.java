@@ -45,8 +45,8 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(@RequestParam(value = "enterpriseId",required = false)String enterpriseId, EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
-		EasyuiDatagrid<GspReceivingAddressVO> pagedDatagrid = gspReceivingAddressService.getPagedDatagrid(pager, query);
+	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(@RequestParam(value = "receivingId",required = false)String receivingId, EasyuiDatagridPager pager) {
+		EasyuiDatagrid<GspReceivingAddressVO> pagedDatagrid = gspReceivingAddressService.getPagedDatagrid(pager, receivingId);
 		return pagedDatagrid;
 	}
 
@@ -78,8 +78,8 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String id) {
-		Json json = gspReceivingAddressService.deleteGspReceivingAddress(id);
+	public Json delete(@RequestParam(value = "receivingAddressId") String receivingAddressId) {
+		Json json = gspReceivingAddressService.deleteGspReceivingAddress(receivingAddressId);
 		if(json == null){
 			json = new Json();
 		}

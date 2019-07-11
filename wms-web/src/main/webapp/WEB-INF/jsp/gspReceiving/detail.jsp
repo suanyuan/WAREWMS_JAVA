@@ -26,9 +26,9 @@
             <td><input type='text' id="enterpriseNo"  name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
             <th>简称</th>
             <td><input type='text' id="s"  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
+            <th>联系人</th>
+            <td><input type='text' name='contacts' class='easyui-textbox' value="${gspReceivingAddress.contacts}" size="16" data-options='required:true'/></td>
 
-            <th>货主</th>
-            <td><input type='text' name='clientId'  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>供应商</th>
@@ -45,17 +45,17 @@
             <td><input type='text' name='isReturn' class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/></td>
         </tr>
         <tr>
-            <th>地址</th>
-            <td><input type='text' name='deliveryAddress' class='easyui-textbox ' value="${gspReceivingAddress.deliveryAddress}" size="16" data-options='required:true'/></td>
-            <th>联系人</th>
-            <td><input type='text' name='contacts' class='easyui-textbox' value="${gspReceivingAddress.contacts}" size="16" data-options='required:true'/></td>
+           <%-- <th>地址</th>
+            <td><input type='text' name='deliveryAddress' class='easyui-textbox ' value="${gspReceivingAddress.deliveryAddress}" size="16" data-options='required:true'/></td>--%>
+               <th>货主</th>
+               <td><input type='text' name='clientId'  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
             <th>联系人电话</th>
             <td><input type='text' name='phone' class='easyui-textbox' value="${gspReceivingAddress.phone}" size="16" data-options='required:true'/></td>
 
 
             <th>
                 <a onclick='dooSubmit();' id='ezuiBtn_commit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-                <a onclick='ezuiDialogClose("#ezuiDialogA");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+                <a onclick='ezuiDialogClose("#ezuiDialog");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
             </th>
 
 
@@ -63,10 +63,7 @@
     </table>
     </fieldset>
 </form>
-<div>收货地址列表</div>
-    <fieldset style="margin-top: 20px">
-<table id='ezuiDetailsDatagrid'></table>
-    </fieldset>
+        <table id='ezuiDetailsDatagrid'></table>
 <form>
     <div>
         <a onclick='AddAddress();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.skuAdd'/></a>
@@ -79,6 +76,7 @@
 </div>
 
 <div id='ezuiDialogDetail' style='padding: 10px;'>
+
     <div id='detailToolbar' class='datagrid-toolbar' style=''>
         <fieldset>
             <legend>企业信息</legend>
@@ -134,57 +132,7 @@
 </div>
 
 <div id="dialogAddAddress" style='padding: 10px;'>
-<%--<form id="dialogAddAddressForm" method="post">
-    <input type='hidden' id='receivingAddressId' name='receivingAddressId'/>
-    <table>
-        <tr>
-            <th>销售人</th>
-            <td><input type='text' name="sellerName" id='sellerName' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>国家</th>
-            <td><input type='text'   name="country" id='country' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>省</th>
-            <td><input type='text' name="province" id='province' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>市</th>
-            <td><input type='text' name="city" id='city' class='easyui-textbox' size='16' data-options='required:true;'/></td>
-        </tr>
-        <tr>
-            <th>区</th>
-            <td><input type='text' name="district" id='district' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>送货地址</th>
-            <td><input type='text' name="deliveryAddress" id='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>邮编</th>
-            <td><input type='text' name="zipcode"  id='zipcode' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>联系人</th>
-            <td><input type='text' name="contacts" id='contacts' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>联系人电话</th>
-            <td><input type='text' name="phone"  id='phone' class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-        <tr>
-            <th>是否默认</th>
-            <td><input type='text' id='isDefault' name="isDefault" class='easyui-textbox' size='16' data-options='required:true'/></td>
-        </tr>
-    </table>
-</form>
-    <div>
-        <td>
-            <a onclick='doSubmitAddress();'  class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-            <a onclick='ezuiDialogClose("#dialogAddAddress");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-        </td>
-    </div>--%>
+
 
 </div>
 <script>
@@ -246,11 +194,11 @@
 
         ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
 
-            url : '<c:url value="/gspReceivingAddressController.do?showDatagrid&enterpriseId=${enterpriseId}"/>',
+            url : '<c:url value="/gspReceivingAddressController.do?showDatagrid&receivingId=${receivingId}"/>',
             method : 'POST',
             toolbar : '',
             idField : 'receivingId',
-            title : '',
+            title : '收货地址列表',
             pageSize : 200,
             pageList : [50, 100, 200],
             border : false,
@@ -268,14 +216,18 @@
                 {field: 'receivingId',		hidden:true,  title: '待输入栏位1',	width: 90 },
                 {field: 'sellerName',		title: '销售人',	width:60, align: 'center' },
                 {field: 'country',		title: '国家',	width: 50, align: 'center' },
+
                 {field: 'province',		title: '省',	width: 50, align: 'center' },
                 {field: 'city',		title: '市',	width:50 , align: 'center'},
                 {field: 'district',		title: '区',	width:50 , align: 'center'},
+
                 {field: 'deliveryAddress',		title: '地址',	width:90 , align: 'center'},
                 {field: 'zipcode',		title: '邮编',	width: 90 , align: 'center'},
                 {field: 'contacts',		title: '联系人',	width: 90 , align: 'center'},
                 {field: 'phone',		title: '联系人电话',	width: 90, align: 'center' },
-                {field: 'isDefault',		title: '是否默认',	width: 90 , align: 'center'},
+                {field: 'isDefault',		title: '是否默认',	width: 90 , align: 'center',formatter:function(value,rowData,rowIndex){
+                        return rowData.isDefault == '1' ? '是' : '否';
+                    }},
                 {field: 'createId',		title: '创建人',	width: 90 , align: 'center'},
                 {field: 'createDate',		title: '创建日期',	width: 90, align: 'center' },
                 {field: 'editId',		title: '修改人',	width: 90, align: 'center'},
@@ -601,19 +553,20 @@
             href: sy.bp()+"/gspReceivingController.do?toDialogAddress",
             cache: false,
             onClose : function() {
-                /* ezuiFormClear(ezuiForm);*/
+                 ezuiFormClear(ezuiForm);
             }
         })
-        //dialogAddAddress.dialog('open');
+
     };
     var AddressDel = function(){
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         if(row){
+            console.log(row.receivingAddressId);
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
                 if(confirm){
                     $.ajax({
                         url : 'gspReceivingAddressController.do?delete',
-                        data : {id : row.receivingAddressId},
+                        data : {receivingAddressId : row.receivingAddressId},
                         type : 'POST',
                         dataType : 'JSON',
                         success : function(result){
