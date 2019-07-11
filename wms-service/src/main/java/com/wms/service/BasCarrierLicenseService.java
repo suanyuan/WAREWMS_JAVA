@@ -10,6 +10,7 @@ import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.GspCustomerForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class BasCarrierLicenseService extends BaseService {
 
 	@Autowired
 	private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
+
+	@Autowired
+	private GspCustomerService gspCustomerService;
 
 	@Autowired
 	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
@@ -89,9 +93,11 @@ public class BasCarrierLicenseService extends BaseService {
 			json = new Json();
 			BasCarrierLicense basCarrierLicense = new BasCarrierLicense();
 			GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+			GspCustomerForm gspCustomerForm = new GspCustomerForm();
 
 			BeanUtils.copyProperties(basCarrierLicenseForm.getBasCarrierLicenseForm(), basCarrierLicense);
 			BeanUtils.copyProperties(basCarrierLicenseForm.getGspBusinessLicenseForm(), gspBusinessLicense);
+			BeanUtils.copyProperties(basCarrierLicenseForm.getGspCustomerForm(), gspCustomerForm);
 			basCarrierLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			basCarrierLicense.setActiveFlag("1");
@@ -102,6 +108,10 @@ public class BasCarrierLicenseService extends BaseService {
 			basCarrierLicenseMybatisDao.add(basCarrierLicense);
 
 			gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
+
+			gspCustomerService.addGspCustomer(gspCustomerForm);
+
+
 			json.setSuccess(true);
 		} catch (BeansException e) {
 			e.printStackTrace();

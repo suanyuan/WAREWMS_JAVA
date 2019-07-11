@@ -2,6 +2,7 @@ package com.wms.vo.form;
 
 import com.wms.entity.BasCarrierLicense;
 import com.wms.entity.GspBusinessLicense;
+import com.wms.entity.GspCustomer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
@@ -9,6 +10,7 @@ public class BasCarrierLicenseForm {
 
     private GspBusinessLicenseForm gspBusinessLicenseForm;
     private BasCarrierLicenseForm basCarrierLicenseForm;
+    private GspCustomerForm gspCustomerForm;
     private String carrierLicenseId;
 	private String enterpriseId;
 	private String roadNumber;
@@ -63,6 +65,14 @@ public class BasCarrierLicenseForm {
     private String registrationAuthority;
 
     private String attachmentUrl;
+
+    public GspCustomerForm getGspCustomerForm() {
+        return gspCustomerForm;
+    }
+
+    public void setGspCustomerForm(GspCustomerForm gspCustomerForm) {
+        this.gspCustomerForm = gspCustomerForm;
+    }
 
     public GspBusinessLicenseForm getGspBusinessLicenseForm() {
         return gspBusinessLicenseForm;

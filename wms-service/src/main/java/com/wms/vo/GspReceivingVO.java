@@ -22,12 +22,21 @@ public class GspReceivingVO {
 	private String isReturn;
 	private String contacts;
 	private String phone;
+	private String firstState;
 
 	private String deliveryAddress;
 
 
 
 	private String isCooperation;
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
 
 	public String getEnterpriseNo() {
 		return enterpriseNo;

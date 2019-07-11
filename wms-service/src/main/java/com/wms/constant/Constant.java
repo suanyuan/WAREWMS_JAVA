@@ -22,6 +22,7 @@ public class Constant {
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
     public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
+    public static final String CODE_CATALOG_CHECKSTATE = "CATALOG_CHECKSTATE"; //审核状态
     public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
     public static final String CODE_CATALOG_CUS_TYP = "CUS_TYP";//客户类型
 
@@ -73,7 +74,8 @@ public class Constant {
     public static final String CODE_CATALOG_CHECKSTATE_PASS = "40"; //(已通过)
     public static final String CODE_CATALOG_CHECKSTATE_FAIL = "50"; //(未通过)
 
-
+//GSP开关
+    public static final String QC_FLAG = "QC_FLAG";
 
 
 

@@ -22,6 +22,9 @@
     <div title="营业执照信息" data-options="href:'/gspEnterpriseInfoController.do?toBusinessLicense'" style="overflow:auto;padding:20px;display:none;">
         tab2
     </div>
+    <div title="合同信息" data-options="href:'/gspCustomerController.do?toDetail'" style="overflow:auto;padding:20px;display:none;">
+        tab2
+    </div>
 
 </div>
 </body>

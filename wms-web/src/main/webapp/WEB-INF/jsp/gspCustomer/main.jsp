@@ -51,7 +51,7 @@ $(function() {
 			{field: 'firstState',		title: '首营状态',	width: 38 ,formatter:firstStateTypeFormatter},
 			{field: 'isCheck',		title: '是否审查',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'isCooperation',		title: '是否合作',	width: 38 ,formatter: yesOrNoFormatter},
-			{field: 'operateType',		title: '类型',	width: 38 ,formatter: yesOrNoFormatter},
+			{field: 'operateType',		title: '类型',	width: 38 ,formatter: entTypeFormatter},
 			{field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
 			{field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
 			{field: 'clientContent',		title: '委托内容',	width: 38 ,hidden:true},
@@ -224,6 +224,7 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -317,6 +318,30 @@ var doSearch = function(){
         $("#enterpriseIdQuery").textbox("setValue",name);
         enterpriseDialog_gspCustomer.dialog("close");
     }
+
+    function doConfirm(){
+        var rows = ezuiDatagrid.datagrid("getSelections");
+        if(rows){
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
+                if (confirm) {
+                    var arr = new Array();
+                    for(var i=0;i<rows.length;i++){
+                        arr.push(rows[i].clientId);
+					}
+                    $.ajax({
+                        url : sy.bp()+"/gspCustomerController.do?confirmSubmit",
+                        data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
+                        success : function(result){
+                            var msg = result.msg;
+                            showMsg(msg);
+                            ezuiDatagrid.datagrid("reload");
+                        }
+                    });
+
+                }
+            })
+        }
+	}
 
 	$(function () {
 		$("#enterpriseIdQuery").textbox({

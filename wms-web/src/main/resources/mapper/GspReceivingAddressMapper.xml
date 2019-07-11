@@ -164,7 +164,12 @@ where 1=1
 <!-- 根据id查询 收货地址 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from gsp_receiving_address where receiving_id = #{receivingId}
+	 from gsp_receiving_address where receiving_id = #{receivingId} and  is_default='1'
+</select>
+<!-- 根据id查询 收货地址 -->
+<select id="queryByReceivingId"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	 from gsp_receiving_address where receiving_id = #{receivingId} order by edit_date desc limit 0,20
 </select>
 
 <!-- 收货地址 列表总数-->
@@ -177,7 +182,7 @@ where 1=1
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
-	from gsp_receiving_address 
+	from gsp_receiving_address
 	<include refid="Example_Where_Clause"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
@@ -191,6 +196,6 @@ where 1=1
 
 	<!-- 根据id查询 区域信息 -->
 <select id="findPCDByPid"  resultMap="areasResultMap" parameterType="Object">
-		select *  from province_city_district where pid = #{pid}
+		select *  from bas_province_city_district where pid = #{pid}
 </select>
 </mapper>   

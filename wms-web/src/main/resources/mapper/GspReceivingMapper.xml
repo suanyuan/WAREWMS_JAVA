@@ -16,6 +16,7 @@
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
 	<result column="is_return" property="isReturn"/>
+	<result column="first_state" property="firstState"/>
 </resultMap>
        
 <!-- gsp_receiving table all fields -->
@@ -64,6 +65,9 @@ where 1=1
 	</if>
 	<if test="condition.isReturn != null and condition.isReturn != ''" >
 	    and is_return =  #{condition.isReturn}
+	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+	    and first_state =  #{condition.firstState}
 	</if>
 </trim>
 </sql>

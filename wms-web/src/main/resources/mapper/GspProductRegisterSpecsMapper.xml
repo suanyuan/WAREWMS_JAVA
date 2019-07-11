@@ -177,7 +177,7 @@ where 1=1
 		conversion_rate=#{conversionRate},
 	</if>
 	<if test="long != null  ">
-		long=#{long},
+		`long`=#{long},
 	</if>
 	<if test="wide != null  ">
 		wide=#{wide},
@@ -191,7 +191,7 @@ where 1=1
 	<if test="manageCategories != null  ">
 		manage_categories=#{manageCategories},
 	</if>
-	<if test="packing require != null  ">
+	<if test="packingRequire != null  ">
 		packing_require=#{packingRequire},
 	</if>
 	<if test="storageCondition != null  ">

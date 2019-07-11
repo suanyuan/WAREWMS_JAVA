@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "province_city_district")
+@Table(name = "bas_province_city_district")
 @Data
 public class PCD {
 	@Id

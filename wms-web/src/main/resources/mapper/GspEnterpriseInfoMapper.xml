@@ -270,7 +270,7 @@ where 1=1
 <!-- 企业信息 列表总数-->
 <select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
 	select count(1)
-	from gsp_enterprise_info g left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	from gsp_enterprise_info g
 	left join bas_codes bc on g.state = bc.code
 	<if test="condition.type == 'customer'">
 		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id

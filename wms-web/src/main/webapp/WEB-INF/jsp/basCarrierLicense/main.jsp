@@ -20,7 +20,7 @@ $(function() {
 		url : '<c:url value="/basCarrierLicenseController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -34,20 +34,20 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'roadNumber',		title: '道路运营许可证编号',	width: 50 },
-			{field: 'roadNumberTerm',		title: '道路运输经营许可证证件有效期道路运输经营许可证证件有效期',	width: 50 },
-			{field: 'roadAuthorityPermit',		title: '道路运输经营许可证核发机关',	width: 50 },
-			{field: 'roadBusinessScope',		title: '道路运输经营许可证经营范围',	width: 50 },
-			{field: 'carrierNo',		title: '快递业务经营许可证编号',	width: 50 },
-			{field: 'carrierDate',		title: '快递业务经营许可证发证日期',	width: 50 },
-			{field: 'carrierEndDate',		title: '快递业务经营许可证有效期至',	width: 50 },
-			{field: 'carrierAuthorityPermit',		title: '快递业务经营许可证发证机关',	width: 50 },
-			{field: 'carrierBusinessScope',		title: '快递业务经营许可证业务范围',	width: 50 },
-			{field: 'createId',		title: '录入人',	width: 50 },
-			{field: 'createDate',	title: '录入时间',	width: 50 },
-			{field: 'editId',		title: '修改人',	width: 50 },
-			{field: 'editDate',		title: '修改时间',	width: 50 },
-			{field: 'activeFlag',	title: '是否有效',	width: 50 ,formatter:function(value,rowData,rowIndex){
+			{field: 'roadNumber',		title: '道路运营许可证编号',	width: 90 },
+			{field: 'roadNumberTerm',		title: '证件有效期',	width: 50 },
+			{field: 'roadAuthorityPermit',		title: '核发机关',	width: 50 },
+			{field: 'roadBusinessScope',		title: '经营范围',	width: 50 },
+			{field: 'carrierNo',		title: '快递经营许可证编号',	width: 90 },
+			{field: 'carrierDate',		title: '发证日期',	width: 85 },
+            {field: 'carrierAuthorityPermit',		title: '发证机关',	width: 45 },
+            {field: 'carrierEndDate',		title: '有效期至',	width: 85 },
+			{field: 'carrierBusinessScope',		title: '业务范围',	width: 50 },
+			{field: 'createId',		title: '录入人',	width: 40 },
+			{field: 'createDate',	title: '录入时间',	width: 85 },
+			{field: 'editId',		title: '修改人',	width: 40 },
+			{field: 'editDate',		title: '修改时间',	width: 85 },
+			{field: 'activeFlag',	title: '是否合作',	width: 40 ,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 } }
 		]],
@@ -78,6 +78,13 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+
+    $("#activeFlag").combobox({
+        url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
 });
 var add = function(){
 	processType = 'add';
@@ -151,6 +158,7 @@ var commit = function(){
     var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
+    var clientObj = new Object();
 
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
@@ -158,9 +166,13 @@ var commit = function(){
     $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
         businessObj[""+$(this).attr("name")+""] = $(this).val();
     });
+    $("#ezuiFormClient input[class='textbox-value'][type!='file']").each(function (index) {
+        clientObj[""+$(this).attr("name")+""] = $(this).val();
+    });
 
     gspEnterpriceFrom["BasCarrierLicenseForm"] = infoObj;
     gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
+    gspEnterpriceFrom["clientForm"] = clientObj;
 
     var url = '';
     if (processType == 'edit') {
@@ -182,7 +194,6 @@ var commit = function(){
             url : url,
             data : {"enterpriseId":enterpriceId,"basCarrierLicenseFormstr":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
-                console.log(result);
                 var msg='';
                 try{
                     if(result.success){
@@ -241,30 +252,28 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>道路运营许可证编号：</th><td><input type='text' id='roadNumber' class='easyui-textbox' size='4' data-options=''/></td>
+							<th>道路运营许可证编号</th><td><input type='text' id='roadNumber' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否合作</th>
+							<td>
+								<input id="activeFlag" class="easyui-combobox" size="16" >
+							</td>
+
 							<%--<th>道路运输经营许可证证件有效期：</th><td><input type='text' id='roadNumberTerm' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>道路运输经营许可证核发机关：</th><td><input type='text' id='roadAuthorityPermit' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>道路运输经营许可证经营范围：</th><td><input type='text' id='roadBusinessScope' class='easyui-textbox' size='4' data-options=''/></td>--%>
-							<th>快递业务经营许可证编号：</th><td><input type='text' id='carrierNo' class='easyui-textbox' size='4' data-options=''/></td>
+							<th>道路运输经营许可证经营范围：</th><td><input type='text' id='roadBusinessScope' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>快递业务经营许可证发证日期：</th><td><input type='text' id='carrierDate' class='easyui-textbox' size='4' data-options=''/></td>
-							<%--<th>快递业务经营许可证有效期至：</th><td><input type='text' id='carrierEndDate' class='easyui-textbox' size='4' data-options=''/></td>
+							<th>快递业务经营许可证有效期至：</th><td><input type='text' id='carrierEndDate' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>快递业务经营许可证发证机关：</th><td><input type='text' id='carrierAuthorityPermit' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>快递业务经营许可证业务范围：</th><td><input type='text' id='carrierBusinessScope' class='easyui-textbox' size='4' data-options=''/></td>--%>
-							<th>录入人：</th><td><input type='text' id='createId' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>录入时间：</th><td><input type='text' id='createDate' class='easyui-textbox' size=’4' data-options=''/></td>
+							<th>修改时间</th><td><input type='text' id='editDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>录入时间</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>修改人：</th><td><input type='text' id='editId' class='easyui-textbox' size='4' data-options=''/></td>
-							<th>修改时间：</th><td><input type='text' id='editDate' class='easyui-textbox' size='4' data-options=''/></td>
-							<%--<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>--%>
-                            <th>是否有效：</th>
-                            <td>
-                                <select id="activeFlag" class="easyui-combobox"  style="width:100px;">
-                                    <option value=""></option>
-                                    <option value="1">有效</option>
-                                    <option value="0">失效</option>
-                                </select>
-                            </td>
+							<th>快递经营许可证编号</th><td><input type='text' id='carrierNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>修改人</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>录入人</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
+						<%--<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>--%>
+
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

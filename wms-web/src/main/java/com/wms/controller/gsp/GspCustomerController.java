@@ -117,4 +117,10 @@ public class GspCustomerController {
 		return gspCustomerService.getGspCustomerCombobox();
 	}
 
+	@Login
+	@RequestMapping(params = "confirmSubmit")
+	@ResponseBody
+	public Json confirmSubmit(String id){
+		return gspCustomerService.confirmSubmit(id);
+	}
 }

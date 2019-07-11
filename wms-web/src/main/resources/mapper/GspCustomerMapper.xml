@@ -107,8 +107,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_customer(client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use)
- values(#{clientNo},#{clientName},#{enterpriseId},#{remark},#{firstState},#{isCheck},#{isCooperation},#{operateType},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into gsp_customer(client_id,client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use)
+ values(#{clientId},#{clientNo},#{clientName},#{enterpriseId},#{remark},#{firstState},#{isCheck},#{isCooperation},#{operateType},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{createId},now(),#{editId},#{editDate},#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  

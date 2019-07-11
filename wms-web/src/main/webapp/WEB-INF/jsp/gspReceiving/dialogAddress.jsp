@@ -4,24 +4,30 @@
 
 <div id='dialogAddAddress' style='padding: 10px;'>
 	<form id='dialogAddAddressForm' method='post' >
-
-	<input type='hidden' id='r'  name='receivingId' class='easyui-textvalue' value="${receivingId}"/>
+	<input type='hidden' id='r'   name='receivingId' class='easyui-textbox' />
 
 			<table>
 				<tr>
+				<th>收货单位</th>
+				<td>
+					<input type='text' name='clientId' id="receivingI"  size="16" class='easyui-textbox' data-options='required:true'/>
+					<a href="javascript:void(0)" onclick="searchReceiving()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>
+				</td>
+				</tr>
+				<tr>
 					<th>销售人</th>
-					<td><input type='text' name="sellerName"  class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="sellerName"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>国家</th>
-					<td><input type='text'   name="country"  class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text'   name="country"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>省</th>
 					<td>
 						<input id="cc1" class="easyui-combobox" name="province" editable="false" data-options="
             	required:true,
-                valueField: 'id',
+                valueField: 'name',
                 textField: 'name',
             	url: 'gspReceivingAddressController.do?getArea&pid=0',
             	onSelect: function(rec){
@@ -37,7 +43,7 @@
 					<td>
 					<input id="cc2" class="easyui-combobox" name="city" editable="false" data-options="
             required:true,
-            valueField: 'id',
+            valueField: 'name',
             textField: 'name',
             onSelect: function(rec){
             	$('#cc2').combobox('reload', url);
@@ -50,108 +56,35 @@
 				<tr>
 					<th>区/县</th>
 					<td>
-						<input id="cc3" class="easyui-combobox" name="city" editable="false" data-options="
+						<input id="cc3" class="easyui-combobox" name="district" editable="false" data-options="
             required:true,
-            valueField:'id',
+            valueField:'name',
             textField:'name'">
 					</td>
 				</tr>
-				<%--<tr>
-					<th>省</th>
-					<td>
-						<input  id="provincesssss"  name="province" class="easyui-combobox"  data-options='required:true' />
-					</td>
-
-				</tr>
-				<tr>
-					<th>市</th>
-					<td>
-						<input  id="citys"  name="city" class="easyui-combobox"  data-options='required:true' />
-					</td>
-				</tr>
-				<tr>
-					<th>区/县</th>
-					<td>
-						<input  id="area"  name="areas" class="easyui-combobox"  data-options='required:true' />
-					</td>
-				</tr>--%>
-
-				<%--<tr>
-				<th>省</th>
-				<td>
-					<select id="provincesssss" style="width: 140px" name="province"   data-options='required:true' onchange="changeCity()">
-						<option value="34">--请选择省--</option>
-					</select>
-				</td>
-
-			</tr>
-				<tr>
-					<th>市</th>
-					<td>
-						<select id="city" style="width: 140px"  name="city"   onchange="changeDistrict()">
-							<option value="3401">--请选择市--</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>区/县</th>
-					<td>
-						<select style="width: 140px" id="areas"  name="district"   data-options='required:true' onchange="changeDhiddenValue()">
-							<option value="341225">--请选择区/县--</option>
-						</select>
-					</td>
-				</tr>
-				<input type="hidden" name="phidden" id="phidden">
-				<input type="hidden" name="chidden" id="chidden">
-				<input type="hidden" name="dhidden" id="dhidden">
---%>
-
-				<%--<tr>
-					<th>省</th>
-					<td>
-						<input id="pcc1" class="easyui-combobox" >
-					</td>
-				</tr>
-				<tr>
-					<th>市</th>
-					<td>
-						<input id="pcc2" class="easyui-combobox" >
-					</td>
-				</tr>
-				<tr>
-					<th>区/县</th>
-					<td>
-						<input id="pcc3" class="easyui-combobox" >
-					</td>
-				</tr>--%>
-
 				<tr>
 					<th>地址</th>
-					<td><input type='text' name="deliveryAddress"  class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="deliveryAddress"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>邮编</th>
-					<td><input type='text' name="zipcode"   class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="zipcode"   class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>联系人</th>
-					<td><input type='text' name="contacts"  class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="contacts"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>联系人电话</th>
-					<td><input type='text' name="phone"  class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="phone"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>是否默认</th>
-					<td><input type='text' id='isDefault' name="isDefault" class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' id='isDefault' name="isDefault" class='easyui-combobox' size='20' data-options='required:true'/></td>
 				</tr>
 			</table>
 
 	</form>
-
-
-
-
 </div>
 <div>
 	<td>
@@ -185,119 +118,153 @@
 
 
 
+<div id='ezuiDialogReceivingDetail' style='padding: 10px;'>
+	<div id='TBReceiving' class='datagrid-toolbar' style=''>
+		<fieldset>
+			<legend>收货单位信息</legend>
+			<table>
+				<tr>
+					<th>收货单位</th>
+					<td><input type='text' id='receivId' class='easyui-textbox' data-options='width:200'/></td>
+					<th>是否需要审核</th>
+					<td><input type='text' id='check' class='easyui-textbox' data-options='width:200'/></td>
+					<td>
+						<a onclick='doSearchReceiving();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+						<a onclick='choseReceivingSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+	<table id="dataGridReceivingDetail">
 
+	</table>
+</div>
+
+<div id="dialogReceiving">
+
+</div>
 <script>
-   /* $(function () {
-        $('#pcc1').combobox({
-            url:'/gspReceivingAddressController.do?getArea&pid=0',
+	var ezuiDialogReceivingDetail;
+	var dataGridReceivingDetail;
+	var dialogReceiving;
+    $(function () {
+        $("#isDefault").combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
-            textField:'name',
-            /!*onSelect: function(rec){
-                $('#pcc2').combobox('clear');
-                $('#pcc3').combobox('clear');
-                var url= '/gspReceivingAddressController.do?getArea&pid='+rec.id;
-                $('#pcc2').combobox('reload',url);
-            }*!/
+            textField:'value'
         });
-        /!* $('#pcc2').combobox({
-
-             valueField:'id',
-             textField:'name',
-             onSelect: function(rec){
-                 $('#pcc2').combobox('reload', url);
-                 $('#pcc3').combobox('clear');
-                 var url = '/gspReceivingAddressController.do?getArea&pid='+rec.id;
-                 $('#pcc3').combobox('reload', url);
-             }
-         });
-         $('#pcc3').combobox({
-             //url:'gspReceivingAddressController.do?getArea&pid=0',
-             valueField:'id',
-             textField:'name'
-         });*!/
-    })*/
 
 
 
-        /*$(function(){
-           /!* $.ajax({
-                url:'/gspReceivingAddressController.do?getArea',
-                data:{pid:0},
-                type:'POST',
-				sync:false,
-                dataType:'json',
-                success:function(data){
-					console.log(data[0]);
-                    for(var i=0;i<data.length;i++){
-                        var $option = $("<option value='"+data[i].id+"'>"+data[i].name+"</option>");
-                        $("#dialogAddAddressForm select[name='province']").append($option);
-                    }
-                }
-            })*!/
-        });*/
+        dataGridReceivingDetail = $("#dataGridReceivingDetail").datagrid({
+            url : '<c:url value="/gspReceivingController.do?showDatagrid"/>',
+            method:'POST',
+            toolbar : '#TBReceiving',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'receivingId',
+            columns : [[
+                {field: 'receivingId',	hidden:true,		width: 72 },
+                {field: 'clientId',		title: '货主',	width: 52 },
+                {field: 'supplierId',		title: '供应商',	width: 52 },
 
- /*  var changeCity=    function (){
-            //当省的内容发生变化的时候，响应的改变省的隐藏域的值
-         //   $("#phidden").val($("#provincesssss option:selected").html());
-            //页面加载完成，将省的信息加载完成
-            //下拉列表框标签对象的val()方法就是选中的option标签的value的属性值
-         //  var pida =  $("#provincesssss").val();
-       var pron=  document.getElementById("provincesssss");
-       var index =  pron.selectedIndex;
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: 81 },
+                {field: 'shorthandName',		title: '简称',	width: 41 },
+                {field: 'enterpriseName',		title: '企业名称',	width: 61  },
 
-       var pid =  pron.options[index].value;
-       var pid1 =  pron.options[index].text;
-          //  var pid =  $(this).val();
-            console.log(pid);
-            console.log(pid1);
-            $.ajax({
-                url:"gspReceivingAddressController.do?getArea",
-                data:{pid:pid},
-				sync:false,
-                dataType:"json",
-                success:function(data){
-                   //清空城市下拉列表框的内容
-                    $("#city").html("<option value=''>-- 请选择市 --</option>");
-                    $("#areas").html("<option value=''>-- 请选择区/县 --</option>");
-                    //遍历json，json数组中每一个json，都对应一个省的信息，都应该在省的下拉列表框下面添加一个<option>
-                    for(var i=0;i<data.length;i++){
-                        var $option = $("<option value='"+data[i].id+"'>"+data[i].name+"</option>");
-                        $("#dialogAddAddressForm select[name='city']").append($option);
-                    }
-                }
-            });
-        };
 
-        function changeDistrict(){
-            //当城市的内容发生变化的时候，相应的改变城市的隐藏域的值
-            $("#chidden").val($("#city option:selected").html());
-            //页面加载完成，将省的信息加载完成
-            //下拉列表框标签对象的val()方法就是选中的option标签的value的属性值
-            var pid = $("#dialogAddAddressForm select[name='city']").val();
-            $.ajax({
-                url:"gspReceivingAddressController.do?getArea",
-                data:{"pid":pid},
-                dataType:"json",
-                success:function(data){
-                    //清空城市下拉列表框的内容
-                    $("#dialogAddAddressForm select[name='areas']").html("<option value=''>-- 请选择区/县 --</option>");
-                    for(var i=0;i<data.length;i++){
-                        var $option = $("<option value='"+data[i].id+"'>"+data[i].name+"</option>");
-                        $("#dialogAddAddressForm select[name='areas']").append($option);
-                    }
-                }
-            });
+                {field: 'deliveryAddress',		title: '地址',	width: 52 },
+                {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
+                        return rowData.isCheck == '1' ? '是' : '否';
+                    }},
+                {field: 'firstState',		title: '审核状态',	width: 62 ,formatter:firstStateFormatter},
+                {field: 'isReturn',		title: '是否医废',	width: 62 ,formatter:function(value,rowData,rowIndex){
+                        return rowData.isReturn == '1' ? '是' : '否';
+                    }},
+                {field: 'isUse',		title: '是否有效',	width: 62 ,formatter:function(value,rowData,rowIndex){
+                        return rowData.isUse == '1' ? '是' : '否';
+                    }},
+            ]],
+            onDblClickCell: function(index,field,value){
+                choseReceivingSelect();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        });
+
+
+        ezuiDialogReceivingDetail = $('#ezuiDialogReceivingDetail').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+        dialogReceiving = $('#dialogReceiving').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            fit:true,
+            href:sy.bp()+"/gspReceivingController.do?toDetail",
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+    });
+
+
+
+
+
+
+
+    function searchReceiving() {
+        if(ezuiDialogReceivingDetail){
+
+        ezuiDialogReceivingDetail.dialog('open')
         }
 
-        function changeDhiddenValue(){
-            //当城市的内容发生变化的时候，相应的改变城市的隐藏域的值
-            $("#dhidden").val($("#dialogAddAddressForm select[name='areas'] option:selected").html());
-        }*/
+    }
 
+    function doSearchReceiving() {
+        dataGridReceivingDetail.datagrid('load', {
+            receivingId : $('#receivId').val(),
+            isCheck : $('#check').val(),
+        });
+    }
 
-
-
-
+    function choseReceivingSelect() {
+        var row = dataGridReceivingDetail.datagrid("getSelected");
+        if(row){
+            $("#receivingI").textbox("setValue",row.clientId);
+            $("#r").textbox("setValue",row.receivingId);
+            ezuiDialogReceivingDetail.dialog('close');
+        }
+    }
 
     function doSubmitAddress() {
         var infoObj = new Object();

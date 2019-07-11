@@ -11,7 +11,7 @@
             <td><input type='text' data="1" id="roadNumber" value="${basCarrierLicense.roadNumber}" name='roadNumber' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>道路经营许可证照片</th>
+            <th>许可证照片</th>
             <td>
                 <input id="roadNumberUrlFile" name='file' value="${basCarrierLicense.roadNumberlicenseUrl}">
                 <a id="roadNumberbtn" href="#" class="easyui-linkbutton" data-options="">查看</a>
@@ -19,15 +19,15 @@
             </td>
         </tr>
         <tr>
-            <th>许可证有效期</th>
+            <th>有效期</th>
             <td><input type='text' data="1" id="roadNumberTerm" value="${basCarrierLicense.roadNumberTerm}" name='roadNumberTerm' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>许可证签发机关</th>
+            <th>签发机关</th>
             <td><input type='text' data="1" id="roadAuthorityPermit" value="${basCarrierLicense.roadAuthorityPermit}" name='roadAuthorityPermit' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>道路经营范围</th>
+            <th>经营范围</th>
             <td><input type='text' data="1" id="roadBusinessScope" value="${basCarrierLicense.roadBusinessScope}" name='roadBusinessScope' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
@@ -35,7 +35,7 @@
             <td><input type='text' data="1" id="carrierNo" value="${basCarrierLicense.carrierNo}" name='carrierNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>快递经营许可证照片</th>
+            <th>许可证照片</th>
             <td>
                 <input id="licenseUrlFile" name='file' value="${basCarrierLicense.licenseUrl}">
                 <a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
@@ -43,17 +43,17 @@
             </td>
         </tr>
         <tr>
-            <th>快递经营许可证发证日期</th>
+            <th>许可证发证日期</th>
             <td><input type='text' data="1" id="carrierDate"  value="${basCarrierLicense.carrierDate}"  name='carrierDate' class="easyui-datebox" size='50' data-options='required:true'/></td>
         </tr> <tr>
-            <th>快递经营许可证有效期截止日期</th>
+            <th>有效期至</th>
             <td><input type='text' data="1" id="carrierEndDate" value="${basCarrierLicense.carrierEndDate}" name='carrierEndDate' class="easyui-datebox" size='50' data-options='required:true'/></td>
         </tr> <tr>
-            <th>快递经营范围</th>
+            <th>经营范围</th>
             <td><input type='text' data="1" id="carrierBusinessScope" value="${basCarrierLicense.carrierBusinessScope}"  name='carrierBusinessScope' class="easyui-textbox" size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>快递经营许可证签发机关</th>
+            <th>签发机关</th>
             <td><input type='text' data="1" id="carrierAuthorityPermit" value="${basCarrierLicense.carrierAuthorityPermit}" name='carrierAuthorityPermit' class='easyui-textbox' size='50'  data-options='required:true'/></td>
         </tr>
 

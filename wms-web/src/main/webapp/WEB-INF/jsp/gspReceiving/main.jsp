@@ -29,7 +29,7 @@
                     url : '<c:url value="/gspReceivingController.do?showDatagrid"/>',
                     method:'POST',
                     toolbar : '#toolbar',
-                    title: '待输入标题',
+                    title: '',
                     pageSize : 50,
                     pageList : [50, 100, 200],
                     fit: true,
@@ -59,7 +59,7 @@
                         {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isCheck == '1' ? '是' : '否';
                             }},
-                        {field: 'firstState',		title: '审核状态',	width: 62 },
+                        {field: 'firstState',		title: '审核状态',	width: 62 ,formatter:firstStateFormatter},
                         {field: 'isReturn',		title: '是否医废',	width: 62 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isReturn == '1' ? '是' : '否';
                             }},
@@ -90,9 +90,9 @@
 
                     }
                 });
-                ezuiDialogA = $('#ezuiDialog').dialog({
+                /*ezuiDialogA = $('#ezuiDialog').dialog({
                     modal : true,
-                    title : '<spring:message code="common.dialog.title"/>',
+                    title : '',
                     href:dialogUrll,
                     fit:true,
                     cache:false,
@@ -100,7 +100,7 @@
                     onClose : function() {
                         ezuiFormClear(ezuiForm);
                     }
-                }).dialog('close');
+                }).dialog('close');*/
 
 
                 enterDialog = $('#ezuiFormInfo').dialog({
@@ -134,24 +134,61 @@
                     textField:'value'
                 });
             });
-            var add = function(){
+var add = function(){
                 processType = 'add';
-                $('#receivingId').val(0);
-               ezuiDialogA.dialog('open');
+                /*console.log($('#receivingId').val(0));
+               ezuiDialogA.dialog('open');*/
+    $('#ezuiDialog').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        href:dialogUrll,
+        fit:true,
+        cache:false,
+        buttons : '#ezuiDialogBtn',
+        onClose : function() {
+            $('#ezuiFormAddress').form('clear');
+        }
+    });
 
             };
-  var edit = function(){
+var edit = function(){
+
+
                 processType = 'edit';
                 var row = ezuiDatagrid.datagrid('getSelected');
 
+
+
         if(row){
-           // ezuiDialogA.dialog('open');
-                    ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
-                }else{
+
+            if (row.firstState == '10' || row.firstState == '40') {
+                $.messager.show({
+                    msg : '审核中与审核通过的申请无法编辑', title : '提示'
+                });
+            }else {
+
+                   // ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+
+
+                $('#ezuiDialog').dialog({
+                    modal : true,
+                    title : '<spring:message code="common.dialog.title"/>',
+                    href:dialogUrll,
+                    fit:true,
+                    cache:false,
+                    buttons : '#ezuiDialogBtn',
+                    onClose : function() {
+                        ezuiFormClear(ezuiForm);
+                    }
+                }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+
+            }
+        }else{
                     $.messager.show({
                         msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-                    });
-                }
+                  			  });
+               			 }
+
             };
 
 
@@ -275,6 +312,7 @@
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='newAdd();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
+					<a onclick='newAdd();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>下发</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

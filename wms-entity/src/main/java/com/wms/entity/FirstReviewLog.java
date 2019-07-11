@@ -37,4 +37,6 @@ public class FirstReviewLog  implements Serializable {
 
 	private java.util.Date editDate;
 
+	private String reviewType;
+
 }

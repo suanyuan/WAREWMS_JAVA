@@ -1,5 +1,7 @@
 package com.wms.mybatis.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 
  * <br>
@@ -7,5 +9,5 @@ package com.wms.mybatis.dao;
  */
 public interface FirstReviewLogMybatisDao extends BaseDao {
 	
-	
+	Long updateFirstReviewByNo(@Param("no")String no,@Param("state")String state,@Param("editId")String editId);
 }

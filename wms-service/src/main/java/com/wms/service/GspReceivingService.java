@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
@@ -51,7 +52,7 @@ public class GspReceivingService extends BaseService {
 	@Autowired
 	private GspReceivingAddressMybatisDao gspReceivingAddressMybatisDao;
 
-	public EasyuiDatagrid<GspReceivingVO> getPagedDatagrid(EasyuiDatagridPager pager, GspReceivingQuery query) {
+	public EasyuiDatagrid<GspReceivingVO> getPagedDatagrid(EasyuiDatagridPager pager, GspReceivingQuery query)  {
 		EasyuiDatagrid<GspReceivingVO> datagrid = new EasyuiDatagrid<GspReceivingVO>();
 
 		try {
@@ -78,7 +79,9 @@ public class GspReceivingService extends BaseService {
 
 					GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
 
-					gspReceivingVO.setIsCooperation(gspCustomer.getIsCooperation());
+					if (gspCustomer!=null) {
+						gspReceivingVO.setIsCooperation(gspCustomer.getIsCooperation());
+					}
 				}
 				if ( gspEnterpriseInfo!=null){
 					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
@@ -91,7 +94,7 @@ public class GspReceivingService extends BaseService {
 			datagrid.setTotal((long) gspReceivingMybatisDao.queryByCount(mybatisCriteria));
 			datagrid.setRows(gspReceivingVOList);
 		} catch (Exception e) {
-			return null;
+			e.printStackTrace();
 		}
 		return datagrid;
 	}

@@ -188,7 +188,27 @@ public class CommonController {
     @RequestMapping(params = "getEntType")
     @ResponseBody
     public List<EasyuiCombobox> getEntType(){
-        //TODO 数据库内容待添加
         return basCodesService.getBy(Constant.CODE_CATALOG_ENTTYPE);
+    }
+
+    /**
+     * 首营状态
+     * @return
+     */
+    @RequestMapping(params = "firstState")
+    @ResponseBody
+    public List<EasyuiCombobox> firstState(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_FIRSTSTATE);
+    }
+
+
+    /**
+     * 首营状态
+     * @return
+     */
+    @RequestMapping(params = "checkState")
+    @ResponseBody
+    public List<EasyuiCombobox> checkState(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_CHECKSTATE);
     }
 }
