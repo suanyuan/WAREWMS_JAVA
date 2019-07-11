@@ -17,6 +17,26 @@ public class GspProductRegisterSpecs implements Serializable {
   @Transient
   private int hashCode = Integer.MIN_VALUE;
 
+  public static long getSerialVersionUID() {
+    return serialVersionUID;
+  }
+
+  public int getHashCode() {
+    return hashCode;
+  }
+
+  public void setHashCode(int hashCode) {
+    this.hashCode = hashCode;
+  }
+
+  public String getLlong() {
+    return llong;
+  }
+
+  public void setLlong(String llong) {
+    this.llong = llong;
+  }
+
   private String specsId;
   private String productRegisterId;
 

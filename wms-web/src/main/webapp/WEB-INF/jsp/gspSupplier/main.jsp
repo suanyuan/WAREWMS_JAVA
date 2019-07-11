@@ -125,6 +125,46 @@ var edit = function(){
 	}
 
 };
+
+var check = function () {
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row.firstState=="10" || row.firstState=="40"){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法删除', title : '提示'
+        });
+    }else {
+        if (row) {
+            $.messager.confirm('是否开始审核', '提示', function (confirm) {
+                if (confirm) {
+                    $.ajax({
+                        url: 'gspSupplierController.do?delete',
+                        data: {id: row.supplierId},
+                        type: 'POST',
+                        dataType: 'JSON',
+                        success: function (result) {
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg: msg, title: '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+
+
+        }
+        ;
+
+    };
+
+
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row.firstState=="10" || row.firstState=="40"){
@@ -222,7 +262,9 @@ var commit = function(){
 
 
 	}else{
-	    if(infoObj.isCheck==0){
+
+	    if(infoObj.isCheck==0 && infoObj.isCheck!=null&&infoObj.isCheck!=""){
+            alert(infoObj.isCheck);
             $.messager.confirm('提示', '该申请无需审核 是否直接下发？', function(confirm) {
                 if(confirm){
                     url = sy.bp()+'/gspSupplierController.do?add';
@@ -247,10 +289,16 @@ var commit = function(){
                     });
                 }
             });
-		}else {
+		}else if(infoObj.isCheck==1){
+            //alert(1111111);
             url = sy.bp()+'/gspSupplierController.do?add';
             addOrEdit(url,infoObj);
-		}
+		}else if(infoObj.isCheck==""){
+	        //alert(2222222);
+            $.messager.show({
+                msg : '请选择是否需要审核', title : '提示'
+            });
+        }
 	}
 
 
@@ -387,7 +435,8 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+                    <a onclick='check();' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>开始审核</a>
+                    <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 
