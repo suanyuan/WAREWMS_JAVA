@@ -1,12 +1,18 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.*;
+import com.wms.entity.BasSku;
+import com.wms.entity.DocQcDetails;
+import com.wms.entity.GspEnterpriseInfo;
+import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocQcDetailsQuery;
-import com.wms.query.InvLotAttQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.utils.BeanConvertUtil;
@@ -127,22 +133,54 @@ public class DocQcDetailsService extends BaseService {
             BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
 
             //SKU - 型号/规格
-            pdaDocQcDetailVO.setBasSku(basSku);
+            BasSku subBasSku = new BasSku();
+            BeanUtils.copyProperties(basSku, subBasSku);//为了解决FastJson的循环引用问题
+            pdaDocQcDetailVO.setBasSku(subBasSku);
 
             //批次
-//            InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
-            InvLotAttQuery lotAttQuery = new InvLotAttQuery();
-            BeanUtils.copyProperties(query, lotAttQuery);
-            InvLotAtt lotAtt = invLotAttMybatisDao.queryForScan(lotAttQuery);
+            InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
+//            InvLotAttQuery lotAttQuery = new InvLotAttQuery();
+//            BeanUtils.copyProperties(query, lotAttQuery);
+//            InvLotAtt lotAtt = invLotAttMybatisDao.queryForScan(lotAttQuery);
             pdaDocQcDetailVO.setInvLotAtt(lotAtt);
 
             //历史注册证(+生产企业详情)
-            List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(basSku.getSku(), basSku.getCustomerid());
-            pdaDocQcDetailVO.setProductRegisterList(registerList);
+            List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(subBasSku.getSku(), subBasSku.getCustomerid());
+            //TODO 为了解决FastJson的循环引用问题 肯定有别的方法，待优化
+            String jsonStr1 = JSON.toJSONString(registerList, SerializerFeature.DisableCircularReferenceDetect);
+            pdaDocQcDetailVO.setProductRegisterList(JSONObject.parseArray(jsonStr1, PdaGspProductRegister.class));
+
+            //当前批次-产品注册证对应的 生产厂家
+            PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
+            //为了解决FastJson的循环引用问题
+            String jsonStr2 = JSON.toJSONString(productRegister.getEnterpriseInfo(), SerializerFeature.DisableCircularReferenceDetect);
+            pdaDocQcDetailVO.setEnterpriseInfo(JSONObject.parseObject(jsonStr2, GspEnterpriseInfo.class));
 
             pdaDocQcDetailVOList.add(pdaDocQcDetailVO);
         }
 
+
 	    return pdaDocQcDetailVOList;
+    }
+
+    /**
+     * 查询任务明细列表
+     * @param qcno ~
+     * @return ~
+     */
+    public List<PdaDocQcDetailVO> queryDocQcList(String qcno, int pageNum) {
+
+        List<PdaDocQcDetailVO> docQcDetailVOList = new ArrayList<>();
+        PdaDocQcDetailVO pdaDocQcDetailVO;
+
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryDocQcList(qcno, (pageNum - 1) * Constant.pageSize, Constant.pageSize);
+        for (DocQcDetails docQcDetails : docQcDetailsList) {
+
+            pdaDocQcDetailVO = new PdaDocQcDetailVO();
+            BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
+            docQcDetailVOList.add(pdaDocQcDetailVO);
+        }
+
+        return docQcDetailVOList;
     }
 }

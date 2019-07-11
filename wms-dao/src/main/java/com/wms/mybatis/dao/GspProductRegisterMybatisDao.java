@@ -17,7 +17,7 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      * @param registerNo 注册证编号
      * @return ~
      */
-//    GspProductRegister queryByNo(@Param("registerNo") String registerNo);
+    PdaGspProductRegister queryByNo(@Param("registerNo") String registerNo);
 
     /**
      * 通过bas_sku_history.reservedfiled03 匹配使用过的注册证

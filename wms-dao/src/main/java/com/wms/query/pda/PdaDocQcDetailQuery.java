@@ -14,5 +14,7 @@ public class PdaDocQcDetailQuery extends BaseLotatt {
 
     private String GTIN;//Global Trade Item Num
 
+    private String locationid;//库位
+
     private String sku;//传参不需要传，但是在拿到pda扫码传参后需要获取sku并赋值，查询到的sku进行精确查询
 }

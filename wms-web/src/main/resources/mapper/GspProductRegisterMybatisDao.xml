@@ -281,6 +281,12 @@
 		</if>
 	</select>
 
+    <select id="queryByNo" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
+    </select>
+
     <!--查询所有历史产品档案中使用过的注册证号-->
     <select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select reg.* from gsp_product_register reg

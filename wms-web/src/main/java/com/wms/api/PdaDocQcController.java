@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -111,23 +112,24 @@ public class PdaDocQcController {
         return resultMap;
     }
 
-//    /**
-//     * 获取上架进度明细列表
-//     * @param pano ~
-//     * @return ~
-//     */
-//    @RequestMapping(params = "docPaList", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Map<String, Object> queryDocPaList(String pano) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        if (pano == null || pano.length() == 0) {
-//            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "订单号缺失"));
-//            return resultMap;
-//        }
-//        List<PdaDocPaDetailVO> detailVOList = docPaDetailsService.queryDocPaList(pano);
-//        resultMap.put(Constant.DATA, detailVOList);
-//        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
-//        return resultMap;
-//    }
+    /**
+     * 获取验收进度明细列表
+     * @param qcno ~
+     * @param pageNum ~
+     * @return ~
+     */
+    @RequestMapping(params = "docQcList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocPaList(String qcno,@RequestParam(defaultValue = "1") int pageNum) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if (qcno == null || qcno.length() == 0) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "任务单号缺失"));
+            return resultMap;
+        }
+        List<PdaDocQcDetailVO> detailVOList = docQcDetailsService.queryDocQcList(qcno, pageNum);
+        resultMap.put(Constant.DATA, detailVOList);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
 }
