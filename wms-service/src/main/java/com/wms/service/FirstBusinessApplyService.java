@@ -42,9 +42,11 @@ public class FirstBusinessApplyService extends BaseService {
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
+		query.setIsUse(Constant.IS_USE_YES);
 		criteria.setCondition(query);
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setOrderByClause("t1.create_date desc");
 		List<FirstBusinessApplyResult> firstBusinessApplyList = firstBusinessApplyMybatisDao.queryPageList(criteria);
 		FirstBusinessApplyVO firstBusinessApplyVO = null;
 		List<FirstBusinessApplyVO> firstBusinessApplyVOList = new ArrayList<FirstBusinessApplyVO>();

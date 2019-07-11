@@ -141,7 +141,7 @@ where 1=1
  
 <!-- 根据id查询 产品首营审核记录表 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	 from first_review_log where review_id = #{reviewId}
 </select>
 
@@ -164,5 +164,10 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+<update id="updateFirstReviewByNo" parameterType="Object">
+	update first_review_log set apply_state=#{state},edit_id = #{editId},edit_date = now()
+	 where review_type_id = #{no}
+</update>
   	
 </mapper>   
