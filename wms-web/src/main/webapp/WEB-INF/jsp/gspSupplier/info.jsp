@@ -14,15 +14,15 @@ var enterpriseDialog;
         <tr style="display: none">
             <td><input type="text" id="supplierId" value="${supplierId}"/></td>
         </tr>
-        <tr><th>企业：</th>
+        <tr><th>企业</th>
             <td>
                 <input type='text' data="1" id='enterpriseIdQuery1' size='16' name="enterpriseName" data='1' class='easyui-textbox' data-options='' style="width: 100px;"/>
-                <input type="hidden" class="easyui-textbox" id="enterpriseId" name="enterpriseId" data='1'  />
-                <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+                <input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />
+                <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
         </tr>
-        <tr><th>代码：</th><td><input type='text' data="1" id='enterpriseNo' size='16' name="enterpriseNo" class='easyui-textbox' data-options=''/></td></tr>
-        <tr><th>简称：</th><td><input type='text' data="1" id='shorthandName' size='16' name="shorthandName" class='easyui-textbox' data-options=''/></td></tr>
+        <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='16' name="enterpriseNo" class='easyui-textbox' data-options=''/></td></tr>
+        <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='16' name="shorthandName" class='easyui-textbox' data-options=''/></td></tr>
 
 
 
@@ -90,9 +90,9 @@ var enterpriseDialog;
         </tr>
     </table>
 </form>
-<%--<div id='enterpriseDialog' style='padding: 10px;'>--%>
+<div id='enterpriseDialog' style='padding: 10px;'>
 
-<%--</div>--%>
+</div>
 <script>
     var enterpriseDialog_gspSupplierInfo;
 
@@ -145,7 +145,7 @@ var enterpriseDialog;
         enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier",
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplierInfo&enterpriseType=supplier",
             width: 850,
             height: 500,
             cache: false,
@@ -155,7 +155,7 @@ var enterpriseDialog;
         })
     }
 
-    function choseSelect_gspSupplier(id,name) {
+    function choseSelect_gspSupplierInfo(id,name) {
         //console.log(id)
         //console.log(name)
         var enterpriceId;
@@ -183,9 +183,23 @@ var enterpriseDialog;
             }
         });
 
-
-
         //$("input[name='enterpriseId1']").val(id);
         enterpriseDialog_gspSupplierInfo.dialog("close");
     }
+
+    $(function () {
+        $("#enterpriseIdQuery1").textbox({
+            width:135,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchMainEnterprise();
+                }
+            }]
+        })
+    })
+
+
+
+
 </script>

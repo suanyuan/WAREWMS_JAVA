@@ -6,6 +6,12 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;

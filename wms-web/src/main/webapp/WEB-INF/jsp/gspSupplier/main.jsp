@@ -6,6 +6,12 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -35,9 +41,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-            {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
-                    return rowData.isCheck == '1' ? '是' : '否';
-                }},
+
 			{field: 'supplierId',		title: '主键',	width: 88,hidden:true },
 			{field: 'enterpriseId',		title: '企业流水号',	width: 88 ,hidden:true},
 
@@ -54,7 +58,9 @@ $(function() {
             {field: 'createDate',		title: '创建时间',	width: 88 },
             {field: 'editId',		title: '编辑人',	width: 88 },
             {field: 'editDate',		title: '编辑时间',	width: 88 },
-
+            {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isCheck == '1' ? '是' : '否';
+                }},
             {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }}
@@ -98,31 +104,28 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	//alert(row.supplierId);
-	if(row.firstState=="40" || row.firstState=="10"){
-        $.messager.show({
-            msg : '审核中与审核通过的申请无法编辑', title : '提示'
-        });
-	}else {
-        if(row){
-            // ezuiForm.form('load',{
-            //     // supplierId : row.supplierId,
-            // 	// enterpriseId : row.enterpriseId,
-            // 	// isCheck : row.isCheck,
-            // 	// operateType : row.operateType,
-            // 	// createId : row.createId,
-            // 	// createDate : row.createDate,
-            // 	// editId : row.editId,
-            // 	// editDate : row.editDate,
-            // 	// isUse : row.isUse
-            // });
+    if(row){
+        // ezuiForm.form('load',{
+        //     // supplierId : row.supplierId,
+        // 	// enterpriseId : row.enterpriseId,
+        // 	// isCheck : row.isCheck,
+        // 	// operateType : row.operateType,
+        // 	// createId : row.createId,
+        // 	// createDate : row.createDate,
+        // 	// editId : row.editId,
+        // 	// editDate : row.editDate,
+        // 	// isUse : row.isUse
+        // });
 
-            ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
-        }else{
-            $.messager.show({
-                msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-            });
-        }
-	}
+        ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+
+
+
 
 };
 
@@ -244,6 +247,7 @@ var addOrEdit = function(url,infoObj) {
 
 
 var commit = function(){
+    var row = ezuiDatagrid.datagrid('getSelected');
     var infoObj = new Object();
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
@@ -256,12 +260,18 @@ var commit = function(){
 		//
 		// }
 
+        if(row.firstState=="40" || row.firstState=="10"){
+            $.messager.show({
+                msg : '审核中与审核通过的申请无法编辑', title : '提示'
+            });
+        }else {
+            var row = ezuiDatagrid.datagrid('getSelected');
+            infoObj["supplierId"] = row.supplierId;
+            url = sy.bp()+'/gspSupplierController.do?edit';
+            addOrEdit(url,infoObj);
+        }
 
 
-        var row = ezuiDatagrid.datagrid('getSelected');
-        infoObj["supplierId"] = row.supplierId;
-        url = sy.bp()+'/gspSupplierController.do?edit';
-        addOrEdit(url,infoObj);
 
 
 
@@ -386,7 +396,7 @@ var doSearch = function(){
 							<td>
 								<input type='text' id='enterpriseIdQuery' class='easyui-textbox' data-options='' style="width: 100px;"/>
 								<input type="hidden" class="easyui-textvalue" name="enterpriseId">
-								<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+								<!--<a href="javascript:void(0)" onclick='searchMainEnterprise()' class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
 							</td>
 							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
@@ -402,7 +412,7 @@ var doSearch = function(){
 																																	{id: '经营', value: '经营'},
 																																	{id: '生产', value: '生产'}
 																																]"/></td>
-							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
 																																	<%--editable:false,--%>
 																																	<%--valueField: 'id',--%>
@@ -419,7 +429,7 @@ var doSearch = function(){
 																																	<%--{id: '1', value: '是'},--%>
 																																	<%--{id: '0', value: '否'}--%>
 																																<%--]"/></td>--%>
-							<th>是否有效：</th><td><input type='text' id='isUse' data-options='' size='16'/></td>
+							<th>是否有效</th><td><input type='text' id='isUse' data-options='' size='16'/></td>
 							<th>编辑时间</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 
@@ -431,11 +441,12 @@ var doSearch = function(){
 								<%--</select></td>--%>
 
 						</tr>
-							<td>
+						<tr >
+							<td colspan="10">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
-
+						</tr>
 					</table>
 				</fieldset>
 				<div>
@@ -523,6 +534,17 @@ var doSearch = function(){
         enterpriseDialog_gspSupplier.dialog("close");
     }
 
+    $(function () {
+        $("#enterpriseIdQuery").textbox({
+            width:135,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchMainEnterprise();
+                }
+            }]
+        })
+    })
 </script>
 
 
