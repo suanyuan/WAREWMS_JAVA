@@ -59,6 +59,7 @@ public class GspReceivingService extends BaseService {
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCurrentPage(pager.getPage());
 			mybatisCriteria.setPageSize(pager.getRows());
+			mybatisCriteria.setOrderByClause("edit_date desc");
 			mybatisCriteria.setCondition(query);
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 			List<GspReceiving> gspReceivingList = gspReceivingMybatisDao.queryByList(mybatisCriteria);
@@ -118,6 +119,31 @@ public class GspReceivingService extends BaseService {
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
+			firstReviewLog.setApplyState("00");
+			firstReviewLog.setReviewId(RandomUtil.getUUID());
+			firstReviewLogMybatisDao.add(firstReviewLog);
+		} catch (BeansException e) {
+			throw new Exception("服务器忙!");
+		}
+
+		json.setSuccess(true);
+		return json;
+	}
+
+	public Json confirmApply(String receivingId) throws Exception {
+		Json json = new Json();
+		try {
+			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+
+			if (gspReceiving != null) {
+					gspReceiving.setFirstState("10");
+				gspReceivingMybatisDao.updateBySelective(gspReceiving);
+			}
+
+			//插入一条首营申请日志记录
+			FirstReviewLog firstReviewLog = new FirstReviewLog();
+			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			firstReviewLog.setReviewTypeId(receivingId);
 			firstReviewLog.setApplyState("00");
 			firstReviewLog.setReviewId(RandomUtil.getUUID());
 			firstReviewLogMybatisDao.add(firstReviewLog);

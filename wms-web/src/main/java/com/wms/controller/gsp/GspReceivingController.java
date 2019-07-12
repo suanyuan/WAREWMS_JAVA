@@ -83,6 +83,19 @@ public class GspReceivingController {
 	}
 
 	@Login
+	@RequestMapping(params = "confirmApply")
+	@ResponseBody
+	public Json confirmApply(@RequestParam(value = "receivingId") String receivingId) throws Exception {
+		Json json = gspReceivingService.confirmApply(receivingId);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		json.setMsg("新增成功！");
+		return json;
+	}
+
+	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
 	public Json edit(GspReceivingForm gspReceivingForm) throws Exception {
