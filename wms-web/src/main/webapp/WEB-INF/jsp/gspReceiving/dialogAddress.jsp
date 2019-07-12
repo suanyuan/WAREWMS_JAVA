@@ -4,7 +4,7 @@
 
 <div id='dialogAddAddress' style='padding: 10px;'>
 	<form id='dialogAddAddressForm' method='post' >
-	<input type='hidden' id='r'   name='receivingId' class='easyui-textbox' />
+	<input type='hidden' id='r'   name='receivingId' class='textbox-value' />
 
 			<table>
 				<tr>
@@ -149,7 +149,7 @@
 	var dataGridReceivingDetail;
 	var dialogReceiving;
     $(function () {
-        $("#isDefault").combobox({
+        $("#dialogAddAddressForm input[name='isDefault']").combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
@@ -219,7 +219,7 @@
             height:500,
             cache: false,
             onClose : function() {
-                ezuiFormClear(ezuiForm);
+               // ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 
@@ -230,7 +230,7 @@
             href:sy.bp()+"/gspReceivingController.do?toDetail",
             cache: false,
             onClose : function() {
-                ezuiFormClear(ezuiForm);
+               // ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 
@@ -261,7 +261,8 @@
         var row = dataGridReceivingDetail.datagrid("getSelected");
         if(row){
             $("#receivingI").textbox("setValue",row.clientId);
-            $("#r").textbox("setValue",row.receivingId);
+         //   $("#r").textbox("setValue",row.receivingId);
+            $("#r").val(row.receivingId);
             ezuiDialogReceivingDetail.dialog('close');
         }
     }

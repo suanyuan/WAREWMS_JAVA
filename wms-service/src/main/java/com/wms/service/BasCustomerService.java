@@ -28,6 +28,9 @@ public class BasCustomerService extends BaseService {
 	private BasCustomerMybatisDao basCustomerMybatisDao;
 
 	@Autowired
+	private GspReceivingMybatisDao gspReceivingMybatisDao;
+
+	@Autowired
 	private CommonService commonService;
 
 	@Autowired
@@ -94,14 +97,22 @@ public class BasCustomerService extends BaseService {
 				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setCustomerid(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-				basCustomer.setActiveFlag("1");
+				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
+				basCustomer.setCustomerType("CO");
 				//
 				basCustomerMybatisDao.add(basCustomer);
+				GspReceiving gspReceiving = new GspReceiving();
+
+				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
+
+				gspReceivingMybatisDao.add(gspReceiving);
+
 				//插入一条首营申请日志记录
 				FirstReviewLog firstReviewLog = new FirstReviewLog();
 				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
-
+				firstReviewLog.setApplyContent("不需要申请直接下发");
 				firstReviewLog.setApplyState("40");
 				firstReviewLog.setReviewId(RandomUtil.getUUID());
 				firstReviewLogMybatisDao.add(firstReviewLog);

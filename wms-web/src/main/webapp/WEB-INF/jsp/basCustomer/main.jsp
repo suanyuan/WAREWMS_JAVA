@@ -33,9 +33,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'customerid',
 		columns : [[
-			{field: 'customerId',		title: '客户代码',	width: 20 },
+			{field: 'customerid',		title: '客户代码',	width: 20 },
             {field: 'descrC',		title: '客户名称',	width: 20 },
             {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {

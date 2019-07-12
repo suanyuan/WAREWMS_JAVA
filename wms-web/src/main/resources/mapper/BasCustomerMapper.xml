@@ -620,7 +620,10 @@ where 1=1
 
 	<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		select * from  (SELECT a.CUSTOMERID,
-
+		a.EDITTIME,
+		a.EDITWHO,
+		a.ADDTIME,
+		a.ADDWHO,
 		a.FOLLOWUP,
 		a.receiving_address_id,
 		a.enterprise_id,
@@ -643,7 +646,7 @@ where 1=1
 		c.remark FROM bas_customer a left join gsp_customer b on a.enterprise_id = b.enterprise_id left  join gsp_enterprise_info c
 		on c.enterprise_id= b.enterprise_id) d
 		<include refid="Example_Where_Clause"/>
-
+		order by EDITTIME desc
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
