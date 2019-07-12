@@ -134,6 +134,51 @@ where 1=1
 	</trim> where review_id=#{reviewId}
 </update>
 
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateByReviewTypeId" parameterType="Object" >
+		update first_review_log set
+		<trim  suffixOverrides="," >
+
+			<if test="applyContent != null  ">
+				apply_content=#{applyContent},
+			</if>
+			<if test="applyState != null  ">
+				apply_state=#{applyState},
+			</if>
+			<if test="checkIdQc != null  ">
+				check_id_qc=#{checkIdQc},
+			</if>
+			<if test="checkDateQc != null  ">
+				check_date_qc=#{checkDateQc},
+			</if>
+			<if test="checkRemarkQc != null  ">
+				check_remark_qc=#{checkRemarkQc},
+			</if>
+			<if test="checkIdHead != null  ">
+				check_id_head=#{checkIdHead},
+			</if>
+			<if test="checkDateHead != null  ">
+				check_date_head=#{checkDateHead},
+			</if>
+			<if test="checkRemarkHead != null  ">
+				check_remark_head=#{checkRemarkHead},
+			</if>
+			<if test="createId != null  ">
+				create_id=#{createId},
+			</if>
+			<if test="createDate != null  ">
+				create_date=#{createDate},
+			</if>
+			<if test="editId != null  ">
+				edit_id=#{editId},
+			</if>
+			<if test="editDate != null  ">
+				edit_date=#{editDate},
+			</if>
+		</trim> where review_type_id=#{reviewTypeId}
+	</update>
+
+
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
 	delete 	 from first_review_log where review_id = #{reviewId}

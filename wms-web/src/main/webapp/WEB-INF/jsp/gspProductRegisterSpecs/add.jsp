@@ -102,6 +102,7 @@
 
 
         </tr>
+
         <tr>
             <th>运输条件</th>
             <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
@@ -157,6 +158,9 @@
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
+            <th>附卡类别</th>
+            <td><input type='text'   id="attachedCardCategory" name='attachedCardCategory' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
+
         </tr>
     </table>
 </form>

@@ -22,4 +22,6 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     public void deleteByid(Object id);
 
 
+    public <T> T selectByProductCode(Object id);
+
 }

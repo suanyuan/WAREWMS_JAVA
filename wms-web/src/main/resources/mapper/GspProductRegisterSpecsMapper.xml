@@ -33,6 +33,9 @@
 	<result column="is_use" property="isUse"/>
 	<result column="is_certificate" property="isCertificate"/>
 	<result column="is_doublec" property="isDoublec"/>
+
+	<result column="attached_card_category" property="attachedCardCategory"/>
+
 	<result column="alternat_name1" property="alternatName1"/>
 	<result column="alternat_name2" property="alternatName2"/>
 	<result column="alternat_name3" property="alternatName3"/>
@@ -254,6 +257,13 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select *
 	 from gsp_product_register_specs where specs_id = #{specsId}
+</select>
+
+<!-- 根据productCode查询 产品注册证规格 -->
+	<select id="selectByProductCode"  resultMap="BaseResultMap" parameterType="Object">
+	select t1.*,t2.product_register_no,t2.product_name_main
+	from gsp_product_register_specs t1 left join gsp_product_register t2
+	ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode} and t1.is_use = 1
 </select>
 
 <!-- 根据id查询 产品注册证规格关联产品注册证 -->

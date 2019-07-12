@@ -128,39 +128,46 @@ var edit = function(){
 
 var check = function () {
     var row = ezuiDatagrid.datagrid('getSelected');
-    if(row.firstState=="10" || row.firstState=="40"){
+    var infoObj = new Object();
+    infoObj["supplierId"] = row.supplierId;
+    infoObj["firstState"] = "10";
+
+    alert(row.supplierId+"================="+row.firstState);
+    if(row.firstState!="00"){
         $.messager.show({
-            msg : '审核中与审核通过的申请无法删除', title : '提示'
+            msg : '只有新建的可以开始审核', title : '提示'
         });
     }else {
         if (row) {
-            $.messager.confirm('是否开始审核', '提示', function (confirm) {
+            $.messager.confirm('提示', '是否开始审核', function (confirm) {
                 if (confirm) {
+                    //修改首营状态为 审核中 10
                     $.ajax({
-                        url: 'gspSupplierController.do?delete',
-                        data: {id: row.supplierId},
+                        url: 'gspSupplierController.do?edit',
+                        data: {"gspSupplierForm": JSON.stringify(infoObj)},//审核中 10
                         type: 'POST',
                         dataType: 'JSON',
                         success: function (result) {
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                            } catch (e) {
-                                msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            } finally {
-                                $.messager.show({
-                                    msg: msg, title: '<spring:message code="common.message.prompt"/>'
-                                });
-                                ezuiDatagrid.datagrid('reload');
-                            }
+                            ezuiDatagrid.datagrid('reload');
                         }
                     });
+					//修改审核状态为 质量部审核  20
+                    $.ajax({
+                        url: 'firstReviewLogController.do?updateByReviewTypeId',
+                        data: {reviewTypeId: row.supplierId,applyState:"20"},//质量部审核  20
+                        type: 'POST',
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                        }
+                    });
+
                 }
             });
 
 
         }
-        ;
+    };
 
     };
 
@@ -245,9 +252,9 @@ var commit = function(){
 	//console.log(infoObj+"infoObj====="+infoObj.isCheck);
 	var url = '';
 	if (processType == 'edit') {
-		if(infoObj.firstState == "40" || infoObj.firstState == "10" ){
-
-		}
+		// if(infoObj.firstState == "40" || infoObj.firstState == "10" ){
+		//
+		// }
 
 
 

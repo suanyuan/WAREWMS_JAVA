@@ -79,6 +79,19 @@ public class GspProductRegisterSpecs implements Serializable {
   private String isCertificate;
   private String isDoublec;
 
+
+  private String attachedCardCategory;
+
+
+
+
+
+
+
+
+
+
+
   private String alternatName1;
   private String alternatName2;
   private String alternatName3;
@@ -400,4 +413,12 @@ public class GspProductRegisterSpecs implements Serializable {
     public void setIsDoublec(String isDoublec) {
         this.isDoublec = isDoublec;
     }
+
+  public String getAttachedCardCategory() {
+    return attachedCardCategory;
+  }
+
+  public void setAttachedCardCategory(String attachedCardCategory) {
+    this.attachedCardCategory = attachedCardCategory;
+  }
 }

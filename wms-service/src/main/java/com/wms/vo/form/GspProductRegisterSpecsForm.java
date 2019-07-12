@@ -35,7 +35,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String isUse;
 	private java.lang.String isCertificate;
 	private java.lang.String isDoublec;
-
+	private java.lang.String attachedCardCategory;
 
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
@@ -311,4 +311,12 @@ public class GspProductRegisterSpecsForm {
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
     }
+
+	public String getAttachedCardCategory() {
+		return attachedCardCategory;
+	}
+
+	public void setAttachedCardCategory(String attachedCardCategory) {
+		this.attachedCardCategory = attachedCardCategory;
+	}
 }

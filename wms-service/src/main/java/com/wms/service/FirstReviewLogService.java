@@ -90,6 +90,17 @@ public class FirstReviewLogService extends BaseService {
 		return json;
 	}
 
+	public Json updateByReviewTypeId(FirstReviewLogForm firstReviewLogForm) {
+		Json json = new Json();
+		FirstReviewLog firstReviewLog = new FirstReviewLog();
+		BeanUtils.copyProperties(firstReviewLogForm, firstReviewLog);
+		firstReviewLogMybatisDao.updateByReviewTypeId(firstReviewLog);
+		json.setSuccess(true);
+		return json;
+	}
+
+
+
 	public Json deleteFirstReviewLog(String id) {
 		Json json = new Json();
 		FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(id);
