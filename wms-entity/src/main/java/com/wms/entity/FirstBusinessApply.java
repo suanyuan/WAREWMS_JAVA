@@ -25,4 +25,6 @@ public class FirstBusinessApply  implements Serializable {
 
 	private String isUse;
 
+	private String firstState;
+
 }

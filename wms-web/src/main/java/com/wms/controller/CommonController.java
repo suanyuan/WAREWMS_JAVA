@@ -154,7 +154,6 @@ public class CommonController {
     @RequestMapping(params = "getCatalogFirstState")
     @ResponseBody
     public List<EasyuiCombobox> getCatalogFirstState(){
-        //TODO 数据库内容待添加
         return basCodesService.getBy(Constant.CODE_CATALOG_FIRSTSTATE);
     }
 

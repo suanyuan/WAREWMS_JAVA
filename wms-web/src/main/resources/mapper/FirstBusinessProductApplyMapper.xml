@@ -16,6 +16,7 @@
 	<result column="edit_id" property="editId"/>
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
+	<result column="first_state" property="firstState"/>
 </resultMap>
 
 <resultMap id="PageResultMap" type="com.wms.result.FirstBusinessProductApplyResult">
@@ -34,11 +35,12 @@
 	<result column="product_name" property="productName"/>
 	<result column="specs_name" property="specsName"/>
 	<result column="product_model" property="productModel"/>
+	<result column="first_state" property="firstState"/>
 </resultMap>
        
 <!-- first_business_product_apply table all fields -->
 <sql id="Base_Column_List" >
-	 product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use
+	 product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use,first_state
 </sql>
    
    
@@ -79,6 +81,10 @@ where 1=1
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and is_use =  #{condition.isUse}
 	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+		and first_state =  #{condition.firstState}
+	</if>
+
 </trim>
 </sql>
 
@@ -119,18 +125,21 @@ where 1=1
 		<if test="condition.isUse != null and condition.isUse != ''" >
 			and t1.is_use =  #{condition.isUse}
 		</if>
+		<if test="condition.firstState != null and condition.firstState != ''" >
+			and first_state =  #{condition.firstState}
+		</if>
 	</trim>
 </sql>
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into first_business_product_apply(product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use)
- values(#{productApplyId},#{applyId},#{specsId},#{isCheck},#{isOperate},#{isCold},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into first_business_product_apply(product_apply_id,apply_id,specs_id,is_check,is_operate,is_cold,create_id,create_date,edit_id,edit_date,is_use,first_state)
+ values(#{productApplyId},#{applyId},#{specsId},#{isCheck},#{isOperate},#{isCold},#{createId},now(),#{editId},#{editDate},#{isUse},#{firstState})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update first_business_product_apply set apply_id=#{applyId},specs_id=#{specsId},is_check=#{isCheck},is_operate=#{isOperate},is_cold=#{isCold},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where product_apply_id=#{productApplyId}
+  update first_business_product_apply set apply_id=#{applyId},specs_id=#{specsId},is_check=#{isCheck},is_operate=#{isOperate},is_cold=#{isCold},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},first_state=#{firstState} where product_apply_id=#{productApplyId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -166,6 +175,9 @@ where 1=1
 	</if>
 	<if test="isUse != null  ">
 		is_use=#{isUse},
+	</if>
+	<if test="firstState != null  ">
+		first_state=#{firstState},
 	</if>
 	</trim> where product_apply_id=#{productApplyId}
 </update>
