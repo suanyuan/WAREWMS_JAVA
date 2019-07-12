@@ -76,23 +76,30 @@ public class GspReceivingController {
 		Json json = gspReceivingService.addGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("新增成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
 	}
 
 	@Login
 	@RequestMapping(params = "confirmApply")
 	@ResponseBody
-	public Json confirmApply(@RequestParam(value = "receivingId") String receivingId) throws Exception {
-		Json json = gspReceivingService.confirmApply(receivingId);
+	public Json confirmApply(GspReceivingForm gspReceivingForm) throws Exception {
+		Json json = gspReceivingService.confirmApply(gspReceivingForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("新增成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "validateReceiv")
+	@ResponseBody
+	public GspReceiving validateReceiv(@RequestParam(value = "receivingId") String receivingId) throws Exception {
+		return gspReceivingService.validateReceiv(receivingId);
 	}
 
 	@Login
@@ -102,9 +109,8 @@ public class GspReceivingController {
 		Json json = gspReceivingService.editGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("修改成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -115,9 +121,9 @@ public class GspReceivingController {
 		Json json = gspReceivingService.deleteGspReceiving(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("解除合作成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
 	}
 

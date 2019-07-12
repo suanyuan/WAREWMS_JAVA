@@ -129,21 +129,21 @@ public class GspReceivingService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
-
-	public Json confirmApply(String receivingId) throws Exception {
+	public Json confirmApply(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
 		try {
-			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
-
+		GspReceiving gspReceiving=	gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
 			if (gspReceiving != null) {
-					gspReceiving.setFirstState("10");
+				gspReceiving.setFirstState("10");
 				gspReceivingMybatisDao.updateBySelective(gspReceiving);
 			}
+
+
 
 			//插入一条首营申请日志记录
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			firstReviewLog.setReviewTypeId(receivingId);
+			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
 			firstReviewLog.setApplyState("00");
 			firstReviewLog.setReviewId(RandomUtil.getUUID());
 			firstReviewLogMybatisDao.add(firstReviewLog);
@@ -153,6 +153,11 @@ public class GspReceivingService extends BaseService {
 
 		json.setSuccess(true);
 		return json;
+	}
+
+	public GspReceiving validateReceiv(String receivingId) throws Exception {
+
+		return gspReceivingMybatisDao.queryById(receivingId);
 	}
 
 	public Json editGspReceiving(GspReceivingForm gspReceivingForm) {

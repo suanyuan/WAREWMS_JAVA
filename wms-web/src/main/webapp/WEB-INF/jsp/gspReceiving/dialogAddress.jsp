@@ -230,7 +230,7 @@
             href:sy.bp()+"/gspReceivingController.do?toDetail",
             cache: false,
             onClose : function() {
-               // ezuiFormClear(ezuiForm);
+                // ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 

@@ -4,9 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
 </head>
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+
+
 <body>
 
 
@@ -15,32 +19,32 @@
     <input type='hidden' id='hiddenreceivingId' name='receivingId' value="${receivingId}" class="textbox-value"/>
     <input type="hidden" id="hiddencustomerType" name='customerType'  value="CO" class="textbox-value"/>
     <input type='hidden' id='enterpriseId' name='enterpriseId' value="${enterpriseId}"  class='textbox-value'/>
-    <fieldset style="height: 100px">
+    <fieldset>
 
-        <table>
+        <table style="text-align: right">
 
             <tr>
             <th>企业</th>
             <td>
-                <input type='text' id="enterpriseN"  name='enterpriseName' value='${gspEnterpriseInfo.enterpriseName}'  size='16' class='easyui-textbox' data-options='required:true'/>
-                <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+                <input type='text' id="enterpriseN"  name='enterpriseName'   size='16' class='easyui-textbox' data-options='required:true'/>
+                <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
             <th>代码</th>
-            <td><input type='text' id="enterpriseNo"  name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'  size='16' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' id="enterpriseNo" style="width: 200px" name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}' width="200px"  size='16' class='easyui-textbox' data-options='required:true'/></td>
 
                 <th>是否有效</th>
-                <td><input type='text' name='isUse' id="use" class='easyui-combobox' value="${gspReceiving.isUse}" size="16" data-options='required:true,editable:false'/></td>
+                <td><input type='text' name='isUse' style="width: 200px" id="use" class='easyui-combobox' value="${gspReceiving.isUse}" width="200px" size="16" data-options='required:true,editable:false'/></td>
         </tr>
         <tr>
             <th>供应商</th>
             <td>
-                <input type='text' name='supplierId' id="supplier" value="${gspReceiving.supplierId}" size="16" class='easyui-textbox' data-options='required:true'/>
-                <a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>
+                <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox' data-options='required:true'/>
+                <%--<a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>--%>
             </td>
             <th>简称</th>
-            <td><input type='text' id="s"  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
+            <td><input type='text' id="s" style="width: 200px"  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
             <th>是否医废</th>
-            <td><input type='text' name='isReturn' class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/></td>
+            <td><input type='text' name='isReturn' style="width: 200px" class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/></td>
 
 
         </tr>
@@ -48,15 +52,13 @@
            <%-- <th>地址</th>
             <td><input type='text' name='deliveryAddress' class='easyui-textbox ' value="${gspReceivingAddress.deliveryAddress}" size="16" data-options='required:true'/></td>--%>
                <th>货主</th>
-               <td><input type='text' name='clientId'  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
+               <td><input type='text' name='clientId' style="width: 200px"  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
                <th>是否需要审核</th>
-               <td><input type='text' name='isCheck' id="isChec"  value="${gspReceiving.isCheck}" class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
-            <th>
+               <td><input type='text' name='isCheck' style="width: 200px" id="isChec"  value="${gspReceiving.isCheck}" class='easyui-combobox' size="16" data-options='required:true,editable:false'/></td>
+            <th style="text-align: right">
                 <a onclick='dooSubmit();' id='ezuiBtn_commit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-                <a onclick='ezuiDialogClose("#ezuiDialog");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+                <a onclick='ezuiDialogClose("#ezuiDialog");' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-clear"' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
             </th>
-
-
         </tr>
     </table>
     </fieldset>
@@ -152,6 +154,27 @@
         ezuiFormAddress=$('#ezuiFormAddress').form();
         dialogAddAddressForm=$('#dialogAddAddressForm').form();
 
+
+        $("#enterpriseN").textbox({
+            value:"${gspEnterpriseInfo.enterpriseName}",
+            width:200,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchEnterprise();
+                }
+            }]
+        });
+        $("#supplier").textbox({
+            value:"${gspReceiving.supplierId}",
+            width:200,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchSupplier();
+                }
+            }]
+        });
 
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
