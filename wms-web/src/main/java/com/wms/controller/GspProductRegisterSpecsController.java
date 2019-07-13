@@ -130,7 +130,7 @@ public class GspProductRegisterSpecsController {
 	@Login
 	@RequestMapping(params = "importExcelData")
 	@ResponseBody
-	public Json importExcelData( MultipartHttpServletRequest mhsr) throws Exception {
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterSpecsService.importExcelData(mhsr);
 	}
 

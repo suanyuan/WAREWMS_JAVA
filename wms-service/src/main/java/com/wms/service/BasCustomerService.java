@@ -157,25 +157,28 @@ public class BasCustomerService extends BaseService {
 	public Json supplierAddCustomer(GspSupplierForm gspSupplierForm) {
 		Json json = new Json();
 		BasCustomer basCustomer = new BasCustomer();
-		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
 		basCustomer.setCustomerType("VE");
-		System.out.println("gspSupplierForm.getEnterpriseId()==============="+gspSupplierForm.getEnterpriseId());
 		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		int num = basCustomerMybatisDao.selectBySelective(basCustomer);
+		if(num!=0){
+			basCustomerMybatisDao.delete(basCustomer);
+		}
 
-		basCustomer.setOperateType(gspSupplierForm.getOperateType());
-		basCustomer.setActiveFlag(gspSupplierForm.getIsUse());
+		basCustomer = new BasCustomer();
+		basCustomer.setCustomerType("VE");
+		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		basCustomer.setOperateType(gspSupplierForm.getEnterpriseType());
+		basCustomer.setActiveFlag("1");
 		basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
-
-		//BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
-
-
-
-		//BeanUtils.copyProperties(basCustomerQuery, basCustomer);
 		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomer.setAddtime(new Date());
 		basCustomer.setEdittime(new Date());
 		basCustomerMybatisDao.add(basCustomer);
+
+
+
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

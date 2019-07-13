@@ -22,6 +22,10 @@ public interface BasCustomerMybatisDao extends BaseDao {
 
 	GspReceivingAddress getReceivingAddressInfo(String receivingAddressId);
 
+	public int  selectBySelective(Object id);
+
+
+	//public void delectByCustomerTypeAndEnterpriseId(Object id);
 
 	public void goon(Object id);
 

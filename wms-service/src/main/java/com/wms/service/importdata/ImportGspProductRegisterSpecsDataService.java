@@ -158,13 +158,22 @@ public class ImportGspProductRegisterSpecsDataService {
 
 
 			try {
-				importDataVO.setProductCode(dataArray.getProductCode());
 
+
+				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
+
+				if(gspProductRegisterSpecs==null  ){
+					importDataVO.setProductCode(dataArray.getProductCode());
+				}else if("0".equals(gspProductRegisterSpecs.getIsUse())){
+					importDataVO.setProductCode(dataArray.getProductCode());
+				}else{
+					throw new Exception();
+				}
 				if (StringUtils.isEmpty(dataArray.getProductCode())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[商品代码]，未输入").append(" ");
+				rowResult.append("[商品代码]，未输入或已有该产品信息并且有效 无法重复添加").append(" ");
 			}
 
 			try {

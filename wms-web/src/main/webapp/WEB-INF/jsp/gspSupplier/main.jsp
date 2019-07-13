@@ -53,7 +53,7 @@ $(function() {
             {field: 'enterpriseNo',		title: '企业信息代码',	width: 88 },
             {field: 'shorthandName',		title: '简称',	width: 88 },
             {field: 'enterpriseName',		title: '企业名称',	width: 88 },
-            {field: 'enterpriseType',		title: '企业类型',	width: 88 },
+            {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
             {field: 'createDate',		title: '创建时间',	width: 88 },
             {field: 'editId',		title: '编辑人',	width: 88 },
@@ -177,6 +177,7 @@ var check = function () {
 
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
+
 	if(row.firstState=="10" || row.firstState=="40"){
         $.messager.show({
             msg : '审核中与审核通过的申请无法删除', title : '提示'
@@ -191,6 +192,17 @@ var del = function(){
                         type : 'POST',
                         dataType : 'JSON',
                         success : function(result){
+                            $.ajax({
+                                url : 'basCustomerController.do?delete',
+                                data : {enterpriseId : row.enterpriseId,customerType:"VE"},
+                                type : 'POST',
+                                dataType : 'JSON',
+                                success : function(date){
+
+                                }
+                            });
+
+
                             var msg = '';
                             try {
                                 msg = result.msg;
@@ -252,7 +264,9 @@ var commit = function(){
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-
+    infoObj["enterpriseId"] = $("#ezuiFormInfo input[id='enterpriseId'][data='1']").val();
+	alert(infoObj["enterpriseId"]);
+    alert(infoObj["enterpriseName"]);
 	//console.log(infoObj+"infoObj====="+infoObj.isCheck);
 	var url = '';
 	if (processType == 'edit') {
@@ -265,7 +279,7 @@ var commit = function(){
                 msg : '审核中与审核通过的申请无法编辑', title : '提示'
             });
         }else {
-            var row = ezuiDatagrid.datagrid('getSelected');
+            //var row = ezuiDatagrid.datagrid('getSelected');
             infoObj["supplierId"] = row.supplierId;
             url = sy.bp()+'/gspSupplierController.do?edit';
             addOrEdit(url,infoObj);
@@ -281,7 +295,7 @@ var commit = function(){
 	}else{
 
 	    if(infoObj.isCheck==0 && infoObj.isCheck!=null&&infoObj.isCheck!=""){
-            alert(infoObj.isCheck);
+            //alert(infoObj.isCheck);
             $.messager.confirm('提示', '该申请无需审核 是否直接下发？', function(confirm) {
                 if(confirm){
                     url = sy.bp()+'/gspSupplierController.do?add';
@@ -409,8 +423,8 @@ var doSearch = function(){
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
-																																	{id: '经营', value: '经营'},
-																																	{id: '生产', value: '生产'}
+																																	{id: 'JY', value: '经营'},
+																																	{id: 'SC', value: '生产'}
 																																]"/></td>
 							<th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
@@ -517,7 +531,7 @@ var doSearch = function(){
         enterpriseDialog_gspSupplier = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier",
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier&enterpriseType=supplier&type=orther",
             width: 850,
             height: 500,
             cache: false,
