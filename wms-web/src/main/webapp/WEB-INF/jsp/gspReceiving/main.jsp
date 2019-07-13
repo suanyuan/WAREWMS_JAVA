@@ -16,7 +16,7 @@
             var ezuiMenu;
             var ezuiForm;
             var enterDialog;
-            var ezuiDialogA;
+            var ezuiDialog;
             var ezuiDatagrid;
             var ezuiFormInfo;
             var dialogUrll = sy.bp()+"/gspReceivingController.do?toDetail";
@@ -48,12 +48,12 @@
                         {field: 'receivingId',	hidden:true,		width: 72 },
                         {field: 'enterpriseId',	hidden:true,		width: 72 },
                         {field: 'firstState',		title: '首营状态',	width: 62 ,formatter:firstStateFormatter},
-                        {field: 'clientId',		title: '货主ID',	width: 52 },
+                        {field: 'enterpriseName',		title: '收货单位',	width: 52 },
 
-                        {field: 'supplierId',		title: '供应商',	width: 52 },
-                        {field: 'enterpriseNo',		title: '企业信息代码',	width: 81 },
-                        {field: 'shorthandName',		title: '简称',	width: 41 },
-                        {field: 'enterpriseName',		title: '企业名称',	width: 61  },
+                        {field: 'enterpriseNo',		title: '收货单位代码',	width: 81 },
+                        {field: 'shorthandName',		title: '收货单位简称',	width: 41 },
+                        {field: 'clientId',		title: '货主ID',	width: 52 },
+                        // {field: 'supplierId',		title: '企业名称',	width: 61  },
                         {field: 'deliveryAddress',		title: '地址',	width: 52 },
                         {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isCheck == '1' ? '是' : '否';
@@ -150,29 +150,59 @@ var add = function(){
 
             };
 var edit = function(){
+
                 processType = 'edit';
-                var row = ezuiDatagrid.datagrid('getSelected');
+var row = ezuiDatagrid.datagrid('getSelected');
        	 if(row){
-            if (row.firstState == '10' || row.firstState == '40') {
-                $.messager.show({
-                    msg : '审核中与审核通过的申请无法编辑', title : '提示'
-                });
-            }else {
-                   // ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+             $.ajax({
+                 url: '/gspReceivingController.do?validateReceiv',
+                 data: {receivingId: row.receivingId},
+                 type: 'POST',
+                 dataType: 'JSON',
+                 success: function (res) {
 
-                $('#ezuiDialog').dialog({
-                    modal : true,
-                    title : '<spring:message code="common.dialog.title"/>',
-                    href:dialogUrll,
-                    fit:true,
-                    cache:false,
-                    buttons : '#ezuiDialogBtn',
-                    onClose : function() {
-                        ezuiFormClear(ezuiForm);
-                    }
-                }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+                     if (res.firstState == '10' || res.firstState == '40') {
 
-            }
+                         $('#ezuiDialog').dialog({
+                             modal : true,
+                             title : '<spring:message code="common.dialog.title"/>',
+                             href:dialogUrll,
+                             fit:true,
+                             cache:false,
+                             buttons : '#ezuiDialogBtn',
+                             onClose : function() {
+                                 ezuiFormClear(ezuiForm);
+                             }
+                         }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+                         /*$.messager.show({
+                             msg : '审核中与审核通过的申请无法编辑', title : '提示'
+                         });*/
+                     }else {
+                         // ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+
+                         $('#ezuiDialog').dialog({
+                             modal : true,
+                             title : '<spring:message code="common.dialog.title"/>',
+                             href:dialogUrll,
+                             fit:true,
+                             cache:false,
+                             buttons : '#ezuiDialogBtn',
+                             onClose : function() {
+                                 ezuiFormClear(ezuiForm);
+                             }
+                         }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+
+                     }
+
+                 }
+
+
+
+
+
+             })
+
+
         }else{
                     $.messager.show({
                         msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -183,7 +213,55 @@ var edit = function(){
 
 
  var newAdd = function(){
-                edit();
+
+     var row = ezuiDatagrid.datagrid('getSelected');
+     if (row) {
+         $.ajax({
+             url: '/gspReceivingController.do?validateReceiv',
+             data: {receivingId: row.receivingId},
+             type: 'POST',
+             dataType: 'JSON',
+			 success: function (res) {
+                 if(res.firstState!="40"){
+                     $('#ezuiDialog').dialog({
+                         modal : true,
+                         title : '<spring:message code="common.dialog.title"/>',
+                         href:dialogUrll,
+                         fit:true,
+                         cache:false,
+                         buttons : '#ezuiDialogBtn',
+                         onClose : function() {
+                             ezuiFormClear(ezuiForm);
+                         }
+                     }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+
+                 }else {
+                     $.messager.show({
+                         msg : '该项已审核通过，请重新选择！', title : '<spring:message code="common.message.prompt"/>'
+                     });
+				 }
+
+
+             }
+
+
+
+
+
+		 })
+
+
+
+
+
+
+     }else {
+         $.messager.show({
+             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+         });
+     }
+
+
                 /*var row = ezuiDatagrid.datagrid('getSelected');
                 console.log(row);
                 if(row){
@@ -241,15 +319,16 @@ var edit = function(){
                     });
                 }
             };
-            var commit = function(){
+var commit = function(){
                 dooSubmit();
             };
  var doSearch = function(){
                 ezuiDatagrid.datagrid('load', {
                     receivingId : $('#receivingId').val(),
                     enterpriseId : $('#enterpriseId').val(),
+                    enterpriseName : $('#enterpriseName').val(),
                     clientId : $('#clientId').val(),
-                    supplierId : $('#supplierId').val(),
+                 //   supplierId : $('#supplierId').val(),
                     deliveryAddress : $('#deliveryAddress').val(),
                     isCheck : $('#isCh').combobox("getValue"),
                     isReturn : $('#isR').combobox("getValue"),
@@ -309,12 +388,11 @@ function xiafa() {
             dataType: 'JSON',
 			success:function (res) {
                 if (res.firstState == '00' &&  res.isCheck=='1') {
-
                     $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认申请？', function(confirm) {
                         if (confirm) {
                             $.ajax({
                                 url: '/gspReceivingController.do?confirmApply',
-                                data: {basCustomerForm: rowSelect},
+                                data: {gspReceivingFormsttr:JSON.stringify(rowSelect)},
                                 type: 'POST',
                                 dataType: 'JSON',
                                 success: function (result) {
@@ -339,7 +417,7 @@ function xiafa() {
                         if (confirm) {
                             $.ajax({
                                 url: '/basCustomerController.do?add',
-                                data: {basCustomerForm: rowSelect},
+                                data: {basCustomerFormStr: JSON.stringify(rowSelect)},
                                 type: 'POST',
                                 dataType: 'JSON',
                                 success: function (result) {

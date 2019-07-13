@@ -567,6 +567,10 @@ where 1=1
 	update  Bas_Customer set ACTIVE_FLAG='1' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
 
+<delete id="deleteBascustomer" parameterType="Object">
+	delete * from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+</delete>
+
 	<!-- 根据id查询 客户档案 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
@@ -601,24 +605,23 @@ where 1=1
     and b.codeid = 'CUS_TYP'
 </select>
 
-<!-- 查询客户档案分页列表
+ <!--查询客户档案分页列表-->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
+	select a.*,b.codename_c as customerTypeName
 	from (select <include refid="Base_Column_List"/>
 	from Bas_Customer 
 	<include refid="Example_Where_Clause"/>
     ) a, Bas_Codes b
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
-	) 
+	) c
 	where 1 = 1
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-</select>-->
 
-	<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	order by EDITTIME desc
+</select>
+
+	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		select * from  (SELECT a.CUSTOMERID,
 		a.EDITTIME,
 		a.EDITWHO,
@@ -650,7 +653,7 @@ where 1=1
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
-	</select>
+	</select>-->
 	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		SELECT *
 		FROM bas_customer

@@ -8,7 +8,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.entity.BasCustomer;
 import com.wms.entity.GspSupplier;
+import com.wms.vo.form.GspReceivingForm;
 import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,7 +74,20 @@ public class BasCustomerController {
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(BasCustomerForm basCustomerForm) throws Exception {
+	public Json add(@RequestParam(value="basCustomerFormStr",required=true)  String basCustomerFormStr) throws Exception {
+		BasCustomerForm basCustomerForm = JSON.parseObject(basCustomerFormStr, BasCustomerForm.class);
+
+		Json json = basCustomerService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+	@Login
+	@RequestMapping(params = "submit")
+	@ResponseBody
+	public Json submit(BasCustomerForm basCustomerForm) throws Exception {
 		Json json = basCustomerService.addBasCustomer(basCustomerForm);
 		if(json == null){
 			json = new Json();
@@ -117,6 +132,16 @@ public class BasCustomerController {
 		}
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+	}
+
+
+	@Login
+	@RequestMapping(params = "selectCustomer")
+	@ResponseBody
+	public BasCustomer selectCustomer(String enterpriseId, String customerType) {
+
+
+		return basCustomerService.selectCustomer(enterpriseId,customerType);
 	}
 	@Login
 	@RequestMapping(params = "goon")

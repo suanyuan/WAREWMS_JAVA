@@ -13,6 +13,7 @@ import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,9 +104,13 @@ public class GspReceivingService extends BaseService {
 	public Json addGspReceiving(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
 		try {
-
-
 			GspReceiving gspReceiving = new GspReceiving();
+			if (StringUtils.isNotEmpty(gspReceivingForm.getReceivingId())){
+				GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
+				oldgspReceiving.setIsUse("0");
+				gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+			}
+
 
 			BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 			gspReceiving.setIsUse("1");
@@ -132,18 +137,15 @@ public class GspReceivingService extends BaseService {
 	public Json confirmApply(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
 		try {
-		GspReceiving gspReceiving=	gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
+			FirstReviewLog firstReviewLog = new FirstReviewLog();
+			GspReceiving gspReceiving=	gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
 			if (gspReceiving != null) {
 				gspReceiving.setFirstState("10");
 				gspReceivingMybatisDao.updateBySelective(gspReceiving);
+				firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
 			}
-
-
-
 			//插入一条首营申请日志记录
-			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
 			firstReviewLog.setApplyState("00");
 			firstReviewLog.setReviewId(RandomUtil.getUUID());
 			firstReviewLogMybatisDao.add(firstReviewLog);
@@ -157,7 +159,8 @@ public class GspReceivingService extends BaseService {
 
 	public GspReceiving validateReceiv(String receivingId) throws Exception {
 
-		return gspReceivingMybatisDao.queryById(receivingId);
+		GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+		return gspReceiving;
 	}
 
 	public Json editGspReceiving(GspReceivingForm gspReceivingForm) {
