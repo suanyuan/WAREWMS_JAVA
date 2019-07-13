@@ -65,7 +65,7 @@ where 1=1
 		and product_name_main like  '%${condition.productNameMain}%'
 	</if>
 	<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-		and t1.product_register_id =  ${condition.productRegisterId}
+		and t1.product_register_id =  ${condition.productRegisterId,jdbcType=VARCHAR}
 	</if>
 
 
@@ -310,7 +310,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 		</if>
 		<choose>
 			<when test="condition.productRegisterId !=null and condition.productRegisterId!=''">
-				and t1.product_register_id =  ${condition.productRegisterId}
+				and t1.product_register_id =  #{condition.productRegisterId}
 			</when>
 			<when test="condition.productRegisterId == null">
 				and t1.product_register_id is null
@@ -375,7 +375,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 		</if>
 		<choose>
 			<when test="condition.productRegisterId !=null  and condition.productRegisterId!=''">
-				and t1.product_register_id =  ${condition.productRegisterId}
+				and t1.product_register_id = #{condition.productRegisterId}
 			</when>
 			<when test="condition.productRegisterId == null">
 				and t1.product_register_id is null

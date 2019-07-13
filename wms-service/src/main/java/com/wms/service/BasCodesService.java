@@ -34,6 +34,7 @@ public class BasCodesService {
         Map<String,Object> map = new HashMap<>();
         map.put("codeid",codeid);
         mybatisCriteria.setCondition(map);
+        mybatisCriteria.setOrderByClause("show_sequence");
         List<BasCodes> list =  basCodesMybatisDao.queryByList(mybatisCriteria);
         if(list!=null && list.size()>0){
             EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
