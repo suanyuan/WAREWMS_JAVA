@@ -11,7 +11,7 @@ public class GspSecondRecordForm {
 	private String headName;
 	private String operateMode;
 	private String operatePlace;
-	private String bussinessScope;
+	private String businessScope;
 	private String residence;
 	private String recordUrl;
 	private java.util.Date approveDate;
@@ -68,13 +68,6 @@ public class GspSecondRecordForm {
 		this.operatePlace = operatePlace;
 	}
 
-	public String getBussinessScope() {
-		return bussinessScope;
-	}
-
-	public void setBussinessScope(String bussinessScope) {
-		this.bussinessScope = bussinessScope;
-	}
 
 	public String getResidence() {
 		return residence;
@@ -131,5 +124,13 @@ public class GspSecondRecordForm {
 
 	public void setOpType(String opType) {
 		this.opType = opType;
+	}
+
+	public String getBusinessScope() {
+		return businessScope;
+	}
+
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 }

@@ -1,6 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
     table th{
         text-align: right;
@@ -17,34 +18,34 @@
             <table>
                 <tr>
                     <th>备案编号</th>
-                    <td><input type='text' value="${gspSecondRecord.recordNo}" name='recordNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>企业名称</th>
-                    <td><input type='text' value="" id="recordEnterprise" name='enterpriseId' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:200'/></td>
                     <th>企业负责人</th>
-                    <td><input type='text' value="${gspSecondRecord.headName}" name='headName' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.headName}" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>经营方式</th>
-                    <td><input type='text' value="${gspSecondRecord.operateMode}" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
                     <th>经营场所</th>
-                    <td><input type='text' value="${gspSecondRecord.operatePlace}" name='operatePlace' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.operatePlace}" id="operatePlace" name='operatePlace' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>住所</th>
-                    <td><input type='text' value="${gspSecondRecord.residence}" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>备案批准日期</th>
-                    <td><input type='text' value="${gspSecondRecord.approveDate}" name='approveDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200,editable:false'/></td>
                     <th>备案发证机关</th>
-                    <td><input type='text' value="${gspSecondRecord.registrationAuthority}" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="${gspSecondRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
                     <th>备案照片</th>
                     <td>
-                        <input type="hidden" data="1" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
+                        <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
                         <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                     </td>
                     <th>经营范围</th>
                     <td colspan="3">
-                        <input type='text' value="${gspSecondRecord.bussinessScope}" name='bussinessScope' class='easyui-textbox' style="height: 40px;" data-options='required:true,multiline:true,width:480'/>
+                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 40px;" data-options='required:true,multiline:true,width:480'/>
                     </td>
                     <td style="text-align: left" colspan="2">
                         <a onclick='selectRecordScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
@@ -75,9 +76,11 @@
 
     $(function () {
         //初始化显示企业信息
-        $("#ezuiFormInfo input[id='enterpriseName']").each(function (index) {
-            //$("#recordEnterprise").textbox("setValue",$(this).textbox("getValue"));
-        })
+        if($("#ezuiFormInfo input[id='enterpriseName']")){
+            $("#recordEnterprise").textbox({
+                value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
+            });
+        }
 
         //控件初始化
         ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({
@@ -129,7 +132,7 @@
         $('#recordFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
-            buttonText: '浏览',  //按钮说明文字
+            buttonText: '上传',  //按钮说明文字
             required: true,
             prompt:'${gspSecondRecord.recordUrl}',
             onChange:function(data){
@@ -186,17 +189,18 @@
 
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
-        var oldValue = $("#ezuiFormRecord input[name = 'businessScope']").textbox("getValue");
+        var oldValue = $("#ezuiFormRecord input[id='businessScope']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormRecord input[name = 'businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[name = 'businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
+        $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");
     }
 
@@ -220,7 +224,7 @@
     //加载历史证照信息
     function initHistoryData(row) {
 
-        $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
+        $("#ezuiFormRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
@@ -237,7 +241,7 @@
     function recordUpdate() {
         opType = "update";
         $("#opType").val("update");
-        $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
+        $("#ezuiFormRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue","");

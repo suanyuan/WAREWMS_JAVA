@@ -118,6 +118,7 @@ public class GspBusinessLicenseService extends BaseService {
 					gspBusinessLicenseId = RandomUtil.getUUID();
 					gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
 					gspBusinessLicenseForm.setBusinessId(gspBusinessLicenseId);
+					gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
 					addGspBusinessLicense(gspBusinessLicenseForm);
 
 					if(gspOperateDetailForm.size()>0){
@@ -144,6 +145,7 @@ public class GspBusinessLicenseService extends BaseService {
 				String newBusinessLicenseId = RandomUtil.getUUID();
 				gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
 				gspBusinessLicenseForm.setBusinessId(newBusinessLicenseId);
+				gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
 				addGspBusinessLicense(gspBusinessLicenseForm);
 
 				if(gspOperateDetailForm.size()>0){

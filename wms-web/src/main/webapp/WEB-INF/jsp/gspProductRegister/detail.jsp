@@ -25,9 +25,9 @@
                                     <input type='text' id='enterpriseName' value="" />
                                 </td>
                                 <th>管理分类</th>
-                                <td><input type='text' name='classifyId' class='easyui-textbox' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
+                                <td><input type='text' name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
                                 <th>分类目录</th>
-                                <td><input type='text' name='classifyCatalog' class='easyui-textbox' value="${gspProductRegister.classifyCatalog}" data-options='required:true'/></td>
+                                <td><input type='text' name='classifyCatalog' value="${gspProductRegister.classifyCatalog}" data-options='required:true'/></td>
                             </tr>
                             <tr>
                                 <th>产品名称</th>
@@ -43,31 +43,31 @@
                                 <th>代理人名称</th>
                                 <td><input type='text' name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options='required:true'/></td>
                                 <th>有效期至</th>
-                                <td><input type='text' name='productRegisterExpiryDate' class='easyui-textbox' value="${gspProductRegister.productRegisterExpiryDate}" data-options='required:true'/></td>
+                                <td><input type='text' name='productRegisterExpiryDate' class='easyui-datebox' value="${gspProductRegister.productRegisterExpiryDate}" data-options='required:true,disabled:true,width:185'/></td>
                                 <th>有效期</th>
-                                <td><input type='text' name='productExpiryDate' class='easyui-textbox' value="${gspProductRegister.productExpiryDate}" data-options='required:true'/></td>
+                                <td><input type='text' name='productExpiryDate' class='easyui-datebox' value="${gspProductRegister.productExpiryDate}" data-options='required:true,disabled:true,width:185'/></td>
                                 <th>批准日期</th>
-                                <td><input type='text' name='approveDate' class='easyui-textbox' value="${gspProductRegister.approveDate}" data-options='required:true'/></td>
-                            </tr>
-                            <tr>
-                                <th>审核人</th>
-                                <td><input type='text' name='checkerId' class='easyui-textbox' value="${gspProductRegister.checkerId}" data-options='required:true'/></td>
-                                <th>审核时间</th>
-                                <td><input type='text' name='checkDate' class='easyui-textbox' value="${gspProductRegister.checkDate}" data-options='required:true'/></td>
-                                <th>创建人</th>
-                                <td><input type='text' name='createId' class='easyui-textbox' value="${gspProductRegister.createId}" data-options='required:true'/></td>
-                                <th>创建时间</th>
-                                <td><input type='text' name='createDate' class='easyui-textbox' value="${gspProductRegister.createDate}" data-options='required:true'/></td>
+                                <td><input type='text' name='approveDate' class='easyui-datebox' value="${gspProductRegister.approveDate}" data-options='required:true,disabled:true,width:185'/></td>
                             </tr>
                             <tr>
                                 <th>产品储存条件</th>
                                 <td><input type='text' name='storageConditions' class='easyui-textbox' value="${gspProductRegister.storageConditions}"  data-options='required:true'/></td>
                                 <th>其他内容</th>
                                 <td><input type='text' name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options='required:true'/></td>
+                                <th>创建人</th>
+                                <td><input type='text' name='createId' class='easyui-textbox' value="${gspProductRegister.createId}" data-options='disabled:true'/></td>
+                                <th>创建时间</th>
+                                <td><input type='text' name='createDate' class='easyui-textbox' value="${gspProductRegister.createDate}" data-options='disabled:true'/></td>
+                            </tr>
+                            <tr>
+                                <th>审核人</th>
+                                <td><input type='text' name='checkerId' class='easyui-textbox' value="${gspProductRegister.checkerId}" data-options='required:true,disabled:true'/></td>
+                                <th>审核时间</th>
+                                <td><input type='text' name='checkDate' class='easyui-textbox' value="${gspProductRegister.checkDate}" data-options='required:true,disabled:true'/></td>
                                 <th>编辑人</th>
-                                <td><input type='text' name='editId' class='easyui-textbox' value="${gspProductRegister.editId}" data-options='required:true'/></td>
+                                <td><input type='text' name='editId' class='easyui-textbox' value="${gspProductRegister.editId}" data-options='disabled:true'/></td>
                                 <th>编辑时间</th>
-                                <td><input type='text' name='editDate' class='easyui-textbox' value="${gspProductRegister.editDate}" data-options='required:true'/></td>
+                                <td><input type='text' name='editDate' class='easyui-textbox' value="${gspProductRegister.editDate}" data-options='disabled:true'/></td>
                             </tr>
 
                             <tr>
@@ -165,124 +165,6 @@
     var enterpriseDatagrid;
     var dialogEnterprise; //TODO 替换成企业信息查询通用
     var ezuiDatagridDetail;
-
-    function doUpload(data) {
-        var ajaxFile = new uploadFile({
-            "url":sy.bp()+"/commonController.do?uploadFileLocal",
-            "dataType":"json",
-            "timeout":50000,
-            "async":true,
-            "data":{
-                //多文件
-                "file":{
-                    //file为name字段 后台可以通过$_FILES["file"]获得
-                    "file":document.getElementsByName("file")[0].files[0]//文件数组
-                }
-            },
-            onload:function(data){
-                console.log(data)
-                $("#licenseUrl").val(data.comment);
-            },
-            onerror:function(er){
-                console.log(er);
-            }
-        });
-        //$('#file').filebox('clear');//上传成功后清空里面的值
-    }
-
-    function addDetail() {
-        ezuiFormClear($("#ezuiFormDetail"))
-    }
-    
-    function submitDetail() {
-        var url = '';
-        if (processType == 'edit') {
-            url = '/gspProductRegisterController.do?edit';
-        }else{
-            url = '/gspProductRegisterController.do?add';
-        }
-        ezuiFormDetail.form('submit', {
-            url : url,
-            onSubmit : function(){
-                if(ezuiFormDetail.form('validate')){
-                    $.messager.progress({
-                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-                    });
-                    return true;
-                }else{
-                    return false;
-                }
-            },
-            success : function(data) {
-                console.log(data);
-
-            }
-        });
-    }
-
-    var ezuiFormClear = function(ezuiForm){
-        ezuiTimespinnerClear(ezuiForm);
-        ezuiFileboxClear(ezuiForm);
-        ezuiNumberboxClear(ezuiForm);
-        ezuiTextboxClear(ezuiForm);
-        ezuiComboboxClear(ezuiForm);
-        ezuiCombotreeClear(ezuiForm);
-        ezuiDateboxClear(ezuiForm);
-        ezuiDatetimeboxClear(ezuiForm);
-        $(ezuiForm).find('input[type=file]').each(function(){
-            $(this).val('');
-        });
-        $(ezuiForm).find('input[type=checkbox]').each(function(){
-            $(this).attr('checked',false);
-        });
-        $(ezuiForm).find('input').each(function(){
-            $(this).removeClass('tooltip-f');
-            $(this).removeClass('validatebox-invalid');
-        });
-    };
-
-    function detailsBind(){
-        if($("#gspProductRegisterId").val()==""){
-            $.messager.show({
-                msg : "请先添加注册证再绑定产品", title : '<spring:message code="common.message.prompt"/>'
-            });
-            return;
-        }
-        ezuiDialogSpec.dialog('open');
-    }
-
-    function detailsUnBind(){
-        if($("#gspProductRegisterId").val()==""){
-            return;
-        }
-        var selectRows = ezuiDatagridDetail.datagrid("getSelections");
-        if(selectRows){
-            var arr = selectRows.join(',');
-            $.messager.confirm('', '确认要解除产品绑定吗', function(confirm) {
-                if(confirm){
-                    $.ajax({
-                        url : 'gspProductRegisterController.do?unBind',
-                        data : {id : arr},
-                        type : 'POST',
-                        dataType : 'JSON',
-                        success : function(result){
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                            } catch (e) {
-                                msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            } finally {
-                                $.messager.show({
-                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                                });
-                                ezuiDatagrid.datagrid('reload');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    }
 
     $(function () {
         $('#attachmentUrlFile').filebox({
@@ -436,7 +318,7 @@
             height:500,
             cache: false,
             onClose : function() {
-                
+
             },
             onOpen : function () {
 
@@ -444,24 +326,139 @@
         }).dialog('close');
 
 
-        /*$("#productChose").linkbutton({
-            iconCls: 'icon-add',
-            onClick:function () {
-                console.log("chose");
-            }
+        $("#ezuiFormDetail input[name='classifyId']").combobox({
+            url:sy.bp()+'/commonController.do?getCatalogClassify',
+            valueField:'id',
+            textField:'value'
         })
 
-        $("#productQuery").linkbutton({
-            iconCls: 'icon-search',
-            onClick:function () {
-                console.log("query");
-            }
-        })*/
+        $("#ezuiFormDetail input[name='classifyCatalog']").combobox({
+            url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox',
+            valueField:'id',
+            textField:'value'
+        });
     })
+
+    function doUpload(data) {
+        var ajaxFile = new uploadFile({
+            "url":sy.bp()+"/commonController.do?uploadFileLocal",
+            "dataType":"json",
+            "timeout":50000,
+            "async":true,
+            "data":{
+                //多文件
+                "file":{
+                    //file为name字段 后台可以通过$_FILES["file"]获得
+                    "file":document.getElementsByName("file")[0].files[0]//文件数组
+                }
+            },
+            onload:function(data){
+                console.log(data)
+                $("#licenseUrl").val(data.comment);
+            },
+            onerror:function(er){
+                console.log(er);
+            }
+        });
+        //$('#file').filebox('clear');//上传成功后清空里面的值
+    }
+
+    function addDetail() {
+        ezuiFormClear($("#ezuiFormDetail"))
+    }
     
+    function submitDetail() {
+        var url = '';
+        if (processType == 'edit') {
+            url = '/gspProductRegisterController.do?edit';
+        }else{
+            url = '/gspProductRegisterController.do?add';
+        }
+        ezuiFormDetail.form('submit', {
+            url : url,
+            onSubmit : function(){
+                if(ezuiFormDetail.form('validate')){
+                    $.messager.progress({
+                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                    });
+                    return true;
+                }else{
+                    return false;
+                }
+            },
+            success : function(data) {
+                console.log(data);
+
+            }
+        });
+    }
+
+    var ezuiFormClear = function(ezuiForm){
+        ezuiTimespinnerClear(ezuiForm);
+        ezuiFileboxClear(ezuiForm);
+        ezuiNumberboxClear(ezuiForm);
+        ezuiTextboxClear(ezuiForm);
+        ezuiComboboxClear(ezuiForm);
+        ezuiCombotreeClear(ezuiForm);
+        ezuiDateboxClear(ezuiForm);
+        ezuiDatetimeboxClear(ezuiForm);
+        $(ezuiForm).find('input[type=file]').each(function(){
+            $(this).val('');
+        });
+        $(ezuiForm).find('input[type=checkbox]').each(function(){
+            $(this).attr('checked',false);
+        });
+        $(ezuiForm).find('input').each(function(){
+            $(this).removeClass('tooltip-f');
+            $(this).removeClass('validatebox-invalid');
+        });
+    };
+
+    function detailsBind(){
+        if($("#gspProductRegisterId").val()==""){
+            $.messager.show({
+                msg : "请先添加注册证再绑定产品", title : '<spring:message code="common.message.prompt"/>'
+            });
+            return;
+        }
+        ezuiDialogSpec.dialog('open');
+    }
+
+    function detailsUnBind(){
+        if($("#gspProductRegisterId").val()==""){
+            return;
+        }
+        var selectRows = ezuiDatagridDetail.datagrid("getSelections");
+        if(selectRows){
+            var arr = selectRows.join(',');
+            $.messager.confirm('', '确认要解除产品绑定吗', function(confirm) {
+                if(confirm){
+                    $.ajax({
+                        url : 'gspProductRegisterController.do?unBind',
+                        data : {id : arr},
+                        type : 'POST',
+                        dataType : 'JSON',
+                        success : function(result){
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     function choseSelect() {
         var rows = dataGridProduct.datagrid("getChecked");
-        console.log(rows);
         if(rows){
             var arr = new Array();
             for(var i=0;i<rows.length;i++){
@@ -505,11 +502,9 @@
 
     function selectEnterprise() {
         var rows = enterpriseDatagrid.datagrid("getSelected");
-        console.log(rows)
         if(rows){
-            //TODO 查询企业信息反填
             $("#enterpriseId").val(rows.enterpriseId);
-            $("#enterpriseName").val(rows.enterpriseName);
+            $("#enterpriseName").textbox("setValue",rows.enterpriseName);
             ezuiDialogEnterprise.dialog("close");
         }
     }

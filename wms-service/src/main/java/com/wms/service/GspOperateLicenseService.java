@@ -76,14 +76,14 @@ public class GspOperateLicenseService extends BaseService {
 	}
 
 	public void updateGspOperateLicenseActiveTag(String id,String tag) {
-		GspOperateLicenseForm form = new GspOperateLicenseForm();
+		GspOperateLicense form = new GspOperateLicense();
 		form.setEnterpriseId(id);
 		form.setIsUse(tag);
 		gspOperateLicenseMybatisDao.updateBySelective(form);
 	}
 
 	public void updateGspBusinessLicenseTagById(String id,String tag) {
-		GspOperateLicenseForm form = new GspOperateLicenseForm();
+		GspOperateLicense form = new GspOperateLicense();
 		form.setOperateId(id);
 		form.setIsUse(tag);
 		gspOperateLicenseMybatisDao.updateBySelective(form);
@@ -119,6 +119,7 @@ public class GspOperateLicenseService extends BaseService {
 					gspOperateLicenseId = RandomUtil.getUUID();
 					gspOperateLicenseForm.setEnterpriseId(enterpriceId);
 					gspOperateLicenseForm.setOperateId(gspOperateLicenseId);
+					gspOperateLicenseForm.setIsUse(Constant.IS_USE_YES);
 					addGspOperateLicense(gspOperateLicenseForm);
 
 					if(gspOperateDetailForm.size()>0){
@@ -145,6 +146,7 @@ public class GspOperateLicenseService extends BaseService {
 				String newOperateLicenseId = RandomUtil.getUUID();
 				gspOperateLicenseForm.setEnterpriseId(enterpriceId);
 				gspOperateLicenseForm.setOperateId(newOperateLicenseId);
+				gspOperateLicenseForm.setIsUse(Constant.IS_USE_YES);
 				addGspOperateLicense(gspOperateLicenseForm);
 
 				if(gspOperateDetailForm.size()>0){
@@ -172,7 +174,7 @@ public class GspOperateLicenseService extends BaseService {
 	public EasyuiDatagrid<GspOperateLicenseVO> getGspOperateLicenseHistory(EasyuiDatagridPager pager, GspOperateLicenseQuery query){
 		EasyuiDatagrid<GspOperateLicenseVO> datagrid = new EasyuiDatagrid<>();
 		List<GspOperateLicenseVO> gspOperateLicenseVOList = new ArrayList<>();
-		if(query.getEnterpriseId().equals("")){
+		if(!query.getEnterpriseId().equals("")){
 			MybatisCriteria criteria = new MybatisCriteria();
 			criteria.setCondition(query);
 			criteria.setCurrentPage(pager.getPage());
@@ -182,7 +184,7 @@ public class GspOperateLicenseService extends BaseService {
 			List<GspOperateLicense> operateLicenses = gspOperateLicenseMybatisDao.queryByList(criteria);
 			for(GspOperateLicense g : operateLicenses){
 				GspOperateLicenseVO vo = new GspOperateLicenseVO();
-				com.wms.utils.BeanUtils.copyProperties(g,vo);
+				BeanUtils.copyProperties(g,vo);
 				gspOperateLicenseVOList.add(vo);
 			}
 			int total = gspOperateLicenseMybatisDao.queryByCount(criteria);

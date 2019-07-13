@@ -73,6 +73,9 @@ $(function() {
         cache: false,
         onClose : function() {
             ezuiFormClear(ezuiForm);
+        },
+        onLoad:function () {
+
         }
 	}).dialog('close');
 });

@@ -208,7 +208,14 @@ where 1=1
 			and g.enterprise_name like  CONCAT('%',#{condition.enterpriseName},'%')
 		</if>
 		<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
-			and g.enterprise_type =  #{condition.enterpriseType}
+			<choose>
+				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
+					and (g.enterprise_type = 'JY' or g.enterprise_type = 'SC')
+				</when>
+				<otherwise>
+					and g.enterprise_type = #{condition.enterpriseType}
+				</otherwise>
+			</choose>
 		</if>
 		<if test="condition.contacts != null and condition.contacts != ''" >
 			and g.contacts =  #{condition.contacts}

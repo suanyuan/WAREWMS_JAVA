@@ -21,7 +21,7 @@ public class GspSecondRecord  implements Serializable {
 
 	private String operatePlace;
 
-	private String bussinessScope;
+	private String businessScope;
 
 	private String residence;
 

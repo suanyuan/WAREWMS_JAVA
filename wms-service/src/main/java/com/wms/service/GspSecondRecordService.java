@@ -34,6 +34,8 @@ public class GspSecondRecordService extends BaseService {
 		Json json = new Json();
 		GspSecondRecord gspSecondRecord = new GspSecondRecord();
 		BeanUtils.copyProperties(gspSecondRecordForm, gspSecondRecord);
+		gspSecondRecord.setCreateId(getLoginUserId());
+		gspSecondRecord.setIsUse(Constant.IS_USE_YES);
 		gspSecondRecordMybatisDao.add(gspSecondRecord);
 		json.setSuccess(true);
 		return json;
@@ -74,14 +76,14 @@ public class GspSecondRecordService extends BaseService {
 	}
 
 	public void updateGspSecondRecordActiveTag(String id,String tag) {
-		GspSecondRecordForm form = new GspSecondRecordForm();
+		GspSecondRecord form = new GspSecondRecord();
 		form.setEnterpriseId(id);
 		form.setIsUse(tag);
 		gspSecondRecordMybatisDao.updateBySelective(form);
 	}
 
 	public void updateGspSecondRecordTagById(String id,String tag) {
-		GspSecondRecordForm form = new GspSecondRecordForm();
+		GspSecondRecord form = new GspSecondRecord();
 		form.setRecordId(id);
 		form.setIsUse(tag);
 		gspSecondRecordMybatisDao.updateBySelective(form);
@@ -117,6 +119,7 @@ public class GspSecondRecordService extends BaseService {
 					gspSecondRecordId = RandomUtil.getUUID();
 					gspSecondRecordForm.setEnterpriseId(enterpriceId);
 					gspSecondRecordForm.setRecordId(gspSecondRecordId);
+					gspSecondRecordForm.setIsUse(Constant.IS_USE_YES);
 					addGspSecondRecord(gspSecondRecordForm);
 
 					if(gspOperateDetailForm.size()>0){
@@ -143,6 +146,7 @@ public class GspSecondRecordService extends BaseService {
 				String newOperateLicenseId = RandomUtil.getUUID();
 				gspSecondRecordForm.setEnterpriseId(enterpriceId);
 				gspSecondRecordForm.setRecordId(newOperateLicenseId);
+				gspSecondRecordForm.setIsUse(Constant.IS_USE_YES);
 				addGspSecondRecord(gspSecondRecordForm);
 
 				if(gspOperateDetailForm.size()>0){
@@ -170,7 +174,7 @@ public class GspSecondRecordService extends BaseService {
 	public EasyuiDatagrid<GspSecondRecordVO> getGspSecondRecordHistory(EasyuiDatagridPager pager, GspSecondRecordQuery query){
 		EasyuiDatagrid<GspSecondRecordVO> datagrid = new EasyuiDatagrid<>();
 		List<GspSecondRecordVO> gspOperateLicenseVOList = new ArrayList<>();
-		if(query.getEnterpriseId().equals("")){
+		if(!query.getEnterpriseId().equals("")){
 			MybatisCriteria criteria = new MybatisCriteria();
 			criteria.setCondition(query);
 			criteria.setCurrentPage(pager.getPage());
@@ -180,7 +184,7 @@ public class GspSecondRecordService extends BaseService {
 			List<GspSecondRecord> operateLicenses = gspSecondRecordMybatisDao.queryByList(criteria);
 			for(GspSecondRecord g : operateLicenses){
 				GspSecondRecordVO vo = new GspSecondRecordVO();
-				com.wms.utils.BeanUtils.copyProperties(g,vo);
+				BeanUtils.copyProperties(g,vo);
 				gspOperateLicenseVOList.add(vo);
 			}
 			int total = gspSecondRecordMybatisDao.queryByCount(criteria);
