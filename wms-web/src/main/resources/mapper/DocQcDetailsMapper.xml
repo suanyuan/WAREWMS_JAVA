@@ -269,5 +269,21 @@ where 1=1
         order by linestatus asc, userdefine1 asc
         limit #{start}, #{pageSize}
     </select>
+
+    <update id="updateQcDesc" parameterType="java.util.Map">
+        update doc_qc_details
+        set qcdescr = #{qcdescr, jdbcType=VARCHAR},
+        edittime = now(),
+        editwho = #{editwho, jdbcType=VARCHAR}
+        where qcno = #{qcno, jdbcType=VARCHAR} and qclineno = #{qclineno, jdbcType=VARCHAR}
+    </update>
+
+    <update id="submitDocQc" statementType="CALLABLE" parameterType="java.util.Map">
+        {call spasn_qc_process(#{allqcflag, mode=IN, jdbcType=INTEGER},#{qcno, mode=IN, jdbcType=VARCHAR},
+        #{qclineno, mode=IN, jdbcType=VARCHAR},#{qcqty, mode=IN, jdbcType=VARCHAR},#{lotatt01, mode=IN, jdbcType=VARCHAR},
+        #{lotatt02, mode=IN, jdbcType=VARCHAR},#{lotatt06, mode=IN, jdbcType=VARCHAR},#{lotatt10, mode=IN, jdbcType=VARCHAR},
+        #{lotatt11, mode=IN, jdbcType=VARCHAR},#{qcdescr, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},
+        #{warehouseid, mode=IN, jdbcType=VARCHAR},#{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
+    </update>
   	
 </mapper>   

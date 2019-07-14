@@ -20,6 +20,12 @@
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
+    <result column="lotatt13" property="lotatt13"/>
+    <result column="lotatt14" property="lotatt14"/>
+    <result column="lotatt15" property="lotatt15"/>
+    <result column="lotatt16" property="lotatt16"/>
+    <result column="lotatt17" property="lotatt17"/>
+    <result column="lotatt18" property="lotatt18"/>
 	<result column="addtime" property="addtime"/>
 	<result column="addwho" property="addwho"/>
 	<result column="edittime" property="edittime"/>
@@ -30,7 +36,7 @@
        
 <!-- inv_lot_att table all fields -->
 <sql id="Base_Column_List" >
-	 lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename
+	 lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename
 </sql>
    
    
@@ -83,6 +89,24 @@ where 1=1
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
 	    and lotatt12 =  #{condition.lotatt12}
 	</if>
+    <if test="condition.lotatt13 != null and condition.lotatt13 != ''" >
+        and lotatt13 =  #{condition.lotatt13}
+    </if>
+    <if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+        and lotatt14 =  #{condition.lotatt14}
+    </if>
+    <if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+        and lotatt15 =  #{condition.lotatt15}
+    </if>
+    <if test="condition.lotatt16 != null and condition.lotatt16 != ''" >
+        and lotatt16 =  #{condition.lotatt16}
+    </if>
+    <if test="condition.lotatt17 != null and condition.lotatt17 != ''" >
+        and lotatt17 =  #{condition.lotatt17}
+    </if>
+    <if test="condition.lotatt18 != null and condition.lotatt18 != ''" >
+        and lotatt18 =  #{condition.lotatt18}
+    </if>
 	<if test="condition.addtime != null and condition.addtime != ''" >
 	    and addtime =  #{condition.addtime}
 	</if>
@@ -107,13 +131,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into inv_lot_att(lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename)
- values(#{lotnum},#{customerid},#{sku},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{lotatt12},#{addtime},#{addwho},#{edittime},#{editwho},#{receivingtime},#{qcreportfilename})
+  insert into inv_lot_att(lotnum,customerid,sku,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,addtime,addwho,edittime,editwho,receivingtime,qcreportfilename)
+ values(#{lotnum},#{customerid},#{sku},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{lotatt12},#{lotatt13},#{lotatt14},#{lotatt15},#{lotatt16},#{lotatt17},#{lotatt18},#{addtime},#{addwho},#{edittime},#{editwho},#{receivingtime},#{qcreportfilename})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update inv_lot_att set customerid=#{customerid},sku=#{sku},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},receivingtime=#{receivingtime},qcreportfilename=#{qcreportfilename} where lotnum=#{lotnum}
+  update inv_lot_att set customerid=#{customerid},sku=#{sku},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},lotatt13=#{lotatt13},lotatt14=#{lotatt14},lotatt15=#{lotatt15},lotatt16=#{lotatt16},lotatt17=#{lotatt17},lotatt18=#{lotatt18},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},receivingtime=#{receivingtime},qcreportfilename=#{qcreportfilename} where lotnum=#{lotnum}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -162,6 +186,24 @@ where 1=1
 	<if test="lotatt12 != null  ">
 		lotatt12=#{lotatt12},
 	</if>
+        <if test="lotatt13 != null  ">
+            lotatt13=#{lotatt13},
+        </if>
+        <if test="lotatt14 != null  ">
+            lotatt14=#{lotatt14},
+        </if>
+        <if test="lotatt15 != null  ">
+            lotatt15=#{lotatt15},
+        </if>
+        <if test="lotatt16 != null  ">
+            lotatt16=#{lotatt16},
+        </if>
+        <if test="lotatt17 != null  ">
+            lotatt17=#{lotatt17},
+        </if>
+        <if test="lotatt18 != null  ">
+            lotatt18=#{lotatt18},
+        </if>
 	<if test="addtime != null  ">
 		addtime=#{addtime},
 	</if>

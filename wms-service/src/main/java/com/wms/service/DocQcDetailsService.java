@@ -11,10 +11,12 @@ import com.wms.entity.DocQcDetails;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
+import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocQcDetailsVO;
 import com.wms.vo.Json;
@@ -23,6 +25,7 @@ import com.wms.vo.pda.PdaDocQcDetailVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,8 +156,11 @@ public class DocQcDetailsService extends BaseService {
             //当前批次-产品注册证对应的 生产厂家
             PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
             //为了解决FastJson的循环引用问题
-            String jsonStr2 = JSON.toJSONString(productRegister.getEnterpriseInfo(), SerializerFeature.DisableCircularReferenceDetect);
-            pdaDocQcDetailVO.setEnterpriseInfo(JSONObject.parseObject(jsonStr2, GspEnterpriseInfo.class));
+            if (productRegister != null) {
+
+                String jsonStr2 = JSON.toJSONString(productRegister.getEnterpriseInfo(), SerializerFeature.DisableCircularReferenceDetect);
+                pdaDocQcDetailVO.setEnterpriseInfo(JSONObject.parseObject(jsonStr2, GspEnterpriseInfo.class));
+            }
 
             pdaDocQcDetailVOList.add(pdaDocQcDetailVO);
         }
@@ -182,5 +188,47 @@ public class DocQcDetailsService extends BaseService {
         }
 
         return docQcDetailVOList;
+    }
+
+    /**
+     * 更新已验收的验收说明
+     * @param query  ~
+     * @return ~
+     */
+    public PdaResult editQcDesc(DocQcDetailsQuery query) {
+
+        query.setEditwho("Gizmo");
+        int result = docQcDetailsDao.updateQcDesc(query);
+        if (result == 0) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 任务单不存在");
+        }
+        return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
+    }
+
+    /**
+     * 验收提交
+     * @param form ~
+     * @return ~
+     */
+    public PdaResult submitDocQc(PdaDocQcDetailForm form) {
+
+        form.setUserid("Gizmo");
+        form.setLanguage("CN");
+        form.setReturncode("");
+        try {
+
+            docQcDetailsDao.submitDocQc(form);
+        }catch (Exception e) {
+            e.printStackTrace();
+
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
+
+            return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
+        } else {
+
+            return new PdaResult(PdaResult.CODE_FAILURE, form.getReturncode());
+        }
     }
 }

@@ -2,7 +2,9 @@ package com.wms.api;
 
 import com.wms.constant.Constant;
 import com.wms.mybatis.dao.DocQcDetailsMybatisDao;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocQcEndForm;
+import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocQcDetailsService;
@@ -84,33 +86,47 @@ public class PdaDocQcController {
         return resultMap;
     }
 
-//    /**
-//     * 上架提交 单次上架 + 连续上架
-//     * @param form 扫码结果
-//     * @return ~
-//     */
-//    @RequestMapping(params = "submit", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Map<String, Object> submit(PdaDocPaDetailForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put(Constant.RESULT, docPaDetailsService.putawayGoods(form));
-//        return resultMap;
-//    }
-
     /**
-     * 结束验收
-     * @param form 验收任务单号
+     * 验收提交
+     * @param form 扫码结果
      * @return ~
      */
-    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+    @RequestMapping(params = "submit", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> endTask(PdaDocQcEndForm form) {
+    public Map<String, Object> submit(PdaDocQcDetailForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put(Constant.RESULT, docQcHeaderService.endTask(form));
+        resultMap.put(Constant.RESULT, docQcDetailsService.submitDocQc(form));
         return resultMap;
     }
+
+    /**
+     * 修改已验收的验收说明
+     * @param query notes、qcno、qclineo传参
+     * @return ~
+     */
+    @RequestMapping(params = "editQcDesc", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> editDesc(DocQcDetailsQuery query) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docQcDetailsService.editQcDesc(query));
+        return resultMap;
+    }
+
+//    /**
+//     * 结束验收
+//     * @param form 验收任务单号
+//     * @return ~
+//     */
+//    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> endTask(PdaDocQcEndForm form) {
+//
+//        Map<String, Object> resultMap = new HashMap<>();
+//        resultMap.put(Constant.RESULT, docQcHeaderService.endTask(form));
+//        return resultMap;
+//    }
 
     /**
      * 获取验收进度明细列表

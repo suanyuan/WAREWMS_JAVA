@@ -125,7 +125,7 @@ public class DocPaHeaderService extends BaseService {
     }
 
     /**
-     * 结束收货单任务
+     * 结束上架单任务
      * @param form 预入通知单号
      * @return ~
      */

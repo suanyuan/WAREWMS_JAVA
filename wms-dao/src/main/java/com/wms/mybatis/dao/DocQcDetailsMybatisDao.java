@@ -1,6 +1,8 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocQcDetails;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
+import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +28,16 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @return ~
      */
 	List<DocQcDetails> queryDocQcList(@Param("qcno") String qcno, @Param("start") int start, @Param("pageSize") int pageSize);
+
+    /**
+     * 更新验收说明，不用生成的略~
+     * @return 1 || 0
+     */
+	int updateQcDesc(DocQcDetailsQuery query);
+
+    /**
+     * 验收提交
+     * @param form ~
+     */
+	void submitDocQc(PdaDocQcDetailForm form);
 }
