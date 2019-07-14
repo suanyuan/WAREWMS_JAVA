@@ -154,7 +154,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
 		Json json = null;
 		MultipartFile excelFile = mhsr.getFile("uploadData");
-		System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
+		//System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
 		if(excelFile != null && excelFile.getSize() > 0){
 			json = importGspProductRegisterSpecsDataService.importExcelData(excelFile);
 		}

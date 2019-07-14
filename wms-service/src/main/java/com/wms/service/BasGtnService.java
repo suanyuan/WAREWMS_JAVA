@@ -1,11 +1,17 @@
 package com.wms.service;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.entity.BasGtn;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.BasGtnMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.service.importdata.ImportBasGtnDataService;
+import com.wms.utils.ResourceUtil;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +23,12 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.BasGtnForm;
 import com.wms.query.BasGtnQuery;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Service("basGtnService")
 public class BasGtnService extends BaseService {
@@ -25,6 +37,8 @@ public class BasGtnService extends BaseService {
 	private BasGtnDao basGtnDao;
 	@Autowired
 	private BasGtnMybatisDao basGtnMybatisDao;
+	@Autowired
+	private ImportBasGtnDataService importBasGtnDataService;
 
 	public EasyuiDatagrid<BasGtnVO> getPagedDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
 		/*EasyuiDatagrid<BasGtnVO> datagrid = new EasyuiDatagrid<BasGtnVO>();
@@ -94,6 +108,44 @@ public class BasGtnService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+
+	public void exportTemplate(HttpServletResponse response, String token) {
+		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
+			File file = new File(ResourceUtil.getImportRootPath("basGtn_template.xls"));
+			response.reset();
+			Cookie cookie = new Cookie("downloadToken",token);
+			cookie.setMaxAge(60);
+			response.addCookie(cookie);
+			response.setContentType(ContentTypeEnum.stream.getContentType());
+			response.addHeader("Content-Disposition", "attachment;filename=" + new String(file.getName().getBytes()));
+			response.addHeader("Content-Length", "" + file.length());
+
+			try(InputStream fis = new BufferedInputStream(new FileInputStream(file))){
+				byte[] buffer = new byte[fis.available()];
+
+				fis.read(buffer);
+				System.out.println();
+				toClient.write(buffer);
+				toClient.flush();
+			}catch(IOException ex){
+//				log.error(ExceptionUtil.getExceptionMessage(ex));
+			}
+		} catch (Exception e) {
+//			log.error(ExceptionUtil.getExceptionMessage(e));
+		}
+	}
+
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+		Json json = null;
+		MultipartFile excelFile = mhsr.getFile("uploadData");
+		System.out.println();
+		System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
+		if(excelFile != null && excelFile.getSize() > 0){
+			json = importBasGtnDataService.importExcelData(excelFile);
+		}
+		return json;
+	}
+
 
 	public List<EasyuiCombobox> getBasGtnCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();

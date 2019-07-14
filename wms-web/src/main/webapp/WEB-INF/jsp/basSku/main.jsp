@@ -574,12 +574,12 @@ var downloadTemplate = function(){
 							<td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>代码</th>
 							<td><input type='text' id='sku'  name="sku" class='easyui-textbox' size='16' /></td>
-							<th>增加时间起始</th>
+							<th>创建时间</th>
 							<td><input type='text' id='addTimeStart' name="addTimeStart" class='easyui-datebox' size='16' data-options=''/></td>
-                            <th>增加时间结束</th>
+                            <th>至</th>
                             <td><input type='text' id='addTimeEnd' name="addTimeEnd" class='easyui-datebox' size='16' data-options=''/></td>
 
-                            <th>增加人</th>
+                            <th>创建人</th>
 							<td><input type='text' id='addwho'  name="addwho" class='easyui-textbox' size='16' /></td>
                             </tr>
 
@@ -588,9 +588,9 @@ var downloadTemplate = function(){
 							<td><input type='text' id='descrC' name="descrC" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>型号</th>
 							<td><input type='text' id='descrE'  name="descrE" class='easyui-textbox' size='16' /></td>
-							<th>编辑时间起始</th>
+							<th>编辑时间</th>
 							<td><input type='text' id='edittimeStart' name="edittimeStart" class='easyui-datebox' size='16' data-options=''/></td>
-                            <th>编辑时间起始</th>
+                            <th>至</th>
                             <td><input type='text' id='edittimeEnd' name="edittimeEnd" class='easyui-datebox' size='16' data-options=''/></td>
                             <th>编辑人</th>
 							<td><input type='text' id='editwho'  name="editwho" class='easyui-textbox' size='16' /></td>
@@ -634,8 +634,8 @@ var downloadTemplate = function(){
                         <td colspan="10">
                             <a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
                             <a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-                            <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
-                            <a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+                            <%--<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>--%>
+                            <%--<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>--%>
                         </td>
 
                         </tr>

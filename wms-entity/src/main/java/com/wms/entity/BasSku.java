@@ -124,6 +124,19 @@ public class BasSku implements Serializable {
 
 	private String skuGroup5;
 
+	private String skugroup6;
+
+
+
+	private String skuGroup7;
+
+	private String skuGroup8;
+
+	private String skuGroup9;
+
+
+
+
 	private BigDecimal skuhigh;
 
 	private BigDecimal skulength;
@@ -141,6 +154,38 @@ public class BasSku implements Serializable {
 	private BigDecimal qtyonhold;
 
 	public BasSku() {
+	}
+
+	public String getSkugroup6() {
+		return skugroup6;
+	}
+
+	public void setSkugroup6(String skugroup6) {
+		this.skugroup6 = skugroup6;
+	}
+
+	public String getSkuGroup7() {
+		return skuGroup7;
+	}
+
+	public void setSkuGroup7(String skuGroup7) {
+		this.skuGroup7 = skuGroup7;
+	}
+
+	public String getSkuGroup8() {
+		return skuGroup8;
+	}
+
+	public void setSkuGroup8(String skuGroup8) {
+		this.skuGroup8 = skuGroup8;
+	}
+
+	public String getSkuGroup9() {
+		return skuGroup9;
+	}
+
+	public void setSkuGroup9(String skuGroup9) {
+		this.skuGroup9 = skuGroup9;
 	}
 
 	public String getCustomerid() {

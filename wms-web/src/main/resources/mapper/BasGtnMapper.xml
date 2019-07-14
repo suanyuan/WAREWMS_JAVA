@@ -47,7 +47,7 @@ where 1=1
 	<if test="gTNCODE != null  ">
 		GTNCODE=#{gTNCODE},
 	</if>
-	</trim> where SKU=#{sKU}
+	</trim> where SKU=#{sku}
 </update>
 
 <!-- 删除记录 -->
@@ -58,7 +58,7 @@ where 1=1
 <!-- 根据id查询 GTN码维护 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from bas_gtn where SKU = #{sKU}
+	 from bas_gtn where SKU = #{sku}
 </select>
 
 <!-- GTN码维护 列表总数-->
