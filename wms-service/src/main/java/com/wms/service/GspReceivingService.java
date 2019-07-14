@@ -13,6 +13,7 @@ import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ public class GspReceivingService extends BaseService {
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCurrentPage(pager.getPage());
 			mybatisCriteria.setPageSize(pager.getRows());
+			mybatisCriteria.setOrderByClause("edit_date desc");
 			mybatisCriteria.setCondition(query);
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 			List<GspReceiving> gspReceivingList = gspReceivingMybatisDao.queryByList(mybatisCriteria);
@@ -102,9 +104,13 @@ public class GspReceivingService extends BaseService {
 	public Json addGspReceiving(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
 		try {
-
-
 			GspReceiving gspReceiving = new GspReceiving();
+			if (StringUtils.isNotEmpty(gspReceivingForm.getReceivingId())){
+				GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
+				oldgspReceiving.setIsUse("0");
+				gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+			}
+
 
 			BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 			gspReceiving.setIsUse("1");
@@ -127,6 +133,34 @@ public class GspReceivingService extends BaseService {
 
 		json.setSuccess(true);
 		return json;
+	}
+	public Json confirmApply(GspReceivingForm gspReceivingForm) throws Exception {
+		Json json = new Json();
+		try {
+			FirstReviewLog firstReviewLog = new FirstReviewLog();
+			GspReceiving gspReceiving=	gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
+			if (gspReceiving != null) {
+				gspReceiving.setFirstState("10");
+				gspReceivingMybatisDao.updateBySelective(gspReceiving);
+				firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
+			}
+			//插入一条首营申请日志记录
+			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			firstReviewLog.setApplyState("00");
+			firstReviewLog.setReviewId(RandomUtil.getUUID());
+			firstReviewLogMybatisDao.add(firstReviewLog);
+		} catch (BeansException e) {
+			throw new Exception("服务器忙!");
+		}
+
+		json.setSuccess(true);
+		return json;
+	}
+
+	public GspReceiving validateReceiv(String receivingId) throws Exception {
+
+		GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+		return gspReceiving;
 	}
 
 	public Json editGspReceiving(GspReceivingForm gspReceivingForm) {

@@ -39,13 +39,13 @@ $(function() {
             {field: 'classifyId',		title: '管理分类',	width: 28 },
             {field: 'classifyCatalog',		title: '分类目录',	width: 28 },
 			{field: 'productNameMain',		title: '产品名称',	width: 28 },
-			{field: 'approveDate',		title: '批准日期',	width: 28 },
-			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 28 },
+			{field: 'approveDate',		title: '批准日期',	width: 28 ,formatter:dateFormat2},
+			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 28 ,formatter:dateFormat2},
 			{field: 'productRegisterVersion',		title: '注册证版本',	width: 28 },
 			{field: 'checkerId',		title: '审核人',	width: 28 },
-			{field: 'checkDate',		title: '审核时间',	width: 28 },
+			{field: 'checkDate',		title: '审核时间',	width: 28 ,formatter:dateFormat2},
 			{field: 'createId',		title: '创建人',	width: 28 },
-			{field: 'createDate',		title: '创建时间',	width: 28 },
+			{field: 'createDate',		title: '创建时间',	width: 28 ,formatter:dateFormat2},
 			{field: 'isUse',		title: '是否有效',	width: 28 }
 
 		]],
@@ -65,7 +65,11 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-	ezuiDialog = $('#ezuiDialog').dialog({
+});
+var add = function(){
+	processType = 'add';
+	$('#gspProductRegisterId').val(0);
+    ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
         title : '<spring:message code="common.dialog.title"/>',
         href:dialogUrl,
@@ -73,19 +77,30 @@ $(function() {
         cache: false,
         onClose : function() {
             ezuiFormClear(ezuiForm);
+        },
+        onLoad:function () {
         }
-	}).dialog('close');
-});
-var add = function(){
-	processType = 'add';
-	$('#gspProductRegisterId').val(0);
-	ezuiDialog.dialog("refresh",dialogUrl).dialog('open');
+    })
+	//ezuiDialog.dialog("refresh",dialogUrl).dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-        ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
+        //ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
+        ezuiDialog = $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            href:dialogUrl+"&id="+row.productRegisterId,
+            fit:true,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            },
+            onLoad:function () {
+
+            }
+        })
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

@@ -11,7 +11,7 @@
 	<result column="head_name" property="headName"/>
 	<result column="operate_mode" property="operateMode"/>
 	<result column="operate_place" property="operatePlace"/>
-	<result column="bussiness_scope" property="bussinessScope"/>
+	<result column="business_scope" property="businessScope"/>
 	<result column="residence" property="residence"/>
 	<result column="record_url" property="recordUrl"/>
 	<result column="approve_date" property="approveDate"/>
@@ -25,7 +25,7 @@
        
 <!-- gsp_second_record table all fields -->
 <sql id="Base_Column_List" >
-	 record_id,record_no,enterprise_id,head_name,operate_mode,operate_place,bussiness_scope,residence,record_url,approve_date,registration_authority,create_id,create_date,edit_id,edit_date,is_use
+	 record_id,record_no,enterprise_id,head_name,operate_mode,operate_place,business_scope,residence,record_url,approve_date,registration_authority,create_id,create_date,edit_id,edit_date,is_use
 </sql>
    
    
@@ -51,8 +51,8 @@ where 1=1
 	<if test="condition.operatePlace != null and condition.operatePlace != ''" >
 	    and operate_place =  #{condition.operatePlace}
 	</if>
-	<if test="condition.bussinessScope != null and condition.bussinessScope != ''" >
-	    and bussiness_scope =  #{condition.bussinessScope}
+	<if test="condition.businessScope != null and condition.businessScope != ''" >
+	    and business_scope =  #{condition.businessScope}
 	</if>
 	<if test="condition.residence != null and condition.residence != ''" >
 	    and residence =  #{condition.residence}
@@ -87,13 +87,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_second_record(record_id,record_no,enterprise_id,head_name,operate_mode,operate_place,bussiness_scope,residence,record_url,approve_date,registration_authority,create_id,create_date,edit_id,edit_date,is_use)
- values(#{recordId},#{recordNo},#{enterpriseId},#{headName},#{operateMode},#{operatePlace},#{bussinessScope},#{residence},#{recordUrl},#{approveDate},#{registrationAuthority},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into gsp_second_record(record_id,record_no,enterprise_id,head_name,operate_mode,operate_place,business_scope,residence,record_url,approve_date,registration_authority,create_id,create_date,edit_id,edit_date,is_use)
+ values(#{recordId},#{recordNo},#{enterpriseId},#{headName},#{operateMode},#{operatePlace},#{businessScope},#{residence},#{recordUrl},#{approveDate},#{registrationAuthority},#{createId},now(),#{editId},#{editDate},#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_second_record set record_no=#{recordNo},enterprise_id=#{enterpriseId},head_name=#{headName},operate_mode=#{operateMode},operate_place=#{operatePlace},bussiness_scope=#{bussinessScope},residence=#{residence},record_url=#{recordUrl},approve_date=#{approveDate},registration_authority=#{registrationAuthority},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where record_id=#{recordId}
+  update gsp_second_record set record_no=#{recordNo},enterprise_id=#{enterpriseId},head_name=#{headName},operate_mode=#{operateMode},operate_place=#{operatePlace},business_scope=#{businessScope},residence=#{residence},record_url=#{recordUrl},approve_date=#{approveDate},registration_authority=#{registrationAuthority},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where record_id=#{recordId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -115,8 +115,8 @@ where 1=1
 	<if test="operatePlace != null  ">
 		operate_place=#{operatePlace},
 	</if>
-	<if test="bussinessScope != null  ">
-		bussiness_scope=#{bussinessScope},
+	<if test="businessScope != null  ">
+		business_scope=#{businessScope},
 	</if>
 	<if test="residence != null  ">
 		residence=#{residence},

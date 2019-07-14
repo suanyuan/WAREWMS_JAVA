@@ -104,6 +104,7 @@ public class GspSupplierService extends BaseService {
 
 
 		firstReviewLogMybatisDao.add(firstReviewLog);
+
 		GspSupplierMybatisDao.add(gspSupplier);
 		json.setSuccess(true);
 		return json;

@@ -9,5 +9,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface FirstReviewLogMybatisDao extends BaseDao {
 	
-	Long updateFirstReviewByNo(@Param("no")String no,@Param("state")String state,@Param("editId")String editId);
+	Long updateFirstReviewByNo(@Param("no")String no, @Param("state")String state, @Param("editId")String editId);
+
+    public <T> void updateByReviewTypeId(T t);
+
 }

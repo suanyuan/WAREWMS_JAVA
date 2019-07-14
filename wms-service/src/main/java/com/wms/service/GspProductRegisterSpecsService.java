@@ -184,6 +184,18 @@ public class GspProductRegisterSpecsService extends BaseService {
 		}
 		return Json.success("",gspProductRegisterSpecsVO);
 	}
+	public Json getInfoByProductCode(String productCode){
+		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(productCode);
+		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
+		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
+
+		gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
+		gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(new Date()));
+		if(gspProductRegisterSpecsVO == null){
+			return Json.error("企业信息不存在！");
+		}
+		return Json.success("",gspProductRegisterSpecsVO);
+	}
 
 
 	public List<EasyuiCombobox> getGspProductRegisterSpecsCombobox() {

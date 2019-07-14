@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspReceiving;
@@ -14,9 +15,11 @@ import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.GspEnterpriceFrom;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,10 +79,31 @@ public class GspReceivingController {
 		Json json = gspReceivingService.addGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("新增成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "confirmApply")
+	@ResponseBody
+	public Json confirmApply( @RequestParam(value="gspReceivingFormsttr",required=true) String gspReceivingFormstr) throws Exception {
+		GspReceivingForm gspReceivingForm = JSON.parseObject(gspReceivingFormstr,GspReceivingForm.class);
+		Json json = gspReceivingService.confirmApply(gspReceivingForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "validateReceiv")
+	@ResponseBody
+	public GspReceiving validateReceiv(@RequestParam(value = "receivingId") String receivingId) throws Exception {
+		return gspReceivingService.validateReceiv(receivingId);
 	}
 
 	@Login
@@ -89,9 +113,8 @@ public class GspReceivingController {
 		Json json = gspReceivingService.editGspReceiving(gspReceivingForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("修改成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -102,9 +125,9 @@ public class GspReceivingController {
 		Json json = gspReceivingService.deleteGspReceiving(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg("解除合作成功！");
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
 	}
 

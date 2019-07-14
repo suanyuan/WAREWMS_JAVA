@@ -561,10 +561,17 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	update  Bas_Customer set ACTIVE_FLAG='0' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
-
+	<!--&lt;!&ndash; 删除记录通过公司id和客户类型 &ndash;&gt;-->
+	<!--<delete id="delete" parameterType="Object">-->
+	<!--update  Bas_Customer set ACTIVE_FLAG='0' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}-->
+<!--</delete>-->
 	<!-- 恢复记录 -->
 <delete id="goon" parameterType="Object">
 	update  Bas_Customer set ACTIVE_FLAG='1' where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+</delete>
+
+<delete id="deleteBascustomer" parameterType="Object">
+	delete * from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
 
 	<!-- 根据id查询 客户档案 -->
@@ -600,27 +607,34 @@ where 1=1
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
 </select>
+<select id="selectBySelective" resultType="java.lang.Integer"  parameterType="Object">
+	select  count(1) from Bas_Customer
+	where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	and active_flag = 1
+</select>
 
-<!-- 查询客户档案分页列表
+ <!--查询客户档案分页列表-->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
+	select a.*,b.codename_c as customerTypeName
 	from (select <include refid="Base_Column_List"/>
 	from Bas_Customer 
 	<include refid="Example_Where_Clause"/>
     ) a, Bas_Codes b
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
-	) 
+	) c
 	where 1 = 1
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-</select>-->
 
-	<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	order by EDITTIME desc
+</select>
+
+	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		select * from  (SELECT a.CUSTOMERID,
-
+		a.EDITTIME,
+		a.EDITWHO,
+		a.ADDTIME,
+		a.ADDWHO,
 		a.FOLLOWUP,
 		a.receiving_address_id,
 		a.enterprise_id,
@@ -643,11 +657,11 @@ where 1=1
 		c.remark FROM bas_customer a left join gsp_customer b on a.enterprise_id = b.enterprise_id left  join gsp_enterprise_info c
 		on c.enterprise_id= b.enterprise_id) d
 		<include refid="Example_Where_Clause"/>
-
+		order by EDITTIME desc
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
-	</select>
+	</select>-->
 	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		SELECT *
 		FROM bas_customer

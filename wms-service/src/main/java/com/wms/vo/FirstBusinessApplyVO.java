@@ -15,6 +15,8 @@ public class FirstBusinessApplyVO {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String firstState;
+	private String productLine;
 
 	public String getApplyId() {
 		return applyId;
@@ -110,5 +112,21 @@ public class FirstBusinessApplyVO {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getProductLine() {
+		return productLine;
+	}
+
+	public void setProductLine(String productLine) {
+		this.productLine = productLine;
 	}
 }

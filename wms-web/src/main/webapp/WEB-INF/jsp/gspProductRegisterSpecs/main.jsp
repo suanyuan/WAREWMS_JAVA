@@ -6,6 +6,12 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -43,7 +49,7 @@ $(function() {
 
 
 			{field: 'specsName',		title: '规格名称',	width: 25 },
-			{field: 'productCode',		title: '代码',	width: 25 },
+			{field: 'productCode',		title: '商品代码',	width: 25 },
 			{field: 'productName',		title: '商品名称',	width: 25 },
 			{field: 'productRemark',		title: '商品描述',	width: 25 },
 			{field: 'productModel',		title: '型号',	width: 25 },
@@ -51,6 +57,7 @@ $(function() {
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
 			{field: 'unit',		title: '单位',	width: 25 },
 			{field: 'packingUnit',		title: '包装单位',	width: 25 },
+            {field: 'attachedCardCategory',		title: '附卡类别',	width: 25 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },
 			// {field: 'conversionRate',		title: '换算率',	width: 25 },
 			// {field: 'llong',		title: '长',	width: 25 },
@@ -208,21 +215,10 @@ var del = function(){
 		});
 	}
 };
-var commit = function(){
-    console.log("qwe");
-    var infoObj = new Object();
-    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
-        infoObj[""+$(this).attr("name")+""] = $(this).val();
-    })
-	console.log(infoObj);
-    var url = '';
-    if (processType == 'edit') {
-        var row = ezuiDatagrid.datagrid('getSelected');
-        infoObj["specsId"] = row.specsId;
-        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
-    }else{
-        url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
-    }
+
+
+
+var addOrEdit = function(url,infoObj) {
     $.ajax({
         url : url,
         data : {"gspProductRegisterSpecsForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
@@ -248,6 +244,53 @@ var commit = function(){
             }
         }
     });
+}
+
+
+
+var commit = function(){
+    console.log("qwe");
+    var infoObj = new Object();
+    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+        infoObj[""+$(this).attr("name")+""] = $(this).val();
+    })
+	console.log(infoObj);
+    var url = '';
+    if (processType == 'edit') {
+        var row = ezuiDatagrid.datagrid('getSelected');
+        infoObj["specsId"] = row.specsId;
+        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
+        addOrEdit(url,infoObj);
+    }else{
+        $.ajax({
+            url : '/gspProductRegisterSpecsController.do?getInfoByProductCode',
+            data : {productCode: infoObj["productCode"] },
+			type : 'POST',
+			dataType : 'JSON',
+			async  :true,
+            success : function(result){
+                alert(result+"====="+result.obj.isUse);
+                    //alert(111111);
+					$.messager.show({
+						msg : '已有该产品信息并且有效 无法重复添加', title : '提示'
+					});
+            },
+            error : function() {
+                //alert(33333333);
+                url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
+                addOrEdit(url,infoObj);
+            }
+        });
+
+
+
+
+
+
+
+
+    }
+
 
 	/*var url = '';
 	if (processType == 'edit') {

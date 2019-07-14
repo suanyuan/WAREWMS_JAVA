@@ -1,9 +1,6 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.wms.constant.Constant;
 import com.wms.entity.GspProductRegisterSpecs;
@@ -11,7 +8,9 @@ import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +65,22 @@ public class GspProductRegisterService extends BaseService {
 		GspProductRegister gspProductRegister = new GspProductRegister();
 		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
 		gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+		gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
 		gspProductRegisterMybatisDao.add(gspProductRegister);
 		json.setSuccess(true);
 		return json;
 	}
 
-	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) {
+	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
 		Json json = new Json();
 		GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
 		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
+		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+		gspProductRegister.setEditDate(new Date());
+		gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		gspProductRegisterMybatisDao.update(gspProductRegister);
 		json.setSuccess(true);
 		return json;

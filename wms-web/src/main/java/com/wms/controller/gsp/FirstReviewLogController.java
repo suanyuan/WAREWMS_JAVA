@@ -67,6 +67,17 @@ public class FirstReviewLogController {
 	}
 
 	@Login
+	@RequestMapping(params = "updateByReviewTypeId")
+	@ResponseBody
+	public Json updateByReviewTypeId(FirstReviewLogForm firstReviewLogForm) throws Exception {
+		Json json = firstReviewLogService.updateByReviewTypeId(firstReviewLogForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
 	public Json delete(String id) {

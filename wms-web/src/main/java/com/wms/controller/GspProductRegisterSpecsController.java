@@ -114,6 +114,12 @@ public class GspProductRegisterSpecsController {
 		return gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(specsId);
 	}
 
+	@Login
+	@RequestMapping(params = "getInfoByProductCode")
+	@ResponseBody
+	public Object getInfoByProductCode(String productCode) {
+		return gspProductRegisterSpecsService.getInfoByProductCode(productCode);
+	}
 
     @Login
     @RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
@@ -124,9 +130,11 @@ public class GspProductRegisterSpecsController {
 	@Login
 	@RequestMapping(params = "importExcelData")
 	@ResponseBody
-	public Json importExcelData( MultipartHttpServletRequest mhsr) throws Exception {
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterSpecsService.importExcelData(mhsr);
 	}
+
+
 
 	@Login
 	@RequestMapping(params = "getBtn")

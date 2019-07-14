@@ -33,9 +33,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'customerid',
 		columns : [[
-			{field: 'customerId',		title: '客户代码',	width: 20 },
+			{field: 'customerid',		title: '客户代码',	width: 20 },
             {field: 'descrC',		title: '客户名称',	width: 20 },
             {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
@@ -189,36 +189,55 @@ var exchange=function (type) {
 /* 删除 */
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
-	    var customerType = exchange(row.customerType);
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.update"/>', function(confirm) {
-			if(confirm){
-				$.ajax({
-					url : 'basCustomerController.do?delete',
-					data : {enterpriseId : row.enterpriseId, customerType : customerType},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							if(result.success){
-								msg = result.msg;
-							}else{
-								$.messager.alert('操作提示', result.msg);
-								msg = '<font color="red">' + result.msg + '</font>';
-							}
-						} catch (e) {
-							msg = '<spring:message code="common.message.data.delete.failed"/>';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
+    if(row){
+        var customerType = exchange(row.customerType);
+
+        $.ajax({
+            url : 'basCustomerController.do?selectCustomer',
+            data : {enterpriseId : row.enterpriseId, customerType : customerType},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+
+                if(result.activeFlag=="1"){
+                    $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.update"/>', function(confirm) {
+                        if(confirm){
+                            $.ajax({
+                                url : 'basCustomerController.do?delete',
+                                data : {enterpriseId : row.enterpriseId, customerType : customerType},
+                                type : 'POST',
+                                dataType : 'JSON',
+                                success : function(result){
+                                    var msg = '';
+                                    try {
+                                        if(result.success){
+                                            msg = result.msg;
+                                        }else{
+                                            $.messager.alert('操作提示', result.msg);
+                                            msg = '<font color="red">' + result.msg + '</font>';
+                                        }
+                                    } catch (e) {
+                                        msg = '<spring:message code="common.message.data.delete.failed"/>';
+                                    } finally {
+                                        $.messager.show({
+                                            msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                        });
+                                        ezuiDatagrid.datagrid('reload');
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }else{
+                    $.messager.show({
+                        msg : '该客户不是合作客户，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+                    });
+                }
+            }
+        });
+
+
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -229,40 +248,58 @@ var del = function(){
 /* 继续合作 */
 var goon = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row.activeFlag!="1"){
+    if (row) {
         var type = exchange(row.customerType);
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.goon"/>', function(confirm) {
-			if(confirm){
-				$.ajax({
-					url : 'basCustomerController.do?goon',
-					data : {enterpriseId : row.enterpriseId, customerType : type},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							if(result.success){
-								msg = result.msg;
-							}else{
-								$.messager.alert('操作提示', result.msg);
-								msg = '<font color="red">' + result.msg + '</font>';
-							}
-						} catch (e) {
-							msg = '<spring:message code="common.message.data.delete.failed"/>';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
-	}else{
-		$.messager.show({
-			msg : '该客户已是合作客户，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
-		});
+
+        $.ajax({
+            url : 'basCustomerController.do?selectCustomer',
+            data : {enterpriseId : row.enterpriseId, customerType : type},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+
+                if(result.activeFlag!="1"){
+                    var type = exchange(row.customerType);
+                    $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.goon"/>', function(confirm) {
+                        if(confirm){
+                            $.ajax({
+                                url : 'basCustomerController.do?goon',
+                                data : {enterpriseId : row.enterpriseId, customerType : type},
+                                type : 'POST',
+                                dataType : 'JSON',
+                                success : function(result){
+                                    var msg = '';
+                                    try {
+                                        if(result.success){
+                                            msg = result.msg;
+                                        }else{
+                                            $.messager.alert('操作提示', result.msg);
+                                            msg = '<font color="red">' + result.msg + '</font>';
+                                        }
+                                    } catch (e) {
+                                        msg = '<spring:message code="common.message.data.delete.failed"/>';
+                                    } finally {
+                                        $.messager.show({
+                                            msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                        });
+                                        ezuiDatagrid.datagrid('reload');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    $.messager.show({
+                        msg : '该客户已是合作客户，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+                    });
+                }
+            }
+        });
+
+    }else {
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
 	}
 };
 
@@ -323,7 +360,7 @@ var doSearch = function(){
         supContractNo : $('#supContractNo').val(),
 
 		customerType : $('#customerType').combobox('getValue'),
-        operateType : $('#operateType').combobox('getValue'),
+        /*operateType : $('#operateType').combobox('getValue'),*/
 		activeFlag : $('#activeFlag').combobox('getValue'),
         isChineseLabel : $('#isChineseLabel').combobox('getValue'),
         descrC : $('#descrC').val()
@@ -340,42 +377,51 @@ var doSearch = function(){
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
-					<table >
-						<tr align="left">
-							<th>产品代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options='' align="left"/></td>
-							<th>客户名称</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>企业信息代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>
-						<tr align="left">
-							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>合同编号</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>
-
-							<th>委托开始时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
-
-						</tr>
-							<th align="left">客户类型</th><td><input type='text' id='customerType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+					<table style="text-align: right">
+						<tr >
+							<th>客户代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options='' align="left"/></td>
+							<%--<th>企业信息代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
+						<%--<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th >客户类型</th><td><input type='text' id='customerType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
 																																	valueField: 'id',
 																																	textField: 'value'"/></td>
+							<th >是否激活</th>
+							<td>
+								<select id="activeFlag" class="easyui-combobox"  style="width:145px;">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
 
-							<th align="left">企业类型</th><td><input type='text' id='operateType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	url:'<c:url value="/basCustomerController.do?getOperateTypeCombobox"/>',
-																																	valueField: 'id',
-																																	textField: 'value'"/></td>
+							<th >是否贴中文标签</th>
 
-						<th align="left">是否贴中文标签</th>
+							<td>
+								<select id="isChineseLabel" name="isChineseLabel" class="easyui-combobox"  style="width:145px;">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+						<%--<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>合同编号</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户名称</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>
 
-						<td>
-							<select id="isChineseLabel" name="isChineseLabel" class="easyui-combobox"  style="width:145px;">
-								<option value=""></option>
-								<option value="1">是</option>
-								<option value="0">否</option>
-							</select>
-						</td>
+							<th>委托开始时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<td >
+								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+							</td>
+						</tr>
+
+
+
+
 
 							<%--<th>是否贴中文标签：</th><td><input type='text' id="isChineseLabel"  name="activeFlag"  class="easyui-combobox" size='4' data-options="panelHeight:'auto',
 																																	editable:false,
@@ -392,19 +438,9 @@ var doSearch = function(){
 																																	data: [
 																																	{id: 'Y', value: '是'},
 																																	{id: 'N', value: '否'}
+
 																																	]"/></td>--%>
-						<th align="left">是否激活</th>
-						<td>
-							<select id="activeFlag" class="easyui-combobox"  style="width:145px;">
-								<option value=""></option>
-								<option value="1">是</option>
-								<option value="0">否</option>
-							</select>
-						</td>
-						<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-							</td>
+
 						</tr>
 					</table>
 				</fieldset>

@@ -31,4 +31,6 @@ public class FirstBusinessProductApply  implements Serializable {
 
 	private String isUse;
 
+	private String firstState;
+
 }

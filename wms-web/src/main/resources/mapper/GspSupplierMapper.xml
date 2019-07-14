@@ -115,6 +115,9 @@ where 1=1
 	<if test="operateType != null  ">
 		operate_type=#{operateType},
 	</if>
+	<if test="firstState != null  ">
+		first_state=#{firstState},
+	</if>
 	<if test="createId != null  ">
 		create_id=#{createId},
 	</if>

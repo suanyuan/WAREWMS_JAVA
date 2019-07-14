@@ -272,8 +272,6 @@ var checkFormData = function (formId,obj) {
         }
     })
 
-
-
 	if(checkObjIsEmpty(obj) == true && checkResult == true){
 
 	    //长期证照
@@ -287,7 +285,11 @@ var checkFormData = function (formId,obj) {
         }
 
         //上传附件
-        $("#"+formId+" input[type=hidden][data=1]").each(function () {
+        $("#"+formId+" input[type=hidden][data=2]").each(function () {
+            if($(this).val() == ""){
+                checkResult = false;
+				return;
+			}
             obj[""+$(this).attr("id")+""] = $(this).val();
         })
 

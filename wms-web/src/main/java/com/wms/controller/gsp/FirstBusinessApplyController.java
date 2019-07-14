@@ -1,12 +1,14 @@
 package com.wms.controller.gsp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
-import com.wms.entity.FirstBusinessApply;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.query.FirstBusinessProductApplyQuery;
 import com.wms.vo.FirstBusinessProductApplyPageVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,7 +117,27 @@ public class FirstBusinessApplyController {
 	@Login
 	@RequestMapping(params = "apply")
 	@ResponseBody
-	public Json apply(String clientId,String supplierId,String productArr) throws Exception {
+	public Json apply(String id,String clientId,String supplierId,String productArr) throws Exception {
+		if(!StringUtils.isEmpty(id)){
+			return firstBusinessApplyService.editApply(id,clientId,supplierId,productArr);
+		}
 		return firstBusinessApplyService.addApply(clientId,supplierId,productArr);
+	}
+
+	@Login
+	@RequestMapping(params = "confirmApply")
+	@ResponseBody
+	public Json confirmApply(String id) throws Exception {
+		if(StringUtils.isEmpty(id)){
+			return Json.error("请选择需要确认的申请");
+		}
+		return firstBusinessApplyService.confirmApply(id);
+	}
+
+	@Login
+	@RequestMapping(params = "getProductLineByEnterpriseId")
+	@ResponseBody
+	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){
+		return firstBusinessApplyService.getProductLineByEnterpriseId(enterpriseId);
 	}
 }

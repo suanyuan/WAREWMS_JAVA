@@ -1,6 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
     table th{
         text-align: right;
@@ -37,24 +38,24 @@
                     <th>库房地址</th>
                     <td><input type='text' value="${gspOperateLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>经营/生产</br>许可证有效期</th>
-                    <td><input type='text' value="${gspOperateLicense.licenseExpiryDate}" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
                 </tr>
                 <tr>
                     <th>经营/生产</br>许可证批准日期</th>
-                    <td><input type='text' value="${gspOperateLicense.approveDate}" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
                     <th>经营/生产</br>许可证发证机关</th>
                     <td><input type='text' value="${gspOperateLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>经营/生产</br>许可证照片</th>
                     <td>
                         <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
-                        <input type="hidden" data="1" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
+                        <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                 </tr>
                 <tr>
                     <th>经营范围</th>
-                    <td colspan="3"><input type='text' data="1" value="${gspOperateLicense.bussinessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:590,editable:false'/></td>
+                    <td colspan="3"><input type='text' data="1" value="${gspOperateLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:590,editable:false'/></td>
                     <td style="text-align: left" colspan="2"><a onclick='selectOperateScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a></td>
                 </tr>
 
@@ -296,7 +297,7 @@
 
     function choseSelect_Catalog_operateLicense(row) {
         var choseRowNameArr = new Array();
-        var oldValue = $("#businessScope").textbox("getValue");
+        var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
@@ -307,6 +308,7 @@
             choseRowArrOperate.push(row.instrumentCatalogId);
             $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
+        $("#ezuiFormOperate input[id='choseScope']").val(choseRowArrOperate.join(","));
         $(ezuidialogChoseScopeOperate).dialog("close");
     }
 
@@ -334,7 +336,7 @@
     //加载历史证照信息
     function initHistoryData(row) {
 
-        $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
+        $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
@@ -353,7 +355,7 @@
     function operateUpdate() {
         opType = "update";
         $("#opType").val("update");
-        $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
+        $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue","");

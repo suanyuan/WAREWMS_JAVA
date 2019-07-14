@@ -14,6 +14,7 @@ import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspSupplierForm;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
+
+	@Autowired
+	private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
+
+	@Autowired
+	private GspReceivingMybatisDao gspReceivingMybatisDao;
 
 	@Autowired
 	private CommonService commonService;
@@ -75,6 +82,8 @@ public class BasCustomerService extends BaseService {
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		Json json = null;
 		try {
+
+
 			StringBuilder resultMsg = new StringBuilder();
 			this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
 
@@ -84,24 +93,48 @@ public class BasCustomerService extends BaseService {
 			if (resultMsg.length() == 0) {
 				BasCustomer basCustomer = new BasCustomer();
 
+				if (StringUtils.isNotEmpty(basCustomerForm.getReceivingId())){
+					GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(basCustomerForm.getReceivingId());
+					oldgspReceiving.setIsUse("0");
+					gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+				}
+				BasCustomerQuery customerQuery = new BasCustomerQuery();
+				customerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				customerQuery.setCustomerType(basCustomerForm.getCustomerType());
 
 
+				BasCustomer oldbasCustomer=basCustomerMybatisDao.queryById(customerQuery);
 
-
+				if (oldbasCustomer != null) {
+					BasSkuHistory basSkuHistory = new BasSkuHistory();
+					BeanUtils.copyProperties(oldbasCustomer,basSkuHistory);
+					basCustomerMybatisDao.deleteBascustomer(oldbasCustomer.getEnterpriseId(),oldbasCustomer.getCustomerType());
+					basSkuHistoryMybatisDao.add(basSkuHistory);
+				}
+				//下发到客户档案
 				BeanUtils.copyProperties(basCustomerForm, basCustomer);
-
-				//获取操作工号
 				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setCustomerid(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-				basCustomer.setActiveFlag("1");
+				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
 				//
 				basCustomerMybatisDao.add(basCustomer);
+				GspReceiving gspReceiving = new GspReceiving();
+
+				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
+				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				gspReceiving.setFirstState("40");
+				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+
+				gspReceivingMybatisDao.add(gspReceiving);
+
 				//插入一条首营申请日志记录
 				FirstReviewLog firstReviewLog = new FirstReviewLog();
 				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
-
+				firstReviewLog.setApplyContent("不需要申请直接下发");
 				firstReviewLog.setApplyState("40");
 				firstReviewLog.setReviewId(RandomUtil.getUUID());
 				firstReviewLogMybatisDao.add(firstReviewLog);
@@ -124,25 +157,28 @@ public class BasCustomerService extends BaseService {
 	public Json supplierAddCustomer(GspSupplierForm gspSupplierForm) {
 		Json json = new Json();
 		BasCustomer basCustomer = new BasCustomer();
-		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
 		basCustomer.setCustomerType("VE");
-		System.out.println("gspSupplierForm.getEnterpriseId()==============="+gspSupplierForm.getEnterpriseId());
 		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		int num = basCustomerMybatisDao.selectBySelective(basCustomer);
+		if(num!=0){
+			basCustomerMybatisDao.delete(basCustomer);
+		}
 
-		basCustomer.setOperateType(gspSupplierForm.getOperateType());
-		basCustomer.setActiveFlag(gspSupplierForm.getIsUse());
+		basCustomer = new BasCustomer();
+		basCustomer.setCustomerType("VE");
+		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		basCustomer.setOperateType(gspSupplierForm.getEnterpriseType());
+		basCustomer.setActiveFlag("1");
 		basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
-
-		//BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
-
-
-
-		//BeanUtils.copyProperties(basCustomerQuery, basCustomer);
 		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomer.setAddtime(new Date());
 		basCustomer.setEdittime(new Date());
 		basCustomerMybatisDao.add(basCustomer);
+
+
+
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;
@@ -187,6 +223,17 @@ public class BasCustomerService extends BaseService {
 			json.setMsg("资料处理成功！");
 		}
 		return json;
+	}
+
+
+	public BasCustomer selectCustomer(String enterpriseId, String customertype) {
+
+
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setEnterpriseId(enterpriseId);
+		customerQuery.setCustomerType(customertype);
+
+		return basCustomerMybatisDao.queryById(customerQuery);
 	}
 	public Json goonBasCustomer(String enterpriseId, String customertype) {
 		Json json = new Json();

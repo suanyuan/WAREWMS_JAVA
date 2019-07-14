@@ -19,7 +19,7 @@ public class GspOperateLicense  implements Serializable {
 
 	private String headName;
 
-	private String bussinessScope;
+	private String businessScope;
 
 	private String warehouseAddress;
 

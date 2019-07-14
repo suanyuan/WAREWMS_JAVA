@@ -1,5 +1,7 @@
 package com.wms.mybatis.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 
  * <br>
@@ -7,6 +9,6 @@ package com.wms.mybatis.dao;
  */
 public interface GspBusinessLicenseMybatisDao extends BaseDao {
 
-    void updateGspBusinessLicenseActiveTag(String enterpriseId,String tag);
+    void updateGspBusinessLicenseActiveTag(@Param("enterpriseId") String enterpriseId,@Param("tag") String tag);
 
 }

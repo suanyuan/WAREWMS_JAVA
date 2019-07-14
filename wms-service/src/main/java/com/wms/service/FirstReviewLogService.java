@@ -90,6 +90,17 @@ public class FirstReviewLogService extends BaseService {
 		return json;
 	}
 
+	public Json updateByReviewTypeId(FirstReviewLogForm firstReviewLogForm) {
+		Json json = new Json();
+		FirstReviewLog firstReviewLog = new FirstReviewLog();
+		BeanUtils.copyProperties(firstReviewLogForm, firstReviewLog);
+		firstReviewLogMybatisDao.updateByReviewTypeId(firstReviewLog);
+		json.setSuccess(true);
+		return json;
+	}
+
+
+
 	public Json deleteFirstReviewLog(String id) {
 		Json json = new Json();
 		FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(id);
@@ -141,6 +152,7 @@ public class FirstReviewLogService extends BaseService {
 	}
 
 	private Json publishData(String no) throws Exception{
+		//TODO 把数据至为失效
 		//下发委托客户数据
 		if(no.indexOf(Constant.APLCUSNO)!=-1){
 			Json json = gspCustomerService.getGspCustomerById(no);
@@ -207,10 +219,9 @@ public class FirstReviewLogService extends BaseService {
 				skuForm.setSkuGroup4(specObj.getStorageCondition());
 				skuForm.setSkuGroup5(specObj.getTransportCondition());
 				skuForm.setSkuGroup6(register.getEnterpriseId());
-				//skuForm.setSkuGroup7();//是否需要双证
-				//skuForm.setSkuGroup8();//是否需要产品合格证
+				skuForm.setSkuGroup7(specObj.getIsDoublec());//是否需要双证
+				skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
 				skuForm.setSkuGroup9(specObj.getProductionAddress());
-
 				//skuForm
 				basSkuService.addBasSku(skuForm);
 			}

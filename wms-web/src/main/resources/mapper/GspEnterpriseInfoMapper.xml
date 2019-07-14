@@ -208,7 +208,14 @@ where 1=1
 			and g.enterprise_name like  CONCAT('%',#{condition.enterpriseName},'%')
 		</if>
 		<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
-			and g.enterprise_type =  #{condition.enterpriseType}
+			<choose>
+				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
+					and (g.enterprise_type = 'JY' or g.enterprise_type = 'SC')
+				</when>
+				<otherwise>
+					and g.enterprise_type = #{condition.enterpriseType}
+				</otherwise>
+			</choose>
 		</if>
 		<if test="condition.contacts != null and condition.contacts != ''" >
 			and g.contacts =  #{condition.contacts}
@@ -235,13 +242,14 @@ where 1=1
 			<choose>
 				<when test="condition.type == 'customer'">
 					and cus.enterprise_id !=''
+					and cus.first_state = '40'
 				</when>
 				<when test="condition.type == 'supplier'">
 					and gs.enterprise_id !=''
+					and gs.first_state = '40'
 				</when>
 			</choose>
 		</if>
-		and g.state = '40'
 		and g.is_use = '1'
 	</trim>
 </sql>
@@ -249,9 +257,8 @@ where 1=1
 <!-- 查询企业信息列表 -->
 <select id="queryPageListByType" resultMap="BaseResultMap"  parameterType="Object">
 	select
-	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use,bc.codename_c state
+	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
 	from gsp_enterprise_info g
-	left join bas_codes bc on g.state = bc.code
 	<if test="condition.type == 'customer'">
 		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
 	</if>
@@ -271,7 +278,6 @@ where 1=1
 <select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
 	select count(1)
 	from gsp_enterprise_info g
-	left join bas_codes bc on g.state = bc.code
 	<if test="condition.type == 'customer'">
 		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
 	</if>
