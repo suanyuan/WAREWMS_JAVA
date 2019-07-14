@@ -124,9 +124,7 @@ public class BasSku implements Serializable {
 
 	private String skuGroup5;
 
-	private String skugroup6;
-
-
+	private String skuGroup6;
 
 	private String skuGroup7;
 
@@ -135,7 +133,7 @@ public class BasSku implements Serializable {
 	private String skuGroup9;
 
 
-
+	private String firstop;
 
 	private BigDecimal skuhigh;
 
@@ -156,13 +154,7 @@ public class BasSku implements Serializable {
 	public BasSku() {
 	}
 
-	public String getSkugroup6() {
-		return skugroup6;
-	}
 
-	public void setSkugroup6(String skugroup6) {
-		this.skugroup6 = skugroup6;
-	}
 
 	public String getSkuGroup7() {
 		return skuGroup7;
@@ -688,4 +680,19 @@ public class BasSku implements Serializable {
 				+ qtyallocated + ", qtyonhold=" + qtyonhold + "]";
 	}
 
+	public String getSkuGroup6() {
+		return skuGroup6;
+	}
+
+	public void setSkuGroup6(String skuGroup6) {
+		this.skuGroup6 = skuGroup6;
+	}
+
+	public String getFirstop() {
+		return firstop;
+	}
+
+	public void setFirstop(String firstop) {
+		this.firstop = firstop;
+	}
 }
