@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -70,8 +71,9 @@ public class UserService extends BaseService {
 	private SfcUserLoginMybatisDao sfcUserLoginMybatisDao;
 	@Autowired
 	private JavaMailSender mailSender;
-	
-	public EasyuiDatagrid<UserVO> getPagedDatagrid(EasyuiDatagridPager pager, UserQuery query) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    public EasyuiDatagrid<UserVO> getPagedDatagrid(EasyuiDatagridPager pager, UserQuery query) {
 		EasyuiDatagrid<UserVO> datagrid = new EasyuiDatagrid<UserVO>();
 		List<User> userList = userDao.getPagedDatagrid(pager, query);
 		UserVO userVO = null;
@@ -97,7 +99,11 @@ public class UserService extends BaseService {
 		Collections.sort(allUserList, new SfcUserComparator());// 排序
 		for(SfcUser sfcUser : allUserList){
 			if(StringUtils.isEmpty(sfcUser.getParentNodeId())){
+//                SfcUserVO sfcUserVO = new SfcUserVO();
+			    //sfcUser.setCreateTime(new Date());
+
 				sfcUserVOSet.add(this.getUserTreegridNode(sfcUser, allUserList));
+
 			}
 		}
 		return sfcUserVOSet;
@@ -119,7 +125,8 @@ public class UserService extends BaseService {
 				subUserList.add(subUser);
 			}
 		}
-		
+        sfcUserVO.setCreateTime(simpleDateFormat.format(sfcUser.getCreateTime()));
+        sfcUserVO.setLastLoginTime(simpleDateFormat.format(sfcUser.getLastLoginTime()));
 		if(subUserList != null && subUserList.size() > 0){
 			Collections.sort(subUserList, new SfcUserComparator());// 排序
 			
