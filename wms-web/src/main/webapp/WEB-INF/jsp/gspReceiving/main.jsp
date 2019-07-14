@@ -43,12 +43,11 @@
                     idField : 'receivingId',
                     columns : [[
 
-
-                        {field: 'receivingId',	hidden:true,		width: 72 },
-                        {field: 'enterpriseId',	hidden:true,		width: 72 },
+                        {field: 'enterpriseId',	hidden:true,width: 92 },
+                        {field: 'receivingId',	title: '申请单号',width: 72 },
+                       /* {field: 'receivingId',			width: 102 },*/
                         {field: 'firstState',		title: '首营状态',	width: 62 ,formatter:firstStateFormatter},
                         {field: 'enterpriseName',		title: '收货单位',	width: 102 },
-
                         {field: 'enterpriseNo',		title: '收货单位代码',	width: 91 },
                         {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
                         {field: 'clientId',		title: '货主ID',	width: 52 },
@@ -87,7 +86,6 @@
                     },onLoadSuccess:function(data){
                         ajaxBtn($('#menuId').val(), '<c:url value="/gspReceivingController.do?getBtn"/>', ezuiMenu);
                         $(this).datagrid('unselectAll');
-
                     }
                 });
                 /*ezuiDialogA = $('#ezuiDialog').dialog({
@@ -108,7 +106,7 @@
                     title : '<spring:message code="common.dialog.title"/>',
                     buttons : '#ezuiDialogBtn',
                     onClose : function() {
-                       /* ezuiFormClear(ezuiForm);*/
+                        ezuiFormClear(ezuiForm);
                     }
                 }).dialog('close');
 
@@ -328,19 +326,21 @@ var commit = function(){
                 ezuiDatagrid.datagrid('load', {
                     receivingId : $('#receivingId').val(),
                     enterpriseId : $('#enterpriseId').val(),
-                    enterpriseName : $('#enterpriseName').val(),
+                    enterpriseName : $('#enterpriseNa').val(),
+                    shorthandName : $('#shortName').val(),
+                    enterpriseNo : $('#enterpriseNumber').val(),
                     clientId : $('#clientId').val(),
                    supplierId : $('#supplierId').val(),
-                   /* contacts : $('#contacts').val(),
+                    /*contacts : $('#contacts').val(),
                    phone : $('#phone').val(),
                     deliveryAddress : $('#deliveryAddress').val(),*/
                     isCheck : $('#isCh').combobox("getValue"),
                     isReturn : $('#isR').combobox("getValue"),
 
-                    createId : $('#createId').val(),
+                   /* createId : $('#createId').val(),
                     createDate : $('#createDate').val(),
                     editId : $('#editId').val(),
-                    editDate : $('#editDate').val(),
+                    editDate : $('#editDate').val(),*/
                     isUse : $('#isU').combobox("getValue")
                 });
             };
@@ -469,10 +469,10 @@ function xiafa() {
 		<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
-					<table>
+					<table style="text-align: right">
 						<tr>
 						<th>收货单位</th>
-						<td><input type='text' id='receivingId' class='easyui-textbox' size='16' data-options=''/></td>
+						<td><input type='text' id='enterpriseNa' name="enterpriseName" class='easyui-textbox' size='16' data-options=''/></td>
 						<th>收货单位代码</th>
 						<td><input type='text' id="enterpriseNumber"  name='enterpriseNo'  size='16' class='easyui-textbox' data-options=''/></td>
 						<th>收货单位简称</th>
@@ -481,8 +481,8 @@ function xiafa() {
 						</tr>
 
 						<tr>
-							<th>货主</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应商</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主ID</th><td><input type='text' id='clientId' name="clientId" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应商</th><td><input type='text' id='supplierId' name="supplierId" class='easyui-textbox' size='16' data-options=''/></td>
 
 						</tr>
 						<tr>

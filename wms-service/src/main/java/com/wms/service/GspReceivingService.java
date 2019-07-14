@@ -64,8 +64,22 @@ public class GspReceivingService extends BaseService {
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 			List<GspReceiving> gspReceivingList = gspReceivingMybatisDao.queryByList(mybatisCriteria);
 
-			GspReceivingVO gspReceivingVO = null;
 			List<GspReceivingVO> gspReceivingVOList = new ArrayList<GspReceivingVO>();
+			GspReceivingVO gspReceivingVO = null;
+			/*List<GspEnterpriseInfo> gspEnterpriseInFoList = gspEnterpriseInfoMybatisDao.queryByList(mybatisCriteria);
+			if (gspEnterpriseInFoList != null) {
+				for (GspEnterpriseInfo gspEnterpriseInfo: gspEnterpriseInFoList){
+					gspReceivingVO = new GspReceivingVO();
+					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
+					gspReceivingVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getShorthandName());
+					gspReceivingVOList.add(gspReceivingVO);
+				}
+			}*/
+
+
+
+
 			for (GspReceiving gspReceiving : gspReceivingList) {
 				gspReceivingVO = new GspReceivingVO();
 

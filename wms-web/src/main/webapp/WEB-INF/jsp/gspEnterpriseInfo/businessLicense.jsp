@@ -7,7 +7,7 @@
         text-align: right;
     }
 </style>
-<div id='detailBusinessToolbar' class='datagrid-toolbar' style='padding: 0px;'>
+<div id='detailBusinessToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff'>
     <form id='ezuiFormBusiness' method='post' style="padding: 0px;">
         <input type='hidden' data="1" id='businessId' name='businessId' value="${gspBusinessLicense.businessId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.enterpriseId}"/>

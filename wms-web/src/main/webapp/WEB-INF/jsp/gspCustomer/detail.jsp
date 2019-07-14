@@ -89,7 +89,7 @@
     </table>
 </form>
 <div id='ezuiDialogDetail' style='padding: 10px;'>
-    <div id='detailToolbar' class='datagrid-toolbar' style=''>
+    <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff'>
         <fieldset>
             <legend>企业信息</legend>
             <table>

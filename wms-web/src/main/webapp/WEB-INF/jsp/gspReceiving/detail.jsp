@@ -65,7 +65,14 @@
     </fieldset>
 </form>
 
+
      <table id='ezuiDetailsDatagrid'></table>
+    <div>
+        <a onclick='AddAddress();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.skuAdd'/></a>
+        <a onclick='AddressEdit();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.skuEdit'/></a>
+        <a onclick='AddressDel();' id='ezuiDetailsBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.skuDelete'/></a>
+        <a onclick='clearDatagridSelected("#ezuiDetailsDatagrid");' id="clearBtn"  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+    </div>
 
     <div id="dialogAddAddress" style='padding: 10px;'>
 
@@ -147,7 +154,7 @@
                 <tr>
                     <th>企业：</th>
                     <td>
-                        <input type='text' id='enterpriseIdQuery' style="width: 100px;"/>
+                        <input type='text' id='enterpriseIdQuery' style="width: 170px;"/>
                         <input type="hidden" class="easyui-textvalue" name="enterpriseId">
                         <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                     </td>
@@ -168,12 +175,7 @@
 <div id="dialogClient">
 </div>
 
-<div>
-            <a onclick='AddAddress();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.skuAdd'/></a>
-            <a onclick='AddressEdit();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.skuEdit'/></a>
-            <a onclick='AddressDel();' id='ezuiDetailsBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.skuDelete'/></a>
-            <a onclick='clearDatagridSelected("#ezuiDetailsDatagrid");' id="clearBtn"  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
-</div>
+
 
 <div id='ezuiBtn' style="display: none">
     <a onclick='doSubmitAddress();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
@@ -209,7 +211,7 @@
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){
-                    searchClient();
+                    searchEnterprise();
                 }
             }]
         });
@@ -288,24 +290,24 @@
             columns : [[
                 {field: 'receivingAddressId',	hidden:true,	title: '待输入栏位0',	width: 10 },
                 {field: 'receivingId',		hidden:true,  title: '待输入栏位1',	width: 90 },
-                {field: 'sellerName',		title: '销售人',	width:60, align: 'center' },
-                {field: 'country',		title: '国家',	width: 50, align: 'center' },
+                {field: 'sellerName',		title: '销售人',	width:60  },
+                {field: 'country',		title: '国家',	width: 50 },
 
-                {field: 'province',		title: '省',	width: 50, align: 'center' },
-                {field: 'city',		title: '市',	width:50 , align: 'center'},
-                {field: 'district',		title: '区',	width:50 , align: 'center'},
+                {field: 'province',		title: '省',	width: 50 },
+                {field: 'city',		title: '市',	width:50 },
+                {field: 'district',		title: '区',	width:50 },
 
-                {field: 'deliveryAddress',		title: '地址',	width:90 , align: 'center'},
-                {field: 'zipcode',		title: '邮编',	width: 90 , align: 'center'},
-                {field: 'contacts',		title: '联系人',	width: 90 , align: 'center'},
-                {field: 'phone',		title: '联系人电话',	width: 90, align: 'center' },
-                {field: 'isDefault',		title: '是否默认',	width: 90 , align: 'center',formatter:function(value,rowData,rowIndex){
+                {field: 'deliveryAddress',		title: '地址',	width:90 },
+                {field: 'zipcode',		title: '邮编',	width: 90 },
+                {field: 'contacts',		title: '联系人',	width: 90},
+                {field: 'phone',		title: '联系人电话',	width: 90 },
+                {field: 'isDefault',		title: '是否默认',	width: 90 ,formatter:function(value,rowData,rowIndex){
                         return rowData.isDefault == '1' ? '是' : '否';
                     }},
-                {field: 'createId',		title: '创建人',	width: 90 , align: 'center'},
-                {field: 'createDate',		title: '创建日期',	width: 90, align: 'center' },
-                {field: 'editId',		title: '修改人',	width: 90, align: 'center'},
-                {field: 'editDate',		title: '修改日期',	width: 100,align: 'center' }
+                {field: 'createId',		title: '创建人',	width: 90},
+                {field: 'createDate',		title: '创建日期',	width: 90 },
+                {field: 'editId',		title: '修改人',	width: 90},
+                {field: 'editDate',		title: '修改日期',	width: 100 }
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -339,16 +341,16 @@
             singleSelect:true,
             idField : 'enterpriseId',
             columns : [[
-                {field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
-                {field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
-                {field: 'shorthandName',		title: '简称',	width: 61 },
-                {field: 'enterpriseName',		title: '企业名称',	width: 61 },
-                {field: 'enterpriseType',		title: '企业类型',	width: 61 ,formatter: entTypeFormatter},
-                {field: 'createId',		title: '录入人',	width: 61 },
-                {field: 'createDate',		title: '录入时间',	width: 61 },
-                {field: 'editId',		title: '修改人',	width: 61 },
-                {field: 'editDate',		title: '修改时间',	width: 61 },
-                {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
+                {field: 'enterpriseId',		title: '主键',	width: 81 ,hidden:true},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: 91 },
+                {field: 'shorthandName',		title: '简称',	width: 91 },
+                {field: 'enterpriseName',		title: '企业名称',	width: 91 },
+                {field: 'enterpriseType',		title: '企业类型',	width: 91 ,formatter: entTypeFormatter},
+                {field: 'createId',		title: '录入人',	width:81 },
+                {field: 'createDate',		title: '录入时间',	width: 81 },
+                {field: 'editId',		title: '修改人',	width: 81 },
+                {field: 'editDate',		title: '修改时间',	width: 81 },
+                {field: 'isUse',		title: '是否有效',	width: 91,formatter:isUseFormatter }
             ]],
             onDblClickCell: function(index,field,value){
                 choseSelect();
@@ -496,7 +498,7 @@
             singleSelect:true,
             idField : 'clientId',
             columns : [[
-                {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                {field: 'customerType',	title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                         if (rowData.customerType=='CO') {
                             return rowData.customerType='收货单位';
                         }else if (rowData.customerType=='VE'){
