@@ -58,6 +58,50 @@ public class BasSkuVO {
 	private java.lang.String skuGroup3;
 	private java.lang.String skuGroup4;
 	private java.lang.String skuGroup5;
+	private java.lang.String skuGroup6;
+	private java.lang.String skuGroup7;
+	private java.lang.String skuGroup8;
+
+	public String getSkuGroup6() {
+		return skuGroup6;
+	}
+
+	public void setSkuGroup6(String skuGroup6) {
+		this.skuGroup6 = skuGroup6;
+	}
+
+	public String getSkuGroup7() {
+		return skuGroup7;
+	}
+
+	public void setSkuGroup7(String skuGroup7) {
+		this.skuGroup7 = skuGroup7;
+	}
+
+	public String getSkuGroup8() {
+		return skuGroup8;
+	}
+
+	public void setSkuGroup8(String skuGroup8) {
+		this.skuGroup8 = skuGroup8;
+	}
+
+	public String getSkuGroup9() {
+		return skuGroup9;
+	}
+
+	public void setSkuGroup9(String skuGroup9) {
+		this.skuGroup9 = skuGroup9;
+	}
+
+	private java.lang.String skuGroup9;
+
+
+
+	private java.lang.String firstop;
+
+
+
 	private java.math.BigDecimal skuhigh;
 	private java.math.BigDecimal skulength;
 	private java.math.BigDecimal skuwidth;
@@ -502,5 +546,13 @@ public class BasSkuVO {
 
 	public void setEdittime(String edittime) {
 		this.edittime = edittime;
+	}
+
+	public String getFirstop() {
+		return firstop;
+	}
+
+	public void setFirstop(String firstop) {
+		this.firstop = firstop;
 	}
 }

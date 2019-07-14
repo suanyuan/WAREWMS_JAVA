@@ -40,6 +40,7 @@
 	<result column="qtymin" property="qtymin"/>
 	<result column="replenishrule" property="replenishrule"/>
 	<result column="reservecode" property="reservecode"/>
+
 	<result column="reservedfield01" property="reservedfield01"/>
 	<result column="reservedfield02" property="reservedfield02"/>
 	<result column="reservedfield03" property="reservedfield03"/>
@@ -54,10 +55,11 @@
 	<result column="sku_group3" property="skuGroup3"/>
 	<result column="sku_group4" property="skuGroup4"/>
 	<result column="sku_group5" property="skuGroup5"/>
-	<result column="sku_group6" property="skugroup6"/>
+	<result column="sku_group6" property="skuGroup6"/>
 	<result column="sku_group7" property="skuGroup7"/>
 	<result column="sku_group8" property="skuGroup8"/>
 	<result column="sku_group9" property="skuGroup9"/>
+	<result column="firstop" property="firstop"/>
 	<result column="softallocationrule" property="softallocationrule"/>
 	<result column="tare" property="tare"/>
 	<result column="qty" property="qty"/>
@@ -98,6 +100,7 @@
 	editwho,
 	firstinbounddate,
 	grossweight,
+	firstop,
 	inboundlifedays,
 	lotid,
 	netweight,
