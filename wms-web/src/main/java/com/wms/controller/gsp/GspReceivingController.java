@@ -19,10 +19,7 @@ import com.wms.vo.form.GspEnterpriceFrom;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspReceivingService;
@@ -59,7 +56,7 @@ public class GspReceivingController {
 	}
 	@Login
 	@RequestMapping(params = "toDialogAddress")
-	public ModelAndView toDialogAddress(String receivingId) {
+	public ModelAndView toDialogAddress(@RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("receivingId", receivingId);
 		return new ModelAndView("gspReceiving/dialogAddress", model);
@@ -75,8 +72,8 @@ public class GspReceivingController {
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(GspReceivingForm gspReceivingForm) throws Exception {
-		Json json = gspReceivingService.addGspReceiving(gspReceivingForm);
+	public Json add(GspReceivingForm gspReceivingForm,@RequestParam(value = "newreceivingId",required = false)String newreceivingId ) throws Exception {
+		Json json = gspReceivingService.addGspReceiving(gspReceivingForm,newreceivingId);
 		if(json == null){
 			json = new Json();
 		}
@@ -149,7 +146,8 @@ public class GspReceivingController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(@RequestParam(required = false) String enterpriseId,@RequestParam(required = false) String receivingId) {
+	public ModelAndView toDetail(@RequestParam(value = "enterpriseId",required = false,defaultValue = "") String enterpriseId,
+								 @RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (StringUtils.isNotEmpty(enterpriseId)){
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(enterpriseId);

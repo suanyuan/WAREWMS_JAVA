@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+
 
 @Data
 @Entity
@@ -36,11 +36,11 @@ public class GspReceivingAddress  implements Serializable {
 
 	private String createId;
 
-	private java.util.Date createDate;
+	private String createDate;
 
 	private String editId;
 
-	private java.util.Date editDate;
+	private String editDate;
 
 	public String getReceivingAddressId() {
 		return receivingAddressId;
@@ -146,11 +146,11 @@ public class GspReceivingAddress  implements Serializable {
 		this.createId = createId;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -162,11 +162,11 @@ public class GspReceivingAddress  implements Serializable {
 		this.editId = editId;
 	}
 
-	public Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 }

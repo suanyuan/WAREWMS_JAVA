@@ -766,14 +766,13 @@ where 1=1
 	               a.location,
 	               a.lotnum,
 	               a.addwho,
-	               a.addtime,
-	               row_number() over(order by a.orderlineno) as row_num
+	               a.addtime
 	          from Doc_Order_Details a, Bas_Sku b, Bas_Codes c
 	         where a.customerid = b.customerid
 	           and a.sku = b.sku
 	           and a.linestatus = c.code
 	           and c.codeid = 'SO_STS'
-	           and a.orderno = #{condition.orderno,jdbcType=VARCHAR})
+	           and a.orderno = #{condition.orderno,jdbcType=VARCHAR}) f
 	 where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

@@ -46,8 +46,7 @@ public class GspReceivingService extends BaseService {
 	private GspReceivingMybatisDao gspReceivingMybatisDao;
 
 
-	@Autowired
-	private GspCustomerMybatisDao gspCustomerMybatisDao;
+
 
 
 	@Autowired
@@ -69,7 +68,9 @@ public class GspReceivingService extends BaseService {
 			List<GspReceivingVO> gspReceivingVOList = new ArrayList<GspReceivingVO>();
 			for (GspReceiving gspReceiving : gspReceivingList) {
 				gspReceivingVO = new GspReceivingVO();
-				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryById(gspReceiving.getReceivingId());
+
+
+				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryIsDefault(gspReceiving);
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
 
 				BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
@@ -78,12 +79,13 @@ public class GspReceivingService extends BaseService {
 					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 					gspReceivingVO.setContacts(gspReceivingAddress.getContacts());
 					gspReceivingVO.setPhone(gspReceivingAddress.getPhone());
+					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 
-					GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
+					/*GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
 
 					if (gspCustomer!=null) {
 						gspReceivingVO.setIsCooperation(gspCustomer.getIsCooperation());
-					}
+					}*/
 				}
 				if ( gspEnterpriseInfo!=null){
 					gspReceivingVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
@@ -101,7 +103,7 @@ public class GspReceivingService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addGspReceiving(GspReceivingForm gspReceivingForm) throws Exception {
+	public Json addGspReceiving(GspReceivingForm gspReceivingForm,String newreceivingId) throws Exception {
 		Json json = new Json();
 		try {
 			GspReceiving gspReceiving = new GspReceiving();
@@ -109,17 +111,29 @@ public class GspReceivingService extends BaseService {
 				GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
 				oldgspReceiving.setIsUse("0");
 				gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+
+				BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
+				gspReceiving.setIsUse("1");
+				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				gspReceiving.setFirstState("00");
+
+				gspReceivingMybatisDao.add(gspReceiving);
+			}else {
+
+				BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
+				gspReceiving.setIsUse("1");
+				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setReceivingId(newreceivingId);
+				gspReceiving.setFirstState("00");
+
+				gspReceivingMybatisDao.add(gspReceiving);
 			}
 
 
-			BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
-			gspReceiving.setIsUse("1");
-			gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-			gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-			gspReceiving.setFirstState("00");
 
-			gspReceivingMybatisDao.add(gspReceiving);
 			//插入一条首营申请日志记录
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());

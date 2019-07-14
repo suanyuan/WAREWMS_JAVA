@@ -514,8 +514,8 @@ where 1=1
 	(select codename_c from Bas_Codes where codeid = 'LOC_HDL' and a.locationhandling=code) as locationhandlingName,
 	(select codename_c from Bas_Codes where codeid = 'LOC_DMD' and a.demand=code) as demandName,
 	(select descr from Bas_Zone where a.putawayzone=zone) as putawayzoneName,
-	(select descr from Bas_Zone where a.pickzone=zone) as pickzoneName,
-	rownum as row_num from (
+	(select descr from Bas_Zone where a.pickzone=zone) as pickzoneName
+	 from (
 	select 
 	<include refid="Base_Column_List"/>
 	from Bas_Location 
@@ -524,7 +524,7 @@ where 1=1
        order by  ${orderByClause}
     </if> -->
     order by locationid) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

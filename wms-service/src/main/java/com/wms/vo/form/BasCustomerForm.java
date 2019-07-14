@@ -20,6 +20,7 @@ public class BasCustomerForm {
 	private String isReturn;
 	private String deliveryAddress;
 	private String sellerName;
+	private String newreceivingId;
 
 	private String receivingAddressId;
 
@@ -108,6 +109,14 @@ public class BasCustomerForm {
 	private Long clientTerm;
 
 	private Long isChineseLabel;
+
+	public String getNewreceivingId() {
+		return newreceivingId;
+	}
+
+	public void setNewreceivingId(String newreceivingId) {
+		this.newreceivingId = newreceivingId;
+	}
 
 	public String getReceivingId() {
 		return receivingId;

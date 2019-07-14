@@ -164,7 +164,13 @@ where 1=1
 <!-- 根据id查询 收货地址 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from gsp_receiving_address where receiving_id = #{receivingId} and  is_default='1'
+	 from gsp_receiving_address where receiving_id = #{receivingId}
+</select>
+
+	<!-- 根据id查询 收货地址 -->
+<select id="queryIsDefault"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	 from gsp_receiving_address where  is_default='1' and receiving_id = #{receivingId}
 </select>
 <!-- 根据id查询 收货地址 -->
 <select id="queryByReceivingId"  resultMap="BaseResultMap" parameterType="Object">

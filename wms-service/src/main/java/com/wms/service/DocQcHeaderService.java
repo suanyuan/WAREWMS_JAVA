@@ -33,7 +33,7 @@ public class DocQcHeaderService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryByPageList(mybatisCriteria);
+        List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryByList(mybatisCriteria);
         DocQcHeaderVO docQcHeaderVO = null;
         List<DocQcHeaderVO> docQcHeaderVOList = new ArrayList<>();
         for (DocQcHeader docPaDetails : docQcHeaderList) {

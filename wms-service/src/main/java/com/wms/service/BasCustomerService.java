@@ -123,11 +123,16 @@ public class BasCustomerService extends BaseService {
 				GspReceiving gspReceiving = new GspReceiving();
 
 				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
-				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 				gspReceiving.setFirstState("40");
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+				if (StringUtils.isNotEmpty(basCustomerForm.getNewreceivingId())){
 
+					gspReceiving.setReceivingId(basCustomerForm.getNewreceivingId());
+				}else {
+
+					gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				}
 				gspReceivingMybatisDao.add(gspReceiving);
 
 				//插入一条首营申请日志记录

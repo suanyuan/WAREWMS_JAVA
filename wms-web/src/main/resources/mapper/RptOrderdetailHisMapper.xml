@@ -249,7 +249,7 @@ where 1=1
 <!-- 查询订单装箱清单-按箱分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
+	select a.* from (
 	select 
 	<include refid="Base_Column_List"/>
 	from Rpt_Orderdetail_His 
@@ -259,7 +259,7 @@ where 1=1
     </if> -->
     order by orderno
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

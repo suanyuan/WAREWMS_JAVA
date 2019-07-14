@@ -1,4 +1,6 @@
 package com.wms.controller.gsp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +10,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wms.entity.GspReceivingAddress;
 import com.wms.entity.PCD;
+import com.wms.utils.editor.CustomDateEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspReceivingAddressService;
@@ -33,6 +34,20 @@ public class GspReceivingAddressController {
 
 	@Autowired
 	private GspReceivingAddressService gspReceivingAddressService;
+
+
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		binder.registerCustomEditor(Date.class,"addtime",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"edisendtime5",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime1",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+
 
 	@Login
 	@RequestMapping(params = "toReceivingAddress")

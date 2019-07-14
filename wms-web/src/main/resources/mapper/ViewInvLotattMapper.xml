@@ -321,7 +321,7 @@ where 1=1
 <!-- 查询库存余量按批次库位列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
+	select a.* from (
 	select 
 	<include refid="Base_Column_List"/>
 	from View_Inv_Lotatt 
@@ -331,7 +331,7 @@ where 1=1
 <!--     </if> -->
     order by fmcustomerid,fmsku,fmlocation
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

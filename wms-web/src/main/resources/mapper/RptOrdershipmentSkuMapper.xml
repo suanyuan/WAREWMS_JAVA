@@ -184,7 +184,7 @@ where 1=1
 <!-- 查询订单2B发运信息分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
+	select a.* from (
 	select 
 	<include refid="Base_Column_List"/>
 	from Rpt_Ordershipment_Sku 
@@ -194,7 +194,7 @@ where 1=1
     </if> -->
     order by customerid,orderno
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

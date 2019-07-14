@@ -16,7 +16,6 @@
             var ezuiMenu;
             var ezuiForm;
             var enterDialog;
-            var ezuiDialog;
             var ezuiDatagrid;
             var ezuiFormInfo;
             var dialogUrll = sy.bp()+"/gspReceivingController.do?toDetail";
@@ -48,13 +47,16 @@
                         {field: 'receivingId',	hidden:true,		width: 72 },
                         {field: 'enterpriseId',	hidden:true,		width: 72 },
                         {field: 'firstState',		title: '首营状态',	width: 62 ,formatter:firstStateFormatter},
-                        {field: 'enterpriseName',		title: '收货单位',	width: 52 },
+                        {field: 'enterpriseName',		title: '收货单位',	width: 102 },
 
-                        {field: 'enterpriseNo',		title: '收货单位代码',	width: 81 },
-                        {field: 'shorthandName',		title: '收货单位简称',	width: 41 },
+                        {field: 'enterpriseNo',		title: '收货单位代码',	width: 91 },
+                        {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
                         {field: 'clientId',		title: '货主ID',	width: 52 },
-                        // {field: 'supplierId',		title: '企业名称',	width: 61  },
-                        {field: 'deliveryAddress',		title: '地址',	width: 52 },
+                        {field: 'supplierId',		title: '供应商',	width: 61  },
+                        {field: 'deliveryAddress',		title: '地址',	width: 92 },
+                        {field: 'contacts',		title: '联系人',	width: 82 },
+                        {field: 'phone',		title: '联系人电话',	width: 82 },
+
                         {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isCheck == '1' ? '是' : '否';
                             }},
@@ -166,14 +168,14 @@ var row = ezuiDatagrid.datagrid('getSelected');
                          $('#ezuiDialog').dialog({
                              modal : true,
                              title : '<spring:message code="common.dialog.title"/>',
-                             href:dialogUrll,
+
                              fit:true,
                              cache:false,
                              buttons : '#ezuiDialogBtn',
                              onClose : function() {
                                  ezuiFormClear(ezuiForm);
                              }
-                         }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+                         }).dialog('refresh', dialogUrll+"&enterpriseId="+res.enterpriseId+"&receivingId="+res.receivingId);
                          /*$.messager.show({
                              msg : '审核中与审核通过的申请无法编辑', title : '提示'
                          });*/
@@ -183,7 +185,7 @@ var row = ezuiDatagrid.datagrid('getSelected');
                          $('#ezuiDialog').dialog({
                              modal : true,
                              title : '<spring:message code="common.dialog.title"/>',
-                             href:dialogUrll,
+
                              fit:true,
                              cache:false,
                              buttons : '#ezuiDialogBtn',
@@ -213,6 +215,7 @@ var row = ezuiDatagrid.datagrid('getSelected');
 
 
  var newAdd = function(){
+     processType='newAdd';
 
      var row = ezuiDatagrid.datagrid('getSelected');
      if (row) {
@@ -222,11 +225,10 @@ var row = ezuiDatagrid.datagrid('getSelected');
              type: 'POST',
              dataType: 'JSON',
 			 success: function (res) {
-                 if(res.firstState!="40"){
+                 if(res.firstState=="40"){
                      $('#ezuiDialog').dialog({
                          modal : true,
                          title : '<spring:message code="common.dialog.title"/>',
-                         href:dialogUrll,
                          fit:true,
                          cache:false,
                          buttons : '#ezuiDialogBtn',
@@ -237,7 +239,7 @@ var row = ezuiDatagrid.datagrid('getSelected');
 
                  }else {
                      $.messager.show({
-                         msg : '该项已审核通过，请重新选择！', title : '<spring:message code="common.message.prompt"/>'
+                         msg : '该项审核未通过，请重新选择！', title : '<spring:message code="common.message.prompt"/>'
                      });
 				 }
 
@@ -328,8 +330,10 @@ var commit = function(){
                     enterpriseId : $('#enterpriseId').val(),
                     enterpriseName : $('#enterpriseName').val(),
                     clientId : $('#clientId').val(),
-                 //   supplierId : $('#supplierId').val(),
-                    deliveryAddress : $('#deliveryAddress').val(),
+                   supplierId : $('#supplierId').val(),
+                   /* contacts : $('#contacts').val(),
+                   phone : $('#phone').val(),
+                    deliveryAddress : $('#deliveryAddress').val(),*/
                     isCheck : $('#isCh').combobox("getValue"),
                     isReturn : $('#isR').combobox("getValue"),
 
@@ -467,8 +471,21 @@ function xiafa() {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
+						<th>收货单位</th>
+						<td><input type='text' id='receivingId' class='easyui-textbox' size='16' data-options=''/></td>
+						<th>收货单位代码</th>
+						<td><input type='text' id="enterpriseNumber"  name='enterpriseNo'  size='16' class='easyui-textbox' data-options=''/></td>
+						<th>收货单位简称</th>
+						<td><input type='text' id="shortName"   name='shorthandName' size='16'  class='easyui-textbox' data-options=''/></td>
+
+						</tr>
+
+						<tr>
 							<th>货主</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
+
+						</tr>
+						<tr>
 							<th>是否需要审核</th><td><input type='text' id='isCh' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>是否医废</th><td><input type='text' id='isR' name="isReturn" class='easyui-textbox' size='16' data-options=''/></td>
 
@@ -485,7 +502,7 @@ function xiafa() {
 					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>--%>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
-					<a onclick='xiafa();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认申请</a>
+					<a onclick='xiafa();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认审核</a>
 					<a onclick='newAdd();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<%--<a onclick='confirmApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认申请</a>--%>
 				</div>

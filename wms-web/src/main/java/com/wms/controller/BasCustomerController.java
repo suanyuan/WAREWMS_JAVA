@@ -74,8 +74,10 @@ public class BasCustomerController {
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(@RequestParam(value="basCustomerFormStr",required=true)  String basCustomerFormStr) throws Exception {
+	public Json add(@RequestParam(value="basCustomerFormStr",required=true)  String basCustomerFormStr,
+					@RequestParam(value = "newreceivingId",required = false)String newreceivingId) throws Exception {
 		BasCustomerForm basCustomerForm = JSON.parseObject(basCustomerFormStr, BasCustomerForm.class);
+		basCustomerForm.setNewreceivingId(newreceivingId);
 
 		Json json = basCustomerService.addBasCustomer(basCustomerForm);
 		if(json == null){

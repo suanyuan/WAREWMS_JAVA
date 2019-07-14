@@ -35,8 +35,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'customerid',
 		columns : [[
-			{field: 'customerid',		title: '客户代码',	width: 20 },
-            {field: 'descrC',		title: '客户名称',	width: 20 },
+
             {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';
@@ -54,6 +53,11 @@ $(function() {
                         return rowData.customerType='主体';
 					}
                 } },
+            {field: 'activeFlag',		title: '是否合作 ',	width: 20,formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }},
+            {field: 'customerid',		title: '客户代码',	width: 20 },
+            {field: 'descrC',		title: '客户名称',	width: 20 },
             {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
             {field: 'shorthandName',		title: '简称 ',	width: 15 },
             {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
@@ -73,9 +77,7 @@ $(function() {
             }},*/
 			{field: 'clientTerm',		title: '委托期限',	width: 20 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
-            {field: 'activeFlag',		title: '是否合作 ',	width: 20,formatter:function(value,rowData,rowIndex){
-                    return rowData.activeFlag == '1' ? '是' : '否';
-                }}
+
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -387,7 +389,7 @@ var doSearch = function(){
 																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
 																																	valueField: 'id',
 																																	textField: 'value'"/></td>
-							<th >是否激活</th>
+							<th >是否合作</th>
 							<td>
 								<select id="activeFlag" class="easyui-combobox"  style="width:145px;">
 									<option value=""></option>
@@ -396,7 +398,7 @@ var doSearch = function(){
 								</select>
 							</td>
 
-							<th >是否贴中文标签</th>
+						<%--	<th >是否贴中文标签</th>
 
 							<td>
 								<select id="isChineseLabel" name="isChineseLabel" class="easyui-combobox"  style="width:145px;">
@@ -404,15 +406,14 @@ var doSearch = function(){
 									<option value="1">是</option>
 									<option value="0">否</option>
 								</select>
-							</td>
-						</tr>
-						<tr>
+							</td>--%>
+
 						<%--<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<th>合同编号</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>合同编号</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<th>客户名称</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>
 
-							<th>委托开始时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<%--<th>委托开始时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
+							<%--<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
 							<td >
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

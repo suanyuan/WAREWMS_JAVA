@@ -4,7 +4,9 @@
 
 <div id='dialogAddAddress' style='padding: 10px;'>
 	<form id='dialogAddAddressForm' method='post' >
-	<input type='hidden' id='r'   name='receivingId' value="${receivingId}" class='textbox-value' />
+
+	<input  id='r'  type="hidden" name='receivingId' value="${receivingId}" class='textbox-value' />
+	<%--<input    name='receivingId' value="${receivingId}" class='easyui-textbox' />--%>
 
 			<table>
 				<%--<tr>
@@ -94,13 +96,15 @@
 	var ezuiDialogReceivingDetail;
 	var dataGridReceivingDetail;
 	var dialogReceiving;
+
+	var  newreceivingId;
     $(function () {
         $("#dialogAddAddressForm input[name='isDefault']").combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
         });
-
+        console.log($("#hiddenreceivingId").val());
     });
 
     function doSubmitAddress() {
@@ -108,7 +112,6 @@
         $("#dialogAddAddressForm input[class='textbox-value']").each(function (index) {
             infoObj[""+$(this).attr("name")+""] = $(this).val();
         });
-
 
 
         var url = '';
@@ -127,8 +130,10 @@
                 try{
                     if(result.success){
                         msg = result.msg;
+                        newreceivingId=result.obj;
                         ezuiDetailsDatagrid.datagrid('reload');
                         dialogAddAddress.dialog('close');
+
                     }else{
                         msg = '<font color="red">' + result.msg + '</font>';
                     }
