@@ -23,7 +23,27 @@
 <sql id="Base_Column_List" >
 	 receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return,first_State
 </sql>
-   
+  <!-- <select  id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	   select * from (select * from gsp_enterprise_info where 1=1
+	   <if test="condition.enterpriseNo != null and condition.enterpriseNo != ''">
+		   and enterprise_no like CONCAT('%',#{condition.enterpriseNo},'%')
+	   </if>
+	   <if test="condition.shorthandName != null and condition.shorthandName != ''">
+		   and shorthand_name like CONCAT('%',#{condition.shorthandName},'%')
+	   </if>
+	   <if test="condition.enterpriseName != null and condition.enterpriseName != ''">
+		   and enterprise_name like CONCAT('%',#{condition.enterpriseName},'%')
+	   </if>
+	   ) a,
+	   (select * from gsp_receiving where 1=1 <include refid="Example_Where_Clause"/> ) b
+	   where a.enterpriseId = b.enterpriseId
+	   <if test="orderByClause != null and orderByClause != ''" >
+		   order by  ${orderByClause}
+	   </if>
+	   <if test="limitClause != null and limitClause != ''" >
+		   ${limitClause}
+	   </if>
+   </select>-->
    
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
@@ -141,7 +161,7 @@ where 1=1
 	<include refid="Example_Where_Clause"/>
 </select>
   	
-<!-- 查询收货地址列表 -->
+ <!--查询收货地址列表-->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>

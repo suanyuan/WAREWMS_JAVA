@@ -364,7 +364,7 @@ var doSearch = function(){
 		customerType : $('#customerType').combobox('getValue'),
         /*operateType : $('#operateType').combobox('getValue'),*/
 		activeFlag : $('#activeFlag').combobox('getValue'),
-        isChineseLabel : $('#isChineseLabel').combobox('getValue'),
+
         descrC : $('#descrC').val()
 
 	});

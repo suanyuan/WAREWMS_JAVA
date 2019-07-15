@@ -1,12 +1,16 @@
 package com.wms.controller;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.utils.editor.CustomDateEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -29,6 +33,17 @@ public class BasCarrierLicenseController {
 	private BasCarrierLicenseService basCarrierLicenseService;
 
 
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		binder.registerCustomEditor(Date.class,"addtime",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"edisendtime5",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime1",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 
 
 	@Login
