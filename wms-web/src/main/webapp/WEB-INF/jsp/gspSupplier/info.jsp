@@ -1,6 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 
-
+<c:import url='/WEB-INF/jsp/include/meta.jsp' />
+<c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <script type='text/javascript'>
 
 
@@ -43,13 +44,40 @@ var enterpriseDialog;
         <%--</tr>--%>
 
 
-
+        <tr>
+            <th>合同编号</th>
+            <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+        </tr>
+        <tr>
+            <th>合同附件</th>
+            <td>
+                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
+                <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+            </td>
+        </tr>
+        <tr>
+            <th>委托内容</th>
+            <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+        </tr>
+        <tr>
+            <th>委托开始时间</th>
+            <td><input type='text'  name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+        </tr>
+        <tr>
+            <th>委托结束时间</th>
+            <td><input type='text'  name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+        </tr>
+        <tr>
+            <th>委托期限</th>
+            <td><input type='text' value="${customer.clientTerm}" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
+        </tr>
 
 
 
         <tr>
             <th>是否审查</th>
-            <td><input type="text" data="1" id="isCheck"  name="isCheck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+            <td><input type="text" data="1" id="isCheck"  name="isCheck" value="${isCheck}"   class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -205,7 +233,182 @@ var enterpriseDialog;
         })
     })
 
+    // $(function () {
+    //
+    //
+    //         if(processType == 'add'){
+    //            // alert(1111);
+    //             $("#ezuiFormInfo input[id='isCheck'][data='1']").combobox('setValue','1');
+    //
+    //            // $("#ezuiFormInfo input[id='isCheck'][data='1']").textbox('setValue',"1");
+    //             //$("#ezuiFormInfo input[id='isCheck'][data='1']").combobox('setValue',"1");
+    //
+    //         }
+    //
+    //
+    //
+    // })
+    $(function () {
+        $("#enterpriseName").textbox({
+            value:"${customer.clientName}",
+            width:200,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchEnterprise();
+                }
+            }]
+        })
 
+        $('#contractUrlFile').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            required: true,
+            onChange:function(data){
+                if(data){
+                    doUpload(data);
+                }
+            }
+        });
+
+        function doUpload(data) {
+            var ajaxFile = new uploadFile({
+                "url":sy.bp()+"/commonController.do?uploadFileLocal",
+                "dataType":"json",
+                "timeout":50000,
+                "async":true,
+                "data":{
+                    //多文件
+                    "file":{
+                        //file为name字段 后台可以通过$_FILES["file"]获得
+                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                    }
+                },
+                onload:function(data){
+                    $("#contractUrl").val(data.comment);
+                },
+                onerror:function(er){
+                    console.log(er);
+                }
+            });
+        }
+
+        $('input[name="firstState"]').combobox({
+            url:sy.bp()+'/commonController.do?getCatalogFirstState',
+            valueField:'id',
+            textField:'value'
+        });
+
+        /*$('#isCheckData').combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#isCheckData').combobox("setValue",'${customer.isCheck}')
+            }
+        });
+
+        $('#isCooperationData').combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#isCooperationData').combobox("setValue",'${customer.isCooperation}')
+            }
+        });*/
+
+        $("#isChineseLabelData").combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
+            }
+        });
+
+        $('#operateTypeData').combobox({
+            url:sy.bp()+'/commonController.do?getEntType',
+            valueField:'id',
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#operateTypeData').combobox("setValue",'${customer.operateType}')
+            }
+        })
+
+        enterpriseDatagrid = $("#dataGridDetail").datagrid({
+            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
+            method:'POST',
+            toolbar : '#detailToolbar',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                isUse : '1',
+                enterpriseType:'default'
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'enterpriseId',
+            columns : [[
+                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'shorthandName',		title: '简称',	width: '20%' },
+                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
+                {field: '_operate',		title: '操作',	width: '20%',
+                    formatter: formatOper
+                }
+            ]],
+            onDblClickCell: function(index,field,value){
+                choseSelect();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        })
+
+        dataGridDetail = $('#ezuiDialogDetail').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+        dialogEnterprise = $('#dialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            fit:true,
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+    })
 
 
 </script>

@@ -51,7 +51,7 @@ public class GspProductRegisterSpecsVO {
 	private java.lang.String isUse;
 	private java.lang.String isCertificate;
 	private java.lang.String isDoublec;
-	private java.lang.String attachedCardCategory;
+	private java.lang.String attacheCardCategory;
 
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
@@ -366,11 +366,12 @@ public class GspProductRegisterSpecsVO {
 		this.packingRequire = packingRequire;
 	}
 
-	public String getAttachedCardCategory() {
-		return attachedCardCategory;
+
+	public String getAttacheCardCategory() {
+		return attacheCardCategory;
 	}
 
-	public void setAttachedCardCategory(String attachedCardCategory) {
-		this.attachedCardCategory = attachedCardCategory;
+	public void setAttacheCardCategory(String attacheCardCategory) {
+		this.attacheCardCategory = attacheCardCategory;
 	}
 }

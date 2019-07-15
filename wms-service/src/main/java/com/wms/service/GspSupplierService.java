@@ -51,7 +51,7 @@ public class GspSupplierService extends BaseService {
 //		datagrid.setTotal(gspSupplierDao.countAll(query));
 //		datagrid.setRows(gspSupplierVOList);
 //		return datagrid;
-		System.out.println(query.getOperateType()+"========query.getOperateType()=======");
+		//System.out.println(query.getOperateType()+"========query.getOperateType()=======");
 		EasyuiDatagrid<GspSupplierVO> datagrid = new EasyuiDatagrid<GspSupplierVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -69,8 +69,12 @@ public class GspSupplierService extends BaseService {
 			if(gspSupplier.getEditDate()!=null){
 				gspSupplierVO.setEditDate(simpleDateFormat.format(gspSupplier.getEditDate()));
 			}
-
-
+			if(gspSupplier.getClientStartDate()!=null){
+				gspSupplierVO.setClientStartDate(simpleDateFormat.format(gspSupplier.getClientStartDate()));
+			}
+			if(gspSupplier.getClientEndDate()!=null){
+				gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
+			}
 			basGtnVOList.add(gspSupplierVO);
 		}
 

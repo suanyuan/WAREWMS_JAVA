@@ -80,7 +80,7 @@ public class GspProductRegisterSpecs implements Serializable {
   private String isDoublec;
 
 
-  private String attachedCardCategory;
+  private String attacheCardCategory;
 
 
 
@@ -414,11 +414,12 @@ public class GspProductRegisterSpecs implements Serializable {
         this.isDoublec = isDoublec;
     }
 
-  public String getAttachedCardCategory() {
-    return attachedCardCategory;
+
+  public String getAttacheCardCategory() {
+    return attacheCardCategory;
   }
 
-  public void setAttachedCardCategory(String attachedCardCategory) {
-    this.attachedCardCategory = attachedCardCategory;
+  public void setAttacheCardCategory(String attacheCardCategory) {
+    this.attacheCardCategory = attacheCardCategory;
   }
 }

@@ -25,7 +25,7 @@ $(function() {
 		url : '<c:url value="/basPackageController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,

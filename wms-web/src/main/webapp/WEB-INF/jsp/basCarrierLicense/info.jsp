@@ -73,7 +73,7 @@
 
         $('#licenseUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '200', //文本宽度
+            width: '345', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
@@ -86,7 +86,7 @@
 
             $('#roadNumberUrlFile').filebox({
                 prompt: '选择一个文件',//文本说明文件
-                width: '200', //文本宽度
+                width: '345', //文本宽度
                 buttonText: '上传',  //按钮说明文字
                 required: true,
                 onChange:function(data){

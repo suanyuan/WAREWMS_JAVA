@@ -28,7 +28,7 @@ $(function() {
 		url : '<c:url value="/basGtnController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [10, 50, 100],
 		fit: true,

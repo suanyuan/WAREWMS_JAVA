@@ -48,11 +48,11 @@ $(function() {
 			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
 
             {field: 'firstState',		title: '首营状态',	width: 88 ,formatter:firstStateFormatter
-
 				},
             {field: 'enterpriseNo',		title: '企业信息代码',	width: 88 },
             {field: 'shorthandName',		title: '简称',	width: 88 },
             {field: 'enterpriseName',		title: '企业名称',	width: 88 },
+            {field: 'clientTerm',		title: '委托期限',	width: 88 },
             {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
             {field: 'createDate',		title: '创建时间',	width: 88 },
