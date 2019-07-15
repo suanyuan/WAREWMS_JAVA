@@ -36,7 +36,7 @@
     <div title="备案凭证" data-options="href:'gspEnterpriseInfoController.do?toSecondRecord&id=${enterpriseId}'" style="display:none;overflow:auto;padding:5px;">
         tab3
     </div>
-    <div title="收货地址信息" data-options="href:'/gspReceivingAddressController.do?toReceivingAddress'"   style="display:none;">
+    <div title="收货地址信息" data-options="href:'/basCustomerController.do?toReceivingAddress&enterpriseId=${enterpriseId}'"   style="display:none;">
         tab4
     </div>
 </div>

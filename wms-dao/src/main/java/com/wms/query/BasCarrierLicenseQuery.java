@@ -3,6 +3,8 @@ package com.wms.query;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class BasCarrierLicenseQuery implements IQuery {
 
 	private String carrierLicenseId;
@@ -18,9 +20,95 @@ public class BasCarrierLicenseQuery implements IQuery {
 	private String carrierBusinessScope;
 	private String createId;
 	private String createDate;
+	private String createDateEnd;
+	private String createDateBegin;
 	private String editId;
 	private String editDate;
+	private String editDateEnd;
+	private String editDateBegin;
 	private String activeFlag;
+
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private Date clientStartDate;
+
+	private Date clientEndDate;
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getCreateDateBegin() {
+		return createDateBegin;
+	}
+
+	public void setCreateDateBegin(String createDateBegin) {
+		this.createDateBegin = createDateBegin;
+	}
+
+	public String getEditDateBegin() {
+		return editDateBegin;
+	}
+
+	public void setEditDateBegin(String editDateBegin) {
+		this.editDateBegin = editDateBegin;
+	}
+
+	public String getCreateDateEnd() {
+		return createDateEnd;
+	}
+
+	public void setCreateDateEnd(String createDateEnd) {
+		this.createDateEnd = createDateEnd;
+	}
+
+	public String getEditDateEnd() {
+		return editDateEnd;
+	}
+
+	public void setEditDateEnd(String editDateEnd) {
+		this.editDateEnd = editDateEnd;
+	}
 
 	public String getCarrierLicenseId() {
 		return carrierLicenseId;

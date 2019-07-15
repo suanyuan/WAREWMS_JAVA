@@ -160,6 +160,12 @@ where 1=1
 	select count(1) from gsp_receiving 
 	<include refid="Example_Where_Clause"/>
 </select>
+
+	<!-- 根据企业id查询收货单位-->
+<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_receiving where enterprise_id = #{enterpriseId}
+</select>
   	
  <!--查询收货地址列表-->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">

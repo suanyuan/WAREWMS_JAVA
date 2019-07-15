@@ -1,7 +1,7 @@
 package com.wms.mybatis.dao;
 
 
-
+import com.wms.entity.GspReceiving;
 
 /**
  * 
@@ -10,5 +10,5 @@ package com.wms.mybatis.dao;
  */
 public interface GspReceivingMybatisDao extends BaseDao {
 	
-	
+	public GspReceiving queryByEnterpriseId(String enterpriseId);
 }

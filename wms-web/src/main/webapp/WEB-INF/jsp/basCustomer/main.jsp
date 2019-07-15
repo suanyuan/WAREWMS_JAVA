@@ -155,7 +155,8 @@ var edit = function(){
             clientTerm:row.clientTerm,
             isChineseLabel:row.isChineseLabel,
 			activeFlag : row.activeFlag,
-			receivingAddressId: row.receivingAddressId
+			receivingAddressId: row.receivingAddressId,
+            enterpriseId: row.enterpriseId
 
 			/*address1 : row.address1,
 			contact1 : row.contact1,
@@ -163,7 +164,17 @@ var edit = function(){
 			overreceiving : row.overreceiving,
 			overrcvpercentage : row.overrcvpercentage*/
 		});
-		ezuiDialog.dialog('open');
+        $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+           /* href: '/basCustomerController.do?toDetail',*/
+            fit:true,
+            cache:false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('refresh','/basCustomerController.do?toDetail&enterpriseId='+row.enterpriseId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -568,10 +579,10 @@ var doSearch = function(){
 			</table>&ndash;%&gt;
 		</form>--%>
 	</div>
-	<div id='ezuiDialogBtn'>
+	<%--<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>
+	</div>--%>
 	<%--<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>

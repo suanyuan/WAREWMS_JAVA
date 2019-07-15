@@ -119,6 +119,28 @@
 <div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
     <div id='TB' class='datagrid-toolbar' style=''>
         <fieldset>
+            <legend>货主信息</legend>
+            <table>
+                <tr>
+                    <th>代码：</th><td><input type='text'  class='easyui-textbox' data-options=''/></td>
+                    <th>简称：</th><td><input type='text'  class='easyui-textbox' data-options=''/></td>
+                </tr>
+                <tr>
+                    <th>企业：</th>
+                    <td>
+                        <input type='text' style="width: 170px;"/>
+                        <input type="hidden" class="easyui-textvalue" name="enterpriseId">
+                        <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
+                    </td>
+                    <th>首营状态：</th><td><input type='text' class='easyui-textbox' data-options=''/></td>
+                    <td>
+                        <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+       <%-- <fieldset>
             <legend>供应商信息</legend>
             <table>
                 <tr>
@@ -132,7 +154,7 @@
                     </td>
                 </tr>
             </table>
-        </fieldset>
+        </fieldset>--%>
     </div>
     <table id="dataGridSupplierDetail">
 
@@ -266,7 +288,7 @@
             textField:'value'
         });
 
-        //订单明细列表（数据窗口）
+        //收货地址列表（数据窗口）
 
         ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
 
@@ -317,6 +339,12 @@
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:300});
+
+
+                if (processType == 'add') {
+                    $("isChec").combobox('setValue','1')
+
+                }
             }
         });
 
@@ -394,12 +422,12 @@
         }).dialog('close');
 
 
-
-        supplierDatagrid = $("#dataGridSupplierDetail").datagrid({
+//供应商初始化
+       /* supplierDatagrid = $("#dataGridSupplierDetail").datagrid({
             url : sy.bp()+'/gspSupplierController.do?showDatagrid',
             method:'POST',
             toolbar : '#TB',
-            title: '<spring:message code="common.dialog.title"/>',
+            title: '',
             pageSize : 50,
             pageList : [50, 100, 200],
             border: false,
@@ -452,8 +480,72 @@
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:540});
             }
-        });
+        }); */
+        supplierDatagrid = $("#dataGridSupplierDetail").datagrid({
+            url : sy.bp()+'/basCustomerController.do?showDatagrid',
+            method:'POST',
+            toolbar : '#TB',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                isUse : '1'
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'clientId',
+            columns : [[
+                {field: 'customerType',	title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                        if (rowData.customerType=='CO') {
+                            return rowData.customerType='收货单位';
+                        }else if (rowData.customerType=='VE'){
+                            return rowData.customerType='供应商';
+                        }else if (rowData.customerType=='CA'){
+                            return rowData.customerType='承运商';
+                        }else if (rowData.customerType=='OT'){
+                            return rowData.customerType='其他';
+                        }else if (rowData.customerType=='OW'){
+                            return rowData.customerType='货主';
+                        }else if (rowData.customerType=='PR'){
+                            return rowData.customerType='生产企业';
+                        }else if (rowData.customerType=='WH'){
+                            return rowData.customerType='主体';
+                        }
+                    } },
+                {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                        return rowData.activeFlag == '1' ? '是' : '否';
+                    }},
+                {field: 'customerid',		title: '客户代码',	width: 80 },
+                {field: 'descrC',		title: '客户名称',	width: 80 },
+                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
+                {field: 'shorthandName',		title: '简称 ',	width: 85 },
+                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
+                {field: 'contacts',		title: '联系人 ',	width: 85 },
+                {field: 'contactsPhone',		title: '联系人电话 ',	width: 80 },
+                {field: 'remark',		title: '备注 ',	width: 85 },
+            ]],
+            onDblClickCell: function(index,field,value){
+                choseSupplierSelect();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
 
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        });
+//供应商弹窗
         ezuiDialogSupplierDetail = $('#ezuiDialogSupplierDetail').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -461,7 +553,7 @@
             height:500,
             cache: false,
             onClose : function() {
-               // ezuiFormClear(ezuiForm);
+                ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 
@@ -469,14 +561,13 @@
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             fit:true,
-
             cache: false,
             onClose : function() {
-                //ezuiFormClear(ezuiForm);
+                ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
 
-
+//货主弹窗列表
         clientDatagrid = $("#dataGridClientDetail").datagrid({
             url : sy.bp()+'/basCustomerController.do?showDatagrid',
             method:'POST',
@@ -541,7 +632,7 @@
                 $(this).datagrid("resize",{height:540});
             }
         });
-
+//货主弹窗
         ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -745,17 +836,22 @@
 
 
     }
-
+//双击选中
     function choseSupplierSelect() {
         var row = supplierDatagrid.datagrid("getSelected");
         if(row){
-            $("#supplier").textbox("setValue",row.supplierId);
+            $("#supplier").textbox("setValue",row.descrC);
+
+           // ezuiDialogClientDetail.dialog('close');
+           // $("#supplier").textbox("setValue",row.supplierId);
             /* $("#operateType").textbox("setValue",row.operateType);
              $("#isUse").textbox("setValue",row.isUse);
              $("#isCheck").textbox("setValue",row.isCheck);*/
             ezuiDialogSupplierDetail.dialog('close');
         }
     }
+
+    //弹窗搜索功能
     function doSearchSupplier() {
         supplierDatagrid.datagrid('load', {
             supplierId : $('#supplierId').val(),
@@ -763,14 +859,14 @@
             isUse : '1'
         });
     }
-
+//搜索打开供应商弹窗
     function searchSupplier() {
         if(ezuiDialogSupplierDetail){
             ezuiDialogSupplierDetail.dialog('open');
         }
 
     }
-
+//增加地址
     var  AddAddress=function () {
         processType = 'add';
         dialogAddAddress = $('#dialogAddAddress').dialog({
@@ -786,6 +882,7 @@
         })
 
     };
+    //地址的删除
     var AddressDel = function(){
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         if(row){
@@ -819,7 +916,7 @@
             });
         }
     };
-
+//地址的编辑
     var AddressEdit = function(){
         processType = 'edit';
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
@@ -844,9 +941,8 @@
         }
     };
 
-
+//控制是否编辑逻辑功能
 function binaji() {
-
 
 
 

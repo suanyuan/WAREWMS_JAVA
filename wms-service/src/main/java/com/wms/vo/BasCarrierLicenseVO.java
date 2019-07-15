@@ -3,6 +3,8 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class BasCarrierLicenseVO {
 
 	private String carrierLicenseId;
@@ -20,12 +22,81 @@ public class BasCarrierLicenseVO {
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
 	private String createId;
+
+
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private Date clientStartDate;
+
+	private Date clientEndDate;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	private String createDate;
 	private String editId;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	private String editDate;
 	private String activeFlag;
+	private String enterpriseName;
+	private String roadNumberlicenseUrl;
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getRoadNumberlicenseUrl() {
+		return roadNumberlicenseUrl;
+	}
+
+	public void setRoadNumberlicenseUrl(String roadNumberlicenseUrl) {
+		this.roadNumberlicenseUrl = roadNumberlicenseUrl;
+	}
 
 	public String getEnterpriseId() {
 		return enterpriseId;

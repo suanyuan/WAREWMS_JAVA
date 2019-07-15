@@ -51,9 +51,9 @@ public class GspReceivingAddressController {
 
 	@Login
 	@RequestMapping(params = "toReceivingAddress")
-	public ModelAndView toReceivingAddress(String menuId) {
+	public ModelAndView toReceivingAddress(String enterpriseId) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
+		model.put("enterpriseId", enterpriseId);
 		return new ModelAndView("basCustomer/receivingAddress", model);
 	}
 
