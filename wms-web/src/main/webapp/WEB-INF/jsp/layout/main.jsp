@@ -305,7 +305,7 @@ var openForgetPwdDialog = function(){
 				<tr>
 					<th>密码</th>
 					<td>
-						<input type="password" value="123456" name="password" class="easyui-textbox" size='19' data-options="required:true"/>
+						<input type="password" value="" name="password" class="easyui-textbox" size='19' data-options="required:true"/>
 					</td>
 				</tr>
 				<tr>

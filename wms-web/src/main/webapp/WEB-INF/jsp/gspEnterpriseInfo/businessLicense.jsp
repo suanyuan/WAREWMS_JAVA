@@ -7,7 +7,7 @@
         text-align: right;
     }
 </style>
-<div id='detailBusinessToolbar' class='datagrid-toolbar' style='padding: 0px;'>
+<div id='detailBusinessToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
     <form id='ezuiFormBusiness' method='post' style="padding: 0px;">
         <input type='hidden' data="1" id='businessId' name='businessId' value="${gspBusinessLicense.businessId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.enterpriseId}"/>
@@ -23,27 +23,28 @@
                     <td><input type='text' data="1" value="${gspBusinessLicense.socialCreditCode}" id="socialCreditCode" name='socialCreditCode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>名称</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.licenseName}" id="licenseName" name='licenseName' class='easyui-textbox' data-options='required:true,width:200'/></td>
-                    <th>类型</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
-                    <th>住所</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <th>类型</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>法定代表人</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.juridicalPerson}" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>注册资本</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.registeredCapital}" id="registeredCapital" name='registeredCapital' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                </tr>
+                <tr>
+                    <th>住所</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <th>登记机关</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>成立日期</th>
                     <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.establishmentDate}"/>" id="establishmentDate" name='establishmentDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
                     <th>发证日期</th>
                     <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.issueDate}"/>" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
-                    <th>登记机关</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>营业期限时间</th>
                     <td colspan="3">
-
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessStartDate}"/>" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
                         &nbsp;&nbsp;至&nbsp;&nbsp;
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessEndDate}"/>" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
@@ -99,7 +100,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'${gspBusinessLicense.enterpriseId}'},
+            queryParams:{'enterpriseId':'','socialCreditCode':'${gspBusinessLicense.socialCreditCode}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,

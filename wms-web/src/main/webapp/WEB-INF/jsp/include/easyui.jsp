@@ -127,9 +127,9 @@
 
     var outTimeFormatter = function(value,row,index) {
         if(value == 0 || value<0){
-            return "已过期";
-        }else{
             return value+"天后过期";
+        }else{
+            return "已过期";
         }
     }
 
@@ -151,6 +151,19 @@
             case CHECKSTATE.CHECKSTATE_30 : return "负责人审核";
             case CHECKSTATE.CHECKSTATE_40 : return "已通过";
             case CHECKSTATE.CHECKSTATE_50 : return "未通过";
+        }
+    }
+
+    var applyTypeFormatter = function(value,row,index) {
+	    console.log(row);
+        if(row.reviewTypeId.indexOf("CUS")!=-1){
+            return "委托客户";
+		}else if(row.reviewTypeId.indexOf("SUP")!=-1){
+            return "供应商";
+		}else if(row.reviewTypeId.indexOf("PRO")!=-1){
+            return "产品";
+        }else if(row.reviewTypeId.indexOf("REC")!=-1){
+            return "收货单位";
         }
     }
 

@@ -33,7 +33,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'applyId',
 		columns : [[
-			{field: 'applyId',		title: '主键',	width: 100,hidden:true },
+			{field: 'applyId',		title: '申请单号',	width: 100},
             {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
 			{field: 'clientName',		title: '委托客户',	width: 100 },
 			{field: 'supplierName',		title: '供应客户',	width: 100 },
@@ -181,11 +181,44 @@ var doSearch = function(){
 
 var doConfirm = function () {
     var row = ezuiDatagrid.datagrid('getSelected');
-    if(row){
+    if(row && row.length>0){
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
             if(confirm){
                 $.ajax({
                     url : 'firstBusinessApplyController.do?confirmApply',
+                    data : {id : row.applyId},
+                    type : 'POST',
+                    dataType : 'JSON',
+                    success : function(result){
+                        var msg = '';
+                        try {
+                            msg = result.msg;
+                        } catch (e) {
+                            msg = '<spring:message code="common.message.data.delete.failed"/>';
+                        } finally {
+                            $.messager.show({
+                                msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                            });
+                            ezuiDatagrid.datagrid('reload');
+                        }
+                    }
+                });
+            }
+        });
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+}
+
+var reApply = function () {
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认重新审核吗', function(confirm) {
+            if(confirm){
+                $.ajax({
+                    url : 'firstBusinessApplyController.do?reApply',
                     data : {id : row.applyId},
                     type : 'POST',
                     dataType : 'JSON',
@@ -247,7 +280,8 @@ var doConfirm = function () {
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认审核</a>
+					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
+					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>

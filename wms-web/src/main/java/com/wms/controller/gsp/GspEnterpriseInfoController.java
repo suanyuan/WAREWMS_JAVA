@@ -105,9 +105,8 @@ public class GspEnterpriseInfoController {
 		Json json = gspEnterpriceService.addGspEnterprice(gspEnterpriceFrom);
 		if(json == null){
 			json = new Json();
-
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 
 	}
@@ -285,16 +284,12 @@ public class GspEnterpriseInfoController {
 		return gspEnterpriceService.getGspSecondRecord(enterpriseId);
 	}
 
-	/*@Login
-	@RequestMapping(params = "addBusinessLicense")
+	@Login
+	@RequestMapping(params = "showDatagridSearch")
 	@ResponseBody
-	public Object addBusinessLicense(@RequestParam(defaultValue = "")String enterpriseId,
-									 @RequestParam(defaultValue = "") String businessFormStr,
-									 @RequestParam(defaultValue = "") String operateDetailStr,
-									 @RequestParam(defaultValue = "") String gspBusinessLicenseId,
-									 @RequestParam(defaultValue = "") String opType){
-		return gspEnterpriceService.addGspBusinessLicense(enterpriseId,businessFormStr,operateDetailStr,gspBusinessLicenseId,opType);
-	}*/
+	public EasyuiDatagrid<GspEnterpriseInfoVO> showDatagridSearch(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
+		return gspEnterpriseInfoService.getPagedDatagridType(pager, query);
+	}
 
 	@Login
 	@RequestMapping(params = "businessHistoryDatagridList")

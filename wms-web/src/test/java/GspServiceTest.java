@@ -5,8 +5,10 @@ import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.service.CommonService;
 import com.wms.service.GspEnterpriseInfoService;
+import com.wms.service.GspOperateDetailService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
+import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.form.GspBusinessLicenseForm;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.junit.Test;
@@ -19,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.beans.PropertyDescriptor;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +50,8 @@ public class GspServiceTest {
     private CommonMybatisDao commonMybatisDao;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private GspOperateDetailService gspOperateDetailService;
 
     @Test
     public void test(){
@@ -85,7 +91,23 @@ public class GspServiceTest {
         //commonMybatisDao.getIdSequence(map);
        System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
 */
-
+        //String s = "edbf5a04a7a743f1bfcf51ec52c0ddfc";
+        List<String> arrlicense = new ArrayList<>();
+        List<String> arroperate = new ArrayList<>();
+        List<GspOperateDetailVO> licenseDetails = gspOperateDetailService.queryOperateDetailByLicense("edbf5a04a7a743f1bfcf51ec52c0ddfc");
+        List<GspOperateDetailVO> operateLicenseDetails = gspOperateDetailService.queryOperateDetailByLicense("73f9fb81c1514eb0961d80dd4c6b8564");
+        for(GspOperateDetailVO v : licenseDetails){
+            arrlicense.add(v.getOperateId());
+        }
+        for(GspOperateDetailVO v : operateLicenseDetails){
+            arroperate.add(v.getOperateId());
+        }
+        for(String s : arroperate){
+            if(!arrlicense.contains(s)){
+                System.out.println(true);
+            }
+        }
+        System.out.println(true);
 
     }
 

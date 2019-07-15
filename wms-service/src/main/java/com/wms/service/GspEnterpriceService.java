@@ -1,19 +1,21 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.dto.GspEnterpriseBusinessDTO;
-import com.wms.entity.GspBusinessLicense;
-import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.GspOperateLicense;
-import com.wms.entity.GspSecondRecord;
+import com.wms.dto.GspEnterpriseTypeDTO;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.GspOperateLicenseMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspBusinessLicenseQuery;
+import com.wms.query.GspEnterpriseInfoQuery;
 import com.wms.query.GspOperateLicenseQuery;
 import com.wms.query.GspSecondRecordQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.RandomUtil;
+import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.*;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +54,8 @@ public class GspEnterpriceService extends BaseService {
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
     private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+    @Autowired
+    private GspOperateDetailService gspOperateDetailService;
 
     /**
      * 新增企业信息
@@ -59,24 +64,62 @@ public class GspEnterpriceService extends BaseService {
      */
     public Json addGspEnterprice(GspEnterpriceFrom gspEnterpriceFrom){
         try{
+
             GspEnterpriseInfoForm gspEnterpriseInfoForm = gspEnterpriceFrom.getGspEnterpriseInfoForm();
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
             GspOperateLicenseForm gspOperateLicenseForm = gspEnterpriceFrom.getGspOperateLicenseForm();
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
 
+            boolean enterpriseIsNewVersion = false;
             if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
                 return Json.error("企业基础信息不能为空");
             }
             String enterpriseId = gspEnterpriceFrom.getGspEnterpriseInfoForm().getEnterpriseId();
             if(StringUtils.isEmpty(enterpriseId)) {
+                //新增判断企业编号是否重复
+                if(!checkGspEnterpriceByEnterpriseNo(gspEnterpriseInfoForm.getEnterpriseNo())){
+                    return Json.error("企业信息代码不能重复");
+                }
+
                 gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
                 enterpriseId = RandomUtil.getUUID();
                 gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
                 gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
             }else{
-                //TODO 更新首营失效
-                gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
-                gspEnterpriseInfoService.editGspEnterpriseInfo(gspEnterpriseInfoForm);
+                //判断首营状态
+                GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);
+                if(info == null){
+                    return Json.error("企业信息不存在");
+                }
+                boolean isCanEdit = true;
+                List<GspEnterpriseTypeDTO> enterpriseTypeDTOS = queryEnterpriseType(info.getEnterpriseId());
+                if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0){
+                    for(GspEnterpriseTypeDTO ent : enterpriseTypeDTOS){
+                        if(!ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_PASS)){//首营申请审核中的数据不能修改
+                            isCanEdit = false;
+                            break;
+                        }
+                    }
+                    if(!isCanEdit){
+                        return Json.error("已存在申请记录的企业信息不能修改");
+                    }
+                    enterpriseIsNewVersion = true;
+                    gspEnterpriseInfoService.updateGspEnterpriseInfoActiveTag(enterpriseId,Constant.IS_USE_NO);
+                    enterpriseId = RandomUtil.getUUID();
+                    gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+                    gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+                    gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
+
+                }else{
+                    //1.新建状态，更新原数据
+                    gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+                    gspEnterpriseInfoService.editGspEnterpriseInfo(gspEnterpriseInfoForm);
+                }
+            }
+
+            //判断经营范围
+            if(operateDetailIsRight(initScope(gspBusinessLicenseForm.getScopArr()),initScope(gspOperateLicenseForm.getScopArr())) == false){
+                return Json.error("经营/生产许可证中经营范围与营业执照中经营范围不相等");
             }
 
             //组装经营范围
@@ -92,13 +135,22 @@ public class GspEnterpriceService extends BaseService {
 
             if(gspBusinessLicenseForm != null){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
+                if(enterpriseIsNewVersion == true){
+                    gspBusinessLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                }
                 gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
             if(gspOperateLicenseForm != null){
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
+                if(enterpriseIsNewVersion == true){
+                    gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                }
                 gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
             }
             if(gspSecondRecordForm != null){
+                if(enterpriseIsNewVersion == true){
+                    gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                }
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
                 gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
@@ -279,6 +331,11 @@ public class GspEnterpriceService extends BaseService {
         return Json.error("");
     }
 
+    /**
+     * 初始化经营范围
+     * @param scope
+     * @return
+     */
     private String initScope(String scope){
         String[] scopeArr = scope.split(",");
         StringBuffer resultArr = new StringBuffer();
@@ -290,6 +347,66 @@ public class GspEnterpriceService extends BaseService {
 
         }
         return "["+resultArr.substring(0,resultArr.length()-1)+"]";
+    }
+
+    /**
+     * 根据企业信息代码查询是否重复
+     * @param enterpriseNo
+     * @return
+     */
+    private boolean checkGspEnterpriceByEnterpriseNo(String enterpriseNo){
+        GspEnterpriseInfoQuery query = new GspEnterpriseInfoQuery();
+        query.setEnterpriseNo(enterpriseNo);
+        query.setIsUse(Constant.IS_USE_YES);
+        MybatisCriteria criteria = new MybatisCriteria();
+        criteria.setCondition(query);
+        List<GspEnterpriseInfo> enterpriseInfos = gspBusinessLicenseMybatisDao.queryByList(criteria);
+        if(enterpriseInfos!=null && enterpriseInfos.size()>0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * 查询企业身份信息
+     * @param enterpriseId
+     * @return
+     */
+    private List<GspEnterpriseTypeDTO> queryEnterpriseType(String enterpriseId){
+        List<GspEnterpriseTypeDTO> list = gspEnterpriseInfoMybatisDao.queryEnterpriseApplyListById(enterpriseId);
+        return list;
+    }
+
+    /**
+     *
+     * @param license,operateLicense
+     * @return
+     */
+    private boolean operateDetailIsRight(String license,String operateLicense){
+        if(operateLicense == null || operateLicense.equals("")){
+            return true;
+        }
+
+        List<GspOperateDetailForm> licenseDetail = JSON.parseArray(license,GspOperateDetailForm.class);
+        List<GspOperateDetailForm> operateDetail = JSON.parseArray(operateLicense,GspOperateDetailForm.class);
+        List<String> arrlicense = new ArrayList<>();
+        List<String> arroperate = new ArrayList<>();
+
+        for(GspOperateDetailForm v : licenseDetail){
+            arrlicense.add(v.getOperateId());
+        }
+        for(GspOperateDetailForm v : operateDetail){
+            arroperate.add(v.getOperateId());
+        }
+        for(String s : arroperate){
+            if(arrlicense.toString().indexOf(s)==-1){
+                return false;
+            }
+        }
+        return true;
+
+
     }
 
 }

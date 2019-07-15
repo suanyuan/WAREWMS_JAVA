@@ -37,18 +37,6 @@ public class GspEnterpriseInfoService extends BaseService {
 
 
 	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
-		/*EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
-		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoDao.getPagedDatagrid(pager, query);
-		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
-		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
-		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
-			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
-			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInf oVO);
-			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
-		}
-		datagrid.setTotal(gspEnterpriseInfoDao.countAll(query));
-		datagrid.setRows(gspEnterpriseInfoVOList);
-		return datagrid;*/
 		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -66,12 +54,6 @@ public class GspEnterpriseInfoService extends BaseService {
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			/*if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
-				gspEnterpriseInfoVO.setIsUse("有效");
-			}else {
-				gspEnterpriseInfoVO.setIsUse("失效");
-			}*/
-
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
 		Long total = 0L;
@@ -91,6 +73,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setOrderByClause("create_date desc");
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();

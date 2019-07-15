@@ -95,7 +95,7 @@ var edit = function(){
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	alert(row.packid)
+	//alert(row.packid)
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){

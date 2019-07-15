@@ -102,4 +102,11 @@ public class FirstReviewLogController {
 	public Json check(String id,String remark) {
 		return firstReviewLogService.checkFirstReview(id,remark);
 	}
+
+	@Login
+	@RequestMapping(params = "returnCheck")
+	@ResponseBody
+	public Json returnCheck(String id,String remark) {
+		return firstReviewLogService.returnCheck(id,remark);
+	}
 }

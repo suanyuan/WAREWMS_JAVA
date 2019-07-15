@@ -43,15 +43,15 @@ $(function() {
 		singleSelect:true,
 		idField : 'clientId',
 		columns : [[
-			{field: 'clientId',		title: '主键',	width: 38 ,hidden:true},
+			{field: 'clientId',		title: '申请单号',	width: 50 },
+            {field: 'firstState',		title: '首营状态',	width: 38 ,formatter:firstStateTypeFormatter},
 			{field: 'clientNo',		title: '代码',	width: 38 },
 			{field: 'clientName',		title: '简称',	width: 38 },
 			{field: 'enterpriseId',		title: '企业id',	width: 38 ,hidden:true},
 			{field: 'remark',		title: '备注',	width: 38 ,hidden:true},
-			{field: 'firstState',		title: '首营状态',	width: 38 ,formatter:firstStateTypeFormatter},
 			{field: 'isCheck',		title: '是否审查',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'isCooperation',		title: '是否合作',	width: 38 ,formatter: yesOrNoFormatter},
-			{field: 'operateType',		title: '类型',	width: 38 ,formatter: entTypeFormatter},
+			{field: 'operateType',		title: '类型',	width: 38 ,formatter: entTypeFormatter,hidden:true},
 			{field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
 			{field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
 			{field: 'clientContent',		title: '委托内容',	width: 38 ,hidden:true},
@@ -61,8 +61,6 @@ $(function() {
 			{field: 'isChineseLabel',		title: '是否长期',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 38 },
 			{field: 'createDate',		title: '创建时间',	width: 38 ,formatter:dateFormat2},
-			{field: 'editId',		title: '修改人',	width: 38 },
-			{field: 'editDate',		title: '修改时间',	width: 38  ,formatter:dateFormat2},
 			{field: 'isUse',		title: '是否有效',	width: 38 ,formatter: yesOrNoFormatter}
 		]],
 		onDblClickRow: function(index,row){
@@ -200,14 +198,14 @@ var doSearch = function(){
 								<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                             </td>
 							<th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>
-							<th>是否审查：</th><td><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
+							<th style="display: none;">是否审查：</th><td style="display: none;"><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>是否合作：</th><td><input type='text' id='isCooperation' class='easyui-textbox' data-options=''/></td>
 							<th>类型：</th><td><input type='text' id='operateType' class='easyui-textbox' data-options=''/></td>
 							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' data-options=''/></td>
 							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' data-options=''/></td>
+							<th style="display: none;">是否有效：</th><td style="display: none;"><input type='text' id='isUse' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>是否贴中文标签：</th><td><input type='text' id='isChineseLabel' class='easyui-textbox' data-options=''/></td>
@@ -224,7 +222,8 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认审核</a>
+					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
+					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -321,7 +320,7 @@ var doSearch = function(){
 
     function doConfirm(){
         var rows = ezuiDatagrid.datagrid("getSelections");
-        if(rows){
+        if(rows && rows.length>0){
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
                 if (confirm) {
                     var arr = new Array();
@@ -342,6 +341,30 @@ var doSearch = function(){
             })
         }
 	}
+
+    function reApply(){
+        var rows = ezuiDatagrid.datagrid("getSelections");
+        if(rows && rows.length>0){
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要重新下发吗', function(confirm) {
+                if (confirm) {
+                    var arr = new Array();
+                    for(var i=0;i<rows.length;i++){
+                        arr.push(rows[i].clientId);
+                    }
+                    $.ajax({
+                        url : sy.bp()+"/gspCustomerController.do?reApply",
+                        data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
+                        success : function(result){
+                            var msg = result.msg;
+                            showMsg(msg);
+                            ezuiDatagrid.datagrid("reload");
+                        }
+                    });
+
+                }
+            })
+        }
+    }
 
 	$(function () {
 		$("#enterpriseIdQuery").textbox({

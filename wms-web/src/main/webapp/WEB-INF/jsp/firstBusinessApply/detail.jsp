@@ -7,37 +7,44 @@
 <body>
 
 <form id='ezuiFormDetail' method='post'>
-    <input type='hidden' id='applyId' name='applyId' value="${firstBusinessApply.applyId}"/>
-    <table>
-        <tr>
-            <th>委托客户</th>
-            <td>
-                <input type='text' value="${firstBusinessApply.clientName}" id='clientName' class='easyui-textbox' data-options='required:true,width:200'/>
-                <input type="hidden" name="clientId" id="clientId" value="${firstBusinessApply.clientId}"/>
-            </td>
-            <th>产品线</th>
-            <td>
-                <input id="productLine" name="productLine" type="text"/>
-            </td>
-            <th>供应客户</th>
-            <td>
-                <input type='text' value="${firstBusinessApply.supplierName}" id='supplierName' class='easyui-textbox' data-options='required:true,width:200'/>
-                <input type="hidden" name="supplierId" id="supplierId" value="${firstBusinessApply.supplierId}"/>
-            </td>
-            <td>
-                <a onclick='choseProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>选择产品</a>
-                <a onclick='submitApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交申请</a>
-                <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>清空选择</a>
-            </td>
-            <!--<th>创建人</th>
-            <td><input type='text' name='createId' class='easyui-textbox' data-options='required:true,width:200'/></td>
-            <th>创建时间</th>
-            <td><input type='text' name='createDate' class='easyui-textbox' data-options='required:true,width:200'/></td>-->
+    <fieldset>
+        <legend>产品首营信息</legend>
+            <input type='hidden' id='applyId' name='applyId' value="${firstBusinessApply.applyId}"/>
+            <table>
+                <tr>
+                    <th>委托客户</th>
+                    <td>
+                        <input type='text' value="${firstBusinessApply.clientName}" id='clientName' class='easyui-textbox' data-options='required:true,width:200'/>
+                        <input type="hidden" name="clientId" id="clientId" value="${firstBusinessApply.clientId}"/>
+                    </td>
+                    <th>产品线</th>
+                    <td>
+                        <input id="productLine" name="productLine" type="text"/>
+                    </td>
+                    <th>供应客户</th>
+                    <td>
+                        <input type='text' value="${firstBusinessApply.supplierName}" id='supplierName' class='easyui-textbox' data-options='required:true,width:200'/>
+                        <input type="hidden" name="supplierId" id="supplierId" value="${firstBusinessApply.supplierId}"/>
+                    </td>
+                    <td>
 
-        </tr>
-    </table>
+                    </td>
+                    <!--<th>创建人</th>
+                    <td><input type='text' name='createId' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <th>创建时间</th>
+                    <td><input type='text' name='createDate' class='easyui-textbox' data-options='required:true,width:200'/></td>-->
+
+                </tr>
+            </table>
+    </fieldset>
 </form>
-
+<div>
+    <a onclick='choseProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>选择产品</a>
+    <a onclick='submitApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交申请</a>
+    <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
+    <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
+    <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>清空选择</a>
+</div>
 <table id='ezuiDatagridDetail' ></table>
 
 <div id='enterpriseCustomerDialog' style='padding: 10px;'>

@@ -135,6 +135,16 @@ public class FirstBusinessApplyController {
 	}
 
 	@Login
+	@RequestMapping(params = "reApply")
+	@ResponseBody
+	public Json reApply(String id) throws Exception {
+		if(StringUtils.isEmpty(id)){
+			return Json.error("请选择需要确认的申请");
+		}
+		return firstBusinessApplyService.reApply(id);
+	}
+
+	@Login
 	@RequestMapping(params = "getProductLineByEnterpriseId")
 	@ResponseBody
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){

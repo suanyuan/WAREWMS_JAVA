@@ -46,13 +46,13 @@ where 1=1
 	    and enterprise_id =  #{condition.enterpriseId}
 	</if>
 	<if test="condition.licenseNumber != null and condition.licenseNumber != ''" >
-	    and license_number =  #{condition.licenseNumber}
+	    and license_number like CONCAT('%',#{condition.licenseNumber},'%')
 	</if>
 	<if test="condition.socialCreditCode != null and condition.socialCreditCode != ''" >
-	    and social_credit_code =  #{condition.socialCreditCode}
+	    and social_credit_code like CONCAT('%',#{condition.socialCreditCode},'%')
 	</if>
 	<if test="condition.licenseName != null and condition.licenseName != ''" >
-	    and license_name =  #{condition.licenseName}
+	    and license_name like CONCAT('%',#{condition.licenseName},'%')
 	</if>
 	<if test="condition.licenseType != null and condition.licenseType != ''" >
 	    and license_type =  #{condition.licenseType}

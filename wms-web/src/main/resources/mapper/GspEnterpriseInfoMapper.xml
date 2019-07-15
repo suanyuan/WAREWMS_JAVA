@@ -35,6 +35,12 @@
 	<result column="business_end_date" property="businessEndDate"/>
 	<result column="outTime" property="outTime"/>
 </resultMap>
+
+<resultMap id="GspEnterpriseTypeResultMap" type="com.wms.dto.GspEnterpriseTypeDTO" >
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="enterprise_type" property="enterPriseType"/>
+	<result column="first_State" property="firstState"/>
+</resultMap>
        
 <!-- gsp_enterprise_info table all fields -->
 <sql id="Base_Column_List" >
@@ -212,6 +218,9 @@ where 1=1
 				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
 					and (g.enterprise_type = 'JY' or g.enterprise_type = 'SC')
 				</when>
+				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
+					and (g.enterprise_type != 'ZT')
+				</when>
 				<otherwise>
 					and g.enterprise_type = #{condition.enterpriseType}
 				</otherwise>
@@ -241,11 +250,11 @@ where 1=1
 		<if test="condition.type != null and condition.type != ''" >
 			<choose>
 				<when test="condition.type == 'customer'">
-					and cus.enterprise_id !=''
+					and cus.enterprise_id is not null
 					and cus.first_state = '40'
 				</when>
 				<when test="condition.type == 'supplier'">
-					and gs.enterprise_id !=''
+					and gs.enterprise_id is not null
 					and gs.first_state = '40'
 				</when>
 			</choose>
@@ -290,8 +299,8 @@ where 1=1
 <!-- 查询营业执照已过期或将要过期的企业-->
 <select id="queryBusinessLicenseOutTime" resultMap="GspEnterpriseBusinessResultMap"  parameterType="Object">
 	select b.business_start_date,g.enterprise_id,g.enterprise_name,g.enterprise_no,g.shorthand_name,IFNULL(DATEDIFF(now(),b.business_end_date),0) outTime
-	from gsp_enterprise_info g left join gsp_business_license b on g.enterprise_id = b.enterprise_id and b.is_use = '1'
-	where 1=1
+	from gsp_enterprise_info g left join gsp_business_license b on g.enterprise_id = b.enterprise_id
+	where 1=1 and b.is_use = '1'
 	<trim  suffixOverrides="," >
 		<if test="enterpriseId != null and enterpriseId != ''" >
 			and g.enterprise_id =  #{enterpriseId}
@@ -299,8 +308,27 @@ where 1=1
 		<if test="type != null and type != ''" >
 			and g.enterprise_type =  #{type}
 		</if>
-		and IFNULL(DATEDIFF(now(),b.business_end_date),0) &lt;= #{diffCount}
+		and IFNULL(DATEDIFF(b.business_end_date,now()),0) &lt;= #{diffCount}
 	</trim>
+</select>
+
+<!-- 查询企业身份信息-->
+<select id="queryEnterpriseApplyListById" resultMap="GspEnterpriseTypeResultMap"  parameterType="Object">
+
+	select * from (
+	select g.enterprise_id,enterprise_type,c.first_state from gsp_enterprise_info g
+	left join gsp_customer c on g.enterprise_id = c.enterprise_id
+	where g.is_use = '1' and c.is_use='1'
+	union
+	select g.enterprise_id,enterprise_type,s.first_state from gsp_enterprise_info g
+	left join gsp_supplier s on g.enterprise_id = s.enterprise_id
+	where g.is_use = '1' and s.is_use='1'
+	union
+	select g.enterprise_id,enterprise_type,s.first_state from gsp_enterprise_info g
+	left join gsp_receiving s on g.enterprise_id = s.enterprise_id
+	where g.is_use = '1' and s.is_use='1'
+	) t where enterprise_id = #{enterpriseId}
+
 </select>
 
 </mapper>   

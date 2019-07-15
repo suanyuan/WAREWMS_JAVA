@@ -7,7 +7,7 @@
         text-align: right;
     }
 </style>
-<div id='detailRecordToolbar' class='datagrid-toolbar' style='padding: 0px;'>
+<div id='detailRecordToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
     <form id='ezuiFormRecord' method='post' style="padding: 0px;">
         <input type='hidden' data="1" id='recordId' name='recordId' value="${gspSecondRecord.recordId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
@@ -23,26 +23,28 @@
                     <td><input type='text' value="" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:200'/></td>
                     <th>企业负责人</th>
                     <td><input type='text' value="${gspSecondRecord.headName}" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:200'/></td>
-                    <th>经营方式</th>
-                    <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
-                    <th>经营场所</th>
-                    <td><input type='text' value="${gspSecondRecord.operatePlace}" id="operatePlace" name='operatePlace' class='easyui-textbox' data-options='required:true,width:200'/></td>
-                    <th>住所</th>
-                    <td><input type='text' value="${gspSecondRecord.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <th>经营方式</th>
+                    <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>备案批准日期</th>
                     <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200,editable:false'/></td>
                     <th>备案发证机关</th>
                     <td><input type='text' value="${gspSecondRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
                 <tr>
+                    <th>经营场所</th>
+                    <td><input type='text' value="${gspSecondRecord.operatePlace}" id="operatePlace" name='operatePlace' class='easyui-textbox' data-options='required:true,width:200'/></td>
+                    <th>住所</th>
+                    <td><input type='text' value="${gspSecondRecord.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>备案照片</th>
                     <td>
                         <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
                         <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                     </td>
+                </tr>
+                <tr>
                     <th>经营范围</th>
                     <td colspan="3">
                         <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 40px;" data-options='required:true,multiline:true,width:480'/>

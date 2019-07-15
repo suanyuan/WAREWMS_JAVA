@@ -37,7 +37,7 @@
 		<property name="jdbcUrl" value="${url}"/>
 		<property name="user" value="${username}"/>
 		<property name="password" value="${password}"/>
-		<property name="minPoolSize" value="5"/>
+		<property name="minPoolSize" value="1"/>
 		<property name="maxPoolSize" value="15"/>
 		<property name="initialPoolSize" value="10"/>
 		<property name="idleConnectionTestPeriod" value="18000"/>

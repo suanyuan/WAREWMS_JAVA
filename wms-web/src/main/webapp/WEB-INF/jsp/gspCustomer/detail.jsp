@@ -9,7 +9,7 @@
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <body>
 <form id='ezuiForm' method='post'>
-    <input type='hidden' id='clientId' name='clientId' value="${clientId}" class="textbox-value"/>
+    <input type='hidden' id='clientId' name='clientId' value="${customer.clientId}" class="textbox-value"/>
     <input type="hidden" id="enterpriseId" name='enterpriseId' class="textbox-value"/>
     <table>
         <tr>
@@ -212,7 +212,7 @@
         })
 
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
             toolbar : '#detailToolbar',
             title: '',
@@ -223,7 +223,8 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1'
+                isUse : '1',
+                enterpriseType:'default'
             },
             fit:true,
             collapsible:false,

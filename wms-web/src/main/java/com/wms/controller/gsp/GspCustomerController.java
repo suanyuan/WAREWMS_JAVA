@@ -123,4 +123,11 @@ public class GspCustomerController {
 	public Json confirmSubmit(String id){
 		return gspCustomerService.confirmSubmit(id);
 	}
+
+	@Login
+	@RequestMapping(params = "reApply")
+	@ResponseBody
+	public Json reApply(String id){
+		return gspCustomerService.reApply(id);
+	}
 }

@@ -73,7 +73,8 @@ $(function() {
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
 		href:dialogUrl,
-		fit:true,
+		width:1200,
+		height:530,
         cache: false,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
@@ -284,6 +285,15 @@ var checkFormData = function (formId,obj) {
             }
         }
 
+        //主键
+        $("#"+formId+" input[type=hidden][data=1]").each(function () {
+            if($(this).val() == ""){
+                checkResult = false;
+                return;
+            }
+            obj[""+$(this).attr("id")+""] = $(this).val();
+        })
+
         //上传附件
         $("#"+formId+" input[type=hidden][data=2]").each(function () {
             if($(this).val() == ""){
@@ -342,10 +352,6 @@ var doSearch = function(){
 							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业类型</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' size='16' data-options=''/></td>
-							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-							</td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
@@ -354,6 +360,10 @@ var doSearch = function(){
 							<td>
 								<select id="isUse" style="width:100px;">
 								</select>
+							</td>
+							<td colspan="2">
+								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 					</table>

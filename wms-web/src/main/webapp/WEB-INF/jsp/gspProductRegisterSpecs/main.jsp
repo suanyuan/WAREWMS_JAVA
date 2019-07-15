@@ -269,7 +269,7 @@ var commit = function(){
 			dataType : 'JSON',
 			async  :true,
             success : function(result){
-                alert(result+"====="+result.obj.isUse);
+                //alert(result+"====="+result.obj.isUse);
                     //alert(111111);
 					$.messager.show({
 						msg : '已有该产品信息并且有效 无法重复添加', title : '提示'

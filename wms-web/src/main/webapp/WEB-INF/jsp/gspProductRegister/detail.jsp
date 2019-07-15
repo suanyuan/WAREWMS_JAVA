@@ -11,8 +11,10 @@
 </style>
 <div class='easyui-layout' data-options='fit:true,border:false'>
     <div data-options='region:"center",border:false' style='overflow: hidden;'>
-            <div id='detailToolbar' class='datagrid-toolbar' style=''>
+            <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff;'>
                 <form id='ezuiFormDetail' method='post'>
+                    <input type="hidden" id="operateDetail" name="operateDetail" value="${operateDetail}"/>
+                    <input type='hidden' id='choseScope' value="${choseScope}"/>
                 <fieldset>
                     <legend>产品注册证信息</legend>
                         <input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId' value="${gspProductRegister.productRegisterId}"/>
@@ -27,8 +29,8 @@
                                 </td>
                                 <th>管理分类</th>
                                 <td><input type='text' id="classifyId" name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
-                                <th>分类目录</th>
-                                <td><input type='text' id="classifyCatalog" name='classifyCatalog' value="${gspProductRegister.classifyCatalog}" data-options='required:true'/></td>
+                                <th>注册证版本</th>
+                                <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
                             </tr>
                             <tr>
                                 <th>产品名称</th>
@@ -84,10 +86,13 @@
                                 <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" style="width: 100%;height: 50px;" data-options='required:true,multiline:true'/></td>
                             </tr>
                             <tr>
-                                <th>注册证版本</th>
-                                <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="${gspProductRegister.productRegisterVersion}" data-options='required:true'/></td>
+                                <th>分类目录</th>
+                                <td colspan="3">
+                                    <input type='text' id="classifyCatalog" name='classifyCatalog' value="${gspProductRegister.classifyCatalog}"/>
+                                    <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                                </td>
                                 <th>注册证附件</th>
-                                <td style="text-align: left;" colspan="5">
+                                <td style="text-align: left;" colspan="3">
                                     <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='required:true'/>
                                     <a id="btn" href="javascript:void(0)" onclick="viewUrl()" class="easyui-linkbutton" data-options="">查看</a>
                                     <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspProductRegister.attachmentUrl}"/>
@@ -99,7 +104,7 @@
                 </fieldset>
                 </form>
             </div>
-            <table id='ezuiDatagridDetail' ></table>
+            <table id='' ></table>
             <form>
                 <div>
                     <a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>
@@ -153,10 +158,7 @@
 
         </table>
     </div>
-    <!--企业信息详情dialog
-    <div id="dialogEnterprise">
-
-    </div>-->
+    <div id="dialogChoseScope" style='padding: 10px;'></div>
 </div>
 <script charset="UTF-8" type="text/javascript" src="/js/jquery/ajaxfileupload.js"></script>
 <script>
@@ -167,6 +169,8 @@
     var enterpriseDatagrid;
     var dialogEnterprise; //TODO 替换成企业信息查询通用
     var ezuiDatagridDetail;
+    var ezuidialogChoseScope;
+    var choseRowArr = new Array();
 
     $(function () {
         $('#attachmentUrlFile').filebox({
@@ -303,13 +307,56 @@
             width:185
         })
 
-        $("#ezuiFormDetail input[name='classifyCatalog']").combobox({
-            url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox',
+        $("#ezuiFormDetail input[name='classifyCatalog']").textbox({
+            width:450,
+            multiline:true,
+            height:40
+        });
+
+        $('#ezuiFormDetail input[name="productRegisterVersion"]').combobox({
+            url:sy.bp()+'/commonController.do?getCatalogVersion',
             valueField:'id',
             textField:'value',
-            width:185
+            onLoadSuccess:function () {
+                $(this).combobox("setValue",'${gspProductRegister.productRegisterVersion}');
+            }
         });
+
+
     })
+
+    /**
+     * 经营范围选择
+     */
+    function selectProductRegisterScope() {
+        ezuidialogChoseScope = $('#dialogChoseScope').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:800,
+            height:500,
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=productRegister&id=${gspProductRegister.productRegisterId}',
+            onClose : function() {
+
+            }
+        });
+    }
+    
+    function choseSelect_Catalog_productRegister(row) {
+        var choseRowNameArr = new Array();
+        var oldValue = $("#classifyCatalog").textbox("getValue");
+        if(row instanceof Array){
+            for(var i=0;i<row.length;i++){
+                choseRowArr.push(row[i].instrumentCatalogId);
+                choseRowNameArr.push(row[i].instrumentCatalogName);
+            }
+            $("#classifyCatalog").textbox("setValue",oldValue+choseRowNameArr.join(","))
+        }else{
+            choseRowArr.push(row.instrumentCatalogId);
+            $("#classifyCatalog").textbox("setValue",oldValue+row.instrumentCatalogName);
+        }
+        $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
+        ezuidialogChoseScope.dialog("close");
+    }
 
     function doUpload(data) {
         var ajaxFile = new uploadFile({

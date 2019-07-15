@@ -135,7 +135,7 @@ var check = function () {
     infoObj["supplierId"] = row.supplierId;
     infoObj["firstState"] = "10";
 
-    alert(row.supplierId+"================="+row.firstState);
+    //alert(row.supplierId+"================="+row.firstState);
     if(row.firstState!="00"){
         $.messager.show({
             msg : '只有新建的可以开始审核', title : '提示'
@@ -265,8 +265,8 @@ var commit = function(){
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
     infoObj["enterpriseId"] = $("#ezuiFormInfo input[id='enterpriseId'][data='1']").val();
-	alert(infoObj["enterpriseId"]);
-    alert(infoObj["enterpriseName"]);
+	//alert(infoObj["enterpriseId"]);
+    //alert(infoObj["enterpriseName"]);
 	//console.log(infoObj+"infoObj====="+infoObj.isCheck);
 	var url = '';
 	if (processType == 'edit') {
@@ -467,7 +467,7 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-                    <a onclick='check();' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>开始审核</a>
+                    <a onclick='check();' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交审核</a>
                     <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>

@@ -172,7 +172,7 @@ public class GspBusinessLicenseService extends BaseService {
 	public EasyuiDatagrid<GspBusinessLicenseVO> getGspBusinessLicenseHistory(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
 		EasyuiDatagrid<GspBusinessLicenseVO> datagrid = new EasyuiDatagrid<>();
 		List<GspBusinessLicenseVO> gspBusinessLicenseVOList = new ArrayList<>();
-		if(!query.getEnterpriseId().equals("")){
+		if(!query.getSocialCreditCode().equals("")){
 			MybatisCriteria criteria = new MybatisCriteria();
 			criteria.setCondition(query);
 			criteria.setCurrentPage(pager.getPage());

@@ -220,7 +220,8 @@ $(function() {
 		if ($("#ezuiDetailsForm #expectedqty").val() != '') {
 			if ($("#ezuiDetailsForm #sku").val() == '') {
 				$("#ezuiDetailsForm #expectedqty").numberbox('clear');
-				alert("没有输入产品");
+				//alert("没有输入产品");
+				showMsg("没有输入产品")
 			} else {
 				$.ajax({
 					url : 'basSkuController.do?getSkuInfo',
@@ -948,7 +949,7 @@ var detailsReceive = function(){
 	if(rowcount > 0) {  
 		$.each(checkedItems ,function(index, item){
 			if (item.linestatus != '00') {
-				alert("非创建状态不能确认收货！");
+				showMsg("非创建状态不能确认收货！")
 			} else {
 				$.ajax({
 					async: false,//异步执行，保证每一条记录异步执行。

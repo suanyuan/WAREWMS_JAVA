@@ -13,6 +13,7 @@ public class FirstBusinessApplyForm {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String firstState;
 
 	public String getApplyId() {
 		return applyId;
@@ -76,5 +77,13 @@ public class FirstBusinessApplyForm {
 
 	public void setEditDate(String editDate) {
 		this.editDate = editDate;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
 	}
 }

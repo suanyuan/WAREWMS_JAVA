@@ -47,6 +47,8 @@ public class FirstBusinessApplyService extends BaseService {
 	private CommonService commonService;
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
+	@Autowired
+	private FirstBusinessProductApplyService firstBusinessProductApplyService;
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
@@ -235,6 +237,45 @@ public class FirstBusinessApplyService extends BaseService {
 
 			//更新申请记录
 			firstReviewLogService.updateFirstReviewByNo(id,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+
+			return Json.error("操作成功");
+
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		return Json.error("操作失败");
+	}
+
+	public Json reApply(String id){
+		try{
+			//重新申请
+			Json json = queryFirstBusinessApply(id);
+			if(!json.isSuccess() || json.getObj() == null){
+				return Json.error("没有查询到对应的申请单号");
+			}
+
+			//修改原数据为失效
+			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+			firstBusinessApply.setApplyId(id);
+			firstBusinessApply.setIsUse(Constant.IS_USE_NO);
+			firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
+			//更新申请记录
+			firstReviewLogService.updateFirstReviewByNo(id,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+
+			//重新插入单据
+			FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(id);
+			Json result = firstBusinessProductApplyService.getListByApplyId(id);
+			if(!result.isSuccess()){
+				List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
+				if(list!=null && list.size()>0){
+					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString());
+				}
+			}
+
+			//TODO 失效已下发的数据
+			firstReviewLogService.cancelData(id);
 
 			return Json.error("操作成功");
 

@@ -32,9 +32,15 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
+        rowStyler:function(index,row){
+		    if(row.applyState == CHECKSTATE.CHECKSTATE_50){
+                return 'color:red;';
+			}
+		},
 		idField : 'id',
 		columns : [[
 			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
+            {field: '申请类型',		title: '申请类型',	width: 57,formatter:applyTypeFormatter },
 			{field: 'reviewTypeId',		title: '申请单编号',	width: 57 },
 			{field: 'applyContent',		title: '内容',	width: 57 },
 			{field: 'applyState',		title: '状态',	width: 57 ,
@@ -45,7 +51,6 @@ $(function() {
 			{field: 'checkRemarkQc',		title: '备注',	width: 57 },
 			{field: 'checkIdHead',		title: '负责人审核',	width: 57 },
 			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 },
-			{field: 'checkRemarkHead',		title: '负责人审核说明',	width: 57 },
 			{field: 'createDate',		title: '创建时间',	width: 57 ,formatter:dateFormat2}
 		]],
         onDblClickRow: function(index,row){
@@ -110,7 +115,7 @@ function showCheck() {
 
 //审核
 function doCheck() {
-    $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核吗', function(confirm) {
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核操作吗', function(confirm) {
         if (confirm) {
             var row = ezuiDatagrid.datagrid("getSelections");
             var arr = new Array();
@@ -146,11 +151,44 @@ function doCheck() {
 
         }
     })
-
 }
 
 function returnCheck() {
-	
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行驳回操作吗', function(confirm) {
+        if (confirm) {
+            var row = ezuiDatagrid.datagrid("getSelections");
+            var arr = new Array();
+            for(var i=0;i<row.length;i++){
+                arr.push(row[i].reviewId);
+            }
+            if(row){
+                $.ajax({
+                    url : sy.bp()+"/firstReviewLogController.do?returnCheck",
+                    data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
+                    success : function(result){
+                        var msg='';
+                        try{
+                            if(result.success){
+                                msg = result.msg;
+                                ezuiDatagrid.datagrid('reload');
+                                ezuiDialog.dialog('close');
+                            }else{
+                                msg = '<font color="red">' + result.msg + '</font>';
+                            }
+                        }catch (e) {
+                            msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+                        } finally {
+                            $.messager.show({
+                                msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                            });
+                            $.messager.progress('close');
+                        }
+                    }
+                });
+            }
+
+        }
+    })
 }
 </script>
 </head>
@@ -170,16 +208,18 @@ function returnCheck() {
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<a onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
 							</td>
 						</tr>
 					</table>
 				</fieldset>
+				<div>
+					<a onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
+				</div>
 			</div>
-			<table id='ezuiDatagrid'></table> 
+			<table id='ezuiDatagrid'></table>
 		</div>
 	</div>
-	<div id='ezuiDialog' style='padding: 10px;'>
+	<div id='ezuiDialog' style='padding: 10px;display: none'>
 		<table>
 			<tr>
 				<th>备注</th>
@@ -189,7 +229,7 @@ function returnCheck() {
 	</div>
 	<div id="showDialog"></div>
 
-	<div id='ezuiDialogBtn'>
+	<div id='ezuiDialogBtn' style="display: none">
 		<a onclick='doCheck();' class='easyui-linkbutton' href='javascript:void(0);'>通过</a>
 		<a onclick='returnCheck();' class='easyui-linkbutton' href='javascript:void(0);'>驳回</a>
 	</div>

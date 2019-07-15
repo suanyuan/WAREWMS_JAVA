@@ -152,6 +152,7 @@ public class BasLocationService extends BaseService {
 		basLocation.setEdittime(today);
 		basLocationMybatisDao.update(basLocation);
 		json.setSuccess(true);
+		json.setMsg("操作成功");
 		return json;
 		
 	}
@@ -165,17 +166,19 @@ public class BasLocationService extends BaseService {
 		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
 		BasLocation basLocation = basLocationMybatisDao.queryById(locationQuery);
 		if(basLocation != null){
-			basLocationMybatisDao.basLocationCheck(map);
-			String result = map.get("result").toString();
-			if (result.equals("000")) {
+			//TODO 判断存储过程修改
+			//basLocationMybatisDao.basLocationCheck(map);
+			//String result = map.get("result").toString();
+			//if (result.equals("000")) {
 				basLocationMybatisDao.delete(basLocation);
-			} else {
-				json.setSuccess(false);
-				json.setMsg(result);
-				return json;
-			}
+			//} else {
+			//	json.setSuccess(false);
+			//	json.setMsg(result);
+			//	return json;
+			//}
 		}
 		json.setSuccess(true);
+		json.setMsg("操作成功");
 		return json;
 	}
 
