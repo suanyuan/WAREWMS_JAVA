@@ -20,7 +20,8 @@
 	    if(!fileName){
 	        fileName = "";
 		}
-		window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName);
+		//修改sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName为url
+		window.open(url);
     }
     
     var isUseFormatter = function(value,row,index) {

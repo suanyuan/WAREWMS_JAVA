@@ -26,13 +26,13 @@ import java.util.*;
 /**
  * Created by IntelliJ IDEA.
  * User: andy.qu
- * Date: 2019/6/24
+ * Date: 2019/6/24q
  */
 @Controller
 @RequestMapping("commonController")
 public class CommonController {
 
-    private static final String uploadUrl = "/Users/quendi/fileUpload";
+    private static final String uploadUrl = "E:\\fileUploads";
 
     @Autowired
     private BasCodesService basCodesService;
@@ -50,15 +50,16 @@ public class CommonController {
         InputStream stream = null;
         uploadResult.setSuccess(false);
         String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+        //String uploadPath = request.getSession().getServletContext().getRealPath("uploadfiles");
         String file_name = UUID.randomUUID().toString().replace("-","")+"."+ ext.substring(ext.lastIndexOf(".")+1);
         try {
             stream = file.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
-            File targetFile = new File(uploadUrl+File.separator+file_name);
+            File targetFile= new File(uploadUrl+File.separator+file_name);
             Files.write(buffer,targetFile);
             uploadResult.setSuccess(true);
-            uploadResult.setComment(file_name);
+            uploadResult.setComment("/fileuploads/"+file_name);
         } catch (IOException e) {
             uploadResult.setSuccess(false);
             uploadResult.setComment("uploadFile 上传文件 error");

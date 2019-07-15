@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocPoHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocPoHeader" >
+	<result column="pono" property="pono"/>
+	<result column="potype" property="potype"/>
+	<result column="potypename" property="potypeName"/>
+	<result column="postatus" property="postatus"/>
+	<result column="postatusname" property="postatusName"/>
+	<result column="pocreationtime" property="pocreationtime"/>
+	<result column="expectedarrivetime1" property="expectedarrivetime1"/>
+	<result column="expectedarrivetime2" property="expectedarrivetime2"/>
+	<result column="poreference1" property="poreference1"/>
+	<result column="poreference2" property="poreference2"/>
+	<result column="poreference3" property="poreference3"/>
+	<result column="poreference4" property="poreference4"/>
+	<result column="poreference5" property="poreference5"/>
+	<result column="supplierid" property="supplierid"/>
+	<result column="supplierName" property="supplierName"/>
+	<result column="supplier_address1" property="supplierAddress1"/>
+	<result column="supplier_address2" property="supplierAddress2"/>
+	<result column="supplier_address3" property="supplierAddress3"/>
+	<result column="supplier_address4" property="supplierAddress4"/>
+	<result column="suppliercity" property="supplierCity"/>
+	<result column="supplier_province" property="supplierProvince"/>
+	<result column="supplier_country" property="supplierCountry"/>
+	<result column="supplier_zip" property="supplierZip"/>
+	<result column="customerid" property="customerid"/>
+	<result column="edisendflag" property="edisendflag"/>
+	<result column="supplier_contact" property="supplierContact"/>
+	<result column="supplier_mail" property="supplierMail"/>
+	<result column="supplier_fax" property="supplierFax"/>
+	<result column="supplier_tel1" property="supplierTel1"/>
+	<result column="supplier_tel2" property="supplierTel2"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="notes" property="notes"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edisendtime" property="edisendtime"/>
+	<result column="hedi01" property="hedi01"/>
+	<result column="hedi02" property="hedi02"/>
+	<result column="hedi03" property="hedi03"/>
+	<result column="hedi04" property="hedi04"/>
+	<result column="hedi05" property="hedi05"/>
+	<result column="hedi06" property="hedi06"/>
+	<result column="hedi07" property="hedi07"/>
+	<result column="hedi08" property="hedi08"/>
+	<result column="hedi09" property="hedi09"/>
+	<result column="hedi10" property="hedi10"/>
+	<result column="warehouseid" property="warehouseid"/>
+	<result column="warehouse" property="warehouseName"/>
+	<result column="createsource" property="createsource"/>
+	<result column="releasestatus" property="releasestatus"/>
+	<result column="userdefinea" property="userdefinea"/>
+	<result column="userdefineb" property="userdefineb"/>
+</resultMap>
+       
+<!-- doc_po_header table all fields -->
+<sql id="Base_Column_List" >
+	 pono,potype,postatus,pocreationtime,expectedarrivetime1,expectedarrivetime2,poreference1,poreference2,poreference3,poreference4,poreference5,supplierid,supplierName,supplier_address1,supplier_address2,supplier_address3,supplier_address4,suppliercity,supplier_province,supplier_country,supplier_zip,customerid,edisendflag,supplier_contact,supplier_mail,supplier_fax,supplier_tel1,supplier_tel2,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,edisendtime,hedi01,hedi02,hedi03,hedi04,hedi05,hedi06,hedi07,hedi08,hedi09,hedi10,warehouseid,createsource,releasestatus,userdefinea,userdefineb
+</sql>
+<!-- 分页查询条件 -->
+<sql id="Example_Where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.pono != null and condition.pono != ''" >
+				and pono like CONCAT('%',#{condition.pono},'%')
+			</if>
+			<if test="condition.potype != null and condition.potype != ''" >
+				and potype =  #{condition.potype}
+			</if>
+			<if test="condition.postatus != null and condition.postatus != ''" >
+				and postatus =  #{condition.postatus}
+			</if>
+			<if test="condition.pocreationtime != null " >
+				and  pocreationtime &gt;= #{condition.pocreationtime}
+			</if>
+			<if test="condition.addtime != null" >
+				and pocreationtime &lt;= #{condition.addtime}
+			</if>
+			<if test="condition.expectedarrivetime1 != null" >
+				and expectedarrivetime1 &gt;= #{condition.expectedarrivetime1}
+			</if>
+			<if test="condition.expectedarrivetime2 != null" >
+				and expectedarrivetime2 &lt;= #{condition.expectedarrivetime2}
+			</if>
+			<if test="condition.poreference1 != null and condition.poreference1 != ''" >
+				and poreference1 =  #{condition.poreference1}
+			</if>
+			<if test="condition.poreference2 != null and condition.poreference2 != ''" >
+				and poreference2 =  #{condition.poreference2}
+			</if>
+			<if test="condition.poreference3 != null and condition.poreference3 != ''" >
+				and poreference3 =  #{condition.poreference3}
+			</if>
+			<if test="condition.poreference4 != null and condition.poreference4 != ''" >
+				and poreference4 =  #{condition.poreference4}
+			</if>
+			<if test="condition.poreference5 != null and condition.poreference5 != ''" >
+				and poreference5 =  #{condition.poreference5}
+			</if>
+			<if test="condition.supplierid != null and condition.supplierid != ''" >
+				and supplierid =  #{condition.supplierid}
+			</if>
+			<if test="condition.supplierName != null and condition.supplierName != ''" >
+				and supplierName like CONCAT('%',#{condition.supplierName},'%')
+			</if>
+			<if test="condition.supplierAddress1 != null and condition.supplierAddress1 != ''" >
+				and supplier_address1 =  #{condition.supplierAddress1}
+			</if>
+			<if test="condition.supplierAddress2 != null and condition.supplierAddress2 != ''" >
+				and supplier_address2 =  #{condition.supplierAddress2}
+			</if>
+			<if test="condition.supplierAddress3 != null and condition.supplierAddress3 != ''" >
+				and supplier_address3 =  #{condition.supplierAddress3}
+			</if>
+			<if test="condition.supplierAddress4 != null and condition.supplierAddress4 != ''" >
+				and supplier_address4 =  #{condition.supplierAddress4}
+			</if>
+			<if test="condition.supplierCity != null and condition.supplieriCty != ''" >
+				and suppliercity =  #{condition.supplierCity}
+			</if>
+			<if test="condition.supplierProvince != null and condition.supplierProvince != ''" >
+				and supplier_province =  #{condition.supplierProvince}
+			</if>
+			<if test="condition.supplierCountry != null and condition.supplierCountry != ''" >
+				and supplier_country =  #{condition.supplierCountry}
+			</if>
+			<if test="condition.supplierZip != null and condition.supplierZip != ''" >
+				and supplier_zip =  #{condition.supplierZip}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid like CONCAT('%',#{condition.customerid},'%')
+			</if>
+			<if test="condition.edisendflag != null and condition.edisendflag != ''" >
+				and edisendflag =  #{condition.edisendflag}
+			</if>
+			<if test="condition.supplierContact != null and condition.supplierContact != ''" >
+				and supplier_contact =  #{condition.supplierContact}
+			</if>
+			<if test="condition.supplierMail != null and condition.supplierMail != ''" >
+				and supplier_mail =  #{condition.supplierMail}
+			</if>
+			<if test="condition.supplierFax != null and condition.supplierFax != ''" >
+				and supplier_fax =  #{condition.supplierFax}
+			</if>
+			<if test="condition.supplierTel1 != null and condition.supplierTel1 != ''" >
+				and supplier_tel1 =  #{condition.supplierTel1}
+			</if>
+			<if test="condition.supplierTel2 != null and condition.supplierTel2 != ''" >
+				and supplier_tel2 =  #{condition.supplierTel2}
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.notes != null and condition.notes != ''" >
+				and notes  like CONCAT('%',#{condition.notes},'%')
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and addwho like CONCAT('%',#{condition.addwho},'%')
+			</if>
+			<if test="condition.edittime != null" >
+				and edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.edisendtime != null" >
+				and edisendtime =  #{condition.edisendtime}
+			</if>
+			<if test="condition.hedi01 != null and condition.hedi01 != ''" >
+				and hedi01 =  #{condition.hedi01}
+			</if>
+			<if test="condition.hedi02 != null and condition.hedi02 != ''" >
+				and hedi02 =  #{condition.hedi02}
+			</if>
+			<if test="condition.hedi03 != null and condition.hedi03 != ''" >
+				and hedi03 =  #{condition.hedi03}
+			</if>
+			<if test="condition.hedi04 != null and condition.hedi04 != ''" >
+				and hedi04 =  #{condition.hedi04}
+			</if>
+			<if test="condition.hedi05 != null and condition.hedi05 != ''" >
+				and hedi05 =  #{condition.hedi05}
+			</if>
+			<if test="condition.hedi06 != null and condition.hedi06 != ''" >
+				and hedi06 =  #{condition.hedi06}
+			</if>
+			<if test="condition.hedi07 != null and condition.hedi07 != ''" >
+				and hedi07 =  #{condition.hedi07}
+			</if>
+			<if test="condition.hedi08 != null and condition.hedi08 != ''" >
+				and hedi08 =  #{condition.hedi08}
+			</if>
+			<if test="condition.hedi09 != null and condition.hedi09 != ''" >
+				and hedi09 =  #{condition.hedi09}
+			</if>
+			<if test="condition.hedi10 != null and condition.hedi10 != ''" >
+				and hedi10 =  #{condition.hedi10}
+			</if>
+			<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+				and warehouseid =  #{condition.warehouseid}
+			</if>
+			<if test="condition.createsource != null and condition.createsource != ''" >
+				and createsource =  #{condition.createsource}
+			</if>
+			<if test="condition.releasestatus != null and condition.releasestatus != ''" >
+				and releasestatus =  #{condition.releasestatus}
+			</if>
+			<if test="condition.userdefinea != null and condition.userdefinea != ''" >
+				and userdefinea =  #{condition.userdefinea}
+			</if>
+			<if test="condition.userdefineb != null and condition.userdefineb != ''" >
+				and userdefineb =  #{condition.userdefineb}
+			</if>
+		</trim>
+	</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_po_header(pono,potype,postatus,pocreationtime,expectedarrivetime1,expectedarrivetime2,poreference1,poreference2,poreference3,poreference4,poreference5,supplierid,supplierName,supplier_address1,supplier_address2,supplier_address3,supplier_address4,suppliercity,supplier_province,supplier_country,supplier_zip,customerid,edisendflag,supplier_contact,supplier_mail,supplier_fax,supplier_tel1,supplier_tel2,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,edisendtime,hedi01,hedi02,hedi03,hedi04,hedi05,hedi06,hedi07,hedi08,hedi09,hedi10,warehouseid,createsource,releasestatus,userdefinea,userdefineb)
+ values(#{pono},#{potype},#{postatus},now(),#{expectedarrivetime1},#{expectedarrivetime2},#{poreference1},#{poreference2},#{poreference3},#{poreference4},#{poreference5},#{supplierid},#{supplierName},#{supplierAddress1},#{supplierAddress2},#{supplierAddress3},#{supplierAddress4},#{supplierCity},#{supplierProvince},#{supplierCountry},#{supplierZip},#{customerid},#{edisendflag},#{supplierContact},#{supplierMail},#{supplierFax},#{supplierTel1},#{supplierTel2},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{notes},now(),#{addwho},now(),#{editwho},#{edisendtime},#{hedi01},#{hedi02},#{hedi03},#{hedi04},#{hedi05},#{hedi06},#{hedi07},#{hedi08},#{hedi09},#{hedi10},#{warehouseid},#{createsource},#{releasestatus},#{userdefinea},#{userdefineb})
+</insert>
+
+<!-- 根据id，修改记录-->
+<update id="updateBySelective" parameterType="Object" >
+		update doc_po_header set
+		<trim  suffixOverrides="," >
+			<if test="potype != null  ">
+				potype=#{potype},
+			</if>
+			<if test="postatus != null  ">
+				postatus=#{postatus},
+			</if>
+			<if test="pocreationtime != null  ">
+				pocreationtime=#{pocreationtime},
+			</if>
+			<if test="expectedarrivetime1 != null  ">
+				expectedarrivetime1=#{expectedarrivetime1},
+			</if>
+			<if test="expectedarrivetime2 != null  ">
+				expectedarrivetime2=#{expectedarrivetime2},
+			</if>
+			<if test="poreference1 != null  ">
+				poreference1=#{poreference1},
+			</if>
+			<if test="poreference2 != null  ">
+				poreference2=#{poreference2},
+			</if>
+			<if test="poreference3 != null  ">
+				poreference3=#{poreference3},
+			</if>
+			<if test="poreference4 != null  ">
+				poreference4=#{poreference4},
+			</if>
+			<if test="poreference5 != null  ">
+				poreference5=#{poreference5},
+			</if>
+			<if test="supplierid != null  ">
+				supplierid=#{supplierid},
+			</if>
+			<if test="supplierName != null  ">
+				supplierName=#{supplierName},
+			</if>
+			<if test="supplierAddress1 != null  ">
+				supplier_address1=#{supplierAddress1},
+			</if>
+			<if test="supplierAddress2 != null  ">
+				supplier_address2=#{supplierAddress2},
+			</if>
+			<if test="supplierAddress3 != null  ">
+				supplier_address3=#{supplierAddress3},
+			</if>
+			<if test="supplierAddress4 != null  ">
+				supplier_address4=#{supplierAddress4},
+			</if>
+			<if test="supplierCity != null  ">
+				suppliercity=#{suppliercity},
+			</if>
+			<if test="supplierProvince != null  ">
+				supplier_province=#{supplierProvince},
+			</if>
+			<if test="supplierCountry != null  ">
+				supplier_country=#{supplierCountry},
+			</if>
+			<if test="supplierZip != null  ">
+				supplier_zip=#{supplierZip},
+			</if>
+			<if test="customerid != null  ">
+				customerid=#{customerid},
+			</if>
+			<if test="edisendflag != null  ">
+				edisendflag=#{edisendflag},
+			</if>
+			<if test="supplierContact != null  ">
+				supplier_contact=#{supplierContact},
+			</if>
+			<if test="supplierMail != null  ">
+				supplier_mail=#{supplierMail},
+			</if>
+			<if test="supplierFax != null  ">
+				supplier_fax=#{supplierFax},
+			</if>
+			<if test="supplierTel1 != null  ">
+				supplier_tel1=#{supplierTel1},
+			</if>
+			<if test="supplierTel2 != null  ">
+				supplier_tel2=#{supplierTel2},
+			</if>
+			<if test="userdefine1 != null  ">
+				userdefine1=#{userdefine1},
+			</if>
+			<if test="userdefine2 != null  ">
+				userdefine2=#{userdefine2},
+			</if>
+			<if test="userdefine3 != null  ">
+				userdefine3=#{userdefine3},
+			</if>
+			<if test="userdefine4 != null  ">
+				userdefine4=#{userdefine4},
+			</if>
+			<if test="userdefine5 != null  ">
+				userdefine5=#{userdefine5},
+			</if>
+			<if test="notes != null  ">
+				notes=#{notes},
+			</if>
+			<if test="addtime != null  ">
+				addtime=#{addtime},
+			</if>
+			<if test="addwho != null  ">
+				addwho=#{addwho},
+			</if>
+			<if test="edittime != null  ">
+				edittime=#{edittime},
+			</if>
+			<if test="editwho != null  ">
+				editwho=#{editwho},
+			</if>
+			<if test="edisendtime != null  ">
+				edisendtime=#{edisendtime},
+			</if>
+			<if test="hedi01 != null  ">
+				hedi01=#{hedi01},
+			</if>
+			<if test="hedi02 != null  ">
+				hedi02=#{hedi02},
+			</if>
+			<if test="hedi03 != null  ">
+				hedi03=#{hedi03},
+			</if>
+			<if test="hedi04 != null  ">
+				hedi04=#{hedi04},
+			</if>
+			<if test="hedi05 != null  ">
+				hedi05=#{hedi05},
+			</if>
+			<if test="hedi06 != null  ">
+				hedi06=#{hedi06},
+			</if>
+			<if test="hedi07 != null  ">
+				hedi07=#{hedi07},
+			</if>
+			<if test="hedi08 != null  ">
+				hedi08=#{hedi08},
+			</if>
+			<if test="hedi09 != null  ">
+				hedi09=#{hedi09},
+			</if>
+			<if test="hedi10 != null  ">
+				hedi10=#{hedi010},
+			</if>
+			<if test="warehouseid != null  ">
+				warehouseid=#{warehouseid},
+			</if>
+			<if test="createsource != null  ">
+				createsource=#{createsource},
+			</if>
+			<if test="releasestatus != null  ">
+				releasestatus=#{releasestatus},
+			</if>
+			<if test="userdefinea != null  ">
+				userdefinea=#{userdefinea},
+			</if>
+			<if test="userdefineb != null  ">
+				userdefineb=#{userdefineb},
+			</if>
+		</trim>
+	where pono=#{pono}
+	</update>
+
+<!--取消订单 -->
+<select id="cancel" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call spasn_close_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{pono,mode=IN,jdbcType=VARCHAR},'90','N','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	from doc_po_header where pono = #{id}
+</delete>
+ 
+<!-- 根据id查询 采购订单 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_po_header where pono = #{pono}
+</select>
+
+<!-- 采购订单 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_po_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询采购订单列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.*, b.codename_c as potypeName, c.codename_c as postatusName, (@rowNum :=@rowNum + 1) as row_num
+	from (select
+	<include refid="Base_Column_List"/>
+	from doc_po_header 
+	<include refid="Example_Where_Clause"/>
+	) as a,
+	Bas_Codes b,
+	Bas_Codes c,
+	(SELECT(@rowNum := 0)) e
+	where a.potype = b.code
+	and b.codeid = 'PO_TYP'
+	and a.postatus = c.code
+	and c.codeid = 'PO_STS'
+	) as t
+	where 1 = 1
+    <!--<if test="orderByClause != null and orderByClause != ''" >-->
+       <!--order by  ${orderByClause}-->
+    <!--</if>-->
+	order by pocreationtime desc
+	<if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+
+<!--查询采购订单类型-->
+ <select id="getPotypeCombobox"  resultType="com.wms.entity.DocPoHeader" parameterType="Object">
+    select code as potype ,codename_c as potypeName
+           from Bas_Codes
+          where codeid = 'PO_TYP'
+    order by show_sequence
+ </select>
+<!--查询采购状态-->
+<select id="getPostatusCombobox"  resultType="com.wms.entity.DocPoHeader" parameterType="Object">
+         select code as postatus ,codename_c as postatusName
+           from Bas_Codes
+          where codeid = 'PO_STS'
+    order by show_sequence
+	</select>
+<!--查询仓库编码-->
+<select id="getWarehouseCombobox"  resultType="com.wms.entity.DocPoHeader" parameterType="Object">
+    select code as warehouseid ,codename_c as warehouseName
+           from Bas_Codes
+          where codeid = ''
+    order by show_sequence
+	</select>
+<!--新增订单号 -->
+<select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','PANO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+</select>
+</mapper>   

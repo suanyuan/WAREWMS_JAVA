@@ -31,6 +31,10 @@ $(function () {
 			textField: 'value'
 		});
 	});
+	/*主动让input失去焦点*/
+	var input = $("input",$("#loginForm #username").next("span"));
+	input.blur();
+
 	loginForm = $('#loginForm').form();
 	logoutForm = $('#logoutForm').form();
 	modifyForm = $('#modifyForm').form();
@@ -300,7 +304,7 @@ var openForgetPwdDialog = function(){
 			<table class="tableForm">
 				<tr>
 					<th>帐号</th>
-					<td><input autofocus="autofocus" type="text" value="admin" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
+					<td><input autofocus="autofocus" type="text" value="admin" id="username" name="username" class="easyui-textbox" size='19'  data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<th>密码</th>
