@@ -7,10 +7,12 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 public class BasZonegroupVO {
 
 	private java.lang.String zonegroup;
-	private java.util.Date addtime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String addtime;
 	private java.lang.String addwho;
 	private java.lang.String descr;
-	private java.util.Date edittime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String edittime;
 	private java.lang.String editwho;
 	private java.lang.String warehouseid;
 
@@ -22,14 +24,7 @@ public class BasZonegroupVO {
 		this.zonegroup = zonegroup;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(java.util.Date addtime) {
-		this.addtime = addtime;
-	}
 
 	public java.lang.String getAddwho() {
 		return addwho;
@@ -47,12 +42,19 @@ public class BasZonegroupVO {
 		this.descr = descr;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
+	public String getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(String addtime) {
+		this.addtime = addtime;
+	}
+
+	public String getEdittime() {
 		return edittime;
 	}
 
-	public void setEdittime(java.util.Date edittime) {
+	public void setEdittime(String edittime) {
 		this.edittime = edittime;
 	}
 

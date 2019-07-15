@@ -12,15 +12,19 @@ public class BasCarrierLicenseVO {
 	private String roadAuthorityPermit;
 	private String roadBusinessScope;
 	private String carrierNo;
-	private java.util.Date carrierDate;
-	private java.util.Date carrierEndDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String carrierDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String carrierEndDate;
 	private String clientTerm;
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
 	private String createId;
-	private java.util.Date createDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String createDate;
 	private String editId;
-	private java.util.Date editDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String editDate;
 	private String activeFlag;
 
 	public String getEnterpriseId() {
@@ -79,23 +83,6 @@ public class BasCarrierLicenseVO {
 		this.carrierNo = carrierNo;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierDate() {
-		return carrierDate;
-	}
-
-	public void setCarrierDate(java.util.Date carrierDate) {
-		this.carrierDate = carrierDate;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierEndDate() {
-		return carrierEndDate;
-	}
-
-	public void setCarrierEndDate(java.util.Date carrierEndDate) {
-		this.carrierEndDate = carrierEndDate;
-	}
 
 	public String getClientTerm() {
 		return clientTerm;
@@ -129,14 +116,6 @@ public class BasCarrierLicenseVO {
 		this.createId = createId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
 
 	public String getEditId() {
 		return editId;
@@ -146,12 +125,35 @@ public class BasCarrierLicenseVO {
 		this.editId = editId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getCarrierDate() {
+		return carrierDate;
+	}
+
+	public void setCarrierDate(String carrierDate) {
+		this.carrierDate = carrierDate;
+	}
+
+	public String getCarrierEndDate() {
+		return carrierEndDate;
+	}
+
+	public void setCarrierEndDate(String carrierEndDate) {
+		this.carrierEndDate = carrierEndDate;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 

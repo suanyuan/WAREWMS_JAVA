@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class BasCarrierLicenseService extends BaseService {
 
 	@Autowired
 	private BasCarrierLicenseDao basCarrierLicenseDao;
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<BasCarrierLicenseVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCarrierLicenseQuery query) {
 		EasyuiDatagrid<BasCarrierLicenseVO> datagrid = new EasyuiDatagrid<BasCarrierLicenseVO>();
@@ -58,6 +60,16 @@ public class BasCarrierLicenseService extends BaseService {
 		for (BasCarrierLicense basCarrierLicense : basCarrierLicenseList) {
 			basCarrierLicenseVO = new BasCarrierLicenseVO();
 			BeanUtils.copyProperties(basCarrierLicense, basCarrierLicenseVO);
+
+			basCarrierLicenseVO.setCreateDate(simpleDateFormat.format(basCarrierLicense.getCreateDate()));
+			basCarrierLicenseVO.setEditDate(simpleDateFormat.format(basCarrierLicense.getEditDate()));
+			if(basCarrierLicense.getCarrierDate()!=null){
+				basCarrierLicenseVO.setCarrierDate(simpleDateFormat.format(basCarrierLicense.getCarrierDate()));
+
+			}
+			if(basCarrierLicense.getCarrierEndDate()!=null){
+				basCarrierLicenseVO.setCarrierEndDate(simpleDateFormat.format(basCarrierLicense.getCarrierEndDate()));
+			}	
 			basCarrierLicenseVOList.add(basCarrierLicenseVO);
 		}
 		datagrid.setTotal((long) basCarrierLicenseMybatisDao.queryByCount(mybatisCriteria));
