@@ -422,4 +422,9 @@ public class BasCustomerService extends BaseService {
 		return superClassMap;
 	}
 
+
+	public BasCustomer getQueryBy(){
+	    return null;
+    }
+
 }

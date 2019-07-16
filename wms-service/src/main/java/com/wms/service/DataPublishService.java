@@ -110,12 +110,16 @@ public class DataPublishService extends BaseService {
             form.setClientContent(supplier.getClientContent());
             form.setClientStartDate(DateUtil.parse(supplier.getClientStartDate(),"yyyy-MM-dd"));
             form.setClientEndDate(DateUtil.parse(supplier.getClientEndDate(),"yyyy-MM-dd"));
-            form.setClientTerm(Long.parseLong(supplier.getClientTerm()));
+            Long clientTerm = 0l;
+            if(null == supplier.getClientTerm() || "".equals(supplier.getClientTerm())){
+                clientTerm = Long.parseLong(supplier.getClientTerm());
+            }
+            form.setClientTerm(clientTerm);
             form.setActiveFlag(Constant.IS_USE_YES);
             form.setBankaccount(no);
             form.setBillclass(supplier.getFirstState());
 
-            return basCustomerService.addBasCustomer(form);
+            return basCustomerService.clientAddCustomer(form);
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 			GspReceiving gspReceiving = gspReceivingService.getGspReceiving(no);
 
@@ -133,7 +137,7 @@ public class DataPublishService extends BaseService {
             form.setClientTerm(Long.parseLong(supplier.getClientTerm()));*/
             form.setActiveFlag(Constant.IS_USE_YES);
 
-            return basCustomerService.addBasCustomer(form);
+            return basCustomerService.clientAddCustomer(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){
@@ -288,5 +292,22 @@ public class DataPublishService extends BaseService {
             return Json.error("操作成功");
         }
         return Json.error("单据号无效："+no);
+    }
+
+    public Json publishDataWithOutApply(GspEnterpriseInfoForm gspEnterpriseInfoForm){
+
+
+
+        BasCustomerForm form = new BasCustomerForm();
+        form.setCustomerid(gspEnterpriseInfoForm.getEnterpriseNo());
+        form.setDescrC(gspEnterpriseInfoForm.getEnterpriseName());
+        form.setCustomerType(Constant.CODE_CUS_TYP_WH);
+        form.setEnterpriseId(gspEnterpriseInfoForm.getEnterpriseId());
+        form.setOperateType(gspEnterpriseInfoForm.getEnterpriseType());
+        form.setActiveFlag(Constant.IS_USE_YES);
+        form.setBankaccount("");
+        form.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+
+        return basCustomerService.clientAddCustomer(form);
     }
 }

@@ -117,7 +117,7 @@
     var entTypeFormatter = function(value,row,index) {
         switch (value) {
 			case CODE_ENT_TYP.CODE_ENT_TYP_JY : return "经营";
-            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "国内生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_GWSC : return "国外生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
             case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";

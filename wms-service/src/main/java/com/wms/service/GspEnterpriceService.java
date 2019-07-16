@@ -87,6 +87,11 @@ public class GspEnterpriceService extends BaseService {
                 enterpriseId = RandomUtil.getUUID();
                 gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
                 gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
+
+                //主体直接下发
+                if(gspEnterpriseInfoForm.getEnterpriseType().equals(Constant.CODE_ENT_TYP_ZT)){
+                    dataPublishService.publishDataWithOutApply(gspEnterpriseInfoForm);
+                }
             }else{
                 //判断首营状态
                 GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);
