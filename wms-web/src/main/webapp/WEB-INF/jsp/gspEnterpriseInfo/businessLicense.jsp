@@ -83,7 +83,6 @@
 <script>
     var ezuiBussinessDatagridDetail;
     var ezuidialogChoseScope;
-    var choseRowArr = new Array();
     var url;
     var opType = "add";
     $(function () {
@@ -302,6 +301,7 @@
     
     function choseSelect_Catalog_businessLicense(row) {
         var choseRowNameArr = new Array();
+        var choseRowArr = new Array();
         var oldValue = $("#businessScope").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){

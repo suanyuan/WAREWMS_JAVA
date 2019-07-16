@@ -27,28 +27,37 @@
                 <tr>
                     <th>企业负责人</th>
                     <td><input type='text' value="${gspOperateLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
-                    <th>类型</th>
+                    <th>经营/生产许可证有效期</th>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
+                    <!--<th>企业类型</th>
                     <td>
-                        <!--  <input type='text' data="1" value="${gspBusinessLicense.licenseType}" id="licenseType" name='licenseType' class='easyui-textbox' data-options='required:true,width:250'/>-->
                         <select class="easyui-combobox" id="licenseType" name='licenseType' style="width:250px;">
                             <option value="SC">生产</option>
                             <option value="JY">经营</option>
                         </select>
-                    </td>
+                    </td>-->
                 </tr>
                 <tr>
                     <th>库房地址</th>
                     <td><input type='text' value="${gspOperateLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:250'/></td>
-                    <th>经营/生产许可证有效期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
-                </tr>
-                <tr>
-                    <th>经营/生产许可证批准日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
-                    <th>经营/生产许可证发证机关</th>
+                    <th>经营/生产许可证部门</th>
                     <td><input type='text' value="${gspOperateLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
                 </tr>
                 <tr>
+                    <th>企业名称</th>
+                    <td><input type='text' value="${gspOperateLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <th>法定代表人</th>
+                    <td><input type='text' value="${gspOperateLicense.juridicalPersion}" data="1" id="juridicalPersion" name='juridicalPersion' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                </tr>
+                <tr>
+                    <th>住所</th>
+                    <td><input type='text' value="${gspOperateLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <th>经营场所</th>
+                    <td><input type='text' value="${gspOperateLicense.business_residence}" data="1" id="business_residence" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                </tr>
+                <tr>
+                    <th>经营/生产许可证发证日期</th>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
                     <th>经营/生产许可证照片</th>
                     <td>
                         <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}">
@@ -56,9 +65,11 @@
                         <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
+                </tr>
+                <tr>
                     <th>经营范围</th>
-                    <td >
-                        <input type='text' data="1" value="${gspOperateLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:250,editable:false'/>
+                    <td colspan="3">
+                        <input type='text' data="1" value="${gspOperateLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:350,editable:false'/>
                         <a onclick='selectOperateScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
@@ -79,7 +90,6 @@
 <script>
     var ezuiOperateDatagridDetail;
     var ezuidialogChoseScopeOperate;
-    var choseRowArrOperate = new Array();
     var url;
     var opType = "add";
     $(function () {
@@ -300,6 +310,7 @@
 
     function choseSelect_Catalog_operateLicense(row) {
         var choseRowNameArr = new Array();
+        var choseRowArrOperate = new Array();
         var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){

@@ -122,6 +122,7 @@
             case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
             case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
 			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
+			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
         }
     }
 

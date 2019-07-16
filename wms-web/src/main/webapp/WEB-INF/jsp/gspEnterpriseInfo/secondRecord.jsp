@@ -75,7 +75,6 @@
 
     var ezuiRecordDatagridDetail;
     var ezuidialogChoseScopeRecord;
-    var choseRowArrRecord = new Array();
     var opType = "add";
 
     $(function () {
@@ -213,6 +212,7 @@
 
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
+        var choseRowArrRecord = new Array();
         var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){

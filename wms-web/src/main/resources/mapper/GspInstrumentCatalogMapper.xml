@@ -32,10 +32,10 @@ where 1=1
 	    and instrument_catalog_id =  #{condition.instrumentCatalogId}
 	</if>
 	<if test="condition.instrumentCatalogNo != null and condition.instrumentCatalogNo != ''" >
-	    and instrument_catalog_no =  #{condition.instrumentCatalogNo}
+	    and instrument_catalog_no like CONCAT('%',#{condition.instrumentCatalogNo},'%')
 	</if>
 	<if test="condition.instrumentCatalogName != null and condition.instrumentCatalogName != ''" >
-	    and instrument_catalog_name =  #{condition.instrumentCatalogName}
+	    and instrument_catalog_name like CONCAT('%',#{condition.instrumentCatalogName},'%')
 	</if>
 	<if test="condition.instrumentCatalogRemark != null and condition.instrumentCatalogRemark != ''" >
 	    and instrument_catalog_remark =  #{condition.instrumentCatalogRemark}
