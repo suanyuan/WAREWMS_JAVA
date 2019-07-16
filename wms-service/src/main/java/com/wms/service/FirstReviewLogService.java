@@ -103,7 +103,7 @@ public class FirstReviewLogService extends BaseService {
 			FirstReviewLog updateLog = new FirstReviewLog();
 			//未审核
 			if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
-				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_QC)){
+				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_QC) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
 					return Json.error("没有审核权限");
 				}
 				updateLog.setCheckIdQc(userLogin.getId());
@@ -111,7 +111,7 @@ public class FirstReviewLogService extends BaseService {
 				updateLog.setCheckRemarkQc(remark);
 				updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
 			}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
-				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD)){
+				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
 					return Json.error("没有审核权限");
 				}
 				updateLog.setCheckIdHead(userLogin.getId());

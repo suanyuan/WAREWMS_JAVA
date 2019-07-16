@@ -50,7 +50,7 @@ public class SfcUserLogin implements Serializable {
 
 	private Set<SfcCustomer> customerSet;
 
-	private String userGrade;
+	private String userGrade ="";
 
 	public java.lang.String getId() {
 		return id;

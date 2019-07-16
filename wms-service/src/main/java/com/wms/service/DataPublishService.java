@@ -64,7 +64,7 @@ public class DataPublishService extends BaseService {
             gspCustomerForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
             gspCustomerService.editGspCustomer(gspCustomerForm);
 
-            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(no);
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
 
             BasCustomerForm form = new BasCustomerForm();
             form.setCustomerid(gspEnterpriseInfo.getEnterpriseNo());

@@ -4,7 +4,7 @@
 <html>
 <head>
 <style type="text/css">
-	#allmap {overflow: hidden;margin:0;background:url('<c:url value="/images/main1.png"/>')no-repeat;}
+	/*#allmap {overflow: hidden;margin:0;background:url('<c:url value="/images/main1.png"/>')no-repeat;}*/
 </style>
 <c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
 <c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
