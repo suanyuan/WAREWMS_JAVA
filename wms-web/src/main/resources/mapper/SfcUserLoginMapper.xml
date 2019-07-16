@@ -44,6 +44,7 @@
 	<result column="user_id" property="id"/>
 	<result column="user_name" property="userName"/>
 	<result column="user_type" property="userType"/>
+	<result column="user_grade" property="userGrade"/>
 	<association property="country" javaType="com.wms.mybatis.entity.SfcCountry">
         <result column="country_id" property="id"/>
         <result column="country_name" property="countryName"/>
@@ -207,7 +208,8 @@ where 1=1
 	       ifnull(c.descr_c,h.descr_c) as warehouse_name,
 	       ifnull(b.defaultflag, g.defaultflag) as defaultflag,
 	       d.customer_id,
-	       e.descr_c as customer_name
+	       e.descr_c as customer_name,
+	       user_grade
 	  from sfc_user a
 	  left outer join sfc_user_warehouse b on a.user_id = b.user_id and b.warehouse_id = #{warehouseId,jdbcType=VARCHAR}
 	  left outer join bas_customer c on b.warehouse_id = c.customerid and c.customer_type = 'WH'

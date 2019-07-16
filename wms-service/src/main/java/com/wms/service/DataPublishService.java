@@ -2,6 +2,8 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.utils.DateUtil;
+import com.wms.utils.PinyinUtil;
 import com.wms.vo.GspCustomerVO;
 import com.wms.vo.GspSupplierVO;
 import com.wms.vo.Json;
@@ -9,6 +11,7 @@ import com.wms.vo.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +39,10 @@ public class DataPublishService extends BaseService {
     private FirstBusinessApplyService firstBusinessApplyService;
     @Autowired
     private FirstBusinessProductApplyService firstBusinessProductApplyService;
+    @Autowired
+    private GspEnterpriseInfoService gspEnterpriseInfoService;
+    @Autowired
+    private GspReceivingService gspReceivingService;
 
     /**
      * 下发数据
@@ -57,7 +64,12 @@ public class DataPublishService extends BaseService {
             gspCustomerForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
             gspCustomerService.editGspCustomer(gspCustomerForm);
 
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(no);
+
             BasCustomerForm form = new BasCustomerForm();
+            form.setCustomerid(gspEnterpriseInfo.getEnterpriseNo());
+            form.setDescrC(gspEnterpriseInfo.getEnterpriseName());
+            form.setCustomerType(Constant.CODE_CUS_TYP_OW);
             form.setEnterpriseId(customer.getEnterpriseId());
             form.setOperateType(customer.getOperateType());
             form.setContractNo(customer.getContractNo());
@@ -68,8 +80,10 @@ public class DataPublishService extends BaseService {
             form.setClientTerm(Long.parseLong(customer.getClientTerm()));
             form.setIsChineseLabel(Long.parseLong(customer.getIsChineseLabel()));
             form.setActiveFlag(Constant.IS_USE_YES);
-            //return basCustomerService.addBasCustomer(form);
-            return Json.success("数据下发中");
+            form.setBankaccount(no);
+            form.setBillclass(gspCustomerForm.getFirstState());
+
+            return basCustomerService.clientAddCustomer(form);
         }else if(no.indexOf(Constant.APLSUPNO)!=-1){
             Json json = gspSupplierService.getGspSupplierInfo(no);
             if(!json.isSuccess()){
@@ -82,22 +96,44 @@ public class DataPublishService extends BaseService {
             supplierForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
             gspSupplierService.editGspSupplier(supplierForm);
 
-            BasCustomerForm form = new BasCustomerForm();
+            /*BasCustomerForm form = new BasCustomerForm();
             form.setEnterpriseId(supplier.getEnterpriseId());
             form.setOperateType(supplier.getOperateType());
+            form.setActiveFlag(Constant.IS_USE_YES);*/
+
+            BasCustomerForm form = new BasCustomerForm();
+            form.setCustomerType(Constant.CODE_CUS_TYP_OW);
+            form.setEnterpriseId(supplier.getEnterpriseId());
+            form.setOperateType(supplier.getOperateType());
+            form.setContractNo(supplier.getContractNo());
+            form.setContractUrl(supplier.getContractUrl());
+            form.setClientContent(supplier.getClientContent());
+            form.setClientStartDate(DateUtil.parse(supplier.getClientStartDate(),"yyyy-MM-dd"));
+            form.setClientEndDate(DateUtil.parse(supplier.getClientEndDate(),"yyyy-MM-dd"));
+            form.setClientTerm(Long.parseLong(supplier.getClientTerm()));
+            form.setActiveFlag(Constant.IS_USE_YES);
+            form.setBankaccount(no);
+            form.setBillclass(supplier.getFirstState());
+
+            return basCustomerService.addBasCustomer(form);
+        }else if(no.indexOf(Constant.APLRECNO)!=-1){
+			GspReceiving gspReceiving = gspReceivingService.getGspReceiving(no);
+
+            BasCustomerForm form = new BasCustomerForm();
+            form.setCustomerType(Constant.CODE_CUS_TYP_CO);
+            form.setEnterpriseId(gspReceiving.getEnterpriseId());
+            form.setBankaccount(no);
+            form.setBillclass(gspReceiving.getFirstState());
+           /* form.setOperateType(gspReceiving.getOperateType());
+            form.setContractNo(gspReceiving.getContractNo());
+            form.setContractUrl(gspReceiving.getContractUrl());
+            form.setClientContent(gspReceiving.getClientContent());
+            form.setClientStartDate(DateUtil.parse(supplier.getClientStartDate(),"yyyy-MM-dd"));
+            form.setClientEndDate(DateUtil.parse(supplier.getClientEndDate(),"yyyy-MM-dd"));
+            form.setClientTerm(Long.parseLong(supplier.getClientTerm()));*/
             form.setActiveFlag(Constant.IS_USE_YES);
 
-            //return basCustomerService.addBasCustomer(form);
-            return Json.success("数据下发中");
-        }else if(no.indexOf(Constant.APLRECNO)!=-1){
-			/*Json json = gspReceivingService
-			return Constant.APLRECNO;*/
-			/*BasCustomerForm form = new BasCustomerForm();
-			form.setEnterpriseId();
-			form.setOperateType(supplier.getOperateType());
-			form.setActiveFlag(Constant.IS_USE_YES);
-			basCustomerService.addBasCustomer();*/
-            return Json.error("待开发");
+            return basCustomerService.addBasCustomer(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){
@@ -120,6 +156,10 @@ public class DataPublishService extends BaseService {
                 Json spec = gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(f.getSpecsId());
                 GspProductRegisterSpecs specObj = (GspProductRegisterSpecs)spec.getObj();
                 GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
+
+                BasCustomer basCustomer = basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
+                BasCustomer customerId = basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
+
                 skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());
@@ -135,11 +175,15 @@ public class DataPublishService extends BaseService {
                 skuForm.setSkuGroup3(specObj.getPackingRequire());//包装要求
                 skuForm.setSkuGroup4(specObj.getStorageCondition());
                 skuForm.setSkuGroup5(specObj.getTransportCondition());
-                skuForm.setSkuGroup6(register.getEnterpriseId());//TODO 改为bas_customer主键
+                skuForm.setSkuGroup6(basCustomer.getCustomerid());//TODO 改为bas_customer主键
                 skuForm.setSkuGroup7(specObj.getIsDoublec());//是否需要双证
                 skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
                 skuForm.setSkuGroup9(specObj.getProductionAddress());
                 skuForm.setActiveFlag(Constant.IS_USE_YES);
+                skuForm.setFirstop(form.getFirstState());
+                skuForm.setPutawayrule(no);//申请单号
+                skuForm.setCustomerid(customerId.getCustomerid());
+
                 //skuForm
                 basSkuService.addBasSku(skuForm);
                 return Json.success("数据下发中");
@@ -151,7 +195,6 @@ public class DataPublishService extends BaseService {
 
     //作废已下发数据
     public Json cancelData(String no) throws Exception{
-        //TODO 关联数据需要从基础数据中查询
         //委托客户数据
         if(no.indexOf(Constant.APLCUSNO)!=-1){
             Json json = gspCustomerService.getGspCustomerById(no);
@@ -159,10 +202,20 @@ public class DataPublishService extends BaseService {
                 return Json.error("查询不到对应的委托客户申请");
             }
             GspCustomer customer = (GspCustomer)json.getObj();
+
+            GspCustomerForm updateGspCustomer = new GspCustomerForm();
+            updateGspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+            updateGspCustomer.setIsUse(Constant.IS_USE_NO);
+            updateGspCustomer.setClientId(no);
+
+            gspCustomerService.editGspCustomer(updateGspCustomer);
+
             BasCustomerForm form = new BasCustomerForm();
             form.setEnterpriseId(customer.getEnterpriseId());
             form.setOperateType(customer.getOperateType());
             form.setActiveFlag(Constant.IS_USE_NO);
+            form.setBillclass(updateGspCustomer.getFirstState());
+
             return basCustomerService.editBasCustomer(form);
         }else if(no.indexOf(Constant.APLSUPNO)!=-1){
             Json json = gspSupplierService.getGspSupplierInfo(no);
@@ -170,14 +223,20 @@ public class DataPublishService extends BaseService {
                 return Json.error("查询不到对应的供应商申请");
             }
             GspSupplier supplier = (GspSupplier)json.getObj();
+            GspSupplierForm updateSupplierForm = new GspSupplierForm();
+            updateSupplierForm.setSupplierId(no);
+            updateSupplierForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+            updateSupplierForm.setIsUse(Constant.IS_USE_NO);
+            gspSupplierService.editGspSupplier(updateSupplierForm);
+
             BasCustomerForm form = new BasCustomerForm();
             form.setEnterpriseId(supplier.getEnterpriseId());
             form.setOperateType(supplier.getOperateType());
             form.setActiveFlag(Constant.IS_USE_NO);
+            form.setBillclass(updateSupplierForm.getFirstState());
             return basCustomerService.editBasCustomer(form);
+
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
-			/*Json json = gspReceivingService
-			return Constant.APLRECNO;*/
             return Json.error("待开发");
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
@@ -189,6 +248,13 @@ public class DataPublishService extends BaseService {
             if(!productJson.isSuccess()){
                 return productJson;
             }
+
+            FirstBusinessApplyForm updateForm = new FirstBusinessApplyForm();
+            updateForm.setApplyId(no);
+            updateForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+            updateForm.setIsUse(Constant.IS_USE_NO);
+            firstBusinessApplyService.editFirstBusinessApply(updateForm);
+
             List<FirstBusinessProductApply> productApplyList = (List<FirstBusinessProductApply>)productJson.getObj();
             for(FirstBusinessProductApply f:productApplyList){
                 BasSkuForm skuForm = new BasSkuForm();
@@ -215,6 +281,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
                 skuForm.setSkuGroup9(specObj.getProductionAddress());
                 skuForm.setActiveFlag(Constant.IS_USE_NO);
+                skuForm.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
                 //skuForm
                 basSkuService.editBasSku(skuForm);
             }

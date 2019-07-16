@@ -66,9 +66,12 @@ $(function() {
 			});
 		},onLoadSuccess:function(data){
 
-		},onClickRow:function (data) {
-			if(data.applyState == CHECKSTATE.CHECKSTATE_40 || CHECKSTATE.CHECKSTATE_50){
-
+		},onClickRow:function (index,row) {
+		    console.log(row.applyState)
+			if(row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50){
+				$("#doCheck").linkbutton("disable");
+			}else{
+                $("#doCheck").linkbutton("enable");
 			}
         }
 	});
@@ -232,7 +235,7 @@ function returnCheck() {
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
+					<a id="doCheck" onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

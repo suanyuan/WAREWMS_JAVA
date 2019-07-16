@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>WAREWMS仓储管理系统</title>
+<title>上海嘉和诚康医疗器械有限公司WMS系统</title>
 <c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
 <c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
 <script type="text/javascript" charset="UTF-8">

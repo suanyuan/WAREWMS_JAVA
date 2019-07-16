@@ -75,6 +75,7 @@ $(function() {
 		href:dialogUrl,
 		width:1200,
 		height:530,
+        closable:false,
         cache: false,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
@@ -194,6 +195,7 @@ var commit = function(){
         showMsg("生产类型企业需要填写经营生产许可证！");
         return;
 	}
+
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC && isVal == false){
         showMsg("经营生产许可证填写不完全！");
         return;
