@@ -3,6 +3,8 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class GspSupplierForm {
 
 	private java.lang.String supplierId;
@@ -20,6 +22,67 @@ public class GspSupplierForm {
 	private java.lang.String enterpriseType;
 	private java.lang.String enterpriseNo;
 	private java.lang.String productionAddress;
+
+	private java.lang.String contractNo;
+	private java.lang.String contractUrl;
+	private java.lang.String clientContent;
+
+	private java.util.Date clientStartDate;
+
+	private java.util.Date clientEndDate;
+	private java.lang.String clientTerm;
+
+
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
+
 	public String getShorthandName() {
 		return shorthandName;
 	}

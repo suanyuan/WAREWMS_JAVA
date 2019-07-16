@@ -89,7 +89,8 @@ public class GspSupplierService extends BaseService {
 		Json json = new Json();
 		GspSupplier gspSupplier = new GspSupplier();
 		BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
-		gspSupplier.setSupplierId(commonService.generateSeq(Constant.APLSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		System.out.println("SfcUserLoginUtil.getLoginUser().getId()========="+SfcUserLoginUtil.getLoginUser().getId());
+		gspSupplier.setSupplierId(commonService.generateSeq(Constant.APLSUPNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 		FirstReviewLog firstReviewLog = new FirstReviewLog();
 		firstReviewLog.setReviewId(RandomUtil.getUUID());
 		firstReviewLog.setReviewTypeId(gspSupplier.getSupplierId());
@@ -128,7 +129,15 @@ public class GspSupplierService extends BaseService {
 		GspSupplier gspSupplier = GspSupplierMybatisDao.queryById(supplierId);
 		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
 		gspSupplierVO.setEditDate(simpleDateFormat.format(new Date()));
+		gspSupplierVO.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+		if(gspSupplier.getClientStartDate()!=null){
+			gspSupplierVO.setClientStartDate(simpleDateFormat.format(gspSupplier.getClientStartDate()));
+		}
+		if(gspSupplier.getClientEndDate()!=null){
+			gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
+
+		}
 		//System.out.println("gspSupplierVO============="+gspSupplierVO.getCreateDate()+"==========="+gspSupplierVO.getCreateDate());
 		if(gspSupplier == null){
 			return Json.error("不存在！");

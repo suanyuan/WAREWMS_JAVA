@@ -1,13 +1,17 @@
-<%@ page language='java' pageEncoding='UTF-8'%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%--<%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>--%>
+<%--<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>--%>
 
-<c:import url='/WEB-INF/jsp/include/meta.jsp' />
-<c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+
 <script type='text/javascript'>
 
 
 
 var enterpriseDialog;
 </script>
+<%--<c:import url='/WEB-INF/jsp/include/meta.jsp' />--%>
+<%--<c:import url='/WEB-INF/jsp/include/easyui.jsp' />--%>
 <form id='ezuiFormInfo' method='post'>
     <input type='hidden' id='gspSupplierId' name='gspSupplierId'/>
     <table>
@@ -16,25 +20,27 @@ var enterpriseDialog;
         </tr>
         <tr><th>企业</th>
             <td>
-                <input type='text' data="1" id='enterpriseIdQuery1' size='16' name="enterpriseName" data='1' class='easyui-textbox' data-options='' style="width: 100px;"/>
+                <input type='text' data="1" id='enterpriseIdQuery1'  name="enterpriseName" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
                 <input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
         </tr>
-        <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='16' name="enterpriseNo" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
-        <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='16' name="shorthandName" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
+        <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='20' name="enterpriseNo" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
+        <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='20' name="shorthandName" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
         <tr>
 
             <%--<th>企业类型</th>--%>
             <%--<td><input type='text' data="1" id="operateType" name='operateType' class='easyui-textbox' size='16' data-options='required:true'/></td>--%>
             <th>企业类型</th><td><input type="text" data="1" id="enterpriseType"  name="enterpriseType"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+                                                                                                                                    required:true,
+                                                                                                                                    width:200,
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
 																																	{id: 'JY', value: '经营'},
 																																	{id: 'SC', value: '生产'}
-																																],width:200"/></td>
+																																]" readonly/></td>
         </tr>
 
 
@@ -46,31 +52,31 @@ var enterpriseDialog;
 
         <tr>
             <th>合同编号</th>
-            <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="" data="1" id="contractNo"   name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
-                <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
+                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
+                <input id="contractUrlFile" name='file' value="">
                 <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
         </tr>
         <tr>
-            <th>委托内容</th>
-            <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+            <th>合同内容</th>
+            <td><input type='text' value="" data="1" id="clientContent" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
         </tr>
         <tr>
-            <th>委托开始时间</th>
-            <td><input type='text'  name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <th>合同开始时间</th>
+            <td><input type='text' data="1" id="clientStartDate" name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
-            <th>委托结束时间</th>
-            <td><input type='text'  name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <th>合同结束时间</th>
+            <td><input type='text' data="1" id="clientEndDate" name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
-            <th>委托期限</th>
-            <td><input type='text' value="${customer.clientTerm}" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
+            <th>合同期限</th>
+            <td><input type='text' data="1" id="clientTerm" value="" name='clientTerm' class='easyui-numberbox' data-options='width:200'/></td>
         </tr>
 
 
@@ -78,13 +84,15 @@ var enterpriseDialog;
         <tr>
             <th>是否审查</th>
             <td><input type="text" data="1" id="isCheck"  name="isCheck" value="${isCheck}"   class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+                                                                                                                                    required:true,
+                                                                                                                                    width:200,
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
-																																],required:true,width:200"/></td>
+																																]"/></td>
         </tr>
 
 
@@ -107,19 +115,21 @@ var enterpriseDialog;
         <tr>
             <%--<th>是否有效</th>--%>
             <th>是否有效</th> <td><input type="text" data="1" id="isUse"  name="isUse"  value="${isUse}" class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+                                                                                                                                    width:200,
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
-																																],width:200"/></td>
+																																]"/></td>
         </tr>
     </table>
 </form>
 <div id='enterpriseDialog' style='padding: 10px;'>
 
 </div>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
     var enterpriseDialog_gspSupplierInfo;
 
@@ -142,7 +152,7 @@ var enterpriseDialog;
                                     //gspBusinessFrom[""+$(this).attr("id")+""] = $(this).textbox("getValue");
                                 }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
                                     $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
-                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                                     $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }
                             }
@@ -150,10 +160,13 @@ var enterpriseDialog;
 
                         })
                         console.log(result.obj.enterpriseType);
-                        console.log(result.obj.operateType);
-                        $("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
+                        console.log(result.obj.clientStartDate);
+                        //$("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
                         $("#ezuiFormInfo input[id='editDate'][data='1']").textbox('setValue',result.obj.editDate);
                         $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
+
+                        //$("#ezuiFormInfo input[id='clientStartDate'][data='1']").datebox('setValue',result.obj.clientStartDate);
+                        //$("#ezuiFormInfo input[id='clientEndDate'][data='1']").datebox('setValue',result.obj.clientEndDate);
 
                         //$("#enterpriseIdQuery1").textbox("setValue",result.Obj.enterpriseName);
                     }
@@ -233,32 +246,9 @@ var enterpriseDialog;
         })
     })
 
-    // $(function () {
-    //
-    //
-    //         if(processType == 'add'){
-    //            // alert(1111);
-    //             $("#ezuiFormInfo input[id='isCheck'][data='1']").combobox('setValue','1');
-    //
-    //            // $("#ezuiFormInfo input[id='isCheck'][data='1']").textbox('setValue',"1");
-    //             //$("#ezuiFormInfo input[id='isCheck'][data='1']").combobox('setValue',"1");
-    //
-    //         }
-    //
-    //
-    //
-    // })
+
     $(function () {
-        $("#enterpriseName").textbox({
-            value:"${customer.clientName}",
-            width:200,
-            icons:[{
-                iconCls:'icon-search',
-                handler: function(e){
-                    searchEnterprise();
-                }
-            }]
-        })
+
 
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
@@ -294,118 +284,20 @@ var enterpriseDialog;
             });
         }
 
-        $('input[name="firstState"]').combobox({
-            url:sy.bp()+'/commonController.do?getCatalogFirstState',
-            valueField:'id',
-            textField:'value'
-        });
 
-        /*$('#isCheckData').combobox({
-            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
-            valueField:'id',
-            textField:'value',
-            width:200,
-            onLoadSuccess:function () {
-                $('#isCheckData').combobox("setValue",'${customer.isCheck}')
-            }
-        });
 
-        $('#isCooperationData').combobox({
-            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
-            valueField:'id',
-            textField:'value',
-            width:200,
-            onLoadSuccess:function () {
-                $('#isCooperationData').combobox("setValue",'${customer.isCooperation}')
-            }
-        });*/
-
-        $("#isChineseLabelData").combobox({
-            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
-            valueField:'id',
-            textField:'value',
-            width:200,
-            onLoadSuccess:function () {
-                $('#isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
-            }
-        });
-
-        $('#operateTypeData').combobox({
-            url:sy.bp()+'/commonController.do?getEntType',
-            valueField:'id',
-            textField:'value',
-            width:200,
-            onLoadSuccess:function () {
-                $('#operateTypeData').combobox("setValue",'${customer.operateType}')
-            }
-        })
-
-        enterpriseDatagrid = $("#dataGridDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
-            method:'POST',
-            toolbar : '#detailToolbar',
-            title: '',
-            pageSize : 50,
-            pageList : [50, 100, 200],
-            border: false,
-            fitColumns : false,
-            nowrap: true,
-            striped: true,
-            queryParams:{
-                isUse : '1',
-                enterpriseType:'default'
-            },
-            fit:true,
-            collapsible:false,
-            pagination:true,
-            rownumbers:true,
-            singleSelect:true,
-            idField : 'enterpriseId',
-            columns : [[
-                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
-                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
-                {field: 'shorthandName',		title: '简称',	width: '20%' },
-                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter}
-            ]],
-            onDblClickCell: function(index,field,value){
-                choseSelect();
-            },
-            onRowContextMenu : function(event, rowIndex, rowData) {
-
-            },
-            onSelect: function(rowIndex, rowData) {
-
-            },
-            onLoadSuccess:function(data){
-                $(this).datagrid('unselectAll');
-                $(this).datagrid("resize",{height:540});
-            }
-        })
-
-        dataGridDetail = $('#ezuiDialogDetail').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
-
-        dialogEnterprise = $('#dialogEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            fit:true,
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
 
     })
-
+    function viewUrl(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#contractUrl").val()!=""){
+                showUrl($("#contractUrl").val());
+            }else {
+                showMsg("请上传合同附件！");
+            }
+        }
+    }
 
 </script>

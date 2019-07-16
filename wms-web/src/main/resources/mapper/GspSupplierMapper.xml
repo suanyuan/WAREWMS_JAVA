@@ -31,7 +31,7 @@
        
 <!-- gsp_supplier table all fields -->
 <sql id="Base_Column_List" >
-	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state
+	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state,contractNo,contractUrl,clientContent,clientStartDate,clientEndDate,clientTerm
 </sql>
    
    
@@ -101,8 +101,9 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use)
- values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse})
+  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term
+)
+ values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm})
 </insert>
 
 <!-- 根据id，修改记录-->  

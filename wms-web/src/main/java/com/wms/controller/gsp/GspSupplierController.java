@@ -49,7 +49,7 @@ public class GspSupplierController {
 		model.put("menuId", menuId);
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
-		model.put("isCheck","是");
+		model.put("isCheck",1);
 
 		//model.put("specsId", specsId);
 		model.put("isUse", 1);

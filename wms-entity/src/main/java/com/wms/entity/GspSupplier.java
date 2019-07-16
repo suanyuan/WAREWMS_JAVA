@@ -31,7 +31,6 @@ public class GspSupplier implements Serializable {
   private String shorthandName;
   private String enterpriseType;
 
-
   private String contractNo;
   private String contractUrl;
   private String clientContent;

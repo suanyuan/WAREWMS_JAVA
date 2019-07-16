@@ -49,6 +49,9 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String alternatName3;
 	private String alternatName4;
 	private String alternatName5;
+
+
+
 	public String getPackingRequire() {
 		return packingRequire;
 	}
