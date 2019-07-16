@@ -32,7 +32,16 @@ import com.wms.query.DocPoHeaderQuery;
 @RequestMapping("docPoHeaderController")
 public class DocPoHeaderController {
 
-
+//	@InitBinder
+//	public void initBinder(ServletRequestDataBinder binder) {
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		binder.registerCustomEditor(Date.class,"pocreationtime",new CustomDateEditor(dateFormat, true));
+//		binder.registerCustomEditor(Date.class,"edisendtime",new CustomDateEditor(dateFormat, true));
+//		binder.registerCustomEditor(Date.class,"expectedarrivetime1",new CustomDateEditor(dateFormat, true));
+//		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
+//		binder.registerCustomEditor(Date.class,"addtime",new CustomDateEditor(dateFormat, true));
+//		binder.registerCustomEditor(Date.class,"edittime",new CustomDateEditor(dateFormat, true));
+//	}
 
     @Autowired
     private DocPoHeaderService docPoHeaderService;
