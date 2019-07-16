@@ -15,6 +15,7 @@ import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,4 +164,33 @@ public class GspReceivingController {
 		model.put("receivingId", receivingId);
 		return new ModelAndView("gspReceiving/detail", model);
 	}
+
+
+
+	/*@Login
+	@RequestMapping(params = "addXiaFa")
+	@ResponseBody
+	public Json addXiaFa(@RequestParam(value="basCustomerFormStr",required=true)  String basCustomerFormStr,
+					@RequestParam(value = "newreceivingId",required = false)String newreceivingId) throws Exception {
+		BasCustomerForm basCustomerForm = JSON.parseObject(basCustomerFormStr, BasCustomerForm.class);
+		basCustomerForm.setNewreceivingId(newreceivingId);
+
+		Json json = gspReceivingService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+	@Login
+	@RequestMapping(params = "submit")
+	@ResponseBody
+	public Json submit(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = gspReceivingService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}*/
 }

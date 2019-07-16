@@ -91,7 +91,7 @@ public class BasCarrierLicenseController {
 	}*/
 	@Login
 	@RequestMapping(params = "toBusinessLicense")
-	public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String enterpriseId) {
+	public ModelAndView toBusinessLicense(@RequestParam(value = "enterpriseId",defaultValue = "") String enterpriseId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", enterpriseId);
 		if(!"".equals(enterpriseId)){

@@ -1,7 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page language='java' pageEncoding='UTF-8'%>
 <form id='ezuiFormInfo' method='post'>
-    <input type='hidden' id='basCarrierLicenseId' name='basCarrierLicenseId'/>
     <input type='hidden' id='enterpriseD' name='enterpriseId' value=""/>
 
     <table>
@@ -9,31 +8,31 @@
             <td><input type="hidden" id="carrierLicenseId" value="${basCarrierLicense.carrierLicenseId}"/></td>
         </tr>
         <tr>
-            <th>承运商</th>
+            <th style="color: #0E2D5F">承运商</th>
             <td><input type='text' data="1" id="enterpriseId"  value="" name='enterpriseName' class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>道路经营许可证</th>
+            <th style="color: #0E2D5F">道路经营许可证</th>
             <td><input type='text' data="1" id="roadNumber" value="${basCarrierLicense.roadNumber}" name='roadNumber' class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>许可证照片</th>
+            <th style="color: #0E2D5F">许可证照片</th>
             <td>
-                <input id="roadNumberUrlFile" name='file' <%--value="${basCarrierLicense.roadNumberlicenseUrl}"--%>>
+                <input id="roadNumberUrlFile" name='file'> <%--value="${basCarrierLicense.roadNumberlicenseUrl}"--%>
                 <a id="roadNumberbtn" href="#" class="easyui-linkbutton" data-options="">查看</a>
                 <input type="hidden" class="textbox-value" name="roadNumberlicenseUrl" id="roadNumberlicenseUrl" value="${BasCarrierLicense.roadNumberlicenseUrl}"/>
             </td>
         </tr>
         <tr>
-            <th>有效期</th>
+            <th style="color: #0E2D5F">有效期</th>
             <td><input type='text' data="1" id="roadNumberTerm" value="${basCarrierLicense.roadNumberTerm}" name='roadNumberTerm' class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>签发机关</th>
+            <th style="color: #0E2D5F">签发机关</th>
             <td><input type='text' data="1" id="roadAuthorityPermit" value="${basCarrierLicense.roadAuthorityPermit}" name='roadAuthorityPermit' class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>经营范围</th>
+            <th  style="color: #0E2D5F">经营范围</th>
             <td><input type='text' data="1" id="roadBusinessScope" value="${basCarrierLicense.roadBusinessScope}" name='roadBusinessScope' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
@@ -41,7 +40,7 @@
             <td><input type='text' data="1" id="carrierNo" value="${basCarrierLicense.carrierNo}" name='carrierNo' class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>许可证照片</th>
+            <th>经营许可证照片</th>
             <td>
                 <input id="licenseUrlFile" name='file'  <%--value="${basCarrierLicense.licenseUrl}"--%>>
                 <a id="btn1" href="#" class="easyui-linkbutton" data-options="">查看</a>
@@ -71,25 +70,25 @@
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl"  value="${customer.contractUrl}" data-options='required:true'/>
-                <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
-                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+                <input   name="contractUrl" id="contractUrl"  value="${customer.contractUrl}" data-options='required:true'/>
+                <input type="hidden" id="contractUrlFile" name='file' value="${customer.contractUrl}">
+                <a  id="btn" href="javascript:void(0);" class="easyui-linkbutton" onclick="viewUrl()" >查看</a>
             </td>
         </tr>
         <tr>
-            <th>委托内容</th>
+            <th>合同内容</th>
             <td><input type='text' name='clientContent' class='easyui-textbox' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>委托开始时间</th>
+            <th>合同开始时间</th>
             <td><input type='text' name='clientStartDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>委托结束时间</th>
+            <th>合同结束时间</th>
             <td><input type='text' name='clientEndDate' class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>委托期限</th>
+            <th>合同期限</th>
             <td><input type='text' name='clientTerm' class='easyui-numberbox' data-options='required:true'/></td>
         </tr>
         <tr>
@@ -147,7 +146,7 @@
 
         $('#licenseUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '345', //文本宽度
+            width: '170', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
@@ -160,7 +159,7 @@
 
             $('#roadNumberUrlFile').filebox({
                 prompt: '选择一个文件',//文本说明文件
-                width: '345', //文本宽度
+                width: '170', //文本宽度
                 buttonText: '上传',  //按钮说明文字
                 required: true,
                 onChange:function(data){

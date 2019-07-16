@@ -599,7 +599,7 @@ where 1=1
 
 <!-- 查询客户档案列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select a.*,b.codename_c as customerTypeName,row_number() over(order by a.customerid) as row_num
+	select a.*,b.codename_c as customerTypeName
 	from (select <include refid="Base_Column_List"/>
 	from Bas_Customer 
 	<include refid="Example_Where_Clause"/>

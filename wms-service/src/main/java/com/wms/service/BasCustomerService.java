@@ -5,21 +5,30 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasCustomerQuery;
+import com.wms.query.ViewInvTranQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspSupplierForm;
+import com.wms.vo.form.ViewInvTranExportForm;
+import com.wms.vo.form.ViewInvTranForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 @Service("basCustomerService")
@@ -69,6 +78,7 @@ public class BasCustomerService extends BaseService {
 				basCustomerVO.setContacts(gspEnterpriseInfo.getContacts());
 				basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
 				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
+				basCustomerVO.setRemark(gspEnterpriseInfo.getRemark());
 			}
 
 
@@ -79,6 +89,19 @@ public class BasCustomerService extends BaseService {
 		return datagrid;
 	}
 
+
+
+
+
+
+	/*public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = new Json();
+		BasCustomer basCustomer = new BasCustomer();
+		BeanUtils.copyProperties(basCustomerForm, basCustomer);
+		basCustomerMybatisDao.add(basCustomer);
+		json.setSuccess(true);
+		return json;
+	}*/
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		Json json = null;
 		try {
@@ -293,6 +316,80 @@ public class BasCustomerService extends BaseService {
 			return Json.error("收货地址信息不存在！");
 		}
 		return Json.success("",gspReceivingAddress);
+	}
+
+	public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCustomerForm form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+
+		BasCustomerForm basCustomerForm = new BasCustomerForm();
+
+		basCustomerForm.setCustomerType(form.getCustomerType());
+		basCustomerForm.setCustomerid(form.getCustomerid());
+		basCustomerForm.setDescrC(form.getDescrC());
+		basCustomerForm.setActiveFlag(form.getActiveFlag());
+		try {
+			BasCustomerQuery query = new BasCustomerQuery();
+			//权限控制
+			query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+			com.wms.utils.BeanUtils.copyProperties(basCustomerForm, query);
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "客户档案查询结果";
+			// excel要导出的数据
+			//List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
+			EasyuiDatagridPager page = new EasyuiDatagridPager();
+			EasyuiDatagrid<BasCustomerVO> pagedDatagrid = getPagedDatagrid(page, query);
+			List<BasCustomerVO> basCustomerVOList = pagedDatagrid.getRows();
+
+
+			// 导出
+			if (basCustomerVOList == null || basCustomerVOList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(basCustomerVOList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("customerType", "客户类型");
+		superClassMap.put("activeFlag", "是否合作");
+		superClassMap.put("customerid", "客户ID");
+		superClassMap.put("enterpriseNo", "企业信息代码");
+		superClassMap.put("shorthandName", "简称");
+		superClassMap.put("enterpriseName", "企业名称");
+		superClassMap.put("contacts", "联系人");
+		superClassMap.put("contactsPhone", "联系人电话");
+		superClassMap.put("remark", "备注");
+		superClassMap.put("supContractNo", "合同编号");
+		superClassMap.put("contractUrl", "合同文件");
+		superClassMap.put("clientContent", "委托内容");
+		superClassMap.put("clientStartDate", "委托开始时间");
+		superClassMap.put("clientEndDate", "委托结束时间");
+		superClassMap.put("clientTerm", "委托期限");
+		superClassMap.put("isChineseLabel", "是否贴中文标签");
+		//superClassMap.put("descrC", "中文描述");
+		//superClassMap.put("descrE", "英文描述");
+		//superClassMap.put("operateType", "类型");
+		return superClassMap;
 	}
 
 }

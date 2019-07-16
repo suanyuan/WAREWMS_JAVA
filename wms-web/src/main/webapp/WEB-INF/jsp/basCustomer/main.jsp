@@ -63,19 +63,19 @@ $(function() {
             {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
             {field: 'contacts',		title: '联系人 ',	width: 15 },
             {field: 'contactsPhone',		title: '联系人电话 ',	width: 30 },
-            {field: 'remark',		title: '备注 ',	width: 15 },
+			{field: 'supContractNo',		title: '合同编号 ',	width: 20 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-			{field: 'supContractNo',		title: '合同编号 ',	width: 20 },
-			{field: 'contractUrl',		title: '合同文件 ',	width: 20 },
-			{field: 'clientContent',		title: '委托内容 ',	width: 20 },
-			{field: 'clientStartDate',		title: '委托开始时间 ',	width: 30 },
-			{field: 'clientEndDate',		title: '委托结束时间 ',	width: 30 },
-			/*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
-				return rowData.overreceiving == 'Y' ? '是' : '否';
-            }},*/
+            {field: 'contractUrl',		title: '合同文件 ',	width: 20 },
+            {field: 'clientContent',		title: '委托内容 ',	width: 20 },
+            {field: 'clientStartDate',		title: '委托开始时间 ',	width: 30 },
+            {field: 'clientEndDate',		title: '委托结束时间 ',	width: 30 },
 			{field: 'clientTerm',		title: '委托期限',	width: 20 },
+            /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
+                return rowData.overreceiving == 'Y' ? '是' : '否';
+            }},*/
+            {field: 'remark',		title: '备注 ',	width: 15 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
 
 		]],
@@ -124,6 +124,9 @@ var add = function(){
 	/*$("#ezuiForm #overrcvpercentage").numberbox('setValue','0');*/
 	ezuiDialog.dialog('open');
 };
+
+
+
 
 /* 编辑 */
 var edit = function(){
@@ -381,6 +384,37 @@ var doSearch = function(){
 	});
 };
 
+
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        param.put("descrC", $('#descrC').val());
+        param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        param.put("customerid", $('#customerid').val());
+        param.put("customerType", $('#customerType').combobox('getValue'));
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportBasCustomerDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+/* 导出end */
 </script>
 </head>
 <body>
@@ -427,7 +461,10 @@ var doSearch = function(){
 							<%--<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
 							<td >
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
 							</td>
 						</tr>
 

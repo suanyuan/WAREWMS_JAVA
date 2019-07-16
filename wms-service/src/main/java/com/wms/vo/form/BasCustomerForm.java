@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class BasCustomerForm {
 	private String receivingId;
+	private String token;
 	private String enterpriseId;
 	private String clientId;
 	private String supplierId;
@@ -109,6 +110,14 @@ public class BasCustomerForm {
 	private Long clientTerm;
 
 	private Long isChineseLabel;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public String getNewreceivingId() {
 		return newreceivingId;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
@@ -61,7 +62,19 @@ public class BasCustomerController {
 	public EasyuiDatagrid<BasCustomerVO> showDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		return basCustomerService.getPagedDatagrid(pager, query);
 	}
+	/*@Login
+	@RequestMapping(params = "add")
+	@ResponseBody
+	public Json add(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = basCustomerService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}*/
 
+	// 收货单位首映申请增加
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
@@ -241,5 +254,13 @@ public class BasCustomerController {
 		}
 		model.put("enterpriseId", enterpriseId);
 		return new ModelAndView("basCustomer/receivingAddress", model);
+	}
+
+
+
+	@Login
+	@RequestMapping(params = "exportBasCustomerDataToExcel")
+	public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCustomerForm form) throws Exception {
+		basCustomerService.exportBasCustomerDataToExcel(response, form);
 	}
 }

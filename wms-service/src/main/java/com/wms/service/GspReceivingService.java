@@ -10,9 +10,11 @@ import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.SfcWarehouse;
+import com.wms.query.BasCustomerQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.BasCustomerForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -35,6 +37,9 @@ public class GspReceivingService extends BaseService {
 
 	@Autowired
 	private CommonService commonService;
+
+	@Autowired
+	private BasCustomerService basCustomerService;
 
 	@Autowired
 	private GspReceivingDao gspReceivingDao;
@@ -136,12 +141,23 @@ public class GspReceivingService extends BaseService {
 				gspReceivingMybatisDao.add(gspReceiving);
 			}else {
 
+				if (newreceivingId!=null&&newreceivingId!=""){
+
+					BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
+					gspReceiving.setIsUse("1");
+					gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+					gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+					gspReceiving.setReceivingId(newreceivingId);
+					gspReceiving.setFirstState("00");
+
+				}else {
 				BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 				gspReceiving.setIsUse("1");
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-				gspReceiving.setReceivingId(newreceivingId);
+				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 				gspReceiving.setFirstState("00");
+				}
 
 				gspReceivingMybatisDao.add(gspReceiving);
 			}
@@ -225,5 +241,88 @@ public class GspReceivingService extends BaseService {
 		}
 		return comboboxList;
 	}
+
+
+/*	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
+		*//*Json json = null;
+		try {
+
+
+			StringBuilder resultMsg = new StringBuilder();
+			BasCustomerService.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
+
+			json = new Json();
+
+
+			if (resultMsg.length() == 0) {
+				BasCustomer basCustomer = new BasCustomer();
+
+				if (StringUtils.isNotEmpty(basCustomerForm.getReceivingId())){
+					GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(basCustomerForm.getReceivingId());
+					oldgspReceiving.setIsUse("0");
+					gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+				}
+				BasCustomerQuery customerQuery = new BasCustomerQuery();
+				customerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				customerQuery.setCustomerType(basCustomerForm.getCustomerType());
+
+
+				BasCustomer oldbasCustomer=basCustomerMybatisDao.queryById(customerQuery);
+
+				if (oldbasCustomer != null) {
+					BasSkuHistory basSkuHistory = new BasSkuHistory();
+					BeanUtils.copyProperties(oldbasCustomer,basSkuHistory);
+					basCustomerMybatisDao.deleteBascustomer(oldbasCustomer.getEnterpriseId(),oldbasCustomer.getCustomerType());
+					basSkuHistoryMybatisDao.add(basSkuHistory);
+				}
+				//下发到客户档案
+				BeanUtils.copyProperties(basCustomerForm, basCustomer);
+				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setCustomerid(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
+				//
+				basCustomerMybatisDao.add(basCustomer);
+				GspReceiving gspReceiving = new GspReceiving();
+
+				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
+				gspReceiving.setFirstState("40");
+				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+				if (StringUtils.isNotEmpty(basCustomerForm.getNewreceivingId())){
+
+					gspReceiving.setReceivingId(basCustomerForm.getNewreceivingId());
+				}else {
+
+					gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				}
+				gspReceivingMybatisDao.add(gspReceiving);
+
+				//插入一条首营申请日志记录
+				FirstReviewLog firstReviewLog = new FirstReviewLog();
+				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
+				firstReviewLog.setApplyContent("不需要申请直接下发");
+				firstReviewLog.setApplyState("40");
+				firstReviewLog.setReviewId(RandomUtil.getUUID());
+				firstReviewLogMybatisDao.add(firstReviewLog);
+
+
+			} else {
+				json.setSuccess(false);
+				json.setMsg(resultMsg.toString());
+				return json;
+			}
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		} catch (BeansException e) {
+			throw new Exception("系统忙！");
+		}
+		return json;
+	}*//*
+		return basCustomerService.xiaFaBasCustomer(basCustomerForm);
+
+	}*/
 
 }

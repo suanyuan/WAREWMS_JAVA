@@ -11,7 +11,7 @@
     <form id='ezuiFormBusiness' method='post' style="padding: 0px;">
         <input type='hidden' data="1" id='businessId' name='businessId' value="${gspBusinessLicense.businessId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspBusinessLicense.enterpriseId}"/>
-        <input type='hidden' id='choseScope' value="${choseScope}"/>
+        <input type='hidden' id='choseScope' value="<%--${choseScope}--%>"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
             <legend>明细</legend>
