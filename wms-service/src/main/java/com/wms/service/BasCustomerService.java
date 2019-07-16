@@ -139,7 +139,7 @@ public class BasCustomerService extends BaseService {
 				BeanUtils.copyProperties(basCustomerForm, basCustomer);
 				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-				basCustomer.setCustomerid(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
 				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
 				//
@@ -163,7 +163,7 @@ public class BasCustomerService extends BaseService {
 				FirstReviewLog firstReviewLog = new FirstReviewLog();
 				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
-				firstReviewLog.setApplyContent("不需要申请直接下发");
+				firstReviewLog.setApplyContent("无需审核");
 				firstReviewLog.setApplyState("40");
 				firstReviewLog.setReviewId(RandomUtil.getUUID());
 				firstReviewLogMybatisDao.add(firstReviewLog);
@@ -293,6 +293,25 @@ public class BasCustomerService extends BaseService {
 
 		return basCustomerMybatisDao.queryById(customerQuery);
 	}
+
+	public BasCustomer selectCustomerById(String customerID, String customertype) {
+
+
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setCustomerid(customerID);
+		customerQuery.setCustomerType(customertype);
+		customerQuery.setActiveFlag(Constant.IS_USE_YES);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(customerQuery);
+
+
+		List<BasCustomer> list = basCustomerMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+
 	public Json goonBasCustomer(String enterpriseId, String customertype) {
 		Json json = new Json();
 		BasCustomerQuery customerQuery = new BasCustomerQuery();

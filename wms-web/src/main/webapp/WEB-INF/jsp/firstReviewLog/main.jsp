@@ -47,10 +47,10 @@ $(function() {
 				formatter:checkStateTypeFormatter
 			},
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 57 },
-			{field: 'checkDateQc',		title: '审核时间',	width: 57 },
+			{field: 'checkDateQc',		title: '审核时间',	width: 57 ,formatter:dateFormat2},
 			{field: 'checkRemarkQc',		title: '备注',	width: 57 },
 			{field: 'checkIdHead',		title: '负责人审核',	width: 57 },
-			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 },
+			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 ,formatter:dateFormat2},
 			{field: 'createDate',		title: '创建时间',	width: 57 ,formatter:dateFormat2}
 		]],
         onDblClickRow: function(index,row){
@@ -67,7 +67,6 @@ $(function() {
 		},onLoadSuccess:function(data){
 
 		},onClickRow:function (index,row) {
-		    console.log(row.applyState)
 			if(row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50){
 				$("#doCheck").linkbutton("disable");
 			}else{

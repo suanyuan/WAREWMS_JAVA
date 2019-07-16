@@ -400,7 +400,7 @@ where 1=1
 		address4=#{address4},
 	</if>
 	<if test="addtime != null  ">
-		addtime=sysdate,
+		addtime=now(),
 	</if>
 	<if test="addwho != null  ">
 		addwho=#{addwho},
@@ -505,7 +505,7 @@ where 1=1
 		easycode=#{easycode},
 	</if>
 	<if test="edittime != null  ">
-		edittime=sysdate,
+		edittime=now(),
 	</if>
 	<if test="editwho != null  ">
 		editwho=#{editwho},

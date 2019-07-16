@@ -117,11 +117,11 @@ public class FirstBusinessApplyController {
 	@Login
 	@RequestMapping(params = "apply")
 	@ResponseBody
-	public Json apply(String id,String clientId,String supplierId,String productArr) throws Exception {
+	public Json apply(String id,String clientId,String supplierId,String productArr,String productLine) throws Exception {
 		if(!StringUtils.isEmpty(id)){
 			return firstBusinessApplyService.editApply(id,clientId,supplierId,productArr);
 		}
-		return firstBusinessApplyService.addApply(clientId,supplierId,productArr);
+		return firstBusinessApplyService.addApply(clientId,supplierId,productArr,productLine);
 	}
 
 	@Login

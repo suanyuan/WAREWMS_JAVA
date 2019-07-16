@@ -91,7 +91,7 @@ public class FirstBusinessApplyService extends BaseService {
 		Json json = new Json();
 		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(firstBusinessApplyForm.getApplyId());
 		BeanUtils.copyProperties(firstBusinessApplyForm, firstBusinessApply);
-		firstBusinessApplyMybatisDao.update(firstBusinessApply);
+		firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 		json.setSuccess(true);
 		return json;
 	}
@@ -160,7 +160,7 @@ public class FirstBusinessApplyService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addApply(String clientId,String supplierId,String productArr){
+	public Json addApply(String clientId,String supplierId,String productArr,String productLine){
 		try{
 			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 			String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -180,6 +180,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApply.setSpecsId(specsId);
 				firstBusinessProductApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstBusinessProductApply.setIsUse(Constant.IS_USE_YES);
+
 				firstBusinessProductApplyMybatisDao.add(firstBusinessProductApply);
 			}
 
@@ -222,7 +223,7 @@ public class FirstBusinessApplyService extends BaseService {
 					firstBusinessProductApplyMybatisDao.updateBySelective(firstUpdate);
 				}
 
-				return addApply(clientId,supplierId,productArr);
+				return addApply(clientId,supplierId,productArr,"");
 			}
 		}catch (Exception e){
 			e.printStackTrace();
@@ -273,7 +274,7 @@ public class FirstBusinessApplyService extends BaseService {
 			if(!result.isSuccess()){
 				List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
 				if(list!=null && list.size()>0){
-					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString());
+					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString(),"");
 				}
 			}
 
@@ -291,10 +292,9 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();
-		GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);
 		MybatisCriteria criteria = new MybatisCriteria();
 		ProductLineQuery query = new ProductLineQuery();
-		query.setEnterpriseName(info.getEnterpriseName());
+		query.setEnterpriseName(enterpriseId);
 		criteria.setCondition(query);
 		List<ProductLine> lineList = productLineMybatisDao.queryByList(criteria);
 		if(lineList!=null){

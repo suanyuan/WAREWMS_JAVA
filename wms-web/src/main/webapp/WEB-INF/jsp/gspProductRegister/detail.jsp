@@ -10,7 +10,7 @@
     }
 </style>
 <div class='easyui-layout' data-options='fit:true,border:false'>
-    <div data-options='region:"center",border:false' style='overflow: hidden;'>
+    <div data-options='region:"center",border:false' style='overflow: auto;'>
             <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff;'>
                 <form id='ezuiFormDetail' method='post'>
                     <input type="hidden" id="operateDetail" name="operateDetail" value="${operateDetail}"/>
@@ -251,7 +251,8 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1'
+                isUse : '1',
+                enterpriseType:'default'
             },
             fit:true,
             collapsible:false,
@@ -310,7 +311,8 @@
         $("#ezuiFormDetail input[id='classifyCatalog']").textbox({
             width:450,
             multiline:true,
-            height:40
+            height:40,
+            editable:false
         });
 
         $('#ezuiFormDetail input[name="productRegisterVersion"]').combobox({

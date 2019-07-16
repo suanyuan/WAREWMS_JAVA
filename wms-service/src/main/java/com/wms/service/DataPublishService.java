@@ -4,9 +4,8 @@ import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PinyinUtil;
-import com.wms.vo.GspCustomerVO;
-import com.wms.vo.GspSupplierVO;
-import com.wms.vo.Json;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.*;
 import com.wms.vo.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,8 +100,12 @@ public class DataPublishService extends BaseService {
             form.setOperateType(supplier.getOperateType());
             form.setActiveFlag(Constant.IS_USE_YES);*/
 
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
+
             BasCustomerForm form = new BasCustomerForm();
-            form.setCustomerType(Constant.CODE_CUS_TYP_OW);
+            form.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+            form.setDescrC(gspEnterpriseInfo.getEnterpriseName());
+            form.setCustomerType(Constant.CODE_CUS_TYP_VE);
             form.setEnterpriseId(supplier.getEnterpriseId());
             form.setOperateType(supplier.getOperateType());
             form.setContractNo(supplier.getContractNo());
@@ -123,7 +126,12 @@ public class DataPublishService extends BaseService {
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 			GspReceiving gspReceiving = gspReceivingService.getGspReceiving(no);
 
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(gspReceiving.getEnterpriseId());
+
+
             BasCustomerForm form = new BasCustomerForm();
+            form.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+            form.setDescrC(gspEnterpriseInfo.getEnterpriseName());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
             form.setEnterpriseId(gspReceiving.getEnterpriseId());
             form.setBankaccount(no);
@@ -143,7 +151,7 @@ public class DataPublishService extends BaseService {
             if(!json.isSuccess()){
                 return Json.error("查询不到对应的产品申请");
             }
-            FirstBusinessApply firstBusinessApply = (FirstBusinessApply)json.getObj();
+            FirstBusinessApplyVO firstBusinessApply = (FirstBusinessApplyVO)json.getObj();
 
             FirstBusinessApplyForm form = new FirstBusinessApplyForm();
             form.setApplyId(firstBusinessApply.getApplyId());
@@ -158,11 +166,11 @@ public class DataPublishService extends BaseService {
             for(FirstBusinessProductApply f:productApplyList){
                 BasSkuForm skuForm = new BasSkuForm();
                 Json spec = gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(f.getSpecsId());
-                GspProductRegisterSpecs specObj = (GspProductRegisterSpecs)spec.getObj();
+                GspProductRegisterSpecsVO specObj = (GspProductRegisterSpecsVO)spec.getObj();
                 GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
 
-                BasCustomer basCustomer = basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
-                BasCustomer customerId = basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
+                BasCustomer basCustomer = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);//basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
+                BasCustomer customerId =  basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);//basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
 
                 skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
@@ -174,7 +182,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield04(register.getClassifyId());
                 skuForm.setReservedfield05(register.getClassifyCatalog());
                 skuForm.setSku(specObj.getProductCode());
-                skuForm.setSkuGroup1(specObj.getProductLine());
+                skuForm.setSkuGroup1("");//specObj.getProductLine()产品线
                 //skuForm.setSkuGroup2();//附卡类别
                 skuForm.setSkuGroup3(specObj.getPackingRequire());//包装要求
                 skuForm.setSkuGroup4(specObj.getStorageCondition());

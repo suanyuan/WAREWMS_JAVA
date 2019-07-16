@@ -304,7 +304,7 @@ var openForgetPwdDialog = function(){
 			<table class="tableForm">
 				<tr>
 					<th>帐号</th>
-					<td><input autofocus="autofocus" type="text" value="admin" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
+					<td><input autofocus="autofocus" type="text" value="" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<th>密码</th>

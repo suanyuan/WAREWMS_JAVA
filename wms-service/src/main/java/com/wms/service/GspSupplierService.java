@@ -104,7 +104,7 @@ public class GspSupplierService extends BaseService {
 		}else if("0".equals(gspSupplier.getIsCheck())){
 			firstReviewLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);//审核状态 已通过 代码
 			gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);//首营状态 审核通过 代码
-			firstReviewLog.setApplyContent("不需要审核直接下发");
+			firstReviewLog.setApplyContent("无需审核");
 		}
 
 
