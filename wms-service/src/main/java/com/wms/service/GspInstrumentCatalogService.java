@@ -32,7 +32,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
-		mybatisCriteria.setOrderByClause("classify_id");
+		mybatisCriteria.setOrderByClause("c.cretae_date desc,classify_id");
 		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;
@@ -54,6 +54,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		BeanUtils.copyProperties(gspInstrumentCatalogForm, gspInstrumentCatalog);
 		gspInstrumentCatalog.setInstrumentCatalogId(RandomUtil.getUUID());
 		gspInstrumentCatalog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspInstrumentCatalog.setIsUse(Constant.IS_USE_YES);
 		gspInstrumentCatalog.setCretaeDate(new Date());
 		gspInstrumentCatalogMybatisDao.add(gspInstrumentCatalog);
 		json.setSuccess(true);

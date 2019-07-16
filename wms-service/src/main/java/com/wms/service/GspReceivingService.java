@@ -242,6 +242,10 @@ public class GspReceivingService extends BaseService {
 		return comboboxList;
 	}
 
+	public GspReceiving getGspReceiving(String id){
+		return gspReceivingMybatisDao.queryById(id);
+	}
+
 
 /*	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		*//*Json json = null;

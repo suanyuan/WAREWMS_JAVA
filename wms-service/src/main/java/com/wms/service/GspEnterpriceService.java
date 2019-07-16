@@ -56,6 +56,8 @@ public class GspEnterpriceService extends BaseService {
     private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
     @Autowired
     private GspOperateDetailService gspOperateDetailService;
+    @Autowired
+    private DataPublishService dataPublishService;
 
     /**
      * 新增企业信息
@@ -69,8 +71,8 @@ public class GspEnterpriceService extends BaseService {
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
             GspOperateLicenseForm gspOperateLicenseForm = gspEnterpriceFrom.getGspOperateLicenseForm();
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
-
-            boolean enterpriseIsNewVersion = false;
+            //是否要创建新版本
+            boolean enterpriseIsNewVersion = true;
             if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
                 return Json.error("企业基础信息不能为空");
             }
@@ -91,33 +93,46 @@ public class GspEnterpriceService extends BaseService {
                 if(info == null){
                     return Json.error("企业信息不存在");
                 }
-                boolean isCanEdit = true;
+
                 List<GspEnterpriseTypeDTO> enterpriseTypeDTOS = queryEnterpriseType(info.getEnterpriseId());
                 if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0){
                     for(GspEnterpriseTypeDTO ent : enterpriseTypeDTOS){
-                        if(!ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_PASS)){//首营申请审核中的数据不能修改
-                            isCanEdit = false;
-                            break;
+                        if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING)){//首营申请审核中的数据不能修改
+                            return Json.error("首营申请中的企业信息不能修改");
+                        }else if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
+                            enterpriseIsNewVersion = false;
+                        }else if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_PASS)){
+                            //TODO 重新下发新申请
+                            //TODO 修改首营状态为已报废
+                            dataPublishService.cancelData(ent.getApplyNo());
                         }
                     }
-                    if(!isCanEdit){
-                        return Json.error("已存在申请记录的企业信息不能修改");
-                    }
-                    enterpriseIsNewVersion = true;
-                    gspEnterpriseInfoService.updateGspEnterpriseInfoActiveTag(enterpriseId,Constant.IS_USE_NO);
-                    enterpriseId = RandomUtil.getUUID();
-                    gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
-                    gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
-                    gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
 
-                }else{
+                    //创建新版本
+                    if(enterpriseIsNewVersion){
+                        gspEnterpriseInfoService.updateGspEnterpriseInfoActiveTag(enterpriseId,Constant.IS_USE_NO);
+
+                        enterpriseId = RandomUtil.getUUID();
+                        gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+                        gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
+                        gspEnterpriseInfoService.addGspEnterpriseInfo(gspEnterpriseInfoForm);
+
+
+                        /**
+                         * TODO 发起新申请
+                         */
+                    }
+
+                }
+                if(enterpriseIsNewVersion == true){
                     //1.新建状态，更新原数据
                     gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
                     gspEnterpriseInfoService.editGspEnterpriseInfo(gspEnterpriseInfoForm);
                 }
+
             }
 
-            //判断经营范围
+            //判断经营范围 已作废不需要判断
             /*if(gspBusinessLicenseForm.getScopArr()!=null && gspOperateLicenseForm.getScopArr()!=null){
                 if(operateDetailIsRight(initScope(gspBusinessLicenseForm.getScopArr()),initScope(gspOperateLicenseForm.getScopArr())) == false){
                     return Json.error("经营/生产许可证中经营范围与营业执照中经营范围不相等");

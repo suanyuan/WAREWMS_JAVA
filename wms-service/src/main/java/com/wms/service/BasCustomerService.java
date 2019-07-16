@@ -17,6 +17,7 @@ import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
+import com.wms.vo.form.GspCustomerForm;
 import com.wms.vo.form.GspSupplierForm;
 import com.wms.vo.form.ViewInvTranExportForm;
 import com.wms.vo.form.ViewInvTranForm;
@@ -206,6 +207,35 @@ public class BasCustomerService extends BaseService {
 		basCustomerMybatisDao.add(basCustomer);
 
 
+
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
+
+	public Json clientAddCustomer(BasCustomerForm basCustomerForm) {
+		Json json = new Json();
+		BasCustomer basCustomerQuery = new BasCustomer();
+		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
+		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+		int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
+		if(num!=0){
+			basCustomerMybatisDao.delete(basCustomerQuery);
+		}
+
+		BasCustomer basCustomer = new BasCustomer();
+		BeanUtils.copyProperties(basCustomerForm,basCustomer);
+		/*basCustomer.setCustomerType(basCustomerForm.getCustomerType());
+		basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+		basCustomer.setCustomerid(basCustomerForm.getCustomerid());
+		basCustomer.setOperateType(basCustomerForm.getOperateType());
+		basCustomer.setActiveFlag(basCustomerForm.getActiveFlag());
+		basCustomer.setDescrC(basCustomerForm.getDescrC());*/
+		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setAddtime(new Date());
+		basCustomer.setEdittime(new Date());
+		basCustomerMybatisDao.add(basCustomer);
 
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
