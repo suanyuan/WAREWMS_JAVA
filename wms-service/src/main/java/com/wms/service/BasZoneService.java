@@ -82,6 +82,7 @@ public class BasZoneService extends BaseService {
 		}
 		
 		json.setSuccess(true);
+		json.setMsg("操作成功");
 		return json;
 	}
 		

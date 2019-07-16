@@ -101,16 +101,16 @@ public class GspBusinessLicenseService extends BaseService {
 	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType){
 		try{
 			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
-			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
+			List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>();//JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
 				return Json.error("请先保存企业基础信息");
 			}
 			if(gspBusinessLicenseForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
 				return Json.error("营业执照信息不全！");
 			}
-			if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
+			/*if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
 				return Json.error("必须选择营业执照经营范围！");
-			}
+			}*/
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增

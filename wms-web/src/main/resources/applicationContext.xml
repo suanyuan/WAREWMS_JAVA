@@ -19,6 +19,7 @@
 	<import resource="classpath:/conf/spring-ftp.xml"/>
 	<import resource="classpath:/conf/spring-mybatis.xml"/>
 	<import resource="classpath:/conf/spring-redis.xml"/>
+	<!--<import resource="classpath:/conf/spring-mvc.xml"/>-->
 <!-- 	<import resource="classpath:\batch\batch001.xml"/> -->
 <!-- 	<import resource="classpath:\conf\spring-batch.xml"/> -->
 	

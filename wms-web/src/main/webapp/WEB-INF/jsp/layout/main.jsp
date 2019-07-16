@@ -91,6 +91,10 @@ $(function () {
 	if('${sessionScope.userInfo}'){
 		addTab({url : "<c:url value='/home.html'/>", title : "首页",closable : false});
 	}
+
+    /*主动让input失去焦点*/
+    var input = $("input",$("#loginForm #username").next("span"));
+    input.blur();
 });
 var addTab = function (params) {
 	var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>';

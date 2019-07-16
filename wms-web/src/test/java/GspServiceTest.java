@@ -8,6 +8,7 @@ import com.wms.service.GspEnterpriseInfoService;
 import com.wms.service.GspOperateDetailService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.RedisUtil;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.form.GspBusinessLicenseForm;
 import org.apache.commons.beanutils.PropertyUtilsBean;
@@ -33,9 +34,10 @@ import java.util.Map;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "classpath*:/applicationContext.xml",
         "classpath*:/conf/spring-datasource.xml",
-        "classpath*:/conf/spring-mybatis.xml"
+        "classpath*:/conf/spring-mybatis.xml",
+        "classpath*:/conf/spring-redis.xml",
+        "classpath*:/conf/spring-mvc.xml"
 
 })
 public class GspServiceTest {
@@ -52,6 +54,9 @@ public class GspServiceTest {
     private CommonService commonService;
     @Autowired
     private GspOperateDetailService gspOperateDetailService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Test
     public void test(){
@@ -70,6 +75,8 @@ public class GspServiceTest {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+
 
     }
 
@@ -92,7 +99,7 @@ public class GspServiceTest {
        System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
 */
         //String s = "edbf5a04a7a743f1bfcf51ec52c0ddfc";
-        List<String> arrlicense = new ArrayList<>();
+        /*List<String> arrlicense = new ArrayList<>();
         List<String> arroperate = new ArrayList<>();
         List<GspOperateDetailVO> licenseDetails = gspOperateDetailService.queryOperateDetailByLicense("edbf5a04a7a743f1bfcf51ec52c0ddfc");
         List<GspOperateDetailVO> operateLicenseDetails = gspOperateDetailService.queryOperateDetailByLicense("73f9fb81c1514eb0961d80dd4c6b8564");
@@ -107,7 +114,8 @@ public class GspServiceTest {
                 System.out.println(true);
             }
         }
-        System.out.println(true);
+        System.out.println(true);*/
+        redisUtil.get("aa");
 
     }
 

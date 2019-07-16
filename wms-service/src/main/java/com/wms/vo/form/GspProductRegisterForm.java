@@ -34,6 +34,7 @@ public class GspProductRegisterForm {
 	private String classifyId;
 	private String classifyCatalog;
 	private String enterpriseId;
+	private String choseScope;
 
 	public String getProductRegisterId() {
 		return productRegisterId;
@@ -265,5 +266,13 @@ public class GspProductRegisterForm {
 
 	public void setEnterpriseId(String enterpriseId) {
 		this.enterpriseId = enterpriseId;
+	}
+
+	public String getChoseScope() {
+		return choseScope;
+	}
+
+	public void setChoseScope(String choseScope) {
+		this.choseScope = choseScope;
 	}
 }

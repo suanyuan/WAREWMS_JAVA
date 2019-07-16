@@ -46,10 +46,12 @@
                 </tr>
                 <tr>
                     <th>经营范围</th>
-                    <td colspan="3">
-                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 40px;" data-options='required:true,multiline:true,width:480'/>
+                    <td colspan="2">
+                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350'/>
                     </td>
-                    <td style="text-align: left" colspan="2">
+                    <th>经营范围(已选择)</th>
+                    <td colspan="2">
+                        <input type='text' id="showChose" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350,editable:false'/>
                         <a onclick='selectRecordScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
@@ -144,7 +146,28 @@
             }
         });
 
+        initChoseText();
+
     })
+
+    function initChoseText() {
+        $.ajax({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
+            data : {
+                "licenseId":'${gspSecondRecord.recordId}'
+            }
+            ,type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                if(result && result.length>0){
+                    var arr = new Array();
+                    for(var i=0;i<result.length;i++){
+                        arr.push(result[i].operateName);
+                    }
+                    $("#ezuiFormRecord input[id='showChose']").textbox("setValue",arr.join(","))
+                }
+            }
+        });
+    }
 
     function doUpload(data) {
         var ajaxFile = new uploadFile({
@@ -160,7 +183,6 @@
                 }
             },
             onload:function(data){
-                console.log(data);
                 $("#recordUrl").val(data.comment);
             },
             onerror:function(er){
@@ -191,16 +213,16 @@
 
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
-        var oldValue = $("#ezuiFormRecord input[id='businessScope']").textbox("getValue");
+        var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",oldValue+choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
         $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");

@@ -49,6 +49,9 @@ public class FirstBusinessApplyService extends BaseService {
 	private ProductLineMybatisDao productLineMybatisDao;
 	@Autowired
 	private FirstBusinessProductApplyService firstBusinessProductApplyService;
+	@Autowired
+	private DataPublishService dataPublishService;
+
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
@@ -275,7 +278,7 @@ public class FirstBusinessApplyService extends BaseService {
 			}
 
 			//TODO 失效已下发的数据
-			firstReviewLogService.cancelData(id);
+			dataPublishService.cancelData(id);
 
 			return Json.error("操作成功");
 

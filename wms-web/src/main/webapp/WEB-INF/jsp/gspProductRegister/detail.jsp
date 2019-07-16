@@ -14,7 +14,7 @@
             <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff;'>
                 <form id='ezuiFormDetail' method='post'>
                     <input type="hidden" id="operateDetail" name="operateDetail" value="${operateDetail}"/>
-                    <input type='hidden' id='choseScope' value="${choseScope}"/>
+                    <input type='hidden' id='choseScope' value="${choseScope}" name="choseScope" class="textbox-value"/>
                 <fieldset>
                     <legend>产品注册证信息</legend>
                         <input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId' value="${gspProductRegister.productRegisterId}"/>
@@ -88,7 +88,7 @@
                             <tr>
                                 <th>分类目录</th>
                                 <td colspan="3">
-                                    <input type='text' id="classifyCatalog" name='classifyCatalog' value="${gspProductRegister.classifyCatalog}"/>
+                                    <input type='text' id="classifyCatalog" name="classifyCatalog"  value="${gspProductRegister.classifyCatalog}"/>
                                     <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                                 </td>
                                 <th>注册证附件</th>
@@ -104,7 +104,7 @@
                 </fieldset>
                 </form>
             </div>
-            <table id='' ></table>
+            <table id='ezuiDatagridDetail' ></table>
             <form>
                 <div>
                     <a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>
@@ -307,7 +307,7 @@
             width:185
         })
 
-        $("#ezuiFormDetail input[name='classifyCatalog']").textbox({
+        $("#ezuiFormDetail input[id='classifyCatalog']").textbox({
             width:450,
             multiline:true,
             height:40
@@ -342,17 +342,18 @@
     }
     
     function choseSelect_Catalog_productRegister(row) {
+        console.log(row)
         var choseRowNameArr = new Array();
-        var oldValue = $("#classifyCatalog").textbox("getValue");
+        var oldValue = $("#ezuiFormDetail input[id='classifyCatalog']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArr.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#classifyCatalog").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",oldValue+choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-            $("#classifyCatalog").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",oldValue+row.instrumentCatalogName);
         }
         $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
         ezuidialogChoseScope.dialog("close");
@@ -399,7 +400,6 @@
             showMsg("有效期时间大于有效期至时间");
             return;
         }
-        return;
         var url = '';
         if (processType == 'edit') {
             url = '/gspProductRegisterController.do?edit';
@@ -419,9 +419,14 @@
                 }
             },
             success : function(data) {
-                console.log(data);
                 $.messager.progress('close');
-                showMsg(data.msg);
+                var result = $.parseJSON(data);
+                if(result.success){
+                    $("#gspProductRegisterId").val(data.obj);
+                    ezuiDatagridDetail.datagrid("reload");
+                }
+                showMsg(result.msg);
+
             },
             error:function () {
                 $.messager.progress('close');

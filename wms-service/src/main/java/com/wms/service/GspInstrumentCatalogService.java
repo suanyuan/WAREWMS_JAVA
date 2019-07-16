@@ -121,4 +121,8 @@ public class GspInstrumentCatalogService extends BaseService {
 		return datagrid;
 	}
 
+	public GspInstrumentCatalog getGspInstrumentCatalog(String id){
+		return gspInstrumentCatalogMybatisDao.queryById(id);
+	}
+
 }

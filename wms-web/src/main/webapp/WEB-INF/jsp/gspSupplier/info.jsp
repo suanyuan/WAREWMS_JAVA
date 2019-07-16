@@ -21,8 +21,8 @@ var enterpriseDialog;
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
         </tr>
-        <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='16' name="enterpriseNo" class='easyui-textbox' data-options='' readonly/></td></tr>
-        <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='16' name="shorthandName" class='easyui-textbox' data-options='' readonly/></td></tr>
+        <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='16' name="enterpriseNo" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
+        <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='16' name="shorthandName" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
         <tr>
 
             <%--<th>企业类型</th>--%>
@@ -34,7 +34,7 @@ var enterpriseDialog;
 																																	data: [
 																																	{id: 'JY', value: '经营'},
 																																	{id: 'SC', value: '生产'}
-																																]"/></td>
+																																],width:200"/></td>
         </tr>
 
 
@@ -84,25 +84,25 @@ var enterpriseDialog;
 																																	data: [
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
-																																]"/></td>
+																																],required:true,width:200"/></td>
         </tr>
 
 
         <tr>
             <th>创建人</th>
-            <td><input type='text' data="1" id="createId" name='createId' value="${createId}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="createId" name='createId' value="${createId}" class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>创建时间</th>
-            <td><input type='text' data="1" id="createDate" name='createDate' value="${createDate}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="createDate" name='createDate' value="${createDate}" class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>编辑人</th>
-            <td><input type='text' data="1" id="editId" name='editId' value="${createId}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="editId" name='editId' value="${createId}" class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>编辑时间</th>
-            <td><input type='text' data="1" id="editDate" name='editDate' value="${createDate}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="editDate" name='editDate' value="${createDate}" class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <%--<th>是否有效</th>--%>
@@ -113,7 +113,7 @@ var enterpriseDialog;
 																																	data: [
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
-																																]"/></td>
+																																],width:200"/></td>
         </tr>
     </table>
 </form>
@@ -223,7 +223,7 @@ var enterpriseDialog;
 
     $(function () {
         $("#enterpriseIdQuery1").textbox({
-            width:135,
+            width:200,
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){
@@ -366,10 +366,7 @@ var enterpriseDialog;
                 {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
-                {field: '_operate',		title: '操作',	width: '20%',
-                    formatter: formatOper
-                }
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter}
             ]],
             onDblClickCell: function(index,field,value){
                 choseSelect();

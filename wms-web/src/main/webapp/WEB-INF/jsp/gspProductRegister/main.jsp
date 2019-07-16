@@ -37,7 +37,7 @@ $(function() {
 			{field: 'productRegisterId',		title: '主键',	width: 28 ,hidden:true},
 			{field: 'productRegisterNo',		title: '注册证编号',	width: 28 },
             {field: 'classifyId',		title: '管理分类',	width: 28 },
-            {field: 'classifyCatalog',		title: '分类目录',	width: 28 },
+            //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
 			{field: 'productNameMain',		title: '产品名称',	width: 28 },
 			{field: 'approveDate',		title: '批准日期',	width: 28 ,formatter:dateFormat2},
 			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 28 ,formatter:dateFormat2},

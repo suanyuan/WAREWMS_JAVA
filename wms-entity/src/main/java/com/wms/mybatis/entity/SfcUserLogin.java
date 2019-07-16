@@ -50,6 +50,8 @@ public class SfcUserLogin implements Serializable {
 
 	private Set<SfcCustomer> customerSet;
 
+	private String userGrade;
+
 	public java.lang.String getId() {
 		return id;
 	}
@@ -184,6 +186,14 @@ public class SfcUserLogin implements Serializable {
 
 	public void setCustomerSet(Set<SfcCustomer> customerSet) {
 		this.customerSet = customerSet;
+	}
+
+	public String getUserGrade() {
+		return userGrade;
+	}
+
+	public void setUserGrade(String userGrade) {
+		this.userGrade = userGrade;
 	}
 
 	@Override

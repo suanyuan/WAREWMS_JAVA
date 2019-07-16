@@ -7,6 +7,7 @@ public class GspOperateDetailVO {
 
 	private String licenseId;
 	private String operateId;
+	private String operateName;
 	private String createId;
 	private java.util.Date createDate;
 	private String editId;
@@ -71,4 +72,11 @@ public class GspOperateDetailVO {
 		this.isUse = isUse;
 	}
 
+	public String getOperateName() {
+		return operateName;
+	}
+
+	public void setOperateName(String operateName) {
+		this.operateName = operateName;
+	}
 }

@@ -20,6 +20,7 @@
 	<result column="merchant_id" property="merchantId"/>
 	<result column="session_id" property="sessionId"/>
 	<result column="user_type" property="userType"/>
+	<result column="user_grade" property="userGrade"/>
 </resultMap>
 
 <resultMap id="queryRoleForListMap" type="com.wms.mybatis.entity.SfcUser">
@@ -37,6 +38,7 @@
 	<result column="merchant_id" property="merchantId"/>
 	<result column="session_id" property="sessionId"/>
 	<result column="user_type" property="userType"/>
+	<result column="user_grade" property="userGrade"/>
 	<!-- <result column="country_id" property="countryId"/> -->
 	<association property="country" javaType="com.wms.mybatis.entity.SfcCountry">
         <result column="country_id" property="id"/>
@@ -79,7 +81,7 @@
        
 <!-- Sfc_User table all fields -->
 <sql id="Base_Column_List" >
-	 birthday,country_id,create_time,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type
+	 birthday,country_id,create_time,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type,user_grade
 </sql>
    
    
@@ -385,7 +387,8 @@ where 1=1
 	       h.descr_c as warehouse_name,
 	       g.defaultflag,
 	       i.customer_id,
-	       j.descr_c as customer_name
+	       j.descr_c as customer_name,
+	       user_grade
 	  from sfc_user a
 	  left outer join sfc_user_role b on a.user_id = b.user_id
 	  left outer join sfc_role c on b.role_id = c.role_id

@@ -57,6 +57,8 @@ public class SfcUser implements Serializable {
 	private com.wms.mybatis.entity.SfcWarehouse defaultWarehouse;
 
 	private Set<SfcCustomer> customerSet;
+
+	private String userGrade;
 	
 	public String getId() {
 		return id;
@@ -209,6 +211,14 @@ public class SfcUser implements Serializable {
 
 	public void setCustomerSet(Set<SfcCustomer> customerSet) {
 		this.customerSet = customerSet;
+	}
+
+	public String getUserGrade() {
+		return userGrade;
+	}
+
+	public void setUserGrade(String userGrade) {
+		this.userGrade = userGrade;
 	}
 
 	@Override

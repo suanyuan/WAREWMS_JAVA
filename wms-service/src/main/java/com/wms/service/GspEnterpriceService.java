@@ -118,9 +118,11 @@ public class GspEnterpriceService extends BaseService {
             }
 
             //判断经营范围
-            if(operateDetailIsRight(initScope(gspBusinessLicenseForm.getScopArr()),initScope(gspOperateLicenseForm.getScopArr())) == false){
-                return Json.error("经营/生产许可证中经营范围与营业执照中经营范围不相等");
-            }
+            /*if(gspBusinessLicenseForm.getScopArr()!=null && gspOperateLicenseForm.getScopArr()!=null){
+                if(operateDetailIsRight(initScope(gspBusinessLicenseForm.getScopArr()),initScope(gspOperateLicenseForm.getScopArr())) == false){
+                    return Json.error("经营/生产许可证中经营范围与营业执照中经营范围不相等");
+                }
+            }*/
 
             //组装经营范围
             if(gspBusinessLicenseForm.getScopArr()!=null && !"".equals(gspBusinessLicenseForm.getScopArr())){
@@ -154,15 +156,13 @@ public class GspEnterpriceService extends BaseService {
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
                 gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
-            Json.success("保存成功");
+            return Json.success("保存成功");
         }catch (Exception e){
             logger.info("企业信息新增失败"+e.getMessage());
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error("保存失败");
         }
-
-        return Json.success("保存成功");
     }
 
     /**
@@ -360,7 +360,7 @@ public class GspEnterpriceService extends BaseService {
         query.setIsUse(Constant.IS_USE_YES);
         MybatisCriteria criteria = new MybatisCriteria();
         criteria.setCondition(query);
-        List<GspEnterpriseInfo> enterpriseInfos = gspBusinessLicenseMybatisDao.queryByList(criteria);
+        List<GspEnterpriseInfo> enterpriseInfos = gspEnterpriseInfoMybatisDao.queryByList(criteria);
         if(enterpriseInfos!=null && enterpriseInfos.size()>0){
             return false;
         }else{
