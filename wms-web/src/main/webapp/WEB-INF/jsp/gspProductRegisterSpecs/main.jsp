@@ -340,12 +340,12 @@ var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
         productNameMain : $('#productNameMain').val(),
         productRegisterNo: $('#productRegisterNo').val(),
-		specsName : $('#specsName').val(),
-		productCode : $('#productCode').val(),
-		productName : $('#productName').val(),
-		productRemark : $('#productRemark').val(),
-		productModel : $('#productModel').val(),
-		productionAddress : $('#productionAddress').combobox("getValue"),
+        specsName : $('#specsName').val(),
+        productCode : $('#productCode').val(),
+        productName : $('#productName').val(),
+        productRemark : $('#productRemark').val(),
+        productModel : $('#productModel').val(),
+		productionAddress : $('#productionAddress').val(),
 
         createDateEnd : $("#createDateEnd").datebox("getValue"),
         createDateStart : $("#createDateStart").datebox("getValue"),
@@ -368,8 +368,8 @@ var doSearch = function(){
 		editId : $('#editId').val(),
 		//editDate : $('#editDate').val(),
 		isUse : $('#isUse').combobox('getValue')
-
 	});
+
 };
 
 
@@ -455,7 +455,7 @@ var toImportData = function(){
 							<th>注册证编号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格名称</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>商品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>商品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 						<td>
 

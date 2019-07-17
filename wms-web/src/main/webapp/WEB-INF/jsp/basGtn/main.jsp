@@ -45,9 +45,9 @@ $(function() {
 			{field: 'sku',		title: '产品代码',	width: 400 },
 			{field: 'gtncode',		title: 'GTN码',	width: 400 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
-		},
+		// onDblClickCell: function(index,field,value){
+		// 	edit();
+		// },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');
