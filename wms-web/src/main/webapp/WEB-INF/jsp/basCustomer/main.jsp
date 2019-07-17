@@ -17,6 +17,8 @@ var ezuiDatagrid;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+
+
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 		method:'POST',
@@ -26,7 +28,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: false,
 		striped: true,
 		collapsible:false,
@@ -36,7 +38,7 @@ $(function() {
 		idField : 'customerid',
 		columns : [[
 
-            {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
+            {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';
 					}else if (rowData.customerType=='VE'){
@@ -53,30 +55,30 @@ $(function() {
                         return rowData.customerType='主体';
 					}
                 } },
-            {field: 'activeFlag',		title: '是否合作 ',	width: 20,formatter:function(value,rowData,rowIndex){
+            {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            {field: 'customerid',		title: '客户代码',	width: 20 },
-            {field: 'descrC',		title: '客户名称',	width: 20 },
-            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
-            {field: 'shorthandName',		title: '简称 ',	width: 15 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
-            {field: 'contacts',		title: '联系人 ',	width: 15 },
-            {field: 'contactsPhone',		title: '联系人电话 ',	width: 30 },
-			{field: 'supContractNo',		title: '合同编号 ',	width: 20 },
+            {field: 'customerid',		title: '客户代码',	width: 120 },
+            {field: 'descrC',		title: '客户名称',	width: 100 },
+            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 90 },
+            {field: 'shorthandName',		title: '简称 ',	width: 55 },
+            {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
+            {field: 'contacts',		title: '联系人 ',	width: 75 },
+            {field: 'contactsPhone',		title: '联系人电话 ',	width: 95 },
+			{field: 'supContractNo',		title: '合同编号 ',	width: 120 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-            {field: 'contractUrl',		title: '合同文件 ',	width: 20 },
-            {field: 'clientContent',		title: '委托内容 ',	width: 20 },
-            {field: 'clientStartDate',		title: '委托开始时间 ',	width: 30 },
-            {field: 'clientEndDate',		title: '委托结束时间 ',	width: 30 },
-			{field: 'clientTerm',		title: '委托期限',	width: 20 },
+            {field: 'contractUrl',		title: '合同文件 ',	width: 120 },
+            {field: 'clientContent',		title: '委托内容 ',	width: 120 },
+            {field: 'clientStartDate',		title: '委托开始时间 ',	width: 130 },
+            {field: 'clientEndDate',		title: '委托结束时间 ',	width: 130 },
+			{field: 'clientTerm',		title: '委托期限',	width: 120 },
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'remark',		title: '备注 ',	width: 15 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
+            {field: 'remark',		title: '备注 ',	width: 85 },
+            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 90},
 
 		]],
 		onDblClickCell: function(index,field,value){

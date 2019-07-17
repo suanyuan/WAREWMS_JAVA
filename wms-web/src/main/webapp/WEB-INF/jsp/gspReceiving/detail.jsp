@@ -493,7 +493,7 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1',
+                activeFlag : '1',
                 customerType:'VE'
             },
             fit:true,
@@ -581,7 +581,7 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1',
+                activeFlag : '1',
                 customerType:'OW'
             },
             fit:true,
@@ -717,7 +717,6 @@
         var row = clientDatagrid.datagrid("getSelected");
         if(row){
             $("#client").textbox("setValue",row.descrC);
-
             ezuiDialogClientDetail.dialog('close');
         }
     }
@@ -734,15 +733,19 @@
 
     //收货单位信息提交
     function dooSubmit() {
+
+
+
+
         /*$("#ezuiFormAddress input[id='isCheck']")*/
         var a = $('#isChec').combobox('getValue');
-        if (a=='1') {
-            var   url = '<c:url value="/gspReceivingController.do?add"/>';
+        var row = ezuiDetailsDatagrid.datagrid("getSelected");
 
+    if (a=='1') {
+            var   url = '<c:url value="/gspReceivingController.do?add"/>';
             $("#ezuiFormAddress").form('submit', {
-                url : url+"&newreceivingId="+newreceivingId,
+                url : url+"&newreceivingId="+row.receivingAddressId,
                 onSubmit : function(){
-                    console.log("1");
                     if(ezuiFormAddress.form('validate')){
                         $.messager.progress({
                             text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -780,7 +783,7 @@
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否直接下发？',function (confirm) {
                 if (confirm) {
                     $("#ezuiFormAddress").form('submit', {
-                        url : '/basCustomerController.do?submit&newreceivingId='+newreceivingId,
+                        url : '/basCustomerController.do?submit&newreceivingId='+row.receivingAddressId,
                         onSubmit : function(){
                             if(ezuiFormAddress.form('validate')){
                                 $.messager.progress({
@@ -861,6 +864,9 @@
     //增加地址
     var  AddAddress=function () {
         processType = 'add';
+
+        if ($('#ezuiFormAddress').form('validate')){
+
         dialogAddAddress = $('#dialogAddAddress').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -872,6 +878,7 @@
                  ezuiFormClear(ezuiForm);
             }
         })
+        }
 
     };
     //地址的删除
@@ -937,7 +944,7 @@
     function binaji() {
 
     if (processType == 'add') {
-    $("#ezuiFormAddress input[name='isCheck']").val('1');
+    $("#ezuiFormAddress input[name='isCheck']").val('0');
     }
     if (processType != "newAdd"){
     var a = $("#first").val();

@@ -47,13 +47,13 @@
                     <th>企业名称</th>
                     <td><input type='text' value="${gspOperateLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>法定代表人</th>
-                    <td><input type='text' value="${gspOperateLicense.juridicalPersion}" data="1" id="juridicalPersion" name='juridicalPersion' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspOperateLicense.juridicalPerson}" data="1" id="juridicalPersion" name='juridicalPersion' class='easyui-textbox' data-options='required:true,width:250'/></td>
                 </tr>
                 <tr>
                     <th>住所</th>
                     <td><input type='text' value="${gspOperateLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>经营场所</th>
-                    <td><input type='text' value="${gspOperateLicense.business_residence}" data="1" id="business_residence" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspOperateLicense.businessResidence}" data="1" id="business_residence" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
                 </tr>
                 <tr>
                     <th>经营/生产许可证发证日期</th>

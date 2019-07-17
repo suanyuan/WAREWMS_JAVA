@@ -68,7 +68,7 @@ public class GspReceivingAddressService extends BaseService {
 			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
-			gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+		//	gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 			json.setObj(gspReceivingAddress.getReceivingId());
 
 		}else {

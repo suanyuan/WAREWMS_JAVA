@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.BasCustomer;
+import com.wms.entity.ProductLine;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.ProductLineMybatisDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,12 @@ public class ProductLineController {
 	@Autowired
 	private ProductLineService productLineService;
 
+	@Autowired
+	private ProductLineMybatisDao productLineMybatisDao;
+
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
+
 
 
 	@Login
@@ -38,6 +47,22 @@ public class ProductLineController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
 		return new ModelAndView("productLine/main", model);
+	}
+	@Login
+	@RequestMapping(params = "toAddProduct")
+	public ModelAndView toAddProduct(String productLineId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		ProductLine productLine = productLineMybatisDao.queryById(productLineId);
+		if (productLine != null) {
+
+			BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(productLine.getCustomerid());
+			if (basCustomer != null) {
+
+				model.put("descrC", basCustomer.getDescrC());
+			}
+		}
+		model.put("productLine", productLine);
+		return new ModelAndView("productLine/addProduct", model);
 	}
 
 	@Login
@@ -56,8 +81,8 @@ public class ProductLineController {
 		Json json = productLineService.addProductLine(productLineForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

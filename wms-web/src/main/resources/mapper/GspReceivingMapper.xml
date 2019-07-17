@@ -49,7 +49,7 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
-	<if test="condition.receivingId != null and condition.receivingId != ''" >
+	<if test="condition.receivingId != null or condition.receivingId == ''" >
 	    and receiving_id =  #{condition.receivingId}
 	</if>
 	<if test="condition.firstState != null and condition.firstState != ''" >

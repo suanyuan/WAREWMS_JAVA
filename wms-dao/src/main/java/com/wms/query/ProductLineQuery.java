@@ -6,6 +6,8 @@ public class ProductLineQuery implements IQuery {
 
 	private String productLineId;
 	private String enterpriseName;
+	private String customerid;
+	private String descrC;
 	private String name;
 	private String expression;
 	private String createId;
@@ -13,6 +15,22 @@ public class ProductLineQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
+
+	public String getDescrC() {
+		return descrC;
+	}
+
+	public void setDescrC(String descrC) {
+		this.descrC = descrC;
+	}
 
 	public String getProductLineId() {
 		return productLineId;

@@ -8,6 +8,7 @@ public class ProductLineForm {
 	private String productLineId;
 	private String enterpriseName;
 	private String name;
+	private String customerid;
 	private String expression;
 	private String createId;
 
@@ -15,6 +16,14 @@ public class ProductLineForm {
 	private String editId;
 	private String editDate;
 	private String isUse;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
 	public String getProductLineId() {
 		return productLineId;

@@ -17,7 +17,10 @@ public class GspReceivingForm {
 	private String isReturn;
 	private String deliveryAddress;
 	private String sellerName;
+	private String contacts;
+	private String phone;
 	private String firstState;
+
 
 	public String getNewreceivingId() {
 		return newreceivingId;
@@ -66,9 +69,6 @@ public class GspReceivingForm {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-	private String contacts;
-	private String phone;
 	public String getIsCooperation() {
 		return isCooperation;
 	}

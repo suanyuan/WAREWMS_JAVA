@@ -153,7 +153,7 @@
             case CHECKSTATE.CHECKSTATE_40 : return "已通过";
             case CHECKSTATE.CHECKSTATE_50 : return "未通过";
         }
-    }
+    };
 
     var applyTypeFormatter = function(value,row,index) {
 	    console.log(row);

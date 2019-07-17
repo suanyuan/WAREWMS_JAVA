@@ -23,7 +23,7 @@
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
 	<result column="enterprise_name" property="enterpriseName"/>
-	<result column="juridical_person" property="juridicalPersion"/>
+	<result column="juridical_person" property="juridicalPerson"/>
 	<result column="residence" property="residence"/>
 	<result column="business_residence" property="businessResidence"/>
 
