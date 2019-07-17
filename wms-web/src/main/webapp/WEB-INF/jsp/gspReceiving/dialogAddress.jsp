@@ -1,73 +1,118 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+
 <div id='dialogAddAddress' style='padding: 10px;'>
-	<input type='hidden' id='receivingId' name='receivingId'/>
 	<form id='dialogAddAddressForm' method='post' >
 
+	<input  id='r'  type="hidden" name='receivingId' value="${receivingId}" class='textbox-value' />
+	<%--<input    name='receivingId' value="${receivingId}" class='easyui-textbox' />--%>
 
 			<table>
+				<%--<tr>
+				<th>收货单位</th>
+				<td>
+					<input type='text' name='clientId' id="receivingI"  size="16" class='easyui-textbox' data-options='required:true'/>
+					<a href="javascript:void(0)" onclick="searchReceiving()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>
+				</td>
+				</tr>--%>
 				<tr>
 					<th>销售人</th>
-					<td><input type='text' name="sellerName" id='sellerName' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="sellerName"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>国家</th>
-					<td><input type='text'   name="country" id='country' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text'   name="country"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>省</th>
-					<td><select  name="province" id='province'>
-						<option value="selected">请选择省份</option>
-
-						</select>
+					<td>
+						<input id="cc1" class="easyui-combobox" name="province" editable="false" data-options="
+            	required:true,
+                valueField: 'name',
+                textField: 'name',
+            	url: 'gspReceivingAddressController.do?getArea&pid=0',
+            	onSelect: function(rec){
+					$('#cc2').combobox('clear');
+               		$('#cc3').combobox('clear');
+                	var url= 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+                	$('#cc2').combobox('reload',url);
+            }">
 					</td>
 				</tr>
 				<tr>
 					<th>市</th>
-					<td><input type='text' name="city" id='city' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td>
+					<input id="cc2" class="easyui-combobox" name="city" editable="false" data-options="
+            required:true,
+            valueField: 'name',
+            textField: 'name',
+            onSelect: function(rec){
+            	$('#cc2').combobox('reload', url);
+                $('#cc3').combobox('clear');
+                var url = 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+                $('#cc3').combobox('reload', url);
+            }">
+					</td>
 				</tr>
 				<tr>
-					<th>区</th>
-					<td><input type='text' name="district" id='district' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>区/县</th>
+					<td>
+						<input id="cc3" class="easyui-combobox" name="district" editable="false" data-options="
+            required:true,
+            valueField:'name',
+            textField:'name'">
+					</td>
 				</tr>
 				<tr>
-					<th>送货地址</th>
-					<td><input type='text' name="deliveryAddress" id='deliveryAddress' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>地址</th>
+					<td><input type='text' name="deliveryAddress"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>邮编</th>
-					<td><input type='text' name="zipcode"  id='zipcode' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="zipcode"   class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>联系人</th>
-					<td><input type='text' name="contacts" id='contacts' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="contacts"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>联系人电话</th>
-					<td><input type='text' name="phone"  id='phone' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name="phone"  class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>是否默认</th>
-					<td><input type='text' id='isDefault' name="isDefault" class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' id='isDefault' name="isDefault" class='easyui-combobox' size='20' data-options='required:true'/></td>
 				</tr>
 			</table>
 
 	</form>
+</div>
 
-</div>
-<div>
-	<td>
-		<a onclick='doSubmitAddress();'  class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose(dialogAddAddress);' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</td>
-</div>
+
+
+
 <script>
+	var ezuiDialogReceivingDetail;
+	var dataGridReceivingDetail;
+	var dialogReceiving;
+
+	var  newreceivingId;
+    $(function () {
+        $("#dialogAddAddressForm input[name='isDefault']").combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value'
+        });
+        console.log($("#hiddenreceivingId").val());
+    });
+
     function doSubmitAddress() {
         var infoObj = new Object();
         $("#dialogAddAddressForm input[class='textbox-value']").each(function (index) {
             infoObj[""+$(this).attr("name")+""] = $(this).val();
-        })
+        });
+
 
         var url = '';
         if (processType == 'edit') {
@@ -85,8 +130,10 @@
                 try{
                     if(result.success){
                         msg = result.msg;
+                        newreceivingId=result.obj;
                         ezuiDetailsDatagrid.datagrid('reload');
                         dialogAddAddress.dialog('close');
+
                     }else{
                         msg = '<font color="red">' + result.msg + '</font>';
                     }
@@ -103,40 +150,9 @@
         });
 
 
-        /*$("#dialogAddAddressForm").form('submit', {
-            url : url,
-            onSubmit : function(){
-                console.log("1");
-                if(dialogAddAddressForm.form('validate')){
-                    $.messager.progress({
-                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-                    });
-                    return true;
-                }else{
-                    return false;
-                }
-            },
-            success : function(data) {
-                var msg='';
-                try {
-                    var result = $.parseJSON(data);
-                    if(result.success){
-                        msg = result.msg;
-                        ezuiDetailsDatagrid.datagrid('reload');
-                        dialogAddAddress.dialog('close');
-                    }else{
-                        msg = '<font color="red">' + result.msg + '</font>';
-                    }
-                } catch (e) {
-                    msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-                    msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-                } finally {
-                    $.messager.show({
-                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                    });
-                    $.messager.progress('close');
-                }
-            }
-        });*/
+
     }
+
+
+
 </script>

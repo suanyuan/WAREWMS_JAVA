@@ -39,14 +39,7 @@
             <td><input type='text' data="1" id="productModel" name='productModel' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
             <th>产地</th>
-            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	valueField: 'id',
-																																	textField: 'value',
-																																	data: [
-																																	{id: '国内', value: '国内'},
-																																	{id: '国外', value: '国外'}
-																																]"/></td>
+            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='required:true' /></td>
             <%--<td><select data="1" id="productionAddress" name="productionAddress" class="easyui-combobox"  style="width:385px;">--%>
                 <%--<option value=""></option>--%>
                 <%--<option >国内</option>--%>
@@ -82,6 +75,28 @@
 
         </tr>
         <tr>
+            <th>是否需要双证</th><td><input type="text" data="1" id="isDoublec"    name="isDoublec"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '1', value: '是'},
+																																	{id: '0', value: '否'}
+																																]"/></td>
+            <th>是否需要产品合格证</th><td><input type="text" data="1" id="isCertificate"   name="isCertificate"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '1', value: '是'},
+																																	{id: '0', value: '否'}
+																																]"/></td>
+
+
+
+        </tr>
+
+        <tr>
             <th>运输条件</th>
             <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
@@ -114,20 +129,24 @@
         </tr>
 
         <tr>
+            <th>附卡类别</th>
+            <td><input type='text' data="1"  id="attacheCardCategory" name='attacheCardCategory' class='easyui-textbox' size='50' data-options='required:true' /></td>
+
             <th>创建人</th>
             <td contenteditable="false"><input type='text' data="1" value="${createId}" id="createId" name='createId' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
-
-            <th>创建时间</th>
-            <td><input type='text' data="1" value="${createDate}" id="createDate" name='createDate' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
         </tr>
         <tr>
+            <th>创建时间</th>
+            <td><input type='text' data="1" value="${createDate}" id="createDate" name='createDate' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
+
             <th>编辑人</th>
             <td><input type='text' data="1" value="${createId}" id="editId" name='editId' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
 
+          </tr>
+        <tr>
             <th>编辑时间</th>
             <td><input type='text'  value="${createDate}" id="editDate" name='editDate' class='easyui-textbox' size='50' data-options='required:true' readonly/></td>
-        </tr>
-        <tr>
+
             <th>是否有效：</th><td><input type="text" data="1" id="isUse"  value="${isUse}"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
@@ -136,6 +155,7 @@
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
+
         </tr>
     </table>
 </form>
@@ -143,8 +163,11 @@
 <script>
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
+
         if(row){
+            if(processType == 'edit'){
             $.ajax({
+
                 url : 'gspProductRegisterSpecsController.do?getInfo',
                 data : {"specsId" : row.specsId},
                 type : 'POST',
@@ -152,11 +175,23 @@
                 success : function(result){
                     if(result.success){
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
-                            $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""])
+                            if($(this).attr("class")){
+                                if($(this).attr("class").indexOf('easyui-textbox')!=-1){
+                                    $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                    //gspBusinessFrom[""+$(this).attr("id")+""] = $(this).textbox("getValue");
+                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                    $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                    $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }
+                            }
+
+
                         })
                     }
                 }
             });
+            }
         }
 
 

@@ -26,13 +26,14 @@ import java.util.*;
 /**
  * Created by IntelliJ IDEA.
  * User: andy.qu
- * Date: 2019/6/24q
+ * Date: 2019/6/24
  */
 @Controller
 @RequestMapping("commonController")
 public class CommonController {
 
-    private static final String uploadUrl = "E:\\fileUploads";
+    private static final String uploadUrl = "/Users/quendi/fileUpload";
+    //private static final String uploadUrl = "/root/uploadDir";
 
     @Autowired
     private BasCodesService basCodesService;
@@ -50,16 +51,15 @@ public class CommonController {
         InputStream stream = null;
         uploadResult.setSuccess(false);
         String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-        //String uploadPath = request.getSession().getServletContext().getRealPath("uploadfiles");
         String file_name = UUID.randomUUID().toString().replace("-","")+"."+ ext.substring(ext.lastIndexOf(".")+1);
         try {
             stream = file.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
-            File targetFile= new File(uploadUrl+File.separator+file_name);
+            File targetFile = new File(uploadUrl+File.separator+file_name);
             Files.write(buffer,targetFile);
             uploadResult.setSuccess(true);
-            uploadResult.setComment("/fileuploads/"+file_name);
+            uploadResult.setComment(file_name);
         } catch (IOException e) {
             uploadResult.setSuccess(false);
             uploadResult.setComment("uploadFile 上传文件 error");
@@ -94,7 +94,7 @@ public class CommonController {
             response.setHeader("Content-Length", String.valueOf(fileLength));
             bis = new BufferedInputStream(new FileInputStream(file));
             bos = new BufferedOutputStream(response.getOutputStream());
-            byte[] buff = new byte[2048];
+            byte[] buff = new byte[4096];
             int bytesRead;
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
                 bos.write(buff, 0, bytesRead);
@@ -155,7 +155,6 @@ public class CommonController {
     @RequestMapping(params = "getCatalogFirstState")
     @ResponseBody
     public List<EasyuiCombobox> getCatalogFirstState(){
-        //TODO 数据库内容待添加
         return basCodesService.getBy(Constant.CODE_CATALOG_FIRSTSTATE);
     }
 
@@ -189,7 +188,27 @@ public class CommonController {
     @RequestMapping(params = "getEntType")
     @ResponseBody
     public List<EasyuiCombobox> getEntType(){
-        //TODO 数据库内容待添加
         return basCodesService.getBy(Constant.CODE_CATALOG_ENTTYPE);
+    }
+
+    /**
+     * 首营状态
+     * @return
+     */
+    @RequestMapping(params = "firstState")
+    @ResponseBody
+    public List<EasyuiCombobox> firstState(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_FIRSTSTATE);
+    }
+
+
+    /**
+     * 首营状态
+     * @return
+     */
+    @RequestMapping(params = "checkState")
+    @ResponseBody
+    public List<EasyuiCombobox> checkState(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_CHECKSTATE);
     }
 }

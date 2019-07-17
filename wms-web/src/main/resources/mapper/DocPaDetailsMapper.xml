@@ -30,11 +30,18 @@
 	<result column="TRANSACTIONID" property="transactionid"/>
 </resultMap>
 
+    <!--<resultMap id="ExtendResultMap" type="com.wms.entity.DocPaDetails" extends="BaseResultMap">-->
+        <!--<association property="invLotAtt"-->
+                     <!--column="{customerid = CUSTOMERID, sku = SKU, lotatt04 = USERDEFINE3, lotatt05 = USERDEFINE4}"-->
+                     <!--javaType="com.wms.entity.InvLotAtt"-->
+                     <!--select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryForScan"/>-->
+    <!--</resultMap>-->
+
     <resultMap id="ExtendResultMap" type="com.wms.entity.DocPaDetails" extends="BaseResultMap">
         <association property="invLotAtt"
-                     column="{lotatt02 = USERDEFINE2, lotatt04 = USERDEFINE3, lotatt05 = USERDEFINE4}"
+                     column="LOTNUM"
                      javaType="com.wms.entity.InvLotAtt"
-                     select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryForScan"/>
+                     select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
     </resultMap>
        
 <!-- doc_pa_details table all fields -->
@@ -242,15 +249,12 @@ where 1=1
         where pano = #{pano, jdbcType = VARCHAR} and palineno = #{palineno, jdbcType = INTEGER}
     </select>
 
-    <!-- userdefine2-效期 userdefine3-生产批号 userdefine4-序列号 -->
+    <!-- userdefine3-生产批号 userdefine4-序列号 -->
     <select id="queryDocPaDetail" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         <include refid="Base_Column_List"/>
         from doc_pa_details
-        where pano = #{pano, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
-        <if test="lotatt02 != null and lotatt02 != ''">
-            and userdefine2 = #{lotatt02, jdbcType=VARCHAR}
-        </if>
+        where pano = #{pano, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR} and userdefine1 = 'STAGE01'
         <if test="lotatt04 != null and lotatt04 != ''">
             and userdefine3 = #{lotatt04, jdbcType=VARCHAR}
         </if>
@@ -259,9 +263,9 @@ where 1=1
         </if>
     </select>
 
-    <select id="putawayGoods" statementType="CALLABLE" parameterType="java.util.Map">
-        {call spasn_putawaying_process(#{pano, jdbcType=VARCHAR},#{palineno, jdbcType=INTEGER},#{lotatt01, jdbcType=VARCHAR},#{asnno, jdbcType=VARCHAR},#{asnlineno, jdbcType=VARCHAR},#{customerid, jdbcType=VARCHAR},#{sku, jdbcType=VARCHAR},#{userdefine1, jdbcType=VARCHAR},#{userdefine2, jdbcType=VARCHAR},#{userdefine3, jdbcType=VARCHAR},#{userdefine4, jdbcType=VARCHAR},#{userdefine5, jdbcType=VARCHAR},#{packid, jdbcType=VARCHAR},#{userid, jdbcType=VARCHAR},#{paqty, jdbcType=DECIMAL},#{warehouseid, jdbcType=VARCHAR},#{language, jdbcType=VARCHAR},#{returncode, jdbcType=VARCHAR})}
-    </select>
+    <update id="putawayGoods" statementType="CALLABLE" parameterType="java.util.Map">
+        {call spasn_putawaying_process(#{pano, mode=IN, jdbcType=VARCHAR},#{palineno, mode=IN, jdbcType=VARCHAR},#{lotatt01, mode=IN, jdbcType=VARCHAR},#{asnno, mode=IN, jdbcType=VARCHAR},#{asnlineno, mode=IN, jdbcType=VARCHAR},#{customerid, mode=IN, jdbcType=VARCHAR},#{sku, mode=IN, jdbcType=VARCHAR},#{userdefine1, mode=IN, jdbcType=VARCHAR},#{userdefine2, mode=IN, jdbcType=VARCHAR},#{userdefine3, mode=IN, jdbcType=VARCHAR},#{userdefine4, mode=IN, jdbcType=VARCHAR},#{userdefine5, mode=IN, jdbcType=VARCHAR},#{packid, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},#{paqty, mode=IN, jdbcType=DECIMAL},#{warehouseid, mode=IN, jdbcType=VARCHAR},#{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
+    </update>
 
     <select id="queryDocPaList" parameterType="java.lang.String" resultMap="ExtendResultMap">
         select

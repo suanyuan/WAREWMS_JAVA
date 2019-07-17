@@ -3,7 +3,9 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
-public class GspBusinessLicenseVO {
+import java.io.Serializable;
+
+public class GspBusinessLicenseVO implements Serializable {
 
 	private String businessId;
 	private String enterpriseId;
@@ -14,6 +16,7 @@ public class GspBusinessLicenseVO {
 	private String residence;
 	private String juridicalPerson;
 	private String registeredCapital;
+
 	private java.util.Date establishmentDate;
 	private java.util.Date businessStartDate;
 	private java.util.Date businessEndDate;

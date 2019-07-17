@@ -37,6 +37,7 @@ public class GspBusinessLicenseService extends BaseService {
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
 		gspBusinessLicense.setCreateId(getLoginUserId());
+		gspBusinessLicense.setIsUse(Constant.IS_USE_YES);
 		gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
@@ -77,47 +78,47 @@ public class GspBusinessLicenseService extends BaseService {
 	}
 
 	public void updateGspBusinessLicenseActiveTag(String enterpriseId,String tag) {
-		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
-		form.setEnterpriseId(enterpriseId);
-		form.setIsUse(tag);
-		gspBusinessLicenseMybatisDao.updateBySelective(form);
+		gspBusinessLicenseMybatisDao.updateGspBusinessLicenseActiveTag(enterpriseId, tag);
 	}
 
 	public void updateGspBusinessLicenseTagById(String id,String tag) {
 		GspBusinessLicenseForm form = new GspBusinessLicenseForm();
 		form.setBusinessId(id);
 		form.setIsUse(tag);
-		gspBusinessLicenseMybatisDao.updateBySelective(form);
+		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+		BeanUtils.copyProperties(form,gspBusinessLicense);
+		gspBusinessLicenseMybatisDao.updateBySelective(gspBusinessLicense);
 	}
 
 	/**
 	 * 营业执照新增
 	 * @param enterpriceId 企业id
-	 * @param businessFormStr
+	 * @param gspBusinessLicenseForm
 	 * @param operateDetailStr
 	 * @param gspBusinessLicenseId 营业执照id
 	 * @return
 	 */
-	public Json addGspBusinessLicense(String enterpriceId,String businessFormStr,String operateDetailStr,String gspBusinessLicenseId,String opType){
+	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType){
 		try{
-			GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
-			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
+			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
+			List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>();//JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
 				return Json.error("请先保存企业基础信息");
 			}
 			if(gspBusinessLicenseForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
 				return Json.error("营业执照信息不全！");
 			}
-			if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
+			/*if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
 				return Json.error("必须选择营业执照经营范围！");
-			}
+			}*/
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增
-				if("".equals(gspBusinessLicenseId)){
+				if(gspBusinessLicenseId == null || "".equals(gspBusinessLicenseId)){
 					gspBusinessLicenseId = RandomUtil.getUUID();
 					gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
 					gspBusinessLicenseForm.setBusinessId(gspBusinessLicenseId);
+					gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
 					addGspBusinessLicense(gspBusinessLicenseForm);
 
 					if(gspOperateDetailForm.size()>0){
@@ -144,6 +145,7 @@ public class GspBusinessLicenseService extends BaseService {
 				String newBusinessLicenseId = RandomUtil.getUUID();
 				gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
 				gspBusinessLicenseForm.setBusinessId(newBusinessLicenseId);
+				gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
 				addGspBusinessLicense(gspBusinessLicenseForm);
 
 				if(gspOperateDetailForm.size()>0){
@@ -153,7 +155,7 @@ public class GspBusinessLicenseService extends BaseService {
 					}
 				}
 			}
-			return Json.error("提交营业执照失败");
+			return Json.error("保存营业执照失败");
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -170,7 +172,7 @@ public class GspBusinessLicenseService extends BaseService {
 	public EasyuiDatagrid<GspBusinessLicenseVO> getGspBusinessLicenseHistory(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
 		EasyuiDatagrid<GspBusinessLicenseVO> datagrid = new EasyuiDatagrid<>();
 		List<GspBusinessLicenseVO> gspBusinessLicenseVOList = new ArrayList<>();
-		if(!query.getEnterpriseId().equals("")){
+		if(!query.getSocialCreditCode().equals("")){
 			MybatisCriteria criteria = new MybatisCriteria();
 			criteria.setCondition(query);
 			criteria.setCurrentPage(pager.getPage());

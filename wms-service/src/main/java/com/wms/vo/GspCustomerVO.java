@@ -3,12 +3,15 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class GspCustomerVO {
 
 	private String clientId;
 	private String clientNo;
 	private String clientName;
 	private String enterpriseId;
+	private String enterpriseName;
 	private String remark;
 	private String firstState;
 	private String isCheck;
@@ -17,8 +20,8 @@ public class GspCustomerVO {
 	private String contractNo;
 	private String contractUrl;
 	private String clientContent;
-	private String clientStartDate;
-	private String clientEndDate;
+	private Date clientStartDate;
+	private Date clientEndDate;
 	private String clientTerm;
 	private String isChineseLabel;
 	private String createId;
@@ -123,19 +126,19 @@ public class GspCustomerVO {
 		this.clientContent = clientContent;
 	}
 
-	public String getClientStartDate() {
+	public Date getClientStartDate() {
 		return clientStartDate;
 	}
 
-	public void setClientStartDate(String clientStartDate) {
+	public void setClientStartDate(Date clientStartDate) {
 		this.clientStartDate = clientStartDate;
 	}
 
-	public String getClientEndDate() {
+	public Date getClientEndDate() {
 		return clientEndDate;
 	}
 
-	public void setClientEndDate(String clientEndDate) {
+	public void setClientEndDate(Date clientEndDate) {
 		this.clientEndDate = clientEndDate;
 	}
 
@@ -197,4 +200,11 @@ public class GspCustomerVO {
 		this.isUse = isUse;
 	}
 
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 }

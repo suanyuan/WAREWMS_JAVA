@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.utils.RandomUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,7 @@ public class BasPackageService extends BaseService {
 		BasPackage basPackage = new BasPackage();
 		//System.out.println(basPackageForm.getPackid()+"=====================================");
 		BeanUtils.copyProperties(basPackageForm, basPackage);
+		basPackageForm.setPackid(RandomUtil.getUUID());
 		basPackageMybatisDao.add(basPackageForm);
 		json.setSuccess(true);
 		return json;
@@ -64,7 +66,7 @@ public class BasPackageService extends BaseService {
 		//basPackageQuery.setPackid(basPackageForm.getPackid());
 		//BasPackage basPackage = basPackageMybatisDao.queryById(basPackageQuery);
 		//BeanUtils.copyProperties(basPackageForm, basPackage);
-		basPackageMybatisDao.update(basPackageForm);
+		basPackageMybatisDao.updateBySelective(basPackageForm);
 		json.setSuccess(true);
 
 		return json;

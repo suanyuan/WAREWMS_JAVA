@@ -57,7 +57,7 @@ public class PdaPutawayController {
      */
     @RequestMapping(params = "docPaHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocAsnHeader(String pano) {
+    public Map<String, Object> queryDocPaHeader(String pano) {
 
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocPaHeaderVO pdaDocAsnHeaderVO = docPaHeaderService.queryByPano(pano);
@@ -79,6 +79,13 @@ public class PdaPutawayController {
 
         Map<String, Object> resultMap = new HashMap<>();
         PdaDocPaDetailVO docPaDetailVO = docPaDetailsService.queryDocPaDetail(query);
+
+        if (docPaDetailVO == null || docPaDetailVO.getPano().length() == 0) {
+            PdaResult result =
+                    new PdaResult(PdaResult.CODE_FAILURE, "无任务详情信息");
+            resultMap.put(Constant.RESULT, result);
+            return resultMap;
+        }
 
         if (docPaDetailVO.getBasSku() == null
                 || docPaDetailVO.getInvLotAtt() == null) {
@@ -144,5 +151,4 @@ public class PdaPutawayController {
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
     }
-
 }

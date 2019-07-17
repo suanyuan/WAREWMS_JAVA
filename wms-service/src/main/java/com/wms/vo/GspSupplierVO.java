@@ -16,6 +16,70 @@ public class GspSupplierVO {
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	private java.lang.String editDate;
 	private java.lang.String isUse;
+	private java.lang.String firstState;
+	private java.lang.String enterpriseNo;
+	private java.lang.String enterpriseName;
+	private java.lang.String shorthandName;
+	private java.lang.String enterpriseType;
+
+
+	private java.lang.String contractNo;
+	private java.lang.String contractUrl;
+	private java.lang.String clientContent;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String clientStartDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String clientEndDate;
+	private java.lang.String clientTerm;
+
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public String getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(String clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public String getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(String clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
 
 	public java.lang.String getSupplierId() {
 		return supplierId;
@@ -91,5 +155,45 @@ public class GspSupplierVO {
 
 	public void setEditDate(String editDate) {
 		this.editDate = editDate;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
 	}
 }

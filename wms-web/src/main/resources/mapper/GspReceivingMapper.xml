@@ -16,13 +16,34 @@
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
 	<result column="is_return" property="isReturn"/>
+	<result column="first_state" property="firstState"/>
 </resultMap>
        
 <!-- gsp_receiving table all fields -->
 <sql id="Base_Column_List" >
-	 receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return
+	 receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return,first_State
 </sql>
-   
+  <!-- <select  id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	   select * from (select * from gsp_enterprise_info where 1=1
+	   <if test="condition.enterpriseNo != null and condition.enterpriseNo != ''">
+		   and enterprise_no like CONCAT('%',#{condition.enterpriseNo},'%')
+	   </if>
+	   <if test="condition.shorthandName != null and condition.shorthandName != ''">
+		   and shorthand_name like CONCAT('%',#{condition.shorthandName},'%')
+	   </if>
+	   <if test="condition.enterpriseName != null and condition.enterpriseName != ''">
+		   and enterprise_name like CONCAT('%',#{condition.enterpriseName},'%')
+	   </if>
+	   ) a,
+	   (select * from gsp_receiving where 1=1 <include refid="Example_Where_Clause"/> ) b
+	   where a.enterpriseId = b.enterpriseId
+	   <if test="orderByClause != null and orderByClause != ''" >
+		   order by  ${orderByClause}
+	   </if>
+	   <if test="limitClause != null and limitClause != ''" >
+		   ${limitClause}
+	   </if>
+   </select>-->
    
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
@@ -30,6 +51,9 @@ where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.receivingId != null and condition.receivingId != ''" >
 	    and receiving_id =  #{condition.receivingId}
+	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+	    and first_state =  #{condition.firstState}
 	</if>
 	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
 	    and enterprise_id =  #{condition.enterpriseId}
@@ -62,19 +86,22 @@ where 1=1
 	<if test="condition.isReturn != null and condition.isReturn != ''" >
 	    and is_return =  #{condition.isReturn}
 	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+	    and first_state =  #{condition.firstState}
+	</if>
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_receiving(receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return)
- values(#{receivingId},#{enterpriseId},#{clientId},#{supplierId},#{isCheck},#{createId},now(),#{editId},now(),#{isUse},#{isReturn})
+  insert into gsp_receiving(receiving_id,enterprise_id,client_id,supplier_id,is_check,create_id,create_date,edit_id,edit_date,is_use,is_return,first_state)
+ values(#{receivingId},#{enterpriseId},#{clientId},#{supplierId},#{isCheck},#{createId},now(),#{editId},now(),#{isUse},#{isReturn},#{firstState})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_receiving set enterprise_id=#{enterpriseId},client_id=#{clientId},supplier_id=#{supplierId},is_check=#{isCheck},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},is_return=#{isReturn} where receiving_id=#{receivingId}
+  update gsp_receiving set enterprise_id=#{enterpriseId},client_id=#{clientId},supplier_id=#{supplierId},is_check=#{isCheck},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},is_return=#{isReturn},first_state=#{firstState} where receiving_id=#{receivingId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -111,6 +138,9 @@ where 1=1
 	<if test="isReturn != null  ">
 		is_return=#{isReturn},
 	</if>
+	<if test="firstState != null  ">
+		first_state=#{firstState},
+	</if>
 	</trim> where receiving_id=#{receivingId}
 </update>
 
@@ -130,8 +160,14 @@ where 1=1
 	select count(1) from gsp_receiving 
 	<include refid="Example_Where_Clause"/>
 </select>
+
+	<!-- 根据企业id查询收货单位-->
+<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_receiving where enterprise_id = #{enterpriseId}
+</select>
   	
-<!-- 查询收货地址列表 -->
+ <!--查询收货地址列表-->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>

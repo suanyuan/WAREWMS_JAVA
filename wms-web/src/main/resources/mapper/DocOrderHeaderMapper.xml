@@ -1374,7 +1374,7 @@ where 1=1
 <!--查询订单列表-->
 <select id="queryByPageList" resultMap="DocOrderHeaderMap"  parameterType="Object">
 	select * from (
-	select a.*, b.codename_c as sostatusName, c.codename_c as ordertypeName, d.codename_c as releasestatusName, row_number() over(order by a.orderno desc) as row_num
+	select a.*, b.codename_c as sostatusName, c.codename_c as ordertypeName, d.codename_c as releasestatusName/*, row_number() over(order by a.orderno desc) as row_num*/
 	from (select 
 	<include refid="Base_Column_List"/>
 	from Doc_Order_Header 
@@ -1389,7 +1389,7 @@ where 1=1
 	and c.codeid = 'SO_TYP'
 	and a.releasestatus = d.code
 	and d.codeid = 'RLS_STS'
-	)
+	)  f
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

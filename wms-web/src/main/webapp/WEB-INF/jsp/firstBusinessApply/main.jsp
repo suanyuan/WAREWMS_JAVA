@@ -33,16 +33,15 @@ $(function() {
 		singleSelect:true,
 		idField : 'applyId',
 		columns : [[
-			{field: 'applyId',		title: '主键',	width: 100,hidden:true },
+			{field: 'applyId',		title: '申请单号',	width: 100},
+            {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
 			{field: 'clientName',		title: '委托客户',	width: 100 },
 			{field: 'supplierName',		title: '供应客户',	width: 100 },
             {field: 'productCode',		title: '产品代码',	width: 100 },
             {field: 'productName',		title: '产品名称',	width: 100 },
 			{field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 100 },
-			{field: 'editId',		title: '编辑人',	width: 100 },
-			{field: 'editDate',		title: '编辑时间',	width: 100 },
-			{field: 'isUse',		title: '是否有效',	width: 100 }
+			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -78,24 +77,15 @@ $(function() {
 });
 var add = function(){
 	processType = 'add';
-	$('#firstBusinessApplyId').val(0);
-	ezuiDialog.dialog('open');
+	$('#applyId').val(0);
+	ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id=");
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			applyId : row.applyId,
-			clientId : row.clientId,
-			supplierId : row.supplierId,
-			createId : row.createId,
-			createDate : row.createDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse
-		});
-		ezuiDialog.dialog('open');
+
+		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id="+row.applyId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -179,8 +169,8 @@ var commit = function(){
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		applyId : $('#applyId').val(),
-		clientId : $('#clientId').val(),
-		supplierId : $('#supplierId').val(),
+		clientId : $('#clientIdQuery').val(),
+		supplierId : $('#supplierIdQuery').val(),
 		createId : $('#createId').val(),
 		createDate : $('#createDate').val(),
 		editId : $('#editId').val(),
@@ -188,6 +178,72 @@ var doSearch = function(){
 		isUse : $('#isUse').val()
 	});
 };
+
+var doConfirm = function () {
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
+            if(confirm){
+                $.ajax({
+                    url : 'firstBusinessApplyController.do?confirmApply',
+                    data : {id : row.applyId},
+                    type : 'POST',
+                    dataType : 'JSON',
+                    success : function(result){
+                        var msg = '';
+                        try {
+                            msg = result.msg;
+                        } catch (e) {
+                            msg = '<spring:message code="common.message.data.delete.failed"/>';
+                        } finally {
+                            $.messager.show({
+                                msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                            });
+                            ezuiDatagrid.datagrid('reload');
+                        }
+                    }
+                });
+            }
+        });
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+}
+
+var reApply = function () {
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认重新审核吗', function(confirm) {
+            if(confirm){
+                $.ajax({
+                    url : 'firstBusinessApplyController.do?reApply',
+                    data : {id : row.applyId},
+                    type : 'POST',
+                    dataType : 'JSON',
+                    success : function(result){
+                        var msg = '';
+                        try {
+                            msg = result.msg;
+                        } catch (e) {
+                            msg = '<spring:message code="common.message.data.delete.failed"/>';
+                        } finally {
+                            $.messager.show({
+                                msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                            });
+                            ezuiDatagrid.datagrid('reload');
+                        }
+                    }
+                });
+            }
+        });
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+}
 </script>
 <style>
 	table th{
@@ -204,10 +260,10 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>产品代码：</th><td><input type='text' id='applyId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品名称：</th><td><input type='text' id='clientId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>委托客户：</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应客户：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码：</th><td><input type='text' id='applyIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品名称：</th><td><input type='text' id='' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托客户：</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应客户：</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>创建时间起始：</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
@@ -224,6 +280,8 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
+					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>

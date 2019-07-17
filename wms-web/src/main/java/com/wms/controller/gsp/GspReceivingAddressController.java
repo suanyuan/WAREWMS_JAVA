@@ -1,17 +1,20 @@
 package com.wms.controller.gsp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wms.entity.GspReceivingAddress;
+import com.wms.entity.PCD;
+import com.wms.utils.editor.CustomDateEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspReceivingAddressService;
@@ -32,19 +35,33 @@ public class GspReceivingAddressController {
 	@Autowired
 	private GspReceivingAddressService gspReceivingAddressService;
 
+
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		binder.registerCustomEditor(Date.class,"addtime",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"edisendtime5",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime1",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"expectedarrivetime2",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"createDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class,"editDate",new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+
+
 	@Login
 	@RequestMapping(params = "toReceivingAddress")
-	public ModelAndView toReceivingAddress(String menuId) {
+	public ModelAndView toReceivingAddress(String enterpriseId) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
+		model.put("enterpriseId", enterpriseId);
 		return new ModelAndView("basCustomer/receivingAddress", model);
 	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
-		EasyuiDatagrid<GspReceivingAddressVO> pagedDatagrid = gspReceivingAddressService.getPagedDatagrid(pager, query);
+	public EasyuiDatagrid<GspReceivingAddressVO> showDatagrid(@RequestParam(value = "receivingId",required = false)String receivingId, EasyuiDatagridPager pager) {
+		EasyuiDatagrid<GspReceivingAddressVO> pagedDatagrid = gspReceivingAddressService.getPagedDatagrid(pager, receivingId);
 		return pagedDatagrid;
 	}
 
@@ -76,8 +93,8 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String id) {
-		Json json = gspReceivingAddressService.deleteGspReceivingAddress(id);
+	public Json delete(@RequestParam(value = "receivingAddressId") String receivingAddressId) {
+		Json json = gspReceivingAddressService.deleteGspReceivingAddress(receivingAddressId);
 		if(json == null){
 			json = new Json();
 		}
@@ -99,4 +116,18 @@ public class GspReceivingAddressController {
 		return gspReceivingAddressService.getGspReceivingAddressCombobox();
 	}
 
+
+	@Login
+	@RequestMapping(params = "getArea")
+	@ResponseBody
+	public String getArea(@RequestParam(value = "pid") String pid) {
+		String json=null;
+		if (pid!=null&&pid!="") {
+			int i = Integer.parseInt(pid);
+			List<PCD> pcdList = gspReceivingAddressService.findPCDByPid(i);
+			json = JSON.toJSONString(pcdList);
+
+		}
+		return json;
+	}
 }

@@ -14,12 +14,50 @@ public class GspSupplierQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
-
+	private String enterpriseIdQuery;
+	private String firstState;
 	private String createDateStart;
 	private String createDateEnd;
 	private String editDateStart;
 	private String editDateEnd;
+	private String enterpriseNo;
+	private String enterpriseName;
+	private String shorthandName;
 
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseType() {
+		return enterpriseType;
+	}
+
+	public void setEnterpriseType(String enterpriseType) {
+		this.enterpriseType = enterpriseType;
+	}
+
+	private String enterpriseType;
 
 
 
@@ -125,5 +163,21 @@ public class GspSupplierQuery implements IQuery {
 
 	public void setEditDateEnd(String editDateEnd) {
 		this.editDateEnd = editDateEnd;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
+
+	public String getEnterpriseIdQuery() {
+		return enterpriseIdQuery;
+	}
+
+	public void setEnterpriseIdQuery(String enterpriseIdQuery) {
+		this.enterpriseIdQuery = enterpriseIdQuery;
 	}
 }

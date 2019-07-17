@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -70,8 +71,9 @@ public class UserService extends BaseService {
 	private SfcUserLoginMybatisDao sfcUserLoginMybatisDao;
 	@Autowired
 	private JavaMailSender mailSender;
-	
-	public EasyuiDatagrid<UserVO> getPagedDatagrid(EasyuiDatagridPager pager, UserQuery query) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    public EasyuiDatagrid<UserVO> getPagedDatagrid(EasyuiDatagridPager pager, UserQuery query) {
 		EasyuiDatagrid<UserVO> datagrid = new EasyuiDatagrid<UserVO>();
 		List<User> userList = userDao.getPagedDatagrid(pager, query);
 		UserVO userVO = null;
@@ -97,7 +99,11 @@ public class UserService extends BaseService {
 		Collections.sort(allUserList, new SfcUserComparator());// 排序
 		for(SfcUser sfcUser : allUserList){
 			if(StringUtils.isEmpty(sfcUser.getParentNodeId())){
+//                SfcUserVO sfcUserVO = new SfcUserVO();
+			    //sfcUser.setCreateTime(new Date());
+
 				sfcUserVOSet.add(this.getUserTreegridNode(sfcUser, allUserList));
+
 			}
 		}
 		return sfcUserVOSet;
@@ -119,7 +125,15 @@ public class UserService extends BaseService {
 				subUserList.add(subUser);
 			}
 		}
-		
+		if(sfcUser.getCreateTime()!=null){
+        	sfcUserVO.setCreateTime(simpleDateFormat.format(sfcUser.getCreateTime()));
+		}
+		if(sfcUser.getLastLoginTime()!=null){
+			sfcUserVO.setLastLoginTime(simpleDateFormat.format(sfcUser.getLastLoginTime()));
+		}
+		if(sfcUser.getBirthday()!=null){
+			sfcUserVO.setBirthday(simpleDateFormat.format(sfcUser.getBirthday()));
+		}
 		if(subUserList != null && subUserList.size() > 0){
 			Collections.sort(subUserList, new SfcUserComparator());// 排序
 			
@@ -202,6 +216,7 @@ public class UserService extends BaseService {
 	public Json addUser(UserForm userForm) throws Exception {
 		Json json = new Json();
 		SfcUserLoginQuery sfcUserLoginQuery = new SfcUserLoginQuery();
+		System.out.println(userForm+"=============");
 		sfcUserLoginQuery.setId(userForm.getUserId());
 		sfcUserLoginQuery.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());;
 		SfcUserLogin sfcUserLogin = sfcUserLoginMybatisDao.queryById(sfcUserLoginQuery);

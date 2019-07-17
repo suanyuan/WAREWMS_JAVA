@@ -3,10 +3,10 @@
     <input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
     <table>
         <tr style="display: none">
-            <td><input type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
+            <td><input data="1" type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
         </tr>
         <tr>
-            <th>企业信息代码</th>
+            <th>企业代码</th>
             <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
@@ -19,7 +19,9 @@
         </tr>
         <tr>
             <th>企业类型</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseType}" id="enterpriseType" name='enterpriseType' size='50' data-options='required:true'/></td>
+            <td>
+                <input type='text' data="1" value="" id="enterpriseType" name='enterpriseType' class='easyui-combobox' size='50' />
+            </td>
         </tr>
         <tr>
             <th>联系人</th>
@@ -81,10 +83,20 @@
         })
     })*/
 
-    //控件初始化
-    $('#enterpriseType').combobox({
-        url:sy.bp()+'/commonController.do?getEntType',
-        valueField:'id',
-        textField:'value'
-    });
+    //控件初始化data-options="required:true,valueField:'id',textField:'value',url:'commonController.do?getEntType'"
+    /**/
+
+    $(function () {
+        var enterpriseType = '${gspEnterpriseInfo.enterpriseType}';
+        $('#enterpriseType').combobox({
+            url:sy.bp()+'/commonController.do?getEntType',
+            valueField:'id',
+            textField:'value',
+            required:true,
+            onLoadSuccess:function(){
+                $("#enterpriseType").combobox("select",enterpriseType);
+            }
+        });
+
+    })
 </script>

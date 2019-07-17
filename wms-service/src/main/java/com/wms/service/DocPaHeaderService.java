@@ -98,7 +98,7 @@ public class DocPaHeaderService extends BaseService {
 
         List<DocPaHeader> docPaHeaderList = docPaHeaderDao.queryUndoneList(form.getStart(), form.getPageSize());
         List<PdaDocPaHeaderVO> pdaDocPaHeaderVOList = new ArrayList<>();
-        PdaDocPaHeaderVO pdaDocPaHeaderVO = new PdaDocPaHeaderVO();
+        PdaDocPaHeaderVO pdaDocPaHeaderVO;
         for (DocPaHeader docPaHeader : docPaHeaderList) {
 
             pdaDocPaHeaderVO = new PdaDocPaHeaderVO();
@@ -125,7 +125,7 @@ public class DocPaHeaderService extends BaseService {
     }
 
     /**
-     * 结束收货单任务
+     * 结束上架单任务
      * @param form 预入通知单号
      * @return ~
      */

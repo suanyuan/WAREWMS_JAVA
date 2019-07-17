@@ -10,7 +10,7 @@ public class GspOperateLicenseForm {
 	private String licenseNo;
 	private String operateMode;
 	private String headName;
-	private String bussinessScope;
+	private String businessScope;
 	private String warehouseAddress;
 	private java.util.Date licenseExpiryDate;
 	private String licenseUrl;
@@ -18,6 +18,8 @@ public class GspOperateLicenseForm {
 	private String registrationAuthority;
 	private String operateType;
 	private String isUse;
+	private String scopArr;
+	private String opType;
 
 	public String getOperateId() {
 		return operateId;
@@ -57,14 +59,6 @@ public class GspOperateLicenseForm {
 
 	public void setHeadName(String headName) {
 		this.headName = headName;
-	}
-
-	public String getBussinessScope() {
-		return bussinessScope;
-	}
-
-	public void setBussinessScope(String bussinessScope) {
-		this.bussinessScope = bussinessScope;
 	}
 
 	public String getWarehouseAddress() {
@@ -123,5 +117,29 @@ public class GspOperateLicenseForm {
 
 	public void setIsUse(String isUse) {
 		this.isUse = isUse;
+	}
+
+	public String getScopArr() {
+		return scopArr;
+	}
+
+	public void setScopArr(String scopArr) {
+		this.scopArr = scopArr;
+	}
+
+	public String getOpType() {
+		return opType;
+	}
+
+	public void setOpType(String opType) {
+		this.opType = opType;
+	}
+
+	public String getBusinessScope() {
+		return businessScope;
+	}
+
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 }

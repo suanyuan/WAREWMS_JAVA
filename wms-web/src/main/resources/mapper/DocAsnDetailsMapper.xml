@@ -973,5 +973,16 @@ insert into doc_asn_details
 	</foreach>
 </select>
 
+    <select id="queryForScan" parameterType="java.util.Map" resultMap="ExtendDetailMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_asn_details detail
+        where detail.asnno = #{asnno, jdbcType=VARCHAR}
+        and detail.customerid = #{customerid, jdbcType=VARCHAR}
+        and detail.sku = #{sku, jdbcType=VARCHAR}
+        and detail.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+        and detail.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+    </select>
+
 
 </mapper>   

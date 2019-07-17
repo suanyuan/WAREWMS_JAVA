@@ -33,6 +33,10 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String editId;
 	private java.util.Date editDate;
 	private java.lang.String isUse;
+	private java.lang.String isCertificate;
+	private java.lang.String isDoublec;
+	private java.lang.String attacheCardCategory;
+
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
 	private java.lang.String alternatName3;
@@ -184,11 +188,27 @@ public class GspProductRegisterSpecsForm {
 		this.manageCategories = manageCategories;
 	}
 
-	public java.lang.String getPacking_Require() {
+	public java.lang.String getPackingRequire() {
 		return packingRequire;
 	}
 
-	public void setPacking_Require(java.lang.String packing_Require) {
+	public String getIsCertificate() {
+		return isCertificate;
+	}
+
+	public void setIsCertificate(String isCertificate) {
+		this.isCertificate = isCertificate;
+	}
+
+	public String getIsDoublec() {
+		return isDoublec;
+	}
+
+	public void setIsDoublec(String isDoublec) {
+		this.isDoublec = isDoublec;
+	}
+
+	public void setPackingRequire(java.lang.String packing_Require) {
 		this.packingRequire = packing_Require;
 	}
 
@@ -291,4 +311,20 @@ public class GspProductRegisterSpecsForm {
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
     }
+
+	public String getAttacheCardCategory() {
+		return attacheCardCategory;
+	}
+
+	public void setAttacheCardCategory(String attacheCardCategory) {
+		this.attacheCardCategory = attacheCardCategory;
+	}
+
+//	public String getAttachedCardCategory() {
+//		return attachedCardCategory;
+//	}
+//
+//	public void setAttachedCardCategory(String attachedCardCategory) {
+//		this.attachedCardCategory = attachedCardCategory;
+//	}
 }

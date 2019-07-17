@@ -6,20 +6,29 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
+var ezuiImportDataDialog;
+var ezuiImportDataForm;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+    ezuiImportDataForm=$('#ezuiImportDataForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/basGtnController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [10, 50, 100],
 		fit: true,
@@ -36,9 +45,9 @@ $(function() {
 			{field: 'sku',		title: '产品代码',	width: 400 },
 			{field: 'gtncode',		title: 'GTN码',	width: 400 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
-		},
+		// onDblClickCell: function(index,field,value){
+		// 	edit();
+		// },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');
@@ -60,6 +69,17 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+
+    //导入
+    ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
+        modal : true,
+        title : '导入',
+        buttons : '#ezuiImportDataDialogBtn',
+        onClose : function() {
+            ezuiFormClear(ezuiImportDataForm);
+        }
+    }).dialog('close');
+    /* 控件初始化end */
 });
 var add = function(){
 	processType = 'add';
@@ -161,6 +181,75 @@ var doSearch = function(){
 		gtncode : $('#gtncode').val()
 	});
 };
+
+/* 导入start */
+var commitImportData1 = function(obj){
+    ezuiImportDataForm.form('submit', {
+        url : '<c:url value="/basGtnController.do?importExcelData"/>',
+        onSubmit : function(){
+            if(ezuiImportDataForm.form('validate')){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
+                return true;
+            }else{
+                return false;
+            }
+        },
+        success : function(data) {
+            var msg='';
+            try {
+                var result = $.parseJSON(data);
+                if(result.success){
+                    msg = result.msg.replace(/ /g, '\n');
+                    ezuiDatagrid.datagrid('reload');
+                }else{
+                    msg = result.msg.replace(/ /g, '\n');
+                }
+            } catch (e) {
+                msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                ezuiFormClear(ezuiImportDataForm);
+                $('#importResult').textbox('setValue',msg);
+                $.messager.progress('close');
+            }
+        }
+    });
+};
+
+/* 下载导入模板 */
+var downloadTemplate = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_downloadTemplate').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        var formId = ajaxDownloadFile(sy.bp()+"/basGtnController.do?exportTemplate", param);
+        downloadCheckTimer = window.setInterval(function () {
+            var list = new cookieList('downloadToken');
+            if (list.items() == token){
+                window.clearInterval(downloadCheckTimer);
+                list.clear();
+                $('#'+formId).remove();
+                $('#ezuiBtn_downloadTemplate').linkbutton('enable');
+                $.messager.show({
+                    msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            };
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    };
+};
+/* 导入end */
+
+var toImportData = function(){
+    ezuiImportDataDialog.dialog('open');
+};
+
 </script>
 </head>
 <body>
@@ -177,6 +266,8 @@ var doSearch = function(){
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+
 							</td>
 						</tr>
 					</table>
@@ -214,6 +305,31 @@ var doSearch = function(){
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
+
 	</div>
+
+	<!-- 导入start -->
+	<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
+		<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>
+			<table>
+				<tr>
+					<th>档案</th>
+					<td>
+						<input type="text" id="uploadData" name="uploadData" class="easyui-filebox" size="36" data-options="buttonText:'选择',validType:['filenameExtension[\'xls\']']"/>
+						<a onclick='downloadTemplate();' id='ezuiBtn_downloadTemplate' class='easyui-linkbutton' href='javascript:void(0);'>下载档案模版</a>
+					</td>
+				</tr>
+				<tr>
+					<th>执行结果</th>
+					<td><input id='importResult' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id='ezuiImportDataDialogBtn'>
+		<a onclick='commitImportData1();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+	</div>
+	<!-- 导入end -->
 </body>
 </html>

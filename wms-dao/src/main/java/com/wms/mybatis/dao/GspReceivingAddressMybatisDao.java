@@ -1,7 +1,10 @@
 package com.wms.mybatis.dao;
 
 
+import com.wms.entity.GspReceivingAddress;
+import com.wms.entity.PCD;
 
+import java.util.List;
 
 /**
  * 
@@ -9,6 +12,10 @@ package com.wms.mybatis.dao;
  * <b>功能：</b>GspReceivingAddressMybatisDao<br>
  */
 public interface GspReceivingAddressMybatisDao extends BaseDao {
-	
-	
+
+
+    public List<PCD> findPCDByPid(int pid);
+    public List<GspReceivingAddress> queryByReceivingId(String receivingId);
+    public GspReceivingAddress queryIsDefault(Object o);
+
 }

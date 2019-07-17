@@ -30,7 +30,7 @@
     var enterpriseSearchGrid_${target};
     $(function () {
         enterpriseSearchGrid_${target} = $("#enterpriseSearchGrid_${target}").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            url : '/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
             toolbar : '#enterpriseSearchGridToolbar_${target}',
             title: '',
@@ -42,7 +42,8 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                type:'${type}'
+                type:'${type}',
+                enterpriseType:'${enterpriseType}'
             },
             fit:true,
             collapsible:false,
@@ -55,7 +56,7 @@
                 {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
                 {field: '_operate',		title: '操作',	width: '20%',
                     formatter: formatOper_${target}
                 }
@@ -88,8 +89,6 @@
 
             }
         })
-        //ezuiDialog_${target}
-        //enterpriseSearchDetal_${target}.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
     }
 
     function formatOper_${target}(value,row,index){

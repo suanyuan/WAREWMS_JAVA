@@ -220,7 +220,8 @@ $(function() {
 		if ($("#ezuiDetailsForm #expectedqty").val() != '') {
 			if ($("#ezuiDetailsForm #sku").val() == '') {
 				$("#ezuiDetailsForm #expectedqty").numberbox('clear');
-				alert("没有输入产品");
+				//alert("没有输入产品");
+				showMsg("没有输入产品")
 			} else {
 				$.ajax({
 					url : 'basSkuController.do?getSkuInfo',
@@ -620,38 +621,38 @@ var doSearch = function(){
 
 /* 导入start */
 var commitImportData = function(obj){
-	ezuiImportDataForm.form('submit', {
-		url : '<c:url value="/docAsnHeaderController.do?importExcelData"/>',
-		onSubmit : function(){
-			if(ezuiImportDataForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg.replace(/ /g, '\n');
-					ezuiDatagrid.datagrid('reload');
-				}else{
-					msg = result.msg.replace(/ /g, '\n');
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				ezuiFormClear(ezuiImportDataForm);
-				$('#importResult').textbox('setValue',msg);
-				$.messager.progress('close');
-			}
-		}
-	});
+    ezuiImportDataForm.form('submit', {
+        url : '<c:url value="/docAsnHeaderController.do?importExcelData"/>',
+        onSubmit : function(){
+            if(ezuiImportDataForm.form('validate')){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
+                return true;
+            }else{
+                return false;
+            }
+        },
+        success : function(data) {
+            var msg='';
+            try {
+                var result = $.parseJSON(data);
+                if(result.success){
+                    msg = result.msg.replace(/ /g, '\n');
+                    ezuiDatagrid.datagrid('reload');
+                }else{
+                    msg = result.msg.replace(/ /g, '\n');
+                }
+            } catch (e) {
+                msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                ezuiFormClear(ezuiImportDataForm);
+                $('#importResult').textbox('setValue',msg);
+                $.messager.progress('close');
+            }
+        }
+    });
 };
 var toImportData = function(){
 	ezuiImportDataDialog.dialog('open');
@@ -948,7 +949,7 @@ var detailsReceive = function(){
 	if(rowcount > 0) {  
 		$.each(checkedItems ,function(index, item){
 			if (item.linestatus != '00') {
-				alert("非创建状态不能确认收货！");
+				showMsg("非创建状态不能确认收货！")
 			} else {
 				$.ajax({
 					async: false,//异步执行，保证每一条记录异步执行。

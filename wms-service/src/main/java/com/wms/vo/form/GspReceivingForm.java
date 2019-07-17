@@ -3,6 +3,7 @@ package com.wms.vo.form;
 public class GspReceivingForm {
 
 	private String receivingId;
+	private String newreceivingId;
 	private String enterpriseId;
 	private String clientId;
 	private String supplierId;
@@ -16,6 +17,31 @@ public class GspReceivingForm {
 	private String isReturn;
 	private String deliveryAddress;
 	private String sellerName;
+	private String firstState;
+
+	public String getNewreceivingId() {
+		return newreceivingId;
+	}
+
+	public void setNewreceivingId(String newreceivingId) {
+		this.newreceivingId = newreceivingId;
+	}
+
+	public String getIsCheck() {
+		return isCheck;
+	}
+
+	public void setIsCheck(String isCheck) {
+		this.isCheck = isCheck;
+	}
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
 
 	public String getSellerName() {
 		return sellerName;
@@ -91,13 +117,7 @@ public class GspReceivingForm {
 		this.supplierId = supplierId;
 	}
 
-	public String getIsCheck() {
-		return isCheck;
-	}
 
-	public void setIsCheck(String isCheck) {
-		this.isCheck = isCheck;
-	}
 
 	public String getCreateId() {
 		return createId;

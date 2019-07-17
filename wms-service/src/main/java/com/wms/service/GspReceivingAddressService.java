@@ -3,10 +3,13 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.constant.Constant;
+import com.wms.entity.PCD;
 import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,20 +32,26 @@ public class GspReceivingAddressService extends BaseService {
 	@Autowired
 	private GspReceivingAddressMybatisDao gspReceivingAddressMybatisDao;
 
-	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, GspReceivingAddressQuery query) {
+	@Autowired
+	private CommonService commonService;
+
+	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, String receivingId) {
 		EasyuiDatagrid<GspReceivingAddressVO> datagrid = new EasyuiDatagrid<GspReceivingAddressVO>();
 
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
-		criteria.setCondition(query);
-		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByList(criteria);
+
+		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(receivingId);
 		GspReceivingAddressVO gspReceivingAddressVO = null;
 		List<GspReceivingAddressVO> gspReceivingAddressVOList = new ArrayList<GspReceivingAddressVO>();
+		if (gspReceivingAddressList!=null){
 		for (GspReceivingAddress gspReceivingAddress : gspReceivingAddressList) {
 			gspReceivingAddressVO = new GspReceivingAddressVO();
 			BeanUtils.copyProperties(gspReceivingAddress, gspReceivingAddressVO);
 			gspReceivingAddressVOList.add(gspReceivingAddressVO);
+		}
+
 		}
 		datagrid.setTotal((long) gspReceivingAddressMybatisDao.queryByCount(criteria));
 		datagrid.setRows(gspReceivingAddressVOList);
@@ -52,13 +61,27 @@ public class GspReceivingAddressService extends BaseService {
 	public Json addGspReceivingAddress(GspReceivingAddressForm gspReceivingAddressForm) throws Exception {
 		Json json = new Json();
 		GspReceivingAddress gspReceivingAddress = new GspReceivingAddress();
-		BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
-		gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-		gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-		gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
-		gspReceivingAddress.setReceivingId(RandomUtil.getUUID());
+
+		if (StringUtils.isEmpty(gspReceivingAddressForm.getReceivingId())){
+
+			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
+			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
+			gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+			json.setObj(gspReceivingAddress.getReceivingId());
+
+		}else {
+
+			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
+			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
+		}
+
 		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
 		json.setSuccess(true);
+
 		return json;
 	}
 
@@ -73,9 +96,9 @@ public class GspReceivingAddressService extends BaseService {
 
 	public Json deleteGspReceivingAddress(String id) {
 		Json json = new Json();
-		GspReceivingAddress gspReceivingAddress = gspReceivingAddressDao.findById(id);
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryById(id);
 		if(gspReceivingAddress != null){
-			gspReceivingAddressDao.delete(gspReceivingAddress);
+			gspReceivingAddressMybatisDao.delete(gspReceivingAddress);
 		}
 		json.setSuccess(true);
 		return json;
@@ -94,6 +117,11 @@ public class GspReceivingAddressService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+
+	public List<PCD> findPCDByPid(int pid) {
+		return gspReceivingAddressMybatisDao.findPCDByPid(pid);
 	}
 
 }

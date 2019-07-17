@@ -1,29 +1,36 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasCustomer;
-import com.wms.entity.GspCustomer;
-import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.GspReceivingAddress;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.*;
+import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasCustomerQuery;
+import com.wms.query.ViewInvTranQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
+import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
+import com.wms.vo.form.GspCustomerForm;
+import com.wms.vo.form.GspSupplierForm;
+import com.wms.vo.form.ViewInvTranExportForm;
+import com.wms.vo.form.ViewInvTranForm;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Service("basCustomerService")
 public class BasCustomerService extends BaseService {
@@ -31,6 +38,17 @@ public class BasCustomerService extends BaseService {
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
 
+	@Autowired
+	private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
+
+	@Autowired
+	private GspReceivingMybatisDao gspReceivingMybatisDao;
+
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
+	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
@@ -61,6 +79,7 @@ public class BasCustomerService extends BaseService {
 				basCustomerVO.setContacts(gspEnterpriseInfo.getContacts());
 				basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
 				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
+				basCustomerVO.setRemark(gspEnterpriseInfo.getRemark());
 			}
 
 
@@ -71,35 +90,153 @@ public class BasCustomerService extends BaseService {
 		return datagrid;
 	}
 
+
+
+
+
+
+	/*public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = new Json();
+		BasCustomer basCustomer = new BasCustomer();
+		BeanUtils.copyProperties(basCustomerForm, basCustomer);
+		basCustomerMybatisDao.add(basCustomer);
+		json.setSuccess(true);
+		return json;
+	}*/
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
-		StringBuilder resultMsg = new StringBuilder();
-		this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
-
-			Json json = new Json();
+		Json json = null;
+		try {
 
 
-		if (resultMsg.length() == 0) {
-			BasCustomer basCustomer = new BasCustomer();
-			GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
-			GspCustomer gspCustomer = new GspCustomer();
-			BeanUtils.copyProperties(basCustomerForm,gspEnterpriseInfo);
-			BeanUtils.copyProperties(basCustomerForm, basCustomer);
-			BeanUtils.copyProperties(basCustomerForm, gspCustomer);
-			//获取操作工号
-			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			StringBuilder resultMsg = new StringBuilder();
+			this.validateCustomer(basCustomerForm, resultMsg);// 验证客户是否存在
 
-			//
-			basCustomerMybatisDao.add(basCustomer);
-			basCustomerMybatisDao.add(gspCustomer);
-			basCustomerMybatisDao.add(gspEnterpriseInfo);
+			json = new Json();
 
 
-		} else {
-			json.setSuccess(false);
-			json.setMsg(resultMsg.toString());
-			return json;
+			if (resultMsg.length() == 0) {
+				BasCustomer basCustomer = new BasCustomer();
+
+				if (StringUtils.isNotEmpty(basCustomerForm.getReceivingId())){
+					GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(basCustomerForm.getReceivingId());
+					oldgspReceiving.setIsUse("0");
+					gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
+				}
+				BasCustomerQuery customerQuery = new BasCustomerQuery();
+				customerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				customerQuery.setCustomerType(basCustomerForm.getCustomerType());
+
+
+				BasCustomer oldbasCustomer=basCustomerMybatisDao.queryById(customerQuery);
+
+				if (oldbasCustomer != null) {
+					BasSkuHistory basSkuHistory = new BasSkuHistory();
+					BeanUtils.copyProperties(oldbasCustomer,basSkuHistory);
+					basCustomerMybatisDao.deleteBascustomer(oldbasCustomer.getEnterpriseId(),oldbasCustomer.getCustomerType());
+					basSkuHistoryMybatisDao.add(basSkuHistory);
+				}
+				//下发到客户档案
+				BeanUtils.copyProperties(basCustomerForm, basCustomer);
+				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+				basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
+				//
+				basCustomerMybatisDao.add(basCustomer);
+				GspReceiving gspReceiving = new GspReceiving();
+
+				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
+				gspReceiving.setFirstState("40");
+				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+				if (StringUtils.isNotEmpty(basCustomerForm.getNewreceivingId())){
+
+					gspReceiving.setReceivingId(basCustomerForm.getNewreceivingId());
+				}else {
+
+					gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				}
+				gspReceivingMybatisDao.add(gspReceiving);
+
+				//插入一条首营申请日志记录
+				FirstReviewLog firstReviewLog = new FirstReviewLog();
+				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
+				firstReviewLog.setApplyContent("无需审核");
+				firstReviewLog.setApplyState("40");
+				firstReviewLog.setReviewId(RandomUtil.getUUID());
+				firstReviewLogMybatisDao.add(firstReviewLog);
+
+
+			} else {
+				json.setSuccess(false);
+				json.setMsg(resultMsg.toString());
+				return json;
+			}
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		} catch (BeansException e) {
+			throw new Exception("系统忙！");
 		}
+		return json;
+	}
+
+
+	public Json supplierAddCustomer(GspSupplierForm gspSupplierForm) {
+		Json json = new Json();
+		BasCustomer basCustomer = new BasCustomer();
+		basCustomer.setCustomerType("VE");
+		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		int num = basCustomerMybatisDao.selectBySelective(basCustomer);
+		if(num!=0){
+			basCustomerMybatisDao.delete(basCustomer);
+		}
+
+		basCustomer = new BasCustomer();
+		basCustomer.setCustomerType("VE");
+		basCustomer.setEnterpriseId(gspSupplierForm.getEnterpriseId());
+		basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		basCustomer.setOperateType(gspSupplierForm.getEnterpriseType());
+		basCustomer.setActiveFlag("1");
+		basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setAddtime(new Date());
+		basCustomer.setEdittime(new Date());
+		basCustomerMybatisDao.add(basCustomer);
+
+
+
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
+
+	public Json clientAddCustomer(BasCustomerForm basCustomerForm) {
+		Json json = new Json();
+		BasCustomer basCustomerQuery = new BasCustomer();
+		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
+		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+		int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
+		if(num!=0){
+			basCustomerMybatisDao.delete(basCustomerQuery);
+		}
+
+		BasCustomer basCustomer = new BasCustomer();
+		BeanUtils.copyProperties(basCustomerForm,basCustomer);
+		/*basCustomer.setCustomerType(basCustomerForm.getCustomerType());
+		basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
+		basCustomer.setCustomerid(basCustomerForm.getCustomerid());
+		basCustomer.setOperateType(basCustomerForm.getOperateType());
+		basCustomer.setActiveFlag(basCustomerForm.getActiveFlag());
+		basCustomer.setDescrC(basCustomerForm.getDescrC());*/
+		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomer.setAddtime(new Date());
+		basCustomer.setEdittime(new Date());
+		basCustomerMybatisDao.add(basCustomer);
+
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;
@@ -114,7 +251,7 @@ public class BasCustomerService extends BaseService {
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
 		
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-		basCustomerMybatisDao.update(basCustomer);
+		basCustomerMybatisDao.updateBySelective(basCustomer);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;
@@ -145,6 +282,36 @@ public class BasCustomerService extends BaseService {
 		}
 		return json;
 	}
+
+
+	public BasCustomer selectCustomer(String enterpriseId, String customertype) {
+
+
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setEnterpriseId(enterpriseId);
+		customerQuery.setCustomerType(customertype);
+
+		return basCustomerMybatisDao.queryById(customerQuery);
+	}
+
+	public BasCustomer selectCustomerById(String customerID, String customertype) {
+
+
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setCustomerid(customerID);
+		customerQuery.setCustomerType(customertype);
+		customerQuery.setActiveFlag(Constant.IS_USE_YES);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(customerQuery);
+
+
+		List<BasCustomer> list = basCustomerMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+
 	public Json goonBasCustomer(String enterpriseId, String customertype) {
 		Json json = new Json();
 		BasCustomerQuery customerQuery = new BasCustomerQuery();
@@ -199,5 +366,84 @@ public class BasCustomerService extends BaseService {
 		}
 		return Json.success("",gspReceivingAddress);
 	}
+
+	public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCustomerForm form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+
+		BasCustomerForm basCustomerForm = new BasCustomerForm();
+
+		basCustomerForm.setCustomerType(form.getCustomerType());
+		basCustomerForm.setCustomerid(form.getCustomerid());
+		basCustomerForm.setDescrC(form.getDescrC());
+		basCustomerForm.setActiveFlag(form.getActiveFlag());
+		try {
+			BasCustomerQuery query = new BasCustomerQuery();
+			//权限控制
+			query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+			com.wms.utils.BeanUtils.copyProperties(basCustomerForm, query);
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "客户档案查询结果";
+			// excel要导出的数据
+			//List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
+			EasyuiDatagridPager page = new EasyuiDatagridPager();
+			EasyuiDatagrid<BasCustomerVO> pagedDatagrid = getPagedDatagrid(page, query);
+			List<BasCustomerVO> basCustomerVOList = pagedDatagrid.getRows();
+
+
+			// 导出
+			if (basCustomerVOList == null || basCustomerVOList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(basCustomerVOList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("customerType", "客户类型");
+		superClassMap.put("activeFlag", "是否合作");
+		superClassMap.put("customerid", "客户ID");
+		superClassMap.put("enterpriseNo", "企业信息代码");
+		superClassMap.put("shorthandName", "简称");
+		superClassMap.put("enterpriseName", "企业名称");
+		superClassMap.put("contacts", "联系人");
+		superClassMap.put("contactsPhone", "联系人电话");
+		superClassMap.put("remark", "备注");
+		superClassMap.put("supContractNo", "合同编号");
+		superClassMap.put("contractUrl", "合同文件");
+		superClassMap.put("clientContent", "委托内容");
+		superClassMap.put("clientStartDate", "委托开始时间");
+		superClassMap.put("clientEndDate", "委托结束时间");
+		superClassMap.put("clientTerm", "委托期限");
+		superClassMap.put("isChineseLabel", "是否贴中文标签");
+		//superClassMap.put("descrC", "中文描述");
+		//superClassMap.put("descrE", "英文描述");
+		//superClassMap.put("operateType", "类型");
+		return superClassMap;
+	}
+
+
+	public BasCustomer getQueryBy(){
+	    return null;
+    }
 
 }

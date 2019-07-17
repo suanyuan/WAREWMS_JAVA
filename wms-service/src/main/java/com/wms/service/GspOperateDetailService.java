@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.constant.Constant;
+import com.wms.entity.GspInstrumentCatalog;
 import com.wms.mybatis.dao.GspOperateDetailMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspOperateLicenseQuery;
@@ -23,6 +24,8 @@ public class GspOperateDetailService extends BaseService {
 
 	@Autowired
 	private GspOperateDetailMybatisDao gspOperateDetailMybatisDao;
+	@Autowired
+	private GspInstrumentCatalogService gspInstrumentCatalogService;
 
 	public EasyuiDatagrid<GspOperateDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, GspOperateDetailQuery query) {
 		EasyuiDatagrid<GspOperateDetailVO> datagrid = new EasyuiDatagrid<GspOperateDetailVO>();
@@ -48,7 +51,10 @@ public class GspOperateDetailService extends BaseService {
 		Json json = new Json();
 		GspOperateDetail gspOperateDetail = new GspOperateDetail();
 		gspOperateDetail.setLicenseType(licenseType);
-		BeanUtils.copyProperties(gspOperateDetailForm, gspOperateDetail);
+		gspOperateDetail.setLicenseId(gspOperateDetailForm.getEnterpriseId());
+		gspOperateDetail.setOperateId(gspOperateDetailForm.getOperateId());
+		gspOperateDetail.setIsUse(Constant.IS_USE_YES);
+		//BeanUtils.copyProperties(gspOperateDetailForm, gspOperateDetail);
 		gspOperateDetailMybatisDao.add(gspOperateDetail);
 		json.setSuccess(true);
 		return json;
@@ -71,12 +77,23 @@ public class GspOperateDetailService extends BaseService {
 	}
 
 	public List<GspOperateDetailVO> queryOperateDetailByLicense(String license){
-		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
-		query.setEnterpriseId(license);
+		List<GspOperateDetailVO> voList = new ArrayList<>();
+		GspOperateDetailQuery query = new GspOperateDetailQuery();
+		query.setLicenseId(license);
 		query.setIsUse(Constant.IS_USE_YES);
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCondition(query);
-		return gspOperateDetailMybatisDao.queryByList(criteria);
+		List<GspOperateDetail> list = gspOperateDetailMybatisDao.queryByList(criteria);
+		for(GspOperateDetail g : list){
+			GspOperateDetailVO v = new GspOperateDetailVO();
+			v.setOperateId(g.getOperateId());
+			GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogService.getGspInstrumentCatalog(g.getOperateId());
+			if(gspInstrumentCatalog!=null){
+				v.setOperateName(gspInstrumentCatalog.getInstrumentCatalogName());
+			}
+			voList.add(v);
+		}
+		return voList;
 	}
 
 }

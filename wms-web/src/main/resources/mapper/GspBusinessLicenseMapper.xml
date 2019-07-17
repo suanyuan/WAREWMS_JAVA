@@ -46,13 +46,13 @@ where 1=1
 	    and enterprise_id =  #{condition.enterpriseId}
 	</if>
 	<if test="condition.licenseNumber != null and condition.licenseNumber != ''" >
-	    and license_number =  #{condition.licenseNumber}
+	    and license_number like CONCAT('%',#{condition.licenseNumber},'%')
 	</if>
 	<if test="condition.socialCreditCode != null and condition.socialCreditCode != ''" >
-	    and social_credit_code =  #{condition.socialCreditCode}
+	    and social_credit_code like CONCAT('%',#{condition.socialCreditCode},'%')
 	</if>
 	<if test="condition.licenseName != null and condition.licenseName != ''" >
-	    and license_name =  #{condition.licenseName}
+	    and license_name like CONCAT('%',#{condition.licenseName},'%')
 	</if>
 	<if test="condition.licenseType != null and condition.licenseType != ''" >
 	    and license_type =  #{condition.licenseType}
@@ -112,7 +112,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into gsp_business_license(business_id,enterprise_id,license_number,social_credit_code,license_name,license_type,residence,juridical_person,registered_capital,establishment_date,business_start_date,business_end_date,is_long,business_scope,issue_date,registration_authority,attachment_url,create_id,create_date,edit_id,edit_date,is_use)
- values(#{businessId},#{enterpriseId},#{licenseNumber},#{socialCreditCode},#{licenseName},#{licenseType},#{residence},#{juridicalPerson},#{registeredCapital},#{establishmentDate},#{businessStartDate},#{businessEndDate},#{isLong},#{businessScope},#{issueDate},#{registrationAuthority},#{attachmentUrl},#{createId},now(),#{editId},#{editDate},#{isUse})
+ values(#{businessId},#{enterpriseId},#{licenseNumber},#{socialCreditCode},#{licenseName},#{licenseType},#{residence},#{juridicalPerson},#{registeredCapital},#{establishmentDate,jdbcType=TIMESTAMP},#{businessStartDate,jdbcType=TIMESTAMP},#{businessEndDate,jdbcType=TIMESTAMP},#{isLong},#{businessScope},#{issueDate},#{registrationAuthority},#{attachmentUrl},#{createId},now(),#{editId},#{editDate,jdbcType=TIMESTAMP},#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -220,5 +220,11 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+<!-- 删除记录 -->
+<update id="updateGspBusinessLicenseActiveTag" parameterType="Object">
+	update gsp_business_license set is_use=#{tag}  where enterprise_id = #{enterpriseId}
+</update>
+
 
 </mapper>   

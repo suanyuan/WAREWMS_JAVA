@@ -35,7 +35,7 @@ where 1=1
 	    and review_id =  #{condition.reviewId}
 	</if>
 	<if test="condition.reviewTypeId != null and condition.reviewTypeId != ''" >
-	    and review_type_id =  #{condition.reviewTypeId}
+		and review_type_id like CONCAT('%',#{condition.reviewTypeId},'%')
 	</if>
 	<if test="condition.applyContent != null and condition.applyContent != ''" >
 	    and apply_content =  #{condition.applyContent}
@@ -72,6 +72,12 @@ where 1=1
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
 	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.applyState == null or condition.applyState == ''" >
+		and apply_state != '00'
+	</if>
+	<if test="condition.applyNo != null and condition.applyNo != ''" >
+		and review_type_id = #{condition.applyNo}
 	</if>
 </trim>
 </sql>
@@ -134,6 +140,51 @@ where 1=1
 	</trim> where review_id=#{reviewId}
 </update>
 
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateByReviewTypeId" parameterType="Object" >
+		update first_review_log set
+		<trim  suffixOverrides="," >
+
+			<if test="applyContent != null  ">
+				apply_content=#{applyContent},
+			</if>
+			<if test="applyState != null  ">
+				apply_state=#{applyState},
+			</if>
+			<if test="checkIdQc != null  ">
+				check_id_qc=#{checkIdQc},
+			</if>
+			<if test="checkDateQc != null  ">
+				check_date_qc=#{checkDateQc},
+			</if>
+			<if test="checkRemarkQc != null  ">
+				check_remark_qc=#{checkRemarkQc},
+			</if>
+			<if test="checkIdHead != null  ">
+				check_id_head=#{checkIdHead},
+			</if>
+			<if test="checkDateHead != null  ">
+				check_date_head=#{checkDateHead},
+			</if>
+			<if test="checkRemarkHead != null  ">
+				check_remark_head=#{checkRemarkHead},
+			</if>
+			<if test="createId != null  ">
+				create_id=#{createId},
+			</if>
+			<if test="createDate != null  ">
+				create_date=#{createDate},
+			</if>
+			<if test="editId != null  ">
+				edit_id=#{editId},
+			</if>
+			<if test="editDate != null  ">
+				edit_date=#{editDate},
+			</if>
+		</trim> where review_type_id=#{reviewTypeId}
+	</update>
+
+
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
 	delete 	 from first_review_log where review_id = #{reviewId}
@@ -141,7 +192,7 @@ where 1=1
  
 <!-- 根据id查询 产品首营审核记录表 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	 from first_review_log where review_id = #{reviewId}
 </select>
 
@@ -164,5 +215,10 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+<update id="updateFirstReviewByNo" parameterType="Object">
+	update first_review_log set apply_state=#{state},edit_id = #{editId},edit_date = now()
+	 where review_type_id = #{no}
+</update>
   	
 </mapper>   

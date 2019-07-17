@@ -8,6 +8,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery-easyui/locale/easyui-lang-zh_CN.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/syUtils.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/swUtils.js"/>"></script>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/constant.js"/>"></script>
 <c:set var="themeValue">
 	<c:out value="${cookie.easyuiThemeName.value}" default="default"/>
 </c:set>
@@ -23,14 +24,19 @@
 		//修改sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName为url
 		window.open(url);
     }
-    
-    var isUseFormatter = function(value,row,index) {
-	    console.log(value);
-		if(value == "1"){
-		    return "有效";
-		}else{
-            return "失效";
-		}
+
+    var firstStateFormatter = function(value,row,index) {
+        if(value == "00"){
+            return "新建";
+        }else if(value == "10"){
+            return "审核中";
+        }else if(value == "90"){
+            return "已报废";
+        }else if(value == "60"){
+            return "已停止";
+        }else if(value == "40"){
+            return "审核通过";
+        }
     }
 
     var isUseRowStyler = function(index,row) {
@@ -63,10 +69,104 @@
             hour = time.getHours(),
             minute = time.getMinutes(),
             second = time.getSeconds()
-        return  year+'-'+this.add0(month)+'-'+ this.add0(day)+' '+this.add0(hour)+':'+this.add0(minute)+':'+this.add0(second)
+        return  year+'-'+ add0(month)+'-'+ add0(day)+' '+add0(hour)+':'+add0(minute)+':'+add0(second)
+    }
+
+    var dateFormat2 = function(timestamp){
+        if(!timestamp || timestamp == ""){
+            return "";
+        }
+        var time = new Date(timestamp);    //先将时间戳转为Date对象，然后才能使用Date的方法
+        var year = time.getFullYear(),
+            month = time.getMonth() + 1 ,  //月份是从0开始的
+            day = time.getDate(),
+            hour = time.getHours(),
+            minute = time.getMinutes(),
+            second = time.getSeconds()
+        return  year+'-'+ add0(month)+'-'+add0(day);
     }
 
     var add0 = function(m){
         return m < 10 ? '0' + m: m
     }
+
+	var checkObjIsEmpty = function(obj){
+        var hasProp = false;
+        for (var prop in obj){
+            hasProp = true;
+            break;
+        }
+        return hasProp;
+    }
+
+    var isUseFormatter = function(value,row,index) {
+        if(value == "1"){
+            return "有效";
+        }else{
+            return "失效";
+        }
+    }
+
+    var yesOrNoFormatter = function(value,row,index) {
+        if(value == "1"){
+            return "是";
+        }else{
+            return "否";
+        }
+    }
+
+    var entTypeFormatter = function(value,row,index) {
+        switch (value) {
+			case CODE_ENT_TYP.CODE_ENT_TYP_JY : return "经营";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GWSC : return "国外生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
+            case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
+			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
+			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
+        }
+    }
+
+    var outTimeFormatter = function(value,row,index) {
+        if(value == 0 || value<0){
+            return value+"天后过期";
+        }else{
+            return "已过期";
+        }
+    }
+
+    var firstStateTypeFormatter = function(value,row,index) {
+        switch (value) {
+            case FIRSTSTATE.FIRSTSTATE_00 : return "新建";
+            case FIRSTSTATE.FIRSTSTATE_10 : return "审核中";
+            case FIRSTSTATE.FIRSTSTATE_40 : return "审核通过";
+            case FIRSTSTATE.FIRSTSTATE_50 : return "未通过";
+            case FIRSTSTATE.FIRSTSTATE_60 : return "已停止";
+            case FIRSTSTATE.FIRSTSTATE_90 : return "已报废";
+        }
+    }
+
+    var checkStateTypeFormatter = function(value,row,index) {
+        switch (value) {
+            case CHECKSTATE.CHECKSTATE_00 : return "新建";
+            case CHECKSTATE.CHECKSTATE_20 : return "质量部审核";
+            case CHECKSTATE.CHECKSTATE_30 : return "负责人审核";
+            case CHECKSTATE.CHECKSTATE_40 : return "已通过";
+            case CHECKSTATE.CHECKSTATE_50 : return "未通过";
+        }
+    }
+
+    var applyTypeFormatter = function(value,row,index) {
+	    console.log(row);
+        if(row.reviewTypeId.indexOf("CUS")!=-1){
+            return "委托客户";
+		}else if(row.reviewTypeId.indexOf("SUP")!=-1){
+            return "供应商";
+		}else if(row.reviewTypeId.indexOf("PRO")!=-1){
+            return "产品";
+        }else if(row.reviewTypeId.indexOf("REC")!=-1){
+            return "收货单位";
+        }
+    }
+
 </script>

@@ -5,24 +5,26 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspSecondRecordForm {
 
-	private Long recordId;
+	private String recordId;
 	private String recordNo;
 	private String enterpriseId;
 	private String headName;
 	private String operateMode;
 	private String operatePlace;
-	private String bussinessScope;
+	private String businessScope;
 	private String residence;
 	private String recordUrl;
 	private java.util.Date approveDate;
 	private String registrationAuthority;
 	private String isUse;
+	private String scopArr;
+	private String opType;
 
-	public Long getRecordId() {
+	public String getRecordId() {
 		return recordId;
 	}
 
-	public void setRecordId(Long recordId) {
+	public void setRecordId(String recordId) {
 		this.recordId = recordId;
 	}
 
@@ -66,13 +68,6 @@ public class GspSecondRecordForm {
 		this.operatePlace = operatePlace;
 	}
 
-	public String getBussinessScope() {
-		return bussinessScope;
-	}
-
-	public void setBussinessScope(String bussinessScope) {
-		this.bussinessScope = bussinessScope;
-	}
 
 	public String getResidence() {
 		return residence;
@@ -113,5 +108,29 @@ public class GspSecondRecordForm {
 
 	public void setIsUse(String isUse) {
 		this.isUse = isUse;
+	}
+
+	public String getScopArr() {
+		return scopArr;
+	}
+
+	public void setScopArr(String scopArr) {
+		this.scopArr = scopArr;
+	}
+
+	public String getOpType() {
+		return opType;
+	}
+
+	public void setOpType(String opType) {
+		this.opType = opType;
+	}
+
+	public String getBusinessScope() {
+		return businessScope;
+	}
+
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 }

@@ -13,7 +13,8 @@ public class GspEnterpriseInfoQuery implements IQuery {
 	private String shorthandName;
 	private String enterpriseName;
 	private String enterpriseType;
-	private String createDate;
+	private String createDateBegin;
+	private String createDateEnd;
 	private String isUse;
 	private String type;
 }

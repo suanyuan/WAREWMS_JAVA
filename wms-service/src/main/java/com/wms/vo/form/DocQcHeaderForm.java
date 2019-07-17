@@ -6,7 +6,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 public class DocQcHeaderForm {
 
 	private String qcno;
-	private String asnno;
+	private String pano;
 	private String customerid;
 	private String qcreference1;
 	private String qcreference2;
@@ -37,12 +37,12 @@ public class DocQcHeaderForm {
 		this.qcno = qcno;
 	}
 
-	public String getAsnno() {
-		return asnno;
+	public String getPano() {
+		return pano;
 	}
 
-	public void setAsnno(String asnno) {
-		this.asnno = asnno;
+	public void setPano(String pano) {
+		this.pano = pano;
 	}
 
 	public String getCustomerid() {

@@ -11,7 +11,7 @@ public class DocQcHeader  implements Serializable {
 
 	private String qcno;
 
-	private String asnno;
+	private String pano;
 
 	private String customerid;
 

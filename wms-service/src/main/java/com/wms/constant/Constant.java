@@ -22,12 +22,35 @@ public class Constant {
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
     public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态
+    public static final String CODE_CATALOG_CHECKSTATE = "CATALOG_CHECKSTATE"; //审核状态
     public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
+    public static final String CODE_CATALOG_CUS_TYP = "CUS_TYP";//客户类型
+
 
 //  企业类型
     public static final String CODE_ENT_TYP_JY = "JY";//经营
     public static final String CODE_ENT_TYP_GNSC = "GNSC";//国内生产
     public static final String CODE_ENT_TYP_GWSC = "GWSC";//国外生产
+    public static final String CODE_ENT_TYP_KD = "KD";//快递
+    public static final String CODE_ENT_TYP_YL = "YL";//医疗单位
+    public static final String CODE_ENT_TYP_ZT = "ZT";//主体
+
+//  客户类型
+    public static final String CODE_CUS_TYP_CA = "CA";//承运商
+    public static final String CODE_CUS_TYP_CO = "CO";//收货单位
+    public static final String CODE_CUS_TYP_OT = "OT";//其他
+    public static final String CODE_CUS_TYP_OW = "OW";//货主
+    public static final String CODE_CUS_TYP_PR = "PR";//生产企业
+    public static final String CODE_CUS_TYP_VE = "VE";//供应商
+    public static final String CODE_CUS_TYP_WH = "WH";//主体
+
+
+// 权限
+    public static final String USER_GRADE_NONE = "00";
+    public static final String USER_GRADE_QC = "10";
+    public static final String USER_GRADE_HEAD = "01";
+    public static final String USER_GRADE_QCHEAD = "11";
+
 
 
 //是否
@@ -35,10 +58,13 @@ public class Constant {
     public static final String CODE_YES_OR_NO = "0";
 
 //Seq
-    public static final String APLCUSNO = "APLCUSNO";
-    public static final String APLSUPNO = "APLSUPNO";
-    public static final String APLRECNO = "APLRECNO";
-    public static final String APLPRONO = "APLPRONO";
+    public static final String APLCUSNO = "APCUS";//委托客户申请
+    public static final String APLSUPNO = "APSUP";//供应商申请
+    public static final String APLRECNO = "APREC";//收货单位申请
+    public static final String APLPRONO = "APPRO";//产品申请
+
+    public static final String BASRECNO = "BASRECNO";//收货单位客户档案编号
+    public static final String BASSUPNO = "BASSUPNO";//供应商客户档案编号
 
     //code
     //首营状态
@@ -55,7 +81,8 @@ public class Constant {
     public static final String CODE_CATALOG_CHECKSTATE_PASS = "40"; //(已通过)
     public static final String CODE_CATALOG_CHECKSTATE_FAIL = "50"; //(未通过)
 
-
+//GSP开关
+    public static final String QC_FLAG = "QC_FLAG";
 
 
 

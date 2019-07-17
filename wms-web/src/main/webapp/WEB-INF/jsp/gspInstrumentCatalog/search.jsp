@@ -10,14 +10,16 @@
             <legend>器械目录分类</legend>
             <table>
                 <tr>
-                    <th>版本</th>
-                    <td><input type='text' id='version_${target}' size='16' data-options=''/></td>
-                    <th>分类</th>
-                    <td><input type='text' id='classify_${target}' size='16' data-options=''/></td>
                     <th>编号</th>
-                    <td><input type='text' id='productCode_${target}' class='easyui-textbox' size='16' data-options=''/></td>
+                    <td><input type='text' id='productCode_${target}' class='easyui-textbox'  data-options='width:132'/></td>
                     <th>名称</th>
-                    <td><input type='text' id='productName_${target}' class='easyui-textbox' size='16' data-options=''/></td>
+                    <td><input type='text' id='productName_${target}' class='easyui-textbox'  data-options='width:132'/></td>
+                </tr>
+                <tr>
+                    <th>版本</th>
+                    <td><input type='text' id='version_${target}' data-options=''/></td>
+                    <th>分类</th>
+                    <td><input type='text' id='classify_${target}'  data-options=''/></td>
                     <td>
                         <a onclick='searchCataLog_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
                         <a onclick='removeCataLog_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>清除</a>

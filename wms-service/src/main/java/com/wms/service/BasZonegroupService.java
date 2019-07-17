@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class BasZonegroupService extends BaseService {
 	@Autowired
 //	private BasZonegroupDao basZonegroupDao;
 	private BasZoneGroupMybatisDao basZoneGroupMybatisDao;
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<BasZonegroupVO> getPagedDatagrid(EasyuiDatagridPager pager, BasZonegroupQuery query) {
 		EasyuiDatagrid<BasZonegroupVO> datagrid = new EasyuiDatagrid<BasZonegroupVO>();
@@ -43,6 +45,10 @@ public class BasZonegroupService extends BaseService {
 		for (BasZonegroup basZonegroup : basZonegroupList) {
 			basZonegroupVO = new BasZonegroupVO();
 			BeanUtils.copyProperties(basZonegroup, basZonegroupVO);
+
+			basZonegroupVO.setAddtime(simpleDateFormat.format(basZonegroup.getAddtime()));
+			basZonegroupVO.setEdittime(simpleDateFormat.format(basZonegroup.getEdittime()));
+
 			basZonegroupVOList.add(basZonegroupVO);
 		}
 		datagrid.setTotal((long) basZoneGroupMybatisDao.queryByCount(mybatisCriteria));

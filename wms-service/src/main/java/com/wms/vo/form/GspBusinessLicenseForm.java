@@ -23,6 +23,8 @@ public class GspBusinessLicenseForm {
 	private String registrationAuthority;
 	private String attachmentUrl;
 	private String isUse;
+	private String scopArr;
+	private String opType;
 
 	public String getBusinessId() {
 		return businessId;
@@ -170,5 +172,21 @@ public class GspBusinessLicenseForm {
 
 	public void setIsUse(String isUse) {
 		this.isUse = isUse;
+	}
+
+	public String getScopArr() {
+		return scopArr;
+	}
+
+	public void setScopArr(String scopArr) {
+		this.scopArr = scopArr;
+	}
+
+	public String getOpType() {
+		return opType;
+	}
+
+	public void setOpType(String opType) {
+		this.opType = opType;
 	}
 }

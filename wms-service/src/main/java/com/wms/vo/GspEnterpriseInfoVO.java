@@ -13,11 +13,16 @@ public class GspEnterpriseInfoVO {
 	private String contacts;
 	private String contactsPhone;
 	private String remark;
-	private Long createId;
-	private java.util.Date createDate;
-	private Long editId;
-	private java.util.Date editDate;
+	private String createId;
+	private String createDate;
+	private String editId;
+	private String editDate;
 	private String isUse;
+	private String state;
+	private String userDefine1;
+	private String userDefine2;
+	private String userDefine3;
+	private String userDefine4;
 
 	public String getEnterpriseId() {
 		return enterpriseId;
@@ -83,37 +88,37 @@ public class GspEnterpriseInfoVO {
 		this.remark = remark;
 	}
 
-	public Long getCreateId() {
+	public String getCreateId() {
 		return createId;
 	}
 
-	public void setCreateId(Long createId) {
+	public void setCreateId(String createId) {
 		this.createId = createId;
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	public Long getEditId() {
+	public String getEditId() {
 		return editId;
 	}
 
-	public void setEditId(Long editId) {
+	public void setEditId(String editId) {
 		this.editId = editId;
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 
@@ -125,4 +130,43 @@ public class GspEnterpriseInfoVO {
 		this.isUse = isUse;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getUserDefine1() {
+		return userDefine1;
+	}
+
+	public void setUserDefine1(String userDefine1) {
+		this.userDefine1 = userDefine1;
+	}
+
+	public String getUserDefine2() {
+		return userDefine2;
+	}
+
+	public void setUserDefine2(String userDefine2) {
+		this.userDefine2 = userDefine2;
+	}
+
+	public String getUserDefine3() {
+		return userDefine3;
+	}
+
+	public void setUserDefine3(String userDefine3) {
+		this.userDefine3 = userDefine3;
+	}
+
+	public String getUserDefine4() {
+		return userDefine4;
+	}
+
+	public void setUserDefine4(String userDefine4) {
+		this.userDefine4 = userDefine4;
+	}
 }

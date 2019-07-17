@@ -1,16 +1,18 @@
 package com.wms.vo;
 
 
+import com.wms.entity.DocAsnDetail;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 
 public class GspProductRegisterSpecsVO {
-
+	private Integer seq;
 	private java.lang.String specsId;
 	private java.lang.String productRegisterId;
 
@@ -47,11 +49,19 @@ public class GspProductRegisterSpecsVO {
     @JsonSerialize(using = JsonDatetimeSerializer.class)
 	private java.lang.String editDate;
 	private java.lang.String isUse;
+	private java.lang.String isCertificate;
+	private java.lang.String isDoublec;
+	private java.lang.String attacheCardCategory;
+
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	//private java.util.Set<DocAsnDetail> docAsnDetailSet;
+	private List<GspProductRegisterSpecsVO> gspProductRegisterSpecsVOList;
+
 
 	public java.lang.String getSpecsId() {
 		return specsId;
@@ -197,13 +207,7 @@ public class GspProductRegisterSpecsVO {
 		this.manageCategories = manageCategories;
 	}
 
-	public java.lang.String getPacking_Require() {
-		return packingRequire;
-	}
 
-	public void setPacking_Require(java.lang.String packing_Require) {
-		this.packingRequire = packing_Require;
-	}
 
 	public java.lang.String getStorageCondition() {
 		return storageCondition;
@@ -321,4 +325,53 @@ public class GspProductRegisterSpecsVO {
     public void setEditDate(String editDate) {
         this.editDate = editDate;
     }
+
+	public List<GspProductRegisterSpecsVO> getGspProductRegisterSpecsVOList() {
+		return gspProductRegisterSpecsVOList;
+	}
+
+	public void setGspProductRegisterSpecsVOList(List<GspProductRegisterSpecsVO> gspProductRegisterSpecsVOList) {
+		this.gspProductRegisterSpecsVOList = gspProductRegisterSpecsVOList;
+	}
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+
+	public String getIsCertificate() {
+		return isCertificate;
+	}
+
+	public void setIsCertificate(String isCertificate) {
+		this.isCertificate = isCertificate;
+	}
+
+	public String getIsDoublec() {
+		return isDoublec;
+	}
+
+	public void setIsDoublec(String isDoublec) {
+		this.isDoublec = isDoublec;
+	}
+
+	public String getPackingRequire() {
+		return packingRequire;
+	}
+
+	public void setPackingRequire(String packingRequire) {
+		this.packingRequire = packingRequire;
+	}
+
+
+	public String getAttacheCardCategory() {
+		return attacheCardCategory;
+	}
+
+	public void setAttacheCardCategory(String attacheCardCategory) {
+		this.attacheCardCategory = attacheCardCategory;
+	}
 }

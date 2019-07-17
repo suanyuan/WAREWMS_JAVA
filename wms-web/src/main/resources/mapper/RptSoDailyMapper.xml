@@ -322,7 +322,7 @@ where 1=1
 <!-- 查询出库日报分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
+	select a.* from (
 	select 
 	<include refid="Base_Column_List"/>
 	from Rpt_So_Daily 
@@ -332,7 +332,7 @@ where 1=1
     </if> -->
     order by customerid,orderno
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

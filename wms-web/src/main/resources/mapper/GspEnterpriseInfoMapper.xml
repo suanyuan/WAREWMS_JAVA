@@ -18,11 +18,34 @@
 	<result column="edit_id" property="editId"/>
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
+	<result column="state" property="state"/>
+	<result column="user_define1" property="userDefine1"/>
+	<result column="user_define2" property="userDefine2"/>
+	<result column="user_define3" property="userDefine3"/>
+	<result column="user_define4" property="userDefine4"/>
+</resultMap>
+
+<resultMap id="GspEnterpriseBusinessResultMap" type="com.wms.dto.GspEnterpriseBusinessDTO" >
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="enterprise_no" property="enterpriseNo"/>
+	<result column="shorthand_name" property="shorthandName"/>
+	<result column="enterprise_name" property="enterpriseName"/>
+	<result column="enterprise_type" property="enterpriseType"/>
+	<result column="business_start_date" property="businessStartDate"/>
+	<result column="business_end_date" property="businessEndDate"/>
+	<result column="outTime" property="outTime"/>
+</resultMap>
+
+<resultMap id="GspEnterpriseTypeResultMap" type="com.wms.dto.GspEnterpriseTypeDTO" >
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="enterprise_type" property="enterPriseType"/>
+	<result column="first_State" property="firstState"/>
+	<result column="applyNo" property="applyNo"/>
 </resultMap>
        
 <!-- gsp_enterprise_info table all fields -->
 <sql id="Base_Column_List" >
-	 enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use
+	 enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state,user_define1,user_define2,user_define3,user_define4
 </sql>
    
    
@@ -69,19 +92,28 @@ where 1=1
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and is_use =  #{condition.isUse}
 	</if>
+	<if test="condition.createDateBegin != null and condition.createDateBegin != ''" >
+		and create_date &gt;=  #{condition.createDateBegin}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and create_date &lt;=  #{condition.createDateEnd}
+	</if>
+	<if test="condition.state != null and condition.state != ''" >
+		and state =  #{condition.state}
+	</if>
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_enterprise_info (enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use)
- values(#{enterpriseId},#{enterpriseNo},#{shorthandName},#{enterpriseName},#{enterpriseType},#{contacts},#{contactsPhone},#{remark},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into gsp_enterprise_info (enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state)
+ values(#{enterpriseId},#{enterpriseNo},#{shorthandName},#{enterpriseName},#{enterpriseType},#{contacts},#{contactsPhone},#{remark},#{createId},now(),#{editId},#{editDate},#{isUse},#{state})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_enterprise_info set enterprise_no=#{enterpriseNo},shorthand_name=#{shorthandName},enterprise_name=#{enterpriseName},enterprise_type=#{enterpriseType},contacts=#{contacts},contacts_phone=#{contactsPhone},remark=#{remark},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where enterprise_id=#{enterpriseId}
+  update gsp_enterprise_info set enterprise_no=#{enterpriseNo},shorthand_name=#{shorthandName},enterprise_name=#{enterpriseName},enterprise_type=#{enterpriseType},contacts=#{contacts},contacts_phone=#{contactsPhone},remark=#{remark},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},state=#{state} where enterprise_id=#{enterpriseId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -124,6 +156,9 @@ where 1=1
 	<if test="isUse != null  ">
 		is_use=#{isUse},
 	</if>
+	<if test="state != null  ">
+		state=#{state},
+	</if>
 	</trim> where enterprise_id=#{enterpriseId}
 </update>
 
@@ -133,7 +168,7 @@ where 1=1
 </delete>
 	<!-- 删除记录 -->
 <delete id="deleteGspEnterprise" parameterType="Object">
-	update 	 gsp_enterprise_info set is_use='无效' where enterprise_id = #{enterpriseId}
+	update 	 gsp_enterprise_info set is_use='0' where enterprise_id = #{enterpriseId}
 </delete>
 
 	<!-- 根据id查询 企业信息 -->
@@ -180,7 +215,17 @@ where 1=1
 			and g.enterprise_name like  CONCAT('%',#{condition.enterpriseName},'%')
 		</if>
 		<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
-			and g.enterprise_type =  #{condition.enterpriseType}
+			<choose>
+				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
+					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
+				</when>
+				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
+					and (g.enterprise_type != 'ZT')
+				</when>
+				<otherwise>
+					and g.enterprise_type = #{condition.enterpriseType}
+				</otherwise>
+			</choose>
 		</if>
 		<if test="condition.contacts != null and condition.contacts != ''" >
 			and g.contacts =  #{condition.contacts}
@@ -203,19 +248,19 @@ where 1=1
 		<if test="condition.editDate != null and condition.editDate != ''" >
 			and g.edit_date =  #{condition.editDate}
 		</if>
-		<if test="condition.isUse != null and condition.isUse != ''" >
-			and g.is_use =  #{condition.isUse}
-		</if>
 		<if test="condition.type != null and condition.type != ''" >
 			<choose>
 				<when test="condition.type == 'customer'">
-					and cus.enterprise_id !=''
+					and cus.enterprise_id is not null
+					and cus.first_state = '40'
 				</when>
 				<when test="condition.type == 'supplier'">
-					and gs.enterprise_id !=''
+					and gs.enterprise_id is not null
+					and gs.first_state = '40'
 				</when>
 			</choose>
 		</if>
+		and g.is_use = '1'
 	</trim>
 </sql>
 
@@ -242,11 +287,49 @@ where 1=1
 <!-- 企业信息 列表总数-->
 <select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
 	select count(1)
-	from gsp_enterprise_info g left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
-	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	from gsp_enterprise_info g
+	<if test="condition.type == 'customer'">
+		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	</if>
+	<if test="condition.type == 'supplier'">
+		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
+	</if>
 	<include refid="Example_Where_Clause_Type"/>
 </select>
 
+<!-- 查询营业执照已过期或将要过期的企业-->
+<select id="queryBusinessLicenseOutTime" resultMap="GspEnterpriseBusinessResultMap"  parameterType="Object">
+	select b.business_start_date,g.enterprise_id,g.enterprise_name,g.enterprise_no,g.shorthand_name,IFNULL(DATEDIFF(now(),b.business_end_date),0) outTime
+	from gsp_enterprise_info g left join gsp_business_license b on g.enterprise_id = b.enterprise_id
+	where 1=1 and b.is_use = '1'
+	<trim  suffixOverrides="," >
+		<if test="enterpriseId != null and enterpriseId != ''" >
+			and g.enterprise_id =  #{enterpriseId}
+		</if>
+		<if test="type != null and type != ''" >
+			and g.enterprise_type =  #{type}
+		</if>
+		and IFNULL(DATEDIFF(b.business_end_date,now()),0) &lt;= #{diffCount}
+	</trim>
+</select>
 
+<!-- 查询企业身份信息-->
+<select id="queryEnterpriseApplyListById" resultMap="GspEnterpriseTypeResultMap"  parameterType="Object">
+
+	select * from (
+	select g.enterprise_id,enterprise_type,c.first_state,c.client_id applyNo from gsp_enterprise_info g
+	left join gsp_customer c on g.enterprise_id = c.enterprise_id
+	where g.is_use = '1' and c.is_use='1'
+	union
+	select g.enterprise_id,enterprise_type,s.first_state,s.supplier_id applyNo from gsp_enterprise_info g
+	left join gsp_supplier s on g.enterprise_id = s.enterprise_id
+	where g.is_use = '1' and s.is_use='1'
+	union
+	select g.enterprise_id,enterprise_type,s.first_state,s.receiving_id applyNo from gsp_enterprise_info g
+	left join gsp_receiving s on g.enterprise_id = s.enterprise_id
+	where g.is_use = '1' and s.is_use='1'
+	) t where enterprise_id = #{enterpriseId}
+
+</select>
 
 </mapper>   

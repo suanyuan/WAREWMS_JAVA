@@ -37,22 +37,11 @@ public class GspEnterpriseInfoService extends BaseService {
 
 
 	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
-		/*EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
-		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoDao.getPagedDatagrid(pager, query);
-		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
-		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
-		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
-			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
-			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
-		}
-		datagrid.setTotal(gspEnterpriseInfoDao.countAll(query));
-		datagrid.setRows(gspEnterpriseInfoVOList);
-		return datagrid;*/
 		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setOrderByClause("create_date desc");
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
@@ -65,12 +54,6 @@ public class GspEnterpriseInfoService extends BaseService {
 		for (GspEnterpriseInfo gspEnterpriseInfo : gspEnterpriseInfoList) {
 			gspEnterpriseInfoVO = new GspEnterpriseInfoVO();
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
-			/*if(gspEnterpriseInfoVO.getIsUse().equals(Constant.IS_USE_YES)){
-				gspEnterpriseInfoVO.setIsUse("有效");
-			}else {
-				gspEnterpriseInfoVO.setIsUse("失效");
-			}*/
-
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
 		Long total = 0L;
@@ -90,6 +73,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setOrderByClause("create_date desc");
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList = new ArrayList<GspEnterpriseInfoVO>();
@@ -113,6 +97,11 @@ public class GspEnterpriseInfoService extends BaseService {
 
 
 	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
+
+		if(checkRep(gspEnterpriseInfoForm.getEnterpriseNo(),gspEnterpriseInfoForm.getEnterpriseName())){
+			return Json.error("该企业信息已存在，企业名称和编号不能重复！");
+		}
+
 		SfcUserLogin userLogin =  SfcUserLoginUtil.getLoginUser();
 		Json json = new Json();
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
@@ -175,6 +164,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		BeanUtils.copyProperties(form,gspEnterpriseInfo);
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 	}
+
 	public Json addEnterprise(GspEnterpriseInfo gspEnterpriseInfo) throws Exception {
 		Json json = new Json();
 
@@ -185,12 +175,34 @@ public class GspEnterpriseInfoService extends BaseService {
 		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-		gspEnterpriseInfo.setIsUse("有效");
+		gspEnterpriseInfo.setIsUse(Constant.IS_USE_YES);
 		gspEnterpriseInfoMybatisDao.add(gspEnterpriseInfo);
 
 
 		json.setSuccess(true);
 		json.setMsg("添加成功");
 		return json;
+	}
+
+	/**
+	 * 检查企业id或者名称是否重复
+	 * @param enterpriseNo
+	 * @param enterpriseName
+	 * @return
+	 */
+	private boolean checkRep(String enterpriseNo,String enterpriseName){
+		GspEnterpriseInfoQuery query = new GspEnterpriseInfoQuery();
+		MybatisCriteria criteria = new MybatisCriteria();
+		query.setIsUse(Constant.IS_USE_YES);
+		query.setEnterpriseNo(enterpriseNo);
+		query.setEnterpriseName(enterpriseName);
+		criteria.setCondition(query);
+		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
+		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryPageListByType(criteria);
+		if(gspEnterpriseInfoList!=null && gspEnterpriseInfoList.size()>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

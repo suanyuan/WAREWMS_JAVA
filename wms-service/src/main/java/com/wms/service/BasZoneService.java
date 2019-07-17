@@ -82,6 +82,7 @@ public class BasZoneService extends BaseService {
 		}
 		
 		json.setSuccess(true);
+		json.setMsg("操作成功");
 		return json;
 	}
 		
@@ -109,6 +110,7 @@ public class BasZoneService extends BaseService {
 		basZone.setEdittime(today);
 		basZoneMybatisDao.update(basZone);
 		json.setSuccess(true);
+		json.setMsg("操作成功");
 		return json;
 	}
 
@@ -121,16 +123,18 @@ public class BasZoneService extends BaseService {
 		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
 		BasZone basZone = basZoneMybatisDao.queryById(zoneQuery);
 		if(basZone != null){
-			basZoneMybatisDao.basZoneCheck(map);
-			String result = map.get("result").toString();
-			if (result.equals("000")) {
+			//TODO 判断库区能否删除
+			//basZoneMybatisDao.basZoneCheck(map);
+			//String result = map.get("result").toString();
+			//if (result.equals("000")) {
 				basZoneMybatisDao.delete(basZone);
-			} else {
-				json.setSuccess(false);
-				json.setMsg(result);
-				return json;
-			}
+			//} else {
+			//	json.setSuccess(false);
+			//	json.setMsg(result);
+			//	return json;
+			//}
 		}
+		json.setMsg("操作成功");
 		json.setSuccess(true);
 		return json;
 	}

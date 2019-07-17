@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasGtnVO {
 
+	private Integer seq;
 	private java.lang.String sku;
 	private java.lang.String gtncode;
 
@@ -24,4 +25,11 @@ public class BasGtnVO {
 		this.gtncode = gtncode;
 	}
 
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
 }

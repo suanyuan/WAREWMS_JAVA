@@ -15,9 +15,7 @@ public class DocQcDetails  implements Serializable {
 
 	private String linestatus;
 
-	private String asnno;
-
-	private Double asnlineno;
+	private Double palineno;
 
 	private String customerid;
 
@@ -25,7 +23,7 @@ public class DocQcDetails  implements Serializable {
 
 	private String lotnum;
 
-	private Double asnqtyExpected;
+	private Double paqtyExpected;
 
 	private Double qcqtyExpected;
 

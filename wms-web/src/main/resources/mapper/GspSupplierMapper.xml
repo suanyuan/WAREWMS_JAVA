@@ -14,11 +14,24 @@
 	<result column="edit_id" property="editId"/>
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
+	<result column="first_state" property="firstState"/>
+	<result column="enterprise_no" property="enterpriseNo"/>
+	<result column="enterprise_name" property="enterpriseName"/>
+	<result column="shorthand_name" property="shorthandName"/>
+	<result column="enterprise_type" property="enterpriseType"/>
+
+	<result column="contract_no" property="contractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+
 </resultMap>
        
 <!-- gsp_supplier table all fields -->
 <sql id="Base_Column_List" >
-	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use
+	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state,contractNo,contractUrl,clientContent,clientStartDate,clientEndDate,clientTerm
 </sql>
    
    
@@ -30,43 +43,57 @@ where 1=1
 	    and supplier_id like '%${condition.supplierId}%'
 	</if>
 	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
-	    and enterprise_id like '%${condition.enterpriseId}%'
+	    and t1.enterprise_id like '%${condition.enterpriseId}%'
 	</if>
 	<if test="condition.isCheck != null and condition.isCheck != ''" >
 	    and is_check =  #{condition.isCheck}
 	</if>
 
 	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
-		and create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
+		and t1.create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
 	</if>
 	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
-		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> create_date
+		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> t1.create_date
 	</if>
 	<if test="condition.editDateStart != null and condition.editDateStart != ''" >
-		and edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
+		and t1.edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
 	</if>
 	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
-		and     #{condition.editDateEnd}  <![CDATA[  >=  ]]> edit_date
+		and     #{condition.editDateEnd}  <![CDATA[  >=  ]]> t1.edit_date
 	</if>
 
 
-	<if test="condition.operateType != null and condition.operateType != ''" >
-	    and operate_type =  #{condition.operateType}
-	</if>
+	<!--<if test="condition.operateType != null and condition.operateType != ''" >-->
+	    <!--and operate_type =  #{condition.operateType}-->
+	<!--</if>-->
 	<if test="condition.createId != null and condition.createId != ''" >
-	    and create_id like '%${condition.createId}%'
+	    and t1.create_id like '%${condition.createId}%'
 	</if>
 	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date like '%${condition.createDate}%'
+	    and t1.create_date like '%${condition.createDate}%'
 	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
-	    and edit_id like '%${condition.editId}%'
+	    and t1.edit_id like '%${condition.editId}%'
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and edit_date like '%${condition.editDate}%'
+	    and t1.edit_date like '%${condition.editDate}%'
 	</if>
 	<if test="condition.isUse != null and condition.isUse != ''" >
-	    and is_use =  #{condition.isUse}
+	    and t1.is_use =  #{condition.isUse}
+	</if>
+
+
+	<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
+		and t2.enterprise_no like '%${condition.enterpriseNo}%'
+	</if>
+	<if test="condition.enterpriseIdQuery != null and condition.enterpriseIdQuery != ''" >
+		and t2.enterprise_name = #{condition.enterpriseIdQuery}
+	</if>
+	<if test="condition.shorthandName != null and condition.shorthandName != ''" >
+		and t2.shorthand_name like  '%${condition.shorthandName}%'
+	</if>
+	<if test="condition.operateType != null and condition.operateType != ''" >
+		and t2.enterprise_type like  '%${condition.operateType}%'
 	</if>
 </trim>
 </sql>
@@ -74,8 +101,9 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use)
- values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{createDate},#{editId},#{editDate},#{isUse})
+  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term
+)
+ values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -95,6 +123,9 @@ where 1=1
 	</if>
 	<if test="operateType != null  ">
 		operate_type=#{operateType},
+	</if>
+	<if test="firstState != null  ">
+		first_state=#{firstState},
 	</if>
 	<if test="createId != null  ">
 		create_id=#{createId},
@@ -118,24 +149,35 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	delete 	 from gsp_supplier where supplier_id = #{supplierId}
 </delete>
- 
+<!-- 记录失效 -->
+<delete id="deleteNotUse" parameterType="Object">
+	update 	gsp_supplier set is_use=  0
+	where supplier_id=#{supplierId}
+</delete>
+
+
+
 <!-- 根据id查询 供应商首营申请 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from gsp_supplier where supplier_id = #{supplierId}
+	select t1.*,t2.enterprise_no,t2.enterprise_name,t2.shorthand_name,t2.enterprise_type
+	from gsp_supplier t1 left join gsp_enterprise_info t2
+	ON t1.enterprise_id = t2.enterprise_id where supplier_id = #{supplierId}
 </select>
 
 <!-- 供应商首营申请 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from gsp_supplier 
+	select count(1) from gsp_supplier t1 left join gsp_enterprise_info t2
+	ON t1.enterprise_id = t2.enterprise_id
 	<include refid="Example_Where_Clause"/>
 </select>
-  	
+
+
+
 <!-- 查询供应商首营申请列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from gsp_supplier 
+	select t1.*,t2.enterprise_no,t2.enterprise_name,t2.shorthand_name,t2.enterprise_type
+	from gsp_supplier t1 left join gsp_enterprise_info t2
+	ON t1.enterprise_id = t2.enterprise_id
 	<include refid="Example_Where_Clause"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}

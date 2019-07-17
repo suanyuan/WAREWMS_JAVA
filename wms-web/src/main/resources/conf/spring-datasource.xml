@@ -70,7 +70,7 @@
 		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
 		<property name="minEvictableIdleTimeMillis" value="300000" />
 		<!-- 验证连接有效与否的SQL，不同的数据配置不同 -->
-		<property name="validationQuery" value="select 1 " />
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
 		<!-- 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。 -->
 		<property name="testWhileIdle" value="true" />
 		<!-- 这里建议配置为TRUE，防止取到的连接不可用,但会影响性能 -->

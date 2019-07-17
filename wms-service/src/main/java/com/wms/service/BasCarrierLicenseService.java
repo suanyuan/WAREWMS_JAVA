@@ -1,15 +1,21 @@
 package com.wms.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.dao.GspBusinessLicenseDao;
 import com.wms.entity.GspBusinessLicense;
+import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.BasCarrierLicenseMybatisDao;
 import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.BasCarrierLicenseFormString;
+import com.wms.vo.form.GspCustomerForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +38,16 @@ public class BasCarrierLicenseService extends BaseService {
 	private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
 
 	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
+	@Autowired
 	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
 
 	@Autowired
 	private BasCarrierLicenseDao basCarrierLicenseDao;
+
+
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<BasCarrierLicenseVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCarrierLicenseQuery query) {
 		EasyuiDatagrid<BasCarrierLicenseVO> datagrid = new EasyuiDatagrid<BasCarrierLicenseVO>();
@@ -54,6 +66,20 @@ public class BasCarrierLicenseService extends BaseService {
 		for (BasCarrierLicense basCarrierLicense : basCarrierLicenseList) {
 			basCarrierLicenseVO = new BasCarrierLicenseVO();
 			BeanUtils.copyProperties(basCarrierLicense, basCarrierLicenseVO);
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(basCarrierLicense.getEnterpriseId());
+			if (gspEnterpriseInfo != null) {
+
+				basCarrierLicenseVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+			}
+			basCarrierLicenseVO.setCreateDate(simpleDateFormat.format(basCarrierLicense.getCreateDate()));
+			basCarrierLicenseVO.setEditDate(simpleDateFormat.format(basCarrierLicense.getEditDate()));
+			if(basCarrierLicense.getCarrierDate()!=null){
+				basCarrierLicenseVO.setCarrierDate(simpleDateFormat.format(basCarrierLicense.getCarrierDate()));
+
+			}
+			if(basCarrierLicense.getCarrierEndDate()!=null){
+				basCarrierLicenseVO.setCarrierEndDate(simpleDateFormat.format(basCarrierLicense.getCarrierEndDate()));
+			}	
 			basCarrierLicenseVOList.add(basCarrierLicenseVO);
 		}
 		datagrid.setTotal((long) basCarrierLicenseMybatisDao.queryByCount(mybatisCriteria));
@@ -83,15 +109,17 @@ public class BasCarrierLicenseService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Json addBasCarrierLicense(BasCarrierLicenseForm basCarrierLicenseForm) throws Exception {
+	public Json addBasCarrierLicense(BasCarrierLicenseFormString basCarrierLicenseForm) throws Exception {
 		Json json = null;
 		try {
 			json = new Json();
 			BasCarrierLicense basCarrierLicense = new BasCarrierLicense();
 			GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
+			//GspCustomerForm gspCustomerForm = new GspCustomerForm();
 
 			BeanUtils.copyProperties(basCarrierLicenseForm.getBasCarrierLicenseForm(), basCarrierLicense);
 			BeanUtils.copyProperties(basCarrierLicenseForm.getGspBusinessLicenseForm(), gspBusinessLicense);
+		//	BeanUtils.copyProperties(basCarrierLicenseForm.getGspCustomerForm(), gspCustomerForm);
 			basCarrierLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			basCarrierLicense.setActiveFlag("1");
@@ -99,9 +127,14 @@ public class BasCarrierLicenseService extends BaseService {
 			gspBusinessLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspBusinessLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspBusinessLicense.setIsUse("1");
+			gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
 			basCarrierLicenseMybatisDao.add(basCarrierLicense);
 
 			gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
+
+		//	gspCustomerService.addGspCustomer(gspCustomerForm);
+
+
 			json.setSuccess(true);
 		} catch (BeansException e) {
 			e.printStackTrace();
@@ -109,7 +142,6 @@ public class BasCarrierLicenseService extends BaseService {
 
 		return json;
 	}
-
 	/**
 	 * 对承运商的编辑
 	 * @param basCarrierLicenseForm
@@ -171,6 +203,13 @@ public class BasCarrierLicenseService extends BaseService {
 			return Json.error("企业信息不存在！");
 		}
 		return Json.success("",basCarrierLicense);
+	}
+
+
+	public BasCarrierLicense queryByEnterId(String enterpriceId){
+
+
+		return basCarrierLicenseMybatisDao.queryByEnterId(enterpriceId);
 	}
 
 }

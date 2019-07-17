@@ -19,11 +19,22 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 	private String userName;
 	private String gender;
 	private Byte enable;
-	private Date birthday;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String birthday;
 	private SfcCountry country;
 	private String email;
-	private Date createTime;
-	private Date lastLoginTime;
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String createTime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String lastLoginTime;
 	private Map<String, String> parent;
 	private java.lang.String state;
 	private List<SfcUserVO> children;// 子節點
@@ -97,12 +108,11 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 		this.enable = enable;
 	}
 
-	@JsonSerialize(using = JsonDateSerializer.class)
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 
@@ -114,21 +124,12 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 		this.email = email;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public Date getLastLoginTime() {
+	public String getLastLoginTime() {
 		return lastLoginTime;
 	}
 
-	public void setLastLoginTime(Date lastLoginTime) {
+	public void setLastLoginTime(String lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
 

@@ -70,4 +70,17 @@ public class FirstBusinessProductApplyService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+
+	public Json getListByApplyId(String applyId){
+		MybatisCriteria criteria = new MybatisCriteria();
+		FirstBusinessProductApplyQuery query = new FirstBusinessProductApplyQuery();
+		query.setProductApplyId(applyId);
+		criteria.setCondition(query);
+		List<FirstBusinessProductApply> list = firstBusinessProductApplyMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return Json.success("",list);
+		}else {
+			return Json.error("查询不到对应的产品");
+		}
+	}
 }

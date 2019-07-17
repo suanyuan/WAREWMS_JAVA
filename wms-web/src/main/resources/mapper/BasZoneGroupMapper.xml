@@ -105,7 +105,7 @@ where 1=1
 <!-- 查询区域列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
-	select a.*,rownum as row_num from (
+	select a.*  from (
 	select 
 	<include refid="Base_Column_List"/>
 	from Bas_ZoneGroup 
@@ -115,7 +115,7 @@ where 1=1
     </if> -->
     order by zonegroup
     ) a 
-	) 
+	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

@@ -25,7 +25,73 @@ public class GspSupplier implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date editDate;
   private String isUse;
+  private String firstState;
+  private String enterpriseNo;
+  private String enterpriseName;
+  private String shorthandName;
+  private String enterpriseType;
 
+  private String contractNo;
+  private String contractUrl;
+  private String clientContent;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date clientStartDate;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date clientEndDate;
+  private String clientTerm;
+
+  public String getContractNo() {
+    return contractNo;
+  }
+
+  public void setContractNo(String contractNo) {
+    this.contractNo = contractNo;
+  }
+
+  public String getContractUrl() {
+    return contractUrl;
+  }
+
+  public void setContractUrl(String contractUrl) {
+    this.contractUrl = contractUrl;
+  }
+
+  public String getClientContent() {
+    return clientContent;
+  }
+
+  public void setClientContent(String clientContent) {
+    this.clientContent = clientContent;
+  }
+
+  public Date getClientStartDate() {
+    return clientStartDate;
+  }
+
+  public void setClientStartDate(Date clientStartDate) {
+    this.clientStartDate = clientStartDate;
+  }
+
+  public Date getClientEndDate() {
+    return clientEndDate;
+  }
+
+  public void setClientEndDate(Date clientEndDate) {
+    this.clientEndDate = clientEndDate;
+  }
+
+  public String getClientTerm() {
+    return clientTerm;
+  }
+
+  public void setClientTerm(String clientTerm) {
+    this.clientTerm = clientTerm;
+  }
+
+
+
+  public GspSupplier() {
+  }
 
   public String getSupplierId() {
     return supplierId;
@@ -107,4 +173,43 @@ public class GspSupplier implements Serializable {
     this.isUse = isUse;
   }
 
+  public String getFirstState() {
+    return firstState;
+  }
+
+  public void setFirstState(String firstState) {
+    this.firstState = firstState;
+  }
+
+  public String getEnterpriseNo() {
+    return enterpriseNo;
+  }
+
+  public void setEnterpriseNo(String enterpriseNo) {
+    this.enterpriseNo = enterpriseNo;
+  }
+
+  public String getEnterpriseName() {
+    return enterpriseName;
+  }
+
+  public void setEnterpriseName(String enterpriseName) {
+    this.enterpriseName = enterpriseName;
+  }
+
+  public String getShorthandName() {
+    return shorthandName;
+  }
+
+  public void setShorthandName(String shorthandName) {
+    this.shorthandName = shorthandName;
+  }
+
+  public String getEnterpriseType() {
+    return enterpriseType;
+  }
+
+  public void setEnterpriseType(String enterpriseType) {
+    this.enterpriseType = enterpriseType;
+  }
 }

@@ -45,12 +45,29 @@ public class BasSkuForm {
 	private java.lang.String reservedfield03;
 	private java.lang.String reservedfield04;
 	private java.lang.String reservedfield05;
+	private java.lang.String reservedfield06;
+	private java.lang.String reservedfield07;
+	private java.lang.String reservedfield08;
+	private java.lang.String reservedfield09;
+	private java.lang.String reservedfield10;
+	private java.lang.String reservedfield11;
+	private java.lang.String reservedfield12;
+	private java.lang.String reservedfield13;
+	private java.lang.String reservedfield14;
+	private java.lang.String reservedfield15;
+	private java.lang.String reservedfield16;
+	private java.lang.String reservedfield17;
+	private java.lang.String reservedfield18;
 	private java.lang.String rotationid;
 	private java.lang.String skuGroup1;
 	private java.lang.String skuGroup2;
 	private java.lang.String skuGroup3;
 	private java.lang.String skuGroup4;
 	private java.lang.String skuGroup5;
+	private java.lang.String skuGroup6;
+	private java.lang.String skuGroup7;
+	private java.lang.String skuGroup8;
+	private java.lang.String skuGroup9;
 	private java.math.BigDecimal skuhigh;
 	private java.math.BigDecimal skulength;
 	private java.math.BigDecimal skuwidth;
@@ -59,6 +76,7 @@ public class BasSkuForm {
 	private java.math.BigDecimal qty;
 	private java.math.BigDecimal qtyallocated;
 	private java.math.BigDecimal qtyonhold;
+	private String firstop;
 
 	public java.lang.String getCustomerid() {
 		return customerid;
@@ -495,4 +513,147 @@ public class BasSkuForm {
 		this.qtyonhold = qtyonhold;
 	}
 
+	public String getReservedfield06() {
+		return reservedfield06;
+	}
+
+	public void setReservedfield06(String reservedfield06) {
+		this.reservedfield06 = reservedfield06;
+	}
+
+	public String getReservedfield07() {
+		return reservedfield07;
+	}
+
+	public void setReservedfield07(String reservedfield07) {
+		this.reservedfield07 = reservedfield07;
+	}
+
+	public String getReservedfield08() {
+		return reservedfield08;
+	}
+
+	public void setReservedfield08(String reservedfield08) {
+		this.reservedfield08 = reservedfield08;
+	}
+
+	public String getReservedfield09() {
+		return reservedfield09;
+	}
+
+	public void setReservedfield09(String reservedfield09) {
+		this.reservedfield09 = reservedfield09;
+	}
+
+	public String getReservedfield10() {
+		return reservedfield10;
+	}
+
+	public void setReservedfield10(String reservedfield10) {
+		this.reservedfield10 = reservedfield10;
+	}
+
+	public String getReservedfield11() {
+		return reservedfield11;
+	}
+
+	public void setReservedfield11(String reservedfield11) {
+		this.reservedfield11 = reservedfield11;
+	}
+
+	public String getReservedfield12() {
+		return reservedfield12;
+	}
+
+	public void setReservedfield12(String reservedfield12) {
+		this.reservedfield12 = reservedfield12;
+	}
+
+	public String getReservedfield13() {
+		return reservedfield13;
+	}
+
+	public void setReservedfield13(String reservedfield13) {
+		this.reservedfield13 = reservedfield13;
+	}
+
+	public String getReservedfield14() {
+		return reservedfield14;
+	}
+
+	public void setReservedfield14(String reservedfield14) {
+		this.reservedfield14 = reservedfield14;
+	}
+
+	public String getReservedfield15() {
+		return reservedfield15;
+	}
+
+	public void setReservedfield15(String reservedfield15) {
+		this.reservedfield15 = reservedfield15;
+	}
+
+	public String getReservedfield16() {
+		return reservedfield16;
+	}
+
+	public void setReservedfield16(String reservedfield16) {
+		this.reservedfield16 = reservedfield16;
+	}
+
+	public String getReservedfield17() {
+		return reservedfield17;
+	}
+
+	public void setReservedfield17(String reservedfield17) {
+		this.reservedfield17 = reservedfield17;
+	}
+
+	public String getReservedfield18() {
+		return reservedfield18;
+	}
+
+	public void setReservedfield18(String reservedfield18) {
+		this.reservedfield18 = reservedfield18;
+	}
+
+	public String getSkuGroup6() {
+		return skuGroup6;
+	}
+
+	public void setSkuGroup6(String skuGroup6) {
+		this.skuGroup6 = skuGroup6;
+	}
+
+	public String getSkuGroup7() {
+		return skuGroup7;
+	}
+
+	public void setSkuGroup7(String skuGroup7) {
+		this.skuGroup7 = skuGroup7;
+	}
+
+	public String getSkuGroup8() {
+		return skuGroup8;
+	}
+
+	public void setSkuGroup8(String skuGroup8) {
+		this.skuGroup8 = skuGroup8;
+	}
+
+	public String getSkuGroup9() {
+		return skuGroup9;
+	}
+
+	public void setSkuGroup9(String skuGroup9) {
+		this.skuGroup9 = skuGroup9;
+	}
+
+	public String getFirstop() {
+		return firstop;
+	}
+
+	public void setFirstop(String firstop) {
+		this.firstop = firstop;
+	}
 }

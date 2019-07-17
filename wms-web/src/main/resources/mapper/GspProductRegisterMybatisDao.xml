@@ -36,6 +36,10 @@
 		<result column="enterprise_id" property="enterpriseId"/>
 	</resultMap>
 
+    <resultMap id="ExtendResultMap" type="com.wms.mybatis.entity.pda.PdaGspProductRegister" extends="BaseResultMap" >
+        <association property="enterpriseInfo" column="enterprise_id" javaType="com.wms.entity.GspEnterpriseInfo" select="com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao.queryById"/>
+    </resultMap>
+
 	<!-- gsp_product_register table all fields -->
 	<sql id="Base_Column_List" >
 	 product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id
@@ -140,7 +144,7 @@
 	<!-- 插入记录 -->
 	<insert id="add" parameterType="Object" >
   insert into gsp_product_register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id)
- values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog},#{enterpriseId})
+ values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},now(),#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog},#{enterpriseId})
 </insert>
 
 	<!-- 根据id，修改记录-->
@@ -276,5 +280,18 @@
 			${limitClause}
 		</if>
 	</select>
+
+    <select id="queryByNo" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
+    </select>
+
+    <!--查询所有历史产品档案中使用过的注册证号-->
+    <select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select reg.* from gsp_product_register reg
+        left join bas_sku_history sku on sku.reservedfield03 = reg.product_register_no
+        where sku.sku = #{sku, jdbcType=VARCHAR} and sku.customerid = #{customerid, jdbcType=VARCHAR}
+    </select>
 
 </mapper>   

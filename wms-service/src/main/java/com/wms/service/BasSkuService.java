@@ -140,7 +140,7 @@ public class BasSkuService extends BaseService {
 
 		basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basSku.setEdittime(today);
-		basSkuMybatisDao.update(basSku);
+		basSkuMybatisDao.updateBySelective(basSku);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

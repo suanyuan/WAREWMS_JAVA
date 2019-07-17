@@ -5,8 +5,11 @@ import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.service.CommonService;
 import com.wms.service.GspEnterpriseInfoService;
+import com.wms.service.GspOperateDetailService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.RedisUtil;
+import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.form.GspBusinessLicenseForm;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.junit.Test;
@@ -19,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.beans.PropertyDescriptor;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,9 +34,10 @@ import java.util.Map;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "classpath*:/applicationContext.xml",
         "classpath*:/conf/spring-datasource.xml",
-        "classpath*:/conf/spring-mybatis.xml"
+        "classpath*:/conf/spring-mybatis.xml",
+        "classpath*:/conf/spring-redis.xml",
+        "classpath*:/conf/spring-mvc.xml"
 
 })
 public class GspServiceTest {
@@ -46,6 +52,11 @@ public class GspServiceTest {
     private CommonMybatisDao commonMybatisDao;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private GspOperateDetailService gspOperateDetailService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Test
     public void test(){
@@ -65,6 +76,8 @@ public class GspServiceTest {
             e.printStackTrace();
         }
 
+
+
     }
 
     @Test
@@ -76,7 +89,7 @@ public class GspServiceTest {
 
     @Test
     public void testSec(){
-       Map<String,Object> map = new HashMap<>();
+       /*Map<String,Object> map = new HashMap<>();
         map.put("warehouseid","WH01");
         map.put("no", Constant.APLCUSNO);
         map.put("resultNo","");
@@ -84,7 +97,28 @@ public class GspServiceTest {
        //String str = docAsnHeaderMybatisDao.getIdSequence(map);
         //commonMybatisDao.getIdSequence(map);
        System.out.println(commonService.generateSeq(Constant.APLCUSNO,"WH01"));
-
+*/
+        //String s = "edbf5a04a7a743f1bfcf51ec52c0ddfc";
+        /*List<String> arrlicense = new ArrayList<>();
+        List<String> arroperate = new ArrayList<>();
+        List<GspOperateDetailVO> licenseDetails = gspOperateDetailService.queryOperateDetailByLicense("edbf5a04a7a743f1bfcf51ec52c0ddfc");
+        List<GspOperateDetailVO> operateLicenseDetails = gspOperateDetailService.queryOperateDetailByLicense("73f9fb81c1514eb0961d80dd4c6b8564");
+        for(GspOperateDetailVO v : licenseDetails){
+            arrlicense.add(v.getOperateId());
+        }
+        for(GspOperateDetailVO v : operateLicenseDetails){
+            arroperate.add(v.getOperateId());
+        }
+        for(String s : arroperate){
+            if(!arrlicense.contains(s)){
+                System.out.println(true);
+            }
+        }
+        System.out.println(true);*/
+        redisUtil.get("aa");
 
     }
+
+
+
 }

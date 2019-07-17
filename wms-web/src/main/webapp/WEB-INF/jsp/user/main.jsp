@@ -165,9 +165,11 @@ var add = function(){
 };
 
 var edit = function(){
+
 	processType = 'edit';
 	var row = ezuiTreegrid.treegrid('getSelected');
 	if(row){
+
 		if(row.userType == 0){
 			$('#enableCombobox').combobox('disable');
 		    $('#genderCombobox').combobox('disable');
@@ -183,6 +185,7 @@ var edit = function(){
 				userType : row.userType
 			});
 		}else{
+            //alert(11111111);
 			$('#enableCombobox').combobox('enable');
 			$('#genderCombobox').combobox('enable');
 			$('#countryCombobox').combobox('enable');
@@ -191,16 +194,20 @@ var edit = function(){
 		    $('#customerCombobox').combobox('enable');
 			$('#birthday').datebox('enable');
 			$('#email').textbox('enable');
+            //alert(2222222);
+            //debugger
 			ezuiForm.form('load',{
 				userId : row.id,
 				userName : row.userName,
 				userType : row.userType,
 				gender : row.gender,
+
 				enable : row.enable,
 				birthday : row.birthday,
 				countryId : row.country.id,
 				email : row.email
 			});
+            //alert(3333333);
 			var role = row.roleSet;
 			if(role){
 				var roleArray = [];
@@ -217,6 +224,7 @@ var edit = function(){
 			    }
 				$('#warehouseCombobox').combobox('setValues',warehouseArray);
 			}
+            //alert(11111111);
 			var customer = row.customerSet;
 			if(customer){
 				var customerArray = [];
@@ -227,6 +235,7 @@ var edit = function(){
 			}
 		}
 		$('#parentNodeId').combotree('setValue', row.parent ? row.parent.parentNodeId : "");
+
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({

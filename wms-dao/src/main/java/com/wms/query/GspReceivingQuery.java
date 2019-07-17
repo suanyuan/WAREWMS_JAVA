@@ -7,6 +7,9 @@ public class GspReceivingQuery implements IQuery {
 
 	private String receivingId;
 	private String enterpriseId;
+	private String enterpriseName;
+	private String enterpriseNo;
+	private String shorthandName;
 	private String clientId;
 	private String supplierId;
 	private String isCheck;
@@ -17,6 +20,30 @@ public class GspReceivingQuery implements IQuery {
 	private String isUse;
 	private String isReturn;
 	private String isCooperation;
+
+	public String getEnterpriseNo() {
+		return enterpriseNo;
+	}
+
+	public void setEnterpriseNo(String enterpriseNo) {
+		this.enterpriseNo = enterpriseNo;
+	}
+
+	public String getShorthandName() {
+		return shorthandName;
+	}
+
+	public void setShorthandName(String shorthandName) {
+		this.shorthandName = shorthandName;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public String getIsCooperation() {
 		return isCooperation;

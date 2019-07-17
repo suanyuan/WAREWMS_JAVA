@@ -17,6 +17,26 @@ public class GspProductRegisterSpecs implements Serializable {
   @Transient
   private int hashCode = Integer.MIN_VALUE;
 
+  public static long getSerialVersionUID() {
+    return serialVersionUID;
+  }
+
+  public int getHashCode() {
+    return hashCode;
+  }
+
+  public void setHashCode(int hashCode) {
+    this.hashCode = hashCode;
+  }
+
+  public String getLlong() {
+    return llong;
+  }
+
+  public void setLlong(String llong) {
+    this.llong = llong;
+  }
+
   private String specsId;
   private String productRegisterId;
 
@@ -56,6 +76,22 @@ public class GspProductRegisterSpecs implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date editDate;
   private String isUse;
+  private String isCertificate;
+  private String isDoublec;
+
+
+  private String attacheCardCategory;
+
+
+
+
+
+
+
+
+
+
+
   private String alternatName1;
   private String alternatName2;
   private String alternatName3;
@@ -360,5 +396,30 @@ public class GspProductRegisterSpecs implements Serializable {
 
   public void setPackingRequire(String packingRequire) {
     this.packingRequire = packingRequire;
+  }
+
+    public String getIsCertificate() {
+        return isCertificate;
+    }
+
+    public void setIsCertificate(String isCertificate) {
+        this.isCertificate = isCertificate;
+    }
+
+    public String getIsDoublec() {
+        return isDoublec;
+    }
+
+    public void setIsDoublec(String isDoublec) {
+        this.isDoublec = isDoublec;
+    }
+
+
+  public String getAttacheCardCategory() {
+    return attacheCardCategory;
+  }
+
+  public void setAttacheCardCategory(String attacheCardCategory) {
+    this.attacheCardCategory = attacheCardCategory;
   }
 }

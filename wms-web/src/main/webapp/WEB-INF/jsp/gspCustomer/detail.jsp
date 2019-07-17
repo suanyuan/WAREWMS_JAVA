@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,88 +9,87 @@
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <body>
 <form id='ezuiForm' method='post'>
-    <input type='hidden' id='clientId' name='clientId' value="${clientId}" class="textbox-value"/>
+    <input type='hidden' id='clientId' name='clientId' value="${customer.clientId}" class="textbox-value"/>
     <input type="hidden" id="enterpriseId" name='enterpriseId' class="textbox-value"/>
     <table>
         <tr>
             <th>企业</th>
             <td>
-                <input type='text' id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:200'/>
-                <a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>
+                <input type='text' value="${customer.enterpriseName}" id="enterpriseName" name='enterpriseName' />
             </td>
         </tr>
         <tr>
             <th>代码</th>
-            <td><input type='text' id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.clientNo}" id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>简称</th>
-            <td><input type='text' id='clientName' name='clientName' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.clientName}" id='clientName' name='clientName' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
-            <th>备注</th>
-            <td><input type='text' name='remark' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <th>企业类型</th>
+            <td><input type='text' id="operateTypeData" name='operateType' /></td>
         </tr>
-        <tr>
+        <!-- <tr>
             <th>首营状态</th>
             <td><input type='text' name='firstState' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>
-        <tr>
+        </tr> -->
+        <!--<tr>
             <th>是否审核</th>
-            <td><input type='text' name='isCheck' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
+            <td><input type='text' id="isCheckData" name='isCheck'/></td>
         </tr>
         <tr>
             <th>是否合作</th>
-            <td><input type='text' name='isCooperation' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr>
-        <tr>
-            <th>类型</th>
-            <td><input type='text' name='operateType' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
+            <td><input type='text' id="isCooperationData" name='isCooperation' /></td>
+        </tr>-->
         <tr>
             <th>合同编号</th>
-            <td><input type='text' name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl"/>
-                <input id="contractUrlFile" name='file'>
-                <a id="btn" href="#" class="easyui-linkbutton" data-options="">浏览</a>
+                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
+                <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
         </tr>
         <tr>
             <th>委托内容</th>
-            <td><input type='text' name='clientContent' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
         </tr>
         <tr>
             <th>委托开始时间</th>
-            <td><input type='text' name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>委托结束时间</th>
-            <td><input type='text' name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>委托期限</th>
-            <td><input type='text' name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.clientTerm}" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>是否贴中文标签</th>
-            <td><input type='text' name='isChineseLabel' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
         </tr>
         <tr>
+            <th>备注</th>
+            <td><input type='text' value="${customer.remark}" name='remark' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+        </tr>
+        <!--<tr>
             <th>创建人</th>
             <td><input type='text' name='createId' value="${createId}" class='easyui-textbox' data-options='editable:false,width:200'/></td>
         </tr>
         <tr>
             <th>创建时间</th>
             <td><input type='text' name='createDate' value="${createDate}" class='easyui-textbox' data-options='editable:false,width:200'/></td>
-        </tr>
+        </tr>-->
     </table>
 </form>
 <div id='ezuiDialogDetail' style='padding: 10px;'>
-    <div id='detailToolbar' class='datagrid-toolbar' style=''>
+    <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff'>
         <fieldset>
             <legend>企业信息</legend>
             <table>
@@ -120,6 +120,17 @@
     var dataGridDetail;
     var dialogEnterprise;
     $(function () {
+        $("#enterpriseName").textbox({
+            value:"${customer.clientName}",
+            width:200,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchEnterprise();
+                }
+            }]
+        })
+
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
@@ -160,26 +171,49 @@
             textField:'value'
         });
 
-        $('input[name="isCheck"]').combobox({
+        /*$('#isCheckData').combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
-            textField:'value'
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#isCheckData').combobox("setValue",'${customer.isCheck}')
+            }
         });
 
-        $('input[name="isCooperation"]').combobox({
+        $('#isCooperationData').combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
-            textField:'value'
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#isCooperationData').combobox("setValue",'${customer.isCooperation}')
+            }
+        });*/
+
+        $("#isChineseLabelData").combobox({
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+            valueField:'id',
+            textField:'value',
+            width:200,
+            required:true,
+            onLoadSuccess:function () {
+                $('#isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
+            }
         });
 
-        $('input[name="isChineseLabel"]').combobox({
-            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
+        $('#operateTypeData').combobox({
+            url:sy.bp()+'/commonController.do?getEntType',
             valueField:'id',
-            textField:'value'
-        });
+            textField:'value',
+            width:200,
+            onLoadSuccess:function () {
+                $('#operateTypeData').combobox("setValue",'${customer.operateType}')
+            }
+        })
 
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
             toolbar : '#detailToolbar',
             title: '',
@@ -190,7 +224,8 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1'
+                isUse : '1',
+                enterpriseType:'default'
             },
             fit:true,
             collapsible:false,
@@ -203,7 +238,7 @@
                 {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
-                {field: 'enterpriseType',		title: '企业类型',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
                 {field: '_operate',		title: '操作',	width: '20%',
                     formatter: formatOper
                 }
@@ -269,12 +304,12 @@
             $("#enterpriseName").textbox("setValue",row.enterpriseName);
             $("#clientNo").textbox("setValue",row.enterpriseNo);
             $("#clientName").textbox("setValue",row.shorthandName);
+            $("#operateTypeData").combobox("setValue",row.enterpriseType);
             dataGridDetail.dialog('close');
         }
     }
 
     function operateGrid(id) {
-        console.log(id);
         dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
     }
 
@@ -324,6 +359,18 @@
                 }
             }
         });
+    }
+
+    function viewUrl(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#contractUrl").val()!=""){
+                showUrl($("#contractUrl").val());
+            }else {
+                showMsg("请上传合同附件！");
+            }
+        }
     }
 </script>
 </body>
