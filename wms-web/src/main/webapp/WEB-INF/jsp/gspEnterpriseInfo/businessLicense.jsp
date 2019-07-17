@@ -302,16 +302,16 @@
     function choseSelect_Catalog_businessLicense(row) {
         var choseRowNameArr = new Array();
         var choseRowArr = new Array();
-        var oldValue = $("#businessScope").textbox("getValue");
+        //var oldValue = $("#businessScope").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArr.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#businessScope").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#businessScope").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-           $("#businessScope").textbox("setValue",oldValue+row.instrumentCatalogName);
+           $("#businessScope").textbox("setValue",row.instrumentCatalogName);
         }
         $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
         $(ezuidialogChoseScope).dialog("close");

@@ -17,17 +17,14 @@
                         <input type='text' value="${firstBusinessApply.clientName}" id='clientName' class='easyui-textbox' data-options='required:true,width:200'/>
                         <input type="hidden" name="clientId" id="clientId" value="${firstBusinessApply.clientId}"/>
                     </td>
-                    <th>产品线</th>
-                    <td>
-                        <input id="productLine" name="productLine" type="text"/>
-                    </td>
                     <th>供应商</th>
                     <td>
                         <input type='text' value="${firstBusinessApply.supplierName}" id='supplierName' class='easyui-textbox' data-options='required:true,width:200'/>
                         <input type="hidden" name="supplierId" id="supplierId" value="${firstBusinessApply.supplierId}"/>
                     </td>
+                    <th>产品线</th>
                     <td>
-
+                        <input id="productLine" name="productLine" type="text"/>
                     </td>
                     <!--<th>创建人</th>
                     <td><input type='text' name='createId' class='easyui-textbox' data-options='required:true,width:200'/></td>
@@ -369,7 +366,7 @@
             singleSelect:true,
             idField : 'clientId',
             columns : [[
-                {field: 'customerType',	title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                {field: 'customerType',	title: '客户类型 ',	width: 100,formatter:function(value,rowData,rowIndex){
                         if (rowData.customerType=='CO') {
                             return rowData.customerType='收货单位';
                         }else if (rowData.customerType=='VE'){
@@ -386,17 +383,14 @@
                             return rowData.customerType='主体';
                         }
                     } },
-                {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                {field: 'activeFlag',		title: '是否合作 ',	width: 100,formatter:function(value,rowData,rowIndex){
                         return rowData.activeFlag == '1' ? '是' : '否';
                     }},
-                {field: 'customerid',		title: '客户代码',	width: 80 },
-                {field: 'descrC',		title: '客户名称',	width: 80 },
+                {field: 'customerid',		title: '客户代码',	width: 150 },
+                {field: 'descrC',		title: '客户名称',	width: 150 },
                 {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
                 {field: 'shorthandName',		title: '简称 ',	width: 85 },
-                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
-                {field: 'contacts',		title: '联系人 ',	width: 85 },
-                {field: 'contactsPhone',		title: '联系人电话 ',	width: 80 },
-                {field: 'remark',		title: '备注 ',	width: 85 },
+                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 }
             ]],
             onDblClickCell: function(index,field,value){
                 choseSupplierSelect();
@@ -612,9 +606,21 @@
     function choseClientSelect() {
         var row = clientDatagrid.datagrid("getSelected");
         if(row){
+
             $("#clientId").val(row.customerid);
             $("#clientName").textbox("setValue",row.descrC)
 
+            ezuiDialogClientDetail.dialog('close');
+        }
+    }
+
+    //双击选中供应商
+    function choseSupplierSelect() {
+        var row = supplierDatagrid.datagrid("getSelected");
+        console.log(row);
+        if(row){
+            $("#supplierId").val(row.customerid);
+            $("#supplierName").textbox("setValue",row.descrC)
             $("#productLine").combobox({
                 url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&enterpriseId='+row.customerid,
                 valueField:'id',
@@ -623,21 +629,6 @@
 
                 }
             })
-            ezuiDialogClientDetail.dialog('close');
-        }
-    }
-
-    //双击选中供应商
-    function choseSupplierSelect() {
-        var row = supplierDatagrid.datagrid("getSelected");
-        if(row){
-            $("#supplierId").val(row.customerid);
-            $("#supplierName").textbox("setValue",row.descrC)
-            // ezuiDialogClientDetail.dialog('close');
-            // $("#supplier").textbox("setValue",row.supplierId);
-            /* $("#operateType").textbox("setValue",row.operateType);
-             $("#isUse").textbox("setValue",row.isUse);
-             $("#isCheck").textbox("setValue",row.isCheck);*/
             ezuiDialogSupplierDetail.dialog('close');
         }
     }

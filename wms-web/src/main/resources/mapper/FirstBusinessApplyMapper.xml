@@ -14,6 +14,7 @@
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
 	<result column="first_state" property="firstState"/>
+	<result column="productline" property="productline"/>
 </resultMap>
 
 <!-- Result Map-->
@@ -31,11 +32,12 @@
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
 	<result column="first_state" property="firstState"/>
+	<result column="productline" property="productline"/>
 </resultMap>
        
 <!-- first_business_apply table all fields -->
 <sql id="Base_Column_List" >
-	 apply_id,client_id,supplier_id,create_id,create_date,edit_id,edit_date,is_use,first_state
+	 apply_id,client_id,supplier_id,create_id,create_date,edit_id,edit_date,is_use,first_state,productline
 </sql>
    
    
@@ -70,19 +72,22 @@ where 1=1
 	<if test="condition.firstState != null and condition.firstState != ''" >
 		and first_state =  #{condition.firstState}
 	</if>
+	<if test="condition.productline != null and condition.productline != ''" >
+		and productline =  #{condition.productline}
+	</if>
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into first_business_apply(apply_id,client_id,supplier_id,create_id,create_date,edit_id,edit_date,is_use,first_state)
- values(#{applyId},#{clientId},#{supplierId},#{createId},now(),#{editId},#{editDate},#{isUse},#{firstState})
+  insert into first_business_apply(apply_id,client_id,supplier_id,create_id,create_date,edit_id,edit_date,is_use,first_state,productline)
+ values(#{applyId},#{clientId},#{supplierId},#{createId},now(),#{editId},#{editDate},#{isUse},#{firstState},#{productline})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update first_business_apply set client_id=#{clientId},supplier_id=#{supplierId},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},first_state=#{firstState} where apply_id=#{applyId}
+  update first_business_apply set client_id=#{clientId},supplier_id=#{supplierId},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},first_state=#{firstState},productline=#{productline} where apply_id=#{applyId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -112,6 +117,9 @@ where 1=1
 	</if>
 	<if test="firstState != null  ">
 		first_state=#{firstState},
+	</if>
+	<if test="productline != null  ">
+		productline=#{productline},
 	</if>
 	</trim> where apply_id=#{applyId}
 </update>
@@ -179,6 +187,9 @@ where 1=1
 		<if test="condition.firstState != null and condition.firstState != ''" >
 			and t1.first_state =  #{condition.firstState}
 		</if>
+		<if test="condition.productline != null and condition.productline != ''" >
+			and t1.productline =  #{condition.productline}
+		</if>
 	</trim>
 </sql>
 
@@ -186,7 +197,7 @@ where 1=1
 <!-- 查询产品首营申请记录列表 -->
 <select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
 	select
-	sp.product_code,sp.product_name,t1.apply_id,client_id,eic.enterprise_name client_name,supplier_id,eis.enterprise_name supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state
+	sp.product_code,sp.product_name,t1.apply_id,client_id,eic.enterprise_name client_name,supplier_id,eis.enterprise_name supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state,t1.productline
 	from first_business_apply t1 left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
 	left join gsp_product_register_specs sp on t2.specs_id = sp.specs_id
 	left join gsp_enterprise_info eic on client_id = eic.enterprise_id

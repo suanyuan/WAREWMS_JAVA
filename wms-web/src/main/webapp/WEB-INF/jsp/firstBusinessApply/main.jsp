@@ -19,7 +19,7 @@ $(function() {
 		url : '<c:url value="/firstBusinessApplyController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '首营审核',
+		title: '查询',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,

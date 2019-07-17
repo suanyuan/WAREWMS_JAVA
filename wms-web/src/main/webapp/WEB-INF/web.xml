@@ -84,6 +84,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>springMvc</servlet-name>
+    <url-pattern>/uploadUrl/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>springMvc</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

@@ -170,6 +170,7 @@ public class FirstBusinessApplyService extends BaseService {
 			firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstBusinessApply.setIsUse(Constant.IS_USE_YES);
 			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+			firstBusinessApply.setProductline(productLine);
 			firstBusinessApplyMybatisDao.add(firstBusinessApply);
 
 			String[] arr = productArr.split(",");
@@ -295,6 +296,7 @@ public class FirstBusinessApplyService extends BaseService {
 		MybatisCriteria criteria = new MybatisCriteria();
 		ProductLineQuery query = new ProductLineQuery();
 		query.setEnterpriseName(enterpriseId);
+		query.setIsUse(Constant.IS_USE_YES);
 		criteria.setCondition(query);
 		List<ProductLine> lineList = productLineMybatisDao.queryByList(criteria);
 		if(lineList!=null){

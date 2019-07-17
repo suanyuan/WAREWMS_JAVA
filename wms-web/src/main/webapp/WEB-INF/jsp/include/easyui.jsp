@@ -21,7 +21,7 @@
 	    if(!fileName){
 	        fileName = "";
 		}
-		window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName);
+		window.open(sy.bp()+"/uploadUrl/"+url);
     }
 
     var firstStateFormatter = function(value,row,index) {

@@ -68,6 +68,7 @@ public class GspProductRegisterService extends BaseService {
 		GspProductRegister gspProductRegister = new GspProductRegister();
 		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
 		gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+		gspProductRegister.setIsUse(Constant.IS_USE_YES);
 		gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
 		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
