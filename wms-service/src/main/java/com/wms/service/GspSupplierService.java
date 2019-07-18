@@ -86,6 +86,8 @@ public class GspSupplierService extends BaseService {
 
     @Transactional
 	public Json addGspSupplier(GspSupplierForm gspSupplierForm) throws Exception {
+
+	    System.out.println("gspSupplierForm.getContractUrl()===="+gspSupplierForm.getContractUrl());
 		Json json = new Json();
 		GspSupplier gspSupplier = new GspSupplier();
 		BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
@@ -130,13 +132,14 @@ public class GspSupplierService extends BaseService {
 		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
 		gspSupplierVO.setEditDate(simpleDateFormat.format(new Date()));
 		gspSupplierVO.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-		gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+		if(gspSupplier.getCreateDate()!=null){
+            gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+        }
 		if(gspSupplier.getClientStartDate()!=null){
 			gspSupplierVO.setClientStartDate(simpleDateFormat.format(gspSupplier.getClientStartDate()));
 		}
 		if(gspSupplier.getClientEndDate()!=null){
 			gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
-
 		}
 		//System.out.println("gspSupplierVO============="+gspSupplierVO.getCreateDate()+"==========="+gspSupplierVO.getCreateDate());
 		if(gspSupplier == null){

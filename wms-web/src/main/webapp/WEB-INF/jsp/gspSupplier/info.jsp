@@ -57,8 +57,9 @@ var enterpriseDialog;
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
-                <input id="contractUrlFile" name='file' value="">
+                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value="${customer.contractUrl}"/>
+                <%--<input class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>--%>
+                <input id="contractUrlFile" name='file' value="" />
                 <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
         </tr>
@@ -137,6 +138,7 @@ var enterpriseDialog;
         var row = ezuiDatagrid.datagrid('getSelected');
         //alert(row.supplierId);
         if(row){
+
             if(processType == 'edit'){
             $.ajax({
                 url : 'gspSupplierController.do?getInfo',
@@ -159,15 +161,17 @@ var enterpriseDialog;
 
 
                         })
-                        console.log(result.obj.enterpriseType);
-                        console.log(result.obj.clientStartDate);
+                        //console.log(result.obj.enterpriseType);
+                        console.log(result.obj.contractUrl);
                         //$("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
                         $("#ezuiFormInfo input[id='editDate'][data='1']").textbox('setValue',result.obj.editDate);
                         $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
 
+                        $("#ezuiFormInfo input[id='contractUrlFile']").textbox('setValue',result.obj.contractUrl);
                         //$("#ezuiFormInfo input[id='clientStartDate'][data='1']").datebox('setValue',result.obj.clientStartDate);
                         //$("#ezuiFormInfo input[id='clientEndDate'][data='1']").datebox('setValue',result.obj.clientEndDate);
 
+                        //$("#contractUrl").val(result.obj.enterpriseType);
                         //$("#enterpriseIdQuery1").textbox("setValue",result.Obj.enterpriseName);
                     }
                 }
@@ -226,6 +230,7 @@ var enterpriseDialog;
                     $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
                     //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
                     $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
+
                 }
             }
         });
@@ -256,6 +261,7 @@ var enterpriseDialog;
             buttonText: '浏览',  //按钮说明文字
             required: true,
             onChange:function(data){
+
                 if(data){
                     doUpload(data);
                 }
@@ -276,10 +282,11 @@ var enterpriseDialog;
                     }
                 },
                 onload:function(data){
+                    alert(data.comment);
                     $("#contractUrl").val(data.comment);
                 },
                 onerror:function(er){
-                    console.log(er);
+                    // console.log(er);
                 }
             });
         }

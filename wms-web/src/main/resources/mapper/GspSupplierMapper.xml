@@ -127,8 +127,32 @@ where 1=1
 	<if test="firstState != null  ">
 		first_state=#{firstState},
 	</if>
-	<if test="createId != null  ">
-		create_id=#{createId},
+
+
+
+    <if test="contractNo != null  ">
+        contract_no=#{contractNo},
+    </if>
+    <if test="contractUrl != null  ">
+        contract_url=#{contractUrl},
+    </if>
+    <if test="clientContent != null  ">
+        client_content=#{clientContent},
+    </if>
+    <if test="clientStartDate != null  ">
+        client_start_date=#{clientStartDate},
+    </if>
+    <if test="clientEndDate != null  ">
+        client_end_date=#{clientEndDate},
+    </if>
+    <if test="clientTerm != null  ">
+        client_term=#{clientTerm},
+    </if>
+
+
+
+    <if test="createId != null  ">
+        create_id=#{createId},
 	</if>
 	<if test="createDate != null  ">
 		create_date=#{createDate},

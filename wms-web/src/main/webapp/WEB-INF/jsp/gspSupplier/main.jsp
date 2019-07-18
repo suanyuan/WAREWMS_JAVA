@@ -42,7 +42,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 
-			{field: 'supplierId',		title: '申请单号',	width: 88},
+			{field: 'supplierId',		title: '申请单号',	width: 96},
 			{field: 'enterpriseId',		title: '企业流水号',	width: 88 ,hidden:true},
 
 			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
@@ -103,7 +103,7 @@ var edit = function(){
 
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
-	//alert(row.supplierId);
+	// alert(row.supplierId);
     if(row){
         // ezuiForm.form('load',{
         //     // supplierId : row.supplierId,

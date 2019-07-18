@@ -44,8 +44,8 @@ where 1=1
 <update id="updateBySelective" parameterType="Object" >
 	update bas_gtn set 
 	<trim  suffixOverrides="," >
-	<if test="gTNCODE != null  ">
-		GTNCODE=#{gTNCODE},
+	<if test="gtncode != null  ">
+		GTNCODE=#{gtncode},
 	</if>
 	</trim> where SKU=#{sku}
 </update>
