@@ -57,7 +57,7 @@ var enterpriseDialog;
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value="${customer.contractUrl}"/>
+                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=""/>
                 <%--<input class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>--%>
                 <input id="contractUrlFile" name='file' value="" />
                 <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
@@ -69,15 +69,17 @@ var enterpriseDialog;
         </tr>
         <tr>
             <th>合同开始时间</th>
-            <td><input type='text' data="1" id="clientStartDate" name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1"  id="clientStartDate"  name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200
+                                                                                                                               '/></td>
         </tr>
         <tr>
             <th>合同结束时间</th>
-            <td><input type='text' data="1" id="clientEndDate" name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1" id="clientEndDate"  name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200
+                                                                                                                                '/></td>
         </tr>
         <tr>
             <th>合同期限</th>
-            <td><input type='text' data="1" id="clientTerm" value="" name='clientTerm' class='easyui-numberbox' data-options='width:200'/></td>
+            <td><input type='text' data="1" id="clientTerm" name='clientTerm' class='easyui-numberbox' data-options='width:200'/></td>
         </tr>
 
 
@@ -166,11 +168,15 @@ var enterpriseDialog;
                         //$("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
                         $("#ezuiFormInfo input[id='editDate'][data='1']").textbox('setValue',result.obj.editDate);
                         $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
-
+                        $("#contractUrl").val(result.obj.contractUrl);
                         $("#ezuiFormInfo input[id='contractUrlFile']").textbox('setValue',result.obj.contractUrl);
+                        //$("#ezuiFormInfo input[id='contractUrl']").textbox('setValue',result.obj.contractUrl);
+
+
+                        //$("#ezuiFormInfo input[id='contractUrl']").val('setValue',result.obj.contractUrl);
                         //$("#ezuiFormInfo input[id='clientStartDate'][data='1']").datebox('setValue',result.obj.clientStartDate);
                         //$("#ezuiFormInfo input[id='clientEndDate'][data='1']").datebox('setValue',result.obj.clientEndDate);
-
+                        //$("#contractUrl").val(result.obj.contractUrl);
                         //$("#contractUrl").val(result.obj.enterpriseType);
                         //$("#enterpriseIdQuery1").textbox("setValue",result.Obj.enterpriseName);
                     }
@@ -253,7 +259,16 @@ var enterpriseDialog;
 
 
     $(function () {
-
+        $('#clientStartDate').datebox({
+            onChange: function(date){
+                onChangeDate();
+            }
+        });
+        $('#clientEndDate').datebox({
+            onChange: function(date){
+                onChangeDate();
+            }
+        });
 
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
@@ -290,11 +305,8 @@ var enterpriseDialog;
                 }
             });
         }
-
-
-
-
     })
+
     function viewUrl(url) {
         if(url){
             showUrl(url);
@@ -307,4 +319,16 @@ var enterpriseDialog;
         }
     }
 
+
+    function onChangeDate() {
+        var startTime = $("#clientStartDate").datebox('getValue');
+        var endTime =$("#clientEndDate").datebox('getValue') ;
+        if(startTime!=null && endTime!=null&& endTime!=""&& startTime !=""  ) {
+            var endTime = new Date(endTime);
+            var startTime = new Date(startTime);
+            var days = endTime.getTime() - startTime.getTime();
+            var day = parseInt(days / (1000 * 60 * 60 * 24));
+            $("#clientTerm").numberbox('setValue',day);
+        }
+    }
 </script>

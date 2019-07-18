@@ -115,7 +115,7 @@ where 1=1
 <update id="updateBySelective" parameterType="Object" >
 	update gsp_supplier set 
 	<trim  suffixOverrides="," >
-	<if test="enterpriseId != null  ">
+	<if test="enterpriseId != null  and enterpriseId != '' ">
 		enterprise_id=#{enterpriseId},
 	</if>
 	<if test="isCheck != null  ">
