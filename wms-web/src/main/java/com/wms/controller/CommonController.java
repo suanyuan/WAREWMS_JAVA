@@ -56,10 +56,13 @@ public class CommonController {
             stream = file.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
+
             File targetFile = new File(uploadUrl+File.separator+file_name);
+            System.out.println("targetFile=="+targetFile);
             Files.write(buffer,targetFile);
             uploadResult.setSuccess(true);
             uploadResult.setComment(file_name);
+
         } catch (IOException e) {
             uploadResult.setSuccess(false);
             uploadResult.setComment("uploadFile 上传文件 error");

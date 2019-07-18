@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+		table th{
+			text-align: right;
+		}
+	</style>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <script type='text/javascript'>
@@ -81,7 +86,6 @@ var add = function(){
         onLoad:function () {
         }
     })
-	//ezuiDialog.dialog("refresh",dialogUrl).dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
@@ -157,7 +161,14 @@ $(function () {
     $('#productRegisterVersion').combobox({
         url:sy.bp()+'/commonController.do?getCatalogVersion',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+        onChange:function (newValue,oldValue) {
+            $('#classifyCatalog').combobox({
+                url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox&version='+newValue,
+                valueField:'id',
+                textField:'value'
+            });
+        }
     });
 
     $('#classifyId').combobox({
@@ -167,7 +178,7 @@ $(function () {
     });
 
     $('#classifyCatalog').combobox({
-        url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox',
+        url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox&version=',
         valueField:'id',
         textField:'value'
     });
@@ -190,16 +201,18 @@ $(function () {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>注册证编号：</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品名称：</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>管理分类：</th><td><input type='text' id='classifyId' size='16' data-options=''/></td>
-							<th>分类目录：</th><td><input type='text' id='classifyCatalog' size='16' data-options=''/></td>
+							<th>注册证编号：</th><td><input type='text' id='productRegisterNo' class='easyui-textbox'  data-options='width:200'/></td>
+							<th>产品名称：</th><td><input type='text' id='productNameMain' class='easyui-textbox'  data-options='width:200'/></td>
+							<th>管理分类：</th><td><input type='text' id='classifyId' class='easyui-combobox' data-options='width:200'/></td>
 						</tr>
 						<tr>
-							<th>版本：</th><td><input type='text' id='productRegisterVersion' size='16' data-options=''/></td>
-							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' size='16' data-options=''/></td>
+							<th>版本：</th><td><input type='text' id='productRegisterVersion' class='easyui-combobox' data-options='width:200'/></td>
+							<th>分类目录：</th><td><input type='text' id='classifyCatalog' class='easyui-combobox' data-options='width:200'/></td>
+							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-combobox' data-options='width:200'/></td>
+						</tr>
+						<tr>
+							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-datebox'  data-options='width:200'/></td>
+							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-datebox'  data-options='width:200'/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

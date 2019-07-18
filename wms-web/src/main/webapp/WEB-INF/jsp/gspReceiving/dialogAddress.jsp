@@ -149,7 +149,7 @@
             }
         });
 
-
+        ezuiDetailsDatagrid.datagrid('select','1')
 
     }
 

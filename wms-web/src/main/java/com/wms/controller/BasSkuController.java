@@ -77,6 +77,7 @@ public class BasSkuController {
 			json = new Json();
 
 		}
+		System.out.println(json);
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}

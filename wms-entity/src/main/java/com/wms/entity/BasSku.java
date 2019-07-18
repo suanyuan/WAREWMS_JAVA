@@ -53,6 +53,15 @@ public class BasSku implements Serializable {
 	private String defaultreceivinguom;
 
 	private String defaultshipmentuom;
+    private String shelflifetype;
+
+    public String getShelflifetype() {
+        return shelflifetype;
+    }
+
+    public void setShelflifetype(String shelflifetype) {
+        this.shelflifetype = shelflifetype;
+    }
 
     /**
      * 中文产品名称

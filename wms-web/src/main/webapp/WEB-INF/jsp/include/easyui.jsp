@@ -21,8 +21,7 @@
 	    if(!fileName){
 	        fileName = "";
 		}
-		//修改sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName为url
-		window.open(url);
+		window.open(sy.bp()+"/uploadUrl/"+url);
     }
 
     var firstStateFormatter = function(value,row,index) {
@@ -154,7 +153,7 @@
             case CHECKSTATE.CHECKSTATE_40 : return "已通过";
             case CHECKSTATE.CHECKSTATE_50 : return "未通过";
         }
-    }
+    };
 
     var applyTypeFormatter = function(value,row,index) {
 	    console.log(row);

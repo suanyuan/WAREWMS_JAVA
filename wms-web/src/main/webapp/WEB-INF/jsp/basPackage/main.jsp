@@ -127,12 +127,14 @@ var del = function(){
 	}
 };
 var commit = function(){
+   // alert(111111);
 	var url = '';
 	if (processType == 'edit') {
 		url = '<c:url value="/basPackageController.do?edit"/>';
 	}else{
 		url = '<c:url value="/basPackageController.do?add"/>';
 	}
+
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
@@ -142,10 +144,13 @@ var commit = function(){
 				});
 				return true;
 			}else{
+                console.log("bbb");
 				return false;
 			}
+
 		},
 		success : function(data) {
+		    console.log("asd");
 			var msg='';
 			try {
 				var result = $.parseJSON(data);
@@ -212,7 +217,7 @@ var doSearch = function(){
 			<table>
 				<tr hidden	>
 					<th>包装代码</th>
-					<td><input type='text' name='packid' hidden class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='packid' hidden class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>包装描述</th>

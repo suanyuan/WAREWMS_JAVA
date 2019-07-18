@@ -182,8 +182,8 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield04(register.getClassifyId());
                 skuForm.setReservedfield05(register.getClassifyCatalog());
                 skuForm.setSku(specObj.getProductCode());
-                skuForm.setSkuGroup1("");//specObj.getProductLine()产品线
-                //skuForm.setSkuGroup2();//附卡类别
+                skuForm.setSkuGroup1(firstBusinessApply.getProductLine());//specObj.getProductLine()产品线
+                skuForm.setSkuGroup2(specObj.getAttacheCardCategory());//附卡类别
                 skuForm.setSkuGroup3(specObj.getPackingRequire());//包装要求
                 skuForm.setSkuGroup4(specObj.getStorageCondition());
                 skuForm.setSkuGroup5(specObj.getTransportCondition());
@@ -213,7 +213,7 @@ public class DataPublishService extends BaseService {
             if(!json.isSuccess()){
                 return Json.error("查询不到对应的委托客户申请");
             }
-            GspCustomer customer = (GspCustomer)json.getObj();
+            GspCustomerVO customer = (GspCustomerVO)json.getObj();
 
             GspCustomerForm updateGspCustomer = new GspCustomerForm();
             updateGspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
@@ -234,7 +234,7 @@ public class DataPublishService extends BaseService {
             if(!json.isSuccess()){
                 return Json.error("查询不到对应的供应商申请");
             }
-            GspSupplier supplier = (GspSupplier)json.getObj();
+            GspSupplierVO supplier = (GspSupplierVO)json.getObj();
             GspSupplierForm updateSupplierForm = new GspSupplierForm();
             updateSupplierForm.setSupplierId(no);
             updateSupplierForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
@@ -302,9 +302,12 @@ public class DataPublishService extends BaseService {
         return Json.error("单据号无效："+no);
     }
 
+    /**
+     * 直接下发主体信息
+     * @param gspEnterpriseInfoForm
+     * @return
+     */
     public Json publishDataWithOutApply(GspEnterpriseInfoForm gspEnterpriseInfoForm){
-
-
 
         BasCustomerForm form = new BasCustomerForm();
         form.setCustomerid(gspEnterpriseInfoForm.getEnterpriseNo());

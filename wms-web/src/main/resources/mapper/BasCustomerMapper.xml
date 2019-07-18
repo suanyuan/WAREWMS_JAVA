@@ -93,7 +93,6 @@
 
 <!-- Bas_Customer table all fields -->
 <sql id="Base_Column_List" >
-
 	customerid,
 	customer_type,
 	active_flag,
@@ -169,9 +168,9 @@ where 1=1
 	    and receiving_address_id =  #{condition.receivingAddressId,jdbcType=VARCHAR}
 	</if>
 	<if test="condition.descrC != null and condition.descrC != ''" >
-		and DESCR_C =  #{condition.descrC,jdbcType=VARCHAR}
+		and  DESCR_C  like  '%${condition.descrC}%'
 	</if>
-	<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
+	<!--<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
 	and enterprise_no =  #{condition.enterpriseNo,jdbcType=VARCHAR}
 </if>
 	<if test="condition.shorthandName != null and condition.shorthandName != ''" >
@@ -179,7 +178,7 @@ where 1=1
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 		and enterprise_name =  #{condition.enterpriseName,jdbcType=VARCHAR}
-	</if>
+	</if>-->
 	<if test="condition.supContractNo != null and condition.supContractNo != ''" >
 		and sup_contract_no =  #{condition.supContractNo,jdbcType=VARCHAR}
 	</if>
@@ -589,6 +588,19 @@ where 1=1
 			)
 		</if>
 	</if>
+</select>
+	<select id="queryByenterId"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from bas_customer
+	where enterprise_id=#{enterpriseId,jdbcType=VARCHAR}
+	and customer_type=#{customerType,jdbcType=VARCHAR}
+</select>
+
+	<select id="queryByCustomerId"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from bas_customer
+	where CUSTOMERID=#{customerid,jdbcType=VARCHAR}
+
 </select>
 
 <!-- 客户档案 列表总数-->

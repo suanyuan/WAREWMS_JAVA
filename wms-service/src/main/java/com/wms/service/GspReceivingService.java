@@ -39,7 +39,7 @@ public class GspReceivingService extends BaseService {
 	private CommonService commonService;
 
 	@Autowired
-	private BasCustomerService basCustomerService;
+	private BasCustomerMybatisDao basCustomerMybatisDao;
 
 	@Autowired
 	private GspReceivingDao gspReceivingDao;
@@ -91,7 +91,10 @@ public class GspReceivingService extends BaseService {
 
 				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryIsDefault(gspReceiving);
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
-
+				BasCustomer basCustomer1 = new BasCustomer();
+				basCustomer1.setEnterpriseId(gspReceiving.getEnterpriseId());
+				basCustomer1.setCustomerType("CO");
+				BasCustomer basCustomer = basCustomerMybatisDao.queryByenterId(basCustomer1);
 				BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
 				if (gspReceivingAddress!=null ){
 
@@ -112,6 +115,9 @@ public class GspReceivingService extends BaseService {
 					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
 
 				}
+				if ( basCustomer!=null){
+					gspReceivingVO.setCustomerid(basCustomer.getCustomerid());
+				}
 				gspReceivingVOList.add(gspReceivingVO);
 			}
 			datagrid.setTotal((long) gspReceivingMybatisDao.queryByCount(mybatisCriteria));
@@ -126,6 +132,8 @@ public class GspReceivingService extends BaseService {
 		Json json = new Json();
 		try {
 			GspReceiving gspReceiving = new GspReceiving();
+
+			//发起新申请
 			if (StringUtils.isNotEmpty(gspReceivingForm.getReceivingId())){
 				GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
 				oldgspReceiving.setIsUse("0");
@@ -140,8 +148,8 @@ public class GspReceivingService extends BaseService {
 
 				gspReceivingMybatisDao.add(gspReceiving);
 			}else {
-
-				if (newreceivingId!=null&&newreceivingId!=""){
+				// 新增
+				/*if (newreceivingId!=null&&newreceivingId!=""){
 
 					BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 					gspReceiving.setIsUse("1");
@@ -150,14 +158,15 @@ public class GspReceivingService extends BaseService {
 					gspReceiving.setReceivingId(newreceivingId);
 					gspReceiving.setFirstState("00");
 
-				}else {
+				}else {*/
 				BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 				gspReceiving.setIsUse("1");
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 				gspReceiving.setFirstState("00");
-				}
+				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(newreceivingId);
+				gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
 
 				gspReceivingMybatisDao.add(gspReceiving);
 			}
@@ -167,7 +176,8 @@ public class GspReceivingService extends BaseService {
 			//插入一条首营申请日志记录
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
+			firstReviewLog.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			firstReviewLog.setReviewTypeId(gspReceivingForm.getReceivingId());
 			firstReviewLog.setApplyState("00");
 			firstReviewLog.setReviewId(RandomUtil.getUUID());
 			firstReviewLogMybatisDao.add(firstReviewLog);
@@ -183,11 +193,12 @@ public class GspReceivingService extends BaseService {
 		try {
 			FirstReviewLog firstReviewLog = new FirstReviewLog();
 			GspReceiving gspReceiving=	gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
-			if (gspReceiving != null) {
-				gspReceiving.setFirstState("10");
-				gspReceivingMybatisDao.updateBySelective(gspReceiving);
-				firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
+			if (gspReceiving == null) {
+				return null;
 			}
+			gspReceiving.setFirstState("10");
+			gspReceivingMybatisDao.updateBySelective(gspReceiving);
+			firstReviewLog.setReviewTypeId(gspReceiving.getReceivingId());
 			//插入一条首营申请日志记录
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstReviewLog.setApplyState("00");

@@ -205,7 +205,7 @@
             height:500,
             href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=secondRecord&id=${gspSecondRecord.recordId}',
             onClose : function() {
-
+                ezuidialogChoseScopeRecord.dialog('clear');
             }
         });
     }
@@ -213,16 +213,16 @@
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
         var choseRowArrRecord = new Array();
-        var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
+        //var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",row.instrumentCatalogName);
         }
         $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");

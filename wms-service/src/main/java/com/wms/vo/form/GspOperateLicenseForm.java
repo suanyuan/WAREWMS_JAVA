@@ -18,8 +18,45 @@ public class GspOperateLicenseForm {
 	private String registrationAuthority;
 	private String operateType;
 	private String isUse;
+
 	private String scopArr;
 	private String opType;
+	private String businessResidence;
+	private String juridicalPerson;
+	private String residence;
+	private String enterpriseName;
+
+	public String getBusinessResidence() {
+		return businessResidence;
+	}
+
+	public void setBusinessResidence(String businessResidence) {
+		this.businessResidence = businessResidence;
+	}
+
+	public String getJuridicalPerson() {
+		return juridicalPerson;
+	}
+
+	public void setJuridicalPerson(String juridicalPerson) {
+		this.juridicalPerson = juridicalPerson;
+	}
+
+	public String getResidence() {
+		return residence;
+	}
+
+	public void setResidence(String residence) {
+		this.residence = residence;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public String getOperateId() {
 		return operateId;

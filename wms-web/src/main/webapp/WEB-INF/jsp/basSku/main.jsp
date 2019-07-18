@@ -35,7 +35,7 @@ $(function() {
 		toolbar : '#toolbar',
 		title: '产品档案',
 		pageSize : 50,
-		pageList : [50, 100, 200],
+		pageList : [50, 3, 200],
 		fit: true,
 		border: false,
 		fitColumns : true,
