@@ -26,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -106,6 +107,7 @@ public class BasCustomerService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}*/
+	@Transactional
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		Json json = null;
 		try {
@@ -153,12 +155,16 @@ public class BasCustomerService extends BaseService {
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(basCustomerForm.getNewreceivingId());
-				if (gspReceivingAddress != null) {
+				String id ="";
+				List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(id);
+				if (gspReceivingAddressList != null && gspReceivingAddressList.size()!=0) {
+					for (GspReceivingAddress gspReceivingAddress : gspReceivingAddressList){
 
-					gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
+						gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
+						gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
+					}
+
 				}
-
 				gspReceivingMybatisDao.add(gspReceiving);
 				firstReviewLogMybatisDao.add(firstReviewLog);
 

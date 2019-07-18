@@ -73,7 +73,7 @@
 </div>--%>
 <div id='ezuiDialog' style='padding: 10px;'>
     <form id='ezuiForm' method='post'>
-        <input type='hidden' id='productLineId' name='productLineId'/>
+        <input type='hidden' id='productLineId' name='productLineId' value="${productLine.productLineId}"/>
         <input type='hidden' id='customerid' name='customerid' />
         <table>
             <tr>

@@ -18,9 +18,9 @@ public class GspReceivingAddressForm {
 	private String phone;
 	private String isDefault;
 	private String createId;
-	private java.util.Date createDate;
+	private String createDate;
 	private String editId;
-	private java.util.Date editDate;
+	private String editDate;
 
 	public String getReceivingAddressId() {
 		return receivingAddressId;
@@ -127,11 +127,11 @@ public class GspReceivingAddressForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -144,11 +144,11 @@ public class GspReceivingAddressForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 

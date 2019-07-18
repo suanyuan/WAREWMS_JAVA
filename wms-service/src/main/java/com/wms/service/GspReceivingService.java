@@ -28,6 +28,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspReceivingForm;
 import com.wms.query.GspReceivingQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("gspReceivingService")
 public class GspReceivingService extends BaseService {
@@ -66,7 +67,7 @@ public class GspReceivingService extends BaseService {
 			mybatisCriteria.setPageSize(pager.getRows());
 			mybatisCriteria.setOrderByClause("edit_date desc");
 			mybatisCriteria.setCondition(query);
-			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+			//mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 			List<GspReceiving> gspReceivingList = gspReceivingMybatisDao.queryByList(mybatisCriteria);
 
 			List<GspReceivingVO> gspReceivingVOList = new ArrayList<GspReceivingVO>();
@@ -101,7 +102,7 @@ public class GspReceivingService extends BaseService {
 					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 					gspReceivingVO.setContacts(gspReceivingAddress.getContacts());
 					gspReceivingVO.setPhone(gspReceivingAddress.getPhone());
-					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
+					//gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
 
 					/*GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspReceiving.getClientId());
 
@@ -127,7 +128,7 @@ public class GspReceivingService extends BaseService {
 		}
 		return datagrid;
 	}
-
+	@Transactional
 	public Json addGspReceiving(GspReceivingForm gspReceivingForm,String newreceivingId) throws Exception {
 		Json json = new Json();
 		try {
@@ -165,9 +166,16 @@ public class GspReceivingService extends BaseService {
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 				gspReceiving.setFirstState("00");
-				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(newreceivingId);
-				gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
+				String id ="";
+				List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(id);
+				if (gspReceivingAddressList != null && gspReceivingAddressList.size()!=0) {
+					for (GspReceivingAddress gspReceivingAddress : gspReceivingAddressList){
 
+						gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
+						gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
+					}
+
+				}
 				gspReceivingMybatisDao.add(gspReceiving);
 			}
 
@@ -188,6 +196,10 @@ public class GspReceivingService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+
+
+
+
 	public Json confirmApply(GspReceivingForm gspReceivingForm) throws Exception {
 		Json json = new Json();
 		try {

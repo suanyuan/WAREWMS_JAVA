@@ -82,9 +82,9 @@ public class ProductLineController {
 		if(json == null){
 			json = new Json();
 		}
-		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
-		return json;
-	}
+        json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        return json;
+    }
 
 	@Login
 	@RequestMapping(params = "edit")
@@ -93,9 +93,9 @@ public class ProductLineController {
 		Json json = productLineService.updateProductLine(productLineForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		return json;
+        json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        return json;
 	}
 
 	@Login
@@ -105,9 +105,9 @@ public class ProductLineController {
 		Json json = productLineService.deleteProductLine(productLineId);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		return json;
+        json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        return json;
 	}
 
 	@Login

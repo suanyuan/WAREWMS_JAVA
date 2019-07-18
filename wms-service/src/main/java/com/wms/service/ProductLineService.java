@@ -121,7 +121,7 @@ public class ProductLineService extends BaseService {
 		productLineQuery.setName(productLineForm.getName());
 
 
-		ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+		ProductLine productLine = productLineMybatisDao.queryById(productLineQuery.getProductLineId());
 
 		BeanUtils.copyProperties(productLineForm, productLine);
 

@@ -81,7 +81,8 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(GspReceivingAddressForm gspReceivingAddressForm) throws Exception {
+	public Json edit(@RequestParam(value = "gspReceivingAddressFormStr") String gspReceivingAddressFormStr) throws Exception {
+		GspReceivingAddressForm gspReceivingAddressForm = JSON.parseObject(gspReceivingAddressFormStr, GspReceivingAddressForm.class);
 		Json json = gspReceivingAddressService.editGspReceivingAddress(gspReceivingAddressForm);
 		if(json == null){
 			json = new Json();

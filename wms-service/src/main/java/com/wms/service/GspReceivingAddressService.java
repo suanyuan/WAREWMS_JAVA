@@ -63,13 +63,22 @@ public class GspReceivingAddressService extends BaseService {
 		GspReceivingAddress gspReceivingAddress = new GspReceivingAddress();
 
 		if (StringUtils.isEmpty(gspReceivingAddressForm.getReceivingId())){
+			//如果是默认覆盖
+			if ("1".equals(gspReceivingAddressForm.getIsDefault())){
+				gspReceivingAddress.setIsDefault(gspReceivingAddressForm.getIsDefault());
+				GspReceivingAddress gspReceivingAddress1 = gspReceivingAddressMybatisDao.queryIsDefault(gspReceivingAddress);
+				if (gspReceivingAddress1 != null) {
+					gspReceivingAddress1.setIsDefault("0");
+					gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress1);
+				}
+			}
 
 			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
 			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
-		//	gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-			json.setObj(gspReceivingAddress.getReceivingId());
+			//gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+			//json.setObj(gspReceivingAddress.getReceivingId());
 
 		}else {
 
@@ -87,16 +96,16 @@ public class GspReceivingAddressService extends BaseService {
 
 	public Json editGspReceivingAddress(GspReceivingAddressForm gspReceivingAddressForm) {
 		Json json = new Json();
-		GspReceivingAddress gspReceivingAddress = gspReceivingAddressDao.findById(gspReceivingAddressForm.getReceivingAddressId());
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(gspReceivingAddressForm.getReceivingAddressId());
 		BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
-		gspReceivingAddressDao.update(gspReceivingAddress);
+		gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteGspReceivingAddress(String id) {
 		Json json = new Json();
-		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryById(id);
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(id);
 		if(gspReceivingAddress != null){
 			gspReceivingAddressMybatisDao.delete(gspReceivingAddress);
 		}

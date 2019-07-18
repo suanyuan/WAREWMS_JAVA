@@ -202,7 +202,7 @@
 
 <div id='ezuiBtn' style="display: none">
     <a onclick='doSubmitAddress();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-    <a onclick='ezuiDialogClose(dialogAddAddress);' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+    <a onclick='clearDialog();' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
 <script>
     var dialogClient;
@@ -734,17 +734,22 @@
     //收货单位信息提交
     function dooSubmit() {
 
-
+        /*var url = '';
+        if (processType == 'edit') {
+            url = sy.bp()+'/gspReceivingController.do?edit';
+        }else{
+            url = sy.bp()+'/gspReceivingController.do?add';
+        }*/
 
 
         /*$("#ezuiFormAddress input[id='isCheck']")*/
         var a = $('#isChec').combobox('getValue');
-        var row = ezuiDetailsDatagrid.datagrid("getSelected");
+       // var row = ezuiDetailsDatagrid.datagrid("getSelected");
 
     if (a=='1') {
             var   url = '<c:url value="/gspReceivingController.do?add"/>';
             $("#ezuiFormAddress").form('submit', {
-                url : url+"&newreceivingId="+row.receivingAddressId,
+                url : url+"&newreceivingId="+'',
                 onSubmit : function(){
                     if(ezuiFormAddress.form('validate')){
                         $.messager.progress({
@@ -783,7 +788,7 @@
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否直接下发？',function (confirm) {
                 if (confirm) {
                     $("#ezuiFormAddress").form('submit', {
-                        url : '/basCustomerController.do?submit&newreceivingId='+row.receivingAddressId,
+                        url : '/basCustomerController.do?submit&newreceivingId='+'',
                         onSubmit : function(){
                             if(ezuiFormAddress.form('validate')){
                                 $.messager.progress({
@@ -861,6 +866,10 @@
         }
 
     }
+
+    var  clearDialog=function () {
+        $('#dialogAddAddress').dialog('close')
+    }
     //增加地址
     var  AddAddress=function () {
         processType = 'add';
@@ -872,7 +881,7 @@
             title : '<spring:message code="common.dialog.title"/>',
             width:320,
             height:390,
-            href: sy.bp()+"/gspReceivingController.do?toDialogAddress"+"&receivingId="+$("#hiddenreceivingId").val(),
+            href: sy.bp()+"/gspReceivingController.do?toDialogAddress&receivingId="+$("#hiddenreceivingId").val(),
             buttons : '#ezuiBtn',
             onClose : function() {
                  ezuiFormClear(ezuiForm);
@@ -885,11 +894,10 @@
     var AddressDel = function(){
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         if(row){
-            console.log(row.receivingAddressId);
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
                 if(confirm){
                     $.ajax({
-                        url : 'gspReceivingAddressController.do?delete',
+                        url : '/gspReceivingAddressController.do?delete',
                         data : {receivingAddressId : row.receivingAddressId},
                         type : 'POST',
                         dataType : 'JSON',
@@ -921,18 +929,18 @@
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         //alert(row.supplierId);
         if(row){
-            // ezuiForm.form('load',{
-            //     // supplierId : row.supplierId,
-            // 	// enterpriseId : row.enterpriseId,
-            // 	// isCheck : row.isCheck,
-            // 	// operateType : row.operateType,
-            // 	// createId : row.createId,
-            // 	// createDate : row.createDate,
-            // 	// editId : row.editId,
-            // 	// editDate : row.editDate,
-            // 	// isUse : row.isUse
-            // });
-            dialogAddAddress.dialog('open');
+
+             $('#dialogAddAddress').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                width:320,
+                height:390,
+                href: sy.bp()+"/gspReceivingController.do?toDialogAddress"+"&receivingId="+$("#hiddenreceivingId").val()+"&receivingAddressId="+row.receivingAddressId,
+                buttons : '#ezuiBtn',
+                onClose : function() {
+                    ezuiFormClear(ezuiForm);
+                }
+            })
         }else{
             $.messager.show({
                 msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
