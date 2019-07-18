@@ -20,17 +20,16 @@
 																																	valueField: 'id',
 																																     textField: 'value'"/>
                 </td>
-                <th>货主</th>
-                <td><input type='text' name='customerid' id='customerid' class='easyui-textbox' size='16'
-                           data-options=''/></td>
+
             </tr>
             <tr>
                 <th>产品</th>
                 <td><input type='text' name='sku' id='sku' class='easyui-textbox' size='16'
                            data-options='required:false'/></td>
-                <th>订单数量</th>
-                <td><input type='text' name='orderedqty' id='orderedqty' class='easyui-textbox' size=16
-                           data-options='editable:true'/></td>
+                <th>货主</th>
+                <td><input type='text' name='customerid' id='customerid' class='easyui-textbox' size='16'
+                           data-options=''/></td>
+
                 <th>单位</th>
                 <td><input type='text' name='uom' id='uom' class='easyui-textbox' size='16'
                            data-options='editable:true'/></td>
@@ -39,6 +38,9 @@
                            data-options='editable:true'/></td>
             </tr>
             <tr>
+                <th>订单数量</th>
+                <td><input type='text' name='orderedqty' id='orderedqty' class='easyui-numberbox' size=16
+                           data-options='editable:true'/></td>
                 <th>体积</th>
                 <td><input type='text' name='totalcubic' id='totalcubic' class='easyui-numberbox' size='16'
                            data-options='required:true,min:0,precision:3'/></td>
@@ -65,7 +67,7 @@
             </tr>
             <tr>
                 <th>备注</th>
-                <td><input type='text' name='notes' id='notes' class='easyui-textbox' size='16'
+                <td colspan="4"><input type='text' name='notes' id='notes' class='easyui-textbox' size='16'
                            data-options="required:false,multiline:true,width:'300',height:'50'"/></td>
             </tr>
         </table>

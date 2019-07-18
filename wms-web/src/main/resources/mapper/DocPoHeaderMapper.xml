@@ -68,6 +68,11 @@
 <sql id="Base_Column_List" >
 	 pono,potype,postatus,pocreationtime,expectedarrivetime1,expectedarrivetime2,poreference1,poreference2,poreference3,poreference4,poreference5,supplierid,supplierName,supplier_address1,supplier_address2,supplier_address3,supplier_address4,suppliercity,supplier_province,supplier_country,supplier_zip,customerid,edisendflag,supplier_contact,supplier_mail,supplier_fax,supplier_tel1,supplier_tel2,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,edisendtime,hedi01,hedi02,hedi03,hedi04,hedi05,hedi06,hedi07,hedi08,hedi09,hedi10,warehouseid,createsource,releasestatus,userdefinea,userdefineb
 </sql>
+	<!-- doc_po_header table all fields -->
+<sql id="Base_Column_List1" >
+	 e.pono,e.potype,e.postatus,e.pocreationtime,e.expectedarrivetime1,e.expectedarrivetime2,e.poreference1,e.poreference2,e.poreference3,e.poreference4,e.poreference5,e.supplierid,e.supplierName,e.supplier_address1,e.supplier_address2,e.supplier_address3,e.supplier_address4,e.suppliercity,e.supplier_province,e.supplier_country,e.supplier_zip,e.customerid,e.edisendflag,e.supplier_contact,e.supplier_mail,e.supplier_fax,e.supplier_tel1,e.supplier_tel2,e.userdefine1,e.userdefine2,e.userdefine3,e.userdefine4,e.userdefine5,e.notes,e.addtime,e.addwho,e.edittime,e.editwho,e.edisendtime,e.hedi01,e.hedi02,e.hedi03,e.hedi04,e.hedi05,e.hedi06,e.hedi07,e.hedi08,e.hedi09,e.hedi10,e.warehouseid,e.createsource,e.releasestatus,e.userdefinea,e.userdefineb
+
+</sql>
 <!-- 分页查询条件 -->
 <sql id="Example_Where_Clause">
 		where 1=1
@@ -233,6 +238,181 @@
 			</if>
 			<if test="condition.userdefineb != null and condition.userdefineb != ''" >
 				and userdefineb =  #{condition.userdefineb}
+			</if>
+			<if test="condition.sku!=null and condition.sku!=''">
+				and sku =  #{condition.sku}
+			</if>
+		</trim>
+	</sql>
+<!-- 分页查询条件 -->
+<sql id="Example_Where_Clause1">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.pono != null and condition.pono != ''" >
+				and e.pono like CONCAT('%',#{condition.pono},'%')
+			</if>
+			<if test="condition.potype != null and condition.potype != ''" >
+				and e.potype =  #{condition.potype}
+			</if>
+			<if test="condition.postatus != null and condition.postatus != ''" >
+				and e.postatus =  #{condition.postatus}
+			</if>
+			<if test="condition.pocreationtime != null " >
+				and  e.pocreationtime &gt;= #{condition.pocreationtime}
+			</if>
+			<if test="condition.addtime != null" >
+				and e.pocreationtime &lt;= #{condition.addtime}
+			</if>
+			<if test="condition.expectedarrivetime1 != null" >
+				and e.expectedarrivetime1 &gt;= #{condition.expectedarrivetime1}
+			</if>
+			<if test="condition.expectedarrivetime2 != null" >
+				and e.expectedarrivetime1 &lt;= #{condition.expectedarrivetime2}
+			</if>
+			<if test="condition.poreference1 != null and condition.poreference1 != ''" >
+				and e.poreference1 =  #{condition.poreference1}
+			</if>
+			<if test="condition.poreference2 != null and condition.poreference2 != ''" >
+				and e.poreference2 =  #{condition.poreference2}
+			</if>
+			<if test="condition.poreference3 != null and condition.poreference3 != ''" >
+				and e.poreference3 =  #{condition.poreference3}
+			</if>
+			<if test="condition.poreference4 != null and condition.poreference4 != ''" >
+				and e.poreference4 =  #{condition.poreference4}
+			</if>
+			<if test="condition.poreference5 != null and condition.poreference5 != ''" >
+				and e.poreference5 =  #{condition.poreference5}
+			</if>
+			<if test="condition.supplierid != null and condition.supplierid != ''" >
+				and e.supplierid =  #{condition.supplierid}
+			</if>
+			<if test="condition.supplierName != null and condition.supplierName != ''" >
+				and e.supplierName like CONCAT('%',#{condition.supplierName},'%')
+			</if>
+			<if test="condition.supplierAddress1 != null and condition.supplierAddress1 != ''" >
+				and e.supplier_address1 =  #{condition.supplierAddress1}
+			</if>
+			<if test="condition.supplierAddress2 != null and condition.supplierAddress2 != ''" >
+				and e.supplier_address2 =  #{condition.supplierAddress2}
+			</if>
+			<if test="condition.supplierAddress3 != null and condition.supplierAddress3 != ''" >
+				and e.supplier_address3 =  #{condition.supplierAddress3}
+			</if>
+			<if test="condition.supplierAddress4 != null and condition.supplierAddress4 != ''" >
+				and e.supplier_address4 =  #{condition.supplierAddress4}
+			</if>
+			<if test="condition.supplierCity != null and condition.supplieriCty != ''" >
+				and e.suppliercity =  #{condition.supplierCity}
+			</if>
+			<if test="condition.supplierProvince != null and condition.supplierProvince != ''" >
+				and e.supplier_province =  #{condition.supplierProvince}
+			</if>
+			<if test="condition.supplierCountry != null and condition.supplierCountry != ''" >
+				and e.supplier_country =  #{condition.supplierCountry}
+			</if>
+			<if test="condition.supplierZip != null and condition.supplierZip != ''" >
+				and e.supplier_zip =  #{condition.supplierZip}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and e.customerid like CONCAT('%',#{condition.customerid},'%')
+			</if>
+			<if test="condition.edisendflag != null and condition.edisendflag != ''" >
+				and e.edisendflag =  #{condition.edisendflag}
+			</if>
+			<if test="condition.supplierContact != null and condition.supplierContact != ''" >
+				and e.supplier_contact =  #{condition.supplierContact}
+			</if>
+			<if test="condition.supplierMail != null and condition.supplierMail != ''" >
+				and e.supplier_mail =  #{condition.supplierMail}
+			</if>
+			<if test="condition.supplierFax != null and condition.supplierFax != ''" >
+				and e.supplier_fax =  #{condition.supplierFax}
+			</if>
+			<if test="condition.supplierTel1 != null and condition.supplierTel1 != ''" >
+				and e.supplier_tel1 =  #{condition.supplierTel1}
+			</if>
+			<if test="condition.supplierTel2 != null and condition.supplierTel2 != ''" >
+				and e.supplier_tel2 =  #{condition.supplierTel2}
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and e.userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and e.userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and e.userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and e.userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and e.userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.notes != null and condition.notes != ''" >
+				and e.notes  like CONCAT('%',#{condition.notes},'%')
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and e.addwho like CONCAT('%',#{condition.addwho},'%')
+			</if>
+			<if test="condition.edittime != null" >
+				and e.edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and e.editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.edisendtime != null" >
+				and e.edisendtime =  #{condition.edisendtime}
+			</if>
+			<if test="condition.hedi01 != null and condition.hedi01 != ''" >
+				and e.hedi01 =  #{condition.hedi01}
+			</if>
+			<if test="condition.hedi02 != null and condition.hedi02 != ''" >
+				and e.hedi02 =  #{condition.hedi02}
+			</if>
+			<if test="condition.hedi03 != null and condition.hedi03 != ''" >
+				and e.hedi03 =  #{condition.hedi03}
+			</if>
+			<if test="condition.hedi04 != null and condition.hedi04 != ''" >
+				and e.hedi04 =  #{condition.hedi04}
+			</if>
+			<if test="condition.hedi05 != null and condition.hedi05 != ''" >
+				and e.hedi05 =  #{condition.hedi05}
+			</if>
+			<if test="condition.hedi06 != null and condition.hedi06 != ''" >
+				and e.hedi06 =  #{condition.hedi06}
+			</if>
+			<if test="condition.hedi07 != null and condition.hedi07 != ''" >
+				and e.hedi07 =  #{condition.hedi07}
+			</if>
+			<if test="condition.hedi08 != null and condition.hedi08 != ''" >
+				and e.hedi08 =  #{condition.hedi08}
+			</if>
+			<if test="condition.hedi09 != null and condition.hedi09 != ''" >
+				and e.hedi09 =  #{condition.hedi09}
+			</if>
+			<if test="condition.hedi10 != null and condition.hedi10 != ''" >
+				and e.hedi10 =  #{condition.hedi10}
+			</if>
+			<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+				and e.warehouseid =  #{condition.warehouseid}
+			</if>
+			<if test="condition.createsource != null and condition.createsource != ''" >
+				and e.createsource =  #{condition.createsource}
+			</if>
+			<if test="condition.releasestatus != null and condition.releasestatus != ''" >
+				and e.releasestatus =  #{condition.releasestatus}
+			</if>
+			<if test="condition.userdefinea != null and condition.userdefinea != ''" >
+				and e.userdefinea =  #{condition.userdefinea}
+			</if>
+			<if test="condition.userdefineb != null and condition.userdefineb != ''" >
+				and e.userdefineb =  #{condition.userdefineb}
+			</if>
+			<if test="condition.sku!=null and condition.sku!=''">
+				and sku =  #{condition.sku}
+				group by e.pono
 			</if>
 		</trim>
 	</sql>
@@ -428,8 +608,13 @@
 
 <!-- 采购订单 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from doc_po_header 
-	<include refid="Example_Where_Clause"/>
+	select
+	count(1) from(
+	select
+	<include refid="Base_Column_List1"/>
+	from doc_po_header AS e
+	LEFT JOIN doc_po_details f ON e.pono=f.pono
+	<include refid="Example_Where_Clause1"/>) as g
 </select>
   	
 <!-- 查询采购订单列表 -->
@@ -437,9 +622,10 @@
 	select * from (
 	select a.*, b.codename_c as potypeName, c.codename_c as postatusName, (@rowNum :=@rowNum + 1) as row_num
 	from (select
-	<include refid="Base_Column_List"/>
-	from doc_po_header 
-	<include refid="Example_Where_Clause"/>
+	<include refid="Base_Column_List1"/>
+	from doc_po_header AS e
+	LEFT JOIN doc_po_details f ON e.pono=f.pono
+	<include refid="Example_Where_Clause1"/>
 	) as a,
 	Bas_Codes b,
 	Bas_Codes c,

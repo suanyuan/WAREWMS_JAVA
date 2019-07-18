@@ -45,12 +45,10 @@
                 //分页显示部分
                 columns: [[
                     {field: 'ck', checkbox: true},
-                    {field: 'pono', title: '采购单号', width: 16},
+                    {field: 'pono', title: '采购单号', width: 20},
                     {field: 'potypeName', title: '采购类型', width: 14},
                     {field: 'postatusName', title: '采购状态', width: 20},
-                    {field: 'pocreationtime', title: '创建时间', width: 25},
                     {field: 'customerid', title: '货主编码', width: 20},
-                    {field: 'expectedarrivetime1', title: '预期到货时间', width: 30},
                     // {field: 'expectedarrivetime2',		title: '预期到货时间TO',	width: 14 },
                     // {field: 'supplierid',		title: '供应商代码',	width: 14 },
                     {field: 'supplierName', title: '供应商名称', width: 30},
@@ -69,8 +67,9 @@
                     // {field: 'userdefine3',		title: '用户自定义3',	width: 14 },
                     // {field: 'userdefine4',		title: '用户自定义4',	width: 14 },
                     // {field: 'userdefine5',		title: '用户自定义5',	width: 14 },
-
                     // {field: 'addtime',		title: '创建时间',	width: 20 },
+                    {field: 'expectedarrivetime1', title: '预期到货时间', width: 30},
+                    {field: 'pocreationtime', title: '创建时间', width: 25},
                     {field: 'addwho', title: '创建人', width: 14},
                     {field: 'edittime', title: '最后编辑时间', width: 30},
                     {field: 'editwho', title: '编辑人', width: 14},
@@ -85,7 +84,7 @@
                     // {field: 'hedi08',		title: '待输入栏位46',	width: 14 },
                     // {field: 'hedi09',		title: '待输入栏位47',	width: 14 },
                     // {field: 'hedi10',		title: '待输入栏位48',	width: 14 },
-                    {field: 'notes', title: '备注', width: 75},
+                    // {field: 'notes', title: '备注', width: 75},
                     {field: 'warehouseid', title: '仓库编码', width: 20},
                     // {field: 'createsource',		title: '待输入栏位50',	width: 14 },
                     // {field: 'releasestatus',		title: '待输入栏位51',	width: 14 },
@@ -96,13 +95,13 @@
                     edit();
                 },
                 onRowContextMenu: function (event, rowIndex, rowData) {
-                    // event.preventDefault();
-                    // $(this).datagrid('unselectAll');
-                    //  $(this).datagrid('selectRow', rowIndex);
-                    // ezuiMenu.menu('show', {
-                    // 	left : event.pageX,
-                    // 	top : event.pageY
-                    // });
+                    event.preventDefault();
+                    $(this).datagrid('unselectAll');
+                     $(this).datagrid('selectRow', rowIndex);
+                    ezuiMenu.menu('show', {
+                    	left : event.pageX,
+                    	top : event.pageY
+                    });
                 }, onCheckAll: function (rows) {
                     if (rows) {
                         for (var i = 0; i < rows.length; i++) {
@@ -153,16 +152,16 @@
                     {field: 'polinestatusName', title: '行状态', width: 70},
                     {field: 'customerid', title: '货主', width: 70},
                     {field: 'sku', title: '产品', width: 107},
-                    {field: 'orderedqty', title: '订单数量', width: 60},
                     {field: 'uom', title: '单位', width: 155},
-                    {field: 'packid', title: '包装代码', width: 70},
+                    {field: 'packid', title: '包装代码', width: 100},
+                    {field: 'orderedqty', title: '订单数量', width: 60},
                     {field: 'totalcubic', title: '总体积', width: 70},
                     {field: 'totalgrossweight', title: '总重量', width: 70},
-                    {field: 'totalnetweight', title: '总净重量', width: 107},
-                    {field: 'totalgrossweight', title: '重量', width: 50},
-                    {field: 'addtime', title: '创建时间', width: 155},
+                    {field: 'totalnetweight', title: '总净重量', width: 70},
+                    {field: 'totalgrossweight', title: '重量', width: 70},
+                    {field: 'addtime', title: '创建时间', width: 145},
                     {field: 'addwho', title: '创建人', width: 70},
-                    {field: 'edittime', title: '最后编辑时间', width: 155},
+                    {field: 'edittime', title: '最后编辑时间', width: 145},
                     {field: 'editwho', title: '编辑人', width: 70},
                     {field: 'notes', title: '备注', width: 155},
                 ]],
@@ -693,9 +692,9 @@
                             var result = $.parseJSON(data);
                             if (result.success) {
                                 if (processType == 'edit') {
-                                    ezuiDetailsDatagrid.datagrid('reload');
+                                    ezuiDetailsDatagrid.datagrid('reload',{pono: $('#ezuiForm #pono').val()});
                                 } else {
-                                    ezuiDetailsDatagrid.datagrid('reload');
+                                    ezuiDetailsDatagrid.datagrid('reload',{pono: $('#ezuiForm #pono').val()});
                                 }
                                 ezuiDetailsDialog.dialog('close');
                                 msg = '<font color="red">' + "提交成功" + '</font>';
@@ -775,7 +774,8 @@
                 createsource: $('#createsource').val(),
                 releasestatus: $('#releasestatus').val(),
                 userdefinea: $('#userdefinea').val(),
-                userdefineb: $('#userdefineb').val()
+                userdefineb: $('#userdefineb').val(),
+                sku:$('#sku').val()
             });
 
         };
@@ -970,7 +970,7 @@
                                    data-options=''/></td>
 
 
-                        <th>供应商名称</th>
+                        <th>供应商</th>
                         <td><input type='text' id='supplierName' class='easyui-textbox' size='16' data-options=''/></td>
 
                     </tr>
@@ -983,8 +983,9 @@
                         <th>至</th>
                         <td><input type='text' id='addtime' class='easyui-datetimebox' size='16'
                                    data-options=''/></td>
-                        <th>货主编码</th>
+                        <th>货主代码</th>
                         <td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+
 
                     </tr>
                     <tr>
@@ -995,10 +996,8 @@
 																																	valueField: 'id',
 																																	textField: 'value'"/>
                         </td>
-                        <th>创建人</th>
-                        <td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
-                        <th>备注</th>
-                        <td><input type='text' id='notes' class='easyui-textbox' size='16' data-options="required:false"/></td>
+                        <th>产品</th>
+                        <td><input type='text' id='sku'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>
                             <%--一级datagrid查询--%>
                             <a onclick='doSearch();' class='easyui-linkbutton'
@@ -1036,19 +1035,17 @@
             code='common.button.close'/></a>
 </div>
 <%--右键菜单--%>
-<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
+<div id='ezuiMenu' class='easyui-menu' style='width:75px; display:none;'>
     <div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message
             code='common.button.add'/></div>
-    <div onclick='cancel();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message
-            code='common.button.delete'/></div>
     <div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message
             code='common.button.edit'/></div>
 </div>
 <%--二级右键菜单--%>
 <div id='ezuiDetailsMenu' class='easyui-menu' style='width:120px;display: none;'>
-<div onclick='detailsAdd();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.skuAdd'/></div>
-<div onclick='detailsDel();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.skuDelete'/></div>
-<div onclick='detailsEdit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.skuEdit'/></div>
+<div onclick='detailsAdd();' id='menu_add2' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.skuAdd'/></div>
+<div onclick='detailsDel();' id='menu_del2' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.skuDelete'/></div>
+<div onclick='detailsEdit();' id='menu_edit2' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.skuEdit'/></div>
 </div>
 <c:import url='/WEB-INF/jsp/docPoHeader/dialog.jsp'/>
 <c:import url='/WEB-INF/jsp/docPoHeader/custDialog.jsp'/>

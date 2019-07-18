@@ -61,6 +61,15 @@ public class DocPoHeaderQuery implements IQuery {
 	private String releasestatus;
 	private String userdefinea;
 	private String userdefineb;
+	private String sku;//附加
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
 
 	public String getPono() {
 		return pono;

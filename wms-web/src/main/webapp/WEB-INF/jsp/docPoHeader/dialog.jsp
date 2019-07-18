@@ -32,19 +32,16 @@
 
                 <th>预计到货时间</th>
                 <td ><input type='text' id='expectedarrivetime1' name='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
-
-
-
-                <th>供应商名称</th>
+                <th>供应商</th>
                 <td ><input type='text' id='supplierName'  name='supplierName' class='easyui-textbox' size='16' data-options='required:false'/></td>
+                <th>供应商联系人</th>
+                <td ><input type='text'  id='supplierContact'  name='supplierContact' class='easyui-textbox' size='16' data-options='required:false'/></td>
 
-                <th>货主编码</th>
-                <td ><input type='text'  id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:false'/></td>
             </tr>
 
             <tr>
-                <th>供应商联系人</th>
-                <td ><input type='text'  id='supplierContact'  name='supplierContact' class='easyui-textbox' size='16' data-options='required:false'/></td>
+                <th>货主代码</th>
+                <td ><input type='text'  id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:false'/></td>
                  <th>创建时间</th>
                 <td ><input type='text' id='pocreationtime' name='pocreationtime' class='easyui-datetimebox' size='16'  data-options='required:false'/></td>
                 <th>仓库</th>
@@ -52,7 +49,7 @@
             </tr>
             <tr>
                  <th>备注</th>
-                <td><input type='text'  id='notes' name='notes' class='easyui-textbox' size='16' data-options="required:false,multiline:true,width:'300',height:'50'"/></td>
+                <td colspan="3"><input type='text'  id='notes' name='notes' class='easyui-textbox' size='16' data-options="required:false,multiline:true,width:'300',height:'50'"/></td>
                 <td colspan='2'>
                     <a onclick='renew();' id='ezuiBtn_renew' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>新增</a>
                     <a onclick='commit();' id='ezuiBtn_recommit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
