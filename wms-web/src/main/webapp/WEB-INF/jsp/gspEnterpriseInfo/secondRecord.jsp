@@ -28,7 +28,7 @@
                     <th>经营方式</th>
                     <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>备案批准日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200,editable:false'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                     <th>备案发证机关</th>
                     <td><input type='text' value="${gspSecondRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
@@ -40,7 +40,7 @@
                     <th>备案照片</th>
                     <td>
                         <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
-                        <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}">
+                        <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}" atth="fileUpload">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                     </td>
                 </tr>
@@ -79,11 +79,11 @@
 
     $(function () {
         //初始化显示企业信息
-        if($("#ezuiFormInfo input[id='enterpriseName']")){
+        /*if($("#ezuiFormInfo input[id='enterpriseName']")){
             $("#recordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
-        }
+        }*/
 
         //控件初始化
         ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({
@@ -191,7 +191,7 @@
     }
 
     function formatOperAttachmentRecord(value,row,index){
-        return "<a onclick=\"viewUrl('"+row.licenseUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        return "<a onclick=\"viewUrl('"+row.recordUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
     /**
@@ -232,8 +232,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#licenseUrl").val()!=""){
-                showUrl($("#licenseUrl").val());
+            if($("#recordUrl").val()!=""){
+                showUrl($("#recordUrl").val());
             }else {
                 showMsg("请上传许可证附件！");
             }

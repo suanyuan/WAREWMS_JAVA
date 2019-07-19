@@ -21,7 +21,7 @@
 	    if(!fileName){
 	        fileName = "";
 		}
-		window.open(sy.bp()+"/uploadUrl/"+url);
+		window.open(sy.bp()+"/fileUpload/"+url);
     }
 
     var firstStateFormatter = function(value,row,index) {

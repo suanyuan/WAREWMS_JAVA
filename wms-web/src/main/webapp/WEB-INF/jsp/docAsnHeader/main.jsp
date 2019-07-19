@@ -177,7 +177,7 @@ $(function() {
 			iconCls:'icon-search',
 			handler: function(e){
 				$("#ezuiCustDataDialog #customerid").textbox('clear');
-				ezuiCustDataClick();
+				ezuiCustDataClick('OW');
 				ezuiCustDataDialogSearch();
 			}
 		}]
@@ -316,15 +316,13 @@ $(function() {
 	}).dialog('close');
 
 	/* 控件初始化end */
-
     $("#productId").textbox({
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
-                console.log("a");
                 productDialog_docAsnHeader = $('#ezuiProductSearchDialog').dialog({
                     modal : true,
-                    title : '',
+                    title : '查询',
                     href:sy.bp()+"/basSkuController.do?toSearchDialog&target=docAsnHeader",
                     width:850,
                     height:500,
@@ -343,7 +341,7 @@ $(function() {
             iconCls:'icon-search',
             handler: function(e){
                 $("#ezuiCustDataDialog #customerid").textbox('clear');
-                ezuiCustDataClick();
+                ezuiCustDataClick('VE');
                 ezuiCustDataDialogSearch();
             }
         }]
@@ -373,6 +371,10 @@ var ezuiToolbarClear = function(){
 	$('#edisendtime5').datetimebox('clear');
 	$('#addwho').textbox('clear');
 	$("#asnstatusCheck").attr("checked",false);
+    $('#addwho').textbox('clear');
+    $('#customerid').textbox('clear');
+    $('#productId').textbox('clear');
+    $('#supplierId').textbox('clear');
 };
 
 /* 新增按钮 */
@@ -1053,7 +1055,7 @@ var ezuiCustToolbarClear = function(){
 };
 
 /* 客户选择弹框-主界面 */
-var ezuiCustDataClick = function(){
+var ezuiCustDataClick = function(customerType){
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1076,12 +1078,12 @@ var ezuiCustDataClick = function(){
 	},
 	idField : 'customerid',
 	columns : [[
-				{field: 'customerid',	title: '客户代码',	width: 15},
+				{field: 'customerid',	title: '客户代码',	width: 50},
 				{field: 'descrC',		title: '中文名称',	width: 50},
-				{field: 'descrE',		title: '英文名称',	width: 50},
+				{field: 'descrE',		title: '英文名称',	width: 25},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -1092,8 +1094,8 @@ var ezuiCustDataClick = function(){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+	$("#ezuiCustDataDialog #customerType").combobox('setValue',customerType).combo('readonly', true);
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiCustDataDialog.dialog('open');
 };
 
@@ -1101,7 +1103,11 @@ var ezuiCustDataClick = function(){
 var selectCust = function(){
 	var row = ezuiCustDataDialogId.datagrid('getSelected');
 	if(row){
-		$("#customerid").textbox('setValue',row.customerid);
+		if(row.customerType == "OW"){
+            $("#customerid").textbox('setValue',row.customerid);
+		}else if(row.customerType == "VE"){
+            $("#supplierId").textbox('setValue',row.customerid);
+		}
 		ezuiCustDataDialog.dialog('close');
 	}
 };
@@ -1135,7 +1141,7 @@ var ezuiCustDataDialogClick = function(){
 				{field: 'descrE',			title: '英文名称',	width: 50},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -1201,7 +1207,7 @@ var ezuiSkuDataClick = function(){
 				{field: 'descrC',		title: '中文名称',	width: 160},
 				{field: 'descrE',		title: '英文名称',	width: 160},
 				{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }},
 				{field: 'alternateSku1',title: '商品条码',	width: 120},
 				{field: 'packid',		title: '包装代码',	width: 80},
@@ -1348,7 +1354,7 @@ function afterCheckButtion(rowData) {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>货主编码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>预入通知单号</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
@@ -1385,7 +1391,7 @@ function afterCheckButtion(rowData) {
 							<th>预计入库时间</th><td><input type='text' id='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='expectedarrivetime2' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>备注</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
-							<th style="text-align: right">产品编号</th>	<td><input type="text" id="productId"/></td>
+							<th style="text-align: right">产品代码</th>	<td><input type="text" id="productId"/></td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='addtime' class='easyui-datetimebox' size='16' data-options=''/></td>

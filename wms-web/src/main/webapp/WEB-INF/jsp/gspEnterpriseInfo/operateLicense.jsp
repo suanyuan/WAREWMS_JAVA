@@ -28,7 +28,7 @@
                     <th>企业负责人</th>
                     <td><input type='text' value="${gspOperateLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>经营/生产许可证有效期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
                     <!--<th>企业类型</th>
                     <td>
                         <select class="easyui-combobox" id="licenseType" name='licenseType' style="width:250px;">
@@ -57,10 +57,10 @@
                 </tr>
                 <tr>
                     <th>经营/生产许可证发证日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250,editable:false'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
                     <th>经营/生产许可证照片</th>
                     <td>
-                        <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}">
+                        <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}" atth="fileUpload">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                         <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->

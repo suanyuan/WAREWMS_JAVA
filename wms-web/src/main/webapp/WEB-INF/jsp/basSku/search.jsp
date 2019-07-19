@@ -91,6 +91,10 @@
     function formatOperProductSearch_${target}(value,row,index){
         return "<a onclick=\"operateGrid_product_${target}('"+row.sku+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
+    
+    function doSearch_product_${target}() {
+        productSearchGrid_${target}.datagrid("reload",{"sku":$("#product_code_${target}").textbox("getValue"),"descrC":$("#product_name_${target}").textbox("getValue")})
+    }
 </script>
 </body>
 </html>
