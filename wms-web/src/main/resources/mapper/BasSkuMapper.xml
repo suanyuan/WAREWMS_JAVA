@@ -764,19 +764,18 @@ where 1=1
             select
               DISTINCT a.sku
             from bas_sku a
-            INNER JOIN bas_gtn_lotatt b ON a.customerid = b.customerid
-                                          AND a.sku = b.sku
+            LEFT JOIN bas_gtn_lotatt b ON a.customerid = b.customerid AND a.sku = b.sku
             LEFT JOIN bas_gtn c ON a.sku = c.sku
             WHERE 0=1
 
+                <if test="GTIN != null and GTIN != ''">
+                    or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}
+                </if>
                 <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
                     or (ifnull(b.lotatt04, '*') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '*')
                         AND
                         ifnull(b.lotatt05, '*') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '*')
                     )
-                </if>
-                <if test="GTIN != null and GTIN != ''">
-                    or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}
                 </if>
                 <if test="alternate_sku1 != null and alternate_sku1 != ''">
                     or a.alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}

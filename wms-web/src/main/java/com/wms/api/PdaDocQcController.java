@@ -78,12 +78,7 @@ public class PdaDocQcController {
     @ResponseBody
     public Map<String, Object> queryDocQcDetail(PdaDocQcDetailQuery query) {
 
-        Map<String, Object> resultMap = new HashMap<>();
-        List<PdaDocQcDetailVO> detailVOList = docQcDetailsService.queryDocQcDetail(query);
-
-        resultMap.put(Constant.DATA, detailVOList);
-        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
-        return resultMap;
+        return  docQcDetailsService.queryDocQcDetail(query);
     }
 
     /**

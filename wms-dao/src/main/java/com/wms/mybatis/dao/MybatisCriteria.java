@@ -21,9 +21,11 @@ public class MybatisCriteria {
 	 */
 	protected boolean distinct;
 	
-	private int currentPage = 1; // 当前页
+	//private int currentPage = 1; // 当前页
+	private int currentPage = 0; // 当前页
 	private int totalCount = 0; // 总行数
-	private int pageSize = 10; // 页大小
+	//private int pageSize = 10; // 页大小
+	private int pageSize = 0; // 页大小
 	private boolean doPage = true;//是否启动分页
 
 	/**
@@ -81,7 +83,7 @@ public class MybatisCriteria {
 	}
 
 	public String getLimitClause() {
-		if(doPage){
+		if(doPage && pageSize>0 && currentPage>0){
 			int minRow = (this.currentPage - 1) * this.pageSize + 1;
 			int maxRow = this.currentPage * this.pageSize;
 			//limitClause = " and row_num between " + minRow + " and " + maxRow;

@@ -9,7 +9,7 @@ import lombok.Data;
 
 public class PdaDocQcDetailForm extends BaseLotatt {
 
-    //同批次批量验收合格
+    //同生产批号批量验收合格
     private int allqcflag;
 
     private String qcno;

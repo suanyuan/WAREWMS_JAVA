@@ -185,6 +185,7 @@ public class GspOperateLicenseService extends BaseService {
 			for(GspOperateLicense g : operateLicenses){
 				GspOperateLicenseVO vo = new GspOperateLicenseVO();
 				BeanUtils.copyProperties(g,vo);
+				vo.setBusinessScope(g.getBusinessScope());
 				gspOperateLicenseVOList.add(vo);
 			}
 			int total = gspOperateLicenseMybatisDao.queryByCount(criteria);

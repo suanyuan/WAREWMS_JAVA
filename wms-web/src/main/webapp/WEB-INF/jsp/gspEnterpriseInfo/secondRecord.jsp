@@ -20,7 +20,7 @@
                     <th>备案编号</th>
                     <td><input type='text' value="${gspSecondRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>企业名称</th>
-                    <td><input type='text' value="" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:200'/></td>
+                    <td><input type='text' value="" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:200' class='easyui-textbox'/></td>
                     <th>企业负责人</th>
                     <td><input type='text' value="${gspSecondRecord.headName}" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
@@ -79,11 +79,11 @@
 
     $(function () {
         //初始化显示企业信息
-        /*if($("#ezuiFormInfo input[id='enterpriseName']")){
+        if($("#ezuiFormInfo input[id='enterpriseName']")){
             $("#recordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
-        }*/
+        }
 
         //控件初始化
         ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({
@@ -137,7 +137,6 @@
             width: '200', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
-            prompt:'${gspSecondRecord.recordUrl}',
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -247,18 +246,26 @@
 
     //加载历史证照信息
     function initHistoryData(row) {
-
         $("#ezuiFormRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
                 }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
-                    $(this).datebox("setValue",row[""+$(this).attr("id")+""]);
+                    $(this).datebox("setValue",dateFormat2(row[""+$(this).attr("id")+""]));
                 }
             }
         })
-        $("#recordUrl").val(row['recordUrl'])
-        $("#recordFile").filebox("setValue",row['recordUrl']);
+        //$("#recordUrl").val(row['recordUrl'])
+        //$("#recordFile").filebox("setValue",row['recordUrl']);
+
+        //加载已选择的范围
+        initChoseText();
+
+        if($("#ezuiFormInfo input[id='enterpriseName']")){
+            $("#recordEnterprise").textbox({
+                value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
+            });
+        }
     }
 
     //换证清空当前数据

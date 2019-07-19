@@ -10,7 +10,7 @@ public class GspOperateLicenseVO {
 	private String licenseNo;
 	private String operateMode;
 	private String headName;
-	private String bussinessScope;
+	private String businessScope;
 	private String warehouseAddress;
 	private java.util.Date licenseExpiryDate;
 	private String licenseUrl;
@@ -22,6 +22,11 @@ public class GspOperateLicenseVO {
 	private Long editId;
 	private java.util.Date editDate;
 	private String isUse;
+	private String businessResidence;
+	private String juridicalPerson;
+	private String residence;
+	private String enterpriseName;
+
 
 	public String getOperateId() {
 		return operateId;
@@ -63,12 +68,12 @@ public class GspOperateLicenseVO {
 		this.headName = headName;
 	}
 
-	public String getBussinessScope() {
-		return bussinessScope;
+	public String getBusinessScope() {
+		return businessScope;
 	}
 
-	public void setBussinessScope(String bussinessScope) {
-		this.bussinessScope = bussinessScope;
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 
 	public String getWarehouseAddress() {
@@ -162,5 +167,38 @@ public class GspOperateLicenseVO {
 	public void setIsUse(String isUse) {
 		this.isUse = isUse;
 	}
+
+	public String getBusinessResidence() {
+		return businessResidence;
+	}
+
+	public void setBusinessResidence(String businessResidence) {
+		this.businessResidence = businessResidence;
+	}
+
+	public String getJuridicalPerson() {
+		return juridicalPerson;
+	}
+
+	public void setJuridicalPerson(String juridicalPerson) {
+		this.juridicalPerson = juridicalPerson;
+	}
+
+	public String getResidence() {
+		return residence;
+	}
+
+	public void setResidence(String residence) {
+		this.residence = residence;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
 
 }

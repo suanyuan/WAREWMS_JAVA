@@ -268,9 +268,14 @@ public class BasCustomerService extends BaseService {
 		Json json = new Json();
 		BasCustomer basCustomerQuery = new BasCustomer();
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
-		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
-		int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
-		if(num!=0){
+		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
+
+		BasCustomer basCustomerHistory = basCustomerMybatisDao.selectByIdType(basCustomerQuery);
+		//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
+		if(basCustomerHistory!=null){
+			BasSkuHistory basSkuHistory = new BasSkuHistory();
+			BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
+			basSkuHistoryMybatisDao.add(basSkuHistory);
 			basCustomerMybatisDao.delete(basCustomerQuery);
 		}
 

@@ -29,13 +29,6 @@
                     <td><input type='text' value="${gspOperateLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
                     <th>经营/生产许可证有效期</th>
                     <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
-                    <!--<th>企业类型</th>
-                    <td>
-                        <select class="easyui-combobox" id="licenseType" name='licenseType' style="width:250px;">
-                            <option value="SC">生产</option>
-                            <option value="JY">经营</option>
-                        </select>
-                    </td>-->
                 </tr>
                 <tr>
                     <th>库房地址</th>
@@ -145,7 +138,6 @@
             width: '250', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
-            prompt:'${gspOperateLicense.licenseUrl}',
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -349,20 +341,21 @@
 
     //加载历史证照信息
     function initHistoryData(row) {
-
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
-                if($(this).attr("class").indexOf('easyui-textbox')!=-1){
-                    $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
-                }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
-                    $(this).datebox("setValue",row[""+$(this).attr("id")+""]);
-                }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
-                    $(this).numberbox("setValue",row[""+$(this).attr("id")+""]);
+                if($(this).attr("id")) {
+                    if ($(this).attr("class").indexOf('easyui-textbox') != -1) {
+                        $(this).textbox("setValue", row["" + $(this).attr("id") + ""]);
+                    }else if ($(this).attr("class").indexOf('easyui-datebox') != -1) {
+                        $(this).datebox("setValue", dateFormat2(row["" + $(this).attr("id") + ""]));
+                    }else if ($(this).attr("class").indexOf('easyui-numberbox') != -1) {
+                        $(this).numberbox("setValue", row["" + $(this).attr("id") + ""]);
+                    }
                 }
             }
         })
-        $("#licenseUrl").val(row['licenseUrl'])
-        $("#licenseUrlFile").filebox("setValue",row['licenseUrl']);
+        //$("#licenseUrl").val(row['licenseUrl'])
+       // $("#licenseUrlFile").filebox("setValue",row['licenseUrl']);
     }
 
     //换证清空当前数据

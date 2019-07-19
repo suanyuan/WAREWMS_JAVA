@@ -32,4 +32,6 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	public BasCustomer queryByCustomerId(Object id);
 
 	public void deleteBascustomer(String enterpriseId, String customertype);
+
+	BasCustomer selectByIdType(Object id);
 }

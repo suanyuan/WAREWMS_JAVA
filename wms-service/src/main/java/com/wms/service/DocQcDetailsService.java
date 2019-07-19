@@ -28,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("docQcDetailsService")
 public class DocQcDetailsService extends BaseService {
@@ -114,59 +116,61 @@ public class DocQcDetailsService extends BaseService {
 //	}
 
     /**
-     * 获取验收详情，可能存在多条
+     * 获取验收详情
      * @param query ~
      * @return ~
      */
-    public List<PdaDocQcDetailVO> queryDocQcDetail(PdaDocQcDetailQuery query) {
+    public Map<String, Object> queryDocQcDetail(PdaDocQcDetailQuery query) {
+
+        Map<String, Object> map = new HashMap<>();
+        PdaDocQcDetailVO pdaDocQcDetailVO = new PdaDocQcDetailVO();
 
         //获取BasSku
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
-        query.setSku(basSku.getSku());
-        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryDocQcDetail(query);
-        List<PdaDocQcDetailVO> pdaDocQcDetailVOList = new ArrayList<>();
-        PdaDocQcDetailVO pdaDocQcDetailVO;
-
-        for (DocQcDetails docQcDetails : docQcDetailsList) {
-
-            pdaDocQcDetailVO = new PdaDocQcDetailVO();
-            BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
-
-            //SKU - 型号/规格
-            BasSku subBasSku = new BasSku();
-            BeanUtils.copyProperties(basSku, subBasSku);//为了解决FastJson的循环引用问题
-            pdaDocQcDetailVO.setBasSku(subBasSku);
-
-            //批次
-            InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
-//            InvLotAttQuery lotAttQuery = new InvLotAttQuery();
-//            BeanUtils.copyProperties(query, lotAttQuery);
-//            InvLotAtt lotAtt = invLotAttMybatisDao.queryForScan(lotAttQuery);
-            pdaDocQcDetailVO.setInvLotAtt(lotAtt);
-
-            //历史注册证(+生产企业详情)
-            List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(subBasSku.getSku(), subBasSku.getCustomerid());
-            //TODO 为了解决FastJson的循环引用问题 肯定有别的方法，待优化
-            String jsonStr1 = JSON.toJSONString(registerList, SerializerFeature.DisableCircularReferenceDetect);
-            pdaDocQcDetailVO.setProductRegisterList(JSONObject.parseArray(jsonStr1, PdaGspProductRegister.class));
-
-            //当前批次-产品注册证对应的 生产厂家
-            PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
-            //为了解决FastJson的循环引用问题
-            if (productRegister != null) {
-
-                String jsonStr2 = JSON.toJSONString(productRegister.getEnterpriseInfo(), SerializerFeature.DisableCircularReferenceDetect);
-                pdaDocQcDetailVO.setEnterpriseInfo(JSONObject.parseObject(jsonStr2, GspEnterpriseInfo.class));
-            }
-
-            pdaDocQcDetailVOList.add(pdaDocQcDetailVO);
+        if (basSku == null || basSku.getSku() == null) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无产品信息"));
+            return map;
         }
+        pdaDocQcDetailVO.setBasSku(basSku);
+
+        //DocQcDetails
+        query.setSku(basSku.getSku());
+        DocQcDetails docQcDetails = docQcDetailsDao.queryDocQcDetail(query);
+
+        if (docQcDetails == null || docQcDetails.getQcno() == null) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无验收明细"));
+            return map;
+        }
+        BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
 
 
-	    return pdaDocQcDetailVOList;
+        //批次
+        InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
+        if (lotAtt == null || lotAtt.getLotnum() == null) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无批次信息"));
+            return map;
+        }
+        pdaDocQcDetailVO.setInvLotAtt(lotAtt);
+
+        //历史注册证(+生产企业详情)
+        List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(basSku.getSku(), basSku.getCustomerid());
+        pdaDocQcDetailVO.setProductRegisterList(registerList == null ? new ArrayList<PdaGspProductRegister>() : registerList);
+
+        //当前批次-产品注册证对应的 生产厂家
+        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
+        if (productRegister == null || productRegister.getEnterpriseId() == null) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无生产厂家信息"));
+            return map;
+        }
+        pdaDocQcDetailVO.setEnterpriseInfo(productRegister.getEnterpriseInfo());
+
+        map.put(Constant.DATA, pdaDocQcDetailVO);
+        map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+
+        return map;
     }
 
     /**
@@ -184,6 +188,9 @@ public class DocQcDetailsService extends BaseService {
 
             pdaDocQcDetailVO = new PdaDocQcDetailVO();
             BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
+            String jsonStr1 = JSON.toJSONString(invLotAtt, SerializerFeature.DisableCircularReferenceDetect);
+            pdaDocQcDetailVO.setInvLotAtt(JSONObject.parseObject(jsonStr1, InvLotAtt.class));
             docQcDetailVOList.add(pdaDocQcDetailVO);
         }
 

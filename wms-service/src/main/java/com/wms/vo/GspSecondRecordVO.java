@@ -11,7 +11,7 @@ public class GspSecondRecordVO {
 	private String headName;
 	private String operateMode;
 	private String operatePlace;
-	private String bussinessScope;
+	private String businessScope;
 	private String residence;
 	private String recordUrl;
 	private java.util.Date approveDate;
@@ -70,12 +70,12 @@ public class GspSecondRecordVO {
 		this.operatePlace = operatePlace;
 	}
 
-	public String getBussinessScope() {
-		return bussinessScope;
+	public String getBusinessScope() {
+		return businessScope;
 	}
 
-	public void setBussinessScope(String bussinessScope) {
-		this.bussinessScope = bussinessScope;
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 
 	public String getResidence() {
