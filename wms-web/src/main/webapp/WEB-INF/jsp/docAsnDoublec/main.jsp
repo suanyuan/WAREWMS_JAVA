@@ -55,9 +55,7 @@ $(function() {
 			{field: 'edittime',		title: '编辑时间',	width: 53 },
 			{field: 'editwho',		title: '编辑人',	width: 53 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
-		},
+
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');
@@ -303,11 +301,11 @@ var toImportData = function(){
 						<tr>
 							<th>任务号</th><td><input type='text' id='doublecno' class='easyui-textbox' size='16' data-options=''/></td>
 
-							<th>产品型号</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>名称</th><td><input type='text' id='context1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>执行标准</th><td><input type='text' id='context2' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>备注</th><td><input type='text' id='context3' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>标记匹配</th><td><input type='text' id='context4' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品型号</th><td><input type='text' id='context1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>名称</th><td><input type='text' id='context2' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>执行标准</th><td><input type='text' id='context3' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>备注</th><td><input type='text' id='context4' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>标记匹配</th><td><input type='text' id='matchFlag' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>待输入名称6：</th><td><input type='text' id='context5' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称7：</th><td><input type='text' id='context6' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称8：</th><td><input type='text' id='context7' class='easyui-textbox' size='16' data-options=''/></td>--%>
