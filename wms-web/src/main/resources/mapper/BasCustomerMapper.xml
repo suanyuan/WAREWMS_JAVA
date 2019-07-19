@@ -625,6 +625,12 @@ where 1=1
 	and active_flag = 1
 </select>
 
+<select id="selectByIdType" resultMap="BaseResultMap"  parameterType="Object">
+	select  * from Bas_Customer
+	where customerid=#{customerid,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	and active_flag = 1
+</select>
+
  <!--查询客户档案分页列表-->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select * from (
