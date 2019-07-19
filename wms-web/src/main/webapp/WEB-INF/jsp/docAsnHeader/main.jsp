@@ -1056,6 +1056,8 @@ var ezuiCustToolbarClear = function(){
 
 /* 客户选择弹框-主界面 */
 var ezuiCustDataClick = function(customerType){
+    $("#ezuiCustDataDialog #customerType").combobox('setValue',customerType).combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1094,8 +1096,7 @@ var ezuiCustDataClick = function(customerType){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiCustDataDialog #customerType").combobox('setValue',customerType).combo('readonly', true);
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+
 	ezuiCustDataDialog.dialog('open');
 };
 
@@ -1114,6 +1115,8 @@ var selectCust = function(){
 
 /* 客户选择弹框-订单信息界面 */
 var ezuiCustDataDialogClick = function(){
+    $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1152,8 +1155,7 @@ var ezuiCustDataDialogClick = function(){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+
 	ezuiCustDataDialog.dialog('open');
 };
 /* 客户选择-订单信息界面 */
@@ -1180,6 +1182,8 @@ var ezuiSkuToolbarClear = function(){
 
 /* 商品选择弹框 */
 var ezuiSkuDataClick = function(){
+    $("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
+    $("#ezuiSkuDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiSkuDataDialogId = $('#ezuiSkuDataDialogId').datagrid({
 	url:'<c:url value="/basSkuController.do?showDatagrid"/>',
 	method:'POST',
@@ -1223,8 +1227,7 @@ var ezuiSkuDataClick = function(){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
-	$("#ezuiSkuDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+
 	ezuiSkuDataDialog.dialog('open');
 };
 /* 商品选择 */

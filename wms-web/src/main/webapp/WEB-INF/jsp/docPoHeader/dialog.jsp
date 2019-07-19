@@ -33,7 +33,10 @@
                 <th>预计到货时间</th>
                 <td ><input type='text' id='expectedarrivetime1' name='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
                 <th>供应商</th>
-                <td ><input type='text' id='supplierName'  name='supplierName' class='easyui-textbox' size='16' data-options='required:false'/></td>
+                <td >
+                    <input type='text' id='supplierName'  name='supplierName' class='easyui-textbox' size='16' data-options=''/>
+                    <input type='hidden' id='supplierid'  name='supplierid' class='easyui-textbox' size='16' data-options=''/></td>
+
                 <th>供应商联系人</th>
                 <td ><input type='text'  id='supplierContact'  name='supplierContact' class='easyui-textbox' size='16' data-options='required:false'/></td>
 
