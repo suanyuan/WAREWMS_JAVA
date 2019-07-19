@@ -1,8 +1,8 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.InvLotAtt;
+import com.wms.mybatis.entity.IdSequence;
 import com.wms.query.InvLotAttQuery;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Param;
 public interface InvLotAttMybatisDao extends BaseDao {
 	
 	InvLotAtt queryForScan(InvLotAttQuery query);
+
+	void getIdSequence(IdSequence idSequence);
 }

@@ -246,4 +246,10 @@ where 1=1
         where pano = #{pano, jdbcType=VARCHAR}
     </update>
 
+    <select id="queryByQcno" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select pa.* from doc_pa_header pa
+        left join doc_qc_header qc on qc.pano = pa.pano
+        where  qc.qcno = #{qcno, jdbcType=VARCHAR}
+    </select>
+
 </mapper>   

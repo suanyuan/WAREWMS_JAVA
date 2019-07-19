@@ -6,14 +6,15 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocQcDetails;
-import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.InvLotAtt;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocQcDetailsQuery;
+import com.wms.query.InvLotAttQuery;
+import com.wms.query.InvLotLocIdQuery;
+import com.wms.query.InvLotQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
@@ -27,10 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("docQcDetailsService")
 public class DocQcDetailsService extends BaseService {
@@ -50,6 +48,14 @@ public class DocQcDetailsService extends BaseService {
 	@Autowired
 	private GspProductRegisterMybatisDao productRegisterMybatisDao;
 
+	@Autowired
+	private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
+
+	@Autowired
+	private InvLotMybatisDao invLotMybatisDao;
+
+	@Autowired
+	private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
 
 
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
@@ -80,25 +86,25 @@ public class DocQcDetailsService extends BaseService {
 		return json;
 	}
 
-	//TODO WARNING!! 此处不可用个，查询条件欠缺 no + lineno
 	public Json editDocQcDetails(DocQcDetailsForm docQcDetailsForm) {
 		Json json = new Json();
-		DocQcDetails docQcDetails = docQcDetailsDao.queryById(docQcDetailsForm.getQcno());
+		DocQcDetails docQcDetails = docQcDetailsDao.queryById(docQcDetailsForm);
 		BeanUtils.copyProperties(docQcDetailsForm, docQcDetails);
 		docQcDetailsDao.update(docQcDetails);
 		json.setSuccess(true);
 		return json;
 	}
 
-	public Json deleteDocQcDetails(String id) {
-		Json json = new Json();
-		DocQcDetails docQcDetails = docQcDetailsDao.queryById(id);
-		if(docQcDetails != null){
-			docQcDetailsDao.delete(docQcDetails);
-		}
-		json.setSuccess(true);
-		return json;
-	}
+    //TODO WARNING!! 此处不可用个，删除条件欠缺 应该qcno + qclineno
+//	public Json deleteDocQcDetails(String id) {
+//		Json json = new Json();
+//		DocQcDetails docQcDetails = docQcDetailsDao.queryById(id);
+//		if(docQcDetails != null){
+//			docQcDetailsDao.delete(docQcDetails);
+//		}
+//		json.setSuccess(true);
+//		return json;
+//	}
 
 //	public List<EasyuiCombobox> getDocQcDetailsCombobox() {
 //		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
@@ -232,10 +238,204 @@ public class DocQcDetailsService extends BaseService {
         }
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 
-            return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
+            if (form.getAllqcflag() == 0) {
+
+                return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
+            }else {
+
+                //处理批量验收合格操作
+                return configAllQc(form);
+            }
         } else {
 
             return new PdaResult(PdaResult.CODE_FAILURE, form.getReturncode());
         }
+    }
+
+    /**
+     * 处理批量验收操作 procedure 拆出来的
+     * @param form ~
+     * @return ~
+     */
+    private PdaResult configAllQc(PdaDocQcDetailForm form) {
+
+        /*
+        获取本次操作的验收明细
+         */
+        DocQcDetails currentQcDetail = docQcDetailsDao.queryById(form);
+
+        /*
+        获取同生产批号的验收任务明细记录，userdefine5=DJ,相同的QCNO、sku、userdefine3、userdefine5=DJ
+         */
+        DocQcDetailsQuery qcDetailsQuery = new DocQcDetailsQuery();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        qcDetailsQuery.setQcno(currentQcDetail.getQcno());
+        qcDetailsQuery.setSku(currentQcDetail.getSku());
+        qcDetailsQuery.setUserdefine3(currentQcDetail.getUserdefine3());
+        qcDetailsQuery.setUserdefine5("DJ");
+
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcDetailsQuery));
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByPageList(mybatisCriteria);
+
+        try {
+            /*
+            对应每条验收明细的库存记录、上架明细、验收明细要做对应的处理
+            */
+            for (DocQcDetails qcDetails : docQcDetailsList) {
+
+                /* ********************************inv_lot_att******************************** */
+
+                /*
+                获取待检的验收明细中的批次属性
+                */
+                InvLotAtt lotatt_history = invLotAttMybatisDao.queryById(qcDetails.getLotnum());
+                InvLotAttQuery lotAttQuery = new InvLotAttQuery(lotatt_history);
+                lotAttQuery.setLotatt10("HG");
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(lotAttQuery));
+                List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByList(mybatisCriteria);
+                /*
+                判断是否存在此批次
+                不存在 ->  插入新批次
+                存在 -> 查出来做流转
+                */
+                InvLotAtt lotatt_hg = new InvLotAtt();
+                if (invLotAttList == null || invLotAttList.size() < 1) {
+
+                    IdSequence idSequence = new IdSequence(form.getWarehouseid(), "CN", IdSequence.SEQUENCE_TYPE_LOT_NUM);
+                    invLotAttMybatisDao.getIdSequence(idSequence);
+
+                    BeanUtils.copyProperties(lotatt_history, lotatt_hg);
+                    lotatt_hg.setLotatt10("HG");
+                    lotatt_hg.setAddwho("Gizmo");
+                    lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
+                    invLotAttMybatisDao.add(lotatt_hg);
+                }else {
+
+                    lotatt_hg = invLotAttList.get(0);//18个批次属性匹配完查询只有一个
+                }
+
+
+                /* ********************************inv_lot_loc_id******************************** */
+
+                /*
+                根据qcdetails+历史批次属性，获取库位批次库存详情
+                * */
+                InvLotLocIdQuery invLotLocIdQuery = new InvLotLocIdQuery();
+                invLotLocIdQuery.setLocationid(qcDetails.getUserdefine1());
+                invLotLocIdQuery.setCustomerid(qcDetails.getCustomerid());
+                invLotLocIdQuery.setSku(qcDetails.getSku());
+                invLotLocIdQuery.setLotnum(lotatt_history.getLotnum());
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotLocIdQuery));
+                List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryByList(mybatisCriteria);
+                if (invLotLocIdList == null || invLotLocIdList.size() == 0) {
+
+                    throw new Exception("111");
+                }
+                InvLotLocId invLotLocId_history = invLotLocIdList.get(0);//历史存在数据
+                InvLotLocId invLotLocId_hg = new InvLotLocId();
+                BeanUtils.copyProperties(invLotLocId_history, invLotLocId_hg);
+                invLotLocId_hg.setLotnum(lotatt_hg.getLotnum());
+                invLotLocIdMybatisDao.add(invLotLocId_hg);//插入合格批次的库位库存
+                invLotLocIdMybatisDao.delete(invLotLocId_history);//删除待检批次的库位库存
+
+
+                /* ********************************inv_lot******************************** */
+
+                /*
+                根据qcdetails+历史批次属性，获取批次库存详情
+                * */
+                InvLotQuery invLotQuery = new InvLotQuery();
+                invLotQuery.setLotnum(lotatt_history.getLotnum());
+                invLotQuery.setCustomerid(qcDetails.getCustomerid());
+                invLotQuery.setSku(qcDetails.getSku());
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotQuery));
+                List<InvLot> invLotList_history = invLotMybatisDao.queryByList(mybatisCriteria);
+                if (invLotList_history == null || invLotList_history.size() == 0) {
+
+                    throw new Exception("222");
+                }
+                InvLot invLot_history = invLotList_history.get(0);
+                InvLot invLot_hg = new InvLot();
+                BeanUtils.copyProperties(invLot_history, invLot_hg);
+                invLot_history.setQty(invLot_history.getQty() - qcDetails.getQcqtyExpected());
+                invLot_history.setEditwho("Gizmo");
+                invLotMybatisDao.update(invLot_history);//库存里面减去此明细中的预期验收数
+                invLotMybatisDao.deleteEmptyInv();//清除0库存记录
+
+                //库存里面插入或更新加上预期验收数
+                invLotQuery.setLotnum(lotatt_hg.getLotnum());
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotQuery));
+                List<InvLot> invLotList_hg = invLotMybatisDao.queryByList(mybatisCriteria);
+                invLot_hg.setLotnum(lotatt_hg.getLotnum());
+                if (invLotList_hg == null || invLotList_hg.size() == 0) {
+
+                    //插入
+                    invLot_hg.setQty(qcDetails.getQcqtyExpected());
+                    invLot_hg.setAddwho("Gizmo");
+                    invLot_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
+                    invLotMybatisDao.add(invLot_hg);
+                }else {
+
+                    InvLot invLot_exist = invLotList_hg.get(0);
+
+                    //加上件数
+                    invLot_hg.setQty(invLot_exist.getQty() + qcDetails.getQcqtyExpected());
+                    invLot_hg.setEditwho("Gizmo");
+                    invLot_hg.setEdittime(new java.sql.Date((new Date()).getTime()));
+                    invLotMybatisDao.updateQty(invLot_hg);
+                }
+
+
+                /* ********************************doc_qc_details******************************** */
+
+                /*
+                根据qcdetails,更新批次号为合格的批次号，验收完成数为预期验收数，验收状态为合格
+                * */
+                qcDetails.setLotnum(lotatt_hg.getLotnum());
+                qcDetails.setQcqtyCompleted(qcDetails.getQcqtyExpected());
+                qcDetails.setUserdefine5("HG");
+                qcDetails.setEditwho("Gizmo");
+                qcDetails.setEdittime(new java.sql.Date((new Date()).getTime()));
+                docQcDetailsDao.updateQcDetail(qcDetails);
+
+
+                /* ********************************doc_qc_header******************************** */
+
+                /*
+                通过qcdetails.qcno-header-pano，再取得此上架任务单的总件数，all_pa_qty(前提上架任务单 是40)
+                获取 doc_qc_details 此验收任务单里总的已验收完成件数，all_qc_qty
+                做件数判断
+                * */
+                //获取上架任务单的状态
+                DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(qcDetails.getQcno());
+                if (docPaHeader.getPastatus().equals("40")) {
+
+                    int all_pa_qty = docQcDetailsDao.queryCompletedPaQty(qcDetails.getQcno());
+                    int all_qc_qty = docQcDetailsDao.queryCompletedQcQty(qcDetails.getQcno());
+                    if (all_qc_qty < all_pa_qty) {
+                        //30
+                    }else {
+                        //40
+                    }
+                }else {
+
+                    //30
+                }
+            }
+            /* ********************************doc_pa_details******************************** */
+
+        } catch (Exception e) {
+
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+            if (e.getMessage().equals("111")) {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量验收合格失败(库位批次库存)");
+            }else if (e.getMessage().equals("222")) {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量验收合格失败(批次库存)");
+            }
+        }
+        return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }
 }

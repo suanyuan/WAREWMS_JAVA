@@ -265,5 +265,10 @@ where 1=1
           and customerid = #{customerid, jdbcType=VARCHAR}
           and sku = #{sku, jdbcType=VARCHAR}
     </select>
+
+    <!--新增批次号-->
+    <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
+      {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{language,mode=IN,jdbcType=VARCHAR},#{type,mode=IN,jdbcType=VARCHAR},#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+    </select>
   	
 </mapper>   

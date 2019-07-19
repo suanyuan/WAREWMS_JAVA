@@ -25,4 +25,11 @@ public interface DocPaHeaderMybatisDao extends BaseDao {
      * @return 1 || 0
      */
     int endTask(PdaDocPaEndForm form);
+
+    /**
+     * 通过验收任务单获取上架头档
+     * @param qcno !
+     * @return !
+     */
+    DocPaHeader queryByQcno(@Param("qcno") String qcno);
 }

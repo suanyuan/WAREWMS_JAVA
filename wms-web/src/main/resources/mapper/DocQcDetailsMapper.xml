@@ -219,7 +219,7 @@ where 1=1
 <!-- 根据id查询 验收明细档 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_qc_details where qcno = #{qcno}
+	 from doc_qc_details where qcno = #{qcno} and qclineno = #{qclineno}
 </select>
 
 <!-- 验收明细档 列表总数-->
@@ -290,5 +290,26 @@ where 1=1
         #{lotatt11, mode=IN, jdbcType=VARCHAR},#{qcdescr, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},
         #{warehouseid, mode=IN, jdbcType=VARCHAR},#{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
     </update>
+
+    <update id="updateQcDetail" parameterType="java.util.Map">
+        update doc_qc_details set
+        lotnum = #{lotnum, jdbcType=VARCHAR},
+        qcqty_completed = #{qcqty_completed, jdbcType=VARCHAR},
+        userdefine5 = #{userdefine5, jdbcType=VARCHAR},
+        editwho = #{editwho, jdbcType=VARCHAR},
+        edittime = #{edittime, jdbcType=VARCHAR}
+        where qcno = #{qcno, jdbcType=VARCHAR} and qclineno = #{qclineno, jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryCompletedPaQty" parameterType="java.util.Map" resultType="int">
+        select sum(detail.putwayqty_completed) from doc_pa_details detail
+        left join doc_qc_header header on detail.pano = header.pano
+        where  header.qcno = #{qcno, jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryCompletedQcQty" parameterType="java.util.Map" resultType="int">
+        select sum(putwayqty_completed) from doc_qc_details
+        where  qcno = #{qcno, jdbcType=VARCHAR}
+    </select>
   	
 </mapper>   

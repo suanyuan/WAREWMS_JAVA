@@ -40,4 +40,25 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @param form ~
      */
 	void submitDocQc(PdaDocQcDetailForm form);
+
+    /**
+     * for 批量验收 修改明细数据
+     * @param details ~
+     * @return ~
+     */
+	int updateQcDetail(DocQcDetails details);
+
+    /**
+     * 获取验收任务单对应的上架任务单的总完成数（上架单结束的状态下）
+     * @param qcno ~
+     * @return ~
+     */
+	int queryCompletedPaQty(@Param("qcno") String qcno);
+
+    /**
+     * 获取验收任务单对应的明细单下面做的总验收完成数
+     * @param qcno ~
+     * @return ~
+     */
+	int queryCompletedQcQty(@Param("qcno") String qcno);
 }

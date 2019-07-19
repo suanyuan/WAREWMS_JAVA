@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.InvLotLocIdMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.InvLotLocId" >
+	<result column="lotnum" property="lotnum"/>
+	<result column="locationid" property="locationid"/>
+	<result column="traceid" property="traceid"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="qty" property="qty"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyrpin" property="qtyrpin"/>
+	<result column="qtyrpout" property="qtyrpout"/>
+	<result column="qtymvin" property="qtymvin"/>
+	<result column="qtymvout" property="qtymvout"/>
+	<result column="qtyonhold" property="qtyonhold"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="netweight" property="netweight"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="cubic" property="cubic"/>
+	<result column="price" property="price"/>
+	<result column="onholdlocker" property="onholdlocker"/>
+	<result column="lpn" property="lpn"/>
+	<result column="qtypa" property="qtypa"/>
+</resultMap>
+       
+<!-- inv_lot_loc_id table all fields -->
+<sql id="Base_Column_List" >
+	 lotnum,locationid,traceid,customerid,sku,qty,qtyallocated,qtyrpin,qtyrpout,qtymvin,qtymvout,qtyonhold,addtime,addwho,edittime,editwho,netweight,grossweight,cubic,price,onholdlocker,lpn,qtypa
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and traceid =  #{condition.traceid}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and qty =  #{condition.qty}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtyrpin != null and condition.qtyrpin != ''" >
+	    and qtyrpin =  #{condition.qtyrpin}
+	</if>
+	<if test="condition.qtyrpout != null and condition.qtyrpout != ''" >
+	    and qtyrpout =  #{condition.qtyrpout}
+	</if>
+	<if test="condition.qtymvin != null and condition.qtymvin != ''" >
+	    and qtymvin =  #{condition.qtymvin}
+	</if>
+	<if test="condition.qtymvout != null and condition.qtymvout != ''" >
+	    and qtymvout =  #{condition.qtymvout}
+	</if>
+	<if test="condition.qtyonhold != null and condition.qtyonhold != ''" >
+	    and qtyonhold =  #{condition.qtyonhold}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.grossweight != null and condition.grossweight != ''" >
+	    and grossweight =  #{condition.grossweight}
+	</if>
+	<if test="condition.cubic != null and condition.cubic != ''" >
+	    and cubic =  #{condition.cubic}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.onholdlocker != null and condition.onholdlocker != ''" >
+	    and onholdlocker =  #{condition.onholdlocker}
+	</if>
+	<if test="condition.lpn != null and condition.lpn != ''" >
+	    and lpn =  #{condition.lpn}
+	</if>
+	<if test="condition.qtypa != null and condition.qtypa != ''" >
+	    and qtypa =  #{condition.qtypa}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into inv_lot_loc_id(lotnum,locationid,traceid,customerid,sku,qty,qtyallocated,qtyrpin,qtyrpout,qtymvin,qtymvout,qtyonhold,addtime,addwho,edittime,editwho,netweight,grossweight,cubic,price,onholdlocker,lpn,qtypa)
+ values(#{lotnum},#{locationid},#{traceid},#{customerid},#{sku},#{qty},#{qtyallocated},#{qtyrpin},#{qtyrpout},#{qtymvin},#{qtymvout},#{qtyonhold},#{addtime},#{addwho},#{edittime},#{editwho},#{netweight},#{grossweight},#{cubic},#{price},#{onholdlocker},#{lpn},#{qtypa})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update inv_lot_loc_id set locationid=#{locationid},traceid=#{traceid},customerid=#{customerid},sku=#{sku},qty=#{qty},qtyallocated=#{qtyallocated},qtyrpin=#{qtyrpin},qtyrpout=#{qtyrpout},qtymvin=#{qtymvin},qtymvout=#{qtymvout},qtyonhold=#{qtyonhold},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},netweight=#{netweight},grossweight=#{grossweight},cubic=#{cubic},price=#{price},onholdlocker=#{onholdlocker},lpn=#{lpn},qtypa=#{qtypa} where lotnum=#{lotnum}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update inv_lot_loc_id set 
+	<trim  suffixOverrides="," >
+	<if test="locationid != null  ">
+		locationid=#{locationid},
+	</if>
+	<if test="traceid != null  ">
+		traceid=#{traceid},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="qtyallocated != null  ">
+		qtyallocated=#{qtyallocated},
+	</if>
+	<if test="qtyrpin != null  ">
+		qtyrpin=#{qtyrpin},
+	</if>
+	<if test="qtyrpout != null  ">
+		qtyrpout=#{qtyrpout},
+	</if>
+	<if test="qtymvin != null  ">
+		qtymvin=#{qtymvin},
+	</if>
+	<if test="qtymvout != null  ">
+		qtymvout=#{qtymvout},
+	</if>
+	<if test="qtyonhold != null  ">
+		qtyonhold=#{qtyonhold},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="netweight != null  ">
+		netweight=#{netweight},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="cubic != null  ">
+		cubic=#{cubic},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="onholdlocker != null  ">
+		onholdlocker=#{onholdlocker},
+	</if>
+	<if test="lpn != null  ">
+		lpn=#{lpn},
+	</if>
+	<if test="qtypa != null  ">
+		qtypa=#{qtypa},
+	</if>
+	</trim> where lotnum=#{lotnum}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
+</delete>
+ 
+<!-- 根据id查询 库位库存表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
+</select>
+
+<!-- 库位库存表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from inv_lot_loc_id 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询库位库存表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from inv_lot_loc_id 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

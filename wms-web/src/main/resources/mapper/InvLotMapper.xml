@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.InvLotMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.InvLot" >
+	<result column="lotnum" property="lotnum"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="qty" property="qty"/>
+	<result column="cubic" property="cubic"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="netweight" property="netweight"/>
+	<result column="price" property="price"/>
+	<result column="qtypreallocated" property="qtypreallocated"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyonhold" property="qtyonhold"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+</resultMap>
+       
+<!-- inv_lot table all fields -->
+<sql id="Base_Column_List" >
+	 lotnum,customerid,sku,qty,cubic,grossweight,netweight,price,qtypreallocated,qtyallocated,qtyonhold,addtime,addwho,edittime,editwho
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and qty =  #{condition.qty}
+	</if>
+	<if test="condition.cubic != null and condition.cubic != ''" >
+	    and cubic =  #{condition.cubic}
+	</if>
+	<if test="condition.grossweight != null and condition.grossweight != ''" >
+	    and grossweight =  #{condition.grossweight}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.qtypreallocated != null and condition.qtypreallocated != ''" >
+	    and qtypreallocated =  #{condition.qtypreallocated}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtyonhold != null and condition.qtyonhold != ''" >
+	    and qtyonhold =  #{condition.qtyonhold}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into inv_lot(lotnum,customerid,sku,qty,cubic,grossweight,netweight,price,qtypreallocated,qtyallocated,qtyonhold,addtime,addwho,edittime,editwho)
+ values(#{lotnum},#{customerid},#{sku},#{qty},#{cubic},#{grossweight},#{netweight},#{price},#{qtypreallocated},#{qtyallocated},#{qtyonhold},#{addtime},#{addwho},#{edittime},#{editwho})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update inv_lot set customerid=#{customerid},sku=#{sku},qty=#{qty},cubic=#{cubic},grossweight=#{grossweight},netweight=#{netweight},price=#{price},qtypreallocated=#{qtypreallocated},qtyallocated=#{qtyallocated},qtyonhold=#{qtyonhold},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho} where lotnum=#{lotnum}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update inv_lot set 
+	<trim  suffixOverrides="," >
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="cubic != null  ">
+		cubic=#{cubic},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="netweight != null  ">
+		netweight=#{netweight},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="qtypreallocated != null  ">
+		qtypreallocated=#{qtypreallocated},
+	</if>
+	<if test="qtyallocated != null  ">
+		qtyallocated=#{qtyallocated},
+	</if>
+	<if test="qtyonhold != null  ">
+		qtyonhold=#{qtyonhold},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	</trim> where lotnum=#{lotnum}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from inv_lot where lotnum = #{lotnum}
+</delete>
+ 
+<!-- 根据id查询 批次库存表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from inv_lot where lotnum = #{lotnum}
+</select>
+
+<!-- 批次库存表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from inv_lot 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询批次库存表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from inv_lot 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+    <update id="updateQty" parameterType="java.util.Map">
+        update inv_lot set
+        qty = #{qty, jdbcType=INTEGER}, edittime = now(), editwho = #{editwho, jdbcType=VARCHAR}
+        where lotnum = #{lotnum, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteEmptyInv">
+        delete from inv_lot where qty = 0
+    </delete>
+  	
+</mapper>   
