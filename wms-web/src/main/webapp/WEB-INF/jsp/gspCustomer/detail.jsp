@@ -60,15 +60,15 @@
         </tr>
         <tr>
             <th>委托开始时间</th>
-            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" id="clientStartDateForm" name='clientStartDate' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>委托结束时间</th>
-            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" id="clientEndDateForm" name='clientEndDate' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>委托期限</th>
-            <td><input type='text' value="${customer.clientTerm}" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
+            <td><input type='text' value="${customer.clientTerm}" id="clientTermForm" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>是否贴中文标签</th>
@@ -120,6 +120,18 @@
     var dataGridDetail;
     var dialogEnterprise;
     $(function () {
+        $('#clientStartDateForm').datebox({
+            onChange: function(date){
+                onChangeDate();
+            }
+        });
+
+        $('#clientEndDateForm').datebox({
+            onChange: function(date){
+                onChangeDate();
+            }
+        });
+
         $("#enterpriseName").textbox({
             value:"${customer.clientName}",
             width:200,
@@ -372,6 +384,21 @@
             }
         }
     }
+
+    function onChangeDate() {
+        var startTime = $('#clientStartDateForm').eq(0).datebox('getValue');
+        var endTime = $('#clientEndDateForm').eq(0).datebox('getValue') ;
+
+        if(startTime!=null && endTime!=null&& endTime!=""&& startTime !=""  ) {
+            var endTime = new Date(endTime);
+            var startTime = new Date(startTime);
+            var days = endTime.getTime() - startTime.getTime();
+            var day = parseInt(days / (1000 * 60 * 60 * 24));
+            $('#clientTermForm').eq(0).numberbox('setValue',day);
+        }
+    }
+
+
 </script>
 </body>
 </html>

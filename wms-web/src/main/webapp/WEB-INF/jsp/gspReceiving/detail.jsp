@@ -349,7 +349,7 @@
         });
 
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+            url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
             toolbar : '#detailToolbar',
             title: '<spring:message code="common.dialog.title"/>',
@@ -360,7 +360,8 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                isUse : '1'
+                isUse : '1',
+                enterpriseType:'default'
             },
             fit:true,
             collapsible:false,
@@ -746,6 +747,8 @@
         var a = $('#isChec').combobox('getValue');
        // var row = ezuiDetailsDatagrid.datagrid("getSelected");
 
+        if ($('#ezuiFormAddress').form('validate')){
+
     if (a=='1') {
             var   url = '<c:url value="/gspReceivingController.do?add"/>';
             $("#ezuiFormAddress").form('submit', {
@@ -828,6 +831,7 @@
 
 
 
+        }
         }
 
 

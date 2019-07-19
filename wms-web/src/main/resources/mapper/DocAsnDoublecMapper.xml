@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocAsnDoublecMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocAsnDoublec" >
+	<result column="doublecno" property="doublecno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="context1" property="context1"/>
+	<result column="context2" property="context2"/>
+	<result column="context3" property="context3"/>
+	<result column="context4" property="context4"/>
+	<result column="context5" property="context5"/>
+	<result column="context6" property="context6"/>
+	<result column="context7" property="context7"/>
+	<result column="context8" property="context8"/>
+	<result column="match_flag" property="matchFlag"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+</resultMap>
+       
+<!-- doc_asn_doublec table all fields -->
+<sql id="Base_Column_List" >
+	 doublecno,customerid,context1,context2,context3,context4,context5,context6,context7,context8,match_flag,addtime,addwho,edittime,editwho
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.doublecno != null and condition.doublecno != ''" >
+	    and doublecno like '%${condition.doublecno}%'
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid like '%${condition.customerid}%'
+	</if>
+	<if test="condition.context1 != null and condition.context1 != ''" >
+	    and context1 like '%${condition.context1}%'
+	</if>
+	<if test="condition.context2 != null and condition.context2 != ''" >
+	    and context2 like '%${condition.context2}%'
+	</if>
+	<if test="condition.context3 != null and condition.context3 != ''" >
+	    and context3 like '%${condition.context3}%'
+	</if>
+	<if test="condition.context4 != null and condition.context4 != ''" >
+	    and context4 like '%${condition.context4}%'
+	</if>
+	<if test="condition.context5 != null and condition.context5 != ''" >
+	    and context5 like '%${condition.context5}%'
+	</if>
+	<if test="condition.context6 != null and condition.context6 != ''" >
+	    and context6 like '%${condition.context6}%'
+	</if>
+	<if test="condition.context7 != null and condition.context7 != ''" >
+	    and context7 like '%${condition.context7}%'
+	</if>
+	<if test="condition.context8 != null and condition.context8 != ''" >
+	    and context8 like '%${condition.context8}%'
+	</if>
+	<if test="condition.matchFlag != null and condition.matchFlag != ''" >
+	    and match_flag like '%${condition.matchFlag}%'
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_asn_doublec(doublecno,customerid,context1,context2,context3,context4,context5,context6,context7,context8,match_flag,addtime,addwho,edittime,editwho)
+ values(#{doublecno},#{customerid},#{context1},#{context2},#{context3},#{context4},#{context5},#{context6},#{context7},#{context8},#{matchFlag},#{addtime},#{addwho},#{edittime},#{editwho})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_asn_doublec set customerid=#{customerid},context1=#{context1},context2=#{context2},context3=#{context3},context4=#{context4},context5=#{context5},context6=#{context6},context7=#{context7},context8=#{context8},match_flag=#{matchFlag},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho} where doublecno=#{doublecno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_asn_doublec set 
+	<trim  suffixOverrides="," >
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="context1 != null  ">
+		context1=#{context1},
+	</if>
+	<if test="context2 != null  ">
+		context2=#{context2},
+	</if>
+	<if test="context3 != null  ">
+		context3=#{context3},
+	</if>
+	<if test="context4 != null  ">
+		context4=#{context4},
+	</if>
+	<if test="context5 != null  ">
+		context5=#{context5},
+	</if>
+	<if test="context6 != null  ">
+		context6=#{context6},
+	</if>
+	<if test="context7 != null  ">
+		context7=#{context7},
+	</if>
+	<if test="context8 != null  ">
+		context8=#{context8},
+	</if>
+	<if test="matchFlag != null  ">
+		match_flag=#{matchFlag},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	</trim> where doublecno=#{doublecno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_asn_doublec where doublecno = #{doublecno}
+</delete>
+ 
+<!-- 根据id查询 双证导入 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_asn_doublec where doublecno = #{doublecno}
+</select>
+
+<!-- 双证导入 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_asn_doublec 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询双证导入列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_asn_doublec 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

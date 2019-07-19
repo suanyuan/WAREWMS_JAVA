@@ -187,7 +187,7 @@ public class GspCustomerService extends BaseService {
 			String[] arr = id.split(",");
 			for(String s : arr){
 				String no = commonService.generateSeq(Constant.APLCUSNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-				//更新就数据状态
+				//更新旧数据状态
 				GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(s);
 				String oldNo = gspCustomer.getClientId();
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
@@ -195,7 +195,7 @@ public class GspCustomerService extends BaseService {
 				gspCustomerMybatisDao.updateBySelective(gspCustomer);
 				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
-				//更新审核状态为未通过
+				//新增审核状态为未通过数据
 				gspCustomer.setClientId(no);
 				gspCustomer.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
@@ -223,6 +223,20 @@ public class GspCustomerService extends BaseService {
 			return Json.error("操作失败");
 		}
 
+	}
+
+	/**
+	 * 更新首营状态
+	 * @param no
+	 * @param state
+	 * @return
+	 */
+	public Json updateFirstState(String no,String state){
+		Long result = gspCustomerMybatisDao.updateFirstState(no,state);
+		if(result>0){
+			return Json.success("更新委托客户申请单首营状态成功");
+		}
+		return Json.error("更新委托客户申请单首营状态失败");
 	}
 
 }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.QcMeteringDeviceMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.QcMeteringDevice" >
+	<result column="cal_id" property="calId"/>
+	<result column="cal_name" property="calName"/>
+	<result column="cal_number" property="calNumber"/>
+	<result column="cal_term" property="calTerm"/>
+	<result column="cal_card_url" property="calCardUrl"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="active_flag" property="activeFlag"/>
+</resultMap>
+       
+<!-- qc_metering_device table all fields -->
+<sql id="Base_Column_List" >
+	 cal_id,cal_name,cal_number,cal_term,cal_card_url,create_id,create_date,edit_id,edit_date,active_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.calId != null and condition.calId != ''" >
+	    and cal_id =  #{condition.calId}
+	</if>
+	<if test="condition.calName != null and condition.calName != ''" >
+	    and cal_name like  CONCAT('%',#{condition.calName},'%')
+	</if>
+	<if test="condition.calNumber != null and condition.calNumber != ''" >
+	    and cal_number =  #{condition.calNumber}
+	</if>
+	<if test="condition.calTerm != null and condition.calTerm != ''" >
+	    and cal_term =  #{condition.calTerm}
+	</if>
+	<if test="condition.calCardUrl != null and condition.calCardUrl != ''" >
+	    and cal_card_url =  #{condition.calCardUrl}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+		and create_date &gt;=  #{condition.createDateStart}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and create_date &lt;=  #{condition.createDateEnd}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDateStart != null and condition.editDateStart != ''" >
+		and edit_date &gt;=  #{condition.editDateStart}
+	</if>
+	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
+		and edit_date &lt;=  #{condition.editDateEnd}
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag =  #{condition.activeFlag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into qc_metering_device(cal_id,cal_name,cal_number,cal_term,cal_card_url,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{calId},#{calName},#{calNumber},#{calTerm},#{calCardUrl},#{createId},now(),#{editId},now(),#{activeFlag})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update qc_metering_device set cal_name=#{calName},cal_number=#{calNumber},cal_term=#{calTerm},cal_card_url=#{calCardUrl},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},active_flag=#{activeFlag} where cal_id=#{calId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update qc_metering_device set 
+	<trim  suffixOverrides="," >
+	<if test="calName != null  ">
+		cal_name=#{calName},
+	</if>
+	<if test="calNumber != null  ">
+		cal_number=#{calNumber},
+	</if>
+	<if test="calTerm != null  ">
+		cal_term=#{calTerm},
+	</if>
+	<if test="calCardUrl != null  ">
+		cal_card_url=#{calCardUrl},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	</trim> where cal_id=#{calId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from qc_metering_device where cal_id = #{calId}
+</delete>
+ 
+<!-- 根据id查询 计量设备 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from qc_metering_device where cal_id = #{calId}
+</select>
+
+<!-- 计量设备 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from qc_metering_device 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询计量设备列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from qc_metering_device 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+
+	<!-- 查询营业执照已过期或将要过期的企业-->
+<select id="getQcMeteringDeviceOutTime" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT
+	cal_name,
+	cal_number,
+	cal_term,
+	active_flag,
+	IFNULL(DATEDIFF(now(), cal_term), 0) outTime
+	FROM
+	qc_metering_device
+	WHERE
+	1 = 1
+	AND active_flag = '1'
+	AND IFNULL(DATEDIFF(cal_term, now()), 0) &lt;= #{diffCount}
+	</select>
+  	
+</mapper>   

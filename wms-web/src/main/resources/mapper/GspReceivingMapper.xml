@@ -246,5 +246,10 @@ where 1=1
        ${limitClause}
     </if>-->
 </select>
+
+<!-- 根据id，修改记录-->
+<update id="updateFirstState" parameterType="Object" >
+  update gsp_receiving set first_state=#{state} where receiving_id=#{no}
+</update>
   	
 </mapper>   

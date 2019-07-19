@@ -13,10 +13,7 @@ import com.wms.utils.ExcelUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
-import com.wms.vo.DocAsnDetailVO;
-import com.wms.vo.DocAsnHeaderVO;
-import com.wms.vo.GspProductRegisterSpecsVO;
-import com.wms.vo.Json;
+import com.wms.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +44,8 @@ public class ImportGspProductRegisterSpecsDataService {
 	@Autowired
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 	@Autowired
+	private DocAsnDoublecMybatisDao docAsnDoublecMybatisDao;
+	@Autowired
 	private BasPackageService basPackageService;
 	/**
 	 * 导入入库单
@@ -66,15 +65,15 @@ public class ImportGspProductRegisterSpecsDataService {
             in = excelFile.getInputStream();
             
             //获取sheetName名字
-            String sheetName = "产品基础信息";
+            String sheetName = "双证导入";
             //excel的表头与文字对应，获取excel表头
             LinkedHashMap<String, String> map = getLeadInFiledPublicQuestionBank();
             //获取组合excel表头数组，防止重复用的
             String[] uniqueFields =new String[] { "序号" };
             //获取需要导入的具体的表
-            Class asn = new ImportGPRSData().getClass();
+            Class asn = new ImportDoublecData().getClass();
             //excel转化成的list集合
-            List<ImportGPRSData> GPRSList = null;
+            List<ImportDoublecData> GPRSList = null;
             try {
                 //调用excle共用类，转化成list
 				GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
@@ -82,7 +81,7 @@ public class ImportGspProductRegisterSpecsDataService {
                 e.printStackTrace();
             }
             //保存实体集合
-            List<GspProductRegisterSpecsVO> importDataList = this.listToBean(GPRSList, resultMsg);
+            List<DocAsnDoublecVO> importDataList = this.listToBean(GPRSList, resultMsg);
             if (true) {
 //				this.validateCustomer(importDataList, resultMsg);// 验证客户是否存在
 //				if (resultMsg.length() == 0) {
@@ -123,10 +122,10 @@ public class ImportGspProductRegisterSpecsDataService {
 //
 //		return importData;
 //	}
-	private List<GspProductRegisterSpecsVO> listToBean(List<ImportGPRSData> GPRSList, StringBuilder resultMsg) {
+	private List<DocAsnDoublecVO> listToBean(List<ImportDoublecData> GPRSList, StringBuilder resultMsg) {
 		StringBuilder rowResult = new StringBuilder();
-		List<GspProductRegisterSpecsVO> importData = new ArrayList<GspProductRegisterSpecsVO>();
-		GspProductRegisterSpecsVO importDataVO =  null;
+		List<DocAsnDoublecVO> importData = new ArrayList<DocAsnDoublecVO>();
+		DocAsnDoublecVO importDataVO =  null;
 //		List<DocAsnDetailVO> importDetailsDataVOList = new ArrayList<DocAsnDetailVO>();
 //		DocAsnDetailVO importDetailsDataVO = null;
 		String quantityData = null;
@@ -138,8 +137,8 @@ public class ImportGspProductRegisterSpecsDataService {
 		format.setLenient(false);
 		formatRQ.setLenient(false);
 
-		for (ImportGPRSData dataArray : GPRSList) {
-			importDataVO = new GspProductRegisterSpecsVO();
+		for (ImportDoublecData dataArray : GPRSList) {
+			importDataVO = new DocAsnDoublecVO();
 			int arrayIndex = 0;
 			try {
 				importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
@@ -159,287 +158,85 @@ public class ImportGspProductRegisterSpecsDataService {
 
 			try {
 
-
-				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
-
-				if(gspProductRegisterSpecs==null  ){
-					importDataVO.setProductCode(dataArray.getProductCode());
-				}else if("0".equals(gspProductRegisterSpecs.getIsUse())){
-					importDataVO.setProductCode(dataArray.getProductCode());
-				}else{
+				importDataVO.setDoublecno(dataArray.getDoublecno());
+				DocAsnDoublec docAsnDoublec = docAsnDoublecMybatisDao.queryById(dataArray.getDoublecno());
+				if(docAsnDoublec!=null){
 					throw new Exception();
 				}
-				if (StringUtils.isEmpty(dataArray.getProductCode())) {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[商品代码]，未输入或已有该产品信息并且有效 无法重复添加").append(" ");
-			}
-
-			try {
-				importDataVO.setProductName(dataArray.getProductName());
-
-				if (StringUtils.isEmpty(dataArray.getProductName())) {
+//				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
+//
+//				if(gspProductRegisterSpecs==null  ){
+//					importDataVO.setProductCode(dataArray.getDoublecno());
+//				}else if("0".equals(gspProductRegisterSpecs.getIsUse())){
+//
+//				}else{
+//					throw new Exception();
+//				}
+				if (StringUtils.isEmpty(dataArray.getDoublecno())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[产品名称]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setProductRemark(dataArray.getProductRemark());
-				if (StringUtils.isEmpty(dataArray.getProductRemark())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[产品描述]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setSpecsName(dataArray.getSpecsName());
-				if (StringUtils.isEmpty(dataArray.getSpecsName())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[规格名称]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setProductModel(dataArray.getProductModel());
-
-				if (StringUtils.isEmpty(dataArray.getProductModel())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[型号]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setProductionAddress(dataArray.getProductionAddress());
-
-				if (StringUtils.isEmpty(dataArray.getProductionAddress())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[产地]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setBarCode(dataArray.getBarCode());
-
-				if (StringUtils.isEmpty(dataArray.getBarCode())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[商品条码]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setUnit(dataArray.getUnit());
-
-				if (StringUtils.isEmpty(dataArray.getUnit())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[单位]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setPackingUnit(dataArray.getPackingUnit());
-				List<EasyuiCombobox> s =basPackageService.getBasPackageCombobox();
-				boolean flag = false;
-
-				for(EasyuiCombobox d :s){
-					d.getId();
-					if(d.getValue().equals(dataArray.getPackingUnit())){
-						 flag = true;
-					}
-				}
-
-
-
-				if (StringUtils.isEmpty(dataArray.getPackingUnit())|| !flag) {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[包装单位]，未输入或不存在该包装单位").append(" ");
-			}
-
-			try {
-				importDataVO.setLlong(dataArray.getLlong());
-
-				if (isNumeric(dataArray.getLlong())) {
-
-				}else {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[长]，须为数字").append(" ");
-			}
-
-			try {
-				importDataVO.setWide(dataArray.getWide());
-
-				if (isNumeric(dataArray.getWide())) {
-
-				}else {
-					throw new Exception();
-				}
-
-			} catch (Exception e) {
-				rowResult.append("[宽]，须为数字").append(" ");
-			}
-
-			try {
-				importDataVO.setHight(dataArray.getHight());
-
-				if (isNumeric(dataArray.getHight())) {
-
-				}else {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[高]，须为数字").append(" ");
-			}
-
-			try {
-				if("是".equals(dataArray.getIsCertificate())){
-					importDataVO.setIsCertificate("1");
-				}else if("否".equals(dataArray.getIsCertificate())){
-					importDataVO.setIsCertificate("0");
-				}
-
-
-				if (StringUtils.isEmpty(dataArray.getIsCertificate())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[是否需要产品合格证]，未输入").append(" ");
-			}
-
-
-			try {
-				//importDataVO.setIsDoublec(dataArray.getIsDoublec());
-				if("是".equals(dataArray.getIsDoublec())){
-					importDataVO.setIsDoublec("1");
-				}else if("否".equals(dataArray.getIsDoublec())){
-					importDataVO.setIsDoublec("0");
-				}
-				if (StringUtils.isEmpty(dataArray.getIsDoublec())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[是否需要双证]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setPackingRequire(dataArray.getPackingRequire());
-
-				if (StringUtils.isEmpty(dataArray.getPackingRequire())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[包装要求]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setStorageCondition(dataArray.getStorageCondition());
-
-				if (StringUtils.isEmpty(dataArray.getStorageCondition())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[存储条件]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setTransportCondition(dataArray.getTransportCondition());
-
-				if (StringUtils.isEmpty(dataArray.getTransportCondition())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[运输条件]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setAlternatName1(dataArray.getAlternatName1());
-
-				if (StringUtils.isEmpty(dataArray.getAlternatName1())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[自赋码1]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setAlternatName2(dataArray.getAlternatName2());
-
-				if (StringUtils.isEmpty(dataArray.getAlternatName2())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[自赋码2]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setAlternatName3(dataArray.getAlternatName3());
-
-				if (StringUtils.isEmpty(dataArray.getAlternatName3())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[自赋码3]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setAlternatName4(dataArray.getAlternatName4());
-
-				if (StringUtils.isEmpty(dataArray.getAlternatName4())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[自赋码4]，未输入").append(" ");
-			}
-
-			try {
-				importDataVO.setAlternatName5(dataArray.getAlternatName5());
-
-				if (StringUtils.isEmpty(dataArray.getAlternatName5())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[自赋码5]，未输入").append(" ");
+				rowResult.append("[任务号]，未输入或者任务号重复").append(" ");
 			}
 
 //			try {
-//				format.parse(dataArray.getExpectedarrivetime1());
-//			} catch (ParseException e) {
-//				//如果throw java.text.ParseException或者NullPointerException，就说明格式不对
-//				rowResult.append("[预期到货时间]，格式错误").append(" ");
-//			}
-			//生产日期、失效日期、入库日期
-
-			//长 宽 高
-
-//			//库存状态
-//			try {
-//				if (StringUtils.isNotEmpty(dataArray.getLotatt04())) {
-//					if (!(dataArray.getLotatt04().equals("HG") || dataArray.getLotatt04().equals("CP"))) {
-//						throw new Exception();
-//					}
+//				importDataVO.setProductName(dataArray.getCustomerid());
+//
+//				if (StringUtils.isEmpty(dataArray.getCustomerid())) {
+//					throw new Exception();
 //				}
 //			} catch (Exception e) {
-//				rowResult.append("[库存状态]，输入异常").append(" ");
+//				rowResult.append("[客户编号]，未输入").append(" ");
 //			}
 
+			try {
+				importDataVO.setContext1(dataArray.getContext1());
+				if (StringUtils.isEmpty(dataArray.getContext1())) {//判日期是否为空
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				rowResult.append("[产品型号]，未输入").append(" ");
+			}
 
-			//importDataList.add(importDataVO);
-			//importDataVO.setGspProductRegisterSpecsVOList(importDataList);
+			try {
+				importDataVO.setContext2(dataArray.getContext2());
+				if (StringUtils.isEmpty(dataArray.getContext2())) {//判日期是否为空
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				rowResult.append("[名称]，未输入").append(" ");
+			}
+
+			try {
+				importDataVO.setContext3(dataArray.getContext3());
+
+				if (StringUtils.isEmpty(dataArray.getContext3())) {//判日期是否为空
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				rowResult.append("[执行标准]，未输入").append(" ");
+			}
+
+			try {
+				importDataVO.setContext4(dataArray.getContext4());
+
+				if (StringUtils.isEmpty(dataArray.getContext4())) {//判日期是否为空
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				rowResult.append("[备注]，未输入").append(" ");
+			}
+
+
+
+
+
+
 			if (rowResult.length() > 0) {
 				if(rowResult.lastIndexOf("，") > -1){
 					rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
 				}
+				System.out.println();
 				resultMsg.append("序号：").append(dataArray.getSeq()).append("资料有错 ").append(rowResult).append(" ");
 				rowResult.setLength(0);
 			} else {
@@ -459,28 +256,13 @@ public class ImportGspProductRegisterSpecsDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号", "seq");
-	    map.put("商品代码", "productCode");
-	    map.put("产品名称", "productName");
-	    map.put("产品描述", "productRemark");
-	    map.put("规格名称", "specsName");
-	    map.put("型号", "productModel");
-	    map.put("产地", "productionAddress");
-	    map.put("商品条码", "barCode");
-	    map.put("单位", "unit");
-	    map.put("包装单位", "packingUnit");
-	    map.put("长", "llong");
-	    map.put("宽", "wide");
-	    map.put("高", "hight");
-		map.put("是否需要产品合格证", "isCertificate");
-		map.put("是否需要双证", "isDoublec");
-	    map.put("包装要求", "packingRequire");
-	    map.put("存储条件", "storageCondition");
-		map.put("运输条件", "transportCondition");
-	    map.put("自赋码1", "alternatName1");
-		map.put("自赋码2", "alternatName2");
-		map.put("自赋码3", "alternatName3");
-		map.put("自赋码4", "alternatName4");
-		map.put("自赋码5", "alternatName5");
+	    map.put("任务号", "doublecno");
+	    map.put("产品型号", "context1");
+	    map.put("名称", "context2");
+	    map.put("执行标准", "context3");
+	    map.put("备注", "context4");
+
+
 
 	    return map;
 	}
@@ -547,10 +329,10 @@ public class ImportGspProductRegisterSpecsDataService {
 	}*/
 
 	@Transactional
-	private void saveProductRegisterSpecs(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
-		GspProductRegisterSpecs gspProductRegisterSpecs = null;
-		for(GspProductRegisterSpecsVO importDataVO : importDataList){
-			gspProductRegisterSpecs = new GspProductRegisterSpecs();
+	private void saveProductRegisterSpecs(List<DocAsnDoublecVO> importDataList, StringBuilder resultMsg) {
+		DocAsnDoublec gspProductRegisterSpecs = null;
+		for(DocAsnDoublecVO importDataVO : importDataList){
+			gspProductRegisterSpecs = new DocAsnDoublec();
 			BeanUtils.copyProperties(importDataVO, gspProductRegisterSpecs);
 //			//获取SO编号
 //			Map<String ,Object> map=new HashMap<String, Object>();
@@ -560,17 +342,17 @@ public class ImportGspProductRegisterSpecsDataService {
 //			String resultNo = map.get("resultNo").toString();
 //			if (resultCode.substring(0,3).equals("000")) {
 				//赋值
-				gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
+				//gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
 				//gspProductRegisterSpecs.setProductRegisterId("PR");
 				//gspProductRegisterSpecs.setSpecsName(importDataVO.getSpecsName());
 				//gspProductRegisterSpecs.setSpecsId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-				gspProductRegisterSpecs.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-				gspProductRegisterSpecs.setCreateDate(new Date());
-				gspProductRegisterSpecs.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-				gspProductRegisterSpecs.setEditDate(new Date());
-				gspProductRegisterSpecs.setIsUse("1");
+				gspProductRegisterSpecs.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				gspProductRegisterSpecs.setAddtime(new Date());
+				gspProductRegisterSpecs.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+				gspProductRegisterSpecs.setEdittime(new Date());
+				//gspProductRegisterSpecs.setIsUse("1");
 				//保存订单主信息
-			gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
+			docAsnDoublecMybatisDao.add(gspProductRegisterSpecs);
 
 				resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
 			}

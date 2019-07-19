@@ -2,6 +2,7 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.GspReceiving;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -11,4 +12,6 @@ import com.wms.entity.GspReceiving;
 public interface GspReceivingMybatisDao extends BaseDao {
 	
 	public GspReceiving queryByEnterpriseId(String enterpriseId);
+
+	Long updateFirstState(@Param("no") String no,@Param("state") String state);
 }

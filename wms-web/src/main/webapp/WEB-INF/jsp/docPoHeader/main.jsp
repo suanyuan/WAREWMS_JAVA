@@ -8,20 +8,23 @@
     <c:import url='/WEB-INF/jsp/include/easyui.jsp'/>
     <script type='text/javascript'>
         var processType;
-        var ezuiMenu;//右键菜单
-        var ezuiDetailsMenu;//二级datagrid右键菜单
-        var ezuiForm;//二级dialog from表单
-        var ezuiDetailsForm;//三级dialog from表单
-        var ezuiDialog;//二级dialog
-        var ezuiDetailsDialog;//三级dialog
-        var ezuiDatagrid;//主页datagrid
-        var ezuiDetailsDatagrid;//二级datagrid
-        var ezuiCustDataDialog;// 货主编码选择弹框页面
-        var ezuiCustDataDialogId;// 货主编码选择弹框
+        var ezuiMenu;                 //右键菜单
+        var ezuiDetailsMenu;          //二级datagrid右键菜单
+        var ezuiForm;                 //二级dialog from表单
+        var ezuiDetailsForm;          //三级dialog from表单
+        var ezuiDialog;               //二级dialog
+        var ezuiDetailsDialog;        //三级dialog
+        var ezuiDatagrid;             //主页datagrid
+        var ezuiDetailsDatagrid;      //二级datagrid
+        var ezuiCustDataDialog;       //货主编码选择弹框页面
+        var ezuiCustDataDialogId;     //货主编码选择弹框
+        var ezuiSkuDataDialog;        //三级diaoyog产品选择框
+        var ezuiSkuDataDialogId;      //三级diaoyog产品选择框
+        var productDialog_docPoHeader;//主页产品选择框
         $(function () {
-            ezuiMenu = $('#ezuiMenu').menu();//右键菜单
+            ezuiMenu = $('#ezuiMenu').menu();              //右键菜单
             ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();//二级右键菜单
-            ezuiForm = $('#ezuiForm').form();//二级dialog from表单
+            ezuiForm = $('#ezuiForm').form();              //二级dialog from表单
             ezuiDetailsForm = $('#ezuiDetailsForm').form();//三级dialog from表单
             ezuiImportDataForm = $('#ezuiImportDataForm').form();
 //主页datagrid初始化
@@ -48,10 +51,10 @@
                     {field: 'pono', title: '采购单号', width: 20},
                     {field: 'potypeName', title: '采购类型', width: 14},
                     {field: 'postatusName', title: '采购状态', width: 20},
-                    {field: 'customerid', title: '货主编码', width: 20},
+                    {field: 'customerid', title: '货主代码', width: 20},
                     // {field: 'expectedarrivetime2',		title: '预期到货时间TO',	width: 14 },
-                    // {field: 'supplierid',		title: '供应商代码',	width: 14 },
                     {field: 'supplierName', title: '供应商名称', width: 30},
+                    {field: 'supplierid', title: '供应商',hidden:true, width: 30},
                     // {field: 'supplierCity',		title: '城市',	width: 14 },
                     // {field: 'supplierProvince',		title: '省',	width: 14 },
                     // {field: 'supplierCountry',		title: '国家',	width: 14 },
@@ -151,7 +154,8 @@
                     {field: 'polineno', title: '订单行号', width: 100},
                     {field: 'polinestatusName', title: '行状态', width: 70},
                     {field: 'customerid', title: '货主', width: 70},
-                    {field: 'sku', title: '产品', width: 107},
+                    {field: 'sku', title: '产品代码', width: 107},
+                    {field: 'skudescrc', title: '产品名称', width: 107},
                     {field: 'uom', title: '单位', width: 155},
                     {field: 'packid', title: '包装代码', width: 100},
                     {field: 'orderedqty', title: '订单数量', width: 60},
@@ -189,6 +193,81 @@
                     $(this).datagrid('unselectAll');
                     $(this).datagrid("resize", {height: 200});
                 }
+            });
+//查询控件初始化
+            $("#customerid").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        $("#ezuiCustDataDialog #customerid").textbox('clear');
+                        ezuiCustDataClick('OW');
+                        ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
+//查询控件初始化
+            $("#ezuiForm #customerid").textbox({
+                // editable:false,
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        $("#ezuiCustDataDialog #customerid").textbox('clear');
+                        ezuiCustDataDialogClick('OW');
+                        ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
+//查询控件初始化
+            $("#supplierid").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        $("#ezuiCustDataDialog #customerid").textbox('clear');
+                        ezuiCustDataClick('VE');
+                        ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
+//查询控件初始化
+            $("#ezuiForm #supplierName").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        $("#ezuiCustDataDialog #customerid").textbox('clear');
+                        ezuiCustDataDialogClick('VE');
+                        ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
+//查询控件初始化
+            $("#ezuiDetailsForm #customerid").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        $("#ezuiCustDataDialog #customerid").textbox('clear');
+                        ezuiCustDataDetilDialogClick('OW');
+                        ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
+//查询控件初始化 载入公用弹窗页面
+            $("#sku").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        productDialog_docPoHeader = $('#ezuiSkuSearchDialog').dialog({
+                            modal : true,
+                            title : '查询',
+                            href:sy.bp()+"/basSkuController.do?toSearchDialog&target=docPoHeader",
+                            width:850,
+                            height:500,
+                            cache:false,
+                            onClose : function() {
+
+                            }
+                        })
+                    }
+                }]
             });
 //时间控件初始化
             $('#addtime').datetimebox('calendar').calendar({
@@ -238,20 +317,31 @@
                     ezuiFormClear(ezuiDetailsForm);
                 }
             }).dialog('close');
+//货主代码选择弹框
+            ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
+                modal: true,
+                title: '<spring:message code="common.dialog.title"/>',
+                buttons: '',
+                onOpen: function () {
+
+                },
+                onClose: function () {
+
+                }
+            }).dialog('close');
+//商品选择弹框
+            ezuiSkuDataDialog = $('#ezuiSkuDataDialog').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                onOpen : function() {
+
+                },
+                onClose : function() {
+
+                }
+            }).dialog('close');
         });
-
-//客户选择弹框
-        ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
-            modal: true,
-            title: '<spring:message code="common.dialog.title"/>',
-            buttons: '',
-            onOpen: function () {
-
-            },
-            onClose: function () {
-
-            }
-        }).dialog('close');
 //主页新增按钮
         var add = function () {
             processType = 'add';
@@ -280,18 +370,7 @@
             $("#ezuiForm #pono").textbox({
                 editable:false
             });
-//点击搜索货主编码
-//     $("#ezuiForm #customerid").textbox({
-//         // editable:false,
-//         icons:[{
-//             iconCls:'icon-search',
-//             handler: function(e){
-//                $("#ezuiCustDataDialog #customerid").textbox('clear');
-//                  ezuiCustDataDialogClick();
-//                 ezuiCustDataDialogSearch();
-//            }
-//         }]
-//    });
+
             // $("#ezuiForm #asnno1").textbox({
             //     editable:false
             // });
@@ -302,7 +381,7 @@
             $('#ezuiBtn_recommit').linkbutton('enable');
             ezuiDialog.dialog('open');
         };
-        //主页编辑按钮
+//主页编辑按钮
         var edit = function () {
             processType = 'edit';
             //时间控件初始化
@@ -326,10 +405,6 @@
             $("#ezuiForm #expectedarrivetime1").textbox({
                 editable: false, readonly: false
             });
-            $("#ezuiForm #customerid").textbox({
-                editable: false,
-                icons: []
-            });
             $("#ezuiForm #pono").textbox({
                 editable: false
             });
@@ -340,6 +415,7 @@
                     pono: row.pono,
                     potype: row.potype,
                     postatus: row.postatus,
+                    supplierid: row.supplierid,
                     supplierName: row.supplierName,
                     supplierContact: row.supplierContact,
                     notes: row.notes,
@@ -363,7 +439,7 @@
                 })
             }
         };
-        //主页取消按钮
+//主页取消按钮
         var cancel = function () {
             var row = ezuiDatagrid.datagrid('getSelected');
             if (row) {
@@ -397,21 +473,21 @@
                 });
             }
         };
-        //明细新增按钮
+//明细新增按钮
         var detailsAdd = function () {
             if ($('#ezuiForm #pono').val() == '') {
                 return;
             } else {
                 processType = 'add';
                 $('#docPoDetailsId').val(0);
-                $("#ezuiDetailsForm #sku").textbox({
+                $("#ezuiDetailsForm #skudescrc").textbox({
                     // editable: false,
                     icons: [{
                         iconCls: 'icon-search',
                         handler: function (e) {
                             $("#ezuiSkuDataDialog #sku").textbox('clear');
-                            // ezuiSkuDataClick();
-                            // ezuiSkuDataSearch();
+                              ezuiSkuDataClick();
+                              ezuiSkuDataSearch();
                         }
                     }]
                 });
@@ -437,8 +513,7 @@
             }
             ;
         };
-
-        //明细编辑按钮
+//明细编辑按钮
         var detailsEdit = function () {
             processType = 'edit';
             //时间控件初始化
@@ -463,14 +538,14 @@
                 editable: false, readonly: true
             });
             $('#docPoDetailsId').val(0);
-            $("#ezuiDetailsForm #sku").textbox({
+            $("#ezuiDetailsForm #skudescrc").textbox({
                 editable: false,
                 icons: [{
                     iconCls: 'icon-search',
                     handler: function (e) {
                         $("#ezuiSkuDataDialog #sku").textbox('clear');
-                        // ezuiSkuDataClick();
-                        // ezuiSkuDataSearch();
+                          ezuiSkuDataClick();
+                          ezuiSkuDataSearch();
                     }
                 }]
             });
@@ -497,6 +572,7 @@
                     polinestatus: row.polinestatus,
                     orderedqty: row.orderedqty,
                     sku: row.sku,
+                    skudescrc:row.skudescrc,
                     uom: row.uom,
                     packid: row.packid,
                     totalcubic: row.totalcubic,
@@ -523,7 +599,7 @@
             }
         };
 
-        //明细删除按钮
+//明细删除按钮
         var detailsDel = function () {
             var row = ezuiDetailsDatagrid.datagrid('getSelected');
             if (row) {
@@ -557,8 +633,7 @@
                 });
             }
         };
-
-        // 二级ezuiDialog新增按钮
+// 二级ezuiDialog新增按钮
         var renew = function () {
             processType = 'add';
             $('#docPoHeaderId').val(0);
@@ -602,7 +677,7 @@
             $('#ezuiBtn_renew').linkbutton('disable');
             $('#ezuiBtn_recommit').linkbutton('enable');
         };
-        // 二级ezuiDialog提交
+// 二级ezuiDialog提交
         var commit = function () {
             var postatus = $("#ezuiDialog #postatus").combobox('getValue');
             if (postatus == '00' || postatus == '30' || postatus == '40') {
@@ -664,7 +739,7 @@
             ;
 
         };
-        // 明细提交按钮
+// 明细提交按钮
         var detailsCommit = function () {
             var postatus = $("#ezuiDetailsDialog #polinestatus").combobox('getValue');
             if (postatus == '00' || postatus == '30' || postatus == '40') {
@@ -718,7 +793,7 @@
                 });
             }
         };
-        //主页datagrid-toolbar条件查询
+//主页datagrid-toolbar条件查询
         var doSearch = function () {
             ezuiDatagrid.datagrid('load', {
                 pono: $('#pono').val(),
@@ -779,12 +854,14 @@
             });
 
         };
-        // 客户选择弹框清空
+// 货主代码选择弹框清空
         var ezuiCustToolbarClear = function () {
             $("#ezuiCustDataDialog #customerid").textbox('clear');
         };
-        // 客户选择弹框-主界面
-        var ezuiCustDataClick = function () {
+// 货主代码选择弹框-主界面
+        var ezuiCustDataClick = function (customerType)     {
+            $("#ezuiCustDataDialog #customerType").combobox('setValue',customerType).combo('readonly',true);
+            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combo('readonly',true);
             ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
                 url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
                 method: 'POST',
@@ -813,7 +890,7 @@
                     {field: 'customerTypeName', title: '类型', width: 15},
                     {
                         field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
-                            return rowData.activeFlag == 'Y' ? '是' : '否';
+                            return rowData.activeFlag == '1' ? '是' : '否';
                         }
                     }
                 ]],
@@ -825,21 +902,12 @@
                     $(this).datagrid('unselectAll');
                 }
             });
-            $("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combo('readonly', true);
-            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', 'Y').combo('readonly', true);
             ezuiCustDataDialog.dialog('open');
         };
-
-        //客户选择-主界面
-        var selectCust = function () {
-            var row = ezuiCustDataDialogId.datagrid('getSelected');
-            if (row) {
-                $("#customerid").textbox('setValue', row.customerid);
-                ezuiCustDataDialog.dialog('close');
-            }
-        };
-        // 货主编码选择弹框
-        var ezuiCustDataDialogClick = function () {
+// 货主代码选择弹框-二级diayog
+        var ezuiCustDataDialogClick = function (customerType) {
+            $("#ezuiCustDataDialog #customerType").combobox('setValue', customerType).combo('readonly', true);
+            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combo('readonly', true);
             ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
                 url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
                 method: 'POST',
@@ -868,7 +936,7 @@
                     {field: 'customerTypeName', title: '类型', width: 15},
                     {
                         field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
-                            return rowData.activeFlag == 'Y' ? '是' : '否';
+                            return rowData.activeFlag == '1' ? '是' : '否';
                         }
                     }
                 ]],
@@ -880,11 +948,55 @@
                     $(this).datagrid('unselectAll');
                 }
             });
-            $("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combo('readonly', true);
-            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', 'Y').combo('readonly', true);
             ezuiCustDataDialog.dialog('open');
         };
-        // 货主编码选择弹框查询
+// 货主代码选择弹框-三级diayog
+        var ezuiCustDataDetilDialogClick = function (customerType) {
+            $("#ezuiCustDataDialog #customerType").combobox('setValue', customerType).combo('readonly', true);
+            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combo('readonly', true);
+            ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+                url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+                method: 'POST',
+                toolbar: '#ezuiCustToolbar',
+                title: '客户档案',
+                pageSize: 50,
+                pageList: [50, 100, 200],
+                fit: true,
+                border: false,
+                fitColumns: true,
+                nowrap: false,
+                striped: true,
+                collapsible: false,
+                pagination: true,
+                rownumbers: true,
+                singleSelect: true,
+                queryParams: {
+                    customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+                    activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+                },
+                idField: 'customerid',
+                columns: [[
+                    {field: 'customerid', title: '客户代码', width: 15},
+                    {field: 'descrC', title: '中文名称', width: 50},
+                    {field: 'descrE', title: '英文名称', width: 50},
+                    {field: 'customerTypeName', title: '类型', width: 15},
+                    {
+                        field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+                            return rowData.activeFlag == '1' ? '是' : '否';
+                        }
+                    }
+                ]],
+                onDblClickCell: function (index, field, value) {
+                    selectDetilDialogCust();
+                },
+                onRowContextMenu: function (event, rowIndex, rowData) {
+                }, onLoadSuccess: function (data) {
+                    $(this).datagrid('unselectAll');
+                }
+            });
+            ezuiCustDataDialog.dialog('open');
+        };
+// 货主编代码择弹框查询
         var ezuiCustDataDialogSearch = function () {
             ezuiCustDataDialogId.datagrid('load', {
                 customerid: $("#ezuiCustDataDialog #customerid").textbox("getValue"),
@@ -892,16 +1004,132 @@
                 activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
             });
         };
-        // 货主选择-之后关闭
+// 货主代码选择-主界面
+        var selectCust = function () {
+            var row = ezuiCustDataDialogId.datagrid('getSelected');
+            if(row.customerType == "OW"){
+                $("#customerid").textbox('setValue',row.customerid);
+            }else if(row.customerType == "VE"){
+                $("#supplierId").textbox('setValue',row.customerid);
+            }
+            ezuiCustDataDialog.dialog('close');
+        };
+// 货主代码选择-详细页面之后关闭
         var selectDialogCust = function () {
             var row = ezuiCustDataDialogId.datagrid('getSelected');
-            if (row) {
-                $("#ezuiDialog #customerid").textbox('setValue', row.customerid);
+            if(row.customerType == "OW"){
+                    $("#ezuiDialog #customerid").textbox('setValue',row.customerid);
+                }else if(row.customerType == "VE"){
+                    $("#ezuiDialog #supplierId").textbox('setValue',row.customerid);
+                    $("#ezuiDialog #supplierName").textbox('setValue',row.descrC);
+                }
                 ezuiCustDataDialog.dialog('close');
-            }
+
+        };
+// 货主代码选择-三级diayog页面之后关闭
+        var selectDetilDialogCust= function () {
+            var row = ezuiCustDataDialogId.datagrid('getSelected');
+            if (row) {
+                $("#ezuiDetailsForm #customerid").textbox('setValue', row.customerid);
+
+        }
+            ezuiCustDataDialog.dialog('close');
+
         };
 
-        //一级datagrid单击事件
+// 商品选择弹框-三级diayog
+        var ezuiSkuDataClick = function(){
+            $("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
+            $("#ezuiSkuDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+            ezuiSkuDataDialogId = $('#ezuiSkuDataDialogId').datagrid({
+                url:'<c:url value="/basSkuController.do?showDatagrid"/>',
+                method:'POST',
+                toolbar:'#ezuiSkuToolbar',
+                title:'商品档案',
+                pageSize:50,
+                pageList:[50, 100, 200],
+                fit:true,
+                border:false,
+                fitColumns:false,
+                nowrap:false,
+                striped:true,
+                collapsible:false,
+                pagination:true,
+                rownumbers:true,
+                singleSelect:true,
+                queryParams:{
+                    customerid : $("#ezuiDetailsForm #customerid").textbox("getValue"),
+                    activeFlag : $("#ezuiSkuDataDialog #activeFlag").combobox('getValue')
+                },
+                idField : 'sku',
+                columns : [[
+                    {field: 'customerid',	title: '客户代码',	width: 80},
+                    {field: 'sku',			title: '商品编码',	width: 120},
+                    {field: 'descrC',		title: '中文名称',	width: 160},
+                    {field: 'descrE',		title: '英文名称',	width: 160},
+                    {field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
+                            return rowData.activeFlag == '1' ? '是' : '否';
+                        }},
+                    {field: 'alternateSku1',title: '商品条码',	width: 120},
+                    {field: 'packid',		title: '包装代码',	width: 80},
+                    {field: 'qty',			title: '库存数',	width: 60},
+                    {field: 'qtyallocated',	title: '分配数',	width: 60},
+                    {field: 'qtyonhold',	title: '冻结数',	width: 60}
+                ]],
+                onDblClickCell: function(index,field,value){
+                    selectSku();
+                },
+                onRowContextMenu : function(event, rowIndex, rowData) {
+                },onLoadSuccess:function(data){
+                    $(this).datagrid('unselectAll');
+                }
+            });
+
+            ezuiSkuDataDialog.dialog('open');
+        };
+// 商品选择弹框查询-三级diayog
+        var ezuiSkuDataSearch = function(){
+            ezuiSkuDataDialogId.datagrid('load', {
+                customerid : $("#ezuiSkuDataDialog #customerid").textbox("getValue"),
+                sku : $("#ezuiSkuDataDialog #sku").textbox("getValue"),
+                activeFlag : $("#ezuiSkuDataDialog #activeFlag").combobox('getValue')
+            });
+        };
+// 商品选择弹框清空
+        var ezuiSkuToolbarClear = function(){
+            $("#ezuiSkuDataDialog #sku").textbox('clear');
+        };
+// 商品选择-主页
+        var selectSku = function(){
+            var row = ezuiSkuDataDialogId.datagrid('getSelected');
+            if(row){
+                $("#ezuiDetailsForm #sku").textbox('setValue',row.sku);
+                $("#ezuiDetailsForm #skudescrc").textbox('setValue',row.descrC);
+                $("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
+                $("#ezuiDetailsForm #expectedqty").numberbox('clear');
+                $("#ezuiDetailsForm #totalgrossweight").numberbox('clear');
+                $("#ezuiDetailsForm #totalcubic").numberbox('clear');
+                $("#ezuiDetailsForm #totalprice").numberbox('clear');
+                ezuiSkuDataDialog.dialog('close');
+            }
+        };
+// 主页产品框选择
+        function choseSelect_product_docPoHeader(row){
+            var sku;
+            if(row){
+                sku = row;
+            }else{
+                row = $("#productSearchGrid_docPoHeader").datagrid("getSelections");
+                if(row){
+                    sku = row[0]
+                }
+            }
+            if(sku){
+                $("#sku").textbox("setValue",sku.sku);
+            }
+            productDialog_docPoHeader.dialog("close");
+        }
+// 一级datagrid单击事件
         function afterCheckButtion(rowData) {
             if (rowData.postatus == '99' || rowData.postatus == '90') {
                 $('#ezuiBtn_close').linkbutton('disable');
@@ -933,7 +1161,7 @@
 <body>
 <input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
 <div class='easyui-layout' data-options='fit:true,border:false'>
-    <%--主页datagrid-toolbar--%>
+<%--主页datagrid-toolbar--%>
     <div data-options='region:"center",border:false' style='overflow: hidden;'>
 
         <div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
@@ -971,7 +1199,7 @@
 
 
                         <th>供应商</th>
-                        <td><input type='text' id='supplierName' class='easyui-textbox' size='16' data-options=''/></td>
+                        <td><input type='text' id='supplierid' class='easyui-textbox' size='16' data-options=''/></td>
 
                     </tr>
                     <tr>
@@ -996,7 +1224,7 @@
 																																	valueField: 'id',
 																																	textField: 'value'"/>
                         </td>
-                        <th>产品</th>
+                        <th>产品代码</th>
                         <td><input type='text' id='sku'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>
                             <%--一级datagrid查询--%>
@@ -1027,7 +1255,6 @@
         <table id='ezuiDatagrid'></table>
     </div>
 </div>
-
 <div id='ezuiDialogBtn'>
     <%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message--%>
             <%--code='common.button.commit'/></a>--%>
@@ -1050,5 +1277,10 @@
 <c:import url='/WEB-INF/jsp/docPoHeader/dialog.jsp'/>
 <c:import url='/WEB-INF/jsp/docPoHeader/custDialog.jsp'/>
 <c:import url='/WEB-INF/jsp/docPoHeader/detailsDialog.jsp'/>
+<c:import url='/WEB-INF/jsp/docPoHeader/skuDialog.jsp' />
+<!--产品查询 -->
+<div id="ezuiSkuSearchDialog">
+
+</div>
 </body>
 </html>

@@ -99,7 +99,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'firstBusinessApplyController.do?delete',
-					data : {id : row.id},
+					data : {id : row.applyId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){

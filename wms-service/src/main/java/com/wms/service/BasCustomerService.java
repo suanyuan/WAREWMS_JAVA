@@ -268,9 +268,14 @@ public class BasCustomerService extends BaseService {
 		Json json = new Json();
 		BasCustomer basCustomerQuery = new BasCustomer();
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
-		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
-		int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
-		if(num!=0){
+		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
+
+		BasCustomer basCustomerHistory = basCustomerMybatisDao.selectByIdType(basCustomerQuery);
+		//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
+		if(basCustomerHistory!=null){
+			BasSkuHistory basSkuHistory = new BasSkuHistory();
+			BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
+			basSkuHistoryMybatisDao.add(basSkuHistory);
 			basCustomerMybatisDao.delete(basCustomerQuery);
 		}
 
@@ -301,6 +306,21 @@ public class BasCustomerService extends BaseService {
 		BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
 		
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomerMybatisDao.updateBySelective(basCustomer);
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
+
+	public Json editBasCustomerByCustomerId(BasCustomerForm basCustomerForm) {
+		Json json = new Json();
+		BasCustomerQuery basCustomerQuery = new BasCustomerQuery();
+		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
+		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
+		BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(basCustomerQuery);
+		BeanUtils.copyProperties(basCustomerForm, basCustomer);
+
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomerMybatisDao.updateBySelective(basCustomer);
 		json.setSuccess(true);

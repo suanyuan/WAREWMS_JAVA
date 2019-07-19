@@ -30,15 +30,13 @@
 																														valueField: 'id',
 																														textField: 'value',
 																														data: [
-																															{id: 'Y', value: '是'}, 
-																															{id: 'N', value: '否'}
+																															{id: '1', value: '是'},
+																															{id: '0', value: '否'}
 																														]"/>
                             </td>
                             <td>
                                 <a onclick='ezuiCustDataDialogSearch();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-                                <a onclick='selectCust();' id='ezuiBtn_edit' class='easyui-linkbutton'
-                                   data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
                                 <a onclick='ezuiCustToolbarClear();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-remove"'
                                    href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

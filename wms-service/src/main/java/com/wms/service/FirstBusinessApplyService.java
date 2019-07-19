@@ -1,35 +1,26 @@
 package com.wms.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
-import com.wms.entity.FirstBusinessProductApply;
-import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.ProductLine;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.query.FirstBusinessProductApplyQuery;
-import com.wms.query.ProductLineQuery;
+import com.wms.query.*;
 import com.wms.result.FirstBusinessApplyResult;
 import com.wms.result.FirstBusinessProductApplyResult;
 import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.FirstBusinessProductApplyPageVO;
+import com.wms.vo.*;
 import com.wms.vo.form.FirstReviewLogForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.entity.FirstBusinessApply;
-import com.wms.vo.FirstBusinessApplyVO;
-import com.wms.vo.Json;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.FirstBusinessApplyForm;
-import com.wms.query.FirstBusinessApplyQuery;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service("firstBusinessApplyService")
@@ -51,6 +42,16 @@ public class FirstBusinessApplyService extends BaseService {
 	private FirstBusinessProductApplyService firstBusinessProductApplyService;
 	@Autowired
 	private DataPublishService dataPublishService;
+	@Autowired
+	private GspSupplierService gspSupplierService;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private GspOperateLicenseService gspOperateLicenseService;
+	@Autowired
+	private GspProductRegisterService gspProductRegisterService;
+	@Autowired
+	private GspProductRegisterSpecsService gspProductRegisterSpecsService;
 
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
@@ -162,6 +163,25 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public Json addApply(String clientId,String supplierId,String productArr,String productLine){
 		try{
+
+			if("".equals(clientId)){
+				return Json.error("请选择委托客户");
+			}
+
+			if("".equals(supplierId)){
+				return Json.error("请选择供应商");
+			}
+
+			if("".equals(productArr)){
+				return Json.error("请选择首营产品");
+			}
+
+			//检查经营范围
+			Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
+			if(!checkScopeResult.isSuccess()){
+				return checkScopeResult;
+			}
+
 			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 			String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			firstBusinessApply.setApplyId(no);
@@ -201,7 +221,19 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("申请失败");
 	}
 
-	public Json editApply(String id,String clientId,String supplierId,String productArr){
+	public Json editApply(String id,String clientId,String supplierId,String productArr,String productLine){
+		if("".equals(clientId)){
+			return Json.error("请选择委托客户");
+		}
+
+		if("".equals(supplierId)){
+			return Json.error("请选择供应商");
+		}
+
+		if("".equals(productArr)){
+			return Json.error("请选择首营产品");
+		}
+
 		try{
 			FirstBusinessApply oldApply = firstBusinessApplyMybatisDao.queryById(id);
 			if(oldApply!=null){
@@ -224,7 +256,7 @@ public class FirstBusinessApplyService extends BaseService {
 					firstBusinessProductApplyMybatisDao.updateBySelective(firstUpdate);
 				}
 
-				return addApply(clientId,supplierId,productArr,"");
+				return addApply(clientId,supplierId,productArr,productLine);
 			}
 		}catch (Exception e){
 			e.printStackTrace();
@@ -310,5 +342,79 @@ public class FirstBusinessApplyService extends BaseService {
 		return comboboxList;
 	}
 
+	/**
+	 * 更新首营状态
+	 * @param no
+	 * @param state
+	 * @return
+	 */
+	public Json updateFirstState(String no,String state){
+		Long result = firstBusinessApplyMybatisDao.updateBusinessByNo(no,state);
+		if(result>0){
+			return Json.success("更新申请单首营状态成功");
+		}
+		return Json.error("更新申请单首营状态失败");
+	}
+
+	public Json checkBusinessScope(String clientId,String supplierId,String productArr){
+		//委托客户scope是否需要判断
+		Json json = gspSupplierService.getGspSupplierInfo(supplierId);
+		if(!json.isSuccess()){
+			return Json.error("查询不到对应的供应商");
+		}
+		GspSupplierVO supplierVO = (GspSupplierVO)json.getObj();
+		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
+		query.setIsUse(Constant.IS_USE_YES);
+		query.setEnterpriseId(supplierVO.getEnterpriseId());
+		GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
+		if(gspOperateLicense == null){
+			return Json.error("供应商查询不到生产营业执照信息");
+		}
+
+		List<GspOperateDetailVO> operateDetails = gspOperateDetailService.queryOperateDetailByLicense(gspOperateLicense.getOperateId());
+
+		return operateDetailIsRight(operateDetails,productArr);
+	}
+
+	/**
+	 * 经营范围比对
+	 * @param
+	 * @return
+	 */
+	private Json operateDetailIsRight(List<GspOperateDetailVO> operateDetails,String productArr){
+		if(operateDetails == null || productArr.equals("")){
+			return Json.error("没有选择经营范围");
+		}
+
+		String[] productArrList = productArr.split(",");
+		List<String> arrlicense = new ArrayList<>();
+		List<String> arroperate = new ArrayList<>();
+
+		Json productSpec = gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(productArrList[0]);
+		if(productSpec == null){
+			return Json.error("没有查询到对应的产品");
+		}
+		GspProductRegisterSpecsVO spec = (GspProductRegisterSpecsVO)productSpec.getObj();
+
+		List<GspOperateDetailVO> registerDetailVo = gspOperateDetailService.queryOperateDetailByLicense(spec.getProductRegisterNo());
+		if(registerDetailVo == null || registerDetailVo.size() == 0){
+			return Json.error("产品没有关联产品注册证");
+		}
+
+		for(GspOperateDetailVO v : operateDetails){
+			arrlicense.add(v.getOperateId());
+		}
+		for(GspOperateDetailVO v : registerDetailVo){
+			arroperate.add(v.getOperateId());
+		}
+		for(String s : arroperate){
+			if(arrlicense.toString().indexOf(s)==-1){
+				Json.error("供应商营业执照范围和产品注册证范围不匹配");
+			}
+		}
+		return Json.success("");
+
+
+	}
 
 }

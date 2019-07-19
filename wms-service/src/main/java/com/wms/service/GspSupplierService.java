@@ -30,7 +30,7 @@ public class GspSupplierService extends BaseService {
 	@Autowired
 	private GspSupplierDao gspSupplierDao;
 	@Autowired
-	private GspSupplierMybatisDao GspSupplierMybatisDao;
+	private GspSupplierMybatisDao gspSupplierMybatisDao;
 	@Autowired
 	private CommonService commonService;
 	@Autowired
@@ -59,7 +59,7 @@ public class GspSupplierService extends BaseService {
 		criteria.setCondition(query);
 		GspSupplierVO gspSupplierVO = null;
 		List<GspSupplierVO> basGtnVOList = new ArrayList<GspSupplierVO>();
-		List<GspSupplier> basGtnList = GspSupplierMybatisDao.queryByList(criteria);
+		List<GspSupplier> basGtnList = gspSupplierMybatisDao.queryByList(criteria);
 		for (GspSupplier gspSupplier : basGtnList) {
 			gspSupplierVO = new GspSupplierVO();
 			BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
@@ -78,7 +78,7 @@ public class GspSupplierService extends BaseService {
 			basGtnVOList.add(gspSupplierVO);
 		}
 
-		int total = GspSupplierMybatisDao.queryByCount(criteria);
+		int total = gspSupplierMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(basGtnVOList);
 		return datagrid;
@@ -112,7 +112,7 @@ public class GspSupplierService extends BaseService {
 
 		firstReviewLogMybatisDao.add(firstReviewLog);
 
-		GspSupplierMybatisDao.add(gspSupplier);
+		gspSupplierMybatisDao.add(gspSupplier);
 		json.setSuccess(true);
 		return json;
 	}
@@ -121,14 +121,14 @@ public class GspSupplierService extends BaseService {
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
 		//BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
-		GspSupplierMybatisDao.updateBySelective(gspSupplierForm);
+		gspSupplierMybatisDao.updateBySelective(gspSupplierForm);
 		json.setSuccess(true);
 		return json;
 	}
 	public Json getGspSupplierInfo(String supplierId){
 		GspSupplierVO gspSupplierVO = new GspSupplierVO();
 		System.out.println("supplierId==========="+supplierId);
-		GspSupplier gspSupplier = GspSupplierMybatisDao.queryById(supplierId);
+		GspSupplier gspSupplier = gspSupplierMybatisDao.queryById(supplierId);
 		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
 		gspSupplierVO.setEditDate(simpleDateFormat.format(new Date()));
 		gspSupplierVO.setEditId(SfcUserLoginUtil.getLoginUser().getId());
@@ -152,7 +152,7 @@ public class GspSupplierService extends BaseService {
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(id);
 		if(id != null){
-			GspSupplierMybatisDao.deleteNotUse(id);
+			gspSupplierMybatisDao.deleteNotUse(id);
 		}
 		json.setSuccess(true);
 		return json;
@@ -171,6 +171,20 @@ public class GspSupplierService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	/**
+	 * 更新首营状态
+	 * @param no
+	 * @param state
+	 * @return
+	 */
+	public Json updateFirstState(String no,String state){
+		Long result = gspSupplierMybatisDao.updateFirstState(no,state);
+		if(result>0){
+			return Json.success("更新供应商申请单首营状态成功");
+		}
+		return Json.error("更新供应商申请单首营状态失败");
 	}
 
 }
