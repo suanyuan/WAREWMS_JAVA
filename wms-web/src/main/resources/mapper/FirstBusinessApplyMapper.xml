@@ -72,9 +72,6 @@ where 1=1
 	<if test="condition.firstState != null and condition.firstState != ''" >
 		and first_state =  #{condition.firstState}
 	</if>
-	<if test="condition.productline != null and condition.productline != ''" >
-		and productline =  #{condition.productline}
-	</if>
 </trim>
 </sql>
    
@@ -231,5 +228,9 @@ where 1=1
 		${limitClause}
 	</if>
 </select>
-  	
+
+<!-- 根据id，修改记录-->
+<update id="updateBusinessByNo" parameterType="Object" >
+  update first_business_apply set first_state=#{state} where apply_id=#{no}
+ </update>
 </mapper>   

@@ -1,7 +1,7 @@
 package com.wms.mybatis.dao;
 
 
-
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -10,5 +10,6 @@ package com.wms.mybatis.dao;
  */
 public interface GspSupplierMybatisDao extends BaseDao {
     public void deleteNotUse(Object id);
-	
+
+    Long updateFirstState(@Param("no") String no, @Param("state") String state);
 }

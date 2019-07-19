@@ -119,7 +119,7 @@ public class FirstBusinessApplyController {
 	@ResponseBody
 	public Json apply(String id,String clientId,String supplierId,String productArr,String productLine) throws Exception {
 		if(!StringUtils.isEmpty(id)){
-			return firstBusinessApplyService.editApply(id,clientId,supplierId,productArr);
+			return firstBusinessApplyService.editApply(id,clientId,supplierId,productArr,productLine);
 		}
 		return firstBusinessApplyService.addApply(clientId,supplierId,productArr,productLine);
 	}

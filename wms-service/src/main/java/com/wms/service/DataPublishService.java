@@ -216,16 +216,17 @@ public class DataPublishService extends BaseService {
 
             gspCustomerService.editGspCustomer(updateGspCustomer);
 
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
+
             BasCustomerForm form = new BasCustomerForm();
-            form.setCustomerid(customer.getClientId());
+            form.setCustomerid(gspEnterpriseInfo.getEnterpriseNo());
             form.setEnterpriseId(customer.getEnterpriseId());
             form.setOperateType(customer.getOperateType());
             form.setActiveFlag(Constant.IS_USE_NO);
             form.setBillclass(updateGspCustomer.getFirstState());
-            form.setCustomerid(customer.getClientId());
             form.setCustomerType(Constant.CODE_CUS_TYP_OW);
 
-            return basCustomerService.editBasCustomer(form);
+            return basCustomerService.editBasCustomerByCustomerId(form);
         }else if(no.indexOf(Constant.APLSUPNO)!=-1){
             Json json = gspSupplierService.getGspSupplierInfo(no);
             if(!json.isSuccess()){
@@ -247,7 +248,7 @@ public class DataPublishService extends BaseService {
             form.setCustomerid(supplier.getSupplierId());
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
 
-            return basCustomerService.editBasCustomer(form);
+            return basCustomerService.editBasCustomerByCustomerId(form);
 
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 
@@ -263,8 +264,6 @@ public class DataPublishService extends BaseService {
 
             gspReceivingService.editGspReceiving(gspReceivingForm);
 
-            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(gspReceiving.getEnterpriseId());
-
             BasCustomerForm form = new BasCustomerForm();
             form.setCustomerid(gspReceiving.getReceivingId());
             form.setEnterpriseId(gspReceiving.getEnterpriseId());
@@ -273,7 +272,7 @@ public class DataPublishService extends BaseService {
             form.setBillclass(gspReceivingForm.getFirstState());
             form.setCustomerid(gspReceiving.getReceivingId());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
-            return basCustomerService.editBasCustomer(form);
+            return basCustomerService.editBasCustomerByCustomerId(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){
@@ -344,5 +343,25 @@ public class DataPublishService extends BaseService {
         form.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
 
         return basCustomerService.clientAddCustomer(form);
+    }
+
+    /**
+     * 更新单据首营状态
+     * @param no
+     * @param state
+     * @return
+     */
+    public Json updateFirstState(String no,String state){
+        //委托客户数据
+        if(no.indexOf(Constant.APLCUSNO)!=-1){
+            return gspCustomerService.updateFirstState(no,state);
+        }else if(no.indexOf(Constant.APLSUPNO)!=-1){
+            return gspSupplierService.updateFirstState(no,state);
+        }else if(no.indexOf(Constant.APLRECNO)!=-1){
+            return gspReceivingService.updateFirstState(no,state);
+        }else if(no.indexOf(Constant.APLPRONO)!=-1){
+            return firstBusinessApplyService.updateFirstState(no,state);
+        }
+        return Json.error("没有查询到对应的申请单");
     }
 }

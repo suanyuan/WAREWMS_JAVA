@@ -269,6 +269,19 @@ public class GspReceivingService extends BaseService {
 		return gspReceivingMybatisDao.queryById(id);
 	}
 
+	/**
+	 * 更新首营状态
+	 * @param no
+	 * @param state
+	 * @return
+	 */
+	public Json updateFirstState(String no,String state){
+		Long result = gspReceivingMybatisDao.updateFirstState(no,state);
+		if(result>0){
+			return Json.success("更新申请单首营状态成功");
+		}
+		return Json.error("更新申请单首营状态失败");
+	}
 
 /*	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		*//*Json json = null;

@@ -11,7 +11,7 @@
 		<table border="1" style="width: 100%">
 			<tr>
 				<td align="center">
-					<font color="red">系統發生錯誤</font>
+					<font color="red">系统错误</font>
 				</td>
 			</tr>
 			<tr>

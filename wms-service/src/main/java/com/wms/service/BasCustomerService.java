@@ -312,6 +312,21 @@ public class BasCustomerService extends BaseService {
 		json.setMsg("资料处理成功！");
 		return json;
 	}
+
+	public Json editBasCustomerByCustomerId(BasCustomerForm basCustomerForm) {
+		Json json = new Json();
+		BasCustomerQuery basCustomerQuery = new BasCustomerQuery();
+		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
+		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
+		BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(basCustomerQuery);
+		BeanUtils.copyProperties(basCustomerForm, basCustomer);
+
+		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basCustomerMybatisDao.updateBySelective(basCustomer);
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
 	
 	private void validateCustomer(BasCustomerForm basCustomerForm, StringBuilder resultMsg) {
 		BasCustomerQuery basCustomerQuery = new BasCustomerQuery();

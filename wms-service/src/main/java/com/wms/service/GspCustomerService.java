@@ -225,4 +225,18 @@ public class GspCustomerService extends BaseService {
 
 	}
 
+	/**
+	 * 更新首营状态
+	 * @param no
+	 * @param state
+	 * @return
+	 */
+	public Json updateFirstState(String no,String state){
+		Long result = gspCustomerMybatisDao.updateFirstState(no,state);
+		if(result>0){
+			return Json.success("更新委托客户申请单首营状态成功");
+		}
+		return Json.error("更新委托客户申请单首营状态失败");
+	}
+
 }

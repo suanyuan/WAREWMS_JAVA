@@ -41,7 +41,7 @@ $(function() {
 		columns : [[
 			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
             {field: '申请类型',		title: '申请类型',	width: 57,formatter:applyTypeFormatter },
-			{field: 'reviewTypeId',		title: '申请单编号',	width: 57 },
+			{field: 'reviewTypeId',		title: '申请单编号',	width: 80 },
 			{field: 'applyContent',		title: '内容',	width: 57 },
 			{field: 'applyState',		title: '状态',	width: 57 ,
 				formatter:checkStateTypeFormatter
@@ -51,6 +51,7 @@ $(function() {
 			{field: 'checkRemarkQc',		title: '备注',	width: 57 },
 			{field: 'checkIdHead',		title: '负责人审核',	width: 57 },
 			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 ,formatter:dateFormat2},
+            {field: 'checkRemarkHead',		title: '备注',	width: 57 },
 			{field: 'createDate',		title: '创建时间',	width: 57 ,formatter:dateFormat2}
 		]],
         onDblClickRow: function(index,row){
@@ -91,8 +92,37 @@ $(function() {
 });
 
 var edit = function(row){
+    return;
+    var dialogUrl = "";
+    var title = "";
 	if(row){
+        if(row.reviewTypeId.indexOf("CUS")!=-1){
+            title = "委托客户首营申请单";
+            dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail"+"&id="+row.reviewTypeId;
+        }else if(row.reviewTypeId.indexOf("SUP")!=-1){
+            title = "供应商首营申请单";
+            //dialogUrl = sy.bp()+
+            return "供应商";
+        }else if(row.reviewTypeId.indexOf("PRO")!=-1){
+            title = "产品首营申请单";
+            return "产品";
+        }else if(row.reviewTypeId.indexOf("REC")!=-1){
+            title = "收货单位首营申请单";
+            return "收货单位";
+        }
 
+        if(dialogUrl!=""){
+            ezuiDialog = $('#showDialog').dialog({
+                modal : true,
+                title : title,
+                href:dialogUrl,
+                fit:true,
+                cache:false,
+                onClose : function() {
+                    ezuiFormClear(ezuiForm);
+                }
+            })
+		}
 	}
 };
 var doSearch = function(){
@@ -254,5 +284,6 @@ function returnCheck() {
 		<a onclick='doCheck();' class='easyui-linkbutton' href='javascript:void(0);'>通过</a>
 		<a onclick='returnCheck();' class='easyui-linkbutton' href='javascript:void(0);'>驳回</a>
 	</div>
+
 </body>
 </html>

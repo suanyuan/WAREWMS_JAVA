@@ -31,6 +31,8 @@ public class FirstReviewLogService extends BaseService {
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 	@Autowired
 	private DataPublishService dataPublishService;
+	@Autowired
+	private FirstBusinessApplyService firstBusinessApplyService;
 
 	public EasyuiDatagrid<FirstReviewLogVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstReviewLogQuery query) {
 		EasyuiDatagrid<FirstReviewLogVO> datagrid = new EasyuiDatagrid<FirstReviewLogVO>();
@@ -38,7 +40,7 @@ public class FirstReviewLogService extends BaseService {
 		criteria.setCondition(query);
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
-		criteria.setOrderByClause("create_date desc");
+		criteria.setOrderByClause("create_date,check_date_qc,check_date_head desc");
 		List<FirstReviewLog> firstReviewLogList = firstReviewLogMybatisDao.queryByList(criteria);
 		FirstReviewLogVO firstReviewLogVO = null;
 		List<FirstReviewLogVO> firstReviewLogVOList = new ArrayList<FirstReviewLogVO>();
@@ -92,6 +94,12 @@ public class FirstReviewLogService extends BaseService {
 		return json;
 	}
 
+	/**
+	 * 审核通过
+	 * @param id 单号
+	 * @param remark 备注
+ 	 * @return
+	 */
 	public Json checkFirstReview(String id,String remark){
 		try{
 			SfcUserLogin userLogin = SfcUserLoginUtil.getLoginUser();
@@ -110,6 +118,7 @@ public class FirstReviewLogService extends BaseService {
 				updateLog.setCheckDateQc(new Date());
 				updateLog.setCheckRemarkQc(remark);
 				updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
+
 			}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
 				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
 					return Json.error("没有审核权限");
@@ -134,12 +143,18 @@ public class FirstReviewLogService extends BaseService {
 		}
 	}
 
+	/**
+	 * 驳回
+	 * @param id 单号
+	 * @param remark 备注
+	 * @return
+	 */
 	public Json returnCheck(String id,String remark){
 		try{
 			Json json = new Json();
 			FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(id);
 			FirstReviewLog updateLog = new FirstReviewLog();
-			//未审核
+			//质量部审核
 			if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
 				updateLog.setCheckIdQc(SfcUserLoginUtil.getLoginUser().getId());
 				updateLog.setCheckDateQc(new Date());
@@ -149,10 +164,15 @@ public class FirstReviewLogService extends BaseService {
 				updateLog.setCheckDateHead(new Date());
 				updateLog.setCheckRemarkHead(remark);
 			}
+			//更新审核状态
 			updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 			updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 			updateLog.setReviewId(id);
 			firstReviewLogMybatisDao.updateBySelective(updateLog);
+
+			//更新首营申请单状态
+			dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+
 			json.setMsg("操作成功");
 			json.setSuccess(true);
 			return json;

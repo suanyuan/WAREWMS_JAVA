@@ -54,4 +54,6 @@ public class GspSupplierDao extends BaseDao<GspSupplier, String, GspSupplierQuer
 		}
 		return criteria;
 	}
+
+
 }
