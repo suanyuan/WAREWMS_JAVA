@@ -1,8 +1,10 @@
 package com.wms.query;
 
+import lombok.Data;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+@Data
 public class FirstReviewLogQuery implements IQuery {
 
 	private String reviewId;
@@ -20,5 +22,6 @@ public class FirstReviewLogQuery implements IQuery {
 	private String createDateEnd;
 	private String editId;
 	private String editDate;
+	private String applyNo;
 
 }

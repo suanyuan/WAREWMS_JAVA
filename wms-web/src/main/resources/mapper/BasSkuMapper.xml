@@ -41,6 +41,7 @@
 	<result column="replenishrule" property="replenishrule"/>
 	<result column="reservecode" property="reservecode"/>
 
+	<result column="shelflifetype" property="shelflifetype"/>
 	<result column="reservedfield01" property="reservedfield01"/>
 	<result column="reservedfield02" property="reservedfield02"/>
 	<result column="reservedfield03" property="reservedfield03"/>
@@ -207,6 +208,7 @@ where 1=1
 	insert into Bas_Sku(
 	customerid,
 	sku,
+
 	<if test="descrC != null  ">
 		descr_c,
 	</if>
@@ -246,6 +248,52 @@ where 1=1
 	<if test="price != null  ">
 		price,
 	</if>
+	<if test="alternateSku4 != null  ">
+		alternate_sku4,
+	</if>
+	<if test="alternateSku5 != null  ">
+		alternate_sku5,
+	</if>
+	<if test="firstinbounddate != null  ">
+		firstinbounddate,
+	</if>
+	<if test="firstop != null  ">
+		firstop,
+	</if>
+	<if test="qty != null  ">
+		qty,
+	</if>
+	<if test="qtyallocated != null  ">
+		qtyallocated,
+	</if>
+	<if test="qtyonhold != null  ">
+		qtyonhold,
+	</if>
+	<if test="skuGroup2 != null  ">
+		sku_group2,
+	</if>
+	<if test="skuGroup3 != null  ">
+		sku_group3,
+	</if>
+	<if test="skuGroup4 != null  ">
+		sku_group4,
+	</if>
+	<if test="skuGroup5 != null  ">
+		sku_group5,
+	</if>
+	<if test="skuGroup6 != null  ">
+		sku_group6,
+	</if>
+	<if test="skuGroup7 != null  ">
+		sku_group7,
+	</if>
+	<if test="skuGroup8 != null  ">
+		sku_group8,
+	</if>
+	<if test="skuGroup9 != null  ">
+		sku_group9,
+	</if>
+
 	netweight,
 	tare,
 	skuhigh,
@@ -317,14 +365,61 @@ where 1=1
 	<if test="price != null  ">
 		#{price},
 	</if>
+	<if test="alternateSku4 != null  ">
+		#{alternateSku4},
+	</if>
+	<if test="alternateSku5 != null  ">
+		#{alternateSku5},
+	</if>
+	<if test="firstinbounddate != null  ">
+		#{firstinbounddate},
+	</if>
+	<if test="firstop != null  ">
+		#{firstop},
+	</if>
+	<if test="qty != null  ">
+		#{qty},
+	</if>
+	<if test="qtyallocated != null  ">
+		#{qtyallocated},
+	</if>
+	<if test="qtyonhold != null  ">
+		#{qtyonhold},
+	</if>
+	<if test="skuGroup2 != null  ">
+		#{skuGroup2},
+	</if>
+	<if test="skuGroup3 != null  ">
+		#{skuGroup3},
+	</if>
+	<if test="skuGroup4 != null  ">
+		#{skuGroup4},
+	</if>
+	<if test="skuGroup5 != null  ">
+		#{skuGroup5},
+	</if>
+	<if test="skuGroup6 != null  ">
+		#{skuGroup6},
+	</if>
+	<if test="skuGroup7 != null  ">
+		#{skuGroup7},
+	</if>
+	<if test="skuGroup8 != null  ">
+		#{skuGroup8},
+	</if>
+	<if test="skuGroup9 != null  ">
+		#{skuGroup9},
+	</if>
+
+
 	0,
 	0,
 	0,
 	0,
 	0,
-	sysdate,
+	now(),
 	#{addwho},
-	sysdate,
+	now(),
 	#{editwho},
 	'STANDARD',
 	'STANDARD',
@@ -497,7 +592,96 @@ where 1=1
 	<if test="skuGroup9 != null  ">
 		sku_group9=#{skuGroup9},
 	</if>
-	</trim> where customerid=#{customerid} and sku=#{sku}
+		<if test="allocationrule != null  ">
+			allocationrule=#{allocationrule},
+		</if>
+		<if test="defaulthold != null  ">
+			defaulthold=#{defaulthold},
+		</if>
+		<if test="defaultreceivinguom != null  ">
+			defaultreceivinguom=#{defaultreceivinguom},
+		</if>
+		<if test="defaultshipmentuom != null  ">
+			defaultshipmentuom=#{defaultshipmentuom},
+		</if>
+		<if test="firstinbounddate != null  ">
+			firstinbounddate=#{firstinbounddate},
+		</if>
+		<if test="inboundlifedays != null  ">
+			inboundlifedays=#{inboundlifedays},
+		</if>
+		<if test="lotid != null  ">
+			lotid=#{lotid},
+		</if>
+		<if test="netweight != null  ">
+			netweight=#{netweight},
+		</if>
+		<if test="onestepallocation != null  ">
+			onestepallocation=#{onestepallocation},
+		</if>
+		<if test="outboundlifedays != null  ">
+			outboundlifedays=#{outboundlifedays},
+		</if>
+		<if test="overrcvpercentage != null  ">
+			overrcvpercentage=#{overrcvpercentage},
+		</if>
+		<if test="overreceiving != null  ">
+			overreceiving=#{overreceiving},
+		</if>
+		<if test="putawayrule != null  ">
+			putawayrule=#{putawayrule},
+		</if>
+		<if test="qtymax != null  ">
+			qtymax=#{qtymax},
+		</if>
+		<if test="qtymin != null  ">
+			qtymin=#{qtymin},
+		</if>
+		<if test="replenishrule != null  ">
+			replenishrule=#{replenishrule},
+		</if>
+		<if test="reservecode != null  ">
+			reservecode=#{reservecode},
+		</if>
+		<if test="rotationid != null  ">
+			rotationid=#{rotationid},
+		</if>
+		<if test="skuhigh != null  ">
+			skuhigh=#{skuhigh},
+		</if>
+
+		<if test="skulength != null  ">
+			skulength=#{skulength},
+		</if>
+		<if test="skuwidth != null  ">
+			skuwidth=#{skuwidth},
+		</if>
+		<if test="firstop != null  ">
+			firstop=#{firstop},
+		</if>
+		<if test="skuGroup9 != null  ">
+			sku_group9=#{skuGroup9},
+		</if>
+		<if test="softallocationrule != null  ">
+			softallocationrule=#{softallocationrule},
+		</if>
+		<if test="tare != null  ">
+			tare=#{tare},
+		</if>
+		<if test="qty != null  ">
+			qty=#{qty},
+		</if>
+		<if test="qtyallocated != null  ">
+			qtyallocated=#{qtyallocated},
+		</if>
+		<if test="qtyonhold != null  ">
+			qtyonhold=#{qtyonhold},
+		</if>
+
+
+
+
+</trim> where customerid=#{customerid} and sku=#{sku}
 </update>
 
 <!-- 删除记录 -->

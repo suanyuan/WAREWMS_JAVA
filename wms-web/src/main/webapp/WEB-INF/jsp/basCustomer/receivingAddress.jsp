@@ -6,10 +6,8 @@
     var ezuiDatagri;
     $(function() {
 
-
-
     ezuiDatagri = $('#ezuiData').datagrid({
-		url : 'gspReceivingAddressController.do?showDatagrid',
+		url : '/gspReceivingAddressController.do?showDatagrid&receivingId=${receivingId}',
 		method:'POST',
         toolbar : '#toolb',
         title: '',
@@ -46,6 +44,7 @@
 		onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
             ezuiDatagri.datagrid("resize",{height:500});
+
         }
 	});
 

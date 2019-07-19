@@ -47,7 +47,12 @@ var cookieList = function(cookieName) {
 	};
 };
 var ezuiDialogClose = function(dialogId){
-	$(dialogId).dialog('close');
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认关闭？', function(confirm) {
+        if (confirm) {
+            $(dialogId).dialog('close');
+        }
+    })
+
 };
 var ezuiCombotreeReload = function(ezuiForm){
 	$(ezuiForm).find('.easyui-combotree').each(function(){

@@ -49,6 +49,9 @@ public class FirstBusinessApplyService extends BaseService {
 	private ProductLineMybatisDao productLineMybatisDao;
 	@Autowired
 	private FirstBusinessProductApplyService firstBusinessProductApplyService;
+	@Autowired
+	private DataPublishService dataPublishService;
+
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
@@ -88,7 +91,7 @@ public class FirstBusinessApplyService extends BaseService {
 		Json json = new Json();
 		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(firstBusinessApplyForm.getApplyId());
 		BeanUtils.copyProperties(firstBusinessApplyForm, firstBusinessApply);
-		firstBusinessApplyMybatisDao.update(firstBusinessApply);
+		firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 		json.setSuccess(true);
 		return json;
 	}
@@ -157,7 +160,7 @@ public class FirstBusinessApplyService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addApply(String clientId,String supplierId,String productArr){
+	public Json addApply(String clientId,String supplierId,String productArr,String productLine){
 		try{
 			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 			String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -167,6 +170,7 @@ public class FirstBusinessApplyService extends BaseService {
 			firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstBusinessApply.setIsUse(Constant.IS_USE_YES);
 			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+			firstBusinessApply.setProductline(productLine);
 			firstBusinessApplyMybatisDao.add(firstBusinessApply);
 
 			String[] arr = productArr.split(",");
@@ -177,6 +181,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApply.setSpecsId(specsId);
 				firstBusinessProductApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstBusinessProductApply.setIsUse(Constant.IS_USE_YES);
+
 				firstBusinessProductApplyMybatisDao.add(firstBusinessProductApply);
 			}
 
@@ -219,7 +224,7 @@ public class FirstBusinessApplyService extends BaseService {
 					firstBusinessProductApplyMybatisDao.updateBySelective(firstUpdate);
 				}
 
-				return addApply(clientId,supplierId,productArr);
+				return addApply(clientId,supplierId,productArr,"");
 			}
 		}catch (Exception e){
 			e.printStackTrace();
@@ -270,12 +275,12 @@ public class FirstBusinessApplyService extends BaseService {
 			if(!result.isSuccess()){
 				List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
 				if(list!=null && list.size()>0){
-					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString());
+					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString(),"");
 				}
 			}
 
 			//TODO 失效已下发的数据
-			firstReviewLogService.cancelData(id);
+			dataPublishService.cancelData(id);
 
 			return Json.error("操作成功");
 
@@ -288,10 +293,10 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();
-		GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);
 		MybatisCriteria criteria = new MybatisCriteria();
 		ProductLineQuery query = new ProductLineQuery();
-		query.setEnterpriseName(info.getEnterpriseName());
+		query.setEnterpriseName(enterpriseId);
+		query.setIsUse(Constant.IS_USE_YES);
 		criteria.setCondition(query);
 		List<ProductLine> lineList = productLineMybatisDao.queryByList(criteria);
 		if(lineList!=null){

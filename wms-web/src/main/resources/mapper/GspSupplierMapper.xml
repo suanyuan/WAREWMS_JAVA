@@ -19,11 +19,19 @@
 	<result column="enterprise_name" property="enterpriseName"/>
 	<result column="shorthand_name" property="shorthandName"/>
 	<result column="enterprise_type" property="enterpriseType"/>
+
+	<result column="contract_no" property="contractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+
 </resultMap>
        
 <!-- gsp_supplier table all fields -->
 <sql id="Base_Column_List" >
-	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state
+	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state,contractNo,contractUrl,clientContent,clientStartDate,clientEndDate,clientTerm
 </sql>
    
    
@@ -93,8 +101,9 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use)
- values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse})
+  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term
+)
+ values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -106,7 +115,7 @@ where 1=1
 <update id="updateBySelective" parameterType="Object" >
 	update gsp_supplier set 
 	<trim  suffixOverrides="," >
-	<if test="enterpriseId != null  ">
+	<if test="enterpriseId != null  and enterpriseId != '' ">
 		enterprise_id=#{enterpriseId},
 	</if>
 	<if test="isCheck != null  ">
@@ -118,8 +127,32 @@ where 1=1
 	<if test="firstState != null  ">
 		first_state=#{firstState},
 	</if>
-	<if test="createId != null  ">
-		create_id=#{createId},
+
+
+
+    <if test="contractNo != null  ">
+        contract_no=#{contractNo},
+    </if>
+    <if test="contractUrl != null  ">
+        contract_url=#{contractUrl},
+    </if>
+    <if test="clientContent != null  ">
+        client_content=#{clientContent},
+    </if>
+    <if test="clientStartDate != null  ">
+        client_start_date=#{clientStartDate},
+    </if>
+    <if test="clientEndDate != null  ">
+        client_end_date=#{clientEndDate},
+    </if>
+    <if test="clientTerm != null  ">
+        client_term=#{clientTerm},
+    </if>
+
+
+
+    <if test="createId != null  ">
+        create_id=#{createId},
 	</if>
 	<if test="createDate != null  ">
 		create_date=#{createDate},

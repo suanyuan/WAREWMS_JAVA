@@ -6,6 +6,8 @@ public class ProductLineVO {
 
 	private String productLineId;
 	private String enterpriseName;
+	private String descrC;
+	private String customerid;
 	private String name;
 	private String expression;
 	private String createId;
@@ -13,6 +15,22 @@ public class ProductLineVO {
 	private String editId;
 	private Date editDate;
 	private String isUse;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
+
+	public String getDescrC() {
+		return descrC;
+	}
+
+	public void setDescrC(String descrC) {
+		this.descrC = descrC;
+	}
 
 	public String getProductLineId() {
 		return productLineId;

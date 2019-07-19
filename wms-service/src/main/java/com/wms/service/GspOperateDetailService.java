@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wms.constant.Constant;
+import com.wms.entity.GspInstrumentCatalog;
 import com.wms.mybatis.dao.GspOperateDetailMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspOperateLicenseQuery;
@@ -23,6 +24,8 @@ public class GspOperateDetailService extends BaseService {
 
 	@Autowired
 	private GspOperateDetailMybatisDao gspOperateDetailMybatisDao;
+	@Autowired
+	private GspInstrumentCatalogService gspInstrumentCatalogService;
 
 	public EasyuiDatagrid<GspOperateDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, GspOperateDetailQuery query) {
 		EasyuiDatagrid<GspOperateDetailVO> datagrid = new EasyuiDatagrid<GspOperateDetailVO>();
@@ -84,6 +87,10 @@ public class GspOperateDetailService extends BaseService {
 		for(GspOperateDetail g : list){
 			GspOperateDetailVO v = new GspOperateDetailVO();
 			v.setOperateId(g.getOperateId());
+			GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogService.getGspInstrumentCatalog(g.getOperateId());
+			if(gspInstrumentCatalog!=null){
+				v.setOperateName(gspInstrumentCatalog.getInstrumentCatalogName());
+			}
 			voList.add(v);
 		}
 		return voList;

@@ -51,7 +51,7 @@ public class GspSupplierService extends BaseService {
 //		datagrid.setTotal(gspSupplierDao.countAll(query));
 //		datagrid.setRows(gspSupplierVOList);
 //		return datagrid;
-		System.out.println(query.getOperateType()+"========query.getOperateType()=======");
+		//System.out.println(query.getOperateType()+"========query.getOperateType()=======");
 		EasyuiDatagrid<GspSupplierVO> datagrid = new EasyuiDatagrid<GspSupplierVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -69,8 +69,12 @@ public class GspSupplierService extends BaseService {
 			if(gspSupplier.getEditDate()!=null){
 				gspSupplierVO.setEditDate(simpleDateFormat.format(gspSupplier.getEditDate()));
 			}
-
-
+			if(gspSupplier.getClientStartDate()!=null){
+				gspSupplierVO.setClientStartDate(simpleDateFormat.format(gspSupplier.getClientStartDate()));
+			}
+			if(gspSupplier.getClientEndDate()!=null){
+				gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
+			}
 			basGtnVOList.add(gspSupplierVO);
 		}
 
@@ -82,10 +86,13 @@ public class GspSupplierService extends BaseService {
 
     @Transactional
 	public Json addGspSupplier(GspSupplierForm gspSupplierForm) throws Exception {
+
+	    System.out.println("gspSupplierForm.getContractUrl()===="+gspSupplierForm.getContractUrl());
 		Json json = new Json();
 		GspSupplier gspSupplier = new GspSupplier();
 		BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
-		gspSupplier.setSupplierId(commonService.generateSeq(Constant.APLSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+		System.out.println("SfcUserLoginUtil.getLoginUser().getId()========="+SfcUserLoginUtil.getLoginUser().getId());
+		gspSupplier.setSupplierId(commonService.generateSeq(Constant.APLSUPNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
 		FirstReviewLog firstReviewLog = new FirstReviewLog();
 		firstReviewLog.setReviewId(RandomUtil.getUUID());
 		firstReviewLog.setReviewTypeId(gspSupplier.getSupplierId());
@@ -99,7 +106,7 @@ public class GspSupplierService extends BaseService {
 		}else if("0".equals(gspSupplier.getIsCheck())){
 			firstReviewLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);//审核状态 已通过 代码
 			gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);//首营状态 审核通过 代码
-			firstReviewLog.setApplyContent("不需要审核直接下发");
+			firstReviewLog.setApplyContent("无需审核");
 		}
 
 
@@ -124,7 +131,16 @@ public class GspSupplierService extends BaseService {
 		GspSupplier gspSupplier = GspSupplierMybatisDao.queryById(supplierId);
 		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
 		gspSupplierVO.setEditDate(simpleDateFormat.format(new Date()));
-		gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+		gspSupplierVO.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+		if(gspSupplier.getCreateDate()!=null){
+            gspSupplierVO.setCreateDate(simpleDateFormat.format(gspSupplier.getCreateDate()));
+        }
+		if(gspSupplier.getClientStartDate()!=null){
+			gspSupplierVO.setClientStartDate(simpleDateFormat.format(gspSupplier.getClientStartDate()));
+		}
+		if(gspSupplier.getClientEndDate()!=null){
+			gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
+		}
 		//System.out.println("gspSupplierVO============="+gspSupplierVO.getCreateDate()+"==========="+gspSupplierVO.getCreateDate());
 		if(gspSupplier == null){
 			return Json.error("不存在！");

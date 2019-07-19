@@ -28,7 +28,7 @@ $(function() {
 		url : '<c:url value="/basGtnController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [10, 50, 100],
 		fit: true,
@@ -45,9 +45,9 @@ $(function() {
 			{field: 'sku',		title: '产品代码',	width: 400 },
 			{field: 'gtncode',		title: 'GTN码',	width: 400 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
-		},
+		// onDblClickCell: function(index,field,value){
+		// 	edit();
+		// },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');

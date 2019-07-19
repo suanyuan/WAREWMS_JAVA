@@ -125,8 +125,15 @@ public class UserService extends BaseService {
 				subUserList.add(subUser);
 			}
 		}
-        sfcUserVO.setCreateTime(simpleDateFormat.format(sfcUser.getCreateTime()));
-        sfcUserVO.setLastLoginTime(simpleDateFormat.format(sfcUser.getLastLoginTime()));
+		if(sfcUser.getCreateTime()!=null){
+        	sfcUserVO.setCreateTime(simpleDateFormat.format(sfcUser.getCreateTime()));
+		}
+		if(sfcUser.getLastLoginTime()!=null){
+			sfcUserVO.setLastLoginTime(simpleDateFormat.format(sfcUser.getLastLoginTime()));
+		}
+		if(sfcUser.getBirthday()!=null){
+			sfcUserVO.setBirthday(simpleDateFormat.format(sfcUser.getBirthday()));
+		}
 		if(subUserList != null && subUserList.size() > 0){
 			Collections.sort(subUserList, new SfcUserComparator());// 排序
 			
@@ -209,6 +216,7 @@ public class UserService extends BaseService {
 	public Json addUser(UserForm userForm) throws Exception {
 		Json json = new Json();
 		SfcUserLoginQuery sfcUserLoginQuery = new SfcUserLoginQuery();
+		System.out.println(userForm+"=============");
 		sfcUserLoginQuery.setId(userForm.getUserId());
 		sfcUserLoginQuery.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());;
 		SfcUserLogin sfcUserLogin = sfcUserLoginMybatisDao.queryById(sfcUserLoginQuery);

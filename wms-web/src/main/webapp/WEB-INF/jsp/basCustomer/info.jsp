@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <th>企业类型</th>
-            <td><input type='text' data="1" id="enterpriseType" name='enterpriseType' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="enterpriseType" name='enterpriseType' class='easyui-combobox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>联系人</th>
@@ -40,6 +40,8 @@
 <script>
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
+
+
         if(row){
             $.ajax({
                 url : 'gspEnterpriseInfoController.do?getInfo',
@@ -55,6 +57,17 @@
                 }
             });
         }
+
+      //  var enterpriseType = $('#enterpriseType').combobox("getValue");
+        $('#enterpriseType').combobox({
+            url:sy.bp()+'/commonController.do?getEntType',
+            valueField:'id',
+            textField:'value',
+            required:true,
+            onLoadSuccess:function(){
+               // $("#enterpriseType").combobox("select",enterpriseType);
+            }
+        });
 
     })
 </script>

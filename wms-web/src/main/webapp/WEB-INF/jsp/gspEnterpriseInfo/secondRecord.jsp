@@ -28,7 +28,7 @@
                     <th>经营方式</th>
                     <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>备案批准日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200,editable:false'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                     <th>备案发证机关</th>
                     <td><input type='text' value="${gspSecondRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
@@ -40,16 +40,18 @@
                     <th>备案照片</th>
                     <td>
                         <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
-                        <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}">
+                        <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}" atth="fileUpload">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                     </td>
                 </tr>
                 <tr>
                     <th>经营范围</th>
-                    <td colspan="3">
-                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 40px;" data-options='required:true,multiline:true,width:480'/>
+                    <td colspan="2">
+                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350'/>
                     </td>
-                    <td style="text-align: left" colspan="2">
+                    <th>经营范围(已选择)</th>
+                    <td colspan="2">
+                        <input type='text' id="showChose" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350,editable:false'/>
                         <a onclick='selectRecordScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
@@ -73,16 +75,15 @@
 
     var ezuiRecordDatagridDetail;
     var ezuidialogChoseScopeRecord;
-    var choseRowArrRecord = new Array();
     var opType = "add";
 
     $(function () {
         //初始化显示企业信息
-        if($("#ezuiFormInfo input[id='enterpriseName']")){
+        /*if($("#ezuiFormInfo input[id='enterpriseName']")){
             $("#recordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
-        }
+        }*/
 
         //控件初始化
         ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({
@@ -144,7 +145,28 @@
             }
         });
 
+        initChoseText();
+
     })
+
+    function initChoseText() {
+        $.ajax({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
+            data : {
+                "licenseId":'${gspSecondRecord.recordId}'
+            }
+            ,type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                if(result && result.length>0){
+                    var arr = new Array();
+                    for(var i=0;i<result.length;i++){
+                        arr.push(result[i].operateName);
+                    }
+                    $("#ezuiFormRecord input[id='showChose']").textbox("setValue",arr.join(","))
+                }
+            }
+        });
+    }
 
     function doUpload(data) {
         var ajaxFile = new uploadFile({
@@ -160,7 +182,6 @@
                 }
             },
             onload:function(data){
-                console.log(data);
                 $("#recordUrl").val(data.comment);
             },
             onerror:function(er){
@@ -170,7 +191,7 @@
     }
 
     function formatOperAttachmentRecord(value,row,index){
-        return "<a onclick=\"viewUrl('"+row.licenseUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        return "<a onclick=\"viewUrl('"+row.recordUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
     /**
@@ -184,23 +205,24 @@
             height:500,
             href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=secondRecord&id=${gspSecondRecord.recordId}',
             onClose : function() {
-
+                ezuidialogChoseScopeRecord.dialog('clear');
             }
         });
     }
 
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
-        var oldValue = $("#ezuiFormRecord input[id='businessScope']").textbox("getValue");
+        var choseRowArrRecord = new Array();
+        //var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[id='businessScope']").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",row.instrumentCatalogName);
         }
         $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");
@@ -210,8 +232,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#licenseUrl").val()!=""){
-                showUrl($("#licenseUrl").val());
+            if($("#recordUrl").val()!=""){
+                showUrl($("#recordUrl").val());
             }else {
                 showMsg("请上传许可证附件！");
             }

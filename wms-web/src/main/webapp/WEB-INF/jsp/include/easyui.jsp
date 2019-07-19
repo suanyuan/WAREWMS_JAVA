@@ -21,7 +21,7 @@
 	    if(!fileName){
 	        fileName = "";
 		}
-		window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url+"&fileName="+fileName);
+		window.open(sy.bp()+"/fileUpload/"+url);
     }
 
     var firstStateFormatter = function(value,row,index) {
@@ -117,11 +117,12 @@
     var entTypeFormatter = function(value,row,index) {
         switch (value) {
 			case CODE_ENT_TYP.CODE_ENT_TYP_JY : return "经营";
-            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "国内生产";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_GWSC : return "国外生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
             case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
 			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
+			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
         }
     }
 
@@ -152,7 +153,7 @@
             case CHECKSTATE.CHECKSTATE_40 : return "已通过";
             case CHECKSTATE.CHECKSTATE_50 : return "未通过";
         }
-    }
+    };
 
     var applyTypeFormatter = function(value,row,index) {
 	    console.log(row);

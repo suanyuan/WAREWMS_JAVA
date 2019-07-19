@@ -57,7 +57,7 @@ $(function() {
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
 			{field: 'unit',		title: '单位',	width: 25 },
 			{field: 'packingUnit',		title: '包装单位',	width: 25 },
-            {field: 'attachedCardCategory',		title: '附卡类别',	width: 25 },
+            {field: 'attacheCardCategory',		title: '附卡类别',	width: 25 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },
 			// {field: 'conversionRate',		title: '换算率',	width: 25 },
 			// {field: 'llong',		title: '长',	width: 25 },
@@ -340,12 +340,12 @@ var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
         productNameMain : $('#productNameMain').val(),
         productRegisterNo: $('#productRegisterNo').val(),
-		specsName : $('#specsName').val(),
-		productCode : $('#productCode').val(),
-		productName : $('#productName').val(),
-		productRemark : $('#productRemark').val(),
-		productModel : $('#productModel').val(),
-		productionAddress : $('#productionAddress').combobox("getValue"),
+        specsName : $('#specsName').val(),
+        productCode : $('#productCode').val(),
+        productName : $('#productName').val(),
+        productRemark : $('#productRemark').val(),
+        productModel : $('#productModel').val(),
+		productionAddress : $('#productionAddress').val(),
 
         createDateEnd : $("#createDateEnd").datebox("getValue"),
         createDateStart : $("#createDateStart").datebox("getValue"),
@@ -368,8 +368,8 @@ var doSearch = function(){
 		editId : $('#editId').val(),
 		//editDate : $('#editDate').val(),
 		isUse : $('#isUse').combobox('getValue')
-
 	});
+
 };
 
 
@@ -455,7 +455,7 @@ var toImportData = function(){
 							<th>注册证编号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格名称</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>商品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>商品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 						<td>
 
@@ -471,14 +471,7 @@ var toImportData = function(){
 
                         </tr>
 						<tr >
-                            <th>产地</th><td><input type="text" id="productionAddress"  name="productionAddress"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
-																																	editable:false,
-																																	valueField: 'id',
-																																	textField: 'value',
-																																	data: [
-																																	{id: '国内', value: '国内'},
-																																	{id: '国外', value: '国外'}
-																																]"/></td>
+                            <th>产地</th><td><input type="text" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='16' data-options=''/></td>
                             <%--<input type='text' id='productionAddress' class='easyui-textbox' size='16' data-options=''/></td>--%>
                             <th>是否有效</th><td><input type="text" id="isUse"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,

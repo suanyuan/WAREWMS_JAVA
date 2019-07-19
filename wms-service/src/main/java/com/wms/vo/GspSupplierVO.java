@@ -22,6 +22,65 @@ public class GspSupplierVO {
 	private java.lang.String shorthandName;
 	private java.lang.String enterpriseType;
 
+
+	private java.lang.String contractNo;
+	private java.lang.String contractUrl;
+	private java.lang.String clientContent;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String clientStartDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String clientEndDate;
+	private java.lang.String clientTerm;
+
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public String getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(String clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public String getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(String clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
 	public java.lang.String getSupplierId() {
 		return supplierId;
 	}

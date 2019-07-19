@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -24,13 +25,25 @@ public class BasCarrierLicense  implements Serializable {
 
 	private java.util.Date carrierDate;
 
-	private java.util.Date carrierEndDate;
+	private Date carrierEndDate;
 
 	private String clientTerm;
 
 	private String carrierAuthorityPermit;
 
 	private String carrierBusinessScope;
+
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private Date clientStartDate;
+
+	private Date clientEndDate;
+
+
 
 	private String createId;
 

@@ -3,6 +3,8 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class BasCarrierLicenseVO {
 
 	private String carrierLicenseId;
@@ -12,16 +14,89 @@ public class BasCarrierLicenseVO {
 	private String roadAuthorityPermit;
 	private String roadBusinessScope;
 	private String carrierNo;
-	private java.util.Date carrierDate;
-	private java.util.Date carrierEndDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String carrierDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String carrierEndDate;
 	private String clientTerm;
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
 	private String createId;
-	private java.util.Date createDate;
+
+
+	private String contractNo;
+
+	private String contractUrl;
+
+	private String clientContent;
+
+	private Date clientStartDate;
+
+	private Date clientEndDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String createDate;
 	private String editId;
-	private java.util.Date editDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String editDate;
 	private String activeFlag;
+	private String enterpriseName;
+	private String roadNumberlicenseUrl;
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+
+	public String getContractUrl() {
+		return contractUrl;
+	}
+
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
+	}
+
+	public String getClientContent() {
+		return clientContent;
+	}
+
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
+	}
+
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getRoadNumberlicenseUrl() {
+		return roadNumberlicenseUrl;
+	}
+
+	public void setRoadNumberlicenseUrl(String roadNumberlicenseUrl) {
+		this.roadNumberlicenseUrl = roadNumberlicenseUrl;
+	}
 
 	public String getEnterpriseId() {
 		return enterpriseId;
@@ -79,23 +154,6 @@ public class BasCarrierLicenseVO {
 		this.carrierNo = carrierNo;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierDate() {
-		return carrierDate;
-	}
-
-	public void setCarrierDate(java.util.Date carrierDate) {
-		this.carrierDate = carrierDate;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCarrierEndDate() {
-		return carrierEndDate;
-	}
-
-	public void setCarrierEndDate(java.util.Date carrierEndDate) {
-		this.carrierEndDate = carrierEndDate;
-	}
 
 	public String getClientTerm() {
 		return clientTerm;
@@ -129,14 +187,6 @@ public class BasCarrierLicenseVO {
 		this.createId = createId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
 
 	public String getEditId() {
 		return editId;
@@ -146,12 +196,35 @@ public class BasCarrierLicenseVO {
 		this.editId = editId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public String getCarrierDate() {
+		return carrierDate;
+	}
+
+	public void setCarrierDate(String carrierDate) {
+		this.carrierDate = carrierDate;
+	}
+
+	public String getCarrierEndDate() {
+		return carrierEndDate;
+	}
+
+	public void setCarrierEndDate(String carrierEndDate) {
+		this.carrierEndDate = carrierEndDate;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 

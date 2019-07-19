@@ -196,6 +196,7 @@
             valueField:'id',
             textField:'value',
             width:200,
+            required:true,
             onLoadSuccess:function () {
                 $('#isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
             }

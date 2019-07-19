@@ -33,7 +33,7 @@
                     pageList : [50, 100, 200],
                     fit: true,
                     border: false,
-                    fitColumns : true,
+                    fitColumns : false,
                     nowrap: true,
                     striped: true,
                     collapsible:false,
@@ -44,14 +44,14 @@
                     columns : [[
 
                         {field: 'enterpriseId',	hidden:true,width: 92 },
-                        {field: 'receivingId',	title: '申请单号',width: 72 },
+                        {field: 'receivingId',	title: '申请单号',width: 122 },
                        /* {field: 'receivingId',			width: 102 },*/
-                        {field: 'firstState',		title: '首营状态',	width: 62 ,formatter:firstStateFormatter},
-                        {field: 'enterpriseName',		title: '收货单位',	width: 102 },
-                        {field: 'enterpriseNo',		title: '收货单位代码',	width: 91 },
+                        {field: 'firstState',		title: '首营状态',	width: 92 ,formatter:firstStateFormatter},
+                        {field: 'enterpriseName',		title: '收货单位',	width: 122 },
+                        {field: 'enterpriseNo',		title: '收货单位代码',	width: 101 },
                         {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
-                        {field: 'clientId',		title: '货主ID',	width: 52 },
-                        {field: 'supplierId',		title: '供应商',	width: 61  },
+                        {field: 'customerid',		title: '货主ID',	width: 122 },
+                        {field: 'supplierId',		title: '供应商',	width: 161  },
                         {field: 'deliveryAddress',		title: '地址',	width: 92 },
                         {field: 'contacts',		title: '联系人',	width: 82 },
                         {field: 'phone',		title: '联系人电话',	width: 82 },
@@ -65,10 +65,10 @@
                         {field: 'isUse',		title: '是否有效',	width: 62 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isUse == '1' ? '是' : '否';
                             }},
-                        {field: 'createId',		title: '创建人',	width: 52 },
-                        {field: 'createDate',		title: '创建日期',	width: 102 },
-                        {field: 'editId',		title: '修改人',	width: 52 },
-                        {field: 'editDate',		title: '修改日期',	width: 102 },
+                        {field: 'createId',		title: '创建人',	width: 82 },
+                        {field: 'createDate',		title: '创建日期',	width: 132 },
+                        {field: 'editId',		title: '修改人',	width: 82 },
+                        {field: 'editDate',		title: '修改日期',	width: 132 },
 
 
                     ]],
@@ -83,7 +83,8 @@
                             left : event.pageX,
                             top : event.pageY
                         });
-                    },onLoadSuccess:function(data){
+                    },
+					onLoadSuccess:function(data){
                         ajaxBtn($('#menuId').val(), '<c:url value="/gspReceivingController.do?getBtn"/>', ezuiMenu);
                         $(this).datagrid('unselectAll');
                     }
@@ -183,7 +184,6 @@ var row = ezuiDatagrid.datagrid('getSelected');
                          $('#ezuiDialog').dialog({
                              modal : true,
                              title : '<spring:message code="common.dialog.title"/>',
-
                              fit:true,
                              cache:false,
                              buttons : '#ezuiDialogBtn',
@@ -329,7 +329,7 @@ var commit = function(){
                     enterpriseName : $('#enterpriseNa').val(),
                     shorthandName : $('#shortName').val(),
                     enterpriseNo : $('#enterpriseNumber').val(),
-                    clientId : $('#clientId').val(),
+                    customerid : $('#customerid').val(),
                    supplierId : $('#supplierId').val(),
                     /*contacts : $('#contacts').val(),
                    phone : $('#phone').val(),
@@ -441,7 +441,11 @@ function xiafa() {
                         }
                     })
 
-                }else {
+                }else if (res.firstState == '40') {
+                    $.messager.show({
+                        msg : '该项已审核通过，请重新选择!', title : '提示'
+                    });
+				}else {
                     $.messager.show({
                         msg : '该项已在审核中，请重新选择!', title : '提示'
                     });
@@ -481,7 +485,7 @@ function xiafa() {
 						</tr>
 
 						<tr>
-							<th>货主ID</th><td><input type='text' id='clientId' name="clientId" class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主ID</th><td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierId' name="supplierId" class='easyui-textbox' size='16' data-options=''/></td>
 
 						</tr>
@@ -501,10 +505,10 @@ function xiafa() {
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>--%>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='xiafa();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
 					<a onclick='newAdd();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
-					<%--<a onclick='confirmApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认申请</a>--%>
+					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+				<%--<a onclick='confirmApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认申请</a>--%>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

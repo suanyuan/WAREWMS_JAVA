@@ -14,4 +14,5 @@ public class GspEnterpriseTypeDTO implements Serializable {
     private String enterpriseId;
     private String enterPriseType;
     private String firstState;
+    private String applyNo;
 }

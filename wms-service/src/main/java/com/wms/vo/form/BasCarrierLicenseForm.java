@@ -6,14 +6,15 @@ import com.wms.entity.GspCustomer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class BasCarrierLicenseForm {
 
     private GspBusinessLicenseForm gspBusinessLicenseForm;
-    private BasCarrierLicenseForm basCarrierLicenseForm;
-    private GspCustomerForm gspCustomerForm;
     private String carrierLicenseId;
 	private String enterpriseId;
 	private String roadNumber;
+	private String enterpriseName;
 	private String roadNumberTerm;
 	private String roadAuthorityPermit;
 	private String roadBusinessScope;
@@ -30,6 +31,7 @@ public class BasCarrierLicenseForm {
 	private String activeFlag;
 	private String file;
 	private String roadNumberlicenseUrl;
+	private String licenseUrl;
 
 
     private String businessId;
@@ -66,13 +68,73 @@ public class BasCarrierLicenseForm {
 
     private String attachmentUrl;
 
-    public GspCustomerForm getGspCustomerForm() {
-        return gspCustomerForm;
+    private String contractNo;
+
+    private String contractUrl;
+
+    private String clientContent;
+
+    private String clientStartDate;
+
+    private String clientEndDate;
+
+    public String getEnterpriseName() {
+        return enterpriseName;
     }
 
-    public void setGspCustomerForm(GspCustomerForm gspCustomerForm) {
-        this.gspCustomerForm = gspCustomerForm;
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getContractUrl() {
+        return contractUrl;
+    }
+
+    public void setContractUrl(String contractUrl) {
+        this.contractUrl = contractUrl;
+    }
+
+    public String getClientContent() {
+        return clientContent;
+    }
+
+    public void setClientContent(String clientContent) {
+        this.clientContent = clientContent;
+    }
+
+    public String getClientStartDate() {
+        return clientStartDate;
+    }
+
+    public void setClientStartDate(String clientStartDate) {
+        this.clientStartDate = clientStartDate;
+    }
+
+    public String getClientEndDate() {
+        return clientEndDate;
+    }
+
+    public void setClientEndDate(String clientEndDate) {
+        this.clientEndDate = clientEndDate;
+    }
+
+
 
     public GspBusinessLicenseForm getGspBusinessLicenseForm() {
         return gspBusinessLicenseForm;
@@ -82,13 +144,7 @@ public class BasCarrierLicenseForm {
         this.gspBusinessLicenseForm = gspBusinessLicenseForm;
     }
 
-    public BasCarrierLicenseForm getBasCarrierLicenseForm() {
-        return basCarrierLicenseForm;
-    }
 
-    public void setBasCarrierLicenseForm(BasCarrierLicenseForm basCarrierLicenseForm) {
-        this.basCarrierLicenseForm = basCarrierLicenseForm;
-    }
 
     public String getFile() {
         return file;

@@ -189,8 +189,8 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>代码：</th><td><input type='text' id='clientNoQuery' class='easyui-textbox' data-options=''/></td>
-							<th>简称：</th><td><input type='text' id='clientNameQuery' class='easyui-textbox' data-options=''/></td>
+							<th>企业代码：</th><td><input type='text' id='clientNoQuery' class='easyui-textbox' data-options=''/></td>
+							<th>企业简称：</th><td><input type='text' id='clientNameQuery' class='easyui-textbox' data-options=''/></td>
 							<th>企业：</th>
                             <td>
                                 <input type='text' id='enterpriseIdQuery' style="width: 100px;"/>

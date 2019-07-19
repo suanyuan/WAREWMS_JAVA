@@ -47,10 +47,10 @@ $(function() {
 				formatter:checkStateTypeFormatter
 			},
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 57 },
-			{field: 'checkDateQc',		title: '审核时间',	width: 57 },
+			{field: 'checkDateQc',		title: '审核时间',	width: 57 ,formatter:dateFormat2},
 			{field: 'checkRemarkQc',		title: '备注',	width: 57 },
 			{field: 'checkIdHead',		title: '负责人审核',	width: 57 },
-			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 },
+			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 ,formatter:dateFormat2},
 			{field: 'createDate',		title: '创建时间',	width: 57 ,formatter:dateFormat2}
 		]],
         onDblClickRow: function(index,row){
@@ -66,7 +66,13 @@ $(function() {
 			});
 		},onLoadSuccess:function(data){
 
-		}
+		},onClickRow:function (index,row) {
+			if(row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50){
+				$("#doCheck").linkbutton("disable");
+			}else{
+                $("#doCheck").linkbutton("enable");
+			}
+        }
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
@@ -90,11 +96,17 @@ var edit = function(row){
 	}
 };
 var doSearch = function(){
+    //applyType
+	//applyNo
+	//applyState
+	//createDateBegin
+	//createDateEnd
 	ezuiDatagrid.datagrid('load', {
-		reviewTypeId : $('#reviewTypeId').val(),
-		applyState : $('#applyState').val(),
-		createDateBegin : $('#createDateBegin').val(),
-        createDateEnd : $('#createDateEnd').val()
+		reviewTypeId : $('#applyType').combobox("getValue"),
+        applyNo : $('#applyNo').textbox("getValue"),
+        applyState : $("#applyState").textbox("getValue"),
+		createDateBegin : $('#createDateBegin').textbox("getValue"),
+        createDateEnd : $('#createDateEnd').textbox("getValue")
 	});
 };
 
@@ -129,13 +141,9 @@ function doCheck() {
                     success : function(result){
                         var msg='';
                         try{
-                            if(result.success){
-                                msg = result.msg;
-                                ezuiDatagrid.datagrid('reload');
-                                ezuiDialog.dialog('close');
-                            }else{
-                                msg = '<font color="red">' + result.msg + '</font>';
-                            }
+                            msg = result.msg;
+                            ezuiDatagrid.datagrid('reload');
+                            ezuiDialog.dialog('close');
                         }catch (e) {
                             //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
                             msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
@@ -201,10 +209,23 @@ function returnCheck() {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<!-- <th>类型</th><td><input type='text' id='reviewTypeId' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>状态</th><td><input type='text' id='applyState' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>申请类型</th>
+							<td>
+								<select id="applyType" class="easyui-combobox" data-options='width:120'>
+									<option value=""></option>
+									<option value="CUS">委托客户</option>
+									<option value="SUP">供应商</option>
+									<option value="PRO">产品</option>
+									<option value="REC">收货单位</option>
+								</select>
+							</td>
+							<th>申请单号</th>
+							<td>
+								<input type='text' id='applyNo' class='easyui-textbox' data-options='width:150'/>
+							</td>
+							<th>状态</th><td><input type='text' id='applyState' class='easyui-textbox' data-options='width:150'/></td>
+							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' data-options='width:150'/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' data-options='width:150'/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -213,7 +234,7 @@ function returnCheck() {
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
+					<a id="doCheck" onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

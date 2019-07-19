@@ -19,7 +19,7 @@ $(function() {
 		url : '<c:url value="/firstBusinessApplyController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '首营审核',
+		title: '查询',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -181,7 +181,7 @@ var doSearch = function(){
 
 var doConfirm = function () {
     var row = ezuiDatagrid.datagrid('getSelected');
-    if(row && row.length>0){
+    if(row){
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
             if(confirm){
                 $.ajax({

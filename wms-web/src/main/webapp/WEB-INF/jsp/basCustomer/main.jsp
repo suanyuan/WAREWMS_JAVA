@@ -17,6 +17,8 @@ var ezuiDatagrid;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+
+
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 		method:'POST',
@@ -26,7 +28,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: false,
 		striped: true,
 		collapsible:false,
@@ -36,7 +38,7 @@ $(function() {
 		idField : 'customerid',
 		columns : [[
 
-            {field: 'customerType',		title: '客户类型 ',	width: 20,formatter:function(value,rowData,rowIndex){
+            {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';
 					}else if (rowData.customerType=='VE'){
@@ -53,30 +55,30 @@ $(function() {
                         return rowData.customerType='主体';
 					}
                 } },
-            {field: 'activeFlag',		title: '是否合作 ',	width: 20,formatter:function(value,rowData,rowIndex){
+            {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            {field: 'customerid',		title: '客户代码',	width: 20 },
-            {field: 'descrC',		title: '客户名称',	width: 20 },
-            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 30 },
-            {field: 'shorthandName',		title: '简称 ',	width: 15 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 20 },
-            {field: 'contacts',		title: '联系人 ',	width: 15 },
-            {field: 'contactsPhone',		title: '联系人电话 ',	width: 30 },
-            {field: 'remark',		title: '备注 ',	width: 15 },
+            {field: 'customerid',		title: '客户代码',	width: 120 },
+            {field: 'descrC',		title: '客户名称',	width: 100 },
+            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 90 },
+            {field: 'shorthandName',		title: '简称 ',	width: 55 },
+            {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
+            {field: 'contacts',		title: '联系人 ',	width: 75 },
+            {field: 'contactsPhone',		title: '联系人电话 ',	width: 95 },
+			{field: 'supContractNo',		title: '合同编号 ',	width: 120 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-			{field: 'supContractNo',		title: '合同编号 ',	width: 20 },
-			{field: 'contractUrl',		title: '合同文件 ',	width: 20 },
-			{field: 'clientContent',		title: '委托内容 ',	width: 20 },
-			{field: 'clientStartDate',		title: '委托开始时间 ',	width: 30 },
-			{field: 'clientEndDate',		title: '委托结束时间 ',	width: 30 },
-			/*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
-				return rowData.overreceiving == 'Y' ? '是' : '否';
+            {field: 'contractUrl',		title: '合同文件 ',	width: 120 },
+            {field: 'clientContent',		title: '委托内容 ',	width: 120 },
+            {field: 'clientStartDate',		title: '委托开始时间 ',	width: 130 },
+            {field: 'clientEndDate',		title: '委托结束时间 ',	width: 130 },
+			{field: 'clientTerm',		title: '委托期限',	width: 120 },
+            /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
+                return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-			{field: 'clientTerm',		title: '委托期限',	width: 20 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 40},
+            {field: 'remark',		title: '备注 ',	width: 85 },
+            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 90},
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -125,6 +127,9 @@ var add = function(){
 	ezuiDialog.dialog('open');
 };
 
+
+
+
 /* 编辑 */
 var edit = function(){
 	processType = 'edit';
@@ -155,7 +160,8 @@ var edit = function(){
             clientTerm:row.clientTerm,
             isChineseLabel:row.isChineseLabel,
 			activeFlag : row.activeFlag,
-			receivingAddressId: row.receivingAddressId
+			receivingAddressId: row.receivingAddressId,
+            enterpriseId: row.enterpriseId
 
 			/*address1 : row.address1,
 			contact1 : row.contact1,
@@ -163,7 +169,17 @@ var edit = function(){
 			overreceiving : row.overreceiving,
 			overrcvpercentage : row.overrcvpercentage*/
 		});
-		ezuiDialog.dialog('open');
+        $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+           /* href: '/basCustomerController.do?toDetail',*/
+            fit:true,
+            cache:false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('refresh','/basCustomerController.do?toDetail&enterpriseId='+row.enterpriseId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -370,6 +386,37 @@ var doSearch = function(){
 	});
 };
 
+
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        param.put("descrC", $('#descrC').val());
+        param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        param.put("customerid", $('#customerid').val());
+        param.put("customerType", $('#customerType').combobox('getValue'));
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportBasCustomerDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+/* 导出end */
 </script>
 </head>
 <body>
@@ -416,7 +463,10 @@ var doSearch = function(){
 							<%--<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
 							<td >
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
 							</td>
 						</tr>
 
@@ -449,7 +499,7 @@ var doSearch = function(){
 					<%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
-					<a onclick='goon();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.goon'/></a>
+					<a onclick='goon();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.goon'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -568,10 +618,10 @@ var doSearch = function(){
 			</table>&ndash;%&gt;
 		</form>--%>
 	</div>
-	<div id='ezuiDialogBtn'>
+	<%--<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-	</div>
+	</div>--%>
 	<%--<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>

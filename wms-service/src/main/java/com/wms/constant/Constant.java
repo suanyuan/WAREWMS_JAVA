@@ -45,16 +45,23 @@ public class Constant {
     public static final String CODE_CUS_TYP_WH = "WH";//主体
 
 
+// 权限
+    public static final String USER_GRADE_NONE = "00";
+    public static final String USER_GRADE_QC = "10";
+    public static final String USER_GRADE_HEAD = "01";
+    public static final String USER_GRADE_QCHEAD = "11";
+
+
 
 //是否
     public static final String CODE_YES_OR_YES = "1";
     public static final String CODE_YES_OR_NO = "0";
 
 //Seq
-    public static final String APLCUSNO = "APLCUSNO";//委托客户申请
-    public static final String APLSUPNO = "APLSUPNO";//供应商申请
-    public static final String APLRECNO = "APLRECNO";//收货单位申请
-    public static final String APLPRONO = "APLPRONO";//产品申请
+    public static final String APLCUSNO = "APCUS";//委托客户申请
+    public static final String APLSUPNO = "APSUP";//供应商申请
+    public static final String APLRECNO = "APREC";//收货单位申请
+    public static final String APLPRONO = "APPRO";//产品申请
 
     public static final String BASRECNO = "BASRECNO";//收货单位客户档案编号
     public static final String BASSUPNO = "BASSUPNO";//供应商客户档案编号

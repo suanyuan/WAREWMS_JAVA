@@ -19,7 +19,8 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 	private String userName;
 	private String gender;
 	private Byte enable;
-	private Date birthday;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String birthday;
 	private SfcCountry country;
 	private String email;
 
@@ -107,12 +108,11 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 		this.enable = enable;
 	}
 
-	@JsonSerialize(using = JsonDateSerializer.class)
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 

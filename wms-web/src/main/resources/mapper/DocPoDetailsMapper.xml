@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocPoDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocPoDetails" >
+	<result column="pono" property="pono"/>
+	<result column="polineno" property="polineno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="skudescrc" property="skudescrc"/>
+	<result column="skudescre" property="skudescre"/>
+	<result column="orderedqty" property="orderedqty"/>
+	<result column="orderedqtyEach" property="orderedqtyEach"/>
+	<result column="receivedqty" property="receivedqty"/>
+	<result column="receivedqtyEach" property="receivedqtyEach"/>
+	<result column="receivedtime" property="receivedtime"/>
+	<result column="uom" property="uom"/>
+	<result column="packid" property="packid"/>
+	<result column="totalcubic" property="totalcubic"/>
+	<result column="totalgrossweight" property="totalgrossweight"/>
+	<result column="totalnetweight" property="totalnetweight"/>
+	<result column="totalprice" property="totalprice"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="notes" property="notes"/>
+	<result column="lotatt18" property="lotatt18"/>
+	<result column="lotatt17" property="lotatt17"/>
+	<result column="lotatt16" property="lotatt16"/>
+	<result column="lotatt15" property="lotatt15"/>
+	<result column="lotatt14" property="lotatt14"/>
+	<result column="lotatt13" property="lotatt13"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="polinestatus" property="polinestatus"/>
+	<!--附加-->
+	<result column="polinestatusName" property="polinestatusName"/>
+	<result column="dEdi01" property="dEdi01"/>
+	<result column="dEdi02" property="dEdi02"/>
+	<result column="dEdi03" property="dEdi03"/>
+	<result column="dEdi04" property="dEdi04"/>
+	<result column="dEdi05" property="dEdi05"/>
+	<result column="dEdi06" property="dEdi06"/>
+	<result column="dEdi07" property="dEdi07"/>
+	<result column="dEdi08" property="dEdi08"/>
+	<result column="dEdi09" property="dEdi09"/>
+	<result column="dEdi10" property="dEdi10"/>
+	<result column="qtyreleased" property="qtyreleased"/>
+</resultMap>
+       
+<!-- doc_po_details table all fields -->
+<sql id="Base_Column_List" >
+	 pono,polineno,customerid,sku,skudescrc,skudescre,orderedqty,orderedqtyEach,receivedqty,receivedqtyEach,receivedtime,uom,packid,totalcubic,totalgrossweight,totalnetweight,totalprice,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,notes,lotatt18,lotatt17,lotatt16,lotatt15,lotatt14,lotatt13,lotatt12,polinestatus,dEdi01,dEdi02,dEdi03,dEdi04,dEdi05,dEdi06,dEdi07,dEdi08,dEdi09,dEdi10,qtyreleased
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.pono != null and condition.pono != ''" >
+	    and pono =  #{condition.pono}
+	</if>
+	<if test="condition.polineno != null and condition.polineno != ''" >
+	    and polineno =  #{condition.polineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.skudescrc != null and condition.skudescrc != ''" >
+	    and skudescrc =  #{condition.skudescrc}
+	</if>
+	<if test="condition.skudescre != null and condition.skudescre != ''" >
+	    and skudescre =  #{condition.skudescre}
+	</if>
+	<if test="condition.orderedqty != null and condition.orderedqty != ''" >
+	    and orderedqty =  #{condition.orderedqty}
+	</if>
+	<if test="condition.orderedqtyEach != null and condition.orderedqtyEach != ''" >
+	    and orderedqtyEach =  #{condition.orderedqtyEach}
+	</if>
+	<if test="condition.receivedqty != null and condition.receivedqty != ''" >
+	    and receivedqty =  #{condition.receivedqty}
+	</if>
+	<if test="condition.receivedqtyEach != null and condition.receivedqtyEach != ''" >
+	    and receivedqtyEach =  #{condition.receivedqtyEach}
+	</if>
+	<if test="condition.receivedtime != null" >
+	    and receivedtime =  #{condition.receivedtime}
+	</if>
+	<if test="condition.uom != null and condition.uom != ''" >
+	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<if test="condition.totalnetweight != null and condition.totalnetweight != ''" >
+	    and totalnetweight =  #{condition.totalnetweight}
+	</if>
+	<if test="condition.totalprice != null and condition.totalprice != ''" >
+	    and totalprice =  #{condition.totalprice}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.addtime != null" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+	    and lotatt06 =  #{condition.lotatt06}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt09 != null and condition.lotatt09 != ''" >
+	    and lotatt09 =  #{condition.lotatt09}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.lotatt18 != null and condition.lotatt18 != ''" >
+	    and lotatt18 =  #{condition.lotatt18}
+	</if>
+	<if test="condition.lotatt17 != null and condition.lotatt17 != ''" >
+	    and lotatt17 =  #{condition.lotatt17}
+	</if>
+	<if test="condition.lotatt16 != null and condition.lotatt16 != ''" >
+	    and lotatt16 =  #{condition.lotatt16}
+	</if>
+	<if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+	    and lotatt15 =  #{condition.lotatt15}
+	</if>
+	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+	    and lotatt14 =  #{condition.lotatt14}
+	</if>
+	<if test="condition.lotatt13 != null and condition.lotatt13 != ''" >
+	    and lotatt13 =  #{condition.lotatt13}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and lotatt12 =  #{condition.lotatt12}
+	</if>
+	<if test="condition.polinestatus != null and condition.polinestatus != ''" >
+	    and polinestatus =  #{condition.polinestatus}
+	</if>
+	<if test="condition.dEdi01 != null and condition.dEdi01 != ''" >
+	    and dEdi01 =  #{condition.dEdi01}
+	</if>
+	<if test="condition.dEdi02 != null and condition.dEdi02 != ''" >
+	    and dEdi02 =  #{condition.dEdi02}
+	</if>
+	<if test="condition.dEdi03 != null and condition.dEdi03 != ''" >
+	    and dEdi03 =  #{condition.dEdi03}
+	</if>
+	<if test="condition.dEdi04 != null and condition.dEdi04 != ''" >
+	    and dEdi04 =  #{condition.dEdi04}
+	</if>
+	<if test="condition.dEdi05 != null and condition.dEdi05 != ''" >
+	    and dEdi05 =  #{condition.dEdi05}
+	</if>
+	<if test="condition.dEdi06 != null and condition.dEdi06 != ''" >
+	    and dEdi06 =  #{condition.dEdi06}
+	</if>
+	<if test="condition.dEdi07 != null and condition.dEdi07 != ''" >
+	    and dEdi07 =  #{condition.dEdi07}
+	</if>
+	<if test="condition.dEdi08 != null and condition.dEdi08 != ''" >
+	    and dEdi08 =  #{condition.dEdi08}
+	</if>
+	<if test="condition.dEdi09 != null and condition.dEdi09 != ''" >
+	    and dEdi09 =  #{condition.dEdi09}
+	</if>
+	<if test="condition.dEdi10 != null and condition.dEdi10 != ''" >
+	    and dEdi10 =  #{condition.dEdi10}
+	</if>
+	<if test="condition.qtyreleased != null and condition.qtyreleased != ''" >
+	    and qtyreleased =  #{condition.qtyreleased}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_po_details(pono,polineno,customerid,sku,skudescrc,skudescre,orderedqty,orderedqtyEach,receivedqty,receivedqtyEach,receivedtime,uom,packid,totalcubic,totalgrossweight,totalnetweight,totalprice,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,notes,lotatt18,lotatt17,lotatt16,lotatt15,lotatt14,lotatt13,lotatt12,polinestatus,dEdi01,dEdi02,dEdi03,dEdi04,dEdi05,dEdi06,dEdi07,dEdi08,dEdi09,dEdi10,qtyreleased)
+ values(#{pono},#{polineno},#{customerid},#{sku},#{skudescrc},#{skudescre},#{orderedqty},#{orderedqtyEach},#{receivedqty},#{receivedqtyEach},#{receivedtime},#{uom},#{packid},#{totalcubic},#{totalgrossweight},#{totalnetweight},#{totalprice},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},now(),#{addwho},now(),#{editwho},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{notes},#{lotatt18},#{lotatt17},#{lotatt16},#{lotatt15},#{lotatt14},#{lotatt13},#{lotatt12},#{polinestatus},#{dEdi01},#{dEdi02},#{dEdi03},#{dEdi04},#{dEdi05},#{dEdi06},#{dEdi07},#{dEdi08},#{dEdi09},#{dEdi10},#{qtyreleased})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_po_details set polineno=#{polineno},customerid=#{customerid},sku=#{sku},skudescrc=#{skudescrc},skudescre=#{skudescre},orderedqty=#{orderedqty},orderedqtyEach=#{orderedqtyEach},receivedqty=#{receivedqty},receivedqtyEach=#{receivedqtyEach},receivedtime=#{receivedtime},uom=#{uom},packid=#{packid},totalcubic=#{totalcubic},totalgrossweight=#{totalgrossweight},totalnetweight=#{totalnetweight},totalprice=#{totalprice},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},notes=#{notes},lotatt18=#{lotatt18},lotatt17=#{lotatt17},lotatt16=#{lotatt16},lotatt15=#{lotatt15},lotatt14=#{lotatt14},lotatt13=#{lotatt13},lotatt12=#{lotatt12},polinestatus=#{polinestatus},dEdi01=#{dEdi01},dEdi02=#{dEdi02},dEdi03=#{dEdi03},dEdi04=#{dEdi04},dEdi05=#{dEdi05},dEdi06=#{dEdi06},dEdi07=#{dEdi07},dEdi08=#{dEdi08},dEdi09=#{dEdi09},dEdi10=#{dEdi10},qtyreleased=#{qtyreleased} where pono=#{pono}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_po_details set 
+	<trim  suffixOverrides="," >
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="skudescrc != null  ">
+		skudescrc=#{skudescrc},
+	</if>
+	<if test="skudescre != null  ">
+		skudescre=#{skudescre},
+	</if>
+	<if test="orderedqty != null  ">
+		orderedqty=#{orderedqty},
+	</if>
+	<if test="orderedqtyEach != null  ">
+		orderedqtyEach=#{orderedqtyEach},
+	</if>
+	<if test="receivedqty != null  ">
+		receivedqty=#{receivedqty},
+	</if>
+	<if test="receivedqtyEach != null  ">
+		receivedqtyEach=#{receivedqtyEach},
+	</if>
+	<if test="receivedtime != null  ">
+		receivedtime=#{receivedtime},
+	</if>
+	<if test="uom != null  ">
+		uom=#{uom},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="totalcubic != null  ">
+		totalcubic=#{totalcubic},
+	</if>
+	<if test="totalgrossweight != null  ">
+		totalgrossweight=#{totalgrossweight},
+	</if>
+	<if test="totalnetweight != null  ">
+		totalnetweight=#{totalnetweight},
+	</if>
+	<if test="totalprice != null  ">
+		totalprice=#{totalprice},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="lotatt01 != null  ">
+		lotatt01=#{lotatt01},
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02=#{lotatt02},
+	</if>
+	<if test="lotatt03 != null  ">
+		lotatt03=#{lotatt03},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="lotatt05 != null  ">
+		lotatt05=#{lotatt05},
+	</if>
+	<if test="lotatt06 != null  ">
+		lotatt06=#{lotatt06},
+	</if>
+	<if test="lotatt07 != null  ">
+		lotatt07=#{lotatt07},
+	</if>
+	<if test="lotatt08 != null  ">
+		lotatt08=#{lotatt08},
+	</if>
+	<if test="lotatt09 != null  ">
+		lotatt09=#{lotatt09},
+	</if>
+	<if test="lotatt10 != null  ">
+		lotatt10=#{lotatt10},
+	</if>
+	<if test="lotatt11 != null  ">
+		lotatt11=#{lotatt11},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="lotatt18 != null  ">
+		lotatt18=#{lotatt18},
+	</if>
+	<if test="lotatt17 != null  ">
+		lotatt17=#{lotatt17},
+	</if>
+	<if test="lotatt16 != null  ">
+		lotatt16=#{lotatt16},
+	</if>
+	<if test="lotatt15 != null  ">
+		lotatt15=#{lotatt15},
+	</if>
+	<if test="lotatt14 != null  ">
+		lotatt14=#{lotatt14},
+	</if>
+	<if test="lotatt13 != null  ">
+		lotatt13=#{lotatt13},
+	</if>
+	<if test="lotatt12 != null  ">
+		lotatt12=#{lotatt12},
+	</if>
+	<if test="polinestatus != null  ">
+		polinestatus=#{polinestatus},
+	</if>
+	<if test="dEdi01 != null  ">
+		dEdi01=#{dEdi01},
+	</if>
+	<if test="dEdi02 != null  ">
+		dEdi02=#{dEdi02},
+	</if>
+	<if test="dEdi03 != null  ">
+		dEdi03=#{dEdi03},
+	</if>
+	<if test="dEdi04 != null  ">
+		dEdi04=#{dEdi04},
+	</if>
+	<if test="dEdi05 != null  ">
+		dEdi05=#{dEdi05},
+	</if>
+	<if test="dEdi06 != null  ">
+		dEdi06=#{dEdi06},
+	</if>
+	<if test="dEdi07 != null  ">
+		dEdi07=#{dEdi07},
+	</if>
+	<if test="dEdi08 != null  ">
+		dEdi08=#{dEdi08},
+	</if>
+	<if test="dEdi09 != null  ">
+		dEdi09=#{dEdi09},
+	</if>
+	<if test="dEdi10 != null  ">
+		dEdi10=#{dEdi10},
+	</if>
+	<if test="qtyreleased != null  ">
+		qtyreleased=#{qtyreleased},
+	</if>
+	</trim>
+	where pono=#{pono}
+	<if test="polineno!=null and polineno!=''">
+		and polineno=#{polineno}
+	</if>
+
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_po_details where pono = #{pono} and polineno=#{polineno}
+</delete>
+ 
+<!-- 根据id查询 采购订单 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_po_details where pono = #{pono} and polineno=#{polineno}
+</select>
+
+<!-- 采购订单 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_po_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询采购订单列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT * FROM (
+	SELECT a.*, b.codename_c AS polinestatusName,(@rowNum :=@rowNum + 1) AS row_num
+	FROM (SELECT
+	<include refid="Base_Column_List"/>
+	FROM  `doc_po_details`
+	<include refid="Example_Where_Clause"/>
+	) AS a,
+	Bas_Codes b,
+	(SELECT(@rowNum := 0)) e
+	WHERE a.polinestatus = b.code
+	AND b.codeid = 'PO_STS'
+	) AS t
+	WHERE 1 = 1
+
+	ORDER BY `addtime` DESC
+	<!--<if test="orderByClause != null and orderByClause != ''" >-->
+       <!--order by  ${orderByClause}-->
+    <!--</if>-->
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!--入库单明细行号-->
+	<select id="getAsnlinenoById" resultType="java.lang.Long"  parameterType="Object">
+	select ifnull(max(polineno),0) from Doc_Po_Details where pono = #{pono,jdbcType=VARCHAR}
+</select>
+  	
+</mapper>   

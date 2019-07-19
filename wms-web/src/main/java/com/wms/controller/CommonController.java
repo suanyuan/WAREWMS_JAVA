@@ -32,8 +32,8 @@ import java.util.*;
 @RequestMapping("commonController")
 public class CommonController {
 
-    //private static final String uploadUrl = "/Users/quendi/fileUpload";
-    private static final String uploadUrl = "/root/uploadDir";
+    private static final String uploadUrl = "/Users/quendi/fileUpload";
+    //private static final String uploadUrl = "/root/uploadDir";
 
     @Autowired
     private BasCodesService basCodesService;
@@ -56,10 +56,13 @@ public class CommonController {
             stream = file.getInputStream();
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
+
             File targetFile = new File(uploadUrl+File.separator+file_name);
+            System.out.println("targetFile=="+targetFile);
             Files.write(buffer,targetFile);
             uploadResult.setSuccess(true);
             uploadResult.setComment(file_name);
+
         } catch (IOException e) {
             uploadResult.setSuccess(false);
             uploadResult.setComment("uploadFile 上传文件 error");
@@ -94,7 +97,7 @@ public class CommonController {
             response.setHeader("Content-Length", String.valueOf(fileLength));
             bis = new BufferedInputStream(new FileInputStream(file));
             bos = new BufferedOutputStream(response.getOutputStream());
-            byte[] buff = new byte[2048];
+            byte[] buff = new byte[4096];
             int bytesRead;
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
                 bos.write(buff, 0, bytesRead);

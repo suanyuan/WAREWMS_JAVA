@@ -24,6 +24,7 @@ public class GspSupplierQuery implements IQuery {
 	private String enterpriseName;
 	private String shorthandName;
 
+
 	public String getEnterpriseNo() {
 		return enterpriseNo;
 	}

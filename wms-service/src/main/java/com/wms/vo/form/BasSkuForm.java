@@ -76,6 +76,7 @@ public class BasSkuForm {
 	private java.math.BigDecimal qty;
 	private java.math.BigDecimal qtyallocated;
 	private java.math.BigDecimal qtyonhold;
+	private String firstop;
 
 	public java.lang.String getCustomerid() {
 		return customerid;
@@ -646,5 +647,13 @@ public class BasSkuForm {
 
 	public void setSkuGroup9(String skuGroup9) {
 		this.skuGroup9 = skuGroup9;
+	}
+
+	public String getFirstop() {
+		return firstop;
+	}
+
+	public void setFirstop(String firstop) {
+		this.firstop = firstop;
 	}
 }

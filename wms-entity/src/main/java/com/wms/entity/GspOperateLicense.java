@@ -43,4 +43,11 @@ public class GspOperateLicense  implements Serializable {
 
 	private String isUse;
 
+	private String enterpriseName;
+
+	private String juridicalPerson;
+
+	private String residence;
+
+	private String businessResidence;
 }

@@ -48,21 +48,21 @@
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessStartDate}"/>" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
                         &nbsp;&nbsp;至&nbsp;&nbsp;
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessEndDate}"/>" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
-                        <input id="isLong" <c:if test="${gspBusinessLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期</label>
+                        <input id="isLong" <c:if test="${gspBusinessLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期/无固定时间</label>
                     </td>
                 </tr>
                 <tr>
                     <th>营业执照照片</th>
                     <td>
-                        <input id="file" name='file' value="${gspBusinessLicense.attachmentUrl}">
+                        <input id="file" name='file' value="${gspBusinessLicense.attachmentUrl}" atth="fileUpload">
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
                         <input type="hidden" data="2" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspBusinessLicense.attachmentUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                     <th>经营范围</th>
                     <td colspan="5">
-                        <input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:400,editable:false'/>
-                        <a onclick='selectBusinessScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                        <input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:400'/>
+                        <!--<a onclick='selectBusinessScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>-->
                     </td>
                 </tr>
 
@@ -83,7 +83,6 @@
 <script>
     var ezuiBussinessDatagridDetail;
     var ezuidialogChoseScope;
-    var choseRowArr = new Array();
     var url;
     var opType = "add";
     $(function () {
@@ -139,7 +138,6 @@
             width: '200', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
-            prompt:'${gspBusinessLicense.attachmentUrl}',
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -302,16 +300,17 @@
     
     function choseSelect_Catalog_businessLicense(row) {
         var choseRowNameArr = new Array();
-        var oldValue = $("#businessScope").textbox("getValue");
+        var choseRowArr = new Array();
+        //var oldValue = $("#businessScope").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArr.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#businessScope").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#businessScope").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-           $("#businessScope").textbox("setValue",oldValue+row.instrumentCatalogName);
+           $("#businessScope").textbox("setValue",row.instrumentCatalogName);
         }
         $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
         $(ezuidialogChoseScope).dialog("close");

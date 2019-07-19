@@ -17,6 +17,10 @@
 	<result column="is_use" property="isUse"/>
 	<result column="is_return" property="isReturn"/>
 	<result column="first_state" property="firstState"/>
+	<result column="enterprise_no" property="enterpriseNo"/>
+	<result column="enterprise_name" property="enterpriseName"/>
+	<result column="shorthand_name" property="shorthandName"/>
+	<result column="enterprise_type" property="enterpriseType"/>
 </resultMap>
        
 <!-- gsp_receiving table all fields -->
@@ -50,44 +54,55 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.receivingId != null and condition.receivingId != ''" >
-	    and receiving_id =  #{condition.receivingId}
+	    and t1.receiving_id =  #{condition.receivingId}
+	</if>
+	<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
+		and t2.enterprise_no like '%${condition.enterpriseNo}%'
+	</if>
+	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+		and t2.enterprise_name like '%${condition.enterpriseName}%'
+	</if>
+	<if test="condition.shorthandName != null and condition.shorthandName != ''" >
+		and t2.shorthand_name like  '%${condition.shorthandName}%'
+	</if>
+	<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
+		and t2.enterprise_type =  #{condition.enterpriseType}
 	</if>
 	<if test="condition.firstState != null and condition.firstState != ''" >
-	    and first_state =  #{condition.firstState}
+	    and t1.first_state =  #{condition.firstState}
 	</if>
 	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
-	    and enterprise_id =  #{condition.enterpriseId}
+	    and t1.enterprise_id =  #{condition.enterpriseId}
 	</if>
 	<if test="condition.clientId != null and condition.clientId != ''" >
-	    and client_id =  #{condition.clientId}
+	    and t1.client_id =  #{condition.clientId}
 	</if>
 	<if test="condition.supplierId != null and condition.supplierId != ''" >
-	    and supplier_id =  #{condition.supplierId}
+	    and t1.supplier_id =  #{condition.supplierId}
 	</if>
 	<if test="condition.isCheck != null and condition.isCheck != ''" >
-	    and is_check =  #{condition.isCheck}
+	    and t1.is_check =  #{condition.isCheck}
 	</if>
-
 	<if test="condition.createId != null and condition.createId != ''" >
-	    and create_id =  #{condition.createId}
+	    and t1.create_id =  #{condition.createId}
 	</if>
 	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date =  #{condition.createDate}
+	    and t1.create_date =  #{condition.createDate}
 	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
-	    and edit_id =  #{condition.editId}
+	    and t1.edit_id =  #{condition.editId}
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and edit_date =  #{condition.editDate}
+	    and t1.edit_date =  #{condition.editDate}
 	</if>
 	<if test="condition.isUse != null and condition.isUse != ''" >
-	    and is_use =  #{condition.isUse}
+	    and t1.is_use =  #{condition.isUse}
 	</if>
 	<if test="condition.isReturn != null and condition.isReturn != ''" >
-	    and is_return =  #{condition.isReturn}
+	    and t1.is_return =  #{condition.isReturn}
 	</if>
 	<if test="condition.firstState != null and condition.firstState != ''" >
-	    and first_state =  #{condition.firstState}
+	    and t1.first_state =  #{condition.firstState}
 	</if>
 </trim>
 </sql>
@@ -158,12 +173,69 @@ where 1=1
 <!-- 收货地址 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from gsp_receiving 
-	<include refid="Example_Where_Clause"/>
+	where 1=1
+	<if test="condition.receivingId != null or condition.receivingId == ''" >
+		and receiving_id =  #{condition.receivingId}
+	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+		and first_state =  #{condition.firstState}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+		and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.clientId != null and condition.clientId != ''" >
+		and client_id =  #{condition.clientId}
+	</if>
+	<if test="condition.supplierId != null and condition.supplierId != ''" >
+		and supplier_id =  #{condition.supplierId}
+	</if>
+	<if test="condition.isCheck != null and condition.isCheck != ''" >
+		and is_check =  #{condition.isCheck}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+		and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+		and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+		and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+		and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+		and is_use =  #{condition.isUse}
+	</if>
+	<if test="condition.isReturn != null and condition.isReturn != ''" >
+		and is_return =  #{condition.isReturn}
+	</if>
+	<if test="condition.firstState != null and condition.firstState != ''" >
+		and first_state =  #{condition.firstState}
+	</if>
+</select>
+
+	<!-- 根据企业id查询收货单位-->
+<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_receiving where enterprise_id = #{enterpriseId}
 </select>
   	
  <!--查询收货地址列表-->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
+
+
+	select t1.*,t2.enterprise_no,t2.enterprise_name,t2.shorthand_name,t2.enterprise_type
+	from gsp_receiving t1 left join gsp_enterprise_info t2
+	ON t1.enterprise_id = t2.enterprise_id
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
+	<!--select
 	<include refid="Base_Column_List"/>
 	from gsp_receiving 
 	<include refid="Example_Where_Clause"/>
@@ -172,7 +244,7 @@ where 1=1
     </if>
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
-    </if>
+    </if>-->
 </select>
   	
 </mapper>   

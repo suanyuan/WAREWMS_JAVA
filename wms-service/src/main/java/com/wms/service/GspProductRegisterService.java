@@ -61,16 +61,19 @@ public class GspProductRegisterService extends BaseService {
 	}
 
 	public Json addGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception {
-		Json json = new Json();
+		if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
+			return Json.error("产品注册证编号重复");
+		}
+
 		GspProductRegister gspProductRegister = new GspProductRegister();
 		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
 		gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+		gspProductRegister.setIsUse(Constant.IS_USE_YES);
 		gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
 		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
 		gspProductRegisterMybatisDao.add(gspProductRegister);
-		json.setSuccess(true);
-		return json;
+		return Json.success("操作成功",gspProductRegister.getProductRegisterId());
 	}
 
 	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
@@ -211,5 +214,18 @@ public class GspProductRegisterService extends BaseService {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Json.error("解除绑定失败");
 		}
+	}
+
+
+	public boolean checkRep(String registerNo){
+		MybatisCriteria criteria = new MybatisCriteria();
+		GspProductRegisterQuery query = new GspProductRegisterQuery();
+		query.setProductRegisterNo(registerNo);
+		criteria.setCondition(query);
+		List<GspProductRegister> list = gspProductRegisterMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return false;
+		}
+		return true;
 	}
 }

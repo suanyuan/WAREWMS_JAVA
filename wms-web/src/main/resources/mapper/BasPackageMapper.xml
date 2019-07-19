@@ -56,21 +56,21 @@ where 1=1
 	<if test="cartonizeuom1 != null  ">
 		cartonizeuom1=#{cartonizeuom1},
 	</if>
-	<if test="cartonizeuom2 != null  ">
-		cartonizeuom2=#{cartonizeuom2},
+	<if test="descr1 != null  ">
+		descr1=#{descr1},
 	</if>
-	<if test="cartonizeuom3 != null  ">
-		cartonizeuom3=#{cartonizeuom3},
+	<if test="qty1 != null  ">
+		qty1=#{qty1},
 	</if>
-	<if test="cartonizeuom4 != null  ">
-		cartonizeuom4=#{cartonizeuom4},
+	<if test="packuom1 != null  ">
+		packuom1=#{packuom1},
 	</if>
 	<if test="descr != null  ">
 		descr=#{descr},
 	</if>
 
 
-	</trim> where addtime=#{addtime}
+	</trim> where packid=#{packid}
 </update>
 
 <!-- 删除记录 -->

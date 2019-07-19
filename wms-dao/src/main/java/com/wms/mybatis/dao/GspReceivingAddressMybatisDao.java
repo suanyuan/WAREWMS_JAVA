@@ -17,5 +17,6 @@ public interface GspReceivingAddressMybatisDao extends BaseDao {
     public List<PCD> findPCDByPid(int pid);
     public List<GspReceivingAddress> queryByReceivingId(String receivingId);
     public GspReceivingAddress queryIsDefault(Object o);
+    public GspReceivingAddress queryByAddressId(String receivingAddressId);
 
 }

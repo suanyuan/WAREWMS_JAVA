@@ -14,6 +14,7 @@ public class ProductLine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String productLineId;
+    private String customerid;
 
     private String enterpriseName;
 

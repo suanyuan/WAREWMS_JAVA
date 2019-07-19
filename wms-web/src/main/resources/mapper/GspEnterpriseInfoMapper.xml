@@ -40,6 +40,7 @@
 	<result column="enterprise_id" property="enterpriseId"/>
 	<result column="enterprise_type" property="enterPriseType"/>
 	<result column="first_State" property="firstState"/>
+	<result column="applyNo" property="applyNo"/>
 </resultMap>
        
 <!-- gsp_enterprise_info table all fields -->
@@ -216,7 +217,7 @@ where 1=1
 		<if test="condition.enterpriseType != null and condition.enterpriseType != ''" >
 			<choose>
 				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
-					and (g.enterprise_type = 'JY' or g.enterprise_type = 'SC')
+					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
 				</when>
 				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
 					and (g.enterprise_type != 'ZT')
@@ -316,15 +317,15 @@ where 1=1
 <select id="queryEnterpriseApplyListById" resultMap="GspEnterpriseTypeResultMap"  parameterType="Object">
 
 	select * from (
-	select g.enterprise_id,enterprise_type,c.first_state from gsp_enterprise_info g
+	select g.enterprise_id,enterprise_type,c.first_state,c.client_id applyNo from gsp_enterprise_info g
 	left join gsp_customer c on g.enterprise_id = c.enterprise_id
 	where g.is_use = '1' and c.is_use='1'
 	union
-	select g.enterprise_id,enterprise_type,s.first_state from gsp_enterprise_info g
+	select g.enterprise_id,enterprise_type,s.first_state,s.supplier_id applyNo from gsp_enterprise_info g
 	left join gsp_supplier s on g.enterprise_id = s.enterprise_id
 	where g.is_use = '1' and s.is_use='1'
 	union
-	select g.enterprise_id,enterprise_type,s.first_state from gsp_enterprise_info g
+	select g.enterprise_id,enterprise_type,s.first_state,s.receiving_id applyNo from gsp_enterprise_info g
 	left join gsp_receiving s on g.enterprise_id = s.enterprise_id
 	where g.is_use = '1' and s.is_use='1'
 	) t where enterprise_id = #{enterpriseId}

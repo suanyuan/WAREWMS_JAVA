@@ -15,6 +15,7 @@ import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
 import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspEnterpriceFrom;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,12 @@ public class GspReceivingController {
 	}
 	@Login
 	@RequestMapping(params = "toDialogAddress")
-	public ModelAndView toDialogAddress(@RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {
+	public ModelAndView toDialogAddress(@RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId,
+										@RequestParam(value = "receivingAddressId",required = false,defaultValue = "") String receivingAddressId) {
 		Map<String, Object> model = new HashMap<String, Object>();
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(receivingAddressId);
 		model.put("receivingId", receivingId);
+		model.put("gspReceivingAddress", gspReceivingAddress);
 		return new ModelAndView("gspReceiving/dialogAddress", model);
 	}
 
@@ -81,6 +85,19 @@ public class GspReceivingController {
 
 		return json;
 	}
+
+	/*@Login
+	@RequestMapping(params = "add")
+	@ResponseBody
+	public Json edit(GspReceivingForm gspReceivingForm,@RequestParam(value = "newreceivingId",required = false)String newreceivingId ) throws Exception {
+		Json json = gspReceivingService.addGspReceiving(gspReceivingForm,newreceivingId);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		return json;
+	}*/
 
 	@Login
 	@RequestMapping(params = "confirmApply")
@@ -163,4 +180,33 @@ public class GspReceivingController {
 		model.put("receivingId", receivingId);
 		return new ModelAndView("gspReceiving/detail", model);
 	}
+
+
+
+	/*@Login
+	@RequestMapping(params = "addXiaFa")
+	@ResponseBody
+	public Json addXiaFa(@RequestParam(value="basCustomerFormStr",required=true)  String basCustomerFormStr,
+					@RequestParam(value = "newreceivingId",required = false)String newreceivingId) throws Exception {
+		BasCustomerForm basCustomerForm = JSON.parseObject(basCustomerFormStr, BasCustomerForm.class);
+		basCustomerForm.setNewreceivingId(newreceivingId);
+
+		Json json = gspReceivingService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+	@Login
+	@RequestMapping(params = "submit")
+	@ResponseBody
+	public Json submit(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = gspReceivingService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}*/
 }

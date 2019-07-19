@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -96,8 +97,8 @@ public class GspInstrumentCatalogController {
 	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody
-	public List<EasyuiCombobox> getCombobox() {
-		return gspInstrumentCatalogService.getGspInstrumentCatalogCombobox();
+	public List<EasyuiCombobox> getCombobox(@RequestParam(value="version",required = false,defaultValue = "") String version) {
+		return gspInstrumentCatalogService.getGspInstrumentCatalogCombobox(version);
 	}
 
 	@Login

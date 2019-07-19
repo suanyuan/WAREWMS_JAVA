@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspReceivingVO {
 	private String enterpriseNo;
+	private String customerid;
 
 	private String shorthandName;
 
@@ -29,6 +30,14 @@ public class GspReceivingVO {
 
 
 	private String isCooperation;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
 	public String getFirstState() {
 		return firstState;

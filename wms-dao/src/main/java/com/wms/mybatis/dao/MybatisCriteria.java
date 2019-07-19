@@ -24,6 +24,7 @@ public class MybatisCriteria {
 	private int currentPage = 1; // 当前页
 	private int totalCount = 0; // 总行数
 	private int pageSize = 10; // 页大小
+	private boolean doPage = true;//是否启动分页
 
 	/**
 	 * 排序字段
@@ -80,10 +81,12 @@ public class MybatisCriteria {
 	}
 
 	public String getLimitClause() {
-		//int minRow = (this.currentPage - 1) * this.pageSize + 1;
-		//int maxRow = this.currentPage * this.pageSize;
-		//limitClause = " and row_num between " + minRow + " and " + maxRow;
-		limitClause = " LIMIT " + (currentPage-1) + "," + pageSize;
+		if(doPage){
+			int minRow = (this.currentPage - 1) * this.pageSize + 1;
+			int maxRow = this.currentPage * this.pageSize;
+			//limitClause = " and row_num between " + minRow + " and " + maxRow;
+			limitClause = " LIMIT " + (minRow-1) + "," + maxRow;
+		}
 		return limitClause;
 	}
 
@@ -156,5 +159,13 @@ public class MybatisCriteria {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 
+	}
+
+	public boolean isDoPage() {
+		return doPage;
+	}
+
+	public void setDoPage(boolean doPage) {
+		this.doPage = doPage;
 	}
 }

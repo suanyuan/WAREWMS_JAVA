@@ -25,7 +25,7 @@
        
 <!-- bas_carrier_license table all fields -->
 <sql id="Base_Column_List" >
-	 carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag
+	 carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,contract_no,contract_url,client_content,client_start_date,client_end_date,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag
 </sql>
    
    
@@ -72,6 +72,36 @@ where 1=1
 	<if test="condition.createDate != null and condition.createDate != ''" >
 	    and create_date =  #{condition.createDate}
 	</if>
+	<if test="condition.createDateBegin != null and condition.createDateBegin != ''" >
+		and create_date &gt;=  #{condition.createDateBegin}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and create_date &lt;=  #{condition.createDateEnd}
+	</if>
+	<if test="condition.contractNo != null and condition.contractNo != ''" >
+		and contract_no =  #{condition.contractNo}
+	</if>
+	<if test="condition.contractUrl != null and condition.contractUrl != ''" >
+		and contract_url =  #{condition.contractUrl}
+	</if>
+	<if test="condition.clientContent != null and condition.clientContent != ''" >
+		and client_content =  #{condition.clientContent}
+	</if>
+	<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+		and client_start_date =  #{condition.clientStartDate}
+	</if>
+	<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+		and client_end_date =  #{condition.clientEndDate}
+	</if>
+	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
+		and client_term =  #{condition.clientTerm}
+	</if>
+	<if test="condition.editDateBegin != null and condition.editDateBegin != ''" >
+		and edit_date &gt;=  #{condition.editDateBegin}
+	</if>
+	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
+		and edit_date &lt;=  #{condition.editDateEnd}
+	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
 	    and edit_id =  #{condition.editId}
 	</if>
@@ -87,8 +117,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag)
- values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{createId},now(),#{editId},now(),#{activeFlag})
+  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{createId},now(),#{editId},now(),#{activeFlag})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -130,6 +160,24 @@ where 1=1
 	<if test="carrierBusinessScope != null  ">
 		carrier_business_scope=#{carrierBusinessScope},
 	</if>
+		<if test="contractNo != null  ">
+			contract_no=#{contractNo},
+		</if>
+		<if test="contractUrl != null  ">
+			contract_url=#{contractUrl},
+		</if>
+		<if test="clientContent != null  ">
+			client_content=#{clientContent},
+		</if>
+		<if test="clientStartDate != null  ">
+			client_start_date=#{clientStartDate},
+		</if>
+		<if test="clientEndDate != null  ">
+			client_end_date=#{clientEndDate},
+		</if>
+		<if test="clientTerm != null  ">
+			client_term=#{clientTerm},
+		</if>
 	<if test="createId != null  ">
 		create_id=#{createId},
 	</if>
@@ -157,6 +205,11 @@ where 1=1
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
 	 from bas_carrier_license where carrier_license_id = #{carrierLicenseId}
+</select>
+	<!-- 根据企业id查询 承运商 -->
+<select id="queryByEnterId"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	 from bas_carrier_license where enterprise_id = #{enterpriseId}
 </select>
 
 <!-- 承运商 列表总数-->

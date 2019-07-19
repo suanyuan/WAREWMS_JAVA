@@ -25,7 +25,7 @@ $(function() {
 		url : '<c:url value="/basPackageController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -39,7 +39,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'packid',		title: '包装代码',	width: 160 },
+			{field: 'packid',		title: '包装代码',	width: 160 ,hidden:true},
 			{field: 'descr',		title: '包装描述',	width: 160 },
 			{field: 'packuom1',		title: '主单位',	width: 160 },
 			{field: 'qty1',		title: '数量',	width: 160 },
@@ -127,12 +127,14 @@ var del = function(){
 	}
 };
 var commit = function(){
+   // alert(111111);
 	var url = '';
 	if (processType == 'edit') {
 		url = '<c:url value="/basPackageController.do?edit"/>';
 	}else{
 		url = '<c:url value="/basPackageController.do?add"/>';
 	}
+
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
@@ -142,10 +144,13 @@ var commit = function(){
 				});
 				return true;
 			}else{
+                console.log("bbb");
 				return false;
 			}
+
 		},
 		success : function(data) {
+		    console.log("asd");
 			var msg='';
 			try {
 				var result = $.parseJSON(data);
@@ -186,7 +191,7 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>包装代码</th><td><input type='text' id='packid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th hidden>包装代码</th><td hidden><input type='text' id='packid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>包装描述</th><td><input type='text' id='descr' class='easyui-textbox' size='16' data-options=''/></td>
 
 							<td>
@@ -210,9 +215,9 @@ var doSearch = function(){
 		<form id='ezuiForm' method='post'>
 			<input type='hidden' id='basPackageId' name='basPackageId'/>
 			<table>
-				<tr>
+				<tr hidden	>
 					<th>包装代码</th>
-					<td><input type='text' name='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='packid' hidden class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>包装描述</th>

@@ -37,6 +37,8 @@ public class GspCustomerService extends BaseService {
 	private FirstReviewLogService firstReviewLogService;
 	@Autowired
 	private CommonService commonService;
+	@Autowired
+	private DataPublishService dataPublishService;
 
 	public EasyuiDatagrid<GspCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, GspCustomerQuery query) {
 		EasyuiDatagrid<GspCustomerVO> datagrid = new EasyuiDatagrid<GspCustomerVO>();
@@ -100,9 +102,6 @@ public class GspCustomerService extends BaseService {
 			return Json.error("没有查询到对应的申请单号");
 		}
 
-		if(!gspCustomer.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
-			return Json.error("审核中的单据无法修改");
-		}
 		BeanUtils.copyProperties(gspCustomerForm, gspCustomer);
 		gspCustomerMybatisDao.updateBySelective(gspCustomer);
 		json.setSuccess(true);
@@ -214,7 +213,7 @@ public class GspCustomerService extends BaseService {
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
 				//TODO 审核通过的数据需要更新为失败(待测试)
-				firstReviewLogService.cancelData(oldNo);
+                dataPublishService.cancelData(oldNo);
 
 			}
 			return Json.success("重新申请成功成功");

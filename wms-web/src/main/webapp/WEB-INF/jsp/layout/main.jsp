@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>WAREWMS仓储管理系统</title>
+<title>上海嘉和诚康医疗器械有限公司WMS系统</title>
 <c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
 <c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
 <script type="text/javascript" charset="UTF-8">
@@ -91,6 +91,10 @@ $(function () {
 	if('${sessionScope.userInfo}'){
 		addTab({url : "<c:url value='/home.html'/>", title : "首页",closable : false});
 	}
+
+    /*主动让input失去焦点*/
+    var input = $("input",$("#loginForm #username").next("span"));
+    input.blur();
 });
 var addTab = function (params) {
 	var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>';
@@ -300,7 +304,7 @@ var openForgetPwdDialog = function(){
 			<table class="tableForm">
 				<tr>
 					<th>帐号</th>
-					<td><input autofocus="autofocus" type="text" value="admin" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
+					<td><input autofocus="autofocus" type="text" value="" id="username" name="username" class="easyui-textbox" size='19' data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<th>密码</th>

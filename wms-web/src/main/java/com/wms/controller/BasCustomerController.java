@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.wms.entity.BasCustomer;
+import com.wms.entity.GspReceiving;
 import com.wms.entity.GspSupplier;
+import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.vo.form.GspReceivingForm;
 import com.wms.vo.form.GspSupplierForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class BasCustomerController {
 
 	@Autowired
 	private BasCustomerService basCustomerService;
+
+	@Autowired
+	private GspReceivingMybatisDao gspReceivingMybatisDao;
 	
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -48,21 +54,7 @@ public class BasCustomerController {
 		binder.registerCustomEditor(Date.class,"edittime",new CustomDateEditor(dateFormat, true));
 	}
 
-	@Login
-	@RequestMapping(params = "toMain")
-	public ModelAndView toMain(String menuId) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
-		return new ModelAndView("basCustomer/main", model);
-	}
 
-	@Login
-	@RequestMapping(params = "toCustomer")
-	public ModelAndView toCustomer(String menuId) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
-		return new ModelAndView("basCustomer/customer", model);
-	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
@@ -70,7 +62,19 @@ public class BasCustomerController {
 	public EasyuiDatagrid<BasCustomerVO> showDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		return basCustomerService.getPagedDatagrid(pager, query);
 	}
+	/*@Login
+	@RequestMapping(params = "add")
+	@ResponseBody
+	public Json add(BasCustomerForm basCustomerForm) throws Exception {
+		Json json = basCustomerService.addBasCustomer(basCustomerForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}*/
 
+	// 收货单位首映申请增加
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
@@ -177,52 +181,7 @@ public class BasCustomerController {
 	}
 
 
-    @Login
-    @RequestMapping(params = "toDetail")
-    public ModelAndView toDetail(String enterpriseId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("enterpriseId", enterpriseId);
-        return new ModelAndView("basCustomer/detail", model);
-    }
 
-    @Login
-    @RequestMapping(params = "toInfo")
-    public ModelAndView toInfo(String enterpriseId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("enterpriseId", enterpriseId);
-        return new ModelAndView("basCustomer/info", model);
-    }
-
-    @Login
-    @RequestMapping(params = "toBusinessLicense")
-    public ModelAndView toBusinessLicense(String enterpriseId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("enterpriseId", enterpriseId);
-        return new ModelAndView("basCustomer/businessLicense", model);
-    }
-
-    @Login
-    @RequestMapping(params = "toOperateLicense")
-    public ModelAndView toOperateLicense(String enterpriseId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("enterpriseId", enterpriseId);
-        return new ModelAndView("basCustomer/operateLicense", model);
-    }
-
-    @Login
-    @RequestMapping(params = "toSecondRecord")
-    public ModelAndView toSecondRecord(String enterpriseId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("enterpriseId", enterpriseId);
-        return new ModelAndView("basCustomer/secondRecord", model);
-    }
-	@Login
-	@RequestMapping(params = "toReceivingAddress")
-	public ModelAndView toReceivingAddress(String menuId) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
-		return new ModelAndView("basCustomer/receivingAddress", model);
-	}
 
 	@Login
 	@RequestMapping(params = "getReceivingAddress")
@@ -230,5 +189,78 @@ public class BasCustomerController {
 	public Object getReceivingAddress(String enterpriseId,String receivingAddressId) {
 		return basCustomerService.getReceivingAddressInfo(enterpriseId,receivingAddressId);
 	}
+	@Login
+	@RequestMapping(params = "toMain")
+	public ModelAndView toMain(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("basCustomer/main", model);
+	}
 
+	@Login
+	@RequestMapping(params = "toCustomer")
+	public ModelAndView toCustomer(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("basCustomer/customer", model);
+	}
+	@Login
+	@RequestMapping(params = "toDetail")
+	public ModelAndView toDetail(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/detail", model);
+	}
+
+	@Login
+	@RequestMapping(params = "toInfo")
+	public ModelAndView toInfo(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/info", model);
+	}
+
+	@Login
+	@RequestMapping(params = "toBusinessLicense")
+	public ModelAndView toBusinessLicense(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/businessLicense", model);
+	}
+
+	@Login
+	@RequestMapping(params = "toOperateLicense")
+	public ModelAndView toOperateLicense(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/operateLicense", model);
+	}
+
+	@Login
+	@RequestMapping(params = "toSecondRecord")
+	public ModelAndView toSecondRecord(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/secondRecord", model);
+	}
+	@Login
+	@RequestMapping(params = "toReceivingAddress")
+	public ModelAndView toReceivingAddress(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		GspReceiving gspReceiving = gspReceivingMybatisDao.queryByEnterpriseId(enterpriseId);
+		if (gspReceiving != null) {
+
+			model.put("receivingId", gspReceiving.getReceivingId());
+		}
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/receivingAddress", model);
+	}
+
+
+
+	@Login
+	@RequestMapping(params = "exportBasCustomerDataToExcel")
+	public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCustomerForm form) throws Exception {
+		basCustomerService.exportBasCustomerDataToExcel(response, form);
+	}
 }

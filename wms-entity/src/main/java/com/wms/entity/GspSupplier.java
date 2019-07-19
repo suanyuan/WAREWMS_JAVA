@@ -30,6 +30,66 @@ public class GspSupplier implements Serializable {
   private String enterpriseName;
   private String shorthandName;
   private String enterpriseType;
+
+  private String contractNo;
+  private String contractUrl;
+  private String clientContent;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date clientStartDate;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date clientEndDate;
+  private String clientTerm;
+
+  public String getContractNo() {
+    return contractNo;
+  }
+
+  public void setContractNo(String contractNo) {
+    this.contractNo = contractNo;
+  }
+
+  public String getContractUrl() {
+    return contractUrl;
+  }
+
+  public void setContractUrl(String contractUrl) {
+    this.contractUrl = contractUrl;
+  }
+
+  public String getClientContent() {
+    return clientContent;
+  }
+
+  public void setClientContent(String clientContent) {
+    this.clientContent = clientContent;
+  }
+
+  public Date getClientStartDate() {
+    return clientStartDate;
+  }
+
+  public void setClientStartDate(Date clientStartDate) {
+    this.clientStartDate = clientStartDate;
+  }
+
+  public Date getClientEndDate() {
+    return clientEndDate;
+  }
+
+  public void setClientEndDate(Date clientEndDate) {
+    this.clientEndDate = clientEndDate;
+  }
+
+  public String getClientTerm() {
+    return clientTerm;
+  }
+
+  public void setClientTerm(String clientTerm) {
+    this.clientTerm = clientTerm;
+  }
+
+
+
   public GspSupplier() {
   }
 

@@ -175,7 +175,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-		gspEnterpriseInfo.setIsUse("有效");
+		gspEnterpriseInfo.setIsUse(Constant.IS_USE_YES);
 		gspEnterpriseInfoMybatisDao.add(gspEnterpriseInfo);
 
 

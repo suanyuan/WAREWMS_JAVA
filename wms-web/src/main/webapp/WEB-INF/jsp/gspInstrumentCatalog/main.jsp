@@ -72,34 +72,39 @@ $(function() {
 		}
 	}).dialog('close');
 
+    $('#classifyIdQuery').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogClassify',
+        valueField:'id',
+        textField:'value',
+        editable:false
+    });
+
+    $('#versionQuery').combobox({
+        url:sy.bp()+'/commonController.do?getCatalogVersion',
+        valueField:'id',
+        textField:'value',
+        editable:false
+    });
+
     $('#classifyId').combobox({
         url:sy.bp()+'/commonController.do?getCatalogClassify',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+        editable:false
     });
 
     $('#version').combobox({
         url:sy.bp()+'/commonController.do?getCatalogVersion',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+        editable:false
     });
 
-    $('#fromClassify').combobox({
-        url:sy.bp()+'/commonController.do?getCatalogClassify',
-        valueField:'id',
-        textField:'value'
-    });
-
-    $('#fromVersion').combobox({
-        url:sy.bp()+'/commonController.do?getCatalogVersion',
-        valueField:'id',
-        textField:'value'
-    });
-
-    $('#isUse').combobox({
+    $('#isUseQuery').combobox({
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+        editable:false
     });
 });
 var add = function(){
@@ -117,14 +122,12 @@ var edit = function(){
 			instrumentCatalogNo : row.instrumentCatalogNo,
 			instrumentCatalogName : row.instrumentCatalogName,
 			instrumentCatalogRemark : row.instrumentCatalogRemark,
-			classifyId : row.classifyId,
-			version : row.version,
-			createId : row.createId,
-			cretaeDate : row.cretaeDate,
-			editId : row.editId,
-			editDate : row.editDate,
-			isUse : row.isUse
 		});
+
+        $('#fromClassify').combobox("setValue",row.classifyId);
+
+        $('#fromVersion').combobox("setValue",row.version);
+
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -208,13 +211,11 @@ var commit = function(){
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		instrumentCatalogId : $('#instrumentCatalogId').val(),
-		instrumentCatalogNo : $('#instrumentCatalogNo').val(),
-		instrumentCatalogName : $('#instrumentCatalogName').val(),
-		instrumentCatalogRemark : $('#instrumentCatalogRemark').val(),
-		classifyId : $('#classifyId').combobox("getValue"),
-		version : $('#version').combobox("getValue"),
-		isUse : $('#isUse').combobox("getValue")
+		instrumentCatalogNo : $('#instrumentCatalogNoQuery').val(),
+		instrumentCatalogName : $('#instrumentCatalogNameQuery').val(),
+		classifyId : $('#classifyIdQuery').combobox("getValue"),
+		version : $('#versionQuery').combobox("getValue"),
+		isUse : $('#isUseQuery').combobox("getValue")
 	});
 };
 </script>
@@ -229,16 +230,16 @@ var doSearch = function(){
 					<table>
 						<tr>
 							<!--<th style="display: none;">待输入名称0：</th><td><input type='text'  id='instrumentCatalogId' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>编号：</th><td><input type='text' id='instrumentCatalogNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>名称：</th><td><input type='text' id='instrumentCatalogName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编号：</th><td><input type='text' id='instrumentCatalogNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>名称：</th><td><input type='text' id='instrumentCatalogNameQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th style="display: none;">待输入名称3：</th><td><input type='text' id='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>分类：</th><td><input type='text' id='classifyId' size='16' data-options=''/></td>
-							<th>版本：</th><td><input type='text' id='version' size='16' data-options=''/></td>
+							<th>分类：</th><td><input type='text' id='classifyIdQuery' size='16' data-options=''/></td>
+							<th>版本：</th><td><input type='text' id='versionQuery' size='16' data-options=''/></td>
 							<!--<th >待输入名称6：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称9：</th><td><input type='text' id='editDate' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>是否有效：</th><td><input type='text' id='isUse' size='16' data-options=''/></td>
+							<th>是否有效：</th><td><input type='text' id='isUseQuery' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -270,11 +271,11 @@ var doSearch = function(){
 				</tr>
 				<tr>
 					<th>分类</th>
-					<td><input type='text' id="fromClassify" name='classifyId' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+					<td><input type='text' id="classifyId" name='classifyId'  size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
 					<th>版本</th>
-					<td><input type='text' id="fromVersion" name='version' class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+					<td><input type='text' id="version" name='version'  size='16' data-options='required:true,width:200'/></td>
 				</tr>
 				<tr>
 					<th>备注</th>

@@ -36,5 +36,10 @@ public class GspReceiving  implements Serializable {
 	private String isUse;
 
 	private String isReturn;
+	private String enterpriseNo;
+	private String enterpriseName;
+	private String shorthandName;
+	private String enterpriseType;
+
 
 }

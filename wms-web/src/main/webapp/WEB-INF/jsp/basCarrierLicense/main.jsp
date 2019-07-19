@@ -32,8 +32,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'enterpriseId',
 		columns : [[
+			{field: 'enterpriseName',		title: '承运商名称',	width: 90 },
 			{field: 'roadNumber',		title: '道路运营许可证编号',	width: 90 },
 			{field: 'roadNumberTerm',		title: '证件有效期',	width: 50 },
 			{field: 'roadAuthorityPermit',		title: '核发机关',	width: 50 },
@@ -67,11 +68,12 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
+
+
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
-        href:dialogUrl,
         fit:true,
         cache: false,
 		onClose : function() {
@@ -95,8 +97,9 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
+		/*ezuiForm.form('load',{
 			carrierLicenseId : row.carrierLicenseId,
+            enterpriseId : row.enterpriseId,
 			roadNumber : row.roadNumber,
 			roadNumberTerm : row.roadNumberTerm,
 			roadAuthorityPermit : row.roadAuthorityPermit,
@@ -111,10 +114,19 @@ var edit = function(){
 			editId : row.editId,
 			editDate : row.editDate,
 			activeFlag : row.activeFlag
-		});
+		});*/
 	/*	ezuiDialog.dialog('open');*/
 
-        ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+        $('#ezuiDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+            fit:true,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('refresh', dialogUrl+"&enterpriseId="+row.enterpriseId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -160,19 +172,19 @@ var commit = function(){
     var businessObj = new Object();
     var clientObj = new Object();
 
-    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+    $("#ezuiFormInfo input[class='textbox-value'][type='hidden']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     });
     $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
         businessObj[""+$(this).attr("name")+""] = $(this).val();
     });
-    $("#ezuiFormClient input[class='textbox-value'][type!='file']").each(function (index) {
+   /* $("#ezuiFormClient input[class='textbox-value'][type!='file']").each(function (index) {
         clientObj[""+$(this).attr("name")+""] = $(this).val();
-    });
+    });*/
 
     gspEnterpriceFrom["BasCarrierLicenseForm"] = infoObj;
     gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
-    gspEnterpriceFrom["clientForm"] = clientObj;
+   // gspEnterpriceFrom["clientForm"] = clientObj;
 
     var url = '';
     if (processType == 'edit') {
@@ -235,9 +247,11 @@ var doSearch = function(){
 		carrierAuthorityPermit : $('#carrierAuthorityPermit').val(),
 		carrierBusinessScope : $('#carrierBusinessScope').val(),
 		createId : $('#createId').val(),
-		createDate : $('#createDate').val(),
+        createDateBegin : $('#createDateBegin').datebox("getValue"),
+		createDateEnd : $('#createDateEnd').datebox("getValue"),
 		editId : $('#editId').val(),
-		editDate : $('#editDate').val(),
+        editDateBegin : $('#editDateBegin').datebox("getValue"),
+		editDateEnd : $('#editDateEnd').datebox("getValue"),
 		activeFlag : $('#activeFlag').combobox("getValue"),
 	});
 };
@@ -250,8 +264,9 @@ var doSearch = function(){
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
-					<table>
+					<table style="text-align: right">
 						<tr>
+
 							<th>道路运营许可证编号</th><td><input type='text' id='roadNumber' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>是否合作</th>
 							<td>
@@ -265,13 +280,15 @@ var doSearch = function(){
 							<th>快递业务经营许可证有效期至：</th><td><input type='text' id='carrierEndDate' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>快递业务经营许可证发证机关：</th><td><input type='text' id='carrierAuthorityPermit' class='easyui-textbox' size='4' data-options=''/></td>
 							<th>快递业务经营许可证业务范围：</th><td><input type='text' id='carrierBusinessScope' class='easyui-textbox' size='4' data-options=''/></td>--%>
-							<th>修改时间</th><td><input type='text' id='editDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>录入时间</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>修改时间</th><td><input type='text' id='editDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>快递经营许可证编号</th><td><input type='text' id='carrierNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>修改人</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>录入人</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>修改人</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<%--<th>录入人</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>录入时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 						<%--<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>--%>
 
 							<td>
@@ -283,7 +300,7 @@ var doSearch = function(){
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>
+					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.update'/></a>--%>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>

@@ -7,7 +7,9 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 
 
+import com.wms.entity.BasCustomer;
 import com.wms.entity.ProductLine;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.ProductLineMybatisDao;
 
@@ -35,6 +37,9 @@ public class ProductLineService extends BaseService {
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
 
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
+
 	public EasyuiDatagrid<ProductLineVO> getPagedDatagrid(EasyuiDatagridPager pager, ProductLineQuery query) throws Exception {
 		EasyuiDatagrid<ProductLineVO> datagrid = new EasyuiDatagrid<ProductLineVO>();
 
@@ -42,16 +47,22 @@ public class ProductLineService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("edit_date desc");
 		//mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 
 
 		ProductLineVO productLineVO = null;
 		List<ProductLine> productLineList = productLineMybatisDao.queryByList(mybatisCriteria);
-		if (productLineList != null) {
-			List<ProductLineVO> productLineVOList = new ArrayList<ProductLineVO>();
+		List<ProductLineVO> productLineVOList = new ArrayList<ProductLineVO>();
+		if (productLineList != null && productLineList.size()!=0) {
 			for (ProductLine productLine : productLineList) {
 				productLineVO = new ProductLineVO();
 				BeanUtils.copyProperties(productLine, productLineVO);
+				BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(productLine.getCustomerid());
+				if (basCustomer != null) {
+					productLineVO.setDescrC(basCustomer.getDescrC());
+
+				}
 				productLineVOList.add(productLineVO);
 			}
 
@@ -73,7 +84,7 @@ public class ProductLineService extends BaseService {
 		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-		productLine.setIsUse("有效");
+		productLine.setIsUse("1");
 		productLineMybatisDao.insert(productLine);
 
 
@@ -110,7 +121,7 @@ public class ProductLineService extends BaseService {
 		productLineQuery.setName(productLineForm.getName());
 
 
-		ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+		ProductLine productLine = productLineMybatisDao.queryById(productLineQuery.getProductLineId());
 
 		BeanUtils.copyProperties(productLineForm, productLine);
 

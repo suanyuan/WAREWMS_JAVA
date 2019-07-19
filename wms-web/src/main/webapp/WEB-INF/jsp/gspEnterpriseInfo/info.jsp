@@ -6,7 +6,7 @@
             <td><input data="1" type="hidden" id="enterpriseId" value="${enterpriseId}"/></td>
         </tr>
         <tr>
-            <th>企业信息代码</th>
+            <th>企业代码</th>
             <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>

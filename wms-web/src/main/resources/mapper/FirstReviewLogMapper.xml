@@ -35,7 +35,7 @@ where 1=1
 	    and review_id =  #{condition.reviewId}
 	</if>
 	<if test="condition.reviewTypeId != null and condition.reviewTypeId != ''" >
-	    and review_type_id =  #{condition.reviewTypeId}
+		and review_type_id like CONCAT('%',#{condition.reviewTypeId},'%')
 	</if>
 	<if test="condition.applyContent != null and condition.applyContent != ''" >
 	    and apply_content =  #{condition.applyContent}
@@ -72,6 +72,12 @@ where 1=1
 	</if>
 	<if test="condition.editDate != null and condition.editDate != ''" >
 	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.applyState == null or condition.applyState == ''" >
+		and apply_state != '00'
+	</if>
+	<if test="condition.applyNo != null and condition.applyNo != ''" >
+		and review_type_id = #{condition.applyNo}
 	</if>
 </trim>
 </sql>

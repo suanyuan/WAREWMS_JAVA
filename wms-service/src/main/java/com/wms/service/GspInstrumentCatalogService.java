@@ -9,6 +9,8 @@ import com.wms.mybatis.dao.GspInstrumentCatalogMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.util.facade.FacadeTaskHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
-		mybatisCriteria.setOrderByClause("classify_id");
+		mybatisCriteria.setOrderByClause("c.instrument_catalog_no,bc.CodeName_C");
 		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;
@@ -54,6 +56,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		BeanUtils.copyProperties(gspInstrumentCatalogForm, gspInstrumentCatalog);
 		gspInstrumentCatalog.setInstrumentCatalogId(RandomUtil.getUUID());
 		gspInstrumentCatalog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+		gspInstrumentCatalog.setIsUse(Constant.IS_USE_YES);
 		gspInstrumentCatalog.setCretaeDate(new Date());
 		gspInstrumentCatalogMybatisDao.add(gspInstrumentCatalog);
 		json.setSuccess(true);
@@ -81,11 +84,15 @@ public class GspInstrumentCatalogService extends BaseService {
 		return json;
 	}
 
-	public List<EasyuiCombobox> getGspInstrumentCatalogCombobox() {
+	public List<EasyuiCombobox> getGspInstrumentCatalogCombobox(String version) {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		GspInstrumentCatalogQuery query = new GspInstrumentCatalogQuery();
+		if(!StringUtils.isEmpty(version)){
+			query.setVersion(version);
+			mybatisCriteria.setDoPage(false);
+		}
 		query.setIsUse(Constant.IS_USE_YES);
 		mybatisCriteria.setCondition(query);
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
@@ -105,7 +112,7 @@ public class GspInstrumentCatalogService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
-		mybatisCriteria.setOrderByClause("classify_id");
+		mybatisCriteria.setOrderByClause("c.instrument_catalog_no,bc.CodeName_C");
 		EasyuiDatagrid<GspInstrumentCatalogVO> datagrid = new EasyuiDatagrid<GspInstrumentCatalogVO>();
 		List<GspInstrumentCatalog> gspInstrumentCatalogList = gspInstrumentCatalogMybatisDao.queryByList(mybatisCriteria);
 		GspInstrumentCatalogVO gspInstrumentCatalogVO = null;
@@ -119,6 +126,10 @@ public class GspInstrumentCatalogService extends BaseService {
 		datagrid.setTotal(Long.parseLong(count+""));
 		datagrid.setRows(gspInstrumentCatalogVOList);
 		return datagrid;
+	}
+
+	public GspInstrumentCatalog getGspInstrumentCatalog(String id){
+		return gspInstrumentCatalogMybatisDao.queryById(id);
 	}
 
 }
