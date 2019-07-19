@@ -20,7 +20,7 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @param query ~
      * @return 可能会有多条,让用户自行选择
      */
-	List<DocQcDetails> queryDocQcDetail(PdaDocQcDetailQuery query);
+	DocQcDetails queryDocQcDetail(PdaDocQcDetailQuery query);
 
     /**
      * 获取验收任务的明细进度清单

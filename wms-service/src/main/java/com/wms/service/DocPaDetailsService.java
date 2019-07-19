@@ -5,8 +5,10 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
 import com.wms.entity.DocPaDetails;
+import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
+import com.wms.mybatis.dao.InvLotAttMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.query.DocPaDetailsQuery;
@@ -38,6 +40,9 @@ public class DocPaDetailsService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
+
+	@Autowired
+	private InvLotAttMybatisDao invLotAttMybatisDao;
 
 	public EasyuiDatagrid<DocPaDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaDetailsQuery query) {
         EasyuiDatagrid<DocPaDetailsVO> datagrid = new EasyuiDatagrid<>();
@@ -159,10 +164,17 @@ public class DocPaDetailsService extends BaseService {
 
         if (docPaDetails == null) return new PdaResult(PdaResult.CODE_FAILURE, "上架明细数据缺失");
 
+        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docPaDetails.getLotnum());
+
         //上架
         String locationid = form.getUserdefine1();
+        String userdefine5 = form.getUserdefine5();
         BeanUtils.copyProperties(docPaDetails, form);
         form.setUserdefine1(locationid);
+        form.setUserdefine5(userdefine5);
+        if (form.getLotatt01().equals("")) {
+            form.setLotatt01(invLotAtt.getLotatt01());
+        }
         form.setUserid("Gizmo");
         form.setLanguage("CN");
         form.setReturncode("");
@@ -172,6 +184,7 @@ public class DocPaDetailsService extends BaseService {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
         }
+
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 
             return new PdaResult(PdaResult.CODE_SUCCESS, "上架成功");

@@ -244,20 +244,25 @@ where 1=1
 
     <select id="queryDocQcDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from doc_qc_details
-        where qcno = #{qcno, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
+        detail.*
+        from doc_qc_details detail
+        left join inv_lot_att lotatt on detail.lotnum = lotatt.lotnum
+        where detail.qcno = #{qcno, jdbcType=VARCHAR} and detail.customerid = #{customerid, jdbcType=VARCHAR} and detail.sku = #{sku, jdbcType=VARCHAR}
+
+        <if test="lotatt01 != null and lotatt01 != ''">
+            and lotatt.lotatt01 = #{lotatt01, jdbcType=VARCHAR}
+        </if>
         <if test="locationid != null and locationid != ''">
-            and userdefine1 = #{locationid, jdbcType=VARCHAR}
+            and detail.userdefine1 = #{locationid, jdbcType=VARCHAR}
         </if>
         <if test="lotatt04 != null and lotatt04 != ''">
-            and userdefine3 = #{lotatt04, jdbcType=VARCHAR}
+            and detail.userdefine3 = #{lotatt04, jdbcType=VARCHAR}
         </if>
         <if test="lotatt05 != null and lotatt05 != ''">
-            and userdefine4 = #{lotatt05, jdbcType=VARCHAR}
+            and detail.userdefine4 = #{lotatt05, jdbcType=VARCHAR}
         </if>
         <if test="lotatt10 != null and lotatt10 != ''">
-            and userdefine5 = #{lotatt10, jdbcType=VARCHAR}
+            and detail.userdefine5 = #{lotatt10, jdbcType=VARCHAR}
         </if>
     </select>
 
@@ -266,7 +271,7 @@ where 1=1
         <include refid="Base_Column_List"/>
         from doc_qc_details
         where qcno = #{qcno, jdbcType=VARCHAR}
-        order by linestatus asc, userdefine1 asc
+        order by linestatus asc, userdefine1 asc, sku asc
         limit #{start}, #{pageSize}
     </select>
 
