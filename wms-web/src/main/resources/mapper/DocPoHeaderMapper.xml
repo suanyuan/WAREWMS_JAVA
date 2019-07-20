@@ -68,7 +68,7 @@
 <sql id="Base_Column_List" >
 	 pono,potype,postatus,pocreationtime,expectedarrivetime1,expectedarrivetime2,poreference1,poreference2,poreference3,poreference4,poreference5,supplierid,supplierName,supplier_address1,supplier_address2,supplier_address3,supplier_address4,suppliercity,supplier_province,supplier_country,supplier_zip,customerid,edisendflag,supplier_contact,supplier_mail,supplier_fax,supplier_tel1,supplier_tel2,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,addtime,addwho,edittime,editwho,edisendtime,hedi01,hedi02,hedi03,hedi04,hedi05,hedi06,hedi07,hedi08,hedi09,hedi10,warehouseid,createsource,releasestatus,userdefinea,userdefineb
 </sql>
-	<!-- doc_po_header table all fields -->
+<!-- doc_po_header table all fields -->
 <sql id="Base_Column_List1" >
 	 e.pono,e.potype,e.postatus,e.pocreationtime,e.expectedarrivetime1,e.expectedarrivetime2,e.poreference1,e.poreference2,e.poreference3,e.poreference4,e.poreference5,e.supplierid,e.supplierName,e.supplier_address1,e.supplier_address2,e.supplier_address3,e.supplier_address4,e.suppliercity,e.supplier_province,e.supplier_country,e.supplier_zip,e.customerid,e.edisendflag,e.supplier_contact,e.supplier_mail,e.supplier_fax,e.supplier_tel1,e.supplier_tel2,e.userdefine1,e.userdefine2,e.userdefine3,e.userdefine4,e.userdefine5,e.notes,e.addtime,e.addwho,e.edittime,e.editwho,e.edisendtime,e.hedi01,e.hedi02,e.hedi03,e.hedi04,e.hedi05,e.hedi06,e.hedi07,e.hedi08,e.hedi09,e.hedi10,e.warehouseid,e.createsource,e.releasestatus,e.userdefinea,e.userdefineb
 
