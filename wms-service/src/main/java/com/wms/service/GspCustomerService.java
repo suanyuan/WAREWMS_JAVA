@@ -63,6 +63,12 @@ public class GspCustomerService extends BaseService {
 
 	public Json addGspCustomer(GspCustomerForm gspCustomerForm) throws Exception {
 		try{
+
+			Integer result = gspCustomerMybatisDao.queryGspCustomerByClientNo(gspCustomerForm.getClientNo());
+			if(result>0){
+				return Json.error("同一个企业不能重复申请");
+			}
+
 			String no = commonService.generateSeq(Constant.APLCUSNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			Json json = new Json();
 			GspCustomer gspCustomer = new GspCustomer();
@@ -100,6 +106,10 @@ public class GspCustomerService extends BaseService {
 		GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspCustomerForm.getClientId());
 		if(gspCustomer ==null){
 			return Json.error("没有查询到对应的申请单号");
+		}
+
+		if(gspCustomer.getFirstState()!=Constant.CODE_CATALOG_FIRSTSTATE_NEW){
+			return Json.error("审核中的单据无法修改");
 		}
 
 		BeanUtils.copyProperties(gspCustomerForm, gspCustomer);
@@ -184,11 +194,19 @@ public class GspCustomerService extends BaseService {
 			if(StringUtils.isEmpty(id)){
 				return Json.error("请选择要重新申请的数据");
 			}
+
 			String[] arr = id.split(",");
 			for(String s : arr){
 				String no = commonService.generateSeq(Constant.APLCUSNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+
 				//更新旧数据状态
 				GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(s);
+
+				Integer result = gspCustomerMybatisDao.queryGspCustomerByClientNo(gspCustomer.getClientNo());
+				if(result>0){
+					return Json.error("同一个企业不能重复申请");
+				}
+
 				String oldNo = gspCustomer.getClientId();
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 				gspCustomer.setIsUse(Constant.IS_USE_NO);
@@ -216,7 +234,7 @@ public class GspCustomerService extends BaseService {
                 dataPublishService.cancelData(oldNo);
 
 			}
-			return Json.success("重新申请成功成功");
+			return Json.success("重新申请成功");
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

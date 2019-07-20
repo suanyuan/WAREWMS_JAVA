@@ -52,6 +52,8 @@ public class FirstBusinessApplyService extends BaseService {
 	private GspProductRegisterService gspProductRegisterService;
 	@Autowired
 	private GspProductRegisterSpecsService gspProductRegisterSpecsService;
+	@Autowired
+	private BasCustomerService basCustomerService;
 
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
@@ -358,14 +360,14 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public Json checkBusinessScope(String clientId,String supplierId,String productArr){
 		//委托客户scope是否需要判断
-		Json json = gspSupplierService.getGspSupplierInfo(supplierId);
-		if(!json.isSuccess()){
+		BasCustomer basCustomer = basCustomerService.selectCustomerById(supplierId,Constant.CODE_CUS_TYP_VE);
+		if(basCustomer == null){
 			return Json.error("查询不到对应的供应商");
 		}
-		GspSupplierVO supplierVO = (GspSupplierVO)json.getObj();
+
 		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
 		query.setIsUse(Constant.IS_USE_YES);
-		query.setEnterpriseId(supplierVO.getEnterpriseId());
+		query.setEnterpriseId(basCustomer.getEnterpriseId());
 		GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
 		if(gspOperateLicense == null){
 			return Json.error("供应商查询不到生产营业执照信息");
@@ -396,9 +398,9 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		GspProductRegisterSpecsVO spec = (GspProductRegisterSpecsVO)productSpec.getObj();
 
-		List<GspOperateDetailVO> registerDetailVo = gspOperateDetailService.queryOperateDetailByLicense(spec.getProductRegisterNo());
+		List<GspOperateDetailVO> registerDetailVo = gspOperateDetailService.queryOperateDetailByLicense(spec.getProductRegisterId());
 		if(registerDetailVo == null || registerDetailVo.size() == 0){
-			return Json.error("产品没有关联产品注册证");
+			return Json.error("产品注册证没有选择经营范围");
 		}
 
 		for(GspOperateDetailVO v : operateDetails){
@@ -409,7 +411,7 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		for(String s : arroperate){
 			if(arrlicense.toString().indexOf(s)==-1){
-				Json.error("供应商营业执照范围和产品注册证范围不匹配");
+				return Json.error("供应商营业执照范围和产品注册证范围不匹配");
 			}
 		}
 		return Json.success("");

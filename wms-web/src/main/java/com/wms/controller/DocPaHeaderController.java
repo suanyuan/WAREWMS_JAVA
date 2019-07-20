@@ -2,6 +2,7 @@ package com.wms.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -83,6 +84,22 @@ public class DocPaHeaderController {
 	@ResponseBody
 	public Json getBtn(String id, HttpSession session) {
 		return docPaHeaderService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+	}
+
+	/**
+	 * 打印上架任务单
+	 * @param response
+	 * @param orderCodeList
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "exportBatchPdf")
+	public void exportBatchPdf(HttpServletResponse response, String orderCodeList) throws Exception {
+		try {
+			//entryOrderHeaderForCrossDockingService.exportBatchPdf(response, orderCodeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

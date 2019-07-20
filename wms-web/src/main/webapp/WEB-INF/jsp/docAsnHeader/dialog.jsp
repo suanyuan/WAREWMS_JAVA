@@ -1,6 +1,11 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
+<style>
+	table th{
+		text-align: right;
+	}
+</style>
 <div id='ezuiDialog' class='easyui-dialog' style='padding: 10px;'>
 	<form id='ezuiForm' method='post' >
 		<input type='hidden' id='docAsnHeaderId' name='docAsnHeaderId'/>
@@ -8,7 +13,7 @@
 			<legend>入库单头</legend>
 			<table>
 				<tr>
-					<th>客户编号</th>
+					<th>货主代码</th>
 					<td><input type='text' id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>入库单编号</th>
 					<td><input type='text' id='asnno1' name='asnno1' class='easyui-textbox' size='16' data-options='required:false'/></td>
@@ -45,14 +50,14 @@
 				</tr>
 				<tr>
 					<th>备注</th>
-					<td colspan="7"><input type='text' id='notes' name='notes' class='easyui-textbox' size='90' data-options=''/></td>
+					<td colspan="7"><input type='text' id='notes' name='notes' class='easyui-textbox' size='90' data-options='multiline:true,height:30'/></td>
 				</tr>
 				<tr>
-					<th>用户自定义1</th>
+					<th>随车温度</th>
 					<td><input type='text' id='userdefine1' name='userdefine1' class='easyui-textbox' size='16' data-options=''/></td>
-					<th>用户自定义2</th>
+					<th>上架单号</th>
 					<td><input type='text' id='userdefine2' name='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>
-					<th>用户自定义3</th>
+					<th>验收单号</th>
 					<td><input type='text' id='userdefine3' name='userdefine3' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>

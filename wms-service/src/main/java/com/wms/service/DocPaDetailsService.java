@@ -212,4 +212,14 @@ public class DocPaDetailsService extends BaseService {
         }
         return detailVOList;
     }
+
+    /**
+     * 查询上架任务明细
+     * @param pano
+     * @return
+     */
+    public List<DocPaDetails> queryDocPdaDetails(String pano){
+        List<DocPaDetails> detailsList = docPaDetailsMybatisDao.queryDocPaList(pano);
+        return detailsList;
+    }
 }

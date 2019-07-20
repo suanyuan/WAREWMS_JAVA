@@ -51,16 +51,23 @@
 				<th>入库日期</th><td><input type='text' name='lotatt03' id='lotatt03' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 			</tr>
 			<tr>	
-				<th>库存状态</th><td><input type='text' name='lotatt04' id='lotatt04' class='easyui-combobox' size='16' data-options="required:false,panelHeight:'auto',
-																													editable:true,
-																													valueField: 'id',
-																													textField: 'value',
-																													data: [
-																													{id: 'HG', value: '合格'}, 
-																													{id: 'CC', value: '残次'}, 
-																												]"/></td>
-				<th>批属5</th><td><input type='text' name='lotatt05' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
-				<th>批属6</th><td><input type='text' name='lotatt06' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>生产批号</th><td><input type='text' name='lotatt04' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>序列号</th><td><input type='text' name='lotatt05' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>产品注册证</th><td><input type='text' name='lotatt06' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>灭菌批号</th><td><input type='text' name='lotatt07' id='lotatt07' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>供应商</th><td><input type='text' name='lotatt08' id='lotatt08' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>样品属性</th><td><input type='text' name='lotatt09' id='lotatt09' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>质量状态</th><td><input type='text' name='lotatt10' id='lotatt10' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>存储条件</th><td><input type='text' name='lotatt11' id='lotatt11' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>产品名称</th><td><input type='text' name='lotatt12' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>双证</th><td><input type='text' name='lotatt13' id='lotatt13' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>入库单号</th><td><input type='text' name='lotatt14' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 			</tr>
 		</table>
 	</form>

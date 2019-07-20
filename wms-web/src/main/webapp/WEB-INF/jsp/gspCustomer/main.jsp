@@ -77,7 +77,22 @@ $(function() {
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/gspCustomerController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
-		}
+		},
+        onSelect: function(rowIndex, rowData) {
+            if (rowIndex - 1){
+                console.log(rowData);
+                if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_00){
+                    $('#ezuiBtn_confirm').linkbutton('enable');
+                    $('#ezuiBtn_reApply').linkbutton('disable');
+                }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40){
+                    $('#ezuiBtn_reApply').linkbutton('enable');
+                    $('#ezuiBtn_confirm').linkbutton('disable');g
+                }else {
+                    $('#ezuiBtn_reApply').linkbutton('disable');
+                    $('#ezuiBtn_confirm').linkbutton('disable');
+				}
+            };
+        }
 	});
 
 });
@@ -345,7 +360,7 @@ var doSearch = function(){
     function reApply(){
         var rows = ezuiDatagrid.datagrid("getSelections");
         if(rows && rows.length>0){
-            $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要重新下发吗', function(confirm) {
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要发起新申请吗', function(confirm) {
                 if (confirm) {
                     var arr = new Array();
                     for(var i=0;i<rows.length;i++){

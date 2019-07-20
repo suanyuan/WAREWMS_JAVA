@@ -57,7 +57,22 @@ $(function() {
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/firstBusinessApplyController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
-		}
+		},
+        onSelect: function(rowIndex, rowData) {
+            if (rowIndex - 1){
+                console.log(rowData);
+                if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_00){
+                    $('#ezuiBtn_confirm').linkbutton('enable');
+                    $('#ezuiBtn_reApply').linkbutton('disable');
+                }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40){
+                    $('#ezuiBtn_reApply').linkbutton('enable');
+                    $('#ezuiBtn_confirm').linkbutton('disable');g
+                }else {
+                    $('#ezuiBtn_reApply').linkbutton('disable');
+                    $('#ezuiBtn_confirm').linkbutton('disable');
+                }
+            };
+        }
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
