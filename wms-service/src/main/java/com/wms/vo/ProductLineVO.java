@@ -11,9 +11,9 @@ public class ProductLineVO {
 	private String name;
 	private String expression;
 	private String createId;
-	private Date createDate;
+	private String createDate;
 	private String editId;
-	private Date editDate;
+	private String editDate;
 	private String isUse;
 
 	public String getCustomerid() {
@@ -83,19 +83,19 @@ public class ProductLineVO {
 	}
 
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	public Date getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 

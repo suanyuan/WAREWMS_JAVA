@@ -166,13 +166,14 @@ public class GspReceivingController {
 	public ModelAndView toDetail(@RequestParam(value = "enterpriseId",required = false,defaultValue = "") String enterpriseId,
 								 @RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		if (StringUtils.isNotEmpty(enterpriseId)){
-			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(enterpriseId);
-			model.put("gspEnterpriseInfo",gspEnterpriseInfo);
-		}
 		if (StringUtils.isNotEmpty(receivingId)){
-			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
 			GspReceivingAddress gspReceivingAddress =gspReceivingAddressMybatisDao.queryById(receivingId);
+			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+			if (gspReceiving != null) {
+				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
+				model.put("gspEnterpriseInfo",gspEnterpriseInfo);
+			}
+
 			model.put("gspReceiving",gspReceiving);
 			model.put("gspReceivingAddress",gspReceivingAddress);
 		}

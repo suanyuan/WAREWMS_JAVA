@@ -1,23 +1,34 @@
 package com.wms.service;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.*;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocPaDetails;
 import com.wms.entity.DocPaHeader;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
+import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.DocPaHeaderQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.PDFUtil;
 import com.wms.vo.DocPaHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocPaHeaderVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +37,8 @@ public class DocPaHeaderService extends BaseService {
 
 	@Autowired
 	private DocPaHeaderMybatisDao docPaHeaderDao;
+	@Autowired
+	private DocPaDetailsService docPaDetailsService;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -139,4 +152,64 @@ public class DocPaHeaderService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
+
+    public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
+        StringBuilder sb = new StringBuilder();
+        try (OutputStream os = response.getOutputStream()){
+            sb.append("inline; filename=")
+                    .append(URLEncoder.encode("PDF","UTF-8"))
+                    .append(".pdf");
+            response.setHeader("Content-disposition", sb.toString());sb.setLength(0);
+            response.setContentType(ContentTypeEnum.pdf.getContentType());
+
+            Document document = null;
+            AcroFields form = null;
+            PdfStamper stamper = null;
+            PdfImportedPage page = null;
+            ByteArrayOutputStream baos = null;
+
+            if (StringUtils.isNotEmpty(orderCodeList)) {
+
+                document = new Document(PDFUtil.getTemplate("wms_crossdocking_package.pdf").getPageSize(1));
+                PdfCopy pdfCopy = new PdfCopy(document, os);
+                document.open();
+
+               /* String[] orderCodeArray = orderCodeList.split(",");
+                for (String orderCode : orderCodeArray) {
+
+                    DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
+                    if(docPaHeader!=null){
+                        DocPaDetailsQuery query = new DocPaDetailsQuery();
+                        query.setAsnno(orderCode);
+                        List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
+                        if(detailsList!=null && detailsList.size()>0){
+                            for(DocPaDetails details : detailsList){
+                                baos = new ByteArrayOutputStream();
+                                stamper = new PdfStamper(PDFUtil.getTemplate("wms_crossdocking_package.pdf"), baos);
+                                form = stamper.getAcroFields();
+                                form.setField("fenceName",);
+                                form.setField("barCode", );
+                                form.setField("quantity", );
+                                form.setField("custShortName", );
+                                form.setField("custStore", );
+                                form.setField("name", );
+                                form.setField("address", );
+                                form.setField("expectedArriveTime", ;
+                                form.replacePushbuttonField("barCodeImg", PDFUtil.genPdfButton(form, "barCodeImg", BarcodeGeneratorUtil.genBarcode(orderPackageForCrossDocking.getBarCode(), 800)));
+                                stamper.setFormFlattening(true);
+                                stamper.close();
+                                page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
+                                pdfCopy.addPage(page);
+                            }
+                        }
+                    }
+
+                }
+                document.close();*/
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

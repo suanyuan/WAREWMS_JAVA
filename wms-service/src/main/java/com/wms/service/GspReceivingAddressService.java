@@ -61,33 +61,10 @@ public class GspReceivingAddressService extends BaseService {
 	public Json addGspReceivingAddress(GspReceivingAddressForm gspReceivingAddressForm) throws Exception {
 		Json json = new Json();
 		GspReceivingAddress gspReceivingAddress = new GspReceivingAddress();
-
-		if (StringUtils.isEmpty(gspReceivingAddressForm.getReceivingId())){
-			//如果是默认覆盖
-			if ("1".equals(gspReceivingAddressForm.getIsDefault())){
-				gspReceivingAddress.setIsDefault(gspReceivingAddressForm.getIsDefault());
-				GspReceivingAddress gspReceivingAddress1 = gspReceivingAddressMybatisDao.queryIsDefault(gspReceivingAddress);
-				if (gspReceivingAddress1 != null) {
-					gspReceivingAddress1.setIsDefault("0");
-					gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress1);
-				}
-			}
-
 			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
 			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
-			//gspReceivingAddress.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-			//json.setObj(gspReceivingAddress.getReceivingId());
-
-		}else {
-
-			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
-			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
-		}
-
 		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
 		json.setSuccess(true);
 
@@ -131,6 +108,56 @@ public class GspReceivingAddressService extends BaseService {
 
 	public List<PCD> findPCDByPid(int pid) {
 		return gspReceivingAddressMybatisDao.findPCDByPid(pid);
+	}
+
+
+	public Json addDefaultGspReceivingAddress(GspReceivingAddressForm gspReceivingAddressForm) throws Exception {
+				Json json = new Json();
+				GspReceivingAddress gspReceivingAddress = new GspReceivingAddress();
+
+
+		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(gspReceivingAddressForm.getReceivingId());
+		if (gspReceivingAddressList != null&&gspReceivingAddressList.size()!=0) {
+
+			for (GspReceivingAddress gspReceivingAddress1: gspReceivingAddressList){
+				//如果是默认覆盖
+				if ("1".equals(gspReceivingAddress1.getIsDefault())){
+					gspReceivingAddress1.setIsDefault("0");
+					gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress1);
+				}
+
+			}
+		}
+		//新增默认地址
+			BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
+			gspReceivingAddress.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspReceivingAddress.setReceivingAddressId(RandomUtil.getUUID());
+		gspReceivingAddressMybatisDao.add(gspReceivingAddress);
+		json.setSuccess(true);
+
+		return json;
+	}
+
+
+	public Json editDefaultGspReceivingAddress(GspReceivingAddressForm gspReceivingAddressForm) {
+		Json json = new Json();
+		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(gspReceivingAddressForm.getReceivingId());
+		if (gspReceivingAddressList != null&&gspReceivingAddressList.size()!=0) {
+			for (GspReceivingAddress gspReceivingAddress1: gspReceivingAddressList){
+				//如果是默认覆盖
+				if ("1".equals(gspReceivingAddress1.getIsDefault())){
+					gspReceivingAddress1.setIsDefault("0");
+					gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress1);
+				}
+
+			}
+		}
+		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(gspReceivingAddressForm.getReceivingAddressId());
+		BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
+		gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
+		json.setSuccess(true);
+		return json;
 	}
 
 }

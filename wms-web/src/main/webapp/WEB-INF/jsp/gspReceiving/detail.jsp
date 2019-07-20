@@ -700,7 +700,6 @@
         if(ezuiDialogClientDetail){
             ezuiDialogClientDetail.dialog('open');
         }
-
     }
     //查询货主信息条件
     function doSearchClient() {
@@ -953,15 +952,15 @@
     };
 
     //控制是否编辑逻辑功能
-    function binaji() {
+ function binaji() {
 
     if (processType == 'add') {
     $("#ezuiFormAddress input[name='isCheck']").val('0');
     }
     if (processType != "newAdd"){
     var a = $("#first").val();
-
-    if (a=='40'||a =='10'){
+    var b =$("#enterpriseId").val();
+    if (a =='40'||a == '10'||b == ''){
     $('#enterpriseN').css('display', 'none');
     $('#enterpriseN').attr("readonly",true);
     $('#enterpriseNo').css('display', 'none');

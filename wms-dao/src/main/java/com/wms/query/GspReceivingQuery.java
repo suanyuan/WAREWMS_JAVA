@@ -6,6 +6,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 public class GspReceivingQuery implements IQuery {
 
 	private String receivingId;
+	private String customerid;
 	private String enterpriseId;
 	private String enterpriseName;
 	private String enterpriseNo;
@@ -20,6 +21,14 @@ public class GspReceivingQuery implements IQuery {
 	private String isUse;
 	private String isReturn;
 	private String isCooperation;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
 	public String getEnterpriseNo() {
 		return enterpriseNo;

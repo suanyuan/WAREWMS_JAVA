@@ -37,21 +37,28 @@ $(function() {
 		singleSelect:true,
 		idField : 'customerid',
 		columns : [[
-			{field: 'customerid',		title: '货主',	width: 71 },
-			{field: 'lotatt14',		title: '入库单号',	width: 91 },
+            {field: 'lotatt14',		title: '入库单号',	width: 91 },
+            {field: 'customerid',		title: '货主',	width: 71 },
 			{field: 'lotatt03',		title: '入库日期',	width: 71 },
+			{field: 'lotatt12',		title: '产品代码',	width: 71 },
 			{field: 'lotatt12',		title: '产品名称',	width: 71 },
+			{field: 'lotatt06',		title: '注册证号/备案凭证号',	width: 71 },
+			{field: 'sku',		title: '规格型号',	width: 71 },
 			{field: 'lotatt04',		title: '生产批号',	width: 71 },
 			{field: 'lotatt05',		title: '序列号',	width: 71 },
 			{field: 'lotatt07',		title: '灭菌批号',	width: 71 },
 			{field: 'lotatt01',		title: '生产日期',	width: 71 },
 			{field: 'lotatt02',		title: '有效期/失效期',	width: 71 },
 			{field: 'lotatt08',		title: '供应商',	width: 71 },
+			{field: 'lotatt08',		title: '库存数量',	width: 71 },
+			{field: 'lotatt08',		title: '单位',	width: 71 },
 			{field: 'lotatt11',		title: '存储条件',	width: 71 },
 			{field: 'enterpriseName',		title: '生产厂家',	width: 71 },
 
 			{field: 'lotatt10',		title: '质量状态',	width: 71 },
-			{field: 'name',		title: '产品线',	width: 71 }
+			{field: 'lotatt10',		title: '库位',	width: 71 },
+            {field: 'name',		title: '产品线',	width: 71 },
+            {field: 'lotatt10',		title: '备注',	width: 71 },
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

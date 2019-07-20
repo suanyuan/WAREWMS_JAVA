@@ -77,6 +77,17 @@ public class DocQcDetailsController {
 //			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 //		return json;
 //	}
+	/*@Login
+	@RequestMapping(params = "delete")
+	@ResponseBody
+	public Json delete(String id) {
+		Json json = docQcDetailsService.deleteDocQcDetails(id);
+		if(json == null){
+			json = new Json();
+		}
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}*/
 
 	@Login
 	@RequestMapping(params = "getBtn")

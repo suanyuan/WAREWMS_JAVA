@@ -106,4 +106,20 @@ public class DocPaService {
             return Json.error("合并上架清单系统异常");
         }
     }
+
+    public Json confirmReceiving(String asnNos){
+        if (StringUtils.isEmpty(asnNos)) {
+            return Json.error("请选择需要操作的单据");
+        }
+        try {
+            //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务
+
+            //
+            return Json.error("操作失败");
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Json.error("确认收货系统异常");
+        }
+    }
 }

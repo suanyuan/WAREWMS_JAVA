@@ -426,7 +426,6 @@ public class ImportAsnDataService {
 		}
 	}
 
-	@Transactional
 	private void saveAsn(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
 		DocAsnHeader asnHeader = null;
 		for(DocAsnHeaderVO importDataVO : importDataList){

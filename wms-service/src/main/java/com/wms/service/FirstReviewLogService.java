@@ -171,7 +171,7 @@ public class FirstReviewLogService extends BaseService {
 			firstReviewLogMybatisDao.updateBySelective(updateLog);
 
 			//更新首营申请单状态
-			dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+			dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 
 			json.setMsg("操作成功");
 			json.setSuccess(true);

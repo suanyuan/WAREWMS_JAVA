@@ -315,7 +315,7 @@ var openForgetPwdDialog = function(){
 				<tr>
 					<th>仓库</th>
 					<td>
-						<input type="text" id="warehouseId" name="warehouseId" class="easyui-combobox" size='19' data-options="required:true,
+						<input type="text" id="warehouseId" name="warehouseId" class="easyui-combobox" size='19' data-options="
 																															panelHeight:'auto',
 																															editable:false,
 																															valueField: 'id',

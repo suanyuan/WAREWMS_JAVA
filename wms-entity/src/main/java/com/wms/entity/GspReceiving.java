@@ -40,6 +40,7 @@ public class GspReceiving  implements Serializable {
 	private String enterpriseName;
 	private String shorthandName;
 	private String enterpriseType;
+	private String customerid;
 
 
 }

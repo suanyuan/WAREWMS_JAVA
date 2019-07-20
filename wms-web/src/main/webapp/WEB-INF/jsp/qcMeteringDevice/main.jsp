@@ -6,6 +6,7 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -37,14 +38,14 @@ $(function() {
 			{field: 'calName',		title: '名称',	width: 80 },
 			{field: 'calNumber',	title: '编号',	width: 80 },
 			{field: 'calTerm',		title: '校期',	width: 80 },
-			{field: 'calCardUrl',	title: '证件',	width: 80 },
-			{field: 'createId',		title: '创建人',	width: 80 },
-			{field: 'createDate',	title: '创建日期',	width: 80 },
-			{field: 'editId',		title: '修改人',	width: 80 },
-			{field: 'editDate',		title: '修改日期',	width: 80 },
-			{field: 'activeFlag',	title: '是否有效',	width: 80 ,formatter:function (value,rowData,rowIndex) {
-					return rowData.activeFlag=='1'? '是':'否'
-                }}
+			//{field: 'calCardUrl',	title: '证件',	width: 80 },
+            {field: 'activeFlag',	title: '是否有效',	width: 80 ,formatter:function (value,rowData,rowIndex) {
+                    return rowData.activeFlag=='1'? '是':'否'
+                }},
+            {field: 'createId',		title: '创建人',	width: 80 },
+            {field: 'createDate',	title: '创建日期',	width: 80 },
+            {field: 'editId',		title: '修改人',	width: 80 },
+            {field: 'editDate',		title: '修改日期',	width: 80 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -73,7 +74,7 @@ $(function() {
 	}).dialog('close');
 
 
-    $('#licenseUrlFile').filebox({
+    $('#file').filebox({
         prompt: '选择一个文件',//文本说明文件
         width: '170', //文本宽度
         buttonText: '上传',  //按钮说明文字
@@ -85,7 +86,27 @@ $(function() {
         }
     });
 
-
+    function doUpload(data) {
+        var ajaxFile = new uploadFile({
+            "url":sy.bp()+"/commonController.do?uploadFileLocal",
+            "dataType":"json",
+            "timeout":50000,
+            "async":true,
+            "data":{
+                //多文件
+                "file":{
+                    //file为name字段 后台可以通过$_FILES["file"]获得
+                    "file":document.getElementsByName("file")[0].files[0]//文件数组
+                }
+            },
+            onload:function(data){
+                $("#calCardUrl").val(data.comment);
+            },
+            onerror:function(er){
+                console.log(er);
+            }
+        });
+    }
     $('#activeFlag').combobox({
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
@@ -96,9 +117,6 @@ $(function() {
         valueField:'id',
         textField:'value'
     });
-
-
-
 
     $.ajax({
         url : sy.bp()+"/qcMeteringDeviceController.do?getQcMeteringDeviceOutTime",
@@ -111,14 +129,16 @@ $(function() {
                         {field: 'calName',		title: '名称',	width: 80 },
                         {field: 'calNumber',	title: '编号',	width: 80 },
                         {field: 'calTerm',		title: '校期',	width: 80 },
-                        {field: 'activeFlag',	title: '是否有效',	width: 80 }
+                        {field: 'activeFlag',	title: '是否有效',	width: 80 },
+                        {field: 'createId',	title: '创建人',	width: 80 },
+                        {field: 'createDate',	title: '创建时间',	width: 130 }
                     ]]
                 });
 
                 $('#show').dialog({
                     modal : true,
-                    title : '计量设备校期提醒',
-                    width:450,
+                    title : '计量设备校期过期提醒',
+                    width:550,
                     height:350,
                     cache: false,
                     onClose : function() {
@@ -129,33 +149,17 @@ $(function() {
         }
     });
 });
+
 var add = function(){
 	processType = 'add';
 	$('#qcMeteringDeviceId').val(0);
 	ezuiDialog.dialog('open');
 };
 
-function doUpload(data) {
-    var ajaxFile = new uploadFile({
-        "url":sy.bp()+"/commonController.do?uploadFileLocal",
-        "dataType":"json",
-        "timeout":50000,
-        "async":true,
-        "data":{
-            //多文件
-            "file":{
-                //file为name字段 后台可以通过$_FILES["file"]获得
-                "file":document.getElementsByName("file")[0].files[0]//文件数组
-            }
-        },
-        onload:function(data){
-            $("#calCardUrl").val(data.comment);
-        },
-        onerror:function(er){
-            console.log(er);
-        }
-    });
-}
+
+
+
+
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
@@ -165,14 +169,13 @@ var edit = function(){
 			calName : row.calName,
 			calNumber : row.calNumber,
 			calTerm : row.calTerm,
-
+            calCardUrl : row.calCardUrl,
 			createId : row.createId,
 			createDate : row.createDate,
 			editId : row.editId,
 			editDate : row.editDate,
 			activeFlag : row.activeFlag
 		});
-		//$('#licenseUrlFile').textbox('setValue',row.calCardUrl);
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -330,9 +333,9 @@ var doSearch = function(){
 				</tr>
 				<tr>
 					<th>证件上传</th>
-					<td><input type='text' name='file' class='easyui-textbox' size='16' data-options='required:true' id="licenseUrlFile"/>
+					<td><input     id="file" name="file" atth="fileUpload"/>
+						<input type="hidden"  class="textbox-value" name="calCardUrl"<%-- class='easyui-textbox' size='16' data-options='required:true'--%> id="calCardUrl" />
 						<a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
-						<input type="hidden" class="textbox-value" name="calCardUrl"   id="calCardUrl" />
 					</td>
 				</tr>
 				<tr>

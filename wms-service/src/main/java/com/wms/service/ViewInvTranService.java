@@ -33,7 +33,7 @@ public class ViewInvTranService extends BaseService {
 
 	@Autowired
 	private ViewInvTranMybatisDao viewInvTranMybatisDao;
-
+//返回主页datagrid
 	public EasyuiDatagrid<ViewInvTranVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvTranQuery query) {
 		EasyuiDatagrid<ViewInvTranVO> datagrid = new EasyuiDatagrid<ViewInvTranVO>();
 		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

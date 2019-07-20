@@ -68,12 +68,15 @@ $(function() {
 			{field: 'releasestatusName',		title: '释放状态',	width: 71 },
 			{field: 'warehouseid',		title: '仓库编码',	width: 71 },
 			{field: 'notes',		title: '备注',	width: 250 },
-			{field: 'asnstatus',		title: '入库状态C',	width: 1 },
+			{field: 'asnstatus',		title: '入库状态',	width: 1 },
 
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+			//edit();
 		},
+        onDblClickRow: function(index,row){
+            edit(row);
+        },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 // 			event.preventDefault();
 // 			$(this).datagrid('unselectAll');
@@ -129,9 +132,9 @@ $(function() {
 		columns : [[
 			{field: 'chk',              checkbox:true,      width: 6},
 			{field: 'asnlineno',		title: '行号',		width: 40 },
-			{field: 'sku',				title: '商品编码',		width: 70 },
-			{field: 'skudescrc',			title: '商品名称',		width: 107 },
-			{field: 'alternativesku',	title: '商品条码',		width: 70 },
+			{field: 'sku',				title: '产品代码',		width: 70 },
+			{field: 'skudescrc',			title: '产品名称',		width: 107 },
+			{field: 'alternativesku',	title: '产品条码',		width: 70 },
 			{field: 'linestatusName',	title: '行状态',		width: 70 },
 			{field: 'expectedqty',		title: '预期到货数',		width: 70 },
 			{field: 'receivedqty',		title: '实际到货数',		width: 70 },
@@ -140,12 +143,19 @@ $(function() {
 			{field: 'totalcubic',		title: '体积',		width: 50 },
 			{field: 'totalprice',		title: '单价',		width: 50 },
 			{field: 'lotatt01',		title: '生产日期',		width: 155 },
-			{field: 'lotatt02',		title: '失效日期',		width: 155 },
+			{field: 'lotatt02',		title: '效期',		width: 155 },
 			{field: 'lotatt03',		title: '入库日期',		width: 155 },
-			{field: 'lotatt04',		title: '库存状态',		width: 70 },
-			{field: 'lotatt05',		title: '批属5',		width: 70 },
-			{field: 'lotatt06',		title: '批属6',		width: 40 },
-			{field: 'linestatus',	title: '行状态',		width: 1 },
+			{field: 'lotatt04',		title: '生产批号',		width: 70 },
+			{field: 'lotatt05',		title: '序列号',		width: 70 },
+			{field: 'lotatt06',		title: '产品注册证',		width: 80 },
+			{field: 'lotatt07',	title: '灭菌批号',		width: 80 },
+            {field: 'lotatt08',	title: '供应商',		width: 80 },
+            {field: 'lotatt09',	title: '样品属性',		width: 80 },
+            {field: 'lotatt10',	title: '质量状态',		width: 80 },
+            {field: 'lotatt11',	title: '存储条件',		width: 80 },
+            {field: 'lotatt12',	title: '产品名称',		width: 80 },
+            {field: 'lotatt13',	title: '双证',		width: 80 },
+            {field: 'lotatt14',	title: '入库单号',		width: 80 }
 		]],
 		onDblClickCell: function(index,field,value){
 			detailsEdit();
@@ -159,6 +169,11 @@ $(function() {
 					$('#ezuiDetailsBtn_del').linkbutton('enable');
 					$('#ezuiDetailsBtn_receive').linkbutton('enable');
 				}else{
+				    if(rowData.linestatus == '40'){//完全收货状态可以进行确认收货、
+						$("#ezuiBtn_merge").linkbutton('disable');
+					}else{
+                        $("#ezuiBtn_merge").linkbutton('enable');
+					}
 					$('#ezuiDetailsBtn_edit').linkbutton('disable');
 					$('#ezuiDetailsBtn_del').linkbutton('disable');
 					$('#ezuiDetailsBtn_receive').linkbutton('disable');
@@ -423,7 +438,7 @@ var add = function(){
 };
 
 /* 编辑按钮 */
-var edit = function(){
+var edit = function(row){
 	processType = 'edit';
 	$('#docAsnHeaderId').val(0);
 	//时间控件初始化
@@ -453,7 +468,7 @@ var edit = function(){
 		editable:false
 	});
 	$("#ezuiForm #asnstatus").combo('readonly', true);
-	var row = ezuiDatagrid.datagrid('getSelected');
+	var row = row;//ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		$('#ezuiForm').form({
 		    url: '<c:url value="/docAsnHeaderController.do?showAsnHeader"/>',
@@ -874,6 +889,7 @@ var detailsEdit = function(){
 	});
 	$("#ezuiDetailsForm #linestatus").combo('readonly', true);
 	var row = ezuiDetailsDatagrid.datagrid('getSelected');
+	console.log(row);
 	if(row){
 		ezuiDetailsForm.form('load',{
 			asnno : row.asnno,
@@ -896,7 +912,15 @@ var detailsEdit = function(){
             lotatt03 : row.lotatt03,
             lotatt04 : row.lotatt04,
             lotatt05 : row.lotatt05,
-            lotatt06 : row.lotatt06
+            lotatt06 : row.lotatt06,
+            lotatt07 : row.lotatt07,
+            lotatt08 : row.lotatt08,
+            lotatt09 : row.lotatt09,
+            lotatt10 : row.lotatt10,
+            lotatt11 : row.lotatt11,
+            lotatt12 : row.lotatt12,
+            lotatt13 : row.lotatt13,
+            lotatt14 : row.lotatt14
 		});
 		if (row.linestatus == '00') {
 			$('#ezuiBtn_detailsCommit').linkbutton("enable");
@@ -1118,7 +1142,7 @@ var selectCust = function(){
 /* 客户选择弹框-订单信息界面 */
 var ezuiCustDataDialogClick = function(){
     $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1190,7 +1214,7 @@ var ezuiSkuDataClick = function(){
 	url:'<c:url value="/basSkuController.do?showDatagrid"/>',
 	method:'POST',
 	toolbar:'#ezuiSkuToolbar',
-	title:'商品档案',
+	title:'产品档案',
 	pageSize:50,
 	pageList:[50, 100, 200],
 	fit:true,
@@ -1209,13 +1233,13 @@ var ezuiSkuDataClick = function(){
 	idField : 'sku',
 	columns : [[
 				{field: 'customerid',	title: '客户代码',	width: 80},
-				{field: 'sku',			title: '商品编码',	width: 120},
+				{field: 'sku',			title: '产品代码',	width: 120},
 				{field: 'descrC',		title: '中文名称',	width: 160},
 				{field: 'descrE',		title: '英文名称',	width: 160},
 				{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
 					return rowData.activeFlag == '1' ? '是' : '否';
 	            }},
-				{field: 'alternateSku1',title: '商品条码',	width: 120},
+				{field: 'alternateSku1',title: '产品条码',	width: 120},
 				{field: 'packid',		title: '包装代码',	width: 80},
 				{field: 'qty',			title: '库存数',	width: 60},
 				{field: 'qtyallocated',	title: '分配数',	width: 60},
@@ -1337,6 +1361,7 @@ function afterCheckButtion(rowData) {
         $('#ezuiDetailsBtn_edit').linkbutton('disable');
         $('#ezuiDetailsBtn_del').linkbutton('disable');
         $('#ezuiDetailsBtn_receive').linkbutton('disable');
+        $("#ezuiBtn_merge").linkbutton('disable');
     }else if(rowData.asnstatus == '00'){
         $('#ezuiBtn_close').linkbutton('disable');
         $('#ezuiBtn_cancel').linkbutton('enable');
@@ -1344,6 +1369,8 @@ function afterCheckButtion(rowData) {
         $('#ezuiDetailsBtn_edit').linkbutton('enable');
         $('#ezuiDetailsBtn_del').linkbutton('enable');
         $('#ezuiDetailsBtn_receive').linkbutton('enable');
+        $("#ezuiBtn_merge").linkbutton('enable');
+        $("#ezuiBtn_receiving").linkbutton('enable');
     }else{
 
     };

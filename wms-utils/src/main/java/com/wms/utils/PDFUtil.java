@@ -1,10 +1,11 @@
 package com.wms.utils;
 
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfFormField;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PushbuttonField;
+import com.itextpdf.text.pdf.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * PDF 工具类
@@ -40,5 +41,12 @@ public class PDFUtil {
 		button.setProportionalIcon(true);
 		button.setImage(Image.getInstance(img));
 		return button.getField();
+	}
+
+	public static ArrayList<BaseFont> getFontList() throws DocumentException, IOException {
+		ArrayList<BaseFont> fontList = new ArrayList<>();
+		BaseFont bfChinese = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+		fontList.add(bfChinese);
+		return fontList;
 	}
 }
