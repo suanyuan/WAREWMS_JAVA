@@ -1,9 +1,7 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
-import com.wms.mybatis.dao.DocQcDetailsMybatisDao;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
-import com.wms.mybatis.entity.pda.PdaDocQcEndForm;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
@@ -108,20 +106,6 @@ public class PdaDocQcController {
         resultMap.put(Constant.RESULT, docQcDetailsService.editQcDesc(query));
         return resultMap;
     }
-
-//    /**
-//     * 结束验收
-//     * @param form 验收任务单号
-//     * @return ~
-//     */
-//    @RequestMapping(params = "endTask", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Map<String, Object> endTask(PdaDocQcEndForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put(Constant.RESULT, docQcHeaderService.endTask(form));
-//        return resultMap;
-//    }
 
     /**
      * 获取验收进度明细列表

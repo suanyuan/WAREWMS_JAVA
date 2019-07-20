@@ -37,4 +37,11 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      * @return ~~
      */
 	List<DocPaDetails> queryDocPaList(String pano);
+
+    /**
+     * 批量更新同生产批号的上架产品为合格状态
+     * @param docPaDetails pano、sku、userdefine3、userdefine5(DJ)
+     * @return ~
+     */
+	int updateBatchQc(DocPaDetails docPaDetails);
 }

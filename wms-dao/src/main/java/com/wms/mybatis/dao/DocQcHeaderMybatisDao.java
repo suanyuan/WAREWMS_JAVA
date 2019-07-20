@@ -1,7 +1,7 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocQcHeader;
-import com.wms.mybatis.entity.pda.PdaDocQcEndForm;
+import com.wms.mybatis.entity.pda.PdaDocQcStatusForm;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,10 +20,9 @@ public interface DocQcHeaderMybatisDao extends BaseDao {
     List<DocQcHeader> queryUndoneList(@Param("start") int start, @Param("pageSize") int pageSize);
 
     /**
-     * 结束验收任务单
+     * 更新验收任务单
      * @param form ~
      * @return 1 || 0
-     * TODO 传参修改
      */
-    int endTask(PdaDocQcEndForm form);
+    int updateTaskStatus(PdaDocQcStatusForm form);
 }

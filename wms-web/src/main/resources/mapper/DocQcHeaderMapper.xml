@@ -238,11 +238,11 @@ where 1=1
         limit #{start}, #{pageSize}
     </select>
 
-    <update id="endTask" parameterType="java.util.Map">
+    <update id="updateTaskStatus" parameterType="java.util.Map">
         update doc_qc_header set
-        qcstatus = '40',
-        edittime = NOW(),
-        editwho = #{editwho, jdbcType=VARCHAR}
+        qcstatus = #{qcstatus, jdbcType=VARCHAR},
+        editwho = #{editwho, jdbcType=VARCHAR},
+        edittime = NOW()
         where qcno = #{qcno, jdbcType=VARCHAR}
     </update>
   	

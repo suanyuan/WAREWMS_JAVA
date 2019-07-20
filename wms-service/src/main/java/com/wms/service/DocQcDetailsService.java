@@ -10,6 +10,7 @@ import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
+import com.wms.mybatis.entity.pda.PdaDocQcStatusForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.InvLotAttQuery;
@@ -56,6 +57,12 @@ public class DocQcDetailsService extends BaseService {
 
 	@Autowired
 	private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
+
+	@Autowired
+	private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
+
+	@Autowired
+	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
 
 
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
@@ -408,33 +415,49 @@ public class DocQcDetailsService extends BaseService {
                 * */
                 //获取上架任务单的状态
                 DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(qcDetails.getQcno());
+                PdaDocQcStatusForm statusForm = new PdaDocQcStatusForm();
+                statusForm.setQcno(qcDetails.getQcno());
+                statusForm.setEditwho("Gizmo");
                 if (docPaHeader.getPastatus().equals("40")) {
 
                     int all_pa_qty = docQcDetailsDao.queryCompletedPaQty(qcDetails.getQcno());
                     int all_qc_qty = docQcDetailsDao.queryCompletedQcQty(qcDetails.getQcno());
                     if (all_qc_qty < all_pa_qty) {
                         //30
+                        statusForm.setQcstatus("30");
                     }else {
                         //40
+                        statusForm.setQcstatus("40");
                     }
                 }else {
-
                     //30
+                    statusForm.setQcstatus("30");
                 }
-            }
-            /* ********************************doc_pa_details******************************** */
+                docQcHeaderMybatisDao.updateTaskStatus(statusForm);
 
+                /* ********************************doc_pa_details******************************** */
+                /*
+                因为上架明细中的质量只有DJ 和 HG，所以需要匹配pano、sku、userdefine3、userdefine5（DJ）
+                */
+                DocPaDetails docPaDetails = new DocPaDetails();
+                docPaDetails.setPano(qcDetails.getQcno());
+                docPaDetails.setSku(qcDetails.getSku());
+                docPaDetails.setUserdefine3(qcDetails.getUserdefine3());
+                docPaDetails.setUserdefine5("DJ");
+                docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
+            }
         } catch (Exception e) {
 
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
             if (e.getMessage().equals("111")) {
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量验收合格失败(库位批次库存)");
+                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(库位批次库存错误)");
             }else if (e.getMessage().equals("222")) {
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量验收合格失败(批次库存)");
+                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(批次库存错误)");
             }
+            return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(系统错误)");
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }

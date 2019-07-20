@@ -5,9 +5,7 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocQcHeader;
 import com.wms.mybatis.dao.DocQcHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.entity.pda.PdaDocQcEndForm;
 import com.wms.query.DocQcHeaderQuery;
-import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocQcHeaderVO;
 import com.wms.vo.Json;
@@ -122,21 +120,5 @@ public class DocQcHeaderService extends BaseService {
             BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
         }
         return pdaDocQcHeaderVO;
-    }
-
-    /**
-     * 结束验收单任务
-     * @param form 验收单单号
-     * @return ~
-     */
-    public PdaResult endTask(PdaDocQcEndForm form) {
-
-        form.setEditwho("Gizmo");
-        int result = docQcHeaderMybatisDao.endTask(form);
-
-        if (result == 0) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 订单号不存在");
-        }
-        return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
 }
