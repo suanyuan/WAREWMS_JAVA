@@ -227,5 +227,11 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <update id="updateQty" parameterType="java.util.Map">
+        update inv_lot_loc_id set
+        qty = #{qty}, editwho = #{editwho}, edittime = now()
+        where lotnum = #{lotnum} and locationid = #{locationid}
+    </update>
   	
 </mapper>   

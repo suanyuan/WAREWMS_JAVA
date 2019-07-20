@@ -22,7 +22,7 @@ public class PdaDocQcDetailForm extends BaseLotatt {
 
     private String warehouseid;
 
-    //--------------------
+    //--------------------上面是pda传参、lotatt01、02、04、06、11
 
     private String userid;
 

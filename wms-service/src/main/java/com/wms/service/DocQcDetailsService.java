@@ -8,6 +8,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.CleanInventory;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocQcStatusForm;
@@ -39,9 +40,6 @@ public class DocQcDetailsService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
-
-	@Autowired
-	private GspEnterpriseInfoMybatisDao enterpriseInfoMybatisDao;
 
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
@@ -235,6 +233,12 @@ public class DocQcDetailsService extends BaseService {
         form.setUserid("Gizmo");
         form.setLanguage("CN");
         form.setReturncode("");
+
+        DocQcDetails docQcDetails = new DocQcDetails();
+        if (form.getAllqcflag() == 1) {
+            docQcDetails = docQcDetailsDao.queryById(form);
+        }
+
         try {
 
             docQcDetailsDao.submitDocQc(form);
@@ -245,13 +249,13 @@ public class DocQcDetailsService extends BaseService {
         }
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 
-            if (form.getAllqcflag() == 0) {
-
-                return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
-            }else {
+            if (form.getAllqcflag() == 1) {
 
                 //处理批量验收合格操作
-                return configAllQc(form);
+                return configAllQc(form, docQcDetails);
+            }else {
+
+                return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
             }
         } else {
 
@@ -264,29 +268,31 @@ public class DocQcDetailsService extends BaseService {
      * @param form ~
      * @return ~
      */
-    private PdaResult configAllQc(PdaDocQcDetailForm form) {
-
-        /*
-        获取本次操作的验收明细
-         */
-        DocQcDetails currentQcDetail = docQcDetailsDao.queryById(form);
-
-        /*
-        获取同生产批号的验收任务明细记录，userdefine5=DJ,相同的QCNO、sku、userdefine3、userdefine5=DJ
-         */
-        DocQcDetailsQuery qcDetailsQuery = new DocQcDetailsQuery();
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        qcDetailsQuery.setQcno(currentQcDetail.getQcno());
-        qcDetailsQuery.setSku(currentQcDetail.getSku());
-        qcDetailsQuery.setUserdefine3(currentQcDetail.getUserdefine3());
-        qcDetailsQuery.setUserdefine5("DJ");
-
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcDetailsQuery));
-        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByPageList(mybatisCriteria);
+    private PdaResult configAllQc(PdaDocQcDetailForm form, DocQcDetails currentQcDetail) {
 
         try {
+
+            /*
+            获取同生产批号的验收任务明细记录，userdefine5=DJ,相同的QCNO、sku、userdefine3、userdefine5=DJ
+            */
+            DocQcDetailsQuery qcDetailsQuery = new DocQcDetailsQuery();
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            qcDetailsQuery.setQcno(currentQcDetail.getQcno());
+            qcDetailsQuery.setSku(currentQcDetail.getSku());
+            qcDetailsQuery.setUserdefine3(currentQcDetail.getUserdefine3());
+            qcDetailsQuery.setUserdefine5("DJ");
+
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcDetailsQuery));
+            List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
+
             /*
             对应每条验收明细的库存记录、上架明细、验收明细要做对应的处理
+            这里的docQcDetailsList，如果是一次把一条明细的件数都验收了，之后再批量操作，其实是没有在这个list里面的 ，
+            所以这条明细对应的doc_pa_details里面也没有回写HG状态，之后上架，这条明细也不会再有了，关系不大了；
+            但如果是一条验收明细，做了部分验收，然后批量操作，上面验收先把验收的数量从验收明细里面拆出来，list还是会查到的
+
+            ！！！！更正：上面的思路是错的，❎
+            --> 如果是第一次验收、且有序列号的，那就只有一条，普通验收完成之后，下面的list就为0了，得在每次都加上
             */
             for (DocQcDetails qcDetails : docQcDetailsList) {
 
@@ -341,9 +347,24 @@ public class DocQcDetailsService extends BaseService {
                 InvLotLocId invLotLocId_history = invLotLocIdList.get(0);//历史存在数据
                 InvLotLocId invLotLocId_hg = new InvLotLocId();
                 BeanUtils.copyProperties(invLotLocId_history, invLotLocId_hg);
-                invLotLocId_hg.setLotnum(lotatt_hg.getLotnum());
-                invLotLocIdMybatisDao.add(invLotLocId_hg);//插入合格批次的库位库存
-                invLotLocIdMybatisDao.delete(invLotLocId_history);//删除待检批次的库位库存
+                invLotLocId_hg.setLotnum(lotatt_hg.getLotnum());//更换新批次号
+                InvLotLocId invLotLocId_tmp = invLotLocIdMybatisDao.queryById(invLotLocId_hg);
+                if (invLotLocId_tmp == null || invLotLocId_tmp.getLotnum() == null) {
+
+                    //无 插入
+                    invLotLocIdMybatisDao.add(invLotLocId_hg);//插入合格批次的库位库存
+                }else {
+
+                    //有 更新
+                    invLotLocId_tmp.setQty(invLotLocId_tmp.getQty() + qcDetails.getQcqtyExpected());
+                    invLotLocId_tmp.setEditwho("Gizmo");
+                    invLotLocIdMybatisDao.updateQty(invLotLocId_tmp);
+                }
+
+                //根据历史批次+验收库位 更新历史批次库存件数-本明细中的预期验收数
+                invLotLocId_history.setQty(invLotLocId_history.getQty() - qcDetails.getQcqtyExpected());
+                invLotLocId_history.setEditwho("Gizmo");
+                invLotLocIdMybatisDao.updateQty(invLotLocId_history);
 
 
                 /* ********************************inv_lot******************************** */
@@ -367,19 +388,18 @@ public class DocQcDetailsService extends BaseService {
                 invLot_history.setQty(invLot_history.getQty() - qcDetails.getQcqtyExpected());
                 invLot_history.setEditwho("Gizmo");
                 invLotMybatisDao.update(invLot_history);//库存里面减去此明细中的预期验收数
-                invLotMybatisDao.deleteEmptyInv();//清除0库存记录
 
                 //库存里面插入或更新加上预期验收数
                 invLotQuery.setLotnum(lotatt_hg.getLotnum());
                 mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(invLotQuery));
                 List<InvLot> invLotList_hg = invLotMybatisDao.queryByList(mybatisCriteria);
-                invLot_hg.setLotnum(lotatt_hg.getLotnum());
+                invLot_hg.setLotnum(lotatt_hg.getLotnum());//修改为真正的合格批次号
+                invLot_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
+                invLot_hg.setAddwho("Gizmo");
                 if (invLotList_hg == null || invLotList_hg.size() == 0) {
 
                     //插入
                     invLot_hg.setQty(qcDetails.getQcqtyExpected());
-                    invLot_hg.setAddwho("Gizmo");
-                    invLot_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
                     invLotMybatisDao.add(invLot_hg);
                 }else {
 
@@ -387,8 +407,6 @@ public class DocQcDetailsService extends BaseService {
 
                     //加上件数
                     invLot_hg.setQty(invLot_exist.getQty() + qcDetails.getQcqtyExpected());
-                    invLot_hg.setEditwho("Gizmo");
-                    invLot_hg.setEdittime(new java.sql.Date((new Date()).getTime()));
                     invLotMybatisDao.updateQty(invLot_hg);
                 }
 
@@ -400,9 +418,10 @@ public class DocQcDetailsService extends BaseService {
                 * */
                 qcDetails.setLotnum(lotatt_hg.getLotnum());
                 qcDetails.setQcqtyCompleted(qcDetails.getQcqtyExpected());
+                qcDetails.setQcdescr(form.getQcdescr());
+                qcDetails.setLinestatus("40");
                 qcDetails.setUserdefine5("HG");
                 qcDetails.setEditwho("Gizmo");
-                qcDetails.setEdittime(new java.sql.Date((new Date()).getTime()));
                 docQcDetailsDao.updateQcDetail(qcDetails);
 
 
@@ -434,18 +453,25 @@ public class DocQcDetailsService extends BaseService {
                     statusForm.setQcstatus("30");
                 }
                 docQcHeaderMybatisDao.updateTaskStatus(statusForm);
-
-                /* ********************************doc_pa_details******************************** */
-                /*
-                因为上架明细中的质量只有DJ 和 HG，所以需要匹配pano、sku、userdefine3、userdefine5（DJ）
-                */
-                DocPaDetails docPaDetails = new DocPaDetails();
-                docPaDetails.setPano(qcDetails.getQcno());
-                docPaDetails.setSku(qcDetails.getSku());
-                docPaDetails.setUserdefine3(qcDetails.getUserdefine3());
-                docPaDetails.setUserdefine5("DJ");
-                docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
             }
+
+            /* ********************************doc_pa_details******************************** */
+            /*
+                因为上架明细中的质量只有DJ 和 HG，所以需要匹配pano、sku、userdefine3、userdefine5（DJ）
+            */
+            DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(currentQcDetail.getQcno());
+            DocPaDetails docPaDetails = new DocPaDetails();
+            docPaDetails.setPano(docPaHeader.getPano());
+            docPaDetails.setSku(currentQcDetail.getSku());
+            docPaDetails.setUserdefine3(currentQcDetail.getUserdefine3());
+            docPaDetails.setUserdefine5("DJ");
+            docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
+
+
+            /* ********************************清除0库存******************************** */
+            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", "Gizmo");
+            docQcDetailsDao.cleanInventory(cleanInventory);
+
         } catch (Exception e) {
 
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -457,7 +483,7 @@ public class DocQcDetailsService extends BaseService {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(批次库存错误)");
             }
-            return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(系统错误)");
+            return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(系统错误:" + e.getMessage() + ")");
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }

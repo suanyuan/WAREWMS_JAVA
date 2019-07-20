@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocQcDetails;
+import com.wms.mybatis.entity.CleanInventory;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
@@ -18,7 +19,7 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
     /**
      * 根据扫码结果查询验收明细，
      * @param query ~
-     * @return 可能会有多条,让用户自行选择
+     * @return ~区分了生产日期，只会有一条
      */
 	DocQcDetails queryDocQcDetail(PdaDocQcDetailQuery query);
 
@@ -61,4 +62,10 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @return ~
      */
 	int queryCompletedQcQty(@Param("qcno") String qcno);
+
+    /**
+     * 清除0库存
+     * @param cleanInventory ~
+     */
+	void cleanInventory(CleanInventory cleanInventory);
 }
