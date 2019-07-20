@@ -6,7 +6,7 @@
 	<form id='dialogAddAddressForm' method='post' >
 
 	<input  id='r'  type="hidden" name='receivingId' value="${receivingId}" class='textbox-value' />
-	<input  id='r'  type="hidden" name='receivingAddressId' value="${gspReceivingAddress.receivingAddressId}" class='textbox-value' />
+	<input  id='rece'  type="hidden" name='receivingAddressId' value="${gspReceivingAddress.receivingAddressId}" class='textbox-value' />
 	<%--<input    name='receivingId' value="${receivingId}" class='easyui-textbox' />--%>
 
 			<table>
@@ -114,8 +114,11 @@
             infoObj[""+$(this).attr("name")+""] = $(this).val();
         });
 
+var defaultAddress=$('#isDefault').combobox('getValue');
+
 
         var url = '';
+   if (defaultAddress=='0'){
         if (processType == 'edit') {
             url = '<c:url value="/gspReceivingAddressController.do?edit"/>';
         }else{
@@ -150,7 +153,42 @@
             }
         });
 
+    }else {
 
+       if (processType == 'edit') {
+           url = '<c:url value="/gspReceivingAddressController.do?editDefault"/>';
+       }else{
+           url = '<c:url value="/gspReceivingAddressController.do?addDefault"/>';
+       }
+
+       $.ajax({
+           url : url,
+           data : {"gspReceivingAddressFormStr":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
+           success : function(result){
+               //console.log(result);
+               var msg='';
+               try{
+                   if(result.success){
+                       msg = result.msg;
+                       newreceivingId=result.obj;
+                       ezuiDetailsDatagrid.datagrid('reload');
+                       $("#dialogAddAddress").dialog('close');
+
+                   }else{
+                       msg = '<font color="red">' + result.msg + '</font>';
+                   }
+               }catch (e) {
+                   //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                   msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+               } finally {
+                   $.messager.show({
+                       msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                   });
+                   $.messager.progress('close');
+               }
+           }
+       });
+   }
 
     }
 

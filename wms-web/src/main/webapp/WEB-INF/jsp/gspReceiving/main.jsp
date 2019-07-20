@@ -140,7 +140,7 @@ var add = function(){
     $('#ezuiDialog').dialog({
         modal : true,
         title : '<spring:message code="common.dialog.title"/>',
-        href:dialogUrll,
+        href:dialogUrll+"&enterpriseId='0'",
         fit:true,
         cache:false,
         buttons : '#ezuiDialogBtn',
@@ -153,7 +153,7 @@ var add = function(){
 var edit = function(){
 
                 processType = 'edit';
-var row = ezuiDatagrid.datagrid('getSelected');
+		var row = ezuiDatagrid.datagrid('getSelected');
        	 if(row){
              $.ajax({
                  url: '/gspReceivingController.do?validateReceiv',
@@ -162,7 +162,7 @@ var row = ezuiDatagrid.datagrid('getSelected');
                  dataType: 'JSON',
                  success: function (res) {
 
-                     if (res.firstState == '10' || res.firstState == '40') {
+                    // if (res.firstState == '10' || res.firstState == '40') {
 
                          $('#ezuiDialog').dialog({
                              modal : true,
@@ -178,10 +178,9 @@ var row = ezuiDatagrid.datagrid('getSelected');
                          /*$.messager.show({
                              msg : '审核中与审核通过的申请无法编辑', title : '提示'
                          });*/
-                     }else {
-                         // ezuiDialogA.dialog('open').dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+                  //   }else {
 
-                         $('#ezuiDialog').dialog({
+                        /* $('#ezuiDialog').dialog({
                              modal : true,
                              title : '<spring:message code="common.dialog.title"/>',
                              fit:true,
@@ -190,9 +189,9 @@ var row = ezuiDatagrid.datagrid('getSelected');
                              onClose : function() {
                                  ezuiFormClear(ezuiForm);
                              }
-                         }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+                         }).dialog('refresh', dialogUrll+"&enterpriseId="+res.enterpriseId+"&receivingId="+res.receivingId);
 
-                     }
+                     }*/
 
                  }
 
@@ -211,7 +210,7 @@ var row = ezuiDatagrid.datagrid('getSelected');
 
             };
 
-
+//发起 新申请
  var newAdd = function(){
      processType='newAdd';
 

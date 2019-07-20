@@ -121,14 +121,39 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "getArea")
 	@ResponseBody
-	public String getArea(@RequestParam(value = "pid") String pid) {
-		String json=null;
+	public List<PCD> getArea(@RequestParam(value = "pid") String pid) {
+		List<PCD> pcdList=null;
 		if (pid!=null&&pid!="") {
 			int i = Integer.parseInt(pid);
-			List<PCD> pcdList = gspReceivingAddressService.findPCDByPid(i);
-			json = JSON.toJSONString(pcdList);
-
+			pcdList = gspReceivingAddressService.findPCDByPid(i);
 		}
+		return pcdList;
+	}
+//默认地址判断
+	@Login
+	@RequestMapping(params = "addDefault")
+	@ResponseBody
+	public Json addDefault(@RequestParam(value = "gspReceivingAddressFormStr") String gspReceivingAddressFormStr) throws Exception {
+		GspReceivingAddressForm gspReceivingAddressForm = JSON.parseObject(gspReceivingAddressFormStr, GspReceivingAddressForm.class);
+		Json json = gspReceivingAddressService.addDefaultGspReceivingAddress(gspReceivingAddressForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+
+
+	@Login
+	@RequestMapping(params = "editDefault")
+	@ResponseBody
+	public Json editDefault(@RequestParam(value = "gspReceivingAddressFormStr") String gspReceivingAddressFormStr) throws Exception {
+		GspReceivingAddressForm gspReceivingAddressForm = JSON.parseObject(gspReceivingAddressFormStr, GspReceivingAddressForm.class);
+		Json json = gspReceivingAddressService.editDefaultGspReceivingAddress(gspReceivingAddressForm);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 }
