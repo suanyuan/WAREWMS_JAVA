@@ -165,7 +165,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		Json json = new Json();
 		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.findById(id);
 		if(id != null){
-			gspProductRegisterSpecsMybatisDao.deleteByid	(id);
+			gspProductRegisterSpecsMybatisDao.deleteByid(id);
 		}
 		json.setSuccess(true);
 		return json;
