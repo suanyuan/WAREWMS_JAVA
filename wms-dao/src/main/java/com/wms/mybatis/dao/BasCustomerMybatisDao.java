@@ -7,6 +7,8 @@ import java.util.Map;
 import com.wms.entity.BasCustomer;
 import com.wms.entity.GspReceivingAddress;
 import com.wms.mybatis.dao.BaseDao;
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 
  * <br>
@@ -31,7 +33,7 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	public BasCustomer queryByenterId(Object id);
 	public BasCustomer queryByCustomerId(Object id);
 
-	public void deleteBascustomer(String enterpriseId, String customertype);
+	public void deleteBascustomer(@Param("enterpriseId") String enterpriseId,@Param("customerType") String customerType);
 
 	BasCustomer selectByIdType(Object id);
 }

@@ -219,4 +219,20 @@ public class DocAsnDetailService extends BaseService {
             return new PdaResult(PdaResult.CODE_FAILURE, form.getResult());
         }
     }
+
+	/**
+	 * 获取入库预报
+	 * @param query ~
+	 * @return 明细
+	 */
+	public DocAsnDetailVO queryDocAsnDetail(DocAsnDetailQuery query) {
+
+		DocAsnDetailVO docAsnDetailVO = new DocAsnDetailVO();
+
+		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(query);
+		if (docAsnDetail != null) {
+			BeanUtils.copyProperties(docAsnDetail, docAsnDetailVO);
+		}
+		return docAsnDetailVO;
+	}
 }

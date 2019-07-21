@@ -76,7 +76,7 @@
         </tr>
         <tr>
             <th>备注</th>
-            <td><input type='text' value="${customer.remark}" name='remark' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+            <td><input type='text' value="${customer.remark}" name='remark' class='easyui-textbox' data-options='width:200,height:80,multiline:true'/></td>
         </tr>
         <!--<tr>
             <th>创建人</th>

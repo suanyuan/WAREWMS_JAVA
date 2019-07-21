@@ -47,7 +47,7 @@
 			</tr>
 			<tr>
 				<th>生产日期</th><td><input type='text' name='lotatt01' id='lotatt01' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
-				<th>失效日期</th><td><input type='text' name='lotatt02' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
+				<th>效期</th><td><input type='text' name='lotatt02' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 				<th>入库日期</th><td><input type='text' name='lotatt03' id='lotatt03' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 			</tr>
 			<tr>	

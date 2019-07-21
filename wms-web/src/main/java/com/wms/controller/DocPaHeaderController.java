@@ -97,6 +97,8 @@ public class DocPaHeaderController {
 	public void exportBatchPdf(HttpServletResponse response, String orderCodeList) throws Exception {
 		try {
 			//entryOrderHeaderForCrossDockingService.exportBatchPdf(response, orderCodeList);
+
+			docPaHeaderService.exportBatchPdf(response,orderCodeList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

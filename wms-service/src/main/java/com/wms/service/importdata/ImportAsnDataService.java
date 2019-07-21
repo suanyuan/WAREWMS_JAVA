@@ -345,23 +345,25 @@ public class ImportAsnDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号", "seq");
-	    map.put("客户代码", "customerid");
+	    map.put("货主代码", "customerid");
 	    map.put("客户单号1", "asnreference1");
 	    map.put("客户单号2", "asnreference2");
 	    map.put("预期到货时间", "expectedarrivetime1");
-	    map.put("商品编码", "sku");
+	    map.put("产品代码", "sku");
 	    map.put("预期数量", "expectedqty");
 	    map.put("收货库位", "receivinglocation");
 	    map.put("重量", "totalgrossweight");
 	    map.put("体积", "totalcubic");
 	    map.put("单价", "totalprice");
 	    map.put("生产日期", "lotatt01");
-	    map.put("失效日期", "lotatt02");
-	    map.put("入库日期", "lotatt03");
-	    map.put("库存状态", "lotatt04");
-	    map.put("批属5", "lotatt05");
-	    map.put("批属6", "lotatt06");
-	    map.put("备注", "notes");
+	    map.put("效期", "lotatt02");
+	    map.put("生产批号", "lotatt04");
+	    map.put("序列号", "lotatt05");
+	    map.put("产品注册证号", "lotatt06");
+	    map.put("灭菌批号", "lotatt07");
+	    map.put("供应商代码", "lotatt08");
+		map.put("样品属性", "lotatt09");
+		map.put("存储条件", "lotatt11");
 	    return map;
 	}
 	

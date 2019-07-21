@@ -17,7 +17,7 @@
                     <input type='hidden' id='choseScope' value="${choseScope}" name="choseScope" class="textbox-value"/>
                 <fieldset>
                     <legend>产品注册证信息</legend>
-                        <input type='hidden' id='gspProductRegisterId' name='gspProductRegisterId' value="${gspProductRegister.productRegisterId}"/>
+                        <input type='hidden' id='gspProductRegisterId' name='productRegisterId' value="${gspProductRegister.productRegisterId}"/>
                         <table width="100%">
                             <tr>
                                 <th>注册证编号</th>

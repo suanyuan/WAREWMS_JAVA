@@ -215,6 +215,8 @@
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt13" property="lotatt13"/>
+	<result column="lotatt14" property="lotatt14"/>
 	<result column="notes" property="notes"/>
 	<result column="operator" property="operator"/>
 	<result column="plantoloc" property="plantoloc"/>

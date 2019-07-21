@@ -370,7 +370,7 @@ public class FirstBusinessApplyService extends BaseService {
 		query.setEnterpriseId(basCustomer.getEnterpriseId());
 		GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
 		if(gspOperateLicense == null){
-			return Json.error("供应商查询不到生产营业执照信息");
+			return Json.error("供应商查询不到有效的生产营业执照信息");
 		}
 
 		List<GspOperateDetailVO> operateDetails = gspOperateDetailService.queryOperateDetailByLicense(gspOperateLicense.getOperateId());
@@ -411,7 +411,7 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		for(String s : arroperate){
 			if(arrlicense.toString().indexOf(s)==-1){
-				return Json.error("供应商营业执照范围和产品注册证范围不匹配");
+				return Json.error("供应商生经营产/许可证和产品注册证范围不匹配");
 			}
 		}
 		return Json.success("");

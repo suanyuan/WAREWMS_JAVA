@@ -32,8 +32,8 @@ import java.util.*;
 @RequestMapping("commonController")
 public class CommonController {
 
-    private static final String uploadUrl = "/Users/quendi/fileUpload";
-    //private static final String uploadUrl = "/root/uploadDir";
+    //private static final String uploadUrl = "/Users/quendi/fileUpload";
+    private static final String uploadUrl = "/root/uploadDir";
 
     @Autowired
     private BasCodesService basCodesService;

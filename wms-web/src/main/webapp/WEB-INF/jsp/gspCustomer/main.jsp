@@ -60,7 +60,7 @@ $(function() {
 			{field: 'clientTerm',		title: '委托期限',	width: 38 },
 			{field: 'isChineseLabel',		title: '是否长期',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 38 },
-			{field: 'createDate',		title: '创建时间',	width: 38 ,formatter:dateFormat2},
+			{field: 'createDate',		title: '创建时间',	width: 38},
 			{field: 'isUse',		title: '是否有效',	width: 38 ,formatter: yesOrNoFormatter}
 		]],
 		onDblClickRow: function(index,row){

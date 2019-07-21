@@ -4,17 +4,23 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasSku;
+import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocPaDetails;
 import com.wms.entity.DocPaHeader;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
+import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.DocPaHeaderQuery;
 import com.wms.result.PdaResult;
+import com.wms.utils.BarcodeGeneratorUtil;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.DateUtil;
 import com.wms.utils.PDFUtil;
+import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.DocPaHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaHeaderForm;
@@ -28,6 +34,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +46,10 @@ public class DocPaHeaderService extends BaseService {
 	private DocPaHeaderMybatisDao docPaHeaderDao;
 	@Autowired
 	private DocPaDetailsService docPaDetailsService;
+	@Autowired
+	private BasSkuService basSkuService;
+	@Autowired
+	private DocAsnDetailService docAsnDetailService;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -170,42 +181,96 @@ public class DocPaHeaderService extends BaseService {
 
             if (StringUtils.isNotEmpty(orderCodeList)) {
 
-                document = new Document(PDFUtil.getTemplate("wms_crossdocking_package.pdf").getPageSize(1));
+                document = new Document(PDFUtil.getTemplate("wms_receipt_jhck.pdf").getPageSize(1));
                 PdfCopy pdfCopy = new PdfCopy(document, os);
                 document.open();
 
-               /* String[] orderCodeArray = orderCodeList.split(",");
+                String[] orderCodeArray = orderCodeList.split(",");
+
                 for (String orderCode : orderCodeArray) {
 
                     DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
                     if(docPaHeader!=null){
+
+                        int totalNum = 0;
+                        int row = 15;
+                        int pageSize = 0;
+
                         DocPaDetailsQuery query = new DocPaDetailsQuery();
                         query.setAsnno(orderCode);
+
                         List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
-                        if(detailsList!=null && detailsList.size()>0){
+
+                        totalNum = detailsList.size();
+                        pageSize = (int)Math.ceil( (double) totalNum / row);
+                        for(int i=0;i<pageSize;i++){
+                            baos = new ByteArrayOutputStream();
+                            stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
+                            form = stamper.getAcroFields();
+                            form.setField("putwmsCode",docPaHeader.getAsnno());
+                            form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
+                            form.setField("warehouseid", docPaHeader.getWarehouseid());
+                            form.setField("custName", docPaHeader.getCustomerid());
+                            form.setField("supplier", "");
+                            form.setField("notes", "");
+                            form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
+                            //form.setField("barCode1", docPaHeader.getAsnno());
+                            form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
+                            //form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
+
+                            for(int j=0;j<row;j++){
+                                if(totalNum > (row*i+j)){
+                                    DocPaDetails docPaDetails = detailsList.get(row * i + j);
+                                    BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
+
+                                    DocAsnDetailQuery queryDetail = new DocAsnDetailQuery();
+                                    DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
+
+                                    form.setField("sku."+j, docPaDetails.getSku());
+                                    form.setField("skuN."+j, basSku.getDescrC());
+                                    form.setField("regNo."+j, basSku.getReservedfield03());
+                                    form.setField("desc."+j, basSku.getDescrE());
+                                    form.setField("batchNo."+j, docPaDetails.getUserdefine3());
+                                    form.setField("seriNo."+j, docPaDetails.getUserdefine4());
+                                    form.setField("ill."+j, detailVO.getLotatt07());
+                                    form.setField("lot01."+j, detailVO.getLotatt01());
+                                    form.setField("lot02."+j, detailVO.getLotatt02());
+                                    form.setField("qtyE."+j, docPaDetails.getAsnqtyExpected().toString());
+                                    form.setField("uom."+j, basSku.getDefaultreceivinguom());
+                                    form.setField("qty."+j, docPaDetails.getPutwayqtyExpected().toString());
+                                    form.setField("qtyA."+j, docPaDetails.getPutwayqtyCompleted().toString());
+                                }
+                            }
+                            stamper.setFormFlattening(true);
+                            stamper.close();
+                            page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
+                            pdfCopy.addPage(page);
+                        }
+
+                        /*if(detailsList!=null && detailsList.size()>0){
                             for(DocPaDetails details : detailsList){
                                 baos = new ByteArrayOutputStream();
                                 stamper = new PdfStamper(PDFUtil.getTemplate("wms_crossdocking_package.pdf"), baos);
                                 form = stamper.getAcroFields();
-                                form.setField("fenceName",);
-                                form.setField("barCode", );
-                                form.setField("quantity", );
-                                form.setField("custShortName", );
-                                form.setField("custStore", );
-                                form.setField("name", );
-                                form.setField("address", );
+                                form.setField("putwmsCode",docPaHeader.getAsnno());
+                                form.setField("receviedDdate", "");
+                                form.setField("warehouseid", docPaHeader.getWarehouseid());
+                                form.setField("custName", docPaHeader.getCustomerid());
+                                form.setField("supplier", "");
+                                form.setField("notes", "");
+                                form.setField("sku."+, );
                                 form.setField("expectedArriveTime", ;
-                                form.replacePushbuttonField("barCodeImg", PDFUtil.genPdfButton(form, "barCodeImg", BarcodeGeneratorUtil.genBarcode(orderPackageForCrossDocking.getBarCode(), 800)));
+                                form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
                                 stamper.setFormFlattening(true);
                                 stamper.close();
                                 page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
                                 pdfCopy.addPage(page);
                             }
-                        }
+                        }*/
                     }
 
                 }
-                document.close();*/
+                document.close();
             }
         } catch (Exception e) {
             e.printStackTrace();

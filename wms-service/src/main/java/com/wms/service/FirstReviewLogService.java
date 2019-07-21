@@ -40,7 +40,7 @@ public class FirstReviewLogService extends BaseService {
 		criteria.setCondition(query);
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
-		criteria.setOrderByClause("create_date,check_date_qc,check_date_head desc");
+		criteria.setOrderByClause("create_date desc,edit_date desc,check_date_qc desc,check_date_head desc");
 		List<FirstReviewLog> firstReviewLogList = firstReviewLogMybatisDao.queryByList(criteria);
 		FirstReviewLogVO firstReviewLogVO = null;
 		List<FirstReviewLogVO> firstReviewLogVOList = new ArrayList<FirstReviewLogVO>();
@@ -117,7 +117,8 @@ public class FirstReviewLogService extends BaseService {
 				updateLog.setCheckIdQc(userLogin.getId());
 				updateLog.setCheckDateQc(new Date());
 				updateLog.setCheckRemarkQc(remark);
-				updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
+				updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
+				//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
 
 			}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
 				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
@@ -126,7 +127,11 @@ public class FirstReviewLogService extends BaseService {
 				updateLog.setCheckIdHead(userLogin.getId());
 				updateLog.setCheckDateHead(new Date());
 				updateLog.setCheckRemarkHead(remark);
-				updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_PASS);
+				updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);
+				//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_PASS);
+
+				//更新首营状态
+				dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_PASS);
 
 				//下发数据
 				dataPublishService.publishData(firstReviewLog.getReviewTypeId());

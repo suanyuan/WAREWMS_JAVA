@@ -248,7 +248,7 @@ public class DataPublishService extends BaseService {
             form.setCustomerid(supplier.getSupplierId());
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
 
-            return basCustomerService.editBasCustomerByCustomerId(form);
+            return basCustomerService.editBasCustomer(form);
 
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 
@@ -272,7 +272,7 @@ public class DataPublishService extends BaseService {
             form.setBillclass(gspReceivingForm.getFirstState());
             form.setCustomerid(gspReceiving.getReceivingId());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
-            return basCustomerService.editBasCustomerByCustomerId(form);
+            return basCustomerService.editBasCustomer(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){

@@ -229,7 +229,7 @@ var batchPrint = function(){
         }
     });
     if (orderCodeList != null) {
-        window.open(sy.bp()+"/entryOrderForCrossDockingController.do?exportBatchPdf&orderCodeList="+orderCodeList, "Report_"+orderCodeList, "scrollbars=yes,resizable=no");
+        window.open(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&orderCodeList="+orderCodeList, "Report_"+orderCodeList, "scrollbars=yes,resizable=no");
     }
 };
 </script>

@@ -570,7 +570,7 @@ where 1=1
 </delete>
 
 <delete id="deleteBascustomer" parameterType="Object">
-	delete * from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	delete  from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
 
 	<!-- 根据id查询 客户档案 -->

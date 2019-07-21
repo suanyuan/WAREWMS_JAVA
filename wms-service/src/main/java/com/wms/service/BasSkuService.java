@@ -320,4 +320,12 @@ public class BasSkuService extends BaseService {
 		return datagrid;
 	}
 
+	public BasSku getSkuInfo(String customerid, String sku) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("customerid",customerid);
+		param.put("sku",sku);
+		BasSku basSku = basSkuMybatisDao.queryById(param);
+		return basSku;
+	}
+
 }

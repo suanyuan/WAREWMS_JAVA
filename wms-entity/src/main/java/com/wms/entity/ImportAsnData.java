@@ -32,6 +32,10 @@ public class ImportAsnData implements Serializable {
 	private String lotatt04;
 	private String lotatt05;
 	private String lotatt06;
+	private String lotatt07;
+	private String lotatt08;
+	private String lotatt09;
+	private String lotatt11;
 	private String notes;
 
 	public ImportAsnData() {
@@ -197,4 +201,36 @@ public class ImportAsnData implements Serializable {
 		this.notes = notes;
 	}
 
+
+	public String getLotatt07() {
+		return lotatt07;
+	}
+
+	public void setLotatt07(String lotatt07) {
+		this.lotatt07 = lotatt07;
+	}
+
+	public String getLotatt08() {
+		return lotatt08;
+	}
+
+	public void setLotatt08(String lotatt08) {
+		this.lotatt08 = lotatt08;
+	}
+
+	public String getLotatt09() {
+		return lotatt09;
+	}
+
+	public void setLotatt09(String lotatt09) {
+		this.lotatt09 = lotatt09;
+	}
+
+	public String getLotatt11() {
+		return lotatt11;
+	}
+
+	public void setLotatt11(String lotatt11) {
+		this.lotatt11 = lotatt11;
+	}
 }
