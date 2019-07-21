@@ -32,4 +32,11 @@ public interface DocPaHeaderMybatisDao extends BaseDao {
      * @return !
      */
     DocPaHeader queryByQcno(@Param("qcno") String qcno);
+
+    /**
+     * 通过预入通知单号查询上架头档 适用于 定向订单的 上架头档查询
+     * @param asnno
+     * @return
+     */
+    DocPaHeader queryByAsnno(@Param("asnno") String asnno);
 }

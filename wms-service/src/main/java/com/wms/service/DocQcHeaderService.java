@@ -121,4 +121,14 @@ public class DocQcHeaderService extends BaseService {
         }
         return pdaDocQcHeaderVO;
     }
+
+    /**
+     * 通过上架单号查询验收头档 适用于 定向订单的 验收头档查询
+     * @param
+     * @return
+     */
+    public DocQcHeader queryByPano(String pano) {
+
+        return docQcHeaderMybatisDao.queryByPano(pano);
+    }
 }

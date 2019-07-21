@@ -5,7 +5,6 @@ import com.itextpdf.text.pdf.*;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
-import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocPaDetails;
 import com.wms.entity.DocPaHeader;
 import com.wms.entity.enumerator.ContentTypeEnum;
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,6 +144,16 @@ public class DocPaHeaderService extends BaseService {
             BeanUtils.copyProperties(docAsnHeader, pdaDocPaHeaderVO);
         }
         return pdaDocPaHeaderVO;
+    }
+
+    /**
+     * 通过预入通知单号查询上架头档 适用于 定向订单的 上架头档查询
+     * @param asnno
+     * @return
+     */
+    public DocPaHeader queryByAsnno(String asnno) {
+
+        return docPaHeaderDao.queryByAsnno(asnno);
     }
 
     /**

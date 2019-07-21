@@ -245,5 +245,12 @@ where 1=1
         edittime = NOW()
         where qcno = #{qcno, jdbcType=VARCHAR}
     </update>
+
+    <select id="queryByPano" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_qc_header
+        where pano = #{pano, jdbcType=VARCHAR}
+    </select>
   	
 </mapper>   

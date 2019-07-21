@@ -252,4 +252,11 @@ where 1=1
         where  qc.qcno = #{qcno, jdbcType=VARCHAR}
     </select>
 
+    <select id="queryByAsnno" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_pa_header
+        where asnno = #{asnno, jdbcType=VARCHAR}
+    </select>
+
 </mapper>   

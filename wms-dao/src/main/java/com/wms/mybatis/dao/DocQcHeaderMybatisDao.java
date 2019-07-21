@@ -25,4 +25,6 @@ public interface DocQcHeaderMybatisDao extends BaseDao {
      * @return 1 || 0
      */
     int updateTaskStatus(PdaDocQcStatusForm form);
+
+    DocQcHeader queryByPano(@Param("pano") String pano);
 }

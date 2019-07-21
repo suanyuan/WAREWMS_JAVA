@@ -116,6 +116,7 @@ public class DocAsnDetailService extends BaseService {
 		String result = "";
 		if(docAsnDetail != null){
 			docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			docAsnDetail.setReceivedtime(new Date());
 			docAsnDetail.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			docAsnDetailsMybatisDao.receiveByAsn(docAsnDetail);
 			result = docAsnDetail.getResult();

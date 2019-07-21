@@ -44,4 +44,6 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      * @return ~
      */
 	int updateBatchQc(DocPaDetails docPaDetails);
+
+    int queryMaxLineNo(@Param("pano")String pano);
 }

@@ -106,6 +106,11 @@ public class DocPaDetailsService extends BaseService {
 //		return comboboxList;
 //	}
 
+    //获取上架任务单里的最大行号
+    public int queryMaxLineNo(String pano){
+        return docPaDetailsMybatisDao.queryMaxLineNo(pano);
+    }
+
 
     /**
      * TODO 获取上架详情
