@@ -529,4 +529,8 @@ public class DocQcDetailsService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }
+
+    public int queryMaxLineNo(String qcno){
+        return docQcDetailsDao.queryMaxLineNo(qcno);
+    }
 }

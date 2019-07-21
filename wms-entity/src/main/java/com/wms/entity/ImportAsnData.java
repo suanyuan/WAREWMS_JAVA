@@ -37,6 +37,7 @@ public class ImportAsnData implements Serializable {
 	private String lotatt09;
 	private String lotatt11;
 	private String notes;
+	private String asntype;
 
 	public ImportAsnData() {
 	}
@@ -232,5 +233,13 @@ public class ImportAsnData implements Serializable {
 
 	public void setLotatt11(String lotatt11) {
 		this.lotatt11 = lotatt11;
+	}
+
+	public String getAsntype() {
+		return asntype;
+	}
+
+	public void setAsntype(String asntype) {
+		this.asntype = asntype;
 	}
 }

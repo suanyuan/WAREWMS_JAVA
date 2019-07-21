@@ -184,4 +184,11 @@ public class DocAsnHeaderController {
 		return docPaService.mergeDocPa(asnNos);
 	}
 
+	@Login
+	@RequestMapping(params = "confirmReveiving",method = RequestMethod.POST)
+	@ResponseBody
+	public Json confirmReveiving(String asnNos){
+		return docPaService.confirmReceiving(asnNos);
+	}
+
 }

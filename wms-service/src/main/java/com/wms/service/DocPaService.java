@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.dto.DocPaDTO;
+import com.wms.entity.BasSku;
 import com.wms.entity.DocAsnDetail;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
@@ -10,6 +11,8 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
 import com.wms.vo.form.DocPaHeaderForm;
+import com.wms.vo.form.DocQcDetailsForm;
+import com.wms.vo.form.DocQcHeaderForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,16 @@ public class DocPaService {
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
     @Autowired
     private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+    @Autowired
+    private DocAsnDetailService docAsnDetailService;
+    @Autowired
+    private DocQcHeaderService docQcHeaderService;
+    @Autowired
+    private DocQcDetailsService docQcDetailsService;
+    @Autowired
+    private CommonService commonService;
+    @Autowired
+    private BasSkuService basSkuService;
 
     /**
      * 编号列表
@@ -112,9 +125,61 @@ public class DocPaService {
             return Json.error("请选择需要操作的单据");
         }
         try {
-            //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务
+            String[] arr = asnNos.split(",");
+            SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
+            List<DocPaDTO> listDTO = docAsnDetailsMybatisDao.queryDocPaDTO(arr);
+            if (listDTO != null && listDTO.size() > 0) {
+                for(DocPaDTO docPaDTO : listDTO){
+                    if(!docPaDTO.getAsnstatus().equals("00")){
+                        return Json.error("只有创建状态的通知单才能确认收货");
+                    }
 
-            //
+                    //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务
+                    if(docPaDTO.getAsntype().equals("DX")){
+                        String qcNo = commonService.generateSeq("QCNO",login.getWarehouse().getId());
+
+
+                        DocQcHeaderForm docQcHeaderForm = new DocQcHeaderForm();
+                        docQcHeaderForm.setQcno(qcNo);
+                        docQcHeaderForm.setPano(docPaDTO.getAsnno());
+                        docQcHeaderForm.setCustomerid(docPaDTO.getCustomerid());
+                        docQcHeaderForm.setQcstatus("00");
+                        docQcHeaderForm.setQccreationtime(new Date());
+                        docQcHeaderForm.setAddwho(login.getId());
+                        docQcHeaderForm.setAddtime(new Date());
+                        docQcHeaderForm.setWarehouseid(login.getWarehouse().getId());
+                        docQcHeaderService.addDocQcHeader(docQcHeaderForm);
+
+                        DocQcDetailsForm docQcDetailsForm = new DocQcDetailsForm();
+                        docQcDetailsForm.setQcno(qcNo);
+                        docQcDetailsForm.setQclineno((docQcDetailsService.queryMaxLineNo(qcNo)+1)+"");
+                        docQcDetailsForm.setCustomerid(docPaDTO.getCustomerid());
+                        docQcDetailsForm.setSku(docPaDTO.getSku());
+                        docQcDetailsForm.setLotnum(docPaDTO.getLotnum());
+                        docQcDetailsForm.setPaqtyExpected(docPaDTO.getExpectedqty().doubleValue());
+                        docQcDetailsForm.setQcqtyExpected(docPaDTO.getExpectedqty().doubleValue());
+                        docQcDetailsForm.setQcqtyCompleted(0d);
+                        docQcDetailsForm.setUserdefine1(docPaDTO.getPlantoloc());
+                        docQcDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
+                        docQcDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
+                        //docQcDetailsForm.setUserdefine4();
+                        docQcDetailsForm.setUserdefine5("DJ");
+                        docQcDetailsForm.setQcresult("*");
+                        docQcDetailsForm.setFilecontent("*");
+                        docQcDetailsForm.setNotes("*");
+                        docQcDetailsForm.setAddtime(new Date());
+                        docQcDetailsForm.setAddwho(login.getId());
+                        BasSku basSku = basSkuService.getSkuInfo(docPaDTO.getCustomerid(),docPaDTO.getSku());
+                        docQcDetailsForm.setPackid(basSku.getPackid());
+                        docQcDetailsForm.setTransactionid("");
+
+                        docQcDetailsService.addDocQcDetails(docQcDetailsForm);
+                    }
+
+                    Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
+                }
+                return Json.success("收货成功");
+            }
             return Json.error("操作失败");
         }catch (Exception e){
             e.printStackTrace();

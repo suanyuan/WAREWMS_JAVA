@@ -142,7 +142,7 @@ public class ImportAsnDataService {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[客户代码]，未输入").append(" ");
+				rowResult.append("[货主代码]，未输入").append(" ");
 			}
 			try {
 				if (StringUtils.isEmpty(dataArray.getAsnreference1())) {
@@ -177,11 +177,11 @@ public class ImportAsnDataService {
 			} catch (ParseException e) {
 				 rowResult.append("[失效日期]，格式错误").append(" ");
 			} 
-			try {
+			/*try {
 				formatRQ.parse(dataArray.getLotatt03());
 			} catch (ParseException e) {
 				 rowResult.append("[入库日期]，格式错误").append(" ");
-			}
+			}*/
 			//重量、体积、单价
 			try {
 				if (isNumeric(dataArray.getTotalgrossweight())) {
@@ -205,7 +205,7 @@ public class ImportAsnDataService {
 				 rowResult.append("[单价]，须为数字").append(" ");
 			}
 			//库存状态
-			try {
+			/*try {
 				if (StringUtils.isNotEmpty(dataArray.getLotatt04())){
 					if(!(dataArray.getLotatt04().equals("HG") || dataArray.getLotatt04().equals("CP"))){
 						throw new Exception();
@@ -213,7 +213,7 @@ public class ImportAsnDataService {
 				}
 			} catch (Exception e) {
 				rowResult.append("[库存状态]，输入异常").append(" ");
-			}
+			}*/
 			try {
 				quantityData = dataArray.getExpectedqty();
 				if(StringUtils.isNotEmpty(quantityData)){
@@ -240,7 +240,7 @@ public class ImportAsnDataService {
 					//第一行操作
 					importDataVO = new DocAsnHeaderVO();
 					importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
-					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//客户代码
+					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
 					importDataVO.setAsnreference1(dataArray.getAsnreference1());
 					importDataVO.setAsnreference2(dataArray.getAsnreference2());
 					try {
@@ -259,10 +259,14 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
 					importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
 					importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
-					importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
+					//importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				} else if (dataArray.getCustomerid().toUpperCase().equals(customerid) &&
@@ -285,6 +289,10 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				} else {
@@ -295,7 +303,7 @@ public class ImportAsnDataService {
 					importDataVO = new DocAsnHeaderVO();
 					
 					importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
-					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//客户代码
+					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
 					importDataVO.setAsnreference1(dataArray.getAsnreference1());
 					importDataVO.setAsnreference2(dataArray.getAsnreference2());
 					try {
@@ -318,6 +326,10 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				}
@@ -348,6 +360,7 @@ public class ImportAsnDataService {
 	    map.put("货主代码", "customerid");
 	    map.put("客户单号1", "asnreference1");
 	    map.put("客户单号2", "asnreference2");
+		map.put("入库单类型", "asntype");
 	    map.put("预期到货时间", "expectedarrivetime1");
 	    map.put("产品代码", "sku");
 	    map.put("预期数量", "expectedqty");
@@ -377,7 +390,7 @@ public class ImportAsnDataService {
 				sku = basSkuMybatisDao.queryById(skuQuery);
 				if(sku == null){
 					resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
-							 .append("，客户代码：").append(importDataVO.getCustomerid())
+							 .append("，货主代码：").append(importDataVO.getCustomerid())
 							 .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，查无资料").append(" ");
 				}
 			}
@@ -407,9 +420,9 @@ public class ImportAsnDataService {
 		for (DocAsnHeaderVO importDataVO : importDataList) {
 			customerQuery.setCustomerid(importDataVO.getCustomerid());
 			customerQuery.setCustomerType("OW");
-			customer = basCustomerMybatisDao.queryById(customerQuery);
+			customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(),customerQuery.getCustomerType());
 			if (customer == null) {// 是否有客户资料
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户资料").append(" ");
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
 			}
 		}
 	}
@@ -423,7 +436,7 @@ public class ImportAsnDataService {
 			customerQuery.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 			customer = basCustomerMybatisDao.queryById(customerQuery);
 			if (customer == null) {// 是否有客户权限
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户权限").append(" ");
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户权限").append(" ");
 			}
 		}
 	}

@@ -582,7 +582,45 @@ var mergeOrder = function () {
 
 }
 
+var mergeReceiving = function () {
+    var row = ezuiDatagrid.datagrid('getSelections');
+    if(row) {
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认收货？', function(confirm) {
+            if (confirm) {
+                var arr = new Array();
+                for(var i=0;i<row.length;i++){
+                    arr.push(row[i].asnno);
+                }
+                $.ajax({
+                    url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
+                    data : {"asnno":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
+                    success : function(result){
+                        console.log(result);
+                        var msg='';
+                        try{
+                            if(result.success){
+                                msg = result.msg;
+                                ezuiDatagrid.datagrid('reload');
+                                ezuiDialog.dialog('close');
+                            }else{
+                                msg = '<font color="red">' + result.msg + '</font>';
+                            }
+                        }catch (e) {
+                            //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                            msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+                        } finally {
+                            $.messager.show({
+                                msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                            });
+                            $.messager.progress('close');
+                        }
+                    }
+                });
+            }
+        })
+    }
 
+}
 
 /* 关闭按钮 */
 var close1 = function(){

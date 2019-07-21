@@ -75,4 +75,6 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @param cleanInventory ~
      */
 	void cleanInventory(CleanInventory cleanInventory);
+
+	int queryMaxLineNo(@Param("qcNo")String qcno);
 }
