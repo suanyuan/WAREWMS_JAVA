@@ -213,7 +213,7 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from doc_qc_details where qcno = #{qcno}
+	delete 	 from doc_qc_details where qcno = #{qcno} and qclineno = #{qclineno}
 </delete>
  
 <!-- 根据id查询 验收明细档 -->
@@ -300,6 +300,16 @@ where 1=1
         qcdescr = #{qcdescr, jdbcType=VARCHAR},
         editwho = #{editwho, jdbcType=VARCHAR},
         edittime = #{edittime, jdbcType=VARCHAR}
+        where qcno = #{qcno, jdbcType=VARCHAR} and qclineno = #{qclineno, jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateQcCompletedQty" parameterType="java.util.Map">
+        update doc_qc_details set
+        paqty_expected = #{paqtyExpected, jdbcType=DOUBLE},
+        qcqty_expected = #{qcqtyExpected, jdbcType=DOUBLE},
+        qcqty_completed = #{qcqtyCompleted, jdbcType=DOUBLE},
+        editwho = #{editwho, jdbcType=DOUBLE},
+        edittime = now()
         where qcno = #{qcno, jdbcType=VARCHAR} and qclineno = #{qclineno, jdbcType=VARCHAR}
     </update>
 

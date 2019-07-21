@@ -50,6 +50,13 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	int updateQcDetail(DocQcDetails details);
 
     /**
+     * 更新验收明细件数（paqty_expected, qcqty_expected, qcqty_completed）
+     * @param details ~
+     * @return ~
+     */
+	int updateQcCompletedQty(DocQcDetails details);
+
+    /**
      * 获取验收任务单对应的上架任务单的总完成数（上架单结束的状态下）
      * @param qcno ~
      * @return ~

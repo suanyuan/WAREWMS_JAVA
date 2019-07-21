@@ -318,6 +318,7 @@ public class DocQcDetailsService extends BaseService {
                     invLotAttMybatisDao.getIdSequence(idSequence);
 
                     BeanUtils.copyProperties(lotatt_history, lotatt_hg);
+                    lotatt_hg.setLotnum(idSequence.getResultNo());
                     lotatt_hg.setLotatt10("HG");
                     lotatt_hg.setAddwho("Gizmo");
                     lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
@@ -415,14 +416,55 @@ public class DocQcDetailsService extends BaseService {
 
                 /*
                 根据qcdetails,更新批次号为合格的批次号，验收完成数为预期验收数，验收状态为合格
+
+                -->❌思路有点问题：
+                --> 应该先查询出上面普通合格的验收明细，把数量加上去，然后把这条detail删掉
                 * */
-                qcDetails.setLotnum(lotatt_hg.getLotnum());
-                qcDetails.setQcqtyCompleted(qcDetails.getQcqtyExpected());
-                qcDetails.setQcdescr(form.getQcdescr());
-                qcDetails.setLinestatus("40");
-                qcDetails.setUserdefine5("HG");
-                qcDetails.setEditwho("Gizmo");
-                docQcDetailsDao.updateQcDetail(qcDetails);
+
+                //如果更新后的验收明细和普通验收的相同，需要合并,但也不是一味地合并，如果上架过程中待检批次发生了变化，就得单独拿出来做一条记录，
+                //不然在查看验收明细的时候，会查出来多条
+                //  1，如果currentQcDetail.lotnum 等于 lotatt_history.lotnum && 库位相同等，此明细和普通验收的明细匹配，删除本条明细，吧数量
+                //  加到普通验收的数量上去
+
+                //  2，如果lotnum不相等，说明上架过程中的DJ批次改了生产日期，直接更新当前的lotnum, qcqtycompleted, qcdescr, linestatus
+                //  ,userdefine5等
+
+                if (currentQcDetail.getLotnum().equals(lotatt_history.getLotnum()) &&
+                currentQcDetail.getCustomerid().equals(qcDetails.getCustomerid()) &&
+                currentQcDetail.getSku().equals(qcDetails.getSku()) &&
+//                currentQcDetail.getPalineno().equals(qcDetails.getPalineno()) &&
+                currentQcDetail.getUserdefine1().equals(qcDetails.getUserdefine1())) {//其实这个适用于在批量验收的时候，验收数量没有满足预期验收数，需要把普通验收后的两条记录合并成一条
+
+                    // 获取普通验收通过的验收明细
+                    PdaDocQcDetailQuery pdaDocQcDetailQuery = new PdaDocQcDetailQuery();
+                    pdaDocQcDetailQuery.setQcno(qcDetails.getQcno());
+                    pdaDocQcDetailQuery.setCustomerid(qcDetails.getCustomerid());
+                    pdaDocQcDetailQuery.setSku(qcDetails.getSku());
+                    pdaDocQcDetailQuery.setLotatt01(form.getLotatt01());
+                    pdaDocQcDetailQuery.setLocationid(qcDetails.getUserdefine1());
+                    pdaDocQcDetailQuery.setLotatt04(qcDetails.getUserdefine3());
+                    pdaDocQcDetailQuery.setLotatt05(qcDetails.getUserdefine4());
+                    pdaDocQcDetailQuery.setLotatt10("HG");
+                    DocQcDetails normalDocQcDetails = docQcDetailsDao.queryDocQcDetail(pdaDocQcDetailQuery);
+                    normalDocQcDetails.setPaqtyExpected(normalDocQcDetails.getPaqtyExpected() + qcDetails.getPaqtyExpected());
+                    normalDocQcDetails.setQcqtyExpected(normalDocQcDetails.getQcqtyExpected() + qcDetails.getQcqtyExpected());
+                    normalDocQcDetails.setQcqtyCompleted(normalDocQcDetails.getQcqtyCompleted() + qcDetails.getQcqtyExpected());
+                    normalDocQcDetails.setEditwho("Gizmo");
+                    docQcDetailsDao.updateQcCompletedQty(normalDocQcDetails);
+
+                    //删除qcdetails
+                    docQcDetailsDao.delete(qcDetails);
+                }else {
+
+                    qcDetails.setLotnum(lotatt_hg.getLotnum());
+                    qcDetails.setQcqtyCompleted(qcDetails.getQcqtyExpected());
+                    qcDetails.setQcdescr(form.getQcdescr());
+                    qcDetails.setLinestatus("40");
+                    qcDetails.setUserdefine5("HG");
+                    qcDetails.setEditwho("Gizmo");
+                    docQcDetailsDao.updateQcDetail(qcDetails);
+                }
+
 
 
                 /* ********************************doc_qc_header******************************** */
