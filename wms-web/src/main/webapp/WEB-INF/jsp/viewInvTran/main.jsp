@@ -55,8 +55,23 @@ $(function() {
 			{field: 'fmlotatt02',		title: 'FM失效日期',	width: 108 },
 			{field: 'fmlotatt03',		title: 'FM入库日期',	width: 108 },
 			{field: 'fmlotatt04',		title: 'FM库存状态',	width: 74 },
-			{field: 'fmlotatt05',		title: 'FM批次属性5',	width: 74 },
-			{field: 'fmlotatt06',		title: 'FM批次属性6',	width: 74 },
+			{field: 'fmlotatt05',		title: 'FM序列号',	width: 74 },
+			{field: 'fmlotatt06',		title: 'FM产品注册证',	width: 74 },
+            {field: 'fmlotatt07',		title: 'FM灭菌批号',	width: 74 },
+            {field: 'fmlotatt08',		title: 'FM供应商',	width: 74 },
+            {field: 'fmlotatt09',		title: 'FM样品属性',	width: 74 },
+            {field: 'fmlotatt10',		title: 'FM质量状态',	width: 74 },
+            {field: 'fmlotatt11',		title: 'FM存储条件',	width: 74 },
+            {field: 'fmlotatt12',		title: 'FM产品名称',	width: 74 },
+            {field: 'fmlotatt13',		title: 'FM双证',	width: 74 },
+            {field: 'fmlotatt14',		title: 'FM入库单号',	width: 74 },
+            {field: 'fmlotatt15',		title: 'FM生产厂商名称',	width: 74 },
+            // {field: 'fmlotatt16',		title: 'FM批次属性16',	width: 74 },
+            // {field: 'fmlotatt17',		title: 'FM批次属性17',	width: 74 },
+            // {field: 'fmlotatt18',		title: 'FM批次属性18',	width: 74 },
+
+
+
 			{field: 'fmpackid',		title: 'FM箱号',	width: 74 },
 			{field: 'tocustomerid',		title: 'TO客户编码',	width: 74 },
 			{field: 'tosku',		title: 'TO商品编码',	width: 104 },
@@ -71,8 +86,22 @@ $(function() {
 			{field: 'tolotatt02',		title: 'TO失效日期',	width: 108 },
 			{field: 'tolotatt03',		title: 'TO入库日期',	width: 108 },
 			{field: 'tolotatt04',		title: 'TO库存状态',	width: 74 },
-			{field: 'tolotatt05',		title: 'TO批次属性5',	width: 74 },
-			{field: 'tolotatt06',		title: 'TO批次属性6',	width: 74 },
+			{field: 'tolotatt05',		title: 'TO序列号',	width: 74 },
+			{field: 'tolotatt06',		title: 'TO产品注册证',	width: 74 },
+            {field: 'tolotatt07',		title: 'TO灭菌批号',	width: 74 },
+            {field: 'tolotatt08',		title: 'TO供应商',	width: 74 },
+            {field: 'tolotatt09',		title: 'TO样品属性',	width: 74 },
+            {field: 'tolotatt10',		title: 'TO质量状态',	width: 74 },
+            {field: 'tolotatt11',		title: 'TO存储条件',	width: 74 },
+            {field: 'tolotatt12',		title: 'TO产品名称',	width: 74 },
+            {field: 'tolotatt13',		title: 'TO双证',	width: 74 },
+            {field: 'tolotatt14',		title: 'TO入库单号',	width: 74 },
+            {field: 'tolotatt15',		title: 'TO生产厂商名称',	width: 74 },
+            // {field: 'tolotatt16',		title: 'TO批次属性16',	width: 74 },
+            // {field: 'tolotatt17',		title: 'TO批次属性17',	width: 74 },
+            // {field: 'tolotatt18',		title: 'TO批次属性18',	width: 74 },
+
+
 			{field: 'topackid', 	title: 'TO箱号',	width: 74 },
 			{field: 'reasoncode',		title: '原因代码',	width: 44 },
 			{field: 'reason',		title: '原因',	width: 54 },
@@ -88,9 +117,9 @@ $(function() {
 // 			{field: 'fmid',		title: 'FM跟踪号',	width: 1 },
 // 			{field: 'toid',		title: 'TO跟踪号',	width: 1 }
 		]],
-		onDblClickCell: function(index,field,value){
-			edit();
-		},
+		// onDblClickCell: function(index,field,value){
+		// 	edit();
+		// },
 		onSelect: function(rowIndex, rowData) {
 			if (rowIndex - 1){
 				if (rowData.transactiontype == 'IN' && rowData.status == '99') {
@@ -431,7 +460,7 @@ var doSearch = function(){
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看明细</a>
+					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看明细</a>--%>
 					<a onclick='cancelReceive();' id='ezuiBtn_cancelReceive' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>取消收货</a>
 					<a onclick='cancelShipment();' id='ezuiBtn_cancelShipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>取消发货</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>

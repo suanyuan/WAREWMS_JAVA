@@ -84,7 +84,7 @@ public class DocAsnDoublecService extends BaseService {
 
 			basGtnVOList.add(gspProductRegisterSpecsVO);
 		}
-		int total = gspProductRegisterSpecsMybatisDao.queryByCount(criteria);
+		int total = docAsnDoublecMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(basGtnVOList);
 		return datagrid;

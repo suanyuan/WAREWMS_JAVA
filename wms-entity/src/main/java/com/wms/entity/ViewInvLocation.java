@@ -74,6 +74,15 @@ public class ViewInvLocation implements Serializable {
 	private String name;
 	private String productRegisterNo;
 	private String enterpriseName;
+	private String defaultreceivinguom;
+
+	public String getDefaultreceivinguom() {
+		return defaultreceivinguom;
+	}
+
+	public void setDefaultreceivinguom(String defaultreceivinguom) {
+		this.defaultreceivinguom = defaultreceivinguom;
+	}
 
 	public String getLotatt14() {
 		return lotatt14;

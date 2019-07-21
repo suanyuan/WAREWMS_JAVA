@@ -8,9 +8,11 @@ public class DocAsnCertificateVO {
 	private String customerid;
 	private String sku;
 	private String lotatt04;
-	private java.sql.Date addtime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String addtime;
 	private String addwho;
-	private java.sql.Date edittime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String edittime;
 	private String editwho;
 	private String certificateContext;
 
@@ -38,13 +40,20 @@ public class DocAsnCertificateVO {
 		this.lotatt04 = lotatt04;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getAddtime() {
+	public String getAddtime() {
 		return addtime;
 	}
 
-	public void setAddtime(java.sql.Date addtime) {
+	public void setAddtime(String addtime) {
 		this.addtime = addtime;
+	}
+
+	public String getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(String edittime) {
+		this.edittime = edittime;
 	}
 
 	public String getAddwho() {
@@ -55,14 +64,7 @@ public class DocAsnCertificateVO {
 		this.addwho = addwho;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getEdittime() {
-		return edittime;
-	}
 
-	public void setEdittime(java.sql.Date edittime) {
-		this.edittime = edittime;
-	}
 
 	public String getEditwho() {
 		return editwho;

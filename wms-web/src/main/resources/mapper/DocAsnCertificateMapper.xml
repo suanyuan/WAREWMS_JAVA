@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocAsnCertificateMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocAsnCertificate" >
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="certificate_context" property="certificateContext"/>
+</resultMap>
+       
+<!-- doc_asn_certificate table all fields -->
+<sql id="Base_Column_List" >
+	 customerid,sku,lotatt04,addtime,addwho,edittime,editwho,certificate_context
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.certificateContext != null and condition.certificateContext != ''" >
+	    and certificate_context =  #{condition.certificateContext}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_asn_certificate(customerid,sku,lotatt04,addtime,addwho,edittime,editwho,certificate_context)
+ values(#{customerid},#{sku},#{lotatt04},#{addtime},#{addwho},#{edittime},#{editwho},#{certificateContext})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_asn_certificate set sku=#{sku},lotatt04=#{lotatt04},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},certificate_context=#{certificateContext} where customerid=#{customerid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_asn_certificate set 
+	<trim  suffixOverrides="," >
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="certificateContext != null  ">
+		certificate_context=#{certificateContext},
+	</if>
+	</trim> where customerid=#{customerid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_asn_certificate where customerid = #{customerid}
+</delete>
+ 
+<!-- 根据id查询 质量合格证 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_asn_certificate where customerid = #{customerid}
+</select>
+
+<!-- 质量合格证 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_asn_certificate 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询质量合格证列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_asn_certificate 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

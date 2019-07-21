@@ -44,7 +44,7 @@ $(function() {
 			{field: 'addwho',		title: '创建时间',	width: 100 },
 			{field: 'edittime',		title: '编辑时间',	width: 100 },
 			{field: 'editwho',		title: '编辑人',	width: 100 },
-			{field: 'certificateContext',		title: '合格证照片',	width: 100 }
+			{field: 'certificateContext',		title: '合格证照片',	width: 100,hidden:true}
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -287,9 +287,9 @@ var toImportData = function(){
 					</table>
 				</fieldset>
 				<div>
-					<%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
+					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
+					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>查看详情</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -301,42 +301,44 @@ var toImportData = function(){
 			<input type='hidden' id='docAsnCertificateId' name='docAsnCertificateId'/>
 			<table>
 				<tr>
-					<th>待输入0</th>
+					<th>货主</th>
 					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入1</th>
+					<th>产品代码</th>
 					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入2</th>
+					<th>生产批号</th>
 					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入3</th>
-					<td><input type='text' name='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>合格证照片</th>
+					<td><input type='text' name='certificateContext' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				</tr>
+
+				<tr>
+					<th>创建时间</th>
+					<td><input type='text' name='addtime' class='easyui-textbox' value="" size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入4</th>
+					<th>创建人</th>
 					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入5</th>
+					<th>编辑时间</th>
 					<td><input type='text' name='edittime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入6</th>
+					<th>编辑人</th>
 					<td><input type='text' name='editwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
-				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='certificateContext' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
+
 			</table>
 		</form>
 	</div>
 	<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 
 	</div>
@@ -369,6 +371,9 @@ var toImportData = function(){
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<!-- 导入end -->
+
+
+
 
 </body>
 </html>

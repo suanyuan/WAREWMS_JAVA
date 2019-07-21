@@ -45,6 +45,31 @@ public class ViewInvTran implements Serializable {
 	private String fmlotatt05;
 
 	private String fmlotatt06;
+	private String fmlotatt07;
+
+	private String fmlotatt08;
+
+	private String fmlotatt09;
+
+	private String fmlotatt10;
+
+	private String fmlotatt11;
+
+	private String fmlotatt12;
+	private String fmlotatt13;
+
+	private String fmlotatt14;
+
+	private String fmlotatt15;
+
+	private String fmlotatt16;
+
+	private String fmlotatt17;
+
+	private String fmlotatt18;
+
+
+
 
 	private String fmlotnum;
 
@@ -90,7 +115,28 @@ public class ViewInvTran implements Serializable {
 	private String tolotatt05;
 
 	private String tolotatt06;
+	private String tolotatt07;
 
+	private String tolotatt08;
+
+	private String tolotatt09;
+
+	private String tolotatt10;
+
+	private String tolotatt11;
+
+	private String tolotatt12;
+	private String tolotatt13;
+
+	private String tolotatt14;
+
+	private String tolotatt15;
+
+	private String tolotatt16;
+
+	private String tolotatt17;
+
+	private String tolotatt18;
 	private String tolotnum;
 
 	private String topackid;
@@ -138,6 +184,198 @@ public class ViewInvTran implements Serializable {
 	private String warehouseid;
 
 	public ViewInvTran() {
+	}
+
+	public String getFmlotatt07() {
+		return fmlotatt07;
+	}
+
+	public void setFmlotatt07(String fmlotatt07) {
+		this.fmlotatt07 = fmlotatt07;
+	}
+
+	public String getFmlotatt08() {
+		return fmlotatt08;
+	}
+
+	public void setFmlotatt08(String fmlotatt08) {
+		this.fmlotatt08 = fmlotatt08;
+	}
+
+	public String getFmlotatt09() {
+		return fmlotatt09;
+	}
+
+	public void setFmlotatt09(String fmlotatt09) {
+		this.fmlotatt09 = fmlotatt09;
+	}
+
+	public String getFmlotatt10() {
+		return fmlotatt10;
+	}
+
+	public void setFmlotatt10(String fmlotatt10) {
+		this.fmlotatt10 = fmlotatt10;
+	}
+
+	public String getFmlotatt11() {
+		return fmlotatt11;
+	}
+
+	public void setFmlotatt11(String fmlotatt11) {
+		this.fmlotatt11 = fmlotatt11;
+	}
+
+	public String getFmlotatt12() {
+		return fmlotatt12;
+	}
+
+	public void setFmlotatt12(String fmlotatt12) {
+		this.fmlotatt12 = fmlotatt12;
+	}
+
+	public String getFmlotatt13() {
+		return fmlotatt13;
+	}
+
+	public void setFmlotatt13(String fmlotatt13) {
+		this.fmlotatt13 = fmlotatt13;
+	}
+
+	public String getFmlotatt14() {
+		return fmlotatt14;
+	}
+
+	public void setFmlotatt14(String fmlotatt14) {
+		this.fmlotatt14 = fmlotatt14;
+	}
+
+	public String getFmlotatt15() {
+		return fmlotatt15;
+	}
+
+	public void setFmlotatt15(String fmlotatt15) {
+		this.fmlotatt15 = fmlotatt15;
+	}
+
+	public String getFmlotatt16() {
+		return fmlotatt16;
+	}
+
+	public void setFmlotatt16(String fmlotatt16) {
+		this.fmlotatt16 = fmlotatt16;
+	}
+
+	public String getFmlotatt17() {
+		return fmlotatt17;
+	}
+
+	public void setFmlotatt17(String fmlotatt17) {
+		this.fmlotatt17 = fmlotatt17;
+	}
+
+	public String getFmlotatt18() {
+		return fmlotatt18;
+	}
+
+	public void setFmlotatt18(String fmlotatt18) {
+		this.fmlotatt18 = fmlotatt18;
+	}
+
+	public String getTolotatt07() {
+		return tolotatt07;
+	}
+
+	public void setTolotatt07(String tolotatt07) {
+		this.tolotatt07 = tolotatt07;
+	}
+
+	public String getTolotatt08() {
+		return tolotatt08;
+	}
+
+	public void setTolotatt08(String tolotatt08) {
+		this.tolotatt08 = tolotatt08;
+	}
+
+	public String getTolotatt09() {
+		return tolotatt09;
+	}
+
+	public void setTolotatt09(String tolotatt09) {
+		this.tolotatt09 = tolotatt09;
+	}
+
+	public String getTolotatt10() {
+		return tolotatt10;
+	}
+
+	public void setTolotatt10(String tolotatt10) {
+		this.tolotatt10 = tolotatt10;
+	}
+
+	public String getTolotatt11() {
+		return tolotatt11;
+	}
+
+	public void setTolotatt11(String tolotatt11) {
+		this.tolotatt11 = tolotatt11;
+	}
+
+	public String getTolotatt12() {
+		return tolotatt12;
+	}
+
+	public void setTolotatt12(String tolotatt12) {
+		this.tolotatt12 = tolotatt12;
+	}
+
+	public String getTolotatt13() {
+		return tolotatt13;
+	}
+
+	public void setTolotatt13(String tolotatt13) {
+		this.tolotatt13 = tolotatt13;
+	}
+
+	public String getTolotatt14() {
+		return tolotatt14;
+	}
+
+	public void setTolotatt14(String tolotatt14) {
+		this.tolotatt14 = tolotatt14;
+	}
+
+	public String getTolotatt15() {
+		return tolotatt15;
+	}
+
+	public void setTolotatt15(String tolotatt15) {
+		this.tolotatt15 = tolotatt15;
+	}
+
+	public String getTolotatt16() {
+		return tolotatt16;
+	}
+
+	public void setTolotatt16(String tolotatt16) {
+		this.tolotatt16 = tolotatt16;
+	}
+
+	public String getTolotatt17() {
+		return tolotatt17;
+	}
+
+	public void setTolotatt17(String tolotatt17) {
+		this.tolotatt17 = tolotatt17;
+	}
+
+	public String getTolotatt18() {
+		return tolotatt18;
+	}
+
+	public void setTolotatt18(String tolotatt18) {
+		this.tolotatt18 = tolotatt18;
 	}
 
 	public String getWarehouseid() {

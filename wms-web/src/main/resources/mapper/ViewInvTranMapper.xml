@@ -20,6 +20,20 @@
 	<result column="fmlotatt04" property="fmlotatt04"/>
 	<result column="fmlotatt05" property="fmlotatt05"/>
 	<result column="fmlotatt06" property="fmlotatt06"/>
+	<result column="fmlotatt07" property="fmlotatt07"/>
+	<result column="fmlotatt08" property="fmlotatt08"/>
+	<result column="fmlotatt09" property="fmlotatt09"/>
+	<result column="fmlotatt10" property="fmlotatt10"/>
+	<result column="fmlotatt11" property="fmlotatt11"/>
+	<result column="fmlotatt12" property="fmlotatt12"/>
+	<result column="fmlotatt13" property="fmlotatt13"/>
+	<result column="fmlotatt14" property="fmlotatt14"/>
+	<result column="fmlotatt15" property="fmlotatt15"/>
+	<result column="fmlotatt16" property="fmlotatt16"/>
+	<result column="fmlotatt17" property="fmlotatt17"/>
+	<result column="fmlotatt18" property="fmlotatt18"/>
+
+
 	<result column="fmlotnum" property="fmlotnum"/>
 	<result column="fmpackid" property="fmpackid"/>
 	<result column="fmqty" property="fmqty"/>
@@ -41,6 +55,23 @@
 	<result column="tolotatt04" property="tolotatt04"/>
 	<result column="tolotatt05" property="tolotatt05"/>
 	<result column="tolotatt06" property="tolotatt06"/>
+	<result column="tolotatt07" property="tolotatt07"/>
+	<result column="tolotatt08" property="tolotatt08"/>
+	<result column="tolotatt09" property="tolotatt09"/>
+	<result column="tolotatt10" property="tolotatt10"/>
+	<result column="tolotatt11" property="tolotatt11"/>
+	<result column="tolotatt12" property="tolotatt12"/>
+	<result column="tolotatt13" property="tolotatt13"/>
+	<result column="tolotatt14" property="tolotatt14"/>
+	<result column="tolotatt15" property="tolotatt15"/>
+	<result column="tolotatt16" property="tolotatt16"/>
+	<result column="tolotatt17" property="tolotatt17"/>
+	<result column="tolotatt18" property="tolotatt18"/>
+
+
+
+
+
 	<result column="tolotnum" property="tolotnum"/>
 	<result column="topackid" property="topackid"/>
 	<result column="toqty" property="toqty"/>
@@ -66,7 +97,7 @@
        
 <!-- View_Inv_Trans table all fields -->
 <sql id="Base_Column_List" >
-	 addtime,doclineno,docno,doctype,doctype_name,editwho,fmcustomerid,fmid,fmlocation,fmlotatt01,fmlotatt02,fmlotatt03,fmlotatt04,fmlotatt05,fmlotatt06,fmlotnum,fmpackid,fmqty,fmqty_each,fmsku,fmuom,fmuom_name,operator,reason,reasoncode,status,status_name,tocustomerid,toid,tolocation,tolotatt01,tolotatt02,tolotatt03,tolotatt04,tolotatt05,tolotatt06,tolotnum,topackid,toqty,toqty_each,tosku,totalcubic,totalgrossweight,totalnetweight,totalprice,touom,touom_name,transactionid,transactiontime,transactiontype,transactiontype_name,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,warehouseid
+	 addtime,doclineno,docno,doctype,doctype_name,editwho,fmcustomerid,fmid,fmlocation,fmlotatt01,fmlotatt02,fmlotatt03,fmlotatt04,fmlotatt05,fmlotatt06,fmlotatt07,fmlotatt08,fmlotatt09,fmlotatt10,fmlotatt11,fmlotatt12,fmlotatt13,fmlotatt14,fmlotatt15,fmlotatt16,fmlotatt17,fmlotatt18,fmlotnum,fmpackid,fmqty,fmqty_each,fmsku,fmuom,fmuom_name,operator,reason,reasoncode,status,status_name,tocustomerid,toid,tolocation,tolotatt01,tolotatt02,tolotatt03,tolotatt04,tolotatt05,tolotatt06,tolotatt07,tolotatt08,tolotatt09,tolotatt10,tolotatt11,tolotatt12,tolotatt13,tolotatt14,tolotatt15,tolotatt16,tolotatt17,tolotatt18,tolotnum,topackid,toqty,toqty_each,tosku,totalcubic,totalgrossweight,totalnetweight,totalprice,touom,touom_name,transactionid,transactiontime,transactiontype,transactiontype_name,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,warehouseid
 </sql>
    
    

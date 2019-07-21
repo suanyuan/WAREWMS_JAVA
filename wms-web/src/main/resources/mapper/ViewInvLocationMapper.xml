@@ -38,12 +38,13 @@
 	<result column="name" property="name"/>
 	<result column="product_register_no" property="productRegisterNo"/>
 	<result column="enterprise_name" property="enterpriseName"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
 
 </resultMap>
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt08,lotatt10,lotatt14,customerid,product_register_no,enterprise_name,name
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,defaultreceivinguom,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt08,lotatt10,lotatt14,customerid,product_register_no,enterprise_name,name
 </sql>
    
    

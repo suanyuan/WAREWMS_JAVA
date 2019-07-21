@@ -27,7 +27,17 @@ public class ViewInvLocationQuery implements IQuery {
 	private java.math.BigDecimal totalcubic;
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
+
+	private java.lang.String defaultreceivinguom;
 	private Set<SfcCustomer> customerSet;
+
+	public String getDefaultreceivinguom() {
+		return defaultreceivinguom;
+	}
+
+	public void setDefaultreceivinguom(String defaultreceivinguom) {
+		this.defaultreceivinguom = defaultreceivinguom;
+	}
 
 	public java.lang.String getFmcustomerid() {
 		return fmcustomerid;
