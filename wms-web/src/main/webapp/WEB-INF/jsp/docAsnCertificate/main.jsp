@@ -20,7 +20,7 @@ $(function() {
 	ezuiForm = $('#ezuiForm').form();
     ezuiImportDataForm=$('#ezuiImportDataForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/docAsnDoublecController.do?showDatagrid"/>',
+		url : '<c:url value="/docAsnCertificateController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -34,28 +34,21 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:false,
-		idField : 'doublecno',
+		singleSelect:true,
+		idField : 'id',
 		columns : [[
-			{field: 'doublecno',		title: '任务号',	width: 53 },
-			{field: 'customerid',		title: '',	width: 53 ,hidden:true},
-			{field: 'context1',		title: '产品型号',	width: 53 },
-			{field: 'context2',		title: '名称',	width: 53 },
-			{field: 'context3',		title: '执行标准',	width: 53 },
-			{field: 'context4',		title: '备注',	width: 53 },
-			{field: 'context5',		title: '待输入栏位6',	width: 53 ,hidden:true},
-			{field: 'context6',		title: '待输入栏位7',	width: 53 ,hidden:true},
-			{field: 'context7',		title: '待输入栏位8',	width: 53 ,hidden:true},
-			{field: 'context8',		title: '待输入栏位9',	width: 53 ,hidden:true},
-			{field: 'matchFlag',		title: '匹配标记',	width: 53 , formatter:function(value,rowData,rowIndex){
-                    return rowData.matchFlag == '1' ? '已匹配' : '未匹配';
-                }},
-			{field: 'addtime',		title: '创建时间',	width: 53 },
-			{field: 'addwho',		title: '创建人',	width: 53 },
-			{field: 'edittime',		title: '编辑时间',	width: 53 },
-			{field: 'editwho',		title: '编辑人',	width: 53 }
+			{field: 'customerid',		title: '货主',	width: 100 },
+			{field: 'sku',		title: '产品代码',	width: 100 },
+			{field: 'lotatt04',		title: '生产批号',	width: 100 },
+			{field: 'addtime',		title: '创建人',	width: 100 },
+			{field: 'addwho',		title: '创建时间',	width: 100 },
+			{field: 'edittime',		title: '编辑时间',	width: 100 },
+			{field: 'editwho',		title: '编辑人',	width: 100 },
+			{field: 'certificateContext',		title: '合格证照片',	width: 100 }
 		]],
-
+		onDblClickCell: function(index,field,value){
+			edit();
+		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');
@@ -65,7 +58,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnDoublecController.do?getBtn"/>', ezuiMenu);
+			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnCertificateController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -77,7 +70,6 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
-
     //导入
     ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
         modal : true,
@@ -89,9 +81,10 @@ $(function() {
     }).dialog('close');
     /* 控件初始化end */
 });
+
 var add = function(){
 	processType = 'add';
-	$('#docAsnDoublecId').val(0);
+	$('#docAsnCertificateId').val(0);
 	ezuiDialog.dialog('open');
 };
 var edit = function(){
@@ -99,21 +92,14 @@ var edit = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		ezuiForm.form('load',{
-			doublecno : row.doublecno,
 			customerid : row.customerid,
-			context1 : row.context1,
-			context2 : row.context2,
-			context3 : row.context3,
-			context4 : row.context4,
-			context5 : row.context5,
-			context6 : row.context6,
-			context7 : row.context7,
-			context8 : row.context8,
-			matchFlag : row.matchFlag,
+			sku : row.sku,
+			lotatt04 : row.lotatt04,
 			addtime : row.addtime,
 			addwho : row.addwho,
 			edittime : row.edittime,
-			editwho : row.editwho
+			editwho : row.editwho,
+			certificateContext : row.certificateContext
 		});
 		ezuiDialog.dialog('open');
 	}else{
@@ -123,17 +109,13 @@ var edit = function(){
 	}
 };
 var del = function(){
-	var row = ezuiDatagrid.datagrid('getSelections');
+	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-	    var arr = new Array();
-	    for(var i=0;i<row.length;i++){
-            arr.push(row[i].doublecno);
-		}
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
-					url : 'docAsnDoublecController.do?delete',
-					data : {id :arr.join(",")},
+					url : 'docAsnCertificateController.do?delete',
+					data : {id : row.id},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -161,9 +143,9 @@ var del = function(){
 var commit = function(){
 	var url = '';
 	if (processType == 'edit') {
-		url = '<c:url value="/docAsnDoublecController.do?edit"/>';
+		url = '<c:url value="/docAsnCertificateController.do?edit"/>';
 	}else{
-		url = '<c:url value="/docAsnDoublecController.do?add"/>';
+		url = '<c:url value="/docAsnCertificateController.do?add"/>';
 	}
 	ezuiForm.form('submit', {
 		url : url,
@@ -202,28 +184,22 @@ var commit = function(){
 };
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		doublecno : $('#doublecno').val(),
 		customerid : $('#customerid').val(),
-		context1 : $('#context1').val(),
-		context2 : $('#context2').val(),
-		context3 : $('#context3').val(),
-		context4 : $('#context4').val(),
-		context5 : $('#context5').val(),
-		context6 : $('#context6').val(),
-		context7 : $('#context7').val(),
-		context8 : $('#context8').val(),
-		matchFlag : $('#matchFlag').val(),
+		sku : $('#sku').val(),
+		lotatt04 : $('#lotatt04').val(),
 		addtime : $('#addtime').val(),
 		addwho : $('#addwho').val(),
 		edittime : $('#edittime').val(),
-		editwho : $('#editwho').val()
+		editwho : $('#editwho').val(),
+		certificateContext : $('#certificateContext').val()
 	});
 };
+
 
 /* 导入start */
 var commitImportData = function(obj){
     ezuiImportDataForm.form('submit', {
-        url : '<c:url value="/docAsnDoublecController.do?importExcelData"/>',
+        url : '<c:url value="/docAsnCertificateController.do?importExcelData"/>',
         onSubmit : function(){
             if(ezuiImportDataForm.form('validate')){
                 $.messager.progress({
@@ -287,7 +263,6 @@ var downloadTemplate = function(){
 var toImportData = function(){
     ezuiImportDataDialog.dialog('open');
 };
-
 </script>
 </head>
 <body>
@@ -299,25 +274,10 @@ var toImportData = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>任务号</th><td><input type='text' id='doublecno' class='easyui-textbox' size='16' data-options=''/></td>
-
-							<th>产品型号</th><td><input type='text' id='context1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>名称</th><td><input type='text' id='context2' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>执行标准</th><td><input type='text' id='context3' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>备注</th><td><input type='text' id='context4' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>标记匹配</th><td><input type='text' id='matchFlag' class='easyui-textbox' size='16' data-options=''/></td>
-							<%--<th>待输入名称6：</th><td><input type='text' id='context5' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称7：</th><td><input type='text' id='context6' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称8：</th><td><input type='text' id='context7' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称9：</th><td><input type='text' id='context8' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称10：</th><td><input type='text' id='matchFlag' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称11：</th><td><input type='text' id='addtime' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称12：</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称13：</th><td><input type='text' id='edittime' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<%--<th>待输入名称14：</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>--%>
-						</tr>
-						<tr>
-							<td colspan="12">
+							<th>货主</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
@@ -328,7 +288,6 @@ var toImportData = function(){
 				</fieldset>
 				<div>
 					<%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
-
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
@@ -339,64 +298,52 @@ var toImportData = function(){
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='docAsnDoublecId' name='docAsnDoublecId'/>
+			<input type='hidden' id='docAsnCertificateId' name='docAsnCertificateId'/>
 			<table>
 				<tr>
-					<th>任务号</th>
-					<td><input type='text' name='doublecno' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入1</th>
+					<th>待输入0</th>
 					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
+					<th>待输入1</th>
+					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				</tr>
+				<tr>
 					<th>待输入2</th>
-					<td><input type='text' name='context1' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入3</th>
-					<td><input type='text' name='context2' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入4</th>
-					<td><input type='text' name='context3' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入5</th>
-					<td><input type='text' name='context4' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='edittime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入6</th>
-					<td><input type='text' name='context5' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='editwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入7</th>
-					<td><input type='text' name='context6' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='certificateContext' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
-				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='context7' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='context8' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='matchFlag' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-
 			</table>
 		</form>
 	</div>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+
 	</div>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
-		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
+		<%--<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>--%>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
-		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
+		<%--<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>--%>
 	</div>
 
 	<!-- 导入start -->
@@ -422,5 +369,6 @@ var toImportData = function(){
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<!-- 导入end -->
+
 </body>
 </html>
