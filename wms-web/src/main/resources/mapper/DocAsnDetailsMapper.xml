@@ -107,15 +107,29 @@
 	<!-- -->
 	<resultMap id="DocPaDTOMap" type="com.wms.dto.DocPaDTO">
 		<result column="asnno" property="asnno"/>
+		<result column="asntype" property="asntype"/>
 		<result column="linestatus" property="linestatus"/>
 		<result column="asnlineno" property="asnlineno"/>
 		<result column="customerid" property="customerid"/>
 		<result column="sku" property="sku"/>
+		<result column="lotatt01" property="lotatt01"/>
 		<result column="lotatt02" property="lotatt02"/>
+		<result column="lotatt03" property="lotatt03"/>
 		<result column="lotatt04" property="lotatt04"/>
 		<result column="lotatt05" property="lotatt05"/>
+		<result column="lotatt06" property="lotatt06"/>
+		<result column="lotatt07" property="lotatt07"/>
+		<result column="lotatt08" property="lotatt08"/>
+		<result column="lotatt09" property="lotatt09"/>
 		<result column="lotatt10" property="lotatt10"/>
+		<result column="lotatt11" property="lotatt11"/>
+		<result column="lotatt12" property="lotatt12"/>
+		<result column="lotatt13" property="lotatt13"/>
+		<result column="lotatt14" property="lotatt14"/>
 		<result column="packid" property="packid"/>
+		<result column="asnstatus" property="asnstatus"/>
+		<result column="receivedqty" property="receivedqty"/>
+		<result column="lotnum" property="lotnum"/>
 	</resultMap>
        
 <!-- Doc_Asn_Details table all fields -->
@@ -446,6 +460,14 @@ insert into doc_asn_details
          lotatt04,
          lotatt05,
          lotatt06,
+         lotatt07,
+         lotatt08,
+         lotatt09,
+         lotatt10,
+         lotatt11,
+         lotatt12,
+         lotatt13,
+         lotatt14,
          reserve_flag)
         values(#{asnno},
                #{asnlineno},
@@ -482,6 +504,14 @@ insert into doc_asn_details
                #{lotatt04, jdbcType=VARCHAR},
                #{lotatt05, jdbcType=VARCHAR},
                #{lotatt06, jdbcType=VARCHAR},
+               #{lotatt07, jdbcType=VARCHAR},
+               #{lotatt08, jdbcType=VARCHAR},
+               #{lotatt09, jdbcType=VARCHAR},
+               #{lotatt10, jdbcType=VARCHAR},
+               #{lotatt11, jdbcType=VARCHAR},
+               #{lotatt12, jdbcType=VARCHAR},
+               #{lotatt13, jdbcType=VARCHAR},
+               #{lotatt14, jdbcType=VARCHAR},
                'N'
                )
 </insert>
@@ -926,7 +956,7 @@ insert into doc_asn_details
 <!--按明细行收货 -->
 <select id="receiveByAsn" statementType="CALLABLE" parameterType="java.util.Map">
 	<!--EXEC SPASN_Receiving_Process 'WH01',                                 '3','A16011800001',                   '1',                                  '*','*','00','正常','OK','正常','','XTCS'                                 ,'TEST001',                      '90'只支持完全收货                                                                         ,'0','EA','STANDARD','',''                                 ,'',                                 '2016-01-18',                         '',                                  ''                                   ,''                                  ,'','','','','','','0'                                   ,'0.000'                                     ,'0.000','0.00000',                             '','','','','','TEST001',                                    'TEST001'                                    ,'00','','2016-01-18 14:01',                      'Y','wpsadmin'                         ,'CN','wpsadmin'                         ,''-->
-	   {call SPASN_Receiving_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'3',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{expectedqty,mode=IN,jdbcType=VARCHAR},'0','EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt13,mode=IN,jdbcType=VARCHAR},#{lotatt14,mode=IN,jdbcType=VARCHAR},#{lotatt15,mode=IN,jdbcType=VARCHAR},'','','',#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivingtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPASN_Receiving_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'1',#{asnno,mode=IN,jdbcType=VARCHAR},#{asnlineno,mode=IN,jdbcType=VARCHAR},'*','*','00','正常','OK','正常','',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{expectedqty,mode=IN,jdbcType=VARCHAR},#{expectedqty,mode=IN,jdbcType=VARCHAR},'EA','STANDARD','',#{lotatt01,mode=IN,jdbcType=VARCHAR},#{lotatt02,mode=IN,jdbcType=VARCHAR},#{lotatt03,mode=IN,jdbcType=VARCHAR},#{lotatt04,mode=IN,jdbcType=VARCHAR},#{lotatt05,mode=IN,jdbcType=VARCHAR},#{lotatt06,mode=IN,jdbcType=VARCHAR},#{lotatt07,mode=IN,jdbcType=VARCHAR},#{lotatt08,mode=IN,jdbcType=VARCHAR},#{lotatt09,mode=IN,jdbcType=VARCHAR},#{lotatt10,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt13,mode=IN,jdbcType=VARCHAR},#{lotatt14,mode=IN,jdbcType=VARCHAR},#{lotatt15,mode=IN,jdbcType=VARCHAR},null,null,null,#{totalcubic,mode=IN,jdbcType=VARCHAR},#{totalgrossweight,mode=IN,jdbcType=VARCHAR},'0.000',#{totalprice,mode=IN,jdbcType=VARCHAR},'','','','','',#{receivinglocation,mode=IN,jdbcType=VARCHAR},#{receivinglocation,mode=IN,jdbcType=VARCHAR},'00','',#{receivedtime,mode=IN,jdbcType=VARCHAR},'Y',#{editwho,mode=IN,jdbcType=VARCHAR},'CN',#{editwho,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
     <select id="testProcedure" statementType="CALLABLE" parameterType="java.util.Map">
@@ -944,28 +974,29 @@ insert into doc_asn_details
 
 <!-- 根据id查询 入库单管理明细 -->
 <select id="queryDocPaDTO"  resultMap="DocPaDTOMap">
-	select h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,de.lotatt02,de.lotatt04,de.lotatt05,'DJ' as lotatt10,de.packid, ia.lotnum
+	select h.asnstatus,h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,'DJ' as lotatt10,de.packid, ia.lotnum,de.customerid,de.expectedqty,de.plantoloc,
+	de.lotatt02,de.lotatt03,de.lotatt04,de.lotatt05,de.lotatt06,de.lotatt07,de.lotatt08,de.lotatt09,de.lotatt11,de.lotatt12,de.lotatt13,de.lotatt14,h.asntype,de.receivedqty
 	from doc_asn_header h
     left join doc_asn_details de on h.asnno = de.asnno
     left join inv_lot_att ia on
-          IFNULL(ia.lotatt01,'*') = IFNULL(rtrim(de.lotatt01),'*')
-      and IFNULL(ia.lotatt02,'*') = IFNULL(rtrim(de.lotatt02),'*')
-      and IFNULL(ia.lotatt03,'*') = IFNULL(rtrim(de.lotatt03),'*')
-      and IFNULL(ia.lotatt04,'*') = IFNULL(rtrim(de.lotatt04),'*')
-      and IFNULL(ia.lotatt05,'*') = IFNULL(rtrim(de.lotatt05),'*')
-      and IFNULL(ia.lotatt06,'*') = IFNULL(rtrim(de.lotatt06),'*')
-      and IFNULL(ia.lotatt07,'*') = IFNULL(rtrim(de.lotatt07),'*')
-      and IFNULL(ia.lotatt08,'*') = IFNULL(rtrim(de.lotatt08),'*')
-      and IFNULL(ia.lotatt09,'*') = IFNULL(rtrim(de.lotatt09),'*')
-      and IFNULL(ia.lotatt10,'*') = IFNULL(rtrim(de.lotatt10),'*')
-      and IFNULL(ia.lotatt11,'*') = IFNULL(rtrim(de.lotatt11),'*')
-      and IFNULL(ia.lotatt12,'*') = IFNULL(rtrim(de.lotatt12),'*')
-      and IFNULL(ia.lotatt13,'*') = IFNULL(rtrim(de.lotatt13),'*')
-      and IFNULL(ia.lotatt14,'*') = IFNULL(rtrim(de.lotatt14),'*')
-      and IFNULL(ia.lotatt15,'*') = IFNULL(rtrim(de.lotatt15),'*')
-      and IFNULL(ia.lotatt16,'*') = IFNULL(rtrim(de.lotatt16),'*')
-      and IFNULL(ia.lotatt17,'*') = IFNULL(rtrim(de.lotatt17),'*')
-      and IFNULL(ia.lotatt18,'*') = IFNULL(rtrim(de.lotatt18),'*')
+          IFNULL(ia.lotatt01,'') = IFNULL(rtrim(de.lotatt01),'')
+      and IFNULL(ia.lotatt02,'') = IFNULL(rtrim(de.lotatt02),'')
+      and IFNULL(ia.lotatt03,'') = IFNULL(rtrim(de.lotatt03),'')
+      and IFNULL(ia.lotatt04,'') = IFNULL(rtrim(de.lotatt04),'')
+      and IFNULL(ia.lotatt05,'') = IFNULL(rtrim(de.lotatt05),'')
+      and IFNULL(ia.lotatt06,'') = IFNULL(rtrim(de.lotatt06),'')
+      and IFNULL(ia.lotatt07,'') = IFNULL(rtrim(de.lotatt07),'')
+      and IFNULL(ia.lotatt08,'') = IFNULL(rtrim(de.lotatt08),'')
+      and IFNULL(ia.lotatt09,'') = IFNULL(rtrim(de.lotatt09),'')
+      and IFNULL(ia.lotatt10,'') = IFNULL(rtrim(de.lotatt10),'')
+      and IFNULL(ia.lotatt11,'') = IFNULL(rtrim(de.lotatt11),'')
+      and IFNULL(ia.lotatt12,'') = IFNULL(rtrim(de.lotatt12),'')
+      and IFNULL(ia.lotatt13,'') = IFNULL(rtrim(de.lotatt13),'')
+      and IFNULL(ia.lotatt14,'') = IFNULL(rtrim(de.lotatt14),'')
+      and IFNULL(ia.lotatt15,'') = IFNULL(rtrim(de.lotatt15),'')
+      and IFNULL(ia.lotatt16,'') = IFNULL(rtrim(de.lotatt16),'')
+      and IFNULL(ia.lotatt17,'') = IFNULL(rtrim(de.lotatt17),'')
+      and IFNULL(ia.lotatt18,'') = IFNULL(rtrim(de.lotatt18),'')
       and ia.customerid = de.customerid and ia.sku = de.sku
 	where h.asnno in
 	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">

@@ -18,6 +18,7 @@ import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnDetailForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,6 +116,10 @@ public class DocAsnDetailService extends BaseService {
 		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(docAsnDetailQuery);
 		String result = "";
 		if(docAsnDetail != null){
+			if(StringUtils.isEmpty(docAsnDetail.getReceivinglocation())){
+				//docAsnDetail.setPlantoloc("STAGE01");
+				docAsnDetail.setReceivinglocation("STAGE01");
+			}
 			docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			docAsnDetail.setReceivedtime(new Date());
 			docAsnDetail.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

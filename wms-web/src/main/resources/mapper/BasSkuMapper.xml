@@ -748,7 +748,7 @@ where 1=1
 	ifnull(price,0) * #{qty,jdbcType=NUMERIC} as price
 	from Bas_Sku
 	where customerid=upper(#{customerid,jdbcType=VARCHAR})
-	and sku=upper(#{sku,jdbcType=VARCHAR}))
+	and sku=upper(#{sku,jdbcType=VARCHAR})) t
 </select>
 
 <!-- 删除商品记录判断 -->

@@ -93,7 +93,7 @@ public class ImportAsnDataService {
             if (resultMsg.length() == 0 && importDataList != null && importDataList.size() > 0) {
 				this.validateCustomer(importDataList, resultMsg);// 验证客户是否存在
 				if (resultMsg.length() == 0) {
-					this.validateCustomerPermission(importDataList, resultMsg);// 验证客户权限是否存在
+					//this.validateCustomerPermission(importDataList, resultMsg);// 验证客户权限是否存在 TODO 货主权限验证
 					if (resultMsg.length() == 0) {
 						this.validateSku(importDataList, resultMsg);// 验证商品是否存在
 						if (resultMsg.length() == 0) {
@@ -263,10 +263,10 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
+					importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				} else if (dataArray.getCustomerid().toUpperCase().equals(customerid) &&
@@ -289,10 +289,10 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
+					importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				} else {
@@ -326,10 +326,10 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt07());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt08());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt09());
-					importDetailsDataVO.setLotatt06(dataArray.getLotatt11());
+					importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
+					importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
+					importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
+					importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
 					importDetailsDataVO.setNotes(dataArray.getNotes());
 					importDetailsDataVOList.add(importDetailsDataVO);
 				}
@@ -455,7 +455,8 @@ public class ImportAsnDataService {
 			if (resultCode.substring(0,3).equals("000")) {
 				//赋值
 				asnHeader.setAsnno(resultNo);
-				asnHeader.setAsntype("PR");
+				//asnHeader.setAsntype("PR");
+				asnHeader.setAsntype(importDataVO.getAsntype());
 				asnHeader.setReleasestatus("Y");
 				asnHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				asnHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -480,6 +481,7 @@ public class ImportAsnDataService {
 					asnDetails.setAsnlineno(asnlineno + 1);
 					asnDetails.setPackid(basSku.getPackid());
 					asnDetails.setAlternativesku(basSku.getAlternateSku1());
+					asnDetails.setLotatt10("DJ");
 					//体积重量单价若不输入则从SKU里读取
 					if(importDetailsDataVO.getTotalgrossweight().compareTo(BigDecimal.ZERO) == 1){
 						asnDetails.setTotalgrossweight(importDetailsDataVO.getTotalgrossweight());

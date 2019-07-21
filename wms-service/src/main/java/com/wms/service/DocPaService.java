@@ -81,6 +81,7 @@ public class DocPaService {
                 docPaHeaderForm.setAddtime(new Date());
                 docPaHeaderForm.setAddwho(login.getId());
                 docPaHeaderForm.setPaPrintFlag(Constant.CODE_YES_OR_NO);
+                docPaHeaderForm.setCustomerid(listDTO.get(0).getCustomerid());
                 //docPaHeader.setWarehouseid();
                 Json json = docPaHeaderService.addDocPaHeader(docPaHeaderForm);
                 if (!json.isSuccess()) {
@@ -89,10 +90,13 @@ public class DocPaService {
                 for (DocPaDTO docPaDTO : listDTO) {
                     DocPaDetailsForm detailsForm = new DocPaDetailsForm();
                     detailsForm.setPano(panno);
-                    detailsForm.setLinestatus(docPaDTO.getLinestatus());
+                    detailsForm.setLinestatus("00");
                     detailsForm.setLotnum(docPaDTO.getLotnum());
                     detailsForm.setAsnno(docPaDTO.getAsnno());
                     detailsForm.setAsnlineno(Double.parseDouble(docPaDTO.getAsnlineno()+""));
+                    detailsForm.setAsnqtyExpected(docPaDTO.getReceivedqty().doubleValue());
+                    detailsForm.setPutwayqtyExpected(docPaDTO.getReceivedqty().doubleValue());
+                    detailsForm.setPutwayqtyCompleted(0d);
                     detailsForm.setCustomerid(docPaDTO.getCustomerid());
                     detailsForm.setSku(docPaDTO.getSku());
                     detailsForm.setUserdefine1("STAGE01");
@@ -100,6 +104,7 @@ public class DocPaService {
                     detailsForm.setUserdefine3(docPaDTO.getLotatt04());
                     detailsForm.setUserdefine4(docPaDTO.getLotatt05());
                     detailsForm.setUserdefine5(docPaDTO.getLotatt10());
+                    detailsForm.setPalineno((docPaDetailService.queryMaxLineNo(panno)+1) + "");
                     detailsForm.setPackid(docPaDTO.getPackid());
                     detailsForm.setAddwho(login.getId());
                     detailsForm.setAddtime(new Date());
@@ -137,7 +142,10 @@ public class DocPaService {
                     if(!docPaDTO.getAsnstatus().equals("00")){
                         return Json.error("只有创建状态的通知单才能确认收货");
                     }
-
+                    Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
+                    if(!json.isSuccess()){
+                        return Json.error("收货失败");
+                    }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
                     if(docPaDTO.getAsntype().equals("DX")){
 
@@ -236,8 +244,6 @@ public class DocPaService {
                         docQcDetailsForm.setTransactionid("");
                         docQcDetailsService.addDocQcDetails(docQcDetailsForm);
                     }
-
-                    Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
                 }
                 return Json.success("收货成功");
             }

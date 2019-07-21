@@ -152,7 +152,7 @@ $(function() {
             {field: 'lotatt08',	title: '供应商',		width: 80 },
             {field: 'lotatt09',	title: '样品属性',		width: 80 },
             {field: 'lotatt10',	title: '质量状态',		width: 80 },
-            {field: 'lotatt11',	title: '存储条件',		width: 80 },
+            {field: 'lotatt11',	title: '存储条件',		width: 150 },
             {field: 'lotatt12',	title: '产品名称',		width: 80 },
             {field: 'lotatt13',	title: '双证',		width: 80 },
             {field: 'lotatt14',	title: '入库单号',		width: 80 }
@@ -168,15 +168,17 @@ $(function() {
 					$('#ezuiDetailsBtn_edit').linkbutton('enable');
 					$('#ezuiDetailsBtn_del').linkbutton('enable');
 					$('#ezuiDetailsBtn_receive').linkbutton('enable');
+                    $("#ezuiBtn_merge").linkbutton('disable');
 				}else{
-				    if(rowData.linestatus == '40'){//完全收货状态可以进行确认收货、
-						$("#ezuiBtn_merge").linkbutton('disable');
+				    if(rowData.linestatus == '40'){//完全收货状态可以进行上架任务、
+						$("#ezuiBtn_merge").linkbutton('enable');
 					}else{
-                        $("#ezuiBtn_merge").linkbutton('enable');
+                        $("#ezuiBtn_merge").linkbutton('disable');
 					}
 					$('#ezuiDetailsBtn_edit').linkbutton('disable');
 					$('#ezuiDetailsBtn_del').linkbutton('disable');
 					$('#ezuiDetailsBtn_receive').linkbutton('disable');
+                    $("#ezuiBtn_merge").linkbutton('disable');
 				};
 			};
 		},
@@ -553,7 +555,7 @@ var mergeOrder = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?addDocPa",
-                    data : {"asnno":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
+                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
                         success : function(result){
                             console.log(result);
                             var msg='';
@@ -584,6 +586,7 @@ var mergeOrder = function () {
 
 var mergeReceiving = function () {
     var row = ezuiDatagrid.datagrid('getSelections');
+    console.log(row);
     if(row) {
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认收货？', function(confirm) {
             if (confirm) {
@@ -593,7 +596,7 @@ var mergeReceiving = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
-                    data : {"asnno":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
+                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
                     success : function(result){
                         console.log(result);
                         var msg='';
@@ -1399,7 +1402,11 @@ function afterCheckButtion(rowData) {
         $('#ezuiDetailsBtn_edit').linkbutton('disable');
         $('#ezuiDetailsBtn_del').linkbutton('disable');
         $('#ezuiDetailsBtn_receive').linkbutton('disable');
-        $("#ezuiBtn_merge").linkbutton('disable');
+        if(rowData.asnstatus == '40'){
+            $("#ezuiBtn_merge").linkbutton('enable');
+        }else {
+            $("#ezuiBtn_merge").linkbutton('disable');
+        }
     }else if(rowData.asnstatus == '00'){
         $('#ezuiBtn_close').linkbutton('disable');
         $('#ezuiBtn_cancel').linkbutton('enable');
@@ -1407,7 +1414,7 @@ function afterCheckButtion(rowData) {
         $('#ezuiDetailsBtn_edit').linkbutton('enable');
         $('#ezuiDetailsBtn_del').linkbutton('enable');
         $('#ezuiDetailsBtn_receive').linkbutton('enable');
-        $("#ezuiBtn_merge").linkbutton('enable');
+        $("#ezuiBtn_merge").linkbutton('disable');
         $("#ezuiBtn_receiving").linkbutton('enable');
     }else{
 
