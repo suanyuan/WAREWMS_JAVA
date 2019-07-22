@@ -76,7 +76,7 @@ public class InvLotAttService extends BaseService {
 
     /**
      * 导入预入库通知单的时候，判断下是否有这个批次记录,如果有就返回，没有就插入新的
-     * @param docAsnDetailVO customerid, sku, lotatt01~18
+     * @param docAsnDetail customerid, sku, lotatt01~18
      * @return ~
      */
 	public InvLotAtt queryInsertLotatts(DocAsnDetail docAsnDetail) {
@@ -109,9 +109,10 @@ public class InvLotAttService extends BaseService {
             invLotAtt = new InvLotAtt();
             BeanUtils.copyProperties(query, invLotAtt);
             IdSequence idSequence = new IdSequence(SfcUserLoginUtil.getLoginUser().getWarehouse().getId(), "CN", IdSequence.SEQUENCE_TYPE_LOT_NUM);
+            invLotAttDao.getIdSequence(idSequence);
             invLotAtt.setLotnum(idSequence.getResultNo());
             invLotAtt.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-            invLotAtt.setEdittime(new java.sql.Date((new Date()).getTime()));
+            invLotAtt.setAddtime(new java.sql.Date((new Date()).getTime()));
             invLotAtt.setReceivingtime(new java.sql.Date((new Date()).getTime()));
             invLotAttDao.add(invLotAtt);
         }
