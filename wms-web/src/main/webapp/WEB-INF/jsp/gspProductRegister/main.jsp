@@ -40,10 +40,10 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
-			{field: 'productRegisterNo',		title: '注册证编号',	width: 100 },
-            {field: 'classifyId',		title: '管理分类',	width: 100 },
+			{field: 'productRegisterNo',		title: '注册证编号',	width: 150 },
+            {field: 'classifyId',		title: '管理分类',	width: 60 },
             //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
-			{field: 'productNameMain',		title: '产品名称',	width: 100 },
+			{field: 'productNameMain',		title: '产品名称',	width: 150 },
 			{field: 'approveDate',		title: '批准日期',	width: 100 },
 			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 100 },
 			{field: 'productRegisterVersion',		title: '注册证版本',	width: 100 },
@@ -51,7 +51,7 @@ $(function() {
 			{field: 'checkDate',		title: '审核时间',	width: 150 },
 			{field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 150 },
-			{field: 'isUse',		title: '是否有效',	width: 100 }
+			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 
 		]],
 		onDblClickCell: function(index,field,value){

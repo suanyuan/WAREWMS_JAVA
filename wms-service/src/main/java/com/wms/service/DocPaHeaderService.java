@@ -215,7 +215,7 @@ public class DocPaHeaderService extends BaseService {
                             baos = new ByteArrayOutputStream();
                             stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
                             form = stamper.getAcroFields();
-                            form.setField("putwmsCode",docPaHeader.getAsnno());
+                            form.setField("putwmsCode",docPaHeader.getPano());
                             form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
                             form.setField("warehouseid", docPaHeader.getWarehouseid());
                             form.setField("custName", docPaHeader.getCustomerid());
@@ -223,7 +223,7 @@ public class DocPaHeaderService extends BaseService {
                             form.setField("notes", "");
                             form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
                             //form.setField("barCode1", docPaHeader.getAsnno());
-                            form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
+                            form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
                             //form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
 
                             for(int j=0;j<row;j++){

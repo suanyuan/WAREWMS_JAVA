@@ -17,6 +17,7 @@ public class Constant {
     public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";
     public static final String LICENSE_TYPE_OPERATE = "OPERATE";
     public static final String LICENSE_TYPE_RECORD = "RECORD";
+    public static final String LICENSE_TYPE_REGISTER = "REGISTER";
 
 //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类

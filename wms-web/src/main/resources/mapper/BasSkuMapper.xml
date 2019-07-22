@@ -321,7 +321,8 @@ where 1=1
 	qtymin,
 	reservecode,
 	shelflifetype,
-	sku_group1
+	sku_group1,
+	firstop
 	)
 	values(
 	upper(#{customerid}),
@@ -439,7 +440,8 @@ where 1=1
 	0,
 	'IN',
 	'N',
-	#{sku}
+	#{sku},
+	#{firstop}
 	)
 </insert>
 

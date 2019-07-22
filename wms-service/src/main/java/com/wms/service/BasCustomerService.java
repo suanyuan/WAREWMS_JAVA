@@ -27,6 +27,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -265,38 +266,44 @@ public class BasCustomerService extends BaseService {
 	}
 
 	public Json clientAddCustomer(BasCustomerForm basCustomerForm) {
-		Json json = new Json();
-		BasCustomer basCustomerQuery = new BasCustomer();
-		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
-		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
+		try{
+			Json json = new Json();
+			BasCustomer basCustomerQuery = new BasCustomer();
+			basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
+			basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
 
-		BasCustomer basCustomerHistory = basCustomerMybatisDao.selectByIdType(basCustomerQuery);
-		//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
-		if(basCustomerHistory!=null){
-			BasSkuHistory basSkuHistory = new BasSkuHistory();
-			BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
+			BasCustomer basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
+			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
+			if(basCustomerHistory!=null){
+				//BasCustomer basCustomer = new BasCustomer();
+				//BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
 
-			//TODO 插入history.add(basSkuHistory);
-			basCustomerMybatisDao.deleteBascustomer(basCustomerHistory.getEnterpriseId(),basCustomerHistory.getCustomerType());
-		}
+				//TODO 插入history.add(basSkuHistory);
+				basCustomerMybatisDao.deleteBascustomerByCustomerID(basCustomerHistory.getCustomerid(),basCustomerHistory.getCustomerType());
+			}
 
-		BasCustomer basCustomer = new BasCustomer();
-		BeanUtils.copyProperties(basCustomerForm,basCustomer);
+			BasCustomer basCustomer = new BasCustomer();
+			BeanUtils.copyProperties(basCustomerForm,basCustomer);
 		/*basCustomer.setCustomerType(basCustomerForm.getCustomerType());
 		basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
 		basCustomer.setCustomerid(basCustomerForm.getCustomerid());
 		basCustomer.setOperateType(basCustomerForm.getOperateType());
 		basCustomer.setActiveFlag(basCustomerForm.getActiveFlag());
 		basCustomer.setDescrC(basCustomerForm.getDescrC());*/
-		basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-		basCustomer.setAddtime(new Date());
-		basCustomer.setEdittime(new Date());
-		basCustomerMybatisDao.add(basCustomer);
+			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			basCustomer.setAddtime(new Date());
+			basCustomer.setEdittime(new Date());
+			basCustomerMybatisDao.add(basCustomer);
 
-		json.setSuccess(true);
-		json.setMsg("资料处理成功！");
-		return json;
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+			return json;
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.error("操作失败");
+		}
 	}
 
 	public Json editBasCustomer(BasCustomerForm basCustomerForm) {

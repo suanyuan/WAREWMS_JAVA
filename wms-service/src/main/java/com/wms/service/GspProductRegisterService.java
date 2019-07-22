@@ -2,7 +2,9 @@ package com.wms.service;
 
 import java.util.*;
 
+import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
+import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegisterSpecs;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
@@ -12,6 +14,8 @@ import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspProductRegisterSpecsVO;
+import com.wms.vo.form.GspOperateDetailForm;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,8 @@ public class GspProductRegisterService extends BaseService {
 	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 	@Autowired
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
 
 	/**
 	 * 查询分页数据
@@ -64,29 +70,65 @@ public class GspProductRegisterService extends BaseService {
 		if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
 			return Json.error("产品注册证编号重复");
 		}
+		try{
+			GspProductRegister gspProductRegister = new GspProductRegister();
+			BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
+			gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+			gspProductRegister.setIsUse(Constant.IS_USE_YES);
+			gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+			gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+			gspProductRegisterMybatisDao.add(gspProductRegister);
 
-		GspProductRegister gspProductRegister = new GspProductRegister();
-		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
-		gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
-		gspProductRegister.setIsUse(Constant.IS_USE_YES);
-		gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
-		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
-		gspProductRegisterMybatisDao.add(gspProductRegister);
-		return Json.success("操作成功",gspProductRegister.getProductRegisterId());
+			//保存经营范围
+			if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())){
+				String jsonStr = gspOperateDetailService.initScope(gspProductRegisterForm.getChoseScope());
+				List<GspOperateDetailForm> operateDetailForms = JSON.parseArray(jsonStr, GspOperateDetailForm.class);
+				if(operateDetailForms.size()>0){
+					for(GspOperateDetailForm g : operateDetailForms){
+						g.setEnterpriseId(gspProductRegister.getProductRegisterId());
+						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_REGISTER);
+					}
+				}
+			}
+
+			return Json.success("操作成功",gspProductRegister.getProductRegisterId());
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.success("保存失败");
+		}
 	}
 
 	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
-		Json json = new Json();
-		GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
-		BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
-		gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
-		gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
-		gspProductRegister.setEditDate(new Date());
-		gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-		gspProductRegisterMybatisDao.update(gspProductRegister);
-		json.setSuccess(true);
-		return json;
+		try{
+			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
+			BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
+			gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+			gspProductRegister.setEditDate(new Date());
+			gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			gspProductRegisterMybatisDao.update(gspProductRegister);
+
+			//保存经营范围
+			if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())) {
+				String jsonStr = gspOperateDetailService.initScope(gspProductRegisterForm.getChoseScope());
+				List<GspOperateDetailForm> operateDetailForms = JSON.parseArray(jsonStr, GspOperateDetailForm.class);
+
+				gspOperateDetailService.deleteGspOperateDetail(gspProductRegister.getProductRegisterId(),Constant.LICENSE_TYPE_REGISTER);
+				if(operateDetailForms.size()>0){
+					for(GspOperateDetailForm g : operateDetailForms){
+						g.setEnterpriseId(gspProductRegister.getProductRegisterId());
+						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_REGISTER);
+					}
+				}
+			}
+			return Json.success("操作成功",gspProductRegister.getProductRegisterId());
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.success("保存失败");
+		}
 	}
 
 	public Json deleteGspProductRegister(String id) {

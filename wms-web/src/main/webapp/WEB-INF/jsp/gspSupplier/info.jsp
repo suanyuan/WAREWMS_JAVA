@@ -297,7 +297,6 @@ var enterpriseDialog;
                     }
                 },
                 onload:function(data){
-                    alert(data.comment);
                     $("#contractUrl").val(data.comment);
                 },
                 onerror:function(er){

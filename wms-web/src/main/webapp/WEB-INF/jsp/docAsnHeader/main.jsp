@@ -94,14 +94,16 @@ $(function() {
 		  }
 		},
         onCheck:function(index,row){
+            console.log("onCheck");
             if (index - 1){
                 afterCheckButtion(row);
             };
 		},
 		onSelect: function(rowIndex, rowData) {
-			if (rowIndex - 1){
+		    console.log("onSelect");
+			//if (rowIndex - 1){
                 afterCheckButtion(rowData);
-			};
+			//};
 		},
 		onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnHeaderController.do?getBtn"/>', ezuiMenu);
@@ -896,8 +898,8 @@ var detailsAdd = function(){
 		$("#ezuiDetailsForm #totalgrossweight").numberbox("setValue",'0.000');
 		$("#ezuiDetailsForm #totalcubic").numberbox("setValue",'0.000');
 		$("#ezuiDetailsForm #totalprice").numberbox("setValue",'0.00');
-		$("#ezuiDetailsForm #lotatt04").combobox("setValue",'HG');
-		$("#ezuiDetailsForm #lotatt03").datebox("setValue",nowDate(new Date()));
+		//$("#ezuiDetailsForm #lotatt04").combobox("setValue",'HG');
+		//$("#ezuiDetailsForm #lotatt03").datebox("setValue",nowDate(new Date()));
 		ezuiDetailsDialog.dialog('open');
 	};
 };
@@ -1388,6 +1390,7 @@ function choseSelect_product_docAsnHeader(row){
 }
 
 function afterCheckButtion(rowData) {
+    console.log(rowData);
     if (rowData.asnstatus == '99' || rowData.asnstatus == '90') {
         $('#ezuiBtn_close').linkbutton('disable');
         $('#ezuiBtn_cancel').linkbutton('disable');

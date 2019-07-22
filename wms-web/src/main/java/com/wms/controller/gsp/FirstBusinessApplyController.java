@@ -147,7 +147,7 @@ public class FirstBusinessApplyController {
 	@Login
 	@RequestMapping(params = "getProductLineByEnterpriseId")
 	@ResponseBody
-	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){
-		return firstBusinessApplyService.getProductLineByEnterpriseId(enterpriseId);
+	public List<EasyuiCombobox> getProductLineByEnterpriseId(String customerId){
+		return firstBusinessApplyService.getProductLineByEnterpriseId(customerId);
 	}
 }
