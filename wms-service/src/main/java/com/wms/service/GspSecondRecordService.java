@@ -125,17 +125,17 @@ public class GspSecondRecordService extends BaseService {
 					if(gspOperateDetailForm.size()>0){
 						for(GspOperateDetailForm g : gspOperateDetailForm){
 							g.setEnterpriseId(gspSecondRecordId);
-							gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_OPERATE);
+							gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_RECORD);
 						}
 					}
 				}else{//更新
 					gspSecondRecordForm.setRecordId(gspSecondRecordId);
 					editGspSecondRecord(gspSecondRecordForm);
-					gspOperateDetailService.deleteGspOperateDetail(gspSecondRecordId,Constant.LICENSE_TYPE_OPERATE);
+					gspOperateDetailService.deleteGspOperateDetail(gspSecondRecordId,Constant.LICENSE_TYPE_RECORD);
 					if(gspOperateDetailForm.size()>0){
 						for(GspOperateDetailForm g : gspOperateDetailForm){
 							g.setEnterpriseId(gspSecondRecordId);
-							gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_OPERATE);
+							gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_RECORD);
 						}
 					}
 				}
@@ -152,7 +152,7 @@ public class GspSecondRecordService extends BaseService {
 				if(gspOperateDetailForm.size()>0){
 					for(GspOperateDetailForm g : gspOperateDetailForm){
 						g.setEnterpriseId(newOperateLicenseId);
-						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
+						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_RECORD);
 					}
 				}
 			}

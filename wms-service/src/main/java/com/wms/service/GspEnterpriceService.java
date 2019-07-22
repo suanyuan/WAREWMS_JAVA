@@ -354,24 +354,6 @@ public class GspEnterpriceService extends BaseService {
     }
 
     /**
-     * 初始化经营范围
-     * @param scope
-     * @return
-     */
-    private String initScope(String scope){
-        String[] scopeArr = scope.split(",");
-        StringBuffer resultArr = new StringBuffer();
-        for(String str : scopeArr){
-            resultArr.append("{");
-            resultArr.append("enterpriseId:''");
-            resultArr.append(",operateId:'"+str+"'");
-            resultArr.append("},");
-
-        }
-        return "["+resultArr.substring(0,resultArr.length()-1)+"]";
-    }
-
-    /**
      * 根据企业信息代码查询是否重复
      * @param enterpriseNo
      * @return
@@ -429,6 +411,24 @@ public class GspEnterpriceService extends BaseService {
         return true;
 
 
+    }
+
+    /**
+     * 初始化经营范围
+     * @param scope
+     * @return
+     */
+    private String initScope(String scope){
+        String[] scopeArr = scope.split(",");
+        StringBuffer resultArr = new StringBuffer();
+        for(String str : scopeArr){
+            resultArr.append("{");
+            resultArr.append("enterpriseId:''");
+            resultArr.append(",operateId:'"+str+"'");
+            resultArr.append("},");
+
+        }
+        return "["+resultArr.substring(0,resultArr.length()-1)+"]";
     }
 
 }

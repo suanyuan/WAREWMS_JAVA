@@ -60,11 +60,11 @@
             <table>
                 <tr>
                     <th>产品代码</th>
-                    <td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+                    <td><input type='text' id='productCode'  size='16' data-options=''/></td>
                     <th>产品名称</th>
-                    <td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
+                    <td><input type='text' id='productName'  size='16' data-options=''/></td>
                     <th>注册证号</th>
-                    <td><input type='text' id='registerNo' class='easyui-textbox' size='16' data-options=''/></td>
+                    <td><input type='text' id='registerNo'  size='16' data-options=''/></td>
                     <td>
                         <a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                         <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
@@ -506,7 +506,7 @@
     }
     
     function searchProduct() {
-        
+        dataGridProduct.datagrid("load",{"productRegisterNo":$("#registerNo").val()})
     }
     
     function submitApply() {
@@ -622,7 +622,7 @@
             $("#supplierId").val(row.customerid);
             $("#supplierName").textbox("setValue",row.descrC)
             $("#productLine").combobox({
-                url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&enterpriseId='+row.customerid,
+                url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
                 valueField:'id',
                 textField:'value',
                 onLoadSuccess:function () {

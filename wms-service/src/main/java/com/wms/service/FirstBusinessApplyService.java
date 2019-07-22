@@ -325,20 +325,25 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("操作失败");
 	}
 
-	public List<EasyuiCombobox> getProductLineByEnterpriseId(String enterpriseId){
+	public List<EasyuiCombobox> getProductLineByEnterpriseId(String customerId){
+
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();
-		MybatisCriteria criteria = new MybatisCriteria();
-		ProductLineQuery query = new ProductLineQuery();
-		query.setEnterpriseName(enterpriseId);
-		query.setIsUse(Constant.IS_USE_YES);
-		criteria.setCondition(query);
-		List<ProductLine> lineList = productLineMybatisDao.queryByList(criteria);
-		if(lineList!=null){
-			for(ProductLine p : lineList){
-				EasyuiCombobox combobox = new EasyuiCombobox();
-				combobox.setId(p.getProductLineId());
-				combobox.setValue(p.getName());
-				comboboxList.add(combobox);
+		BasCustomer basCustomer = basCustomerService.selectCustomerById(customerId,Constant.CODE_CUS_TYP_VE);
+		GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(basCustomer.getEnterpriseId());
+		if(basCustomer!=null && info!=null){
+			MybatisCriteria criteria = new MybatisCriteria();
+			ProductLineQuery query = new ProductLineQuery();
+			query.setCustomerid(info.getEnterpriseNo());
+			query.setIsUse(Constant.IS_USE_YES);
+			criteria.setCondition(query);
+			List<ProductLine> lineList = productLineMybatisDao.queryByList(criteria);
+			if(lineList!=null){
+				for(ProductLine p : lineList){
+					EasyuiCombobox combobox = new EasyuiCombobox();
+					combobox.setId(p.getProductLineId());
+					combobox.setValue(p.getName());
+					comboboxList.add(combobox);
+				}
 			}
 		}
 		return comboboxList;

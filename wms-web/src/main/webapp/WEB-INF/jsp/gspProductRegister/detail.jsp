@@ -252,7 +252,8 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'default'
+                enterpriseType:'supplier',
+                type:'supplier'
             },
             fit:true,
             collapsible:false,
@@ -346,18 +347,18 @@
     function choseSelect_Catalog_productRegister(row) {
         console.log(row)
         var choseRowNameArr = new Array();
-        var oldValue = $("#ezuiFormDetail input[id='classifyCatalog']").textbox("getValue");
+        //var oldValue = $("#ezuiFormDetail input[id='classifyCatalog']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArr.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",oldValue+choseRowNameArr.join(","))
+            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",oldValue+row.instrumentCatalogName);
+            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",row.instrumentCatalogName);
         }
-        $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
+        $("#ezuiFormDetail input[id='choseScope']").val(choseRowArr.join(","));
         ezuidialogChoseScope.dialog("close");
     }
 

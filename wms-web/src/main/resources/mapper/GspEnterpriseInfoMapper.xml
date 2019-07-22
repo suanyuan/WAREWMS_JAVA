@@ -218,9 +218,13 @@ where 1=1
 			<choose>
 				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
 					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
+					and ( cus.enterprise_id is null)
+					and ( gs.enterprise_id is null)
 				</when>
 				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
 					and (g.enterprise_type != 'ZT')
+					and ( cus.enterprise_id is null)
+					and ( gs.enterprise_id is null)
 				</when>
 				<otherwise>
 					and g.enterprise_type = #{condition.enterpriseType}
@@ -269,12 +273,8 @@ where 1=1
 	select
 	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
 	from gsp_enterprise_info g
-	<if test="condition.type == 'customer'">
-		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
-	</if>
-	<if test="condition.type == 'supplier'">
-		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
-	</if>
+	left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
 	<include refid="Example_Where_Clause_Type"/>
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
@@ -288,12 +288,8 @@ where 1=1
 <select id="queryByCountByType" resultType="java.lang.Long"  parameterType="Object">
 	select count(1)
 	from gsp_enterprise_info g
-	<if test="condition.type == 'customer'">
-		left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
-	</if>
-	<if test="condition.type == 'supplier'">
-		left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
-	</if>
+	left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
+	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
 	<include refid="Example_Where_Clause_Type"/>
 </select>
 

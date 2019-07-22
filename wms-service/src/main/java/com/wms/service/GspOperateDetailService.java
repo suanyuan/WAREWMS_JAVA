@@ -27,6 +27,24 @@ public class GspOperateDetailService extends BaseService {
 	@Autowired
 	private GspInstrumentCatalogService gspInstrumentCatalogService;
 
+	/**
+	 * 初始化经营范围
+	 * @param scope
+	 * @return
+	 */
+	public String initScope(String scope){
+		String[] scopeArr = scope.split(",");
+		StringBuffer resultArr = new StringBuffer();
+		for(String str : scopeArr){
+			resultArr.append("{");
+			resultArr.append("enterpriseId:''");
+			resultArr.append(",operateId:'"+str+"'");
+			resultArr.append("},");
+
+		}
+		return "["+resultArr.substring(0,resultArr.length()-1)+"]";
+	}
+
 	public EasyuiDatagrid<GspOperateDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, GspOperateDetailQuery query) {
 		EasyuiDatagrid<GspOperateDetailVO> datagrid = new EasyuiDatagrid<GspOperateDetailVO>();
 		MybatisCriteria criteria = new MybatisCriteria();

@@ -243,6 +243,7 @@ public class ImportAsnDataService {
 					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
 					importDataVO.setAsnreference1(dataArray.getAsnreference1());
 					importDataVO.setAsnreference2(dataArray.getAsnreference2());
+					importDataVO.setAsntype(dataArray.getAsntype());
 					try {
 						importDataVO.setExpectedarrivetime1(format.parse(dataArray.getExpectedarrivetime1()));
 					} catch (ParseException e) {
@@ -276,6 +277,7 @@ public class ImportAsnDataService {
 					//表头信息一致则只增加明细信息
 					importDetailsDataVO = new DocAsnDetailVO();
 					importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
+					importDataVO.setAsntype(dataArray.getAsntype());
 					importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
 					importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
 					importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
@@ -301,7 +303,7 @@ public class ImportAsnDataService {
 					importData.add(importDataVO);
 					importDetailsDataVOList = new ArrayList<DocAsnDetailVO>();
 					importDataVO = new DocAsnHeaderVO();
-					
+					importDataVO.setAsntype(dataArray.getAsntype());
 					importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
 					importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
 					importDataVO.setAsnreference1(dataArray.getAsnreference1());
