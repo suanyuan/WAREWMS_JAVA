@@ -1010,7 +1010,7 @@
             if(row.customerType == "OW"){
                 $("#customerid").textbox('setValue',row.customerid);
             }else if(row.customerType == "VE"){
-                $("#supplierId").textbox('setValue',row.customerid);
+                $("#supplierid").textbox('setValue',row.customerid);
             }
             ezuiCustDataDialog.dialog('close');
         };

@@ -28,6 +28,24 @@ public class DocPaHeaderQuery implements IQuery {
 	private String editwho;
 	private String paPrintFlag;
 	private String warehouseid;
+	private String addtimeBegin;//附加查询起始到结束时间
+	private String addtimeEnd;
+
+	public String getAddtimeBegin() {
+		return addtimeBegin;
+	}
+
+	public void setAddtimeBegin(String addtimeBegin) {
+		this.addtimeBegin = addtimeBegin;
+	}
+
+	public String getAddtimeEnd() {
+		return addtimeEnd;
+	}
+
+	public void setAddtimeEnd(String addtimeEnd) {
+		this.addtimeEnd = addtimeEnd;
+	}
 
 	public String getPano() {
 		return pano;
