@@ -772,9 +772,9 @@ where 1=1
                     or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}
                 </if>
                 <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
-                    or (ifnull(b.lotatt04, '*') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '*')
+                    or (ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
                         AND
-                        ifnull(b.lotatt05, '*') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '*')
+                        ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
                     )
                 </if>
                 <if test="alternate_sku1 != null and alternate_sku1 != ''">
