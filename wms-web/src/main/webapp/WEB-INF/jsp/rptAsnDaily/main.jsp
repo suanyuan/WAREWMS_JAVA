@@ -134,12 +134,12 @@ var ezuiToolbarClear = function(){
 	$('#customerid').textbox('clear');
 	$('#sku').textbox('clear');
 	$('#skutext').textbox('clear');
-	$("#inbounddate").datetimebox({
-		value:inbounddate(new Date())
-	});
-	$("#inbounddatetext").datetimebox({
-		value:inbounddatetext(new Date())
-	});
+	$("#inbounddate").datetimebox('clear'
+		// value:inbounddate(new Date())
+	);
+	$("#inbounddatetext").datetimebox('clear'
+		// value:inbounddatetext(new Date())
+	);
 };
 
 /* 获取起始日期 */
@@ -154,7 +154,7 @@ var inbounddatetext = function(date){
 	var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"	+ (date.getMonth() + 1);
 	return date.getFullYear() + '-' + month + '-' + day + ' 23:59:59';
 };
-
+/*增删改已屏蔽*/
 var add = function(){
 	processType = 'add';
 	$('#rptAsnDailyId').val(0);
@@ -333,7 +333,7 @@ var ezuiCustDataClick = function(){
 	},
 	onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/cosCommonAddressController.do?getBtn"/>', ezuiMenu);
+// 			ajaxBtn($('#menuId').val(), '<c:url value="/rptAsnDailyController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -399,6 +399,7 @@ var doExport = function(){
 </head>
 <body>
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
+	<%--主页上部查询条件--%>
 	<div class='easyui-layout' data-options='fit:true,border:false'>
 		<div data-options='region:"center",border:false' style='overflow: hidden;'>
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
@@ -410,7 +411,7 @@ var doExport = function(){
 						</tr>
 						<tr>   
 						    <th>商品编码：</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>&nbsp;&nbsp;&nbsp;至：</th><td><input type='text' id='skutext' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>&nbsp;&nbsp;&nbsp;至：</th><td><input type='text' id='skutext' class='easyui-textbox' size='16' data-options=''/></td>--%>
 						</tr>    
 						    <th>收货时间：</th><td><input type='text' id='inbounddate' class='easyui-datetimebox' size='16' data-options='editable:false,
 																																		required:true,
@@ -441,6 +442,7 @@ var doExport = function(){
 			<table id='ezuiDatagrid'></table> 
 		</div>
 	</div>
+	<%--双击弹窗dialog 已经屏蔽 不编辑弹窗--%>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
 			<input type='hidden' id='rptAsnDailyId' name='rptAsnDailyId'/>
@@ -620,7 +622,7 @@ var doExport = function(){
 	</div>
 	 -->
 	 
-	  <!-- 客户选择弹框 -->
+	  <!-- 客户编码选择弹框 -->
 	<div id='ezuiCustDataDialog'  style="width:700px;height:480px;padding:10px 20px"   >
 	<div class='easyui-layout' data-options='fit:true,border:false'>
 	<div data-options="region:'center'">

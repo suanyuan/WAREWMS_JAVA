@@ -30,7 +30,7 @@ public class RptAsnDailyService extends BaseService {
 	
 	@Autowired
 	private RptAsnDailyMybatisDao rptAsnDailyMybatisDao;
-
+//显示首页datagrid
 	public EasyuiDatagrid<RptAsnDailyVO> getPagedDatagrid(EasyuiDatagridPager pager, RptAsnDailyQuery query) {
 		EasyuiDatagrid<RptAsnDailyVO> datagrid = new EasyuiDatagrid<RptAsnDailyVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();

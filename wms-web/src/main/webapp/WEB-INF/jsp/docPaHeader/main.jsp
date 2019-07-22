@@ -214,7 +214,10 @@ var doSearch = function(){
 		edittime : $('#edittime').val(),
 		editwho : $('#editwho').val(),
 		paPrintFlag : $('#paPrintFlag').val(),
-		warehouseid : $('#warehouseid').val()
+		warehouseid : $('#warehouseid').val(),
+		// 附加查询起始到结束时间
+        addtimeBegin:$('#addtimeBegin').datebox("getValue"),
+        addtimeEnd:$('#addtimeEnd').datebox("getValue")
 	});
 };
 
@@ -240,6 +243,7 @@ var callBackRedraw = function () {
 </head>
 <body>
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
+<%--主页上部查询菜单--%>
 	<div class='easyui-layout' data-options='fit:true,border:false'>
 		<div data-options='region:"center",border:false' style='overflow: hidden;'>
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
@@ -249,8 +253,12 @@ var callBackRedraw = function () {
 						<tr>
 							<th>上架单号：</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>入库单号：</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
 							<th>创建时间起始：</th><td><input type='text' id='addtimeBegin' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>创建时间结束：</th><td><input type='text' id='addtimeEnd' class='easyui-datebox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
 							<th>是否打印：</th><td><input type='text' id='paPrintFlag' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>仓库：</th><td><input type='text' id='warehouseid' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
@@ -271,6 +279,7 @@ var callBackRedraw = function () {
 			<table id='ezuiDatagrid'></table> 
 		</div>
 	</div>
+<%--双击弹窗dialog--%>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
 			<input type='hidden' id='docPaHeaderId' name='docPaHeaderId'/>

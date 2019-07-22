@@ -102,8 +102,11 @@ where 1=1
 	<if test="condition.grossweight != null and condition.grossweight != ''" >
 	    and grossweight =  #{condition.grossweight}
 	</if>
-	<if test="condition.inbounddate != null and condition.inbounddate != '' and condition.inbounddatetext != null and condition.inbounddatetext != ''" >
-	    and to_char(to_date(inbounddate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.inbounddate} and #{condition.inbounddatetext}
+	<if test="condition.inbounddate != null and condition.inbounddate != ''" >
+	    and inbounddate  &gt;= #{condition.inbounddate}
+	</if>
+	<if test=" condition.inbounddatetext != null and condition.inbounddatetext != ''" >
+		and inbounddate &lt;= #{condition.inbounddatetext}
 	</if>
 	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
 	    and lotatt01 =  #{condition.lotatt01}

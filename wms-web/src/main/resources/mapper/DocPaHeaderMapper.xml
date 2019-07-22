@@ -109,6 +109,13 @@ where 1=1
 	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
 	    and WAREHOUSEID =  #{condition.warehouseid}
 	</if>
+	<!--附加时间查询-->
+	<if test="condition.addtimeBegin != null and condition.addtimeBegin != ''" >
+		and addtime  &gt;= #{condition.addtimeBegin}
+	</if>
+	<if test=" condition.addtimeEnd != null and condition.addtimeEnd != ''" >
+		and addtime &lt;= #{condition.addtimeEnd}
+	</if>
 </trim>
 </sql>
    
