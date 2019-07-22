@@ -172,7 +172,7 @@ public class DocQcDetailsService extends BaseService {
 
         //当前批次-产品注册证对应的 生产厂家
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
-        if (productRegister == null || productRegister.getEnterpriseId() == null) {
+        if (productRegister == null || productRegister.getEnterpriseInfo() == null) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无生产厂家信息"));
             return map;
         }
