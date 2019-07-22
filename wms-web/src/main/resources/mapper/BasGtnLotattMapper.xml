@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasGtnLotattMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasGtnLotatt" >
+	<result column="lotnum" property="lotnum"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addasnno" property="addasnno"/>
+</resultMap>
+       
+<!-- bas_gtn_lotatt table all fields -->
+<sql id="Base_Column_List" >
+	 lotnum,customerid,sku,lotatt02,lotatt04,lotatt05,addtime,addasnno
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addasnno != null and condition.addasnno != ''" >
+	    and addasnno =  #{condition.addasnno}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_gtn_lotatt(lotnum,customerid,sku,lotatt02,lotatt04,lotatt05,addtime,addasnno)
+ values(#{lotnum},#{customerid},#{sku},#{lotatt02},#{lotatt04},#{lotatt05},#{addtime},#{addasnno})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_gtn_lotatt set customerid=#{customerid},sku=#{sku},lotatt02=#{lotatt02},lotatt04=#{lotatt04},lotatt05=#{lotatt05},addtime=#{addtime},addasnno=#{addasnno} where lotnum=#{lotnum}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_gtn_lotatt set 
+	<trim  suffixOverrides="," >
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02=#{lotatt02},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="lotatt05 != null  ">
+		lotatt05=#{lotatt05},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addasnno != null  ">
+		addasnno=#{addasnno},
+	</if>
+	</trim> where lotnum=#{lotnum}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_gtn_lotatt where lotnum = #{lotnum}
+</delete>
+ 
+<!-- 根据id查询 扫码匹配批次表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_gtn_lotatt where lotnum = #{lotnum}
+</select>
+
+<!-- 扫码匹配批次表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_gtn_lotatt 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询扫码匹配批次表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_gtn_lotatt 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

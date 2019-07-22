@@ -34,6 +34,9 @@ public class InvLotAttQuery implements IQuery {
 	private String receivingtime;
 	private String qcreportfilename;
 
+    public InvLotAttQuery() {
+    }
+
     /**
      * 批量验收的时候使用的，参考DocQcDetailService.configAllQc
      * @param invLotAtt 批次

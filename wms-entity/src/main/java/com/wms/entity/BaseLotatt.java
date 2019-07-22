@@ -19,7 +19,7 @@ public class BaseLotatt {
     private String lotatt12;//产品名称
     private String lotatt13;//双证
     private String lotatt14;//入库单号
-    private String lotatt15;
+    private String lotatt15;//生产厂家
     private String lotatt16;
     private String lotatt17;
     private String lotatt18;

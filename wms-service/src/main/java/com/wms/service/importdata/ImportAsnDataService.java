@@ -13,27 +13,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
+import com.wms.query.*;
+import com.wms.service.BasGtnLotattService;
+import com.wms.service.InvLotAttService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wms.entity.BasLocation;
-import com.wms.entity.BasSku;
-import com.wms.entity.BasCustomer;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.ImportAsnData;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.BasLocationMybatisDao;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
-import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.query.BasCustomerQuery;
-import com.wms.query.BasLocationQuery;
-import com.wms.query.BasSkuQuery;
-import com.wms.query.DocAsnDetailQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -55,9 +45,13 @@ public class ImportAsnDataService {
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 	@Autowired
 	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
+	@Autowired
+	private InvLotAttService invLotAttService;
+	@Autowired
+	private BasGtnLotattService basGtnLotattService;
 	/**
 	 * 导入入库单
-	 * @param xlsFile
+	 * @param excelFile
 	 * @return
 	 * @throws IOException 
 	 * @throws UnsupportedEncodingException 
@@ -464,6 +458,14 @@ public class ImportAsnDataService {
 				//保存订单主信息
 				docAsnHeaderMybatisDao.add(asnHeader);
 				for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
+
+				    //判断预入库明细里面的sku和客户id下的18个批属是否存在
+                    DocAsnDetail docAsnDetail = new DocAsnDetail();
+                    BeanUtils.copyProperties(importDetailsDataVO, docAsnDetail);
+                    InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
+                    //判断是否要插入扫码批次匹配表
+                    basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());
+
 					DocAsnDetail asnDetails = new DocAsnDetail();
 					BeanUtils.copyProperties(importDetailsDataVO, asnDetails);
 					asnDetails.setAsnno(resultNo);

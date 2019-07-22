@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
 import com.wms.entity.DocAsnDetail;
+import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.query.DocAsnDetailQuery;
@@ -44,6 +45,12 @@ public class DocAsnDetailService extends BaseService {
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
 
+	@Autowired
+	private BasGtnLotattService basGtnLotattService;
+
+	@Autowired
+	private InvLotAttService invLotAttService;
+
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -64,13 +71,19 @@ public class DocAsnDetailService extends BaseService {
 	}
 
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
+
+	    DocAsnDetail docAsnDetail = new DocAsnDetail();
+	    BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
+        //判断预入库明细里面的sku和客户id下的18个批属是否存在
+        InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
+        //判断是否要插入扫码批次匹配表
+        basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
+
 		Json json = new Json();
 		DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
 		docAsnDetailQuery.setAsnno(docAsnDetailForm.getAsnno());
 		/*获取新的明细行号*/
 		long orderlineno = docAsnDetailsMybatisDao.getAsnlinenoById(docAsnDetailQuery);
-		DocAsnDetail docAsnDetail = new DocAsnDetail();
-		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
 		docAsnDetail.setAsnlineno(orderlineno + 1);
 		docAsnDetail.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

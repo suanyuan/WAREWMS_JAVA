@@ -60,6 +60,10 @@ public class DocAsnDetailVO {
 	private java.lang.String lotatt12;
 	private java.lang.String lotatt13;
 	private java.lang.String lotatt14;
+    private java.lang.String lotatt15;
+    private java.lang.String lotatt16;
+    private java.lang.String lotatt17;
+    private java.lang.String lotatt18;
 	private java.lang.String notes;
 	private java.lang.String operator;
 	private java.math.BigDecimal overrcvpercentage;
@@ -515,7 +519,39 @@ public class DocAsnDetailVO {
 		this.lotatt12 = lotatt12;
 	}
 
-	public java.lang.String getNotes() {
+    public String getLotatt15() {
+        return lotatt15;
+    }
+
+    public void setLotatt15(String lotatt15) {
+        this.lotatt15 = lotatt15;
+    }
+
+    public String getLotatt16() {
+        return lotatt16;
+    }
+
+    public void setLotatt16(String lotatt16) {
+        this.lotatt16 = lotatt16;
+    }
+
+    public String getLotatt17() {
+        return lotatt17;
+    }
+
+    public void setLotatt17(String lotatt17) {
+        this.lotatt17 = lotatt17;
+    }
+
+    public String getLotatt18() {
+        return lotatt18;
+    }
+
+    public void setLotatt18(String lotatt18) {
+        this.lotatt18 = lotatt18;
+    }
+
+    public java.lang.String getNotes() {
 		return notes;
 	}
 

@@ -266,6 +266,31 @@ where 1=1
           and sku = #{sku, jdbcType=VARCHAR}
     </select>
 
+    <select id="queryByLotatts" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from inv_lot_att ia
+        where IFNULL(ia.lotatt01,'') = IFNULL(rtrim(#{lotatt01, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt02,'') = IFNULL(rtrim(#{lotatt02, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt03,'') = IFNULL(rtrim(#{lotatt03, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt04,'') = IFNULL(rtrim(#{lotatt04, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt05,'') = IFNULL(rtrim(#{lotatt05, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt06,'') = IFNULL(rtrim(#{lotatt06, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt07,'') = IFNULL(rtrim(#{lotatt07, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt08,'') = IFNULL(rtrim(#{lotatt08, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt09,'') = IFNULL(rtrim(#{lotatt09, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt10,'') = IFNULL(rtrim(#{lotatt10, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt11,'') = IFNULL(rtrim(#{lotatt11, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt12,'') = IFNULL(rtrim(#{lotatt12, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt13,'') = IFNULL(rtrim(#{lotatt13, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt14,'') = IFNULL(rtrim(#{lotatt14, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt15,'') = IFNULL(rtrim(#{lotatt15, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt16,'') = IFNULL(rtrim(#{lotatt16, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt17,'') = IFNULL(rtrim(#{lotatt17, jdbcType=VARCHAR}),'')
+        and IFNULL(ia.lotatt18,'') = IFNULL(rtrim(#{lotatt18, jdbcType=VARCHAR}),'')
+        and ia.customerid = #{customerid, jdbcType=VARCHAR} and ia.sku = #{sku, jdbcType=VARCHAR}
+    </select>
+
     <!--新增批次号-->
     <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
       {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{language,mode=IN,jdbcType=VARCHAR},#{type,mode=IN,jdbcType=VARCHAR},#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
