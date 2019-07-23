@@ -155,8 +155,8 @@ public class BasCarrierLicenseController {
 		Json json = basCarrierLicenseService.editBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -167,8 +167,8 @@ public class BasCarrierLicenseController {
 		Json json = basCarrierLicenseService.deleteBasCarrierLicense(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

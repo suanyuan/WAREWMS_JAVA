@@ -3,7 +3,7 @@
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <form id='ezuiFormInfo' method='post'>
-    <input type='hidden' id='enterpriseD' name='enterpriseId' class='textbox-value'/>
+    <input type='hidden' id='enterpriseD' name='enterpriseId' class='textbox-value' value="${enterpriseInFo.enterpriseId}"/>
 
     <table>
         <tr style="display: none">
@@ -11,7 +11,7 @@
         </tr>
         <tr>
             <th style="color: #0E2D5F">承运商</th>
-            <td><input type='text' data="1" id="enterpriseId"   name='enterpriseName' class='easyui-textbox'  data-options='required:true'/></td>
+            <td><input type='text' data="1" id="enterpriseId"   name='enterpriseName' value="${enterpriseInFo.enterpriseName}" class='easyui-textbox'  data-options='required:true'/></td>
         </tr>
         <tr>
             <th style="color: #0E2D5F">道路经营许可证</th>
