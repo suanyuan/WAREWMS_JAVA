@@ -152,9 +152,9 @@
     var enterpriseSupplierDialog;
     var ezuiDialogSpec;
     var dataGridProduct;
-    var arr = new Array();
     var ezuiDialogClientDetail;
     var ezuiDialogSupplierDetail;
+    var arr;
 
     $(function () {
         ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
@@ -506,7 +506,7 @@
     }
     
     function searchProduct() {
-        dataGridProduct.datagrid("load",{"productCode":$("#productCode").val(),"productName":$("#productName").val(),"productRegisterNo":$("#registerNo").val()})
+        dataGridProduct.datagrid("load",{"productCode":$("#productCode").val(),"productName":$("#productName").val(),"productRegisterNo":$("#registerNo").val(),"isUse":"1"})
     }
     
     function submitApply() {
@@ -554,29 +554,32 @@
             }
         });
     }
-    
+    arr = new Array();
     function choseSelect() {
         var rows = dataGridProduct.datagrid("getChecked");
         if(rows){
             for(var i=0;i<rows.length;i++){
-                arr.push(rows[i].specsId);
-                ezuiDatagridDetail.datagrid("appendRow",{
-                    "productApplyId":"",
-                    "applyId":"",
-                    "specsId":rows[i].specsId,
-                    "isCheck":"",
-                    "isOperate":"",
-                    "isCold":"",
-                    "createId":"",
-                    "createDate":"",
-                    "editId":"",
-                    "editDate":"",
-                    "isUse":"",
-                    "productCode":rows[i].productCode,
-                    "productName":rows[i].productName,
-                    "specsName":rows[i].specsName,
-                    "productModel":rows[i].productModel
-                });
+                if(arr.indexOf(rows[i].specsId)==-1){
+                    ezuiDatagridDetail.datagrid("appendRow",{
+                        "productApplyId":"",
+                        "applyId":"",
+                        "specsId":rows[i].specsId,
+                        "isCheck":"",
+                        "isOperate":"",
+                        "isCold":"",
+                        "createId":"",
+                        "createDate":"",
+                        "editId":"",
+                        "editDate":"",
+                        "isUse":"",
+                        "productCode":rows[i].productCode,
+                        "productName":rows[i].productName,
+                        "specsName":rows[i].specsName,
+                        "productModel":rows[i].productModel
+                    });
+                    arr.push(rows[i].specsId);
+                }
+
             }
 
         }

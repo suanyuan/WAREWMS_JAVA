@@ -136,7 +136,7 @@
         </table>
     </div>
     <!--企业信息列表dialog -->
-    <div id='ezuiDialogEnterprise' style='padding: 10px;'>
+    <div id='ezuiDialogEnterprise' style='padding: 10px;display: none;'>
         <div id='ezuiEnterpriseToolbar' class='datagrid-toolbar' style=''>
             <fieldset>
                 <legend>企业信息</legend>
@@ -147,8 +147,8 @@
                         <th>简称</th>
                         <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
                         <td>
-                            <a id="productQuery" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>查询</a>
-                            <a id="productChose" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>选择</a>
+                            <a id="productQuery" onclick="productQuery()" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>查询</a>
+                            <a id="productChose" onclick="productChose()" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>选择</a>
                         </td>
                     </tr>
                 </table>
@@ -272,20 +272,6 @@
             }
         })
 
-        ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-
-            },
-            onOpen : function () {
-
-            }
-        }).dialog('close');
-
 
         $("#ezuiFormDetail input[name='classifyId']").combobox({
             url:sy.bp()+'/commonController.do?getCatalogClassify',
@@ -399,6 +385,9 @@
         ezuiFormDetail.form('submit', {
             url : url,
             onSubmit : function(){
+                if($("#enterpriseId").val() == ""){
+                    return false;
+                }
                 if(ezuiFormDetail.form('validate')){
                     $.messager.progress({
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -470,6 +459,7 @@
             collapsible:false,
             fit:true,
             pagination:true,
+            queryParams:{"isUse":"1"},
             rownumbers:true,
             idField : 'specsId',
             columns : [[
@@ -595,6 +585,7 @@
 
     $("#enterpriseName").textbox({
         width:185,
+        required:true,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -605,7 +596,20 @@
     });
     
     function searchEnterprise() {
-        ezuiDialogEnterprise.dialog("open");
+        ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+
+            },
+            onOpen : function () {
+
+            }
+        })
+        //ezuiDialogEnterprise.dialog("open");
     }
 
     function selectEnterprise() {
@@ -638,7 +642,11 @@
     }
 
     function getBy() {
-        dataGridProduct.datagrid("reload",{"productCode":$("#productCode").val(),"productName":$("#productName").val()})
+        dataGridProduct.datagrid("load",{"productCode":$("#productCode").textbox("getValue"),"productName":$("#productName").textbox("getValue"),"isUse":"1"})
+    }
+
+    function productQuery() {
+        enterpriseDatagrid.datagrid("reload",{"enterpriseNo":$("#enterpriseNo").textbox("getValue"),"shorthandName":$("#shorthandName").textbox("getValue"),"isUse":"1"})
     }
 </script>
 </body>
