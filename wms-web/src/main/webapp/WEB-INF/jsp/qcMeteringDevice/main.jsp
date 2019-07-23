@@ -38,7 +38,7 @@ $(function() {
 			{field: 'calName',		title: '名称',	width: 80 },
 			{field: 'calNumber',	title: '编号',	width: 80 },
 			{field: 'calTerm',		title: '校期',	width: 80 },
-			//{field: 'calCardUrl',	title: '证件',	width: 80 },
+			{field: 'calCardUrl',	title: '证件',	width: 80 },
             {field: 'activeFlag',	title: '是否有效',	width: 80 ,formatter:function (value,rowData,rowIndex) {
                     return rowData.activeFlag=='1'? '是':'否'
                 }},
@@ -157,7 +157,17 @@ var add = function(){
 };
 
 
-
+function viewUrl(url) {
+    if(url){
+        showUrl(url);
+    }else{
+        if($("#calCardUrl").val()!=""){
+            showUrl($("#calCardUrl").val());
+        }else {
+            showMsg("请上传设备证件！");
+        }
+    }
+}
 
 
 var edit = function(){
@@ -176,6 +186,7 @@ var edit = function(){
 			editDate : row.editDate,
 			activeFlag : row.activeFlag
 		});
+        $('#file').filebox({prompt:row.calCardUrl});
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -242,6 +253,7 @@ var commit = function(){
 					msg = result.msg;
 					ezuiDatagrid.datagrid('reload');
 					ezuiDialog.dialog('close');
+                    ezuiForm.form('clear');
 				}else{
 					msg = '<font color="red">' + result.msg + '</font>';
 				}
@@ -333,9 +345,9 @@ var doSearch = function(){
 				</tr>
 				<tr>
 					<th>证件上传</th>
-					<td><input     id="file" name="file" atth="fileUpload"/>
+					<td><input  id="file" name="file" />
 						<input type="hidden"  class="textbox-value" name="calCardUrl"<%-- class='easyui-textbox' size='16' data-options='required:true'--%> id="calCardUrl" />
-						<a id="btn" href="#" class="easyui-linkbutton" data-options="">查看</a>
+						<a id="btn" href="#" class="easyui-linkbutton" onclick="viewUrl()">查看</a>
 					</td>
 				</tr>
 				<tr>

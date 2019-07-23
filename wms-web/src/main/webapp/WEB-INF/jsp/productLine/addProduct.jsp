@@ -78,7 +78,7 @@
         <table>
             <tr>
                 <th>产品线名称</th>
-                <td><input type='text' id="enterpriseN"  name='enterpriseName' value="${productLine.enterpriseName}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' id="enterpriseN"  name='name' value="${productLine.name}" class='easyui-textbox' size='16' data-options='required:true'/></td>
             </tr>
             <tr>
                 <th>货主</th>
