@@ -178,7 +178,7 @@
                 {field: 'productCode',title: '产品代码' ,width: '25%'},
                 {field: 'productName',title: '产品名称',width: '25%'},
                 {field: 'specsName',title: '规格名称' ,width: '25%'},
-                {field: 'productModel',title: '产品型号',width: '25%'}
+                {field: 'productModel',title: '产品型号',width: '25%'},
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -217,10 +217,10 @@
             columns : [[
                 {field: 'ck',checkbox:true },
                 {field: 'specsId',title: '主键' ,hidden:true},
-                {field: 'specsName',title: '规格名称' ,width: '25%'},
                 {field: 'productCode',title: '产品代码' ,width: '25%'},
                 {field: 'productName',title: '产品名称',width: '25%'},
-                {field: 'productModel',title: '产品型号',width: '25%'}
+                {field: 'specsName',title: '规格名称' ,width: '25%'},
+                {field: 'productRegisterNo',title: '产品注册证',width: '25%'}
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -319,17 +319,6 @@
         });
 
 
-        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
-
         //货主弹窗
         ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
             modal : true,
@@ -420,6 +409,7 @@
 
         $("#clientName").textbox({
             icons:[{
+                value:'${firstBusinessApply.clientName}',
                 iconCls:'icon-search',
                 handler: function(e){
                     //searchCustomerEnterprise();
@@ -429,7 +419,7 @@
         })
 
         $("#supplierName").textbox({
-            value:"${gspReceiving.supplierId}",
+            value:"${firstBusinessApply.supplierName}",
             width:150,
             icons:[{
                 iconCls:'icon-search',
@@ -502,11 +492,21 @@
     }
     
     function choseProduct() {
-        ezuiDialogSpec.dialog('open');
+        //ezuiDialogSpec.dialog('open');
+        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        })
     }
     
     function searchProduct() {
-        dataGridProduct.datagrid("load",{"productRegisterNo":$("#registerNo").val()})
+        dataGridProduct.datagrid("load",{"productCode":$("#productCode").val(),"productName":$("#productName").val(),"productRegisterNo":$("#registerNo").val()})
     }
     
     function submitApply() {

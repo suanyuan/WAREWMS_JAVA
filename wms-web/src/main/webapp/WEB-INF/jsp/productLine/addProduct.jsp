@@ -86,7 +86,7 @@
             </tr>
             <tr>
                 <th>说明</th>
-                <td><input type='text' name='expression' value="${productLine.expression}" class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='expression' value="${productLine.expression}" class='easyui-textbox' size='16' data-options=''/></td>
             </tr>
         </table>
     </form>

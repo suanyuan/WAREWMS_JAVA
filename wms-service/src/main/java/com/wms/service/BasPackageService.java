@@ -101,4 +101,14 @@ public class BasPackageService extends BaseService {
 		return comboboxList;
 	}
 
+	public BasPackage queryBasPackBy(BasPackageQuery query){
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		List<BasPackage> list = basPackageMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+
 }

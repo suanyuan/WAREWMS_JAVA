@@ -321,8 +321,7 @@ where 1=1
 	qtymin,
 	reservecode,
 	shelflifetype,
-	sku_group1,
-	firstop
+	sku_group1
 	)
 	values(
 	upper(#{customerid}),
@@ -440,8 +439,7 @@ where 1=1
 	0,
 	'IN',
 	'N',
-	#{sku},
-	#{firstop}
+	#{sku}
 	)
 </insert>
 
@@ -472,7 +470,7 @@ where 1=1
 	update Bas_Sku set 
 	<trim  suffixOverrides="," >
 	<if test="activeFlag != null  ">
-		activeFlag=#{activeFlag},
+		active_flag=#{activeFlag},
 	</if>
 	<if test="alternateSku1 != null  ">
 		alternate_sku1=#{alternateSku1},
