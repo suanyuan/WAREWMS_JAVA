@@ -149,6 +149,13 @@ public class GspReceivingService extends BaseService {
 
 				gspReceivingMybatisDao.add(gspReceiving);
 			}else {
+
+				GspReceiving gspReceiving1 =gspReceivingMybatisDao.queryByEnterpriseId(gspReceivingForm.getEnterpriseId());
+				if(gspReceiving1!=null){
+
+					return Json.error("同一个收货单位不能重复申请！");
+				}
+
 				// 新增
 				/*if (newreceivingId!=null&&newreceivingId!=""){
 

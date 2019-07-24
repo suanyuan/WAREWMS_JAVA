@@ -746,14 +746,14 @@
         var a = $('#isChec').combobox('getValue');
        // var row = ezuiDetailsDatagrid.datagrid("getSelected");
 
-        if ($('#ezuiFormAddress').form('validate')){
+if ($('#ezuiFormAddress').form('validate')){
 
-    if (a=='1') {
-            var   url = '<c:url value="/gspReceivingController.do?add"/>';
-            $("#ezuiFormAddress").form('submit', {
-                url : url+"&newreceivingId="+'',
-                onSubmit : function(){
-                    if(ezuiFormAddress.form('validate')){
+                if (a=='1') {
+                        var   url = '<c:url value="/gspReceivingController.do?add"/>';
+                         $("#ezuiFormAddress").form('submit', {
+                                url : url+"&newreceivingId="+'',
+                                onSubmit : function(){
+                         if(ezuiFormAddress.form('validate')){
                         $.messager.progress({
                             text : '<spring:message code="common.message.data.processing"/>', interval : 100
                         });
