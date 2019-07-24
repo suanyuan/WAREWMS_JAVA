@@ -12,6 +12,11 @@ public class PdaResult {
      */
     public final static int CODE_FAILURE = 400;
 
+    /**
+     * PDA 请求过来，try catch到的错误，需要定义个包含的字符串
+     */
+    public final static String PDA_FAILURE_IDENTIFIER = "##@@**@@##";
+
     private int errorCode;
 
     private String msg;

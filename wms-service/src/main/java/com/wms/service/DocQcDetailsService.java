@@ -142,7 +142,7 @@ public class DocQcDetailsService extends BaseService {
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
         if (basSku == null || basSku.getSku() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无产品信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品信息"));
             return map;
         }
         pdaDocQcDetailVO.setBasSku(basSku);
@@ -152,7 +152,7 @@ public class DocQcDetailsService extends BaseService {
         DocQcDetails docQcDetails = docQcDetailsDao.queryDocQcDetail(query);
 
         if (docQcDetails == null || docQcDetails.getQcno() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无验收明细"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无验收明细"));
             return map;
         }
         BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
@@ -161,7 +161,7 @@ public class DocQcDetailsService extends BaseService {
         //批次
         InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
         if (lotAtt == null || lotAtt.getLotnum() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无批次信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无批次信息"));
             return map;
         }
         pdaDocQcDetailVO.setInvLotAtt(lotAtt);
@@ -173,7 +173,7 @@ public class DocQcDetailsService extends BaseService {
         //当前批次-产品注册证对应的 生产厂家
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if (productRegister == null || productRegister.getEnterpriseInfo() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无生产厂家信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
             return map;
         }
         pdaDocQcDetailVO.setEnterpriseInfo(productRegister.getEnterpriseInfo());
@@ -286,13 +286,8 @@ public class DocQcDetailsService extends BaseService {
             List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
 
             /*
-            对应每条验收明细的库存记录、上架明细、验收明细要做对应的处理
-            这里的docQcDetailsList，如果是一次把一条明细的件数都验收了，之后再批量操作，其实是没有在这个list里面的 ，
-            所以这条明细对应的doc_pa_details里面也没有回写HG状态，之后上架，这条明细也不会再有了，关系不大了；
-            但如果是一条验收明细，做了部分验收，然后批量操作，上面验收先把验收的数量从验收明细里面拆出来，list还是会查到的
-
-            ！！！！更正：上面的思路是错的，❎
-            --> 如果是第一次验收、且有序列号的，那就只有一条，普通验收完成之后，下面的list就为0了，得在每次都加上
+            查询出当前验收任务单下的同生产批号的待检的验收明细，并且批量设置为合格
+            出了循环再直接在上架任务明细中修改此生产批号的默认的上架质量状态。
             */
             for (DocQcDetails qcDetails : docQcDetailsList) {
 
@@ -520,12 +515,12 @@ public class DocQcDetailsService extends BaseService {
 
             if (e.getMessage().equals("111")) {
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(库位批次库存错误)");
+                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
             }else if (e.getMessage().equals("222")) {
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(批次库存错误)");
+                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(批次库存错误)");
             }
-            return new PdaResult(PdaResult.CODE_FAILURE, "当前数量验收成功，批量合格失败(系统错误:" + e.getMessage() + ")");
+            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(系统错误:" + e.getMessage() + ")");
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }
