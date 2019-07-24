@@ -16,6 +16,14 @@
 	<result column="carrier_end_date" property="carrierEndDate"/>
 	<result column="carrier_authority_permit" property="carrierAuthorityPermit"/>
 	<result column="carrier_business_scope" property="carrierBusinessScope"/>
+	<result column="contract_no" property="contractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="license_url" property="licenseUrl"/>
+	<result column="road_number_url" property="roadNumberUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
 	<result column="create_id" property="createId"/>
 	<result column="create_date" property="createDate"/>
 	<result column="edit_id" property="editId"/>
@@ -25,7 +33,7 @@
        
 <!-- bas_carrier_license table all fields -->
 <sql id="Base_Column_List" >
-	 carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,contract_no,contract_url,client_content,client_start_date,client_end_date,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag
+	 carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,client_term,contract_no,road_number_url,contract_url,license_url,client_content,client_start_date,client_end_date,carrier_authority_permit,carrier_business_scope,create_id,create_date,edit_id,edit_date,active_flag
 </sql>
    
    
@@ -117,13 +125,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_term,road_authority_permit,road_business_scope,carrier_no,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,create_id,create_date,edit_id,edit_date,active_flag)
- values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{createId},now(),#{editId},now(),#{activeFlag})
+  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_url,road_number_term,road_authority_permit,road_business_scope,carrier_no,license_url,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberUrl},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{licenseUrl},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{createId},now(),#{editId},now(),#{activeFlag})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update bas_carrier_license set road_number=#{roadNumber},road_number_term=#{roadNumberTerm},road_authority_permit=#{roadAuthorityPermit},road_business_scope=#{roadBusinessScope},carrier_no=#{carrierNo},carrier_date=#{carrierDate},carrier_end_date=#{carrierEndDate},carrier_authority_permit=#{carrierAuthorityPermit},carrier_business_scope=#{carrierBusinessScope},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=now(),active_flag=#{activeFlag} where carrier_license_id=#{carrierLicenseId}
+  update bas_carrier_license set road_number=#{roadNumber},road_number_url=#{roadNumberUrl},road_number_term=#{roadNumberTerm},road_authority_permit=#{roadAuthorityPermit},road_business_scope=#{roadBusinessScope},carrier_no=#{carrierNo},carrier_date=#{carrierDate},carrier_end_date=#{carrierEndDate},carrier_authority_permit=#{carrierAuthorityPermit},carrier_business_scope=#{carrierBusinessScope},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=now(),active_flag=#{activeFlag} where carrier_license_id=#{carrierLicenseId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->

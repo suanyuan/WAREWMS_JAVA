@@ -218,13 +218,9 @@ where 1=1
 			<choose>
 				<when test="condition.enterpriseType == 'supplier'"><!--供应商查询生产经营两种 -->
 					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
-					and ( cus.enterprise_id is null)
-					and ( gs.enterprise_id is null)
 				</when>
 				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
 					and (g.enterprise_type != 'ZT')
-					and ( cus.enterprise_id is null)
-					and ( gs.enterprise_id is null)
 				</when>
 				<otherwise>
 					and g.enterprise_type = #{condition.enterpriseType}
@@ -261,6 +257,10 @@ where 1=1
 				<when test="condition.type == 'supplier'">
 					and gs.enterprise_id is not null
 					and gs.first_state = '40'
+				</when>
+				<when test="condition.type == 'enterprise'">
+					and ( cus.enterprise_id is null)
+					and ( gs.enterprise_id is null)
 				</when>
 			</choose>
 		</if>

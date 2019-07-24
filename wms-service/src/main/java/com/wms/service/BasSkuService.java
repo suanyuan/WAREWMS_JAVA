@@ -136,6 +136,9 @@ public class BasSkuService extends BaseService {
 		skuQuery.setCustomerid(basSkuForm.getCustomerid());
 		skuQuery.setSku(basSkuForm.getSku());
 		BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
+		if(basSku == null){
+			return Json.error("查询不到对应的产品");
+		}
 		BeanUtils.copyProperties(basSkuForm, basSku);
 
 		basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

@@ -121,6 +121,21 @@ public class BasSku implements Serializable {
 
 	private String reservedfield05;
 
+	private String reservedfield06;
+
+	private String reservedfield07;
+	private String reservedfield08;
+	private String reservedfield09;
+	private String reservedfield10;
+	private String reservedfield11;
+	private String reservedfield12;
+	private String reservedfield13;
+	private String reservedfield14;
+	private String reservedfield15;
+	private String reservedfield16;
+	private String reservedfield17;
+	private String reservedfield18;
+
 	private String rotationid;
 
 	private String skuGroup1;
@@ -703,5 +718,109 @@ public class BasSku implements Serializable {
 
 	public void setFirstop(String firstop) {
 		this.firstop = firstop;
+	}
+
+	public String getReservedfield06() {
+		return reservedfield06;
+	}
+
+	public void setReservedfield06(String reservedfield06) {
+		this.reservedfield06 = reservedfield06;
+	}
+
+	public String getReservedfield07() {
+		return reservedfield07;
+	}
+
+	public void setReservedfield07(String reservedfield07) {
+		this.reservedfield07 = reservedfield07;
+	}
+
+	public String getReservedfield08() {
+		return reservedfield08;
+	}
+
+	public void setReservedfield08(String reservedfield08) {
+		this.reservedfield08 = reservedfield08;
+	}
+
+	public String getReservedfield09() {
+		return reservedfield09;
+	}
+
+	public void setReservedfield09(String reservedfield09) {
+		this.reservedfield09 = reservedfield09;
+	}
+
+	public String getReservedfield10() {
+		return reservedfield10;
+	}
+
+	public void setReservedfield10(String reservedfield10) {
+		this.reservedfield10 = reservedfield10;
+	}
+
+	public String getReservedfield11() {
+		return reservedfield11;
+	}
+
+	public void setReservedfield11(String reservedfield11) {
+		this.reservedfield11 = reservedfield11;
+	}
+
+	public String getReservedfield12() {
+		return reservedfield12;
+	}
+
+	public void setReservedfield12(String reservedfield12) {
+		this.reservedfield12 = reservedfield12;
+	}
+
+	public String getReservedfield13() {
+		return reservedfield13;
+	}
+
+	public void setReservedfield13(String reservedfield13) {
+		this.reservedfield13 = reservedfield13;
+	}
+
+	public String getReservedfield14() {
+		return reservedfield14;
+	}
+
+	public void setReservedfield14(String reservedfield14) {
+		this.reservedfield14 = reservedfield14;
+	}
+
+	public String getReservedfield15() {
+		return reservedfield15;
+	}
+
+	public void setReservedfield15(String reservedfield15) {
+		this.reservedfield15 = reservedfield15;
+	}
+
+	public String getReservedfield16() {
+		return reservedfield16;
+	}
+
+	public void setReservedfield16(String reservedfield16) {
+		this.reservedfield16 = reservedfield16;
+	}
+
+	public String getReservedfield17() {
+		return reservedfield17;
+	}
+
+	public void setReservedfield17(String reservedfield17) {
+		this.reservedfield17 = reservedfield17;
+	}
+
+	public String getReservedfield18() {
+		return reservedfield18;
+	}
+
+	public void setReservedfield18(String reservedfield18) {
+		this.reservedfield18 = reservedfield18;
 	}
 }

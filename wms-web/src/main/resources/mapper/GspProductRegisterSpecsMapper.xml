@@ -59,10 +59,10 @@ where 1=1
 <trim  suffixOverrides="," >
 
 	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-		and product_register_no like '%${condition.productRegisterNo}%'
+		and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
 	</if>
 	<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-		and product_name_main like  '%${condition.productNameMain}%'
+		and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
 	</if>
 	<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
 		and t1.product_register_id =  ${condition.productRegisterId,jdbcType=VARCHAR}
@@ -85,16 +85,16 @@ where 1=1
 
 
 	<if test="condition.specsName != null and condition.specsName != ''" >
-	    and specs_name   like  '%${condition.specsName}%'
+	    and specs_name   like  CONCAT('%',#{condition.specsName},'%')
 	</if>
 	<if test="condition.productCode != null and condition.productCode != ''" >
-	    and product_code   like  '%${condition.productCode}%'
+	    and product_code   like  CONCAT('%',#{condition.productCode},'%')
 	</if>
 	<if test="condition.productName != null and condition.productName != ''" >
-	    and product_name   like  '%${condition.productName}%'
+	    and product_name   like  CONCAT('%',#{condition.productName},'%')
 	</if>
 	<if test="condition.productRemark != null and condition.productRemark != ''" >
-	    and product_remark like  '%${condition.productRemark}%'
+	    and product_remark like  CONCAT('%',#{condition.productRemark},'%')
 	</if>
 	<if test="condition.productModel != null and condition.productModel != ''" >
 	    and product_model like  '%${condition.productModel}%'

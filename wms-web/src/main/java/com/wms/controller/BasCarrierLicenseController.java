@@ -76,7 +76,7 @@ public class BasCarrierLicenseController {
 		Json gspEnterpriceInfo = gspEnterpriceService.getGspEnterpriceInfo(enterpriseId);
 		model.put("enterpriseId", enterpriseId);
 		model.put("basCarrierLicense", basCarrierLicense);
-		model.put("enterpriseInFo", gspEnterpriceInfo);
+		model.put("enterpriseInFo", gspEnterpriceInfo.getObj());
 		return new ModelAndView("basCarrierLicense/info", model);
 	}
 	/*@Login
@@ -136,7 +136,7 @@ public class BasCarrierLicenseController {
 	@Login
 	@RequestMapping(params = "add",method = RequestMethod.POST)
 	@ResponseBody
-	public Json add(@RequestParam(value="enterpriseId",required=true) String enterpriseId,@RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
+	public Json add(@RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
 		BasCarrierLicenseFormString basCarrierLicenseForm = JSON.parseObject(basCarrierLicenseFormstr, BasCarrierLicenseFormString.class);
 		Json json = basCarrierLicenseService.addBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
@@ -150,13 +150,13 @@ public class BasCarrierLicenseController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(@RequestParam(value="enterpriseId",required=true) String enterpriseId, @RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
-		BasCarrierLicenseForm basCarrierLicenseForm = JSON.parseObject(basCarrierLicenseFormstr, BasCarrierLicenseForm.class);
+	public Json edit(@RequestParam(value="basCarrierLicenseFormstr",required=true) String basCarrierLicenseFormstr) throws Exception {
+		BasCarrierLicenseFormString basCarrierLicenseForm = JSON.parseObject(basCarrierLicenseFormstr, BasCarrierLicenseFormString.class);
 		Json json = basCarrierLicenseService.editBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -167,8 +167,8 @@ public class BasCarrierLicenseController {
 		Json json = basCarrierLicenseService.deleteBasCarrierLicense(id);
 		if(json == null){
 			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

@@ -131,17 +131,23 @@ public class FirstBusinessApplyController {
 		if(StringUtils.isEmpty(id)){
 			return Json.error("请选择需要确认的申请");
 		}
-		return firstBusinessApplyService.confirmApply(id);
+		return firstBusinessApplyService.addConfirmApply(id);
 	}
 
 	@Login
 	@RequestMapping(params = "reApply")
 	@ResponseBody
-	public Json reApply(String id) throws Exception {
-		if(StringUtils.isEmpty(id)){
-			return Json.error("请选择需要确认的申请");
+	public Json reApply(String id) {
+		try{
+			if(StringUtils.isEmpty(id)){
+				return Json.error("请选择需要确认的申请");
+			}
+			return firstBusinessApplyService.addReApply(id);
+		}catch (Exception e){
+			e.printStackTrace();
+			return Json.error("");
 		}
-		return firstBusinessApplyService.reApply(id);
+
 	}
 
 	@Login
