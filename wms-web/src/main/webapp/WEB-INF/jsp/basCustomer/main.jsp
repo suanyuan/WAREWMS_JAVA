@@ -60,11 +60,11 @@ $(function() {
                 }},
             {field: 'customerid',		title: '客户代码',	width: 120 },
             {field: 'descrC',		title: '客户名称',	width: 100 },
-            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 90 },
-            {field: 'shorthandName',		title: '简称 ',	width: 55 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
-            {field: 'contacts',		title: '联系人 ',	width: 75 },
-            {field: 'contactsPhone',		title: '联系人电话 ',	width: 95 },
+            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 130 },
+            {field: 'shorthandName',		title: '简称 ',	width: 115 },
+            {field: 'enterpriseName',		title: '企业名称 ',	width: 110 },
+            {field: 'contacts',		title: '联系人 ',	width: 115 },
+            {field: 'contactsPhone',		title: '联系人电话 ',	width: 115 },
 			{field: 'supContractNo',		title: '合同编号 ',	width: 120 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
@@ -77,8 +77,8 @@ $(function() {
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'remark',		title: '备注 ',	width: 85 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 90},
+            {field: 'remark',		title: '备注 ',	width: 125 },
+            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110},
 
 		]],
 		onDblClickCell: function(index,field,value){

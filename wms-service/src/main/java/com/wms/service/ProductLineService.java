@@ -66,9 +66,9 @@ public class ProductLineService extends BaseService {
 				productLineVOList.add(productLineVO);
 			}
 
-			datagrid.setTotal((long) productLineMybatisDao.queryByCount(mybatisCriteria));
-			datagrid.setRows(productLineVOList);
 		}
+		datagrid.setTotal((long) productLineMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(productLineVOList);
 
 		return datagrid;
 	}

@@ -41,7 +41,7 @@ where 1=1
 	    and name like  '%${condition.name}%'
 	</if>
 	<if test="condition.expression != null and condition.expression != ''" >
-	    and expression =  #{condition.expression}
+	    and expression like  '%${condition.expression}%'
 	</if>
 	<if test="condition.createId != null and condition.createId != ''" >
 	    and create_id =  #{condition.createId}
@@ -123,16 +123,25 @@ where 1=1
 
 <!-- 生产线 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from product_line 
+	select count(1) from product_line a
+	LEFT JOIN bas_customer b ON a.customerid = b.customerid
 	<include refid="Example_Where_Clause"/>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+		and descr_c like  '%${condition.descrC}%'
+	</if>
 </select>
   	
 <!-- 查询生产线列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from product_line 
+	select
+	a.*
+	FROM
+	product_line a
+	LEFT JOIN bas_customer b ON a.customerid = b.customerid
 	<include refid="Example_Where_Clause"/>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+		and descr_c like  '%${condition.descrC}%'
+	</if>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
     </if>
