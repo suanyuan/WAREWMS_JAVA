@@ -70,6 +70,10 @@ public class GspProductRegisterService extends BaseService {
 		if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
 			return Json.error("产品注册证编号重复");
 		}
+
+		if(StringUtils.isEmpty(gspProductRegisterForm.getEnterpriseId())){
+			return Json.error("请填写生产企业");
+		}
 		try{
 			GspProductRegister gspProductRegister = new GspProductRegister();
 			BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);

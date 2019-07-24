@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.query.BasPackageQuery;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PinyinUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -43,6 +44,8 @@ public class DataPublishService extends BaseService {
     private GspEnterpriseInfoService gspEnterpriseInfoService;
     @Autowired
     private GspReceivingService gspReceivingService;
+    @Autowired
+    private BasPackageService basPackageService;
 
     /**
      * 下发数据
@@ -163,13 +166,22 @@ public class DataPublishService extends BaseService {
                 GspProductRegisterSpecsVO specObj = (GspProductRegisterSpecsVO)spec.getObj();
                 GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
 
+                if(register == null){
+                    return Json.error("产品没有绑定产品注册证");
+                }
+
                 BasCustomer basCustomer = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);//basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
                 BasCustomer customerId =  basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);//basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
 
                 skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());
-                skuForm.setPackid(specObj.getPackingUnit());
+
+                BasPackageQuery query = new BasPackageQuery();
+                query.setDescr(specObj.getPackingUnit());
+                BasPackage basPackage = basPackageService.queryBasPackBy(query);
+                skuForm.setPackid(basPackage == null ? "STANDARD" : basPackage.getPackid());
+
                 skuForm.setReservedfield01(specObj.getProductName());
                 skuForm.setReservedfield02(specObj.getProductRemark());
                 skuForm.setReservedfield03(specObj.getProductRegisterNo());
@@ -192,7 +204,6 @@ public class DataPublishService extends BaseService {
 
                 //skuForm
                 basSkuService.addBasSku(skuForm);
-                return Json.success("数据下发中");
             }
             return Json.error("操作成功");
         }
@@ -278,7 +289,7 @@ public class DataPublishService extends BaseService {
             if(!json.isSuccess()){
                 return Json.error("查询不到对应的产品申请");
             }
-            FirstBusinessApply firstBusinessApply = (FirstBusinessApply)json.getObj();
+            FirstBusinessApplyVO firstBusinessApply = (FirstBusinessApplyVO)json.getObj();
             Json productJson = firstBusinessProductApplyService.getListByApplyId(firstBusinessApply.getApplyId());
             if(!productJson.isSuccess()){
                 return productJson;
@@ -294,9 +305,9 @@ public class DataPublishService extends BaseService {
             for(FirstBusinessProductApply f:productApplyList){
                 BasSkuForm skuForm = new BasSkuForm();
                 Json spec = gspProductRegisterSpecsService.getGspProductRegisterSpecsInfo(f.getSpecsId());
-                GspProductRegisterSpecs specObj = (GspProductRegisterSpecs)spec.getObj();
-                GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
-                skuForm.setDefaultreceivinguom(specObj.getUnit());
+                GspProductRegisterSpecsVO specObj = (GspProductRegisterSpecsVO)spec.getObj();
+                //GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
+                /*skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());
                 skuForm.setPackid(specObj.getPackingUnit());
@@ -306,7 +317,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield04(register.getClassifyId());
                 skuForm.setReservedfield05(register.getClassifyCatalog());
                 skuForm.setSku(specObj.getProductCode());
-                skuForm.setSkuGroup1(specObj.getProductLine());
+                skuForm.setSkuGroup1(firstBusinessApply.getProductLine());
                 //skuForm.setSkuGroup2();//附卡类别
                 skuForm.setSkuGroup3(specObj.getPackingRequire());//包装要求
                 skuForm.setSkuGroup4(specObj.getStorageCondition());
@@ -314,9 +325,11 @@ public class DataPublishService extends BaseService {
                 skuForm.setSkuGroup6(register.getEnterpriseId());
                 skuForm.setSkuGroup7(specObj.getIsDoublec());//是否需要双证
                 skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
-                skuForm.setSkuGroup9(specObj.getProductionAddress());
+                skuForm.setSkuGroup9(specObj.getProductionAddress());*/
                 skuForm.setActiveFlag(Constant.IS_USE_NO);
                 skuForm.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+                skuForm.setSku(specObj.getProductCode());
+                skuForm.setCustomerid(firstBusinessApply.getClientId());
                 //skuForm
                 basSkuService.editBasSku(skuForm);
             }

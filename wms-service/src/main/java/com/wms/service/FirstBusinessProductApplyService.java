@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.constant.Constant;
 import com.wms.mybatis.dao.FirstBusinessProductApplyMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import org.springframework.beans.BeanUtils;
@@ -72,6 +73,20 @@ public class FirstBusinessProductApplyService extends BaseService {
 	}
 
 	public Json getListByApplyId(String applyId){
+		MybatisCriteria criteria = new MybatisCriteria();
+		FirstBusinessProductApplyQuery query = new FirstBusinessProductApplyQuery();
+		query.setProductApplyId(applyId);
+		query.setIsUse(Constant.IS_USE_YES);
+		criteria.setCondition(query);
+		List<FirstBusinessProductApply> list = firstBusinessProductApplyMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return Json.success("",list);
+		}else {
+			return Json.error("查询不到对应的产品");
+		}
+	}
+
+	public Json getListByApplyIdNoUse(String applyId){
 		MybatisCriteria criteria = new MybatisCriteria();
 		FirstBusinessProductApplyQuery query = new FirstBusinessProductApplyQuery();
 		query.setProductApplyId(applyId);

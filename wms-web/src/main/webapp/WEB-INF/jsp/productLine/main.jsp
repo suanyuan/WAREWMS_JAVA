@@ -40,7 +40,7 @@ $(function() {
         },
 		columns : [[
 			{field: 'productLineId',		title: '产品线名称',	width: 88,hidden:true },
-			{field: 'enterpriseName',		title: '产品线名称',	width: 88 },
+			{field: 'name',		title: '产品线名称',	width: 88 },
 			{field: 'descrC',		title: '货主',	width: 88 },
 			//{field: 'name',		title: '货主',	width: 88,hidden:true },
 			{field: 'expression',		title: '说明',	width: 88 },

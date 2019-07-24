@@ -149,7 +149,7 @@ function showCheck() {
         cache: false,
 		buttons:"#ezuiDialogBtn",
         onClose : function() {
-            ezuiFormClear(ezuiForm);
+            //ezuiFormClear(ezuiForm);
             $("#remark").textbox("setValue","");
         }
     });

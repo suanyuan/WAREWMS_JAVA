@@ -23,7 +23,7 @@ public class BasCarrierLicense  implements Serializable {
 
 	private String carrierNo;
 
-	private java.util.Date carrierDate;
+	private Date carrierDate;
 
 	private Date carrierEndDate;
 
@@ -36,6 +36,8 @@ public class BasCarrierLicense  implements Serializable {
 	private String contractNo;
 
 	private String contractUrl;
+	private String roadNumberUrl;
+	private String licenseUrl;
 
 	private String clientContent;
 

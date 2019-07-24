@@ -45,6 +45,7 @@ public class ViewInvLocationVO {
 	private String lotatt10;
 
 	private String lotatt11;
+	private String lotatt14;
 
 	private String lotatt12;
 
@@ -78,6 +79,14 @@ public class ViewInvLocationVO {
 	private java.math.BigDecimal totalcubic;
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
+	}
 
 	public String getEnterpriseName() {
 		return enterpriseName;

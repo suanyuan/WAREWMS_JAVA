@@ -371,7 +371,15 @@ public class BasCustomerService extends BaseService {
 		customerQuery.setEnterpriseId(enterpriseId);
 		customerQuery.setCustomerType(customertype);
 
-		return basCustomerMybatisDao.queryById(customerQuery);
+		BasCustomer basCustomer = null;
+		try {
+			basCustomer = basCustomerMybatisDao.queryById(customerQuery);
+		} catch (Exception e) {
+			return null;
+		}
+
+
+		return basCustomer;
 	}
 
 	public BasCustomer selectCustomerById(String customerID, String customertype) {

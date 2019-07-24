@@ -6,6 +6,7 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -44,6 +45,12 @@ $(function() {
             {field: 'carrierAuthorityPermit',		title: '发证机关',	width: 45 },
             {field: 'carrierEndDate',		title: '有效期至',	width: 85 },
 			{field: 'carrierBusinessScope',		title: '业务范围',	width: 50 },
+            {field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
+            {field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
+            {field: 'clientContent',		title: '合同内容',	width: 38 ,hidden:true},
+            {field: 'clientStartDate',		title: '合同开始时间',	width: 38 ,hidden:true},
+            {field: 'clientEndDate',		title: '合同结束时间',	width: 38 ,hidden:true},
+            {field: 'clientTerm',		title: '合同期限',	width: 38,hidden:true },
 			{field: 'createId',		title: '录入人',	width: 40 },
 			{field: 'createDate',	title: '录入时间',	width: 85 },
 			{field: 'editId',		title: '修改人',	width: 40 },
@@ -170,7 +177,7 @@ var commit = function(){
     var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
-    var clientObj = new Object();
+   // var clientObj = new Object();
 
     $("#ezuiFormInfo input[class='textbox-value'][type='hidden']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
@@ -192,11 +199,11 @@ var commit = function(){
     }else{
         url = sy.bp()+"/basCarrierLicenseController.do?add";
     }
-    var enterpriceId = "";
+    /*var enterpriceId = "";
     var row = ezuiDatagrid.datagrid('getSelected');
     if(row){
         enterpriceId = row.enterpriseId;
-    }
+    }*/
     //验证字段
     if($("#ezuiFormInfo").form('validate')){
         $.messager.progress({
@@ -204,7 +211,7 @@ var commit = function(){
         });
         $.ajax({
             url : url,
-            data : {"enterpriseId":enterpriceId,"basCarrierLicenseFormstr":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
+            data : {"basCarrierLicenseFormstr":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
                 var msg='';
                 try{

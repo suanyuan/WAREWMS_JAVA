@@ -133,6 +133,7 @@ var edit = function(){
             qtyallocated : row.qtyallocated,
             qtyholded : row.qtyholded,
             fmuomName : row.fmuomName,
+            defaultreceivinguom : row.defaultreceivinguom,
             iPa : row.iPa,
             iMv : row.iMv,
             oMv : row.oMv,
@@ -303,13 +304,13 @@ var doSearch = function(){
 					<td><input type='text' name='lotatt03' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>产品代码</th>
 					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>产品名称</th>
 					<td><input type='text' name='lotatt12' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				</tr>
+				<tr>
 					<th>注册证号/备案凭证号</th>
 					<td><input type='text' name='lotatt06' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>规格</th>
+					<th>规格型号</th>
 					<td><input type='text' name='qtyallocated' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>冻结数量</th>
 					<td><input type='text' name='qtyholded' class='easyui-textbox' size='16' data-options='required:true'/></td>

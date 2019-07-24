@@ -114,13 +114,13 @@ public class FirstBusinessApplyService extends BaseService {
 		if(firstBusinessApply!=null){
 			FirstBusinessApplyVO vo = new FirstBusinessApplyVO();
 			BeanUtils.copyProperties(firstBusinessApply,vo);
-			GspEnterpriseInfo client = gspEnterpriseInfoService.getGspEnterpriseInfo(firstBusinessApply.getClientId());
+			BasCustomer client = basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
 			if(client!=null){
-				vo.setClientName(client.getEnterpriseName());
+				vo.setClientName(client.getDescrC());
 			}
-			GspEnterpriseInfo supplier = gspEnterpriseInfoService.getGspEnterpriseInfo(firstBusinessApply.getSupplierId());
+			BasCustomer supplier = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);
 			if(supplier!=null){
-				vo.setSupplierName(supplier.getEnterpriseName());
+				vo.setSupplierName(supplier.getDescrC());
 			}
 			return Json.success("",vo);
 		}
@@ -239,6 +239,11 @@ public class FirstBusinessApplyService extends BaseService {
 		try{
 			FirstBusinessApply oldApply = firstBusinessApplyMybatisDao.queryById(id);
 			if(oldApply!=null){
+
+				if(!oldApply.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
+					return Json.error("不是新建状态的申请单无法修改");
+				}
+
 				FirstBusinessApply update = new FirstBusinessApply();
 				update.setApplyId(id);
 				update.setIsUse(Constant.IS_USE_NO);
@@ -267,7 +272,7 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("申请失败");
 	}
 
-	public Json confirmApply(String id){
+	public Json addConfirmApply(String id){
 		try{
 			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING);
@@ -286,13 +291,30 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("操作失败");
 	}
 
-	public Json reApply(String id){
+	public Json addReApply(String id){
 		try{
 			//重新申请
 			Json json = queryFirstBusinessApply(id);
 			if(!json.isSuccess() || json.getObj() == null){
 				return Json.error("没有查询到对应的申请单号");
 			}
+
+			//重新插入单据
+			/*FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(id);
+			Json result = firstBusinessProductApplyService.getListByApplyIdNoUse(id);
+			if(result.isSuccess()){
+				List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
+				if(list!=null && list.size()>0){
+					List<String> arrlist = new ArrayList<>();
+					for(FirstBusinessProductApply f : list){
+						arrlist.add(f.getSpecsId());
+					}
+					//addApply(newApply.getClientId(),newApply.getSupplierId(),arrlist.toString(),"");
+				}
+			}*/
+
+			//TODO 失效已下发的数据
+			dataPublishService.cancelData(id);
 
 			//修改原数据为失效
 			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
@@ -303,21 +325,7 @@ public class FirstBusinessApplyService extends BaseService {
 			//更新申请记录
 			firstReviewLogService.updateFirstReviewByNo(id,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
-			//重新插入单据
-			FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(id);
-			Json result = firstBusinessProductApplyService.getListByApplyId(id);
-			if(!result.isSuccess()){
-				List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
-				if(list!=null && list.size()>0){
-					 addApply(newApply.getClientId(),newApply.getSupplierId(),list.toString(),"");
-				}
-			}
-
-			//TODO 失效已下发的数据
-			dataPublishService.cancelData(id);
-
-			return Json.error("操作成功");
-
+			return Json.success("操作成功");
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -408,7 +416,7 @@ public class FirstBusinessApplyService extends BaseService {
 			return Json.error("产品注册证没有选择经营范围");
 		}
 
-		for(GspOperateDetailVO v : operateDetails){
+		/*for(GspOperateDetailVO v : operateDetails){
 			arrlicense.add(v.getOperateId());
 		}
 		for(GspOperateDetailVO v : registerDetailVo){
@@ -418,7 +426,7 @@ public class FirstBusinessApplyService extends BaseService {
 			if(arrlicense.toString().indexOf(s)==-1){
 				return Json.error("供应商生经营产/许可证和产品注册证范围不匹配");
 			}
-		}
+		}*/
 		return Json.success("");
 
 

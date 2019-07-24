@@ -132,8 +132,11 @@ where 1=1
 	<if test="condition.qtyshipped != null and condition.qtyshipped != ''" >
 	    and qtyshipped =  #{condition.qtyshipped}
 	</if>
-	<if test="condition.shipmenttime != null and condition.shipmenttime != '' and condition.shipmenttimetext != null and condition.shipmenttimetext != ''" >
-	    and to_char(to_date(shipmenttime,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') between #{condition.shipmenttime} and #{condition.shipmenttimetext}
+	<if test="condition.shipmenttime != null and condition.shipmenttime != ''" >
+	    and shipmenttime &gt;= #{condition.shipmenttime}
+	</if>
+	<if test="condition.shipmenttimetext != null and condition.shipmenttimetext != ''" >
+	    and shipmenttime  &lt;= #{condition.shipmenttimetext}
 	</if>
 	<if test="condition.sku != null and condition.sku != '' and condition.skutext != null and condition.skutext != ''" >
 	    and sku between #{condition.sku} and #{condition.skutext}

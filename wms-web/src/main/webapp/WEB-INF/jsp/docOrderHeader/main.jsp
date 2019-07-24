@@ -1234,6 +1234,8 @@ var ezuiCustToolbarClear = function(){
 
 /* 客户选择弹框-主界面 */
 var ezuiCustDataClick = function(){
+    $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1272,8 +1274,7 @@ var ezuiCustDataClick = function(){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+
 	ezuiCustDataDialog.dialog('open');
 };
 /* 客户选择-主界面 */
@@ -1287,6 +1288,8 @@ var selectCust = function(){
 
 /* 客户选择弹框-订单信息界面 */
 var ezuiCustDataDialogClick = function(){
+    $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1325,8 +1328,7 @@ var ezuiCustDataDialogClick = function(){
 			$(this).datagrid('unselectAll');
 		}
 	});
-	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+
 	ezuiCustDataDialog.dialog('open');
 };
 /* 客户选择-订单信息界面 */

@@ -17,7 +17,7 @@
                     <input type='hidden' id='choseScope' value="${choseScope}" name="choseScope" class="textbox-value"/>
                 <fieldset>
                     <legend>产品注册证信息</legend>
-                        <input type='hidden' id='gspProductRegisterId' name='productRegisterId' value="${gspProductRegister.productRegisterId}"/>
+                        <input type='hidden' class="textbox-value" id='gspProductRegisterId' name='productRegisterId' value="${gspProductRegister.productRegisterId}"/>
                         <table width="100%">
                             <tr>
                                 <th>注册证编号</th>
@@ -113,7 +113,7 @@
             </form>
     </div>
     <!--产品查询列表dialog -->
-    <div id='ezuiDialogSpec' style='padding: 10px;'>
+    <div id='ezuiDialogSpec' style='padding: 10px;display: none;'>
         <div id='productToolbar' class='datagrid-toolbar' style=''>
             <fieldset>
                 <legend>产品注册证信息</legend>
@@ -124,7 +124,7 @@
                         <th>产品名称</th>
                         <td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>
-                            <a id="getBy" onclick='getBy();' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                            <a id="getBy" onclick='getBy();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                             <a id="choseSelect" onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                         </td>
                     </tr>
@@ -136,7 +136,7 @@
         </table>
     </div>
     <!--企业信息列表dialog -->
-    <div id='ezuiDialogEnterprise' style='padding: 10px;'>
+    <div id='ezuiDialogEnterprise' style='padding: 10px;display: none;'>
         <div id='ezuiEnterpriseToolbar' class='datagrid-toolbar' style=''>
             <fieldset>
                 <legend>企业信息</legend>
@@ -147,8 +147,8 @@
                         <th>简称</th>
                         <td><input type='text' id='shorthandName' class='easyui-textbox' data-options='width:200'/></td>
                         <td>
-                            <a id="productQuery" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>查询</a>
-                            <a id="productChose" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>选择</a>
+                            <a id="productQuery" onclick="productQuery()" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>查询</a>
+                            <a id="productChose" onclick="productChose()" class="easyui-linkbutton" data-options="iconCls:'icon-search'" href='javascript:void(0);'>选择</a>
                         </td>
                     </tr>
                 </table>
@@ -223,21 +223,6 @@
             }
         })
 
-        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            },
-            onLoad:function () {
-                $("#getBy").linkbutton({
-                    iconCls: 'icon-search'
-                })
-            }
-        }).dialog('close');
 
         enterpriseDatagrid = $("#enterpriseGridDetail").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
@@ -286,20 +271,6 @@
                 //sy.bp()+'/gspProductRegisterController.do?showSpecsList'
             }
         })
-
-        ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-
-            },
-            onOpen : function () {
-
-            }
-        }).dialog('close');
 
 
         $("#ezuiFormDetail input[name='classifyId']").combobox({
@@ -414,6 +385,9 @@
         ezuiFormDetail.form('submit', {
             url : url,
             onSubmit : function(){
+                if($("#enterpriseId").val() == ""){
+                    return false;
+                }
                 if(ezuiFormDetail.form('validate')){
                     $.messager.progress({
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -424,10 +398,13 @@
                 }
             },
             success : function(data) {
+                console.log(data);
                 $.messager.progress('close');
                 var result = $.parseJSON(data);
                 if(result.success){
-                    $("#gspProductRegisterId").val(data.obj);
+                    console.log(result.obj);
+                    $("#gspProductRegisterId").val(result.obj);
+                    console.log($("#gspProductRegisterId").val());
                     ezuiDatagridDetail.datagrid("reload");
                 }
                 showMsg(result.msg);
@@ -482,6 +459,7 @@
             collapsible:false,
             fit:true,
             pagination:true,
+            queryParams:{"isUse":"1"},
             rownumbers:true,
             idField : 'specsId',
             columns : [[
@@ -494,6 +472,9 @@
             ]],
             onDblClickCell: function(index,field,value){
 
+            },
+            onDblClickRow: function(index,row){
+                choseSelect(row);
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 
@@ -521,7 +502,19 @@
                 });
             }
         })
-        ezuiDialogSpec.dialog('open');
+        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            },
+            onLoad:function () {
+
+            }
+        });
     }
 
     function detailsUnBind(){
@@ -560,13 +553,18 @@
         }
     }
 
-    function choseSelect() {
-        var rows = dataGridProduct.datagrid("getChecked");
-        if(rows && rows.length>0){
+    function choseSelect(row) {
+        var rows = row || dataGridProduct.datagrid("getChecked");
+        if(rows){
             var arr = new Array();
-            for(var i=0;i<rows.length;i++){
-                arr.push(rows[i].specsId);
+            if(rows instanceof Array){
+                for(var i=0;i<rows.length;i++){
+                    arr.push(rows[i].specsId);
+                }
+            }else{
+                arr.push(row.specsId);
             }
+
             $.ajax({
                 url : 'gspProductRegisterController.do?addSpec',
                 data : {"gspProductRegisterId":$("#gspProductRegisterId").val(),"specId" : arr.join(',')},
@@ -587,6 +585,7 @@
 
     $("#enterpriseName").textbox({
         width:185,
+        required:true,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -597,7 +596,20 @@
     });
     
     function searchEnterprise() {
-        ezuiDialogEnterprise.dialog("open");
+        ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+
+            },
+            onOpen : function () {
+
+            }
+        })
+        //ezuiDialogEnterprise.dialog("open");
     }
 
     function selectEnterprise() {
@@ -627,6 +639,14 @@
                 showMsg("请上传产品注册证附件！");
             }
         }
+    }
+
+    function getBy() {
+        dataGridProduct.datagrid("load",{"productCode":$("#productCode").textbox("getValue"),"productName":$("#productName").textbox("getValue"),"isUse":"1"})
+    }
+
+    function productQuery() {
+        enterpriseDatagrid.datagrid("reload",{"enterpriseNo":$("#enterpriseNo").textbox("getValue"),"shorthandName":$("#shorthandName").textbox("getValue"),"isUse":"1"})
     }
 </script>
 </body>

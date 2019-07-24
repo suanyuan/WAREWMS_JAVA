@@ -36,9 +36,9 @@ $(function() {
 		title: '产品档案',
 		pageSize : 50,
 		pageList : [50, 3, 200],
-		fit: true,
+		fit: false,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: false,
 		striped: true,
 		collapsible:false,
@@ -51,28 +51,28 @@ $(function() {
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
 			}}, */
 
-			{field: 'customerid',		title: '货主',	width: 24},
-			{field: 'descrC',		title: '规格名称',	width: 24 },
-			{field: 'descrE',		title: '型号',	width: 24 },
-            {field: 'sku',		title: '代码',	width: 12 },
-			{field: 'firstop',		title: '首营状态',	width: 12 ,formatter:firstStateTypeFormatter},
-			{field: 'packid',		title: '包装规格代码',	width: 24 },
-			{field: 'reservedfield01',		title: '商品名称',	width: 12 },
-			{field: 'reservedfield02',		title: '商品描述',	width: 12 },
-			{field: 'reservedfield03',		title: '注册证号',	width: 12 },
+			{field: 'customerid',		title: '货主',	width: 100},
+			{field: 'descrC',		title: '规格名称',	width: 150 },
+			{field: 'descrE',		title: '型号',	width: 150 },
+            {field: 'sku',		title: '代码',	width: 150 },
+			{field: 'firstop',		title: '首营状态',	width: 100 ,formatter:firstStateTypeFormatter},
+			{field: 'packid',		title: '包装规格代码',	width: 100 },
+			{field: 'reservedfield01',		title: '商品名称',	width: 200 },
+			{field: 'reservedfield02',		title: '商品描述',	width: 300 },
+			{field: 'reservedfield03',		title: '注册证号',	width: 180 },
 
-            {field: 'skuGroup1',		title: '产品线',	width: 12 },
-            {field: 'skuGroup2',		title: '附卡类别',	width: 12 },
+            {field: 'skuGroup1',		title: '产品线',	width: 100 },
+            {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
 
-            {field: 'skuGroup6',		title: '默认供应商',	width: 15 },
+            {field: 'skuGroup6',		title: '默认供应商',	width: 100 },
 
-            {field: 'activeFlag',		title: '激活',	width: 12, formatter:function(value,rowData,rowIndex){
+            {field: 'activeFlag',		title: '激活',	width: 50, formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            {field: 'addtime',		title: '创建时间',	width: 24},
-            {field: 'addwho',		title: '创建人',	width: 12},
-            {field: 'edittime',		title: '编辑时间',	width: 24 },
-            {field: 'editwho',		title: '编辑人',	width: 18 },
+            {field: 'addtime',		title: '创建时间',	width: 100},
+            {field: 'addwho',		title: '创建人',	width: 100},
+            {field: 'edittime',		title: '编辑时间',	width: 100 },
+            {field: 'editwho',		title: '编辑人',	width: 100 },
 
 
 		]],

@@ -15,9 +15,9 @@ public class BasCarrierLicenseVO {
 	private String roadBusinessScope;
 	private String carrierNo;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	private String carrierDate;
+	private Date carrierDate;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	private String carrierEndDate;
+	private Date carrierEndDate;
 	private String clientTerm;
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
@@ -196,19 +196,19 @@ public class BasCarrierLicenseVO {
 		this.editId = editId;
 	}
 
-	public String getCarrierDate() {
+	public Date getCarrierDate() {
 		return carrierDate;
 	}
 
-	public void setCarrierDate(String carrierDate) {
+	public void setCarrierDate(Date carrierDate) {
 		this.carrierDate = carrierDate;
 	}
 
-	public String getCarrierEndDate() {
+	public Date getCarrierEndDate() {
 		return carrierEndDate;
 	}
 
-	public void setCarrierEndDate(String carrierEndDate) {
+	public void setCarrierEndDate(Date carrierEndDate) {
 		this.carrierEndDate = carrierEndDate;
 	}
 

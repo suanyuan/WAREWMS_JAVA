@@ -19,8 +19,8 @@ public class BasCarrierLicenseForm {
 	private String roadAuthorityPermit;
 	private String roadBusinessScope;
 	private String carrierNo;
-	private String carrierDate;
-	private String carrierEndDate;
+	private Date carrierDate;
+	private Date carrierEndDate;
 	private String clientTerm;
 	private String carrierAuthorityPermit;
 	private String carrierBusinessScope;
@@ -33,6 +33,7 @@ public class BasCarrierLicenseForm {
 	private String roadNumberlicenseUrl;
 	private String licenseUrl;
 
+    private String roadNumberUrl;
 
     private String businessId;
 
@@ -74,9 +75,9 @@ public class BasCarrierLicenseForm {
 
     private String clientContent;
 
-    private String clientStartDate;
+    private Date clientStartDate;
 
-    private String clientEndDate;
+    private Date clientEndDate;
 
     public String getEnterpriseName() {
         return enterpriseName;
@@ -118,19 +119,19 @@ public class BasCarrierLicenseForm {
         this.clientContent = clientContent;
     }
 
-    public String getClientStartDate() {
+    public Date getClientStartDate() {
         return clientStartDate;
     }
 
-    public void setClientStartDate(String clientStartDate) {
+    public void setClientStartDate(Date clientStartDate) {
         this.clientStartDate = clientStartDate;
     }
 
-    public String getClientEndDate() {
+    public Date getClientEndDate() {
         return clientEndDate;
     }
 
-    public void setClientEndDate(String clientEndDate) {
+    public void setClientEndDate(Date clientEndDate) {
         this.clientEndDate = clientEndDate;
     }
 
@@ -144,7 +145,13 @@ public class BasCarrierLicenseForm {
         this.gspBusinessLicenseForm = gspBusinessLicenseForm;
     }
 
+    public String getRoadNumberUrl() {
+        return roadNumberUrl;
+    }
 
+    public void setRoadNumberUrl(String roadNumberUrl) {
+        this.roadNumberUrl = roadNumberUrl;
+    }
 
     public String getFile() {
         return file;
@@ -357,20 +364,20 @@ public class BasCarrierLicenseForm {
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public String getCarrierDate() {
+	public Date getCarrierDate() {
 		return carrierDate;
 	}
 
-	public void setCarrierDate(String carrierDate) {
+	public void setCarrierDate(Date carrierDate) {
 		this.carrierDate = carrierDate;
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public String getCarrierEndDate() {
+	public Date getCarrierEndDate() {
 		return carrierEndDate;
 	}
 
-	public void setCarrierEndDate(String carrierEndDate) {
+	public void setCarrierEndDate(Date carrierEndDate) {
 		this.carrierEndDate = carrierEndDate;
 	}
 

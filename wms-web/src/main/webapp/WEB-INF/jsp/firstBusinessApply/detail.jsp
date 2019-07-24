@@ -152,9 +152,9 @@
     var enterpriseSupplierDialog;
     var ezuiDialogSpec;
     var dataGridProduct;
-    var arr = new Array();
     var ezuiDialogClientDetail;
     var ezuiDialogSupplierDetail;
+    var arr;
 
     $(function () {
         ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
@@ -178,7 +178,7 @@
                 {field: 'productCode',title: '产品代码' ,width: '25%'},
                 {field: 'productName',title: '产品名称',width: '25%'},
                 {field: 'specsName',title: '规格名称' ,width: '25%'},
-                {field: 'productModel',title: '产品型号',width: '25%'}
+                {field: 'productModel',title: '产品型号',width: '25%'},
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -217,10 +217,10 @@
             columns : [[
                 {field: 'ck',checkbox:true },
                 {field: 'specsId',title: '主键' ,hidden:true},
-                {field: 'specsName',title: '规格名称' ,width: '25%'},
                 {field: 'productCode',title: '产品代码' ,width: '25%'},
                 {field: 'productName',title: '产品名称',width: '25%'},
-                {field: 'productModel',title: '产品型号',width: '25%'}
+                {field: 'specsName',title: '规格名称' ,width: '25%'},
+                {field: 'productRegisterNo',title: '产品注册证',width: '25%'}
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -319,17 +319,6 @@
         });
 
 
-        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
-
         //货主弹窗
         ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
             modal : true,
@@ -420,6 +409,7 @@
 
         $("#clientName").textbox({
             icons:[{
+                value:'${firstBusinessApply.clientName}',
                 iconCls:'icon-search',
                 handler: function(e){
                     //searchCustomerEnterprise();
@@ -429,7 +419,7 @@
         })
 
         $("#supplierName").textbox({
-            value:"${gspReceiving.supplierId}",
+            value:"${firstBusinessApply.supplierName}",
             width:150,
             icons:[{
                 iconCls:'icon-search',
@@ -502,11 +492,21 @@
     }
     
     function choseProduct() {
-        ezuiDialogSpec.dialog('open');
+        //ezuiDialogSpec.dialog('open');
+        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        })
     }
     
     function searchProduct() {
-        dataGridProduct.datagrid("load",{"productRegisterNo":$("#registerNo").val()})
+        dataGridProduct.datagrid("load",{"productCode":$("#productCode").val(),"productName":$("#productName").val(),"productRegisterNo":$("#registerNo").val(),"isUse":"1"})
     }
     
     function submitApply() {
@@ -554,29 +554,32 @@
             }
         });
     }
-    
+    arr = new Array();
     function choseSelect() {
         var rows = dataGridProduct.datagrid("getChecked");
         if(rows){
             for(var i=0;i<rows.length;i++){
-                arr.push(rows[i].specsId);
-                ezuiDatagridDetail.datagrid("appendRow",{
-                    "productApplyId":"",
-                    "applyId":"",
-                    "specsId":rows[i].specsId,
-                    "isCheck":"",
-                    "isOperate":"",
-                    "isCold":"",
-                    "createId":"",
-                    "createDate":"",
-                    "editId":"",
-                    "editDate":"",
-                    "isUse":"",
-                    "productCode":rows[i].productCode,
-                    "productName":rows[i].productName,
-                    "specsName":rows[i].specsName,
-                    "productModel":rows[i].productModel
-                });
+                if(arr.indexOf(rows[i].specsId)==-1){
+                    ezuiDatagridDetail.datagrid("appendRow",{
+                        "productApplyId":"",
+                        "applyId":"",
+                        "specsId":rows[i].specsId,
+                        "isCheck":"",
+                        "isOperate":"",
+                        "isCold":"",
+                        "createId":"",
+                        "createDate":"",
+                        "editId":"",
+                        "editDate":"",
+                        "isUse":"",
+                        "productCode":rows[i].productCode,
+                        "productName":rows[i].productName,
+                        "specsName":rows[i].specsName,
+                        "productModel":rows[i].productModel
+                    });
+                    arr.push(rows[i].specsId);
+                }
+
             }
 
         }

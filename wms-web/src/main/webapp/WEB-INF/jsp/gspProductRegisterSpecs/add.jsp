@@ -63,15 +63,15 @@
             <%--<td><input type='text' data="1" id="categories" name='categories' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
             <th>长</th>
-            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='50' data-options=''/></td>
         </tr>
 
         <tr>
             <th>宽</th>
-            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='50' data-options=''/></td>
 
             <th>高</th>
-            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>

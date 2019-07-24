@@ -237,7 +237,8 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'default'
+                enterpriseType:'default',
+                type:'enterprise'
             },
             fit:true,
             collapsible:false,
