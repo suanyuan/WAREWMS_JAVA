@@ -301,6 +301,8 @@
 //二级dialog
             ezuiDialog = $('#ezuiDialog').dialog({
                 modal: true,
+                left:0,
+                top:0,
                 title: '<spring:message code="common.dialog.title"/>',
                 buttons: '#ezuiDialogBtn',
                 onClose: function () {

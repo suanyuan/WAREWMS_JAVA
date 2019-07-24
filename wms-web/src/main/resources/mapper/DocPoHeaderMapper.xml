@@ -639,7 +639,7 @@
     <!--<if test="orderByClause != null and orderByClause != ''" >-->
        <!--order by  ${orderByClause}-->
     <!--</if>-->
-	order by pocreationtime desc
+	order by edittime desc
 	<if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
