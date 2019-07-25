@@ -64,7 +64,7 @@ $(function() {
             {field: 'skuGroup1',		title: '产品线',	width: 100 },
             {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
 
-            {field: 'skuGroup6',		title: '默认供应商',	width: 100 },
+            {field: 'skuGroup6Name',		title: '默认供应商',	width: 100 },
 
             {field: 'activeFlag',		title: '激活',	width: 50, formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
@@ -205,6 +205,8 @@ var edit = function(){
             skuGroup4:row.skuGroup4,
             skuGroup5:row.skuGroup5,
             skuGroup6:row.skuGroup6,
+			//附加供应商名称
+            skuGroup6Name:row.skuGroup6Name,
             skuGroup7:row.skuGroup7,
             skuGroup8:row.skuGroup8,
             skuGroup9:row.skuGroup9,
@@ -824,7 +826,8 @@ var downloadTemplate = function(){
 
 				<tr>
 					<th>默认供应商</th>
-					<td><input type='text' name='skuGroup6' class='easyui-textbox' size='16' /></td>
+					<td><input type='hidden' name='skuGroup6' class='easyui-textbox'  />
+					<input type='text' name='skuGroup6Name' class='easyui-textbox' size='16' /></td>
 					<th>是否需要双证</th>
 					<%--<td><input type='text' name='skuGroup7' class='easyui-textbox' size='16' /></td>--%>
 					<td><input type='text' name='skuGroup7' id="skuGroup7" class='easyui-combobox' size='16' data-options="required:true,

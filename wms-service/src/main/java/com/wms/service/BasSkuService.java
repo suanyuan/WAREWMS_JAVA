@@ -64,6 +64,7 @@ public class BasSkuService extends BaseService {
 	@Autowired
 	private ImportSkuDataService importSkuDataService;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//显示主页datagrid
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();

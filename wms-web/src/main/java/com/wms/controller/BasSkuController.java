@@ -60,7 +60,7 @@ public class BasSkuController {
 		model.put("menuId", menuId);
 		return new ModelAndView("basSku/main", model);
 	}
-
+//显示主页datagrid
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

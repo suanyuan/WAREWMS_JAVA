@@ -57,6 +57,8 @@
 	<result column="sku_group4" property="skuGroup4"/>
 	<result column="sku_group5" property="skuGroup5"/>
 	<result column="sku_group6" property="skuGroup6"/>
+	<!--附加供应商名称-->
+	<result column="skuGroup6Name" property="skuGroup6Name"/>
 	<result column="sku_group7" property="skuGroup7"/>
 	<result column="sku_group8" property="skuGroup8"/>
 	<result column="sku_group9" property="skuGroup9"/>
@@ -711,10 +713,13 @@ where 1=1
   	
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
-	select
+
+	SELECT a.*,b.descr_c AS skuGroup6Name from
+	(select
 	<include refid="Base_Column_List"/>
 	from Bas_Sku
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause"/>) as a
+	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>

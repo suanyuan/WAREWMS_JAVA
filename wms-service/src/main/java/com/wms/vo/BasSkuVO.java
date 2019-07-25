@@ -59,8 +59,18 @@ public class BasSkuVO {
 	private java.lang.String skuGroup4;
 	private java.lang.String skuGroup5;
 	private java.lang.String skuGroup6;
+	private String skuGroup6Name;//附加供应商名称
+
 	private java.lang.String skuGroup7;
 	private java.lang.String skuGroup8;
+
+	public String getSkuGroup6Name() {
+		return skuGroup6Name;
+	}
+
+	public void setSkuGroup6Name(String skuGroup6Name) {
+		this.skuGroup6Name = skuGroup6Name;
+	}
 
 	public String getSkuGroup6() {
 		return skuGroup6;

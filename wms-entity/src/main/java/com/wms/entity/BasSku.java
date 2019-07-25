@@ -148,7 +148,9 @@ public class BasSku implements Serializable {
 
 	private String skuGroup5;
 
-	private String skuGroup6;
+	private String skuGroup6;     //供应商代码
+
+	private String skuGroup6Name;//附加供应商名称
 
 	private String skuGroup7;
 
@@ -635,6 +637,15 @@ public class BasSku implements Serializable {
 	public void setQtyonhold(BigDecimal qtyonhold) {
 		this.qtyonhold = qtyonhold;
 	}
+
+	public String getSkuGroup6Name() {
+		return skuGroup6Name;
+	}
+
+	public void setSkuGroup6Name(String skuGroup6Name) {
+		this.skuGroup6Name = skuGroup6Name;
+	}
+
 
 	@Override
 	public int hashCode() {
