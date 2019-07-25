@@ -36,7 +36,7 @@ $(function() {
 		title: '产品档案',
 		pageSize : 50,
 		pageList : [50, 3, 200],
-		fit: false,
+		fit: true,
 		border: false,
 		fitColumns : false,
 		nowrap: false,
@@ -238,7 +238,7 @@ var edit = function(){
             edittime : row.edittime,
 			firstop : row.firstop,
             addtime : row.addtime,
-			addwho:  row.addwho
+            addwho:  row.addwho
 		});
 		ezuiDialog.dialog('open');
 	}else{
@@ -722,25 +722,10 @@ var downloadTemplate = function(){
 
 				<tr>
 					<th>商品名称</th>
-				<td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
-
-				<th>增加时间</th>
-				<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-
-				<tr>
-				<th>增加人</th>
-				<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-
-				<th>编辑时间</th>
-				<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
-				</tr>
+				    <td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
 
-				<tr>
-				<th>编辑人</th>
-				<td><input type='text' name='editwho' class='easyui-textbox' size='16' /></td>
-				<th>首营状态</th>
+					<th>首营状态</th>
 					<td><input type='text' name='firstop' id="firstop" class='easyui-combobox' size='16' data-options="required:true,
 																															panelHeight:'auto',
 																															editable:false,
@@ -754,6 +739,7 @@ var downloadTemplate = function(){
 																																{id: '10', value: '审核中'}
 																															]" readonly/></td>
 				</tr>
+
 
 				<tr>
 				<th>商品描述</th>
@@ -826,7 +812,7 @@ var downloadTemplate = function(){
 
 				<tr>
 					<th>默认供应商</th>
-					<td><input type='hidden' name='skuGroup6' class='easyui-textbox'  />
+					<td><input type='hidden' name='skuGroup6'   />
 					<input type='text' name='skuGroup6Name' class='easyui-textbox' size='16' /></td>
 					<th>是否需要双证</th>
 					<%--<td><input type='text' name='skuGroup7' class='easyui-textbox' size='16' /></td>--%>
@@ -856,6 +842,18 @@ var downloadTemplate = function(){
 					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
 					<%--<th>宽</th>--%>
 					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
+				</tr>
+				<tr>
+					<th>增加时间</th>
+					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>增加人</th>
+					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				</tr>
+				<tr>
+					<th>编辑时间</th>
+					<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
+					<th>编辑人</th>
+					<td><input type='text' name='editwho' class='easyui-textbox' size='16' /></td>
 				</tr>
 				<!-- <tr>
 				<th>时间控件</th><td><input type='text' name='edittime' class='easyui-datebox' data-options='required:true,editable:false'/></td>
