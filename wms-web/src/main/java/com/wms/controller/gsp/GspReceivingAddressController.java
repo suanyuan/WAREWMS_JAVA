@@ -156,4 +156,19 @@ public class GspReceivingAddressController {
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
+
+
+
+
+	@Login
+	@RequestMapping(params = "deleteAddress")
+	@ResponseBody
+	public Json deleteAddress() {
+		Json json = gspReceivingAddressService.deleteAddress();
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
 }

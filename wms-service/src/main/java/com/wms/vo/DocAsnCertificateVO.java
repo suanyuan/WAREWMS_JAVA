@@ -4,7 +4,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class DocAsnCertificateVO {
-
+	private Integer seq;
 	private String customerid;
 	private String sku;
 	private String lotatt04;
@@ -15,6 +15,14 @@ public class DocAsnCertificateVO {
 	private String edittime;
 	private String editwho;
 	private String certificateContext;
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
 
 	public String getCustomerid() {
 		return customerid;

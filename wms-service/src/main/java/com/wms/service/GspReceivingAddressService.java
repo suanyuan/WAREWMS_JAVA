@@ -92,6 +92,19 @@ public class GspReceivingAddressService extends BaseService {
 		return json;
 	}
 
+	public Json deleteAddress() {
+		Json json = new Json();
+		String id="";
+		List<GspReceivingAddress> list = gspReceivingAddressMybatisDao.queryByReceivingId(id);
+		if(list != null && list.size()>0){
+			for (GspReceivingAddress gspReceivingAddress : list){
+				gspReceivingAddressMybatisDao.delete(gspReceivingAddress);
+				json.setSuccess(true);
+			}
+		}
+		return json;
+	}
+
 	public List<EasyuiCombobox> getGspReceivingAddressCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;

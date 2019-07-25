@@ -152,7 +152,6 @@ public class GspReceivingService extends BaseService {
 
 				GspReceiving gspReceiving1 =gspReceivingMybatisDao.queryByEnterpriseId(gspReceivingForm.getEnterpriseId());
 				if(gspReceiving1!=null){
-
 					return Json.error("同一个收货单位不能重复申请！");
 				}
 
@@ -193,7 +192,7 @@ public class GspReceivingService extends BaseService {
 			firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			firstReviewLog.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			firstReviewLog.setReviewTypeId(gspReceivingForm.getReceivingId());
-			firstReviewLog.setApplyState("00");
+			firstReviewLog.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 			firstReviewLog.setReviewId(RandomUtil.getUUID());
 			firstReviewLogMybatisDao.add(firstReviewLog);
 		} catch (BeansException e) {

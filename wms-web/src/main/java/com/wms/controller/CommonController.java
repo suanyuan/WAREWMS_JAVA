@@ -33,7 +33,8 @@ import java.util.*;
 public class CommonController {
 
     //private static final String uploadUrl = "/Users/quendi/fileUpload";
-    private static final String uploadUrl = "/root/uploadDir";
+//    private static final String uploadUrl = "/root/uploadDir";
+   private static final String uploadUrl = "E:\\file";
 
     @Autowired
     private BasCodesService basCodesService;
