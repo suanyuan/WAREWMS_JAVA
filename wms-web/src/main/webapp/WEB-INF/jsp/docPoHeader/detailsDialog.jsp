@@ -26,7 +26,7 @@
                 <th>产品名称</th>
                 <td><input type='text' name='skudescrc' id='skudescrc' class='easyui-textbox' size='16'
                            data-options='required:false'/>
-                    <input type='hidden' name='sku' id='sku' class='easyui-textbox' size='16'
+                    <input type='hidden' name='sku' id='sku'
                            data-options='required:false'/></td>
                 <th>货主代码</th>
                 <td><input type='text' name='customerid' id='customerid' class='easyui-textbox' size='16'
