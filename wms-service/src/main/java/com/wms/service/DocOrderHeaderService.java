@@ -1,23 +1,24 @@
 package com.wms.service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.*;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocOrderDetail;
+import com.wms.entity.DocOrderHeader;
+import com.wms.entity.DocOrderPacking;
+import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.DocOrderHeaderMybatisDao;
+import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.DocOrderHeaderQuery;
+import com.wms.service.importdata.ImportOrderDataService;
+import com.wms.utils.*;
+import com.wms.vo.DocOrderHeaderVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocOrderHeaderForm;
+import com.wms.vo.form.pda.PageForm;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.krysalis.barcode4j.BarcodeException;
@@ -29,32 +30,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.wms.mybatis.dao.DocOrderHeaderMybatisDao;
-import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.entity.DocOrderDetail;
-import com.wms.entity.DocOrderHeader;
-import com.wms.entity.DocOrderPacking;
-import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.service.importdata.ImportOrderDataService;
-import com.wms.utils.BarcodeGeneratorUtil;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.DocOrderHeaderVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocOrderHeaderForm;
-import com.wms.query.DocOrderHeaderQuery;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("docOrderHeaderService")
 public class DocOrderHeaderService extends BaseService {
@@ -86,6 +69,35 @@ public class DocOrderHeaderService extends BaseService {
 		datagrid.setRows(docOrderHeaderVOList);
 		return datagrid;
 	}
+
+	public List<DocOrderHeaderVO> getUndoneList(PageForm form) {
+
+	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+	    mybatisCriteria.setCurrentPage(form.getPageNum());
+	    mybatisCriteria.setPageSize(form.getPageSize());
+	    List<DocOrderHeader> docOrderHeaderList = docOrderHeaderMybatisDao.queryByList(mybatisCriteria);
+	    DocOrderHeaderVO docOrderHeaderVO = null;
+	    List<DocOrderHeaderVO> docOrderHeaderVOList = new ArrayList<>();
+	    for (DocOrderHeader docOrderHeader : docOrderHeaderList) {
+
+	        docOrderHeaderVO = new DocOrderHeaderVO();
+	        BeanUtils.copyProperties(docOrderHeader, docOrderHeaderVO);
+	        docOrderHeaderVOList.add(docOrderHeaderVO);
+        }
+        return docOrderHeaderVOList;
+    }
+
+    public DocOrderHeaderVO queryByOrderNo(String orderno) {
+
+	    DocOrderHeader docOrderHeader = docOrderHeaderMybatisDao.queryById(orderno);
+	    DocOrderHeaderVO docOrderHeaderVO = null;
+	    if (docOrderHeader != null) {
+
+	        docOrderHeaderVO = new DocOrderHeaderVO();
+	        BeanUtils.copyProperties(docOrderHeader, docOrderHeaderVO);
+        }
+        return docOrderHeaderVO;
+    }
 
 	public Json addDocOrderHeader(DocOrderHeaderForm docOrderHeaderForm) throws Exception {
 		Json json = new Json();
