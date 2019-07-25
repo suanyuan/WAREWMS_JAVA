@@ -59,7 +59,7 @@ public class ImportGspProductRegisterSpecsDataService {
 		boolean isSuccess = false;
 		StringBuilder resultMsg = new StringBuilder();
 		InputStream in;
-		
+
 		try {  
             // 获取前台exce的输入流
             in = excelFile.getInputStream();
@@ -77,12 +77,17 @@ public class ImportGspProductRegisterSpecsDataService {
             try {
                 //调用excle共用类，转化成list
 				GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
+
             } catch (ExcelException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+
             }
             //保存实体集合
-            List<GspProductRegisterSpecsVO> importDataList = this.listToBean(GPRSList, resultMsg);
-            if (true) {
+			if(GPRSList==null){
+				resultMsg.append("execel的Sheet表名应为:产品基础信息");
+			}else {
+				List<GspProductRegisterSpecsVO> importDataList = this.listToBean(GPRSList, resultMsg);
+				if (true) {
 //				this.validateCustomer(importDataList, resultMsg);// 验证客户是否存在
 //				if (resultMsg.length() == 0) {
 //					this.validateCustomerPermission(importDataList, resultMsg);// 验证客户权限是否存在
@@ -90,14 +95,15 @@ public class ImportGspProductRegisterSpecsDataService {
 //						this.validateSku(importDataList, resultMsg);// 验证商品是否存在
 //						if (resultMsg.length() == 0) {
 //							this.validateLocation(importDataList, resultMsg);// 验证库位是否存在
-							if (true) {
-								System.out.println("=============");
-								this.saveProductRegisterSpecs(importDataList, resultMsg);// 转成订单资料存入资料库
-								isSuccess = true;
-							}
+					if (true) {
+						System.out.println("=============");
+						this.saveProductRegisterSpecs(importDataList, resultMsg);// 转成订单资料存入资料库
+						isSuccess = true;
+					}
 //						}
 //					}
 //				}
+				}
 			}
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -530,6 +536,11 @@ public class ImportGspProductRegisterSpecsDataService {
 
 	private void saveProductRegisterSpecs(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
 		GspProductRegisterSpecs gspProductRegisterSpecs = null;
+//		boolean flag = false;
+//		if(importDataList.size()==0){
+//			flag = true;
+//		}
+
 		for(GspProductRegisterSpecsVO importDataVO : importDataList){
 			gspProductRegisterSpecs = new GspProductRegisterSpecs();
 			BeanUtils.copyProperties(importDataVO, gspProductRegisterSpecs);
@@ -541,6 +552,7 @@ public class ImportGspProductRegisterSpecsDataService {
 //			String resultNo = map.get("resultNo").toString();
 //			if (resultCode.substring(0,3).equals("000")) {
 				//赋值
+
 				gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
 				//gspProductRegisterSpecs.setProductRegisterId("PR");
 				//gspProductRegisterSpecs.setSpecsName(importDataVO.getSpecsName());
@@ -552,8 +564,16 @@ public class ImportGspProductRegisterSpecsDataService {
 				gspProductRegisterSpecs.setIsUse("1");
 				//保存订单主信息
 			gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
-
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+//				if(flag==true){
+//					resultMsg.delete(0, resultMsg.length());
+//					StringBuilder rowResult = new StringBuilder();
+//					resultMsg = new StringBuilder();
+//					rowResult.append("execel的Sheet表名应为:产品基础信息").append(" ");
+//					resultMsg.append(rowResult);
+//				}else if(!flag){
+					resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+//
+//				}
 			}
 //			else {
 //				resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");

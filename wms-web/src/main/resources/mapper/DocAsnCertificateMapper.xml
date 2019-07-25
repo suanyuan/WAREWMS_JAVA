@@ -94,13 +94,13 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from doc_asn_certificate where customerid = #{customerid}
+	delete 	 from doc_asn_certificate where customerid = #{customerid} and sku = #{sku} and lotatt04 = #{lotatt04}
 </delete>
  
 <!-- 根据id查询 质量合格证 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_asn_certificate where customerid = #{customerid}
+	 from doc_asn_certificate where customerid = #{customerid} and sku = #{sku} and lotatt04 = #{lotatt04}
 </select>
 
 <!-- 质量合格证 列表总数-->

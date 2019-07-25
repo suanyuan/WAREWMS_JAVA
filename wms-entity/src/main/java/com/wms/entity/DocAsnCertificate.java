@@ -2,8 +2,10 @@ package com.wms.entity;
 
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
-
+import java.util.Date;
 @Entity
 public class DocAsnCertificate implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -12,12 +14,38 @@ public class DocAsnCertificate implements Serializable {
   private String customerid;
   private String sku;
   private String lotatt04;
-  private java.sql.Date addtime;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date addtime;
   private String addwho;
-  private java.sql.Date edittime;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date edittime;
   private String editwho;
   private String certificateContext;
+  private String isUse;
 
+  public String getIsUse() {
+    return isUse;
+  }
+
+  public void setIsUse(String isUse) {
+    this.isUse = isUse;
+  }
+
+  public Date getAddtime() {
+    return addtime;
+  }
+
+  public void setAddtime(Date addtime) {
+    this.addtime = addtime;
+  }
+
+  public Date getEdittime() {
+    return edittime;
+  }
+
+  public void setEdittime(Date edittime) {
+    this.edittime = edittime;
+  }
 
   public String getCustomerid() {
     return customerid;
@@ -46,14 +74,6 @@ public class DocAsnCertificate implements Serializable {
   }
 
 
-  public java.sql.Date getAddtime() {
-    return addtime;
-  }
-
-  public void setAddtime(java.sql.Date addtime) {
-    this.addtime = addtime;
-  }
-
 
   public String getAddwho() {
     return addwho;
@@ -61,15 +81,6 @@ public class DocAsnCertificate implements Serializable {
 
   public void setAddwho(String addwho) {
     this.addwho = addwho;
-  }
-
-
-  public java.sql.Date getEdittime() {
-    return edittime;
-  }
-
-  public void setEdittime(java.sql.Date edittime) {
-    this.edittime = edittime;
   }
 
 

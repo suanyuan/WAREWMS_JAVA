@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.result.UploadResult;
 import com.wms.service.BasCodesService;
 import com.wms.utils.DateUtil;
+import com.wms.utils.PropertyUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

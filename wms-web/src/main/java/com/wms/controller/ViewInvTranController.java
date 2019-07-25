@@ -44,7 +44,7 @@ public class ViewInvTranController {
 		model.put("menuId", menuId);
 		return new ModelAndView("viewInvTran/main", model);
 	}
-//返回主页datagrid
+	//返回主页datagrid
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

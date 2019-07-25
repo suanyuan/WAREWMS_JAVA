@@ -3,16 +3,43 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class DocAsnCertificateForm {
 
 	private String customerid;
 	private String sku;
 	private String lotatt04;
-	private java.sql.Date addtime;
+	private java.util.Date addtime;
 	private String addwho;
-	private java.sql.Date edittime;
+	private java.util.Date edittime;
 	private String editwho;
 	private String certificateContext;
+	private String isUse;
+
+	public String getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(String isUse) {
+		this.isUse = isUse;
+	}
+
+	public Date getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(Date addtime) {
+		this.addtime = addtime;
+	}
+
+	public Date getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(Date edittime) {
+		this.edittime = edittime;
+	}
 
 	public String getCustomerid() {
 		return customerid;
@@ -38,14 +65,7 @@ public class DocAsnCertificateForm {
 		this.lotatt04 = lotatt04;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(java.sql.Date addtime) {
-		this.addtime = addtime;
-	}
 
 	public String getAddwho() {
 		return addwho;
@@ -55,14 +75,7 @@ public class DocAsnCertificateForm {
 		this.addwho = addwho;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getEdittime() {
-		return edittime;
-	}
 
-	public void setEdittime(java.sql.Date edittime) {
-		this.edittime = edittime;
-	}
 
 	public String getEditwho() {
 		return editwho;

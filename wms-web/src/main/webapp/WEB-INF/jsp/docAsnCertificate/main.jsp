@@ -6,13 +6,19 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
-
+var dialogUrl = "/docAsnCertificateController.do?toInfo";
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
 $(function() {
@@ -66,10 +72,14 @@ $(function() {
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        fit:true,
+        cache: false,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+
     //导入
     ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
         modal : true,
@@ -83,25 +93,27 @@ $(function() {
 });
 
 var add = function(){
+    var row = ezuiDatagrid.datagrid('getSelected');
 	processType = 'add';
 	$('#docAsnCertificateId').val(0);
+
 	ezuiDialog.dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiForm.form('load',{
-			customerid : row.customerid,
-			sku : row.sku,
-			lotatt04 : row.lotatt04,
-			addtime : row.addtime,
-			addwho : row.addwho,
-			edittime : row.edittime,
-			editwho : row.editwho,
-			certificateContext : row.certificateContext
-		});
-		ezuiDialog.dialog('open');
+		// ezuiForm.form('load',{
+		// 	customerid : row.customerid,
+		// 	sku : row.sku,
+		// 	lotatt04 : row.lotatt04,
+		// 	addtime : row.addtime,
+		// 	addwho : row.addwho,
+		// 	edittime : row.edittime,
+		// 	editwho : row.editwho,
+		// 	certificateContext : row.certificateContext
+		// });
+		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -115,7 +127,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'docAsnCertificateController.do?delete',
-					data : {id : row.id},
+                    data : {"sku" : row.sku,"lotatt04":row.lotatt04,"customerid":row.customerid},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -140,48 +152,58 @@ var del = function(){
 		});
 	}
 };
-var commit = function(){
-	var url = '';
-	if (processType == 'edit') {
-		url = '<c:url value="/docAsnCertificateController.do?edit"/>';
-	}else{
-		url = '<c:url value="/docAsnCertificateController.do?add"/>';
-	}
-	ezuiForm.form('submit', {
-		url : url,
-		onSubmit : function(){
-			if(ezuiForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg;
-					ezuiDatagrid.datagrid('reload');
-					ezuiDialog.dialog('close');
-				}else{
-					msg = '<font color="red">' + result.msg + '</font>';
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				$.messager.show({
-					msg : msg, title : '<spring:message code="common.message.prompt"/>'
-				});
-				$.messager.progress('close');
-			}
-		}
-	});
+
+
+var addOrEdit = function(url,infoObj) {
+    console.log(44444);
+    $.ajax({
+        url: url,
+        data: {"docAsnCertificateForm": JSON.stringify(infoObj)}, type: 'POST', dataType: 'JSON', async: true,
+        success: function (result) {
+            console.log(result);
+            var msg = '';
+            try {
+                if (result.success) {
+                    msg = result.msg;
+                    ezuiDatagrid.datagrid('reload');
+                    ezuiDialog.dialog('close');
+                } else {
+                    msg = '<font color="red">' + result.msg + '</font>';
+                }
+            } catch (e) {
+                //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>' + msg;
+            } finally {
+                $.messager.show({
+                    msg: msg, title: '<spring:message code="common.message.prompt"/>'
+                });
+                $.messager.progress('close');
+            }
+        }
+    });
 };
+
+
+var commit = function(){
+    var row = ezuiDatagrid.datagrid('getSelected');
+    var infoObj = new Object();
+    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+        infoObj[""+$(this).attr("name")+""] = $(this).val();
+    })
+    //infoObj["enterpriseId"] = $("#ezuiFormInfo input[id='enterpriseId'][data='1']").val();
+
+    var url = '';
+    if (processType == 'edit') {
+		infoObj["supplierId"] = row.supplierId;
+		url = sy.bp()+'/docAsnCertificateController.do?edit';
+		addOrEdit(url,infoObj);
+    }else{
+		url = sy.bp()+'/docAsnCertificateController.do?add';
+		addOrEdit(url,infoObj);
+    }
+};
+
+
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		customerid : $('#customerid').val(),
@@ -239,7 +261,7 @@ var downloadTemplate = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        var formId = ajaxDownloadFile(sy.bp()+"/docAsnDoublecController.do?exportTemplate", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/docAsnCertificateController.do?exportTemplate", param);
         downloadCheckTimer = window.setInterval(function () {
             var list = new cookieList('downloadToken');
             if (list.items() == token){
@@ -289,7 +311,7 @@ var toImportData = function(){
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>查看详情</a>
+					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
@@ -297,48 +319,10 @@ var toImportData = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		<form id='ezuiForm' method='post'>
-			<input type='hidden' id='docAsnCertificateId' name='docAsnCertificateId'/>
-			<table>
-				<tr>
-					<th>货主</th>
-					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>产品代码</th>
-					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>生产批号</th>
-					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>合格证照片</th>
-					<td><input type='text' name='certificateContext' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
 
-				<tr>
-					<th>创建时间</th>
-					<td><input type='text' name='addtime' class='easyui-textbox' value="" size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>创建人</th>
-					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>编辑时间</th>
-					<td><input type='text' name='edittime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>编辑人</th>
-					<td><input type='text' name='editwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-
-			</table>
-		</form>
 	</div>
 	<div id='ezuiDialogBtn'>
-		<%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
+		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 
 	</div>
@@ -374,6 +358,57 @@ var toImportData = function(){
 
 
 
+<script>
 
+    $(function () {
+        $('#contractUrlFile').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            required: true,
+            onChange:function(data){
+
+                if(data){
+                    doUpload(data);
+                }
+            }
+        });
+
+        function doUpload(data) {
+            var ajaxFile = new uploadFile({
+                "url":sy.bp()+"/commonController.do?uploadFileLocal",
+                "dataType":"json",
+                "timeout":50000,
+                "async":true,
+                "data":{
+                    //多文件
+                    "file":{
+                        //file为name字段 后台可以通过$_FILES["file"]获得
+                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                    }
+                },
+                onload:function(data){
+                    alert(data.comment);
+                    $("#certificateContext").val(data.comment);
+                },
+                onerror:function(er){
+                    // console.log(er);
+                }
+            });
+        }
+    })
+
+    function viewUrl(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#certificateContext").val()!=""){
+                showUrl($("#certificateContext").val());
+            }else {
+                showMsg("请上传合同附件！");
+            }
+        }
+    }
+</script>
 </body>
 </html>
