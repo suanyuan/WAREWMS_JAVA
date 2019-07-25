@@ -146,13 +146,22 @@ var add = function(){
         buttons : '#ezuiDialogBtn',
         onClose : function() {
             $('#ezuiFormAddress').form('clear');
+            $.ajax({
+                url : '/gspReceivingAddressController.do?deleteAddress',
+                type : 'POST',
+                dataType : 'JSON',
+                success:function () {
+
+                }
+
+            })
         }
     });
 
             };
 var edit = function(){
 
-                processType = 'edit';
+     processType = 'edit';
 		var row = ezuiDatagrid.datagrid('getSelected');
        	 if(row){
              $.ajax({

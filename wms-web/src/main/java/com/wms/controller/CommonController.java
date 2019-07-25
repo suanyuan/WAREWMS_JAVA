@@ -6,7 +6,6 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.result.UploadResult;
 import com.wms.service.BasCodesService;
 import com.wms.utils.DateUtil;
-import com.wms.utils.PropertyUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,8 @@ import java.util.*;
 public class CommonController {
 
     //private static final String uploadUrl = "/Users/quendi/fileUpload";
-    private static final String uploadUrl = "/root/uploadDir";
+//    private static final String uploadUrl = "/root/uploadDir";
+   private static final String uploadUrl = "E:\\file";
 
     @Autowired
     private BasCodesService basCodesService;

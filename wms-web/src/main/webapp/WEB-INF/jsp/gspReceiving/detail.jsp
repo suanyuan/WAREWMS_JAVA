@@ -209,7 +209,7 @@
     var ezuiDialogClientDetail;
     var clientDatagrid;
 
-    var processType;
+    var processTypeAddress;
     var dialogAddAddress;
     var enterpriseDatagrid;
     var dataGridDetail;
@@ -340,11 +340,7 @@
             },
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
-                $(this).datagrid("resize",{height:300});
-                if (processType == 'add') {
-                    $("isChec").combobox('setValue','1')
-
-                }
+                $(this).datagrid("resize",{height:300})
             }
         });
 
@@ -733,25 +729,23 @@
 
     //收货单位信息提交
     function dooSubmit() {
-
-        /*var url = '';
-        if (processType == 'edit') {
-            url = sy.bp()+'/gspReceivingController.do?edit';
-        }else{
-            url = sy.bp()+'/gspReceivingController.do?add';
-        }*/
-
-
-        /*$("#ezuiFormAddress input[id='isCheck']")*/
         var a = $('#isChec').combobox('getValue');
-       // var row = ezuiDetailsDatagrid.datagrid("getSelected");
-
+        var url = '';
+        if (a == '1') {
+            if (processType == 'add') {
+                url = sy.bp()+'/gspReceivingController.do?add&newreceivingId='+'';
+            }else{
+                url = sy.bp()+'/gspReceivingController.do?edit';
+            }
+        }else {
+            url = sy.bp()+'/basCustomerController.do?submit&newreceivingId='+'';
+        }
 if ($('#ezuiFormAddress').form('validate')){
 
                 if (a=='1') {
-                        var   url = '<c:url value="/gspReceivingController.do?add"/>';
+
                          $("#ezuiFormAddress").form('submit', {
-                                url : url+"&newreceivingId="+'',
+                                url : url,
                                 onSubmit : function(){
                          if(ezuiFormAddress.form('validate')){
                         $.messager.progress({
@@ -766,6 +760,7 @@ if ($('#ezuiFormAddress').form('validate')){
                     var msg='';
                     try {
                         var result = $.parseJSON(data);
+                        console.log(result);
                         if(result.success){
                             msg = result.msg;
                             ezuiDatagrid.datagrid('reload');
@@ -790,7 +785,7 @@ if ($('#ezuiFormAddress').form('validate')){
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否直接下发？',function (confirm) {
                 if (confirm) {
                     $("#ezuiFormAddress").form('submit', {
-                        url : '/basCustomerController.do?submit&newreceivingId='+'',
+                        url : url,
                         onSubmit : function(){
                             if(ezuiFormAddress.form('validate')){
                                 $.messager.progress({
@@ -805,6 +800,7 @@ if ($('#ezuiFormAddress').form('validate')){
                             var msg='';
                             try {
                                 var result = $.parseJSON(data);
+
                                 if(result.success){
                                     msg = result.msg;
                                     ezuiDatagrid.datagrid('reload');
@@ -875,7 +871,7 @@ if ($('#ezuiFormAddress').form('validate')){
     }
     //增加地址
     var  AddAddress=function () {
-        processType = 'add';
+       processTypeAddress = 'addAddress';
 
         if ($('#ezuiFormAddress').form('validate')){
 
@@ -928,7 +924,7 @@ if ($('#ezuiFormAddress').form('validate')){
     };
     //地址的编辑
     var AddressEdit = function(){
-        processType = 'edit';
+        processTypeAddress = 'editAddress';
         var row = ezuiDetailsDatagrid.datagrid('getSelected');
         //alert(row.supplierId);
         if(row){

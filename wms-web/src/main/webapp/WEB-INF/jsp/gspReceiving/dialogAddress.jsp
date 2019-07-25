@@ -119,7 +119,7 @@ var defaultAddress=$('#isDefault').combobox('getValue');
 
         var url = '';
    if (defaultAddress=='0'){
-        if (processType == 'edit') {
+        if (processTypeAddress == 'editAddress') {
             url = '<c:url value="/gspReceivingAddressController.do?edit"/>';
         }else{
             url = '<c:url value="/gspReceivingAddressController.do?add"/>';
@@ -155,7 +155,7 @@ var defaultAddress=$('#isDefault').combobox('getValue');
 
     }else {
 
-       if (processType == 'edit') {
+       if (processTypeAddress == 'editAddress') {
            url = '<c:url value="/gspReceivingAddressController.do?editDefault"/>';
        }else{
            url = '<c:url value="/gspReceivingAddressController.do?addDefault"/>';
