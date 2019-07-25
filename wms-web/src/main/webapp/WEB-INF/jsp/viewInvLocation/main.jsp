@@ -41,10 +41,10 @@ $(function() {
             {field: 'customerid',		title: '货主',	width: 71 },
 			{field: 'lotatt03',		title: '入库日期',	width: 91 },
 
-			{field: 'sku',		title: '产品代码',	width: 100 },
+			{field: 'fmsku',		title: '产品代码',	width: 100 },
 			{field: 'lotatt12',		title: '产品名称',	width: 101 },
-			{field: 'lotatt06',		title: '注册证号/备案凭证号',	width: 150 },
-			{field: 'descrE',		title: '规格型号',	width: 103 },
+			{field: 'lotatt06',		title: '注册证号/备案凭证号',	width: 150 },//加个字段
+			{field: 'skudescre',		title: '规格型号',	width: 103 },
 
 			{field: 'lotatt04',		title: '生产批号',	width: 95 },
 			{field: 'lotatt05',		title: '序列号',	width: 110 },
@@ -156,7 +156,7 @@ var edit = function(){
 //货主查询弹框弹出start=========================
 var ezuiCustDataClick = function(){
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
-	url : '<c:url value="/basCustomerController.do?showDatagrid&activeFlag=Y&customerType=OW"/>',
+	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
 	toolbar : '#ezuiCustToolbar',
 	title: '客户档案',
@@ -171,6 +171,10 @@ var ezuiCustDataClick = function(){
 	pagination:true,
 	rownumbers:true,
 	singleSelect:true,
+    queryParams:{
+            activeFlag : '1',
+            customerType:'OW'
+        },
 	idField : 'id',
 	columns : [[
 				{field: 'customerid',	title: '客户代码',	width: 15},
@@ -178,7 +182,7 @@ var ezuiCustDataClick = function(){
 				{field: 'descrE',		title: '英文名称',	width: 50},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -186,20 +190,19 @@ var ezuiCustDataClick = function(){
 	},
 	onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
-
 			$(this).datagrid('unselectAll');
 		}
 	});
 	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combobox('setText','货主');
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combobox('setText','是');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combobox('setText','是');
 	ezuiCustDataDialog.dialog('open');
 };
 //货主查询弹框查询按钮
 var ezuiCustDataDialogSearch = function(){
 	ezuiCustDataDialogId.datagrid('load', {
 		customerid : $("#ezuiCustDataDialog #customerid").textbox("getValue"),
-		/* customerType : $("#ezuiCustDataDialog #customerType").combobox('getValue'),
-		activeFlag : $("#ezuiCustDataDialog #activeFlag").combobox('getValue') */
+		 customerType : $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+		activeFlag : $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
 	});
 };
 //货主查询弹框选择按钮

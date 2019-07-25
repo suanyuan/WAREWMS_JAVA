@@ -126,22 +126,21 @@ public class BasCustomerService extends BaseService {
 				if(num!=0){
 					basCustomerMybatisDao.delete(basCustomer);
 				}
-				basCustomer = new BasCustomer();
-				basCustomer.setCustomerType("CO");
-				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
-				basCustomer.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
-				basCustomer.setOperateType(basCustomerForm.getEnterpriseType());
-				basCustomer.setActiveFlag("1");
-				basCustomer.setDescrC(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getId()));
+
+				 basCustomer = new BasCustomer();
+				String number = commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+				BeanUtils.copyProperties(basCustomerForm,basCustomer);
+
 				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 				basCustomer.setAddtime(new Date());
 				basCustomer.setEdittime(new Date());
 
+
 				//插入一条首营申请日志记录
 				FirstReviewLog firstReviewLog = new FirstReviewLog();
 				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-				firstReviewLog.setReviewTypeId(basCustomerForm.getNewreceivingId());
+				firstReviewLog.setReviewTypeId(number);
 				firstReviewLog.setCreateDate(new Date());
 				firstReviewLog.setEditDate(new Date());
 				firstReviewLog.setApplyContent("无需审核");
@@ -152,15 +151,17 @@ public class BasCustomerService extends BaseService {
 
 				GspReceiving gspReceiving = new GspReceiving();
 				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
-				gspReceiving.setFirstState("40");
+				gspReceiving.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-				gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+				gspReceiving.setReceivingId(number);
 				String id ="";
 				List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(id);
 				if (gspReceivingAddressList != null && gspReceivingAddressList.size()!=0) {
 					for (GspReceivingAddress gspReceivingAddress : gspReceivingAddressList){
-
+						if (gspReceivingAddress.getIsDefault()=="1"){
+						basCustomer.setReceivingAddressId(gspReceivingAddress.getReceivingAddressId());
+						}
 						gspReceivingAddress.setReceivingId(gspReceiving.getReceivingId());
 						gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
 					}
@@ -172,55 +173,7 @@ public class BasCustomerService extends BaseService {
 
 
 				basCustomerMybatisDao.add(basCustomer);
-				/*if (StringUtils.isNotEmpty(basCustomerForm.getReceivingId())){
-					GspReceiving oldgspReceiving =gspReceivingMybatisDao.queryById(basCustomerForm.getReceivingId());
-					oldgspReceiving.setIsUse("0");
-					gspReceivingMybatisDao.updateBySelective(oldgspReceiving);
-				}
-				BasCustomerQuery customerQuery = new BasCustomerQuery();
-				customerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
-				customerQuery.setCustomerType(basCustomerForm.getCustomerType());
-				BasCustomer oldbasCustomer=basCustomerMybatisDao.queryById(customerQuery);
-				if (oldbasCustomer != null) {
-					BasSkuHistory basSkuHistory = new BasSkuHistory();
-					BeanUtils.copyProperties(oldbasCustomer,basSkuHistory);
-					basCustomerMybatisDao.deleteBascustomer(oldbasCustomer.getEnterpriseId(),oldbasCustomer.getCustomerType());
-					basSkuHistoryMybatisDao.add(basSkuHistory);
-				}
-				//下发到客户档案
-				BeanUtils.copyProperties(basCustomerForm, basCustomer);
-				basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-				basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-				basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
-				basCustomer.setActiveFlag(basCustomerForm.getIsUse());
-				basCustomer.setCustomerType("CO");
-				//
-				basCustomerMybatisDao.add(basCustomer);
 
-				GspReceiving gspReceiving = new GspReceiving();
-				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
-				gspReceiving.setFirstState("40");
-				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-				if (StringUtils.isNotEmpty(basCustomerForm.getNewreceivingId())){
-					gspReceiving.setReceivingId(basCustomerForm.getNewreceivingId());
-				}else {
-					gspReceiving.setReceivingId(commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
-				}
-				gspReceivingMybatisDao.add(gspReceiving);
-
-
-				//插入一条首营申请日志记录
-				FirstReviewLog firstReviewLog = new FirstReviewLog();
-				firstReviewLog.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-				firstReviewLog.setReviewTypeId(basCustomerForm.getReceivingId());
-				firstReviewLog.setCreateDate(new Date());
-				firstReviewLog.setEditDate(new Date());
-				firstReviewLog.setApplyContent("无需审核");
-				firstReviewLog.setApplyState("40");
-				firstReviewLog.setReviewId(RandomUtil.getUUID());
-				firstReviewLogMybatisDao.add(firstReviewLog);*/
 				json.setSuccess(true);
 				json.setMsg("资料处理成功！");
 			} else {

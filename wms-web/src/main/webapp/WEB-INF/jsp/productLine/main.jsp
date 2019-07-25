@@ -34,7 +34,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField: 'enterpriseName',
+		idField: 'productLineId',
         rowStyler: function (index, row) {
             if(row.isUse == "0"){  return 'color:red;';}
         },
@@ -151,16 +151,10 @@ var del = function(){
 
 
 var doSearch = function(){
-	ezuiDatagrid.datagrid('load', {
-
-		enterpriseName : $('#enterpriseName').val(),
+	ezuiDatagrid.datagrid('load',{
+        descrC : $('#descr').val(),
 		name : $('#name').val(),
-		expression : $('#expression').val(),
-		/*createId : $('#createId').val(),
-		createDate : $('#createDate').val(),
-		editId : $('#editId').val(),
-		editDate : $('#editDate').val(),
-		isUse : $('#isUse').val()*/
+		expression : $("#expression").val(),
 	});
 };
 
@@ -220,14 +214,9 @@ var commit1 = function(){
 					<table>
 						<tr>
 
-							<th>产品线名称：</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>货主：</th><td><input type='text' id='name' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>说明：</th><td><input type='text' id='expression' class='easyui-textbox' size='8' data-options=''/></td>
-							<%--<th>创建人：</th><td><input type='text' id='createId' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>创建日期：</th><td><input type='text' id='createDate' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>修改人：</th><td><input type='text' id='editId' class='easyui-textbox' size='8' data-options=''/></td>
-							<th>修改日期：</th><td><input type='text' id='editDate' class='easyui-textbox' size='8' data-options=''/></td>--%>
-							<%--<th>待输入名称8：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>产品线名称：</th><td><input type='text' id='name' class='easyui-textbox' size='8' /></td>
+							<th>货主：</th><td><input type='text' id='descr' class='easyui-textbox' size='8' /></td>
+							<th>说明：</th><td><input type='text' id='expression' class='easyui-textbox' size='8' /></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

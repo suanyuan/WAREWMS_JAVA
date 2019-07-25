@@ -37,10 +37,12 @@ public class GspReceivingAddressService extends BaseService {
 
 	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, String receivingId) {
 		EasyuiDatagrid<GspReceivingAddressVO> datagrid = new EasyuiDatagrid<GspReceivingAddressVO>();
-
+		GspReceivingAddressQuery query =new GspReceivingAddressQuery();
+		query.setReceivingId(receivingId);
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
+		criteria.setCondition(query);
 
 		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryByReceivingId(receivingId);
 		GspReceivingAddressVO gspReceivingAddressVO = null;
