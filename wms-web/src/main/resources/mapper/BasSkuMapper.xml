@@ -47,6 +47,19 @@
 	<result column="reservedfield03" property="reservedfield03"/>
 	<result column="reservedfield04" property="reservedfield04"/>
 	<result column="reservedfield05" property="reservedfield05"/>
+	<result column="reservedfield06" property="reservedfield06"/>
+	<result column="reservedfield07" property="reservedfield07"/>
+	<result column="reservedfield08" property="reservedfield08"/>
+	<result column="reservedfield09" property="reservedfield09"/>
+	<result column="reservedfield10" property="reservedfield10"/>
+	<result column="reservedfield11" property="reservedfield11"/>
+	<result column="reservedfield12" property="reservedfield12"/>
+	<result column="reservedfield13" property="reservedfield13"/>
+	<result column="reservedfield14" property="reservedfield14"/>
+	<result column="reservedfield15" property="reservedfield15"/>
+	<result column="reservedfield16" property="reservedfield16"/>
+	<result column="reservedfield17" property="reservedfield17"/>
+	<result column="reservedfield18" property="reservedfield18"/>
 	<result column="rotationid" property="rotationid"/>
 	<result column="skuhigh" property="skuhigh"/>
 	<result column="skulength" property="skulength"/>
@@ -123,6 +136,19 @@
 	reservedfield03,
 	reservedfield04,
 	reservedfield05,
+	reservedfield06,
+	reservedfield07,
+	reservedfield08,
+	reservedfield09,
+	reservedfield10,
+	reservedfield11,
+	reservedfield12,
+	reservedfield13,
+	reservedfield14,
+	reservedfield15,
+	reservedfield16,
+	reservedfield17,
+	reservedfield18,
 	rotationid,
 	skuhigh,
 	skulength,
@@ -693,7 +719,7 @@ where 1=1
  
 <!-- 根据id查询 商品档案 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="java.util.Map">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	from Bas_Sku
 	where customerid = upper(#{customerid,jdbcType=VARCHAR})
 	and sku = upper(#{sku,jdbcType=VARCHAR})

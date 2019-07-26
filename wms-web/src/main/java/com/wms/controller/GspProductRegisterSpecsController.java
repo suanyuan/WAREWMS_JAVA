@@ -108,6 +108,18 @@ public class GspProductRegisterSpecsController {
 	}
 
 	@Login
+	@RequestMapping(params = "toSearchDialog")
+	public ModelAndView toSearchDialog(@RequestParam(defaultValue = "") String target,
+									   @RequestParam(defaultValue = "") String type,
+									   @RequestParam(defaultValue = "") String enterpriseType) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("target",target);
+		model.put("type",type);
+		model.put("enterpriseType",enterpriseType);
+		return new ModelAndView("gspProductRegisterSpecs/search", model);
+	}
+
+	@Login
 	@RequestMapping(params = "getInfo")
 	@ResponseBody
 	public Object getInfo(String specsId) {

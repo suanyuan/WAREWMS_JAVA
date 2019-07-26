@@ -52,7 +52,7 @@
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-				and r.product_register_id =  #{condition.productRegisterId}
+				and r.product_register_id like CONCAT('%',#{condition.productRegisterId},'%')
 			</if>
 			<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
 				and r.product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
