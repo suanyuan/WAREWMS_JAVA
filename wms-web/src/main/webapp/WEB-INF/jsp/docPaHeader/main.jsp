@@ -24,29 +24,33 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:true,
+		singleSelect:false,
 		idField : 'pano',
 		columns : [[
-			{field: 'pano',		title: '上架任务单号',	width: 34 },
-			{field: 'asnno',		title: '入库单号',	width: 34 },
-			{field: 'patype',		title: '类型',	width: 34 },
-			{field: 'pastatus',		title: '上架状态',	width: 34 },
-			{field: 'addtime',		title: '创建时间',	width: 34 },
-			{field: 'addwho',		title: '创建人',	width: 34 },
-			{field: 'edittime',		title: '编辑时间',	width: 34 },
-			{field: 'editwho',		title: '编辑人',	width: 34 },
-			{field: 'paPrintFlag',		title: '是否打印',	width: 34 },
-			{field: 'warehouseid',		title: '仓库',	width: 34 }
+			{field:'ck',checkbox:true},
+			{field: 'pano',		title: '上架任务单号',	width: 150 },
+			{field: 'asnno',		title: '入库单号',	width: 150},
+			{field: 'patype',		title: '类型',	width: 71 },
+			{field: 'pastatus',		title: '上架状态',	width: 71},
+			{field: 'addtime',		title: '创建时间',	width: 150},
+			{field: 'addwho',		title: '创建人',	width: 150 },
+			{field: 'edittime',		title: '编辑时间',	width: 150 },
+			{field: 'editwho',		title: '编辑人',	width: 150 },
+			{field: 'paPrintFlag',		title: '是否打印',	width: 150,formatter:yesOrNoFormatter},
+			{field: 'warehouseid',		title: '仓库',	width: 150 }
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+			//edit();
 		},
+        onDblClickRow: function(index,row){
+            edit(row);
+        },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
 			$(this).datagrid('unselectAll');
@@ -77,9 +81,9 @@ $(function() {
 	})
 });
 
-var edit = function(){
+var edit = function(row){
 	processType = 'edit';
-	var row = ezuiDatagrid.datagrid('getSelected');
+	var row = row;
 	if(row){
 		ezuiForm.form('load',{
 			pano : row.pano,
@@ -220,7 +224,7 @@ var doSearch = function(){
         addtimeEnd:$('#addtimeEnd').datebox("getValue")
 	});
 };
-
+//打印
 var batchPrint = function(){
     var orderCodeList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');

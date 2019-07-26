@@ -40,7 +40,7 @@
                 <th>供应商联系人</th>
                 <td ><input type='text'  id='supplierContact'  name='supplierContact' class='easyui-textbox' size='16' data-options='required:false'/></td>
                 <th>货主代码</th>
-                <td ><input type='text'  id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:false'/></td>2
+                <td ><input type='text'  id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:false'/></td>
 
             </tr>
 
@@ -49,7 +49,11 @@
                  <th>创建时间</th>
                 <td ><input type='text' id='pocreationtime' name='pocreationtime' class='easyui-datetimebox' size='16'  data-options='required:false'/></td>
                 <th>仓库</th>
-                <td ><input type='text'  id='warehouseid' name='warehouseid' class='easyui-combobox' size='16' data-options='required:false'/></td>
+                <td ><input type='text'  id='warehouseid' name='warehouseid' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/docPoHeaderController.do?getWarehouseCombobox"/>',
+																																	valueField: 'id',
+																																	textField: 'value'"/></td>
             </tr>
             <tr>
                  <th>备注</th>
