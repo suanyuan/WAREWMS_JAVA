@@ -62,28 +62,17 @@
                                 <th>创建时间</th>
                                 <td><input type='text' name='createDate' class='easyui-textbox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.createDate}"/>" data-options='editable:false'/></td>
                             </tr>
-                            <!--<tr>
-                                <th>审核人</th>
-                                <td><input type='text' name='checkerId' class='easyui-textbox' value="${gspProductRegister.checkerId}" data-options='required:true,editable:false'/></td>
-                                <th>审核时间</th>
-                                <td><input type='text' name='checkDate' class='easyui-textbox' value="${gspProductRegister.checkDate}" data-options='required:true,editable:false'/></td>
-                                <th>编辑人</th>
-                                <td><input type='text' name='editId' class='easyui-textbox' value="${gspProductRegister.editId}" data-options='editable:false'/></td>
-                                <th>编辑时间</th>
-                                <td><input type='text' name='editDate' class='easyui-textbox' value="${gspProductRegister.editDate}" data-options='editable:false'/></td>
-                            </tr>-->
-
                             <tr>
                                 <th>预期用途</th>
-                                <td colspan="3"><input type='text' name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" style="width: 100%;height: 50px;" data-options='multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" data-options='multiline:true'/></td>
                                 <th>适用范围</th>
-                                <td colspan="3"><input type='text' name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" style="width: 100%;height: 50px;" data-options='multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" data-options='multiline:true'/></td>
                             </tr>
                             <tr>
                                 <th>主要组成部分</th>
-                                <td colspan="3"><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" style="width: 100%;height: 50px;"  data-options='multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" data-options='multiline:true'/></td>
                                 <th>备注</th>
-                                <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" style="width: 100%;height: 50px;" data-options='multiline:true'/></td>
+                                <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
                             </tr>
                             <tr>
                                 <th>分类目录</th>
