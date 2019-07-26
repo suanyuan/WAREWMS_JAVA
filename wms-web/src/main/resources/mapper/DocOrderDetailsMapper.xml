@@ -2,34 +2,103 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mybatis.dao.DocOrderDetailsMybatisDao" > 
+<mapper namespace="com.wms.mybatis.dao.DocOrderDetailsMybatisDao" >
 <!-- Result Map-->
-<resultMap id="DocOrderDetailMap" type="com.wms.entity.DocOrderDetail" >
-	<result column="customerid" property="customerid"/>
+<resultMap id="BaseResultMap" type="com.wms.entity.DocOrderDetails" >
 	<result column="orderno" property="orderno"/>
 	<result column="orderlineno" property="orderlineno"/>
-	<result column="linestatus" property="linestatus"/>
-	<result column="linestatusName" property="linestatusName"/>
+	<result column="customerid" property="customerid"/>
 	<result column="sku" property="sku"/>
-	<result column="skuName" property="skuName"/>
-	<result column="skuNameE" property="skuNameE"/>
+	<result column="linestatus" property="linestatus"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="pickzone" property="pickzone"/>
+	<result column="location" property="location"/>
+	<result column="traceid" property="traceid"/>
 	<result column="qtyordered" property="qtyordered"/>
+	<result column="qtysoftallocated" property="qtysoftallocated"/>
 	<result column="qtyallocated" property="qtyallocated"/>
 	<result column="qtypicked" property="qtypicked"/>
 	<result column="qtyshipped" property="qtyshipped"/>
-	<result column="cubic" property="cubic"/>
-	<result column="grossweight" property="grossweight"/>
-	<result column="price" property="price"/>
-	<result column="pickzone" property="pickzone"/>
-	<result column="location" property="location"/>
-	<result column="lotnum" property="lotnum"/>
-	<result column="addwho" property="addwho"/>
+	<result column="uom" property="uom"/>
+	<result column="packid" property="packid"/>
+	<result column="softallocationrule" property="softallocationrule"/>
+	<result column="allocationrule" property="allocationrule"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="notes" property="notes"/>
+	<result column="qtyordered_each" property="qtyorderedEach"/>
+	<result column="qtysoftallocated_each" property="qtysoftallocatedEach"/>
+	<result column="qtyallocated_each" property="qtyallocatedEach"/>
+	<result column="qtypicked_each" property="qtypickedEach"/>
+	<result column="qtyshipped_each" property="qtyshippedEach"/>
 	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="netweight" property="netweight"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="cubic" property="cubic"/>
+	<result column="price" property="price"/>
+	<result column="alternativesku" property="alternativesku"/>
+	<result column="kitreferenceno" property="kitreferenceno"/>
+	<result column="d_edi_01" property="dEdi01"/>
+	<result column="d_edi_02" property="dEdi02"/>
+	<result column="d_edi_03" property="dEdi03"/>
+	<result column="d_edi_04" property="dEdi04"/>
+	<result column="d_edi_05" property="dEdi05"/>
+	<result column="d_edi_06" property="dEdi06"/>
+	<result column="d_edi_07" property="dEdi07"/>
+	<result column="d_edi_08" property="dEdi08"/>
+	<result column="d_edi_09" property="dEdi09"/>
+	<result column="d_edi_10" property="dEdi10"/>
+	<result column="orderlinereferenceno" property="orderlinereferenceno"/>
+	<result column="d_edi_11" property="dEdi11"/>
+	<result column="d_edi_12" property="dEdi12"/>
+	<result column="d_edi_13" property="dEdi13"/>
+	<result column="d_edi_14" property="dEdi14"/>
+	<result column="d_edi_15" property="dEdi15"/>
+	<result column="d_edi_16" property="dEdi16"/>
+	<result column="d_edi_17" property="dEdi17"/>
+	<result column="d_edi_18" property="dEdi18"/>
+	<result column="d_edi_19" property="dEdi19"/>
+	<result column="d_edi_20" property="dEdi20"/>
+	<result column="kitsku" property="kitsku"/>
+	<result column="erpcancelflag" property="erpcancelflag"/>
+	<result column="userdefine6" property="userdefine6"/>
+	<result column="zonegroup" property="zonegroup"/>
+	<result column="locgroup1" property="locgroup1"/>
+	<result column="locgroup2" property="locgroup2"/>
+	<result column="comminglesku" property="comminglesku"/>
+	<result column="onestepallocation" property="onestepallocation"/>
+	<result column="orderlotcontrol" property="orderlotcontrol"/>
+	<result column="fullcaselotcontrol" property="fullcaselotcontrol"/>
+	<result column="piecelotcontrol" property="piecelotcontrol"/>
+	<result column="referencelineno" property="referencelineno"/>
+	<result column="salesorderno" property="salesorderno"/>
+	<result column="salesorderlineno" property="salesorderlineno"/>
+	<result column="qtyreleased" property="qtyreleased"/>
+	<result column="freegift" property="freegift"/>
 </resultMap>
        
-<!-- Doc_Order_Details table all fields -->
+<!-- doc_order_details table all fields -->
 <sql id="Base_Column_List" >
-	 addtime,addwho,allocationrule,alternativesku,comminglesku,cubic,customerid,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,edittime,editwho,erpcancelflag,freegift,fullcaselotcontrol,grossweight,kitreferenceno,kitsku,linestatus,location,locgroup1,locgroup2,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotnum,netweight,notes,onestepallocation,orderlineno,orderlinereferenceno,orderlotcontrol,orderno,packid,pickzone,piecelotcontrol,price,qtyallocated,qtyallocated_each,qtyordered,qtyordered_each,qtypicked,qtypicked_each,qtyreleased,qtyshipped,qtyshipped_each,qtysoftallocated,qtysoftallocated_each,referencelineno,rotationid,salesorderlineno,salesorderno,sku,softallocationrule,traceid,uom,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6,zonegroup
+	 orderno,orderlineno,customerid,sku,linestatus,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,pickzone,location,traceid,qtyordered,qtysoftallocated,qtyallocated,qtypicked,qtyshipped,uom,packid,softallocationrule,allocationrule,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,qtyordered_each,qtysoftallocated_each,qtyallocated_each,qtypicked_each,qtyshipped_each,addtime,addwho,edittime,editwho,rotationid,netweight,grossweight,cubic,price,alternativesku,kitreferenceno,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,orderlinereferenceno,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,kitsku,erpcancelflag,userdefine6,zonegroup,locgroup1,locgroup2,comminglesku,onestepallocation,orderlotcontrol,fullcaselotcontrol,piecelotcontrol,referencelineno,salesorderno,salesorderlineno,qtyreleased,freegift
 </sql>
    
    
@@ -37,122 +106,23 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
-	<if test="condition.addtime != null and condition.addtime != ''" >
-	    and addtime =  #{condition.addtime}
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
 	</if>
-	<if test="condition.addwho != null and condition.addwho != ''" >
-	    and addwho =  #{condition.addwho}
-	</if>
-	<if test="condition.allocationrule != null and condition.allocationrule != ''" >
-	    and allocationrule =  #{condition.allocationrule}
-	</if>
-	<if test="condition.alternativesku != null and condition.alternativesku != ''" >
-	    and alternativesku =  #{condition.alternativesku}
-	</if>
-	<if test="condition.comminglesku != null and condition.comminglesku != ''" >
-	    and comminglesku =  #{condition.comminglesku}
-	</if>
-	<if test="condition.cubic != null and condition.cubic != ''" >
-	    and cubic =  #{condition.cubic}
+	<if test="condition.orderlineno != null and condition.orderlineno != ''" >
+	    and orderlineno =  #{condition.orderlineno}
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
 	    and customerid =  #{condition.customerid}
 	</if>
-	<if test="condition.dEdi01 != null and condition.dEdi01 != ''" >
-	    and d_edi_01 =  #{condition.dEdi01}
-	</if>
-	<if test="condition.dEdi02 != null and condition.dEdi02 != ''" >
-	    and d_edi_02 =  #{condition.dEdi02}
-	</if>
-	<if test="condition.dEdi03 != null and condition.dEdi03 != ''" >
-	    and d_edi_03 =  #{condition.dEdi03}
-	</if>
-	<if test="condition.dEdi04 != null and condition.dEdi04 != ''" >
-	    and d_edi_04 =  #{condition.dEdi04}
-	</if>
-	<if test="condition.dEdi05 != null and condition.dEdi05 != ''" >
-	    and d_edi_05 =  #{condition.dEdi05}
-	</if>
-	<if test="condition.dEdi06 != null and condition.dEdi06 != ''" >
-	    and d_edi_06 =  #{condition.dEdi06}
-	</if>
-	<if test="condition.dEdi07 != null and condition.dEdi07 != ''" >
-	    and d_edi_07 =  #{condition.dEdi07}
-	</if>
-	<if test="condition.dEdi08 != null and condition.dEdi08 != ''" >
-	    and d_edi_08 =  #{condition.dEdi08}
-	</if>
-	<if test="condition.dEdi09 != null and condition.dEdi09 != ''" >
-	    and d_edi_09 =  #{condition.dEdi09}
-	</if>
-	<if test="condition.dEdi10 != null and condition.dEdi10 != ''" >
-	    and d_edi_10 =  #{condition.dEdi10}
-	</if>
-	<if test="condition.dEdi11 != null and condition.dEdi11 != ''" >
-	    and d_edi_11 =  #{condition.dEdi11}
-	</if>
-	<if test="condition.dEdi12 != null and condition.dEdi12 != ''" >
-	    and d_edi_12 =  #{condition.dEdi12}
-	</if>
-	<if test="condition.dEdi13 != null and condition.dEdi13 != ''" >
-	    and d_edi_13 =  #{condition.dEdi13}
-	</if>
-	<if test="condition.dEdi14 != null and condition.dEdi14 != ''" >
-	    and d_edi_14 =  #{condition.dEdi14}
-	</if>
-	<if test="condition.dEdi15 != null and condition.dEdi15 != ''" >
-	    and d_edi_15 =  #{condition.dEdi15}
-	</if>
-	<if test="condition.dEdi16 != null and condition.dEdi16 != ''" >
-	    and d_edi_16 =  #{condition.dEdi16}
-	</if>
-	<if test="condition.dEdi17 != null and condition.dEdi17 != ''" >
-	    and d_edi_17 =  #{condition.dEdi17}
-	</if>
-	<if test="condition.dEdi18 != null and condition.dEdi18 != ''" >
-	    and d_edi_18 =  #{condition.dEdi18}
-	</if>
-	<if test="condition.dEdi19 != null and condition.dEdi19 != ''" >
-	    and d_edi_19 =  #{condition.dEdi19}
-	</if>
-	<if test="condition.dEdi20 != null and condition.dEdi20 != ''" >
-	    and d_edi_20 =  #{condition.dEdi20}
-	</if>
-	<if test="condition.edittime != null and condition.edittime != ''" >
-	    and edittime =  #{condition.edittime}
-	</if>
-	<if test="condition.editwho != null and condition.editwho != ''" >
-	    and editwho =  #{condition.editwho}
-	</if>
-	<if test="condition.erpcancelflag != null and condition.erpcancelflag != ''" >
-	    and erpcancelflag =  #{condition.erpcancelflag}
-	</if>
-	<if test="condition.freegift != null and condition.freegift != ''" >
-	    and freegift =  #{condition.freegift}
-	</if>
-	<if test="condition.fullcaselotcontrol != null and condition.fullcaselotcontrol != ''" >
-	    and fullcaselotcontrol =  #{condition.fullcaselotcontrol}
-	</if>
-	<if test="condition.grossweight != null and condition.grossweight != ''" >
-	    and grossweight =  #{condition.grossweight}
-	</if>
-	<if test="condition.kitreferenceno != null and condition.kitreferenceno != ''" >
-	    and kitreferenceno =  #{condition.kitreferenceno}
-	</if>
-	<if test="condition.kitsku != null and condition.kitsku != ''" >
-	    and kitsku =  #{condition.kitsku}
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
 	</if>
 	<if test="condition.linestatus != null and condition.linestatus != ''" >
 	    and linestatus =  #{condition.linestatus}
 	</if>
-	<if test="condition.location != null and condition.location != ''" >
-	    and location =  #{condition.location}
-	</if>
-	<if test="condition.locgroup1 != null and condition.locgroup1 != ''" >
-	    and locgroup1 =  #{condition.locgroup1}
-	</if>
-	<if test="condition.locgroup2 != null and condition.locgroup2 != ''" >
-	    and locgroup2 =  #{condition.locgroup2}
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
 	</if>
 	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
 	    and lotatt01 =  #{condition.lotatt01}
@@ -190,98 +160,41 @@ where 1=1
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
 	    and lotatt12 =  #{condition.lotatt12}
 	</if>
-	<if test="condition.lotnum != null and condition.lotnum != ''" >
-	    and lotnum =  #{condition.lotnum}
-	</if>
-	<if test="condition.netweight != null and condition.netweight != ''" >
-	    and netweight =  #{condition.netweight}
-	</if>
-	<if test="condition.notes != null and condition.notes != ''" >
-	    and notes =  #{condition.notes}
-	</if>
-	<if test="condition.onestepallocation != null and condition.onestepallocation != ''" >
-	    and onestepallocation =  #{condition.onestepallocation}
-	</if>
-	<if test="condition.orderlineno != null and condition.orderlineno != ''" >
-	    and orderlineno =  #{condition.orderlineno}
-	</if>
-	<if test="condition.orderlinereferenceno != null and condition.orderlinereferenceno != ''" >
-	    and orderlinereferenceno =  #{condition.orderlinereferenceno}
-	</if>
-	<if test="condition.orderlotcontrol != null and condition.orderlotcontrol != ''" >
-	    and orderlotcontrol =  #{condition.orderlotcontrol}
-	</if>
-	<if test="condition.orderno != null and condition.orderno != ''" >
-	    and orderno =  #{condition.orderno}
-	</if>
-	<if test="condition.packid != null and condition.packid != ''" >
-	    and packid =  #{condition.packid}
-	</if>
 	<if test="condition.pickzone != null and condition.pickzone != ''" >
 	    and pickzone =  #{condition.pickzone}
 	</if>
-	<if test="condition.piecelotcontrol != null and condition.piecelotcontrol != ''" >
-	    and piecelotcontrol =  #{condition.piecelotcontrol}
-	</if>
-	<if test="condition.price != null and condition.price != ''" >
-	    and price =  #{condition.price}
-	</if>
-	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
-	    and qtyallocated =  #{condition.qtyallocated}
-	</if>
-	<if test="condition.qtyallocatedEach != null and condition.qtyallocatedEach != ''" >
-	    and qtyallocated_each =  #{condition.qtyallocatedEach}
-	</if>
-	<if test="condition.qtyordered != null and condition.qtyordered != ''" >
-	    and qtyordered =  #{condition.qtyordered}
-	</if>
-	<if test="condition.qtyorderedEach != null and condition.qtyorderedEach != ''" >
-	    and qtyordered_each =  #{condition.qtyorderedEach}
-	</if>
-	<if test="condition.qtypicked != null and condition.qtypicked != ''" >
-	    and qtypicked =  #{condition.qtypicked}
-	</if>
-	<if test="condition.qtypickedEach != null and condition.qtypickedEach != ''" >
-	    and qtypicked_each =  #{condition.qtypickedEach}
-	</if>
-	<if test="condition.qtyreleased != null and condition.qtyreleased != ''" >
-	    and qtyreleased =  #{condition.qtyreleased}
-	</if>
-	<if test="condition.qtyshipped != null and condition.qtyshipped != ''" >
-	    and qtyshipped =  #{condition.qtyshipped}
-	</if>
-	<if test="condition.qtyshippedEach != null and condition.qtyshippedEach != ''" >
-	    and qtyshipped_each =  #{condition.qtyshippedEach}
-	</if>
-	<if test="condition.qtysoftallocated != null and condition.qtysoftallocated != ''" >
-	    and qtysoftallocated =  #{condition.qtysoftallocated}
-	</if>
-	<if test="condition.qtysoftallocatedEach != null and condition.qtysoftallocatedEach != ''" >
-	    and qtysoftallocated_each =  #{condition.qtysoftallocatedEach}
-	</if>
-	<if test="condition.referencelineno != null and condition.referencelineno != ''" >
-	    and referencelineno =  #{condition.referencelineno}
-	</if>
-	<if test="condition.rotationid != null and condition.rotationid != ''" >
-	    and rotationid =  #{condition.rotationid}
-	</if>
-	<if test="condition.salesorderlineno != null and condition.salesorderlineno != ''" >
-	    and salesorderlineno =  #{condition.salesorderlineno}
-	</if>
-	<if test="condition.salesorderno != null and condition.salesorderno != ''" >
-	    and salesorderno =  #{condition.salesorderno}
-	</if>
-	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =  #{condition.sku}
-	</if>
-	<if test="condition.softallocationrule != null and condition.softallocationrule != ''" >
-	    and softallocationrule =  #{condition.softallocationrule}
+	<if test="condition.location != null and condition.location != ''" >
+	    and location =  #{condition.location}
 	</if>
 	<if test="condition.traceid != null and condition.traceid != ''" >
 	    and traceid =  #{condition.traceid}
 	</if>
+	<if test="condition.qtyordered != null and condition.qtyordered != ''" >
+	    and qtyordered =  #{condition.qtyordered}
+	</if>
+	<if test="condition.qtysoftallocated != null and condition.qtysoftallocated != ''" >
+	    and qtysoftallocated =  #{condition.qtysoftallocated}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtypicked != null and condition.qtypicked != ''" >
+	    and qtypicked =  #{condition.qtypicked}
+	</if>
+	<if test="condition.qtyshipped != null and condition.qtyshipped != ''" >
+	    and qtyshipped =  #{condition.qtyshipped}
+	</if>
 	<if test="condition.uom != null and condition.uom != ''" >
 	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.softallocationrule != null and condition.softallocationrule != ''" >
+	    and softallocationrule =  #{condition.softallocationrule}
+	</if>
+	<if test="condition.allocationrule != null and condition.allocationrule != ''" >
+	    and allocationrule =  #{condition.allocationrule}
 	</if>
 	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
 	    and userdefine1 =  #{condition.userdefine1}
@@ -298,11 +211,167 @@ where 1=1
 	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
 	    and userdefine5 =  #{condition.userdefine5}
 	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.qtyorderedEach != null and condition.qtyorderedEach != ''" >
+	    and qtyordered_each =  #{condition.qtyorderedEach}
+	</if>
+	<if test="condition.qtysoftallocatedEach != null and condition.qtysoftallocatedEach != ''" >
+	    and qtysoftallocated_each =  #{condition.qtysoftallocatedEach}
+	</if>
+	<if test="condition.qtyallocatedEach != null and condition.qtyallocatedEach != ''" >
+	    and qtyallocated_each =  #{condition.qtyallocatedEach}
+	</if>
+	<if test="condition.qtypickedEach != null and condition.qtypickedEach != ''" >
+	    and qtypicked_each =  #{condition.qtypickedEach}
+	</if>
+	<if test="condition.qtyshippedEach != null and condition.qtyshippedEach != ''" >
+	    and qtyshipped_each =  #{condition.qtyshippedEach}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.rotationid != null and condition.rotationid != ''" >
+	    and rotationid =  #{condition.rotationid}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.grossweight != null and condition.grossweight != ''" >
+	    and grossweight =  #{condition.grossweight}
+	</if>
+	<if test="condition.cubic != null and condition.cubic != ''" >
+	    and cubic =  #{condition.cubic}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.alternativesku != null and condition.alternativesku != ''" >
+	    and alternativesku =  #{condition.alternativesku}
+	</if>
+	<if test="condition.kitreferenceno != null and condition.kitreferenceno != ''" >
+	    and kitreferenceno =  #{condition.kitreferenceno}
+	</if>
+	<if test="condition.dEdi01 != null and condition.dEdi01 != ''" >
+	    and d_edi_01 =  #{condition.dEdi01}
+	</if>
+	<if test="condition.dEdi02 != null and condition.dEdi02 != ''" >
+	    and d_edi_02 =  #{condition.dEdi02}
+	</if>
+	<if test="condition.dEdi03 != null and condition.dEdi03 != ''" >
+	    and d_edi_03 =  #{condition.dEdi03}
+	</if>
+	<if test="condition.dEdi04 != null and condition.dEdi04 != ''" >
+	    and d_edi_04 =  #{condition.dEdi04}
+	</if>
+	<if test="condition.dEdi05 != null and condition.dEdi05 != ''" >
+	    and d_edi_05 =  #{condition.dEdi05}
+	</if>
+	<if test="condition.dEdi06 != null and condition.dEdi06 != ''" >
+	    and d_edi_06 =  #{condition.dEdi06}
+	</if>
+	<if test="condition.dEdi07 != null and condition.dEdi07 != ''" >
+	    and d_edi_07 =  #{condition.dEdi07}
+	</if>
+	<if test="condition.dEdi08 != null and condition.dEdi08 != ''" >
+	    and d_edi_08 =  #{condition.dEdi08}
+	</if>
+	<if test="condition.dEdi09 != null and condition.dEdi09 != ''" >
+	    and d_edi_09 =  #{condition.dEdi09}
+	</if>
+	<if test="condition.dEdi10 != null and condition.dEdi10 != ''" >
+	    and d_edi_10 =  #{condition.dEdi10}
+	</if>
+	<if test="condition.orderlinereferenceno != null and condition.orderlinereferenceno != ''" >
+	    and orderlinereferenceno =  #{condition.orderlinereferenceno}
+	</if>
+	<if test="condition.dEdi11 != null and condition.dEdi11 != ''" >
+	    and d_edi_11 =  #{condition.dEdi11}
+	</if>
+	<if test="condition.dEdi12 != null and condition.dEdi12 != ''" >
+	    and d_edi_12 =  #{condition.dEdi12}
+	</if>
+	<if test="condition.dEdi13 != null and condition.dEdi13 != ''" >
+	    and d_edi_13 =  #{condition.dEdi13}
+	</if>
+	<if test="condition.dEdi14 != null and condition.dEdi14 != ''" >
+	    and d_edi_14 =  #{condition.dEdi14}
+	</if>
+	<if test="condition.dEdi15 != null and condition.dEdi15 != ''" >
+	    and d_edi_15 =  #{condition.dEdi15}
+	</if>
+	<if test="condition.dEdi16 != null and condition.dEdi16 != ''" >
+	    and d_edi_16 =  #{condition.dEdi16}
+	</if>
+	<if test="condition.dEdi17 != null and condition.dEdi17 != ''" >
+	    and d_edi_17 =  #{condition.dEdi17}
+	</if>
+	<if test="condition.dEdi18 != null and condition.dEdi18 != ''" >
+	    and d_edi_18 =  #{condition.dEdi18}
+	</if>
+	<if test="condition.dEdi19 != null and condition.dEdi19 != ''" >
+	    and d_edi_19 =  #{condition.dEdi19}
+	</if>
+	<if test="condition.dEdi20 != null and condition.dEdi20 != ''" >
+	    and d_edi_20 =  #{condition.dEdi20}
+	</if>
+	<if test="condition.kitsku != null and condition.kitsku != ''" >
+	    and kitsku =  #{condition.kitsku}
+	</if>
+	<if test="condition.erpcancelflag != null and condition.erpcancelflag != ''" >
+	    and erpcancelflag =  #{condition.erpcancelflag}
+	</if>
 	<if test="condition.userdefine6 != null and condition.userdefine6 != ''" >
 	    and userdefine6 =  #{condition.userdefine6}
 	</if>
 	<if test="condition.zonegroup != null and condition.zonegroup != ''" >
 	    and zonegroup =  #{condition.zonegroup}
+	</if>
+	<if test="condition.locgroup1 != null and condition.locgroup1 != ''" >
+	    and locgroup1 =  #{condition.locgroup1}
+	</if>
+	<if test="condition.locgroup2 != null and condition.locgroup2 != ''" >
+	    and locgroup2 =  #{condition.locgroup2}
+	</if>
+	<if test="condition.comminglesku != null and condition.comminglesku != ''" >
+	    and comminglesku =  #{condition.comminglesku}
+	</if>
+	<if test="condition.onestepallocation != null and condition.onestepallocation != ''" >
+	    and onestepallocation =  #{condition.onestepallocation}
+	</if>
+	<if test="condition.orderlotcontrol != null and condition.orderlotcontrol != ''" >
+	    and orderlotcontrol =  #{condition.orderlotcontrol}
+	</if>
+	<if test="condition.fullcaselotcontrol != null and condition.fullcaselotcontrol != ''" >
+	    and fullcaselotcontrol =  #{condition.fullcaselotcontrol}
+	</if>
+	<if test="condition.piecelotcontrol != null and condition.piecelotcontrol != ''" >
+	    and piecelotcontrol =  #{condition.piecelotcontrol}
+	</if>
+	<if test="condition.referencelineno != null and condition.referencelineno != ''" >
+	    and referencelineno =  #{condition.referencelineno}
+	</if>
+	<if test="condition.salesorderno != null and condition.salesorderno != ''" >
+	    and salesorderno =  #{condition.salesorderno}
+	</if>
+	<if test="condition.salesorderlineno != null and condition.salesorderlineno != ''" >
+	    and salesorderlineno =  #{condition.salesorderlineno}
+	</if>
+	<if test="condition.qtyreleased != null and condition.qtyreleased != ''" >
+	    and qtyreleased =  #{condition.qtyreleased}
+	</if>
+	<if test="condition.freegift != null and condition.freegift != ''" >
+	    and freegift =  #{condition.freegift}
 	</if>
 </trim>
 </sql>
@@ -310,266 +379,33 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-	insert into Doc_Order_Details (
-	customerid,
-	orderno,
-	orderlineno,
-	linestatus,
-	sku,
-	<if test="alternativesku != null  ">
-		alternativesku,
-	</if>
-	<if test="lotnum != null  ">
-		lotnum,
-	</if>
-	<if test="pickzone != null  ">
-		pickzone,
-	</if>
-	<if test="location != null  ">
-		location,
-	</if>
-	qtyordered,
-	qtyordered_each,
-	qtysoftallocated,
-	qtysoftallocated_each,
-	qtyallocated,
-	qtyallocated_each,
-	qtypicked,
-	qtypicked_each,
-	qtyshipped,
-	qtyshipped_each,
-	uom,
-	packid,
-	softallocationrule,
-	allocationrule,
-	rotationid,
-	<if test="notes != null  ">
-		notes,
-	</if>
-	<if test="grossweight != null  ">
-		grossweight,
-	</if>
-	<if test="cubic != null  ">
-		cubic,
-	</if>
-	<if test="price != null  ">
-		price,
-	</if>
-	netweight,
-	addtime,
-	addwho,
-	edittime,
-	editwho,
-	kitreferenceno,
-	onestepallocation)
-	values (
-	#{customerid},
-	#{orderno},
-	#{orderlineno},
-	'00',
-	#{sku},
-	<if test="alternativesku != null  ">
-		#{alternativesku},
-	</if>
-	<if test="lotnum != null  ">
-		#{lotnum},
-	</if>
-	<if test="pickzone != null  ">
-		#{pickzone},
-	</if>
-	<if test="location != null  ">
-		#{location},
-	</if>
-	#{qtyordered},
-	#{qtyordered},
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	'EA',
-	#{packid},
-	'STANDARD',
-	'STANDARD',
-	'STANDARD',
-	<if test="notes != null  ">
-		#{notes},
-	</if>
-	<if test="grossweight != null  ">
-		#{grossweight},
-	</if>
-	<if test="cubic != null  ">
-		#{cubic},
-	</if>
-	<if test="price != null  ">
-		#{price},
-	</if>
-	0,
-	now(),
-	#{addwho},
-	now(),
-	#{editwho},
-	0,
-	'Y')
+  insert into doc_order_details(orderno,orderlineno,customerid,sku,linestatus,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,pickzone,location,traceid,qtyordered,qtysoftallocated,qtyallocated,qtypicked,qtyshipped,uom,packid,softallocationrule,allocationrule,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,qtyordered_each,qtysoftallocated_each,qtyallocated_each,qtypicked_each,qtyshipped_each,addtime,addwho,edittime,editwho,rotationid,netweight,grossweight,cubic,price,alternativesku,kitreferenceno,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,orderlinereferenceno,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,kitsku,erpcancelflag,userdefine6,zonegroup,locgroup1,locgroup2,comminglesku,onestepallocation,orderlotcontrol,fullcaselotcontrol,piecelotcontrol,referencelineno,salesorderno,salesorderlineno,qtyreleased,freegift)
+ values(#{orderno},#{orderlineno},#{customerid},#{sku},#{linestatus},#{lotnum},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{lotatt12},#{pickzone},#{location},#{traceid},#{qtyordered},#{qtysoftallocated},#{qtyallocated},#{qtypicked},#{qtyshipped},#{uom},#{packid},#{softallocationrule},#{allocationrule},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{notes},#{qtyorderedEach},#{qtysoftallocatedEach},#{qtyallocatedEach},#{qtypickedEach},#{qtyshippedEach},#{addtime},#{addwho},#{edittime},#{editwho},#{rotationid},#{netweight},#{grossweight},#{cubic},#{price},#{alternativesku},#{kitreferenceno},#{dEdi01},#{dEdi02},#{dEdi03},#{dEdi04},#{dEdi05},#{dEdi06},#{dEdi07},#{dEdi08},#{dEdi09},#{dEdi10},#{orderlinereferenceno},#{dEdi11},#{dEdi12},#{dEdi13},#{dEdi14},#{dEdi15},#{dEdi16},#{dEdi17},#{dEdi18},#{dEdi19},#{dEdi20},#{kitsku},#{erpcancelflag},#{userdefine6},#{zonegroup},#{locgroup1},#{locgroup2},#{comminglesku},#{onestepallocation},#{orderlotcontrol},#{fullcaselotcontrol},#{piecelotcontrol},#{referencelineno},#{salesorderno},#{salesorderlineno},#{qtyreleased},#{freegift})
 </insert>
 
 <!-- 根据id，修改记录-->  
-<update id="update" parameterType="Object" >
-	update Doc_Order_Details
-	set sku=#{sku},
-	<if test="alternativesku != null  ">
-		alternativesku=#{alternativesku},
-	</if>
-	qtyordered=#{qtyordered},
-	qtyordered_each=#{qtyordered},
-	packid=#{packid},
-	<if test="grossweight != null  ">
-		grossweight=#{grossweight},
-	</if>
-	<if test="cubic != null  ">
-		cubic=#{cubic},
-	</if>
-	<if test="price != null  ">
-		price=#{price},
-	</if>
-	<if test="lotnum != null  ">
-		lotnum=#{lotnum},
-	</if>
-	<if test="pickzone != null  ">
-		pickzone=#{pickzone},
-	</if>
-	<if test="location != null  ">
-		location=#{location},
-	</if>
-	<if test="notes != null  ">
-		notes=#{notes},
-	</if>
-	edittime=now(),
-	editwho=#{editwho}
-	where orderno=#{orderno, jdbcType=VARCHAR}
-	and orderlineno=#{orderlineno, jdbcType=NUMERIC}
-</update>
+ <update id="update" parameterType="Object" >
+  update doc_order_details set orderlineno=#{orderlineno},customerid=#{customerid},sku=#{sku},linestatus=#{linestatus},lotnum=#{lotnum},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},pickzone=#{pickzone},location=#{location},traceid=#{traceid},qtyordered=#{qtyordered},qtysoftallocated=#{qtysoftallocated},qtyallocated=#{qtyallocated},qtypicked=#{qtypicked},qtyshipped=#{qtyshipped},uom=#{uom},packid=#{packid},softallocationrule=#{softallocationrule},allocationrule=#{allocationrule},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},notes=#{notes},qtyordered_each=#{qtyorderedEach},qtysoftallocated_each=#{qtysoftallocatedEach},qtyallocated_each=#{qtyallocatedEach},qtypicked_each=#{qtypickedEach},qtyshipped_each=#{qtyshippedEach},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},rotationid=#{rotationid},netweight=#{netweight},grossweight=#{grossweight},cubic=#{cubic},price=#{price},alternativesku=#{alternativesku},kitreferenceno=#{kitreferenceno},d_edi_01=#{dEdi01},d_edi_02=#{dEdi02},d_edi_03=#{dEdi03},d_edi_04=#{dEdi04},d_edi_05=#{dEdi05},d_edi_06=#{dEdi06},d_edi_07=#{dEdi07},d_edi_08=#{dEdi08},d_edi_09=#{dEdi09},d_edi_10=#{dEdi10},orderlinereferenceno=#{orderlinereferenceno},d_edi_11=#{dEdi11},d_edi_12=#{dEdi12},d_edi_13=#{dEdi13},d_edi_14=#{dEdi14},d_edi_15=#{dEdi15},d_edi_16=#{dEdi16},d_edi_17=#{dEdi17},d_edi_18=#{dEdi18},d_edi_19=#{dEdi19},d_edi_20=#{dEdi20},kitsku=#{kitsku},erpcancelflag=#{erpcancelflag},userdefine6=#{userdefine6},zonegroup=#{zonegroup},locgroup1=#{locgroup1},locgroup2=#{locgroup2},comminglesku=#{comminglesku},onestepallocation=#{onestepallocation},orderlotcontrol=#{orderlotcontrol},fullcaselotcontrol=#{fullcaselotcontrol},piecelotcontrol=#{piecelotcontrol},referencelineno=#{referencelineno},salesorderno=#{salesorderno},salesorderlineno=#{salesorderlineno},qtyreleased=#{qtyreleased},freegift=#{freegift} where orderno=#{orderno}
+ </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
-	update Doc_Order_Details set 
+	update doc_order_details set 
 	<trim  suffixOverrides="," >
-	<if test="addwho != null  ">
-		addwho=#{addwho},
-	</if>
-	<if test="allocationrule != null  ">
-		allocationrule=#{allocationrule},
-	</if>
-	<if test="alternativesku != null  ">
-		alternativesku=#{alternativesku},
-	</if>
-	<if test="comminglesku != null  ">
-		comminglesku=#{comminglesku},
-	</if>
-	<if test="cubic != null  ">
-		cubic=#{cubic},
+	<if test="orderlineno != null  ">
+		orderlineno=#{orderlineno},
 	</if>
 	<if test="customerid != null  ">
 		customerid=#{customerid},
 	</if>
-	<if test="dEdi01 != null  ">
-		d_edi_01=#{dEdi01},
-	</if>
-	<if test="dEdi02 != null  ">
-		d_edi_02=#{dEdi02},
-	</if>
-	<if test="dEdi03 != null  ">
-		d_edi_03=#{dEdi03},
-	</if>
-	<if test="dEdi04 != null  ">
-		d_edi_04=#{dEdi04},
-	</if>
-	<if test="dEdi05 != null  ">
-		d_edi_05=#{dEdi05},
-	</if>
-	<if test="dEdi06 != null  ">
-		d_edi_06=#{dEdi06},
-	</if>
-	<if test="dEdi07 != null  ">
-		d_edi_07=#{dEdi07},
-	</if>
-	<if test="dEdi08 != null  ">
-		d_edi_08=#{dEdi08},
-	</if>
-	<if test="dEdi09 != null  ">
-		d_edi_09=#{dEdi09},
-	</if>
-	<if test="dEdi10 != null  ">
-		d_edi_10=#{dEdi10},
-	</if>
-	<if test="dEdi11 != null  ">
-		d_edi_11=#{dEdi11},
-	</if>
-	<if test="dEdi12 != null  ">
-		d_edi_12=#{dEdi12},
-	</if>
-	<if test="dEdi13 != null  ">
-		d_edi_13=#{dEdi13},
-	</if>
-	<if test="dEdi14 != null  ">
-		d_edi_14=#{dEdi14},
-	</if>
-	<if test="dEdi15 != null  ">
-		d_edi_15=#{dEdi15},
-	</if>
-	<if test="dEdi16 != null  ">
-		d_edi_16=#{dEdi16},
-	</if>
-	<if test="dEdi17 != null  ">
-		d_edi_17=#{dEdi17},
-	</if>
-	<if test="dEdi18 != null  ">
-		d_edi_18=#{dEdi18},
-	</if>
-	<if test="dEdi19 != null  ">
-		d_edi_19=#{dEdi19},
-	</if>
-	<if test="dEdi20 != null  ">
-		d_edi_20=#{dEdi20},
-	</if>
-	<if test="edittime != null  ">
-		edittime=#{edittime},
-	</if>
-	<if test="editwho != null  ">
-		editwho=#{editwho},
-	</if>
-	<if test="erpcancelflag != null  ">
-		erpcancelflag=#{erpcancelflag},
-	</if>
-	<if test="freegift != null  ">
-		freegift=#{freegift},
-	</if>
-	<if test="fullcaselotcontrol != null  ">
-		fullcaselotcontrol=#{fullcaselotcontrol},
-	</if>
-	<if test="grossweight != null  ">
-		grossweight=#{grossweight},
-	</if>
-	<if test="kitreferenceno != null  ">
-		kitreferenceno=#{kitreferenceno},
-	</if>
-	<if test="kitsku != null  ">
-		kitsku=#{kitsku},
+	<if test="sku != null  ">
+		sku=#{sku},
 	</if>
 	<if test="linestatus != null  ">
 		linestatus=#{linestatus},
 	</if>
-	<if test="location != null  ">
-		location=#{location},
-	</if>
-	<if test="locgroup1 != null  ">
-		locgroup1=#{locgroup1},
-	</if>
-	<if test="locgroup2 != null  ">
-		locgroup2=#{locgroup2},
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
 	</if>
 	<if test="lotatt01 != null  ">
 		lotatt01=#{lotatt01},
@@ -607,98 +443,41 @@ where 1=1
 	<if test="lotatt12 != null  ">
 		lotatt12=#{lotatt12},
 	</if>
-	<if test="lotnum != null  ">
-		lotnum=#{lotnum},
-	</if>
-	<if test="netweight != null  ">
-		netweight=#{netweight},
-	</if>
-	<if test="notes != null  ">
-		notes=#{notes},
-	</if>
-	<if test="onestepallocation != null  ">
-		onestepallocation=#{onestepallocation},
-	</if>
-	<if test="orderlineno != null  ">
-		orderlineno=#{orderlineno},
-	</if>
-	<if test="orderlinereferenceno != null  ">
-		orderlinereferenceno=#{orderlinereferenceno},
-	</if>
-	<if test="orderlotcontrol != null  ">
-		orderlotcontrol=#{orderlotcontrol},
-	</if>
-	<if test="orderno != null  ">
-		orderno=#{orderno},
-	</if>
-	<if test="packid != null  ">
-		packid=#{packid},
-	</if>
 	<if test="pickzone != null  ">
 		pickzone=#{pickzone},
 	</if>
-	<if test="piecelotcontrol != null  ">
-		piecelotcontrol=#{piecelotcontrol},
-	</if>
-	<if test="price != null  ">
-		price=#{price},
-	</if>
-	<if test="qtyallocated != null  ">
-		qtyallocated=#{qtyallocated},
-	</if>
-	<if test="qtyallocatedEach != null  ">
-		qtyallocated_each=#{qtyallocatedEach},
-	</if>
-	<if test="qtyordered != null  ">
-		qtyordered=#{qtyordered},
-	</if>
-	<if test="qtyorderedEach != null  ">
-		qtyordered_each=#{qtyorderedEach},
-	</if>
-	<if test="qtypicked != null  ">
-		qtypicked=#{qtypicked},
-	</if>
-	<if test="qtypickedEach != null  ">
-		qtypicked_each=#{qtypickedEach},
-	</if>
-	<if test="qtyreleased != null  ">
-		qtyreleased=#{qtyreleased},
-	</if>
-	<if test="qtyshipped != null  ">
-		qtyshipped=#{qtyshipped},
-	</if>
-	<if test="qtyshippedEach != null  ">
-		qtyshipped_each=#{qtyshippedEach},
-	</if>
-	<if test="qtysoftallocated != null  ">
-		qtysoftallocated=#{qtysoftallocated},
-	</if>
-	<if test="qtysoftallocatedEach != null  ">
-		qtysoftallocated_each=#{qtysoftallocatedEach},
-	</if>
-	<if test="referencelineno != null  ">
-		referencelineno=#{referencelineno},
-	</if>
-	<if test="rotationid != null  ">
-		rotationid=#{rotationid},
-	</if>
-	<if test="salesorderlineno != null  ">
-		salesorderlineno=#{salesorderlineno},
-	</if>
-	<if test="salesorderno != null  ">
-		salesorderno=#{salesorderno},
-	</if>
-	<if test="sku != null  ">
-		sku=#{sku},
-	</if>
-	<if test="softallocationrule != null  ">
-		softallocationrule=#{softallocationrule},
+	<if test="location != null  ">
+		location=#{location},
 	</if>
 	<if test="traceid != null  ">
 		traceid=#{traceid},
 	</if>
+	<if test="qtyordered != null  ">
+		qtyordered=#{qtyordered},
+	</if>
+	<if test="qtysoftallocated != null  ">
+		qtysoftallocated=#{qtysoftallocated},
+	</if>
+	<if test="qtyallocated != null  ">
+		qtyallocated=#{qtyallocated},
+	</if>
+	<if test="qtypicked != null  ">
+		qtypicked=#{qtypicked},
+	</if>
+	<if test="qtyshipped != null  ">
+		qtyshipped=#{qtyshipped},
+	</if>
 	<if test="uom != null  ">
 		uom=#{uom},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="softallocationrule != null  ">
+		softallocationrule=#{softallocationrule},
+	</if>
+	<if test="allocationrule != null  ">
+		allocationrule=#{allocationrule},
 	</if>
 	<if test="userdefine1 != null  ">
 		userdefine1=#{userdefine1},
@@ -715,73 +494,200 @@ where 1=1
 	<if test="userdefine5 != null  ">
 		userdefine5=#{userdefine5},
 	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="qtyorderedEach != null  ">
+		qtyordered_each=#{qtyorderedEach},
+	</if>
+	<if test="qtysoftallocatedEach != null  ">
+		qtysoftallocated_each=#{qtysoftallocatedEach},
+	</if>
+	<if test="qtyallocatedEach != null  ">
+		qtyallocated_each=#{qtyallocatedEach},
+	</if>
+	<if test="qtypickedEach != null  ">
+		qtypicked_each=#{qtypickedEach},
+	</if>
+	<if test="qtyshippedEach != null  ">
+		qtyshipped_each=#{qtyshippedEach},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="rotationid != null  ">
+		rotationid=#{rotationid},
+	</if>
+	<if test="netweight != null  ">
+		netweight=#{netweight},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="cubic != null  ">
+		cubic=#{cubic},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="alternativesku != null  ">
+		alternativesku=#{alternativesku},
+	</if>
+	<if test="kitreferenceno != null  ">
+		kitreferenceno=#{kitreferenceno},
+	</if>
+	<if test="dEdi01 != null  ">
+		d_edi_01=#{dEdi01},
+	</if>
+	<if test="dEdi02 != null  ">
+		d_edi_02=#{dEdi02},
+	</if>
+	<if test="dEdi03 != null  ">
+		d_edi_03=#{dEdi03},
+	</if>
+	<if test="dEdi04 != null  ">
+		d_edi_04=#{dEdi04},
+	</if>
+	<if test="dEdi05 != null  ">
+		d_edi_05=#{dEdi05},
+	</if>
+	<if test="dEdi06 != null  ">
+		d_edi_06=#{dEdi06},
+	</if>
+	<if test="dEdi07 != null  ">
+		d_edi_07=#{dEdi07},
+	</if>
+	<if test="dEdi08 != null  ">
+		d_edi_08=#{dEdi08},
+	</if>
+	<if test="dEdi09 != null  ">
+		d_edi_09=#{dEdi09},
+	</if>
+	<if test="dEdi10 != null  ">
+		d_edi_10=#{dEdi10},
+	</if>
+	<if test="orderlinereferenceno != null  ">
+		orderlinereferenceno=#{orderlinereferenceno},
+	</if>
+	<if test="dEdi11 != null  ">
+		d_edi_11=#{dEdi11},
+	</if>
+	<if test="dEdi12 != null  ">
+		d_edi_12=#{dEdi12},
+	</if>
+	<if test="dEdi13 != null  ">
+		d_edi_13=#{dEdi13},
+	</if>
+	<if test="dEdi14 != null  ">
+		d_edi_14=#{dEdi14},
+	</if>
+	<if test="dEdi15 != null  ">
+		d_edi_15=#{dEdi15},
+	</if>
+	<if test="dEdi16 != null  ">
+		d_edi_16=#{dEdi16},
+	</if>
+	<if test="dEdi17 != null  ">
+		d_edi_17=#{dEdi17},
+	</if>
+	<if test="dEdi18 != null  ">
+		d_edi_18=#{dEdi18},
+	</if>
+	<if test="dEdi19 != null  ">
+		d_edi_19=#{dEdi19},
+	</if>
+	<if test="dEdi20 != null  ">
+		d_edi_20=#{dEdi20},
+	</if>
+	<if test="kitsku != null  ">
+		kitsku=#{kitsku},
+	</if>
+	<if test="erpcancelflag != null  ">
+		erpcancelflag=#{erpcancelflag},
+	</if>
 	<if test="userdefine6 != null  ">
 		userdefine6=#{userdefine6},
 	</if>
 	<if test="zonegroup != null  ">
 		zonegroup=#{zonegroup},
 	</if>
-	</trim> where addtime=#{addtime}
+	<if test="locgroup1 != null  ">
+		locgroup1=#{locgroup1},
+	</if>
+	<if test="locgroup2 != null  ">
+		locgroup2=#{locgroup2},
+	</if>
+	<if test="comminglesku != null  ">
+		comminglesku=#{comminglesku},
+	</if>
+	<if test="onestepallocation != null  ">
+		onestepallocation=#{onestepallocation},
+	</if>
+	<if test="orderlotcontrol != null  ">
+		orderlotcontrol=#{orderlotcontrol},
+	</if>
+	<if test="fullcaselotcontrol != null  ">
+		fullcaselotcontrol=#{fullcaselotcontrol},
+	</if>
+	<if test="piecelotcontrol != null  ">
+		piecelotcontrol=#{piecelotcontrol},
+	</if>
+	<if test="referencelineno != null  ">
+		referencelineno=#{referencelineno},
+	</if>
+	<if test="salesorderno != null  ">
+		salesorderno=#{salesorderno},
+	</if>
+	<if test="salesorderlineno != null  ">
+		salesorderlineno=#{salesorderlineno},
+	</if>
+	<if test="qtyreleased != null  ">
+		qtyreleased=#{qtyreleased},
+	</if>
+	<if test="freegift != null  ">
+		freegift=#{freegift},
+	</if>
+	</trim> where orderno=#{orderno}
 </update>
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete from Doc_Order_Details where orderno = #{orderno} and orderlineno = #{orderlineno}
+	delete 	 from doc_order_details where orderno = #{orderno}
 </delete>
  
-<!-- 根据id查询 订单明细 -->
-<select id="queryById"  resultMap="DocOrderDetailMap" parameterType="Object">
+<!-- 根据id查询 出库单明细表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	from Doc_Order_Details
-	where orderno=#{orderno, jdbcType=VARCHAR}
-	and orderlineno=#{orderlineno, jdbcType=NUMERIC}
+	 from doc_order_details where orderno = #{orderno} and orderlineno = #{orderlineno}
 </select>
 
-<!-- 订单明细 列表总数-->
+<!-- 出库单明细表 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Doc_Order_Details where orderno = #{condition.orderno,jdbcType=VARCHAR}
+	select count(1) from doc_order_details 
+	<include refid="Example_Where_Clause"/>
 </select>
   	
-<!-- 查询订单明细列表 -->
-<select id="queryByPageList" resultMap="DocOrderDetailMap"  parameterType="Object">
-	select *
-	  from (select a.customerid,
-	               a.orderno,
-	               a.orderlineno,
-	               a.linestatus,
-	               c.codename_c as linestatusName,
-	               a.sku,
-	               b.descr_c as skuName,
-	               b.descr_e as skuNameE,
-	               a.alternativesku,
-	               a.packid,
-	               a.qtyordered,
-	               a.qtyallocated,
-	               a.qtypicked,
-	               a.qtyshipped,
-	               a.cubic,
-	               a.grossweight,
-	               a.price,
-	               a.pickzone,
-	               a.location,
-	               a.lotnum,
-	               a.addwho,
-	               a.addtime
-	          from Doc_Order_Details a, Bas_Sku b, Bas_Codes c
-	         where a.customerid = b.customerid
-	           and a.sku = b.sku
-	           and a.linestatus = c.code
-	           and c.codeid = 'SO_STS'
-	           and a.orderno = #{condition.orderno,jdbcType=VARCHAR}) f
-	 where 1 = 1
+<!-- 查询出库单明细表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_order_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
-</select>
-
-<!--订单明细行号-->
-<select id="getOrderlinenoById" resultType="java.lang.Long"  parameterType="Object">
-	select ifnull(max(orderLineno),0) from Doc_Order_Details where orderno = #{orderno,jdbcType=VARCHAR}
 </select>
   	
 </mapper>   

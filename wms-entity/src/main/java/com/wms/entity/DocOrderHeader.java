@@ -347,7 +347,7 @@ public class DocOrderHeader implements Serializable {
 
 	private BigDecimal totalCube;
 	
-	private List<DocOrderDetail> docOrderDetailList;
+	private List<DocOrderDetails> docOrderDetailList;
 
 	public DocOrderHeader() {
 	}
@@ -1672,11 +1672,11 @@ public class DocOrderHeader implements Serializable {
 		this.totalCube = totalCube;
 	}
 
-	public List<DocOrderDetail> getDocOrderDetailList() {
+	public List<DocOrderDetails> getDocOrderDetailList() {
 		return docOrderDetailList;
 	}
 
-	public void setDocOrderDetailList(List<DocOrderDetail> docOrderDetailList) {
+	public void setDocOrderDetailList(List<DocOrderDetails> docOrderDetailList) {
 		this.docOrderDetailList = docOrderDetailList;
 	}
 
