@@ -1,17 +1,19 @@
 package com.wms.controller;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.wms.service.DocPaDetailsService;
-import com.wms.service.DocPaHeaderService;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocAsnHeader;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.DocAsnHeaderQuery;
+import com.wms.service.DocAsnHeaderService;
 import com.wms.service.DocPaService;
-import org.apache.commons.lang.StringUtils;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.annotation.Login;
+import com.wms.utils.editor.CustomDateEditor;
+import com.wms.vo.DocAsnHeaderVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocAsnHeaderForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -22,21 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.DocAsnHeaderService;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.utils.editor.CustomDateEditor;
-import com.wms.vo.DocOrderHeaderVO;
-import com.wms.vo.Json;
-import com.wms.vo.DocAsnHeaderVO;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.DocAsnHeader;
-import com.wms.vo.form.DocAsnHeaderForm;
-import com.wms.query.DocAsnHeaderQuery;
-import com.wms.query.DocOrderHeaderQuery;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("docAsnHeaderController")
