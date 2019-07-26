@@ -34,7 +34,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -48,16 +48,16 @@ $(function() {
             // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
 
 
-			{field: 'specsName',		title: '规格名称',	width: 25 },
-			{field: 'productCode',		title: '商品代码',	width: 25 },
-			{field: 'productName',		title: '商品名称',	width: 25 },
-			{field: 'productRemark',		title: '商品描述',	width: 25 },
-			{field: 'productModel',		title: '型号',	width: 25 },
-			{field: 'productionAddress',		title: '产地',	width: 25 },
+			{field: 'specsName',		title: '规格名称',	width: 100 },
+			{field: 'productCode',		title: '商品代码',	width: 100 },
+			{field: 'productName',		title: '商品名称',	width: 170 },
+			{field: 'productRemark',		title: '商品描述',	width:350 },
+			{field: 'productModel',		title: '型号',	width: 100 },
+			{field: 'productionAddress',		title: '产地',	width: 100 },
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
-			{field: 'unit',		title: '单位',	width: 25 },
-			{field: 'packingUnit',		title: '包装单位',	width: 25 },
-            {field: 'attacheCardCategory',		title: '附卡类别',	width: 25 },
+			{field: 'unit',		title: '单位',	width: 50 },
+			{field: 'packingUnit',		title: '包装单位',	width: 80 },
+            {field: 'attacheCardCategory',		title: '附卡类别',	width: 100 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },
 			// {field: 'conversionRate',		title: '换算率',	width: 25 },
 			// {field: 'llong',		title: '长',	width: 25 },
@@ -68,17 +68,17 @@ $(function() {
 			// {field: 'packingRequire',		title: '包装要求',	width: 25 },
 			// {field: 'storageCondition',		title: '存储条件',	width: 25 },
 			// {field: 'transportCondition',		title: '运输条件',	width: 25 },
-			{field: 'createId',		title: '创建人',	width: 25 },
-			{field: 'createDate',		title: '创建时间',	width: 25 },
-			{field: 'editId',		title: '编辑人',	width: 25 },
-			{field: 'editDate',		title: '编辑时间',	width: 25 },
-			{field: 'isUse',		title: '是否有效',	width: 25, formatter:function(value,rowData,rowIndex){
+			{field: 'createId',		title: '创建人',	width: 71 },
+			{field: 'createDate',		title: '创建时间',	width: 100 },
+			{field: 'editId',		title: '编辑人',	width: 71 },
+			{field: 'editDate',		title: '编辑时间',	width: 100 },
+			{field: 'isUse',		title: '是否有效',	width: 71, formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }},
-            {field: 'isCertificate',		title: '是否需要双证',	width: 25, formatter:function(value,rowData,rowIndex){
+            {field: 'isCertificate',		title: '是否需要双证',	width: 90, formatter:function(value,rowData,rowIndex){
                     return rowData.isCertificate == '1' ? '是' : '否';
                 }},
-            {field: 'isDoublec',		title: '是否需要合格证',	width: 25, formatter:function(value,rowData,rowIndex){
+            {field: 'isDoublec',		title: '是否需要合格证',	width: 90, formatter:function(value,rowData,rowIndex){
                     return rowData.isDoublec == '1' ? '是' : '否';
                 }},
 			// {field: 'alternatName1',		title: '自赋码1',	width: 25 },
@@ -87,8 +87,8 @@ $(function() {
 			// {field: 'alternatName4',		title: '自赋码4',	width: 25 },
 			// {field: 'alternatName5',		title: '自赋码5',	width: 25 },
 
-            {field: 'productRegisterNo',		title: '注册证编号',	width: 25 },
-            {field: 'productNameMain',		title: '产品名称',	width: 25 }
+            {field: 'productRegisterNo',		title: '注册证编号',	width: 100 },
+            {field: 'productNameMain',		title: '产品名称',	width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

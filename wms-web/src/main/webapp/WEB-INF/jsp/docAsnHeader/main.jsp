@@ -355,7 +355,7 @@ $(function() {
     });
 
     $("#supplierId").textbox({
-        width:110,
+        width:145,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){

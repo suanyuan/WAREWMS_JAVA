@@ -46,8 +46,8 @@ $(function() {
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
 			{field: 'enterpriseType',		title: '企业类型',	width: 61 ,formatter: entTypeFormatter},
-            {field: 'createId',		title: '录入人',	width: 61 },
-            {field: 'createDate',		title: '录入时间',	width: 61 },
+            {field: 'createId',		title: '创建人',	width: 61 },
+            {field: 'createDate',		title: '创建时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
             {field: 'editDate',		title: '修改时间',	width: 61 },
             {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
@@ -83,12 +83,14 @@ $(function() {
 	}).dialog('close');
 
 	$("#enterpriseTypeQuery").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getEntType',
         valueField:'id',
         textField:'value'
     });
-
+//时候有效
     $("#isUse").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
@@ -368,9 +370,9 @@ var doSearch = function(){
 						<tr>
 							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否启用</th>
+							<th>是否有效</th>
 							<td>
-								<select id="isUse" style="width:100px;">
+								<select id="isUse" style="width:145px;" class="easyui-combobox">
 								</select>
 							</td>
 							<td colspan="2">
@@ -387,7 +389,7 @@ var doSearch = function(){
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
-			<table id='ezuiDatagrid'></table> 
+			<table id='ezuiDatagrid'></table>
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>

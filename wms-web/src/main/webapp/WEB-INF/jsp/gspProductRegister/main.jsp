@@ -28,7 +28,7 @@ $(function() {
 		title: '',
 		pageSize : 50,
 		pageList : [50, 100, 200],
-		fit: false,
+		fit: true,
 		border: false,
 		fitColumns : false,
 		nowrap: true,
@@ -43,9 +43,9 @@ $(function() {
 			{field: 'productRegisterNo',		title: '注册证编号',	width: 150 },
             {field: 'classifyId',		title: '管理分类',	width: 60 },
             //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
-			{field: 'productNameMain',		title: '产品名称',	width: 150 },
-			{field: 'approveDate',		title: '批准日期',	width: 100 },
-			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 100 },
+			{field: 'productNameMain',		title: '产品名称',	width: 170 },
+			{field: 'approveDate',		title: '批准日期',	width: 150 },
+			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 },
 			{field: 'productRegisterVersion',		title: '注册证版本',	width: 100 },
 			{field: 'checkerId',		title: '审核人',	width: 100 },
 			{field: 'checkDate',		title: '审核时间',	width: 150 },
@@ -150,15 +150,16 @@ var doSearch = function(){
 		productNameMain : $('#productNameMain').val(),
         classifyId : $('#classifyId').combobox("getValue"),
         classifyCatalog : $('#classifyCatalog').combobox("getValue"),
-        version : $('#productRegisterVersion').combobox("getValue"),
-        createDateBegin : $("#createDateBegin").val(),
-        createDateEnd : $("#createDateEnd").val(),
+        productRegisterVersion : $('#productRegisterVersion').combobox("getValue"),
+        createDateBegin : $("#createDateBegin").datebox('getValue'),
+        createDateEnd : $("#createDateEnd").datebox('getValue'),
 		isUse : $('#isUse').combobox("getValue")
 	});
 };
 
 $(function () {
     $('#productRegisterVersion').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogVersion',
         valueField:'id',
         textField:'value',
@@ -172,18 +173,21 @@ $(function () {
     });
 
     $('#classifyId').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogClassify',
         valueField:'id',
         textField:'value'
     });
 
     $('#classifyCatalog').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox&version=',
         valueField:'id',
         textField:'value'
     });
 
     $('#isUse').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
@@ -201,19 +205,19 @@ $(function () {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>注册证编号：</th><td><input type='text' id='productRegisterNo' class='easyui-textbox'  data-options='width:200'/></td>
-							<th>产品名称：</th><td><input type='text' id='productNameMain' class='easyui-textbox'  data-options='width:200'/></td>
-							<th>管理分类：</th><td><input type='text' id='classifyId' class='easyui-combobox' data-options='width:200'/></td>
+							<th>注册证编号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox'  size='16' data-options=''/></td>
+							<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox'  size='16' data-options=''/></td>
+							<th>管理分类</th><td><input type='text' id='classifyId' class='easyui-combobox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>版本：</th><td><input type='text' id='productRegisterVersion' class='easyui-combobox' data-options='width:200'/></td>
-							<th>分类目录：</th><td><input type='text' id='classifyCatalog' class='easyui-combobox' data-options='width:200'/></td>
-							<th>是否有效：</th><td><input type='text' id='isUse' class='easyui-combobox' data-options='width:200'/></td>
+							<th>版本</th><td><input type='text' id='productRegisterVersion' class='easyui-combobox' size='16' data-options=''/></td>
+							<th>分类目录</th><td><input type='text' id='classifyCatalog' class='easyui-combobox' size='16' data-options=''/></td>
+							<th>是否有效</th><td><input type='text' id='isUse' class='easyui-combobox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>创建时间起始：</th><td><input type='text' id='createDateBegin' class='easyui-datebox'  data-options='width:200'/></td>
-							<th>创建时间结束：</th><td><input type='text' id='createDateEnd' class='easyui-datebox'  data-options='width:200'/></td>
-							<td>
+							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox'  size='16' data-options=''/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
