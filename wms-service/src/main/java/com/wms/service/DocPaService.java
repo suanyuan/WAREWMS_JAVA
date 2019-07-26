@@ -144,7 +144,7 @@ public class DocPaService {
                     }
                     Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
                     if(!json.isSuccess()){
-                        return Json.error("收货失败");
+                        throw new Exception("收货失败");
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
                     if(docPaDTO.getAsntype().equals("DX")){

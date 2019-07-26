@@ -23,8 +23,8 @@
 																														valueField: 'id',
 																														textField: 'value',
 																														data: [
-																															{id: 'Y', value: '是'}, 
-																															{id: 'N', value: '否'}
+																															{id: '1', value: '是'},
+																															{id: '0', value: '否'}
 																														]"/></td>
 							<td>
 								<a onclick='ezuiCustDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
