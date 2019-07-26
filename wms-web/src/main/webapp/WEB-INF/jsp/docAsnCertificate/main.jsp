@@ -10,7 +10,6 @@
 		table th{
 			text-align: right;
 		}
-
 	</style>
 <script type='text/javascript'>
 var processType;
@@ -209,9 +208,11 @@ var doSearch = function(){
 		customerid : $('#customerid').val(),
 		sku : $('#sku').val(),
 		lotatt04 : $('#lotatt04').val(),
-		addtime : $('#addtime').val(),
+		//addtime : $('#addtime').val(),
 		addwho : $('#addwho').val(),
-		edittime : $('#edittime').val(),
+        createDateStart: $("#createDateStart").datebox("getValue"),
+        createDateEnd: $("#createDateEnd").datebox("getValue"),
+		//edittime : $('#edittime').val(),
 		editwho : $('#editwho').val(),
 		certificateContext : $('#certificateContext').val()
 	});
@@ -299,7 +300,10 @@ var toImportData = function(){
 							<th>货主</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-							<td>
+                            <th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+                            <th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
+                            <td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
@@ -327,9 +331,9 @@ var toImportData = function(){
 
 	</div>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
-		<%--<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>--%>
+		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
-		<%--<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>--%>
+		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 	</div>
 
 	<!-- 导入start -->

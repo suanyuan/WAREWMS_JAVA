@@ -11,35 +11,51 @@
         </tr>
 
         <tr>
+            <%--<th>注册证编号</th>--%>
+            <%--<td>--%>
+                <%--<input type='text' data="1" id='enterpriseIdQuery1'  name="enterpriseName" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>--%>
+                <%--<input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />--%>
+                <%--&lt;%&ndash;<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>&ndash;%&gt;--%>
+            <%--</td>--%>
+            <th>注册证编号</th>
+            <td>
+                <input type='text' data="1" id='productRegisterQuery'  name="productRegisterNo" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
+                <input type="hidden"  id="productRegisterNo" name="productRegisterNo" data='1'  />
+                <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
+            </td>
+            <%--<th>注册证编号</th>--%>
+            <%--<td><input type='text' data="1" id="productRegisterNo" name='productRegisterNo' class='easyui-textbox' size='50' data-options='required:false' /></td>--%>
+
             <th>产品名称</th>
             <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
 
-            <th>注册证编号</th>
-            <td><input type='text' data="1" id="productRegisterNo" name='productRegisterNo' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
         </tr>
 
         <tr>
+            <th>产地</th>
+            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='required:true' /></td>
+
             <th>规格名称</th>
             <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>商品代码</th>
-            <td><input type='text' data="1" id="productCode" name='productCode' class='easyui-textbox' size='50' data-options='required:true'/></td>
-        </tr>
+          </tr>
 
         <tr>
+            <th>商品代码</th>
+            <td><input type='text' data="1" id="productCode" name='productCode' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
             <th>商品名称</th>
             <td><input type='text' data="1" id="productName" name='productName' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>商品描述</th>
-            <td><input type='text' data="1" id="productRemark" name='productRemark' class='easyui-textbox' size='50' data-options='required:true'/></td>
-        </tr>
+         </tr>
 
         <tr>
+            <th>商品描述</th>
+            <td><input type='text' data="1" id="productRemark" name='productRemark' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
             <th>型号</th>
             <td><input type='text' data="1" id="productModel" name='productModel' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>产地</th>
-            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='required:true' /></td>
             <%--<td><select data="1" id="productionAddress" name="productionAddress" class="easyui-combobox"  style="width:385px;">--%>
                 <%--<option value=""></option>--%>
                 <%--<option >国内</option>--%>
@@ -159,8 +175,11 @@
         </tr>
     </table>
 </form>
+<div id='enterpriseDialog' style='padding: 10px;'>
 
+</div>
 <script>
+    var enterpriseDialog;
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
 
@@ -181,7 +200,7 @@
                                     //gspBusinessFrom[""+$(this).attr("id")+""] = $(this).textbox("getValue");
                                 }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
                                     $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
-                                }else if($(this).attr("class").indexOf('easyui-combobox')!=-1){
+                                }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                                     $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }
                             }
@@ -207,6 +226,71 @@
         //     textField:'value'
         // });
     })
+    function searchEnterprise() {
+        enterpriseDialog = $('#enterpriseDialog').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            href: sy.bp() + "/gspProductRegisterSpecsController.do?toSearchDialog",
+            width: 850,
+            height: 500,
+            cache: false,
+            onClose: function () {
+
+            }
+        })
+    }
+
+    function choseSelect(id,name,address) {
+        //console.log(1111111)
+        //console.log(name)
+        var enterpriceId;
+        enterpriceId = id;
+        //$("input[name='enterpriseId'][data='1']").val(id);
+
+        $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
+        $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
+        $("#productRegisterQuery").textbox("setValue",id);
+
+        productionAddress
+        // $.ajax({
+        //     url : 'gspEnterpriseInfoController.do?getInfo',
+        //     data : {enterpriseId : enterpriceId},
+        //     type : 'POST',
+        //     dataType : 'JSON',
+        //     success : function(date){
+        //         if(date.success){
+        //             // console.log(3333333)
+        //             //console.log(date.obj.enterpriseNo+'====result.enterpriseNo====');
+        //             //console.log('====result.shorthandName===='+date.obj.shorthandName);
+        //
+        //             //$("#enterpriseNo").textbox("setValue",date.obj.enterpriseNo);
+        //             //$("#shorthandName").textbox("setValue",date.obj[""+$("#shorthandName").attr("id")+""]);
+        //             $("#ezuiFormInfo input[id='enterpriseNo'][data='1']").textbox('setValue',date.obj.enterpriseNo);
+        //             $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
+        //             //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
+        //             $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
+        //
+        //         }
+        //     }
+        // });
+        //console.log(4444444444)
+        //$("input[name='enterpriseId1']").val(id);
+        enterpriseDialog.dialog("close");
+    }
+
+    $(function () {
+        $("#productRegisterQuery").textbox({
+            width:383,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    searchEnterprise();
+                }
+            }]
+        })
+    })
+
+
 
 
 

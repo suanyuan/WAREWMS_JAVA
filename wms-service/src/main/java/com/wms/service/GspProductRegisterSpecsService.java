@@ -65,6 +65,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
+		criteria.setOrderByClause("create_date desc");
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
 		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(criteria);

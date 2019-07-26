@@ -122,6 +122,8 @@ public class GspProductRegisterController {
 		return gspProductRegisterService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
+
+
 	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody

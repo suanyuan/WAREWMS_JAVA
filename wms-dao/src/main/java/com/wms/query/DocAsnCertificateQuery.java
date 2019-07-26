@@ -14,6 +14,25 @@ public class DocAsnCertificateQuery implements IQuery {
 	private String editwho;
 	private String certificateContext;
 
+	private String createDateStart;
+	private String createDateEnd;
+
+	public String getCreateDateStart() {
+		return createDateStart;
+	}
+
+	public void setCreateDateStart(String createDateStart) {
+		this.createDateStart = createDateStart;
+	}
+
+	public String getCreateDateEnd() {
+		return createDateEnd;
+	}
+
+	public void setCreateDateEnd(String createDateEnd) {
+		this.createDateEnd = createDateEnd;
+	}
+
 	public String getCustomerid() {
 		return customerid;
 	}

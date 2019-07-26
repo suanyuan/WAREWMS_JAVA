@@ -52,13 +52,13 @@
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-				and r.product_register_id =  #{condition.productRegisterId}
+				and r.product_register_id like CONCAT('%',#{condition.productRegisterId},'%')
 			</if>
 			<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-				and r.product_register_no =  #{condition.productRegisterNo}
+				and r.product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
 			</if>
 			<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-				and r.product_name_main =  #{condition.productNameMain}
+				and r.product_name_main like CONCAT('%',#{condition.productNameMain},'%')
 			</if>
 			<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
 				and r.product_register_name =  #{condition.productRegisterName}

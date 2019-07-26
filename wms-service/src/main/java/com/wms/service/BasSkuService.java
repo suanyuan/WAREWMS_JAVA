@@ -73,6 +73,7 @@ public class BasSkuService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("addtime desc");
 		System.out.println(query.getAddTimeStart()+"=====query.getAddTimeStart()====== query.getAddTimeStart()======"+query.getAddTimeEnd());
 		List<BasSku> basSkuList = basSkuMybatisDao.queryByPageList(mybatisCriteria);
 
