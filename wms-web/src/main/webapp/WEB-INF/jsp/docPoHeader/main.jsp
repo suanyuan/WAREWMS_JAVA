@@ -1222,7 +1222,7 @@
                         <th>仓库</th>
                         <td><input type='text' id='warehouseid' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/docPoHeaderController.do?getPostatusCombobox"/>',
+																																	url:'<c:url value="/docPoHeaderController.do?getWarehouseCombobox"/>',
 																																	valueField: 'id',
 																																	textField: 'value'"/>
                         </td>

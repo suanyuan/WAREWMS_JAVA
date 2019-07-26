@@ -171,7 +171,7 @@ public class DocPaHeaderService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
-
+/*打印*/
     public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
         StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()){
@@ -192,46 +192,49 @@ public class DocPaHeaderService extends BaseService {
                 document = new Document(PDFUtil.getTemplate("wms_receipt_jhck.pdf").getPageSize(1));
                 PdfCopy pdfCopy = new PdfCopy(document, os);
                 document.open();
-
+                 //分割orderCodeList中的主单号pano
                 String[] orderCodeArray = orderCodeList.split(",");
 
                 for (String orderCode : orderCodeArray) {
 
+                    //根据主单pano查询对象DocPaHeader
                     DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
                     if(docPaHeader!=null){
 
                         int totalNum = 0;
-                        int row = 15;
+                        int row = 15;//每页条数
                         int pageSize = 0;
 
                         DocPaDetailsQuery query = new DocPaDetailsQuery();
                         query.setAsnno(orderCode);
-
+                       //根据主单pano获取子单所有的产品 orderCode==pano
                         List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
 
-                        totalNum = detailsList.size();
-                        pageSize = (int)Math.ceil( (double) totalNum / row);
-                        for(int i=0;i<pageSize;i++){
+                        totalNum = detailsList.size();//总条数
+                        pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
+                        for(int i=0;i<pageSize;i++){//单头内容
                             baos = new ByteArrayOutputStream();
                             stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
                             form = stamper.getAcroFields();
-                            form.setField("putwmsCode",docPaHeader.getPano());
+                            form.setField("putwayCode",docPaHeader.getPano());
                             form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
                             form.setField("warehouseid", docPaHeader.getWarehouseid());
                             form.setField("custName", docPaHeader.getCustomerid());
                             form.setField("supplier", "");
-                            form.setField("notes", "");
+                            form.setField("notes", docPaHeader.getNotes());
                             form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
                             //form.setField("barCode1", docPaHeader.getAsnno());
                             form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
                             //form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
 
-                            for(int j=0;j<row;j++){
+                            for(int j=0;j<row;j++){//主单产品明细
                                 if(totalNum > (row*i+j)){
                                     DocPaDetails docPaDetails = detailsList.get(row * i + j);
                                     BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
-
+                                    //根据某一个订单明细查询关联的Doc_Asn_Details
                                     DocAsnDetailQuery queryDetail = new DocAsnDetailQuery();
+                                    queryDetail.setAsnno(docPaDetails.getAsnno());
+                                    queryDetail.setAsnlineno(docPaDetails.getAsnlineno());
                                     DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
 
                                     form.setField("sku."+j, docPaDetails.getSku());

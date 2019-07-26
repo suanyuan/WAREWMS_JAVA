@@ -68,7 +68,7 @@ $(function() {
 			{field: 'releasestatusName',		title: '释放状态',	width: 71 },
 			{field: 'warehouseid',		title: '仓库编码',	width: 71 },
 			{field: 'notes',		title: '备注',	width: 250 },
-			{field: 'asnstatus',		title: '入库状态',	width: 1 },
+			{field: 'asnstatus',		title: '入库状态',	width: 71 },
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -365,9 +365,13 @@ $(function() {
             }
         }]
     });
-
+//仓库下拉框
     $("#warehouseId").combobox({
-
+        panelHeight: 'auto',
+        editable: false,
+        url:'<c:url value="/docPoHeaderController.do?getWarehouseCombobox"/>',
+        valueField: 'id',
+        textField: 'value'
     });
 
 
@@ -1465,6 +1469,7 @@ function afterCheckButtion(rowData) {
 							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<th>供应商</th><td><input type="text" id="supplierId"/></td>
+							<%--仓库在js中设置--%>
 							<th style="text-align: right">仓库</th><td><input type="text" id="warehouseId"/></td>
 						</tr>
 						<tr>
