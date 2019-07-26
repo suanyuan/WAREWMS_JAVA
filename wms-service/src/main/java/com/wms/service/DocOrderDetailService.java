@@ -105,4 +105,9 @@ public class DocOrderDetailService extends BaseService {
 		return comboboxList;
 	}
 
+//	public DocOrderDetailVO getDocOrderDetail(DocOrderDetailQuery query) {
+//
+//
+//    }
+
 }

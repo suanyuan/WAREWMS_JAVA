@@ -69,8 +69,8 @@ $(function() {
 					{field: 'sostatusName',			title: '订单状态',		width: 12 },
 					{field: 'ordertypeName',		title: '订单类型',		width: 12 },
 					{field: 'consigneename',		title: '收货人',		width: 14 },
-					{field: 'caddress1',			title: '收货地址',		width: 36 },
-					{field: 'ctel1',				title: '联系方式',		width: 16 },
+					{field: 'cAddress1',			title: '收货地址',		width: 36 },
+					{field: 'cTel1',				title: '联系方式',		width: 16 },
 					{field: 'releasestatusName',	title: '释放状态',		width: 12 }
 		]],
 		onDblClickCell: function(index,field,value){
@@ -311,8 +311,8 @@ var edit = function(){
 			soreference2 : row.soreference2,
 			sostatus : row.sostatus,
 			consigneename: row.consigneename,
-			cAddress1 : row.caddress1,
-			cTel1 : row.ctel1,
+			cAddress1 : row.cAddress1,
+			cTel1 : row.cTel1,
 			releasestatus : row.releasestatus,
 			ordertype : row.ordertype,
 			ordertime : row.ordertime,
@@ -1235,7 +1235,7 @@ var ezuiCustToolbarClear = function(){
 /* 客户选择弹框-主界面 */
 var ezuiCustDataClick = function(){
     $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1263,7 +1263,7 @@ var ezuiCustDataClick = function(){
 				{field: 'descrE',		title: '英文名称',	width: 50},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -1289,7 +1289,7 @@ var selectCust = function(){
 /* 客户选择弹框-订单信息界面 */
 var ezuiCustDataDialogClick = function(){
     $("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combo('readonly', true);
-    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
 	url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
 	method:'POST',
@@ -1317,7 +1317,7 @@ var ezuiCustDataDialogClick = function(){
 				{field: 'descrE',			title: '英文名称',	width: 50},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -1382,7 +1382,7 @@ var ezuiSkuDataClick = function(){
 					{field: 'descrC',		title: '中文名称',	width: 160},
 					{field: 'descrE',		title: '英文名称',	width: 160},
 					{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
-						return rowData.activeFlag == 'Y' ? '是' : '否';
+						return rowData.activeFlag == '1' ? '是' : '否';
 		            }},
 					{field: 'alternateSku1',title: '商品条码',	width: 120},
 					{field: 'packid',		title: '包装代码',	width: 80},
@@ -1400,7 +1400,7 @@ var ezuiSkuDataClick = function(){
 		}
 	});
 	$("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
-	$("#ezuiSkuDataDialog #activeFlag").combobox('setValue','Y').combo('readonly', true);
+	$("#ezuiSkuDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiSkuDataDialog.dialog('open');
 };
 /* 商品选择 */
@@ -1503,7 +1503,7 @@ var selectLocation = function(){
 							<th>库位通道（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>自定义1（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>自定义2（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>波次编号（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th><!-- 波次编号（D）--></th><td><!--<input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/>--></td>
 						</tr>
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
@@ -1559,7 +1559,7 @@ var selectLocation = function(){
  					<a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> 
  					<a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a> 
 					<a onclick='cancel();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
-					<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>
+					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

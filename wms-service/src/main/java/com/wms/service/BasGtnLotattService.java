@@ -65,7 +65,7 @@ public class BasGtnLotattService extends BaseService {
 	    query.setLotatt02(invLotAtt.getLotatt02());
 	    query.setLotatt04(invLotAtt.getLotatt04());
 	    query.setLotatt05(invLotAtt.getLotatt05());
-	    query.setAddasnno(asnno);
+//	    query.setAddasnno(asnno);
 
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));

@@ -1086,9 +1086,9 @@ var detailsCommit = function(){
 					var result = $.parseJSON(data);
 					if(result.success){
 						if (processType == 'edit') {
-							ezuiDetailsDatagrid.datagrid('reload');
+							ezuiDetailsDatagrid.datagrid('reload',{"asnno":$("#asnno1").textbox("getValue")});
 						} else {
-							ezuiDetailsDatagrid.datagrid('reload');
+							ezuiDetailsDatagrid.datagrid('reload',{"asnno":$("#asnno1").textbox("getValue")});
 						}
 						ezuiDetailsDialog.dialog('close');
 						msg = '<font color="red">' + "提交成功" + '</font>';
