@@ -19,10 +19,42 @@ public class DocOrderHeader implements Serializable {
 	@Id
 	private String orderno;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date addtime;
+	private String ordertype;
 
-	private String addwho;
+	private String sostatus;
+
+	private Date ordertime;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expectedshipmenttime1;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expectedshipmenttime2;
+
+	private String customerid;
+
+	private String soreference1;
+
+	private String soreference2;
+
+	private String soreference3;
+
+	private String soreference4;
+
+	private String soreference5;
+
+	private String soreference6;
+
+	private String releasestatus;
+
+	private String releasestatusName;
+
+	private String priority;
+
+	private String consigneeid;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date requireddeliverytime;
 
 	private BigDecimal allocationcount;
 
@@ -116,15 +148,11 @@ public class DocOrderHeader implements Serializable {
 
 	private String channel;
 
-	private String consigneeid;
-
 	private String consigneename;
 
 	private String consigneenameE;
 
 	private String createsource;
-
-	private String customerid;
 
 	private String deliveryno;
 
@@ -157,18 +185,7 @@ public class DocOrderHeader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date edisendtime5;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date edittime;
-
-	private String editwho;
-
 	private String erpcancelflag;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expectedshipmenttime1;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expectedshipmenttime2;
 
 	private String expressprintflag;
 
@@ -255,10 +272,6 @@ public class DocOrderHeader implements Serializable {
 	private String notes;
 
 	private String orderPrintFlag;
-
-	private Date ordertime;
-
-	private String ordertype;
 	
 	private String ordertypeName;
 
@@ -274,16 +287,7 @@ public class DocOrderHeader implements Serializable {
 
 	private String placeofloading;
 
-	private String priority;
-
 	private String puttolocation;
-
-	private String releasestatus;
-
-	private String releasestatusName;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date requireddeliverytime;
 
 	private String requiredeliveryno;
 
@@ -298,20 +302,6 @@ public class DocOrderHeader implements Serializable {
 	private String signDay;
 
 	private String singlematch;
-
-	private String soreference1;
-
-	private String soreference2;
-
-	private String soreference3;
-
-	private String soreference4;
-
-	private String soreference5;
-
-	private String soreference6;
-
-	private String sostatus;
 
 	private String sostatusName;
 
@@ -1689,4 +1679,14 @@ public class DocOrderHeader implements Serializable {
 	public void setDocOrderDetailList(List<DocOrderDetail> docOrderDetailList) {
 		this.docOrderDetailList = docOrderDetailList;
 	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date addtime;
+
+	private String addwho;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date edittime;
+
+	private String editwho;
 }

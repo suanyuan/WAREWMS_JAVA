@@ -3,8 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
-<c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
 </head>
 <body class="easyui-layout" data-options='fit:true'>
 	<div data-options='region:"center",border:false'>
@@ -12,11 +10,6 @@
 			<tr>
 				<td align="center">
 					<font color="red">系统错误</font>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					${exceptionMessage}
 				</td>
 			</tr>
 		</table>

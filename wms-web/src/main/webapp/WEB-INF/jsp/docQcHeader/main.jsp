@@ -24,7 +24,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -33,29 +33,29 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'qcno',		title: '待输入栏位0',	width: 34 },
-			{field: 'pano',		title: '待输入栏位1',	width: 34 },
-			{field: 'customerid',		title: '待输入栏位2',	width: 34 },
-			{field: 'qcreference1',		title: '待输入栏位3',	width: 34 },
-			{field: 'qcreference2',		title: '待输入栏位4',	width: 34 },
-			{field: 'qcreference3',		title: '待输入栏位5',	width: 34 },
-			{field: 'qcreference4',		title: '待输入栏位6',	width: 34 },
-			{field: 'qcreference5',		title: '待输入栏位7',	width: 34 },
-			{field: 'qctype',		title: '待输入栏位8',	width: 34 },
-			{field: 'qcstatus',		title: '待输入栏位9',	width: 34 },
-			{field: 'qccreationtime',		title: '待输入栏位10',	width: 34 },
-			{field: 'userdefine1',		title: '待输入栏位11',	width: 34 },
-			{field: 'userdefine2',		title: '待输入栏位12',	width: 34 },
-			{field: 'userdefine3',		title: '待输入栏位13',	width: 34 },
-			{field: 'userdefine4',		title: '待输入栏位14',	width: 34 },
-			{field: 'userdefine5',		title: '待输入栏位15',	width: 34 },
-			{field: 'notes',		title: '待输入栏位16',	width: 34 },
-			{field: 'addtime',		title: '待输入栏位17',	width: 34 },
-			{field: 'addwho',		title: '待输入栏位18',	width: 34 },
-			{field: 'edittime',		title: '待输入栏位19',	width: 34 },
-			{field: 'editwho',		title: '待输入栏位20',	width: 34 },
-			{field: 'qcPrintFlag',		title: '待输入栏位21',	width: 34 },
-			{field: 'warehouseid',		title: '待输入栏位22',	width: 34 }
+			{field: 'qcno',		title: '入库单号',	width: 124 },
+			{field: 'customerid',		title: '货主',	width: 124 },
+            {field: 'pano',		title: '待输入栏位1',	width: 124 },
+            {field: 'qcreference1',		title: '待输入栏位3',	width: 134 },
+			{field: 'qcreference2',		title: '待输入栏位4',	width: 134 },
+			{field: 'qcreference3',		title: '待输入栏位5',	width: 134 },
+			{field: 'qcreference4',		title: '待输入栏位6',	width: 134 },
+			{field: 'qcreference5',		title: '待输入栏位7',	width: 134 },
+			{field: 'qctype',		title: '待输入栏位8',	width: 134 },
+			{field: 'qcstatus',		title: '待输入栏位9',	width: 134 },
+			{field: 'qccreationtime',		title: '待输入栏位10',	width: 134 },
+			{field: 'userdefine1',		title: '待输入栏位11',	width: 134 },
+			{field: 'userdefine2',		title: '待输入栏位12',	width: 134 },
+			{field: 'userdefine3',		title: '待输入栏位13',	width: 134 },
+			{field: 'userdefine4',		title: '待输入栏位14',	width: 134 },
+			{field: 'userdefine5',		title: '待输入栏位15',	width: 134 },
+			{field: 'notes',		title: '待输入栏位16',	width: 134 },
+			{field: 'addtime',		title: '创建时间',	width: 134 },
+			{field: 'addwho',		title: '创建人',	width: 134 },
+			{field: 'edittime',		title: '编辑时间',	width: 134 },
+			{field: 'editwho',		title: '编辑人',	width: 134 },
+			{field: 'qcPrintFlag',		title: '打印',	width: 134 },
+			{field: 'warehouseid',		title: '待输入栏位22',	width: 134 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -235,11 +235,11 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>待输入名称0：</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库单号：</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称1：</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称2：</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称3：</th><td><input type='text' id='qcreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称4：</th><td><input type='text' id='qcreference2' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>待输入名称4：</th><td><input type='text' id='qcreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称5：</th><td><input type='text' id='qcreference3' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称6：</th><td><input type='text' id='qcreference4' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称7：</th><td><input type='text' id='qcreference5' class='easyui-textbox' size='16' data-options=''/></td>
@@ -247,17 +247,19 @@ var doSearch = function(){
 							<th>待输入名称9：</th><td><input type='text' id='qcstatus' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称10：</th><td><input type='text' id='qccreationtime' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称11：</th><td><input type='text' id='userdefine1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称12：</th><td><input type='text' id='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>待输入名称12：</th><td><input type='text' id='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>--%>
+						</tr>
+						<tr>
 							<th>待输入名称13：</th><td><input type='text' id='userdefine3' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称14：</th><td><input type='text' id='userdefine4' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称15：</th><td><input type='text' id='userdefine5' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称16：</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称17：</th><td><input type='text' id='addtime' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>待输入名称17：</th><td><input type='text' id='addtime' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称18：</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称19：</th><td><input type='text' id='edittime' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称20：</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>待输入名称21：</th><td><input type='text' id='qcPrintFlag' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称22：</th><td><input type='text' id='warehouseid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>待输入名称22：</th><td><input type='text' id='warehouseid' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -282,92 +284,60 @@ var doSearch = function(){
 				<tr>
 					<th>待输入0</th>
 					<td><input type='text' name='qcno' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入1</th>
 					<td><input type='text' name='pano' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入2</th>
 					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入3</th>
 					<td><input type='text' name='qcreference1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入4</th>
 					<td><input type='text' name='qcreference2' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入5</th>
 					<td><input type='text' name='qcreference3' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入6</th>
 					<td><input type='text' name='qcreference4' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入7</th>
 					<td><input type='text' name='qcreference5' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入8</th>
 					<td><input type='text' name='qctype' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入9</th>
 					<td><input type='text' name='qcstatus' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入10</th>
 					<td><input type='text' name='qccreationtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入11</th>
 					<td><input type='text' name='userdefine1' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>待输入12</th>
 					<td><input type='text' name='userdefine2' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入13</th>
 					<td><input type='text' name='userdefine3' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入14</th>
 					<td><input type='text' name='userdefine4' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入15</th>
 					<td><input type='text' name='userdefine5' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
+
 					<th>待输入16</th>
 					<td><input type='text' name='notes' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入17</th>
+					<th>创建时间</th>
 					<td><input type='text' name='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入18</th>
+					<th>创建人</th>
 					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入19</th>
+					<th>编辑时间</th>
 					<td><input type='text' name='edittime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入20</th>
+					<th>编辑人</th>
 					<td><input type='text' name='editwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入21</th>
 					<td><input type='text' name='qcPrintFlag' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>待输入22</th>
 					<td><input type='text' name='warehouseid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>

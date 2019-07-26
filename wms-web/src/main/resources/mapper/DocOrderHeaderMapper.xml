@@ -765,6 +765,8 @@ where 1=1
 	</if>
 	releasestatus,
 	warehouseid,
+	edisendflag,
+	archiveflag,
 	createsource,
 	addtime,
 	addwho,
@@ -780,8 +782,8 @@ where 1=1
 	<if test="soreference2 != null  ">
 		#{soreference2},
 	</if>
-	sysdate,
-	sysdate,
+	now(),
+	now(),
 	'1',
 	#{consigneename},
 	#{consigneename},
@@ -829,10 +831,12 @@ where 1=1
 	</if>
 	#{releasestatus},
 	#{warehouseid},
+	#{edisendflag},
+	#{archiveflag},
 	#{addwho},
-	sysdate,
+	now(),
 	#{addwho},
-	sysdate,
+	now(),
 	#{editwho}
 	)
 </insert>
@@ -873,7 +877,7 @@ where 1=1
 	<if test="userdefine6 != null  ">
 		userdefine6=#{userdefine6},
 	</if>
-	edittime=sysdate,
+	edittime=now(),
 	editwho=#{editwho}
 	where orderno=#{orderno,jdbcType=VARCHAR}
 </update>
@@ -1484,7 +1488,9 @@ where 1=1
 			<include refid = "Base_Column_List" />
 	        from Doc_Order_Header
 	        <include refid = "Example_Where_Clause" />) a,
-	       Doc_Order_Details b
+	       Doc_Order_Details b,
+		   (select @row_num := 1) x,
+		   (select @prev_value := '') y
 	 where a.orderno = b.orderno
 </select>
 

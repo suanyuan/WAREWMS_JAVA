@@ -19,6 +19,25 @@ import com.wms.vo.DocOrderHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocOrderHeaderForm;
 import com.wms.vo.form.pda.PageForm;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import com.wms.constant.Constant;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.krysalis.barcode4j.BarcodeException;
@@ -111,6 +130,8 @@ public class DocOrderHeaderService extends BaseService {
 			DocOrderHeader docOrderHeader = new DocOrderHeader();
 			BeanUtils.copyProperties(docOrderHeaderForm, docOrderHeader);
 			docOrderHeader.setOrderno(resultNo);
+			docOrderHeader.setEdisendflag(Constant.CODE_YES_OR_NO);
+			docOrderHeader.setArchiveflag(docOrderHeaderForm.getSostatus());
 			docOrderHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			docOrderHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			docOrderHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

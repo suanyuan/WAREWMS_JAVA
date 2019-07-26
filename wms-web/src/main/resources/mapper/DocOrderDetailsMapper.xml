@@ -408,9 +408,9 @@ where 1=1
 		#{price},
 	</if>
 	0,
-	sysdate,
+	now(),
 	#{addwho},
-	sysdate,
+	now(),
 	#{editwho},
 	0,
 	'Y')
@@ -447,7 +447,7 @@ where 1=1
 	<if test="notes != null  ">
 		notes=#{notes},
 	</if>
-	edittime=sysdate,
+	edittime=now(),
 	editwho=#{editwho}
 	where orderno=#{orderno, jdbcType=VARCHAR}
 	and orderlineno=#{orderlineno, jdbcType=NUMERIC}
