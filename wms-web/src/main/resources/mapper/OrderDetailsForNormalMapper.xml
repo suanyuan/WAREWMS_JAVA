@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="OrderDetailsForNormalMap" type="com.wms.entity.order.OrderDetailsForNormal" >
+	<result column="customerId" property="customerId"/>
+	<result column="customerShortName" property="customerShortName"/>
+	<result column="orderNo" property="orderNo"/>
+	<result column="orderLineNo" property="orderLineNo"/>
+	<result column="lineStatus" property="lineStatus"/>
+	<result column="lineStatusName" property="lineStatusName"/>
+	<result column="sku" property="sku"/>
+	<result column="skuName" property="skuName"/>
+	<result column="skuEnglishName" property="skuEnglishName"/>
+	<result column="qtyPlaned" property="qtyPlaned"/>
+	<result column="qtyOrdered" property="qtyOrdered"/>
+	<result column="qtyAllocated" property="qtyAllocated"/>
+	<result column="qtyShipped" property="qtyShipped"/>
+	<result column="totalCubic" property="totalCubic"/>
+	<result column="totalGrossWeight" property="totalGrossWeight"/>
+	<result column="totalPrice" property="totalPrice"/>
+	<result column="pickZone" property="pickZone"/>
+	<result column="locationId" property="locationId"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="unit" property="unit"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="addwho" property="addwho"/>
+	<result column="addtime" property="addtime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edittime" property="edittime"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerId != null and condition.customerId != ''" >
+	    and customerid =  #{condition.customerId}
+	</if>
+	<if test="condition.orderNo != null and condition.orderNo != ''" >
+	    and orderno =  #{condition.orderNo}
+	</if>
+	<if test="condition.orderLineNo != null and condition.orderLineNo != ''" >
+	    and orderno =  #{condition.orderLineNo}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+</trim>
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	insert into Doc_Order_Details (
+	customerid,
+	orderno,
+	orderlineno,
+	linestatus,
+	sku,
+	<if test="lotnum != null  ">
+		lotnum,
+	</if>
+	<if test="pickZone != null  ">
+		pickzone,
+	</if>
+	<if test="locationId != null  ">
+		location,
+	</if>
+	<if test="lotatt01 != null  ">
+		lotatt01,
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02,
+	</if>
+	<if test="lotatt03 != null  ">
+		lotatt03,
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04,
+	</if>
+	qtyplaned,
+	qtyplaned_each,
+	qtyordered,
+	qtyordered_each,
+	qtysoftallocated,
+	qtysoftallocated_each,
+	qtyallocated,
+	qtyallocated_each,
+	qtypicked,
+	qtypicked_each,
+	qtyshipped,
+	qtyshipped_each,
+	<if test="totalGrossWeight != null  ">
+		grossweight,
+	</if>
+	<if test="totalCubic != null  ">
+		cubic,
+	</if>
+	<if test="totalPrice != null  ">
+		price,
+	</if>
+	addtime,
+	addwho,
+	edittime,
+	editwho)
+	values (
+	#{customerId},
+	#{orderNo},
+	#{orderLineNo},
+	'00',
+	#{sku},
+	<if test="lotnum != null  ">
+		#{lotnum},
+	</if>
+	<if test="pickZone != null  ">
+		#{pickZone},
+	</if>
+	<if test="locationId != null  ">
+		#{locationId},
+	</if>
+	<if test="lotatt01 != null  ">
+		to_char(#{lotatt01},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt02 != null  ">
+		to_char(#{lotatt02},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt03 != null  ">
+		to_char(#{lotatt03},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt04 != null  ">
+		#{lotatt04},
+	</if>
+	#{qtyOrdered},
+	#{qtyOrdered},
+	#{qtyOrdered},
+	#{qtyOrdered},
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	<if test="totalGrossWeight != null  ">
+		#{totalGrossWeight},
+	</if>
+	<if test="totalCubic != null  ">
+		#{totalCubic},
+	</if>
+	<if test="totalPrice != null  ">
+		#{totalPrice},
+	</if>
+	now(),
+	#{addwho},
+	now(),
+	#{editwho})
+</insert>
+
+<!-- 根据id，修改记录-->  
+<update id="update" parameterType="Object" >
+	update Doc_Order_Details
+	set sku = #{sku},
+	qtyordered = #{qtyOrdered},
+	qtyordered_each = #{qtyOrdered},
+	<if test="totalGrossWeight != null  ">
+		grossweight = #{totalGrossWeight},
+	</if>
+	<if test="totalCubic != null  ">
+		cubic = #{totalCubic},
+	</if>
+	<if test="totalPrice != null  ">
+		price = #{totalPrice},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum = #{lotnum},
+	</if>
+	<if test="pickZone != null  ">
+		pickzone = #{pickZone},
+	</if>
+	<if test="locationId != null  ">
+		location = #{locationId},
+	</if>
+	<if test="lotatt01 != null  ">
+		lotatt01 = to_char(#{lotatt01},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02 = to_char(#{lotatt02},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt03 != null  ">
+		lotatt03 = to_char(#{lotatt03},'yyyy-mm-dd'),
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04 = #{lotatt04},
+	</if>
+	edittime = now(),
+	editwho = #{editwho}
+	where orderno = #{orderNo, jdbcType=VARCHAR}
+	and orderlineno = #{orderLineNo, jdbcType=NUMERIC}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from Doc_Order_Details where orderno = #{orderNo, jdbcType=VARCHAR} and orderlineno = #{orderLineNo, jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 订单明细 -->
+<select id="queryById"  resultMap="OrderDetailsForNormalMap" parameterType="Object">
+	select  customerid as customerId,
+	orderno as orderNo,
+	orderlineno as orderLineNo,
+	linestatus as lineStatus,
+	sku as sku,
+	qtyplaned as qtyPlaned,
+	qtyordered as qtyOrdered,
+	qtyallocated as qtyAllocated,
+	qtyshipped as qtyShipped,
+	cubic as totalCubic,
+	grossweight as totalGrossWeight,
+	price as totalPrice,
+	pickzone as pickZone,
+	location as locationId,
+	lotnum as lotnum,
+	to_date(lotatt01,'yyyy/mm/dd') as lotatt01,
+	to_date(lotatt02,'yyyy/mm/dd') as lotatt02,
+	to_date(lotatt03,'yyyy/mm/dd') as lotatt03,
+	lotatt04 as lotatt04,
+	addwho,
+	addtime,
+	editwho,
+	edittime
+	from Doc_Order_Details
+	where orderno=#{orderNo, jdbcType=VARCHAR}
+	and orderlineno=#{orderLineNo, jdbcType=NUMERIC}
+</select>
+
+<!-- 订单明细 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from Doc_Order_Details where orderno = #{condition.orderNo,jdbcType=VARCHAR}
+</select>
+  	
+<!-- 查询订单明细列表 -->
+<select id="queryByPageList" resultMap="OrderDetailsForNormalMap"  parameterType="Object">
+	select a.customerid as customerId,
+	b.h_edi_01 as customerShortName,
+	a.orderno as orderNo,
+	a.orderlineno as orderLineNo,
+	a.linestatus as lineStatus,
+	c.codename_c as lineStatusName,
+	a.sku as sku,
+	d.descr_c as skuName,
+	d.descr_e as skuEnglishName,
+	qtyplaned as qtyPlaned,
+	qtyordered as qtyOrdered,
+	qtyallocated as qtyAllocated,
+	qtyshipped as qtyShipped,
+	a.cubic as totalCubic,
+	a.grossweight as totalGrossWeight,
+	a.price as totalPrice,
+	a.pickzone as pickZone,
+	a.location as locationId,
+	a.lotnum as lotnum,
+	a.lotatt01 as lotatt01,
+	a.lotatt02 as lotatt02,
+	a.lotatt03 as lotatt03,
+	a.lotatt04 as lotatt04,
+	d.unit as unit,
+	a.addwho as addwho,
+	a.addtime as addtime,
+	a.editwho as editwho,
+	a.edittime as edittime
+	from (select customerid,
+	orderno,
+	orderlineno,
+	linestatus,
+	sku,
+	qtyplaned,
+	qtyordered,
+	qtyallocated,
+	qtyshipped,
+	cubic,
+	grossweight,
+	price,
+	pickzone,
+	location,
+	lotnum,
+	to_date(lotatt01,'yyyy/mm/dd') as lotatt01,
+	to_date(lotatt02,'yyyy/mm/dd') as lotatt02,
+	to_date(lotatt03,'yyyy/mm/dd') as lotatt03,
+	lotatt04,
+	addwho,
+	addtime,
+	editwho,
+	edittime,
+	row_number() over(order by orderlineno) as row_num
+	from Doc_Order_Details
+	where orderno = #{condition.orderNo,jdbcType=VARCHAR}
+	) a, Bas_Customer b, Bas_Codes c, Bas_Sku d
+	where a.customerid = b.customerid
+	and a.linestatus = c.code
+	and c.codeid = 'SO_STS'
+	and a.customerid = d.customerid
+	and a.sku = d.sku
+	order by a.orderlineno
+</select>
+
+<!--订单明细行号-->
+<select id="getOrderLineNoById" resultType="java.lang.Integer"  parameterType="Object">
+	select nvl(max(orderLineno),0) from Doc_Order_Details where orderno = #{orderNo,jdbcType=VARCHAR}
+</select>
+
+<!--按订单分配 -->
+<select id="allocationByOrderLine" statementType="CALLABLE" parameterType="java.util.Map">
+	{call SPSO_HardAllocation_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'Allocation','By OrderNO + OrderLineNO','',#{orderNo,mode=IN,jdbcType=VARCHAR},#{orderLineNo,mode=IN,jdbcType=INTEGER},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+
+<!--按订单取消分配 -->
+<select id="deAllocationByOrderLine" statementType="CALLABLE" parameterType="java.util.Map">
+	{call SPSO_DEAllocation_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'UnAllocation','By OrderNO + OrderLineNO','',#{orderNo,mode=IN,jdbcType=VARCHAR},#{orderLineNo,mode=IN,jdbcType=INTEGER},'','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</select>
+  	
+</mapper>   

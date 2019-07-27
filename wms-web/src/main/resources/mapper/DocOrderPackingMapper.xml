@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocOrderPackingMybatisDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocOrderPacking" >
+	<result column="traceId" property="traceId"/>
+	<result column="orderNo" property="orderNo"/>
+	<result column="orderCode" property="orderCode"/>
+	<result column="cartonNo" property="cartonNo"/>
+	<result column="sku" property="sku"/>
+	<result column="skuName" property="skuName"/>
+	<result column="scanQty" property="scanQty"/>
+	<result column="allocationQty" property="allocationQty"/>
+	<result column="allocationDetailsId" property="allocationDetailsId"/>
+	<result column="merchantName" property="merchantName"/>
+	<result column="custStore" property="custStore"/>
+	<result column="name" property="name"/>
+	<result column="address" property="address"/>
+	<result column="requiredDeliveryTime" property="requiredDeliveryTime"/>
+	<result column="cartonQty" property="cartonQty"/>
+	<result column="grossWeight" property="grossWeight"/>
+	<result column="cube" property="cube"/>
+</resultMap>
+<!-- Result Map-->
+<resultMap id="PackingResultMap" type="com.wms.entity.DocOrderPacking" >
+	<result column="traceId" property="traceId"/>
+	<result column="orderNo" property="orderNo"/>
+	<result column="cartonNo" property="cartonNo"/>
+	<result column="grossWeight" property="grossWeight"/>
+	<result column="cube" property="cube"/>
+</resultMap>
+<!-- Result Map-->
+<resultMap id="PackingListMap" type="com.wms.entity.order.OrderHeaderForNormal" >
+	<result column="orderNo" property="orderNo"/>
+	<result column="orderCode" property="orderCode"/>
+	<result column="customerShortName" property="customerShortName"/>
+	<result column="consigneeName" property="consigneeName"/>
+	<result column="tel" property="tel"/>
+	<result column="address" property="address"/>
+	<result column="boxQty" property="boxQty"/>
+	<result column="totalQty" property="totalQty"/>
+	<collection property="docOrderPackingList" javaType="java.util.List" ofType="com.wms.entity.DocOrderPacking">
+		<result column="traceId" property="traceId"/>
+		<result column="sku" property="sku"/>
+		<result column="skuName" property="skuName"/>
+		<result column="unit" property="unit"/>
+		<result column="scanQty" property="scanQty"/>
+	</collection>
+</resultMap>
+
+<!--插入装箱信息-->
+<insert id="packingCartonInfoInsert" parameterType="Object" >
+	insert into Doc_Order_Packing_Carton_Info (
+	orderno,
+	traceid,
+	cartonno,
+	addtime,
+	addwho)
+	values (
+	#{orderNo,jdbcType=VARCHAR},
+	#{traceId,jdbcType=VARCHAR},
+	#{cartonNo,jdbcType=INTEGER},
+	now(),
+	#{addwho,jdbcType=VARCHAR})
+</insert>
+
+<!--插入装箱明细-->
+<insert id="packingCartonInsert" parameterType="Object" >
+	insert into Doc_Order_Packing_Carton (
+	orderno,
+	traceid,
+	cartonno,
+	sku,
+	qty,
+	allocationdetailsid,
+	addtime,
+	addwho)
+	values (
+	#{orderNo,jdbcType=VARCHAR},
+	#{traceId,jdbcType=VARCHAR},
+	#{cartonNo,jdbcType=INTEGER},
+	#{sku,jdbcType=VARCHAR},
+	#{scanQty,jdbcType=INTEGER},
+	#{allocationDetailsId,jdbcType=VARCHAR},
+	now(),
+	#{addwho,jdbcType=VARCHAR})
+</insert>
+
+<!--记录单箱装箱重量、体积-->
+<update id="packingCartonInfoUpdate" parameterType="Object" >
+	update Doc_Order_Packing_Carton_Info
+	set grossweight = #{grossWeight,jdbcType=DOUBLE},
+	cube = #{cube,jdbcType=DOUBLE},
+	packingflag = 'Y'
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+</update>
+
+<!--记录整单装箱重量、体积-->
+<update id="orderCartonInfoUpdate" parameterType="Object" >
+	update Doc_Order_Header
+	set h_edi_09 = (select count(*) from Doc_Order_Packing_Carton_Info where orderno = #{orderNo,jdbcType=VARCHAR}),
+	h_edi_11 = #{grossWeight,jdbcType=DOUBLE},
+	h_edi_12 = #{cube,jdbcType=DOUBLE},
+	rfgettask = 'Y'
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+</update>
+
+<!--更新装箱数量-->
+<update id="packingCartonUpdate" parameterType="Object" >
+	update Doc_Order_Packing_Carton
+	set qty = qty + #{scanQty,jdbcType=INTEGER}
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+	and sku = #{sku,jdbcType=VARCHAR}
+	and allocationdetailsid = #{allocationDetailsId,jdbcType=VARCHAR}
+</update>
+
+<!--更新复核标记（取消复核）-->
+<update id="packingCartonFlagUpdate" parameterType="Object" >
+	update Doc_Order_Header
+	set h_edi_11 = null,
+	h_edi_12 = null,
+	rfgettask = 'N'
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+</update>
+
+<!--删除单件装箱记录-->
+<update id="packingSingleDelete" parameterType="Object" >
+	update Doc_Order_Packing_Carton
+	set qty = qty - 1
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+	and sku = #{sku,jdbcType=VARCHAR}
+	and allocationdetailsid = #{allocationDetailsId,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除整行装箱记录 -->
+<delete id="packingSkuDelete" parameterType="Object">
+	delete from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+	and sku = #{sku,jdbcType=VARCHAR}
+	and allocationdetailsid = #{allocationDetailsId,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除整箱记录 -->
+<delete id="packingCartonDelete" parameterType="Object">
+	delete from Doc_Order_Packing_Carton where orderno = #{orderNo,jdbcType=VARCHAR}
+	<if test="cartonNo != null" >
+		and cartonno =  #{cartonNo,jdbcType=INTEGER}
+	</if>
+</delete>
+
+<!-- 删除箱号记录 -->
+<delete id="packingCartonInfoDelete" parameterType="Object">
+	delete from Doc_Order_Packing_Carton_Info where orderno = #{orderNo,jdbcType=VARCHAR}
+	<if test="cartonNo != null" >
+		and cartonno =  #{cartonNo,jdbcType=INTEGER}
+	</if>
+</delete>
+
+<!-- 包装复核 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1)
+	from Doc_Order_Packing_Carton a, Doc_Order_Header b 
+	where a.orderno = b.orderno
+	<if test="condition.orderNo != null and condition.orderNo != ''" >
+		and a.orderno =  #{condition.orderNo}
+	</if>
+	<if test="condition.orderCode != null and condition.orderCode != ''" >
+		and b.soreference1 =  #{condition.orderCode}
+	</if>
+	<if test="condition.cartonNo != null" >
+		and a.cartonno =  #{condition.cartonNo}
+	</if>
+</select>
+  	
+<!-- 查询包装复核列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select cartonno as cartonNo,
+	orderno as orderNo,
+	soreference1 as orderCode,
+	sku as sku,
+	descr_c as skuName,
+	qty as scanQty,
+	grossweight as grossWeight,
+	cube as cube
+	from (select c.customerid,
+	a.orderno,
+	c.soreference1,
+	a.cartonno,
+	a.sku,
+	d.descr_c,
+	a.qty,
+	b.grossweight,
+	b.cube,
+	row_number() over(order by a.cartonno, a.sku) as row_num
+	from (select orderno, cartonno, sku, sum(qty) as qty
+	from Doc_Order_Packing_Carton
+	where 1 = 1
+	<if test="condition.orderNo != null and condition.orderNo != ''" >
+		and orderno =  #{condition.orderNo}
+	</if>
+	<if test="condition.cartonNo != null and condition.cartonNo != ''" >
+		and cartonno =  #{condition.cartonNo}
+	</if>
+	group by orderno, cartonno, sku) a,
+	Doc_Order_Packing_Carton_Info b,
+	Doc_Order_Header c,
+	Bas_Sku d
+	where a.orderno = b.orderno
+	and a.cartonno = b.cartonno
+	and a.orderno = c.orderno
+	and c.customerid = d.customerid
+	and a.sku = d.sku
+	)
+	where 1 = 1
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
+	order by orderno desc, cartonno desc, sku
+</select>
+
+<!--查询订单对应箱数-->
+<select id="queryCartonNoById" resultMap="BaseResultMap" parameterType="Object">
+	select cartonno as cartonNo
+	from (select a.cartonno
+	from (select level as cartonno from dual connect by <![CDATA[ level <= 1000 ]]>) a,
+	(select cartonno
+	from Doc_Order_Packing_Carton_Info
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and packingflag = 'Y') b
+	where a.cartonno = b.cartonno(+)
+	and b.cartonno is null
+	order by cartonno)
+	where rownum = 1
+</select>
+
+<!--判断箱号是否存在-->
+<select id="queryCartonInfoCountById" resultType="java.lang.Integer" parameterType="Object">
+	select count(*)
+	from Doc_Order_Packing_Carton_Info
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+</select>
+
+<!--查询订单装箱信息-->
+<select id="queryCartonInfoById" resultMap="PackingListMap" parameterType="Object">
+	select c.orderNo,
+	c.orderCode,
+	c.boxQty,
+	d.traceid as traceId
+	from (
+	select a.orderno as orderNo,
+	a.soreference1 as orderCode, 
+	count(*) as boxQty
+	from Doc_Order_Header a,
+	Doc_Order_Packing_Carton_Info b
+	where a.orderno = b.orderno
+	and a.orderno = #{orderNo,jdbcType=VARCHAR}
+	group by a.orderno, a.soreference1) c,
+	Doc_Order_Packing_Carton_Info d
+	where c.orderno = d.orderno
+	order by d.traceid
+</select>
+
+<!--扫描产品判断-->
+<select id="checkSkuById" resultMap="BaseResultMap" parameterType="Object">
+	select a.sku, b.descr_c as skuName
+	from (select distinct customerid, sku
+	from Act_Allocation_Details
+	where orderno = #{orderNo,jdbcType=VARCHAR}) a,
+	Bas_Sku b
+	where a.customerid = b.customerid
+	and a.sku = b.sku
+	and (b.sku = #{skuCode,jdbcType=VARCHAR}
+	or b.alternate_sku1 = #{skuCode,jdbcType=VARCHAR}
+	or b.alternate_sku2 = #{skuCode,jdbcType=VARCHAR}
+	or b.alternate_sku3 = #{skuCode,jdbcType=VARCHAR})
+</select>
+
+<!--扫描产品判断-->
+<select id="checkCountById" resultType="java.lang.Integer" parameterType="Object">
+	select count(*)
+	from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and cartonno = #{cartonNo,jdbcType=INTEGER}
+	and sku = #{sku,jdbcType=VARCHAR}
+	and allocationdetailsid = #{allocationDetailsId,jdbcType=VARCHAR}
+</select>
+
+<!--扫描数量判断-->
+<select id="checkQtyById" resultMap="BaseResultMap" parameterType="Object">
+	<![CDATA[
+	select a.orderno as orderNo,
+	a.sku as sku,
+	c.descr_c as skuName,
+	a.qty as allocationQty,
+	nvl(b.qty,0) as scanQty
+	from (select customerid, orderno, sku, sum(qty) qty
+	from Act_Allocation_Details
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
+	group by customerid, orderno, sku) a,
+	(select orderno, sku, sum(qty) qty
+	from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
+	group by orderno, sku) b,
+	Bas_Sku c
+	where a.orderno = b.orderno(+)
+	and a.sku = b.sku(+)
+	and a.customerid = c.customerid
+	and a.sku = c.sku
+	and a.qty >= nvl(b.qty, 0) + #{qty,jdbcType=NUMERIC}
+	]]>
+</select>
+
+<!--复核完成时装箱校验-->
+<select id="checkPackingCommitById" resultMap="BaseResultMap" parameterType="Object">
+	select orderno as orderNo,
+	cartonno as cartonNo
+	from Doc_Order_Packing_Carton_Info
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and packingflag is null
+</select>
+
+<!--复核完成时装箱数量校验-->
+<select id="checkOrderCommitById" resultMap="BaseResultMap" parameterType="Object">
+	select a.sku as sku,
+	c.descr_c as skuName
+	from (select customerid, orderno, sku, sum(qtyallocated) as allocationqty
+	from Doc_Order_Details
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	group by customerid, orderno, sku) a,
+	(select orderno, sku, sum(qty) as scanqty
+	from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	group by orderno, sku) b,
+	Bas_Sku c
+	where a.orderno = b.orderno(+)
+	and a.sku = b.sku(+)
+	and a.customerid = c.customerid
+	and a.sku = c.sku
+	<![CDATA[ and a.allocationqty <> nvl(b.scanqty,0) ]]>
+</select>
+ 
+<!--查询包装复核数据-->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select a.sku,
+	b.descr_c as skuName,
+	a.allocationQty,
+	c.qty as scanQty
+	from (select customerid,
+	orderno, sku, sum(qty) as allocationQty
+	from Act_Allocation_Details
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
+	group by customerid, orderno, sku) a,
+	Bas_Sku b,
+	(select orderno, sku, sum(qty) qty
+	from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
+	group by orderno, sku) c
+	where a.customerid = b.customerid
+	and a.sku = b.sku
+	and a.orderno = c.orderno(+)
+	and a.sku = c.sku(+)
+</select>
+ 
+<!--查询待包装复核数据-->
+<select id="queryPackingById"  resultMap="BaseResultMap" parameterType="Object">
+	select a.orderno as orderNo,
+	a.sku as sku,
+	c.descr_c as skuName,
+	a.qty as allocationQty,
+	nvl(b.qty,0) as scanQty,
+	a.allocationdetailsid as allocationDetailsId
+	from (select customerid, orderno, allocationdetailsid, sku, sum(qty) qty
+	  from Act_Allocation_Details
+	  where orderno = #{orderNo,jdbcType=VARCHAR}
+	  and sku = #{sku,jdbcType=VARCHAR}
+	  group by customerid, orderno, allocationdetailsid, sku) a,
+	(select orderno, allocationdetailsid, sku, sum(qty) qty
+	from Doc_Order_Packing_Carton
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
+	group by orderno, allocationdetailsid, sku) b,
+	Bas_Sku c
+	where a.orderno = b.orderno(+)
+	and a.allocationdetailsid = b.allocationdetailsid(+)
+	and a.sku = b.sku(+)
+	and a.customerid = c.customerid
+	and a.sku = c.sku
+	and a.qty > nvl(b.qty, 0)
+	order by a.allocationdetailsid
+</select>
+ 
+<!--按产品档案计算装箱重量、体积-->
+<select id="queryPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
+	select a.orderno as orderNo,
+	a.cartonno as cartonNo,
+	sum(a.qty * nvl(c.grossweight, 0)) as grossWeight,
+	sum(a.qty * nvl(c.cube, 0)) as cube
+	from Doc_Order_Packing_Carton a,
+	Doc_Order_Header b,
+	Bas_Sku c
+	where a.orderno = b.orderno
+	and b.customerid = c.customerid
+	and a.sku = c.sku
+	and a.orderno = #{orderNo,jdbcType=VARCHAR}
+	and a.cartonno = #{cartonNo,jdbcType=INTEGER}
+	group by a.orderno, a.cartonno
+</select>
+ 
+<!--按已装箱数据合计重量、体积-->
+<select id="queryOrderPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
+	select orderno as orderNo,
+	sum(nvl(grossweight, 0)) as grossWeight,
+	sum(nvl(cube, 0)) as cube
+	from Doc_Order_Packing_Carton_Info
+	where orderno = #{orderNo,jdbcType=VARCHAR}
+	group by orderno
+</select>
+ 
+<!--打印装箱标签数据-->
+<select id="queryPackingLabelById"  resultMap="BaseResultMap" parameterType="Object">
+	select a.traceid as traceId,
+	a.orderno as orderNo,
+	b.soreference1 as orderCode,
+	a.cartonno as cartonNo,
+	b.consigneename || '  ' || b.c_tel1 as name,
+	b.c_address1 as address, 
+	c.h_edi_01 as merchantName,
+	b.c_address4 as custStore,
+	b.carrieraddress1 as fenceName,
+	b.requireddeliverytime as requiredDeliveryTime,
+	(select count(*)
+	from Doc_Order_Packing_Carton_Info dop,
+	Doc_Order_Header doh
+	where dop.orderno = doh.orderno
+	<if test="orderNo != null and orderNo != ''" >
+		and dop.orderno = #{orderNo,jdbcType=VARCHAR}
+	</if>
+	<if test="orderCode != null and orderCode != ''" >
+		and doh.soreference1 =  #{orderCode,jdbcType=INTEGER}
+	</if>
+	) as cartonQty
+	from (select dop.orderno,
+	dop.traceid,
+	dop.cartonno
+	from Doc_Order_Packing_Carton_Info dop,
+	Doc_Order_Header doh
+	where dop.orderno = doh.orderno
+	<if test="orderNo != null and orderNo != ''" >
+		and dop.orderno = #{orderNo,jdbcType=VARCHAR}
+	</if>
+	<if test="orderCode != null and orderCode != ''" >
+		and doh.soreference1 =  #{orderCode,jdbcType=INTEGER}
+	</if>
+	<if test="cartonNo != null" >
+		and dop.cartonno =  #{cartonNo,jdbcType=INTEGER}
+	</if>
+	) a,
+	Doc_Order_Header b,
+	Bas_Customer c
+	where a.orderno = b.orderno
+	and b.customerid = c.customerid
+	order by a.cartonno
+</select>
+ 
+<!--打印装箱清单数据-->
+<select id="queryPackingListById"  resultMap="PackingListMap" parameterType="Object">
+	select a.orderno as orderNo,
+	a.soreference1 as orderCode,
+	c.h_edi_01 as customerShortName,
+	a.consigneename as consigneeName,
+	a.c_tel1 as tel, 
+	a.c_address1 as address,
+	(select count(*)
+	from Doc_Order_Packing_Carton_Info dop,
+	Doc_Order_Header doh
+	where dop.orderno = doh.orderno
+	<if test="orderNo != null and orderNo != ''" >
+		and dop.orderno = #{orderNo,jdbcType=VARCHAR}
+	</if>
+	<if test="orderCode != null and orderCode != ''" >
+		and doh.soreference1 =  #{orderCode,jdbcType=INTEGER}
+	</if>
+	) as boxQty,
+	(select sum(dop.qty)
+	from Doc_Order_Packing_Carton dop,
+	Doc_Order_Header doh
+	where dop.orderno = doh.orderno
+	<if test="orderNo != null and orderNo != ''" >
+		and dop.orderno = #{orderNo,jdbcType=VARCHAR}
+	</if>
+	<if test="orderCode != null and orderCode != ''" >
+		and doh.soreference1 =  #{orderCode,jdbcType=INTEGER}
+	</if>
+	) as totalQty,
+	b.traceid as traceId,
+	b.sku as sku,
+	d.descr_c as skuName,
+	d.unit as unit,
+	b.qty as scanQty
+	from Doc_Order_Header a, 
+	Doc_Order_Packing_Carton b,
+	Bas_Customer c,
+	Bas_Sku d
+	where a.orderno = b.orderno
+	and a.customerid = c.customerid
+	and a.customerid = d.customerid
+	and b.sku = d.sku
+	<if test="orderNo != null and orderNo != ''" >
+		and a.orderno = #{orderNo,jdbcType=VARCHAR}
+	</if>
+	<if test="orderCode != null and orderCode != ''" >
+		and a.soreference1 = #{orderCode,jdbcType=INTEGER}
+	</if>
+	order by b.cartonno, b.sku
+</select>
+
+</mapper>   

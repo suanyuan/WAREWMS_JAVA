@@ -1554,8 +1554,8 @@ var selectLocation = function(){
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='allocation();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
 					<a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelAllocation'/></a>
- 					<a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a> 
- 					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a> 
+ 					<!-- <a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
+ 					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a> -->
  					<a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> 
  					<a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a> 
 					<a onclick='cancel();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
