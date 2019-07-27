@@ -82,7 +82,7 @@ where 1=1
 	    and t1.client_id =  #{condition.clientId}
 	</if>
 	<if test="condition.supplierId != null and condition.supplierId != ''" >
-	    and t1.supplier_id =  #{condition.supplierId}
+	    and t1.supplier_id like CONCAT('%',#{condition.supplierId},'%')
 	</if>
 	<if test="condition.isCheck != null and condition.isCheck != ''" >
 	    and t1.is_check =  #{condition.isCheck}

@@ -32,7 +32,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -42,22 +42,22 @@ $(function() {
 		idField : 'id',
 		columns : [[
 
-			{field: 'supplierId',		title: '申请单号',	width: 96},
+			{field: 'supplierId',		title: '申请单号',	width: 130},
 			{field: 'enterpriseId',		title: '企业流水号',	width: 88 ,hidden:true},
 
 			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
 
             {field: 'firstState',		title: '首营状态',	width: 88 ,formatter:firstStateFormatter
 				},
-            {field: 'enterpriseNo',		title: '企业信息代码',	width: 88 },
-            {field: 'shorthandName',		title: '简称',	width: 88 },
-            {field: 'enterpriseName',		title: '企业名称',	width: 88 },
-            {field: 'clientTerm',		title: '合同期限',	width: 88 },
+            {field: 'enterpriseNo',		title: '企业信息代码',	width: 100	 },
+            {field: 'shorthandName',		title: '简称',	width: 100 },
+            {field: 'enterpriseName',		title: '企业名称',	width: 150 },
+            {field: 'clientTerm',		title: '合同期限',	width: 200 },
             {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
-            {field: 'createDate',		title: '创建时间',	width: 88 },
+            {field: 'createDate',		title: '创建时间',	width: 100 },
             {field: 'editId',		title: '编辑人',	width: 88 },
-            {field: 'editDate',		title: '编辑时间',	width: 88 },
+            {field: 'editDate',		title: '编辑时间',	width: 100 },
             {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isCheck == '1' ? '是' : '否';
                 }},
@@ -83,10 +83,12 @@ $(function() {
 	});
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
+        left:400,
+        width:450,
+        height:600,
         title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',
         href:dialogUrl,
-        fit:true,
         cache: false,
         onClose : function() {
             ezuiFormClear(ezuiForm);
