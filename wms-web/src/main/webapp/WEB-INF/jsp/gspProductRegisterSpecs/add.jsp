@@ -240,7 +240,7 @@
         })
     }
 
-    function choseSelect(id,name,address) {
+    function choseSelect(id,no,name,address) {
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
@@ -249,8 +249,8 @@
 
         $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
         $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
-        $("#productRegisterQuery").textbox("setValue",id);
-
+        $("#productRegisterQuery").textbox("setValue",no);
+        $("#productRegisterId").textbox("setValue",id);
         productionAddress
         // $.ajax({
         //     url : 'gspEnterpriseInfoController.do?getInfo',

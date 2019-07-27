@@ -7,8 +7,11 @@
 <script type='text/javascript'>
 
 
-
+var  ezuiDialog1;
 var enterpriseDialog;
+var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
+
+
 </script>
 <%--<c:import url='/WEB-INF/jsp/include/meta.jsp' />--%>
 <%--<c:import url='/WEB-INF/jsp/include/easyui.jsp' />--%>
@@ -23,6 +26,8 @@ var enterpriseDialog;
                 <input type='text' data="1" id='enterpriseIdQuery1'  name="enterpriseName" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
                 <input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewEnterpriseUrl()">查看</a>
+
             </td>
         </tr>
         <tr><th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='20' name="enterpriseNo" class='easyui-textbox' data-options='required:true,width:200' readonly/></td></tr>
@@ -129,6 +134,14 @@ var enterpriseDialog;
         </tr>
     </table>
 </form>
+<div id='ezuiDialogBtn1'>
+    <%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'>提交企业信息</a>--%>
+    <a onclick='ezuiDialogClose("#ezuiDialog1");' class='easyui-linkbutton' href='javascript:void(0);'>关闭</a>
+</div>
+<div id='ezuiDialog1' style='padding: 10px;'>
+
+</div>
+
 <div id='enterpriseDialog' style='padding: 10px;'>
 
 </div>
@@ -164,8 +177,9 @@ var enterpriseDialog;
 
                         })
                         //console.log(result.obj.enterpriseType);
-                        console.log(result.obj.contractUrl);
+                        console.log(result.obj.enterpriseId);
                         //$("#ezuiFormInfo input[id='createDate'][data='1']").textbox('setValue',result.obj.createDate);
+                        $("#enterpriseId").val(result.obj.enterpriseId);
                         $("#ezuiFormInfo input[id='editDate'][data='1']").textbox('setValue',result.obj.editDate);
                         $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
                         $("#contractUrl").val(result.obj.contractUrl);
@@ -234,6 +248,7 @@ var enterpriseDialog;
                     //$("#shorthandName").textbox("setValue",date.obj[""+$("#shorthandName").attr("id")+""]);
                     $("#ezuiFormInfo input[id='enterpriseNo'][data='1']").textbox('setValue',date.obj.enterpriseNo);
                     $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
+
                     //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
                     $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
 
@@ -317,6 +332,41 @@ var enterpriseDialog;
             }
         }
     }
+
+
+
+    function viewEnterpriseUrl() {
+        $(function() {
+            ezuiDialog1 = $('#ezuiDialog1').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:dialogUrl,
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiForm);
+                }
+            }).dialog('close');
+        })
+        processType = 'edit';
+
+            //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#enterpriseId").val());
+        var enterpriseId = $("#enterpriseId").val();
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+
+    }
+
+
 
 
     function onChangeDate() {
