@@ -46,7 +46,7 @@ public class PdaPackageController {
     }
 
     /**
-     * 获取出库任务单header信息
+     * 获取出库任务单header信息,for pda 包装复核任务列表，任务状态区间
      * @param orderno 出库任务单号
      * @return header信息
      */
@@ -56,17 +56,26 @@ public class PdaPackageController {
 
         Map<String, Object> resultMap = new HashMap<>();
 
-//        OrderHeaderForNormalVO headerVO = orderHeaderForNormalService.queryByOrderno(orderno);
-//        if (headerVO == null || headerVO.getOrderNo() == null) {
-//
-//            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无出库单头档数据"));
-//            return resultMap;
-//        }else if (headerVO.getOrderStatus())
-//
-//        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
-//        resultMap.put(Constant.DATA, headerVO);
-//        resultMap.put(Constant.RESULT, result);
-        return resultMap;
+        OrderHeaderForNormalVO headerVO = orderHeaderForNormalService.queryByOrderno(orderno);
+        if (headerVO == null || headerVO.getOrderNo() == null) {
+
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无出库单头档数据"));
+            return resultMap;
+        }
+        switch (headerVO.getOrderStatus()) {
+            case "60":
+            case "62":
+                PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
+                resultMap.put(Constant.DATA, headerVO);
+                resultMap.put(Constant.RESULT, result);
+                return resultMap;
+            case "63":
+                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单已完全装箱"));
+                return resultMap;
+                default:
+                    resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单不处于包装复核阶段"));
+                    return resultMap;
+        }
     }
 
 //    @RequestMapping(params = "docOrderDetail", method = RequestMethod.GET)
