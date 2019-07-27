@@ -296,7 +296,7 @@
 </select>
   	
 <!--查询订单列表-->
-<select id="queryByPageList" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
+<!--<select id="queryByPageList" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
 	select a.customerid as customerId,
 	b.h_edi_01 as customerShortName,
 	a.orderno as orderNo,
@@ -370,6 +370,7 @@
     </if>
     order by c.show_sequence, a.ordertime desc
 </select>
+-->
 
 <!--拣货单列表-->
 <select id="queryByPickingList" resultMap="PickingMap"  parameterType="Object">

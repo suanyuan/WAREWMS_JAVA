@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.vo.form.pda.PageForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -73,6 +74,23 @@ public class DocOrderPackingService extends BaseService {
 		datagrid.setRows(docOrderPackingVOList);
 		return datagrid;
 	}
+
+	public List<DocOrderPackingVO> getUndoneList(PageForm form) {
+
+	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+	    mybatisCriteria.setCurrentPage(form.getPageNum());
+	    mybatisCriteria.setPageSize(form.getPageSize());
+	    List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryByList(mybatisCriteria);
+	    DocOrderPackingVO docOrderPackingVO;
+	    List<DocOrderPackingVO> docOrderPackingVOList = new ArrayList<>();
+	    for (DocOrderPacking docOrderPacking : docOrderPackingList) {
+
+	        docOrderPackingVO = new DocOrderPackingVO();
+	        BeanUtils.copyProperties(docOrderPacking, docOrderPackingVO);
+	        docOrderPackingVOList.add(docOrderPackingVO);
+        }
+        return docOrderPackingVOList;
+    }
 
 	public Json orderStatusCheck(String orderNo) {
 		Json json = new Json();

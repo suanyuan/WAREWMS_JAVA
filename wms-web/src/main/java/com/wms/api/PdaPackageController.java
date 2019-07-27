@@ -7,6 +7,9 @@ import com.wms.constant.Constant;
 //import com.wms.service.DocOrderHeaderService;
 //import com.wms.service.DocOrderPackingService;
 //import com.wms.vo.DocOrderHeaderVO;
+import com.wms.result.PdaResult;
+import com.wms.service.DocOrderPackingService;
+import com.wms.vo.DocOrderPackingVO;
 import com.wms.vo.form.pda.PageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,32 +25,26 @@ import java.util.Map;
 @RequestMapping("mPackage")
 public class PdaPackageController {
 
-//    @Autowired
-//    private DocOrderHeaderService docOrderHeaderService;
-//
-//    @Autowired
-//    private DocOrderDetailService docOrderDetailService;
-//
-//    @Autowired
-//    private DocOrderPackingService docOrderPackingService;
-//
-//    /**
-//     * 获取出库任务列表
-//     * @param form 分页
-//     * @return ~
-//     */
-//    @RequestMapping(params = "undoneList", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Map<String, Object> queryUndoneList(PageForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        List<DocOrderHeaderVO> pdaDocQcHeaderVOS = docOrderHeaderService.getUndoneList(form);
-//
-//        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
-//        resultMap.put(Constant.DATA, pdaDocQcHeaderVOS);
-//        resultMap.put(Constant.RESULT, result);
-//        return resultMap;
-//    }
+    @Autowired
+    private DocOrderPackingService docOrderPackingService;
+
+    /**
+     * 获取包装复核任务列表
+     * @param form 分页
+     * @return ~
+     */
+    @RequestMapping(params = "undoneList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryUndoneList(PageForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<DocOrderPackingVO> docOrderPackingVOList = docOrderPackingService.getUndoneList(form);
+
+        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
+        resultMap.put(Constant.DATA, docOrderPackingVOList);
+        resultMap.put(Constant.RESULT, result);
+        return resultMap;
+    }
 //
 //    /**
 //     * 获取出库任务单header信息
