@@ -143,7 +143,7 @@ public class DocOrderPackingService extends BaseService {
 		DocOrderPackingQuery docOrderPackingQuery = new DocOrderPackingQuery();
 		docOrderPackingQuery.setOrderNo(orderNo);
 		docOrderPackingQuery.setCartonNo(cartonNo);
-		docOrderPackingQuery.setSkuCode(skuCode);;
+		docOrderPackingQuery.setSkuCode(skuCode);
 		//产品信息校验
 		List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.checkSkuById(docOrderPackingQuery);
 		if (docOrderPackingList.size() == 0) {

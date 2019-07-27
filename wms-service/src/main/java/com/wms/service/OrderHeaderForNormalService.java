@@ -16,16 +16,12 @@ import com.wms.utils.*;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
-import org.apache.avalon.framework.configuration.ConfigurationException;
+import com.wms.vo.form.pda.PageForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.xml.sax.SAXException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -795,5 +791,38 @@ public class OrderHeaderForNormalService extends BaseService {
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query);
 		return orderHeaderForNormal;
 	}
+
+	public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
+
+	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+	    mybatisCriteria.setCurrentPage(form.getPageNum());
+	    mybatisCriteria.setPageSize(form.getPageSize());
+	    List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+
+	    OrderHeaderForNormalVO orderHeaderForNormalVO;
+	    List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();
+
+	    for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormals) {
+
+            orderHeaderForNormalVO = new OrderHeaderForNormalVO();
+	        BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
+	        orderHeaderForNormalVOS.add(orderHeaderForNormalVO);
+        }
+
+        return orderHeaderForNormalVOS;
+    }
+
+    public OrderHeaderForNormalVO queryByOrderno(String orderno) {
+
+	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+	    OrderHeaderForNormalVO headerVO = new OrderHeaderForNormalVO();
+
+	    if (orderHeaderForNormal != null) {
+
+	        BeanUtils.copyProperties(orderHeaderForNormal, headerVO);
+        }
+
+        return headerVO;
+    }
 
 }

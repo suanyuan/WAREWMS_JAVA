@@ -134,8 +134,8 @@ where 1=1
  
 <!-- 根据id查询 字典信息 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from bas_codes where codeid = #{codeid}
+	select <include refid="Base_Column_List" />
+	 from bas_codes where codeid = #{codeid} and code = #{code}
 </select>
 
 <!-- 字典信息 列表总数-->
