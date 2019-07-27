@@ -601,13 +601,13 @@ public class OrderHeaderForNormalService extends BaseService {
 					form.setField("notes", orderHeaderForNormal.getNotes() == null ? "" : orderHeaderForNormal.getNotes());
 					for(int j = 0 ; j < row ; j++){
 						if(totalNum > (row * i + j)){
-							form.setField("seq"+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderLineNo()));
+							form.setField("seq"+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderlineno()));
 							form.setField("sku"+(j+1), detailsList.get(row * i + j).getSku());
-							form.setField("skuName"+(j+1), detailsList.get(row * i + j).getSkuName());
+//							form.setField("skuName"+(j+1), detailsList.get(row * i + j).getSkuName());
 							form.setField("packId"+(j+1), "");
-							form.setField("uom"+(j+1), detailsList.get(row * i + j).getUnit() == null ? "" : detailsList.get(row * i + j).getUnit());
-							form.setField("qtyallocated"+(j+1), String.valueOf(detailsList.get(row * i + j).getQtyAllocated()));
-							form.setField("locationid"+(j+1), detailsList.get(row * i + j).getLocationId());
+							form.setField("uom"+(j+1), detailsList.get(row * i + j).getUom() == null ? "" : detailsList.get(row * i + j).getUom());
+							form.setField("qtyallocated"+(j+1), String.valueOf(detailsList.get(row * i + j).getQtyallocated()));
+							form.setField("locationid"+(j+1), detailsList.get(row * i + j).getLocation());
 							form.setField("lotatt01"+(j+1), detailsList.get(row * i + j).getLotatt01() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt01()));
 							form.setField("lotatt02"+(j+1), detailsList.get(row * i + j).getLotatt02() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt02()));
 							form.setField("lotatt03"+(j+1), detailsList.get(row * i + j).getLotatt03() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt03()));

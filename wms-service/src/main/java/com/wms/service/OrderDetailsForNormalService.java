@@ -55,12 +55,12 @@ public class OrderDetailsForNormalService extends BaseService {
 	public Json add(OrderDetailsForNormalForm orderDetailsForNormalForm) throws Exception {
 		Json json = new Json();
 		OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-		orderDetailsForNormalQuery.setOrderNo(orderDetailsForNormalForm.getOrderNo());
+		orderDetailsForNormalQuery.setOrderno(orderDetailsForNormalForm.getOrderno());
 		/*获取新的订单明细行号*/
 		int orderLineNo = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
 		OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
 		BeanUtils.copyProperties(orderDetailsForNormalForm, orderDetailsForNormal);
-		orderDetailsForNormal.setOrderLineNo(orderLineNo + 1);
+		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		orderDetailsForNormalMybatisDao.add(orderDetailsForNormal);
@@ -72,8 +72,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	public Json edit(OrderDetailsForNormalForm orderDetailsForNormalForm) {
 		Json json = new Json();
 		OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-		orderDetailsForNormalQuery.setOrderNo(orderDetailsForNormalForm.getOrderNo());
-		orderDetailsForNormalQuery.setOrderLineNo(orderDetailsForNormalForm.getOrderLineNo());
+		orderDetailsForNormalQuery.setOrderno(orderDetailsForNormalForm.getOrderno());
+		orderDetailsForNormalQuery.setOrderlineno(orderDetailsForNormalForm.getOrderlineno());
 		OrderDetailsForNormal orderDetailsForNormal = orderDetailsForNormalMybatisDao.queryById(orderDetailsForNormalQuery);
 		BeanUtils.copyProperties(orderDetailsForNormalForm, orderDetailsForNormal);
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -86,8 +86,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	public Json delete(String orderNo, int orderLineNo) {
 		Json json = new Json();
 		OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-		orderDetailsForNormalQuery.setOrderNo(orderNo);
-		orderDetailsForNormalQuery.setOrderLineNo(orderLineNo);
+		orderDetailsForNormalQuery.setOrderno(orderNo);
+		orderDetailsForNormalQuery.setOrderlineno((double) orderLineNo);
 		OrderDetailsForNormal orderDetailsForNormal = orderDetailsForNormalMybatisDao.queryById(orderDetailsForNormalQuery);
 		if(orderDetailsForNormal != null){
 			orderDetailsForNormalMybatisDao.delete(orderDetailsForNormal);
@@ -105,13 +105,13 @@ public class OrderDetailsForNormalService extends BaseService {
 			String[] orderLineNoArray = orderLineNoList.split(",");
 			for (String orderLineNo : orderLineNoArray) {
 				OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-				orderDetailsForNormalQuery.setOrderNo(orderNo);
-				orderDetailsForNormalQuery.setOrderLineNo(Integer.valueOf(orderLineNo));
+				orderDetailsForNormalQuery.setOrderno(orderNo);
+				orderDetailsForNormalQuery.setOrderlineno(Double.valueOf(orderLineNo));
 				OrderDetailsForNormal orderDetailsForNormal = orderDetailsForNormalMybatisDao.queryById(orderDetailsForNormalQuery);
 				if (orderDetailsForNormal != null) {
-					if (orderDetailsForNormal.getLineStatus().equals("00") ||
-						orderDetailsForNormal.getLineStatus().equals("30") ||
-						orderDetailsForNormal.getLineStatus().equals("40")) {
+					if (orderDetailsForNormal.getLinestatus().equals("00") ||
+						orderDetailsForNormal.getLinestatus().equals("30") ||
+						orderDetailsForNormal.getLinestatus().equals("40")) {
 						Map<String ,Object> map=new HashMap<String, Object>();
 						map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 						map.put("orderNo", orderNo);
@@ -157,13 +157,13 @@ public class OrderDetailsForNormalService extends BaseService {
 			String[] orderLineNoArray = orderLineNoList.split(",");
 			for (String orderLineNo : orderLineNoArray) {
 				OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-				orderDetailsForNormalQuery.setOrderNo(orderNo);
-				orderDetailsForNormalQuery.setOrderLineNo(Integer.valueOf(orderLineNo));
+				orderDetailsForNormalQuery.setOrderno(orderNo);
+				orderDetailsForNormalQuery.setOrderlineno(Double.valueOf(orderLineNo));
 				OrderDetailsForNormal orderDetailsForNormal = orderDetailsForNormalMybatisDao.queryById(orderDetailsForNormalQuery);
 				if (orderDetailsForNormal != null) {
-					if (orderDetailsForNormal.getLineStatus().equals("00") ||
-						orderDetailsForNormal.getLineStatus().equals("30") ||
-						orderDetailsForNormal.getLineStatus().equals("40")) {
+					if (orderDetailsForNormal.getLinestatus().equals("00") ||
+						orderDetailsForNormal.getLinestatus().equals("30") ||
+						orderDetailsForNormal.getLinestatus().equals("40")) {
 						Map<String ,Object> map=new HashMap<String, Object>();
 						map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 						map.put("orderNo", orderNo);
