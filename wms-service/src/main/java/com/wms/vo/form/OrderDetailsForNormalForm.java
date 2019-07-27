@@ -1,257 +1,202 @@
 package com.wms.vo.form;
 
+import lombok.Data;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDateSerializer;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+@Data
 public class OrderDetailsForNormalForm {
 
-	private String orderNo;
-	private Integer orderLineNo;
-	private String customerId;
-	private String customerShortName;
-	private String lineStatus;
-	private String lineStatusName;
-	private String sku;
-	private String skuName;
-	private String skuEnglishName;
-	private Integer qtyPlaned;
-	private Integer qtyOrdered;
-	private Integer qtyAllocated;
-	private Integer qtyShipped;
-	private Double totalCubic;
-	private Double totalGrossWeight;
-	private Double totalPrice;
-	private String pickZone;
-	private String locationId;
-	private String lotnum;
-	private java.util.Date lotatt01;
-	private java.util.Date lotatt02;
-	private java.util.Date lotatt03;
-	private String lotatt04;
-	private java.util.Date addtime;
-	private String addwho;
-	private java.util.Date edittime;
-	private String editwho;
+    private String result;
 
-	public String getOrderNo() {
-		return orderNo;
-	}
+    private String orderno;//出库单号
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
+    private Double orderlineno;//出库明细行号
 
-	public Integer getOrderLineNo() {
-		return orderLineNo;
-	}
+    private String customerid;
 
-	public void setOrderLineNo(Integer orderLineNo) {
-		this.orderLineNo = orderLineNo;
-	}
+    private String sku;
 
-	public String getCustomerId() {
-		return customerId;
-	}
+    private String linestatus;
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
-	}
+    private String lotnum;
 
-	public String getCustomerShortName() {
-		return customerShortName;
-	}
+    private String lotatt01;
 
-	public void setCustomerShortName(String customerShortName) {
-		this.customerShortName = customerShortName;
-	}
+    private String lotatt02;
 
-	public String getLineStatus() {
-		return lineStatus;
-	}
+    private String lotatt03;
 
-	public void setLineStatus(String lineStatus) {
-		this.lineStatus = lineStatus;
-	}
+    private String lotatt04;
 
-	public String getLineStatusName() {
-		return lineStatusName;
-	}
+    private String lotatt05;
 
-	public void setLineStatusName(String lineStatusName) {
-		this.lineStatusName = lineStatusName;
-	}
+    private String lotatt06;
 
-	public String getSku() {
-		return sku;
-	}
+    private String lotatt07;
 
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
+    private String lotatt08;
 
-	public String getSkuName() {
-		return skuName;
-	}
+    private String lotatt09;
 
-	public void setSkuName(String skuName) {
-		this.skuName = skuName;
-	}
+    private String lotatt10;
 
-	public String getSkuEnglishName() {
-		return skuEnglishName;
-	}
+    private String lotatt11;
 
-	public void setSkuEnglishName(String skuEnglishName) {
-		this.skuEnglishName = skuEnglishName;
-	}
+    private String lotatt12;
 
-	public Integer getQtyPlaned() {
-		return qtyPlaned;
-	}
+    private String lotatt13;
 
-	public void setQtyPlaned(Integer qtyPlaned) {
-		this.qtyPlaned = qtyPlaned;
-	}
+    private String lotatt14;
 
-	public Integer getQtyOrdered() {
-		return qtyOrdered;
-	}
+    private String lotatt15;
 
-	public void setQtyOrdered(Integer qtyOrdered) {
-		this.qtyOrdered = qtyOrdered;
-	}
+    private String lotatt16;
 
-	public Integer getQtyAllocated() {
-		return qtyAllocated;
-	}
+    private String lotatt17;
 
-	public void setQtyAllocated(Integer qtyAllocated) {
-		this.qtyAllocated = qtyAllocated;
-	}
+    private String lotatt18;
 
-	public Integer getQtyShipped() {
-		return qtyShipped;
-	}
+    private String pickzone;//拣货区
 
-	public void setQtyShipped(Integer qtyShipped) {
-		this.qtyShipped = qtyShipped;
-	}
+    private String location;//拣货库位
 
-	public Double getTotalCubic() {
-		return totalCubic;
-	}
+    private String traceid;//跟踪id
 
-	public void setTotalCubic(Double totalCubic) {
-		this.totalCubic = totalCubic;
-	}
+    private Double qtyordered;//订货数量
 
-	public Double getTotalGrossWeight() {
-		return totalGrossWeight;
-	}
+    private Double qtysoftallocated;//预分配数量 Deprecated
 
-	public void setTotalGrossWeight(Double totalGrossWeight) {
-		this.totalGrossWeight = totalGrossWeight;
-	}
+    private Double qtyallocated;//分配数量
 
-	public Double getTotalPrice() {
-		return totalPrice;
-	}
+    private Double qtypicked;//拣货数量
 
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
+    private Double qtyshipped;//发运数量
 
-	public String getPickZone() {
-		return pickZone;
-	}
+    private String uom;//单位
 
-	public void setPickZone(String pickZone) {
-		this.pickZone = pickZone;
-	}
+    private String packid;//包装单位
 
-	public String getLocationId() {
-		return locationId;
-	}
+    private String softallocationrule;//软分配规则
 
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
-	}
+    private String allocationrule;//分配规则
 
-	public String getLotnum() {
-		return lotnum;
-	}
+    private String userdefine1;
 
-	public void setLotnum(String lotnum) {
-		this.lotnum = lotnum;
-	}
+    private String userdefine2;
 
-	@JsonSerialize(using = JsonDateSerializer.class)
-	public java.util.Date getLotatt01() {
-		return lotatt01;
-	}
+    private String userdefine3;
 
-	public void setLotatt01(java.util.Date lotatt01) {
-		this.lotatt01 = lotatt01;
-	}
+    private String userdefine4;
 
-	@JsonSerialize(using = JsonDateSerializer.class)
-	public java.util.Date getLotatt02() {
-		return lotatt02;
-	}
+    private String userdefine5;
 
-	public void setLotatt02(java.util.Date lotatt02) {
-		this.lotatt02 = lotatt02;
-	}
+    private String notes;
 
-	@JsonSerialize(using = JsonDateSerializer.class)
-	public java.util.Date getLotatt03() {
-		return lotatt03;
-	}
+    private Double qtyorderedEach;//订货件数
 
-	public void setLotatt03(java.util.Date lotatt03) {
-		this.lotatt03 = lotatt03;
-	}
+    private Double qtysoftallocatedEach;//软分配件数 Deprecated
 
-	public String getLotatt04() {
-		return lotatt04;
-	}
+    private Double qtyallocatedEach;//分配件数
 
-	public void setLotatt04(String lotatt04) {
-		this.lotatt04 = lotatt04;
-	}
+    private Double qtypickedEach;//拣货件数
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
-		return addtime;
-	}
+    private Double qtyshippedEach;//发运件数
 
-	public void setAddtime(java.util.Date addtime) {
-		this.addtime = addtime;
-	}
+    private java.util.Date addtime;
 
-	public String getAddwho() {
-		return addwho;
-	}
+    private String addwho;
 
-	public void setAddwho(String addwho) {
-		this.addwho = addwho;
-	}
+    private java.util.Date edittime;
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
-		return edittime;
-	}
+    private String editwho;
 
-	public void setEdittime(java.util.Date edittime) {
-		this.edittime = edittime;
-	}
+    private String rotationid;
 
-	public String getEditwho() {
-		return editwho;
-	}
+    private Double netweight;
 
-	public void setEditwho(String editwho) {
-		this.editwho = editwho;
-	}
+    private Double grossweight;
+
+    private Double cubic;
+
+    private Double price;
+
+    private String alternativesku;
+
+    private Double kitreferenceno;
+
+    private String dEdi01;
+
+    private String dEdi02;
+
+    private String dEdi03;
+
+    private String dEdi04;
+
+    private String dEdi05;
+
+    private String dEdi06;
+
+    private String dEdi07;
+
+    private String dEdi08;
+
+    private Double dEdi09;
+
+    private Double dEdi10;
+
+    private String orderlinereferenceno;
+
+    private String dEdi11;
+
+    private String dEdi12;
+
+    private String dEdi13;
+
+    private String dEdi14;
+
+    private String dEdi15;
+
+    private String dEdi16;
+
+    private String dEdi17;
+
+    private String dEdi18;
+
+    private String dEdi19;
+
+    private String dEdi20;
+
+    private String kitsku;
+
+    private String erpcancelflag;
+
+    private String userdefine6;
+
+    private String zonegroup;
+
+    private String locgroup1;
+
+    private String locgroup2;
+
+    private String comminglesku;
+
+    private String onestepallocation;
+
+    private String orderlotcontrol;
+
+    private String fullcaselotcontrol;
+
+    private String piecelotcontrol;
+
+    private Double referencelineno;
+
+    private String salesorderno;
+
+    private String salesorderlineno;
+
+    private Double qtyreleased;
+
+    private String freegift;
 }

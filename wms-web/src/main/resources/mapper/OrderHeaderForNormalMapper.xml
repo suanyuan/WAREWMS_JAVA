@@ -296,7 +296,7 @@
 </select>
   	
 <!--查询订单列表-->
-<!--<select id="queryByPageList" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
+<select id="queryByPageList" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
 	select a.customerid as customerId,
 	b.h_edi_01 as customerShortName,
 	a.orderno as orderNo,
@@ -370,7 +370,6 @@
     </if>
     order by c.show_sequence, a.ordertime desc
 </select>
--->
 
 <!--拣货单列表-->
 <select id="queryByPickingList" resultMap="PickingMap"  parameterType="Object">
@@ -461,7 +460,7 @@
 </select>
   	
 <!--导出订单明细-->
-<select id="queryByExportList" resultMap="ExportOrderDataMap"  parameterType="Object">
+<!--<select id="queryByExportList" resultMap="ExportOrderDataMap"  parameterType="Object">
 	select a.customerid as customerId,
 	c.h_edi_01 as customerShortName,
 	a.orderno as orderNo,
@@ -509,6 +508,7 @@
 	and d.codeid = 'SO_STS'
 	order by a.orderno, b.orderlineno
 </select>
+-->
 
 <!--订单类型-->
 <select id="queryPrintTemplate" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
