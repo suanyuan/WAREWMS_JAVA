@@ -1,7 +1,10 @@
 package com.wms.service;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfImportedPage;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -12,26 +15,24 @@ import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
 import com.wms.query.OrderHeaderForNormalQuery;
-import com.wms.utils.*;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.PDFUtil;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
-import org.apache.avalon.framework.configuration.ConfigurationException;
+import com.wms.vo.form.pda.PageForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.xml.sax.SAXException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("orderHeaderForNormalService")
@@ -906,5 +907,38 @@ public class OrderHeaderForNormalService extends BaseService {
 			e.printStackTrace();
 		}
 	}
+
+    public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
+
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(form.getPageNum());
+        mybatisCriteria.setPageSize(form.getPageSize());
+        List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+
+        OrderHeaderForNormalVO orderHeaderForNormalVO;
+        List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();
+
+        for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormals) {
+
+            orderHeaderForNormalVO = new OrderHeaderForNormalVO();
+            BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
+            orderHeaderForNormalVOS.add(orderHeaderForNormalVO);
+        }
+
+        return orderHeaderForNormalVOS;
+    }
+
+    public OrderHeaderForNormalVO queryByOrderno(String orderno) {
+
+        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+        OrderHeaderForNormalVO headerVO = new OrderHeaderForNormalVO();
+
+        if (orderHeaderForNormal != null) {
+
+            BeanUtils.copyProperties(orderHeaderForNormal, headerVO);
+        }
+
+        return headerVO;
+    }
 
 }
