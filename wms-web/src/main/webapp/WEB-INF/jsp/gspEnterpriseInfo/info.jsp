@@ -89,6 +89,7 @@
     $(function () {
         var enterpriseType = '${gspEnterpriseInfo.enterpriseType}';
         $('#enterpriseType').combobox({
+            panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getEntType',
             valueField:'id',
             textField:'value',

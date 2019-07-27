@@ -57,6 +57,7 @@ public class GspSupplierService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
+		criteria.setOrderByClause("create_date desc");
 		GspSupplierVO gspSupplierVO = null;
 		List<GspSupplierVO> basGtnVOList = new ArrayList<GspSupplierVO>();
 		List<GspSupplier> basGtnList = gspSupplierMybatisDao.queryByList(criteria);

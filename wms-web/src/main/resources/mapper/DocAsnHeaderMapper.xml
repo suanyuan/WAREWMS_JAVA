@@ -1274,14 +1274,14 @@ insert into doc_asn_header
 </select>
 
 <!--取消订单 -->
-<select id="cancel" statementType="CALLABLE" parameterType="java.util.Map">
+<update id="cancel" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call spasn_close_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{asnno,mode=IN,jdbcType=VARCHAR},'90','N','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
+</update>
 
 <!--关闭订单 -->
-<select id="close" statementType="CALLABLE" parameterType="java.util.Map">
+<update id="close" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call spasn_close_process(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{asnno,mode=IN,jdbcType=VARCHAR},'99','N','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
+</update>
 
     <!--通过通知状态查询列表-->
     <select id="queryUndoneList" resultMap="DocAsnHeaderMap">

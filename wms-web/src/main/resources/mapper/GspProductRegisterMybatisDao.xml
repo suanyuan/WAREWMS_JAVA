@@ -52,13 +52,13 @@
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-				and r.product_register_id =  #{condition.productRegisterId}
+				and r.product_register_id like CONCAT('%',#{condition.productRegisterId},'%')
 			</if>
 			<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-				and r.product_register_no =  #{condition.productRegisterNo}
+				and r.product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
 			</if>
 			<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-				and r.product_name_main =  #{condition.productNameMain}
+				and r.product_name_main like CONCAT('%',#{condition.productNameMain},'%')
 			</if>
 			<if test="condition.productRegisterName != null and condition.productRegisterName != ''" >
 				and r.product_register_name =  #{condition.productRegisterName}
@@ -100,7 +100,7 @@
 				and r.product_register_expiry_date =  #{condition.productRegisterExpiryDate}
 			</if>
 			<if test="condition.productRegisterVersion != null and condition.productRegisterVersion != ''" >
-				and r.product_register_version =  #{condition.productRegisterVersion}
+				and r.product_register_version like CONCAT('%',#{condition.productRegisterVersion},'%')
 			</if>
 			<if test="condition.version != null and condition.version != ''" >
 				and r.version =  #{condition.version}
@@ -140,6 +140,12 @@
 			</if>
 			<if test="condition.productionAddress != null and condition.productionAddress != ''" >
 				and r.production_address =  #{condition.productionAddress}
+			</if>
+			<if test="condition.createDateBegin != null and condition.createDateBegin !='' ">
+				and create_Date &gt;= #{condition.createDateBegin}
+			</if>
+			<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+				and create_Date &lt;= #{condition.createDateEnd}
 			</if>
 		</trim>
 	</sql>

@@ -11,6 +11,8 @@ public class GspProductRegisterVO {
 	private String productRegisterName;
 	private String productRegisterAddress;
 	private String productProductionAddress;
+	private String productionAddress;
+
 	private String agentName;
 	private String applyScope;
 	private String mainPart;
@@ -34,6 +36,14 @@ public class GspProductRegisterVO {
 	private String classifyId;
 	private String classifyCatalog;
 	private String enterpriseId;
+
+	public String getProductionAddress() {
+		return productionAddress;
+	}
+
+	public void setProductionAddress(String productionAddress) {
+		this.productionAddress = productionAddress;
+	}
 
 	public String getProductRegisterId() {
 		return productRegisterId;

@@ -63,20 +63,28 @@ where 1=1
 	    and context8 like '%${condition.context8}%'
 	</if>
 	<if test="condition.matchFlag != null and condition.matchFlag != ''" >
-	    and match_flag like '%${condition.matchFlag}%'
+	    and match_flag   =  #{condition.matchFlag}
 	</if>
-	<if test="condition.addtime != null and condition.addtime != ''" >
-	    and addtime =  #{condition.addtime}
+
+	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+		and addtime   <![CDATA[  >=  ]]>  #{condition.createDateStart}
 	</if>
-	<if test="condition.addwho != null and condition.addwho != ''" >
-	    and addwho =  #{condition.addwho}
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> addtime
 	</if>
-	<if test="condition.edittime != null and condition.edittime != ''" >
-	    and edittime =  #{condition.edittime}
-	</if>
-	<if test="condition.editwho != null and condition.editwho != ''" >
-	    and editwho =  #{condition.editwho}
-	</if>
+
+	<!--<if test="condition.addtime != null and condition.addtime != ''" >-->
+	    <!--and addtime =  #{condition.addtime}-->
+	<!--</if>-->
+	<!--<if test="condition.addwho != null and condition.addwho != ''" >-->
+	    <!--and addwho =  #{condition.addwho}-->
+	<!--</if>-->
+	<!--<if test="condition.edittime != null and condition.edittime != ''" >-->
+	    <!--and edittime =  #{condition.edittime}-->
+	<!--</if>-->
+	<!--<if test="condition.editwho != null and condition.editwho != ''" >-->
+	    <!--and editwho =  #{condition.editwho}-->
+	<!--</if>-->
 </trim>
 </sql>
    
@@ -164,9 +172,10 @@ where 1=1
 	<include refid="Base_Column_List"/>
 	from doc_asn_doublec 
 	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
+	<!--<if test="orderByClause != null and orderByClause != ''" >-->
+       <!--order by  ${orderByClause}-->
+    <!--</if>-->
+	order by  addtime desc
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>

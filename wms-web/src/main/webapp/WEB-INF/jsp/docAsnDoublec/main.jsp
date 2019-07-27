@@ -6,6 +6,11 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+	<style>
+		table th{
+			text-align: right;
+		}
+	</style>
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;
@@ -212,11 +217,14 @@ var doSearch = function(){
 		context6 : $('#context6').val(),
 		context7 : $('#context7').val(),
 		context8 : $('#context8').val(),
-		matchFlag : $('#matchFlag').val(),
-		addtime : $('#addtime').val(),
+		//matchFlag : $('#matchFlag').val(),
+        createDateStart: $("#createDateStart").datebox("getValue"),
+        createDateEnd: $("#createDateEnd").datebox("getValue"),
+		//addtime : $('#addtime').val(),
 		addwho : $('#addwho').val(),
-		edittime : $('#edittime').val(),
-		editwho : $('#editwho').val()
+		//edittime : $('#edittime').val(),
+		editwho : $('#editwho').val(),
+        matchFlag : $('#matchFlag').combobox('getValue')
 	});
 };
 
@@ -304,9 +312,24 @@ var toImportData = function(){
 							<th>产品型号</th><td><input type='text' id='context1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>名称</th><td><input type='text' id='context2' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>执行标准</th><td><input type='text' id='context3' class='easyui-textbox' size='16' data-options=''/></td>
+
 							<th>备注</th><td><input type='text' id='context4' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>标记匹配</th><td><input type='text' id='matchFlag' class='easyui-textbox' size='16' data-options=''/></td>
-							<%--<th>待输入名称6：</th><td><input type='text' id='context5' class='easyui-textbox' size='16' data-options=''/></td>--%>
+
+						</tr>
+						<tr><%--<th>标记匹配</th><td><input type='text' id='matchFlag' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>标记匹配</th><td><input type="text" id="matchFlag"  name="matchFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '1', value: '已匹配'},
+																																	{id: '0', value: '未匹配'}
+																																]"/></td>
+
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
+						<%--<th>待输入名称6：</th><td><input type='text' id='context5' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称7：</th><td><input type='text' id='context6' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称8：</th><td><input type='text' id='context7' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称9：</th><td><input type='text' id='context8' class='easyui-textbox' size='16' data-options=''/></td>--%>
@@ -315,9 +338,8 @@ var toImportData = function(){
 							<%--<th>待输入名称12：</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称13：</th><td><input type='text' id='edittime' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>待输入名称14：</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>--%>
-						</tr>
-						<tr>
-							<td colspan="12">
+
+							<td colspan="4">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>

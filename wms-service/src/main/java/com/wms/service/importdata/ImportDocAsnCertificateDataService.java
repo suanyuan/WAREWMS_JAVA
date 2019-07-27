@@ -1,9 +1,6 @@
 package com.wms.service.importdata;
 
-import com.wms.entity.DocAsnCertificate;
-import com.wms.entity.DocAsnDoublec;
-import com.wms.entity.ImportCertificateData;
-import com.wms.entity.ImportDoublecData;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.service.BasPackageService;
 import com.wms.utils.BeanUtils;
@@ -23,10 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("ImportDocAsnCertificateDataService")
 public class ImportDocAsnCertificateDataService {
@@ -162,7 +156,10 @@ public class ImportDocAsnCertificateDataService {
 
 				importDataVO.setCustomerid(dataArray.getCustomerid());
 
-
+//                BasCustomer basCustomer  = basCustomerMybatisDao.queryByCustomerId(dataArray.getCustomerid());
+//                if(basCustomer==null){
+//                    throw new Exception();
+//                }
 //				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
 //
 //				if(gspProductRegisterSpecs==null  ){
@@ -180,13 +177,20 @@ public class ImportDocAsnCertificateDataService {
 			}
 
 			try {
-				importDataVO.setSku(dataArray.getSku());
-				if (StringUtils.isEmpty(dataArray.getSku())) {//判日期是否为空
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				rowResult.append("[产品代码]，未输入").append(" ");
-			}
+                importDataVO.setSku(dataArray.getSku());
+                Map<String,Object> param = new HashMap<>();
+                param.put("customerid",dataArray.getCustomerid());
+                param.put("sku",dataArray.getSku());
+                BasSku basSku = basSkuMybatisDao.queryById(param);
+                if(basSku==null){
+                    throw new Exception();
+                }
+                if (StringUtils.isEmpty(dataArray.getSku())) {//判日期是否为空
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                rowResult.append("[产品代码或货主]，未输入或不存在").append(" ");
+            }
 
 			try {
 				importDataVO.setLotatt04(dataArray.getLotatt04());
@@ -204,7 +208,7 @@ public class ImportDocAsnCertificateDataService {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("货主,产品代码,生产批号三个一起重复，未输入").append(" ");
+				rowResult.append("货主,产品代码,生产批号三个一起重复").append(" ");
 			}
 
 

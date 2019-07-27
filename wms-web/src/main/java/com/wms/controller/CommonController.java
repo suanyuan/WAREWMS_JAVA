@@ -122,11 +122,11 @@ public class CommonController {
         easyuiComboboxList.add(easyuiCombobox);
         EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
         easyuiComboboxUse.setId("1");
-        easyuiComboboxUse.setValue("启用");
+        easyuiComboboxUse.setValue("有效");
         easyuiComboboxList.add(easyuiComboboxUse);
         EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
         easyuiComboboxUnUse.setId("0");
-        easyuiComboboxUnUse.setValue("禁用");
+        easyuiComboboxUnUse.setValue("失效");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
     }

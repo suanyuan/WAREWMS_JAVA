@@ -263,6 +263,7 @@
 
 
         $("#ezuiFormDetail input[name='classifyId']").combobox({
+            panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getCatalogClassify',
             valueField:'id',
             textField:'value',
@@ -277,6 +278,7 @@
         });
 
         $('#ezuiFormDetail input[name="productRegisterVersion"]').combobox({
+            panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getCatalogVersion',
             valueField:'id',
             textField:'value',
