@@ -15,7 +15,7 @@
 			<th>状态</th>
 			<td><input type='text' name='linestatus' id='linestatus' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																													editable:false,
-																													url:'<c:url value="/docOrderHeaderController.do?getSostatusCombobox"/>',
+																													url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
 																													valueField:'id',
 																													textField:'value'"/></td>
 			</tr>

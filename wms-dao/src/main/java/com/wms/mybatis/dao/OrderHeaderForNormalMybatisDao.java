@@ -13,6 +13,8 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 	List<OrderHeaderForNormal> queryOrderStatus();
 
+	List<OrderHeaderForNormal> queryReleaseStatus();
+
 	List<OrderHeaderForNormal> queryByAllocationDetailsId(String orderno);
 
 	List<OrderHeaderForNormal> queryByUnAllocationDetailsId(String orderno);
@@ -21,7 +23,7 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 	OrderHeaderForNormal queryByReceiptList(OrderHeaderForNormalQuery query);
 
-	List<ExportOrderData> queryByExportList(MybatisCriteria mybatisCriteria);
+	//List<ExportOrderData> queryByExportList(MybatisCriteria mybatisCriteria);
 	
 	void getIdSequence(Map<String, Object> map);
 
