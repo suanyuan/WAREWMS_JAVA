@@ -26,6 +26,24 @@ public class GspCustomerQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String createDateStart;
+	private String createDateEnd;
+
+	public String getCreateDateStart() {
+		return createDateStart;
+	}
+
+	public void setCreateDateStart(String createDateStart) {
+		this.createDateStart = createDateStart;
+	}
+
+	public String getCreateDateEnd() {
+		return createDateEnd;
+	}
+
+	public void setCreateDateEnd(String createDateEnd) {
+		this.createDateEnd = createDateEnd;
+	}
 
 	public String getClientId() {
 		return clientId;

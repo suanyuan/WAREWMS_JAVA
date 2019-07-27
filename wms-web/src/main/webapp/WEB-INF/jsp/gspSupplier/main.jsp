@@ -415,7 +415,7 @@ var doSearch = function(){
 							<th>企业</th>
 							<td>
 								<input type='text' id='enterpriseIdQuery' class='easyui-textbox' data-options='' style="width: 100px;"/>
-								<input type="hidden" class="easyui-textvalue" name="enterpriseId">
+								<input type="hidden" id="enterpriseId" name="enterpriseId">
 								<!--<a href="javascript:void(0)" onclick='searchMainEnterprise()' class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
 							</td>
 							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
@@ -449,7 +449,7 @@ var doSearch = function(){
 																																	<%--{id: '1', value: '是'},--%>
 																																	<%--{id: '0', value: '否'}--%>
 																																<%--]"/></td>--%>
-							<th>是否有效</th><td><input type='text' id='isUse' data-options='' size='16'/></td>
+							<th>是否有效</th><td><input type='text' id='isUse' class='easyui-textbox' data-options='' size='16'/></td>
 							<th>编辑时间</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 
@@ -498,6 +498,7 @@ var doSearch = function(){
 <script>
     var enterpriseDialog_gspSupplier;
     $("#isCheck").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value'
@@ -516,6 +517,7 @@ var doSearch = function(){
     // });
 	//
     $("#isUse").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
@@ -556,7 +558,7 @@ var doSearch = function(){
 
     $(function () {
         $("#enterpriseIdQuery").textbox({
-            width:135,
+            width:146,
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){

@@ -100,7 +100,7 @@ where 1=1
 	    and product_model like  '%${condition.productModel}%'
 	</if>
 	<if test="condition.productionAddress != null and condition.productionAddress != ''" >
-	    and production_address like  '%${condition.productionAddress}%'
+	    and t1.production_address like  '%${condition.productionAddress}%'
 	</if>
 
 

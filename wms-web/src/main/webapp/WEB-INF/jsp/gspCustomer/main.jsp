@@ -45,13 +45,13 @@ $(function() {
 		columns : [[
 			{field: 'clientId',		title: '申请单号',	width: 50 },
             {field: 'firstState',		title: '首营状态',	width: 38 ,formatter:firstStateTypeFormatter},
-			{field: 'clientNo',		title: '代码',	width: 38 },
-			{field: 'clientName',		title: '简称',	width: 38 },
+			{field: 'clientNo',		title: '企业代码',	width: 38 },
+			{field: 'clientName',		title: '企业简称',	width: 38 },
 			{field: 'enterpriseId',		title: '企业id',	width: 38 ,hidden:true},
 			{field: 'remark',		title: '备注',	width: 38 ,hidden:true},
 			{field: 'isCheck',		title: '是否审查',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'isCooperation',		title: '是否合作',	width: 38 ,formatter: yesOrNoFormatter},
-			{field: 'operateType',		title: '类型',	width: 38 ,formatter: entTypeFormatter,hidden:true},
+			{field: 'operateType',		title: '类型',	width: 38 ,formatter: entTypeFormatter},
 			{field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
 			{field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
 			{field: 'clientContent',		title: '委托内容',	width: 38 ,hidden:true},
@@ -101,10 +101,12 @@ var add = function(){
 	$('#gspCustomerId').val(0);
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
+		left:400,
+        width:450,
+        height:550,
         title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',
         href:dialogUrl,
-        fit:true,
         cache:false,
         onClose : function() {
             ezuiFormClear(ezuiForm);
@@ -118,10 +120,12 @@ var edit = function(){
         //ezuiDialog.dialog('refresh', dialogUrl+"&id="+row.clientId).dialog('open');
         ezuiDialog = $('#ezuiDialog').dialog({
             modal : true,
+            left:400,
+			width:450,
+			height:550,
             title : '<spring:message code="common.dialog.title"/>',
             buttons : '#ezuiDialogBtn',
             href:dialogUrl+"&id="+row.clientId,
-            fit:true,
             cache:false,
             onClose : function() {
                 ezuiFormClear(ezuiForm);
@@ -171,26 +175,28 @@ var commit = function(){
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		clientId : $('#clientIdQuery').val(),
-		clientNo : $('#clientNoQuery').val(),
+		clientNo : $('#clientNo').val(),
 		clientName : $('#clientName').val(),
-		enterpriseId : $('#enterpriseId').val(),
+        enterpriseId : $('#enterpriseId').val(),
 		remark : $('#remark').val(),
-		firstState : $('#firstState').val(),
-		isCheck : $('#isCheck').val(),
-		isCooperation : $('#isCooperation').val(),
-		operateType : $('#operateType').val(),
+		firstState : $('#firstState').combobox('getValue'),
+		isCheck : $('#isCheck').combobox('getValue'),
+		isCooperation : $('#isCooperation').combobox('getValue'),
+		operateType : $('#operateType').combobox('getValue'),
 		contractNo : $('#contractNo').val(),
-		contractUrl : $('#contractUrl').val(),
 		clientContent : $('#clientContent').val(),
-		clientStartDate : $('#clientStartDate').val(),
-		clientEndDate : $('#clientEndDate').val(),
+		clientStartDate : $('#clientStartDate').datebox('getValue'),
+		clientEndDate : $('#clientEndDate').datebox('getValue'),
 		clientTerm : $('#clientTerm').val(),
-		isChineseLabel : $('#isChineseLabel').val(),
+		isChineseLabel : $('#isChineseLabel').combobox('getValue'),
 		createId : $('#createId').val(),
 		createDate : $('#createDate').val(),
 		editId : $('#editId').val(),
 		editDate : $('#editDate').val(),
-		isUse : $('#isUse').val()
+		isUse : $('#isUse').val(),
+        createDateStart:$('#createDateStart').combobox('getValue'),//附加创建时间范围查询
+        createDateEnd:$('#createDateEnd').combobox('getValue')
+
 	});
 };
 </script>
@@ -204,29 +210,37 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>企业代码：</th><td><input type='text' id='clientNoQuery' class='easyui-textbox' data-options=''/></td>
-							<th>企业简称：</th><td><input type='text' id='clientNameQuery' class='easyui-textbox' data-options=''/></td>
-							<th>企业：</th>
+							<th>企业代码</th><td><input type='text' id='clientNo' class='easyui-textbox' data-options=''/></td>
+							<th>企业简称</th><td><input type='text' id='clientName' class='easyui-textbox' data-options=''/></td>
+							<th>首营状态</th><td>
+							<input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>
+							<th>企业</th>
                             <td>
-                                <input type='text' id='enterpriseIdQuery' style="width: 100px;"/>
-                                <input type="hidden" class="easyui-textvalue" name="enterpriseId">
+                                <input type='text' id='enterpriseIdQuery' class="easyui-textbox"  style="width: 100px;"/>
+                                <input type='hidden' id="enterpriseId" name="enterpriseId">
 								<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                             </td>
-							<th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>
-							<th style="display: none;">是否审查：</th><td style="display: none;"><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
+
+
 						</tr>
 						<tr>
-							<th>是否合作：</th><td><input type='text' id='isCooperation' class='easyui-textbox' data-options=''/></td>
-							<th>类型：</th><td><input type='text' id='operateType' class='easyui-textbox' data-options=''/></td>
-							<th>委托开始时间：</th><td><input type='text' id='clientStartDate' class='easyui-datebox' data-options=''/></td>
-							<th>委托结束时间：</th><td><input type='text' id='clientEndDate' class='easyui-datebox' data-options=''/></td>
-							<th style="display: none;">是否有效：</th><td style="display: none;"><input type='text' id='isUse' data-options=''/></td>
+							<th>是否审查：</th>
+							<td><input type='text' id='isCheck' class='easyui-textbox' data-options=''/></td>
+							<th>是否合作</th>
+							<td><input type='text' id='isCooperation' class='easyui-textbox' data-options=''/></td>
+							<th>类型</th><td>
+							<input type='text' id='operateType' class='easyui-textbox' data-options=''/></td>
+							<th>中文标签</th><td><input type='text' id='isChineseLabel' class='easyui-textbox' data-options=''/></td>
+
+							<th style="display: none;">是否有效</th><td style="display: none;"><input type='text' id='isUse' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>是否贴中文标签：</th><td><input type='text' id='isChineseLabel' class='easyui-textbox' data-options=''/></td>
-							<th>创建时间：</th><td><input type='text' id='createDateStart' class='easyui-datebox' data-options=''/></td>
-							<th>创建时间：</th><td><input type='text' id='createDateEnd' class='easyui-datebox' data-options=''/></td>
-							<td>
+
+							<th>委托时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' style='width:135px' data-options=''/></td>
+							<th>至</th><td><input type='text' id='clientEndDate' class='easyui-datebox' style='width:135px' data-options=''/></td>
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox'  style='width:135px' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox'  style='width:135px' data-options=''/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
@@ -264,36 +278,42 @@ var doSearch = function(){
 <script>
     var enterpriseDialog_gspCustomer;
     $("#isCheck").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value'
     });
 
     $("#isCooperation").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value'
     });
 
     $("#isChineseLabel").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value'
     });
 
     $("#isUse").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
     });
 
     $("#firstState").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogFirstState',
         valueField:'id',
         textField:'value'
     });
 
     $("#operateType").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getEntType',
         valueField:'id',
         textField:'value'
@@ -328,7 +348,7 @@ var doSearch = function(){
     }
 
     function choseSelect_gspCustomer(id,name) {
-        $("input[name='enterpriseId']").val(id);
+        $("#enterpriseId").val(id);
         $("#enterpriseIdQuery").textbox("setValue",name);
         enterpriseDialog_gspCustomer.dialog("close");
     }
@@ -380,7 +400,7 @@ var doSearch = function(){
             })
         }
     }
-
+//企业点击查询
 	$(function () {
 		$("#enterpriseIdQuery").textbox({
 			width:135,
