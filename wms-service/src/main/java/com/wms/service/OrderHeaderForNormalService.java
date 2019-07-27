@@ -16,12 +16,16 @@ import com.wms.utils.*;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
-import com.wms.vo.form.pda.PageForm;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +63,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+		/*List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
 		OrderHeaderForNormalVO orderHeaderForNormalVO = null;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
@@ -67,7 +71,8 @@ public class OrderHeaderForNormalService extends BaseService {
 			BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 			orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 		}
-		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));*/
+		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();
 		datagrid.setRows(orderHeaderForNormalVOList);
 		return datagrid;
 	}
@@ -125,7 +130,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if(orderHeaderForNormal != null){
-			if (orderHeaderForNormal.getOrderStatus().equals("00")) {
+			if (orderHeaderForNormal.getSostatus().equals("00")) {
 				if (orderHeaderForNormal.getAddwho().equals("EDI")) {
 					json.setSuccess(false);
 					json.setMsg("EDI订单,不能删除!");
@@ -152,7 +157,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
-			if (orderHeaderForNormal.getOrderStatus().equals("00") || orderHeaderForNormal.getOrderStatus().equals("30") || orderHeaderForNormal.getOrderStatus().equals("40")) {
+			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				Map<String ,Object> map=new HashMap<String, Object>();
 				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				map.put("orderNo", orderNo);
@@ -182,7 +187,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
-			if (orderHeaderForNormal.getOrderStatus().equals("00") || orderHeaderForNormal.getOrderStatus().equals("30") || orderHeaderForNormal.getOrderStatus().equals("40")) {
+			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				Map<String ,Object> map=new HashMap<String, Object>();
 				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				map.put("orderNo", orderNo);
@@ -214,7 +219,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			//判断订单状态
-			if (orderHeaderForNormal.getOrderStatus().equals("30") || orderHeaderForNormal.getOrderStatus().equals("40")) {
+			if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				//
 //				try {
 //					StockInXmlVo stockInXmlVo = new StockInXmlVo();
@@ -287,10 +292,10 @@ public class OrderHeaderForNormalService extends BaseService {
 					json.setMsg("出库处理失败：订单数据异常！");
 					return json;
 				}
-			} else if (orderHeaderForNormal.getOrderStatus().equals("50") ||
-					orderHeaderForNormal.getOrderStatus().equals("60") ||
-					orderHeaderForNormal.getOrderStatus().equals("62") ||
-					orderHeaderForNormal.getOrderStatus().equals("63")) {
+			} else if (orderHeaderForNormal.getSostatus().equals("50") ||
+					orderHeaderForNormal.getSostatus().equals("60") ||
+					orderHeaderForNormal.getSostatus().equals("62") ||
+					orderHeaderForNormal.getSostatus().equals("63")) {
 				//
 //				try {
 //					StockInXmlVo stockInXmlVo = new StockInXmlVo();
@@ -354,7 +359,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if(orderHeaderForNormal != null){
-			if (orderHeaderForNormal.getOrderStatus().equals("00")) {
+			if (orderHeaderForNormal.getSostatus().equals("00")) {
 				//创建状态订单直接操作取消
 				Map<String ,Object> map = new HashMap<String, Object>();
 				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -380,8 +385,8 @@ public class OrderHeaderForNormalService extends BaseService {
 					json.setMsg("出库取消失败！");
 					return json;
 				}
-			} else if (orderHeaderForNormal.getOrderStatus().equals("30") ||
-					orderHeaderForNormal.getOrderStatus().equals("40")) {
+			} else if (orderHeaderForNormal.getSostatus().equals("30") ||
+					orderHeaderForNormal.getSostatus().equals("40")) {
 				//分配状态订单先取消分配再取消订单
 				Map<String ,Object> map = new HashMap<String, Object>();
 				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -425,10 +430,10 @@ public class OrderHeaderForNormalService extends BaseService {
 					json.setMsg("出库取消失败！");
 					return json;
 				}
-			} else if (orderHeaderForNormal.getOrderStatus().equals("50") ||
-					orderHeaderForNormal.getOrderStatus().equals("60") ||
-					orderHeaderForNormal.getOrderStatus().equals("62") ||
-					orderHeaderForNormal.getOrderStatus().equals("63")) {
+			} else if (orderHeaderForNormal.getSostatus().equals("50") ||
+					orderHeaderForNormal.getSostatus().equals("60") ||
+					orderHeaderForNormal.getSostatus().equals("62") ||
+					orderHeaderForNormal.getSostatus().equals("63")) {
 				//拣货/装箱状态订单先取消拣货再取消分配最后取消订单
 				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
 				if (allocationDetailsIdList != null) {
@@ -565,7 +570,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
 			if (StringUtils.isNotEmpty(orderNo)) {
 				
-				document = new Document(PDFUtil.getTemplate("wms_picking.pdf").getPageSize(1));
+				document = new Document(PDFUtil.getTemplate("wms_picking_jhck.pdf").getPageSize(1));
 				PdfCopy pdfCopy = new PdfCopy(document, os);
 				document.open();
 				
@@ -574,7 +579,7 @@ public class OrderHeaderForNormalService extends BaseService {
 				int row = 10;
 				int pageSize = 0;
 				detailsList = new ArrayList<OrderDetailsForNormal>();
-				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+				/*OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 				orderHeaderForNormalQuery.setOrderNo(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
 				for(OrderDetailsForNormal orderDetails : orderHeaderForNormal.getOrderDetailsForNormalList()){
@@ -615,7 +620,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					stamper.close();
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
 					pdfCopy.addPage(page);
-				}
+				}*/
 				document.close();
 			}
 		} catch (Exception e) {
@@ -778,7 +783,23 @@ public class OrderHeaderForNormalService extends BaseService {
 			//下拉框添加数据
 			for(OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList){
 				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(orderHeaderForNormal.getOrderStatus()));
+				combobox.setId(String.valueOf(orderHeaderForNormal.getSostatus()));
+				combobox.setValue(orderHeaderForNormal.getOrderStatusName());
+				comboboxList.add(combobox);
+			}
+		}
+		return comboboxList;
+	}
+
+	public List<EasyuiCombobox> getReleasestatusCombobox(){
+		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+		EasyuiCombobox combobox = null;
+		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryReleaseStatus();
+		if(orderHeaderForNormalList != null && orderHeaderForNormalList.size() > 0){
+			//下拉框添加数据
+			for(OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList){
+				combobox = new EasyuiCombobox();
+				combobox.setId(String.valueOf(orderHeaderForNormal.getSostatus()));
 				combobox.setValue(orderHeaderForNormal.getOrderStatusName());
 				comboboxList.add(combobox);
 			}
@@ -792,37 +813,98 @@ public class OrderHeaderForNormalService extends BaseService {
 		return orderHeaderForNormal;
 	}
 
-	public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
+	public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
+		StringBuilder sb = new StringBuilder();
+		try (OutputStream os = response.getOutputStream()){
+			sb.append("inline; filename=")
+					.append(URLEncoder.encode("PDF","UTF-8"))
+					.append(".pdf");
+			response.setHeader("Content-disposition", sb.toString());sb.setLength(0);
+			response.setContentType(ContentTypeEnum.pdf.getContentType());
 
-	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-	    mybatisCriteria.setCurrentPage(form.getPageNum());
-	    mybatisCriteria.setPageSize(form.getPageSize());
-	    List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+			Document document = null;
+			AcroFields form = null;
+			PdfStamper stamper = null;
+			PdfImportedPage page = null;
+			ByteArrayOutputStream baos = null;
 
-	    OrderHeaderForNormalVO orderHeaderForNormalVO;
-	    List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();
+			if (StringUtils.isNotEmpty(orderCodeList)) {
 
-	    for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormals) {
+				document = new Document(PDFUtil.getTemplate("wms_packing_jhck.pdf").getPageSize(1));
+				PdfCopy pdfCopy = new PdfCopy(document, os);
+				document.open();
+				//分割orderCodeList中的主单号pano
+				String[] orderCodeArray = orderCodeList.split(",");
 
-            orderHeaderForNormalVO = new OrderHeaderForNormalVO();
-	        BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
-	        orderHeaderForNormalVOS.add(orderHeaderForNormalVO);
-        }
+				for (String orderCode : orderCodeArray) {
+					//根据主单pano查询对象DocPaHeader
+					/*DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
+					if(docPaHeader!=null){
 
-        return orderHeaderForNormalVOS;
-    }
+						int totalNum = 0;
+						int row = 15;//每页条数
+						int pageSize = 0;
 
-    public OrderHeaderForNormalVO queryByOrderno(String orderno) {
+						DocPaDetailsQuery query = new DocPaDetailsQuery();
+						query.setAsnno(orderCode);
+						//根据主单pano获取子单所有的产品 orderCode==pano
+						List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
 
-	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
-	    OrderHeaderForNormalVO headerVO = new OrderHeaderForNormalVO();
+						totalNum = detailsList.size();//总条数
+						pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
+						for(int i=0;i<pageSize;i++){//单头内容
+							baos = new ByteArrayOutputStream();
+							stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
+							form = stamper.getAcroFields();
+							form.setField("putwayCode",docPaHeader.getPano());
+							form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
+							form.setField("warehouseid", docPaHeader.getWarehouseid());
+							form.setField("custName", docPaHeader.getCustomerid());
+							form.setField("supplier", "");
+							form.setField("notes", docPaHeader.getNotes());
+							form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
+							//form.setField("barCode1", docPaHeader.getAsnno());
+							form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
+							//form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
 
-	    if (orderHeaderForNormal != null) {
+							for(int j=0;j<row;j++){//主单产品明细
+								if(totalNum > (row*i+j)){
+									DocPaDetails docPaDetails = detailsList.get(row * i + j);
+									BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
+									//根据某一个订单明细查询关联的Doc_Asn_Details
+									DocAsnDetailQuery queryDetail = new DocAsnDetailQuery();
+									queryDetail.setAsnno(docPaDetails.getAsnno());
+									queryDetail.setAsnlineno(docPaDetails.getAsnlineno());
+									DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
 
-	        BeanUtils.copyProperties(orderHeaderForNormal, headerVO);
-        }
+									form.setField("sku."+j, docPaDetails.getSku());
+									form.setField("skuN."+j, basSku.getDescrC());
+									form.setField("regNo."+j, basSku.getReservedfield03());
+									form.setField("desc."+j, basSku.getDescrE());
+									form.setField("batchNo."+j, docPaDetails.getUserdefine3());
+									form.setField("seriNo."+j, docPaDetails.getUserdefine4());
+									form.setField("ill."+j, detailVO.getLotatt07());
+									form.setField("lot01."+j, detailVO.getLotatt01());
+									form.setField("lot02."+j, detailVO.getLotatt02());
+									form.setField("qtyE."+j, docPaDetails.getAsnqtyExpected().toString());
+									form.setField("uom."+j, basSku.getDefaultreceivinguom());
+									form.setField("qty."+j, docPaDetails.getPutwayqtyExpected().toString());
+									form.setField("qtyA."+j, docPaDetails.getPutwayqtyCompleted().toString());
+								}
+							}
+							stamper.setFormFlattening(true);
+							stamper.close();
+							page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
+							pdfCopy.addPage(page);
+						}
+					}*/
 
-        return headerVO;
-    }
+				}
+				document.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

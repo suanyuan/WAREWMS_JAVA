@@ -1,590 +1,1176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao" >
-<!-- Result Map-->
-<resultMap id="OrderHeaderForNormalMap" type="com.wms.entity.order.OrderHeaderForNormal" >
-	<result column="customerId" property="customerId"/>
-	<result column="customerShortName" property="customerShortName"/>
-	<result column="orderNo" property="orderNo"/>
-	<result column="orderTime" property="orderTime"/>
-	<result column="requiredDeliveryTime" property="requiredDeliveryTime"/>
-	<result column="orderCode" property="orderCode"/>
-	<result column="orderStatus" property="orderStatus"/>
-	<result column="orderStatusName" property="orderStatusName"/>
-	<result column="orderType" property="orderType"/>
-	<result column="orderTypeName" property="orderTypeName"/>
-	<result column="consigneeName" property="consigneeName"/>
-	<result column="province" property="province"/>
-	<result column="city" property="city"/>
-	<result column="district" property="district"/>
-	<result column="address" property="address"/>
-	<result column="tel" property="tel"/>
-	<result column="zipCode" property="zipCode"/>
-	<result column="lastShipmentTime" property="lastShipmentTime"/>
-	<result column="notes" property="notes"/>
-	<result column="addwho" property="addwho"/>
-	<result column="addtime" property="addtime"/>
-	<result column="edittime" property="edittime"/>
-	<result column="editwho" property="editwho"/>
-	<result column="boxQty" property="boxQty"/>
-	<result column="totalGrossWeight" property="totalGrossWeight"/>
-	<result column="totalCubic" property="totalCubic"/>
-	<result column="allocationDetailsId" property="allocationDetailsId"/>
-	<result column="packingFlag" property="packingFlag"/>
-	<result column="printTemplate" property="printTemplate"/>
-</resultMap>
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocOrderHeaderMybatisDao" >
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.wms.entity.order.OrderHeaderForNormal" >
+		<result column="orderno" property="orderNo"/>
+		<result column="customerid" property="customerid"/>
+		<result column="soreference1" property="soreference1"/>
+		<result column="ordertime" property="ordertime"/>
+		<result column="expectedshipmenttime1" property="expectedshipmenttime1"/>
+		<result column="expectedshipmenttime2" property="expectedshipmenttime2"/>
+		<result column="requireddeliverytime" property="requireddeliverytime"/>
+		<result column="priority" property="priority"/>
+		<result column="consigneeid" property="consigneeid"/>
+		<result column="c_contact" property="cContact"/>
+		<result column="consigneename" property="consigneename"/>
+		<result column="c_address1" property="cAddress1"/>
+		<result column="c_address2" property="cAddress2"/>
+		<result column="c_address3" property="cAddress3"/>
+		<result column="c_address4" property="cAddress4"/>
+		<result column="c_city" property="cCity"/>
+		<result column="c_province" property="cProvince"/>
+		<result column="c_country" property="cCountry"/>
+		<result column="c_fax" property="cFax"/>
+		<result column="billingid" property="billingid"/>
+		<result column="c_zip" property="cZip"/>
+		<result column="b_contact" property="bContact"/>
+		<result column="billingname" property="billingname"/>
+		<result column="b_address1" property="bAddress1"/>
+		<result column="b_address2" property="bAddress2"/>
+		<result column="b_address3" property="bAddress3"/>
+		<result column="b_address4" property="bAddress4"/>
+		<result column="b_city" property="bCity"/>
+		<result column="b_province" property="bProvince"/>
+		<result column="b_zip" property="bZip"/>
+		<result column="b_country" property="bCountry"/>
+		<result column="deliverytermsdescr" property="deliverytermsdescr"/>
+		<result column="b_fax" property="bFax"/>
+		<result column="b_email" property="bEmail"/>
+		<result column="paymenttermsdescr" property="paymenttermsdescr"/>
+		<result column="deliveryterms" property="deliveryterms"/>
+		<result column="paymentterms" property="paymentterms"/>
+		<result column="door" property="door"/>
+		<result column="route" property="route"/>
+		<result column="stop" property="stop"/>
+		<result column="sostatus" property="sostatus"/>
+		<result column="placeofdischarge" property="placeofdischarge"/>
+		<result column="placeofdelivery" property="placeofdelivery"/>
+		<result column="ordertype" property="ordertype"/>
+		<result column="userdefine1" property="userdefine1"/>
+		<result column="userdefine2" property="userdefine2"/>
+		<result column="userdefine3" property="userdefine3"/>
+		<result column="userdefine4" property="userdefine4"/>
+		<result column="userdefine5" property="userdefine5"/>
+		<result column="addtime" property="addtime"/>
+		<result column="addwho" property="addwho"/>
+		<result column="edittime" property="edittime"/>
+		<result column="editwho" property="editwho"/>
+		<result column="notes" property="notes"/>
+		<result column="soreference2" property="soreference2"/>
+		<result column="soreference3" property="soreference3"/>
+		<result column="carrierid" property="carrierid"/>
+		<result column="carriername" property="carriername"/>
+		<result column="carrieraddress1" property="carrieraddress1"/>
+		<result column="carrieraddress3" property="carrieraddress3"/>
+		<result column="carrieraddress2" property="carrieraddress2"/>
+		<result column="carrieraddress4" property="carrieraddress4"/>
+		<result column="carriercity" property="carriercity"/>
+		<result column="carrierprovince" property="carrierprovince"/>
+		<result column="carriercountry" property="carriercountry"/>
+		<result column="carrierzip" property="carrierzip"/>
+		<result column="issuepartyid" property="issuepartyid"/>
+		<result column="issuepartyname" property="issuepartyname"/>
+		<result column="i_address1" property="iAddress1"/>
+		<result column="i_address2" property="iAddress2"/>
+		<result column="i_address3" property="iAddress3"/>
+		<result column="i_address4" property="iAddress4"/>
+		<result column="i_city" property="iCity"/>
+		<result column="i_province" property="iProvince"/>
+		<result column="i_country" property="iCountry"/>
+		<result column="i_zip" property="iZip"/>
+		<result column="lastshipmenttime" property="lastshipmenttime"/>
+		<result column="edisendflag" property="edisendflag"/>
+		<result column="picking_print_flag" property="pickingPrintFlag"/>
+		<result column="createsource" property="createsource"/>
+		<result column="edisendtime" property="edisendtime"/>
+		<result column="edisendtime2" property="edisendtime2"/>
+		<result column="edisendtime3" property="edisendtime3"/>
+		<result column="edisendtime4" property="edisendtime4"/>
+		<result column="edisendtime5" property="edisendtime5"/>
+		<result column="b_tel1" property="bTel1"/>
+		<result column="b_tel2" property="bTel2"/>
+		<result column="carriercontact" property="carriercontact"/>
+		<result column="carriermail" property="carriermail"/>
+		<result column="carrierfax" property="carrierfax"/>
+		<result column="carriertel1" property="carriertel1"/>
+		<result column="carriertel2" property="carriertel2"/>
+		<result column="c_mail" property="cMail"/>
+		<result column="c_tel1" property="cTel1"/>
+		<result column="c_tel2" property="cTel2"/>
+		<result column="i_contact" property="iContact"/>
+		<result column="i_mail" property="iMail"/>
+		<result column="i_fax" property="iFax"/>
+		<result column="i_tel1" property="iTel1"/>
+		<result column="i_tel2" property="iTel2"/>
+		<result column="releasestatus" property="releasestatus"/>
+		<result column="transportation" property="transportation"/>
+		<result column="soreference4" property="soreference4"/>
+		<result column="soreference5" property="soreference5"/>
+		<result column="h_edi_01" property="hEdi01"/>
+		<result column="h_edi_02" property="hEdi02"/>
+		<result column="h_edi_03" property="hEdi03"/>
+		<result column="h_edi_04" property="hEdi04"/>
+		<result column="h_edi_05" property="hEdi05"/>
+		<result column="h_edi_06" property="hEdi06"/>
+		<result column="h_edi_07" property="hEdi07"/>
+		<result column="h_edi_08" property="hEdi08"/>
+		<result column="h_edi_09" property="hEdi09"/>
+		<result column="h_edi_10" property="hEdi10"/>
+		<result column="userdefine6" property="userdefine6"/>
+		<result column="order_print_flag" property="orderPrintFlag"/>
+		<result column="rfgettask" property="rfgettask"/>
+		<result column="warehouseid" property="warehouseid"/>
+		<result column="erpcancelflag" property="erpcancelflag"/>
+		<result column="zonegroup" property="zonegroup"/>
+		<result column="medicalxmltime" property="medicalxmltime"/>
+		<result column="placeofloading" property="placeofloading"/>
+		<result column="requiredeliveryno" property="requiredeliveryno"/>
+		<result column="singlematch" property="singlematch"/>
+		<result column="serialnocatch" property="serialnocatch"/>
+		<result column="followup" property="followup"/>
+		<result column="userdefinea" property="userdefinea"/>
+		<result column="userdefineb" property="userdefineb"/>
+		<result column="salesorderno" property="salesorderno"/>
+		<result column="invoiceprintflag" property="invoiceprintflag"/>
+		<result column="invoiceno" property="invoiceno"/>
+		<result column="invoicetitle" property="invoicetitle"/>
+		<result column="invoicetype" property="invoicetype"/>
+		<result column="invoiceitem" property="invoiceitem"/>
+		<result column="invoiceamount" property="invoiceamount"/>
+		<result column="archiveflag" property="archiveflag"/>
+		<result column="consigneename_e" property="consigneenameE"/>
+		<result column="puttolocation" property="puttolocation"/>
+		<result column="ful_alc" property="fulAlc"/>
+		<result column="deliveryno" property="deliveryno"/>
+		<result column="channel" property="channel"/>
+		<result column="waveno" property="waveno"/>
+		<result column="allocationcount" property="allocationcount"/>
+		<result column="expressprintflag" property="expressprintflag"/>
+		<result column="deliverynoteprintflag" property="deliverynoteprintflag"/>
+		<result column="weightingflag" property="weightingflag"/>
+		<result column="udfprintflag1" property="udfprintflag1"/>
+		<result column="udfprintflag2" property="udfprintflag2"/>
+		<result column="udfprintflag3" property="udfprintflag3"/>
+		<result column="edisendflag3" property="edisendflag3"/>
+		<result column="edisendflag2" property="edisendflag2"/>
+		<result column="soreference6" property="soreference6"/>
+		<result column="sign_day" property="signDay"/>
+		<result column="h_edi_11" property="hEdi11"/>
+		<result column="h_edi_12" property="hEdi12"/>
+		<result column="h_edi_13" property="hEdi13"/>
+		<result column="h_edi_14" property="hEdi14"/>
+		<result column="h_edi_15" property="hEdi15"/>
+	</resultMap>
 
-<resultMap id="PickingMap" type="com.wms.entity.order.OrderHeaderForNormal" >
-	<result column="customerId" property="customerId"/>
-	<result column="customerShortName" property="customerShortName"/>
-	<result column="orderNo" property="orderNo"/>
-	<result column="orderCode" property="orderCode"/>
-	<result column="totalQty" property="totalQty"/>
-	<result column="totalGrossWeight" property="totalGrossWeight"/>
-	<result column="totalCubic" property="totalCubic"/>
-	<result column="notes" property="notes"/>
-	<collection property="orderDetailsForNormalList" javaType="java.util.List" ofType="com.wms.entity.order.OrderDetailsForNormal">
-		<result column="orderLineNo" property="orderLineNo"/>
-		<result column="sku" property="sku"/>
-		<result column="skuName" property="skuName"/>
-		<result column="locationId" property="locationId"/>
-		<result column="unit" property="unit"/>
-		<result column="lotatt01" property="lotatt01"/>
-		<result column="lotatt02" property="lotatt02"/>
-		<result column="lotatt03" property="lotatt03"/>
-		<result column="lotatt04" property="lotatt04"/>
-		<result column="qtyAllocated" property="qtyAllocated"/>
-	</collection>
-</resultMap>
-
-<resultMap id="ReceiptMap" type="com.wms.entity.order.OrderHeaderForNormal" >
-	<result column="customerId" property="customerId"/>
-	<result column="customerShortName" property="customerShortName"/>
-	<result column="orderNo" property="orderNo"/>
-	<result column="orderCode" property="orderCode"/>
-	<result column="requiredDeliveryTime" property="requiredDeliveryTime"/>
-	<result column="consigneeName" property="consigneeName"/>
-	<result column="address" property="address"/>
-	<result column="tel" property="tel"/>
-	<result column="boxQty" property="boxQty"/>
-	<result column="totalPrice" property="totalPrice"/>
-	<result column="notes" property="notes"/>
-	<collection property="orderDetailsForNormalList" javaType="java.util.List" ofType="com.wms.entity.order.OrderDetailsForNormal">
-		<result column="orderLineNo" property="orderLineNo"/>
-		<result column="sku" property="sku"/>
-		<result column="skuName" property="skuName"/>
-		<result column="unit" property="unit"/>
-		<result column="qtyOrdered" property="qtyOrdered"/>
-		<result column="price" property="totalPrice"/>
-	</collection>
-</resultMap>
-
-<!--<resultMap id="ExportOrderDataMap" type="com.wms.entity.ExportOrderData">-->
-	<!--<result column="customerId" property="customerId"/>-->
-	<!--<result column="customerShortName" property="customerShortName"/>-->
-	<!--<result column="orderNo" property="orderNo"/>-->
-	<!--<result column="orderCode" property="orderCode"/>-->
-	<!--<result column="orderStatus" property="orderStatus"/>-->
-	<!--<result column="orderStatusName" property="orderStatusName"/>-->
-	<!--<result column="consigneeName" property="consigneeName"/>-->
-	<!--<result column="address" property="address"/>-->
-	<!--<result column="tel" property="tel"/>-->
-	<!--<result column="orderLineNo" property="orderLineNo"/>-->
-	<!--<result column="sku" property="sku"/>-->
-	<!--<result column="qtyOrdered" property="qtyOrdered"/>-->
-	<!--<result column="qtyShipped" property="qtyShipped"/>-->
-	<!--<result column="price" property="price"/>-->
-<!--</resultMap>-->
-
-<!-- 查询条件 -->
-<sql id="Example_Where_Clause">
-<trim  suffixOverrides="," >
-	<if test="condition.customerId != null and condition.customerId != ''" >
-	    and doh.customerid =  #{condition.customerId}
-	</if>
-	<if test="condition.orderNo != null and condition.orderNo != ''" >
-	    and doh.orderno =  #{condition.orderNo}
-	</if>
-	<if test="condition.orderStartTime != null" >
-	    <![CDATA[ and to_date(to_char(doh.ordertime,'yyyy/mm/dd'),'yyyy/mm/dd') >= #{condition.orderStartTime} ]]>
-	</if>
-	<if test="condition.orderEndTime != null" >
-	    <![CDATA[ and to_date(to_char(doh.ordertime,'yyyy/mm/dd'),'yyyy/mm/dd') <= #{condition.orderEndTime} ]]>
-	</if>
-	<if test="condition.orderType != null and condition.orderType != ''" >
-	    and doh.ordertype =  #{condition.orderType}
-	</if>
-	<if test="condition.orderCode != null and condition.orderCode != ''" >
-	    and doh.soreference1 =  #{condition.orderCode}
-	</if>
-	<if test="condition.orderStatus != null and condition.orderStatus != ''" >
-	    and doh.sostatus = #{condition.orderStatus}
-	</if>
-	<!-- <if test="condition.sostatusCheck != null and condition.sostatusCheck != ''" >
-	    and sostatus not in ('90','99')
-	</if> -->
-	<if test="condition.warehouseId != null and condition.warehouseId != ''" >
-	    and doh.warehouseid =  #{condition.warehouseId}
-	</if>
-	<if test="condition.customerSet != null" >
-		<if test="condition.customerSet.isEmpty() == false" >
-			and doh.customerid in (
-			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
-				#{customerSet.id,jdbcType=VARCHAR}
-			</foreach>
-			)
-		</if>
-	</if>
-</trim>
+	<!-- doc_order_header table all fields -->
+	<sql id="Base_Column_List" >
+	 orderno,customerid,soreference1,ordertime,expectedshipmenttime1,expectedshipmenttime2,requireddeliverytime,priority,consigneeid,c_contact,consigneename,c_address1,c_address2,c_address3,c_address4,c_city,c_province,c_country,c_fax,billingid,c_zip,b_contact,billingname,b_address1,b_address2,b_address3,b_address4,b_city,b_province,b_zip,b_country,deliverytermsdescr,b_fax,b_email,paymenttermsdescr,deliveryterms,paymentterms,door,route,stop,sostatus,placeofdischarge,placeofdelivery,ordertype,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,notes,soreference2,soreference3,carrierid,carriername,carrieraddress1,carrieraddress3,carrieraddress2,carrieraddress4,carriercity,carrierprovince,carriercountry,carrierzip,issuepartyid,issuepartyname,i_address1,i_address2,i_address3,i_address4,i_city,i_province,i_country,i_zip,lastshipmenttime,edisendflag,picking_print_flag,createsource,edisendtime,edisendtime2,edisendtime3,edisendtime4,edisendtime5,b_tel1,b_tel2,carriercontact,carriermail,carrierfax,carriertel1,carriertel2,c_mail,c_tel1,c_tel2,i_contact,i_mail,i_fax,i_tel1,i_tel2,releasestatus,transportation,soreference4,soreference5,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,userdefine6,order_print_flag,rfgettask,warehouseid,erpcancelflag,zonegroup,medicalxmltime,placeofloading,requiredeliveryno,singlematch,serialnocatch,followup,userdefinea,userdefineb,salesorderno,invoiceprintflag,invoiceno,invoicetitle,invoicetype,invoiceitem,invoiceamount,archiveflag,consigneename_e,puttolocation,ful_alc,deliveryno,channel,waveno,allocationcount,expressprintflag,deliverynoteprintflag,weightingflag,udfprintflag1,udfprintflag2,udfprintflag3,edisendflag3,edisendflag2,soreference6,sign_day,h_edi_11,h_edi_12,h_edi_13,h_edi_14,h_edi_15
 </sql>
-   
 
-<!-- 插入记录 -->
-<insert id="add" parameterType="Object" >
-	insert into Doc_Order_Header (
-	orderno,
-	customerid,
-	ordertime,
-	ordertype,
-	sostatus,
-	consigneeid,
-	consigneename,
-	c_address1,
-	<if test="tel != null  ">
-		c_tel1,
-	</if>
-	<if test="customerName != null  ">
-		c_address2,
-	</if>
-	<if test="customerShortName != null  ">
-		c_address3,
-	</if>
-	<if test="customerStore != null  ">
-		c_address4,
-	</if>
-	<if test="fenceName != null  ">
-		carrieraddress1,
-	</if>
-	<if test="orderCode != null  ">
-		soreference1,
-	</if>
-	<if test="externalOrderCode != null  ">
-		soreference2,
-	</if>
-	<if test="requiredDeliveryTime != null  ">
-		requireddeliverytime,
-	</if>
-	<if test="notes != null  ">
-		notes,
-	</if>
-	warehouseid,
-	createsource,
-	addtime,
-	addwho,
-	edittime,
-	editwho
-	)
-	values(
-	#{orderNo},
-	#{customerId},
-	now(),
-	#{orderType},
-	'00',
-	#{consigneeName},
-	#{consigneeName},
-	#{address},
-	<if test="tel != null  ">
-		#{tel},
-	</if>
-	<if test="customerName != null  ">
-		#{customerName},
-	</if>
-	<if test="customerShortName != null  ">
-		#{customerShortName},
-	</if>
-	<if test="customerStore != null  ">
-		#{customerStore},
-	</if>
-	<if test="fenceName != null  ">
-		#{fenceName},
-	</if>
-	<if test="orderCode != null  ">
-		#{orderCode},
-	</if>
-	<if test="externalOrderCode != null  ">
-		#{externalOrderCode},
-	</if>
-	<if test="requiredDeliveryTime != null  ">
-		#{requiredDeliveryTime},
-	</if>
-	<if test="notes != null  ">
-		#{notes},
-	</if>
-	#{warehouseId},
-	#{addwho},
-	now(),
-	#{addwho},
-	now(),
-	#{editwho}
-	)
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.orderno != null and condition.orderno != ''" >
+				and orderno =  #{condition.orderno}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid =  #{condition.customerid}
+			</if>
+			<if test="condition.soreference1 != null and condition.soreference1 != ''" >
+				and soreference1 =  #{condition.soreference1}
+			</if>
+			<if test="condition.ordertime != null and condition.ordertime != ''" >
+				and ordertime =  #{condition.ordertime}
+			</if>
+			<if test="condition.expectedshipmenttime1 != null and condition.expectedshipmenttime1 != ''" >
+				and expectedshipmenttime1 =  #{condition.expectedshipmenttime1}
+			</if>
+			<if test="condition.expectedshipmenttime2 != null and condition.expectedshipmenttime2 != ''" >
+				and expectedshipmenttime2 =  #{condition.expectedshipmenttime2}
+			</if>
+			<if test="condition.requireddeliverytime != null and condition.requireddeliverytime != ''" >
+				and requireddeliverytime =  #{condition.requireddeliverytime}
+			</if>
+			<if test="condition.priority != null and condition.priority != ''" >
+				and priority =  #{condition.priority}
+			</if>
+			<if test="condition.consigneeid != null and condition.consigneeid != ''" >
+				and consigneeid =  #{condition.consigneeid}
+			</if>
+			<if test="condition.cContact != null and condition.cContact != ''" >
+				and c_contact =  #{condition.cContact}
+			</if>
+			<if test="condition.consigneename != null and condition.consigneename != ''" >
+				and consigneename =  #{condition.consigneename}
+			</if>
+			<if test="condition.cAddress1 != null and condition.cAddress1 != ''" >
+				and c_address1 =  #{condition.cAddress1}
+			</if>
+			<if test="condition.cAddress2 != null and condition.cAddress2 != ''" >
+				and c_address2 =  #{condition.cAddress2}
+			</if>
+			<if test="condition.cAddress3 != null and condition.cAddress3 != ''" >
+				and c_address3 =  #{condition.cAddress3}
+			</if>
+			<if test="condition.cAddress4 != null and condition.cAddress4 != ''" >
+				and c_address4 =  #{condition.cAddress4}
+			</if>
+			<if test="condition.cCity != null and condition.cCity != ''" >
+				and c_city =  #{condition.cCity}
+			</if>
+			<if test="condition.cProvince != null and condition.cProvince != ''" >
+				and c_province =  #{condition.cProvince}
+			</if>
+			<if test="condition.cCountry != null and condition.cCountry != ''" >
+				and c_country =  #{condition.cCountry}
+			</if>
+			<if test="condition.cFax != null and condition.cFax != ''" >
+				and c_fax =  #{condition.cFax}
+			</if>
+			<if test="condition.billingid != null and condition.billingid != ''" >
+				and billingid =  #{condition.billingid}
+			</if>
+			<if test="condition.cZip != null and condition.cZip != ''" >
+				and c_zip =  #{condition.cZip}
+			</if>
+			<if test="condition.bContact != null and condition.bContact != ''" >
+				and b_contact =  #{condition.bContact}
+			</if>
+			<if test="condition.billingname != null and condition.billingname != ''" >
+				and billingname =  #{condition.billingname}
+			</if>
+			<if test="condition.bAddress1 != null and condition.bAddress1 != ''" >
+				and b_address1 =  #{condition.bAddress1}
+			</if>
+			<if test="condition.bAddress2 != null and condition.bAddress2 != ''" >
+				and b_address2 =  #{condition.bAddress2}
+			</if>
+			<if test="condition.bAddress3 != null and condition.bAddress3 != ''" >
+				and b_address3 =  #{condition.bAddress3}
+			</if>
+			<if test="condition.bAddress4 != null and condition.bAddress4 != ''" >
+				and b_address4 =  #{condition.bAddress4}
+			</if>
+			<if test="condition.bCity != null and condition.bCity != ''" >
+				and b_city =  #{condition.bCity}
+			</if>
+			<if test="condition.bProvince != null and condition.bProvince != ''" >
+				and b_province =  #{condition.bProvince}
+			</if>
+			<if test="condition.bZip != null and condition.bZip != ''" >
+				and b_zip =  #{condition.bZip}
+			</if>
+			<if test="condition.bCountry != null and condition.bCountry != ''" >
+				and b_country =  #{condition.bCountry}
+			</if>
+			<if test="condition.deliverytermsdescr != null and condition.deliverytermsdescr != ''" >
+				and deliverytermsdescr =  #{condition.deliverytermsdescr}
+			</if>
+			<if test="condition.bFax != null and condition.bFax != ''" >
+				and b_fax =  #{condition.bFax}
+			</if>
+			<if test="condition.bEmail != null and condition.bEmail != ''" >
+				and b_email =  #{condition.bEmail}
+			</if>
+			<if test="condition.paymenttermsdescr != null and condition.paymenttermsdescr != ''" >
+				and paymenttermsdescr =  #{condition.paymenttermsdescr}
+			</if>
+			<if test="condition.deliveryterms != null and condition.deliveryterms != ''" >
+				and deliveryterms =  #{condition.deliveryterms}
+			</if>
+			<if test="condition.paymentterms != null and condition.paymentterms != ''" >
+				and paymentterms =  #{condition.paymentterms}
+			</if>
+			<if test="condition.door != null and condition.door != ''" >
+				and door =  #{condition.door}
+			</if>
+			<if test="condition.route != null and condition.route != ''" >
+				and route =  #{condition.route}
+			</if>
+			<if test="condition.stop != null and condition.stop != ''" >
+				and stop =  #{condition.stop}
+			</if>
+			<if test="condition.sostatus != null and condition.sostatus != ''" >
+				and sostatus =  #{condition.sostatus}
+			</if>
+			<if test="condition.placeofdischarge != null and condition.placeofdischarge != ''" >
+				and placeofdischarge =  #{condition.placeofdischarge}
+			</if>
+			<if test="condition.placeofdelivery != null and condition.placeofdelivery != ''" >
+				and placeofdelivery =  #{condition.placeofdelivery}
+			</if>
+			<if test="condition.ordertype != null and condition.ordertype != ''" >
+				and ordertype =  #{condition.ordertype}
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.addtime != null and condition.addtime != ''" >
+				and addtime =  #{condition.addtime}
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and addwho =  #{condition.addwho}
+			</if>
+			<if test="condition.edittime != null and condition.edittime != ''" >
+				and edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.notes != null and condition.notes != ''" >
+				and notes =  #{condition.notes}
+			</if>
+			<if test="condition.soreference2 != null and condition.soreference2 != ''" >
+				and soreference2 =  #{condition.soreference2}
+			</if>
+			<if test="condition.soreference3 != null and condition.soreference3 != ''" >
+				and soreference3 =  #{condition.soreference3}
+			</if>
+			<if test="condition.carrierid != null and condition.carrierid != ''" >
+				and carrierid =  #{condition.carrierid}
+			</if>
+			<if test="condition.carriername != null and condition.carriername != ''" >
+				and carriername =  #{condition.carriername}
+			</if>
+			<if test="condition.carrieraddress1 != null and condition.carrieraddress1 != ''" >
+				and carrieraddress1 =  #{condition.carrieraddress1}
+			</if>
+			<if test="condition.carrieraddress3 != null and condition.carrieraddress3 != ''" >
+				and carrieraddress3 =  #{condition.carrieraddress3}
+			</if>
+			<if test="condition.carrieraddress2 != null and condition.carrieraddress2 != ''" >
+				and carrieraddress2 =  #{condition.carrieraddress2}
+			</if>
+			<if test="condition.carrieraddress4 != null and condition.carrieraddress4 != ''" >
+				and carrieraddress4 =  #{condition.carrieraddress4}
+			</if>
+			<if test="condition.carriercity != null and condition.carriercity != ''" >
+				and carriercity =  #{condition.carriercity}
+			</if>
+			<if test="condition.carrierprovince != null and condition.carrierprovince != ''" >
+				and carrierprovince =  #{condition.carrierprovince}
+			</if>
+			<if test="condition.carriercountry != null and condition.carriercountry != ''" >
+				and carriercountry =  #{condition.carriercountry}
+			</if>
+			<if test="condition.carrierzip != null and condition.carrierzip != ''" >
+				and carrierzip =  #{condition.carrierzip}
+			</if>
+			<if test="condition.issuepartyid != null and condition.issuepartyid != ''" >
+				and issuepartyid =  #{condition.issuepartyid}
+			</if>
+			<if test="condition.issuepartyname != null and condition.issuepartyname != ''" >
+				and issuepartyname =  #{condition.issuepartyname}
+			</if>
+			<if test="condition.iAddress1 != null and condition.iAddress1 != ''" >
+				and i_address1 =  #{condition.iAddress1}
+			</if>
+			<if test="condition.iAddress2 != null and condition.iAddress2 != ''" >
+				and i_address2 =  #{condition.iAddress2}
+			</if>
+			<if test="condition.iAddress3 != null and condition.iAddress3 != ''" >
+				and i_address3 =  #{condition.iAddress3}
+			</if>
+			<if test="condition.iAddress4 != null and condition.iAddress4 != ''" >
+				and i_address4 =  #{condition.iAddress4}
+			</if>
+			<if test="condition.iCity != null and condition.iCity != ''" >
+				and i_city =  #{condition.iCity}
+			</if>
+			<if test="condition.iProvince != null and condition.iProvince != ''" >
+				and i_province =  #{condition.iProvince}
+			</if>
+			<if test="condition.iCountry != null and condition.iCountry != ''" >
+				and i_country =  #{condition.iCountry}
+			</if>
+			<if test="condition.iZip != null and condition.iZip != ''" >
+				and i_zip =  #{condition.iZip}
+			</if>
+			<if test="condition.lastshipmenttime != null and condition.lastshipmenttime != ''" >
+				and lastshipmenttime =  #{condition.lastshipmenttime}
+			</if>
+			<if test="condition.edisendflag != null and condition.edisendflag != ''" >
+				and edisendflag =  #{condition.edisendflag}
+			</if>
+			<if test="condition.pickingPrintFlag != null and condition.pickingPrintFlag != ''" >
+				and picking_print_flag =  #{condition.pickingPrintFlag}
+			</if>
+			<if test="condition.createsource != null and condition.createsource != ''" >
+				and createsource =  #{condition.createsource}
+			</if>
+			<if test="condition.edisendtime != null and condition.edisendtime != ''" >
+				and edisendtime =  #{condition.edisendtime}
+			</if>
+			<if test="condition.edisendtime2 != null and condition.edisendtime2 != ''" >
+				and edisendtime2 =  #{condition.edisendtime2}
+			</if>
+			<if test="condition.edisendtime3 != null and condition.edisendtime3 != ''" >
+				and edisendtime3 =  #{condition.edisendtime3}
+			</if>
+			<if test="condition.edisendtime4 != null and condition.edisendtime4 != ''" >
+				and edisendtime4 =  #{condition.edisendtime4}
+			</if>
+			<if test="condition.edisendtime5 != null and condition.edisendtime5 != ''" >
+				and edisendtime5 =  #{condition.edisendtime5}
+			</if>
+			<if test="condition.bTel1 != null and condition.bTel1 != ''" >
+				and b_tel1 =  #{condition.bTel1}
+			</if>
+			<if test="condition.bTel2 != null and condition.bTel2 != ''" >
+				and b_tel2 =  #{condition.bTel2}
+			</if>
+			<if test="condition.carriercontact != null and condition.carriercontact != ''" >
+				and carriercontact =  #{condition.carriercontact}
+			</if>
+			<if test="condition.carriermail != null and condition.carriermail != ''" >
+				and carriermail =  #{condition.carriermail}
+			</if>
+			<if test="condition.carrierfax != null and condition.carrierfax != ''" >
+				and carrierfax =  #{condition.carrierfax}
+			</if>
+			<if test="condition.carriertel1 != null and condition.carriertel1 != ''" >
+				and carriertel1 =  #{condition.carriertel1}
+			</if>
+			<if test="condition.carriertel2 != null and condition.carriertel2 != ''" >
+				and carriertel2 =  #{condition.carriertel2}
+			</if>
+			<if test="condition.cMail != null and condition.cMail != ''" >
+				and c_mail =  #{condition.cMail}
+			</if>
+			<if test="condition.cTel1 != null and condition.cTel1 != ''" >
+				and c_tel1 =  #{condition.cTel1}
+			</if>
+			<if test="condition.cTel2 != null and condition.cTel2 != ''" >
+				and c_tel2 =  #{condition.cTel2}
+			</if>
+			<if test="condition.iContact != null and condition.iContact != ''" >
+				and i_contact =  #{condition.iContact}
+			</if>
+			<if test="condition.iMail != null and condition.iMail != ''" >
+				and i_mail =  #{condition.iMail}
+			</if>
+			<if test="condition.iFax != null and condition.iFax != ''" >
+				and i_fax =  #{condition.iFax}
+			</if>
+			<if test="condition.iTel1 != null and condition.iTel1 != ''" >
+				and i_tel1 =  #{condition.iTel1}
+			</if>
+			<if test="condition.iTel2 != null and condition.iTel2 != ''" >
+				and i_tel2 =  #{condition.iTel2}
+			</if>
+			<if test="condition.releasestatus != null and condition.releasestatus != ''" >
+				and releasestatus =  #{condition.releasestatus}
+			</if>
+			<if test="condition.transportation != null and condition.transportation != ''" >
+				and transportation =  #{condition.transportation}
+			</if>
+			<if test="condition.soreference4 != null and condition.soreference4 != ''" >
+				and soreference4 =  #{condition.soreference4}
+			</if>
+			<if test="condition.soreference5 != null and condition.soreference5 != ''" >
+				and soreference5 =  #{condition.soreference5}
+			</if>
+			<if test="condition.hEdi01 != null and condition.hEdi01 != ''" >
+				and h_edi_01 =  #{condition.hEdi01}
+			</if>
+			<if test="condition.hEdi02 != null and condition.hEdi02 != ''" >
+				and h_edi_02 =  #{condition.hEdi02}
+			</if>
+			<if test="condition.hEdi03 != null and condition.hEdi03 != ''" >
+				and h_edi_03 =  #{condition.hEdi03}
+			</if>
+			<if test="condition.hEdi04 != null and condition.hEdi04 != ''" >
+				and h_edi_04 =  #{condition.hEdi04}
+			</if>
+			<if test="condition.hEdi05 != null and condition.hEdi05 != ''" >
+				and h_edi_05 =  #{condition.hEdi05}
+			</if>
+			<if test="condition.hEdi06 != null and condition.hEdi06 != ''" >
+				and h_edi_06 =  #{condition.hEdi06}
+			</if>
+			<if test="condition.hEdi07 != null and condition.hEdi07 != ''" >
+				and h_edi_07 =  #{condition.hEdi07}
+			</if>
+			<if test="condition.hEdi08 != null and condition.hEdi08 != ''" >
+				and h_edi_08 =  #{condition.hEdi08}
+			</if>
+			<if test="condition.hEdi09 != null and condition.hEdi09 != ''" >
+				and h_edi_09 =  #{condition.hEdi09}
+			</if>
+			<if test="condition.hEdi10 != null and condition.hEdi10 != ''" >
+				and h_edi_10 =  #{condition.hEdi10}
+			</if>
+			<if test="condition.userdefine6 != null and condition.userdefine6 != ''" >
+				and userdefine6 =  #{condition.userdefine6}
+			</if>
+			<if test="condition.orderPrintFlag != null and condition.orderPrintFlag != ''" >
+				and order_print_flag =  #{condition.orderPrintFlag}
+			</if>
+			<if test="condition.rfgettask != null and condition.rfgettask != ''" >
+				and rfgettask =  #{condition.rfgettask}
+			</if>
+			<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+				and warehouseid =  #{condition.warehouseid}
+			</if>
+			<if test="condition.erpcancelflag != null and condition.erpcancelflag != ''" >
+				and erpcancelflag =  #{condition.erpcancelflag}
+			</if>
+			<if test="condition.zonegroup != null and condition.zonegroup != ''" >
+				and zonegroup =  #{condition.zonegroup}
+			</if>
+			<if test="condition.medicalxmltime != null and condition.medicalxmltime != ''" >
+				and medicalxmltime =  #{condition.medicalxmltime}
+			</if>
+			<if test="condition.placeofloading != null and condition.placeofloading != ''" >
+				and placeofloading =  #{condition.placeofloading}
+			</if>
+			<if test="condition.requiredeliveryno != null and condition.requiredeliveryno != ''" >
+				and requiredeliveryno =  #{condition.requiredeliveryno}
+			</if>
+			<if test="condition.singlematch != null and condition.singlematch != ''" >
+				and singlematch =  #{condition.singlematch}
+			</if>
+			<if test="condition.serialnocatch != null and condition.serialnocatch != ''" >
+				and serialnocatch =  #{condition.serialnocatch}
+			</if>
+			<if test="condition.followup != null and condition.followup != ''" >
+				and followup =  #{condition.followup}
+			</if>
+			<if test="condition.userdefinea != null and condition.userdefinea != ''" >
+				and userdefinea =  #{condition.userdefinea}
+			</if>
+			<if test="condition.userdefineb != null and condition.userdefineb != ''" >
+				and userdefineb =  #{condition.userdefineb}
+			</if>
+			<if test="condition.salesorderno != null and condition.salesorderno != ''" >
+				and salesorderno =  #{condition.salesorderno}
+			</if>
+			<if test="condition.invoiceprintflag != null and condition.invoiceprintflag != ''" >
+				and invoiceprintflag =  #{condition.invoiceprintflag}
+			</if>
+			<if test="condition.invoiceno != null and condition.invoiceno != ''" >
+				and invoiceno =  #{condition.invoiceno}
+			</if>
+			<if test="condition.invoicetitle != null and condition.invoicetitle != ''" >
+				and invoicetitle =  #{condition.invoicetitle}
+			</if>
+			<if test="condition.invoicetype != null and condition.invoicetype != ''" >
+				and invoicetype =  #{condition.invoicetype}
+			</if>
+			<if test="condition.invoiceitem != null and condition.invoiceitem != ''" >
+				and invoiceitem =  #{condition.invoiceitem}
+			</if>
+			<if test="condition.invoiceamount != null and condition.invoiceamount != ''" >
+				and invoiceamount =  #{condition.invoiceamount}
+			</if>
+			<if test="condition.archiveflag != null and condition.archiveflag != ''" >
+				and archiveflag =  #{condition.archiveflag}
+			</if>
+			<if test="condition.consigneenameE != null and condition.consigneenameE != ''" >
+				and consigneename_e =  #{condition.consigneenameE}
+			</if>
+			<if test="condition.puttolocation != null and condition.puttolocation != ''" >
+				and puttolocation =  #{condition.puttolocation}
+			</if>
+			<if test="condition.fulAlc != null and condition.fulAlc != ''" >
+				and ful_alc =  #{condition.fulAlc}
+			</if>
+			<if test="condition.deliveryno != null and condition.deliveryno != ''" >
+				and deliveryno =  #{condition.deliveryno}
+			</if>
+			<if test="condition.channel != null and condition.channel != ''" >
+				and channel =  #{condition.channel}
+			</if>
+			<if test="condition.waveno != null and condition.waveno != ''" >
+				and waveno =  #{condition.waveno}
+			</if>
+			<if test="condition.allocationcount != null and condition.allocationcount != ''" >
+				and allocationcount =  #{condition.allocationcount}
+			</if>
+			<if test="condition.expressprintflag != null and condition.expressprintflag != ''" >
+				and expressprintflag =  #{condition.expressprintflag}
+			</if>
+			<if test="condition.deliverynoteprintflag != null and condition.deliverynoteprintflag != ''" >
+				and deliverynoteprintflag =  #{condition.deliverynoteprintflag}
+			</if>
+			<if test="condition.weightingflag != null and condition.weightingflag != ''" >
+				and weightingflag =  #{condition.weightingflag}
+			</if>
+			<if test="condition.udfprintflag1 != null and condition.udfprintflag1 != ''" >
+				and udfprintflag1 =  #{condition.udfprintflag1}
+			</if>
+			<if test="condition.udfprintflag2 != null and condition.udfprintflag2 != ''" >
+				and udfprintflag2 =  #{condition.udfprintflag2}
+			</if>
+			<if test="condition.udfprintflag3 != null and condition.udfprintflag3 != ''" >
+				and udfprintflag3 =  #{condition.udfprintflag3}
+			</if>
+			<if test="condition.edisendflag3 != null and condition.edisendflag3 != ''" >
+				and edisendflag3 =  #{condition.edisendflag3}
+			</if>
+			<if test="condition.edisendflag2 != null and condition.edisendflag2 != ''" >
+				and edisendflag2 =  #{condition.edisendflag2}
+			</if>
+			<if test="condition.soreference6 != null and condition.soreference6 != ''" >
+				and soreference6 =  #{condition.soreference6}
+			</if>
+			<if test="condition.signDay != null and condition.signDay != ''" >
+				and sign_day =  #{condition.signDay}
+			</if>
+			<if test="condition.hEdi11 != null and condition.hEdi11 != ''" >
+				and h_edi_11 =  #{condition.hEdi11}
+			</if>
+			<if test="condition.hEdi12 != null and condition.hEdi12 != ''" >
+				and h_edi_12 =  #{condition.hEdi12}
+			</if>
+			<if test="condition.hEdi13 != null and condition.hEdi13 != ''" >
+				and h_edi_13 =  #{condition.hEdi13}
+			</if>
+			<if test="condition.hEdi14 != null and condition.hEdi14 != ''" >
+				and h_edi_14 =  #{condition.hEdi14}
+			</if>
+			<if test="condition.hEdi15 != null and condition.hEdi15 != ''" >
+				and h_edi_15 =  #{condition.hEdi15}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object" >
+  insert into doc_order_header(orderno,customerid,soreference1,ordertime,expectedshipmenttime1,expectedshipmenttime2,requireddeliverytime,priority,consigneeid,c_contact,consigneename,c_address1,c_address2,c_address3,c_address4,c_city,c_province,c_country,c_fax,billingid,c_zip,b_contact,billingname,b_address1,b_address2,b_address3,b_address4,b_city,b_province,b_zip,b_country,deliverytermsdescr,b_fax,b_email,paymenttermsdescr,deliveryterms,paymentterms,door,route,stop,sostatus,placeofdischarge,placeofdelivery,ordertype,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addtime,addwho,edittime,editwho,notes,soreference2,soreference3,carrierid,carriername,carrieraddress1,carrieraddress3,carrieraddress2,carrieraddress4,carriercity,carrierprovince,carriercountry,carrierzip,issuepartyid,issuepartyname,i_address1,i_address2,i_address3,i_address4,i_city,i_province,i_country,i_zip,lastshipmenttime,edisendflag,picking_print_flag,createsource,edisendtime,edisendtime2,edisendtime3,edisendtime4,edisendtime5,b_tel1,b_tel2,carriercontact,carriermail,carrierfax,carriertel1,carriertel2,c_mail,c_tel1,c_tel2,i_contact,i_mail,i_fax,i_tel1,i_tel2,releasestatus,transportation,soreference4,soreference5,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,userdefine6,order_print_flag,rfgettask,warehouseid,erpcancelflag,zonegroup,medicalxmltime,placeofloading,requiredeliveryno,singlematch,serialnocatch,followup,userdefinea,userdefineb,salesorderno,invoiceprintflag,invoiceno,invoicetitle,invoicetype,invoiceitem,invoiceamount,archiveflag,consigneename_e,puttolocation,ful_alc,deliveryno,channel,waveno,allocationcount,expressprintflag,deliverynoteprintflag,weightingflag,udfprintflag1,udfprintflag2,udfprintflag3,edisendflag3,edisendflag2,soreference6,sign_day,h_edi_11,h_edi_12,h_edi_13,h_edi_14,h_edi_15)
+ values(#{orderno},#{customerid},#{soreference1},#{ordertime},#{expectedshipmenttime1},#{expectedshipmenttime2},#{requireddeliverytime},#{priority},#{consigneeid},#{cContact},#{consigneename},#{cAddress1},#{cAddress2},#{cAddress3},#{cAddress4},#{cCity},#{cProvince},#{cCountry},#{cFax},#{billingid},#{cZip},#{bContact},#{billingname},#{bAddress1},#{bAddress2},#{bAddress3},#{bAddress4},#{bCity},#{bProvince},#{bZip},#{bCountry},#{deliverytermsdescr},#{bFax},#{bEmail},#{paymenttermsdescr},#{deliveryterms},#{paymentterms},#{door},#{route},#{stop},#{sostatus},#{placeofdischarge},#{placeofdelivery},#{ordertype},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addtime},#{addwho},#{edittime},#{editwho},#{notes},#{soreference2},#{soreference3},#{carrierid},#{carriername},#{carrieraddress1},#{carrieraddress3},#{carrieraddress2},#{carrieraddress4},#{carriercity},#{carrierprovince},#{carriercountry},#{carrierzip},#{issuepartyid},#{issuepartyname},#{iAddress1},#{iAddress2},#{iAddress3},#{iAddress4},#{iCity},#{iProvince},#{iCountry},#{iZip},#{lastshipmenttime},#{edisendflag},#{pickingPrintFlag},#{createsource},#{edisendtime},#{edisendtime2},#{edisendtime3},#{edisendtime4},#{edisendtime5},#{bTel1},#{bTel2},#{carriercontact},#{carriermail},#{carrierfax},#{carriertel1},#{carriertel2},#{cMail},#{cTel1},#{cTel2},#{iContact},#{iMail},#{iFax},#{iTel1},#{iTel2},#{releasestatus},#{transportation},#{soreference4},#{soreference5},#{hEdi01},#{hEdi02},#{hEdi03},#{hEdi04},#{hEdi05},#{hEdi06},#{hEdi07},#{hEdi08},#{hEdi09},#{hEdi10},#{userdefine6},#{orderPrintFlag},#{rfgettask},#{warehouseid},#{erpcancelflag},#{zonegroup},#{medicalxmltime},#{placeofloading},#{requiredeliveryno},#{singlematch},#{serialnocatch},#{followup},#{userdefinea},#{userdefineb},#{salesorderno},#{invoiceprintflag},#{invoiceno},#{invoicetitle},#{invoicetype},#{invoiceitem},#{invoiceamount},#{archiveflag},#{consigneenameE},#{puttolocation},#{fulAlc},#{deliveryno},#{channel},#{waveno},#{allocationcount},#{expressprintflag},#{deliverynoteprintflag},#{weightingflag},#{udfprintflag1},#{udfprintflag2},#{udfprintflag3},#{edisendflag3},#{edisendflag2},#{soreference6},#{signDay},#{hEdi11},#{hEdi12},#{hEdi13},#{hEdi14},#{hEdi15})
 </insert>
 
-<!-- 根据id，修改记录-->  
-<update id="update" parameterType="Object" >
-	update Doc_Order_Header set
-	requireddeliverytime = #{requiredDeliveryTime},
-	consigneeid = #{consigneeName},
-	consigneename = #{consigneeName},
-	c_address1 = #{address},
-	c_tel1=#{tel},
-	<if test="notes != null  ">
-		notes=#{notes},
-	</if>
-	<if test="orderCode != null  ">
-		soreference1=#{orderCode},
-	</if>
-	edittime = now(),
-	editwho = #{editwho}
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-</update>
+	<!-- 根据id，修改记录-->
+	<update id="update" parameterType="Object" >
+  update doc_order_header set customerid=#{customerid},soreference1=#{soreference1},ordertime=#{ordertime},expectedshipmenttime1=#{expectedshipmenttime1},expectedshipmenttime2=#{expectedshipmenttime2},requireddeliverytime=#{requireddeliverytime},priority=#{priority},consigneeid=#{consigneeid},c_contact=#{cContact},consigneename=#{consigneename},c_address1=#{cAddress1},c_address2=#{cAddress2},c_address3=#{cAddress3},c_address4=#{cAddress4},c_city=#{cCity},c_province=#{cProvince},c_country=#{cCountry},c_fax=#{cFax},billingid=#{billingid},c_zip=#{cZip},b_contact=#{bContact},billingname=#{billingname},b_address1=#{bAddress1},b_address2=#{bAddress2},b_address3=#{bAddress3},b_address4=#{bAddress4},b_city=#{bCity},b_province=#{bProvince},b_zip=#{bZip},b_country=#{bCountry},deliverytermsdescr=#{deliverytermsdescr},b_fax=#{bFax},b_email=#{bEmail},paymenttermsdescr=#{paymenttermsdescr},deliveryterms=#{deliveryterms},paymentterms=#{paymentterms},door=#{door},route=#{route},stop=#{stop},sostatus=#{sostatus},placeofdischarge=#{placeofdischarge},placeofdelivery=#{placeofdelivery},ordertype=#{ordertype},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},notes=#{notes},soreference2=#{soreference2},soreference3=#{soreference3},carrierid=#{carrierid},carriername=#{carriername},carrieraddress1=#{carrieraddress1},carrieraddress3=#{carrieraddress3},carrieraddress2=#{carrieraddress2},carrieraddress4=#{carrieraddress4},carriercity=#{carriercity},carrierprovince=#{carrierprovince},carriercountry=#{carriercountry},carrierzip=#{carrierzip},issuepartyid=#{issuepartyid},issuepartyname=#{issuepartyname},i_address1=#{iAddress1},i_address2=#{iAddress2},i_address3=#{iAddress3},i_address4=#{iAddress4},i_city=#{iCity},i_province=#{iProvince},i_country=#{iCountry},i_zip=#{iZip},lastshipmenttime=#{lastshipmenttime},edisendflag=#{edisendflag},picking_print_flag=#{pickingPrintFlag},createsource=#{createsource},edisendtime=#{edisendtime},edisendtime2=#{edisendtime2},edisendtime3=#{edisendtime3},edisendtime4=#{edisendtime4},edisendtime5=#{edisendtime5},b_tel1=#{bTel1},b_tel2=#{bTel2},carriercontact=#{carriercontact},carriermail=#{carriermail},carrierfax=#{carrierfax},carriertel1=#{carriertel1},carriertel2=#{carriertel2},c_mail=#{cMail},c_tel1=#{cTel1},c_tel2=#{cTel2},i_contact=#{iContact},i_mail=#{iMail},i_fax=#{iFax},i_tel1=#{iTel1},i_tel2=#{iTel2},releasestatus=#{releasestatus},transportation=#{transportation},soreference4=#{soreference4},soreference5=#{soreference5},h_edi_01=#{hEdi01},h_edi_02=#{hEdi02},h_edi_03=#{hEdi03},h_edi_04=#{hEdi04},h_edi_05=#{hEdi05},h_edi_06=#{hEdi06},h_edi_07=#{hEdi07},h_edi_08=#{hEdi08},h_edi_09=#{hEdi09},h_edi_10=#{hEdi10},userdefine6=#{userdefine6},order_print_flag=#{orderPrintFlag},rfgettask=#{rfgettask},warehouseid=#{warehouseid},erpcancelflag=#{erpcancelflag},zonegroup=#{zonegroup},medicalxmltime=#{medicalxmltime},placeofloading=#{placeofloading},requiredeliveryno=#{requiredeliveryno},singlematch=#{singlematch},serialnocatch=#{serialnocatch},followup=#{followup},userdefinea=#{userdefinea},userdefineb=#{userdefineb},salesorderno=#{salesorderno},invoiceprintflag=#{invoiceprintflag},invoiceno=#{invoiceno},invoicetitle=#{invoicetitle},invoicetype=#{invoicetype},invoiceitem=#{invoiceitem},invoiceamount=#{invoiceamount},archiveflag=#{archiveflag},consigneename_e=#{consigneenameE},puttolocation=#{puttolocation},ful_alc=#{fulAlc},deliveryno=#{deliveryno},channel=#{channel},waveno=#{waveno},allocationcount=#{allocationcount},expressprintflag=#{expressprintflag},deliverynoteprintflag=#{deliverynoteprintflag},weightingflag=#{weightingflag},udfprintflag1=#{udfprintflag1},udfprintflag2=#{udfprintflag2},udfprintflag3=#{udfprintflag3},edisendflag3=#{edisendflag3},edisendflag2=#{edisendflag2},soreference6=#{soreference6},sign_day=#{signDay},h_edi_11=#{hEdi11},h_edi_12=#{hEdi12},h_edi_13=#{hEdi13},h_edi_14=#{hEdi14},h_edi_15=#{hEdi15} where orderno=#{orderno}
+ </update>
 
-<!-- 删除记录 -->
-<delete id="delete" parameterType="Object">
-	delete from Doc_Order_Header where orderno = #{orderNo}
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateBySelective" parameterType="Object" >
+		update doc_order_header set
+		<trim  suffixOverrides="," >
+			<if test="customerid != null  ">
+				customerid=#{customerid},
+			</if>
+			<if test="soreference1 != null  ">
+				soreference1=#{soreference1},
+			</if>
+			<if test="ordertime != null  ">
+				ordertime=#{ordertime},
+			</if>
+			<if test="expectedshipmenttime1 != null  ">
+				expectedshipmenttime1=#{expectedshipmenttime1},
+			</if>
+			<if test="expectedshipmenttime2 != null  ">
+				expectedshipmenttime2=#{expectedshipmenttime2},
+			</if>
+			<if test="requireddeliverytime != null  ">
+				requireddeliverytime=#{requireddeliverytime},
+			</if>
+			<if test="priority != null  ">
+				priority=#{priority},
+			</if>
+			<if test="consigneeid != null  ">
+				consigneeid=#{consigneeid},
+			</if>
+			<if test="cContact != null  ">
+				c_contact=#{cContact},
+			</if>
+			<if test="consigneename != null  ">
+				consigneename=#{consigneename},
+			</if>
+			<if test="cAddress1 != null  ">
+				c_address1=#{cAddress1},
+			</if>
+			<if test="cAddress2 != null  ">
+				c_address2=#{cAddress2},
+			</if>
+			<if test="cAddress3 != null  ">
+				c_address3=#{cAddress3},
+			</if>
+			<if test="cAddress4 != null  ">
+				c_address4=#{cAddress4},
+			</if>
+			<if test="cCity != null  ">
+				c_city=#{cCity},
+			</if>
+			<if test="cProvince != null  ">
+				c_province=#{cProvince},
+			</if>
+			<if test="cCountry != null  ">
+				c_country=#{cCountry},
+			</if>
+			<if test="cFax != null  ">
+				c_fax=#{cFax},
+			</if>
+			<if test="billingid != null  ">
+				billingid=#{billingid},
+			</if>
+			<if test="cZip != null  ">
+				c_zip=#{cZip},
+			</if>
+			<if test="bContact != null  ">
+				b_contact=#{bContact},
+			</if>
+			<if test="billingname != null  ">
+				billingname=#{billingname},
+			</if>
+			<if test="bAddress1 != null  ">
+				b_address1=#{bAddress1},
+			</if>
+			<if test="bAddress2 != null  ">
+				b_address2=#{bAddress2},
+			</if>
+			<if test="bAddress3 != null  ">
+				b_address3=#{bAddress3},
+			</if>
+			<if test="bAddress4 != null  ">
+				b_address4=#{bAddress4},
+			</if>
+			<if test="bCity != null  ">
+				b_city=#{bCity},
+			</if>
+			<if test="bProvince != null  ">
+				b_province=#{bProvince},
+			</if>
+			<if test="bZip != null  ">
+				b_zip=#{bZip},
+			</if>
+			<if test="bCountry != null  ">
+				b_country=#{bCountry},
+			</if>
+			<if test="deliverytermsdescr != null  ">
+				deliverytermsdescr=#{deliverytermsdescr},
+			</if>
+			<if test="bFax != null  ">
+				b_fax=#{bFax},
+			</if>
+			<if test="bEmail != null  ">
+				b_email=#{bEmail},
+			</if>
+			<if test="paymenttermsdescr != null  ">
+				paymenttermsdescr=#{paymenttermsdescr},
+			</if>
+			<if test="deliveryterms != null  ">
+				deliveryterms=#{deliveryterms},
+			</if>
+			<if test="paymentterms != null  ">
+				paymentterms=#{paymentterms},
+			</if>
+			<if test="door != null  ">
+				door=#{door},
+			</if>
+			<if test="route != null  ">
+				route=#{route},
+			</if>
+			<if test="stop != null  ">
+				stop=#{stop},
+			</if>
+			<if test="sostatus != null  ">
+				sostatus=#{sostatus},
+			</if>
+			<if test="placeofdischarge != null  ">
+				placeofdischarge=#{placeofdischarge},
+			</if>
+			<if test="placeofdelivery != null  ">
+				placeofdelivery=#{placeofdelivery},
+			</if>
+			<if test="ordertype != null  ">
+				ordertype=#{ordertype},
+			</if>
+			<if test="userdefine1 != null  ">
+				userdefine1=#{userdefine1},
+			</if>
+			<if test="userdefine2 != null  ">
+				userdefine2=#{userdefine2},
+			</if>
+			<if test="userdefine3 != null  ">
+				userdefine3=#{userdefine3},
+			</if>
+			<if test="userdefine4 != null  ">
+				userdefine4=#{userdefine4},
+			</if>
+			<if test="userdefine5 != null  ">
+				userdefine5=#{userdefine5},
+			</if>
+			<if test="addtime != null  ">
+				addtime=#{addtime},
+			</if>
+			<if test="addwho != null  ">
+				addwho=#{addwho},
+			</if>
+			<if test="edittime != null  ">
+				edittime=#{edittime},
+			</if>
+			<if test="editwho != null  ">
+				editwho=#{editwho},
+			</if>
+			<if test="notes != null  ">
+				notes=#{notes},
+			</if>
+			<if test="soreference2 != null  ">
+				soreference2=#{soreference2},
+			</if>
+			<if test="soreference3 != null  ">
+				soreference3=#{soreference3},
+			</if>
+			<if test="carrierid != null  ">
+				carrierid=#{carrierid},
+			</if>
+			<if test="carriername != null  ">
+				carriername=#{carriername},
+			</if>
+			<if test="carrieraddress1 != null  ">
+				carrieraddress1=#{carrieraddress1},
+			</if>
+			<if test="carrieraddress3 != null  ">
+				carrieraddress3=#{carrieraddress3},
+			</if>
+			<if test="carrieraddress2 != null  ">
+				carrieraddress2=#{carrieraddress2},
+			</if>
+			<if test="carrieraddress4 != null  ">
+				carrieraddress4=#{carrieraddress4},
+			</if>
+			<if test="carriercity != null  ">
+				carriercity=#{carriercity},
+			</if>
+			<if test="carrierprovince != null  ">
+				carrierprovince=#{carrierprovince},
+			</if>
+			<if test="carriercountry != null  ">
+				carriercountry=#{carriercountry},
+			</if>
+			<if test="carrierzip != null  ">
+				carrierzip=#{carrierzip},
+			</if>
+			<if test="issuepartyid != null  ">
+				issuepartyid=#{issuepartyid},
+			</if>
+			<if test="issuepartyname != null  ">
+				issuepartyname=#{issuepartyname},
+			</if>
+			<if test="iAddress1 != null  ">
+				i_address1=#{iAddress1},
+			</if>
+			<if test="iAddress2 != null  ">
+				i_address2=#{iAddress2},
+			</if>
+			<if test="iAddress3 != null  ">
+				i_address3=#{iAddress3},
+			</if>
+			<if test="iAddress4 != null  ">
+				i_address4=#{iAddress4},
+			</if>
+			<if test="iCity != null  ">
+				i_city=#{iCity},
+			</if>
+			<if test="iProvince != null  ">
+				i_province=#{iProvince},
+			</if>
+			<if test="iCountry != null  ">
+				i_country=#{iCountry},
+			</if>
+			<if test="iZip != null  ">
+				i_zip=#{iZip},
+			</if>
+			<if test="lastshipmenttime != null  ">
+				lastshipmenttime=#{lastshipmenttime},
+			</if>
+			<if test="edisendflag != null  ">
+				edisendflag=#{edisendflag},
+			</if>
+			<if test="pickingPrintFlag != null  ">
+				picking_print_flag=#{pickingPrintFlag},
+			</if>
+			<if test="createsource != null  ">
+				createsource=#{createsource},
+			</if>
+			<if test="edisendtime != null  ">
+				edisendtime=#{edisendtime},
+			</if>
+			<if test="edisendtime2 != null  ">
+				edisendtime2=#{edisendtime2},
+			</if>
+			<if test="edisendtime3 != null  ">
+				edisendtime3=#{edisendtime3},
+			</if>
+			<if test="edisendtime4 != null  ">
+				edisendtime4=#{edisendtime4},
+			</if>
+			<if test="edisendtime5 != null  ">
+				edisendtime5=#{edisendtime5},
+			</if>
+			<if test="bTel1 != null  ">
+				b_tel1=#{bTel1},
+			</if>
+			<if test="bTel2 != null  ">
+				b_tel2=#{bTel2},
+			</if>
+			<if test="carriercontact != null  ">
+				carriercontact=#{carriercontact},
+			</if>
+			<if test="carriermail != null  ">
+				carriermail=#{carriermail},
+			</if>
+			<if test="carrierfax != null  ">
+				carrierfax=#{carrierfax},
+			</if>
+			<if test="carriertel1 != null  ">
+				carriertel1=#{carriertel1},
+			</if>
+			<if test="carriertel2 != null  ">
+				carriertel2=#{carriertel2},
+			</if>
+			<if test="cMail != null  ">
+				c_mail=#{cMail},
+			</if>
+			<if test="cTel1 != null  ">
+				c_tel1=#{cTel1},
+			</if>
+			<if test="cTel2 != null  ">
+				c_tel2=#{cTel2},
+			</if>
+			<if test="iContact != null  ">
+				i_contact=#{iContact},
+			</if>
+			<if test="iMail != null  ">
+				i_mail=#{iMail},
+			</if>
+			<if test="iFax != null  ">
+				i_fax=#{iFax},
+			</if>
+			<if test="iTel1 != null  ">
+				i_tel1=#{iTel1},
+			</if>
+			<if test="iTel2 != null  ">
+				i_tel2=#{iTel2},
+			</if>
+			<if test="releasestatus != null  ">
+				releasestatus=#{releasestatus},
+			</if>
+			<if test="transportation != null  ">
+				transportation=#{transportation},
+			</if>
+			<if test="soreference4 != null  ">
+				soreference4=#{soreference4},
+			</if>
+			<if test="soreference5 != null  ">
+				soreference5=#{soreference5},
+			</if>
+			<if test="hEdi01 != null  ">
+				h_edi_01=#{hEdi01},
+			</if>
+			<if test="hEdi02 != null  ">
+				h_edi_02=#{hEdi02},
+			</if>
+			<if test="hEdi03 != null  ">
+				h_edi_03=#{hEdi03},
+			</if>
+			<if test="hEdi04 != null  ">
+				h_edi_04=#{hEdi04},
+			</if>
+			<if test="hEdi05 != null  ">
+				h_edi_05=#{hEdi05},
+			</if>
+			<if test="hEdi06 != null  ">
+				h_edi_06=#{hEdi06},
+			</if>
+			<if test="hEdi07 != null  ">
+				h_edi_07=#{hEdi07},
+			</if>
+			<if test="hEdi08 != null  ">
+				h_edi_08=#{hEdi08},
+			</if>
+			<if test="hEdi09 != null  ">
+				h_edi_09=#{hEdi09},
+			</if>
+			<if test="hEdi10 != null  ">
+				h_edi_10=#{hEdi10},
+			</if>
+			<if test="userdefine6 != null  ">
+				userdefine6=#{userdefine6},
+			</if>
+			<if test="orderPrintFlag != null  ">
+				order_print_flag=#{orderPrintFlag},
+			</if>
+			<if test="rfgettask != null  ">
+				rfgettask=#{rfgettask},
+			</if>
+			<if test="warehouseid != null  ">
+				warehouseid=#{warehouseid},
+			</if>
+			<if test="erpcancelflag != null  ">
+				erpcancelflag=#{erpcancelflag},
+			</if>
+			<if test="zonegroup != null  ">
+				zonegroup=#{zonegroup},
+			</if>
+			<if test="medicalxmltime != null  ">
+				medicalxmltime=#{medicalxmltime},
+			</if>
+			<if test="placeofloading != null  ">
+				placeofloading=#{placeofloading},
+			</if>
+			<if test="requiredeliveryno != null  ">
+				requiredeliveryno=#{requiredeliveryno},
+			</if>
+			<if test="singlematch != null  ">
+				singlematch=#{singlematch},
+			</if>
+			<if test="serialnocatch != null  ">
+				serialnocatch=#{serialnocatch},
+			</if>
+			<if test="followup != null  ">
+				followup=#{followup},
+			</if>
+			<if test="userdefinea != null  ">
+				userdefinea=#{userdefinea},
+			</if>
+			<if test="userdefineb != null  ">
+				userdefineb=#{userdefineb},
+			</if>
+			<if test="salesorderno != null  ">
+				salesorderno=#{salesorderno},
+			</if>
+			<if test="invoiceprintflag != null  ">
+				invoiceprintflag=#{invoiceprintflag},
+			</if>
+			<if test="invoiceno != null  ">
+				invoiceno=#{invoiceno},
+			</if>
+			<if test="invoicetitle != null  ">
+				invoicetitle=#{invoicetitle},
+			</if>
+			<if test="invoicetype != null  ">
+				invoicetype=#{invoicetype},
+			</if>
+			<if test="invoiceitem != null  ">
+				invoiceitem=#{invoiceitem},
+			</if>
+			<if test="invoiceamount != null  ">
+				invoiceamount=#{invoiceamount},
+			</if>
+			<if test="archiveflag != null  ">
+				archiveflag=#{archiveflag},
+			</if>
+			<if test="consigneenameE != null  ">
+				consigneename_e=#{consigneenameE},
+			</if>
+			<if test="puttolocation != null  ">
+				puttolocation=#{puttolocation},
+			</if>
+			<if test="fulAlc != null  ">
+				ful_alc=#{fulAlc},
+			</if>
+			<if test="deliveryno != null  ">
+				deliveryno=#{deliveryno},
+			</if>
+			<if test="channel != null  ">
+				channel=#{channel},
+			</if>
+			<if test="waveno != null  ">
+				waveno=#{waveno},
+			</if>
+			<if test="allocationcount != null  ">
+				allocationcount=#{allocationcount},
+			</if>
+			<if test="expressprintflag != null  ">
+				expressprintflag=#{expressprintflag},
+			</if>
+			<if test="deliverynoteprintflag != null  ">
+				deliverynoteprintflag=#{deliverynoteprintflag},
+			</if>
+			<if test="weightingflag != null  ">
+				weightingflag=#{weightingflag},
+			</if>
+			<if test="udfprintflag1 != null  ">
+				udfprintflag1=#{udfprintflag1},
+			</if>
+			<if test="udfprintflag2 != null  ">
+				udfprintflag2=#{udfprintflag2},
+			</if>
+			<if test="udfprintflag3 != null  ">
+				udfprintflag3=#{udfprintflag3},
+			</if>
+			<if test="edisendflag3 != null  ">
+				edisendflag3=#{edisendflag3},
+			</if>
+			<if test="edisendflag2 != null  ">
+				edisendflag2=#{edisendflag2},
+			</if>
+			<if test="soreference6 != null  ">
+				soreference6=#{soreference6},
+			</if>
+			<if test="signDay != null  ">
+				sign_day=#{signDay},
+			</if>
+			<if test="hEdi11 != null  ">
+				h_edi_11=#{hEdi11},
+			</if>
+			<if test="hEdi12 != null  ">
+				h_edi_12=#{hEdi12},
+			</if>
+			<if test="hEdi13 != null  ">
+				h_edi_13=#{hEdi13},
+			</if>
+			<if test="hEdi14 != null  ">
+				h_edi_14=#{hEdi14},
+			</if>
+			<if test="hEdi15 != null  ">
+				h_edi_15=#{hEdi15},
+			</if>
+		</trim> where orderno=#{orderno}
+	</update>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+	delete 	 from doc_order_header where orderno = #{orderno}
 </delete>
- 
-<!-- 根据id查询 订单 -->
-<select id="queryById"  resultMap="OrderHeaderForNormalMap" parameterType="Object">
-	select customerid as customerId,
-	orderno as orderNo,
-	ordertime as orderTime,
-	requireddeliverytime as requiredDeliveryTime,
-	soreference1 as orderCode,
-	sostatus as orderStatus,
-	ordertype as orderType,
-	consigneename as consigneeName,
-	c_province as province,
-	c_city as city,
-	c_address2 as district,
-	c_address1 as address,
-	c_tel1 as tel,
-	c_zip as zipCode,
-	carrierid as carrierId,
-	carriername as carrierName,
-	lastshipmenttime as lastShipmentTime,
-	notes as notes,
-	addwho as addwho,
-	addtime as addtime,
-	editwho as editwho,
-	edittime as edittime,
-	rfgettask as packingFlag
-	from Doc_Order_Header
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	and ordertype = 'SO'
-	<if test="currentTime != null " >
-	    and #{currentTime,jdbcType=DATE} = #{currentTime,jdbcType=DATE}
-	</if>
-</select>
 
-<!--订单列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Doc_Order_Header doh
-	where doh.ordertype = 'SO'
-	<include refid="Example_Where_Clause"/>
-</select>
-  	
-<!--查询订单列表-->
-<select id="queryByPageList" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select a.customerid as customerId,
-	b.h_edi_01 as customerShortName,
-	a.orderno as orderNo,
-	a.ordertime as orderTime,
-	a.requireddeliverytime as requiredDeliveryTime,
-	a.soreference1 as orderCode,
-	a.sostatus as orderStatus,
-	c.codename_c as orderStatusName,
-	a.ordertype as orderType,
-	d.codename_c as orderTypeName,
-	a.consigneename as consigneeName,
-	a.c_province as province,
-	a.c_city as city,
-	a.c_address2 as district,
-	a.c_address1 as address,
-	a.c_tel1 as tel,
-	a.c_zip as zipCode,
-	a.carrierid as carrierId,
-	a.carriername as carrierName,
-	a.lastshipmenttime as lastShipmentTime,
-	a.notes as notes,
-	a.addwho as addwho,
-	a.addtime as addtime,
-	a.editwho as editwho,
-	a.edittime as edittime,
-	a.h_edi_09 as boxQty,
-	a.h_edi_11 as totalGrossWeight,
-	a.h_edi_12 as totalCubic
-	from (select doh.customerid,
-	doh.orderno,
-	doh.ordertime,
-	doh.requireddeliverytime,
-	doh.soreference1,
-	doh.sostatus,
-	doh.ordertype,
-	doh.consigneename,
-	doh.c_province,
-	doh.c_city,
-	doh.c_address2,
-	doh.c_address1,
-	doh.c_tel1,
-	doh.c_zip,
-	doh.carrierid,
-	doh.carriername,
-	doh.lastshipmenttime,
-	doh.notes,
-	doh.addwho,
-	doh.addtime,
-	doh.editwho,
-	doh.edittime,
-	doh.h_edi_09,
-	doh.h_edi_11,
-	doh.h_edi_12,
-	row_number() over(order by bc.show_sequence, doh.ordertime desc) as row_num
-	from Doc_Order_Header doh, Bas_Codes bc
-	where doh.ordertype = 'SO'
-	and doh.sostatus = bc.code
-	and bc.codeid = 'SO_STS'
-	<include refid="Example_Where_Clause"/>
-	) a,
-    Bas_Customer b,
-    Bas_Codes c,
-    Bas_Codes d
-	where a.customerid = b.customerid
-	and a.sostatus = c.code
-	and c.codeid = 'SO_STS'
-	and a.ordertype = d.code
-	and d.codeid = 'SO_TYP'
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-    order by c.show_sequence, a.ordertime desc
-</select>
+	<!-- 根据id查询 出库任务头档 -->
+	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from doc_order_header where orderno = #{orderno}
+	</select>
 
-<!--拣货单列表-->
-<select id="queryByPickingList" resultMap="PickingMap"  parameterType="Object">
-	select c.customerid as customerId,
-	c.h_edi_01 as customerShortName,
-	a.orderno as orderNo,
-	b.soreference1 as orderCode,
-	g.total_qty as totalQty,
-	g.total_grossweight as totalGrossWeight,
-	g.total_cube as totalCubic,
-	b.notes as notes,
-	a.sku as sku,
-	d.descr_c as skuName,
-	d.unit as unit,
-	sum(a.qty) as qtyAllocated,
-	a.location as locationId,
-	row_number() over(order by a.orderno, e.picklogicalsequence, a.sku) as orderLineNo
-	from ACT_Allocation_Details a,
-	Doc_Order_Header b,
-	Bas_Customer c,
-	Bas_Sku d,
-	Bas_Location e,
-	Inv_Lot_Att f,
-	(select x.orderno,
-	sum(x.qty) total_qty,
-	sum(x.qty * nvl(y.grossweight, 0)) total_grossweight,
-	sum(x.qty * nvl(y.cube, 0)) total_cube
-	from Act_Allocation_Details x, Bas_Sku y
-	where x.customerid = y.customerid
-	and x.sku = y.sku
-	and x.orderno = #{orderNo,jdbcType=VARCHAR}
-	group by x.orderno) g
-	where a.customerid = c.customerid
-	and a.customerid = d.customerid
-	and a.sku = d.sku
-	and a.orderno = b.orderno
-	and a.location = e.locationid(+)
-	and a.lotnum = f.lotnum(+)
-	and a.orderno = g.orderno
-	group by c.customerid,
-	c.h_edi_01,
-	a.orderno,
-	b.soreference1,
-	g.total_qty,
-	g.total_grossweight,
-	g.total_cube,
-	b.notes,
-	a.sku,
-	d.descr_c,
-	d.unit,
-	a.location,
-	e.picklogicalsequence
-</select>
+	<!-- 出库任务头档 列表总数-->
+	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from doc_order_header
+		<include refid="Example_Where_Clause"/>
+	</select>
 
-<!--签收单列表-->
-<select id="queryByReceiptList" resultMap="ReceiptMap"  parameterType="Object">
-	select a.customerid as customerId,
-	c.h_edi_01 as customerShortName,
-	a.orderno as orderNo,
-	nvl(a.soreference1,a.orderno) as orderCode,
-	a.requireddeliverytime as requiredDeliveryTime,
-	a.consigneename as consigneeName,
-	a.c_address1 as address,
-	a.c_tel1 as tel,
-	a.h_edi_09 as boxQty,
-	e.totalAmt as totalPrice,
-	a.notes as notes,
-	b.sku as sku,
-	d.descr_c as skuName,
-	d.unit as unit,
-	b.qtyordered as qtyOrdered,
-	b.price as price,
-	row_number() over(order by a.orderno, b.sku) as orderLineNo
-	from Doc_Order_Header a,
-	Doc_Order_Details b,
-	Bas_Customer c,
-	Bas_Sku d,
-	(select orderno,
-	sum(qtyordered * nvl(price,0)) totalAmt
-	from Doc_Order_Details
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	group by orderno) e
-	where a.orderno = b.orderno
-	and a.customerid = c.customerid
-	and b.customerid = d.customerid
-	and b.sku = d.sku
-	and a.orderno = e.orderno
-</select>
-  	
-<!--导出订单明细-->
-<!--<select id="queryByExportList" resultMap="ExportOrderDataMap"  parameterType="Object">
-	select a.customerid as customerId,
-	c.h_edi_01 as customerShortName,
-	a.orderno as orderNo,
-	a.soreference1 as orderCode,
-	a.sostatus as orderStatus,
-	d.codename_c as orderStatusName,
-	a.consigneename as consigneeName,
-	a.c_address1 as address,
-	a.c_tel1 as tel,
-	b.orderlineno as orderLineNo,
-	b.sku as sku,
-	b.qtyordered as qtyOrdered,
-	b.qtyshipped as qtyShipped,
-	b.price as price
-	from (
-	select doh.customerid,
-	doh.orderno,
-	doh.soreference1,
-	doh.sostatus,
-	doh.consigneename,
-	doh.c_province,
-	doh.c_city,
-	doh.c_address2,
-	doh.c_address1,
-	doh.c_tel1,
-	doh.c_zip,
-	doh.carrierid,
-	doh.carriername,
-	doh.lastshipmenttime,
-	doh.notes,
-	doh.addwho,
-	doh.addtime,
-	doh.editwho,
-	doh.edittime
-	from Doc_Order_Header doh
-	where ordertype = 'SO'
-	<include refid="Example_Where_Clause"/>
-	) a,
-	Doc_Order_Details b,
-	Bas_Customer c,
-	Bas_Codes d
-	where a.orderno = b.orderno
-	and a.customerid = c.customerid
-	and a.sostatus = d.code
-	and d.codeid = 'SO_STS'
-	order by a.orderno, b.orderlineno
-</select>
--->
+	<!-- 查询出库任务头档列表 -->
+	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from doc_order_header
+		<include refid="Example_Where_Clause"/>
+		<if test="orderByClause != null and orderByClause != ''" >
+			order by  ${orderByClause}
+		</if>
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
 
-<!--订单类型-->
-<select id="queryPrintTemplate" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select orderno as orderNo,
-	doi.printtemplate as printTemplate
-	from Doc_Order_Header doh,
- 	Doc_Order_Import_Define_Header doi
-	where doh.customerid = doi.customerid(+)
-	and doi.tablename(+) = 'RECEIPT'
-	and orderno = #{orderNo,jdbcType=VARCHAR}
-</select>
-
-<!--订单类型-->
-<select id="queryOrderType" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select code as orderType,
-	codename_c as orderTypeName
-	from Bas_Codes
-	where codeid = 'SO_TYP'
-	and code = 'SO'
-	and udf_opr_chk = 'Y'
-	order by show_sequence
-</select>
-
-<!--订单状态-->
-<select id="queryOrderStatus" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select code as orderStatus,
-	codename_c as orderStatusName
-	from Bas_Codes
-	where codeid = 'SO_STS'
-	and udf_opr_chk = 'Y'
-	order by show_sequence
-</select>
-
-<!--查询待拣货的分配ID-->
-<select id="queryByAllocationDetailsId" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '40'
-</select>
-
-<!--查询待取消拣货的分配ID-->
-<select id="queryByUnAllocationDetailsId" resultMap="OrderHeaderForNormalMap"  parameterType="Object">
-	select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '60'
-</select>
-
-<!--新增订单号 -->
-<select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPCOM_GetIDSequence(#{warehouseId,mode=IN,jdbcType=VARCHAR},'CN','ORDERNO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单分配 -->
-<select id="allocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_HardAllocation_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'Allocation','By OrderNO','',#{orderNo,mode=IN,jdbcType=VARCHAR},'0','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单取消分配 -->
-<select id="deAllocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_DEAllocation_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'UnAllocation','By OrderNO','',#{orderNo,mode=IN,jdbcType=VARCHAR},'0','','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单拣货 -->
-<select id="pickingByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_Picking_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'PK',#{allocationDetailsId,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单取消拣货 -->
-<select id="unPickingByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_Unpicking_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},#{allocationDetailsId,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单发货 -->
-<select id="shipmentByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_Shipment_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'Ship','OrderNo','',#{orderNo,mode=IN,jdbcType=VARCHAR},'0','','','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-
-<!--按订单取消 -->
-<select id="cancelByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPSO_CloseCancel(#{warehouseId,mode=IN,jdbcType=VARCHAR},'Cancel',#{orderNo,mode=IN,jdbcType=VARCHAR},'N','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
-  	
 </mapper>   

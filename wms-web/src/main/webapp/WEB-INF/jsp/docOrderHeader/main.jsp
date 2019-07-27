@@ -94,7 +94,7 @@ $(function() {
 	
 	//订单明细列表
 	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
-		url : '<c:url value="/docOrderDetailController.do?showDatagrid"/>',
+		url : '<c:url value="/docOrderDetailsController.do?showDatagrid"/>',
 		method : 'POST',
 		toolbar : '#detailToolbar',
 		idField : 'orderlineno',
@@ -712,7 +712,7 @@ var cancel = function(){
 };
 
 /* 批量打印拣货单按钮 */
-var print = function(){
+var printPacking = function(){
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
 	$.each(checkedItems, function(index, item){
@@ -1140,7 +1140,7 @@ var detailsDel = function(){
 				$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 					if(confirm){
 						$.ajax({
-							url : 'docOrderDetailController.do?delete',
+							url : 'docOrderDetailsController.do?delete',
 							data : {orderno : row.orderno, orderlineno : row.orderlineno},
 							type : 'POST',
 							dataType : 'JSON',
@@ -1173,9 +1173,9 @@ var detailsDel = function(){
 var detailsCommit = function(){
 	var url = '';
 	if (processType == 'edit') {
-		url = '<c:url value="/docOrderDetailController.do?edit"/>';
+		url = '<c:url value="/docOrderDetailsController.do?edit"/>';
 	}else{
-		url = '<c:url value="/docOrderDetailController.do?add"/>';
+		url = '<c:url value="/docOrderDetailsController.do?add"/>';
 	}
 	ezuiDetailsForm.form('submit', {
 		url : url,
@@ -1508,13 +1508,13 @@ var selectLocation = function(){
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
-																															url:'<c:url value="/docOrderHeaderController.do?getSostatusCombobox"/>',
+																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
 																															valueField: 'id',
 																															textField: 'value'"/></td>
 							
 							<th>至</th><td><input type='text' id='sostatusTo' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
-																															url:'<c:url value="/docOrderHeaderController.do?getSostatusCombobox"/>',
+																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
 																															valueField: 'id',
 																															textField: 'value'"/></td>
 							<th>订单类型</th><td><input type='text' id='ordertype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
@@ -1559,6 +1559,7 @@ var selectLocation = function(){
  					<a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> 
  					<a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a> 
 					<a onclick='cancel();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
+					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>打印拣货单</a>
 					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
 			</div>

@@ -35,7 +35,7 @@ public class DocOrderHeaderController {
 
 	@Autowired
 	private OrderHeaderForNormalService orderHeaderForNormalService;
-	
+
 //	@Autowired
 //	private ExportOrderService exportOrderService;
 
@@ -168,7 +168,7 @@ public class DocOrderHeaderController {
 //			e.printStackTrace();
 //		}
 //	}
-	
+
 //	@Login
 //	@RequestMapping(params = "exportOrderDataToExcel")
 //	public void exportOrderDataToExcel(HttpServletResponse response, OrderHeaderForNormalExportForm form) throws Exception {
@@ -207,5 +207,28 @@ public class DocOrderHeaderController {
 	@ResponseBody
 	public List<EasyuiCombobox> getOrderStatusCombobox() {
 		return orderHeaderForNormalService.getOrderStatusCombobox();
+	}
+
+	@Login
+	@RequestMapping(params = "getReleasestatusCombobox")
+	@ResponseBody
+	public List<EasyuiCombobox> getReleasestatusCombobox() {
+		return orderHeaderForNormalService.getReleasestatusCombobox();
+	}
+
+	/**
+	 * 打印拣货
+	 * @param response
+	 * @param orderCodeList
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "exportPackingPdf")
+	public void exportPackingPdf(HttpServletResponse response, String orderCodeList) throws Exception {
+		try {
+			orderHeaderForNormalService.exportPickingPdf(response,orderCodeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
