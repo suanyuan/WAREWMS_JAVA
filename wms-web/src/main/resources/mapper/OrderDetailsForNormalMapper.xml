@@ -104,9 +104,9 @@
 
     <resultMap id="ExtendResultMap" type="com.wms.entity.order.OrderDetailsForNormal" extends="OrderDetailsForNormalMap">
         <association property="basCodes"
-                     column="{codeid='SO_STS',code=linestatus}"
+                     column="linestatus"
                      javaType="com.wms.entity.BasCodes"
-                     select="com.wms.mybatis.dao.BasCodesMybatisDao.queryById"/>
+                     select="com.wms.mybatis.dao.BasCodesMybatisDao.queryForSO"/>
         <association property="basCustomer"
                      column="customerid"
                      javaType="com.wms.entity.BasCustomer"

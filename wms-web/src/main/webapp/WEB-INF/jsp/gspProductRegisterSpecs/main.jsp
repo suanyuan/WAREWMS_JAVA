@@ -45,8 +45,6 @@ $(function() {
 		columns : [[
 
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
-            // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
-
 
 			{field: 'specsName',		title: '规格名称',	width: 150 },
 			{field: 'productCode',		title: '商品代码',	width: 100 },
@@ -257,7 +255,8 @@ var commit = function(){
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-	console.log(infoObj);
+
+    console.log(infoObj);
     var url = '';
     if (processType == 'edit') {
         var row = ezuiDatagrid.datagrid('getSelected');
