@@ -81,7 +81,7 @@
                                     <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                                 </td>
                                 <th>注册证附件</th>
-                                <td style="text-align: left;" colspan="3">
+                                <td style="text-align: left;" colspan="2">
                                     <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='required:true' value="${gspProductRegister.attachmentUrl}"/>
                                     <a id="btn" href="javascript:void(0)" onclick="viewUrl()" class="easyui-linkbutton" data-options="">查看</a>
                                     <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspProductRegister.attachmentUrl}"/>

@@ -204,6 +204,7 @@
         });*/
 
         $("#isChineseLabelData").combobox({
+            panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value',
@@ -215,6 +216,7 @@
         });
 
         $('#operateTypeData').combobox({
+            panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getEntType',
             valueField:'id',
             textField:'value',

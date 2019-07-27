@@ -42,10 +42,10 @@ where 1=1
 	    and client_id =  #{condition.clientId}
 	</if>
 	<if test="condition.clientNo != null and condition.clientNo != ''" >
-	    and client_no =  #{condition.clientNo}
+	    and client_no like CONCAT('%',#{condition.clientNo},'%')
 	</if>
 	<if test="condition.clientName != null and condition.clientName != ''" >
-	    and client_name =  #{condition.clientName}
+	    and client_name like CONCAT('%',#{condition.clientName},'%')
 	</if>
 	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
 	    and enterprise_id =  #{condition.enterpriseId}
@@ -75,10 +75,16 @@ where 1=1
 	    and client_content =  #{condition.clientContent}
 	</if>
 	<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
-	    and client_start_date =  #{condition.clientStartDate}
+	    and client_start_date &gt;=  #{condition.clientStartDate}
 	</if>
 	<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
-	    and client_end_date =  #{condition.clientEndDate}
+	    and client_end_date &lt;= #{condition.clientEndDate}
+	</if>
+	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+	    and create_date &gt;=  #{condition.createDateStart}
+	</if>
+	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+	    and create_date &lt;= #{condition.createDateEnd}
 	</if>
 	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
 	    and client_term =  #{condition.clientTerm}
@@ -88,9 +94,6 @@ where 1=1
 	</if>
 	<if test="condition.createId != null and condition.createId != ''" >
 	    and create_id =  #{condition.createId}
-	</if>
-	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and create_date =  #{condition.createDate}
 	</if>
 	<if test="condition.editId != null and condition.editId != ''" >
 	    and edit_id =  #{condition.editId}

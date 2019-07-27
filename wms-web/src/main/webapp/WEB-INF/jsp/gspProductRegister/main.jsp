@@ -156,7 +156,7 @@ var doSearch = function(){
 		isUse : $('#isUse').combobox("getValue")
 	});
 };
-
+//下拉框
 $(function () {
     $('#productRegisterVersion').combobox({
         panelHeight: 'auto',

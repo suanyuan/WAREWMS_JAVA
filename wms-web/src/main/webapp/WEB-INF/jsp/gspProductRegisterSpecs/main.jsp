@@ -48,12 +48,12 @@ $(function() {
             // {field: 'productRegisterId',		title: '产品注册证表主键',	width: 25 },
 
 
-			{field: 'specsName',		title: '规格名称',	width: 100 },
+			{field: 'specsName',		title: '规格名称',	width: 150 },
 			{field: 'productCode',		title: '商品代码',	width: 100 },
 			{field: 'productName',		title: '商品名称',	width: 170 },
 			{field: 'productRemark',		title: '商品描述',	width:350 },
 			{field: 'productModel',		title: '型号',	width: 100 },
-			{field: 'productionAddress',		title: '产地',	width: 100 },
+			{field: 'productionAddress',		title: '产地',	width: 150 },
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
 			{field: 'unit',		title: '单位',	width: 50 },
 			{field: 'packingUnit',		title: '包装单位',	width: 80 },
@@ -88,7 +88,7 @@ $(function() {
 			// {field: 'alternatName5',		title: '自赋码5',	width: 25 },
 
             {field: 'productRegisterNo',		title: '注册证编号',	width: 100 },
-            {field: 'productNameMain',		title: '产品名称',	width: 100 }
+            {field: 'productNameMain',		title: '产品名称',	width: 200 }
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -108,10 +108,13 @@ $(function() {
 	});
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
+        left:0,
+        top:0,
+		width:1050,
+		height:550,
         title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',
         href:dialogUrl,
-        fit:true,
         cache: false,
         onClose : function() {
             ezuiFormClear(ezuiForm);
@@ -345,7 +348,7 @@ var doSearch = function(){
         productName : $('#productName').val(),
         productRemark : $('#productRemark').val(),
         productModel : $('#productModel').val(),
-		productionAddress : $('#productionAddress').val(),
+        productionAddress : $('#productionAddress').val(),
 
         createDateEnd : $("#createDateEnd").datebox("getValue"),
         createDateStart : $("#createDateStart").datebox("getValue"),

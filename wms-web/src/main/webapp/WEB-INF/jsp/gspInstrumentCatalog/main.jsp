@@ -33,7 +33,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'instrumentCatalogId',		title: '主键',	width: 72,hidden:true },
+			{field: 'instrumentCatalogId',		title: '主键',	width: 50,hidden:true },
 			{field: 'instrumentCatalogNo',		title: '编号',	width: 72 },
 			{field: 'instrumentCatalogName',		title: '名称',	width: 72 },
 			{field: 'instrumentCatalogRemark',		title: '描述',	width: 72 },
@@ -73,6 +73,7 @@ $(function() {
 	}).dialog('close');
 
     $('#classifyIdQuery').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogClassify',
         valueField:'id',
         textField:'value',
@@ -80,6 +81,7 @@ $(function() {
     });
 
     $('#versionQuery').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogVersion',
         valueField:'id',
         textField:'value',
@@ -87,6 +89,7 @@ $(function() {
     });
 
     $('#classifyId').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogClassify',
         valueField:'id',
         textField:'value',
@@ -94,6 +97,7 @@ $(function() {
     });
 
     $('#version').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogVersion',
         valueField:'id',
         textField:'value',
@@ -101,6 +105,7 @@ $(function() {
     });
 
     $('#isUseQuery').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value',
@@ -230,16 +235,16 @@ var doSearch = function(){
 					<table>
 						<tr>
 							<!--<th style="display: none;">待输入名称0：</th><td><input type='text'  id='instrumentCatalogId' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>编号：</th><td><input type='text' id='instrumentCatalogNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>名称：</th><td><input type='text' id='instrumentCatalogNameQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编号</th><td><input type='text' id='instrumentCatalogNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>名称</th><td><input type='text' id='instrumentCatalogNameQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th style="display: none;">待输入名称3：</th><td><input type='text' id='instrumentCatalogRemark' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>分类：</th><td><input type='text' id='classifyIdQuery' size='16' data-options=''/></td>
-							<th>版本：</th><td><input type='text' id='versionQuery' size='16' data-options=''/></td>
+							<th>分类</th><td><input type='text' id='classifyIdQuery' class='easyui-combobox' size='16' data-options=''/></td>
+							<th>版本</th><td><input type='text' id='versionQuery'  class='easyui-combobox' size='16' data-options=''/></td>
 							<!--<th >待输入名称6：</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称7：</th><td><input type='text' id='cretaeDate' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称8：</th><td><input type='text' id='editId' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<!--<th >待输入名称9：</th><td><input type='text' id='editDate' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>是否有效：</th><td><input type='text' id='isUseQuery' size='16' data-options=''/></td>
+							<th>是否有效</th><td><input type='text' id='isUseQuery' class='easyui-combobox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
