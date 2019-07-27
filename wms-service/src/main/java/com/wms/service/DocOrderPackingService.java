@@ -98,7 +98,7 @@ public class DocOrderPackingService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if(orderHeaderForNormal != null){
-			if (orderHeaderForNormal.getOrderStatus().equals("30") || orderHeaderForNormal.getOrderStatus().equals("40")) {
+			if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				if (orderHeaderForNormal.getPackingFlag().equals("Y")) {
 					json.setSuccess(false);
 					json.setMsg("装箱失败：当前订单已完成装箱操作！");
@@ -143,7 +143,7 @@ public class DocOrderPackingService extends BaseService {
 		DocOrderPackingQuery docOrderPackingQuery = new DocOrderPackingQuery();
 		docOrderPackingQuery.setOrderNo(orderNo);
 		docOrderPackingQuery.setCartonNo(cartonNo);
-		docOrderPackingQuery.setSkuCode(skuCode);;
+		docOrderPackingQuery.setSkuCode(skuCode);
 		//产品信息校验
 		List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.checkSkuById(docOrderPackingQuery);
 		if (docOrderPackingList.size() == 0) {
@@ -311,7 +311,7 @@ public class DocOrderPackingService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
-			if (orderHeaderForNormal.getOrderStatus().equals("70") || orderHeaderForNormal.getOrderStatus().equals("80")) {
+			if (orderHeaderForNormal.getSostatus().equals("70") || orderHeaderForNormal.getSostatus().equals("80")) {
 				json.setSuccess(false);
 				json.setMsg("取消装箱失败：当前状态订单不允许进行取消装箱操作！");
 				return json;
@@ -345,7 +345,7 @@ public class DocOrderPackingService extends BaseService {
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
-			if (orderHeaderForNormal.getOrderStatus().equals("70") || orderHeaderForNormal.getOrderStatus().equals("80")) {
+			if (orderHeaderForNormal.getSostatus().equals("70") || orderHeaderForNormal.getSostatus().equals("80")) {
 				json.setSuccess(false);
 				json.setMsg("取消复核失败：当前状态订单不允许进行取消复核操作！");
 				return json;
@@ -479,7 +479,7 @@ public class DocOrderPackingService extends BaseService {
 
 			if (StringUtils.isNotEmpty(orderNo) || StringUtils.isNotEmpty(orderCode)) {
 				
-				document = new Document(PDFUtil.getTemplate("wms_packing_list.pdf").getPageSize(1));
+				/*document = new Document(PDFUtil.getTemplate("wms_packing_list.pdf").getPageSize(1));
 				PdfCopy pdfCopy = new PdfCopy(document, os);
 				document.open();
 				
@@ -529,7 +529,7 @@ public class DocOrderPackingService extends BaseService {
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
 					pdfCopy.addPage(page);
 				}
-				document.close();
+				document.close();*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,13 +1,12 @@
 package com.wms.entity.order;
 
+import com.wms.entity.BasCodes;
+import com.wms.entity.BasCustomer;
+import com.wms.entity.BasSku;
 import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity
@@ -204,6 +203,12 @@ public class OrderDetailsForNormal implements Serializable {
     private Double qtyreleased;
 
     private String freegift;
+
+    private BasCodes basCodes;
+
+    private BasCustomer basCustomer;
+
+    private BasSku basSku;
 
 	public OrderDetailsForNormal() {
 		
