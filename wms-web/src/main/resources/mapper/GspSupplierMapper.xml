@@ -53,13 +53,13 @@ where 1=1
 		and t1.create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
 	</if>
 	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
-		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> t1.create_date
+		and   t1.create_date  <![CDATA[  <=  ]]>  #{condition.createDateEnd}
 	</if>
 	<if test="condition.editDateStart != null and condition.editDateStart != ''" >
 		and t1.edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
 	</if>
 	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
-		and     #{condition.editDateEnd}  <![CDATA[  >=  ]]> t1.edit_date
+		and  t1.edit_date  <![CDATA[ <=  ]]>  #{condition.editDateEnd}
 	</if>
 
 

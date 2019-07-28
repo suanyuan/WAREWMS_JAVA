@@ -115,15 +115,15 @@ public class BasSku implements Serializable {
 
 	private String reservedfield02;
 
-	private String reservedfield03;
+	private String reservedfield03; //注册证号
 
-	private String reservedfield04;
+	private String reservedfield04; //管理分类
 
-	private String reservedfield05;
+	private String reservedfield05;//分类目录
 
-	private String reservedfield06;
+	private String reservedfield06;//是否冷链
 
-	private String reservedfield07;
+	private String reservedfield07;//是否医疗器械
 	private String reservedfield08;
 	private String reservedfield09;
 	private String reservedfield10;

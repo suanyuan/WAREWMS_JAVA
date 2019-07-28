@@ -21,35 +21,42 @@ public class OrderHeaderForNormal implements Serializable {
 	 * WMS单号
 	 */
 	@Id
-	private String orderNo;
+	private String orderno;
 	/**
 	 * 客户编号
 	 */
-	private String customerId;
+	private String customerid;
 	/**
 	 * 客户订单号
 	 */
 	private String soreference1;
+	private String soreference2;
+	private String soreference3;
+	private String soreference4;
+	private String soreference5;
+	private String soreference6;
+	private String releasestatus;
+
 	/**
 	 * 订单创建时间
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date orderTime;
+	private Date ordertime;
 	/**
 	 * 预期发货时间
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date expectedShipmentTime1;
+	private Date expectedshipmenttime1;
 	/**
 	 * 预期发货时间
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date expectedShipmentTime2;
+	private Date expectedshipmenttime2;
 	/**
 	 * 要求交货时间
 	 */
 	@Temporal(TemporalType.DATE)
-	private Date requiredDeliveryTime;
+	private Date requireddeliverytime;
 	/**
 	 * 订单优先级
 	 */
@@ -57,7 +64,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 收货人
 	 */
-	private String consigneeId;
+	private String consigneeid;
 	/**
 	 * 收货人联系人
 	 */
@@ -65,7 +72,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 收货人
 	 */
-	private String consigneeName;
+	private String consigneename;
 	/**
 	 * 收货人地址
 	 */
@@ -96,7 +103,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 结算人
 	 */
-	private String billingId;
+	private String billingid;
 	/**
 	 * 结算人联系人
 	 */
@@ -104,7 +111,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 结算人名称
 	 */
-	private String billingName;
+	private String billingname;
 	/**
 	 * 结算人地址
 	 */
@@ -120,6 +127,8 @@ public class OrderHeaderForNormal implements Serializable {
 	 * 结算人国家
 	 */
 	private String bCountry;
+
+	private String bProvince;
 	/**
 	 * 结算人邮编
 	 */
@@ -138,7 +147,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 交货描述
 	 */
-	private String deliveryTermsDescr;
+	private String deliverytermsdescr;
 	/**
 	 * 交货条款
 	 */
@@ -170,39 +179,39 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 卸货地点
 	 */
-	private String placeOfDischarge;
+	private String placeofdischarge;
 	/**
 	 * 交货地点
 	 */
-	private String placeOfDelivery;
+	private String placeofdelivery;
 	/**
 	 * 订单类型
 	 */
-	private String orderType;
+	private String ordertype;
 	/**
 	 * 自定义1
 	 */
-	private String userDefine1;
+	private String userdefine1;
 	/**
 	 * 自定义2
 	 */
-	private String userDefine2;
+	private String userdefine2;
 	/**
 	 * 自定义3
 	 */
-	private String userDefine3;
+	private String userdefine3;
 	/**
 	 * 自定义4
 	 */
-	private String userDefine4;
+	private String userdefine4;
 	/**
 	 * 自定义5
 	 */
-	private String userDefine5;
+	private String userdefine5;
 	/**
 	 * 自定义5
 	 */
-	private String userDefine6;
+	private String userdefine6;
 	/**
 	 * 备注
 	 */
@@ -225,9 +234,6 @@ public class OrderHeaderForNormal implements Serializable {
 	 * 订单最后修改人
 	 */
 	private String editwho;
-
-	private String soreference2;
-	private String soreference3;
 
 	/**
 	 * 运输
@@ -288,6 +294,10 @@ public class OrderHeaderForNormal implements Serializable {
 
 	private String iZip;
 
+	private String iMail;
+
+	private String iFax;
+
 	private String lastshipmenttime;
 
 	private String edisendflag;
@@ -302,23 +312,92 @@ public class OrderHeaderForNormal implements Serializable {
 	private String edisendtime4;
 	private String edisendtime5;
 
-	private String H_EDI_01;
-	private String H_EDI_02;
-	private String H_EDI_03;
-	private String H_EDI_04;
-	private String H_EDI_05;
-	private String H_EDI_06;
-	private String H_EDI_07;
-	private String H_EDI_08;
-	private String H_EDI_09;
-	private String H_EDI_10;
+	private String hEdi01;
+	private String hEdi02;
+	private String hEdi03;
+	private String hEdi04;
+	private String hEdi05;
+	private String hEdi06;
+	private String hEdi07;
+	private String hEdi08;
+	private String hEdi09;
+	private String hEdi10;
+	private String hEdi11;
+	private String hEdi12;
+	private String hEdi13;
+	private String hEdi14;
+	private String hEdi15;
+
 	private String EDISendTime;
 
-	private String zoneGroup;
+	private String zonegroup;
 	/**
 	 * 出库复核完成标价
 	 */
 	private String packingFlag;
+	/**
+	 * 运输
+	 */
+	private String transportation;
+
+	private String orderPrintFlag;
+
+	private String rfgettask;
+	private String warehouseid;
+	private String medicalxmltime;
+	private String erpcancelflag;
+	private String placeofloading;
+	private String requiredeliveryno;
+	private String singlematch;
+	private String serialnocatch;
+	private String followup;
+	private String userdefinea;
+	private String userdefineb;
+	private String salesorderno;
+	private String invoiceprintflag;
+	private String invoiceno;
+	private String invoicetitle;
+
+	private String invoicetype;
+
+	private String invoiceitem;
+
+	private Double invoiceamount;
+
+	private String archiveflag;
+
+	private String consigneenameE;
+
+	private String puttolocation;
+
+	private String fulAlc;
+
+	private String deliveryno;
+
+	private String channel;
+
+	private String waveno;
+
+	private Double allocationcount;
+
+	private String expressprintflag;
+
+	private String deliverynoteprintflag;
+
+	private String weightingflag;
+
+	private String udfprintflag1;
+
+	private String udfprintflag2;
+
+	private String udfprintflag3;
+
+	private String edisendflag3;
+
+	private String edisendflag2;
+
+	private String signDay;
+
 
 	//------------------------------------------
 

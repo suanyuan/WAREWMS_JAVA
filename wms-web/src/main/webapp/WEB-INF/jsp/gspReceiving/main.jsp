@@ -47,14 +47,14 @@
                         {field: 'receivingId',	title: '申请单号',width: 122 },
                        /* {field: 'receivingId',			width: 102 },*/
                         {field: 'firstState',		title: '首营状态',	width: 92 ,formatter:firstStateFormatter},
-                        {field: 'enterpriseName',		title: '收货单位',	width: 122 },
+                        {field: 'enterpriseName',		title: '收货单位',	width: 200 },
                         {field: 'enterpriseNo',		title: '收货单位代码',	width: 101 },
                         {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
                         {field: 'customerid',		title: '货主ID',	width: 122 },
                         {field: 'supplierId',		title: '供应商',	width: 161  },
-                        {field: 'deliveryAddress',		title: '地址',	width: 92 },
+                        {field: 'deliveryAddress',		title: '地址',	width: 200 },
                         {field: 'contacts',		title: '联系人',	width: 82 },
-                        {field: 'phone',		title: '联系人电话',	width: 82 },
+                        {field: 'phone',		title: '联系人电话',	width: 100 },
 
                         {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isCheck == '1' ? '是' : '否';
@@ -113,11 +113,13 @@
 
 
                 $("#isU").combobox({
+                    panelHeight: 'auto',
                     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
                     valueField:'id',
                     textField:'value'
                 });
                 $("#isR").combobox({
+                    panelHeight: 'auto',
                     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
                     valueField:'id',
                     textField:'value'
@@ -128,6 +130,7 @@
                     textField:'value'
                 });*/
                 $("#isCh").combobox({
+                    panelHeight: 'auto',
                     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
                     valueField:'id',
                     textField:'value'
@@ -139,9 +142,12 @@ var add = function(){
                ezuiDialogA.dialog('open');*/
     $('#ezuiDialog').dialog({
         modal : true,
+		top:0,
+		left:0,
+        width:1000,
+        height:530,
         title : '<spring:message code="common.dialog.title"/>',
         href:dialogUrll+"&enterpriseId='0'",
-        fit:true,
         cache:false,
         buttons : '#ezuiDialogBtn',
         onClose : function() {
@@ -173,17 +179,19 @@ var edit = function(){
 
                     // if (res.firstState == '10' || res.firstState == '40') {
 
-                         $('#ezuiDialog').dialog({
-                             modal : true,
-                             title : '<spring:message code="common.dialog.title"/>',
-
-                             fit:true,
-                             cache:false,
-                             buttons : '#ezuiDialogBtn',
-                             onClose : function() {
-                                 ezuiFormClear(ezuiForm);
-                             }
-                         }).dialog('refresh', dialogUrll+"&enterpriseId="+res.enterpriseId+"&receivingId="+res.receivingId);
+                  $('#ezuiDialog').dialog({
+                       modal : true,
+					   title : '<spring:message code="common.dialog.title"/>',
+                       top:0,
+                       left:0,
+                       width:1000,
+                       height:530,
+					   cache:false,
+					   buttons : '#ezuiDialogBtn',
+					   onClose : function() {
+						   ezuiFormClear(ezuiForm);
+					   }
+                  }).dialog('refresh', dialogUrll+"&enterpriseId="+res.enterpriseId+"&receivingId="+res.receivingId);
                          /*$.messager.show({
                              msg : '审核中与审核通过的申请无法编辑', title : '提示'
                          });*/

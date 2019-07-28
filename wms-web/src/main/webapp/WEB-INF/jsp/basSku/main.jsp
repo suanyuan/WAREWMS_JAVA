@@ -231,6 +231,13 @@ var edit = function(){
   			reservedfield03 : row.reservedfield03,
             reservedfield04 : row.reservedfield04,
             reservedfield05 : row.reservedfield05,
+            reservedfield06 : row.reservedfield06,
+            reservedfield07 : row.reservedfield07,
+            reservedfield08 : row.reservedfield08,
+            reservedfield09 : row.reservedfield09,
+            reservedfield10 : row.reservedfield10,
+            reservedfield11 : row.reservedfield11,
+            reservedfield12 : row.reservedfield12,
   			grossweight : row.grossweight,
   			cube : row.cube,
   			price : row.price,
@@ -825,6 +832,33 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
+				</tr>
+				<tr>
+					<th>是否冷链</th>
+					<td><input type='text' name='reservedfield06' id="reservedfield06" class='easyui-combobox' size='16' data-options="required:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
+																															]" readonly/></td>
+					<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
+					<%--<th>产地</th>--%>
+					<%--<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>--%>
+					<th>是否医疗器械</th>
+					<td><input type='text' name='reservedfield07' id="reservedfield07" class='easyui-combobox' size='16' data-options="required:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
+																															]" readonly/></td>
+					<%--<th>宽</th>--%>
+					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
 				</tr>
 				<tr>
 					<th>是否需要产品合格证</th>

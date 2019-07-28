@@ -217,7 +217,7 @@ public class BasLocationService extends BaseService {
 	
 	public void exportTemplate(HttpServletResponse response, String token) {
 		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
-			File file = new File(ResourceUtil.getImportRootPath("location_template.csv"));
+			File file = new File(ResourceUtil.getImportRootPath("location_template.xls"));
 			response.reset();
 			Cookie cookie = new Cookie("downloadToken",token);
 			cookie.setMaxAge(60);	
