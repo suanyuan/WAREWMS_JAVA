@@ -8,14 +8,25 @@
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <body>
+<script type='text/javascript'>
+
+
+     var  ezuiDialog1;
+    // var enterpriseDialog;
+     var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
+
+
+</script>
 <form id='ezuiForm' method='post'>
     <input type='hidden' id='clientId' name='clientId' value="${customer.clientId}" class="textbox-value"/>
-    <input type="hidden" id="enterpriseId" name='enterpriseId' class="textbox-value"/>
+    <input type="hidden" id="enterpriseId" name='enterpriseId'  value="${customer.enterpriseId}"  class="textbox-value"/>
     <table>
         <tr>
             <th>企业</th>
             <td>
                 <input type='text' value="${customer.enterpriseName}" id="enterpriseName" name='enterpriseName' />
+                <a href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewEnterpriseUrl()">查看</a>
+
             </td>
         </tr>
         <tr>
@@ -110,7 +121,9 @@
 
     </table>
 </div>
+<div id="ezuiDialog1" style='padding: 10px;'>
 
+</div>
 <div id="dialogEnterprise">
 
 </div>
@@ -315,7 +328,10 @@
     function choseSelect() {
         var row = enterpriseDatagrid.datagrid("getSelected");
         if(row){
-            $("#enterpriseId").val(row.enterpriseId);
+            console.log(row.enterpriseId);
+            //$("#enterpriseId").attr("value",row.enterpriseId);
+            console.log($("#enterpriseId").val());
+            $("#ezuiForm input[id='enterpriseId']").val(row.enterpriseId);
             $("#enterpriseName").textbox("setValue",row.enterpriseName);
             $("#clientNo").textbox("setValue",row.enterpriseNo);
             $("#clientName").textbox("setValue",row.shorthandName);
@@ -348,25 +364,33 @@
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
                     return true;
+                    console.log("1");
                 }else{
+                    console.log("12");
                     return false;
                 }
             },
             success : function(data) {
                 var msg='';
+                console.log("2");
                 try {
                     var result = $.parseJSON(data);
                     if(result.success){
+                        console.log("3");
                         msg = result.msg;
                         ezuiDatagrid.datagrid('reload');
                         ezuiDialog.dialog('close');
                     }else{
                         msg = '<font color="red">' + result.msg + '</font>';
+                        console.log("4");
                     }
                 } catch (e) {
+                    console.log("f");
                     msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+
                     msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
                 } finally {
+                    console.log("5");
                     $.messager.show({
                         msg : msg, title : '<spring:message code="common.message.prompt"/>'
                     });
@@ -387,6 +411,43 @@
             }
         }
     }
+
+    function viewEnterpriseUrl() {
+        $(function() {
+            ezuiDialog1 = $('#ezuiDialog1').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+dialogUrl,
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialog1);
+                }
+            }).dialog('close');
+        })
+        //processType = 'edit';
+
+        //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#ezuiForm input[id='enterpriseId']").val());
+        var enterpriseId = $("#ezuiForm input[id='enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            enterpriseId = $("#enterpriseId").val();
+        }
+
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+
+    }
+
 
     function onChangeDate() {
         var startTime = $('#clientStartDateForm').eq(0).datebox('getValue');

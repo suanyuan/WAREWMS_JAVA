@@ -210,6 +210,8 @@ public class OrderDetailsForNormal implements Serializable {
 
     private BasSku basSku;
 
+    private String skuName;
+
 	public OrderDetailsForNormal() {
 		
 	}

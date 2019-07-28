@@ -161,25 +161,25 @@ where 1=1
 			and t1.apply_id =  #{condition.applyId}
 		</if>
 		<if test="condition.clientId != null and condition.clientId != ''" >
-			and t1.client_id =  #{condition.clientId}
+			and t1.client_id  like CONCAT('%',#{condition.clientId},'%')
 		</if>
 		<if test="condition.supplierId != null and condition.supplierId != ''" >
-			and t1.supplier_id =  #{condition.supplierId}
+			and t1.supplier_id  like CONCAT('%',#{condition.supplierId},'%')
 		</if>
-		<if test="condition.createId != null and condition.createId != ''" >
-			and t1.create_id =  #{condition.createId}
+		<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+			and t1.create_Date &gt;= #{condition.createDateStart}
 		</if>
-		<if test="condition.editId != null and condition.editId != ''" >
-			and t1.edit_id =  #{condition.editId}
+		<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+			and t1.create_Date &lt;= #{condition.createDateEnd}
 		</if>
 		<if test="condition.isUse != null and condition.isUse != ''" >
 			and t1.is_use =  #{condition.isUse}
 		</if>
 		<if test="condition.productCode != null and condition.productCode != ''" >
-			and t1.product_code like CONCAT('%',#{condition.productCode},'%')
+			and product_code like CONCAT('%',#{condition.productCode},'%')
 		</if>
 		<if test="condition.productName != null and condition.productName != ''" >
-			and t1.product_name like CONCAT('%',#{condition.productName},'%')
+			and product_name like CONCAT('%',#{condition.productName},'%')
 		</if>
 		<if test="condition.firstState != null and condition.firstState != ''" >
 			and t1.first_state =  #{condition.firstState}

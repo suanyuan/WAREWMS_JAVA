@@ -134,10 +134,10 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         </tr>
     </table>
 </form>
-<div id='ezuiDialogBtn1'>
-    <%--<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'>提交企业信息</a>--%>
-    <a onclick='ezuiDialogClose("#ezuiDialog1");' class='easyui-linkbutton' href='javascript:void(0);'>关闭</a>
-</div>
+<%--<div id='ezuiDialogBtn1'>--%>
+    <%--&lt;%&ndash;<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'>提交企业信息</a>&ndash;%&gt;--%>
+    <%--<a onclick='ezuiDialogClose("#ezuiDialog1");' class='easyui-linkbutton' href='javascript:void(0);'>关闭</a>--%>
+<%--</div>--%>
 <div id='ezuiDialog1' style='padding: 10px;'>
 
 </div>
@@ -230,7 +230,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         //$("input[name='enterpriseId'][data='1']").val(id);
 
         $("#ezuiFormInfo input[id='enterpriseId']").val(id);
-
+        console.log($("#ezuiFormInfo input[id='enterpriseId']").val());
         $("#enterpriseIdQuery1").textbox("setValue",name);
 
         $.ajax({
@@ -347,15 +347,19 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                 closable:true,
                 cache: false,
                 onClose : function() {
-                    ezuiFormClear(ezuiForm);
+                    ezuiFormClear(ezuiDialog1);
                 }
             }).dialog('close');
         })
-        processType = 'edit';
+        //processType = 'add';
 
             //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#enterpriseId").val());
-        var enterpriseId = $("#enterpriseId").val();
+        console.log($("#ezuiFormInfo input[id='enterpriseId']").val());
+        var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            enterpriseId = $("#enterpriseId").val();
+        }
+
         if(enterpriseId!=null && enterpriseId!="" ){
             ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
         }else{

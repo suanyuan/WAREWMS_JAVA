@@ -68,18 +68,18 @@ $(function() {
 		onDblClickCell: function(index,field,value){
 			edit();
 		},
-		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
-		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/gspSupplierController.do?getBtn"/>', ezuiMenu);
-			$(this).datagrid('unselectAll');
-		}
+		<%--onRowContextMenu : function(event, rowIndex, rowData) {--%>
+			<%--event.preventDefault();--%>
+			<%--$(this).datagrid('unselectAll');--%>
+			<%--$(this).datagrid('selectRow', rowIndex);--%>
+			<%--ezuiMenu.menu('show', {--%>
+				<%--left : event.pageX,--%>
+				<%--top : event.pageY--%>
+			<%--});--%>
+		<%--},onLoadSuccess:function(data){--%>
+			<%--ajaxBtn($('#menuId').val(), '<c:url value="/gspSupplierController.do?getBtn"/>', ezuiMenu);--%>
+			<%--$(this).datagrid('unselectAll');--%>
+		<%--}--%>
 	});
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,

@@ -491,6 +491,295 @@ where 1=1
     update doc_order_details set orderlineno=#{orderlineno},customerid=#{customerid},sku=#{sku},linestatus=#{linestatus},lotnum=#{lotnum},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},lotatt13=#{lotatt13},lotatt14=#{lotatt14},lotatt15=#{lotatt15},lotatt16=#{lotatt16},lotatt17=#{lotatt17},lotatt18=#{lotatt18},pickzone=#{pickzone},location=#{location},traceid=#{traceid},qtyordered=#{qtyordered},qtysoftallocated=#{qtysoftallocated},qtyallocated=#{qtyallocated},qtypicked=#{qtypicked},qtyshipped=#{qtyshipped},uom=#{uom},packid=#{packid},softallocationrule=#{softallocationrule},allocationrule=#{allocationrule},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},notes=#{notes},qtyordered_each=#{qtyorderedEach},qtysoftallocated_each=#{qtysoftallocatedEach},qtyallocated_each=#{qtyallocatedEach},qtypicked_each=#{qtypickedEach},qtyshipped_each=#{qtyshippedEach},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},rotationid=#{rotationid},netweight=#{netweight},grossweight=#{grossweight},cubic=#{cubic},price=#{price},alternativesku=#{alternativesku},kitreferenceno=#{kitreferenceno},d_edi_01=#{dEdi01},d_edi_02=#{dEdi02},d_edi_03=#{dEdi03},d_edi_04=#{dEdi04},d_edi_05=#{dEdi05},d_edi_06=#{dEdi06},d_edi_07=#{dEdi07},d_edi_08=#{dEdi08},d_edi_09=#{dEdi09},d_edi_10=#{dEdi10},orderlinereferenceno=#{orderlinereferenceno},d_edi_11=#{dEdi11},d_edi_12=#{dEdi12},d_edi_13=#{dEdi13},d_edi_14=#{dEdi14},d_edi_15=#{dEdi15},d_edi_16=#{dEdi16},d_edi_17=#{dEdi17},d_edi_18=#{dEdi18},d_edi_19=#{dEdi19},d_edi_20=#{dEdi20},kitsku=#{kitsku},erpcancelflag=#{erpcancelflag},userdefine6=#{userdefine6},zonegroup=#{zonegroup},locgroup1=#{locgroup1},locgroup2=#{locgroup2},comminglesku=#{comminglesku},onestepallocation=#{onestepallocation},orderlotcontrol=#{orderlotcontrol},fullcaselotcontrol=#{fullcaselotcontrol},piecelotcontrol=#{piecelotcontrol},referencelineno=#{referencelineno},salesorderno=#{salesorderno},salesorderlineno=#{salesorderlineno},qtyreleased=#{qtyreleased},freegift=#{freegift} where orderno=#{orderno}
  </update>
 
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateBySelective" parameterType="Object" >
+        update doc_order_details set
+        <trim  suffixOverrides="," >
+            <if test="addwho != null  ">
+                addwho=#{addwho},
+            </if>
+            <if test="allocationrule != null  ">
+                allocationrule=#{allocationrule},
+            </if>
+            <if test="alternativesku != null  ">
+                alternativesku=#{alternativesku},
+            </if>
+            <if test="comminglesku != null  ">
+                comminglesku=#{comminglesku},
+            </if>
+            <if test="cubic != null  ">
+                cubic=#{cubic},
+            </if>
+            <if test="customerid != null  ">
+                customerid=#{customerid},
+            </if>
+            <if test="dEdi01 != null  ">
+                d_edi_01=#{dEdi01},
+            </if>
+            <if test="dEdi02 != null  ">
+                d_edi_02=#{dEdi02},
+            </if>
+            <if test="dEdi03 != null  ">
+                d_edi_03=#{dEdi03},
+            </if>
+            <if test="dEdi04 != null  ">
+                d_edi_04=#{dEdi04},
+            </if>
+            <if test="dEdi05 != null  ">
+                d_edi_05=#{dEdi05},
+            </if>
+            <if test="dEdi06 != null  ">
+                d_edi_06=#{dEdi06},
+            </if>
+            <if test="dEdi07 != null  ">
+                d_edi_07=#{dEdi07},
+            </if>
+            <if test="dEdi08 != null  ">
+                d_edi_08=#{dEdi08},
+            </if>
+            <if test="dEdi09 != null  ">
+                d_edi_09=#{dEdi09},
+            </if>
+            <if test="dEdi10 != null  ">
+                d_edi_10=#{dEdi10},
+            </if>
+            <if test="dEdi11 != null  ">
+                d_edi_11=#{dEdi11},
+            </if>
+            <if test="dEdi12 != null  ">
+                d_edi_12=#{dEdi12},
+            </if>
+            <if test="dEdi13 != null  ">
+                d_edi_13=#{dEdi13},
+            </if>
+            <if test="dEdi14 != null  ">
+                d_edi_14=#{dEdi14},
+            </if>
+            <if test="dEdi15 != null  ">
+                d_edi_15=#{dEdi15},
+            </if>
+            <if test="dEdi16 != null  ">
+                d_edi_16=#{dEdi16},
+            </if>
+            <if test="dEdi17 != null  ">
+                d_edi_17=#{dEdi17},
+            </if>
+            <if test="dEdi18 != null  ">
+                d_edi_18=#{dEdi18},
+            </if>
+            <if test="dEdi19 != null  ">
+                d_edi_19=#{dEdi19},
+            </if>
+            <if test="dEdi20 != null  ">
+                d_edi_20=#{dEdi20},
+            </if>
+            <if test="edittime != null  ">
+                edittime=#{edittime},
+            </if>
+            <if test="editwho != null  ">
+                editwho=#{editwho},
+            </if>
+            <if test="erpcancelflag != null  ">
+                erpcancelflag=#{erpcancelflag},
+            </if>
+            <if test="freegift != null  ">
+                freegift=#{freegift},
+            </if>
+            <if test="fullcaselotcontrol != null  ">
+                fullcaselotcontrol=#{fullcaselotcontrol},
+            </if>
+            <if test="grossweight != null  ">
+                grossweight=#{grossweight},
+            </if>
+            <if test="kitreferenceno != null  ">
+                kitreferenceno=#{kitreferenceno},
+            </if>
+            <if test="kitsku != null  ">
+                kitsku=#{kitsku},
+            </if>
+            <if test="linestatus != null  ">
+                linestatus=#{linestatus},
+            </if>
+            <if test="location != null  ">
+                location=#{location},
+            </if>
+            <if test="locgroup1 != null  ">
+                locgroup1=#{locgroup1},
+            </if>
+            <if test="locgroup2 != null  ">
+                locgroup2=#{locgroup2},
+            </if>
+            <if test="lotatt01 != null  ">
+                lotatt01=#{lotatt01},
+            </if>
+            <if test="lotatt02 != null  ">
+                lotatt02=#{lotatt02},
+            </if>
+            <if test="lotatt03 != null  ">
+                lotatt03=#{lotatt03},
+            </if>
+            <if test="lotatt04 != null  ">
+                lotatt04=#{lotatt04},
+            </if>
+            <if test="lotatt05 != null  ">
+                lotatt05=#{lotatt05},
+            </if>
+            <if test="lotatt06 != null  ">
+                lotatt06=#{lotatt06},
+            </if>
+            <if test="lotatt07 != null  ">
+                lotatt07=#{lotatt07},
+            </if>
+            <if test="lotatt08 != null  ">
+                lotatt08=#{lotatt08},
+            </if>
+            <if test="lotatt09 != null  ">
+                lotatt09=#{lotatt09},
+            </if>
+            <if test="lotatt10 != null  ">
+                lotatt10=#{lotatt10},
+            </if>
+            <if test="lotatt11 != null  ">
+                lotatt11=#{lotatt11},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt12=#{lotatt12},
+            </if>
+            <if test="lotatt13 != null  ">
+                lotatt13=#{lotatt13},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt14=#{lotatt14},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt15=#{lotatt15},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt16=#{lotatt16},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt17=#{lotatt17},
+            </if>
+            <if test="lotatt12 != null  ">
+                lotatt18=#{lotatt18},
+            </if>
+            <if test="lotnum != null  ">
+                lotnum=#{lotnum},
+            </if>
+            <if test="netweight != null  ">
+                netweight=#{netweight},
+            </if>
+            <if test="notes != null  ">
+                notes=#{notes},
+            </if>
+            <if test="onestepallocation != null  ">
+                onestepallocation=#{onestepallocation},
+            </if>
+            <if test="orderlineno != null  ">
+                orderlineno=#{orderlineno},
+            </if>
+            <if test="orderlinereferenceno != null  ">
+                orderlinereferenceno=#{orderlinereferenceno},
+            </if>
+            <if test="orderlotcontrol != null  ">
+                orderlotcontrol=#{orderlotcontrol},
+            </if>
+            <if test="orderno != null  ">
+                orderno=#{orderno},
+            </if>
+            <if test="packid != null  ">
+                packid=#{packid},
+            </if>
+            <if test="pickzone != null  ">
+                pickzone=#{pickzone},
+            </if>
+            <if test="piecelotcontrol != null  ">
+                piecelotcontrol=#{piecelotcontrol},
+            </if>
+            <if test="price != null  ">
+                price=#{price},
+            </if>
+            <if test="qtyallocated != null  ">
+                qtyallocated=#{qtyallocated},
+            </if>
+            <if test="qtyallocatedEach != null  ">
+                qtyallocated_each=#{qtyallocatedEach},
+            </if>
+            <if test="qtyordered != null  ">
+                qtyordered=#{qtyordered},
+            </if>
+            <if test="qtyorderedEach != null  ">
+                qtyordered_each=#{qtyorderedEach},
+            </if>
+            <if test="qtypicked != null  ">
+                qtypicked=#{qtypicked},
+            </if>
+            <if test="qtypickedEach != null  ">
+                qtypicked_each=#{qtypickedEach},
+            </if>
+            <if test="qtyreleased != null  ">
+                qtyreleased=#{qtyreleased},
+            </if>
+            <if test="qtyshipped != null  ">
+                qtyshipped=#{qtyshipped},
+            </if>
+            <if test="qtyshippedEach != null  ">
+                qtyshipped_each=#{qtyshippedEach},
+            </if>
+            <if test="qtysoftallocated != null  ">
+                qtysoftallocated=#{qtysoftallocated},
+            </if>
+            <if test="qtysoftallocatedEach != null  ">
+                qtysoftallocated_each=#{qtysoftallocatedEach},
+            </if>
+            <if test="referencelineno != null  ">
+                referencelineno=#{referencelineno},
+            </if>
+            <if test="rotationid != null  ">
+                rotationid=#{rotationid},
+            </if>
+            <if test="salesorderlineno != null  ">
+                salesorderlineno=#{salesorderlineno},
+            </if>
+            <if test="salesorderno != null  ">
+                salesorderno=#{salesorderno},
+            </if>
+            <if test="sku != null  ">
+                sku=#{sku},
+            </if>
+            <if test="softallocationrule != null  ">
+                softallocationrule=#{softallocationrule},
+            </if>
+            <if test="traceid != null  ">
+                traceid=#{traceid},
+            </if>
+            <if test="uom != null  ">
+                uom=#{uom},
+            </if>
+            <if test="userdefine1 != null  ">
+                userdefine1=#{userdefine1},
+            </if>
+            <if test="userdefine2 != null  ">
+                userdefine2=#{userdefine2},
+            </if>
+            <if test="userdefine3 != null  ">
+                userdefine3=#{userdefine3},
+            </if>
+            <if test="userdefine4 != null  ">
+                userdefine4=#{userdefine4},
+            </if>
+            <if test="userdefine5 != null  ">
+                userdefine5=#{userdefine5},
+            </if>
+            <if test="userdefine6 != null  ">
+                userdefine6=#{userdefine6},
+            </if>
+            <if test="zonegroup != null  ">
+                zonegroup=#{zonegroup},
+            </if>
+        </trim> where orderno=#{orderno} and orderlineno=#{orderlineno}
+    </update>
+
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
 	delete from doc_order_details where orderno = #{orderno, jdbcType=VARCHAR} and orderlineno = #{orderlineno, jdbcType=VARCHAR}
@@ -523,7 +812,7 @@ where 1=1
 
 <!--订单明细行号-->
 <select id="getOrderLineNoById" resultType="java.lang.Integer"  parameterType="Object">
-	select nvl(max(orderlineno),0) from doc_order_details where orderno = #{orderno,jdbcType=VARCHAR}
+	select ifnull(max(orderlineno),0) from doc_order_details where orderno = #{orderno,jdbcType=VARCHAR}
 </select>
 
 <!--按订单分配 -->

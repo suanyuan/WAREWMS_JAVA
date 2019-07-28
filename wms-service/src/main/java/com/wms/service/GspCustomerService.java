@@ -108,13 +108,14 @@ public class GspCustomerService extends BaseService {
 			return Json.error("没有查询到对应的申请单号");
 		}
 
-		if(gspCustomer.getFirstState()!=Constant.CODE_CATALOG_FIRSTSTATE_NEW){
+		if(!Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(gspCustomer.getFirstState())){
 			return Json.error("审核中的单据无法修改");
 		}
 
 		BeanUtils.copyProperties(gspCustomerForm, gspCustomer);
 		gspCustomerMybatisDao.updateBySelective(gspCustomer);
 		json.setSuccess(true);
+
 		return json;
 	}
 

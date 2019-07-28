@@ -432,6 +432,7 @@
         <c:choose>
             <c:when test="${firstBusinessApply.productLine != null}">
                 $("#productLine").combobox({
+                    panelHeight: 'auto',
                     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId',
                     valueField:'id',
                     textField:'text',

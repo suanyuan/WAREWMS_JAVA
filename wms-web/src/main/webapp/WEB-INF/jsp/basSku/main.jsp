@@ -174,7 +174,7 @@ var add = function(){
 	$("#ezuiForm #sku").textbox({
 		editable:true
 	}).textbox('textbox').css('text-transform','uppercase');
-	$("#ezuiForm #activeFlag").combobox('setValue','Y').combobox('setText','是'); 
+	$("#ezuiForm #activeFlag").combobox('setValue','1').combobox('setText','是');
 	$("#ezuiForm #packid").textbox({
 		editable:false
 	}).textbox('setValue','STANDARD');
@@ -388,7 +388,7 @@ var ezuiCustToolbarClear = function(){
 /* 货主弹框-1 */
 var ezuiCustDataClick = function(){
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
-		url : '<c:url value="/basCustomerController.do?showDatagrid&activeFlag=Y&customerType=OW"/>',
+		url : '<c:url value="/basCustomerController.do?showDatagrid&activeFlag=1&customerType=OW"/>',
 		method:'POST',
 		toolbar : '#ezuiCustToolbar',
 		title: '客户档案',
@@ -410,7 +410,7 @@ var ezuiCustDataClick = function(){
 					{field: 'descrE',		title: '英文名称',	width: 50},
 					{field: 'customerTypeName',	title: '类型',	width: 15},
 					{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-						return rowData.activeFlag == 'Y' ? '是' : '否';
+						return rowData.activeFlag == '1' ? '是' : '否';
 		            }}
 				]],
 		onDblClickCell: function(index,field,value){
@@ -423,7 +423,7 @@ var ezuiCustDataClick = function(){
 		}
 	});
 	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combobox('setText','货主');
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combobox('setText','是');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combobox('setText','是');
 	ezuiCustDataDialog.dialog('open');
 };
 /* 货主选择-1 */
@@ -439,7 +439,7 @@ var selectCust = function(){
 /* 货主弹框-2 */
 var ezuiCustDataDialogClick = function(){
 	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
-		url : '<c:url value="/basCustomerController.do?showDatagrid&activeFlag=Y&customerType=OW"/>',
+		url : '<c:url value="/basCustomerController.do?showDatagrid&activeFlag=1&customerType=OW"/>',
 		method:'POST',
 		toolbar : '#ezuiCustToolbar',
 		title: '客户档案',
@@ -461,7 +461,7 @@ var ezuiCustDataDialogClick = function(){
 					{field: 'descrE',			title: '英文名称',	width: 50},
 					{field: 'customerTypeName',	title: '类型',	width: 15},
 					{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-						return rowData.activeFlag == 'Y' ? '是' : '否';
+						return rowData.activeFlag == '1' ? '是' : '否';
 		            }}
 				]],
 		onDblClickCell: function(index,field,value){
@@ -474,7 +474,7 @@ var ezuiCustDataDialogClick = function(){
 		}
 	});
 	$("#ezuiCustDataDialog #customerType").combobox('setValue','OW').combobox('setText','货主');
-	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','Y').combobox('setText','是');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combobox('setText','是');
 	ezuiCustDataDialog.dialog('open');
 };
 /* 货主选择-2 */

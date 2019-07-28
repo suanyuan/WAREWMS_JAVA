@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wms.entity.BasSku;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
 	@Autowired
 	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+	@Autowired
+	private BasSkuService basSkuService;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
@@ -60,6 +63,14 @@ public class OrderDetailsForNormalService extends BaseService {
 		int orderLineNo = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
 		OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
 		BeanUtils.copyProperties(orderDetailsForNormalForm, orderDetailsForNormal);
+
+		/**
+		 * 关联包装代码
+		 */
+		BasSku basSku = basSkuService.getSkuInfo(orderDetailsForNormalForm.getCustomerid(),orderDetailsForNormalForm.getSku());
+		if(basSku!=null){
+			orderDetailsForNormal.setUom(basSku.getPackid());
+		}
 		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -76,8 +87,12 @@ public class OrderDetailsForNormalService extends BaseService {
 		orderDetailsForNormalQuery.setOrderlineno(orderDetailsForNormalForm.getOrderlineno());
 		OrderDetailsForNormal orderDetailsForNormal = orderDetailsForNormalMybatisDao.queryById(orderDetailsForNormalQuery);
 		BeanUtils.copyProperties(orderDetailsForNormalForm, orderDetailsForNormal);
+		BasSku basSku = basSkuService.getSkuInfo(orderDetailsForNormalForm.getCustomerid(),orderDetailsForNormalForm.getSku());
+		if(basSku!=null){
+			orderDetailsForNormal.setUom(basSku.getPackid());
+		}
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-		orderDetailsForNormalMybatisDao.update(orderDetailsForNormal);
+		orderDetailsForNormalMybatisDao.updateBySelective(orderDetailsForNormal);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

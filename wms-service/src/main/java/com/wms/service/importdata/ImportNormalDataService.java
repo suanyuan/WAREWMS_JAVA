@@ -44,19 +44,19 @@
 //	private static final int HEAD_COUNT = 3;
 //	private static final String[] ORDER_ITEM_COLUMN = {"序号","","","","","","","","","","","SKU","数量",""};
 //	private static final String[] ORDER_COLUMN = {"序号","订单类型","客户编码","","","","","","送达时间","","需带回单","SKU","数量",""};
-//	
+//
 //	@Autowired
 //	private SfcOrderDao sfcOrderDao;
-//	
+//
 //	@Autowired
 //	private CrmMerchantSimpleDao crmMerchantSimpleDao;
-//	
+//
 //	@Autowired
 //	private WmsStockDao wmsStockDao;
-//	
+//
 //	@Autowired
 //	private CosCommonAddressDao cosCommonAddressDao;
-//	
+//
 //	public Json importData(MultipartFile csvFile) throws UnsupportedEncodingException, IOException {
 //		Json json = new Json();
 //		boolean isSuccess = false;
@@ -97,7 +97,7 @@
 //		}
 //		return dataArrayLit;
 //	}
-//	
+//
 //	private void validateRow(List<String[]> dataArrayList, StringBuilder resultMsg) {
 //		int cellNum = 0;
 //		String[] columns = null;
@@ -127,7 +127,7 @@
 //			}
 //		}
 //	}
-//	
+//
 //	private List<ImportDataVO> dataToBean(List<String[]> dataArrayList, StringBuilder resultMsg) {
 //		ImportDataVO importDataVO = null;
 //		ImportDataDetailVO importDataDetailVO = null;
@@ -151,7 +151,7 @@
 //					}
 //				} catch (Exception e) {
 //					rowResult.append("[序号]，资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
-//				} 
+//				}
 //				importDataVO.setOrderType("整车".equals(dataArray[arrayIndex++]) ? 2 : 1);//订单类型
 //				try {
 //					importDataVO.setMerchantCode(Integer.parseInt(dataArray[arrayIndex++]));//客户编码
@@ -170,18 +170,18 @@
 //				importDataVO.setReceAddr(dataArray[arrayIndex++]);//收货人地址
 //				importDataVO.setReceName(dataArray[arrayIndex++]);//收货人名称
 //				importDataVO.setReceMobile(dataArray[arrayIndex++]);//收货人电话
-//				
-//				if((StringUtils.isEmpty(importDataVO.getAbbreviation()) || StringUtils.isEmpty(importDataVO.getStoreName())) && 
+//
+//				if((StringUtils.isEmpty(importDataVO.getAbbreviation()) || StringUtils.isEmpty(importDataVO.getStoreName())) &&
 //					(StringUtils.isEmpty(importDataVO.getReceAddr()) || StringUtils.isEmpty(importDataVO.getReceName()) || StringUtils.isEmpty(importDataVO.getReceMobile()))){
 //					rowResult.append("[商户简称、门店名称]或[收货人地址、收货人名称、收货人电话]至少输入一组完整资料").append(" ");
 //				}
-//				
+//
 //				try {
 //					arrivedTime = dataArray[arrayIndex++];
 //					importDataVO.setArrivedTime(DateUtil.parse(arrivedTime, "yyyy/MM/dd"));//送达时间
 //				} catch (Exception e) {
 //					rowResult.append("[送达时间]资料格式转换失败，请输入yyyy/MM/dd格式").append(" ");
-//				} 
+//				}
 //				try {
 //					collectAmt = dataArray[arrayIndex++];
 //					if(StringUtils.isNotEmpty(collectAmt)){//是否代收货款
@@ -195,12 +195,12 @@
 //					}
 //				} catch (Exception e) {
 //					rowResult.append("[代收货款]资料格式转换失败，请输入大于0数字格式").append(" ");
-//				} 
+//				}
 //				backReceipt = dataArray[arrayIndex++];
 //				if(StringUtils.isNotEmpty(backReceipt)){
 //					importDataVO.setTakeReceipt("是".equals(backReceipt) ? 1 : 0);//需带回单
 //				}
-//				
+//
 //				importDataDeatilList = new ArrayList<ImportDataDetailVO>();
 //				importDataDetailVO = new ImportDataDetailVO();
 //				importDataDetailVO.setSkuCode(dataArray[arrayIndex++]);
@@ -208,9 +208,9 @@
 //					importDataDetailVO.setQuantity(Integer.parseInt(dataArray[arrayIndex++]));
 //				} catch (Exception e) {
 //					rowResult.append("[数量]资料格式转换失败，请输入正整数之数字格式").append(" ");
-//				} 
+//				}
 //				importDataDeatilList.add(importDataDetailVO);
-//				
+//
 //				if(dataArray.length > 13){
 //					orderRemark = dataArray[arrayIndex++];
 //					if(StringUtils.isNotEmpty(orderRemark)){
@@ -225,9 +225,9 @@
 //					importDataDetailVO.setQuantity(Integer.parseInt(dataArray[12]));
 //				} catch (Exception e) {
 //					rowResult.append("[数量]资料格式转换失败，资料格式转换失败，请输入正整数之数字格式").append(" ");
-//				} 
+//				}
 //			}
-//			
+//
 //			if (rowResult.length() > 0) {
 //				if(rowResult.lastIndexOf("，") > -1){
 //					rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
@@ -246,7 +246,7 @@
 //		}
 //		return importDataList;
 //	}
-//	
+//
 //	private void validateMerchant(List<ImportDataVO> importOrderList, StringBuilder resultMsg) {
 //		CrmMerchantSimple merchant = null;
 //		CosCommonAddress address = null;
@@ -255,7 +255,7 @@
 //		for (ImportDataVO importDataVO : importOrderList) {
 //			merchantQuery.setMerchantCode(importDataVO.getMerchantCode());
 //			merchant = crmMerchantSimpleDao.getUniqueByQuery(merchantQuery);
-//			
+//
 //			if (merchant == null) {// 是否有商户资料
 //				resultMsg.append("序号：").append(importDataVO.getSeq()).append("商户代码查无商户资料").append(" ");
 //			} else if(merchant.getIsSign() == null || merchant.getIsSign() == 0) {// 商户是否已签约且已付款
@@ -283,7 +283,7 @@
 //			}
 //		}
 //	}
-//	
+//
 //	private void validateStock(List<ImportDataVO> importDataList, StringBuilder resultMsg) {
 //		String skuCode = null;
 //		Integer needQuantity = null;
@@ -297,7 +297,7 @@
 //			for(ImportDataDetailVO importDataDetailVO : importDataDetailList){//归类同skuCode，并计算总和
 //				needQuantity = importDataDetailVO.getQuantity();
 //				skuCode = importDataDetailVO.getSkuCode();
-//				
+//
 //				stockQuery = new WmsStockQuery();
 //				stockQuery.setSkuCode(skuCode);
 //				stockQuery.setMerchantCode(importDataVO.getMerchantCode());
@@ -310,13 +310,13 @@
 //				}
 //			}
 //		}
-//		
+//
 //		if(stockQueryMap.size() > 0){
 //			stockResult = new StringBuilder();
 //			for(WmsStockQuery key : stockQueryMap.keySet()){
 //				stockQuery = stockQueryMap.get(key);
 //				stock = wmsStockDao.getUniqueByQuery(stockQuery);
-//				
+//
 //				if(stock == null || stock.getQuantity() == null){
 //					stockResult.append("	").append("客户编码为：").append(stockQuery.getMerchantCode())
 //					    	   .append("，SKU编码为：").append(stockQuery.getSkuCode()).append("，查无库存资料！").append(" ");
@@ -325,14 +325,14 @@
 //							   .append("，SKU编码为：").append(stockQuery.getSkuCode()).append("，库存不足！目前库存为：").append(stock.getQuantity()).append("，导入订单总出货量为：").append(stockQuery.getNeedQuantity()).append(" ");
 //				}
 //			}
-//			
+//
 //			if (stockResult.length() > 0) {
 //				resultMsg.append("资料有错＝＞").append(" ").append(stockResult).append(" ");
 //				stockResult.setLength(0);
 //			}
 //		}
 //	}
-//	
+//
 //	private void saveOrder(List<ImportDataVO> importOrderList, StringBuilder resultMsg) {
 //		SfcOrder order = null;
 //		SfcOrderQuery orderQuery = new SfcOrderQuery();
@@ -375,7 +375,7 @@
 //			for(ImportDataDetailVO importDataDetailVO : importDataVO.getImportDataDetailList()){
 //				detail = new SfcOrderDetail();
 //				BeanUtils.copyProperties(importDataDetailVO, detail);
-//				
+//
 //				stockQuery = new WmsStockQuery();
 //				stockQuery.setMerchantCode(importDataVO.getMerchantCode());
 //				stockQuery.setSkuCode(importDataDetailVO.getSkuCode());

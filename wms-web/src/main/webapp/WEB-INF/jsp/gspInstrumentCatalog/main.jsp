@@ -65,8 +65,8 @@ $(function() {
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
-		width:500,
-		height:500,
+		width:300,
+		height:400,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
 		}

@@ -25,7 +25,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -40,19 +40,19 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
-            {field: '申请类型',		title: '申请类型',	width: 57,formatter:applyTypeFormatter },
-			{field: 'reviewTypeId',		title: '申请单编号',	width: 80 },
-			{field: 'applyContent',		title: '内容',	width: 57 },
+            {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
+			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
+			{field: 'applyContent',		title: '内容',	width: 71 },
 			{field: 'applyState',		title: '状态',	width: 57 ,
 				formatter:checkStateTypeFormatter
 			},
-			{field: 'checkIdQc',		title: '质量部审核人',	width: 57 },
-			{field: 'checkDateQc',		title: '审核时间',	width: 57 },
-			{field: 'checkRemarkQc',		title: '备注',	width: 57 },
-			{field: 'checkIdHead',		title: '负责人审核',	width: 57 },
-			{field: 'checkDateHead',		title: '负责人审核时间',	width: 57 },
-            {field: 'checkRemarkHead',		title: '备注',	width: 57 },
-			{field: 'createDate',		title: '创建时间',	width: 57 }
+			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
+			{field: 'checkDateQc',		title: '审核时间',	width: 150 },
+			{field: 'checkRemarkQc',		title: '备注',	width: 250 },
+			{field: 'checkIdHead',		title: '负责人审核',	width: 71 },
+			{field: 'checkDateHead',		title: '负责人审核时间',	width: 150 },
+            {field: 'checkRemarkHead',		title: '备注',	width: 250 },
+			{field: 'createDate',		title: '创建时间',	width: 150 }
 		]],
         onDblClickRow: function(index,row){
 			edit(row);
@@ -85,6 +85,7 @@ $(function() {
 	}).dialog('close');
 
 	$("#applyState").combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?checkState',
         valueField:'id',
         textField:'value'
@@ -241,7 +242,7 @@ function returnCheck() {
 						<tr>
 							<th>申请类型</th>
 							<td>
-								<select id="applyType" class="easyui-combobox" data-options='width:120'>
+								<select id="applyType" class="easyui-combobox" data-options="width:120,panelHeight: 'auto'">
 									<option value=""></option>
 									<option value="CUS">委托客户</option>
 									<option value="SUP">供应商</option>
@@ -249,7 +250,7 @@ function returnCheck() {
 									<option value="REC">收货单位</option>
 								</select>
 							</td>
-							<th>申请单号</th>
+							<th>申请单编号</th>
 							<td>
 								<input type='text' id='applyNo' class='easyui-textbox' data-options='width:150'/>
 							</td>

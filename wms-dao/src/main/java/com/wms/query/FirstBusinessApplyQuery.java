@@ -13,6 +13,42 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String productCode;//附加
+	private String productName;//附加
+	private String createDateStart;//附加
+	private String createDateEnd;//附加
+
+	public String getCreateDateStart() {
+		return createDateStart;
+	}
+
+	public void setCreateDateStart(String createDateStart) {
+		this.createDateStart = createDateStart;
+	}
+
+	public String getCreateDateEnd() {
+		return createDateEnd;
+	}
+
+	public void setCreateDateEnd(String createDateEnd) {
+		this.createDateEnd = createDateEnd;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
 
 	public String getApplyId() {
 		return applyId;

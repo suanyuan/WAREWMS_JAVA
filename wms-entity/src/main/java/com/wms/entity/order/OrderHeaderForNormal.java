@@ -435,11 +435,6 @@ public class OrderHeaderForNormal implements Serializable {
 	private String carrierName;
 
 	/**
-	 * 所属仓库
-	 */
-	private String warehouseId;
-
-	/**
 	 * 分配ID
 	 */
 	private String allocationDetailsId;

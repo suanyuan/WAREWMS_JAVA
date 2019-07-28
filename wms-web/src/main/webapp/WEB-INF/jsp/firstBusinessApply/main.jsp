@@ -76,8 +76,12 @@ $(function() {
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
+		top:0,
+		left:0,
+		width:1050,
+		height:600,
 		title : '<spring:message code="common.dialog.title"/>',
-		fit:true,
+		fit:false,
 		href:sy.bp()+"/firstBusinessApplyController.do?toDetail",
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
@@ -85,6 +89,7 @@ $(function() {
 	}).dialog('close');
 
     $('#isUse').combobox({
+        panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
@@ -181,16 +186,16 @@ var commit = function(){
 		}
 	});
 };
+//主页查询
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		applyId : $('#applyId').val(),
+        productCode : $('#productCode').val(),
+        productName:$('#productName').val(),
 		clientId : $('#clientIdQuery').val(),
 		supplierId : $('#supplierIdQuery').val(),
-		createId : $('#createId').val(),
-		createDate : $('#createDate').val(),
-		editId : $('#editId').val(),
-		editDate : $('#editDate').val(),
-		isUse : $('#isUse').val()
+        createDateStart : $('#createDateStart').datebox('getValue'),
+        createDateEnd : $('#createDateEnd').datebox('getValue'),
+		isUse : $('#isUse').combobox('getValue')
 	});
 };
 
@@ -275,15 +280,15 @@ var reApply = function () {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>产品代码：</th><td><input type='text' id='applyIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品名称：</th><td><input type='text' id='' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>委托客户：</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应客户：</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托客户</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应客户</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>创建时间起始：</th><td><input type='text' id='createDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>创建时间结束：</th><td><input type='text' id='editId' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>是否启用：</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>是否启用</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

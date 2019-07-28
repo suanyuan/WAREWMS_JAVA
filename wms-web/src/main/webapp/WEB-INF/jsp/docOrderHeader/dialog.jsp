@@ -25,7 +25,7 @@
 				</tr>
 				<tr>
 					<th>收货人</th>
-					<td><input type='text' id='consigneename' name='consigneename' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' id='consigneeid' name='consigneeid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>联系方式</th>
 					<td><input type='text' id='cTel1' name='cTel1' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>释放状态</th>
@@ -40,16 +40,22 @@
 																											url:'<c:url value="/docOrderHeaderController.do?getOrderTypeCombobox"/>',
 																											valueField: 'id',
 																											textField: 'value'"/></td>
+					<th>快递公司</th>
+					<td><input type='text' id='carrierid' name='carrierid' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>收货地址</th>
 					<td colspan="5"><input type='text' id='cAddress1' name='cAddress1' class='easyui-textbox' size='78' data-options='required:true'/></td>
 					<th>订单发运时间</th>
 					<td><input type='text' id='lastshipmenttime' name='lastshipmenttime' class='easyui-textbox' size='16' data-options='editable: false'/></td>
+					<th>发运方式</th>
+					<td><input type='text' id='userdefine1' name='userdefine1' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>备注</th>
 					<td colspan="5"><input type='text' id='notes' name='notes' class='easyui-textbox' size='78' style="height:30px" data-options="multiline:true,validType:['length[200]']"/></td>
+					<th>结算方式</th>
+					<td><input type='text' id='userdefine2' name='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>订单创建时间</th>
