@@ -280,7 +280,13 @@ public class BasCustomerService extends BaseService {
 		BasCustomerQuery basCustomerQuery = new BasCustomerQuery();
 		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
-		BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(basCustomerQuery);
+
+		BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(basCustomerForm.getCustomerid(),basCustomerForm.getCustomerType());
+        if(basCustomer==null){
+            json.setSuccess(true);
+            json.setMsg("资料已经失效！");
+            return json;
+        }
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
 
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
