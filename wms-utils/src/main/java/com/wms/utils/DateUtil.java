@@ -204,6 +204,22 @@ public class DateUtil {
 		return null;
 	}
 
+    /**
+     * 200212 -》 2020-02-12
+     * @param lotatt02 效期
+     * @return ~
+     */
+	public static String lotatt02DateFormat(String lotatt02) {
+	    if (StringUtils.isEmpty(lotatt02)) {
+	        return lotatt02;
+        }
+        String regex = "(.{2})";
+        lotatt02 = lotatt02.replaceAll(regex, "$1-");
+        lotatt02 = "20" + lotatt02;
+        lotatt02 = lotatt02.substring(0,lotatt02.length() - 1);
+        return lotatt02;
+    }
+
 	public static void main(String[] args) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {

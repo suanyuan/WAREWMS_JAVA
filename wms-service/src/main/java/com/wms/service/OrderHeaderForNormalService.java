@@ -924,10 +924,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
     public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
 
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCurrentPage(form.getPageNum());
-        mybatisCriteria.setPageSize(form.getPageSize());
-        List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+        List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryPackageList(form.getStart(), form.getPageSize());
 
         OrderHeaderForNormalVO orderHeaderForNormalVO;
         List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();

@@ -1,10 +1,12 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocOrderPackingService;
 import com.wms.service.OrderHeaderForNormalService;
 import com.wms.vo.OrderHeaderForNormalVO;
+import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.form.pda.PageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,6 @@ public class PdaPackageController {
     private OrderHeaderForNormalService orderHeaderForNormalService;
 
     /**
-     * TODO 等header改好了加个任务状态的条件，再加个排序
      * 获取包装复核任务列表、收货任务列表
      * @param form 分页
      * @return ~
@@ -78,9 +79,57 @@ public class PdaPackageController {
         }
     }
 
-//    @RequestMapping(params = "docOrderDetail", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Map<String, Object> queryDocOrderDetail(DocOrderDetailQuery query) {
-//
-//    }
+    /**
+     * 获取包装复核任务明细
+     * @param query ~
+     * @return ~
+     */
+    @RequestMapping(params = "docPackage", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {
+
+        return docOrderPackingService.queryDocPackage(query);
+    }
+
+    /**
+     * 包装复核提交
+     * @param form ~
+     * @return ~
+     */
+    @RequestMapping(params = "docPackageCommit", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> docPackageCommit(DocOrderPackingForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docOrderPackingService.packageCommit(form));
+        return resultMap;
+    }
+
+    /**
+     * 包装复核装箱结束提交
+     * @param form ~
+     * @return ~
+     */
+    @RequestMapping(params = "commitCartonType", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> commitCartonType(DocOrderPackingForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docOrderPackingService.commitCartonType(form));
+        return resultMap;
+    }
+
+    /**
+     * 包装复核结束提交
+     * @param orderno ~
+     * @return ~
+     */
+    @RequestMapping(params = "endPacking", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> endPacking(String orderno) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(orderno));
+        return resultMap;
+    }
 }

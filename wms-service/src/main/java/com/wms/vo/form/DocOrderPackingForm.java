@@ -1,92 +1,46 @@
 package com.wms.vo.form;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import lombok.Data;
 
+@Data
 public class DocOrderPackingForm {
 
-	private String traceid;
 	private String orderno;
-	private String sku;
-	private java.math.BigDecimal qty;
-	private String allocationdetailsid;
-	private java.util.Date addtime;
-	private String addwho;
-	private java.util.Date edittime;
-	private String editwho;
 
-	public String getTraceid() {
-		return traceid;
-	}
+    private String traceid;//PDA cartonNum
 
-	public void setTraceid(String traceid) {
-		this.traceid = traceid;
-	}
+    private String cartonno;
 
-	public String getOrderno() {
-		return orderno;
-	}
+    private double grossweight;
 
-	public void setOrderno(String orderno) {
-		this.orderno = orderno;
-	}
+    private double cube;
 
-	public String getSku() {
-		return sku;
-	}
+    private int packingflag;
 
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
+    private String addwho;
 
-	public java.math.BigDecimal getQty() {
-		return qty;
-	}
+    //结束装箱
+    private String cartontype;//箱型
 
-	public void setQty(java.math.BigDecimal qty) {
-		this.qty = qty;
-	}
 
-	public String getAllocationdetailsid() {
-		return allocationdetailsid;
-	}
+    //装箱明细
+    private String customerid;
 
-	public void setAllocationdetailsid(String allocationdetailsid) {
-		this.allocationdetailsid = allocationdetailsid;
-	}
+    private String sku;
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
-		return addtime;
-	}
+    private int qty;
 
-	public void setAddtime(java.util.Date addtime) {
-		this.addtime = addtime;
-	}
+    private String allocationdetailsid;
 
-	public String getAddwho() {
-		return addwho;
-	}
+    private String lotnum;
 
-	public void setAddwho(String addwho) {
-		this.addwho = addwho;
-	}
+    private String lotatt11;
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
-		return edittime;
-	}
+    private String description;
 
-	public void setEdittime(java.util.Date edittime) {
-		this.edittime = edittime;
-	}
+    private String conclusion;
 
-	public String getEditwho() {
-		return editwho;
-	}
+    private String editwho;
 
-	public void setEditwho(String editwho) {
-		this.editwho = editwho;
-	}
-
+    private String skudesce;//包装规格
 }

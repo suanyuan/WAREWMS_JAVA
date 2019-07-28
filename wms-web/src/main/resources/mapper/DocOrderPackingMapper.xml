@@ -33,10 +33,10 @@
 </resultMap>
 <!-- Result Map-->
 <resultMap id="PackingListMap" type="com.wms.entity.order.OrderHeaderForNormal" >
-	<result column="orderNo" property="orderNo"/>
+	<result column="orderNo" property="orderno"/>
 	<result column="orderCode" property="orderCode"/>
 	<!--<result column="customerShortName" property="customerShortName"/>-->
-	<result column="consigneeName" property="consigneeName"/>
+	<result column="consigneeName" property="consigneename"/>
 	<!--<result column="tel" property="tel"/>-->
 	<!--<result column="address" property="address"/>-->
 	<result column="boxQty" property="boxQty"/>
@@ -50,42 +50,72 @@
 	</collection>
 </resultMap>
 
+    <resultMap id="PackingCartonMap" type="com.wms.entity.DocOrderPackingCarton">
+        <result column="orderno" property="orderno"/>
+        <result column="traceid" property="traceid"/>
+        <result column="cartonno" property="cartonno"/>
+        <result column="customerid" property="customerid"/>
+        <result column="sku" property="sku"/>
+        <result column="qty" property="qty"/>
+        <result column="allocationdetailsid" property="allocationdetailsid"/>
+        <result column="addwho" property="addwho"/>
+        <result column="addtime" property="addtime"/>
+    </resultMap>
+
+    <resultMap id="PackingCartonInfoMap" type="com.wms.entity.DocOrderPackingCartonInfo">
+        <result column="orderno" property="orderno"/>
+        <result column="traceid" property="traceid"/>
+        <result column="cartonno" property="cartonno"/>
+        <result column="cartontype" property="cartontype"/>
+        <result column="grossweight" property="grossweight"/>
+        <result column="cube" property="cube"/>
+        <result column="packingflag" property="packingflag"/>
+        <result column="addwho" property="addwho"/>
+        <result column="addtime" property="addtime"/>
+    </resultMap>
+
+    <!-- doc_order_packing_carton table all fields -->
+    <sql id="Carton_Column_List" >
+	 orderno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,skudesce,description,conclusion,addwho,addtime,editwho,edittime
+</sql>
+    <sql id="Carton_Info_Column_List" >
+	 orderno,traceid,cartonno,cartontype,grossweight,cube,packingflag,addwho,addtime
+</sql>
+
 <!--插入装箱信息-->
 <insert id="packingCartonInfoInsert" parameterType="Object" >
 	insert into Doc_Order_Packing_Carton_Info (
 	orderno,
 	traceid,
 	cartonno,
+	cartontype,
+	grossweight,
+	cube,
 	addtime,
 	addwho)
 	values (
-	#{orderNo,jdbcType=VARCHAR},
-	#{traceId,jdbcType=VARCHAR},
-	#{cartonNo,jdbcType=INTEGER},
+	#{orderno,jdbcType=VARCHAR},
+	#{traceid,jdbcType=VARCHAR},
+	#{cartonno,jdbcType=INTEGER},
+	#{cartontype,jdbcType=VARCHAR},
+	#{grossweight,jdbcType=DOUBLE},
+	#{cube,jdbcType=DOUBLE},
 	now(),
 	#{addwho,jdbcType=VARCHAR})
 </insert>
 
 <!--插入装箱明细-->
 <insert id="packingCartonInsert" parameterType="Object" >
-	insert into Doc_Order_Packing_Carton (
-	orderno,
-	traceid,
-	cartonno,
-	sku,
-	qty,
-	allocationdetailsid,
-	addtime,
-	addwho)
-	values (
-	#{orderNo,jdbcType=VARCHAR},
-	#{traceId,jdbcType=VARCHAR},
-	#{cartonNo,jdbcType=INTEGER},
-	#{sku,jdbcType=VARCHAR},
-	#{scanQty,jdbcType=INTEGER},
-	#{allocationDetailsId,jdbcType=VARCHAR},
-	now(),
-	#{addwho,jdbcType=VARCHAR})
+	 insert into doc_order_packing_carton(
+	 orderno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,
+	 lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,
+	 lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,
+	 skudesce,description,conclusion,addwho,addtime,editwho,edittime)
+      values(
+      #{orderno},#{traceid},#{cartonno},#{customerid},#{sku},#{qty},#{allocationdetailsid},
+      #{lotnum},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},
+      #{lotatt10},#{lotatt11},#{lotatt12},#{lotatt13},#{lotatt14},#{lotatt15},#{lotatt16},#{lotatt17},#{lotatt18},
+      #{skudesce},#{description},#{conclusion},#{addwho},now(),null,null)
 </insert>
 
 <!--记录单箱装箱重量、体积-->
@@ -225,7 +255,7 @@
 
 <!--查询订单对应箱数-->
 <select id="queryCartonNoById" resultMap="BaseResultMap" parameterType="Object">
-    SELECT tl.level FROM tmp_level tl
+    SELECT tl.level as cartonNo FROM tmp_level tl
     LEFT JOIN (
                 SELECT * FROM doc_order_packing_carton_info
                 WHERE orderno = #{orderNo,jdbcType=VARCHAR}
@@ -569,4 +599,48 @@ select a.orderno as orderNo,
 	order by b.cartonno, b.sku
 </select>
 
+    <!--查询orderno + sku + customerid 对应的装箱明细-->
+    <select id="queryGoodsPackage" parameterType="java.util.Map" resultMap="PackingCartonMap">
+        select a.* from doc_order_packing_carton a
+        left join doc_order_packing_carton_info b on a.orderno = b.orderno and a.traceid = b.traceid
+        where a.orderno = #{orderno, jdbcType=VARCHAR} and a.sku = #{sku, jdbcType=VARCHAR} and a.customerid = #{customerid, jdbcType=VARCHAR} and a.lotnum = #{lotnum, jdbcType=VARCHAR}
+          and b.packingflag = 0
+    </select>
+
+    <!--获取扫码产品的复核记录-->
+    <select id="queryPackedDetail" parameterType="java.util.Map" resultMap="PackingCartonMap">
+        select
+        <include refid="Carton_Column_List"/>
+        from doc_order_packing_carton
+        where orderno = #{orderno} and customerid = #{customerid} and sku = #{sku} and lotnum = #{lotnum}
+    </select>
+
+    <select id="queryAvailablePackedDetail" parameterType="java.util.Map" resultMap="PackingCartonMap">
+        select
+        <include refid="Carton_Column_List"/>
+        from doc_order_packing_carton
+        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum}
+    </select>
+
+    <select id="queryPackingCartonInfo" parameterType="java.util.Map" resultMap="PackingCartonInfoMap">
+        select
+        <include refid="Carton_Info_Column_List"/>
+        from doc_order_packing_carton_info
+        where orderno = #{orderno} and traceid = #{traceid}
+    </select>
+
+    <update id="updatePackingCarton" parameterType="java.util.Map">
+        update doc_order_packing_carton set
+        qty = #{qty},
+        editwho = #{editwho},
+        edittime = now()
+        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum}
+    </update>
+
+    <update id="updatePackingCartonInfo" parameterType="java.util.Map">
+        update doc_order_packing_carton_info set
+        cartontype = #{cartontype},
+        packingflag = #{packingflag}
+        where orderno = #{orderno} and traceid = #{traceid}
+    </update>
 </mapper>   

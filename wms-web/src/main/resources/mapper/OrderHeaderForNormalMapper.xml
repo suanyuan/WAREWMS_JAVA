@@ -6,7 +6,7 @@
 	<!-- Result Map-->
 	<resultMap id="BaseResultMap" type="com.wms.entity.order.OrderHeaderForNormal" >
 		<result column="orderno" property="orderno"/>
-		<result column="customerid" property="customerId"/>
+		<result column="customerid" property="customerid"/>
 		<result column="soreference1" property="soreference1"/>
 		<result column="ordertime" property="ordertime"/>
 		<result column="expectedshipmenttime1" property="expectedshipmenttime1"/>
@@ -1191,6 +1191,15 @@
 
 	</select>
 
+    <select id="queryPackageList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_order_header
+        where sostatus = '60' or sostatus = '62'
+        order by addtime desc
+        limit #{start}, #{pageSize}
+    </select>
+
 	<!--  -->
 	<select id="queryByPickingList"  resultMap="BaseResultMap" parameterType="Object">
 
@@ -1252,5 +1261,11 @@
 	where codeid = 'RLS_STS'
 	order by show_sequence
 </select>
+
+    <update id="updateSOTask" parameterType="java.util.Map">
+        update doc_order_header set
+        sostatus = #{sostatus}, editwho = #{editwho}, edittime = now()
+        where orderno = #{orderno}
+    </update>
 
 </mapper>   

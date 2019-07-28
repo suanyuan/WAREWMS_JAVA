@@ -7,6 +7,7 @@ import com.wms.entity.ExportOrderData;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
+import org.apache.ibatis.annotations.Param;
 
 public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
@@ -19,6 +20,8 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 	List<OrderHeaderForNormal> queryByAllocationDetailsId(String orderno);
 
 	List<OrderHeaderForNormal> queryByUnAllocationDetailsId(String orderno);
+
+	List<OrderHeaderForNormal> queryPackageList(@Param("start") int start, @Param("pageSize") int pageSize);
 	
 	OrderHeaderForNormal queryByPickingList(OrderHeaderForNormalQuery query);
 
@@ -39,6 +42,8 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 	void shipmentByOrder(Map<String, Object> map);
 
 	void cancelByOrder(Map<String, Object> map);
+
+	int updateSOTask(OrderHeaderForNormal orderHeaderForNormal);
 
 	//OrderHeaderForNormal queryPrintTemplate(OrderHeaderForNormalQuery query);
 }

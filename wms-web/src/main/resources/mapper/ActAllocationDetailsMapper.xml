@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.ActAllocationDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.ActAllocationDetails" >
+	<result column="allocationdetailsid" property="allocationdetailsid"/>
+	<result column="orderno" property="orderno"/>
+	<result column="orderlineno" property="orderlineno"/>
+	<result column="skulineno" property="skulineno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="uom" property="uom"/>
+	<result column="location" property="location"/>
+	<result column="qty" property="qty"/>
+	<result column="traceid" property="traceid"/>
+	<result column="qty_each" property="qtyEach"/>
+	<result column="packid" property="packid"/>
+	<result column="waveno" property="waveno"/>
+	<result column="status" property="status"/>
+	<result column="addwho" property="addwho"/>
+	<result column="addtime" property="addtime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="qtypicked_each" property="qtypickedEach"/>
+	<result column="qtyshipped_each" property="qtyshippedEach"/>
+	<result column="notes" property="notes"/>
+	<result column="picktolocation" property="picktolocation"/>
+	<result column="picktotraceid" property="picktotraceid"/>
+	<result column="pickedtime" property="pickedtime"/>
+	<result column="pickedwho" property="pickedwho"/>
+	<result column="packflag" property="packflag"/>
+	<result column="checkwho" property="checkwho"/>
+	<result column="checktime" property="checktime"/>
+	<result column="shipmenttime" property="shipmenttime"/>
+	<result column="reasoncode" property="reasoncode"/>
+	<result column="shipmentwho" property="shipmentwho"/>
+	<result column="softallocationdetailsid" property="softallocationdetailsid"/>
+	<result column="cubic" property="cubic"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="netweight" property="netweight"/>
+	<result column="price" property="price"/>
+	<result column="sortationlocation" property="sortationlocation"/>
+	<result column="orderno_old" property="ordernoOld"/>
+	<result column="orderlineno_old" property="orderlinenoOld"/>
+	<result column="allocationdetailsid_old" property="allocationdetailsidOld"/>
+	<result column="printflag" property="printflag"/>
+	<result column="contrainerid" property="contrainerid"/>
+	<result column="doublecheckby" property="doublecheckby"/>
+	<result column="shipmentconfirmby" property="shipmentconfirmby"/>
+	<result column="cartonseqno" property="cartonseqno"/>
+	<result column="dropid" property="dropid"/>
+	<result column="pickingtransactionid" property="pickingtransactionid"/>
+	<result column="cartonid" property="cartonid"/>
+	<result column="palletize" property="palletize"/>
+	<result column="workstation" property="workstation"/>
+	<result column="udfprintflag1" property="udfprintflag1"/>
+</resultMap>
+       
+<!-- act_allocation_details table all fields -->
+<sql id="Base_Column_List" >
+	 allocationdetailsid,orderno,orderlineno,skulineno,customerid,sku,lotnum,uom,location,qty,traceid,qty_each,packid,waveno,status,addwho,addtime,editwho,edittime,qtypicked_each,qtyshipped_each,notes,picktolocation,picktotraceid,pickedtime,pickedwho,packflag,checkwho,checktime,shipmenttime,reasoncode,shipmentwho,softallocationdetailsid,cubic,grossweight,netweight,price,sortationlocation,orderno_old,orderlineno_old,allocationdetailsid_old,printflag,contrainerid,doublecheckby,shipmentconfirmby,cartonseqno,dropid,pickingtransactionid,cartonid,palletize,workstation,udfprintflag1
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.allocationdetailsid != null and condition.allocationdetailsid != ''" >
+	    and allocationdetailsid =  #{condition.allocationdetailsid}
+	</if>
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
+	</if>
+	<if test="condition.orderlineno != null and condition.orderlineno != ''" >
+	    and orderlineno =  #{condition.orderlineno}
+	</if>
+	<if test="condition.skulineno != null and condition.skulineno != ''" >
+	    and skulineno =  #{condition.skulineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.uom != null and condition.uom != ''" >
+	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.location != null and condition.location != ''" >
+	    and location =  #{condition.location}
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and qty =  #{condition.qty}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and traceid =  #{condition.traceid}
+	</if>
+	<if test="condition.qtyEach != null and condition.qtyEach != ''" >
+	    and qty_each =  #{condition.qtyEach}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.waveno != null and condition.waveno != ''" >
+	    and waveno =  #{condition.waveno}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.qtypickedEach != null and condition.qtypickedEach != ''" >
+	    and qtypicked_each =  #{condition.qtypickedEach}
+	</if>
+	<if test="condition.qtyshippedEach != null and condition.qtyshippedEach != ''" >
+	    and qtyshipped_each =  #{condition.qtyshippedEach}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.picktolocation != null and condition.picktolocation != ''" >
+	    and picktolocation =  #{condition.picktolocation}
+	</if>
+	<if test="condition.picktotraceid != null and condition.picktotraceid != ''" >
+	    and picktotraceid =  #{condition.picktotraceid}
+	</if>
+	<if test="condition.pickedtime != null and condition.pickedtime != ''" >
+	    and pickedtime =  #{condition.pickedtime}
+	</if>
+	<if test="condition.pickedwho != null and condition.pickedwho != ''" >
+	    and pickedwho =  #{condition.pickedwho}
+	</if>
+	<if test="condition.packflag != null and condition.packflag != ''" >
+	    and packflag =  #{condition.packflag}
+	</if>
+	<if test="condition.checkwho != null and condition.checkwho != ''" >
+	    and checkwho =  #{condition.checkwho}
+	</if>
+	<if test="condition.checktime != null and condition.checktime != ''" >
+	    and checktime =  #{condition.checktime}
+	</if>
+	<if test="condition.shipmenttime != null and condition.shipmenttime != ''" >
+	    and shipmenttime =  #{condition.shipmenttime}
+	</if>
+	<if test="condition.reasoncode != null and condition.reasoncode != ''" >
+	    and reasoncode =  #{condition.reasoncode}
+	</if>
+	<if test="condition.shipmentwho != null and condition.shipmentwho != ''" >
+	    and shipmentwho =  #{condition.shipmentwho}
+	</if>
+	<if test="condition.softallocationdetailsid != null and condition.softallocationdetailsid != ''" >
+	    and softallocationdetailsid =  #{condition.softallocationdetailsid}
+	</if>
+	<if test="condition.cubic != null and condition.cubic != ''" >
+	    and cubic =  #{condition.cubic}
+	</if>
+	<if test="condition.grossweight != null and condition.grossweight != ''" >
+	    and grossweight =  #{condition.grossweight}
+	</if>
+	<if test="condition.netweight != null and condition.netweight != ''" >
+	    and netweight =  #{condition.netweight}
+	</if>
+	<if test="condition.price != null and condition.price != ''" >
+	    and price =  #{condition.price}
+	</if>
+	<if test="condition.sortationlocation != null and condition.sortationlocation != ''" >
+	    and sortationlocation =  #{condition.sortationlocation}
+	</if>
+	<if test="condition.ordernoOld != null and condition.ordernoOld != ''" >
+	    and orderno_old =  #{condition.ordernoOld}
+	</if>
+	<if test="condition.orderlinenoOld != null and condition.orderlinenoOld != ''" >
+	    and orderlineno_old =  #{condition.orderlinenoOld}
+	</if>
+	<if test="condition.allocationdetailsidOld != null and condition.allocationdetailsidOld != ''" >
+	    and allocationdetailsid_old =  #{condition.allocationdetailsidOld}
+	</if>
+	<if test="condition.printflag != null and condition.printflag != ''" >
+	    and printflag =  #{condition.printflag}
+	</if>
+	<if test="condition.contrainerid != null and condition.contrainerid != ''" >
+	    and contrainerid =  #{condition.contrainerid}
+	</if>
+	<if test="condition.doublecheckby != null and condition.doublecheckby != ''" >
+	    and doublecheckby =  #{condition.doublecheckby}
+	</if>
+	<if test="condition.shipmentconfirmby != null and condition.shipmentconfirmby != ''" >
+	    and shipmentconfirmby =  #{condition.shipmentconfirmby}
+	</if>
+	<if test="condition.cartonseqno != null and condition.cartonseqno != ''" >
+	    and cartonseqno =  #{condition.cartonseqno}
+	</if>
+	<if test="condition.dropid != null and condition.dropid != ''" >
+	    and dropid =  #{condition.dropid}
+	</if>
+	<if test="condition.pickingtransactionid != null and condition.pickingtransactionid != ''" >
+	    and pickingtransactionid =  #{condition.pickingtransactionid}
+	</if>
+	<if test="condition.cartonid != null and condition.cartonid != ''" >
+	    and cartonid =  #{condition.cartonid}
+	</if>
+	<if test="condition.palletize != null and condition.palletize != ''" >
+	    and palletize =  #{condition.palletize}
+	</if>
+	<if test="condition.workstation != null and condition.workstation != ''" >
+	    and workstation =  #{condition.workstation}
+	</if>
+	<if test="condition.udfprintflag1 != null and condition.udfprintflag1 != ''" >
+	    and udfprintflag1 =  #{condition.udfprintflag1}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into act_allocation_details(allocationdetailsid,orderno,orderlineno,skulineno,customerid,sku,lotnum,uom,location,qty,traceid,qty_each,packid,waveno,status,addwho,addtime,editwho,edittime,qtypicked_each,qtyshipped_each,notes,picktolocation,picktotraceid,pickedtime,pickedwho,packflag,checkwho,checktime,shipmenttime,reasoncode,shipmentwho,softallocationdetailsid,cubic,grossweight,netweight,price,sortationlocation,orderno_old,orderlineno_old,allocationdetailsid_old,printflag,contrainerid,doublecheckby,shipmentconfirmby,cartonseqno,dropid,pickingtransactionid,cartonid,palletize,workstation,udfprintflag1)
+ values(#{allocationdetailsid},#{orderno},#{orderlineno},#{skulineno},#{customerid},#{sku},#{lotnum},#{uom},#{location},#{qty},#{traceid},#{qtyEach},#{packid},#{waveno},#{status},#{addwho},#{addtime},#{editwho},#{edittime},#{qtypickedEach},#{qtyshippedEach},#{notes},#{picktolocation},#{picktotraceid},#{pickedtime},#{pickedwho},#{packflag},#{checkwho},#{checktime},#{shipmenttime},#{reasoncode},#{shipmentwho},#{softallocationdetailsid},#{cubic},#{grossweight},#{netweight},#{price},#{sortationlocation},#{ordernoOld},#{orderlinenoOld},#{allocationdetailsidOld},#{printflag},#{contrainerid},#{doublecheckby},#{shipmentconfirmby},#{cartonseqno},#{dropid},#{pickingtransactionid},#{cartonid},#{palletize},#{workstation},#{udfprintflag1})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update act_allocation_details set orderno=#{orderno},orderlineno=#{orderlineno},skulineno=#{skulineno},customerid=#{customerid},sku=#{sku},lotnum=#{lotnum},uom=#{uom},location=#{location},qty=#{qty},traceid=#{traceid},qty_each=#{qtyEach},packid=#{packid},waveno=#{waveno},status=#{status},addwho=#{addwho},addtime=#{addtime},editwho=#{editwho},edittime=#{edittime},qtypicked_each=#{qtypickedEach},qtyshipped_each=#{qtyshippedEach},notes=#{notes},picktolocation=#{picktolocation},picktotraceid=#{picktotraceid},pickedtime=#{pickedtime},pickedwho=#{pickedwho},packflag=#{packflag},checkwho=#{checkwho},checktime=#{checktime},shipmenttime=#{shipmenttime},reasoncode=#{reasoncode},shipmentwho=#{shipmentwho},softallocationdetailsid=#{softallocationdetailsid},cubic=#{cubic},grossweight=#{grossweight},netweight=#{netweight},price=#{price},sortationlocation=#{sortationlocation},orderno_old=#{ordernoOld},orderlineno_old=#{orderlinenoOld},allocationdetailsid_old=#{allocationdetailsidOld},printflag=#{printflag},contrainerid=#{contrainerid},doublecheckby=#{doublecheckby},shipmentconfirmby=#{shipmentconfirmby},cartonseqno=#{cartonseqno},dropid=#{dropid},pickingtransactionid=#{pickingtransactionid},cartonid=#{cartonid},palletize=#{palletize},workstation=#{workstation},udfprintflag1=#{udfprintflag1} where allocationdetailsid=#{allocationdetailsid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update act_allocation_details set 
+	<trim  suffixOverrides="," >
+	<if test="orderno != null  ">
+		orderno=#{orderno},
+	</if>
+	<if test="orderlineno != null  ">
+		orderlineno=#{orderlineno},
+	</if>
+	<if test="skulineno != null  ">
+		skulineno=#{skulineno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="uom != null  ">
+		uom=#{uom},
+	</if>
+	<if test="location != null  ">
+		location=#{location},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="traceid != null  ">
+		traceid=#{traceid},
+	</if>
+	<if test="qtyEach != null  ">
+		qty_each=#{qtyEach},
+	</if>
+	<if test="packid != null  ">
+		packid=#{packid},
+	</if>
+	<if test="waveno != null  ">
+		waveno=#{waveno},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="qtypickedEach != null  ">
+		qtypicked_each=#{qtypickedEach},
+	</if>
+	<if test="qtyshippedEach != null  ">
+		qtyshipped_each=#{qtyshippedEach},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="picktolocation != null  ">
+		picktolocation=#{picktolocation},
+	</if>
+	<if test="picktotraceid != null  ">
+		picktotraceid=#{picktotraceid},
+	</if>
+	<if test="pickedtime != null  ">
+		pickedtime=#{pickedtime},
+	</if>
+	<if test="pickedwho != null  ">
+		pickedwho=#{pickedwho},
+	</if>
+	<if test="packflag != null  ">
+		packflag=#{packflag},
+	</if>
+	<if test="checkwho != null  ">
+		checkwho=#{checkwho},
+	</if>
+	<if test="checktime != null  ">
+		checktime=#{checktime},
+	</if>
+	<if test="shipmenttime != null  ">
+		shipmenttime=#{shipmenttime},
+	</if>
+	<if test="reasoncode != null  ">
+		reasoncode=#{reasoncode},
+	</if>
+	<if test="shipmentwho != null  ">
+		shipmentwho=#{shipmentwho},
+	</if>
+	<if test="softallocationdetailsid != null  ">
+		softallocationdetailsid=#{softallocationdetailsid},
+	</if>
+	<if test="cubic != null  ">
+		cubic=#{cubic},
+	</if>
+	<if test="grossweight != null  ">
+		grossweight=#{grossweight},
+	</if>
+	<if test="netweight != null  ">
+		netweight=#{netweight},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="sortationlocation != null  ">
+		sortationlocation=#{sortationlocation},
+	</if>
+	<if test="ordernoOld != null  ">
+		orderno_old=#{ordernoOld},
+	</if>
+	<if test="orderlinenoOld != null  ">
+		orderlineno_old=#{orderlinenoOld},
+	</if>
+	<if test="allocationdetailsidOld != null  ">
+		allocationdetailsid_old=#{allocationdetailsidOld},
+	</if>
+	<if test="printflag != null  ">
+		printflag=#{printflag},
+	</if>
+	<if test="contrainerid != null  ">
+		contrainerid=#{contrainerid},
+	</if>
+	<if test="doublecheckby != null  ">
+		doublecheckby=#{doublecheckby},
+	</if>
+	<if test="shipmentconfirmby != null  ">
+		shipmentconfirmby=#{shipmentconfirmby},
+	</if>
+	<if test="cartonseqno != null  ">
+		cartonseqno=#{cartonseqno},
+	</if>
+	<if test="dropid != null  ">
+		dropid=#{dropid},
+	</if>
+	<if test="pickingtransactionid != null  ">
+		pickingtransactionid=#{pickingtransactionid},
+	</if>
+	<if test="cartonid != null  ">
+		cartonid=#{cartonid},
+	</if>
+	<if test="palletize != null  ">
+		palletize=#{palletize},
+	</if>
+	<if test="workstation != null  ">
+		workstation=#{workstation},
+	</if>
+	<if test="udfprintflag1 != null  ">
+		udfprintflag1=#{udfprintflag1},
+	</if>
+	</trim> where allocationdetailsid=#{allocationdetailsid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from act_allocation_details where allocationdetailsid = #{allocationdetailsid}
+</delete>
+ 
+<!-- 根据id查询 分配明细 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from act_allocation_details where allocationdetailsid = #{allocationdetailsid}
+</select>
+
+<!-- 分配明细 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from act_allocation_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询分配明细列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from act_allocation_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+    <select id="queryByOrder" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from act_allocation_details
+        where orderno = #{orderno, jdbcType=VARCHAR}
+          and orderlineno = #{orderlineno, jdbcType=VARCHAR}
+          and customerid = #{customerid, jdbcType=VARCHAR}
+          and sku = #{sku, jdbcType=VARCHAR}
+          and (status = '60' || status = '62')
+    </select>
+  	
+</mapper>   

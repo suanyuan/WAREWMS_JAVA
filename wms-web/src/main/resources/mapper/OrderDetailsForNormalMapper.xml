@@ -536,4 +536,23 @@ where 1=1
 	{call SPSO_DEAllocation_Process(#{warehouseId,mode=IN,jdbcType=VARCHAR},'UnAllocation','By OrderNO + OrderLineNO','',#{orderNo,mode=IN,jdbcType=VARCHAR},#{orderLineNo,mode=IN,jdbcType=INTEGER},'','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
+    <select id="queryForScan" parameterType="java.util.Map" resultMap="OrderDetailsForNormalMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_order_details
+        where orderno = #{orderno, jdbcType=VARCHAR}
+          and customerid = #{customerid, jdbcType=VARCHAR}
+          and sku = #{sku, jdbcType=VARCHAR}
+          <if test="lotatt02 != null and lotatt02 != ''">
+              and lotatt02 = #{lotatt02, jdbcType=VARCHAR}
+          </if>
+          <if test="lotatt04 != null and lotatt04 != ''">
+              and lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+          </if>
+          <if test="lotatt05 != null and lotatt05 != ''">
+              and lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+          </if>
+
+    </select>
+
 </mapper>   

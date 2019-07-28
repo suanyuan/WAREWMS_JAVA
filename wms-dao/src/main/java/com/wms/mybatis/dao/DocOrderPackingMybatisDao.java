@@ -1,8 +1,11 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocOrderPacking;
+import com.wms.entity.DocOrderPackingCarton;
+import com.wms.entity.DocOrderPackingCartonInfo;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.query.DocOrderPackingQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 /**
@@ -42,11 +45,13 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
 
 	List<DocOrderPacking> queryPackingLabelById(DocOrderPackingQuery docOrderPackingQuery);
 
-	void packingCartonInsert(DocOrderPacking docOrderPacking);
+	void packingCartonInsert(DocOrderPackingCarton docOrderPackingCarton);
+    void packingCartonInsert(DocOrderPacking docOrderPackingCarton);//TODO 这个是错的
 
 	void packingCartonUpdate(DocOrderPacking docOrderPacking);
 
-	void packingCartonInfoInsert(DocOrderPacking docOrderPacking);
+	void packingCartonInfoInsert(DocOrderPackingCartonInfo docOrderPackingCartonInfo);
+    void packingCartonInfoInsert(DocOrderPacking docOrderPacking);//TODO 这个是错的
 
 	OrderHeaderForNormal queryCartonInfoById(DocOrderPacking docOrderPacking);
 
@@ -67,6 +72,19 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
 	DocOrderPacking queryPackingInfoById(DocOrderPackingQuery docOrderPackingQuery);
 	//按已装箱数据合计重量、体积
 	DocOrderPacking queryOrderPackingInfoById(DocOrderPackingQuery docOrderPackingQuery);
-	
-	
+
+	//获取当前产品的装箱箱号
+	DocOrderPackingCarton queryGoodsPackage(DocOrderPackingCarton docOrderPackingCarton);
+
+	//获取当前产品的包装复核记录
+	List<DocOrderPackingCarton> queryPackedDetail(DocOrderPackingCarton docOrderPackingCarton);
+
+	DocOrderPackingCarton queryAvailablePackedDetail(DocOrderPackingCarton docOrderPackingCarton);
+
+	//根据orderno traceid查询
+	DocOrderPackingCartonInfo queryPackingCartonInfo(@Param("orderno") String orderno, @Param("traceid") String traceid);
+
+	int updatePackingCarton(DocOrderPackingCarton docOrderPackingCarton);
+
+    int updatePackingCartonInfo(DocOrderPackingCartonInfo docOrderPackingCartonInfo);
 }
