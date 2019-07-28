@@ -55,16 +55,16 @@ $(function() {
                         return rowData.customerType='主体';
 					}
                 } },
-            {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
+            {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            {field: 'customerid',		title: '客户代码',	width: 120 },
-            {field: 'descrC',		title: '客户名称',	width: 100 },
-            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 130 },
-            {field: 'shorthandName',		title: '简称 ',	width: 115 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 110 },
-            {field: 'contacts',		title: '联系人 ',	width: 115 },
-            {field: 'contactsPhone',		title: '联系人电话 ',	width: 115 },
+            {field: 'customerid',		title: '客户代码',	width: 100 },
+            {field: 'descrC',		title: '客户名称',	width: 250 },
+            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 100 },
+            {field: 'shorthandName',		title: '简称 ',	width: 100 },
+            {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
+            {field: 'contacts',		title: '联系人 ',	width: 80 },
+            {field: 'contactsPhone',		title: '联系人电话 ',	width: 100 },
 			{field: 'supContractNo',		title: '合同编号 ',	width: 120 },
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
@@ -73,11 +73,11 @@ $(function() {
             {field: 'clientContent',		title: '委托内容 ',	width: 120 },
             {field: 'clientStartDate',		title: '委托开始时间 ',	width: 130 },
             {field: 'clientEndDate',		title: '委托结束时间 ',	width: 130 },
-			{field: 'clientTerm',		title: '委托期限',	width: 120 },
+			{field: 'clientTerm',		title: '委托期限',	width: 130 },
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'remark',		title: '备注 ',	width: 125 },
+            {field: 'remark',		title: '备注 ',	width: 200 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110},
 
 		]],
@@ -100,17 +100,20 @@ $(function() {
 	
 	/*$("#customerid").textbox('textbox').css('text-transform','uppercase');*/
 
-    ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-        buttons : '#ezuiDialogBtn',
-        href: '/basCustomerController.do?toDetail',
-		fit:true,
-		cache:false,
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
-	}).dialog('close');
+    <%--ezuiDialog = $('#ezuiDialog').dialog({--%>
+		<%--modal : true,--%>
+		<%--top:0,--%>
+		<%--left:0,--%>
+		<%--width:500,--%>
+		<%--height:500,--%>
+		<%--title : '<spring:message code="common.dialog.title"/>',--%>
+        <%--buttons : '#ezuiDialogBtn',--%>
+        <%--href: '/basCustomerController.do?toDetail',--%>
+		<%--cache:false,--%>
+		<%--onClose : function() {--%>
+			<%--ezuiFormClear(ezuiForm);--%>
+		<%--}--%>
+	<%--}).dialog('close');--%>
 });
 
 /* 新增 */
@@ -174,7 +177,10 @@ var edit = function(){
             title : '<spring:message code="common.dialog.title"/>',
             buttons : '#ezuiDialogBtn',
            /* href: '/basCustomerController.do?toDetail',*/
-            fit:true,
+            top:0,
+            left:0,
+            width:1200,
+            height:500,
             cache:false,
             onClose : function() {
                 ezuiFormClear(ezuiForm);
@@ -438,7 +444,7 @@ var doExport = function(){
 																																	textField: 'value'"/></td>
 							<th >是否合作</th>
 							<td>
-								<select id="activeFlag" class="easyui-combobox"  style="width:145px;">
+								<select id="activeFlag" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
 									<option value=""></option>
 									<option value="1">是</option>
 									<option value="0">否</option>

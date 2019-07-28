@@ -192,7 +192,7 @@ var doSearch = function(){
         productCode : $('#productCode').val(),
         productName:$('#productName').val(),
 		clientId : $('#clientIdQuery').val(),
-		supplierId : $('#supplierId').val(),
+		supplierId : $('#supplierIdQuery').val(),
         createDateStart : $('#createDateStart').datebox('getValue'),
         createDateEnd : $('#createDateEnd').datebox('getValue'),
 		isUse : $('#isUse').combobox('getValue')
@@ -283,7 +283,7 @@ var reApply = function () {
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>委托客户</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应客户</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应客户</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
