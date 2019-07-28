@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 @Data
 public class OrderHeaderForNormalVO {
 
+    private String seq;
+
     /**
      * WMS单号
      */
@@ -469,6 +471,8 @@ public class OrderHeaderForNormalVO {
     private String printTemplate;
 
     private List<OrderDetailsForNormal> orderDetailsForNormalList;
+
+    private List<OrderDetailsForNormalVO> orderDetailsForNormalVOList;
 
     private List<DocOrderPacking> docOrderPackingList;
 }

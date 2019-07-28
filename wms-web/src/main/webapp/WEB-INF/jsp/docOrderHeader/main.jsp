@@ -50,9 +50,9 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:true,
-		checkOnSelect:false,
-		selectOnCheck: false,
+		singleSelect:false,
+		checkOnSelect:true,
+		selectOnCheck: true,
 		idField : 'orderno',
 		queryParams:{
 			ordertime : $('#ordertime').datetimebox('getValue'),
@@ -74,8 +74,11 @@ $(function() {
 					{field: 'releasestatusName',	title: '释放状态',		width: 12 }
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+			//edit();
 		},
+        onDblClickRow(index,row){
+            edit(row);
+        },
 		/* 鼠标右键 */
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			/* event.preventDefault();
@@ -317,10 +320,10 @@ var add = function(){
 };
 
 /* 编辑按钮 */
-var edit = function(){
+var edit = function(srow){
 	processType = 'edit';
 	$('#docOrderHeaderId').val(0);
-	var row = ezuiDatagrid.datagrid('getSelected');
+	var row = srow || ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		ezuiForm.form('load',{
 			customerid : row.customerid,
@@ -338,7 +341,10 @@ var edit = function(){
 			edittime : row.edittime,
 			editwho : row.editwho,
 			lastshipmenttime : row.lastshipmenttime,
-			notes : row.notes
+			notes : row.notes,
+            carrierid:row.carrierid,
+            userdefine1:row.userdefine1,
+            userdefine2:row.userdefine2
 		});
 		if (row.sostatus == '90' || row.sostatus == '99') {
 			$("#ezuiForm #customerid").textbox({
@@ -732,7 +738,7 @@ var cancel = function(){
 /* 批量打印拣货单按钮 */
 var printPacking = function(){
 	orderList = null;
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
 		if (orderList == null) {
 			orderList = item.orderno;
@@ -743,8 +749,26 @@ var printPacking = function(){
 	if (orderList == null) {
 		return;
 	}
-	window.open(sy.bp()+"/docOrderHeaderController.do?exportPickingPdf&orderList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no").print();
+	console.log(orderList);
+	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
+
+var printAccompanying = function () {
+    orderList = null;
+    var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+    $.each(checkedItems, function(index, item){
+        if (orderList == null) {
+            orderList = item.orderno;
+        } else {
+            orderList = orderList + ',' + item.orderno;
+        }
+    });
+    if (orderList == null) {
+        return;
+    }
+    console.log(orderList);
+    window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
+}
 
 /* 提交按钮 */
 var commit = function(){
@@ -1597,8 +1621,9 @@ var selectLocation = function(){
  					<a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> 
  					<a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a> 
 					<a onclick='cancel();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
-					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>打印拣货单</a>
-					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
+					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
+                    <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
+                    <!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

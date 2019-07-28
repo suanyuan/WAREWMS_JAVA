@@ -9,6 +9,8 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 @Data
 public class OrderDetailsForNormalVO {
 
+    private String seq;
+
     private String result;
 
     private String orderno;//出库单号

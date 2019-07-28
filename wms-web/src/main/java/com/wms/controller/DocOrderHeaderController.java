@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -149,7 +150,7 @@ public class DocOrderHeaderController {
 		return json;
 	}
 
-	@Login
+	/*@Login
 	@RequestMapping(params = "exportPickingPdf")
 	public void exportPickingPdf(HttpServletResponse response, String orderNo) throws Exception {
 		try {
@@ -157,7 +158,7 @@ public class DocOrderHeaderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 //	@Login
 //	@RequestMapping(params = "exportReceiptPdf")
@@ -175,12 +176,12 @@ public class DocOrderHeaderController {
 //		exportOrderService.exportOrderDataToExcel(response, form);
 //	}
 
-//	@Login
-//	@RequestMapping(params = "importExcelData")
-//	@ResponseBody
-//	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
-//		return orderHeaderForNormalService.importExcelData(mhsr);
-//	}
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return orderHeaderForNormalService.importExcelData(mhsr);
+	}
 	
 	@Login
 	@RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
@@ -227,6 +228,22 @@ public class DocOrderHeaderController {
 	public void exportPackingPdf(HttpServletResponse response, String orderCodeList) throws Exception {
 		try {
 			orderHeaderForNormalService.exportPickingPdf(response,orderCodeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 打印拣货
+	 * @param response
+	 * @param orderCodeList
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "exportAccompanyingPdf")
+	public void exportAccompanyingPdf(HttpServletResponse response, String orderCodeList) throws Exception {
+		try {
+			orderHeaderForNormalService.exportAccompanyingPdf(response,orderCodeList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

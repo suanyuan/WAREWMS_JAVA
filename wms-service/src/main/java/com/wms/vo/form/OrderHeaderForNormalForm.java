@@ -16,6 +16,7 @@ public class OrderHeaderForNormalForm {
 	private String ordertype;
 	private String orderTypeName;
 	private String consigneename;
+	private String consigneeid;
 	private String province;
 	private String city;
 	private String district;
@@ -292,5 +293,13 @@ public class OrderHeaderForNormalForm {
 
 	public void setReleasestatus(String releasestatus) {
 		this.releasestatus = releasestatus;
+	}
+
+	public String getConsigneeid() {
+		return consigneeid;
+	}
+
+	public void setConsigneeid(String consigneeid) {
+		this.consigneeid = consigneeid;
 	}
 }

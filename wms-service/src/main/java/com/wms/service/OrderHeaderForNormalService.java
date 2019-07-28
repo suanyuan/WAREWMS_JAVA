@@ -6,6 +6,7 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasSku;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
@@ -14,6 +15,7 @@ import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
+import com.wms.service.importdata.ImportOrderDataService;
 import com.wms.utils.*;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
@@ -24,6 +26,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -48,12 +52,14 @@ public class OrderHeaderForNormalService extends BaseService {
 	private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
 	@Autowired
 	private BasCustomerService basCustomerService;
+	@Autowired
+	private BasSkuService basSkuService;
 	
 //	@Autowired
 //	private DocOrderImportMybatisDao docOrderImportMybatisDao;
 //
-//	@Autowired
-//	private ImportOrderDataService importOrderDataService;
+	@Autowired
+	private ImportOrderDataService importOrderDataService;
 	/**
 	 * 订单列表显示
 	 */
@@ -65,7 +71,8 @@ public class OrderHeaderForNormalService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		/*List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+		mybatisCriteria.setOrderByClause("addtime desc");
+		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
 		OrderHeaderForNormalVO orderHeaderForNormalVO = null;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
@@ -73,8 +80,7 @@ public class OrderHeaderForNormalService extends BaseService {
 			BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 			orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 		}
-		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));*/
-		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();
+		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(orderHeaderForNormalVOList);
 		return datagrid;
 	}
@@ -100,6 +106,10 @@ public class OrderHeaderForNormalService extends BaseService {
 			orderHeaderForNormal.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			orderHeaderForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			orderHeaderForNormal.setOrdertime(new Date());
+			orderHeaderForNormal.setEdittime(new Date());
+			orderHeaderForNormal.setEdisendflag(Constant.IS_USE_YES);
+			orderHeaderForNormal.setArchiveflag(Constant.IS_USE_YES);
 			orderHeaderForNormalMybatisDao.add(orderHeaderForNormal);
 			json.setSuccess(true);
 			json.setMsg("资料处理成功！");
@@ -525,14 +535,14 @@ public class OrderHeaderForNormalService extends BaseService {
 		}
 	}
 	
-//	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
-//		Json json = null;
-//		MultipartFile excelFile = mhsr.getFile("uploadData");
-//		if(excelFile != null && excelFile.getSize() > 0){
-//			json = importOrderDataService.importExcelData(excelFile);
-//		}
-//		return json;
-//	}
+	public Json importExcelData(MultipartHttpServletRequest mhsr){
+		Json json = null;
+		MultipartFile excelFile = mhsr.getFile("uploadData");
+		if(excelFile != null && excelFile.getSize() > 0){
+			json = importOrderDataService.importExcelData(excelFile);
+		}
+		return json;
+	}
 	
 	public void exportTemplate(HttpServletResponse response, String token) {
 		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
@@ -587,6 +597,9 @@ public class OrderHeaderForNormalService extends BaseService {
 				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 				orderHeaderForNormalQuery.setOrderNo(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
+				if(orderHeaderForNormal.getOrderDetailsForNormalList()==null){
+					return;
+				}
 				for(OrderDetailsForNormal orderDetails : orderHeaderForNormal.getOrderDetailsForNormalList()){
 					totalNum++;
 					detailsList.add(orderDetails);
@@ -595,42 +608,43 @@ public class OrderHeaderForNormalService extends BaseService {
 				for(int i = 0 ; i < pageSize ; i++){
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					baos = new ByteArrayOutputStream();
-					stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking.pdf"), baos);
+					stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking_jhck.pdf"), baos);
 					form = stamper.getAcroFields();
 					form.setField("orderno", orderHeaderForNormal.getOrderno());
 					//basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
-					form.setField("expectedShipmentTime", "");
-					form.setField("carrierName", "");
-					form.setField("consigneeName", "");
-					form.setField("cContact", "");
-					form.setField("userdefine1", "");
-					form.setField("cAddress1", "");
-					form.setField("c_Tel1", "");
-					form.setField("userdefine2", "");
-					form.setField("sOReference1", "");
-					form.setField("notes", "");
+					form.setField("expectedShipmentTime", DateUtil.format(orderHeaderForNormal.getExpectedshipmenttime1(),"yyyy-MM-dd"));
+					form.setField("carrierName", orderHeaderForNormal.getCarriername());
+					form.setField("consigneeName", orderHeaderForNormal.getCarriername());
+					form.setField("cContact", orderHeaderForNormal.getCContact());
+					form.setField("userdefine1", orderHeaderForNormal.getUserdefine1());
+					form.setField("cAddress1", orderHeaderForNormal.getCAddress1());
+					form.setField("c_Tel1", orderHeaderForNormal.getCTel1());
+					form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
+					form.setField("sOReference1", orderHeaderForNormal.getSoreference1());
+					form.setField("notes", orderHeaderForNormal.getNotes());
 
 					for(int j = 0 ; j < row ; j++){
 						if(totalNum > (row * i + j)){
-							form.setField("location."+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderlineno()));
-							form.setField("sku"+(j+1), detailsList.get(row * i + j).getSku());
-							form.setField("skuN"+(j+1), detailsList.get(row * i + j).getBasSku().getDescrC());
-							form.setField("regNo"+(j+1), "");
-							form.setField("desc"+(j+1), "");
-							form.setField("batchNo"+(j+1), "");
-							form.setField("seriNo"+(j+1), "");
-							form.setField("ill"+(j+1), "");
-							form.setField("lot01"+(j+1), "");
-							form.setField("qtyE"+(j+1), "");
-							form.setField("uom"+(j+1), "");
-							form.setField("qty"+(j+1), "");
-							form.setField("double"+(j+1), "");
-							form.setField("card"+(j+1), "");
-							form.setField("report"+(j+1), "");
-							form.setField("remark"+(j+1), "");
+							BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(),detailsList.get(row * i + j).getSku());
+							form.setField("location."+(j), "");
+							form.setField("sku."+(j), detailsList.get(row * i + j).getSku());
+							form.setField("skuN."+(j), detailsList.get(row * i + j).getSkuName());
+							form.setField("regNo."+(j), basSku.getReservedfield03());
+							form.setField("desc."+(j), basSku.getDescrE());
+							form.setField("batchNo."+(j), detailsList.get(row * i + j).getLotatt04());
+							form.setField("seriNo."+(j), detailsList.get(row * i + j).getLotatt05());
+							form.setField("ill."+(j), detailsList.get(row * i + j).getLotatt01());
+							form.setField("lot01."+(j), detailsList.get(row * i + j).getLotatt02());
+							form.setField("qtyE."+(j), detailsList.get(row * i + j).getQtyallocated().toString());
+							form.setField("uom."+(j), detailsList.get(row * i + j).getUom());
+							form.setField("qty."+(j), "");
+							form.setField("double."+(j), basSku.getSkuGroup7());
+							form.setField("card."+(j), basSku.getSkuGroup2());
+							form.setField("report."+(j), basSku.getSkuGroup8());
+							form.setField("remark."+(j), "");
 						}
 					}
-					form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
+					//form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
 					stamper.setFormFlattening(true);
 					stamper.close();
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
@@ -954,5 +968,94 @@ public class OrderHeaderForNormalService extends BaseService {
 
         return headerVO;
     }
+
+	public void exportAccompanyingPdf(HttpServletResponse response, String orderNo) {
+		StringBuilder sb = new StringBuilder();
+		try (OutputStream os = response.getOutputStream()){
+			sb.append("inline; filename=")
+					.append(URLEncoder.encode("出库随货同行单PDF","UTF-8"))
+					.append(".pdf");
+			response.setHeader("Content-disposition", sb.toString());sb.setLength(0);
+			response.setContentType(ContentTypeEnum.pdf.getContentType());
+
+			Document document = null;
+			AcroFields form = null;
+			PdfStamper stamper = null;
+			PdfImportedPage page = null;
+			ByteArrayOutputStream baos = null;
+
+			if (StringUtils.isNotEmpty(orderNo)) {
+
+				document = new Document(PDFUtil.getTemplate("wms_accompanying_jhck.pdf").getPageSize(1));
+				PdfCopy pdfCopy = new PdfCopy(document, os);
+				document.open();
+
+				int totalNum = 0;
+				List<OrderDetailsForNormal> detailsList = null;
+				int row = 10;
+				int pageSize = 0;
+				detailsList = new ArrayList<OrderDetailsForNormal>();
+				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+				orderHeaderForNormalQuery.setOrderNo(orderNo);
+				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
+				if(orderHeaderForNormal.getOrderDetailsForNormalList()==null){
+					return;
+				}
+				for(OrderDetailsForNormal orderDetails : orderHeaderForNormal.getOrderDetailsForNormalList()){
+					totalNum++;
+					detailsList.add(orderDetails);
+				}
+				pageSize = (int)Math.ceil((double)totalNum / row);
+				for(int i = 0 ; i < pageSize ; i++){
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					baos = new ByteArrayOutputStream();
+					stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking_jhck.pdf"), baos);
+					form = stamper.getAcroFields();
+					form.setField("orderno", orderHeaderForNormal.getOrderno());
+					//basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
+					form.setField("expectedShipmentTime", DateUtil.format(orderHeaderForNormal.getExpectedshipmenttime1(),"yyyy-MM-dd"));
+					form.setField("carrierName", orderHeaderForNormal.getCarriername());
+					form.setField("consigneeName", orderHeaderForNormal.getCarriername());
+					form.setField("cContact", orderHeaderForNormal.getCContact());
+					form.setField("userdefine1", orderHeaderForNormal.getUserdefine1());
+					form.setField("cAddress1", orderHeaderForNormal.getCAddress1());
+					form.setField("c_Tel1", orderHeaderForNormal.getCTel1());
+					form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
+					form.setField("sOReference1", orderHeaderForNormal.getSoreference1());
+					form.setField("notes", orderHeaderForNormal.getNotes());
+
+					/*for(int j = 0 ; j < row ; j++){
+						if(totalNum > (row * i + j)){
+							BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(),detailsList.get(row * i + j).getSku());
+							form.setField("location."+(j), "");
+							form.setField("sku."+(j), detailsList.get(row * i + j).getSku());
+							form.setField("skuN."+(j), detailsList.get(row * i + j).getSkuName());
+							form.setField("regNo."+(j), basSku.getReservedfield03());
+							form.setField("desc."+(j), basSku.getDescrE());
+							form.setField("batchNo."+(j), detailsList.get(row * i + j).getLotatt04());
+							form.setField("seriNo."+(j), detailsList.get(row * i + j).getLotatt05());
+							form.setField("ill."+(j), detailsList.get(row * i + j).getLotatt01());
+							form.setField("lot01."+(j), detailsList.get(row * i + j).getLotatt02());
+							form.setField("qtyE."+(j), detailsList.get(row * i + j).getQtyallocated().toString());
+							form.setField("uom."+(j), detailsList.get(row * i + j).getUom());
+							form.setField("qty."+(j), "");
+							form.setField("double."+(j), basSku.getSkuGroup7());
+							form.setField("card."+(j), basSku.getSkuGroup2());
+							form.setField("report."+(j), basSku.getSkuGroup8());
+							form.setField("remark."+(j), "");
+						}
+					}*/
+					//form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
+					stamper.setFormFlattening(true);
+					stamper.close();
+					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
+					pdfCopy.addPage(page);
+				}
+				document.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
