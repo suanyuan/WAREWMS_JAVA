@@ -100,22 +100,40 @@ $(function() {
 		idField : 'orderlineno',
 		title : '订单明细',
 		border : false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap : false,
 		striped : true,
 		collapsible : false,
 		rownumbers : true,
 		singleSelect : true,
 		columns : [[
-			{field: 'orderlineno',		title: '行号',		width: 12 },
-			{field: 'sku',				title: '商品编码',		width: 20 },
-			{field: 'skuName',			title: '商品名称',		width: 30 },
-			{field: 'linestatusName',	title: '状态',		width: 12 },
-			{field: 'qtyordered',		title: '订货数',		width: 12 },
-			{field: 'qtyallocated',		title: '分配数',		width: 12 },
-			{field: 'qtypicked',		title: '拣货数',		width: 12 },
-			{field: 'qtyshipped',		title: '发货数',		width: 12 },
-			{field: 'alternativesku',	title: '商品条码',		width: 20 }
+			{field: 'orderlineno',		title: '行号',		width: 130 },
+			{field: 'sku',				title: '商品编码',		width: 130 },
+			{field: 'skuName',			title: '商品名称',		width: 130 },
+			{field: 'linestatusName',	title: '状态',		width: 130 },
+			{field: 'qtyordered',		title: '订货数',		width: 130 },
+			{field: 'qtyallocated',		title: '分配数',		width: 130 },
+			{field: 'qtypicked',		title: '拣货数',		width: 130 },
+			{field: 'qtyshipped',		title: '发货数',		width: 130 },
+			{field: 'alternativesku',	title: '商品条码',		width: 130 },
+            {field: 'lotatt01',	title: '生产日期',		width: 130 },
+            {field: 'lotatt02',	title: '效期',		width: 130 },
+            {field: 'lotatt03',	title: '入库日期',		width: 130 },
+            {field: 'lotatt04',	title: '生产批号',		width: 130 },
+            {field: 'lotatt05',	title: '序列号',		width: 130 },
+            {field: 'lotatt06',	title: '产品注册证',		width: 130 },
+            {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
+            {field: 'lotatt08',	title: '供应商',		width: 130 },
+            {field: 'lotatt09',	title: '样品属性',		width: 130 },
+            {field: 'lotatt10',	title: '质量状态',		width: 130 },
+            {field: 'lotatt11',	title: '存储条件',		width: 130 },
+            {field: 'lotatt12',	title: '产品名称',		width: 130 },
+            {field: 'lotatt13',	title: '双证',		width: 130 },
+            {field: 'lotatt14',	title: '入库单号',		width: 130 },
+            {field: 'lotatt15',	title: '生产厂商名称',		width: 130 },
+            {field: 'lotatt16',	title: '自定义批属1',		width: 130 },
+            {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
+            {field: 'lotatt18',	title: '自定义批属3',		width: 130 }
 		]],
 		onDblClickCell: function(index,field,value){
 			detailsEdit();
@@ -294,7 +312,7 @@ var add = function(){
 	$("#ezuiForm #releasestatus").combobox('setValue','Y').combo('readonly', false);
 	$("#ezuiForm #ordertype").combobox('setValue','SO').combo('readonly', false);
 	$("#ezuiForm #ezuiBtn_orderCommit").linkbutton('enable');
-	ezuiDetailsDatagrid.datagrid('load',{orderno:''});
+	ezuiDetailsDatagrid.datagrid('load',{orderno:'-1'});
 	ezuiDialog.dialog('open');
 };
 
@@ -1018,7 +1036,27 @@ var detailsEdit = function(){
 	            price : row.price,
 	            pickzone : row.pickzone,
 	            location : row.location,
-	            lotnum : row.lotnum
+	            lotnum : row.lotnum,
+                lotatt01: row.lotatt01,
+                lotatt02: row.lotatt02,
+                lotatt03: row.lotatt03,
+                lotatt04: row.lotatt04,
+                lotatt05: row.lotatt05,
+                lotatt06: row.lotatt06,
+                lotatt07: row.lotatt07,
+                lotatt08: row.lotatt08,
+                lotatt09: row.lotatt09,
+                lotatt10: row.lotatt10,
+                lotatt11: row.lotatt11,
+                lotatt12: row.lotatt12,
+                lotatt13: row.lotatt13,
+                lotatt14: row.lotatt14,
+                lotatt15: row.lotatt15,
+                lotatt16: row.lotatt16,
+                lotatt17: row.lotatt17,
+                lotatt18: row.lotatt18
+
+
 			});
 			if (row.linestatus == '00') {
 				$("#ezuiDetailsForm #sku").textbox({

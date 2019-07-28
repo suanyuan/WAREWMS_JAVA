@@ -1,30 +1,30 @@
 package com.wms.vo.form;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+
+import java.util.Date;
 
 public class OrderHeaderForNormalForm {
 
-	private String orderNo;
-	private String customerId;
+	private String orderno;
+	private String customerid;
 	private String customerShortName;
-	private java.util.Date orderTime;
-	private java.util.Date requiredDeliveryTime;
+	private String ordertime;
+	private String requiredDeliveryTime;
 	private String orderCode;
 	private String orderStatus;
 	private String orderStatusName;
-	private String orderType;
+	private String ordertype;
 	private String orderTypeName;
-	private String consigneeName;
+	private String consigneename;
 	private String province;
 	private String city;
 	private String district;
-	private String address;
-	private String tel;
+	private String cAddress1;
+	private String cTel1;
 	private String zipCode;
 	private String carrierId;
 	private String carrierName;
-	private java.util.Date lastShipmentTime;
+	private java.util.Date lastshipmenttime;
 	private String notes;
 	private String warehouseId;
 	private java.util.Date addtime;
@@ -32,21 +32,26 @@ public class OrderHeaderForNormalForm {
 	private java.util.Date edittime;
 	private String editwho;
 	private Integer boxQty;
+	private String soreference1;
+	private String soreference2;
+	private String docOrderHeaderId;
+	private String sostatus;
+	private String releasestatus;
 
-	public String getOrderNo() {
-		return orderNo;
+	public String getOrderno() {
+		return orderno;
 	}
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
+	public void setOrderno(String orderno) {
+		this.orderno = orderno;
 	}
 
-	public String getCustomerId() {
-		return customerId;
+	public String getCustomerid() {
+		return customerid;
 	}
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
 	}
 
 	public String getCustomerShortName() {
@@ -57,21 +62,19 @@ public class OrderHeaderForNormalForm {
 		this.customerShortName = customerShortName;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getOrderTime() {
-		return orderTime;
+	public String getOrdertime() {
+		return ordertime;
 	}
 
-	public void setOrderTime(java.util.Date orderTime) {
-		this.orderTime = orderTime;
+	public void setOrdertime(String ordertime) {
+		this.ordertime = ordertime;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getRequiredDeliveryTime() {
+	public String getRequiredDeliveryTime() {
 		return requiredDeliveryTime;
 	}
 
-	public void setRequiredDeliveryTime(java.util.Date requiredDeliveryTime) {
+	public void setRequiredDeliveryTime(String requiredDeliveryTime) {
 		this.requiredDeliveryTime = requiredDeliveryTime;
 	}
 
@@ -99,12 +102,12 @@ public class OrderHeaderForNormalForm {
 		this.orderStatusName = orderStatusName;
 	}
 
-	public String getOrderType() {
-		return orderType;
+	public String getOrdertype() {
+		return ordertype;
 	}
 
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
+	public void setOrdertype(String ordertype) {
+		this.ordertype = ordertype;
 	}
 
 	public String getOrderTypeName() {
@@ -115,12 +118,12 @@ public class OrderHeaderForNormalForm {
 		this.orderTypeName = orderTypeName;
 	}
 
-	public String getConsigneeName() {
-		return consigneeName;
+	public String getConsigneename() {
+		return consigneename;
 	}
 
-	public void setConsigneeName(String consigneeName) {
-		this.consigneeName = consigneeName;
+	public void setConsigneename(String consigneename) {
+		this.consigneename = consigneename;
 	}
 
 	public String getProvince() {
@@ -147,20 +150,20 @@ public class OrderHeaderForNormalForm {
 		this.district = district;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getcAddress1() {
+		return cAddress1;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setcAddress1(String cAddress1) {
+		this.cAddress1 = cAddress1;
 	}
 
-	public String getTel() {
-		return tel;
+	public String getcTel1() {
+		return cTel1;
 	}
 
-	public void setTel(String tel) {
-		this.tel = tel;
+	public void setcTel1(String cTel1) {
+		this.cTel1 = cTel1;
 	}
 
 	public String getZipCode() {
@@ -187,13 +190,12 @@ public class OrderHeaderForNormalForm {
 		this.carrierName = carrierName;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getLastShipmentTime() {
-		return lastShipmentTime;
+	public Date getLastshipmenttime() {
+		return lastshipmenttime;
 	}
 
-	public void setLastShipmentTime(java.util.Date lastShipmentTime) {
-		this.lastShipmentTime = lastShipmentTime;
+	public void setLastshipmenttime(Date lastshipmenttime) {
+		this.lastshipmenttime = lastshipmenttime;
 	}
 
 	public String getNotes() {
@@ -212,12 +214,11 @@ public class OrderHeaderForNormalForm {
 		this.warehouseId = warehouseId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
+	public Date getAddtime() {
 		return addtime;
 	}
 
-	public void setAddtime(java.util.Date addtime) {
+	public void setAddtime(Date addtime) {
 		this.addtime = addtime;
 	}
 
@@ -229,12 +230,11 @@ public class OrderHeaderForNormalForm {
 		this.addwho = addwho;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
+	public Date getEdittime() {
 		return edittime;
 	}
 
-	public void setEdittime(java.util.Date edittime) {
+	public void setEdittime(Date edittime) {
 		this.edittime = edittime;
 	}
 
@@ -252,5 +252,45 @@ public class OrderHeaderForNormalForm {
 
 	public void setBoxQty(Integer boxQty) {
 		this.boxQty = boxQty;
+	}
+
+	public String getSoreference1() {
+		return soreference1;
+	}
+
+	public void setSoreference1(String soreference1) {
+		this.soreference1 = soreference1;
+	}
+
+	public String getSoreference2() {
+		return soreference2;
+	}
+
+	public void setSoreference2(String soreference2) {
+		this.soreference2 = soreference2;
+	}
+
+	public String getDocOrderHeaderId() {
+		return docOrderHeaderId;
+	}
+
+	public void setDocOrderHeaderId(String docOrderHeaderId) {
+		this.docOrderHeaderId = docOrderHeaderId;
+	}
+
+	public String getSostatus() {
+		return sostatus;
+	}
+
+	public void setSostatus(String sostatus) {
+		this.sostatus = sostatus;
+	}
+
+	public String getReleasestatus() {
+		return releasestatus;
+	}
+
+	public void setReleasestatus(String releasestatus) {
+		this.releasestatus = releasestatus;
 	}
 }

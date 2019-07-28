@@ -1,10 +1,8 @@
 package com.wms.service;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.*;
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -15,10 +13,8 @@ import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
 import com.wms.query.OrderHeaderForNormalQuery;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
+import com.wms.result.OrderStatusResult;
+import com.wms.utils.*;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
@@ -33,6 +29,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("orderHeaderForNormalService")
@@ -44,9 +41,13 @@ public class OrderHeaderForNormalService extends BaseService {
 
 	@Autowired
 	private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
+	@Autowired
+	private CommonService commonService;
 	
 	@Autowired
 	private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
+	@Autowired
+	private BasCustomerService basCustomerService;
 	
 //	@Autowired
 //	private DocOrderImportMybatisDao docOrderImportMybatisDao;
@@ -83,17 +84,20 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json add(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
 		Json json = new Json();
 		//获取新的订单号
-		Map<String ,Object> map=new HashMap<String, Object>();
+		/*Map<String ,Object> map=new HashMap<String, Object>();
 		map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		orderHeaderForNormalMybatisDao.getIdSequence(map);
 		String resultCode = map.get("resultCode").toString();
-		String resultNo = map.get("resultNo").toString();
-		if (resultCode.substring(0,3).equals("000")) {
+		String resultNo = map.get("resultNo").toString();*/
+
+		String resultNo = commonService.generateSeq("ORDERNO",SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+		//if (resultCode.substring(0,3).equals("000")) {
+		if(!StringUtils.isEmpty(resultNo)){
 			OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
 			BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
-			orderHeaderForNormal.setOrderNo(resultNo);
-			orderHeaderForNormal.setOrderType("SO");
-			orderHeaderForNormal.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			orderHeaderForNormal.setOrderno(resultNo);
+			orderHeaderForNormal.setOrdertype("SO");
+			orderHeaderForNormal.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			orderHeaderForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			orderHeaderForNormalMybatisDao.add(orderHeaderForNormal);
@@ -103,7 +107,7 @@ public class OrderHeaderForNormalService extends BaseService {
 			return json;
 		} else {
 			json.setSuccess(false);
-			json.setMsg(resultCode);
+			//json.setMsg(resultCode);
 			return json;
 		}
 	}
@@ -113,7 +117,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json edit(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderNo());
+		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
 		orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -216,7 +220,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		Json json = new Json();
 		//
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderNo());
+		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			//判断订单状态
@@ -240,7 +244,7 @@ public class OrderHeaderForNormalService extends BaseService {
 //					e.printStackTrace();
 //				}
 				//操作拣货
-				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderNo());
+				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
 				if (allocationDetailsIdList != null) {
 					for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
 						Map<String ,Object> map=new HashMap<String, Object>();
@@ -266,7 +270,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					//操作发运
 					Map<String ,Object> map=new HashMap<String, Object>();
 					map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-					map.put("orderNo", orderHeaderForNormalForm.getOrderNo());
+					map.put("orderNo", orderHeaderForNormalForm.getOrderno());
 					map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
 					orderHeaderForNormalMybatisDao.shipmentByOrder(map);
 					String shippmentResult = map.get("result").toString();
@@ -318,7 +322,7 @@ public class OrderHeaderForNormalService extends BaseService {
 				//拣货/装箱状态订单直接操作发运
 				Map<String ,Object> map=new HashMap<String, Object>();
 				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-				map.put("orderNo", orderHeaderForNormalForm.getOrderNo());
+				map.put("orderNo", orderHeaderForNormalForm.getOrderno());
 				map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
 				orderHeaderForNormalMybatisDao.shipmentByOrder(map);
 				String shippmentResult = map.get("result").toString();
@@ -580,48 +584,58 @@ public class OrderHeaderForNormalService extends BaseService {
 				int row = 10;
 				int pageSize = 0;
 				detailsList = new ArrayList<OrderDetailsForNormal>();
-				/*OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 				orderHeaderForNormalQuery.setOrderNo(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
 				for(OrderDetailsForNormal orderDetails : orderHeaderForNormal.getOrderDetailsForNormalList()){
 					totalNum++;
 					detailsList.add(orderDetails);
 				}
-				
 				pageSize = (int)Math.ceil((double)totalNum / row);
 				for(int i = 0 ; i < pageSize ; i++){
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					baos = new ByteArrayOutputStream();
 					stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking.pdf"), baos);
 					form = stamper.getAcroFields();
-					form.setField("orderno", orderHeaderForNormal.getOrderNo());
-					form.setField("customerName", orderHeaderForNormal.getCustomerShortName());
-					form.setField("orderCode", orderHeaderForNormal.getOrderCode() == null ? "" : orderHeaderForNormal.getOrderCode());
-					form.setField("totalqty", String.valueOf(orderHeaderForNormal.getTotalQty()));
-					form.setField("totalgrossweight", String.valueOf(orderHeaderForNormal.getTotalGrossWeight()));
-					form.setField("totalcubic", String.valueOf(orderHeaderForNormal.getTotalCubic()));
-					form.setField("notes", orderHeaderForNormal.getNotes() == null ? "" : orderHeaderForNormal.getNotes());
+					form.setField("orderno", orderHeaderForNormal.getOrderno());
+					//basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
+					form.setField("expectedShipmentTime", "");
+					form.setField("carrierName", "");
+					form.setField("consigneeName", "");
+					form.setField("cContact", "");
+					form.setField("userdefine1", "");
+					form.setField("cAddress1", "");
+					form.setField("c_Tel1", "");
+					form.setField("userdefine2", "");
+					form.setField("sOReference1", "");
+					form.setField("notes", "");
+
 					for(int j = 0 ; j < row ; j++){
 						if(totalNum > (row * i + j)){
-							form.setField("seq"+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderlineno()));
+							form.setField("location."+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderlineno()));
 							form.setField("sku"+(j+1), detailsList.get(row * i + j).getSku());
-//							form.setField("skuName"+(j+1), detailsList.get(row * i + j).getSkuName());
-							form.setField("packId"+(j+1), "");
-							form.setField("uom"+(j+1), detailsList.get(row * i + j).getUom() == null ? "" : detailsList.get(row * i + j).getUom());
-							form.setField("qtyallocated"+(j+1), String.valueOf(detailsList.get(row * i + j).getQtyallocated()));
-							form.setField("locationid"+(j+1), detailsList.get(row * i + j).getLocation());
-							form.setField("lotatt01"+(j+1), detailsList.get(row * i + j).getLotatt01() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt01()));
-							form.setField("lotatt02"+(j+1), detailsList.get(row * i + j).getLotatt02() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt02()));
-							form.setField("lotatt03"+(j+1), detailsList.get(row * i + j).getLotatt03() == null ? "" : format.format(detailsList.get(row * i + j).getLotatt03()));
-							form.setField("lotatt04"+(j+1), detailsList.get(row * i + j).getLotatt04() == null ? "" : detailsList.get(row * i + j).getLotatt04());
+							form.setField("skuN"+(j+1), detailsList.get(row * i + j).getBasSku().getDescrC());
+							form.setField("regNo"+(j+1), "");
+							form.setField("desc"+(j+1), "");
+							form.setField("batchNo"+(j+1), "");
+							form.setField("seriNo"+(j+1), "");
+							form.setField("ill"+(j+1), "");
+							form.setField("lot01"+(j+1), "");
+							form.setField("qtyE"+(j+1), "");
+							form.setField("uom"+(j+1), "");
+							form.setField("qty"+(j+1), "");
+							form.setField("double"+(j+1), "");
+							form.setField("card"+(j+1), "");
+							form.setField("report"+(j+1), "");
+							form.setField("remark"+(j+1), "");
 						}
 					}
-					form.replacePushbuttonField("packageBarcodeImg", PDFUtil.genPdfButton(form, "packageBarcodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderNo(), 800)));
+					form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
 					stamper.setFormFlattening(true);
 					stamper.close();
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
 					pdfCopy.addPage(page);
-				}*/
+				}
 				document.close();
 			}
 		} catch (Exception e) {
@@ -763,10 +777,10 @@ public class OrderHeaderForNormalService extends BaseService {
 	public List<EasyuiCombobox> getOrderTypeCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryOrderType();
+		List<OrderStatusResult> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryOrderType();
 		if(orderHeaderForNormalList != null && orderHeaderForNormalList.size() > 0){
 			//下拉框添加数据
-			for(OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList){
+			for(OrderStatusResult orderHeaderForNormal : orderHeaderForNormalList){
 				combobox = new EasyuiCombobox();
 				combobox.setId(String.valueOf(orderHeaderForNormal.getOrderType()));
 				combobox.setValue(orderHeaderForNormal.getOrderTypeName());
@@ -779,12 +793,12 @@ public class OrderHeaderForNormalService extends BaseService {
 	public List<EasyuiCombobox> getOrderStatusCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryOrderStatus();
+		List<OrderStatusResult> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryOrderStatus();
 		if(orderHeaderForNormalList != null && orderHeaderForNormalList.size() > 0){
 			//下拉框添加数据
-			for(OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList){
+			for(OrderStatusResult orderHeaderForNormal : orderHeaderForNormalList){
 				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(orderHeaderForNormal.getSostatus()));
+				combobox.setId(String.valueOf(orderHeaderForNormal.getOrderStatus()));
 				combobox.setValue(orderHeaderForNormal.getOrderStatusName());
 				comboboxList.add(combobox);
 			}
@@ -795,12 +809,12 @@ public class OrderHeaderForNormalService extends BaseService {
 	public List<EasyuiCombobox> getReleasestatusCombobox(){
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryReleaseStatus();
+		List<OrderStatusResult> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryReleaseStatus();
 		if(orderHeaderForNormalList != null && orderHeaderForNormalList.size() > 0){
 			//下拉框添加数据
-			for(OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList){
+			for(OrderStatusResult orderHeaderForNormal : orderHeaderForNormalList){
 				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(orderHeaderForNormal.getSostatus()));
+				combobox.setId(String.valueOf(orderHeaderForNormal.getOrderStatus()));
 				combobox.setValue(orderHeaderForNormal.getOrderStatusName());
 				comboboxList.add(combobox);
 			}

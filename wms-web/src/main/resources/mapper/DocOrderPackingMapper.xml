@@ -35,10 +35,10 @@
 <resultMap id="PackingListMap" type="com.wms.entity.order.OrderHeaderForNormal" >
 	<result column="orderNo" property="orderNo"/>
 	<result column="orderCode" property="orderCode"/>
-	<result column="customerShortName" property="customerShortName"/>
+	<!--<result column="customerShortName" property="customerShortName"/>-->
 	<result column="consigneeName" property="consigneeName"/>
-	<result column="tel" property="tel"/>
-	<result column="address" property="address"/>
+	<!--<result column="tel" property="tel"/>-->
+	<!--<result column="address" property="address"/>-->
 	<result column="boxQty" property="boxQty"/>
 	<result column="totalQty" property="totalQty"/>
 	<collection property="docOrderPackingList" javaType="java.util.List" ofType="com.wms.entity.DocOrderPacking">
@@ -178,7 +178,7 @@
 	</if>
 </select>
   	
-<!-- 查询包装复核列表 -->
+<!-- 查询包装复核列表  row_number() over(order by a.cartonno, a.sku) as row_num -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 	select cartonno as cartonNo,
 	orderno as orderNo,
@@ -196,8 +196,7 @@
 	d.descr_c,
 	a.qty,
 	b.grossweight,
-	b.cube,
-	row_number() over(order by a.cartonno, a.sku) as row_num
+	b.cube
 	from (select orderno, cartonno, sku, sum(qty) as qty
 	from Doc_Order_Packing_Carton
 	where 1 = 1
@@ -226,17 +225,13 @@
 
 <!--查询订单对应箱数-->
 <select id="queryCartonNoById" resultMap="BaseResultMap" parameterType="Object">
-	select cartonno as cartonNo
-	from (select a.cartonno
-	from (select level as cartonno from dual connect by <![CDATA[ level <= 1000 ]]>) a,
-	(select cartonno
-	from Doc_Order_Packing_Carton_Info
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	and packingflag = 'Y') b
-	where a.cartonno = b.cartonno(+)
-	and b.cartonno is null
-	order by cartonno)
-	where rownum = 1
+    SELECT tl.level FROM tmp_level tl
+    LEFT JOIN (
+                SELECT * FROM doc_order_packing_carton_info
+                WHERE orderno = #{orderNo,jdbcType=VARCHAR}
+              ) AS info ON tl.level = info.cartonno
+    WHERE info.cartonno IS NULL
+    ORDER BY tl.level ASC LIMIT 1
 </select>
 
 <!--判断箱号是否存在-->
@@ -294,29 +289,27 @@
 
 <!--扫描数量判断-->
 <select id="checkQtyById" resultMap="BaseResultMap" parameterType="Object">
-	<![CDATA[
-	select a.orderno as orderNo,
-	a.sku as sku,
-	c.descr_c as skuName,
-	a.qty as allocationQty,
-	nvl(b.qty,0) as scanQty
-	from (select customerid, orderno, sku, sum(qty) qty
-	from Act_Allocation_Details
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	and sku = #{sku,jdbcType=VARCHAR}
-	group by customerid, orderno, sku) a,
-	(select orderno, sku, sum(qty) qty
-	from Doc_Order_Packing_Carton
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	and sku = #{sku,jdbcType=VARCHAR}
-	group by orderno, sku) b,
-	Bas_Sku c
-	where a.orderno = b.orderno(+)
-	and a.sku = b.sku(+)
-	and a.customerid = c.customerid
-	and a.sku = c.sku
-	and a.qty >= nvl(b.qty, 0) + #{qty,jdbcType=NUMERIC}
-	]]>
+    select a.orderno as orderNo,
+            a.sku as sku,
+            c.descr_c as skuName,
+            a.qty as allocationQty,
+            ifnull(b.qty,0) as scanQty
+	from (
+	      select customerid, orderno, sku, sum(qty) qty
+	      from Act_Allocation_Details
+	      where orderno = #{orderNo,jdbcType=VARCHAR}
+	      and sku = #{sku,jdbcType=VARCHAR}
+	      group by customerid, orderno, sku
+	      ) as a
+    left join (
+              select orderno, sku, sum(qty) qty
+	          from Doc_Order_Packing_Carton
+	          where orderno = #{orderNo,jdbcType=VARCHAR}
+	          and sku = #{sku,jdbcType=VARCHAR}
+	          group by orderno, sku
+	          ) as b on a.orderno = b.orderno and a.sku = b.sku
+    left join bas_sku c on a.customerid = c.customerid and a.sku = c.sku
+    where a.qty <![CDATA[ >= ]]> ifnull(b.qty, 0) + #{qty, jdbcType=NUMERIC}
 </select>
 
 <!--复核完成时装箱校验-->
@@ -328,9 +321,8 @@
 	and packingflag is null
 </select>
 
-<!--复核完成时装箱数量校验-->
-<select id="checkOrderCommitById" resultMap="BaseResultMap" parameterType="Object">
-	select a.sku as sku,
+<!--复核完成时装箱数量校验
+select a.sku as sku,
 	c.descr_c as skuName
 	from (select customerid, orderno, sku, sum(qtyallocated) as allocationqty
 	from Doc_Order_Details
@@ -345,12 +337,28 @@
 	and a.sku = b.sku(+)
 	and a.customerid = c.customerid
 	and a.sku = c.sku
-	<![CDATA[ and a.allocationqty <> nvl(b.scanqty,0) ]]>
+	<![CDATA[ and a.allocationqty <> IFNULL(b.scanqty,0) ]]>
+-->
+<select id="checkOrderCommitById" resultMap="BaseResultMap" parameterType="Object">
+    select a.sku as sku, c.descr_c as skuName
+	from (
+      select customerid, orderno, sku, sum(qtyallocated) as allocationqty
+	  from Doc_Order_Details
+	  where orderno = #{orderNo,jdbcType=VARCHAR}
+	  group by customerid, orderno, sku
+    ) as a
+    left join (
+      select orderno, sku, sum(qty) as scanqty
+      from Doc_Order_Packing_Carton
+      where orderno = #{orderNo,jdbcType=VARCHAR}
+      group by orderno, sku
+    ) as b on a.orderno = b.orderno and a.sku = b.sku
+    inner join bas_sku c on a.customerid = c.customerid and a.sku = c.sku
+    where <![CDATA[ a.allocationqty <> IFNULL(b.scanqty,0) ]]>
 </select>
  
-<!--查询包装复核数据-->
-<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select a.sku,
+<!--查询包装复核数据
+select a.sku,
 	b.descr_c as skuName,
 	a.allocationQty,
 	c.qty as scanQty
@@ -370,15 +378,30 @@
 	and a.sku = b.sku
 	and a.orderno = c.orderno(+)
 	and a.sku = c.sku(+)
+-->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select a.sku,b.descr_c as skuName,a.allocationQty,c.qty as scanQty
+	from (
+	  select customerid, orderno, sku, sum(qty) as allocationQty
+	  from Act_Allocation_Details
+	  where orderno = #{orderNo,jdbcType=VARCHAR} and sku = #{sku,jdbcType=VARCHAR}
+	  group by customerid, orderno, sku
+	) as a
+	inner join bas_sku b on a.sku = b.sku and a.customerid = b.customerid
+	left join (
+	  select orderno, sku, sum(qty) qty
+	  from Doc_Order_Packing_Carton
+	  where orderno = #{orderNo,jdbcType=VARCHAR} and sku = #{sku,jdbcType=VARCHAR}
+	  group by orderno, sku
+	) as c on a.orderno = c.orderno and a.sku = c.sku
 </select>
  
-<!--查询待包装复核数据-->
-<select id="queryPackingById"  resultMap="BaseResultMap" parameterType="Object">
-	select a.orderno as orderNo,
+<!--查询待包装复核数据
+select a.orderno as orderNo,
 	a.sku as sku,
 	c.descr_c as skuName,
 	a.qty as allocationQty,
-	nvl(b.qty,0) as scanQty,
+	IFNULL(b.qty,0) as scanQty,
 	a.allocationdetailsid as allocationDetailsId
 	from (select customerid, orderno, allocationdetailsid, sku, sum(qty) qty
 	  from Act_Allocation_Details
@@ -396,7 +419,28 @@
 	and a.sku = b.sku(+)
 	and a.customerid = c.customerid
 	and a.sku = c.sku
-	and a.qty > nvl(b.qty, 0)
+	and a.qty > IFNULL(b.qty, 0)
+	order by a.allocationdetailsid
+-->
+<select id="queryPackingById"  resultMap="BaseResultMap" parameterType="Object">
+	select a.orderno as orderNo, a.sku as sku, c.descr_c as skuName, a.qty as allocationQty,
+	IFNULL(b.qty,0) as scanQty, a.allocationdetailsid as allocationDetailsId
+	from (
+	  select customerid, orderno, allocationdetailsid, sku, sum(qty) qty
+	  from Act_Allocation_Details
+	  where orderno = #{orderNo,jdbcType=VARCHAR}
+	  and sku = #{sku,jdbcType=VARCHAR}
+	  group by customerid, orderno, allocationdetailsid, sku
+	) as a
+	left join (
+	  select orderno, allocationdetailsid, sku, sum(qty) qty
+	  from Doc_Order_Packing_Carton
+	  where orderno = #{orderNo,jdbcType=VARCHAR}
+	  and sku = #{sku,jdbcType=VARCHAR}
+	  group by orderno, allocationdetailsid, sku
+	) as b on a.orderno = b.orderno and a.allocationdetailsid = b.allocationdetailsid and a.sku = b.sku
+	inner join bas_sku c on a.customerid = c.customerid and a.sku = c.sku
+	where a.qty > IFNULL(b.qty, 0)
 	order by a.allocationdetailsid
 </select>
  
@@ -404,8 +448,8 @@
 <select id="queryPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
 	select a.orderno as orderNo,
 	a.cartonno as cartonNo,
-	sum(a.qty * nvl(c.grossweight, 0)) as grossWeight,
-	sum(a.qty * nvl(c.cube, 0)) as cube
+	sum(a.qty * IFNULL(c.grossweight, 0)) as grossWeight,
+	sum(a.qty * IFNULL(c.cube, 0)) as cube
 	from Doc_Order_Packing_Carton a,
 	Doc_Order_Header b,
 	Bas_Sku c
@@ -420,8 +464,8 @@
 <!--按已装箱数据合计重量、体积-->
 <select id="queryOrderPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
 	select orderno as orderNo,
-	sum(nvl(grossweight, 0)) as grossWeight,
-	sum(nvl(cube, 0)) as cube
+	sum(IFNULL(grossweight, 0)) as grossWeight,
+	sum(IFNULL(cube, 0)) as cube
 	from Doc_Order_Packing_Carton_Info
 	where orderno = #{orderNo,jdbcType=VARCHAR}
 	group by orderno

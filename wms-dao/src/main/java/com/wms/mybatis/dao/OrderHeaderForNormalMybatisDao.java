@@ -6,14 +6,15 @@ import java.util.Map;
 import com.wms.entity.ExportOrderData;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.result.OrderStatusResult;
 
 public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
-	List<OrderHeaderForNormal> queryOrderType();
+	List<OrderStatusResult> queryOrderType();
 
-	List<OrderHeaderForNormal> queryOrderStatus();
+	List<OrderStatusResult> queryOrderStatus();
 
-	List<OrderHeaderForNormal> queryReleaseStatus();
+	List<OrderStatusResult> queryReleaseStatus();
 
 	List<OrderHeaderForNormal> queryByAllocationDetailsId(String orderno);
 
@@ -25,7 +26,7 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 	//List<ExportOrderData> queryByExportList(MybatisCriteria mybatisCriteria);
 	
-	void getIdSequence(Map<String, Object> map);
+	//void getIdSequence(Map<String, Object> map);
 
 	void allocationByOrder(Map<String, Object> map);
 
@@ -39,5 +40,5 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 	void cancelByOrder(Map<String, Object> map);
 
-	OrderHeaderForNormal queryPrintTemplate(OrderHeaderForNormalQuery query);
+	//OrderHeaderForNormal queryPrintTemplate(OrderHeaderForNormalQuery query);
 }
