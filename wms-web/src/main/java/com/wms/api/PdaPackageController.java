@@ -57,12 +57,12 @@ public class PdaPackageController {
         Map<String, Object> resultMap = new HashMap<>();
 
         OrderHeaderForNormalVO headerVO = orderHeaderForNormalService.queryByOrderno(orderno);
-        if (headerVO == null || headerVO.getOrderNo() == null) {
+        if (headerVO == null || headerVO.getOrderno() == null) {
 
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无出库单头档数据"));
             return resultMap;
         }
-        switch (headerVO.getOrderStatus()) {
+        switch (headerVO.getSostatus()) {
             case "60":
             case "62":
                 PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
