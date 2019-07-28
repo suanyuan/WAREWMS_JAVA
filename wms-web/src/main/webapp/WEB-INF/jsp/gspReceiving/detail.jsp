@@ -334,7 +334,7 @@
                 {field: 'editDate',		title: '修改日期',	width: 100 }
             ]],
             onDblClickCell: function(index,field,value){
-
+                AddressEdit();
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
             },
