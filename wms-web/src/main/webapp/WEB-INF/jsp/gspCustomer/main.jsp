@@ -175,8 +175,8 @@ var commit = function(){
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		clientId : $('#clientIdQuery').val(),
-		clientNo : $('#clientNo').val(),
-		clientName : $('#clientName').val(),
+		clientNo : $('#clientNoQuery').val(),
+		clientName : $('#clientNameQuery').val(),
         enterpriseId : $('#enterpriseId').val(),
 		remark : $('#remark').val(),
 		firstState : $('#firstState').combobox('getValue'),
@@ -210,8 +210,8 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>企业代码</th><td><input type='text' id='clientNo' class='easyui-textbox' data-options=''/></td>
-							<th>企业简称</th><td><input type='text' id='clientName' class='easyui-textbox' data-options=''/></td>
+							<th>企业代码</th><td><input type='text' id='clientNoQuery' class='easyui-textbox' data-options=''/></td>
+							<th>企业简称</th><td><input type='text' id='clientNameQuery' class='easyui-textbox' data-options=''/></td>
 							<th>首营状态</th><td>
 							<input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>
 							<th>企业</th>
