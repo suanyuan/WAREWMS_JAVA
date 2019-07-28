@@ -63,6 +63,56 @@
 			<th>金额</th>
 			<td><input type='text' name='price' id='price' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:2'/></td>
 			</tr>
+			<tr>
+				<th>生产日期</th>
+				<td><input type='text' name='lotatt01' id='lotatt01' class='easyui-datebox' size='16' data-options=''/></td>
+				<th>效期</th>
+				<td><input type='text' name='lotatt02' id='lotatt02' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>入库日期</th>
+				<td><input type='text' name='lotatt03' id='lotatt03' class='easyui-datebox' size='16' data-options=''/></td>
+				<th>生产批号</th>
+				<td><input type='text' name='lotatt04' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>序列号</th>
+				<td><input type='text' name='lotatt05' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>产品注册证</th>
+				<td><input type='text' name='lotatt06' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>灭菌批号</th>
+				<td><input type='text' name='lotatt07' id='lotatt07' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>供应商</th>
+				<td><input type='text' name='lotatt08' id='lotatt08' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>样品属性</th>
+				<td><input type='text' name='lotatt09' id='lotatt09' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>质量状态</th>
+				<td><input type='text' name='lotatt10' id='lotatt10' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>存储条件</th>
+				<td><input type='text' name='lotatt11' id='lotatt11' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>产品名称</th>
+				<td><input type='text' name='lotatt12' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>双证</th>
+				<td><input type='text' name='lotatt13' id='lotatt13' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>入库单号</th>
+				<td><input type='text' name='lotatt14' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>生产厂商名称</th>
+				<td><input type='text' name='lotatt15' id='lotatt15' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>自定义批属1</th>
+				<td><input type='text' name='lotatt16' id='lotatt16' class='easyui-textbox' size='16' data-options=''/></td>
+			</tr>
+			<tr>
+				<th>自定义批属2</th>
+				<td><input type='text' name='lotatt17' id='lotatt17' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>自定义批属3</th>
+				<td><input type='text' name='lotatt18' id='lotatt18' class='easyui-textbox' size='16' data-options=''/></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
 		</table>
 	</form>
 </div>

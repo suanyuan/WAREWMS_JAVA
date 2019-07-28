@@ -114,7 +114,7 @@
         <association property="basSku"
                      column="{customerid=customerid, sku=sku}"
                      javaType="com.wms.entity.BasSku"
-                     select="com.wms.mybatis.dao.BasCustomerMybatisDao.queryById"/>
+                     select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
     </resultMap>
 
     <!-- doc_order_details table all fields -->
