@@ -1,15 +1,20 @@
 package com.wms.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.*;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocOrderPacking;
+import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
+import com.wms.query.DocOrderPackingQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.utils.*;
+import com.wms.vo.DocOrderPackingVO;
+import com.wms.vo.Json;
 import com.wms.vo.form.pda.PageForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,37 +23,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.wms.entity.DocOrderPacking;
-import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.utils.BarcodeGeneratorUtil;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.JaxbUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.DocOrderPackingVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
-import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.query.OrderHeaderForNormalQuery;
-import com.wms.query.DocOrderPackingQuery;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("docOrderPackingService")
 public class DocOrderPackingService extends BaseService {
-	
-	static Logger logger = Logger.getLogger("myLog");
-	
-	private static final String END_POINT = ResourceUtil.geteEndpoint();
 
 	@Autowired
 	private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
@@ -63,7 +48,7 @@ public class DocOrderPackingService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryByPageList(mybatisCriteria);
-		DocOrderPackingVO docOrderPackingVO = null;
+		DocOrderPackingVO docOrderPackingVO;
 		List<DocOrderPackingVO> docOrderPackingVOList = new ArrayList<DocOrderPackingVO>();
 		for (DocOrderPacking docOrderPacking : docOrderPackingList) {
 			docOrderPackingVO = new DocOrderPackingVO();
@@ -74,23 +59,6 @@ public class DocOrderPackingService extends BaseService {
 		datagrid.setRows(docOrderPackingVOList);
 		return datagrid;
 	}
-
-	public List<DocOrderPackingVO> getUndoneList(PageForm form) {
-
-	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-	    mybatisCriteria.setCurrentPage(form.getPageNum());
-	    mybatisCriteria.setPageSize(form.getPageSize());
-	    List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryByList(mybatisCriteria);
-	    DocOrderPackingVO docOrderPackingVO;
-	    List<DocOrderPackingVO> docOrderPackingVOList = new ArrayList<>();
-	    for (DocOrderPacking docOrderPacking : docOrderPackingList) {
-
-	        docOrderPackingVO = new DocOrderPackingVO();
-	        BeanUtils.copyProperties(docOrderPacking, docOrderPackingVO);
-	        docOrderPackingVOList.add(docOrderPackingVO);
-        }
-        return docOrderPackingVOList;
-    }
 
 	public Json orderStatusCheck(String orderNo) {
 		Json json = new Json();
