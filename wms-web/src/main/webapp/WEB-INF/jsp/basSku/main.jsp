@@ -355,7 +355,7 @@ var doSearch = function(){
         descrE : $("#descrE").val(),
         //edittime : $("#edittime").val(),
         editwho : $("#editwho").val(),
-        firstop : $("#firstop").val(),
+        firstop : $("#firstop").combobox('getValue'),
         packid : $("#packid").val(),
         reservedfield01 : $("#reservedfield01").val(),
         reservedfield02 : $("#reservedfield02").val(),
@@ -596,7 +596,7 @@ var downloadTemplate = function(){
 	}
 };
 /* 导入end */
-	
+
 </script>
 </head>
 <body>
@@ -638,7 +638,19 @@ var downloadTemplate = function(){
 
                             <tr>
                             <th>首营状态</th>
-                            <td><input type='text' id='firstop' name="firstop" class='easyui-textbox' size='16' data-options=''/></td>
+                            <td><input type='text' id='firstop' name="firstop" class='easyui-combobox' size='16' data-options="required:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '00', value: '新建'},
+																																{id: '10', value: '审核中'},
+																																{id: '40', value: '审核通过'},
+																																{id: '50', value: '未通过'},
+																																{id: '60', value: '已停止'},
+																																{id: '90', value: '已报废'}
+																															]"/></td>
 							<th>包装规格代码</th>
 							<td><input type='text' id='packid'  name="packid" class='easyui-textbox' size='16' /></td>
 							<th>商品名称</th>
@@ -740,10 +752,11 @@ var downloadTemplate = function(){
 																															textField: 'value',
 																															data: [
 																																{id: '00', value: '新建'},
-																																{id: '90', value: '已报废'},
+																																{id: '10', value: '审核中'},
 																																{id: '40', value: '审核通过'},
+																																{id: '50', value: '未通过'},
 																																{id: '60', value: '已停止'},
-																																{id: '10', value: '审核中'}
+																																{id: '90', value: '已报废'}
 																															]" readonly/></td>
 				</tr>
 
