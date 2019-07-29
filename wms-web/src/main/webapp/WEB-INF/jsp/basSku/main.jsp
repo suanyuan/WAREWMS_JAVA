@@ -638,7 +638,7 @@ var downloadTemplate = function(){
 
                             <tr>
                             <th>首营状态</th>
-                            <td><input type='text' id='firstop' name="firstop" class='easyui-combobox' size='16' data-options="required:true,
+                            <td><input type='text' id='firstop' name="firstop" class='easyui-combobox' size='16' data-options="
 																															panelHeight:'auto',
 																															editable:false,
 																															valueField: 'id',

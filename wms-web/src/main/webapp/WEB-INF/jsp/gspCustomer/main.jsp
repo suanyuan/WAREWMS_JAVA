@@ -60,7 +60,7 @@ $(function() {
 			{field: 'clientTerm',		title: '委托期限',	width: 38 },
 			{field: 'isChineseLabel',		title: '是否长期',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 38 },
-			{field: 'createDate',		title: '创建时间',	width: 38},
+			{field: 'createDate',		title: '创建时间',	width: 45},
 			{field: 'isUse',		title: '是否有效',	width: 38 ,formatter: yesOrNoFormatter}
 		]],
 		onDblClickRow: function(index,row){
@@ -169,6 +169,7 @@ var del = function(){
 		});
 	}
 };
+//增加修改提交
 var commit = function(){
     doSubmit();
 };
@@ -262,6 +263,7 @@ var doSearch = function(){
 	<div id='ezuiDialog' style='padding: 10px;'>
 
 	</div>
+	<%--增加修改提交取消--%>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>

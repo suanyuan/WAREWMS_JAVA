@@ -127,6 +127,8 @@ var edit = function(){
 			instrumentCatalogNo : row.instrumentCatalogNo,
 			instrumentCatalogName : row.instrumentCatalogName,
 			instrumentCatalogRemark : row.instrumentCatalogRemark,
+            classifyId:row.classifyId,
+            version:row.version
 		});
 
         $('#fromClassify').combobox("setValue",row.classifyId);
@@ -262,6 +264,7 @@ var doSearch = function(){
 			<table id='ezuiDatagrid'></table> 
 		</div>
 	</div>
+	<%--二级dialog--%>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
 			<input type='hidden' id='instrumentCatalogId' name='instrumentCatalogId' />

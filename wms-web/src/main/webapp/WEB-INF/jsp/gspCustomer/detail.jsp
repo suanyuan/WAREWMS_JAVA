@@ -17,6 +17,7 @@
 
 
 </script>
+<%--增加修改弹出二级dialog--%>
 <form id='ezuiForm' method='post'>
     <input type='hidden' id='clientId' name='clientId' value="${customer.clientId}" class="textbox-value"/>
     <input type="hidden" id="enterpriseId" name='enterpriseId'  value="${customer.enterpriseId}"  class="textbox-value"/>
@@ -99,6 +100,8 @@
         </tr>-->
     </table>
 </form>
+
+<%--查看企业弹窗--%>
 <div id='ezuiDialogDetail' style='padding: 10px;'>
     <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff'>
         <fieldset>
@@ -130,7 +133,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
     var enterpriseDatagrid;
-    var dataGridDetail;
+    var dataGridDetail;//企业信息弹窗datagrid
     var dialogEnterprise;
     $(function () {
         $('#clientStartDateForm').datebox({
@@ -144,7 +147,7 @@
                 onChangeDate();
             }
         });
-
+        //企业加放大镜
         $("#enterpriseName").textbox({
             value:"${customer.clientName}",
             width:200,
@@ -160,7 +163,7 @@
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
-            required: true,
+            //required: true,
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -238,7 +241,7 @@
                 $('#operateTypeData').combobox("setValue",'${customer.operateType}')
             }
         })
-
+//企业信息弹窗datagrid
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
@@ -347,7 +350,7 @@
     function formatOper(value,row,index){
         return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
-
+    //增加修改提交
     function doSubmit() {
         var url = '';
         if (processType == 'edit') {
@@ -359,7 +362,7 @@
             url : url,
             onSubmit : function(){
                 console.log("1");
-                if(ezuiForm.form('validate')){
+                if($(this).form('validate')){
                     $.messager.progress({
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
@@ -367,6 +370,7 @@
                     console.log("1");
                 }else{
                     console.log("12");
+
                     return false;
                 }
             },
