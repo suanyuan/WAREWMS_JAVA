@@ -1241,7 +1241,7 @@
         select
         <include refid="Base_Column_List"/>
         from doc_order_header
-        where sostatus = '60' or sostatus = '62'
+        where sostatus = '40' or sostatus = '50'
         order by addtime desc
         limit #{start}, #{pageSize}
     </select>

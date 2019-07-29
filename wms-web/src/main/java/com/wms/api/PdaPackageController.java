@@ -64,13 +64,13 @@ public class PdaPackageController {
             return resultMap;
         }
         switch (headerVO.getSostatus()) {
-            case "60":
-            case "62":
+            case "40":
+            case "50":
                 PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
                 resultMap.put(Constant.DATA, headerVO);
                 resultMap.put(Constant.RESULT, result);
                 return resultMap;
-            case "63":
+            case "60":
                 resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单已完全装箱"));
                 return resultMap;
                 default:

@@ -431,15 +431,42 @@ where 1=1
     </if>
 </select>
 
-    <select id="queryByOrder" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <!--<select id="queryByOrder" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from act_allocation_details-->
+        <!--where orderno = #{orderno, jdbcType=VARCHAR}-->
+          <!--and orderlineno = #{orderlineno, jdbcType=VARCHAR}-->
+          <!--and customerid = #{customerid, jdbcType=VARCHAR}-->
+          <!--and sku = #{sku, jdbcType=VARCHAR}-->
+          <!--and (status = '60' || status = '62')-->
+    <!--</select>-->
+
+    <select id="queryForScan" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from act_allocation_details
-        where orderno = #{orderno, jdbcType=VARCHAR}
-          and orderlineno = #{orderlineno, jdbcType=VARCHAR}
-          and customerid = #{customerid, jdbcType=VARCHAR}
-          and sku = #{sku, jdbcType=VARCHAR}
-          and (status = '60' || status = '62')
+        a.*
+        from act_allocation_details a, inv_lot_att b
+        where a.orderno = #{orderno, jdbcType=VARCHAR}
+        and a.customerid = #{customerid, jdbcType=VARCHAR}
+        and a.sku = #{sku, jdbcType=VARCHAR}
+        and a.lotnum = b.lotnum
+        <if test="lotatt02 != null and lotatt02 != ''">
+            and b.lotatt02 = #{lotatt02, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt04 != null and lotatt04 != ''">
+            and b.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt05 != null and lotatt05 != ''">
+            and b.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+        </if>
+        <if test="packflag != null and packflag != ''">
+            and a.packflag = #{packflag, jdbcType=VARCHAR}
+        </if>
     </select>
+
+    <update id="finishPacking" parameterType="java.util.Map">
+      update act_allocation_details set
+      packflag = '1' where allocationdetailsid = #{allocationdetailsid}
+    </update>
   	
 </mapper>   
