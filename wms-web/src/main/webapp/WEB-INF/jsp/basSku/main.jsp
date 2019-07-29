@@ -64,7 +64,7 @@ $(function() {
             {field: 'skuGroup1',		title: '产品线',	width: 100 },
             {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
 
-            {field: 'skuGroup6Name',		title: '默认供应商',	width: 100 },
+            {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
 
             {field: 'activeFlag',		title: '激活',	width: 50, formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';

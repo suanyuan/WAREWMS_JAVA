@@ -193,9 +193,9 @@
             columns : [[
                 {field: 'specsId',title:'主键',hidden:true},
                 {field: 'productCode',title: '产品代码' ,width: '25%'},
+                {field: 'specsName',title: '规格' ,width: '25%'},
+                {field: 'productModel',title: '型号',width: '25%'},
                 {field: 'productName',title: '产品名称',width: '25%'},
-                {field: 'specsName',title: '规格名称' ,width: '25%'},
-                {field: 'productModel',title: '产品型号',width: '25%'}
             ]],
             onDblClickCell: function(index,field,value){
 

@@ -36,6 +36,15 @@ public class GspProductRegisterVO {
 	private String classifyId;
 	private String classifyCatalog;
 	private String enterpriseId;
+	private String enterpriseName;//附加
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public String getProductionAddress() {
 		return productionAddress;
