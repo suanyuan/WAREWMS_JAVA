@@ -60,7 +60,7 @@ public class GspCustomerService extends BaseService {
 		datagrid.setRows(gspCustomerVOList);
 		return datagrid;
 	}
-
+//增加
 	public Json addGspCustomer(GspCustomerForm gspCustomerForm) throws Exception {
 		try{
 
@@ -91,7 +91,7 @@ public class GspCustomerService extends BaseService {
 			firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
 			json.setSuccess(true);
-
+            json.setMsg("资料处理成功!");
 			return json;
 		}catch (Exception e){
 			e.printStackTrace();
@@ -100,7 +100,7 @@ public class GspCustomerService extends BaseService {
 		}
 
 	}
-
+//修改
 	public Json editGspCustomer(GspCustomerForm gspCustomerForm) {
 		Json json = new Json();
 		GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspCustomerForm.getClientId());
@@ -115,7 +115,7 @@ public class GspCustomerService extends BaseService {
 		BeanUtils.copyProperties(gspCustomerForm, gspCustomer);
 		gspCustomerMybatisDao.updateBySelective(gspCustomer);
 		json.setSuccess(true);
-
+		json.setMsg("资料处理成功!");
 		return json;
 	}
 
@@ -133,6 +133,7 @@ public class GspCustomerService extends BaseService {
 			gspCustomerMybatisDao.delete(gspCustomer);
 		}
 		json.setSuccess(true);
+		json.setMsg("资料处理成功!");
 		return json;
 	}
 

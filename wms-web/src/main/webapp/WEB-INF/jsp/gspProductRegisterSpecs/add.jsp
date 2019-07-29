@@ -35,22 +35,27 @@
             <th>产地</th>
             <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='required:true' /></td>
 
-            <th>规格名称</th>
-            <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>生产企业</th>
+
+            <td><input type='hidden' data="1" id="enterpriseId" name='enterpriseId' />
+                <input type='text' data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
           </tr>
 
         <tr>
-            <th>商品代码</th>
+            <th>产品代码</th>
             <td><input type='text' data="1" id="productCode" name='productCode' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>商品名称</th>
-            <td><input type='text' data="1" id="productName" name='productName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>规格</th>
+            <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
+            <%--<th>商品名称</th>--%>
+            <%--<td><input type='text' data="1" id="productName" name='productName' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
          </tr>
 
         <tr>
-            <th>商品描述</th>
+            <th>产品描述</th>
             <td><input type='text' data="1" id="productRemark" name='productRemark' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
             <th>型号</th>
@@ -72,7 +77,7 @@
             <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>包装单位</th>
+            <th>包装规格</th>
             <td><input type='text' data="1" id="packingUnit" name='packingUnit' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
             <%--<th>分类目录</th>--%>
@@ -91,7 +96,7 @@
 
         </tr>
         <tr>
-            <th>是否需要双证</th><td><input type="text" data="1" id="isDoublec"    name="isDoublec"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+            <th>双证</th><td><input type="text" data="1" id="isDoublec"    name="isDoublec"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -99,7 +104,7 @@
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
-            <th>是否需要产品合格证</th><td><input type="text" data="1" id="isCertificate"   name="isCertificate"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
+            <th>产品合格证</th><td><input type="text" data="1" id="isCertificate"   name="isCertificate"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -123,7 +128,7 @@
             <td><input type='text' data="1" id="packingRequire" name='packingRequire' class='easyui-textbox' size='50' data-options='required:true'/></td>
         </tr>
         <tr>
-            <th>存储条件</th>
+            <th>储存条件</th>
             <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
             <th>自赋码1</th>
@@ -240,7 +245,7 @@
         })
     }
 
-    function choseSelect(id,no,name,address) {
+    function choseSelect(id,no,name,address,enterpriseId,enterpriseName) {
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
@@ -251,6 +256,9 @@
         $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
         $("#productRegisterQuery").textbox("setValue",no);
         $("#productRegisterId").textbox("setValue",id);
+        $("#enterpriseName").textbox("setValue",enterpriseName);
+        $("#enterpriseId").textbox("setValue",enterpriseId);
+
         productionAddress
         // $.ajax({
         //     url : 'gspEnterpriseInfoController.do?getInfo',

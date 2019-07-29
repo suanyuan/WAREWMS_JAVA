@@ -66,6 +66,7 @@ public class GspProductRegister  implements Serializable {
 	private String classifyCatalog;
 
 	private String enterpriseId;
+	private String enterpriseName;//附加
 
 	private String productionAddress;
 

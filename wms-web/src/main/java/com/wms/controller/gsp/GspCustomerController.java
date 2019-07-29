@@ -30,7 +30,7 @@ public class GspCustomerController {
 
 	@Autowired
 	private GspCustomerService gspCustomerService;
-
+//返回主页面
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -38,7 +38,7 @@ public class GspCustomerController {
 		model.put("menuId", menuId);
 		return new ModelAndView("gspCustomer/main", model);
 	}
-
+//返回增加或者修改界面
 	@Login
 	@RequestMapping(params = "toDetail")
 	public ModelAndView toDetail(String id) {
@@ -59,14 +59,14 @@ public class GspCustomerController {
 		model.put("menuId", menuId);
 		return new ModelAndView("gspCustomer/info", model);
 	}
-
+//返回主页datagird
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<GspCustomerVO> showDatagrid(EasyuiDatagridPager pager, GspCustomerQuery query) {
 		return gspCustomerService.getPagedDatagrid(pager, query);
 	}
-
+//增加
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
@@ -74,11 +74,12 @@ public class GspCustomerController {
 		Json json = gspCustomerService.addGspCustomer(gspCustomerForm);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+
 		return json;
 	}
-
+//修改
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
@@ -86,11 +87,12 @@ public class GspCustomerController {
 		Json json = gspCustomerService.editGspCustomer(gspCustomerForm);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+
 		return json;
 	}
-
+//删除
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
@@ -98,8 +100,9 @@ public class GspCustomerController {
 		Json json = gspCustomerService.deleteGspCustomer(id);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+
 		return json;
 	}
 
@@ -123,7 +126,7 @@ public class GspCustomerController {
 	public Json confirmSubmit(String id){
 		return gspCustomerService.confirmSubmit(id);
 	}
-
+//发起新申请
 	@Login
 	@RequestMapping(params = "reApply")
 	@ResponseBody
