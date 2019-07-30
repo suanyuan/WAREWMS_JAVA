@@ -41,6 +41,7 @@ public class BasSkuVO {
 	private java.math.BigDecimal overrcvpercentage;
 	private java.lang.String overreceiving;
 	private java.lang.String packid;
+	private java.lang.String descr;
 	private java.math.BigDecimal price;
 	private java.lang.String putawayrule;
 	private java.math.BigDecimal qtymax;
@@ -79,6 +80,13 @@ public class BasSkuVO {
 	private java.lang.String skuGroup7;
 	private java.lang.String skuGroup8;
 
+	public String getDescr() {
+		return descr;
+	}
+
+	public void setDescr(String descr) {
+		this.descr = descr;
+	}
 
 	public String getReservedfield06() {
 		return reservedfield06;

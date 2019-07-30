@@ -39,7 +39,6 @@ import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
-import com.wms.entity.DocOrderHeader;
 import com.wms.entity.ViewInvTran;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.service.importdata.ImportAsnDataService;

@@ -18,6 +18,18 @@ public class GspProductRegisterSpecsVO {
 
 	private java.lang.String productRegisterNo;
 	private java.lang.String productNameMain;
+	private String enterpriseId;//附加
+	private String enterpriseName;//附加
+
+
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	private java.lang.String specsName;
 	private java.lang.String productCode;
@@ -373,5 +385,12 @@ public class GspProductRegisterSpecsVO {
 
 	public void setAttacheCardCategory(String attacheCardCategory) {
 		this.attacheCardCategory = attacheCardCategory;
+	}
+	public String getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(String enterpriseId) {
+		this.enterpriseId = enterpriseId;
 	}
 }

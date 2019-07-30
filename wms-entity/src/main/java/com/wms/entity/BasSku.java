@@ -98,7 +98,7 @@ public class BasSku implements Serializable {
 	private String overreceiving;
 
 	private String packid;
-
+	private String descr;
 	private BigDecimal price;
 
 	private String putawayrule;
@@ -180,7 +180,13 @@ public class BasSku implements Serializable {
 	public BasSku() {
 	}
 
+	public String getDescr() {
+		return descr;
+	}
 
+	public void setDescr(String descr) {
+		this.descr = descr;
+	}
 
 	public String getSkuGroup7() {
 		return skuGroup7;

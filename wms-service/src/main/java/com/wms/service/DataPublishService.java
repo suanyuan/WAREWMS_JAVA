@@ -180,7 +180,7 @@ public class DataPublishService extends BaseService {
                 BasPackageQuery query = new BasPackageQuery();
                 query.setDescr(specObj.getPackingUnit());
                 BasPackage basPackage = basPackageService.queryBasPackBy(query);
-                skuForm.setPackid(basPackage == null ? "STANDARD" : basPackage.getPackid());
+                skuForm.setPackid(basPackage == null ? "6" : basPackage.getPackid());
 
                 skuForm.setReservedfield01(specObj.getProductName());
                 skuForm.setReservedfield02(specObj.getProductRemark());

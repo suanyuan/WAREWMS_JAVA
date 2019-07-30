@@ -466,7 +466,7 @@ where 1=1
     #{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{userdefine6},
     #{notes},
     #{qtyorderedEach},0,0,0,0,
-    #{addtime},#{addwho},#{edittime},#{editwho},
+    now(),#{addwho},#{edittime},#{editwho},
     #{rotationid},
     #{netweight},#{grossweight},#{cubic},#{price},
     #{alternativesku},#{kitreferenceno},

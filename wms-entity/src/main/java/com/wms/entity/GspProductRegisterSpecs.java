@@ -45,7 +45,8 @@ public class GspProductRegisterSpecs implements Serializable {
 
   private String productRegisterNo;
   private String productNameMain;
-
+  private String enterpriseId;//附加
+  private String enterpriseName;//附加
 
   private String specsName;
   private String productCode;
@@ -422,4 +423,22 @@ public class GspProductRegisterSpecs implements Serializable {
   public void setAttacheCardCategory(String attacheCardCategory) {
     this.attacheCardCategory = attacheCardCategory;
   }
+
+  public String getEnterpriseId() {
+    return enterpriseId;
+  }
+
+  public void setEnterpriseId(String enterpriseId) {
+    this.enterpriseId = enterpriseId;
+  }
+
+  public String getEnterpriseName() {
+    return enterpriseName;
+  }
+
+  public void setEnterpriseName(String enterpriseName) {
+    this.enterpriseName = enterpriseName;
+  }
+
+
 }

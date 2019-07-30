@@ -87,7 +87,7 @@ public class GspReceivingService extends BaseService {
 
 
 			for (GspReceiving gspReceiving : gspReceivingList) {
-				gspReceivingVO = new GspReceivingVO();
+                gspReceivingVO = new GspReceivingVO();
 
 
 				GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryIsDefault(gspReceiving);
@@ -95,8 +95,20 @@ public class GspReceivingService extends BaseService {
 				BasCustomer basCustomer1 = new BasCustomer();
 				basCustomer1.setEnterpriseId(gspReceiving.getEnterpriseId());
 				basCustomer1.setCustomerType("CO");
-				BasCustomer basCustomer = basCustomerMybatisDao.queryByenterId(basCustomer1);
-				BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
+                BasCustomer basCustomer = null;
+				try {
+                     basCustomer = basCustomerMybatisDao.queryByenterId(basCustomer1);//俩条数据不能有一样的企业id和企业类型
+
+                }catch (Exception e){
+
+                }
+//                if(basCustomer!=null){
+//					json.setSuccess(true);
+//					json.setMsg("该收获单位已经存在");
+//					json.setMsg(resultMsg.toString());
+//				return json;
+//				}
+                BeanUtils.copyProperties(gspReceiving, gspReceivingVO);
 				if (gspReceivingAddress!=null ){
 
 					gspReceivingVO.setDeliveryAddress(gspReceivingAddress.getDeliveryAddress());
@@ -116,7 +128,7 @@ public class GspReceivingService extends BaseService {
 					gspReceivingVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
 
 				}
-				if ( basCustomer!=null){
+				if (basCustomer!=null){
 					gspReceivingVO.setCustomerid(basCustomer.getCustomerid());
 				}
 				gspReceivingVOList.add(gspReceivingVO);
