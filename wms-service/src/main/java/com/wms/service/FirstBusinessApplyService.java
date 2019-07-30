@@ -385,6 +385,7 @@ public class FirstBusinessApplyService extends BaseService {
 		if(gspOperateLicense == null){
 			return Json.error("供应商查询不到有效的生产营业执照信息");
 		}
+		//TODO 如果委托方是供应商不需要进行判断
 
 		List<GspOperateDetailVO> operateDetails = gspOperateDetailService.queryOperateDetailByLicense(gspOperateLicense.getOperateId());
 

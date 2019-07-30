@@ -6,6 +6,11 @@
 <head>
 <c:import url='/WEB-INF/jsp/include/meta.jsp' />
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+    <style>
+        table th{
+            text-align: right;
+        }
+    </style>
 <script type='text/javascript'>
 var processType;
 var orderList = null;
@@ -44,7 +49,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: false,
 		striped: true,
 		collapsible:false,
@@ -61,17 +66,20 @@ $(function() {
 		},
 		columns : [[
 		            {field: 'chk',                  checkbox:true,      width: 6},
-					{field: 'customerid',			title: '客户编码',		width: 12 },
-					{field: 'orderno',				title: 'SO编号',		width: 20 },
-					{field: 'soreference1',			title: '客户单号1',	width: 20 },
-					{field: 'soreference2',			title: '客户单号2',	width: 20 },
-					{field: 'ordertime',			title: '创建时间',		width: 24 },
-					{field: 'sostatusName',			title: '订单状态',		width: 12 },
-					{field: 'ordertypeName',		title: '订单类型',		width: 12 },
-					{field: 'consigneename',		title: '收货人',		width: 14 },
-					{field: 'cAddress1',			title: '收货地址',		width: 36 },
-					{field: 'cTel1',				title: '联系方式',		width: 16 },
-					{field: 'releasestatusName',	title: '释放状态',		width: 12 }
+					{field: 'customerid',			title: '客户编码',		width: 100 },
+                    {field: 'sostatusName',			title: '订单状态',		width: 100 },
+					{field: 'orderno',				title: 'SO编号',		width: 100 },
+					{field: 'soreference1',			title: '客户单号',	width: 120 },
+					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
+					{field: 'ordertime',			title: '创建时间',		width: 150 },
+					{field: 'ordertypeName',		title: '订单类型',		width: 100 },
+					{field: 'consigneename',		title: '收货人',		width: 100 },
+                    {field: 'cProvince',			title: '省',		width: 100 },
+                    {field: 'cCity',			title: '市',		width: 100 },
+                    {field: 'cAddress2',			title: '区',		width: 100 },
+					{field: 'cAddress1',			title: '收货地址',		width: 250 },
+					{field: 'cTel1',				title: '联系方式',		width: 100 },
+					{field: 'releasestatusName',	title: '释放状态',		width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
@@ -133,10 +141,10 @@ $(function() {
             {field: 'lotatt12',	title: '产品名称',		width: 130 },
             {field: 'lotatt13',	title: '双证',		width: 130 },
             {field: 'lotatt14',	title: '入库单号',		width: 130 },
-            {field: 'lotatt15',	title: '生产厂商名称',		width: 130 },
-            {field: 'lotatt16',	title: '自定义批属1',		width: 130 },
+            {field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
+            /*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
             {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
-            {field: 'lotatt18',	title: '自定义批属3',		width: 130 }
+            {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
 		]],
 		onDblClickCell: function(index,field,value){
 			detailsEdit();
@@ -439,7 +447,7 @@ var del = function(){
 /* 分配按钮 */
 var allocation = function(){
 	var operateResult = '';
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
 		if (item.sostatus >= '50') {
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
@@ -448,7 +456,7 @@ var allocation = function(){
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?allocation',
-				data : {orderno : item.orderno},
+				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
@@ -1552,20 +1560,21 @@ var selectLocation = function(){
 					<table>
 						<tr>
 							<th>SO编号</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>客户编号</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>客户单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>定向入库单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>地区（D）</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>三段码（D）</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品（D）</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>重量（D）</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>省</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>市</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>区</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>地址</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>库位通道（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>自定义1（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>自定义2（D）</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th><!-- 波次编号（D）--></th><td><!--<input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/>--></td>
+							<th>收货人</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>收货电话</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>承运人</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>快递单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
@@ -1584,6 +1593,11 @@ var selectLocation = function(){
 																																url:'<c:url value="/docOrderHeaderController.do?getOrderTypeCombobox"/>',
 																																valueField: 'id',
 																																textField: 'value'"/></td>
+                            <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',
+																																	valueField: 'id',
+																																	textField: 'value'"/></td>
 						</tr>
 						<tr>
 							<th>订单创建时间</th><td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options="editable:false,
@@ -1594,13 +1608,8 @@ var selectLocation = function(){
 																																required:true,
 																																showSeconds:false,
 																																value:ordertimeDateTo(new Date())"/></td>
-							<th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',
-																																	valueField: 'id',
-																																	textField: 'value'"/></td>
-							<th><input id="sostatusCheck" type="checkbox" onclick=""><label for="sostatusCheck">显示关闭/取消订单</label></th>
-							<td>
+							<th colspan="2" style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick=""><label for="sostatusCheck">显示关闭/取消订单</label></th>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
@@ -1616,12 +1625,14 @@ var selectLocation = function(){
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='allocation();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
 					<a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelAllocation'/></a>
- 					<!-- <a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
- 					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a> -->
- 					<a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> 
- 					<a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a> 
-					<a onclick='cancel();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
-					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
+ 					<a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
+ 					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a>
+                    <a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
+                   <!-- <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> -->
+					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
+                    <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>
+
+                    <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
                     <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
                     <!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>

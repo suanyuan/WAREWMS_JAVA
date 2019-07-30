@@ -174,9 +174,10 @@ public class OrderHeaderForNormalService extends BaseService {
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				Map<String ,Object> map=new HashMap<String, Object>();
-				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+				//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				map.put("orderNo", orderNo);
 				map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+				//map.put("result", "");
 				orderHeaderForNormalMybatisDao.allocationByOrder(map);
 				String result = map.get("result").toString();
 				json.setSuccess(true);
@@ -614,7 +615,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					//basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
 					form.setField("expectedShipmentTime", DateUtil.format(orderHeaderForNormal.getExpectedshipmenttime1(),"yyyy-MM-dd"));
 					form.setField("carrierName", orderHeaderForNormal.getCarriername());
-					form.setField("consigneeName", orderHeaderForNormal.getCarriername());
+					form.setField("consigneeName", orderHeaderForNormal.getConsigneename());
 					form.setField("cContact", orderHeaderForNormal.getCContact());
 					form.setField("userdefine1", orderHeaderForNormal.getUserdefine1());
 					form.setField("cAddress1", orderHeaderForNormal.getCAddress1());
@@ -644,7 +645,7 @@ public class OrderHeaderForNormalService extends BaseService {
 							form.setField("remark."+(j), "");
 						}
 					}
-					//form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
+					form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
 					stamper.setFormFlattening(true);
 					stamper.close();
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
