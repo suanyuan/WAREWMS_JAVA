@@ -1,7 +1,5 @@
 package com.wms.mybatis.dao;
 
-
-import com.wms.mybatis.dao.BaseDao;
 /**
  * 
  * <br>

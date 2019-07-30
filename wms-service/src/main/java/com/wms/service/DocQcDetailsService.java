@@ -13,10 +13,7 @@ import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocQcStatusForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
-import com.wms.query.DocQcDetailsQuery;
-import com.wms.query.InvLotAttQuery;
-import com.wms.query.InvLotLocIdQuery;
-import com.wms.query.InvLotQuery;
+import com.wms.query.*;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
@@ -40,6 +37,9 @@ public class DocQcDetailsService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
+
+	@Autowired
+	private BasPackageMybatisDao basPackageMybatisDao;
 
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
@@ -147,6 +147,16 @@ public class DocQcDetailsService extends BaseService {
         }
         pdaDocQcDetailVO.setBasSku(basSku);
 
+        //获取包装规格
+        BasPackageQuery packageQuery = new BasPackageQuery();
+        packageQuery.setPackid(basSku.getPackid());
+        BasPackage basPackage = basPackageMybatisDao.queryById(packageQuery);
+        if (basPackage == null) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品的包装规格"));
+            return map;
+        }
+        pdaDocQcDetailVO.setBasPackage(basPackage);
+
         //DocQcDetails
         query.setSku(basSku.getSku());
         DocQcDetails docQcDetails = docQcDetailsDao.queryDocQcDetail(query);
@@ -165,6 +175,11 @@ public class DocQcDetailsService extends BaseService {
             return map;
         }
         pdaDocQcDetailVO.setInvLotAtt(lotAtt);
+
+        //已验件数 & 未验件数
+        DocQcDetails qtyQcDetails = docQcDetailsDao.queryAcceptQty(query);
+        pdaDocQcDetailVO.setAcceptedQty(qtyQcDetails.getQcqtyCompleted().intValue());
+        pdaDocQcDetailVO.setUnacceptedQty((int) (qtyQcDetails.getQcqtyExpected() - qtyQcDetails.getQcqtyCompleted()));
 
         //历史注册证(+生产企业详情)
         List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(basSku.getSku(), basSku.getCustomerid());

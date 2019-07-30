@@ -622,6 +622,10 @@ select a.orderno as orderNo,
         where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum}
     </select>
 
+    <select id="queryPackedNum" parameterType="java.util.Map" resultType="integer">
+        select ifnull(sum(qty), 0) from doc_order_packing_carton where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
+    </select>
+
     <select id="queryPackingCartonInfo" parameterType="java.util.Map" resultMap="PackingCartonInfoMap">
         select
         <include refid="Carton_Info_Column_List"/>

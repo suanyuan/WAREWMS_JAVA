@@ -81,6 +81,13 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
 
 	DocOrderPackingCarton queryAvailablePackedDetail(DocOrderPackingCarton docOrderPackingCarton);
 
+    /**
+     * 获取分配明细中已装箱数
+     * @param docOrderPackingCarton ~
+     * @return ~
+     */
+	int queryPackedNum(DocOrderPackingCarton docOrderPackingCarton);
+
 	//根据orderno traceid查询
 	DocOrderPackingCartonInfo queryPackingCartonInfo(@Param("orderno") String orderno, @Param("traceid") String traceid);
 

@@ -1,8 +1,10 @@
 package com.wms.mybatis.dao;
 
+import com.wms.entity.DocOrderPacking;
 import com.wms.entity.DocQcDetails;
 import com.wms.mybatis.entity.CleanInventory;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
+import com.wms.query.DocOrderPackingQuery;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import org.apache.ibatis.annotations.Param;
@@ -77,4 +79,11 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	void cleanInventory(CleanInventory cleanInventory);
 
 	int queryMaxLineNo(@Param("qcNo")String qcNo);
+
+    /**
+     * 查询当前批号的已验收件数、未验收件数
+     * @param query ~
+     * @return ~
+     */
+	DocQcDetails queryAcceptQty(PdaDocQcDetailQuery query);
 }

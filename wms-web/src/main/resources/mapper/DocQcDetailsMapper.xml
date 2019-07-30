@@ -332,5 +332,12 @@ where 1=1
 	<select id="queryMaxLineNo" parameterType="Object" resultType="int">
        SELECT ifnull(MAX(QCLINENO + 0),0) FROM doc_qc_details WHERE QCNO = #{qcNo};
     </select>
+
+    <select id="queryAcceptQty" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select ifnull(sum(qcqty_completed), 0) as qcqty_completed, ifnull(sum(qcqty_completed), 0) as qcqty_expected
+        from  doc_qc_details
+        where qcno = #{qcno} and customerid = #{customerid} and sku = #{sku}
+        and userdefine3 = #{lotatt04}
+    </select>
   	
 </mapper>   

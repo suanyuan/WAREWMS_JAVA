@@ -661,23 +661,31 @@ public class DocOrderPackingService extends BaseService {
 	    //TODO 装箱状态判断，个数、单据状态
 
         ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
+        DocOrderPackingCarton packingCartonQuery = new DocOrderPackingCarton();
+
+        //分配明细
         allocationQuery.setAllocationdetailsid(form.getAllocationdetailsid());
         ActAllocationDetails matchDetails = actAllocationDetailsMybatisDao.queryById(allocationQuery);
-        if (matchDetails.getQty() < form.getQty()) {
+
+        //分配明细中装箱的数量
+        packingCartonQuery.setOrderno(form.getOrderno());
+        packingCartonQuery.setAllocationdetailsid(form.getAllocationdetailsid());
+        int packedNum = docOrderPackingMybatisDao.queryPackedNum(packingCartonQuery);
+        if (matchDetails.getQty() < (form.getQty() + packedNum)) {
             return new PdaResult(PdaResult.CODE_FAILURE, "当前提交数超出分配数");
         }
 
         try {
 
             //如果包装数和分配数相同要将分配明细的packflag set 1
-            DocOrderPackingCarton packingCartonQuery = new DocOrderPackingCarton();
-            packingCartonQuery.setOrderno(form.getOrderno());
+
+
             packingCartonQuery.setTraceid(form.getTraceid());
             packingCartonQuery.setSku(form.getSku());
             packingCartonQuery.setLotnum(form.getLotnum());
             DocOrderPackingCarton packingCarton = docOrderPackingMybatisDao.queryAvailablePackedDetail(packingCartonQuery);
             int matchQty = packingCarton == null ? 0 : packingCarton.getQty();
-            if ((matchDetails.getQty() + matchQty) == form.getQty()) {
+            if (matchDetails.getQty() == (form.getQty() + matchQty)) {
 
                 actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
             }
