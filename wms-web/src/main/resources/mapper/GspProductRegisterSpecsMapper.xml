@@ -45,6 +45,7 @@
 
 	<result column="product_register_no" property="productRegisterNo"/>
 	<result column="product_name_main" property="productNameMain"/>
+	<result column="enterprise_id" property="enterpriseId"/>
 </resultMap>
        
 <!-- gsp_product_register_specs table all fields -->
@@ -271,7 +272,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 
 <!-- 根据id查询 产品注册证规格关联产品注册证 -->
 <select id="selectById"  resultMap="BaseResultMap" parameterType="Object">
-	select t1.*,t2.product_register_no,t2.product_name_main
+	select t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
 	from gsp_product_register_specs t1 left join gsp_product_register t2
 	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
@@ -286,7 +287,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 <!-- 查询产品注册证规格列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select
-	t1.*,t2.product_register_no,t2.product_name_main
+	t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
 	from gsp_product_register_specs t1 left join gsp_product_register t2
 	ON t1.product_register_id = t2.product_register_id
 	<include refid="Example_Where_Clause"/>

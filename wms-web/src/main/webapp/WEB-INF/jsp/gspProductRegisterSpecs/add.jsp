@@ -19,8 +19,8 @@
             <%--</td>--%>
             <th>注册证编号</th>
             <td>
-                <input type='text' data="1" id='productRegisterQuery'  name="productRegisterNo" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
-                <input type="hidden"  id="productRegisterNo" name="productRegisterNo" data='1'  />
+                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
+                <%--<input type="hidden" data="1" id="productRegisterNo" name="productRegisterNo" />--%>
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
             <%--<th>注册证编号</th>--%>
@@ -186,6 +186,7 @@
 <script>
     var enterpriseDialog;
     $(function(){
+        //主页编辑
         var row = ezuiDatagrid.datagrid('getSelected');
 
         if(row){
@@ -244,7 +245,7 @@
             }
         })
     }
-
+    //点击注册证编号之后datagrid放大镜事件
     function choseSelect(id,no,name,address,enterpriseId,enterpriseName) {
         //console.log(1111111)
         //console.log(name)
@@ -254,7 +255,7 @@
 
         $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
         $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
-        $("#productRegisterQuery").textbox("setValue",no);
+        $("#productRegisterNo").textbox("setValue",no);
         $("#productRegisterId").textbox("setValue",id);
         $("#enterpriseName").textbox("setValue",enterpriseName);
         $("#enterpriseId").textbox("setValue",enterpriseId);
@@ -287,7 +288,7 @@
     }
 
     $(function () {
-        $("#productRegisterQuery").textbox({
+        $("#productRegisterNo").textbox({
             width:383,
             icons:[{
                 iconCls:'icon-search',

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.service.importdata.ImportAsnDataService;
@@ -45,6 +47,8 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private ImportAsnDataService importAsnDataService;
 	@Autowired
 	private ImportGspProductRegisterSpecsDataService importGspProductRegisterSpecsDataService;
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
@@ -171,10 +175,17 @@ public class GspProductRegisterSpecsService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
-
+//主页grid点击编辑页面获取数据
 
 	public Json getGspProductRegisterSpecsInfo(String id){
+         //	根据specs_id查出单挑getGspProductRegisterSpecs
 		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
+		GspEnterpriseInfo info=new GspEnterpriseInfo();
+		//通过查到的gspProductRegisterSpecs中的getEnterpriseId创建对象
+		info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
+		//通过getEnterpriseId查出生产企业信息
+		GspEnterpriseInfo gspEnterpriseInfo=gspEnterpriseInfoMybatisDao.queryById(info);
+		gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
 

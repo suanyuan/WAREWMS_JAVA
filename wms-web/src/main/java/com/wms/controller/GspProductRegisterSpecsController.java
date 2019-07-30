@@ -118,7 +118,7 @@ public class GspProductRegisterSpecsController {
 		model.put("enterpriseType",enterpriseType);
 		return new ModelAndView("gspProductRegisterSpecs/search", model);
 	}
-
+//主页grid点击编辑页面获取数据
 	@Login
 	@RequestMapping(params = "getInfo")
 	@ResponseBody
