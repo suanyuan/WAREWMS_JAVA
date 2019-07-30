@@ -598,6 +598,10 @@ public class OrderHeaderForNormalService extends BaseService {
 				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 				orderHeaderForNormalQuery.setOrderNo(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
+				if(orderHeaderForNormal == null){
+				    return;
+                }
+
 				if(orderHeaderForNormal.getOrderDetailsForNormalList()==null){
 					return;
 				}
@@ -627,7 +631,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					for(int j = 0 ; j < row ; j++){
 						if(totalNum > (row * i + j)){
 							BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(),detailsList.get(row * i + j).getSku());
-							form.setField("location."+(j), "");
+							form.setField("location."+(j), detailsList.get(row * i + j).getLocation());
 							form.setField("sku."+(j), detailsList.get(row * i + j).getSku());
 							form.setField("skuN."+(j), detailsList.get(row * i + j).getSkuName());
 							form.setField("regNo."+(j), basSku.getReservedfield03());

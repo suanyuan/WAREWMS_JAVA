@@ -648,7 +648,7 @@ where 1=1
 	) c
 	where 1 = 1
 
-	order by EDITTIME desc
+	order by ADDTIME,EDITTIME desc
 </select>
 
 	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">

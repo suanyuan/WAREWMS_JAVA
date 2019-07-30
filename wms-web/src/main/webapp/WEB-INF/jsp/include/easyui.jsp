@@ -156,7 +156,6 @@
     };
 
     var applyTypeFormatter = function(value,row,index) {
-	    console.log(row);
         if(row.reviewTypeId.indexOf("CUS")!=-1){
             return "委托客户";
 		}else if(row.reviewTypeId.indexOf("SUP")!=-1){
@@ -164,6 +163,18 @@
 		}else if(row.reviewTypeId.indexOf("PRO")!=-1){
             return "产品";
         }else if(row.reviewTypeId.indexOf("REC")!=-1){
+            return "收货单位";
+        }
+    }
+
+    var sostatusFormatter = function (value,row,index) {
+        if(row.sostatus.indexOf("CUS")!=-1){
+            return "委托客户";
+        }else if(row.sostatus.indexOf("SUP")!=-1){
+            return "供应商";
+        }else if(row.sostatus.indexOf("PRO")!=-1){
+            return "产品";
+        }else if(row.sostatus.indexOf("REC")!=-1){
             return "收货单位";
         }
     }

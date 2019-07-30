@@ -68,6 +68,7 @@ public class BasCustomerService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setOrderByClause("addtime desc");
 		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByPageList(mybatisCriteria);
 		BasCustomerVO basCustomerVO = null;
 		List<BasCustomerVO> basCustomerVOList = new ArrayList<BasCustomerVO>();
@@ -190,6 +191,7 @@ public class BasCustomerService extends BaseService {
 
 
                 basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
+                basCustomer.setActiveFlag(Constant.IS_USE_YES);
                 basCustomerMybatisDao.add(basCustomer);
 
 				json.setSuccess(true);

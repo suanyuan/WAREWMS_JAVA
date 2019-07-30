@@ -121,6 +121,9 @@
 		<result column="h_edi_10" property="hEdi10"/>
 		<result column="userdefine6" property="userdefine6"/>
 		<result column="order_print_flag" property="orderPrintFlag"/>
+        <result column="orderStatusName" property="orderStatusName"/>
+        <result column="orderTypeName" property="orderTypeName"/>
+
 		<!--<result column="rfgettask" property="rfgettask"/>-->
 	<!--<result column="warehouseid" property="warehouseid"/>-->
 		<!--<result column="erpcancelflag" property="erpcancelflag"/>
@@ -1216,8 +1219,10 @@
 	<!-- 查询出库任务头档列表 -->
 	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 		select
-		<include refid="Base_Column_List"/>
-		from doc_order_header
+		<include refid="Base_Column_List"/>,sos.orderStatusName,sot.orderTypeName
+		from doc_order_header a
+        left join (select code ,codename_c as orderStatusName from Bas_Codes where codeid = 'SO_STS' order by show_sequence) sos on a.SOSTATUS = sos.code
+        left join (select code ,codename_c as orderTypeName from Bas_Codes where codeid = 'SO_TYP' order by show_sequence) sot on a.ORDERTYPE = sot.code
 		<include refid="Example_Where_Clause"/>
 		<if test="orderByClause != null and orderByClause != ''" >
 			order by  ${orderByClause}
@@ -1269,6 +1274,24 @@
 				b.userdefine2,
 				b.soreference1,
 				b.notes,
+				f.lotatt01,
+				f.lotatt02,
+				f.lotatt03,
+				f.lotatt04,
+				f.lotatt05,
+				f.lotatt06,
+				f.lotatt07,
+				f.lotatt08,
+				f.lotatt09,
+				f.lotatt10,
+				f.lotatt11,
+				f.lotatt12,
+				f.lotatt13,
+				f.lotatt14,
+				f.lotatt15,
+				f.lotatt16,
+				f.lotatt17,
+				f.lotatt18,
 				sum(a.qty) as qtyAllocated,
 				a.location as locationId,
 				(@rowNum :=@rowNum + 1) as orderLineNo
@@ -1302,7 +1325,25 @@
 				d.descr_c,
 				d.defaultreceivinguom,
 				a.location,
-				e.picklogicalsequence
+				e.picklogicalsequence,
+				f.lotatt01,
+				f.lotatt02,
+				f.lotatt03,
+				f.lotatt04,
+				f.lotatt05,
+				f.lotatt06,
+				f.lotatt07,
+				f.lotatt08,
+				f.lotatt09,
+				f.lotatt10,
+				f.lotatt11,
+				f.lotatt12,
+				f.lotatt13,
+				f.lotatt14,
+				f.lotatt15,
+				f.lotatt16,
+				f.lotatt17,
+				f.lotatt18
 	</select>
 
 	<!--  -->

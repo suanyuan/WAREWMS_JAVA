@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +68,6 @@ public class OrderDetailsForNormalService extends BaseService {
 		int orderLineNo = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
 		OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
 		BeanUtils.copyProperties(orderDetailsForNormalForm, orderDetailsForNormal);
-
 		/**
 		 * 关联包装代码
 		 */
@@ -77,6 +77,11 @@ public class OrderDetailsForNormalService extends BaseService {
 			query.setPackid(basSku.getPackid());
 			BasPackage basPackage = basPackageService.queryBasPackBy(query);
 			orderDetailsForNormal.setUom(basPackage.getPackuom1());
+			if(basSku.getNetweight() != null){
+				orderDetailsForNormal.setNetweight(basSku.getNetweight().doubleValue());
+			}else{
+				orderDetailsForNormal.setNetweight(0d);
+			}
 		}
 		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
