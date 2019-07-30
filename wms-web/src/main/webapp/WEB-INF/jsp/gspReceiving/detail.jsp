@@ -9,10 +9,12 @@
 </head>
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
-
-
 <body>
-
+<%--<script type='text/javascript'>--%>
+    <%--var  ezuiDialog1;--%>
+    <%--//var enterpriseDialog;--%>
+    <%--var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";--%>
+<%--</script>--%>
 
 <div id='ezuiDialog' style='padding: 10px;'>
 <form id='ezuiFormAddress' method='post'>
@@ -38,8 +40,13 @@
        <tr>
          <th>供应商</th>
           <td>
-                <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox'  data-options='required:true'/>
-                <%--<a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>--%>
+              <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox'  data-options='required:true'/>
+              <%--<a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>--%>
+              <%--<input type='hidden'  name='enterpriseId1' id="enterpriseId1"  size="16" class='easyui-textbox'  data-options='required:true'/>--%>
+              <%--<input type="hidden"  id="enterpriseId1" name="enterpriseId1" data='1'  />--%>
+
+              <%--<a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewSupEnterpriseUrl()">查看</a>--%>
+
           </td>
            <th>货主</th>
            <td><input type='text' name='clientId' id="client" style="width: 150px"  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
@@ -124,6 +131,7 @@
                 <tr>
                     <th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>
                     <th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>
+
                 </tr>
                 <tr>
                     <%--<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>
@@ -199,6 +207,9 @@
 </div>
 
 
+<div id='ezuiDialog1' style='padding: 10px;'>
+
+</div>
 
 <div id='ezuiBtn' style="display: none">
     <a onclick='doSubmitAddress();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
@@ -520,6 +531,7 @@
                 {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
                         return rowData.activeFlag == '1' ? '是' : '否';
                     }},
+                {field: 'enterpriseId',		title: '企业id',	width: 80 ,hidden:true},
                 {field: 'customerid',		title: '客户代码',	width: 80 },
                 {field: 'descrC',		title: '客户名称',	width: 80 },
                 {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
@@ -740,7 +752,7 @@
         }else {
             url = sy.bp()+'/basCustomerController.do?submit&newreceivingId='+'';
         }
-if ($('#ezuiFormAddress').form('validate')){
+        if ($('#ezuiFormAddress').form('validate')){
 
                 if (a=='1') {
 
@@ -837,9 +849,9 @@ if ($('#ezuiFormAddress').form('validate')){
         var row = supplierDatagrid.datagrid("getSelected");
         if(row){
             $("#supplier").textbox("setValue",row.descrC);
-
+            // $("#enterpriseId1").textbox("setValue",row.enterpriseId);
            // ezuiDialogClientDetail.dialog('close');
-           // $("#supplier").textbox("setValue",row.supplierId);
+            //$("#supplierId").textbox("setValue",row.supplierId);
             /* $("#operateType").textbox("setValue",row.operateType);
              $("#isUse").textbox("setValue",row.isUse);
              $("#isCheck").textbox("setValue",row.isCheck);*/
@@ -988,7 +1000,40 @@ if ($('#ezuiFormAddress').form('validate')){
 }
 }
 }
+    <%--function viewSupEnterpriseUrl() {--%>
+        <%--$(function() {--%>
+            <%--ezuiDialog1 = $('#ezuiDialog1').dialog({--%>
+                <%--modal : true,--%>
+                <%--title : '<spring:message code="common.dialog.title"/>',--%>
+                <%--buttons : '',--%>
+                <%--href:dialogUrl,--%>
+                <%--width:1200,--%>
+                <%--height:530,--%>
+                <%--closable:true,--%>
+                <%--cache: false,--%>
+                <%--onClose : function() {--%>
+                    <%--ezuiFormClear(ezuiDialog1);--%>
+                <%--}--%>
+            <%--}).dialog('close');--%>
+        <%--})--%>
+        <%--//processType = 'add';--%>
 
+        <%--//var row = ezuiDatagrid.datagrid('getSelected');--%>
+        <%--console.log($("#ezuiFormInfo input[id='enterpriseId1']").val());--%>
+        <%--var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId1']").val();--%>
+        <%--if(enterpriseId==null || enterpriseId==""){--%>
+            <%--enterpriseId = $("#enterpriseId1").val();--%>
+        <%--}--%>
+
+        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
+            <%--ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');--%>
+        <%--}else{--%>
+            <%--$.messager.show({--%>
+                <%--msg : '请先选择企业', title : '提示'--%>
+            <%--});--%>
+        <%--}--%>
+
+    <%--}--%>
 </script>
 </body>
 </html>

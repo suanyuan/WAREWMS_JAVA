@@ -167,13 +167,22 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	update 	 gsp_receiving set is_use = '0' where receiving_id = #{receivingId}
 </delete>
- 
+	<!--&lt;!&ndash; 删记录 &ndash;&gt;-->
+	<!--<delete id="deleteR" parameterType="Object">-->
+	<!--update 	 gsp_receiving set is_use = '0' where receiving_id = #{receivingId}-->
+<!--</delete>-->
+
+
 <!-- 根据id查询 收货地址 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
 	 from gsp_receiving where receiving_id = #{receivingId}
 </select>
-
+	<!--&lt;!&ndash; 根据企业id和企业类型  查询 收货地址 &ndash;&gt;-->
+	<!--<select id="queryByEnterprise"  resultMap="BaseResultMap" parameterType="Object">-->
+		<!--select <include refid="Base_Column_List" />-->
+		<!--from gsp_receiving where enterprise_id = #{enterpriseId} and enterprise_type = #{enterpriseType}-->
+	<!--</select>-->
 <!-- 收货地址 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from gsp_receiving 

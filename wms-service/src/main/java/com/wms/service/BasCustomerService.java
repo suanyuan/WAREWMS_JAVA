@@ -121,6 +121,12 @@ public class BasCustomerService extends BaseService {
 				BasCustomer basCustomer = new BasCustomer();
 
 				basCustomer.setCustomerType("CO");
+//				BasCustomer basCustomer1 = new BasCustomer();
+//				basCustomer1.setEnterpriseId(basCustomerForm.getEnterpriseId());
+//				basCustomer1.setCustomerType("CO");
+//				basCustomer1 = basCustomerMybatisDao.queryByenterId(basCustomer1);//俩条数据不能有一样的企业id
+//
+
 				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
 				int num = basCustomerMybatisDao.selectBySelective(basCustomer);
 				if(num!=0){
@@ -167,12 +173,24 @@ public class BasCustomerService extends BaseService {
 					}
 
 				}
-				gspReceivingMybatisDao.add(gspReceiving);
+                //gspReceivingMybatisDao.queryById()
+//                 GspReceiving gspReceiving1 = new GspReceiving();
+//                gspReceiving1.setEnterpriseId(basCustomerForm.getEnterpriseId());
+
+                GspReceiving  gspReceiving2 = gspReceivingMybatisDao.queryByEnterpriseId(basCustomerForm.getEnterpriseId());
+                if(gspReceiving2!=null){
+                    //json.setSuccess(false);
+                    json.setMsg("已有相同收货单位！");
+                    //json.setMsg(resultMsg.toString());
+                    return json;
+                }else{
+                    gspReceivingMybatisDao.add(gspReceiving);
+                }
 				firstReviewLogMybatisDao.add(firstReviewLog);
 
 
-
-				basCustomerMybatisDao.add(basCustomer);
+                basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
+                basCustomerMybatisDao.add(basCustomer);
 
 				json.setSuccess(true);
 				json.setMsg("资料处理成功！");

@@ -34,6 +34,9 @@
 	<result column="overrcvpercentage" property="overrcvpercentage"/>
 	<result column="overreceiving" property="overreceiving"/>
 	<result column="packid" property="packid"/>
+
+	<result column="descr" property="descr"/>
+
 	<result column="price" property="price"/>
 	<result column="putawayrule" property="putawayrule"/>
 	<result column="qtymax" property="qtymax"/>
@@ -752,12 +755,13 @@ where 1=1
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT a.*,b.descr_c AS skuGroup6Name from
+	SELECT a.*,b.descr_c AS skuGroup6Name,c.descr from
 	(select
 	<include refid="Base_Column_List"/>
 	from Bas_Sku
 	<include refid="Example_Where_Clause"/>) as a
 	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
+	LEFT JOIN bas_package c ON a.packid=c.packid
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>
