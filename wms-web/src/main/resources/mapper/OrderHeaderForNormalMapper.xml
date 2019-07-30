@@ -1193,18 +1193,18 @@
 			<if test="hEdi15 != null  ">
 				h_edi_15=#{hEdi15},
 			</if>
-		</trim> where orderno=#{orderno}
+		</trim> where orderno=#{orderNo}
 	</update>
 
 	<!-- 删除记录 -->
 	<delete id="delete" parameterType="Object">
-	delete 	 from doc_order_header where orderno = #{orderno}
+	delete 	 from doc_order_header where orderno = #{orderNo}
 </delete>
 
 	<!-- 根据id查询 出库任务头档 -->
 	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
-		from doc_order_header where orderno = #{orderno}
+		from doc_order_header where orderno = #{orderNo}
 	</select>
 
 	<!-- 出库任务头档 列表总数-->
@@ -1271,7 +1271,7 @@
 				b.notes,
 				sum(a.qty) as qtyAllocated,
 				a.location as locationId,
-				GROUP_CONCAT(a.orderlineno order by a.orderno, e.picklogicalsequence, a.sku ) as orderLineNo
+				(@rowNum :=@rowNum + 1) as orderLineNo
 				from ACT_Allocation_Details a
 				inner join Doc_Order_Header b on a.orderno = b.orderno
 				inner join Bas_Customer c on a.customerid = c.customerid
@@ -1287,7 +1287,8 @@
 				where x.customerid = y.customerid
 				and x.sku = y.sku
 				and x.orderno = #{orderNo,jdbcType=VARCHAR}
-				group by x.orderno) g on a.orderno = g.orderno
+				group by x.orderno) g on a.orderno = g.orderno,
+				(SELECT(@rowNum := 0)) e
 				where 1 = 1
 				group by c.customerid,
 				c.h_edi_01,
@@ -1309,8 +1310,8 @@
 
 	</select>
 
-	<update id="allocationByOrder" parameterType="Object">
-
+	<update id="allocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">
+      {call SPSO_OneStep_Allocation('*','*','*','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
 	<update id="deAllocationByOrder" parameterType="Object">
@@ -1339,7 +1340,6 @@
 	codename_c as orderTypeName
 	from Bas_Codes
 	where codeid = 'SO_TYP'
-	and code = 'SO'
 	order by show_sequence
 </select>
 

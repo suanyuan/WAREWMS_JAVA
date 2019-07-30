@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.wms.constant.Constant;
+import com.wms.entity.BasPackage;
+import com.wms.query.BasPackageQuery;
+import com.wms.service.BasPackageService;
 import com.wms.service.CommonService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,8 @@ public class ImportOrderDataService {
 	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
 	@Autowired
 	private CommonService commonService;
+	@Autowired
+	private BasPackageService basPackageService;
 	/**
 	 * 导入订单数据
 	 * @param
@@ -388,7 +393,13 @@ public class ImportOrderDataService {
 					skuQuery.setQty(new BigDecimal(importDetailsDataVO.getQtyordered()));
 					BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
 					//赋值
-					orderDetails.setUom(basSku.getPackid());
+					if(basSku!=null){
+						BasPackageQuery query = new BasPackageQuery();
+						query.setPackid(basSku.getPackid());
+						BasPackage basPackage = basPackageService.queryBasPackBy(query);
+						orderDetails.setUom(basPackage.getPackuom1());
+					}
+
 					orderDetails.setPackid(basSku.getPackid());
 					orderDetails.setOrderlineno((double)(orderlineno + 1));
 					orderDetails.setNetweight(basSku.getGrossweight().doubleValue());

@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wms.entity.BasPackage;
 import com.wms.entity.BasSku;
+import com.wms.query.BasPackageQuery;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
 	@Autowired
 	private BasSkuService basSkuService;
+	@Autowired
+	private BasPackageService basPackageService;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
@@ -69,7 +73,10 @@ public class OrderDetailsForNormalService extends BaseService {
 		 */
 		BasSku basSku = basSkuService.getSkuInfo(orderDetailsForNormalForm.getCustomerid(),orderDetailsForNormalForm.getSku());
 		if(basSku!=null){
-			orderDetailsForNormal.setUom(basSku.getPackid());
+			BasPackageQuery query = new BasPackageQuery();
+			query.setPackid(basSku.getPackid());
+			BasPackage basPackage = basPackageService.queryBasPackBy(query);
+			orderDetailsForNormal.setUom(basPackage.getPackuom1());
 		}
 		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());

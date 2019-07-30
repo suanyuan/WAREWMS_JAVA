@@ -36,7 +36,7 @@ $(function() {
 			{field: 'applyId',		title: '申请单号',	width: 100},
             {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
 			{field: 'clientId',		title: '委托客户',	width: 100 },
-			{field: 'supplierId',		title: '供应客户',	width: 100 },
+			{field: 'supplierId',		title: '供应商客户',	width: 100 },
             {field: 'productCode',		title: '产品代码',	width: 100 },
             {field: 'productName',		title: '产品名称',	width: 100 },
 			{field: 'createId',		title: '创建人',	width: 100 },
