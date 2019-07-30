@@ -1193,12 +1193,12 @@
 			<if test="hEdi15 != null  ">
 				h_edi_15=#{hEdi15},
 			</if>
-		</trim> where orderno=#{orderno}
+		</trim> where orderno=#{orderNo}
 	</update>
 
 	<!-- 删除记录 -->
 	<delete id="delete" parameterType="Object">
-	delete 	 from doc_order_header where orderno = #{orderno}
+	delete 	 from doc_order_header where orderno = #{orderNo}
 </delete>
 
 	<!-- 根据id查询 出库任务头档 -->
