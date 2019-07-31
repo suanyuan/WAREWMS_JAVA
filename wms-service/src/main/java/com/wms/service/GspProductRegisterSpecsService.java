@@ -180,12 +180,14 @@ public class GspProductRegisterSpecsService extends BaseService {
 	public Json getGspProductRegisterSpecsInfo(String id){
          //	根据specs_id查出单挑getGspProductRegisterSpecs
 		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
-		GspEnterpriseInfo info=new GspEnterpriseInfo();
-		//通过查到的gspProductRegisterSpecs中的getEnterpriseId创建对象
-		info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
-		//通过getEnterpriseId查出生产企业信息
-		GspEnterpriseInfo gspEnterpriseInfo=gspEnterpriseInfoMybatisDao.queryById(info);
-		gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+		if(gspProductRegisterSpecs.getEnterpriseId()!=null) {
+			GspEnterpriseInfo info = new GspEnterpriseInfo();
+			//通过查到的gspProductRegisterSpecs中的getEnterpriseId创建对象
+			info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
+			//通过getEnterpriseId查出生产企业信息
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
+			gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+		}
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
 
