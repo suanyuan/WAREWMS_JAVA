@@ -36,6 +36,12 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String isCertificate;
 	private java.lang.String isDoublec;
 	private java.lang.String attacheCardCategory;
+	private java.lang.String coldHainMark;      //冷链标志
+	private java.lang.String sterilizationMarkers;//灭菌标志
+	private java.lang.String medicalDeviceMark;//医疗器械标志
+	private java.lang.String maintenanceCycle;//养护周期
+	private java.lang.String wight;
+
 
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
@@ -43,6 +49,45 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
 
+	public String getColdHainMark() {
+		return coldHainMark;
+	}
+
+	public void setColdHainMark(String coldHainMark) {
+		this.coldHainMark = coldHainMark;
+	}
+
+	public String getSterilizationMarkers() {
+		return sterilizationMarkers;
+	}
+
+	public void setSterilizationMarkers(String sterilizationMarkers) {
+		this.sterilizationMarkers = sterilizationMarkers;
+	}
+
+	public String getMedicalDeviceMark() {
+		return medicalDeviceMark;
+	}
+
+	public void setMedicalDeviceMark(String medicalDeviceMark) {
+		this.medicalDeviceMark = medicalDeviceMark;
+	}
+
+	public String getMaintenanceCycle() {
+		return maintenanceCycle;
+	}
+
+	public void setMaintenanceCycle(String maintenanceCycle) {
+		this.maintenanceCycle = maintenanceCycle;
+	}
+
+	public String getWight() {
+		return wight;
+	}
+
+	public void setWight(String wight) {
+		this.wight = wight;
+	}
 
 	public java.lang.String getSpecsId() {
 		return specsId;
