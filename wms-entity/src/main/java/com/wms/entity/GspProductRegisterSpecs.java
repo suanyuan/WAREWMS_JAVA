@@ -81,12 +81,12 @@ public class GspProductRegisterSpecs implements Serializable {
   private String isDoublec;
 
 
-  private String attacheCardCategory;
-
-
-
-
-
+  private String attacheCardCategory;//附卡类别
+  private String coldHainMark;      //冷链标志
+  private String sterilizationMarkers;//灭菌标志
+  private String medicalDeviceMark;//医疗器械标志
+  private String maintenanceCycle;//养护周期
+  private String wight;
 
 
 
@@ -102,6 +102,45 @@ public class GspProductRegisterSpecs implements Serializable {
   public GspProductRegisterSpecs() {
   }
 
+  public String getColdHainMark() {
+    return coldHainMark;
+  }
+
+  public void setColdHainMark(String coldHainMark) {
+    this.coldHainMark = coldHainMark;
+  }
+
+  public String getSterilizationMarkers() {
+    return sterilizationMarkers;
+  }
+
+  public void setSterilizationMarkers(String sterilizationMarkers) {
+    this.sterilizationMarkers = sterilizationMarkers;
+  }
+
+  public String getMedicalDeviceMark() {
+    return medicalDeviceMark;
+  }
+
+  public void setMedicalDeviceMark(String medicalDeviceMark) {
+    this.medicalDeviceMark = medicalDeviceMark;
+  }
+
+  public String getMaintenanceCycle() {
+    return maintenanceCycle;
+  }
+
+  public void setMaintenanceCycle(String maintenanceCycle) {
+    this.maintenanceCycle = maintenanceCycle;
+  }
+
+  public String getWight() {
+    return wight;
+  }
+
+  public void setWight(String wight) {
+    this.wight = wight;
+  }
 
   public String getSpecsId() {
     return specsId;
