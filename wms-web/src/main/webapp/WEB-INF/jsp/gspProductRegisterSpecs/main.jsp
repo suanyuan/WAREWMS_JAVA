@@ -47,14 +47,14 @@ $(function() {
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
 
 			{field: 'specsName',		title: '规格名称',	width: 150 },
-			{field: 'productCode',		title: '商品代码',	width: 100 },
+			{field: 'productCode',		title: '产品代码',	width: 100 },
 			{field: 'productName',		title: '商品名称',	width: 170 },
-			{field: 'productRemark',		title: '商品描述',	width:350 },
+			{field: 'productRemark',		title: '产品描述',	width:350 },
 			{field: 'productModel',		title: '型号',	width: 100 },
 			{field: 'productionAddress',		title: '产地',	width: 150 },
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
 			{field: 'unit',		title: '单位',	width: 50 },
-			{field: 'packingUnit',		title: '包装单位',	width: 80 },
+			{field: 'packingUnit',		title: '包装规格',	width: 80 },
             {field: 'attacheCardCategory',		title: '附卡类别',	width: 100 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },
 			// {field: 'conversionRate',		title: '换算率',	width: 25 },
@@ -73,10 +73,10 @@ $(function() {
 			{field: 'isUse',		title: '是否有效',	width: 71, formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }},
-            {field: 'isCertificate',		title: '是否需要双证',	width: 90, formatter:function(value,rowData,rowIndex){
+            {field: 'isCertificate',		title: '双证',	width: 90, formatter:function(value,rowData,rowIndex){
                     return rowData.isCertificate == '1' ? '是' : '否';
                 }},
-            {field: 'isDoublec',		title: '是否需要合格证',	width: 90, formatter:function(value,rowData,rowIndex){
+            {field: 'isDoublec',		title: '产品合格证',	width: 90, formatter:function(value,rowData,rowIndex){
                     return rowData.isDoublec == '1' ? '是' : '否';
                 }},
 			// {field: 'alternatName1',		title: '自赋码1',	width: 25 },
@@ -457,14 +457,14 @@ var toImportData = function(){
 							<th>注册证编号</th><td><input type='text' id='productRegisterNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格名称</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>商品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>商品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 						<td>
 
                         </td>
 					</tr>
 						<tr>
-							<th>商品描述</th><td><input type='text' id='productRemark' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品描述</th><td><input type='text' id='productRemark' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>型号</th><td><input type='text' id='productModel' class='easyui-textbox' size='16' data-options=''/></td>
 
 							<th>创建人</th><td><input type='text' id='createId' class='easyui-textbox' size='16' data-options=''/></td>

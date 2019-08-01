@@ -34,7 +34,6 @@
 	<result column="is_certificate" property="isCertificate"/>
 	<result column="is_doublec" property="isDoublec"/>
 
-	<result column="attache_card_category" property="attacheCardCategory"/>
 
 	<result column="alternat_name1" property="alternatName1"/>
 	<result column="alternat_name2" property="alternatName2"/>
@@ -46,11 +45,21 @@
 	<result column="product_register_no" property="productRegisterNo"/>
 	<result column="product_name_main" property="productNameMain"/>
 	<result column="enterprise_id" property="enterpriseId"/>
+
+	<result column="attache_card_category" property="attacheCardCategory"/>
+	<result column="cold_hain_mark" property="coldHainMark"/>
+	<result column="sterilization_markers" property="sterilizationMarkers"/>
+	<result column="medical_device_mark" property="medicalDeviceMark"/>
+	<result column="maintenance_cycle" property="maintenanceCycle"/>
+	<result column="wight" property="wight"/>
+	<!--<result column="attache_card_category" property="attacheCardCategory"/>-->
+
+
 </resultMap>
        
 <!-- gsp_product_register_specs table all fields -->
 <sql id="Base_Column_List" >
-	 specs_id,product_register_no,is_certificate,attache_card_category,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5
+	 specs_id,product_register_no,is_certificate,attache_card_category,wight,maintenance_cycle,medical_device_mark,sterilization_markers,cold_hain_mark,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5
 </sql>
    
    
@@ -127,8 +136,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5})
+  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5)
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -228,7 +237,25 @@ where 1=1
 	<if test="attacheCardCategory != null  ">
 		attache_card_category=#{attacheCardCategory},
 	</if>
-	<if test="alternatName1 != null  ">
+		<if test="attacheCardCategory != null  ">
+			cold_hain_mark=#{coldHainMark},
+		</if>
+		<if test="attacheCardCategory != null  ">
+			sterilization_markers=#{sterilizationMarkers},
+		</if>
+		<if test="attacheCardCategory != null  ">
+			medical_device_mark=#{medicalDeviceMark},
+		</if>
+		<if test="attacheCardCategory != null  ">
+			maintenance_cycle=#{maintenanceCycle},
+		</if>
+		<if test="attacheCardCategory != null  ">
+			wight=#{wight},
+		</if>
+
+
+
+		<if test="alternatName1 != null  ">
 		alternat_name1=#{alternatName1},
 	</if>
 	<if test="alternatName2 != null  ">

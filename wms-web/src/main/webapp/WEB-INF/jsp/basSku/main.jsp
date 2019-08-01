@@ -52,14 +52,14 @@ $(function() {
 			}}, */
 
 			{field: 'customerid',		title: '货主',	width: 100},
-			{field: 'descrC',		title: '规格名称',	width: 150 },
+			{field: 'descrC',		title: '规格',	width: 150 },
 			{field: 'descrE',		title: '型号',	width: 150 },
-            {field: 'sku',		title: '代码',	width: 150 },
+            {field: 'sku',		title: '产品代码',	width: 150 },
 			{field: 'firstop',		title: '首营状态',	width: 100 ,formatter:firstStateTypeFormatter},
 			{field: 'packid',		title: '包装规格代码',	width: 100,hidden:true },
             {field: 'descr',		title: '包装描述',	width: 100},
-			{field: 'reservedfield01',		title: '商品名称',	width: 200 },
-			{field: 'reservedfield02',		title: '商品描述',	width: 300 },
+			{field: 'reservedfield01',		title: '产品名称',	width: 200 },
+			{field: 'reservedfield02',		title: '产品描述',	width: 300 },
 			{field: 'reservedfield03',		title: '注册证号',	width: 180 },
 
             {field: 'skuGroup1',		title: '产品线',	width: 100 },
@@ -612,7 +612,7 @@ var downloadTemplate = function(){
 							<tr>
 							<th>货主</th>
 							<td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
-							<th>代码</th>
+							<th>产品代码</th>
 							<td><input type='text' id='sku'  name="sku" class='easyui-textbox' size='16' /></td>
 							<th>创建时间</th>
 							<td><input type='text' id='addTimeStart' name="addTimeStart" class='easyui-datebox' size='16' data-options=''/></td>
@@ -624,7 +624,7 @@ var downloadTemplate = function(){
                             </tr>
 
 						    <tr>
-							<th>规格名称</th>
+							<th>规格</th>
 							<td><input type='text' id='descrC' name="descrC" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>型号</th>
 							<td><input type='text' id='descrE'  name="descrE" class='easyui-textbox' size='16' /></td>
@@ -654,9 +654,9 @@ var downloadTemplate = function(){
 																															]"/></td>
 							<th>包装规格代码</th>
 							<td><input type='text' id='packid'  name="packid" class='easyui-textbox' size='16' /></td>
-							<th>商品名称</th>
+							<th>产品名称</th>
 							<td><input type='text' id='reservedfield01'  name="reservedfield01" class='easyui-textbox' size='16' /></td>
-							<th>商品描述</th>
+							<th>产品描述</th>
 							<td><input type='text' id='reservedfield02' name="reservedfield02" class='easyui-textbox' size='16' data-options=''/></td>
                             <th>注册证号</th>
                             <td><input type='text' id='reservedfield03'  name="reservedfield03" class='easyui-textbox' size='16' /></td>

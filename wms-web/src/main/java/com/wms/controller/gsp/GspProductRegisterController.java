@@ -139,6 +139,7 @@ public class GspProductRegisterController {
 		GspProductRegister gspProductRegister;
 		if(!"".equals(id)){
 			gspProductRegister = gspProductRegisterService.queryById(id);
+			//根据EnterpriseId查出getEnterpriseName 生产企业
 			GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(gspProductRegister.getEnterpriseId());
 			if(info!=null){
 				map.put("enterpriseName",info.getEnterpriseName());

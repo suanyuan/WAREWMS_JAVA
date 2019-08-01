@@ -47,6 +47,80 @@ public class ImportGPRSData implements Serializable {
 	private String editDate;
 	private String isUse;
 
+
+	private java.lang.String isCertificate;
+	private java.lang.String isDoublec;
+	private java.lang.String attacheCardCategory;
+	private java.lang.String coldHainMark;      //冷链标志
+	private java.lang.String sterilizationMarkers;//灭菌标志
+	private java.lang.String medicalDeviceMark;//医疗器械标志
+	private java.lang.String maintenanceCycle;//养护周期
+	private java.lang.String wight;
+
+
+
+	private String alternatName1;
+	private String alternatName2;
+	private String alternatName3;
+	private String alternatName4;
+	private String alternatName5;
+
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
+
+	public String getAttacheCardCategory() {
+		return attacheCardCategory;
+	}
+
+	public void setAttacheCardCategory(String attacheCardCategory) {
+		this.attacheCardCategory = attacheCardCategory;
+	}
+
+	public String getColdHainMark() {
+		return coldHainMark;
+	}
+
+	public void setColdHainMark(String coldHainMark) {
+		this.coldHainMark = coldHainMark;
+	}
+
+	public String getSterilizationMarkers() {
+		return sterilizationMarkers;
+	}
+
+	public void setSterilizationMarkers(String sterilizationMarkers) {
+		this.sterilizationMarkers = sterilizationMarkers;
+	}
+
+	public String getMedicalDeviceMark() {
+		return medicalDeviceMark;
+	}
+
+	public void setMedicalDeviceMark(String medicalDeviceMark) {
+		this.medicalDeviceMark = medicalDeviceMark;
+	}
+
+	public String getMaintenanceCycle() {
+		return maintenanceCycle;
+	}
+
+	public void setMaintenanceCycle(String maintenanceCycle) {
+		this.maintenanceCycle = maintenanceCycle;
+	}
+
+	public String getWight() {
+		return wight;
+	}
+
+	public void setWight(String wight) {
+		this.wight = wight;
+	}
+
 	public String getIsCertificate() {
 		return isCertificate;
 	}
@@ -61,22 +135,6 @@ public class ImportGPRSData implements Serializable {
 
 	public void setIsDoublec(String isDoublec) {
 		this.isDoublec = isDoublec;
-	}
-
-	private java.lang.String isCertificate;
-	private java.lang.String isDoublec;
-
-	private String alternatName1;
-	private String alternatName2;
-	private String alternatName3;
-	private String alternatName4;
-	private String alternatName5;
-	public String getSeq() {
-		return seq;
-	}
-
-	public void setSeq(String seq) {
-		this.seq = seq;
 	}
 
 	public String getSpecsId() {

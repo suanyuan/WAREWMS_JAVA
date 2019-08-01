@@ -35,6 +35,33 @@ public class GspProductRegisterForm {
 	private String classifyCatalog;
 	private String enterpriseId;
 	private String choseScope;
+	private String transportConditionMain;//运输条件
+	private String approvalDepartment;//审核部门
+	private String productRegsiterUrl;//附件路径
+
+	public String getApprovalDepartment() {
+		return approvalDepartment;
+	}
+
+	public void setApprovalDepartment(String approvalDepartment) {
+		this.approvalDepartment = approvalDepartment;
+	}
+
+	public String getProductRegsiterUrl() {
+		return productRegsiterUrl;
+	}
+
+	public void setProductRegsiterUrl(String productRegsiterUrl) {
+		this.productRegsiterUrl = productRegsiterUrl;
+	}
+
+	public String getTransportConditionMain() {
+		return transportConditionMain;
+	}
+
+	public void setTransportConditionMain(String transportConditionMain) {
+		this.transportConditionMain = transportConditionMain;
+	}
 
 	public String getProductRegisterId() {
 		return productRegisterId;
