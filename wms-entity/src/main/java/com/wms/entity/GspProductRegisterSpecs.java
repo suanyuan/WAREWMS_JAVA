@@ -86,7 +86,8 @@ public class GspProductRegisterSpecs implements Serializable {
   private String sterilizationMarkers;//灭菌标志
   private String medicalDeviceMark;//医疗器械标志
   private String maintenanceCycle;//养护周期
-  private String wight;
+  private String wight;//重量
+  private String packagingUnit;//包装单位
 
 
 
@@ -100,6 +101,14 @@ public class GspProductRegisterSpecs implements Serializable {
   private String alternatName5;
 
   public GspProductRegisterSpecs() {
+  }
+
+  public String getPackagingUnit() {
+    return packagingUnit;
+  }
+
+  public void setPackagingUnit(String packagingUnit) {
+    this.packagingUnit = packagingUnit;
   }
 
   public String getColdHainMark() {

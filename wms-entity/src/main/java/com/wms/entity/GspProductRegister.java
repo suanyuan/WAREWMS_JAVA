@@ -72,5 +72,8 @@ public class GspProductRegister  implements Serializable {
 	private String transportConditionMain;//运输条件
 	private String approvalDepartment;//审核部门
 	private String productRegsiterUrl;//附件路径
+	private String structureAndComposition;//结构及组成
+	private String agentAddress;//代理人住所
+
 
 }

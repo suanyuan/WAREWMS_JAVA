@@ -11,6 +11,8 @@ public class GspProductRegisterForm {
 	private String productRegisterName;
 	private String productRegisterAddress;
 	private String productProductionAddress;
+	private String productionAddress;
+
 	private String agentName;
 	private String applyScope;
 	private String mainPart;
@@ -38,6 +40,32 @@ public class GspProductRegisterForm {
 	private String transportConditionMain;//运输条件
 	private String approvalDepartment;//审核部门
 	private String productRegsiterUrl;//附件路径
+	private String structureAndComposition;//结构及组成
+	private String agentAddress;//代理人住所
+
+	public String getAgentAddress() {
+		return agentAddress;
+	}
+
+	public void setAgentAddress(String agentAddress) {
+		this.agentAddress = agentAddress;
+	}
+
+	public String getStructureAndComposition() {
+		return structureAndComposition;
+	}
+
+	public void setStructureAndComposition(String structureAndComposition) {
+		this.structureAndComposition = structureAndComposition;
+	}
+
+	public String getProductionAddress() {
+		return productionAddress;
+	}
+
+	public void setProductionAddress(String productionAddress) {
+		this.productionAddress = productionAddress;
+	}
 
 	public String getApprovalDepartment() {
 		return approvalDepartment;

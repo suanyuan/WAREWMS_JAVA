@@ -39,6 +39,8 @@
 		<result column="transport_condition_main" property="transportConditionMain"/>
 		<result column="approval_department" property="approvalDepartment"/>
 		<result column="product_regsiter_url" property="productRegsiterUrl"/>
+		<result column="structure_and_composition" property="structureAndComposition"/>
+		<result column="agent_address" property="agentAddress"/>
 	</resultMap>
 
     <resultMap id="ExtendResultMap" type="com.wms.mybatis.entity.pda.PdaGspProductRegister" extends="BaseResultMap" >
@@ -51,7 +53,7 @@
 	 product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
 	 other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,
 	 check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id,
-	 production_address,transport_condition_main,approval_department,product_regsiter_url
+	 production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,agent_address
 </sql>
 
 
@@ -158,6 +160,12 @@
 			<if test="condition.productRegsiterUrl != null and condition.productRegsiterUrl != ''" >
 				and r.product_regsiter_url =  #{condition.productRegsiterUrl}
 			</if>
+			<if test="condition.structureAndComposition != null and condition.structureAndComposition != ''" >
+				and r.structure_and_composition =  #{condition.structureAndComposition}
+			</if>
+			<if test="condition.agentAddress != null and condition.agentAddress != ''" >
+				and r.agent_address =  #{condition.agentAddress}
+			</if>
 			<if test="condition.createDateBegin != null and condition.createDateBegin !='' ">
 				and r.create_Date &gt;= #{condition.createDateBegin}
 			</if>
@@ -170,13 +178,14 @@
 
 	<!-- 插入记录 -->
 	<insert id="add" parameterType="Object" >
-  insert into gsp_product_register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id,production_address,transport_condition_main,approval_department,product_regsiter_url)
- values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},now(),#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog},#{enterpriseId},#{productionAddress},#{condition.transportConditionMain},#{approvalDepartment},#{productRegsiterUrl})
+  insert into gsp_product_register(product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id,production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,agent_address)
+ values(#{productRegisterId},#{productRegisterNo},#{productNameMain},#{productRegisterName},#{productRegisterAddress},#{productProductionAddress},#{agentName},#{applyScope},#{mainPart},#{expectUse},#{storageConditions},#{productExpiryDate},#{otherContent},#{remark},#{approveDate},#{productRegisterExpiryDate},#{productRegisterVersion},#{version},#{checkerId},#{checkDate},#{createId},now(),#{editId},#{editDate},#{isUse},#{attachmentUrl},#{classifyId},#{classifyCatalog},#{enterpriseId},#{productionAddress},#{transportConditionMain},#{approvalDepartment},#{productRegsiterUrl},#{structureAndComposition},#{agentAddress})
 </insert>
 
 	<!-- 根据id，修改记录-->
 	<update id="update" parameterType="Object" >
-  update gsp_product_register set product_register_no=#{productRegisterNo},product_name_main=#{productNameMain},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog},enterprise_id=#{enterpriseId},production_address=#{productionAddress} where product_register_id=#{productRegisterId}
+  update gsp_product_register set product_register_no=#{productRegisterNo},product_name_main=#{productNameMain},product_register_name=#{productRegisterName},product_register_address=#{productRegisterAddress},product_production_address=#{productProductionAddress},agent_name=#{agentName},apply_scope=#{applyScope},main_part=#{mainPart},expect_use=#{expectUse},storage_conditions=#{storageConditions},product_expiry_date=#{productExpiryDate},other_content=#{otherContent},remark=#{remark},approve_date=#{approveDate},product_register_expiry_date=#{productRegisterExpiryDate},product_register_version=#{productRegisterVersion},
+  version=#{version},checker_id=#{checkerId},check_date=#{checkDate},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},attachment_url=#{attachmentUrl},classify_id=#{classifyId},classify_catalog=#{classifyCatalog},enterprise_id=#{enterpriseId},production_address=#{productionAddress} where product_register_id=#{productRegisterId}
  </update>
 
 	<!-- 修改记录，只修改只不为空的字段 -->
@@ -279,7 +288,15 @@
 			<if test="productRegsiterUrl != null  ">
 				product_regsiter_url=#{productRegsiterUrl},
 			</if>
-		</trim> where product_register_id=#{productRegisterId}
+			<if test="structureAndComposition!=null">
+				structure_and_composition=#{structureAndComposition},
+			</if>
+			<if test="agentAddress != null" >
+				agent_address =  #{agentAddress}
+			</if>
+
+		</trim>
+		where product_register_id=#{productRegisterId}
 	</update>
 
 	<!-- 删除记录 -->
@@ -308,7 +325,8 @@
 		product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
 		other_content,r.remark,approve_date,product_register_expiry_date,product_register_version,vc.codename_c VERSION,checker_id,
 		check_date,r.create_id,r.create_date,r.edit_id,r.edit_date,r.is_use,attachment_url,vcs.codename_c classify_id,vcc.codename_c classify_catalog,
-		r.enterprise_id,g.enterprise_name,production_address,transport_condition_main,approval_department,product_regsiter_url
+		r.enterprise_id,g.enterprise_name,production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,
+		agent_address
 		FROM gsp_product_register r LEFT JOIN bas_codes vc ON r.version = vc.code
 		LEFT JOIN bas_codes vcs ON r.classify_id = vcs.code
 		LEFT JOIN bas_codes vcc ON r.classify_catalog = vcc.code

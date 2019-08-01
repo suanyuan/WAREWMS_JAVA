@@ -1,462 +1,466 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao" >
-<!-- Result Map-->
-<resultMap id="BaseResultMap" type="com.wms.entity.GspProductRegisterSpecs" >
-	<result column="specs_id" property="specsId"/>
-	<result column="product_register_id" property="productRegisterId"/>
-	<result column="specs_name" property="specsName"/>
-	<result column="product_code" property="productCode"/>
-	<result column="product_name" property="productName"/>
-	<result column="product_remark" property="productRemark"/>
-	<result column="product_model" property="productModel"/>
-	<result column="production_address" property="productionAddress"/>
-	<result column="bar_code" property="barCode"/>
-	<result column="unit" property="unit"/>
-	<result column="packing_unit" property="packingUnit"/>
-	<!--<result column="categories" property="categories"/>-->
-	<result column="conversion_rate" property="conversionRate"/>
-	<result column="long" property="llong"/>
-	<result column="wide" property="wide"/>
-	<result column="hight" property="hight"/>
-	<!--<result column="product_line" property="productLine"/>-->
-	<!--<result column="manage_categories" property="manageCategories"/>-->
-	<result column="packing_require" property="packingRequire"/>
-	<result column="storage_condition" property="storageCondition"/>
-	<result column="transport_condition" property="transportCondition"/>
-	<result column="create_id" property="createId"/>
-	<result column="create_date" property="createDate"/>
-	<result column="edit_id" property="editId"/>
-	<result column="edit_date" property="editDate"/>
-	<result column="is_use" property="isUse"/>
-	<result column="is_certificate" property="isCertificate"/>
-	<result column="is_doublec" property="isDoublec"/>
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao">
+    <!-- Result Map-->
+    <resultMap id="BaseResultMap" type="com.wms.entity.GspProductRegisterSpecs">
+        <result column="specs_id" property="specsId"/>
+        <result column="product_register_id" property="productRegisterId"/>
+        <result column="specs_name" property="specsName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_remark" property="productRemark"/>
+        <result column="product_model" property="productModel"/>
+        <result column="production_address" property="productionAddress"/>
+        <result column="bar_code" property="barCode"/>
+        <result column="unit" property="unit"/>
+        <result column="packing_unit" property="packingUnit"/>
+        <!--<result column="categories" property="categories"/>-->
+        <result column="conversion_rate" property="conversionRate"/>
+        <result column="long" property="llong"/>
+        <result column="wide" property="wide"/>
+        <result column="hight" property="hight"/>
+        <!--<result column="product_line" property="productLine"/>-->
+        <!--<result column="manage_categories" property="manageCategories"/>-->
+        <result column="packing_require" property="packingRequire"/>
+        <result column="storage_condition" property="storageCondition"/>
+        <result column="transport_condition" property="transportCondition"/>
+        <result column="create_id" property="createId"/>
+        <result column="create_date" property="createDate"/>
+        <result column="edit_id" property="editId"/>
+        <result column="edit_date" property="editDate"/>
+        <result column="is_use" property="isUse"/>
+        <result column="is_certificate" property="isCertificate"/>
+        <result column="is_doublec" property="isDoublec"/>
 
 
-	<result column="alternat_name1" property="alternatName1"/>
-	<result column="alternat_name2" property="alternatName2"/>
-	<result column="alternat_name3" property="alternatName3"/>
-	<result column="alternat_name4" property="alternatName4"/>
-	<result column="alternat_name5" property="alternatName5"/>
+        <result column="alternat_name1" property="alternatName1"/>
+        <result column="alternat_name2" property="alternatName2"/>
+        <result column="alternat_name3" property="alternatName3"/>
+        <result column="alternat_name4" property="alternatName4"/>
+        <result column="alternat_name5" property="alternatName5"/>
 
 
-	<result column="product_register_no" property="productRegisterNo"/>
-	<result column="product_name_main" property="productNameMain"/>
-	<result column="enterprise_id" property="enterpriseId"/>
+        <result column="product_register_no" property="productRegisterNo"/>
+        <result column="product_name_main" property="productNameMain"/>
+        <result column="enterprise_id" property="enterpriseId"/>
 
-	<result column="attache_card_category" property="attacheCardCategory"/>
-	<result column="cold_hain_mark" property="coldHainMark"/>
-	<result column="sterilization_markers" property="sterilizationMarkers"/>
-	<result column="medical_device_mark" property="medicalDeviceMark"/>
-	<result column="maintenance_cycle" property="maintenanceCycle"/>
-	<result column="wight" property="wight"/>
-	<!--<result column="attache_card_category" property="attacheCardCategory"/>-->
+        <result column="attache_card_category" property="attacheCardCategory"/>
+        <result column="cold_hain_mark" property="coldHainMark"/>
+        <result column="sterilization_markers" property="sterilizationMarkers"/>
+        <result column="medical_device_mark" property="medicalDeviceMark"/>
+        <result column="maintenance_cycle" property="maintenanceCycle"/>
+        <result column="wight" property="wight"/>
+        <result column="packaging_unit" property="packagingUnit"/>
+        <!--<result column="attache_card_category" property="attacheCardCategory"/>-->
 
 
-</resultMap>
-       
-<!-- gsp_product_register_specs table all fields -->
-<sql id="Base_Column_List" >
-	 specs_id,product_register_no,is_certificate,attache_card_category,wight,maintenance_cycle,medical_device_mark,sterilization_markers,cold_hain_mark,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5
+    </resultMap>
+
+    <!-- gsp_product_register_specs table all fields -->
+    <sql id="Base_Column_List">
+	 specs_id,product_register_no,is_certificate,attache_card_category,wight,maintenance_cycle,medical_device_mark,sterilization_markers,cold_hain_mark,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit
 </sql>
-   
-   
-<!-- 查询条件 -->
-<sql id="Example_Where_Clause">
-where 1=1
-<trim  suffixOverrides="," >
-
-	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-		and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
-	</if>
-	<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-		and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
-	</if>
-	<if test="condition.productRegisterId != null and condition.productRegisterId != ''" >
-		and t1.product_register_id =  ${condition.productRegisterId,jdbcType=VARCHAR}
-	</if>
 
 
-	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
-		and t1.create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
-	</if>
-	<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
-		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> t1.create_date
-	</if>
-	<if test="condition.editDateStart != null and condition.editDateStart != ''" >
-		and t1.edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
-	</if>
-	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
-		and     #{condition.editDateEnd}  <![CDATA[  >=  ]]> t1.edit_date
-	</if>
+    <!-- 查询条件 -->
+    <sql id="Example_Where_Clause">
+        where 1=1
+        <trim suffixOverrides=",">
+
+            <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
+                and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
+            </if>
+            <if test="condition.productNameMain != null and condition.productNameMain != ''">
+                and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
+            </if>
+            <if test="condition.productRegisterId != null and condition.productRegisterId != ''">
+                and t1.product_register_id = ${condition.productRegisterId,jdbcType=VARCHAR}
+            </if>
 
 
-
-	<if test="condition.specsName != null and condition.specsName != ''" >
-	    and specs_name   like  CONCAT('%',#{condition.specsName},'%')
-	</if>
-	<if test="condition.productCode != null and condition.productCode != ''" >
-	    and product_code   like  CONCAT('%',#{condition.productCode},'%')
-	</if>
-	<if test="condition.productName != null and condition.productName != ''" >
-	    and product_name   like  CONCAT('%',#{condition.productName},'%')
-	</if>
-	<if test="condition.productRemark != null and condition.productRemark != ''" >
-	    and product_remark like  CONCAT('%',#{condition.productRemark},'%')
-	</if>
-	<if test="condition.productModel != null and condition.productModel != ''" >
-	    and product_model like  '%${condition.productModel}%'
-	</if>
-	<if test="condition.productionAddress != null and condition.productionAddress != ''" >
-	    and t1.production_address like  '%${condition.productionAddress}%'
-	</if>
+            <if test="condition.createDateStart != null and condition.createDateStart != ''">
+                and t1.create_date   <![CDATA[  >=  ]]>  #{condition.createDateStart}
+            </if>
+            <if test="condition.createDateEnd != null and condition.createDateEnd != ''">
+                and #{condition.createDateEnd}  <![CDATA[  >=  ]]> t1.create_date
+            </if>
+            <if test="condition.editDateStart != null and condition.editDateStart != ''">
+                and t1.edit_date   <![CDATA[  >=  ]]>  #{condition.editDateStart}
+            </if>
+            <if test="condition.editDateEnd != null and condition.editDateEnd != ''">
+                and #{condition.editDateEnd}  <![CDATA[  >=  ]]> t1.edit_date
+            </if>
 
 
-	<if test="condition.createId != null and condition.createId != ''" >
-	    and t1.create_id like  '%${condition.createId}%'
-	</if>
-	<if test="condition.createDate != null and condition.createDate != ''" >
-	    and t1.create_date like  '%${condition.createDate}%'
-	</if>
-	<if test="condition.editId != null and condition.editId != ''" >
-	    and t1.edit_id like  '%${condition.editId}%'
-	</if>
-	<if test="condition.editDate != null and condition.editDate != ''" >
-	    and t1.edit_date like  '%${condition.editDate}%'
-	</if>
-	<if test="condition.isUse != null and condition.isUse != ''" >
-	    and t1.is_use =  #{condition.isUse}
-	</if>
+            <if test="condition.specsName != null and condition.specsName != ''">
+                and specs_name like CONCAT('%',#{condition.specsName},'%')
+            </if>
+            <if test="condition.productCode != null and condition.productCode != ''">
+                and product_code like CONCAT('%',#{condition.productCode},'%')
+            </if>
+            <if test="condition.productName != null and condition.productName != ''">
+                and product_name like CONCAT('%',#{condition.productName},'%')
+            </if>
+            <if test="condition.productRemark != null and condition.productRemark != ''">
+                and product_remark like CONCAT('%',#{condition.productRemark},'%')
+            </if>
+            <if test="condition.productModel != null and condition.productModel != ''">
+                and product_model like '%${condition.productModel}%'
+            </if>
+            <if test="condition.productionAddress != null and condition.productionAddress != ''">
+                and t1.production_address like '%${condition.productionAddress}%'
+            </if>
 
-</trim>
-</sql>
-   
 
-<!-- 插入记录 -->
-<insert id="add" parameterType="Object" >
-  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5})
+            <if test="condition.createId != null and condition.createId != ''">
+                and t1.create_id like '%${condition.createId}%'
+            </if>
+            <if test="condition.createDate != null and condition.createDate != ''">
+                and t1.create_date like '%${condition.createDate}%'
+            </if>
+            <if test="condition.editId != null and condition.editId != ''">
+                and t1.edit_id like '%${condition.editId}%'
+            </if>
+            <if test="condition.editDate != null and condition.editDate != ''">
+                and t1.edit_date like '%${condition.editDate}%'
+            </if>
+            <if test="condition.isUse != null and condition.isUse != ''">
+                and t1.is_use = #{condition.isUse}
+            </if>
+
+        </trim>
+    </sql>
+
+
+    <!-- 插入记录 -->
+    <insert id="add" parameterType="Object">
+  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit)
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit})
 </insert>
 
-<!-- 根据id，修改记录-->  
- <update id="update" parameterType="Object" >
-  update gsp_product_register_specs set
-     <if test="productRegisterId != null  ">
-     product_register_id=#{productRegisterId},
-     </if>
-     specs_name=#{specsName},product_code=#{productCode},product_name=#{productName},product_remark=#{productRemark},product_model=#{productModel},production_address=#{productionAddress},bar_code=#{barCode},unit=#{unit},packing_unit=#{packingUnit},conversion_rate=#{conversionRate},`long`=#{llong},wide=#{wide},hight=#{hight},packing_require=#{packingRequire},storage_condition=#{storageCondition},transport_condition=#{transportCondition},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},alternat_name1=#{alternatName1},alternat_name2=#{alternatName2},alternat_name3=#{alternatName3},alternat_name4=#{alternatName4},alternat_name5=#{alternatName5} where specs_id=#{specsId}
- </update>
- 
- <!-- 修改记录，只修改只不为空的字段 -->
-<update id="updateBySelective" parameterType="Object" >
-	update gsp_product_register_specs set 
-	<trim  suffixOverrides="," >
-	<if test="productRegisterId != null  ">
-		product_register_id=#{productRegisterId},
-	</if>
-	<if test="specsName != null  ">
-		specs_name=#{specsName},
-	</if>
-	<if test="productCode != null  ">
-		product_code=#{productCode},
-	</if>
-	<if test="productName != null  ">
-		product_name=#{productName},
-	</if>
-	<if test="productRemark != null  ">
-		product_remark=#{productRemark},
-	</if>
-	<if test="productModel != null  ">
-		product_model=#{productModel},
-	</if>
-	<if test="productionAddress != null  ">
-		production_address=#{productionAddress},
-	</if>
-	<if test="barCode != null  ">
-		bar_code=#{barCode},
-	</if>
-	<if test="unit != null  ">
-		unit=#{unit},
-	</if>
-	<if test="packingUnit != null  ">
-		packing_unit=#{packingUnit},
-	</if>
-	<if test="categories != null  ">
-		categories=#{categories},
-	</if>
-	<if test="conversionRate != null  ">
-		conversion_rate=#{conversionRate},
-	</if>
-	<if test="long != null  ">
-		`long`=#{long},
-	</if>
-	<if test="wide != null  ">
-		wide=#{wide},
-	</if>
-	<if test="hight != null  ">
-		hight=#{hight},
-	</if>
-	<if test="productLine != null  ">
-		product_line=#{productLine},
-	</if>
-	<if test="manageCategories != null  ">
-		manage_categories=#{manageCategories},
-	</if>
-	<if test="packingRequire != null  ">
-		packing_require=#{packingRequire},
-	</if>
-	<if test="storageCondition != null  ">
-		storage_condition=#{storageCondition},
-	</if>
-	<if test="transportCondition != null  ">
-		transport_condition=#{transportCondition},
-	</if>
-	<if test="createId != null  ">
-		create_id=#{createId},
-	</if>
-	<if test="createDate != null  ">
-		create_date=#{createDate},
-	</if>
-	<if test="editId != null  ">
-		edit_id=#{editId},
-	</if>
-	<if test="editDate != null  ">
-		edit_date=#{editDate},
-	</if>
-	<if test="isUse != null  ">
-		is_use=#{isUse},
-	</if>
-	<if test="isCertificate != null  ">
-		is_certificate=#{isCertificate},
-	</if>
-	<if test="isDoublec != null  ">
-		is_doublec=#{isDoublec},
-	</if>
-	<if test="attacheCardCategory != null  ">
-		attache_card_category=#{attacheCardCategory},
-	</if>
-		<if test="attacheCardCategory != null  ">
-			cold_hain_mark=#{coldHainMark},
-		</if>
-		<if test="attacheCardCategory != null  ">
-			sterilization_markers=#{sterilizationMarkers},
-		</if>
-		<if test="attacheCardCategory != null  ">
-			medical_device_mark=#{medicalDeviceMark},
-		</if>
-		<if test="attacheCardCategory != null  ">
-			maintenance_cycle=#{maintenanceCycle},
-		</if>
-		<if test="attacheCardCategory != null  ">
-			wight=#{wight},
-		</if>
+    <!-- 根据id，修改记录-->
+    <update id="update" parameterType="Object">
+        update gsp_product_register_specs set
+        <if test="productRegisterId != null  ">
+            product_register_id=#{productRegisterId},
+        </if>
+        specs_name=#{specsName},product_code=#{productCode},product_name=#{productName},product_remark=#{productRemark},product_model=#{productModel},production_address=#{productionAddress},bar_code=#{barCode},unit=#{unit},packing_unit=#{packingUnit},conversion_rate=#{conversionRate},`long`=#{llong},wide=#{wide},hight=#{hight},packing_require=#{packingRequire},storage_condition=#{storageCondition},transport_condition=#{transportCondition},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},alternat_name1=#{alternatName1},alternat_name2=#{alternatName2},alternat_name3=#{alternatName3},alternat_name4=#{alternatName4},alternat_name5=#{alternatName5}
+        where specs_id=#{specsId}
+    </update>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateBySelective" parameterType="Object">
+        update gsp_product_register_specs set
+        <trim suffixOverrides=",">
+            <if test="productRegisterId != null  ">
+                product_register_id=#{productRegisterId},
+            </if>
+            <if test="specsName != null  ">
+                specs_name=#{specsName},
+            </if>
+            <if test="productCode != null  ">
+                product_code=#{productCode},
+            </if>
+            <if test="productName != null  ">
+                product_name=#{productName},
+            </if>
+            <if test="productRemark != null  ">
+                product_remark=#{productRemark},
+            </if>
+            <if test="productModel != null  ">
+                product_model=#{productModel},
+            </if>
+            <if test="productionAddress != null  ">
+                production_address=#{productionAddress},
+            </if>
+            <if test="barCode != null  ">
+                bar_code=#{barCode},
+            </if>
+            <if test="unit != null  ">
+                unit=#{unit},
+            </if>
+            <if test="packingUnit != null  ">
+                packing_unit=#{packingUnit},
+            </if>
+            <if test="categories != null  ">
+                categories=#{categories},
+            </if>
+            <if test="conversionRate != null  ">
+                conversion_rate=#{conversionRate},
+            </if>
+            <if test="long != null  ">
+                `long`=#{long},
+            </if>
+            <if test="wide != null  ">
+                wide=#{wide},
+            </if>
+            <if test="hight != null  ">
+                hight=#{hight},
+            </if>
+            <if test="productLine != null  ">
+                product_line=#{productLine},
+            </if>
+            <if test="manageCategories != null  ">
+                manage_categories=#{manageCategories},
+            </if>
+            <if test="packingRequire != null  ">
+                packing_require=#{packingRequire},
+            </if>
+            <if test="storageCondition != null  ">
+                storage_condition=#{storageCondition},
+            </if>
+            <if test="transportCondition != null  ">
+                transport_condition=#{transportCondition},
+            </if>
+            <if test="createId != null  ">
+                create_id=#{createId},
+            </if>
+            <if test="createDate != null  ">
+                create_date=#{createDate},
+            </if>
+            <if test="editId != null  ">
+                edit_id=#{editId},
+            </if>
+            <if test="editDate != null  ">
+                edit_date=#{editDate},
+            </if>
+            <if test="isUse != null  ">
+                is_use=#{isUse},
+            </if>
+            <if test="isCertificate != null  ">
+                is_certificate=#{isCertificate},
+            </if>
+            <if test="isDoublec != null  ">
+                is_doublec=#{isDoublec},
+            </if>
+            <if test="attacheCardCategory != null  ">
+                attache_card_category=#{attacheCardCategory},
+            </if>
+            <if test="coldHainMark != null  ">
+                cold_hain_mark=#{coldHainMark},
+            </if>
+            <if test="sterilizationMarkers != null  ">
+                sterilization_markers=#{sterilizationMarkers},
+            </if>
+            <if test="medicalDeviceMark != null  ">
+                medical_device_mark=#{medicalDeviceMark},
+            </if>
+            <if test="maintenanceCycle != null  ">
+                maintenance_cycle=#{maintenanceCycle},
+            </if>
+            <if test="wight != null  ">
+                wight=#{wight},
+            </if>
 
 
+            <if test="alternatName1 != null  ">
+                alternat_name1=#{alternatName1},
+            </if>
+            <if test="alternatName2 != null  ">
+                alternat_name2=#{alternatName2},
+            </if>
+            <if test="alternatName3 != null  ">
+                alternat_name3=#{alternatName3},
+            </if>
+            <if test="alternatName4 != null  ">
+                alternat_name4=#{alternatName4},
+            </if>
+            <if test="alternatName5 != null  ">
+                alternat_name5=#{alternatName5},
+            </if>
+            <if test="packagingUnit != null  ">
+                packaging_unit=#{packagingUnit}
+            </if>
+        </trim>
+        where specs_id=#{specsId}
+    </update>
 
-		<if test="alternatName1 != null  ">
-		alternat_name1=#{alternatName1},
-	</if>
-	<if test="alternatName2 != null  ">
-		alternat_name2=#{alternatName2},
-	</if>
-	<if test="alternatName3 != null  ">
-		alternat_name3=#{alternatName3},
-	</if>
-	<if test="alternatName4 != null  ">
-		alternat_name4=#{alternatName4},
-	</if>
-	<if test="alternatName5 != null  ">
-		alternat_name5=#{alternatName5},
-	</if>
-	</trim> where specs_id=#{specsId}
-</update>
-
-<!-- 删除记录 -->
-<delete id="delete" parameterType="Object">
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="Object">
 delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 </delete>
 
-<!-- 记录失效 -->
-<delete id="deleteByid" parameterType="Object">
+    <!-- 记录失效 -->
+    <delete id="deleteByid" parameterType="Object">
 	update gsp_product_register_specs set
 	is_use=0  where specs_id=#{specsId}
 </delete>
 
-<!-- 根据id查询 产品注册证规格 -->
-<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+    <!-- 根据id查询 产品注册证规格 -->
+    <select id="queryById" resultMap="BaseResultMap" parameterType="Object">
 	select *
 	 from gsp_product_register_specs where specs_id = #{specsId}
 </select>
 
-<!-- 根据productCode查询 产品注册证规格 -->
-	<select id="selectByProductCode"  resultMap="BaseResultMap" parameterType="Object">
+    <!-- 根据productCode查询 产品注册证规格 -->
+    <select id="selectByProductCode" resultMap="BaseResultMap" parameterType="Object">
 	select t1.*,t2.product_register_no,t2.product_name_main
 	from gsp_product_register_specs t1 left join gsp_product_register t2
 	ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode} and t1.is_use = 1
 </select>
 
-<!-- 根据id查询 产品注册证规格关联产品注册证 -->
-<select id="selectById"  resultMap="BaseResultMap" parameterType="Object">
+    <!-- 根据id查询 产品注册证规格关联产品注册证 -->
+    <select id="selectById" resultMap="BaseResultMap" parameterType="Object">
 	select t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
 	from gsp_product_register_specs t1 left join gsp_product_register t2
 	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
 
-<!-- 产品注册证规格 列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
-	ON t1.product_register_id = t2.product_register_id
-	<include refid="Example_Where_Clause"/>
-</select>
+    <!-- 产品注册证规格 列表总数-->
+    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+        <include refid="Example_Where_Clause"/>
+    </select>
 
-<!-- 查询产品注册证规格列表 -->
-<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select
-	t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
-	from gsp_product_register_specs t1 left join gsp_product_register t2
-	ON t1.product_register_id = t2.product_register_id
-	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-</select>
+    <!-- 查询产品注册证规格列表 -->
+    <select id="queryByList" resultMap="BaseResultMap" parameterType="Object">
+        select
+        t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
+        from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+        <include refid="Example_Where_Clause"/>
+        <if test="orderByClause != null and orderByClause != ''">
+            order by ${orderByClause}
+        </if>
+        <if test="limitClause != null and limitClause != ''">
+            ${limitClause}
+        </if>
+    </select>
 
-<!-- 产品注册证规格 列表总数-->
-<select id="queryByCountUnBind" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
-	ON t1.product_register_id = t2.product_register_id
-	where 1=1
-	<trim  suffixOverrides="," >
+    <!-- 产品注册证规格 列表总数-->
+    <select id="queryByCountUnBind" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+        where 1=1
+        <trim suffixOverrides=",">
 
-		<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-			and product_register_no like '%${condition.productRegisterNo}%'
-		</if>
-		<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-			and product_name_main like  '%${condition.productNameMain}%'
-		</if>
-		<choose>
-			<when test="condition.productRegisterId !=null and condition.productRegisterId!=''">
-				and t1.product_register_id =  #{condition.productRegisterId}
-			</when>
-			<when test="condition.productRegisterId == null">
-				and t1.product_register_id is null
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
-		<if test="condition.specsName != null and condition.specsName != ''" >
-			and specs_name   like  '%${condition.specsName}%'
-		</if>
-		<if test="condition.productCode != null and condition.productCode != ''" >
-			and product_code   like  '%${condition.productCode}%'
-		</if>
-		<if test="condition.productName != null and condition.productName != ''" >
-			and product_name   like  '%${condition.productName}%'
-		</if>
-		<if test="condition.productRemark != null and condition.productRemark != ''" >
-			and product_remark like  '%${condition.productRemark}%'
-		</if>
-		<if test="condition.productModel != null and condition.productModel != ''" >
-			and product_model like  '%${condition.productModel}%'
-		</if>
-		<if test="condition.productionAddress != null and condition.productionAddress != ''" >
-			and production_address like  '%${condition.productionAddress}%'
-		</if>
-
-
-		<if test="condition.createId != null and condition.createId != ''" >
-			and create_id like  '%${condition.createId}%'
-		</if>
-		<if test="condition.createDate != null and condition.createDate != ''" >
-			and create_date like  '%${condition.createDate}%'
-		</if>
-		<if test="condition.editId != null and condition.editId != ''" >
-			and edit_id like  '%${condition.editId}%'
-		</if>
-		<if test="condition.editDate != null and condition.editDate != ''" >
-			and edit_date like  '%${condition.editDate}%'
-		</if>
-		<if test="condition.isUse != null and condition.isUse != ''" >
-			and t1.is_use =  #{condition.isUse}
-		</if>
-
-	</trim>
-</select>
-
-<!-- 查询产品注册证规格列表未绑定 -->
-<select id="queryByListUnBind" resultMap="BaseResultMap"  parameterType="Object">
-	select
-	t1.*,t2.product_register_no,t2.product_name_main
-	from gsp_product_register_specs t1 left join gsp_product_register t2
-	ON t1.product_register_id = t2.product_register_id
-
-	where 1=1
-	<trim  suffixOverrides="," >
-
-		<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-			and product_register_no like '%${condition.productRegisterNo}%'
-		</if>
-		<if test="condition.productNameMain != null and condition.productNameMain != ''" >
-			and product_name_main like  '%${condition.productNameMain}%'
-		</if>
-		<choose>
-			<when test="condition.productRegisterId !=null  and condition.productRegisterId!=''">
-				and t1.product_register_id = #{condition.productRegisterId}
-			</when>
-			<when test="condition.productRegisterId == null">
-				and t1.product_register_id is null
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
-		<if test="condition.specsName != null and condition.specsName != ''" >
-			and specs_name   like  '%${condition.specsName}%'
-		</if>
-		<if test="condition.productCode != null and condition.productCode != ''" >
-			and product_code   like  '%${condition.productCode}%'
-		</if>
-		<if test="condition.productName != null and condition.productName != ''" >
-			and product_name   like  '%${condition.productName}%'
-		</if>
-		<if test="condition.productRemark != null and condition.productRemark != ''" >
-			and product_remark like  '%${condition.productRemark}%'
-		</if>
-		<if test="condition.productModel != null and condition.productModel != ''" >
-			and product_model like  '%${condition.productModel}%'
-		</if>
-		<if test="condition.productionAddress != null and condition.productionAddress != ''" >
-			and production_address like  '%${condition.productionAddress}%'
-		</if>
+            <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
+                and product_register_no like '%${condition.productRegisterNo}%'
+            </if>
+            <if test="condition.productNameMain != null and condition.productNameMain != ''">
+                and product_name_main like '%${condition.productNameMain}%'
+            </if>
+            <choose>
+                <when test="condition.productRegisterId !=null and condition.productRegisterId!=''">
+                    and t1.product_register_id = #{condition.productRegisterId}
+                </when>
+                <when test="condition.productRegisterId == null">
+                    and t1.product_register_id is null
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+            <if test="condition.specsName != null and condition.specsName != ''">
+                and specs_name like '%${condition.specsName}%'
+            </if>
+            <if test="condition.productCode != null and condition.productCode != ''">
+                and product_code like '%${condition.productCode}%'
+            </if>
+            <if test="condition.productName != null and condition.productName != ''">
+                and product_name like '%${condition.productName}%'
+            </if>
+            <if test="condition.productRemark != null and condition.productRemark != ''">
+                and product_remark like '%${condition.productRemark}%'
+            </if>
+            <if test="condition.productModel != null and condition.productModel != ''">
+                and product_model like '%${condition.productModel}%'
+            </if>
+            <if test="condition.productionAddress != null and condition.productionAddress != ''">
+                and production_address like '%${condition.productionAddress}%'
+            </if>
 
 
-		<if test="condition.createId != null and condition.createId != ''" >
-			and create_id like  '%${condition.createId}%'
-		</if>
-		<if test="condition.createDate != null and condition.createDate != ''" >
-			and create_date like  '%${condition.createDate}%'
-		</if>
-		<if test="condition.editId != null and condition.editId != ''" >
-			and edit_id like  '%${condition.editId}%'
-		</if>
-		<if test="condition.editDate != null and condition.editDate != ''" >
-			and edit_date like  '%${condition.editDate}%'
-		</if>
-		<if test="condition.isUse != null and condition.isUse != ''" >
-			and t1.is_use =  #{condition.isUse}
-		</if>
+            <if test="condition.createId != null and condition.createId != ''">
+                and create_id like '%${condition.createId}%'
+            </if>
+            <if test="condition.createDate != null and condition.createDate != ''">
+                and create_date like '%${condition.createDate}%'
+            </if>
+            <if test="condition.editId != null and condition.editId != ''">
+                and edit_id like '%${condition.editId}%'
+            </if>
+            <if test="condition.editDate != null and condition.editDate != ''">
+                and edit_date like '%${condition.editDate}%'
+            </if>
+            <if test="condition.isUse != null and condition.isUse != ''">
+                and t1.is_use = #{condition.isUse}
+            </if>
 
-	</trim>
+        </trim>
+    </select>
 
-	<if test="orderByClause != null and orderByClause != ''" >
-		order by  ${orderByClause}
-	</if>
-	<if test="limitClause != null and limitClause != ''" >
-		${limitClause}
-	</if>
-</select>
+    <!-- 查询产品注册证规格列表未绑定 -->
+    <select id="queryByListUnBind" resultMap="BaseResultMap" parameterType="Object">
+        select
+        t1.*,t2.product_register_no,t2.product_name_main
+        from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+
+        where 1=1
+        <trim suffixOverrides=",">
+
+            <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
+                and product_register_no like '%${condition.productRegisterNo}%'
+            </if>
+            <if test="condition.productNameMain != null and condition.productNameMain != ''">
+                and product_name_main like '%${condition.productNameMain}%'
+            </if>
+            <choose>
+                <when test="condition.productRegisterId !=null  and condition.productRegisterId!=''">
+                    and t1.product_register_id = #{condition.productRegisterId}
+                </when>
+                <when test="condition.productRegisterId == null">
+                    and t1.product_register_id is null
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+            <if test="condition.specsName != null and condition.specsName != ''">
+                and specs_name like '%${condition.specsName}%'
+            </if>
+            <if test="condition.productCode != null and condition.productCode != ''">
+                and product_code like '%${condition.productCode}%'
+            </if>
+            <if test="condition.productName != null and condition.productName != ''">
+                and product_name like '%${condition.productName}%'
+            </if>
+            <if test="condition.productRemark != null and condition.productRemark != ''">
+                and product_remark like '%${condition.productRemark}%'
+            </if>
+            <if test="condition.productModel != null and condition.productModel != ''">
+                and product_model like '%${condition.productModel}%'
+            </if>
+            <if test="condition.productionAddress != null and condition.productionAddress != ''">
+                and production_address like '%${condition.productionAddress}%'
+            </if>
+
+
+            <if test="condition.createId != null and condition.createId != ''">
+                and create_id like '%${condition.createId}%'
+            </if>
+            <if test="condition.createDate != null and condition.createDate != ''">
+                and create_date like '%${condition.createDate}%'
+            </if>
+            <if test="condition.editId != null and condition.editId != ''">
+                and edit_id like '%${condition.editId}%'
+            </if>
+            <if test="condition.editDate != null and condition.editDate != ''">
+                and edit_date like '%${condition.editDate}%'
+            </if>
+            <if test="condition.isUse != null and condition.isUse != ''">
+                and t1.is_use = #{condition.isUse}
+            </if>
+
+        </trim>
+
+        <if test="orderByClause != null and orderByClause != ''">
+            order by ${orderByClause}
+        </if>
+        <if test="limitClause != null and limitClause != ''">
+            ${limitClause}
+        </if>
+    </select>
 </mapper>   

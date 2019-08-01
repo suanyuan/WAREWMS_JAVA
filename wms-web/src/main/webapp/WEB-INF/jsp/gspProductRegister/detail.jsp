@@ -34,7 +34,7 @@
                             </tr>
                             <tr>
                                 <th>管理分类</th>
-                                <td><input type='text' id="classifyId" name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true'/></td>
+                                <td><input type='text' id="classifyId" name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true,editable:false'/></td>
 
                                 <%--<th>有效期至</th>--%>
                                 <%--<td><input type='text' id="productExpiryDate" name='productExpiryDate' class='easyui-datebox' value="${gspProductRegister.productExpiryDate}" data-options='required:true,editable:false,width:185'/></td>--%>
@@ -46,7 +46,7 @@
                                 <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
                                 <th>注册证附件</th>
                                 <td>
-                                    <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='required:true' value="${gspProductRegister.attachmentUrl}"/>
+                                    <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='' value="${gspProductRegister.attachmentUrl}"/>
                                     <a id="btn" href="javascript:void(0)" onclick="viewUrl()" class="easyui-linkbutton" data-options="">查看</a>
                                     <input type="hidden" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspProductRegister.attachmentUrl}"/>
                                 </td>
@@ -58,7 +58,7 @@
                                     <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                                 </td>
                                 <th>结构及组成</th>
-                                <td><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" data-options=''/></td>
+                                <td><input type='text' name='structureAndComposition' class='easyui-textbox' value="${gspProductRegister.structureAndComposition}" data-options=''/></td>
                             </tr>
                             <tr>
                                 <th>产地</th>
@@ -83,13 +83,11 @@
                                 <th>注册人名称/生产企业</th>
                                 <td>
                                     <input type="hidden" id="enterpriseId" name="enterpriseId" class="textbox-value" value="${gspProductRegister.enterpriseId}"/>
-                                    <input type='text' id='enterpriseName' value="" />
+                                    <input type='text' id='enterpriseName' />
                                 </td>
                                 <th>附件</th>
                                 <td>
-                                    <input  id="productRegsiterFile" name="productRegsiterFile"  data-options='required:true' value="${gspProductRegister.productRegsiterUrl}"/>
-                                    <a id="btn1" href="javascript:void(0)" onclick="viewUrl()" class="easyui-linkbutton" data-options="">查看</a>
-                                    <input type="hidden" class="textbox-value" name="productRegsiterUrl" id="productRegsiterUrl" value="${gspProductRegister.productRegsiterUrl}"/>
+                                    <input type='text'  id="productRegsiterUrl" name="productRegsiterUrl"  class='easyui-textbox' data-options='multiline:true' value="${gspProductRegister.productRegsiterUrl}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -105,7 +103,7 @@
                                 <th>生产地址</th>
                                 <td><input type='text' name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
                                 <th>备注</th>
-                                <td colspan="3"><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
+                                <td><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
 
                             </tr>
                             <tr>
@@ -119,7 +117,7 @@
                             <tr>
 
                                 <th>代理人住所</th>
-                                <td><input type='text' name='agentName' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
+                                <td><input type='text' name='agentAddress' class='easyui-textbox' value="${gspProductRegister.agentAddress}" data-options=''/></td>
 
                                 <th>创建时间</th>
                                 <td><input type='text' name='createDate' class='easyui-textbox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.createDate}"/>" data-options='editable:false'/></td>
@@ -205,13 +203,12 @@
     var ezuiDatagridDetail;
     var ezuidialogChoseScope;
     var choseRowArr = new Array();
-
+//上传文件初始化
     $(function () {
         $('#attachmentUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '上传',  //按钮说明文字
-            required: true,
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -369,7 +366,7 @@
         $("#ezuiFormDetail input[id='choseScope']").val(choseRowArr.join(","));
         ezuidialogChoseScope.dialog("close");
     }
-
+//上传文件
     function doUpload(data) {
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
@@ -393,8 +390,9 @@
         });
         //$('#file').filebox('clear');//上传成功后清空里面的值
     }
-
+//清空from 点击新增触发
     function addDetail() {
+        processType = 'add';
         ezuiFormClear($("#ezuiFormDetail"));
         $("#enterpriseId").val("");
         $("#gspProductRegisterId").val("");
@@ -405,14 +403,14 @@
         $("#ezuiFormDetail input[id='attachmentUrl']").val("");
         ezuiDatagridDetail.datagrid('loadData',{total:0,rows:[]});
     }
-    
+//二级daiyog提交事件
     function submitDetail() {
-        var productExpiryDate = $("#ezuiFormDetail input[id='productExpiryDate']").datebox("getValue");
-        var productRegisterExpiryDate = $("#ezuiFormDetail input[id='productRegisterExpiryDate']").datebox("getValue");
-        if(productRegisterExpiryDate<productExpiryDate){
-            showMsg("有效期时间大于有效期至时间");
-            return;
-        }
+        // var productExpiryDate = $("#ezuiFormDetail input[id='productExpiryDate']").datebox("getValue");
+        // var productRegisterExpiryDate = $("#ezuiFormDetail input[id='productRegisterExpiryDate']").datebox("getValue");
+        // if(productRegisterExpiryDate<productExpiryDate){
+        //     showMsg("有效期时间大于有效期至时间");
+        //     return;
+        // }
         var url = '';
         if (processType == 'edit') {
             url = '/gspProductRegisterController.do?edit';
@@ -439,6 +437,9 @@
                 $.messager.progress('close');
                 var result = $.parseJSON(data);
                 if(result.success){
+                    if(processType == 'add'){
+                        $("#ezuiBtn_edit").linkbutton(editable,true);
+                    }
                     console.log(result.obj);
                     $("#gspProductRegisterId").val(result.obj);
                     console.log($("#gspProductRegisterId").val());
@@ -665,7 +666,7 @@
     function formatOper(value,row,index){
         return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
-
+//查看上传文件
     function viewUrl(url) {
         if(url){
             showUrl(url);

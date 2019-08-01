@@ -65,7 +65,7 @@ public class GspProductRegisterService extends BaseService {
 		datagrid.setRows(gspProductRegisterVOList);
 		return datagrid;
 	}
-
+	//增加
 	public Json addGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception {
 		if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
 			return Json.error("产品注册证编号重复");
@@ -103,7 +103,7 @@ public class GspProductRegisterService extends BaseService {
 			return Json.success("保存失败");
 		}
 	}
-
+//修改
 	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
 		try{
 			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
@@ -112,7 +112,7 @@ public class GspProductRegisterService extends BaseService {
 			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
 			gspProductRegister.setEditDate(new Date());
 			gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-			gspProductRegisterMybatisDao.update(gspProductRegister);
+			gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
 
 			//保存经营范围
 			if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())) {
