@@ -1051,4 +1051,9 @@ public class ExcelUtil {
 		setColumnAutoSize(sheet, 5);
 	}
 
+	public static boolean isNumeric(String str){
+		String regex = "^-?\\d+(\\.\\d+)?$";
+		return str.matches(regex);
+	}
+
 }

@@ -1,7 +1,9 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.ActAllocationDetails;
+import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.ActAllocationDetailsQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -32,4 +34,9 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
      * @return ~
      */
 	int finishPacking(ActAllocationDetailsQuery query);
+
+    /**
+     * 通过已完成的包装复合回写到分配明细中
+     */
+	void callPickingProcedure(PdaOrderPackingForm form);
 }

@@ -468,5 +468,11 @@ where 1=1
       update act_allocation_details set
       packflag = '1' where allocationdetailsid = #{allocationdetailsid}
     </update>
+
+    <update id="callPickingProcedure" statementType="CALLABLE" parameterType="java.util.Map">
+        {call SPSO_Picking_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{action,mode=IN,jdbcType=VARCHAR},
+        #{allocationdetailsid,mode=IN,jdbcType=VARCHAR},'CN',#{userid,mode=IN,jdbcType=VARCHAR},
+        #{result,mode=OUT,jdbcType=VARCHAR})}
+    </update>
   	
 </mapper>   

@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Entity
 public class ActAllocationDetails  implements Serializable {
 
+    private String resultcode;//procedure调用返回
+
 	private String allocationdetailsid;
 
 	private String orderno;

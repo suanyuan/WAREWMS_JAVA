@@ -623,7 +623,8 @@ select a.orderno as orderNo,
     </select>
 
     <select id="queryPackedNum" parameterType="java.util.Map" resultType="integer">
-        select ifnull(sum(qty), 0) from doc_order_packing_carton where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
+        select ifnull(sum(qty), 0) from doc_order_packing_carton
+        where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
     </select>
 
     <select id="queryPackingCartonInfo" parameterType="java.util.Map" resultMap="PackingCartonInfoMap">
