@@ -11,6 +11,7 @@ import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.*;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPackageQuery;
@@ -79,33 +80,71 @@ public class DocOrderPackingService extends BaseService {
 		return datagrid;
 	}
 
+    /**
+     * 出库单状态：
+     * 00 - 订单创建
+     * 30 - 部分分配          ✅
+     * 40 - 分配完成          ✅
+     * 50 - 部分拣货/部分装箱  ✅
+     * 60 - 完全拣货/完全装箱
+     * 80 - 发运/部分发运
+     * 90 - 单据取消
+     * 99 - 单据关闭
+     *
+     * 目前来说，分配完成之后，到出库单的包装复核结束，状态是不做变更的
+     */
 	public Json orderStatusCheck(String orderNo) {
-		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 		orderHeaderForNormalQuery.setOrderNo(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-		if(orderHeaderForNormal != null){
-			if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
-				if (orderHeaderForNormal.getPackingFlag().equals("Y")) {
-					json.setSuccess(false);
-					json.setMsg("装箱失败：当前订单已完成装箱操作！");
-					return json;
-				} else {
-					json.setSuccess(true);
-					json.setMsg("000");
-					return json;
-				}
-			} else {
-				json.setSuccess(false);
-				json.setMsg("装箱失败：当前状态订单不允许进行装箱操作！");
-				return json;
-			}
-		} else {
-			json.setSuccess(false);
-			json.setMsg("装箱失败：查无此出库单号！");
-			return json;
-		}
+		return orderObjCheck(orderHeaderForNormal);
 	}
+
+	private Json orderObjCheck(OrderHeaderForNormal orderHeaderForNormal) {
+        Json json = new Json();
+        if(orderHeaderForNormal != null){
+
+            /*
+             * H - 订单冻结
+             * N - 订单未释放
+             * R - 订单任务下发
+             * Y - 订单释放
+             */
+            switch (orderHeaderForNormal.getReleasestatus()) {
+                case "H":
+                    json.setSuccess(false);
+                    json.setMsg("当前订单已冻结");
+                    return json;
+                case "N":
+                    json.setSuccess(false);
+                    json.setMsg("当前订单未释放");
+                    return json;
+                    default:
+                        break;
+            }
+
+            switch (orderHeaderForNormal.getSostatus()) {
+                case "30":
+                case "40":
+                case "50":
+                    json.setSuccess(true);
+                    json.setMsg("000");
+                    return json;
+                case "60":
+                    json.setSuccess(false);
+                    json.setMsg("当前订单已完成装箱操作！");
+                    return json;
+                default:
+                    json.setSuccess(false);
+                    json.setMsg("当前状态订单不允许进行装箱操作！");
+                    return json;
+            }
+        } else {
+            json.setSuccess(false);
+            json.setMsg("查无此出库单号！");
+            return json;
+        }
+    }
 
 	public Json generateCartonNo(String orderNo) {
 		Json json = new Json();
@@ -526,6 +565,13 @@ public class DocOrderPackingService extends BaseService {
 	public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {
 
 	    Map<String, Object> map = new HashMap<>();
+	    Json statusJson = orderStatusCheck(query.getOrderno());
+	    if (!statusJson.isSuccess()) {
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg()));
+            return map;
+        }
+
+
 	    PdaDocPackageVO pdaDocPackageVO = new PdaDocPackageVO();
 
 	    PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
@@ -658,7 +704,10 @@ public class DocOrderPackingService extends BaseService {
 
     public PdaResult packageCommit(DocOrderPackingForm form) {
 
-	    //TODO 装箱状态判断，个数、单据状态
+        Json statusJson = orderStatusCheck(form.getOrderno());
+        if (!statusJson.isSuccess()) {
+            return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
+        }
 
         ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
         DocOrderPackingCarton packingCartonQuery = new DocOrderPackingCarton();
@@ -667,7 +716,7 @@ public class DocOrderPackingService extends BaseService {
         allocationQuery.setAllocationdetailsid(form.getAllocationdetailsid());
         ActAllocationDetails matchDetails = actAllocationDetailsMybatisDao.queryById(allocationQuery);
 
-        //分配明细中装箱的数量
+        //分配明细中装箱的件数
         packingCartonQuery.setOrderno(form.getOrderno());
         packingCartonQuery.setAllocationdetailsid(form.getAllocationdetailsid());
         int packedNum = docOrderPackingMybatisDao.queryPackedNum(packingCartonQuery);
@@ -740,6 +789,11 @@ public class DocOrderPackingService extends BaseService {
 
     public PdaResult commitCartonType(DocOrderPackingForm form) {
 
+        Json statusJson = orderStatusCheck(form.getOrderno());
+        if (!statusJson.isSuccess()) {
+            return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
+        }
+
         DocOrderPackingCartonInfo packingCartonInfo = docOrderPackingMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
         if (packingCartonInfo == null) {
             return new PdaResult(PdaResult.CODE_FAILURE, "查无此箱号的装箱数据");
@@ -759,17 +813,47 @@ public class DocOrderPackingService extends BaseService {
     public PdaResult endPacking(String orderno) {
 
 	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
-	    if (orderHeaderForNormal == null) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "查无此出库单数据");
+        Json statusJson = orderObjCheck(orderHeaderForNormal);
+	    if (!statusJson.isSuccess()) {
+            return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
         }
-        orderHeaderForNormal.setSostatus("60");
-	    orderHeaderForNormal.setEditwho("Gizmo");
-	    int result = orderHeaderForNormalMybatisDao.updateSOTask(orderHeaderForNormal);
+        try {
+            //1,更改出库单状态
+            orderHeaderForNormal.setSostatus("60");
+            orderHeaderForNormal.setEditwho("Gizmo");
+            orderHeaderForNormalMybatisDao.updateSOTask(orderHeaderForNormal);
 
-	    if (result == 1) {
-            return new PdaResult(PdaResult.CODE_SUCCESS, "包装复核结束成功");
-        }else {
-            return new PdaResult(PdaResult.CODE_FAILURE, "包装复核结束失败");
+            //2,查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
+            Map<String, Object> condition = new HashMap<>();
+            condition.put("orderno", orderno);
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(condition);
+            List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+            for (ActAllocationDetails allocationDetails : actAllocationDetailsList) {
+
+                DocOrderPackingCarton packedQuery = new DocOrderPackingCarton();
+                packedQuery.setAllocationdetailsid(allocationDetails.getAllocationdetailsid());
+                packedQuery.setOrderno(orderno);
+                int packedNum = docOrderPackingMybatisDao.queryPackedNum(packedQuery);
+                allocationDetails.setPrice(packedNum + 0.0);
+                actAllocationDetailsMybatisDao.update(allocationDetails);//分配明细
+
+                PdaOrderPackingForm packingForm = new PdaOrderPackingForm(
+                        orderHeaderForNormal.getWarehouseid(),
+                        PdaOrderPackingForm.ACTION_RV,
+                        allocationDetails.getAllocationdetailsid(),
+                        "Gizmo");
+                actAllocationDetailsMybatisDao.callPickingProcedure(packingForm);
+                if (!packingForm.getResult().equals("000")) {
+                    throw new Exception("包装复核拣货数回写失败");
+                }
+            }
+        }catch (Exception e) {
+
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "结束失败(系统错误:" + e.getMessage() + ")");
         }
+
+        return new PdaResult(PdaResult.CODE_SUCCESS, "包装复核结束成功");
     }
 }
