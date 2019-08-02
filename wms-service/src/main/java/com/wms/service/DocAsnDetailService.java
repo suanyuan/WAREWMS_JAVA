@@ -83,7 +83,7 @@ public class DocAsnDetailService extends BaseService {
 		DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
 		docAsnDetailQuery.setAsnno(docAsnDetailForm.getAsnno());
 		/*获取新的明细行号*/
-		long orderlineno = docAsnDetailsMybatisDao.getAsnlinenoById(docAsnDetailQuery);
+		int orderlineno = docAsnDetailsMybatisDao.getAsnlinenoById(docAsnDetailQuery);
 		docAsnDetail.setAsnlineno(orderlineno + 1);
 		docAsnDetail.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

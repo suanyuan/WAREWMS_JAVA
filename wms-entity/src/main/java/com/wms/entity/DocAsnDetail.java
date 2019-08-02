@@ -24,7 +24,7 @@ public class DocAsnDetail implements Serializable {
 	@Id
 	private String asnno;
 
-	private long asnlineno;
+	private int asnlineno;
 	
 	@Temporal(TemporalType.DATE)
 	private Date addtime;
@@ -288,11 +288,11 @@ public class DocAsnDetail implements Serializable {
 		this.asnno = asnno;
 	}
 
-	public long getAsnlineno() {
+	public int getAsnlineno() {
 		return asnlineno;
 	}
 
-	public void setAsnlineno(long asnlineno) {
+	public void setAsnlineno(int asnlineno) {
 		this.asnlineno = asnlineno;
 	}
 

@@ -398,8 +398,8 @@ public class ImportOrderDataService {
 						query.setPackid(basSku.getPackid());
 						BasPackage basPackage = basPackageService.queryBasPackBy(query);
 						orderDetails.setUom(basPackage.getPackuom1());
+						orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyordered() * basPackage.getQty1().doubleValue());
 					}
-
 					orderDetails.setPackid(basSku.getPackid());
 					orderDetails.setOrderlineno((double)(orderlineno + 1));
 					orderDetails.setNetweight(basSku.getGrossweight().doubleValue());

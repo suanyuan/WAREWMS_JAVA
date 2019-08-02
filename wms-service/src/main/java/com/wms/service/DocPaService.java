@@ -93,7 +93,7 @@ public class DocPaService {
                     detailsForm.setLinestatus("00");
                     detailsForm.setLotnum(docPaDTO.getLotnum());
                     detailsForm.setAsnno(docPaDTO.getAsnno());
-                    detailsForm.setAsnlineno(Double.parseDouble(docPaDTO.getAsnlineno()+""));
+                    detailsForm.setAsnlineno(docPaDTO.getAsnlineno());
                     detailsForm.setAsnqtyExpected(docPaDTO.getReceivedqty().doubleValue());
                     detailsForm.setPutwayqtyExpected(docPaDTO.getReceivedqty().doubleValue());
                     detailsForm.setPutwayqtyCompleted(0d);
@@ -180,7 +180,7 @@ public class DocPaService {
                         docPaDetailsForm.setPalineno((docPaDetailService.queryMaxLineNo(paNo)+1) + "");
                         docPaDetailsForm.setLinestatus("40");
                         docPaDetailsForm.setAsnno(docPaDTO.getAsnno());
-                        docPaDetailsForm.setAsnlineno((double) docPaDTO.getAsnlineno());
+                        docPaDetailsForm.setAsnlineno(docPaDTO.getAsnlineno());
                         docPaDetailsForm.setCustomerid(docPaDTO.getCustomerid());
                         docPaDetailsForm.setSku(docPaDTO.getSku());
                         docPaDetailsForm.setLotnum(docPaDTO.getLotnum());

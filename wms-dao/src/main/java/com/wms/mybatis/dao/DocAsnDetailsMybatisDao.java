@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface DocAsnDetailsMybatisDao extends BaseDao {
 	
-	long getAsnlinenoById(DocAsnDetailQuery docAsnDetailQuery);
+	int getAsnlinenoById(DocAsnDetailQuery docAsnDetailQuery);
 	
 	void receiveByAsn(DocAsnDetail docAsnDetail);
 
