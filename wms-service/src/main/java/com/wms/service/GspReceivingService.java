@@ -42,8 +42,8 @@ public class GspReceivingService extends BaseService {
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
 
-	@Autowired
-	private GspReceivingDao gspReceivingDao;
+	//@Autowired
+	//private GspReceivingDao gspReceivingDao;
 
 	@Autowired
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
@@ -271,7 +271,7 @@ public class GspReceivingService extends BaseService {
 	public List<EasyuiCombobox> getGspReceivingCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspReceiving> gspReceivingList = gspReceivingDao.findAll();
+		List<GspReceiving> gspReceivingList = gspReceivingMybatisDao.queryListByAll();
 		if(gspReceivingList != null && gspReceivingList.size() > 0){
 			for(GspReceiving gspReceiving : gspReceivingList){
 				combobox = new EasyuiCombobox();

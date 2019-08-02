@@ -40,7 +40,9 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String sterilizationMarkers;//灭菌标志
 	private java.lang.String medicalDeviceMark;//医疗器械标志
 	private java.lang.String maintenanceCycle;//养护周期
-	private java.lang.String wight;
+	private java.lang.String wight;//重量
+	private java.lang.String packagingUnit;//包装单位
+
 
 
 	private java.lang.String alternatName1;
@@ -48,6 +50,14 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	public String getPackagingUnit() {
+		return packagingUnit;
+	}
+
+	public void setPackagingUnit(String packagingUnit) {
+		this.packagingUnit = packagingUnit;
+	}
 
 	public String getColdHainMark() {
 		return coldHainMark;

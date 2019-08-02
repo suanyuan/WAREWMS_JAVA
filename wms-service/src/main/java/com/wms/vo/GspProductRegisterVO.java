@@ -37,6 +37,51 @@ public class GspProductRegisterVO {
 	private String classifyCatalog;
 	private String enterpriseId;
 	private String enterpriseName;//附加
+	private String transportConditionMain;//运输条件
+	private String approvalDepartment;//审核部门
+	private String productRegsiterUrl;//附件路径
+	private String structureAndComposition;//结构及组成
+	private String agentAddress;//代理人住所
+
+	public String getTransportConditionMain() {
+		return transportConditionMain;
+	}
+
+	public void setTransportConditionMain(String transportConditionMain) {
+		this.transportConditionMain = transportConditionMain;
+	}
+
+	public String getApprovalDepartment() {
+		return approvalDepartment;
+	}
+
+	public void setApprovalDepartment(String approvalDepartment) {
+		this.approvalDepartment = approvalDepartment;
+	}
+
+	public String getProductRegsiterUrl() {
+		return productRegsiterUrl;
+	}
+
+	public void setProductRegsiterUrl(String productRegsiterUrl) {
+		this.productRegsiterUrl = productRegsiterUrl;
+	}
+
+	public String getStructureAndComposition() {
+		return structureAndComposition;
+	}
+
+	public void setStructureAndComposition(String structureAndComposition) {
+		this.structureAndComposition = structureAndComposition;
+	}
+
+	public String getAgentAddress() {
+		return agentAddress;
+	}
+
+	public void setAgentAddress(String agentAddress) {
+		this.agentAddress = agentAddress;
+	}
 
 	public String getEnterpriseName() {
 		return enterpriseName;

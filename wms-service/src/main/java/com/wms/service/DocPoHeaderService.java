@@ -25,8 +25,8 @@ import com.wms.query.DocPoHeaderQuery;
 @Service("docPoHeaderService")
 public class DocPoHeaderService extends BaseService {
 
-	@Autowired
-	private DocPoHeaderDao docPoHeaderDao;
+	//@Autowired
+	//private DocPoHeaderDao docPoHeaderDao;
 	@Autowired
     private DocPoHeaderMybatisDao docPoHeaderMybatisDao;
 	@Autowired

@@ -33,6 +33,7 @@ var ezuiImportDataDialog;
 var ezuiImportDataForm;
 var ezuiOperateResultDataDialog;
 var ezuiOperateResultDataForm;
+var allocationDetailsDatagrid;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -59,6 +60,7 @@ $(function() {
 		checkOnSelect:true,
 		selectOnCheck: true,
 		idField : 'orderno',
+		rowStyler:docOrderRowStyler,
 		queryParams:{
 			ordertime : $('#ordertime').datetimebox('getValue'),
 			ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
@@ -109,7 +111,7 @@ $(function() {
 		method : 'POST',
 		toolbar : '#detailToolbar',
 		idField : 'orderlineno',
-		title : '订单明细',
+		title : '',
 		border : false,
 		fitColumns : false,
 		nowrap : false,
@@ -156,6 +158,42 @@ $(function() {
 			$(this).datagrid("resize",{height:200});
 		}
 	});
+
+	/* 分配明细列表*/
+    allocationDetailsDatagrid = $('#allocationDetailsDatagrid').datagrid({
+        url : '<c:url value="/docOrderHeaderController.do?showAllocation"/>',
+        method : 'POST',
+        toolbar : '',
+        idField : 'orderlineno',
+        title : '',
+        border : false,
+        fitColumns : false,
+        nowrap : false,
+        striped : true,
+        collapsible : false,
+        rownumbers : true,
+        singleSelect : true,
+        columns : [[
+            {field: 'location',	title: '库位',		width: 120 },
+            {field: 'sku',				title: '商品编码',		width: 130 },
+            {field: 'skuName',			title: '商品名称',		width: 130 },
+            {field: 'qty',		title: '分配数',		width: 80 },
+            {field: 'qtyEach',		title: '分配件数',		width: 80 },
+            {field: 'qtypickedEach',		title: '拣货数',		width: 80 },
+            {field: 'qtyshippedEach',		title: '发货数',		width: 80 },
+            {field: 'status',		title: '状态',		width: 80 ,formatter:sostatusFormatter},
+            {field: 'pickName',	title: '包装',		width: 80 }
+        ]],
+        onDblClickCell: function(index,field,value){
+            detailsEdit();
+        },
+        onRowContextMenu : function(event, rowIndex, rowData) {
+        },
+        onLoadSuccess:function(data){
+            $(this).datagrid('unselectAll');
+            $(this).datagrid("resize",{height:200});
+        }
+    });
 
 	/* 控件初始化start */
 	$("#customerid").textbox({
@@ -352,7 +390,8 @@ var edit = function(srow){
 			notes : row.notes,
             carrierid:row.carrierid,
             userdefine1:row.userdefine1,
-            userdefine2:row.userdefine2
+            userdefine2:row.userdefine2,
+            consigneeid:row.consigneeid
 		});
 		if (row.sostatus == '90' || row.sostatus == '99') {
 			$("#ezuiForm #customerid").textbox({
@@ -393,6 +432,7 @@ var edit = function(srow){
 			$("#ezuiForm #ezuiBtn_orderCommit").linkbutton('enable');
 		}
 		ezuiDetailsDatagrid.datagrid('load',{orderno:row.orderno});
+        allocationDetailsDatagrid.datagrid('load',{ordero:row.orderno})
 		$('#ezuiDetailsDatagrid').parent().parent().parent().show();
 		ezuiDialog.dialog('open');
 	}else{
@@ -463,7 +503,7 @@ var allocation = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg = '000') {
+						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {
@@ -488,7 +528,7 @@ var allocation = function(){
 /* 取消分配按钮 */
 var deAllocation = function(){
 	var operateResult = '';
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
 		if (item.sostatus >= '50') {
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
@@ -497,14 +537,14 @@ var deAllocation = function(){
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?deAllocation',
-				data : {orderno : item.orderno},
+				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg = '000') {
+						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {
@@ -529,7 +569,7 @@ var deAllocation = function(){
 /* 拣货按钮 */
 var picking = function(){
 	var operateResult = '';
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
 		if (item.sostatus == '00' || item.sostatus > '60') {
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
@@ -538,14 +578,15 @@ var picking = function(){
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?picking',
-				data : {orderno : item.orderno},
+				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
 					var msg = '';
 					try {
+					    console.log(result);
 						msg = result.msg;
-						if (msg = '000') {
+						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {
@@ -579,14 +620,14 @@ var unPicking = function(){
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?unPicking',
-				data : {orderno : item.orderno},
+				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg = '000') {
+						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {
@@ -629,7 +670,7 @@ var unPacking = function(){
 							var msg = '';
 							try {
 								msg = result.msg;
-								if (msg = '000') {
+								if (msg == '000') {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理成功" + "\n";
 								} else {
@@ -674,7 +715,7 @@ var shipment = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg = '000') {
+						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {
@@ -717,7 +758,7 @@ var cancel = function(){
 							var msg = '';
 							try {
 								msg = result.msg;
-								if (msg = '000') {
+								if (msg == '000') {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理成功" + "\n";
 								} else {
@@ -1547,6 +1588,12 @@ var selectLocation = function(){
 		ezuiLocDataDialog.dialog('close');
 	};
 };
+
+var docOrderRowStyler = function (index,row) {
+    if(row.sostatus == "30"){
+        return 'color:red;';
+    }
+}
 </script>
 </head>
 <body>
@@ -1633,7 +1680,7 @@ var selectLocation = function(){
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>
 
                     <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
-                    <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
+                    <a onclick='javascript:void(0);' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
                     <!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
 			</div>

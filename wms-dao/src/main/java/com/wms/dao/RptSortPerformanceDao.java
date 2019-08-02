@@ -11,7 +11,7 @@ import com.wms.entity.RptSortPerformance;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.query.RptSortPerformanceQuery;
 
-@Repository("rptSortPerformanceDao")
+
 public class RptSortPerformanceDao extends BaseDao<RptSortPerformance, String, RptSortPerformanceQuery> {
 
 	public List<RptSortPerformance> getPagedDatagrid(EasyuiDatagridPager pager, RptSortPerformanceQuery query) {

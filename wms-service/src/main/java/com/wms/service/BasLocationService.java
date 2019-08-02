@@ -61,9 +61,6 @@ import com.wms.mybatis.dao.MybatisCriteria;
 
 @Service("basLocationService")
 public class BasLocationService extends BaseService {
-
-	@Autowired
-	private BasLocationDao basLocationDao;
 	
 	@Autowired
 	private BasLocationMybatisDao basLocationMybatisDao;

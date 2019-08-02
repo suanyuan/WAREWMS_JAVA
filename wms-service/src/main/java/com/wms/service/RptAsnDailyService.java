@@ -25,8 +25,8 @@ import com.wms.query.RptAsnDailyQuery;
 @Service("rptAsnDailyService")
 public class RptAsnDailyService extends BaseService {
 
-	@Autowired
-	private RptAsnDailyDao rptAsnDailyDao;
+	//@Autowired
+	//private RptAsnDailyDao rptAsnDailyDao;
 	
 	@Autowired
 	private RptAsnDailyMybatisDao rptAsnDailyMybatisDao;
@@ -56,25 +56,25 @@ public class RptAsnDailyService extends BaseService {
 		Json json = new Json();
 		RptAsnDaily rptAsnDaily = new RptAsnDaily();
 		BeanUtils.copyProperties(rptAsnDailyForm, rptAsnDaily);
-		rptAsnDailyDao.save(rptAsnDaily);
+		rptAsnDailyMybatisDao.add(rptAsnDaily);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptAsnDaily(RptAsnDailyForm rptAsnDailyForm) {
 		Json json = new Json();
-		RptAsnDaily rptAsnDaily = rptAsnDailyDao.findById(rptAsnDailyForm.getAsnno());
+		RptAsnDaily rptAsnDaily = rptAsnDailyMybatisDao.queryById(rptAsnDailyForm.getAsnno());
 		BeanUtils.copyProperties(rptAsnDailyForm, rptAsnDaily);
-		rptAsnDailyDao.update(rptAsnDaily);
+		rptAsnDailyMybatisDao.update(rptAsnDaily);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptAsnDaily(String id) {
 		Json json = new Json();
-		RptAsnDaily rptAsnDaily = rptAsnDailyDao.findById(id);
+		RptAsnDaily rptAsnDaily = rptAsnDailyMybatisDao.queryById(id);
 		if(rptAsnDaily != null){
-			rptAsnDailyDao.delete(rptAsnDaily);
+			rptAsnDailyMybatisDao.delete(rptAsnDaily);
 		}
 		json.setSuccess(true);
 		return json;
@@ -83,7 +83,7 @@ public class RptAsnDailyService extends BaseService {
 	public List<EasyuiCombobox> getRptAsnDailyCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptAsnDaily> rptAsnDailyList = rptAsnDailyDao.findAll();
+		List<RptAsnDaily> rptAsnDailyList = rptAsnDailyMybatisDao.queryListByAll();
 		if(rptAsnDailyList != null && rptAsnDailyList.size() > 0){
 			for(RptAsnDaily rptAsnDaily : rptAsnDailyList){
 				combobox = new EasyuiCombobox();

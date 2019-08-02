@@ -101,11 +101,4 @@ public class DocAsnDoublecController {
 		return docAsnDoublecService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
-	@Login
-	@RequestMapping(params = "getCombobox")
-	@ResponseBody
-	public List<EasyuiCombobox> getCombobox() {
-		return docAsnDoublecService.getDocAsnDoublecCombobox();
-	}
-
 }

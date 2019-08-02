@@ -23,8 +23,8 @@ import com.wms.query.DocPoDetailsQuery;
 @Service("docPoDetailsService")
 public class DocPoDetailsService extends BaseService {
 
-	@Autowired
-	private DocPoDetailsDao docPoDetailsDao;
+	//@Autowired
+	//private DocPoDetailsDao docPoDetailsDao;
 	@Autowired
     private DocPoDetailsMybatisDao docPoDetailsMybatisDao;
 //根据主表pono显示datagrid
@@ -92,7 +92,7 @@ public class DocPoDetailsService extends BaseService {
 	public List<EasyuiCombobox> getDocPoDetailsCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<DocPoDetails> docPoDetailsList = docPoDetailsDao.findAll();
+		List<DocPoDetails> docPoDetailsList = docPoDetailsMybatisDao.queryListByAll();
 		if(docPoDetailsList != null && docPoDetailsList.size() > 0){
 			for(DocPoDetails docPoDetails : docPoDetailsList){
 				combobox = new EasyuiCombobox();

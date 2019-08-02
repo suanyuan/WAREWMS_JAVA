@@ -26,8 +26,8 @@ import com.wms.query.GspReceivingAddressQuery;
 @Service("gspReceivingAddressService")
 public class GspReceivingAddressService extends BaseService {
 
-	@Autowired
-	private GspReceivingAddressDao gspReceivingAddressDao;
+	//@Autowired
+	//private GspReceivingAddressDao gspReceivingAddressDao;
 
 	@Autowired
 	private GspReceivingAddressMybatisDao gspReceivingAddressMybatisDao;
@@ -108,7 +108,7 @@ public class GspReceivingAddressService extends BaseService {
 	public List<EasyuiCombobox> getGspReceivingAddressCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressDao.findAll();
+		List<GspReceivingAddress> gspReceivingAddressList = gspReceivingAddressMybatisDao.queryListByAll();
 		if(gspReceivingAddressList != null && gspReceivingAddressList.size() > 0){
 			for(GspReceivingAddress gspReceivingAddress : gspReceivingAddressList){
 				combobox = new EasyuiCombobox();

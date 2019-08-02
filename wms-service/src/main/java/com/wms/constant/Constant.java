@@ -26,6 +26,7 @@ public class Constant {
     public static final String CODE_CATALOG_CHECKSTATE = "CATALOG_CHECKSTATE"; //审核状态
     public static final String CODE_CATALOG_ENTTYPE = "ENT_TYP";//企业类型
     public static final String CODE_CATALOG_CUS_TYP = "CUS_TYP";//客户类型
+    public static final String CODE_CATALOG_UOM = "UOM";//单位
 
 
 //  企业类型

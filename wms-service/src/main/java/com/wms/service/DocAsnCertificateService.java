@@ -37,8 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DocAsnCertificateService extends BaseService {
 
 	@Autowired
-	private DocAsnCertificateDao docAsnCertificateDao;
-	@Autowired
 	private DocAsnCertificateMybatisDao docAsnCertificateMybatisDao;
 
 	@Autowired
@@ -46,18 +44,7 @@ public class DocAsnCertificateService extends BaseService {
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<DocAsnCertificateVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnCertificateQuery query) {
-//		EasyuiDatagrid<DocAsnCertificateVO> datagrid = new EasyuiDatagrid<DocAsnCertificateVO>();
-//		List<DocAsnCertificate> docAsnCertificateList = docAsnCertificateDao.getPagedDatagrid(pager, query);
-//		DocAsnCertificateVO docAsnCertificateVO = null;
-//		List<DocAsnCertificateVO> docAsnCertificateVOList = new ArrayList<DocAsnCertificateVO>();
-//		for (DocAsnCertificate docAsnCertificate : docAsnCertificateList) {
-//			docAsnCertificateVO = new DocAsnCertificateVO();
-//			BeanUtils.copyProperties(docAsnCertificate, docAsnCertificateVO);
-//			docAsnCertificateVOList.add(docAsnCertificateVO);
-//		}
-//		datagrid.setTotal(docAsnCertificateDao.countAll(query));
-//		datagrid.setRows(docAsnCertificateVOList);
-//		return datagrid;
+
 		EasyuiDatagrid<DocAsnCertificateVO> datagrid = new EasyuiDatagrid<DocAsnCertificateVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -175,21 +162,6 @@ public class DocAsnCertificateService extends BaseService {
 			json = importDocAsnCertificateDataService.importExcelData(excelFile);
 		}
 		return json;
-	}
-
-	public List<EasyuiCombobox> getDocAsnCertificateCombobox() {
-		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-		EasyuiCombobox combobox = null;
-		List<DocAsnCertificate> docAsnCertificateList = docAsnCertificateDao.findAll();
-		if(docAsnCertificateList != null && docAsnCertificateList.size() > 0){
-			for(DocAsnCertificate docAsnCertificate : docAsnCertificateList){
-				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(docAsnCertificate.getCustomerid()));
-				combobox.setValue(docAsnCertificate.getCertificateContext());
-				comboboxList.add(combobox);
-			}
-		}
-		return comboboxList;
 	}
 
 }

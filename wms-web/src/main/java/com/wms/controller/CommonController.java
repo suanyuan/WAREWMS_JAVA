@@ -214,4 +214,14 @@ public class CommonController {
     public List<EasyuiCombobox> checkState(){
         return basCodesService.getBy(Constant.CODE_CATALOG_CHECKSTATE);
     }
+    /**
+     * 单位
+     * @return
+     */
+    @RequestMapping(params = "getUOM")
+    @ResponseBody
+    public List<EasyuiCombobox> getUOM(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_UOM);
+    }
+
 }

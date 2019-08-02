@@ -168,14 +168,13 @@
     }
 
     var sostatusFormatter = function (value,row,index) {
-        if(row.sostatus.indexOf("CUS")!=-1){
-            return "委托客户";
-        }else if(row.sostatus.indexOf("SUP")!=-1){
-            return "供应商";
-        }else if(row.sostatus.indexOf("PRO")!=-1){
-            return "产品";
-        }else if(row.sostatus.indexOf("REC")!=-1){
-            return "收货单位";
+		console.log(value);
+        switch (value) {
+            case "40" : return "分配完成";
+            case "60" : return "拣货完成";
+            case "50" : return "部分拣货";
+            case "80" : return "完全发运";
+            case "90" : return "订单完成";
         }
     }
 

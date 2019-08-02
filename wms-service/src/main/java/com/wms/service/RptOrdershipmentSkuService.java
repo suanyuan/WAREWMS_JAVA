@@ -24,8 +24,8 @@ import com.wms.query.RptOrdershipmentSkuQuery;
 @Service("rptOrdershipmentSkuService")
 public class RptOrdershipmentSkuService extends BaseService {
 
-	@Autowired
-	private RptOrdershipmentSkuDao rptOrdershipmentSkuDao;
+	//@Autowired
+	//private RptOrdershipmentSkuDao rptOrdershipmentSkuDao;
 	
 	@Autowired
 	private RptOrdershipmentSkuMybatisDao rptOrdershipmentSkuMybatisDao;
@@ -55,25 +55,25 @@ public class RptOrdershipmentSkuService extends BaseService {
 		Json json = new Json();
 		RptOrdershipmentSku rptOrdershipmentSku = new RptOrdershipmentSku();
 		BeanUtils.copyProperties(rptOrdershipmentSkuForm, rptOrdershipmentSku);
-		rptOrdershipmentSkuDao.save(rptOrdershipmentSku);
+		rptOrdershipmentSkuMybatisDao.add(rptOrdershipmentSku);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptOrdershipmentSku(RptOrdershipmentSkuForm rptOrdershipmentSkuForm) {
 		Json json = new Json();
-		RptOrdershipmentSku rptOrdershipmentSku = rptOrdershipmentSkuDao.findById(rptOrdershipmentSkuForm.getOrderno());
+		RptOrdershipmentSku rptOrdershipmentSku = rptOrdershipmentSkuMybatisDao.queryById(rptOrdershipmentSkuForm.getOrderno());
 		BeanUtils.copyProperties(rptOrdershipmentSkuForm, rptOrdershipmentSku);
-		rptOrdershipmentSkuDao.update(rptOrdershipmentSku);
+		rptOrdershipmentSkuMybatisDao.update(rptOrdershipmentSku);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptOrdershipmentSku(String id) {
 		Json json = new Json();
-		RptOrdershipmentSku rptOrdershipmentSku = rptOrdershipmentSkuDao.findById(id);
+		RptOrdershipmentSku rptOrdershipmentSku = rptOrdershipmentSkuMybatisDao.queryById(id);
 		if(rptOrdershipmentSku != null){
-			rptOrdershipmentSkuDao.delete(rptOrdershipmentSku);
+			rptOrdershipmentSkuMybatisDao.delete(rptOrdershipmentSku);
 		}
 		json.setSuccess(true);
 		return json;
@@ -82,7 +82,7 @@ public class RptOrdershipmentSkuService extends BaseService {
 	public List<EasyuiCombobox> getRptOrdershipmentSkuCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptOrdershipmentSku> rptOrdershipmentSkuList = rptOrdershipmentSkuDao.findAll();
+		List<RptOrdershipmentSku> rptOrdershipmentSkuList = rptOrdershipmentSkuMybatisDao.queryByAll();
 		if(rptOrdershipmentSkuList != null && rptOrdershipmentSkuList.size() > 0){
 			for(RptOrdershipmentSku rptOrdershipmentSku : rptOrdershipmentSkuList){
 				combobox = new EasyuiCombobox();

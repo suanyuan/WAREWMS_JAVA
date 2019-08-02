@@ -3,12 +3,16 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.ActAllocationDetails;
+import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.service.OrderHeaderForNormalService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.utils.editor.CustomDateEditor;
+import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
@@ -67,6 +71,15 @@ public class DocOrderHeaderController {
 	}
 
 	@Login
+	@RequestMapping(params = "showAllocation")
+	@ResponseBody
+	public EasyuiDatagrid<ActAllocationDetailsVO> showAllocation(EasyuiDatagridPager pager,String ordero) {
+		ActAllocationDetailsQuery query = new ActAllocationDetailsQuery();
+		query.setOrderno(ordero);
+		return orderHeaderForNormalService.getPageAllocation(pager, query);
+	}
+
+	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
 	public Json add(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
@@ -119,6 +132,18 @@ public class DocOrderHeaderController {
 	@ResponseBody
 	public Json deAllocation(String orderNo) {
 		Json json = orderHeaderForNormalService.deAllocation(orderNo);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "picking")
+	@ResponseBody
+	public Json picking(String orderNo) {
+		Json json = orderHeaderForNormalService.picking(orderNo);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

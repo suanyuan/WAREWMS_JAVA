@@ -27,8 +27,8 @@ import com.wms.query.RptInOutQuery;
 @Service("rptInOutService")
 public class RptInOutService extends BaseService {
 
-	@Autowired
-	private RptInOutDao rptInOutDao;
+	//@Autowired
+	//private RptInOutDao rptInOutDao;
 	
 	@Autowired
 	private RptInOutMybatisDao rptInOutMybatisDao;
@@ -69,25 +69,25 @@ public class RptInOutService extends BaseService {
 		Json json = new Json();
 		RptInOut rptInOut = new RptInOut();
 		BeanUtils.copyProperties(rptInOutForm, rptInOut);
-		rptInOutDao.save(rptInOut);
+		rptInOutMybatisDao.add(rptInOut);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptInOut(RptInOutForm rptInOutForm) {
 		Json json = new Json();
-		RptInOut rptInOut = rptInOutDao.findById(rptInOutForm.getUserid());
+		RptInOut rptInOut = rptInOutMybatisDao.queryById(rptInOutForm.getUserid());
 		BeanUtils.copyProperties(rptInOutForm, rptInOut);
-		rptInOutDao.update(rptInOut);
+		rptInOutMybatisDao.update(rptInOut);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptInOut(String id) {
 		Json json = new Json();
-		RptInOut rptInOut = rptInOutDao.findById(id);
+		RptInOut rptInOut = rptInOutMybatisDao.queryById(id);
 		if(rptInOut != null){
-			rptInOutDao.delete(rptInOut);
+			rptInOutMybatisDao.delete(rptInOut);
 		}
 		json.setSuccess(true);
 		return json;
@@ -96,7 +96,7 @@ public class RptInOutService extends BaseService {
 	public List<EasyuiCombobox> getRptInOutCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptInOut> rptInOutList = rptInOutDao.findAll();
+		List<RptInOut> rptInOutList = rptInOutMybatisDao.queryListByAll();
 		if(rptInOutList != null && rptInOutList.size() > 0){
 			for(RptInOut rptInOut : rptInOutList){
 				combobox = new EasyuiCombobox();
