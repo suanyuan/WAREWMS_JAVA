@@ -68,15 +68,15 @@
         <tr>
             <th>运输条件</th>
             <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
-            <th>长</th>m
-            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='50' data-options=''/>(m)</td>
+            <th>长</th>
+            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='47' data-options=''/>(m)</td>
         </tr>
 
         <tr>
             <th>储存条件</th>
             <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <th>宽</th>
-            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='50' data-options=''/>(m)</td>
+            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
         </tr>
 
@@ -86,14 +86,14 @@
             <td><input type='hidden' data="1" id="enterpriseId" name='enterpriseId'  size='50' data-options=''/>
                 <input type='text' data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options=''/></td>
             <th>高</th>
-            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='50' data-options=''/>(m)</td>
+            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
           </tr>
        <tr>
            <th>生产许可证号/备案号</th>
            <td><input type='text' data="1" id="licenseNo"  name='licenseNo' class='easyui-textbox' size='50' data-options='editable:false'/></td>
            <th>重量</th>
-           <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='50' data-options=''/>(kg)</td>
+           <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='47' data-options=''/>(kg)</td>
        </tr>
         <tr>
             <th>产地</th>
@@ -180,6 +180,7 @@
             <td><input type='text' data="1" value="${createId}" id="editId" name='editId' class='easyui-textbox' size='50' data-options='' readonly/></td>
             <th>是否有效：</th><td><input type="text" data="1" id="isUse"  value="${isUse}"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
+																																     readonly:true,
 																																	valueField: 'id',
 																																	textField: 'value',
 																																	data: [
