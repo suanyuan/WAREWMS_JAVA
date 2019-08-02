@@ -130,13 +130,18 @@ public class BasCarrierLicenseService extends BaseService {
 			gspBusinessLicense.setIsUse("1");
 			gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
 			gspBusinessLicense.setEnterpriseId(basCarrierLicenseForm.getBasCarrierLicenseForm().getEnterpriseId());
+			BasCarrierLicense basCarrierLicense1 = basCarrierLicenseMybatisDao.queryUseByEnterId(basCarrierLicenseForm.getBasCarrierLicenseForm().getEnterpriseId());
+			if(basCarrierLicense1!=null){
+				json.setMsg("已有相同承运商！");
+				return json;
+			}
 			basCarrierLicenseMybatisDao.add(basCarrierLicense);
 
 			gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 
 		//	gspCustomerService.addGspCustomer(gspCustomerForm);
 
-
+			json.setMsg("资料添加成功");
 			json.setSuccess(true);
 		} catch (BeansException e) {
 			e.printStackTrace();
@@ -157,13 +162,14 @@ public class BasCarrierLicenseService extends BaseService {
 			basCarrierLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			basCarrierLicenseMybatisDao.updateBySelective(basCarrierLicense);
 		}
+
+		System.out.println(basCarrierLicenseForm.getGspBusinessLicenseForm().getBusinessId());
 		if (basCarrierLicenseForm.getGspBusinessLicenseForm().getBusinessId()!=null){
 			GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.queryById(basCarrierLicenseForm.getGspBusinessLicenseForm().getBusinessId());
 			BeanUtils.copyProperties(basCarrierLicenseForm.getGspBusinessLicenseForm(),gspBusinessLicense);
 			gspBusinessLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspBusinessLicenseMybatisDao.updateBySelective(gspBusinessLicense);
-
-			}
+		}
 
 
 
@@ -214,8 +220,6 @@ public class BasCarrierLicenseService extends BaseService {
 
 
 	public BasCarrierLicense queryByEnterId(String enterpriceId){
-
-
 		return basCarrierLicenseMybatisDao.queryByEnterId(enterpriceId);
 	}
 

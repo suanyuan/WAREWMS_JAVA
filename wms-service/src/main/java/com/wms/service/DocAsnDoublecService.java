@@ -35,8 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 @Service("docAsnDoublecService")
 public class DocAsnDoublecService extends BaseService {
 
-	//@Autowired
-	//private DocAsnDoublecDao docAsnDoublecDao;
+//	@Autowired
+//	private DocAsnDoublecDao docAsnDoublecDao;
 	@Autowired
 	private ImportDocAsnDoublecDataService importDocAsnDoublecDataService;
 	@Autowired
@@ -162,4 +162,19 @@ System.out.println(str[a]);
 		}
 		return json;
 	}
+//	public List<EasyuiCombobox> getDocAsnDoublecCombobox() {
+//		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+//		EasyuiCombobox combobox = null;
+//		List<DocAsnDoublec> docAsnDoublecList = docAsnDoublecDao.findAll();
+//		if(docAsnDoublecList != null && docAsnDoublecList.size() > 0){
+//			for(DocAsnDoublec docAsnDoublec : docAsnDoublecList){
+//				combobox = new EasyuiCombobox();
+//				combobox.setId(String.valueOf(docAsnDoublec.getCustomerid()));
+//				combobox.setValue(docAsnDoublec.getMatchFlag());
+//				comboboxList.add(combobox);
+//			}
+//		}
+//		return comboboxList;
+//	}
+
 }

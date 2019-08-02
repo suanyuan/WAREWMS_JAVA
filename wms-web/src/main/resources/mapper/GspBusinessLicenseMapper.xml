@@ -197,7 +197,7 @@ where 1=1
  
 <!-- 根据id查询 营业执照 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	 from gsp_business_license where business_id = #{businessId}
 </select>
 

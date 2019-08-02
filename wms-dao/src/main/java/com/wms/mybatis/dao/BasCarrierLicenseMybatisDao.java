@@ -9,6 +9,7 @@ import com.wms.entity.BasCarrierLicense;
  * <b>功能：</b>BasCarrierLicenseDao<br>
  */
 public interface BasCarrierLicenseMybatisDao extends BaseDao {
-	public BasCarrierLicense queryByEnterId(String enterpriseId);
-	
+	public BasCarrierLicense queryByEnterId(Object id);
+
+	public BasCarrierLicense queryUseByEnterId(String enterpriseId);
 }

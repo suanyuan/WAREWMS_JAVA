@@ -9,6 +9,12 @@
 </head>
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
+<style>
+    table th{
+        text-align: right;
+    }
+
+</style>
 <body>
 <%--<script type='text/javascript'>--%>
     <%--var  ezuiDialog1;--%>
@@ -28,18 +34,22 @@
 
          <tr>
             <th>收货单位</th>
-            <td>
+            <td colspan="" >
                 <input type='text' id="enterpriseN"  name='enterpriseName'   size='16' class='easyui-textbox' data-options='required:true'/>
+
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
+                <!--<a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewSupEnterpriseUrl()">查看</a>-->
+
             </td>
-             <th>收货单位代码</th>
-             <td><input type='text' id="enterpriseNo" style="width: 150px" name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'   size='16' class='easyui-textbox' data-options='required:true'/></td>
+
+             <th >收货单位代码</th>
+             <td><input type='text' id="enterpriseNo" style="width: 150px;" name='enterpriseNo' value='${gspEnterpriseInfo.enterpriseNo}'   size='16' class='easyui-textbox' data-options='required:true'/></td>
              <th>收货单位简称</th>
              <td><input type='text' id="s" style="width: 150px"  name='shorthandName' size='16' value='${gspEnterpriseInfo.shorthandName}' class='easyui-textbox' data-options='required:true'/></td>
        </tr>
        <tr>
          <th>供应商</th>
-          <td>
+           <td colspan="">
               <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox'  data-options='required:true'/>
               <%--<a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>--%>
               <%--<input type='hidden'  name='enterpriseId1' id="enterpriseId1"  size="16" class='easyui-textbox'  data-options='required:true'/>--%>
@@ -49,11 +59,19 @@
 
           </td>
            <th>货主</th>
-           <td><input type='text' name='clientId' id="client" style="width: 150px"  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/></td>
+           <td>
+               <input type='text' name='clientId' id="client" style="width: 150px"  size='16' value='${gspReceiving.clientId}' class='easyui-textbox' data-options='required:true'/>
+               <%--<a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewSupEnterpriseUrl()">查看</a>--%>
+
+           </td>
+
        </tr>
             <tr>
                 <th>是否医废</th>
-                <td><input type='text' name='isReturn' id="return" style="width: 150px" class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/></td>
+                <td><input type='text' name='isReturn' id="return"  style="width: 150px;float: left" class='easyui-combobox' value="${gspReceiving.isReturn}" size="16" data-options='required:true,editable:false'/>
+
+
+                </td>
                 <th>是否有效</th>
                 <td><input type='text' name='isUse'  style="width: 150px" id="use" class='easyui-combobox' value="${gspReceiving.isUse}"  size="16" data-options='required:true,editable:false'/></td>
 
@@ -107,6 +125,8 @@
                         <td>
                             <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                             <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                            <%--<a onclick='ezuiToolbarClear("#ezuiDialogDetail");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>--%>
+
                         </td>
                     </tr>
                 </table>
@@ -115,6 +135,7 @@
         <table id="dataGridDetail">
 
         </table>
+        <div id='enterpriseDialog' style='padding: 10px;'></div>
     </div>
 </div>
 
@@ -378,15 +399,20 @@
             idField : 'enterpriseId',
             columns : [[
                 {field: 'enterpriseId',		title: '主键',	width: 81 ,hidden:true},
-                {field: 'enterpriseNo',		title: '企业信息代码',	width: 91 },
-                {field: 'shorthandName',		title: '简称',	width: 91 },
-                {field: 'enterpriseName',		title: '企业名称',	width: 91 },
-                {field: 'enterpriseType',		title: '企业类型',	width: 91 ,formatter: entTypeFormatter},
-                {field: 'createId',		title: '录入人',	width:81 },
-                {field: 'createDate',		title: '录入时间',	width: 81 },
-                {field: 'editId',		title: '修改人',	width: 81 },
-                {field: 'editDate',		title: '修改时间',	width: 81 },
-                {field: 'isUse',		title: '是否有效',	width: 91,formatter:isUseFormatter }
+                {field: 'enterpriseName',		title: '企业名称',	width: '30%'},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'shorthandName',		title: '简称',	width: '20%' },
+
+                {field: 'enterpriseType',		title: '企业类型',	width:'20%' ,formatter: entTypeFormatter},
+                // {field: 'createId',		title: '录入人',	width:81 },
+                // {field: 'createDate',		title: '录入时间',	width: 81 },
+                // {field: 'editId',		title: '修改人',	width: 81 },
+                // {field: 'editDate',		title: '修改时间',	width: 81 },
+                // {field: 'isUse',		title: '是否有效',	width: 91,formatter:isUseFormatter },
+                {field: '_operate',		title: '操作',	width: '10%',
+                    formatter: formatOper
+                }
+
             ]],
             onDblClickCell: function(index,field,value){
                 choseSelect();
@@ -400,11 +426,37 @@
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:540});
+            },
 
-
-
-            }
+            // enterpriseFUZHI()
         });
+
+        //var row = dataGridDetail.datagrid('getSelected');
+
+
+
+
+        // function enterpriseFUZHI() {
+        //
+        // }
+
+
+        function operateGrid(id) {
+            $('#enterpriseDialog').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,
+                width:850,
+                height:500,
+                cache:false,
+                onClose : function() {
+
+                }
+            })
+        }
+        function formatOper(value,row,index){
+            return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }
 
 
         dataGridDetail = $('#ezuiDialogDetail').dialog({
@@ -600,7 +652,7 @@
             singleSelect:true,
             idField : 'clientId',
             columns : [[
-                {field: 'customerType',	title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                {field: 'customerType',	title: '客户类型 ',	width: '10%',formatter:function(value,rowData,rowIndex){
                         if (rowData.customerType=='CO') {
                             return rowData.customerType='收货单位';
                         }else if (rowData.customerType=='VE'){
@@ -617,17 +669,18 @@
                             return rowData.customerType='主体';
                         }
                     } },
-                {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                {field: 'activeFlag',		title: '是否合作 ',	width: '10%',formatter:function(value,rowData,rowIndex){
                         return rowData.activeFlag == '1' ? '是' : '否';
                     }},
-                {field: 'customerid',		title: '客户代码',	width: 80 },
-                {field: 'descrC',		title: '客户名称',	width: 80 },
-                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
-                {field: 'shorthandName',		title: '简称 ',	width: 85 },
-                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 },
-                {field: 'contacts',		title: '联系人 ',	width: 85 },
-                {field: 'contactsPhone',		title: '联系人电话 ',	width: 80 },
-                {field: 'remark',		title: '备注 ',	width: 85 },
+                {field: 'enterpriseId',		title: '主键',	width: '10%' ,hidden:true},
+                {field: 'customerid',		title: '客户代码',	width: '10%' },
+                {field: 'descrC',		title: '客户名称',	width: '30%' },
+                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: '10%' },
+                {field: 'shorthandName',		title: '简称 ',	width:'10%' },
+                {field: 'enterpriseName',		title: '企业名称 ',	width: '10%' },
+                {field: '_operate',		title: '操作',	width: '10%',
+                    formatter: formatOper
+                }
             ]],
             onDblClickCell: function(index,field,value){
                 choseClientSelect();
@@ -675,15 +728,27 @@
     function searchEnterprise() {
         if(dataGridDetail){
             dataGridDetail.dialog('open');
+            // alert(12e31);
+            dEnterpriseFUZHI();
         }
-
     }
+    function dEnterpriseFUZHI() {
+        console.log($("#enterpriseN").textbox('getValue'))
+        var enterpriseN = $("#enterpriseN").textbox('getValue');
+        // alert(12e31);
+        $("#ezuiDialogDetail input[id='qiyemingcheng']").val(enterpriseN);
+        // $("#ezuiDialogDetail input[id='qiyemingcheng']").val(),
+    }
+
 
     //查询企业信息条件
     function doSearchEnterprise() {
         enterpriseDatagrid.datagrid('load', {
-            enterpriseName : $('#qiyemingcheng').val(),
-            enterpriseNo: $('#qiye').val(),
+            enterpriseName : $("#ezuiDialogDetail input[id='qiyemingcheng']").val(),
+            enterpriseNo : $("#ezuiDialogDetail input[id='qiye']").val(),
+
+            // enterpriseName : $('#qiyemingcheng').val(),
+            // enterpriseNo: $('#qiye').val(),
             isUse : '1'
         });
     }
@@ -1000,40 +1065,40 @@
 }
 }
 }
-    <%--function viewSupEnterpriseUrl() {--%>
-        <%--$(function() {--%>
-            <%--ezuiDialog1 = $('#ezuiDialog1').dialog({--%>
-                <%--modal : true,--%>
-                <%--title : '<spring:message code="common.dialog.title"/>',--%>
-                <%--buttons : '',--%>
-                <%--href:dialogUrl,--%>
-                <%--width:1200,--%>
-                <%--height:530,--%>
-                <%--closable:true,--%>
-                <%--cache: false,--%>
-                <%--onClose : function() {--%>
-                    <%--ezuiFormClear(ezuiDialog1);--%>
-                <%--}--%>
-            <%--}).dialog('close');--%>
-        <%--})--%>
-        <%--//processType = 'add';--%>
+    function viewSupEnterpriseUrl() {
+        $(function() {
+            ezuiDialog1 = $('#ezuiDialog1').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:dialogUrl,
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialog1);
+                }
+            }).dialog('close');
+        })
+        //processType = 'add';
 
-        <%--//var row = ezuiDatagrid.datagrid('getSelected');--%>
-        <%--console.log($("#ezuiFormInfo input[id='enterpriseId1']").val());--%>
-        <%--var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId1']").val();--%>
-        <%--if(enterpriseId==null || enterpriseId==""){--%>
-            <%--enterpriseId = $("#enterpriseId1").val();--%>
-        <%--}--%>
+        //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#ezuiFormInfo input[id='enterpriseId1']").val());
+        var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId1']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            enterpriseId = $("#enterpriseId1").val();
+        }
 
-        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
-            <%--ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');--%>
-        <%--}else{--%>
-            <%--$.messager.show({--%>
-                <%--msg : '请先选择企业', title : '提示'--%>
-            <%--});--%>
-        <%--}--%>
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
 
-    <%--}--%>
+    }
 </script>
 </body>
 </html>

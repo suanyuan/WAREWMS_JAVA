@@ -33,8 +33,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'enterpriseId',
+		idField : 'carrierLicenseId',
 		columns : [[
+            {field: 'carrierLicenseId',		title: '承运商名称',	width: 120,hidden:true },
 			{field: 'enterpriseName',		title: '承运商名称',	width: 120 },
 			{field: 'roadNumber',		title: '道路运营许可证编号',	width: 140 },
 			{field: 'roadNumberTerm',		title: '证件有效期',	width: 120 },
@@ -177,14 +178,15 @@ var commit = function(){
     var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
-   // var clientObj = new Object();
-
+   // var clientObj = new Object();ezuiDatagrid.datagrid('getSelected');
+	// var row = ezuiBussinessDatagridDetail.datagrid('getSelected');
     $("#ezuiFormInfo input[class='textbox-value'][type='hidden']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     });
     $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
         businessObj[""+$(this).attr("name")+""] = $(this).val();
     });
+    businessObj["businessId"] =$("#ezuiFormBusiness input[id='businessId']").val();
    /* $("#ezuiFormClient input[class='textbox-value'][type!='file']").each(function (index) {
         clientObj[""+$(this).attr("name")+""] = $(this).val();
     });*/

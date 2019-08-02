@@ -14,10 +14,8 @@
                     <th>产品名称</th>
                     <td><input type='text' id='productNameMain1' class='easyui-textbox' data-options='width:200'/></td>
                     <td>
-
                         <a onclick='doSearchEnterprise();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                         <a onclick='ezuiToolbarClear("#enterpriseSearchGridToolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>清空</a>
-
                         <a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                     </td>
                 </tr>
