@@ -31,8 +31,8 @@ import java.util.List;
 @Service("productLineService")
 public class ProductLineService extends BaseService {
 
-	@Autowired
-	private ProductLineDao productLineDao;
+	//@Autowired
+	//private ProductLineDao productLineDao;
 
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
@@ -152,7 +152,7 @@ public class ProductLineService extends BaseService {
 	public List<EasyuiCombobox> getProductLineCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<ProductLine> productLineList = productLineDao.findAll();
+		List<ProductLine> productLineList = productLineMybatisDao.queryListByAll();
 		if(productLineList != null && productLineList.size() > 0){
 			for(ProductLine productLine : productLineList){
 				combobox = new EasyuiCombobox();

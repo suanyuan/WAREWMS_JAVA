@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 @Service("basGtnService")
 public class BasGtnService extends BaseService {
 
-	@Autowired
-	private BasGtnDao basGtnDao;
+	//@Autowired
+	//private BasGtnDao basGtnDao;
 	@Autowired
 	private BasGtnMybatisDao basGtnMybatisDao;
 	@Autowired
@@ -150,7 +150,7 @@ public class BasGtnService extends BaseService {
 	public List<EasyuiCombobox> getBasGtnCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<BasGtn> basGtnList = basGtnDao.findAll();
+		List<BasGtn> basGtnList = basGtnMybatisDao.queryListByAll();
 		if(basGtnList != null && basGtnList.size() > 0){
 			for(BasGtn basGtn : basGtnList){
 				combobox = new EasyuiCombobox();

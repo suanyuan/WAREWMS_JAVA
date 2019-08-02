@@ -1234,7 +1234,7 @@
 
 	<!--  -->
 	<select id="queryByAllocationDetailsId"  resultMap="BaseResultMap" parameterType="Object">
-
+		select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '40'
 	</select>
 
 	<!--  -->
@@ -1359,8 +1359,8 @@
 
 	</update>
 
-	<update id="pickingByOrder" parameterType="Object">
-
+	<update id="pickingByOrder" statementType="CALLABLE" parameterType="java.util.Map">
+		{call SPSO_Picking_Process('*','PK',#{allocationDetailsId,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
 	<update id="unPickingByOrder" parameterType="Object">

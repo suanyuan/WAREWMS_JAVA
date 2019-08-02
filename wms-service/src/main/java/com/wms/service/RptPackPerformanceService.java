@@ -24,8 +24,8 @@ import com.wms.query.RptPackPerformanceQuery;
 @Service("rptPackPerformanceService")
 public class RptPackPerformanceService extends BaseService {
 
-	@Autowired
-	private RptPackPerformanceDao rptPackPerformanceDao;
+	//@Autowired
+	//private RptPackPerformanceDao rptPackPerformanceDao;
 	
 	@Autowired
 	private RptPackPerformanceMybatisDao rptPackPerformanceMybatisDao;
@@ -54,25 +54,25 @@ public class RptPackPerformanceService extends BaseService {
 		Json json = new Json();
 		RptPackPerformance rptPackPerformance = new RptPackPerformance();
 		BeanUtils.copyProperties(rptPackPerformanceForm, rptPackPerformance);
-		rptPackPerformanceDao.save(rptPackPerformance);
+		rptPackPerformanceMybatisDao.add(rptPackPerformance);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptPackPerformance(RptPackPerformanceForm rptPackPerformanceForm) {
 		Json json = new Json();
-		RptPackPerformance rptPackPerformance = rptPackPerformanceDao.findById(rptPackPerformanceForm.getCustomerid());
+		RptPackPerformance rptPackPerformance = rptPackPerformanceMybatisDao.queryById(rptPackPerformanceForm.getCustomerid());
 		BeanUtils.copyProperties(rptPackPerformanceForm, rptPackPerformance);
-		rptPackPerformanceDao.update(rptPackPerformance);
+		rptPackPerformanceMybatisDao.update(rptPackPerformance);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptPackPerformance(String id) {
 		Json json = new Json();
-		RptPackPerformance rptPackPerformance = rptPackPerformanceDao.findById(id);
+		RptPackPerformance rptPackPerformance = rptPackPerformanceMybatisDao.queryById(id);
 		if(rptPackPerformance != null){
-			rptPackPerformanceDao.delete(rptPackPerformance);
+			rptPackPerformanceMybatisDao.delete(rptPackPerformance);
 		}
 		json.setSuccess(true);
 		return json;
@@ -81,7 +81,7 @@ public class RptPackPerformanceService extends BaseService {
 	public List<EasyuiCombobox> getRptPackPerformanceCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptPackPerformance> rptPackPerformanceList = rptPackPerformanceDao.findAll();
+		List<RptPackPerformance> rptPackPerformanceList = rptPackPerformanceMybatisDao.queryByAll();
 		if(rptPackPerformanceList != null && rptPackPerformanceList.size() > 0){
 			for(RptPackPerformance rptPackPerformance : rptPackPerformanceList){
 				combobox = new EasyuiCombobox();

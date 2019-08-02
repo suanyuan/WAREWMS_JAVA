@@ -39,8 +39,8 @@ import javax.servlet.http.HttpServletResponse;
 @Service("gspProductRegisterSpecsService")
 public class GspProductRegisterSpecsService extends BaseService {
 
-	@Autowired
-	private GspProductRegisterSpecsDao gspProductRegisterSpecsDao;
+	//@Autowired
+	//private GspProductRegisterSpecsDao gspProductRegisterSpecsDao;
 	@Autowired
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 	@Autowired
@@ -215,7 +215,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	public List<EasyuiCombobox> getGspProductRegisterSpecsCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsDao.findAll();
+		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryListByAll();
 		if(gspProductRegisterSpecsList != null && gspProductRegisterSpecsList.size() > 0){
 			for(GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList){
 				combobox = new EasyuiCombobox();

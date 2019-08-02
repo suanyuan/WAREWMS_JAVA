@@ -27,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("gspSupplierService")
 public class GspSupplierService extends BaseService {
 
-	@Autowired
-	private GspSupplierDao gspSupplierDao;
+	//@Autowired
+	//private GspSupplierDao gspSupplierDao;
 	@Autowired
 	private GspSupplierMybatisDao gspSupplierMybatisDao;
 	@Autowired
@@ -162,7 +162,7 @@ public class GspSupplierService extends BaseService {
 	public List<EasyuiCombobox> getGspSupplierCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspSupplier> gspSupplierList = gspSupplierDao.findAll();
+		List<GspSupplier> gspSupplierList = gspSupplierMybatisDao.queryListByAll();
 		if(gspSupplierList != null && gspSupplierList.size() > 0){
 			for(GspSupplier gspSupplier : gspSupplierList){
 				combobox = new EasyuiCombobox();

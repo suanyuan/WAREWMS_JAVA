@@ -27,8 +27,8 @@ import com.wms.query.RptAsnDetailQuery;
 @Service("rptAsnDetailService")
 public class RptAsnDetailService extends BaseService {
 
-	@Autowired
-	private RptAsnDetailDao rptAsnDetailDao;
+	//@Autowired
+	//private RptAsnDetailDao rptAsnDetailDao;
 	
 	@Autowired
 	private RptAsnDetailMybatisDao rptAsnDetailMybatisDao;
@@ -58,25 +58,25 @@ public class RptAsnDetailService extends BaseService {
 		Json json = new Json();
 		RptAsnDetail rptAsnDetail = new RptAsnDetail();
 		BeanUtils.copyProperties(rptAsnDetailForm, rptAsnDetail);
-		rptAsnDetailDao.save(rptAsnDetail);
+		rptAsnDetailMybatisDao.add(rptAsnDetail);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptAsnDetail(RptAsnDetailForm rptAsnDetailForm) {
 		Json json = new Json();
-		RptAsnDetail rptAsnDetail = rptAsnDetailDao.findById(rptAsnDetailForm.getAsnno());
+		RptAsnDetail rptAsnDetail = rptAsnDetailMybatisDao.queryById(rptAsnDetailForm.getAsnno());
 		BeanUtils.copyProperties(rptAsnDetailForm, rptAsnDetail);
-		rptAsnDetailDao.update(rptAsnDetail);
+		rptAsnDetailMybatisDao.update(rptAsnDetail);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptAsnDetail(String id) {
 		Json json = new Json();
-		RptAsnDetail rptAsnDetail = rptAsnDetailDao.findById(id);
+		RptAsnDetail rptAsnDetail = rptAsnDetailMybatisDao.queryById(id);
 		if(rptAsnDetail != null){
-			rptAsnDetailDao.delete(rptAsnDetail);
+			rptAsnDetailMybatisDao.delete(rptAsnDetail);
 		}
 		json.setSuccess(true);
 		return json;
@@ -85,7 +85,7 @@ public class RptAsnDetailService extends BaseService {
 	public List<EasyuiCombobox> getRptAsnDetailCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptAsnDetail> rptAsnDetailList = rptAsnDetailDao.findAll();
+		List<RptAsnDetail> rptAsnDetailList = rptAsnDetailMybatisDao.queryByAll();
 		if(rptAsnDetailList != null && rptAsnDetailList.size() > 0){
 			for(RptAsnDetail rptAsnDetail : rptAsnDetailList){
 				combobox = new EasyuiCombobox();

@@ -23,14 +23,14 @@ import com.wms.vo.form.CountryForm;
 @Service("countryService")
 public class CountryService extends BaseService {
 	
-	@Autowired
-	private CountryDao countryDao;
+	//@Autowired
+	//private CountryDao countryDao;
 	@Autowired
 	private SfcCountryMybatisDao sfcCountryMybatisDao;
 	
 	public EasyuiDatagrid<CountryVO> getCountryDatagrid(EasyuiDatagridPager pager, CountryQuery query) {
 		EasyuiDatagrid<CountryVO> datagrid = new EasyuiDatagrid<CountryVO>();
-		List<Country> countryList = countryDao.getPagedDatagrid(pager, query);
+		/*List<Country> countryList = countryDao.getPagedDatagrid(pager, query);
 		
 		CountryVO countryVO = null;
 		List<CountryVO> countryVOList = new ArrayList<CountryVO>();
@@ -40,17 +40,17 @@ public class CountryService extends BaseService {
 			countryVOList.add(countryVO);
 		}
 		datagrid.setTotal(countryDao.countAll(query));
-		datagrid.setRows(countryVOList);
+		datagrid.setRows(countryVOList);*/
 		return datagrid;
 	}
 
 	@CacheEvict(value = "countryCache", allEntries = true)
 	public Json addCountry(CountryForm countryForm) throws Exception {
 		Json json = new Json();
-		Country country = new Country();
+		/*Country country = new Country();
 		BeanUtils.copyProperties(countryForm, country);
 		country.setId(countryDao.getCountryId());
-		countryDao.save(country);
+		countryDao.save(country);*/
 		json.setSuccess(true);
 		return json;
 	}
@@ -59,9 +59,9 @@ public class CountryService extends BaseService {
 	public Json editCountry(CountryForm countryForm) {
 //		this.testAtomikos();
 		Json json = new Json();
-		Country country = countryDao.findById(countryForm.getCountryId());
+		/*Country country = countryDao.findById(countryForm.getCountryId());
 		BeanUtils.copyProperties(countryForm, country);
-		countryDao.update(country);
+		countryDao.update(country);*/
 		json.setSuccess(true);
 		
 		return json;
@@ -70,10 +70,10 @@ public class CountryService extends BaseService {
 	@CacheEvict(value = "countryCache", allEntries = true)
 	public Json deleteCountry(int id) {
 		Json json = new Json();
-		Country country = countryDao.findById(id);
+		/*Country country = countryDao.findById(id);
 		if(country != null){
 			countryDao.delete(country);
-		}
+		}*/
 		json.setSuccess(true);
 		return json;
 	}

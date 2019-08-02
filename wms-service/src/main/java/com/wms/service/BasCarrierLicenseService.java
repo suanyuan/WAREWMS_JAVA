@@ -44,8 +44,8 @@ public class BasCarrierLicenseService extends BaseService {
 	@Autowired
 	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
 
-	@Autowired
-	private BasCarrierLicenseDao basCarrierLicenseDao;
+	//@Autowired
+	//private BasCarrierLicenseDao basCarrierLicenseDao;
 
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -189,7 +189,7 @@ public class BasCarrierLicenseService extends BaseService {
 	public List<EasyuiCombobox> getBasCarrierLicenseCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseDao.findAll();
+		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseMybatisDao.queryListByAll();
 		if(basCarrierLicenseList != null && basCarrierLicenseList.size() > 0){
 			for(BasCarrierLicense basCarrierLicense : basCarrierLicenseList){
 				combobox = new EasyuiCombobox();

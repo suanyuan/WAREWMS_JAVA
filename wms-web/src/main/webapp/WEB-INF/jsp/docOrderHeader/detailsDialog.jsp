@@ -59,32 +59,36 @@
 				<th>入库单号</th>
 				<td><input type='text' name='lotatt14' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 			</tr>
-			<!--
-			<th>[+件数]分配数C</th>
-			<td><input type='text' name='qtyallocated' id='qtyallocated' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
-			<th>拣货数C</th>
-			<td><input type='text' name='qtypicked' id='qtypicked' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
-			<th>发货数C</th>
-			<td><input type='text' name='qtyshipped' id='qtyshipped' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
-			<th>重量C</th>
-			<td><input type='text' name='grossweight' id='grossweight' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
-			<th>体积C</th>
-			<td><input type='text' name='cubic' id='cubic' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
-			<th>金额C</th>
-			<td><input type='text' name='price' id='price' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:2'/></td>
-			<th>拣货区C</th>
-			<td><input type='text' name='pickzone' id='pickzone' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+		</table>
+
+		<div style="display: none;">
+			<table>
+				<th>[+件数]分配数C</th>
+				<td><input type='text' name='qtyallocated' id='qtyallocated' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
+				<th>拣货数C</th>
+				<td><input type='text' name='qtypicked' id='qtypicked' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
+				<th>发货数C</th>
+				<td><input type='text' name='qtyshipped' id='qtyshipped' class='easyui-numberbox' size='16' data-options='editable:false,min:0,precision:0'/></td>
+				<th>重量C</th>
+				<td><input type='text' name='grossweight' id='grossweight' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
+				<th>体积C</th>
+				<td><input type='text' name='cubic' id='cubic' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
+				<th>金额C</th>
+				<td><input type='text' name='price' id='price' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:2'/></td>
+				<th>拣货区C</th>
+				<td><input type='text' name='pickzone' id='pickzone' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																											    editable:false,
 																												url:'<c:url value="/basLocationController.do?getPizoneTypeCombobox"/>',
 																												valueField: 'id',
-			<th>批次号C</th>
-			<td><input type='text' name='lotnum' id='lotnum' class='easyui-textbox' size='16' /></td>																									textField: 'value'"/></td>
+																												textField: 'value'"/></td>
 
-			<th>产品注册证C</th>
+				<th>批次号C</th>
+				<td><input type='text' name='lotnum' id='lotnum' class='easyui-textbox' size='16' /></td>
+				<th>产品注册证C</th>
 				<td><input type='text' name='lotatt06' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
 				<th>灭菌批号C</th>
 				<td><input type='text' name='lotatt07' id='lotatt07' class='easyui-textbox' size='16' data-options=''/></td>
-			<th>存储条件C</th>
+				<th>存储条件C</th>
 				<td><input type='text' name='lotatt11' id='lotatt11' class='easyui-textbox' size='16' data-options=''/></td>
 				<th>产品名称C</th>
 				<td><input type='text' name='lotatt12' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
@@ -98,7 +102,9 @@
 				<td><input type='text' name='lotatt18' id='lotatt18' class='easyui-textbox' size='16' data-options=''/></td>
 				<th>双证C</th>
 				<td><input type='text' name='lotatt13' id='lotatt13' class='easyui-textbox' size='16' data-options=''/></td>
-			-->
-		</table>
+			</table>
+
+
+		</div>
 	</form>
 </div>

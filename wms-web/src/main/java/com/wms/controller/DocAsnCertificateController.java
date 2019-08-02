@@ -129,11 +129,4 @@ public class DocAsnCertificateController {
 		return docAsnCertificateService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
-	@Login
-	@RequestMapping(params = "getCombobox")
-	@ResponseBody
-	public List<EasyuiCombobox> getCombobox() {
-		return docAsnCertificateService.getDocAsnCertificateCombobox();
-	}
-
 }

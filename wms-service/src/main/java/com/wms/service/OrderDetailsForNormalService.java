@@ -82,6 +82,11 @@ public class OrderDetailsForNormalService extends BaseService {
 			}else{
 				orderDetailsForNormal.setNetweight(0d);
 			}
+			if(basSku.getGrossweight()!=null){
+				orderDetailsForNormal.setGrossweight(basSku.getGrossweight().doubleValue());
+			}else {
+				orderDetailsForNormal.setGrossweight(0d);
+			}
 		}
 		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());

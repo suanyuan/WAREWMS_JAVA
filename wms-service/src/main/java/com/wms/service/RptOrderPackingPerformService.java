@@ -24,8 +24,8 @@ import com.wms.query.RptOrderPackingPerformQuery;
 @Service("rptOrderPackingPerformService")
 public class RptOrderPackingPerformService extends BaseService {
 
-	@Autowired
-	private RptOrderPackingPerformDao rptOrderPackingPerformDao;
+	//@Autowired
+	//private RptOrderPackingPerformDao rptOrderPackingPerformDao;
 	
 	@Autowired
 	private RptOrderPackingPerformMybatisDao rptOrderPackingPerformMybatisDao;
@@ -54,25 +54,25 @@ public class RptOrderPackingPerformService extends BaseService {
 		Json json = new Json();
 		RptOrderPackingPerform rptOrderPackingPerform = new RptOrderPackingPerform();
 		BeanUtils.copyProperties(rptOrderPackingPerformForm, rptOrderPackingPerform);
-		rptOrderPackingPerformDao.save(rptOrderPackingPerform);
+		rptOrderPackingPerformMybatisDao.add(rptOrderPackingPerform);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptOrderPackingPerform(RptOrderPackingPerformForm rptOrderPackingPerformForm) {
 		Json json = new Json();
-		RptOrderPackingPerform rptOrderPackingPerform = rptOrderPackingPerformDao.findById(rptOrderPackingPerformForm.getCustomerid());
+		RptOrderPackingPerform rptOrderPackingPerform = rptOrderPackingPerformMybatisDao.queryById(rptOrderPackingPerformForm.getCustomerid());
 		BeanUtils.copyProperties(rptOrderPackingPerformForm, rptOrderPackingPerform);
-		rptOrderPackingPerformDao.update(rptOrderPackingPerform);
+		rptOrderPackingPerformMybatisDao.update(rptOrderPackingPerform);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptOrderPackingPerform(String id) {
 		Json json = new Json();
-		RptOrderPackingPerform rptOrderPackingPerform = rptOrderPackingPerformDao.findById(id);
+		RptOrderPackingPerform rptOrderPackingPerform = rptOrderPackingPerformMybatisDao.queryById(id);
 		if(rptOrderPackingPerform != null){
-			rptOrderPackingPerformDao.delete(rptOrderPackingPerform);
+			rptOrderPackingPerformMybatisDao.delete(rptOrderPackingPerform);
 		}
 		json.setSuccess(true);
 		return json;
@@ -81,7 +81,7 @@ public class RptOrderPackingPerformService extends BaseService {
 	public List<EasyuiCombobox> getRptOrderPackingPerformCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptOrderPackingPerform> rptOrderPackingPerformList = rptOrderPackingPerformDao.findAll();
+		List<RptOrderPackingPerform> rptOrderPackingPerformList = rptOrderPackingPerformMybatisDao.queryByAll();
 		if(rptOrderPackingPerformList != null && rptOrderPackingPerformList.size() > 0){
 			for(RptOrderPackingPerform rptOrderPackingPerform : rptOrderPackingPerformList){
 				combobox = new EasyuiCombobox();

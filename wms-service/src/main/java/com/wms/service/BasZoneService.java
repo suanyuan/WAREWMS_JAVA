@@ -29,9 +29,6 @@ import com.wms.mybatis.dao.BasZoneMybatisDao;
 
 @Service("basZoneService")
 public class BasZoneService extends BaseService {
-
-	@Autowired
-	private BasZoneDao basZoneDao;
 	
 	@Autowired
 	private BasZoneMybatisDao basZoneMybatisDao;

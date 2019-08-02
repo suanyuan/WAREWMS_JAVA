@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.wms.mybatis.dao.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,6 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.easyui.EasyuiTree;
 import com.wms.entity.User;
 import com.wms.entity.UserLogin;
-import com.wms.mybatis.dao.SfcCountryMybatisDao;
-import com.wms.mybatis.dao.SfcRoleMybatisDao;
-import com.wms.mybatis.dao.SfcUserLoginMybatisDao;
-import com.wms.mybatis.dao.SfcUserMybatisDao;
 import com.wms.mybatis.entity.SfcCountry;
 import com.wms.mybatis.entity.SfcCustomer;
 import com.wms.mybatis.entity.SfcRole;
@@ -57,16 +54,16 @@ import com.wms.vo.form.UserForm;
 
 @Service("userService")
 public class UserService extends BaseService {
-	@Autowired
-	private UserDao userDao;
+	//@Autowired
+	//private UserDao userDao;
 	@Autowired
 	private SfcUserMybatisDao sfcUserMybatisDao;
 	@Autowired
 	private SfcRoleMybatisDao sfcRoleMybatisDao;
 	@Autowired
 	private SfcCountryMybatisDao sfcCountryMybatisDao;
-	@Autowired
-	private UserLoginDao userLoginDao;
+	//@Autowired
+	//private UserLoginDao userLoginDao;
 	@Autowired
 	private SfcUserLoginMybatisDao sfcUserLoginMybatisDao;
 	@Autowired
@@ -74,7 +71,7 @@ public class UserService extends BaseService {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public EasyuiDatagrid<UserVO> getPagedDatagrid(EasyuiDatagridPager pager, UserQuery query) {
-		EasyuiDatagrid<UserVO> datagrid = new EasyuiDatagrid<UserVO>();
+		/*EasyuiDatagrid<UserVO> datagrid = new EasyuiDatagrid<UserVO>();
 		List<User> userList = userDao.getPagedDatagrid(pager, query);
 		UserVO userVO = null;
 		List<UserVO> UserVOList = new ArrayList<UserVO>();
@@ -85,6 +82,28 @@ public class UserService extends BaseService {
 		}
 		datagrid.setTotal(userDao.countAll(query));
 		datagrid.setRows(UserVOList);
+		return datagrid;*/
+		EasyuiDatagrid<UserVO> datagrid = new EasyuiDatagrid<>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("create_time desc");
+		List<User> userList = sfcUserMybatisDao.queryByList(mybatisCriteria);
+		UserVO userVO = null;
+		List<UserVO> userVOList = new ArrayList<>();
+		if(userList!=null && userList.size()>0){
+			for(User u : userList){
+				userVO = new UserVO();
+				BeanUtils.copyProperties(u,userVO);
+				userVOList.add(userVO);
+			}
+		}
+
+		int count = sfcUserMybatisDao.queryByCount(mybatisCriteria);
+		datagrid.setRows(userVOList);
+		datagrid.setTotal((long)count);
+
 		return datagrid;
 	}
 	
@@ -209,7 +228,7 @@ public class UserService extends BaseService {
 	}
 	
 	public void addUser(User user) throws Exception {
-		userDao.save(user);
+		sfcUserMybatisDao.add(user);
 	}
 	
 	@Transactional
@@ -393,15 +412,20 @@ public class UserService extends BaseService {
 
 	public Json deleteUser(String id) {
 		Json json = new Json();
-		UserLogin userLogin = userLoginDao.findById(id);
+		UserLogin userLogin = sfcUserLoginMybatisDao.queryById(id);
 		if(userLogin != null && userLogin.getUserType() == 0){
-			UserLogin tempUserLogin = userLoginDao.findById("temp");
-			List<UserLogin> subUserLoginList = userLoginDao.findChildrenByParentNodeId(userLogin.getNodeId());
+			UserLogin tempUserLogin = sfcUserLoginMybatisDao.queryById("temp");
+
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			SfcUserLoginQuery query = new SfcUserLoginQuery();
+			query.setNodeId(userLogin.getNodeId());
+			mybatisCriteria.setCondition(query);
+			List<UserLogin> subUserLoginList = sfcUserLoginMybatisDao.queryByList(mybatisCriteria);
 			for(UserLogin subUserLogin : subUserLoginList){
 				subUserLogin.setParentNodeId(tempUserLogin.getNodeId());
-				userLoginDao.update(subUserLogin);
+                sfcUserLoginMybatisDao.update(subUserLogin);
 			}
-			userLoginDao.delete(userLogin);
+            sfcUserLoginMybatisDao.delete(userLogin);
 		}
 		json.setSuccess(true);
 		return json;
@@ -419,8 +443,14 @@ public class UserService extends BaseService {
 	public List<EasyuiCombobox> getSupervisorCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		UserLogin userLogin = userLoginDao.findById("supervisor");
-		List<UserLogin> userLoginList = userLoginDao.findChildrenByParentNodeId(userLogin.getNodeId());
+		UserLogin userLogin = sfcUserLoginMybatisDao.queryById("supervisor");
+
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        SfcUserLoginQuery query = new SfcUserLoginQuery();
+        query.setNodeId(userLogin.getNodeId());
+        mybatisCriteria.setCondition(query);
+        List<UserLogin> userLoginList = sfcUserLoginMybatisDao.queryByList(mybatisCriteria);
+		//List<UserLogin> userLoginList = userLoginDao.findChildrenByParentNodeId(userLogin.getNodeId());
 		if(userLoginList != null && userLoginList.size() > 0){
 			for(UserLogin subUserLogin : userLoginList){
 				combobox = new EasyuiCombobox();

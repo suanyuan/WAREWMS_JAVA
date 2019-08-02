@@ -26,8 +26,8 @@ import com.wms.query.RptOrderPackingshipQuery;
 @Service("rptOrderPackingshipService")
 public class RptOrderPackingshipService extends BaseService {
 
-	@Autowired
-	private RptOrderPackingshipDao rptOrderPackingshipDao;
+	//@Autowired
+	//private RptOrderPackingshipDao rptOrderPackingshipDao;
 	
 	@Autowired
 	private RptOrderPackingshipMybatisDao rptOrderPackingshipMybatisDao;
@@ -57,25 +57,25 @@ public class RptOrderPackingshipService extends BaseService {
 		Json json = new Json();
 		RptOrderPackingship rptOrderPackingship = new RptOrderPackingship();
 		BeanUtils.copyProperties(rptOrderPackingshipForm, rptOrderPackingship);
-		rptOrderPackingshipDao.save(rptOrderPackingship);
+		rptOrderPackingshipMybatisDao.add(rptOrderPackingship);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editRptOrderPackingship(RptOrderPackingshipForm rptOrderPackingshipForm) {
 		Json json = new Json();
-		RptOrderPackingship rptOrderPackingship = rptOrderPackingshipDao.findById(rptOrderPackingshipForm.getTraceid());
+		RptOrderPackingship rptOrderPackingship = rptOrderPackingshipMybatisDao.queryById(rptOrderPackingshipForm.getTraceid());
 		BeanUtils.copyProperties(rptOrderPackingshipForm, rptOrderPackingship);
-		rptOrderPackingshipDao.update(rptOrderPackingship);
+		rptOrderPackingshipMybatisDao.update(rptOrderPackingship);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteRptOrderPackingship(String id) {
 		Json json = new Json();
-		RptOrderPackingship rptOrderPackingship = rptOrderPackingshipDao.findById(id);
+		RptOrderPackingship rptOrderPackingship = rptOrderPackingshipMybatisDao.queryById(id);
 		if(rptOrderPackingship != null){
-			rptOrderPackingshipDao.delete(rptOrderPackingship);
+			rptOrderPackingshipMybatisDao.delete(rptOrderPackingship);
 		}
 		json.setSuccess(true);
 		return json;
@@ -84,7 +84,7 @@ public class RptOrderPackingshipService extends BaseService {
 	public List<EasyuiCombobox> getRptOrderPackingshipCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<RptOrderPackingship> rptOrderPackingshipList = rptOrderPackingshipDao.findAll();
+		List<RptOrderPackingship> rptOrderPackingshipList = rptOrderPackingshipMybatisDao.queryByAll();
 		if(rptOrderPackingshipList != null && rptOrderPackingshipList.size() > 0){
 			for(RptOrderPackingship rptOrderPackingship : rptOrderPackingshipList){
 				combobox = new EasyuiCombobox();

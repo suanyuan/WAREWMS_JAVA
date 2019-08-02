@@ -6,17 +6,23 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.ActAllocationDetails;
+import com.wms.entity.BasPackage;
 import com.wms.entity.BasSku;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.ActAllocationDetailsMybatisDao;
 import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
+import com.wms.query.ActAllocationDetailsQuery;
+import com.wms.query.BasPackageQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
 import com.wms.utils.*;
+import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
@@ -54,6 +60,10 @@ public class OrderHeaderForNormalService extends BaseService {
 	private BasCustomerService basCustomerService;
 	@Autowired
 	private BasSkuService basSkuService;
+	@Autowired
+	private BasPackageService basPackageService;
+	@Autowired
+	private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
 	
 //	@Autowired
 //	private DocOrderImportMybatisDao docOrderImportMybatisDao;
@@ -82,6 +92,31 @@ public class OrderHeaderForNormalService extends BaseService {
 		}
 		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(orderHeaderForNormalVOList);
+		return datagrid;
+	}
+
+	public EasyuiDatagrid<ActAllocationDetailsVO> getPageAllocation(EasyuiDatagridPager pager, ActAllocationDetailsQuery query){
+		EasyuiDatagrid<ActAllocationDetailsVO> datagrid = new EasyuiDatagrid<ActAllocationDetailsVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<ActAllocationDetails> orderHeaderForNormalList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+		List<ActAllocationDetailsVO> actAllocationDetailsVOList = new ArrayList<>();
+		ActAllocationDetailsVO vo = null;
+		for(ActAllocationDetails act : orderHeaderForNormalList){
+			vo = new ActAllocationDetailsVO();
+			BeanUtils.copyProperties(act,vo);
+			BasSku basSku = basSkuService.getSkuInfo(act.getCustomerid(),act.getSku());
+			BasPackageQuery packQuery = new BasPackageQuery();
+			packQuery.setPackid(basSku.getPackid());
+			BasPackage basPackage = basPackageService.queryBasPackBy(packQuery);
+			vo.setSkuName(basSku.getDescrC());
+			vo.setPickName(basPackage.getDescr());
+			actAllocationDetailsVOList.add(vo);
+		}
+		datagrid.setTotal((long) actAllocationDetailsMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(actAllocationDetailsVOList);
 		return datagrid;
 	}
 	/**
@@ -190,7 +225,7 @@ public class OrderHeaderForNormalService extends BaseService {
 			}
 		} else {
 			json.setSuccess(true);
-			json.setMsg("000");
+			json.setMsg("订单分配完成，请查询分配结果");
 			return json;
 		}
 	}
@@ -224,6 +259,58 @@ public class OrderHeaderForNormalService extends BaseService {
 			return json;
 		}
 	}
+
+	/**
+	 * 拣货
+	 */
+	public Json picking(String orderNo) {
+		Json json = new Json();
+		//
+		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		if (orderHeaderForNormal != null) {
+			//判断订单状态
+			if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
+				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
+				if(allocationDetailsIdList!=null){
+					for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
+						Map<String ,Object> map=new HashMap<String, Object>();
+						//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+						map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
+						map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+						orderHeaderForNormalMybatisDao.pickingByOrder(map);
+						String pickResult = map.get("result").toString();
+						if (pickResult != null && pickResult.length() > 0) {
+							if (pickResult.equals("000")) {
+								continue;
+							} else {
+								json.setSuccess(false);
+								json.setMsg("出库处理失败：" + pickResult);
+								return json;
+							}
+						} else {
+							json.setSuccess(false);
+							json.setMsg("出库处理失败：订单数据异常！");
+							return json;
+						}
+					}
+					return Json.success("拣货成功");
+				}else {
+					return Json.success("拣货失败");
+				}
+			}else{
+				json.setSuccess(false);
+				json.setMsg("拣货处理失败：当前状态订单,不能操作拣货!");
+				return json;
+			}
+		}else {
+			json.setSuccess(false);
+			json.setMsg("拣货处理失败：订单数据异常！");
+			return json;
+		}
+	}
+
 	/**
 	 * 发运
 	 */

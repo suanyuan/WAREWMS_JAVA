@@ -24,8 +24,8 @@ import com.wms.query.ViewAsnDetailQuery;
 @Service("viewAsnDetailService")
 public class ViewAsnDetailService extends BaseService {
 
-	@Autowired
-	private ViewAsnDetailDao viewAsnDetailDao;
+	//@Autowired
+	//private ViewAsnDetailDao viewAsnDetailDao;
 	
 	@Autowired
 	private ViewAsnDetailMybatisDao ViewAsnDetailMybatisDao;
@@ -55,25 +55,25 @@ public class ViewAsnDetailService extends BaseService {
 		Json json = new Json();
 		ViewAsnDetail viewAsnDetail = new ViewAsnDetail();
 		BeanUtils.copyProperties(viewAsnDetailForm, viewAsnDetail);
-		viewAsnDetailDao.save(viewAsnDetail);
+		ViewAsnDetailMybatisDao.add(viewAsnDetail);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editViewAsnDetail(ViewAsnDetailForm viewAsnDetailForm) {
 		Json json = new Json();
-		ViewAsnDetail viewAsnDetail = viewAsnDetailDao.findById(viewAsnDetailForm.getAsnno());
+		ViewAsnDetail viewAsnDetail = ViewAsnDetailMybatisDao.queryById(viewAsnDetailForm.getAsnno());
 		BeanUtils.copyProperties(viewAsnDetailForm, viewAsnDetail);
-		viewAsnDetailDao.update(viewAsnDetail);
+		ViewAsnDetailMybatisDao.update(viewAsnDetail);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteViewAsnDetail(String id) {
 		Json json = new Json();
-		ViewAsnDetail viewAsnDetail = viewAsnDetailDao.findById(id);
+		ViewAsnDetail viewAsnDetail = ViewAsnDetailMybatisDao.queryById(id);
 		if(viewAsnDetail != null){
-			viewAsnDetailDao.delete(viewAsnDetail);
+			ViewAsnDetailMybatisDao.delete(viewAsnDetail);
 		}
 		json.setSuccess(true);
 		return json;
@@ -82,7 +82,7 @@ public class ViewAsnDetailService extends BaseService {
 	public List<EasyuiCombobox> getViewAsnDetailCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<ViewAsnDetail> viewAsnDetailList = viewAsnDetailDao.findAll();
+		List<ViewAsnDetail> viewAsnDetailList = ViewAsnDetailMybatisDao.queryByAll();
 		if(viewAsnDetailList != null && viewAsnDetailList.size() > 0){
 			for(ViewAsnDetail viewAsnDetail : viewAsnDetailList){
 				combobox = new EasyuiCombobox();
