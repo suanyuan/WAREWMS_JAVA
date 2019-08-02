@@ -178,21 +178,21 @@ public class ImportAsnDataService {
 			}*/
 			//重量、体积、单价
 			try {
-				if (isNumeric(dataArray.getTotalgrossweight())) {
+				if (ExcelUtil.isNotNumeric(dataArray.getTotalgrossweight())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
 				 rowResult.append("[重量]，须为数字").append(" ");
 			}
 			try {
-				if (isNumeric(dataArray.getTotalcubic())) {
+				if (ExcelUtil.isNotNumeric(dataArray.getTotalcubic())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
 				 rowResult.append("[体积]，须为数字").append(" ");
 			}
 			try {
-				if (isNumeric(dataArray.getTotalprice())) {
+				if (ExcelUtil.isNotNumeric(dataArray.getTotalprice())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
@@ -512,14 +512,5 @@ public class ImportAsnDataService {
 				resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
 			}
 		}
-	}
-	
-	public static boolean isNumeric(String str){
-		for (int i = 0; i < str.length(); i++){
-			if (!Character.isDigit(str.charAt(i))){
-				return false;
-			}
-		}
-		return true;
 	}
 }

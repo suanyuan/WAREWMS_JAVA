@@ -1,6 +1,5 @@
 package com.wms.service;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
@@ -12,14 +11,16 @@ import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
-import com.wms.query.*;
+import com.wms.query.ActAllocationDetailsQuery;
+import com.wms.query.DocOrderPackingQuery;
+import com.wms.query.OrderDetailsForNormalQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.*;
 import com.wms.vo.DocOrderPackingVO;
 import com.wms.vo.Json;
-import com.wms.vo.OrderDetailsForNormalVO;
 import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.pda.PdaDocPackageVO;
 import org.apache.commons.lang.StringUtils;
@@ -818,10 +819,10 @@ public class DocOrderPackingService extends BaseService {
             return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
         }
         try {
-            //1,更改出库单状态
-            orderHeaderForNormal.setSostatus("60");
-            orderHeaderForNormal.setEditwho("Gizmo");
-            orderHeaderForNormalMybatisDao.updateSOTask(orderHeaderForNormal);
+            //1,更改出库单状态 不用修改，拣货procedure处理
+//            orderHeaderForNormal.setSostatus("60");
+//            orderHeaderForNormal.setEditwho("Gizmo");
+//            orderHeaderForNormalMybatisDao.updateSOTask(orderHeaderForNormal);
 
             //2,查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
             Map<String, Object> condition = new HashMap<>();

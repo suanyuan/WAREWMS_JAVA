@@ -320,7 +320,7 @@ where 1=1
     </select>
 
     <select id="queryCompletedQcQty" parameterType="java.util.Map" resultType="int">
-        select sum(putwayqty_completed) from doc_qc_details
+        select sum(qcqty_completed) from doc_qc_details
         where  qcno = #{qcno, jdbcType=VARCHAR}
     </select>
 
@@ -334,7 +334,7 @@ where 1=1
     </select>
 
     <select id="queryAcceptQty" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select ifnull(sum(qcqty_completed), 0) as qcqty_completed, ifnull(sum(qcqty_completed), 0) as qcqty_expected
+        select ifnull(sum(qcqty_completed), 0) as qcqty_completed, ifnull(sum(qcqty_expected), 0) as qcqty_expected
         from  doc_qc_details
         where qcno = #{qcno} and customerid = #{customerid} and sku = #{sku}
         and userdefine3 = #{lotatt04}

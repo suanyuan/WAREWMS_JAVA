@@ -1056,4 +1056,8 @@ public class ExcelUtil {
 		return str.matches(regex);
 	}
 
+    public static boolean isNotNumeric(String str){
+        String regex = "^-?\\d+(\\.\\d+)?$";
+        return !str.matches(regex);
+    }
 }

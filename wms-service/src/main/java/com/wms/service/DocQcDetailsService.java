@@ -528,6 +528,7 @@ public class DocQcDetailsService extends BaseService {
 
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
+            System.out.println(e.getMessage());
             if (e.getMessage().equals("111")) {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
