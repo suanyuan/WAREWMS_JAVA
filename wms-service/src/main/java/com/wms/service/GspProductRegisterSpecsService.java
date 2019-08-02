@@ -15,6 +15,7 @@ import com.wms.service.importdata.ImportAsnDataService;
 import com.wms.service.importdata.ImportGspProductRegisterSpecsDataService;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.ResourceUtil;
+import com.wms.vo.GspEnterpriseInfoVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -187,6 +188,12 @@ public class GspProductRegisterSpecsService extends BaseService {
 			//通过getEnterpriseId查出生产企业信息
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
 			gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+//产品许可证 备案号
+			if(gspEnterpriseInfo.getLicenseNo()!=null){
+				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
+			}else{
+				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getRecordNo());
+			}
 		}
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);

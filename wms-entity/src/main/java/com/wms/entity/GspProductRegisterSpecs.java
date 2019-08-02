@@ -88,6 +88,9 @@ public class GspProductRegisterSpecs implements Serializable {
   private String maintenanceCycle;//养护周期
   private String wight;//重量
   private String packagingUnit;//包装单位
+  //产品许可证 备案号
+  private String licenseNo;
+  private String recordNo;
 
 
 
@@ -99,6 +102,22 @@ public class GspProductRegisterSpecs implements Serializable {
   private String alternatName3;
   private String alternatName4;
   private String alternatName5;
+
+  public String getLicenseNo() {
+    return licenseNo;
+  }
+
+  public void setLicenseNo(String licenseNo) {
+    this.licenseNo = licenseNo;
+  }
+
+  public String getRecordNo() {
+    return recordNo;
+  }
+
+  public void setRecordNo(String recordNo) {
+    this.recordNo = recordNo;
+  }
 
   public GspProductRegisterSpecs() {
   }

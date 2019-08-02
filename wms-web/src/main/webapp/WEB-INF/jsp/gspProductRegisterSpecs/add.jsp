@@ -19,7 +19,7 @@
             <%--</td>--%>
             <th>注册证编号</th>
             <td>
-                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
+                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' data-options='required:true,editable:false,width:200' style="width: 100px;"/>
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
 
@@ -40,7 +40,7 @@
             <th>规格</th>
             <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <th>单位</th>
-            <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true,editable:false'/></td>
             <%--<th>商品名称</th>--%>
             <%--<td><input type='text' data="1" id="productName" name='productName' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
@@ -68,15 +68,15 @@
         <tr>
             <th>运输条件</th>
             <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
-            <th>长</th>
-            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='50' data-options=''/></td>
+            <th>长</th>m
+            <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='50' data-options=''/>(m)</td>
         </tr>
 
         <tr>
             <th>储存条件</th>
             <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <th>宽</th>
-            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='50' data-options=''/>(m)</td>
 
         </tr>
 
@@ -86,18 +86,18 @@
             <td><input type='hidden' data="1" id="enterpriseId" name='enterpriseId'  size='50' data-options=''/>
                 <input type='text' data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options=''/></td>
             <th>高</th>
-            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='50' data-options=''/>(m)</td>
 
           </tr>
        <tr>
            <th>生产许可证号/备案号</th>
-           <td><input type='text' data="1" id="enterpriseId1" name='enterpriseId1' size='50' data-options=''/>
+           <td><input type='text' data="1" id="licenseNo"  name='licenseNo' class='easyui-textbox' size='50' data-options='editable:false'/></td>
            <th>重量</th>
-           <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='50' data-options=''/></td>
+           <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='50' data-options=''/>(kg)</td>
        </tr>
         <tr>
             <th>产地</th>
-            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='' /></td>
+            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='editable:false' /></td>
 
             <th>商品条码</th>
             <td><input type='text' data="1" id="barCode" name='barCode' class='easyui-textbox' size='50' data-options=''/></td>
@@ -271,44 +271,54 @@
         })
     }
     //点击注册证编号之后datagrid放大镜事件
-    function choseSelect(id,no,name,address,enterpriseId,enterpriseName) {
+    function choseSelect(id,no,name,address,enterpriseId,enterpriseName,licenseNo,recordNo) {
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
         enterpriceId = id;
         //$("input[name='enterpriseId'][data='1']").val(id);
+        console.log(licenseNo+'======='+recordNo+'==='+enterpriseId);
 
         $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
         $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
         $("#productRegisterNo").textbox("setValue",no);
         $("#productRegisterId").textbox("setValue",id);
         $("#enterpriseName").textbox("setValue",enterpriseName);
-        $("#enterpriseId").textbox("setValue",enterpriseId);
+        $("#enterpriseId").val(enterpriseId);
+        //生产许可证号 备案号
+        if(licenseNo!=null&&licenseNo!=""){
+            $("#licenseNo").textbox("setValue",licenseNo);
+        }else{
+            $("#licenseNo").textbox("setValue",recordNo);
+        }
 
-        productionAddress
-        // $.ajax({
-        //     url : 'gspEnterpriseInfoController.do?getInfo',
-        //     data : {enterpriseId : enterpriceId},
-        //     type : 'POST',
-        //     dataType : 'JSON',
-        //     success : function(date){
-        //         if(date.success){
-        //             // console.log(3333333)
-        //             //console.log(date.obj.enterpriseNo+'====result.enterpriseNo====');
-        //             //console.log('====result.shorthandName===='+date.obj.shorthandName);
-        //
-        //             //$("#enterpriseNo").textbox("setValue",date.obj.enterpriseNo);
-        //             //$("#shorthandName").textbox("setValue",date.obj[""+$("#shorthandName").attr("id")+""]);
-        //             $("#ezuiFormInfo input[id='enterpriseNo'][data='1']").textbox('setValue',date.obj.enterpriseNo);
-        //             $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
-        //             //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
-        //             $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
-        //
-        //         }
-        //     }
-        // });
-        //console.log(4444444444)
-        //$("input[name='enterpriseId1']").val(id);
+
+
+
+
+       /* $.ajax({
+            url : 'gspEnterpriseInfoController.do?getInfo',
+            data : {enterpriseId : enterpriceId},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(date){
+                if(date.success){
+                    // console.log(3333333)
+                    //console.log(date.obj.enterpriseNo+'====result.enterpriseNo====');
+                    //console.log('====result.shorthandName===='+date.obj.shorthandName);
+
+                    //$("#enterpriseNo").textbox("setValue",date.obj.enterpriseNo);
+                    //$("#shorthandName").textbox("setValue",date.obj[""+$("#shorthandName").attr("id")+""]);
+                    $("#ezuiFormInfo input[id='enterpriseNo'][data='1']").textbox('setValue',date.obj.enterpriseNo);
+                    $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
+                    //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
+                    $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
+
+                }
+            }
+        });
+        console.log(4444444444)
+        $("input[name='enterpriseId1']").val(id);*/
         enterpriseDialog.dialog("close");
     }
 

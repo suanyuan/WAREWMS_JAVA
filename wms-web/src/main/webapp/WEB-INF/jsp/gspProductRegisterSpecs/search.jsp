@@ -56,10 +56,12 @@
             idField : 'productRegisterId',
             columns : [[
                 {field: 'productRegisterId',		title: '主键',	width: '20%' ,hidden:true},
-                {field: 'productRegisterNo',		title: '注册证编号',	width: '33%' },
-                {field: 'productNameMain',		title: '产品名称',	width: '33%' },
+                {field: 'productRegisterNo',		title: '注册证编号',	width: '20%' },
+                {field: 'productNameMain',		title: '产品名称',	width: '20%' },
 
-                {field: 'classifyId',	    	title: '管理分类',	width: '33%' },
+                {field: 'classifyId',	    	title: '管理分类',	width: '20%' },
+                {field: 'licenseNo',	    	title: '许可证号',	width: '20%' },
+                {field: 'recordNo',	    	title: '备案号',	width: '20%' },
                 // {field: 'classifyCatalog',		title: '分类目录',	width: '20%' },
                 // {field: 'productionAddress',		title: '产地',	width: '25%' }
                 // {field: '_operate',		title: '操作',	width: '20%',
@@ -67,7 +69,8 @@
                 // }
             ]],
             onDblClickRow: function(index,row){
-                choseSelect(row.productRegisterId,row.productRegisterNo,row.productNameMain,row.productionAddress,row.enterpriseId,row.enterpriseName);
+                choseSelect(row.productRegisterId,row.productRegisterNo,row.productNameMain,
+                    row.productionAddress,row.enterpriseId,row.enterpriseName,row.licenseNo,row.recordNo);
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 

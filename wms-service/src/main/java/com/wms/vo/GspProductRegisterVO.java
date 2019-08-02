@@ -42,6 +42,24 @@ public class GspProductRegisterVO {
 	private String productRegsiterUrl;//附件路径
 	private String structureAndComposition;//结构及组成
 	private String agentAddress;//代理人住所
+	private String licenseNo;//生产许可证号
+	private String recordNo;//备案号
+
+	public String getLicenseNo() {
+		return licenseNo;
+	}
+
+	public void setLicenseNo(String licenseNo) {
+		this.licenseNo = licenseNo;
+	}
+
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
 
 	public String getTransportConditionMain() {
 		return transportConditionMain;

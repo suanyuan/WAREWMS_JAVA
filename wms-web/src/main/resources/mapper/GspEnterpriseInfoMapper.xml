@@ -23,6 +23,8 @@
 	<result column="user_define2" property="userDefine2"/>
 	<result column="user_define3" property="userDefine3"/>
 	<result column="user_define4" property="userDefine4"/>
+	<result column="license_no" property="licenseNo"/>
+	<result column="record_no" property="recordNo"/>
 </resultMap>
 
 <resultMap id="GspEnterpriseBusinessResultMap" type="com.wms.dto.GspEnterpriseBusinessDTO" >
@@ -173,8 +175,11 @@ where 1=1
 
 	<!-- 根据id查询 企业信息 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from gsp_enterprise_info where enterprise_id = #{enterpriseId}
+	select g.*,gl.license_no,gr.record_no
+	 from gsp_enterprise_info g
+	 LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
+	 left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
+    where g.enterprise_id = #{enterpriseId}
 </select>
 
 <!-- 企业信息 列表总数-->

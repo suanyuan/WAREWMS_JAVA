@@ -41,6 +41,10 @@
 		<result column="product_regsiter_url" property="productRegsiterUrl"/>
 		<result column="structure_and_composition" property="structureAndComposition"/>
 		<result column="agent_address" property="agentAddress"/>
+		<!--//生产许可证号 备案号-->
+		<result column="license_no" property="licenseNo"/>
+		<result column="record_no" property="recordNo"/>
+
 	</resultMap>
 
     <resultMap id="ExtendResultMap" type="com.wms.mybatis.entity.pda.PdaGspProductRegister" extends="BaseResultMap" >
@@ -315,6 +319,9 @@
 		select count(1) from gsp_product_register r left join bas_codes vc on r.version = vc.code
 		left join bas_codes vcs on r.classify_id = vcs.code
 		left join bas_codes vcc on r.classify_catalog = vcc.code
+		LEFT JOIN `gsp_enterprise_info` g ON r.enterprise_id=g.enterprise_id
+		LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
+		left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
 		<include refid="Example_Where_Clause"/>
 	</select>
 
@@ -323,14 +330,16 @@
 		SELECT
 		product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,
 		product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
-		other_content,r.remark,approve_date,product_register_expiry_date,product_register_version,vc.codename_c VERSION,checker_id,
+		other_content,r.remark,r.approve_date,product_register_expiry_date,product_register_version,vc.codename_c VERSION,checker_id,
 		check_date,r.create_id,r.create_date,r.edit_id,r.edit_date,r.is_use,attachment_url,vcs.codename_c classify_id,vcc.codename_c classify_catalog,
 		r.enterprise_id,g.enterprise_name,production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,
-		agent_address
+		agent_address,gl.license_no,gr.record_no
 		FROM gsp_product_register r LEFT JOIN bas_codes vc ON r.version = vc.code
 		LEFT JOIN bas_codes vcs ON r.classify_id = vcs.code
 		LEFT JOIN bas_codes vcc ON r.classify_catalog = vcc.code
 		LEFT JOIN `gsp_enterprise_info` g ON r.enterprise_id=g.enterprise_id
+		LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
+		left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
 		<include refid="Example_Where_Clause"/>
 		<if test="orderByClause != null and orderByClause != ''" >
 			order by  ${orderByClause}

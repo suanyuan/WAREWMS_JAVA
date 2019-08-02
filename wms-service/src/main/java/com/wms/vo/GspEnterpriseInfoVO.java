@@ -23,6 +23,25 @@ public class GspEnterpriseInfoVO {
 	private String userDefine2;
 	private String userDefine3;
 	private String userDefine4;
+//产品许可证 备案号
+	private String licenseNo;
+	private String recordNo;
+
+	public String getLicenseNo() {
+		return licenseNo;
+	}
+
+	public void setLicenseNo(String licenseNo) {
+		this.licenseNo = licenseNo;
+	}
+
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
 
 	public String getEnterpriseId() {
 		return enterpriseId;
