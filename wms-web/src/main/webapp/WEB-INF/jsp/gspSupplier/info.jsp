@@ -221,6 +221,15 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             }
         })
     }
+    var doSearchEnterprise = function(){
+        // console.log($("#enterpriseSearchGridToolbar_gspSupplierInfo input[id='enterpriseNo']").textbox("getValue"));
+        // console.log($('#shorthandName').val());
+        // console.log($('#shorthandName').textbox('getValue'));
+        enterpriseSearchGrid_gspSupplierInfo.datagrid('load', {
+            enterpriseNo : $("#enterpriseSearchGridToolbar_gspSupplierInfo input[id='enterpriseNo']").textbox("getValue"),
+            shorthandName:$("#enterpriseSearchGridToolbar_gspSupplierInfo input[id='shorthandName']").textbox("getValue")
+        });
+    };
 
     function choseSelect_gspSupplierInfo(id,name) {
         //console.log(1111111)

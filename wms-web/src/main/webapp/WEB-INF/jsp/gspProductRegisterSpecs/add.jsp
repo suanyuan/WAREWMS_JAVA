@@ -257,6 +257,7 @@
         //     textField:'value'
         // });
     })
+
     function searchEnterprise() {
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,

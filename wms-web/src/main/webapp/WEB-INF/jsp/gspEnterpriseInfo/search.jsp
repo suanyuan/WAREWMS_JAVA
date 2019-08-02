@@ -76,7 +76,6 @@
             }
         })
     })
-
     function operateGrid_${target}(id) {
         $('#enterpriseDialog_${target}').dialog({
             modal : true,
