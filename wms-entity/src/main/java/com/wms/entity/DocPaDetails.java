@@ -17,7 +17,7 @@ public class DocPaDetails  implements Serializable {
 
 	private String asnno;
 
-	private long asnlineno;
+	private int asnlineno;
 
 	private String customerid;
 

@@ -9,7 +9,7 @@ public class DocPaDetailsForm {
 	private String palineno;
 	private String linestatus;
 	private String asnno;
-	private Double asnlineno;
+	private int asnlineno;
 	private String customerid;
 	private String sku;
 	private String lotnum;
@@ -61,11 +61,11 @@ public class DocPaDetailsForm {
 		this.asnno = asnno;
 	}
 
-	public Double getAsnlineno() {
+	public int getAsnlineno() {
 		return asnlineno;
 	}
 
-	public void setAsnlineno(Double asnlineno) {
+	public void setAsnlineno(int asnlineno) {
 		this.asnlineno = asnlineno;
 	}
 

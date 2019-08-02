@@ -474,7 +474,7 @@ public class ImportAsnDataService {
 					DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
 					docAsnDetailQuery.setAsnno(resultNo);
 					//获取订单明细行号
-					long asnlineno = docAsnDetailsMybatisDao.getAsnlinenoById(docAsnDetailQuery);
+					int asnlineno = docAsnDetailsMybatisDao.getAsnlinenoById(docAsnDetailQuery);
 					//获取SKU信息(条码、包装、重量、体积、金额)
 					BasSkuQuery skuQuery = new BasSkuQuery();
 					skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());

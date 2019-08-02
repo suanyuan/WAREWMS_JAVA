@@ -8,7 +8,7 @@ public class DocAsnDetailVO {
 	
 	private Integer seq;
 	private java.lang.String asnno;
-	private long asnlineno;
+	private int asnlineno;
 	private java.util.Date addtime;
 	private java.lang.String addwho;
 	private java.lang.String alternativedescrC;
@@ -125,11 +125,11 @@ public class DocAsnDetailVO {
 		this.asnno = asnno;
 	}
 
-	public long getAsnlineno() {
+	public int getAsnlineno() {
 		return asnlineno;
 	}
 
-	public void setAsnlineno(long asnlineno) {
+	public void setAsnlineno(int asnlineno) {
 		this.asnlineno = asnlineno;
 	}
 
