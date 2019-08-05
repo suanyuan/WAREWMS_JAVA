@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
 import com.wms.entity.DocAsnDetail;
+import com.wms.entity.DocAsnHeader;
 import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
@@ -35,6 +36,9 @@ public class DocAsnDetailService extends BaseService {
 
 	@Autowired
 	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
+
+	@Autowired
+	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
@@ -87,6 +91,10 @@ public class DocAsnDetailService extends BaseService {
 		docAsnDetail.setAsnlineno(orderlineno + 1);
 		docAsnDetail.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+        //定向订单库位
+        docAsnDetail = configDxLocation(docAsnDetail);
+
 		docAsnDetailsMybatisDao.add(docAsnDetail);
 		json.setSuccess(true);
 		json.setMsg("提交成功");
@@ -101,6 +109,10 @@ public class DocAsnDetailService extends BaseService {
 		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(docAsnDetailQuery);
 		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+		//定向订单库位
+		docAsnDetail = configDxLocation(docAsnDetail);
+
 		docAsnDetailsMybatisDao.update(docAsnDetail);
 		json.setSuccess(true);
 		json.setMsg("提交成功");
@@ -254,4 +266,25 @@ public class DocAsnDetailService extends BaseService {
 		}
 		return docAsnDetailVO;
 	}
+
+    /**
+     * 处理定向订单的上架库位
+     */
+	private DocAsnDetail configDxLocation(DocAsnDetail docAsnDetail) {
+
+	    if (docAsnDetail == null || docAsnDetail.getAsnno() == null || docAsnDetail.getAsnno().length() == 0) {
+	        return docAsnDetail;
+        }
+        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnDetail.getAsnno());
+	    if (docAsnHeader == null || docAsnHeader.getAsntype() == null || docAsnHeader.getAsntype().length() == 0) {
+	        return docAsnDetail;
+        }
+	    if (docAsnHeader.getAsntype().equals("DX") &&
+                (docAsnDetail.getReceivinglocation() == null ||
+                        docAsnDetail.getReceivinglocation().length() == 0)) {
+
+	        docAsnDetail.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);
+        }
+        return docAsnDetail;
+    }
 }

@@ -158,7 +158,7 @@ public class ImportOrderDataService {
 				 rowResult.append("[预计送达时间]，格式错误").append(" ");
 			}*/
 			try {
-				if (StringUtils.isEmpty(dataArray.getConsigneeid())) {
+				if (StringUtils.isEmpty(dataArray.getConsigneeName())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
@@ -215,7 +215,7 @@ public class ImportOrderDataService {
 					} catch (ParseException e) {
 						 rowResult.append("[预计送达时间]，格式错误").append(" ");
 					}*/
-					importDataVO.setConsigneeid(dataArray.getConsigneeid());
+					importDataVO.setConsigneename(dataArray.getConsigneeName());
 					importDataVO.setCAddress1(dataArray.getCAddress1());
 					importDataVO.setCTel1(dataArray.getCTel1());
 					importDataVO.setCarrierid(dataArray.getCarrierid());
@@ -227,7 +227,7 @@ public class ImportOrderDataService {
 				} else if (dataArray.getCustomerid().equals(customerId) &&
 					dataArray.getOrderno().equals(orderCode) &&
 					//dataArray.getRequiredDeliveryTime().equals(requiredDeliveryTime) &&
-					dataArray.getCustomerid().equals(consigneeName) &&
+					dataArray.getConsigneeName().equals(consigneeName) &&
 					dataArray.getCAddress1().equals(address) &&
 					dataArray.getCTel1().equals(tel)) {
 					//表头信息一致则只增加明细信息
@@ -244,7 +244,7 @@ public class ImportOrderDataService {
 					importDataVO.setCustomerid(dataArray.getCustomerid());//客户代码
 					importDataVO.setOrderCode(dataArray.getOrderno());
 
-					importDataVO.setConsigneename(dataArray.getConsigneeid());
+					importDataVO.setConsigneename(dataArray.getConsigneeName());
 					importDataVO.setCAddress1(dataArray.getCAddress1());
 					importDataVO.setCTel1(dataArray.getCTel1());
 
@@ -276,32 +276,32 @@ public class ImportOrderDataService {
 	public LinkedHashMap<String, String> getLeadInFiledPublicQuestionBank() {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-	    map.put("序号", 		"seq");
-	    map.put("客户代码", 	"customerid");
-	    map.put("客户单号1", 	"orderno");
-	    map.put("收货人", 	"consigneeid");
-	    map.put("收货地址", 	"cAddress1");
-	    map.put("收货人电话", 	"cTel1");
-	    map.put("产品", 	"sku");
-		map.put("快递公司", 	"carrierid");
-		map.put("发运方式", 	"userdefine1");
-		map.put("快递结算方式", 	"userdefine2");
-	    map.put("订单数量", 		"qtyordered");
-		map.put("生产日期","lotatt01");
-		map.put("效期","lotatt02");
-		map.put("入库日期","lotatt03");
-		map.put("生产批号","lotatt04");
-		map.put("序列号","lotatt05");
-		map.put("产品注册证号","lotatt06");
-		map.put("灭菌批号","lotatt07");
-		map.put("供应商","lotatt08");
-		map.put("样品属性","lotatt09");
-		map.put("质量状态","lotatt10");
-		map.put("存储状态","lotatt11");
-		map.put("产品名称","lotatt12");
-		map.put("双证","lotatt13");
-		map.put("入库单号","lotatt14");
-		map.put("生产厂商名称","lotatt15");
+	    map.put("序号",           "seq");
+	    map.put("客户代码",        "customerid");
+	    map.put("客户单号1", 	      "orderno");
+	    map.put("收货人",          "consigneeName");
+	    map.put("收货地址",        "cAddress1");
+	    map.put("收货人电话",      "cTel1");
+	    map.put("产品",           "sku");
+		map.put("快递公司",       "carrierid");
+		map.put("发运方式",       "userdefine1");
+		map.put("快递结算方式",    "userdefine2");
+	    map.put("订单数量",        "qtyordered");
+		map.put("生产日期",        "lotatt01");
+		map.put("效期",           "lotatt02");
+		map.put("入库日期",        "lotatt03");
+		map.put("生产批号",         "lotatt04");
+		map.put("序列号",          "lotatt05");
+		map.put("产品注册证号",     "lotatt06");
+		map.put("灭菌批号",         "lotatt07");
+		map.put("供应商",          "lotatt08");
+		map.put("样品属性",         "lotatt09");
+		map.put("质量状态",         "lotatt10");
+		map.put("存储状态",         "lotatt11");
+		map.put("产品名称",         "lotatt12");
+		map.put("双证",           "lotatt13");
+		map.put("入库单号",         "lotatt14");
+		map.put("生产厂商名称",       "lotatt15");
 	    return map;
 	}
 	
