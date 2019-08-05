@@ -438,7 +438,7 @@
                 var result = $.parseJSON(data);
                 if(result.success){
                     if(processType == 'add'){
-                        $("#ezuiBtn_edit").linkbutton(editable,true);
+                        // $("#ezuiBtn_editdiayog").linkbutton("readonly",false);
                     }
                     console.log(result.obj);
                     $("#gspProductRegisterId").val(result.obj);
