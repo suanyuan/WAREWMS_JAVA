@@ -187,7 +187,7 @@ public class DocPaService {
                         docPaDetailsForm.setAsnqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docPaDetailsForm.setPutwayqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docPaDetailsForm.setPutwayqtyCompleted(docPaDTO.getExpectedqty().doubleValue());
-                        docPaDetailsForm.setUserdefine1(docPaDTO.getPlantoloc());//TODO 定向订单的期望库位一定要填
+                        docPaDetailsForm.setUserdefine1(docPaDTO.getReceivinglocation());
                         docPaDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docPaDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docPaDetailsForm.setUserdefine4(docPaDTO.getLotatt05());
@@ -232,7 +232,7 @@ public class DocPaService {
                         docQcDetailsForm.setPaqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docQcDetailsForm.setQcqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docQcDetailsForm.setQcqtyCompleted(0d);
-                        docQcDetailsForm.setUserdefine1(docPaDTO.getPlantoloc());//TODO 定向订单的期望库位一定要填
+                        docQcDetailsForm.setUserdefine1(docPaDTO.getReceivinglocation());
                         docQcDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docQcDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docQcDetailsForm.setUserdefine4(docPaDTO.getLotatt05());

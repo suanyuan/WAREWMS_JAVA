@@ -254,7 +254,7 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
 					importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
 					importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
-					//importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
+					importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
@@ -504,6 +504,12 @@ public class ImportAsnDataService {
 					}
 					asnDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 					asnDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+					if (asnHeader.getAsntype().equals("DX") &&
+                            (importDetailsDataVO.getReceivinglocation() == null ||
+                                    importDetailsDataVO.getReceivinglocation().length() == 0)) {
+					    asnDetails.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);//定向订单库位
+                    }
 					//保存订单明细信息
 					docAsnDetailsMybatisDao.add(asnDetails);
 				}

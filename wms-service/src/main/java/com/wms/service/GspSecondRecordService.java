@@ -98,7 +98,7 @@ public class GspSecondRecordService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspSecondRecord(String enterpriceId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType){
+	public Json addGspSecondRecord(String enterpriceId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType)throws Exception{
 		try{
 			//GspSecondRecordForm gspSecondRecordForm = JSON.parseObject(secondRecordFormStr,GspSecondRecordForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -157,7 +157,7 @@ public class GspSecondRecordService extends BaseService {
 				}
 			}
 
-			return Json.error("保存备案凭证信息失败");
+			return Json.success("保存备案凭证信息成功");
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

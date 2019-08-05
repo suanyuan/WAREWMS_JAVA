@@ -239,7 +239,7 @@ public class BasCustomerService extends BaseService {
 	}
 
 	public Json clientAddCustomer(BasCustomerForm basCustomerForm) {
-		try{
+		//try{
 			Json json = new Json();
 			BasCustomer basCustomerQuery = new BasCustomer();
 			basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
@@ -272,11 +272,11 @@ public class BasCustomerService extends BaseService {
 			json.setSuccess(true);
 			json.setMsg("资料处理成功！");
 			return json;
-		}catch (Exception e){
+		/*}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Json.error("操作失败");
-		}
+		}*/
 	}
 
 	public Json editBasCustomer(BasCustomerForm basCustomerForm) {

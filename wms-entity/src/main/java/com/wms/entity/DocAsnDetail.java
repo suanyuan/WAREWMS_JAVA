@@ -17,6 +17,8 @@ import java.util.Date;
 @NamedQuery(name="DocAsnDetail.findAll", query="SELECT d FROM DocAsnDetail d")
 public class DocAsnDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	public final static String DX_RECEIVING_LOCATION = "DX-01-01-01";
 	
 	private String warehouseid;
 	private String result;

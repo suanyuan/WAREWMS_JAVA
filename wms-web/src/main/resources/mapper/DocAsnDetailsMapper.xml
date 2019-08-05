@@ -130,6 +130,7 @@
 		<result column="asnstatus" property="asnstatus"/>
 		<result column="receivedqty" property="receivedqty"/>
 		<result column="lotnum" property="lotnum"/>
+        <result column="receivinglocation" property="receivinglocation"/>
 	</resultMap>
        
 <!-- Doc_Asn_Details table all fields -->
@@ -454,20 +455,7 @@ insert into doc_asn_details
          editwho,
          createsource,
          palletizeqty_each,
-         lotatt01,
-         lotatt02,
-         lotatt03,
-         lotatt04,
-         lotatt05,
-         lotatt06,
-         lotatt07,
-         lotatt08,
-         lotatt09,
-         lotatt10,
-         lotatt11,
-         lotatt12,
-         lotatt13,
-         lotatt14,
+         lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,
          reserve_flag)
         values(#{asnno},
                #{asnlineno},
@@ -498,20 +486,11 @@ insert into doc_asn_details
                #{addwho},
                #{addwho},
                0,
-               #{lotatt01, jdbcType=VARCHAR},
-               #{lotatt02, jdbcType=VARCHAR},
-               #{lotatt03, jdbcType=VARCHAR},
-               #{lotatt04, jdbcType=VARCHAR},
-               #{lotatt05, jdbcType=VARCHAR},
-               #{lotatt06, jdbcType=VARCHAR},
-               #{lotatt07, jdbcType=VARCHAR},
-               #{lotatt08, jdbcType=VARCHAR},
-               #{lotatt09, jdbcType=VARCHAR},
-               #{lotatt10, jdbcType=VARCHAR},
-               #{lotatt11, jdbcType=VARCHAR},
-               #{lotatt12, jdbcType=VARCHAR},
-               #{lotatt13, jdbcType=VARCHAR},
-               #{lotatt14, jdbcType=VARCHAR},
+               #{lotatt01, jdbcType=VARCHAR},#{lotatt02, jdbcType=VARCHAR},#{lotatt03, jdbcType=VARCHAR},
+               #{lotatt04, jdbcType=VARCHAR},#{lotatt05, jdbcType=VARCHAR},#{lotatt06, jdbcType=VARCHAR},
+               #{lotatt07, jdbcType=VARCHAR},#{lotatt08, jdbcType=VARCHAR},#{lotatt09, jdbcType=VARCHAR},
+               #{lotatt10, jdbcType=VARCHAR},#{lotatt11, jdbcType=VARCHAR},#{lotatt12, jdbcType=VARCHAR},
+               #{lotatt13, jdbcType=VARCHAR},#{lotatt14, jdbcType=VARCHAR},
                'N'
                )
 </insert>
@@ -974,7 +953,7 @@ insert into doc_asn_details
 
 <!-- 根据id查询 入库单管理明细 -->
 <select id="queryDocPaDTO"  resultMap="DocPaDTOMap">
-	select h.asnstatus,h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,'DJ' as lotatt10,de.packid, ia.lotnum,de.customerid,de.expectedqty,de.plantoloc,
+	select h.asnstatus,h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,'DJ' as lotatt10,de.packid, ia.lotnum,de.customerid,de.expectedqty,de.receivinglocation,
 	de.lotatt02,de.lotatt03,de.lotatt04,de.lotatt05,de.lotatt06,de.lotatt07,de.lotatt08,de.lotatt09,de.lotatt11,de.lotatt12,de.lotatt13,de.lotatt14,h.asntype,de.receivedqty
 	from doc_asn_header h
     left join doc_asn_details de on h.asnno = de.asnno

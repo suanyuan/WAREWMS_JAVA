@@ -96,7 +96,7 @@ public class GspEnterpriseInfoService extends BaseService {
 	}
 
 
-	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) throws Exception {
+	public Json addGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm)  {
 
 		if(checkRep(gspEnterpriseInfoForm.getEnterpriseNo(),gspEnterpriseInfoForm.getEnterpriseName())){
 			return Json.error("该企业信息已存在，企业名称和编号不能重复！");

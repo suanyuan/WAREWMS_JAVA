@@ -22,7 +22,7 @@ public class ImportOrderData implements Serializable {
 
 	private String customerid;
 
-	private String consigneeid;
+	private String consigneeName;
 
 	private String cAddress1;
 
