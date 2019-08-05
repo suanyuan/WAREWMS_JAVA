@@ -44,5 +44,8 @@ public class GspEnterpriseInfo implements Serializable {
 	private String userDefine3;
 
 	private String userDefine4;
+	//产品许可证 备案号
+	private String licenseNo;
+	private String recordNo;
 
 }

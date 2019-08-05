@@ -254,7 +254,7 @@ public class ImportAsnDataService {
 					importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
 					importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
 					importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
-					//importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
+					importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
 					importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
 					importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
 					importDetailsDataVO.setLotatt06(dataArray.getLotatt06());

@@ -30,7 +30,7 @@ public class GspOperateLicenseService extends BaseService {
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
 
-	public Json addGspOperateLicense(GspOperateLicenseForm gspOperateLicenseForm) throws Exception {
+	public Json addGspOperateLicense(GspOperateLicenseForm gspOperateLicenseForm) {
 		Json json = new Json();
 		GspOperateLicense gspOperateLicense = new GspOperateLicense();
 		BeanUtils.copyProperties(gspOperateLicenseForm, gspOperateLicense);
@@ -98,7 +98,7 @@ public class GspOperateLicenseService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspOperateLicense(String enterpriceId,GspOperateLicenseForm gspOperateLicenseForm,String operateDetailStr,String gspOperateLicenseId,String opType){
+	public Json addGspOperateLicense(String enterpriceId,GspOperateLicenseForm gspOperateLicenseForm,String operateDetailStr,String gspOperateLicenseId,String opType)throws Exception{
 		try{
 			//GspOperateLicenseForm gspOperateLicenseForm = JSON.parseObject(operateLicenseFormStr,GspOperateLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -152,7 +152,7 @@ public class GspOperateLicenseService extends BaseService {
 				if(gspOperateDetailForm.size()>0){
 					for(GspOperateDetailForm g : gspOperateDetailForm){
 						g.setEnterpriseId(newOperateLicenseId);
-						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
+						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_OPERATE);
 					}
 				}
 			}

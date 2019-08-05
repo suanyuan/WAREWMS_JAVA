@@ -125,8 +125,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into bas_carrier_license(carrier_license_id,enterprise_id,road_number,road_number_url,road_number_term,road_authority_permit,road_business_scope,carrier_no,license_url,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,create_id,create_date,edit_id,edit_date,active_flag)
- values(#{carrierLicenseId},#{enterpriseId},#{roadNumber},#{roadNumberUrl},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{licenseUrl},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{createId},now(),#{editId},now(),#{activeFlag})
+  insert into bas_carrier_license(enterprise_id,road_number,road_number_url,road_number_term,road_authority_permit,road_business_scope,carrier_no,license_url,carrier_date,carrier_end_date,carrier_authority_permit,carrier_business_scope,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,create_id,create_date,edit_id,edit_date,active_flag)
+ values(#{enterpriseId},#{roadNumber},#{roadNumberUrl},#{roadNumberTerm},#{roadAuthorityPermit},#{roadBusinessScope},#{carrierNo},#{licenseUrl},#{carrierDate},#{carrierEndDate},#{carrierAuthorityPermit},#{carrierBusinessScope},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{createId},now(),#{editId},now(),#{activeFlag})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -214,12 +214,18 @@ where 1=1
 	select <include refid="Base_Column_List" /> 
 	 from bas_carrier_license where carrier_license_id = #{carrierLicenseId}
 </select>
+
 	<!-- 根据企业id查询 承运商 -->
 <select id="queryByEnterId"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" />
 	 from bas_carrier_license where enterprise_id = #{enterpriseId}
 </select>
 
+	<!-- 根据企业id查询 已经合作的承运商 -->
+	<select id="queryUseByEnterId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from bas_carrier_license where enterprise_id = #{enterpriseId} and active_flag = 1
+	</select>
 <!-- 承运商 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from bas_carrier_license 

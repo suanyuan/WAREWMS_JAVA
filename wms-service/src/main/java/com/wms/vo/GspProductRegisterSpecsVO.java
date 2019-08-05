@@ -70,13 +70,31 @@ public class GspProductRegisterSpecsVO {
 	private java.lang.String maintenanceCycle;//养护周期
 	private java.lang.String wight;
 	private String packagingUnit;//包装单位
-
+	//产品许可证 备案号
+	private String licenseNo;
+	private String recordNo;
 
 	private java.lang.String alternatName1;
 	private java.lang.String alternatName2;
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	public String getLicenseNo() {
+		return licenseNo;
+	}
+
+	public void setLicenseNo(String licenseNo) {
+		this.licenseNo = licenseNo;
+	}
+
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
 
 	public String getPackagingUnit() {
 		return packagingUnit;

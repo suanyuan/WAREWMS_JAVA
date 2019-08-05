@@ -1234,7 +1234,7 @@
 
 	<!--  -->
 	<select id="queryByAllocationDetailsId"  resultMap="BaseResultMap" parameterType="Object">
-		select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '40'
+		select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '60'
 	</select>
 
 	<!--  -->
@@ -1352,27 +1352,27 @@
 	</select>
 
 	<update id="allocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">
-      {call SPSO_OneStep_Allocation('*','*','*','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+        {call SPSO_OneStep_Allocation('*','*','*','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
 	<update id="deAllocationByOrder" parameterType="Object">
-
+		{call SPSO_DEAllocation_Process('*','UnAllocation','By AllocationDetailsID','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
 	<update id="pickingByOrder" statementType="CALLABLE" parameterType="java.util.Map">
 		{call SPSO_Picking_Process('*','PK',#{allocationDetailsId,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
-	<update id="unPickingByOrder" parameterType="Object">
-
+	<update id="unPickingByOrder" statementType="CALLABLE" parameterType="java.util.Map">
+		{call SPSO_Unpicking_Process('*',#{allocationDetailsId,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
-	<update id="shipmentByOrder" parameterType="Object">
-
+	<update id="shipmentByOrder" statementType="CALLABLE" parameterType="java.util.Map">
+		{call SPSO_Shipment_Process('*','Ship',#{orderNo,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
-	<update id="cancelByOrder" parameterType="Object">
-
+	<update id="cancelByOrder" statementType="CALLABLE" parameterType="java.util.Map">
+		{call SPSO_CloseCancel('*','Cancel',#{orderNo,mode=IN,jdbcType=VARCHAR},'CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
 <!--订单类型-->

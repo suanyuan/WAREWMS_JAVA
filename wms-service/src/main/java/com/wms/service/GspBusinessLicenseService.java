@@ -32,7 +32,7 @@ public class GspBusinessLicenseService extends BaseService {
 	@Autowired
 	private CommonService commonService;
 
-	public Json addGspBusinessLicense(GspBusinessLicenseForm gspBusinessLicenseForm) throws Exception {
+	public Json addGspBusinessLicense(GspBusinessLicenseForm gspBusinessLicenseForm) {
 		Json json = new Json();
 		GspBusinessLicense gspBusinessLicense = new GspBusinessLicense();
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
@@ -98,7 +98,7 @@ public class GspBusinessLicenseService extends BaseService {
 	 * @param gspBusinessLicenseId 营业执照id
 	 * @return
 	 */
-	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType){
+	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType) throws Exception{
 		try{
 			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>();//JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
