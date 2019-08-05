@@ -44,4 +44,9 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
      * @return 0 || 1
      */
 	int endTask(PdaDocAsnEndForm form);
+
+    /**
+     * 通过验收任务单号查询预入库通知单
+     */
+	DocAsnHeader queryByQcNo(@Param("qcno") String qcno);
 }

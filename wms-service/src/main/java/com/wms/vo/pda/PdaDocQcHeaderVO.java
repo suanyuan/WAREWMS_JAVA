@@ -29,4 +29,6 @@ public class PdaDocQcHeaderVO {
      * 仓库id
      */
     private String warehouseid;
+
+    private String asnType;//订单类型
 }

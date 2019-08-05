@@ -1301,4 +1301,11 @@ insert into doc_asn_header
         editwho = #{editwho, jdbcType=VARCHAR}
         where asnno = #{asnno, jdbcType=VARCHAR}
     </update>
+
+    <select id="queryByQcNo" parameterType="java.util.Map" resultMap="DocAsnHeaderMap">
+        select asnHeader.* from doc_asn_header asnHeader
+        left join doc_pa_header paHeader on paHeader.asnno = asnHeader.asnno
+        left join doc_qc_header qcHeader on qcHeader.pano = paHeader.pano
+        where qcHeader.qcno = #{qcno};
+    </select>
 </mapper>

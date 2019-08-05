@@ -2,7 +2,9 @@ package com.wms.service;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocAsnHeader;
 import com.wms.entity.DocQcHeader;
+import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.dao.DocQcHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.DocQcHeaderQuery;
@@ -24,6 +26,9 @@ public class DocQcHeaderService extends BaseService {
 
 	@Autowired
 	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
+
+	@Autowired
+    private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 
 	public EasyuiDatagrid<DocQcHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
         EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -101,6 +106,10 @@ public class DocQcHeaderService extends BaseService {
 
             pdaDocQcHeaderVO = new PdaDocQcHeaderVO();
             BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
+
+            //订单类型
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+            pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
             pdaDocQcHeaderVOList.add(pdaDocQcHeaderVO);
         }
         return pdaDocQcHeaderVOList;
@@ -118,6 +127,10 @@ public class DocQcHeaderService extends BaseService {
         if (docQcHeader != null) {
 
             BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
+
+            //订单类型
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+            pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
         }
         return pdaDocQcHeaderVO;
     }
