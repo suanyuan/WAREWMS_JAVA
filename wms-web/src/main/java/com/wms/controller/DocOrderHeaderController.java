@@ -152,6 +152,18 @@ public class DocOrderHeaderController {
 	}
 
 	@Login
+	@RequestMapping(params = "unPicking")
+	@ResponseBody
+	public Json unPicking(String orderNo) {
+		Json json = orderHeaderForNormalService.unPicking(orderNo);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+
+	@Login
 	@RequestMapping(params = "shipment")
 	@ResponseBody
 	public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {

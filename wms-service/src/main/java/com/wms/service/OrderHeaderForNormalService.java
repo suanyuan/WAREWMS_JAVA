@@ -312,6 +312,59 @@ public class OrderHeaderForNormalService extends BaseService {
 	}
 
 	/**
+	 * 取消拣货
+	 */
+	public Json unPicking(String orderNo) {
+		Json json = new Json();
+		//
+		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		if (orderHeaderForNormal != null) {
+			int sosStatus = 0;
+			sosStatus = Integer.parseInt(orderHeaderForNormal.getSostatus());
+			//判断订单状态
+			if (sosStatus<=40 || sosStatus>60) {
+				json.setSuccess(false);
+				json.setMsg("取消拣货处理失败：当前状态订单,不能操作取消拣货!");
+				return json;
+			}else{
+				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
+				if(allocationDetailsIdList!=null){
+					for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
+						Map<String ,Object> map=new HashMap<String, Object>();
+						//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+						map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
+						map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+						orderHeaderForNormalMybatisDao.unPickingByOrder(map);
+						String pickResult = map.get("result").toString();
+						if (pickResult != null && pickResult.length() > 0) {
+							if (pickResult.equals("000")) {
+								continue;
+							} else {
+								json.setSuccess(false);
+								json.setMsg("取消拣货处理失败：" + pickResult);
+								return json;
+							}
+						} else {
+							json.setSuccess(false);
+							json.setMsg("取消拣货处理失败：订单数据异常！");
+							return json;
+						}
+					}
+					return Json.success("取消拣货成功");
+				}else {
+					return Json.success("取消拣货失败");
+				}
+			}
+		}else {
+			json.setSuccess(false);
+			json.setMsg("取消拣货处理失败：订单数据异常！");
+			return json;
+		}
+	}
+
+	/**
 	 * 发运
 	 */
 	public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {

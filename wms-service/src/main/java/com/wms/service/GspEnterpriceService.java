@@ -64,7 +64,7 @@ public class GspEnterpriceService extends BaseService {
      * @param gspEnterpriceFrom 提交数据
      * @return
      */
-    public Json addGspEnterprice(GspEnterpriceFrom gspEnterpriceFrom){
+    public Json addGspEnterprice(GspEnterpriceFrom gspEnterpriceFrom) throws Exception{
         try{
 
             GspEnterpriseInfoForm gspEnterpriseInfoForm = gspEnterpriceFrom.getGspEnterpriseInfoForm();
