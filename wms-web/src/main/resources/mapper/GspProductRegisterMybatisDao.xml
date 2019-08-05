@@ -147,7 +147,7 @@
 				and r.classify_id =  #{condition.classifyId}
 			</if>
 			<if test="condition.classifyCatalog != null and condition.classifyCatalog != ''" >
-				and r.classify_catalog =  #{condition.classifyCatalog}
+				and r.classify_catalog like concat('%',#{condition.classifyCatalog},'%')
 			</if>
 			<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
 				and r.enterprise_id =  #{condition.enterpriseId}
