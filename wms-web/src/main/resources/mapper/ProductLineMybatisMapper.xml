@@ -32,7 +32,7 @@ where 1=1
 	</if>
 
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
+	    and a.customerid =  #{condition.customerid}
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 	    and enterprise_name like  '%${condition.enterpriseName}%'
@@ -153,7 +153,7 @@ where 1=1
 <select id="queryByPage" resultMap="BaseResultMap"  parameterType="Object">
 		select
 		<include refid="Base_Column_List"/>
-		from product_line
+		from product_line a
 		<include refid="Example_Where_Clause"/>
 		<if test="orderByClause != null and orderByClause != ''" >
 			order by  ${orderByClause}

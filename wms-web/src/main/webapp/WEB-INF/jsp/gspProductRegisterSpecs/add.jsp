@@ -19,7 +19,7 @@
             <%--</td>--%>
             <th>注册证编号</th>
             <td>
-                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' data-options='required:true,editable:false,width:200' style="width: 100px;"/>
+                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' size='50'  data-options='required:true,editable:false'/>
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
             </td>
 
@@ -326,7 +326,6 @@
 
     $(function () {
         $("#productRegisterNo").textbox({
-            width:383,
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){

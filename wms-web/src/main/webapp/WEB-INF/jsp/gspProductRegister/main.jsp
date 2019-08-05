@@ -149,7 +149,8 @@ var doSearch = function(){
 		productRegisterNo : $('#productRegisterNo').val(),
 		productNameMain : $('#productNameMain').val(),
         classifyId : $('#classifyId').combobox("getValue"),
-        classifyCatalog : $('#classifyCatalog').combobox("getValue"),
+		//拿到classifyCatalog值 不是键
+        classifyCatalog : $('#classifyCatalog').combobox("getText"),
         productRegisterVersion : $('#productRegisterVersion').combobox("getValue"),
         createDateBegin : $("#createDateBegin").datebox('getValue'),
         createDateEnd : $("#createDateEnd").datebox('getValue'),

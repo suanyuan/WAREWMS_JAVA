@@ -332,11 +332,14 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		return Json.error("操作失败");
 	}
-
+//根据委托客户获取产品线
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String customerId){
 
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();
-		BasCustomer basCustomer = basCustomerService.selectCustomerById(customerId,Constant.CODE_CUS_TYP_VE);
+		BasCustomer basCustomer = basCustomerService.selectCustomerById(customerId,Constant.CODE_CUS_TYP_OW );
+		if(basCustomer==null){
+			return  comboboxList;
+		}
 		GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(basCustomer.getEnterpriseId());
 		if(basCustomer!=null && info!=null){
 			MybatisCriteria criteria = new MybatisCriteria();

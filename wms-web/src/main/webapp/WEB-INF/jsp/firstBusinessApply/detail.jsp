@@ -442,7 +442,8 @@
                 })
             </c:when>
             <c:otherwise>
-                $("#productLine").combobox();
+                $("#productLine").combobox({panelHeight: 'auto'
+                });
             </c:otherwise>
         </c:choose>
     })
@@ -613,7 +614,17 @@
 
             $("#clientId").val(row.customerid);
             $("#clientName").textbox("setValue",row.descrC)
+            console.log(row.customerid);
+            $("#productLine").combobox({
+                panelHeight: 'auto',
+                url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
+                valueField:'id',
+                textField:'value',
+                onLoadSuccess:function () {
 
+                }
+            })
+            console.log(row.customerid+'结束');
             ezuiDialogClientDetail.dialog('close');
         }
     }
@@ -625,14 +636,14 @@
         if(row){
             $("#supplierId").val(row.customerid);
             $("#supplierName").textbox("setValue",row.descrC)
-            $("#productLine").combobox({
-                url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
-                valueField:'id',
-                textField:'value',
-                onLoadSuccess:function () {
-
-                }
-            })
+            // $("#productLine").combobox({
+            //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
+            //     valueField:'id',
+            //     textField:'value',
+            //     onLoadSuccess:function () {
+            //
+            //     }
+            // })
             ezuiDialogSupplierDetail.dialog('close');
         }
     }
