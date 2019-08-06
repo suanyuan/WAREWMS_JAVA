@@ -137,7 +137,7 @@
     <!-- 插入记录 -->
     <insert id="add" parameterType="Object">
   insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit})
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},now(),#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit})
 </insert>
 
     <!-- 根据id，修改记录-->
@@ -318,7 +318,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
     <!-- 查询产品注册证规格列表 -->
     <select id="queryByList" resultMap="BaseResultMap" parameterType="Object">
         select
-        t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
+        t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id,t1.product_name
         from gsp_product_register_specs t1 left join gsp_product_register t2
         ON t1.product_register_id = t2.product_register_id
         <include refid="Example_Where_Clause"/>
