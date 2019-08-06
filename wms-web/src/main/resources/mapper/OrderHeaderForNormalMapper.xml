@@ -1232,14 +1232,14 @@
 		</if>
 	</select>
 
-	<!--  -->
+	<!--  查询已分配的-->
 	<select id="queryByAllocationDetailsId"  resultMap="BaseResultMap" parameterType="Object">
-		select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '60'
+        select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '40'
 	</select>
 
-	<!--  -->
+	<!--  查询未分配的-->
 	<select id="queryByUnAllocationDetailsId"  resultMap="BaseResultMap" parameterType="Object">
-
+        select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '60'
 	</select>
 
     <select id="queryPackageList" resultMap="BaseResultMap">
@@ -1355,7 +1355,7 @@
         {call SPSO_OneStep_Allocation('*','*','*','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 
-	<update id="deAllocationByOrder" parameterType="Object">
+	<update id="deAllocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">
 		{call SPSO_DEAllocation_Process('*','UnAllocation','By AllocationDetailsID','*',#{orderNo,mode=IN,jdbcType=VARCHAR},'*','*','CN',#{userId,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 	</update>
 

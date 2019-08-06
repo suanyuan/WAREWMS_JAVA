@@ -529,4 +529,11 @@ public class ImportAsnDataService {
 			}
 		}
 	}
+
+	/*public BasSku getSkuBy(String sku,String customerId){
+		BasSkuQuery query = new BasSkuQuery();
+		query.setCustomerid(customerId);
+		query.setSku(sku);
+
+	}*/
 }
