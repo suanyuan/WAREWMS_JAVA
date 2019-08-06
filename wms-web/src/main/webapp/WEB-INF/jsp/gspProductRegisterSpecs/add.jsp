@@ -24,7 +24,7 @@
             </td>
 
             <th>产品名称</th>
-            <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
+            <td><input type='text' data="1" id="productNameMain" name='productName' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
 
         </tr>
 
