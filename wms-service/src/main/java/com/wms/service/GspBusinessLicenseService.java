@@ -99,7 +99,7 @@ public class GspBusinessLicenseService extends BaseService {
 	 * @return
 	 */
 	public Json addGspBusinessLicense(String enterpriceId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType) throws Exception{
-		try{
+		//try{
 			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>();//JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
@@ -156,11 +156,11 @@ public class GspBusinessLicenseService extends BaseService {
 				}
 			}
 			return Json.error("保存营业执照失败");
-		}catch (Exception e){
+		/*}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Json.error("系统错误");
-		}
+		}*/
 	}
 
 	/**

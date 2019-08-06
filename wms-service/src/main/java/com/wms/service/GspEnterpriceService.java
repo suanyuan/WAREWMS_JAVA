@@ -65,7 +65,7 @@ public class GspEnterpriceService extends BaseService {
      * @return
      */
     public Json addGspEnterprice(GspEnterpriceFrom gspEnterpriceFrom) throws Exception{
-        try{
+        //try{
 
             GspEnterpriseInfoForm gspEnterpriseInfoForm = gspEnterpriceFrom.getGspEnterpriseInfoForm();
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
@@ -164,14 +164,14 @@ public class GspEnterpriceService extends BaseService {
                 }
                 gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
-            if(gspOperateLicenseForm != null){
+            if(!BeanUtils.isEmptyFrom(gspOperateLicenseForm)){
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
                 if(enterpriseIsNewVersion == true){
                     gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
             }
-            if(gspSecondRecordForm != null){
+            if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){
                 if(enterpriseIsNewVersion == true){
                     gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
@@ -179,12 +179,12 @@ public class GspEnterpriceService extends BaseService {
                 gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
             return Json.success("保存成功");
-        }catch (Exception e){
+        /*}catch (Exception e){
             logger.info("企业信息新增失败"+e.getMessage());
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error("保存失败");
-        }
+        }*/
     }
 
     /**

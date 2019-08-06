@@ -1428,6 +1428,9 @@ function afterCheckButtion(rowData) {
     }else{
 
     };
+    if(rowData.asntypeName == '定向订单'){
+        $("#ezuiBtn_merge").linkbutton('disable');
+	}
 }
 </script>
 </head>
