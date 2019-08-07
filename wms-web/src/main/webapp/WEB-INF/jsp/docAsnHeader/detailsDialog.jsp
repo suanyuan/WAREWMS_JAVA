@@ -34,7 +34,7 @@
 			<tr>
 				<th>生产日期</th><td><input type='text' name='lotatt01' id='lotatt01' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 				<th>效期</th><td><input type='text' name='lotatt02' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
-				<th>样品属性</th><td><input type='text' name='lotatt09' id='lotatt09' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>样品属性</th><td><input type='text' name='lotatt09' id='lotatt09'  size='16' data-options=''/></td>
 			</tr>
 			<tr>	
 				<th>生产批号</th><td><input type='text' name='lotatt04' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
@@ -80,3 +80,16 @@
 	<a onclick='detailsCommit();' id='ezuiBtn_detailsCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 	<a onclick='ezuiDialogClose("#ezuiDetailsDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
+<script>
+	$(function () {
+        $("#lotatt09").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?sampleAttr',
+            valueField:'id',
+            textField:'value',
+            width:110,
+            required:true
+        });
+
+    })
+</script>

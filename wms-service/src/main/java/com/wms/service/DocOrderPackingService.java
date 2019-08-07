@@ -96,7 +96,7 @@ public class DocOrderPackingService extends BaseService {
      */
 	public Json orderStatusCheck(String orderNo) {
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		return orderObjCheck(orderHeaderForNormal);
 	}
@@ -335,7 +335,7 @@ public class DocOrderPackingService extends BaseService {
 	public Json singlePackingCancel(String orderNo, Integer cartonNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("70") || orderHeaderForNormal.getSostatus().equals("80")) {
@@ -369,7 +369,7 @@ public class DocOrderPackingService extends BaseService {
 	public Json orderPackingCancel(String orderNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("70") || orderHeaderForNormal.getSostatus().equals("80")) {

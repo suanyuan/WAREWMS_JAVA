@@ -244,7 +244,7 @@ where 1=1
   	
 <!-- 查询批次属性列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
+	select
 	<include refid="Base_Column_List"/>
 	from inv_lot_att 
 	<include refid="Example_Where_Clause"/>
@@ -295,5 +295,15 @@ where 1=1
     <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
       {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{language,mode=IN,jdbcType=VARCHAR},#{type,mode=IN,jdbcType=VARCHAR},#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
     </select>
+
+	<!-- 查询批次属性列表 -->
+	<select id="queryLotNoRepet" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		LotAtt04
+		from inv_lot_att
+		<include refid="Example_Where_Clause"/>
+		and LotAtt10 = 'HG'
+		group by LotAtt04
+	</select>
   	
 </mapper>   

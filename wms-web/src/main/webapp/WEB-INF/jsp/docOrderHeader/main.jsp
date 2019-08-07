@@ -206,6 +206,7 @@ $(function() {
 			}
 		}]
 	});
+
 	$('#ordertime').datetimebox('calendar').calendar({
         validator: function(date){
         	var now = new Date();
@@ -444,7 +445,41 @@ var edit = function(srow){
 
 /* 删除按钮 */
 var del = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
+    var operateResult = '';
+    var checkedItems = ezuiDatagrid.datagrid('getSelections');
+    $.each(checkedItems, function(index, item){
+        console.log(item);
+        $.ajax({
+            async: false,
+            url : 'docOrderHeaderController.do?delete',
+            data : {orderno : item.orderno},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+                var msg = '';
+                try {
+                    msg = result.msg;
+                    if (msg == '000') {
+                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                        operateResult = operateResult + "处理成功" + "\n";
+                    } else {
+                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                        operateResult = operateResult + "处理时错误：" + msg + "\n";
+                    };
+                } catch (e) {
+                    msg = '<spring:message code="common.message.data.delete.failed"/>';
+                };
+            }
+        });
+    })
+    if (operateResult != '') {
+        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
+        ezuiOperateResultDataDialog.dialog('open');
+        ezuiDatagrid.datagrid('reload');
+    };
+
+	/*var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		if (row.sostatus != '00') {
 			$.messager.alert('提示','此状态下不能删除订单!','info');
@@ -481,7 +516,7 @@ var del = function(){
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
-	};
+	};*/
 };
 
 /* 分配按钮 */
@@ -1527,6 +1562,22 @@ var selectSku = function(){
 		$("#ezuiDetailsForm #grossweight").numberbox('clear');
 		$("#ezuiDetailsForm #cubic").numberbox('clear');
 		$("#ezuiDetailsForm #price").numberbox('clear');
+
+		$("#ezuiDetailsForm #lotatt04").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/docOrderHeaderController.do?getLotAttBySkuCustomerId&sku='+row.sku+"&customerId="+$("#ezuiDetailsForm #customerid").textbox("getValue"),
+            valueField:'id',
+            textField:'value',
+            width:110,
+            required:true,
+            onSelect:function (record) {
+               /* console.log(record);
+                $("#ezuiDetailsForm #lotatt09").combobox('setValue',record.option.lotatt09);
+                $("#ezuiDetailsForm #lotatt10").textbox('setValue',record.option.lotatt10);
+                $("#ezuiDetailsForm #lotatt08").textbox('setValue',record.option.lotatt15);
+                $("#ezuiDetailsForm #lotatt14").textbox('setValue',record.option.lotatt14);*/
+            }
+		});
 		ezuiSkuDataDialog.dialog('close');
 	};
 };
@@ -1607,21 +1658,55 @@ var docOrderRowStyler = function (index,row) {
 					<table>
 						<tr>
 							<th>SO编号</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>客户代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>客户单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-                            <th>定向入库单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>定向入库单号</th><td><input type='text' id='soreference2' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>省</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>市</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>区</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>地址</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>省</th>
+							<td>
+								<!--<input type='text' id='cProvince' class='easyui-textbox' size='16' data-options=''/>-->
+								<input id="cc1" class="easyui-combobox" name="cProvince"  editable="false" data-options="
+								valueField: 'name',
+								textField: 'name',
+								width:110,
+								url: 'gspReceivingAddressController.do?getArea&pid=0',
+								onSelect: function(rec){
+									$('#cc2').combobox('clear');
+									$('#cc3').combobox('clear');
+									var url= 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+									$('#cc2').combobox('reload',url);
+							}">
+							</td>
+							<th>市</th>
+							<td>
+								<!--<input type='text' id='cCity' class='easyui-textbox' size='16' data-options=''/>-->
+								<input id="cc2" class="easyui-combobox" name="cCity" editable="false" data-options="
+								valueField: 'name',
+								textField: 'name',
+								width:110,
+								onSelect: function(rec){
+									$('#cc2').combobox('reload', url);
+									$('#cc3').combobox('clear');
+									var url = 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+									$('#cc3').combobox('reload', url);
+								}">
+							</td>
+							<th>区</th>
+							<td>
+								<!--<input type='text' id='cCountry' class='easyui-textbox' size='16' data-options=''/>-->
+								<input id="cc3" class="easyui-combobox" name="district"  editable="false" data-options="
+								width:110,
+								valueField:'name',
+								textField:'name'">
+							</td>
+							<th>地址</th><td><input type='text' id='cAddress1' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>收货人</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>收货电话</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>承运人</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>快递单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>收货人</th><td><input type='text' id='cContact' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>收货电话</th><td><input type='text' id='cTel1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>承运人</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',

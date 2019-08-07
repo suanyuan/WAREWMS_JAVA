@@ -1196,18 +1196,18 @@
 			<if test="hEdi15 != null  ">
 				h_edi_15=#{hEdi15},
 			</if>
-		</trim> where orderno=#{orderNo}
+		</trim> where orderno=#{orderno}
 	</update>
 
 	<!-- 删除记录 -->
 	<delete id="delete" parameterType="Object">
-	delete 	 from doc_order_header where orderno = #{orderNo}
+	delete 	 from doc_order_header where orderno = #{orderno}
 </delete>
 
 	<!-- 根据id查询 出库任务头档 -->
 	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
-		from doc_order_header where orderno = #{orderNo}
+		from doc_order_header where orderno = #{orderno}
 	</select>
 
 	<!-- 出库任务头档 列表总数-->

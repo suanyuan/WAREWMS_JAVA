@@ -8,7 +8,7 @@
 			<legend><spring:message code='common.button.orderQuery'/></legend>
 			<table>
 				<tr>
-					<th>客户编号</th>
+					<th>货主</th>
 					<td><input type='text' id='customerid' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>SO编号</th>
 					<td><input type='text' id='orderno' name='orderno' class='easyui-textbox' size='16' data-options='editable: false'/></td>
@@ -24,7 +24,7 @@
 																														textField: 'value'"/></td>
 				</tr>
 				<tr>
-					<th>收货人</th>
+					<th>收货方</th>
 					<td><input type='text' id='consigneeid' name='consigneeid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>联系方式</th>
 					<td><input type='text' id='cTel1' name='cTel1' class='easyui-textbox' size='16' data-options='required:true'/></td>
@@ -41,7 +41,7 @@
 																											valueField: 'id',
 																											textField: 'value'"/></td>
 					<th>快递公司</th>
-					<td><input type='text' id='carrierid' name='carrierid' class='easyui-textbox' size='16' data-options=''/></td>
+					<td><input type='text' id='carrierid' name='carrierid' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>收货地址</th>
@@ -49,13 +49,13 @@
 					<th>订单发运时间</th>
 					<td><input type='text' id='lastshipmenttime' name='lastshipmenttime' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<th>发运方式</th>
-					<td><input type='text' id='userdefine1' name='userdefine1' class='easyui-textbox' size='16' data-options=''/></td>
+					<td><input type='text' id='userdefine1' name='userdefine1' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>备注</th>
 					<td colspan="5"><input type='text' id='notes' name='notes' class='easyui-textbox' size='78' style="height:30px" data-options="multiline:true,validType:['length[200]']"/></td>
 					<th>结算方式</th>
-					<td><input type='text' id='userdefine2' name='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>
+					<td><input type='text' id='userdefine2' name='userdefine2' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>订单创建时间</th>
@@ -94,3 +94,30 @@
 	<%-- <a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a> --%>
 	<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
+<script>
+	$(function () {
+        $("#carrierid").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/basCarrierLicenseController.do?getCombobox',
+            valueField:'id',
+            textField:'value',
+			width:110
+        });
+
+        $("#userdefine1").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?sendFunction',
+            valueField:'id',
+            textField:'value',
+            width:110
+        });
+
+        $("#userdefine2").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?settlement',
+            valueField:'id',
+            textField:'value',
+            width:110
+        });
+    })
+</script>

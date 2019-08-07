@@ -4,6 +4,8 @@ import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.query.InvLotAttQuery;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -21,4 +23,6 @@ public interface InvLotAttMybatisDao extends BaseDao {
      * @return ~
      */
 	InvLotAtt queryByLotatts(InvLotAttQuery query);
+
+	List<InvLotAtt> queryLotNoRepet(MybatisCriteria criteria);
 }
