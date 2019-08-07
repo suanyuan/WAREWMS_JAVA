@@ -134,7 +134,7 @@ var edit = function(){
             onClose : function() {
                 ezuiFormClear(ezuiForm);
             }
-        }).dialog('refresh', dialogUrl+"&enterpriseId="+row.enterpriseId);
+        }).dialog('refresh', dialogUrl+"&enterpriseId="+row.enterpriseId+"&activeFlag="+row.activeFlag);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

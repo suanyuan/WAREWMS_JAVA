@@ -27,36 +27,56 @@
             <td>
                 <input type='text' value="${customer.enterpriseName}" id="enterpriseName" name='enterpriseName' />
                 <a href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewEnterpriseUrl()">查看</a>
-
             </td>
+
+            <th>货主</th>
+            <td><input type='text' value="${customer.costomerid}" id='costomerid' name='costomerid' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
         </tr>
-        <tr>
-            <th>代码</th>
-            <td><input type='text' value="${customer.clientNo}" id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
-        </tr>
+
         <tr>
             <th>简称</th>
             <td><input type='text' value="${customer.clientName}" id='clientName' name='clientName' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <th>联系人</th>
+            <td><input type='text' value="${customer.contacts}" id='contacts' name='contacts' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
+
+        </tr>
+
+        <tr>
+            <th>代码</th>
+            <td><input type='text' value="${customer.clientNo}" id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <th>电话</th>
+            <td><input type='text' value="${customer.telephone}" id='telephone' name='telephone' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
+
         </tr>
         <tr>
             <th>企业类型</th>
             <td><input type='text' id="operateTypeData" name='operateType' /></td>
-        </tr>
-        <!-- <tr>
-            <th>首营状态</th>
-            <td><input type='text' name='firstState' class='easyui-textbox' data-options='required:true,width:200,editable:false'/></td>
-        </tr> -->
-        <!--<tr>
-            <th>是否审核</th>
-            <td><input type='text' id="isCheckData" name='isCheck'/></td>
+            <th>身份证正面照片</th>
+            <td>
+                <input type="hidden" class="textbox-value" name="idCardFront" id="idCardFront" value=" value="${customer.idCardFront}"/>
+                <input id="contractUrlFile2" name='file' value="${customer.idCardFront}">
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl2()">查看</a>
+            </td>
         </tr>
         <tr>
-            <th>是否合作</th>
-            <td><input type='text' id="isCooperationData" name='isCooperation' /></td>
-        </tr>-->
+            <th>是否贴中文标签</th>
+            <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
+            <th>身份证背面照片</th>
+            <td>
+                <input type="hidden" class="textbox-value" name="idCardBack" id="idCardBack" value=" value="${customer.idCardBack}"/>
+                <input id="contractUrlFile3" name='file' value="${customer.idCardBack}">
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl3()">查看</a>
+            </td>
+        </tr>
         <tr>
             <th>合同编号</th>
             <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <th>身份证编号</th>
+            <td><input type='text' value="${customer.idCardNumber}" name='idCardNumber' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
         </tr>
         <tr>
             <th>合同附件</th>
@@ -65,26 +85,39 @@
                 <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
                 <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
+            <th>授权照片</th>
+            <td>
+                <input type="hidden" class="textbox-value" name="empowerPhoto" id="empowerPhoto" value=" value="${customer.empowerPhoto}"/>
+                <input id="contractUrlFile1" name='file' value="${customer.empowerPhoto}">
+                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl1()">查看</a>
+            </td>
+
         </tr>
-        <tr>
-            <th>委托内容</th>
-            <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
-        </tr>
+
         <tr>
             <th>委托开始时间</th>
             <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" id="clientStartDateForm" name='clientStartDate' data-options='required:true,width:200'/></td>
+            <th>授权开始时间</th>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.empowerStartDate}"/>" id="empowerStartDateForm" name='empowerStartDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
+
         </tr>
         <tr>
             <th>委托结束时间</th>
             <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" id="clientEndDateForm" name='clientEndDate' data-options='required:true,width:200'/></td>
+            <th>授权结束时间</th>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.empowerEndDate}"/>" id="empowerEndDateForm" name='empowerEndDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
+
         </tr>
         <tr>
             <th>委托期限</th>
             <td><input type='text' value="${customer.clientTerm}" id="clientTermForm" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
         </tr>
+
         <tr>
-            <th>是否贴中文标签</th>
-            <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
+            <th>委托内容</th>
+            <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+
+
         </tr>
         <tr>
             <th>备注</th>
@@ -170,6 +203,38 @@
                 }
             }
         });
+        $('#contractUrlFile1').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            //required: true,
+            onChange:function(data){
+                if(data){
+                    doUpload1(data);
+                }
+            }
+        });$('#contractUrlFile2').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            //required: true,
+            onChange:function(data){
+                if(data){
+                    doUpload2(data);
+                }
+            }
+        });
+        $('#contractUrlFile3').filebox({
+            prompt: '选择一个文件',//文本说明文件
+            width: '200', //文本宽度
+            buttonText: '浏览',  //按钮说明文字
+            //required: true,
+            onChange:function(data){
+                if(data){
+                    doUpload3(data);
+                }
+            }
+        });
 
         function doUpload(data) {
             var ajaxFile = new uploadFile({
@@ -192,6 +257,70 @@
                 }
             });
         }
+        function doUpload1(data) {
+            var ajaxFile = new uploadFile({
+                "url":sy.bp()+"/commonController.do?uploadFileLocal",
+                "dataType":"json",
+                "timeout":50000,
+                "async":true,
+                "data":{
+                    //多文件
+                    "file":{
+                        //file为name字段 后台可以通过$_FILES["file"]获得
+                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                    }
+                },
+                onload:function(data){
+                    $("#empowerPhoto").val(data.comment);
+                },
+                onerror:function(er){
+                    console.log(er);
+                }
+            });
+        }
+        function doUpload2(data) {
+            var ajaxFile = new uploadFile({
+                "url":sy.bp()+"/commonController.do?uploadFileLocal",
+                "dataType":"json",
+                "timeout":50000,
+                "async":true,
+                "data":{
+                    //多文件
+                    "file":{
+                        //file为name字段 后台可以通过$_FILES["file"]获得
+                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                    }
+                },
+                onload:function(data){
+                    $("#idCardFront").val(data.comment);
+                },
+                onerror:function(er){
+                    console.log(er);
+                }
+            });
+        }
+        function doUpload3(data) {
+            var ajaxFile = new uploadFile({
+                "url":sy.bp()+"/commonController.do?uploadFileLocal",
+                "dataType":"json",
+                "timeout":50000,
+                "async":true,
+                "data":{
+                    //多文件
+                    "file":{
+                        //file为name字段 后台可以通过$_FILES["file"]获得
+                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                    }
+                },
+                onload:function(data){
+                    $("#idCardBack").val(data.comment);
+                },
+                onerror:function(er){
+                    console.log(er);
+                }
+            });
+        }
+
 
         $('input[name="firstState"]').combobox({
             url:sy.bp()+'/commonController.do?getCatalogFirstState',
@@ -241,7 +370,7 @@
                 $('#operateTypeData').combobox("setValue",'${customer.operateType}')
             }
         })
-//企业信息弹窗datagrid
+        //企业信息弹窗datagrid
         enterpriseDatagrid = $("#dataGridDetail").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagridSearch',
             method:'POST',
@@ -327,7 +456,7 @@
             isUse : '1'
         });
     }
-    
+
     function choseSelect() {
         var row = enterpriseDatagrid.datagrid("getSelected");
         if(row){
@@ -412,6 +541,39 @@
                 showUrl($("#contractUrl").val());
             }else {
                 showMsg("请上传合同附件！");
+            }
+        }
+    }
+    function viewUrl1(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#empowerPhoto").val()!=""){
+                showUrl($("#empowerPhoto").val());
+            }else {
+                showMsg("请上传授权照片！");
+            }
+        }
+    }
+    function viewUrl2(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#idCardFront").val()!=""){
+                showUrl($("#idCardFront").val());
+            }else {
+                showMsg("请上传身份证正面照！");
+            }
+        }
+    }
+    function viewUrl3(url) {
+        if(url){
+            showUrl(url);
+        }else{
+            if($("#idCardBack").val()!=""){
+                showUrl($("#idCardBack").val());
+            }else {
+                showMsg("请上传身份证背面照！");
             }
         }
     }

@@ -41,10 +41,13 @@ public class BasCarrierLicenseService extends BaseService {
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
-	@Autowired
-	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+    @Autowired
+    private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
 
-	//@Autowired
+//    @Autowired
+//    private GspEnterpriseInfoMybatisDao GspEnterpriseInfoMybatisDao;
+
+    //@Autowired
 	//private BasCarrierLicenseDao basCarrierLicenseDao;
 
 
@@ -189,7 +192,7 @@ public class BasCarrierLicenseService extends BaseService {
 			basCarrierLicenseMybatisDao.delete(basCarrierLicense);
 		}
 		json.setSuccess(true);
-		return json;
+        return json;
 	}
 
 	public List<EasyuiCombobox> getBasCarrierLicenseCombobox() {
@@ -200,7 +203,8 @@ public class BasCarrierLicenseService extends BaseService {
 			for(BasCarrierLicense basCarrierLicense : basCarrierLicenseList){
 				combobox = new EasyuiCombobox();
 				combobox.setId(basCarrierLicense.getCarrierLicenseId());
-				combobox.setValue(basCarrierLicense.getCarrierNo());
+                GspEnterpriseInfo gspEnterprise = gspEnterpriseInfoMybatisDao.queryById(basCarrierLicense.getEnterpriseId());
+				combobox.setValue(gspEnterprise.getShorthandName());
 				comboboxList.add(combobox);
 			}
 		}
@@ -208,8 +212,6 @@ public class BasCarrierLicenseService extends BaseService {
 	}
 
 	public Json getBasCarrierLicenseInfo(String enterpriceId){
-
-
 
 		BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(enterpriceId);
 		if(basCarrierLicense == null){
@@ -219,8 +221,8 @@ public class BasCarrierLicenseService extends BaseService {
 	}
 
 
-	public BasCarrierLicense queryByEnterId(String enterpriceId){
-		return basCarrierLicenseMybatisDao.queryByEnterId(enterpriceId);
+	public BasCarrierLicense queryByEnterId(BasCarrierLicense BasCarrierLicense){
+		return basCarrierLicenseMybatisDao.queryByEnterId(BasCarrierLicense);
 	}
 
 }

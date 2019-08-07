@@ -17,7 +17,7 @@
 <body>
 
 <div id="tap" class="easyui-tabs">
-    <div title="基本信息" style="padding:20px;" data-options="href:'/basCarrierLicenseController.do?toInfo&enterpriseId=${enterpriseId}'">
+    <div title="基本信息" style="padding:20px;" data-options="href:'/basCarrierLicenseController.do?toInfo&enterpriseId=${enterpriseId}&activeFlag=${activeFlag}'">
     </div>
     <div title="营业执照信息" data-options="href:'/basCarrierLicenseController.do?toBusinessLicense&enterpriseId=${enterpriseId}'" style="overflow:auto;padding:20px;display:none;">
         tab2
