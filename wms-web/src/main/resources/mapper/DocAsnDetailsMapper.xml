@@ -887,7 +887,7 @@ insert into doc_asn_details
 	               a.linestatus,
 	               c.codename_c as linestatusName,
 	               a.sku,
-	               b.descr_c as skudescrc,
+	               b.reservedfield01 as skudescrc,
 	               a.alternativesku,
 	               a.packid,
 	               a.expectedqty,

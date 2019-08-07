@@ -106,8 +106,8 @@ public class DocOrderHeaderController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String orderNo) {
-		Json json = orderHeaderForNormalService.delete(orderNo);
+	public Json delete(String orderno) {
+		Json json = orderHeaderForNormalService.delete(orderno);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -284,5 +284,12 @@ public class DocOrderHeaderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Login
+	@RequestMapping(params = "getLotAttBySkuCustomerId",method = RequestMethod.POST)
+	@ResponseBody
+	public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku,String customerId){
+		return orderHeaderForNormalService.getLotAttBySkuCustomerId(sku,customerId);
 	}
 }

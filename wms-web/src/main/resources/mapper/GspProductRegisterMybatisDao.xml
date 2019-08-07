@@ -354,8 +354,20 @@
         <include refid="Base_Column_List"/>
         from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
     </select>
+<!--根据RegisterNo查单条-->
+	<select id="queryByRegisterNo" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
+    </select>
+<!--根据productNameMain查单条-->
+	<select id="queryByproductNameMain" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gsp_product_register where product_name_main = #{productNameMain, jdbcType=VARCHAR}
+    </select>
 
-    <!--查询所有历史产品档案中使用过的注册证号-->
+<!--查询所有历史产品档案中使用过的注册证号-->
     <select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select reg.* from gsp_product_register reg
         left join bas_sku_history sku on sku.reservedfield03 = reg.product_register_no

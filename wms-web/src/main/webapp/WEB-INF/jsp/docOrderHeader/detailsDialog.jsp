@@ -46,16 +46,19 @@
 				<td><input type='text' name='lotatt02' id='lotatt02' class='easyui-textbox' size='16' data-options=''/></td>
 				<th>入库日期</th>
 				<td><input type='text' name='lotatt03' id='lotatt03' class='easyui-datebox' size='16' data-options=''/></td>
-				<th>生产批号(S)</th>
+				<th>生产批号</th>
 				<td><input type='text' name='lotatt04' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 			</tr>
 			<tr>
-				<th>样品属性(S)</th>
-				<td><input type='text' name='lotatt09' id='lotatt09' class='easyui-textbox' size='16' data-options=''/></td>
+				<th>样品属性</th>
+				<td><input type='text' name='lotatt09' id='lotatt09'/></td>
 				<th>质量状态</th>
-				<td><input type='text' name='lotatt10' id='lotatt10' class='easyui-textbox' size='16' data-options=''/></td>
-				<th>供应商(S)</th>
-				<td><input type='text' name='lotatt08' id='lotatt08' class='easyui-textbox' size='16' data-options=''/></td>
+				<td><input type='text' name='lotatt10' id='lotatt10'/></td>
+				<th>供应商</th>
+				<td>
+                    <input type='text' id='supplierIdChose'/>
+                    <input type='hidden' name='lotatt08' id='lotatt08' />
+                </td>
 				<th>入库单号</th>
 				<td><input type='text' name='lotatt14' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 			</tr>
@@ -108,3 +111,83 @@
 		</div>
 	</form>
 </div>
+<script>
+    $(function () {
+        $("#lotatt09").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?sampleAttr',
+            valueField:'id',
+            textField:'value',
+            width:110,
+            required:true
+        });
+
+        $("#lotatt10").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?qcState',
+            valueField:'id',
+            textField:'value',
+            width:110,
+            required:true
+        });
+
+        /* 控件初始化start */
+        $("#ezuiDetailsForm #supplierIdChose").textbox({
+            width:110,
+            icons:[{
+                iconCls:'icon-search',
+                handler: function(e){
+                    ezuiSupplierDataClick();
+                    ezuiCustDataDialogSearch();
+                }
+            }]
+        });
+
+        /* 客户选择弹框-主界面 */
+        var ezuiSupplierDataClick = function(){
+            $("#ezuiCustDataDialog #customerType").combobox('setValue','VE').combo('readonly', true);
+            $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+            ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+                url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
+                method:'POST',
+                toolbar : '#ezuiCustToolbar',
+                title: '客户档案',
+                pageSize : 50,
+                pageList : [50, 100, 200],
+                fit: true,
+                border: false,
+                fitColumns : true,
+                nowrap: false,
+                striped: true,
+                collapsible:false,
+                pagination:true,
+                rownumbers:true,
+                singleSelect:true,
+                queryParams:{
+                    customerType : $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+                    activeFlag : $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+                },
+                idField : 'customerid',
+                columns : [[
+                    {field: 'customerid',	title: '客户代码',	width: 15},
+                    {field: 'descrC',		title: '中文名称',	width: 50},
+                    {field: 'descrE',		title: '英文名称',	width: 50},
+                    {field: 'customerTypeName',	title: '类型',	width: 15},
+                    {field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
+                            return rowData.activeFlag == '1' ? '是' : '否';
+                        }}
+                ]],
+                onDblClickCell: function(index,field,value){
+                    selectCust();
+                },
+                onRowContextMenu : function(event, rowIndex, rowData) {
+                },onLoadSuccess:function(data){
+                    $(this).datagrid('unselectAll');
+                }
+            });
+
+            ezuiCustDataDialog.dialog('open');
+        };
+
+    })
+</script>

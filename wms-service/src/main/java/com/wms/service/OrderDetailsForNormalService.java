@@ -168,7 +168,7 @@ public class OrderDetailsForNormalService extends BaseService {
 				}
 			}
 			OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-			orderHeaderForNormalQuery.setOrderNo(orderNo);
+			orderHeaderForNormalQuery.setOrderno(orderNo);
 			OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 			json.setSuccess(true);
 			json.setMsg("分配处理成功！");
@@ -220,7 +220,7 @@ public class OrderDetailsForNormalService extends BaseService {
 				}
 			}
 			OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-			orderHeaderForNormalQuery.setOrderNo(orderNo);
+			orderHeaderForNormalQuery.setOrderno(orderNo);
 			OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 			json.setSuccess(true);
 			json.setMsg("分配取消成功！");

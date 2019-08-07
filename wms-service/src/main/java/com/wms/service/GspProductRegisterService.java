@@ -1,21 +1,27 @@
 package com.wms.service;
 
+import java.io.*;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegisterSpecs;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.service.importdata.ImportGspProductRegisterDataService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import com.wms.vo.form.GspOperateDetailForm;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,12 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspProductRegisterForm;
 import com.wms.query.GspProductRegisterQuery;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Service("gspProductRegisterService")
 public class GspProductRegisterService extends BaseService {
@@ -38,6 +50,8 @@ public class GspProductRegisterService extends BaseService {
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private ImportGspProductRegisterDataService importGspProductRegisterDataService;
 
 	/**
 	 * 查询分页数据
@@ -274,4 +288,52 @@ public class GspProductRegisterService extends BaseService {
 		}
 		return true;
 	}
+
+//下载导入模板
+	public void exportTemplate(HttpServletResponse response, String token) {
+		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream())) {
+			File file = new File(ResourceUtil.getImportRootPath("productRegister_template.xls"));
+			response.reset();
+			Cookie cookie = new Cookie("downloadToken",token);
+			cookie.setMaxAge(60);
+			response.addCookie(cookie);
+			response.setContentType(ContentTypeEnum.stream.getContentType());
+			response.addHeader("Content-Disposition", "attachment;filename=" + new String(file.getName().getBytes()));
+			response.addHeader("Content-Length", "" + file.length());
+
+			try(InputStream fis = new BufferedInputStream(new FileInputStream(file))){
+				byte[] buffer = new byte[fis.available()];
+				System.out.println();
+				fis.read(buffer);
+				toClient.write(buffer);
+				toClient.flush();
+			}catch(IOException ex){
+//				log.error(ExceptionUtil.getExceptionMessage(ex));
+			}
+		} catch (Exception e) {
+//			log.error(ExceptionUtil.getExceptionMessage(e));
+		}
+	}
+//导入
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+		Json json = null;
+		MultipartFile excelFile = mhsr.getFile("uploadData");
+		//System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
+		if(excelFile != null && excelFile.getSize() > 0){
+			json = importGspProductRegisterDataService.importExcelData(excelFile);
+		}
+		return json;
+	}
+//根据ProductRegisterNo查询
+	public GspProductRegister queryByRegisterNo(String registerNo){
+		return  gspProductRegisterMybatisDao.queryByRegisterNo(registerNo);
+
+	}
+//根据productNameMain查询
+	public GspProductRegister queryByproductNameMain(String productNameMain){
+		return  gspProductRegisterMybatisDao.queryByproductNameMain(productNameMain);
+
+	}
+
+
 }

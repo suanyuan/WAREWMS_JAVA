@@ -9,15 +9,14 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.ActAllocationDetails;
 import com.wms.entity.BasPackage;
 import com.wms.entity.BasSku;
+import com.wms.entity.InvLotAtt;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.mybatis.dao.ActAllocationDetailsMybatisDao;
-import com.wms.mybatis.dao.DocOrderPackingMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
+import com.wms.mybatis.dao.*;
 import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.BasPackageQuery;
+import com.wms.query.InvLotAttQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
@@ -70,6 +69,8 @@ public class OrderHeaderForNormalService extends BaseService {
 //
 	@Autowired
 	private ImportOrderDataService importOrderDataService;
+	@Autowired
+	private InvLotAttMybatisDao invLotAttMybatisDao;
 	/**
 	 * 订单列表显示
 	 */
@@ -162,7 +163,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json edit(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
+		orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		Date addtime = orderHeaderForNormal.getAddtime();
 		BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
@@ -170,16 +171,16 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormal.setAddtime(addtime);
 		orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
 		json.setSuccess(true);
-		json.setMsg("资料处理成功！");
+		json.setMsg("000");
 		return json;
 	}
 	/**
 	 * 删除订单
 	 */
-	public Json delete(String orderNo) {
+	public Json delete(String orderno) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderno);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if(orderHeaderForNormal != null){
 			if (orderHeaderForNormal.getSostatus().equals("00")) {
@@ -189,6 +190,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					return json;
 				} else {
 					orderHeaderForNormalMybatisDao.delete(orderHeaderForNormal);
+					return Json.success("000");
 				}
 			} else {
 				json.setSuccess(false);
@@ -206,7 +208,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json allocation(String orderNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
@@ -237,7 +239,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json deAllocation(String orderNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
@@ -269,7 +271,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		Json json = new Json();
 		//
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			//判断订单状态
@@ -320,7 +322,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		Json json = new Json();
 		//
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			int sosStatus = 0;
@@ -373,7 +375,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		Json json = new Json();
 		//
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
+		orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if (orderHeaderForNormal != null) {
 			//判断订单状态
@@ -432,7 +434,7 @@ public class OrderHeaderForNormalService extends BaseService {
 							orderHeaderForNormalQuery.setCurrentTime(new Date());
 							orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 							json.setSuccess(true);
-							json.setMsg("出库处理成功！");
+							json.setMsg("000");
 							json.setObj(orderHeaderForNormal);
 							return json;
 						} else {
@@ -514,7 +516,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	public Json cancel(String orderNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-		orderHeaderForNormalQuery.setOrderNo(orderNo);
+		orderHeaderForNormalQuery.setOrderno(orderNo);
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 		if(orderHeaderForNormal != null){
 			if (orderHeaderForNormal.getSostatus().equals("00")) {
@@ -738,7 +740,7 @@ public class OrderHeaderForNormalService extends BaseService {
 				int pageSize = 0;
 				detailsList = new ArrayList<OrderDetailsForNormal>();
 				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-				orderHeaderForNormalQuery.setOrderNo(orderNo);
+				orderHeaderForNormalQuery.setOrderno(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
 				if(orderHeaderForNormal == null){
 				    return;
@@ -984,7 +986,7 @@ public class OrderHeaderForNormalService extends BaseService {
 	}
 
 	public OrderHeaderForNormal getOrderHeader(OrderHeaderForNormalQuery query) {
-		query.setOrderNo(query.getOrderNo().replace(",", ""));
+		query.setOrderno(query.getOrderno().replace(",", ""));
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query);
 		return orderHeaderForNormal;
 	}
@@ -1140,7 +1142,7 @@ public class OrderHeaderForNormalService extends BaseService {
 				int pageSize = 0;
 				detailsList = new ArrayList<OrderDetailsForNormal>();
 				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-				orderHeaderForNormalQuery.setOrderNo(orderNo);
+				orderHeaderForNormalQuery.setOrderno(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
 				if(orderHeaderForNormal.getOrderDetailsForNormalList()==null){
 					return;
@@ -1200,6 +1202,38 @@ public class OrderHeaderForNormalService extends BaseService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 根据sku和customerid
+	 * @param sku
+	 * @param customerId
+	 * @return
+	 */
+	public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku,String customerId){
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		InvLotAttQuery query = new InvLotAttQuery();
+		query.setCustomerid(customerId);
+		query.setSku(sku);
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setDistinct(true);
+		List<EasyuiCombobox> comboboxList = new ArrayList<>();
+		List<InvLotAtt> list = invLotAttMybatisDao.queryLotNoRepet(mybatisCriteria);
+		if(list!=null && list.size()>0){
+			for(InvLotAtt i : list){
+				/*Map<String,Object> option = new HashMap<>();
+				option.put("lotatt09",i.getLotatt09());
+				option.put("lotatt10",i.getLotatt10());
+				option.put("lotatt14",i.getLotatt14());
+				option.put("lotatt15",i.getLotatt15());*/
+				EasyuiCombobox com = new EasyuiCombobox();
+				com.setId(i.getLotatt04());
+				com.setValue(i.getLotatt04());
+				//com.setOption(option);
+				comboboxList.add(com);
+			}
+		}
+		return comboboxList;
 	}
 
 }

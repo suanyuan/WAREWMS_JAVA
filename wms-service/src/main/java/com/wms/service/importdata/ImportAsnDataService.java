@@ -486,6 +486,7 @@ public class ImportAsnDataService {
 						asnDetails.setLotatt13(basSku.getSkuGroup7());
 					}
 					asnDetails.setLotatt14(resultNo);
+					asnDetails.setLotatt15(basSku.getSkuGroup6());
 					//赋值
 					asnDetails.setAsnlineno(asnlineno + 1);
 					asnDetails.setPackid(basSku.getPackid());

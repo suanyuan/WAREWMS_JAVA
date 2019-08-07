@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class OrderHeaderForNormalQuery implements IQuery {
 
-	private String orderNo;
+	private String orderno;
 	private String customerId;
 	private java.util.Date orderStartTime;
 	private java.util.Date orderEndTime;

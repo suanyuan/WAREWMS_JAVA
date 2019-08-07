@@ -77,6 +77,7 @@ public class DocPaService {
                 docAsnDetailsMybatisDao.getIdSequence(map);
                 String panno = map.get("resultNo").toString();
                 docPaHeaderForm.setPano(panno);
+                docPaHeaderForm.setAsnno(asnNos);
                 docPaHeaderForm.setPastatus("00");
                 docPaHeaderForm.setAddtime(new Date());
                 docPaHeaderForm.setAddwho(login.getId());

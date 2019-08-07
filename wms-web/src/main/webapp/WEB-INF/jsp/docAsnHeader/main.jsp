@@ -134,8 +134,8 @@ $(function() {
 		columns : [[
 			{field: 'chk',              checkbox:true,      width: 6},
 			{field: 'asnlineno',		title: '行号',		width: 40 },
-			{field: 'sku',				title: '产品代码',		width: 70 },
-			{field: 'skudescrc',			title: '产品名称',		width: 107 },
+			{field: 'sku',				title: '产品代码',		width: 100 },
+			{field: 'skudescrc',			title: '产品名称',		width: 200 },
 			{field: 'alternativesku',	title: '产品条码',		width: 70 },
 			{field: 'linestatusName',	title: '行状态',		width: 70 },
 			{field: 'expectedqty',		title: '预期到货数',		width: 70 },
@@ -355,7 +355,7 @@ $(function() {
     });
 
     $("#supplierId").textbox({
-        width:145,
+        width:110,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -365,6 +365,7 @@ $(function() {
             }
         }]
     });
+
 //仓库下拉框
     $("#warehouseId").combobox({
         panelHeight: 'auto',

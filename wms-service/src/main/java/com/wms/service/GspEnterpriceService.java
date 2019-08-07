@@ -129,7 +129,7 @@ public class GspEnterpriceService extends BaseService {
                     }
 
                 }else{
-                    enterpriseIsNewVersion = false;
+                    enterpriseIsNewVersion = true;
                 }
                 if(enterpriseIsNewVersion == true){
                     //1.新建状态，更新原数据

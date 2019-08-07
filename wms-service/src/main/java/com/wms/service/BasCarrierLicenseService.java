@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wms.constant.Constant;
 import com.wms.dao.GspBusinessLicenseDao;
 import com.wms.entity.GspBusinessLicense;
 import com.wms.entity.GspEnterpriseInfo;
@@ -196,9 +197,13 @@ public class BasCarrierLicenseService extends BaseService {
 	}
 
 	public List<EasyuiCombobox> getBasCarrierLicenseCombobox() {
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		BasCarrierLicenseQuery query = new BasCarrierLicenseQuery();
+		query.setActiveFlag(Constant.IS_USE_YES);
+		mybatisCriteria.setCondition(query);
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseMybatisDao.queryListByAll();
+		List<BasCarrierLicense> basCarrierLicenseList = basCarrierLicenseMybatisDao.queryByList(mybatisCriteria);
 		if(basCarrierLicenseList != null && basCarrierLicenseList.size() > 0){
 			for(BasCarrierLicense basCarrierLicense : basCarrierLicenseList){
 				combobox = new EasyuiCombobox();

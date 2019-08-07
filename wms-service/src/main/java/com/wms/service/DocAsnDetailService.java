@@ -99,6 +99,7 @@ public class DocAsnDetailService extends BaseService {
 		if(basSku!=null){
 			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
 			docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
+			docAsnDetail.setLotatt15(basSku.getSkuGroup6());
 		}
 
 

@@ -67,7 +67,7 @@
         </tr>
         <tr>
             <th>运输条件</th>
-            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options=''/></td>
             <th>长</th>
             <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='47' data-options=''/>(m)</td>
         </tr>

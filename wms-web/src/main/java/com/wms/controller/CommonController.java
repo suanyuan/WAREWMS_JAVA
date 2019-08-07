@@ -32,8 +32,8 @@ import java.util.*;
 @RequestMapping("commonController")
 public class CommonController {
 
-    //private static final String uploadUrl = "/Users/quendi/fileUpload";
-    private static final String uploadUrl = "/root/uploadDir";
+    private static final String uploadUrl = "/Users/quendi/fileUpload";
+    //private static final String uploadUrl = "/root/uploadDir";
 
     @Autowired
     private BasCodesService basCodesService;
@@ -214,6 +214,7 @@ public class CommonController {
     public List<EasyuiCombobox> checkState(){
         return basCodesService.getBy(Constant.CODE_CATALOG_CHECKSTATE);
     }
+
     /**
      * 单位
      * @return
@@ -222,6 +223,46 @@ public class CommonController {
     @ResponseBody
     public List<EasyuiCombobox> getUOM(){
         return basCodesService.getBy(Constant.CODE_CATALOG_UOM);
+    }
+
+    /**
+     * 样品属性
+     * @return
+     */
+    @RequestMapping(params = "sampleAttr")
+    @ResponseBody
+    public List<EasyuiCombobox> getSampleAttr(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_SAMPLEATTR);
+    }
+
+    /**
+     * 发运方式
+     * @return
+     */
+    @RequestMapping(params = "sendFunction")
+    @ResponseBody
+    public List<EasyuiCombobox> getSendFunction(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_SENDFUNCTION);
+    }
+
+    /**
+     * 结算方式
+     * @return
+     */
+    @RequestMapping(params = "settlement")
+    @ResponseBody
+    public List<EasyuiCombobox> getSettlement(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_SETTLEMENT);
+    }
+
+    /**
+     * 质量状态
+     * @return
+     * */
+    @RequestMapping(params = "qcState")
+    @ResponseBody
+    public List<EasyuiCombobox> getQcState(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
     }
 
 }

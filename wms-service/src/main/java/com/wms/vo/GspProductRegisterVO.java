@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspProductRegisterVO {
 
+	private Integer seq;
 	private String productRegisterId;
 	private String productRegisterNo;
 	private String productNameMain;
@@ -44,6 +45,14 @@ public class GspProductRegisterVO {
 	private String agentAddress;//代理人住所
 	private String licenseNo;//生产许可证号
 	private String recordNo;//备案号
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
 
 	public String getLicenseNo() {
 		return licenseNo;
