@@ -135,10 +135,25 @@ public class DocQcHeaderService extends BaseService {
         return pdaDocQcHeaderVO;
     }
 
+    public PdaDocQcHeaderVO queryDocQcHeaderByPano(String pano) {
+
+        DocQcHeader docQcHeader = queryByPano(pano);
+        if (docQcHeader == null) {
+            return null;
+        }
+
+        PdaDocQcHeaderVO pdaDocQcHeaderVO = new PdaDocQcHeaderVO();
+        BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
+
+        //订单类型
+        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+        pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
+
+        return pdaDocQcHeaderVO;
+    }
+
     /**
      * 通过上架单号查询验收头档 适用于 定向订单的 验收头档查询
-     * @param
-     * @return
      */
     public DocQcHeader queryByPano(String pano) {
 

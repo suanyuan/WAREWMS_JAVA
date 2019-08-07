@@ -68,6 +68,26 @@ public class PdaDocQcController {
     }
 
     /**
+     * 通过上架单号获取验收任务单header信息
+     * @param pano 验收任务单号
+     * @return header信息
+     */
+    @RequestMapping(params = "docQcHeaderByPano", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocQcHeaderByPano(String pano) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        PdaDocQcHeaderVO pdaDocQcHeaderVO = docQcHeaderService.queryDocQcHeaderByPano(pano);
+        if (pdaDocQcHeaderVO == null) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此上架单对应的验收任务"));
+            return resultMap;
+        }
+        resultMap.put(Constant.DATA, pdaDocQcHeaderVO);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
+
+    /**
      * 获取验收任务detail数据
      * @param query 查询条件
      * @return detail数据

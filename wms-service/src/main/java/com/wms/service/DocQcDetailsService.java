@@ -455,6 +455,7 @@ public class DocQcDetailsService extends BaseService {
                     pdaDocQcDetailQuery.setLotatt04(qcDetails.getUserdefine3());
                     pdaDocQcDetailQuery.setLotatt05(qcDetails.getUserdefine4());
                     pdaDocQcDetailQuery.setLotatt10("HG");
+                    pdaDocQcDetailQuery.setLotnum(lotatt_hg.getLotnum());
                     DocQcDetails normalDocQcDetails = docQcDetailsDao.queryDocQcDetail(pdaDocQcDetailQuery);
                     normalDocQcDetails.setPaqtyExpected(normalDocQcDetails.getPaqtyExpected() + qcDetails.getPaqtyExpected());
                     normalDocQcDetails.setQcqtyExpected(normalDocQcDetails.getQcqtyExpected() + qcDetails.getQcqtyExpected());

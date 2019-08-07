@@ -164,8 +164,10 @@ public class OrderHeaderForNormalService extends BaseService {
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		Date addtime = orderHeaderForNormal.getAddtime();
 		BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
 		orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		orderHeaderForNormal.setAddtime(addtime);
 		orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
