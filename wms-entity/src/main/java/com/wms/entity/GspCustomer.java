@@ -52,4 +52,16 @@ public class GspCustomer implements Serializable {
 
 	private String isUse;
 
+	private String costomerid;
+	private String contacts;
+	private String idCardNumber;
+	private String telephone;
+	private String idCardFront;
+	private String idCardBack;
+	private java.util.Date empowerStartDate;
+	private java.util.Date empowerEndDate;
+	private String empowerPhoto;
+
+
+
 }

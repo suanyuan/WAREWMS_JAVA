@@ -210,7 +210,7 @@ public class GspReceivingService extends BaseService {
 		} catch (BeansException e) {
 			throw new Exception("服务器忙!");
 		}
-
+		json.setMsg("资料添加成功");
 		json.setSuccess(true);
 		return json;
 	}

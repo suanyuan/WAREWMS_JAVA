@@ -27,6 +27,88 @@ public class GspCustomerForm {
 	private String editDate;
 	private String isUse;
 
+	private String costomerid;
+	private String contacts;
+	private String idCardNumber;
+	private String telephone;
+	private String idCardFront;
+	private String idCardBack;
+	private String empowerStartDate;
+	private String empowerEndDate;
+	private String empowerPhoto;
+
+	public String getCostomerid() {
+		return costomerid;
+	}
+
+	public void setCostomerid(String costomerid) {
+		this.costomerid = costomerid;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getIdCardFront() {
+		return idCardFront;
+	}
+
+	public void setIdCardFront(String idCardFront) {
+		this.idCardFront = idCardFront;
+	}
+
+	public String getIdCardBack() {
+		return idCardBack;
+	}
+
+	public void setIdCardBack(String idCardBack) {
+		this.idCardBack = idCardBack;
+	}
+
+	public String getEmpowerStartDate() {
+		return empowerStartDate;
+	}
+
+	public void setEmpowerStartDate(String empowerStartDate) {
+		this.empowerStartDate = empowerStartDate;
+	}
+
+	public String getEmpowerEndDate() {
+		return empowerEndDate;
+	}
+
+	public void setEmpowerEndDate(String empowerEndDate) {
+		this.empowerEndDate = empowerEndDate;
+	}
+
+	public String getEmpowerPhoto() {
+		return empowerPhoto;
+	}
+
+	public void setEmpowerPhoto(String empowerPhoto) {
+		this.empowerPhoto = empowerPhoto;
+	}
+
 	public String getClientId() {
 		return clientId;
 	}

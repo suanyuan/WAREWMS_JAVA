@@ -62,19 +62,28 @@ public class BasCarrierLicenseController {
 
 	@Login
 	@RequestMapping(params = "toDetail")
-	public ModelAndView toDetail(String enterpriseId) {
+	public ModelAndView toDetail(String enterpriseId,String activeFlag) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("enterpriseId", enterpriseId);
-		return new ModelAndView("basCarrierLicense/detail", model);
+        model.put("activeFlag", activeFlag);
+        System.out.println(enterpriseId+"=============="+activeFlag);
+
+        return new ModelAndView("basCarrierLicense/detail", model);
 	}
 
 	@Login
 	@RequestMapping(params = "toInfo")
-	public ModelAndView toInfo(String enterpriseId) {
+	public ModelAndView toInfo(String enterpriseId,String activeFlag) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		BasCarrierLicense basCarrierLicense = basCarrierLicenseService.queryByEnterId(enterpriseId);
+        BasCarrierLicense basCarrierLicense1 = new BasCarrierLicense();
+        basCarrierLicense1.setEnterpriseId(enterpriseId);
+        basCarrierLicense1.setActiveFlag(activeFlag);
+//        System.out.println(enterpriseId+"=============="+activeFlag);
+		BasCarrierLicense basCarrierLicense = basCarrierLicenseService.queryByEnterId(basCarrierLicense1);
+
 		Json gspEnterpriceInfo = gspEnterpriceService.getGspEnterpriceInfo(enterpriseId);
 		model.put("enterpriseId", enterpriseId);
+        //model.put("activeFlag", activeFlag);
 		model.put("basCarrierLicense", basCarrierLicense);
 		model.put("enterpriseInFo", gspEnterpriceInfo.getObj());
 		return new ModelAndView("basCarrierLicense/info", model);
@@ -141,8 +150,9 @@ public class BasCarrierLicenseController {
 		Json json = basCarrierLicenseService.addBasCarrierLicense(basCarrierLicenseForm);
 		if(json == null){
 			json = new Json();
+            json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
 		return json;
 
 	}
@@ -180,7 +190,7 @@ public class BasCarrierLicenseController {
 	}
 
 	@Login
-	@RequestMapping(params = "getCombobox")
+    @RequestMapping(params = "getCombobox")
 	@ResponseBody
 	public List<EasyuiCombobox> getCombobox() {
 		return basCarrierLicenseService.getBasCarrierLicenseCombobox();
