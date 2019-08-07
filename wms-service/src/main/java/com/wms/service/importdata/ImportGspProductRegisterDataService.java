@@ -177,6 +177,12 @@ public class ImportGspProductRegisterDataService {
 						throw new Exception();
 					}else if(dataArray.getProductRegisterNo()!=null){
 						GspProductRegister productRegisters=gspProductRegisterService.queryByRegisterNo(dataArray.getProductRegisterNo());
+						//循环去重
+						for(GspProductRegisterVO vo:importData){
+							if(vo.getProductRegisterNo().equals(dataArray.getProductRegisterNo())){
+								throw new Exception();
+							}
+						}
 						if(productRegisters!=null){
 							throw new Exception();
 
@@ -198,6 +204,12 @@ public class ImportGspProductRegisterDataService {
 					throw new Exception();
 				}else if(dataArray.getProductNameMain()!=null){
                 	GspProductRegister gspProductRegister=gspProductRegisterService.queryByproductNameMain(dataArray.getProductNameMain());
+					//循环去重
+					for(GspProductRegisterVO vo:importData){
+						if(vo.getProductNameMain().equals(dataArray.getProductNameMain())){
+							throw new Exception();
+						}
+					}
                 	if(gspProductRegister!=null){
 						throw new Exception();
 					}else{
