@@ -272,7 +272,7 @@ where 1=1
         <include refid="Base_Column_List"/>
         from doc_pa_details
         where PANO = #{pano}
-        order by linestatus asc, userdefine1 asc
+        order by userdefine3 asc, userdefine4 asc, linestatus asc, userdefine1 asc
     </select>
 
     <update id="updateBatchQc" parameterType="java.util.Map">
