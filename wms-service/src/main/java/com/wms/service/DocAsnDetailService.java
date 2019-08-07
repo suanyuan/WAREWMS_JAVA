@@ -10,6 +10,7 @@ import com.wms.entity.DocAsnHeader;
 import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
+import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
@@ -78,10 +79,6 @@ public class DocAsnDetailService extends BaseService {
 
 	    DocAsnDetail docAsnDetail = new DocAsnDetail();
 	    BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
-        //判断预入库明细里面的sku和客户id下的18个批属是否存在
-        InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
-        //判断是否要插入扫码批次匹配表
-        basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
 
 		Json json = new Json();
 		DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
@@ -91,6 +88,24 @@ public class DocAsnDetailService extends BaseService {
 		docAsnDetail.setAsnlineno(orderlineno + 1);
 		docAsnDetail.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+		//获取SKU信息(条码、包装、重量、体积、金额)
+		BasSkuQuery skuQuery = new BasSkuQuery();
+		skuQuery.setCustomerid(docAsnDetail.getCustomerid());
+		skuQuery.setSku(docAsnDetail.getSku());
+		skuQuery.setQty(docAsnDetail.getExpectedqty());
+		BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+
+		if(basSku!=null){
+			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
+			docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
+		}
+
+
+		//判断预入库明细里面的sku和客户id下的18个批属是否存在
+		InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
+		//判断是否要插入扫码批次匹配表
+		basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
 
         //定向订单库位
         docAsnDetail = configDxLocation(docAsnDetail);

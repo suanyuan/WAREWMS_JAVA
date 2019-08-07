@@ -164,8 +164,10 @@ public class OrderHeaderForNormalService extends BaseService {
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 		orderHeaderForNormalQuery.setOrderNo(orderHeaderForNormalForm.getOrderno());
 		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		Date addtime = orderHeaderForNormal.getAddtime();
 		BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
 		orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		orderHeaderForNormal.setAddtime(addtime);
 		orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
@@ -240,7 +242,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		if (orderHeaderForNormal != null) {
 			if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				Map<String ,Object> map=new HashMap<String, Object>();
-				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+				//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				map.put("orderNo", orderNo);
 				map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
 				orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
@@ -273,7 +275,7 @@ public class OrderHeaderForNormalService extends BaseService {
 			//判断订单状态
 			if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
 				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
-				if(allocationDetailsIdList!=null){
+				if(allocationDetailsIdList!=null && allocationDetailsIdList.size()>0){
 					for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
 						Map<String ,Object> map=new HashMap<String, Object>();
 						//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -297,7 +299,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					}
 					return Json.success("拣货成功");
 				}else {
-					return Json.success("拣货失败");
+					return Json.success("拣货失败,查询不到对应的分配明细");
 				}
 			}else{
 				json.setSuccess(false);
@@ -329,7 +331,7 @@ public class OrderHeaderForNormalService extends BaseService {
 				json.setMsg("取消拣货处理失败：当前状态订单,不能操作取消拣货!");
 				return json;
 			}else{
-				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
+				List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
 				if(allocationDetailsIdList!=null){
 					for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
 						Map<String ,Object> map=new HashMap<String, Object>();
@@ -420,7 +422,7 @@ public class OrderHeaderForNormalService extends BaseService {
 					}
 					//操作发运
 					Map<String ,Object> map=new HashMap<String, Object>();
-					map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+					//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 					map.put("orderNo", orderHeaderForNormalForm.getOrderno());
 					map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
 					orderHeaderForNormalMybatisDao.shipmentByOrder(map);
@@ -518,7 +520,7 @@ public class OrderHeaderForNormalService extends BaseService {
 			if (orderHeaderForNormal.getSostatus().equals("00")) {
 				//创建状态订单直接操作取消
 				Map<String ,Object> map = new HashMap<String, Object>();
-				map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+				//map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				map.put("orderNo", orderNo);
 				map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
 				orderHeaderForNormalMybatisDao.cancelByOrder(map);

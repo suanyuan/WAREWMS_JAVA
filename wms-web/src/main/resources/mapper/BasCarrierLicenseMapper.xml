@@ -218,7 +218,7 @@ where 1=1
 	<!-- 根据企业id查询 承运商 -->
 <select id="queryByEnterId"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" />
-	 from bas_carrier_license where enterprise_id = #{enterpriseId}
+	 from bas_carrier_license where enterprise_id = #{enterpriseId} and active_flag = #{activeFlag}
 </select>
 
 	<!-- 根据企业id查询 已经合作的承运商 -->

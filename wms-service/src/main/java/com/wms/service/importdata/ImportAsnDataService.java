@@ -462,11 +462,11 @@ public class ImportAsnDataService {
 				for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
 				    //判断预入库明细里面的sku和客户id下的18个批属是否存在
-                    DocAsnDetail docAsnDetail = new DocAsnDetail();
+                    /*DocAsnDetail docAsnDetail = new DocAsnDetail();
                     BeanUtils.copyProperties(importDetailsDataVO, docAsnDetail);
                     InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
                     //判断是否要插入扫码批次匹配表
-                    basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());
+                    basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());*/
 
 					DocAsnDetail asnDetails = new DocAsnDetail();
 					BeanUtils.copyProperties(importDetailsDataVO, asnDetails);
@@ -481,6 +481,11 @@ public class ImportAsnDataService {
 					skuQuery.setSku(importDetailsDataVO.getSku());
 					skuQuery.setQty(importDetailsDataVO.getExpectedqty());
 					BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+
+					if(basSku!=null){
+						asnDetails.setLotatt13(basSku.getSkuGroup7());
+					}
+					asnDetails.setLotatt14(resultNo);
 					//赋值
 					asnDetails.setAsnlineno(asnlineno + 1);
 					asnDetails.setPackid(basSku.getPackid());
@@ -510,6 +515,11 @@ public class ImportAsnDataService {
                                     importDetailsDataVO.getReceivinglocation().length() == 0)) {
 					    asnDetails.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);//定向订单库位
                     }
+
+					//判断预入库明细里面的sku和客户id下的18个批属是否存在
+					InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(asnDetails);
+					//判断是否要插入扫码批次匹配表
+					basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());
 					//保存订单明细信息
 					docAsnDetailsMybatisDao.add(asnDetails);
 				}
@@ -519,4 +529,11 @@ public class ImportAsnDataService {
 			}
 		}
 	}
+
+	/*public BasSku getSkuBy(String sku,String customerId){
+		BasSkuQuery query = new BasSkuQuery();
+		query.setCustomerid(customerId);
+		query.setSku(sku);
+
+	}*/
 }

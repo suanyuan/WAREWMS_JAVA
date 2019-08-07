@@ -9,7 +9,7 @@
 				<th>入库单编号</th>
 				<td><input type='text' name='asnno'  id='asnno' class='easyui-textbox' size='16' data-options='editable:false'/></td>
 				<th>客户编码</th>
-				<td><input type='text' namde='customerid'  id='customerid' class='easyui-textbox' size='16' data-options='editable:false'/></td>
+				<td><input type='text' name='customerid'  id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 				<th>状态</th>
 				<td><input type='text' name='linestatus' id='linestatus' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																														editable:false,
@@ -52,11 +52,11 @@
 					<th>行号</th>
 					<td><input type='text' name='asnlineno'  id='asnlineno' class='easyui-numberbox' size='16' data-options='editable:false'/></td>
 					<th>重量</th>
-					<td><input type='text' name='totalgrossweight' id='totalgrossweight' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
+					<td><input type='text' name='totalgrossweight' id='totalgrossweight' class='easyui-numberbox' size='16' data-options='min:0,precision:3'/></td>
 					<th>体积</th>
-					<td><input type='text' name='totalcubic' id='totalcubic' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3'/></td>
+					<td><input type='text' name='totalcubic' id='totalcubic' class='easyui-numberbox' size='16' data-options='min:0,precision:3'/></td>
 					<th>单价</th>
-					<td><input type='text' name='totalprice' id='totalprice' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:2'/></td>
+					<td><input type='text' name='totalprice' id='totalprice' class='easyui-numberbox' size='16' data-options='min:0,precision:2'/></td>
 				</tr>
 				<tr>
 					<th>入库日期</th><td><input type='text' name='lotatt03' id='lotatt03' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>

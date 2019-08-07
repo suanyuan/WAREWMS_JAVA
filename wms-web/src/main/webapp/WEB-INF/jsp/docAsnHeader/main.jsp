@@ -969,6 +969,7 @@ var detailsEdit = function(){
             lotatt13 : row.lotatt13,
             lotatt14 : row.lotatt14
 		});
+        //$("#ezuiDetailsForm #customerid").textbox("setValue",row.customerid)
 		if (row.linestatus == '00') {
 			$('#ezuiBtn_detailsCommit').linkbutton("enable");
 		} else {
@@ -1060,6 +1061,7 @@ var detailsReceive = function(){
 
 /* 明细提交按钮 */
 var detailsCommit = function(){
+    console.log("------------");
 	var asnstatus = $("#ezuiDetailsDialog #linestatus").combobox('getValue');
 	if (asnstatus == '00' || asnstatus == '30' || asnstatus == '40'){
 		var url = '';
@@ -1426,6 +1428,9 @@ function afterCheckButtion(rowData) {
     }else{
 
     };
+    if(rowData.asntypeName == '定向订单'){
+        $("#ezuiBtn_merge").linkbutton('disable');
+	}
 }
 </script>
 </head>

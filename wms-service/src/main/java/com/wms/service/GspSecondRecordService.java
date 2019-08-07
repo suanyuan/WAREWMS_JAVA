@@ -99,7 +99,7 @@ public class GspSecondRecordService extends BaseService {
 	 * @return
 	 */
 	public Json addGspSecondRecord(String enterpriceId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType)throws Exception{
-		try{
+		//try{
 			//GspSecondRecordForm gspSecondRecordForm = JSON.parseObject(secondRecordFormStr,GspSecondRecordForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
 			if(StringUtils.isEmpty(enterpriceId)){
@@ -158,11 +158,11 @@ public class GspSecondRecordService extends BaseService {
 			}
 
 			return Json.success("保存备案凭证信息成功");
-		}catch (Exception e){
+		/*}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Json.error("系统错误");
-		}
+		}*/
 	}
 
 	/**

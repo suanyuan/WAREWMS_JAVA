@@ -267,16 +267,16 @@ where 1=1
 	<if test="reservedfield03 != null  ">
 		reservedfield03,
 	</if>
-	<if test="reservedfield02 != null  ">
+	<if test="reservedfield04 != null  ">
 		reservedfield04,
 	</if>
-	<if test="reservedfield03 != null  ">
+	<if test="reservedfield05 != null  ">
 		reservedfield05,
 	</if>
-	<if test="reservedfield02 != null  ">
+	<if test="reservedfield06 != null  ">
 		reservedfield06,
 	</if>
-	<if test="reservedfield03 != null  ">
+	<if test="reservedfield07 != null  ">
 		reservedfield07,
 	</if>
 	<if test="packid != null  ">
@@ -396,6 +396,18 @@ where 1=1
 	<if test="reservedfield03 != null  ">
 		#{reservedfield03},
 	</if>
+    <if test="reservedfield04 != null  ">
+        #{reservedfield04},
+    </if>
+    <if test="reservedfield05 != null  ">
+        #{reservedfield05},
+    </if>
+    <if test="reservedfield06 != null  ">
+        #{reservedfield06},
+    </if>
+    <if test="reservedfield07 != null  ">
+        #{reservedfield07},
+    </if>
 	<if test="packid != null  ">
 		#{packid},
 	</if>

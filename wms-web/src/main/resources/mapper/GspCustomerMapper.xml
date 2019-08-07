@@ -26,11 +26,22 @@
 	<result column="edit_id" property="editId"/>
 	<result column="edit_date" property="editDate"/>
 	<result column="is_use" property="isUse"/>
+
+
+	<result column="costomerid" property="costomerid"/>
+	<result column="contacts" property="contacts"/>
+	<result column="id_card_number" property="idCardNumber"/>
+	<result column="telephone" property="telephone"/>
+	<result column="id_card_front" property="idCardFront"/>
+	<result column="id_card_back" property="idCardBack"/>
+	<result column="empower_start_date" property="empowerStartDate"/>
+	<result column="empower_end_date" property="empowerEndDate"/>
+	<result column="empower_photo" property="empowerPhoto"/>
 </resultMap>
        
 <!-- gsp_customer table all fields -->
 <sql id="Base_Column_List" >
-	 client_id,client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use
+	 client_id,client_no,client_name,costomerid,contacts,id_card_number,telephone,id_card_front,id_card_back,empower_start_date,empower_end_date,empower_photo,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use
 </sql>
    
    
@@ -110,13 +121,13 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_customer(client_id,client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use)
- values(#{clientId},#{clientNo},#{clientName},#{enterpriseId},#{remark},#{firstState},#{isCheck},#{isCooperation},#{operateType},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{createId},now(),#{editId},#{editDate},#{isUse})
+  insert into gsp_customer(client_id,client_no,client_name,enterprise_id,remark,first_state,is_check,is_cooperation,operate_type,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,create_id,create_date,edit_id,edit_date,is_use,costomerid,contacts,id_card_number,telephone,id_card_front,id_card_back,empower_start_date,empower_end_date,empower_photo)
+ values(#{clientId},#{clientNo},#{clientName},#{enterpriseId},#{remark},#{firstState},#{isCheck},#{isCooperation},#{operateType},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{createId},now(),#{editId},#{editDate},#{isUse},#{costomerid},#{contacts},#{idCardNumber},#{telephone},#{idCardFront},#{idCardBack},#{empowerStartDate},#{empowerEndDate},#{empowerPhoto})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update gsp_customer set client_no=#{clientNo},client_name=#{clientName},enterprise_id=#{enterpriseId},remark=#{remark},first_state=#{firstState},is_check=#{isCheck},is_cooperation=#{isCooperation},operate_type=#{operateType},contract_no=#{contractNo},contract_url=#{contractUrl},client_content=#{clientContent},client_start_date=#{clientStartDate},client_end_date=#{clientEndDate},client_term=#{clientTerm},is_chinese_label=#{isChineseLabel},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse} where client_id=#{clientId}
+  update gsp_customer set client_no=#{clientNo},client_name=#{clientName},enterprise_id=#{enterpriseId},remark=#{remark},first_state=#{firstState},is_check=#{isCheck},is_cooperation=#{isCooperation},operate_type=#{operateType},contract_no=#{contractNo},contract_url=#{contractUrl},client_content=#{clientContent},client_start_date=#{clientStartDate},client_end_date=#{clientEndDate},client_term=#{clientTerm},is_chinese_label=#{isChineseLabel},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},costomerid=#{costomerid},contacts=#{contacts},id_card_number=#{idCardNumber},telephone=#{telephone},id_card_front=#{idCardFront},id_card_back=#{idCardBack},empower_start_date=#{empowerStartDate},empower_end_date=#{empowerEndDate},empower_photo=#{empowerPhoto} where client_id=#{clientId}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -183,6 +194,36 @@ where 1=1
 	<if test="isUse != null  ">
 		is_use=#{isUse},
 	</if>
+
+		<if test="costomerid != null  ">
+			costomerid=#{costomerid},
+		</if>
+		<if test="contacts != null  ">
+			contacts=#{contacts},
+		</if>
+		<if test="isUse != null  ">
+			id_card_number=#{idCardNumber},
+		</if>
+		<if test="editId != null  ">
+			telephone=#{telephone},
+		</if>
+		<if test="editDate != null  ">
+			id_card_front=#{idCardFront},
+		</if>
+		<if test="isUse != null  ">
+			id_card_back=#{idCardBack},
+		</if>
+		<if test="editId != null  ">
+			empower_start_date=#{empowerStartDate},
+		</if>
+		<if test="editDate != null  ">
+			empower_end_date=#{empowerEndDate},
+		</if>
+		<if test="isUse != null  ">
+			empower_photo=#{empowerPhoto},
+		</if>
+
+
 	</trim> where client_id=#{clientId}
 </update>
 
