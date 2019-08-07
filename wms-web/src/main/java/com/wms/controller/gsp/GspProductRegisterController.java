@@ -2,6 +2,7 @@ package com.wms.controller.gsp;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.wms.entity.GspEnterpriseInfo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspProductRegisterService;
@@ -179,4 +181,18 @@ public class GspProductRegisterController {
 	public Object unBind(@RequestParam(defaultValue = "") String id){
 		return gspProductRegisterService.unBindProduct(id);
 	}
+//下载导入模板
+	@Login
+	@RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
+	public void exportTemplate(HttpServletResponse response, String token) throws Exception {
+		gspProductRegisterService.exportTemplate(response, token);
+	}
+//导入excel到表单
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return gspProductRegisterService.importExcelData(mhsr);
+	}
+
 }
