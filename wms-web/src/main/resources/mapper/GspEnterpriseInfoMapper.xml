@@ -177,8 +177,8 @@ where 1=1
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select g.*,gl.license_no,gr.record_no
 	 from gsp_enterprise_info g
-	 LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
-	 left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
+	 LEFT JOIN (select * from gsp_operate_license where is_use = '1') gl on g.enterprise_id=gl.enterprise_id
+	 left join (select * from gsp_second_record where is_use = '1')  gr on g.enterprise_id=gr.enterprise_id
     where g.enterprise_id = #{enterpriseId}
 </select>
 
