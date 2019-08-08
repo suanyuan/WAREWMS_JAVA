@@ -43,12 +43,14 @@ public class ViewInvLocation implements Serializable {
 
 	@Column(name="O_RP")
 	private BigDecimal oRp;
+	private BigDecimal fmqtyEach; //数量
 
-	private BigDecimal qtyallocated;
+	private BigDecimal qtyallocated;//分配件数
+	private BigDecimal qtyallocatedEach ;//分配数量
+	private BigDecimal qtyavailed; //可用数量
+	private BigDecimal qtyholdedEach;//冻结数量
 
-	private BigDecimal qtyavailed;
-
-	private BigDecimal qtyholded;
+	private BigDecimal qtyholded;//冻结件数
 
 	private String skudescrc;
 
@@ -65,16 +67,103 @@ public class ViewInvLocation implements Serializable {
 	private String lotatt12;
 	private String lotatt04;
 	private String lotatt05;
+	private String lotatt06;
+
 	private String lotatt07;
 	private String lotatt01;
 	private String lotatt02;
 	private String lotatt08;
+	private String lotatt09;
 	private String lotatt11;
 	private String lotatt10;
 	private String name;
 	private String productRegisterNo;
 	private String enterpriseName;
 	private String defaultreceivinguom;
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public BigDecimal getiMv() {
+		return iMv;
+	}
+
+	public void setiMv(BigDecimal iMv) {
+		this.iMv = iMv;
+	}
+
+	public BigDecimal getiPa() {
+		return iPa;
+	}
+
+	public void setiPa(BigDecimal iPa) {
+		this.iPa = iPa;
+	}
+
+	public BigDecimal getiRp() {
+		return iRp;
+	}
+
+	public void setiRp(BigDecimal iRp) {
+		this.iRp = iRp;
+	}
+
+	public BigDecimal getoMv() {
+		return oMv;
+	}
+
+	public void setoMv(BigDecimal oMv) {
+		this.oMv = oMv;
+	}
+
+	public BigDecimal getoRp() {
+		return oRp;
+	}
+
+	public void setoRp(BigDecimal oRp) {
+		this.oRp = oRp;
+	}
+
+	public BigDecimal getFmqtyEach() {
+		return fmqtyEach;
+	}
+
+	public void setFmqtyEach(BigDecimal fmqtyEach) {
+		this.fmqtyEach = fmqtyEach;
+	}
+
+	public BigDecimal getQtyallocatedEach() {
+		return qtyallocatedEach;
+	}
+
+	public void setQtyallocatedEach(BigDecimal qtyallocatedEach) {
+		this.qtyallocatedEach = qtyallocatedEach;
+	}
+
+	public BigDecimal getQtyholdedEach() {
+		return qtyholdedEach;
+	}
+
+	public void setQtyholdedEach(BigDecimal qtyholdedEach) {
+		this.qtyholdedEach = qtyholdedEach;
+	}
+
+	public String getLotatt09() {
+		return lotatt09;
+	}
+
+	public void setLotatt09(String lotatt09) {
+		this.lotatt09 = lotatt09;
+	}
+
+	public String getLotatt06() {
+		return lotatt06;
+	}
+
+	public void setLotatt06(String lotatt06) {
+		this.lotatt06 = lotatt06;
+	}
 
 	public String getDefaultreceivinguom() {
 		return defaultreceivinguom;

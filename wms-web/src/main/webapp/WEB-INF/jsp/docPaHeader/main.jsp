@@ -37,7 +37,7 @@ $(function() {
 			{field: 'pano',		title: '上架任务单号',	width: 150 },
 			{field: 'asnno',		title: '入库单号',	width: 150},
 			{field: 'patype',		title: '类型',	width: 71 },
-			{field: 'pastatus',		title: '上架状态',	width: 71},
+			{field: 'pastatus',		title: '上架状态',	width: 71,formatter: pastatusFormatter},
 			{field: 'addtime',		title: '创建时间',	width: 150},
 			{field: 'addwho',		title: '创建人',	width: 150 },
 			{field: 'edittime',		title: '编辑时间',	width: 150 },
