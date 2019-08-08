@@ -580,9 +580,9 @@
                             return rowData.customerType='主体';
                         }
                     } },
-                {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
-                        return rowData.activeFlag == '1' ? '是' : '否';
-                    }},
+                // {field: 'activeFlag',		title: '是否合作 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                //         return rowData.activeFlag == '1' ? '是' : '否';
+                //     }},
                 {field: 'enterpriseId',		title: '企业id',	width: 80 ,hidden:true},
                 {field: 'customerid',		title: '客户代码',	width: 80 },
                 {field: 'descrC',		title: '客户名称',	width: 80 },
@@ -669,9 +669,9 @@
                             return rowData.customerType='主体';
                         }
                     } },
-                {field: 'activeFlag',		title: '是否合作 ',	width: '10%',formatter:function(value,rowData,rowIndex){
-                        return rowData.activeFlag == '1' ? '是' : '否';
-                    }},
+                // {field: 'activeFlag',		title: '是否合作 ',	width: '10%',formatter:function(value,rowData,rowIndex){
+                //         return rowData.activeFlag == '1' ? '是' : '否';
+                //     }},
                 {field: 'enterpriseId',		title: '主键',	width: '10%' ,hidden:true},
                 {field: 'customerid',		title: '客户代码',	width: '10%' },
                 {field: 'descrC',		title: '客户名称',	width: '30%' },
@@ -747,6 +747,7 @@
             enterpriseName : $("#ezuiDialogDetail input[id='qiyemingcheng']").val(),
             enterpriseNo : $("#ezuiDialogDetail input[id='qiye']").val(),
 
+            enterpriseType:'default',
             // enterpriseName : $('#qiyemingcheng').val(),
             // enterpriseNo: $('#qiye').val(),
             isUse : '1'
@@ -782,7 +783,9 @@
             descrC : $('#kehumingcehng1').val(),
             customerid : $('#kehudaima1').val(),
             isUse : '1',
-            customerType:'OW'
+            customerType:'OW',
+            activeFlag : '1',
+
         });
     }
     //选择货主

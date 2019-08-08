@@ -26,13 +26,65 @@ public class GspSupplierForm {
 	private java.lang.String contractNo;
 	private java.lang.String contractUrl;
 	private java.lang.String clientContent;
-
 	private java.util.Date clientStartDate;
-
 	private java.util.Date clientEndDate;
 	private java.lang.String clientTerm;
 
 
+	private java.lang.String costomerid;
+	private java.lang.String empowerUnit;
+	private java.lang.String empowerPhoto;
+	private java.util.Date empowerStartdate;
+	private java.util.Date empowerEnddate;
+	private java.lang.String empowerContent;
+
+	public String getCostomerid() {
+		return costomerid;
+	}
+
+	public void setCostomerid(String costomerid) {
+		this.costomerid = costomerid;
+	}
+
+	public String getEmpowerUnit() {
+		return empowerUnit;
+	}
+
+	public void setEmpowerUnit(String empowerUnit) {
+		this.empowerUnit = empowerUnit;
+	}
+
+	public String getEmpowerPhoto() {
+		return empowerPhoto;
+	}
+
+	public void setEmpowerPhoto(String empowerPhoto) {
+		this.empowerPhoto = empowerPhoto;
+	}
+
+	public Date getEmpowerStartdate() {
+		return empowerStartdate;
+	}
+
+	public void setEmpowerStartdate(Date empowerStartdate) {
+		this.empowerStartdate = empowerStartdate;
+	}
+
+	public Date getEmpowerEnddate() {
+		return empowerEnddate;
+	}
+
+	public void setEmpowerEnddate(Date empowerEnddate) {
+		this.empowerEnddate = empowerEnddate;
+	}
+
+	public String getEmpowerContent() {
+		return empowerContent;
+	}
+
+	public void setEmpowerContent(String empowerContent) {
+		this.empowerContent = empowerContent;
+	}
 
 	public String getContractNo() {
 		return contractNo;

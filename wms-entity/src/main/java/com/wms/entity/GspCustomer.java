@@ -58,8 +58,8 @@ public class GspCustomer implements Serializable {
 	private String telephone;
 	private String idCardFront;
 	private String idCardBack;
-	private java.util.Date empowerStartDate;
-	private java.util.Date empowerEndDate;
+	private Date empowerStartDate;
+	private Date empowerEndDate;
 	private String empowerPhoto;
 
 

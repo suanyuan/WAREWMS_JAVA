@@ -43,7 +43,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'sku',		title: '产品代码',	width: 400 },
-			{field: 'gtncode',		title: 'GTN码',	width: 400 }
+			{field: 'gtncode',		title: 'GTIN码',	width: 400 }
 		]],
 		// onDblClickCell: function(index,field,value){
 		// 	edit();
@@ -262,7 +262,7 @@ var toImportData = function(){
 					<table>
 						<tr>
 							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>GTN码</th><td><input type='text' id='gtncode' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>GTIN码</th><td><input type='text' id='gtncode' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -291,7 +291,7 @@ var toImportData = function(){
 					<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>GTN码</th>
+					<th>GTIN码</th>
 					<td><input type='text' name='gtncode' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 			</table>

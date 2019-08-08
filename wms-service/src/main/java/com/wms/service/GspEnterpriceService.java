@@ -5,10 +5,7 @@ import com.wms.constant.Constant;
 import com.wms.dto.GspEnterpriseBusinessDTO;
 import com.wms.dto.GspEnterpriseTypeDTO;
 import com.wms.entity.*;
-import com.wms.mybatis.dao.GspBusinessLicenseMybatisDao;
-import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
-import com.wms.mybatis.dao.GspOperateLicenseMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.*;
 import com.wms.query.GspBusinessLicenseQuery;
 import com.wms.query.GspEnterpriseInfoQuery;
 import com.wms.query.GspOperateLicenseQuery;
@@ -58,6 +55,8 @@ public class GspEnterpriceService extends BaseService {
     private GspOperateDetailService gspOperateDetailService;
     @Autowired
     private DataPublishService dataPublishService;
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
 
     /**
      * 新增企业信息
@@ -193,6 +192,7 @@ public class GspEnterpriceService extends BaseService {
      * @return
      */
     public Json editGspEnterprice(String enterpriceId,GspEnterpriceFrom gspEnterpriceFrom){
+        System.out.println("==================="+gspEnterpriceFrom.getGspEnterpriseInfoForm().getEnterpriseType());
         try{
             GspEnterpriseInfoForm gspEnterpriseInfoForm = gspEnterpriceFrom.getGspEnterpriseInfoForm();
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
@@ -264,6 +264,12 @@ public class GspEnterpriceService extends BaseService {
             if(gspSecondRecord!=null){
                 gspSecondRecordService.updateGspSecondRecordActiveTag(gspSecondRecord.getRecordId()+"",Constant.IS_USE_NO);
             }
+            //删除已下发的企业 需要把客户档案内记录置为不合作   所有关于该企业的首营申请全部报废
+            basCustomerMybatisDao.delete(enterpriceId);
+
+//            if(){
+////
+////            }
 
             //TODO 需要补上企业关联的所有单据信息失效
             return Json.error("删除成功，数据已失效");

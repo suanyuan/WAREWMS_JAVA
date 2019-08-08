@@ -56,9 +56,9 @@
             <td><input type='text' id="operateTypeData" name='operateType' /></td>
             <th>身份证正面照片</th>
             <td>
-                <input type="hidden" class="textbox-value" name="idCardFront" id="idCardFront" value=" value="${customer.idCardFront}"/>
-                <input id="contractUrlFile2" name='file' value="${customer.idCardFront}">
-                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl2()">查看</a>
+                <input type="hidden" class="textbox-value" name="idCardFront" id="idCardFront"  value="${customer.idCardFront}"/>
+                <input id="contractUrlFile2" name='file2' value="${customer.idCardFront}">
+                <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl2()">查看</a>
             </td>
         </tr>
         <tr>
@@ -66,9 +66,9 @@
             <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
             <th>身份证背面照片</th>
             <td>
-                <input type="hidden" class="textbox-value" name="idCardBack" id="idCardBack" value=" value="${customer.idCardBack}"/>
-                <input id="contractUrlFile3" name='file' value="${customer.idCardBack}">
-                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl3()">查看</a>
+                <input type="hidden" class="textbox-value" name="idCardBack" id="idCardBack"  value="${customer.idCardBack}"/>
+                <input id="contractUrlFile3" name='file3' value="${customer.idCardBack}">
+                <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl3()">查看</a>
             </td>
         </tr>
         <tr>
@@ -81,15 +81,15 @@
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>
+                <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl"  value="${customer.contractUrl}"/>
                 <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
-                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+                <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
             <th>授权照片</th>
             <td>
-                <input type="hidden" class="textbox-value" name="empowerPhoto" id="empowerPhoto" value=" value="${customer.empowerPhoto}"/>
-                <input id="contractUrlFile1" name='file' value="${customer.empowerPhoto}">
-                <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl1()">查看</a>
+                <input type="hidden" class="textbox-value" name="empowerPhoto" id="empowerPhoto" value="${customer.empowerPhoto}"/>
+                <input id="contractUrlFile1" name='file1' value="${customer.empowerPhoto}">
+                <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl1()">查看</a>
             </td>
 
         </tr>
@@ -213,7 +213,8 @@
                     doUpload1(data);
                 }
             }
-        });$('#contractUrlFile2').filebox({
+        });
+        $('#contractUrlFile2').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
@@ -267,11 +268,11 @@
                     //多文件
                     "file":{
                         //file为name字段 后台可以通过$_FILES["file"]获得
-                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                        "file":document.getElementsByName("file1")[0].files[0]//文件数组
                     }
                 },
-                onload:function(data){
-                    $("#empowerPhoto").val(data.comment);
+                onload:function(data1){
+                    $("#empowerPhoto").val(data1.comment);
                 },
                 onerror:function(er){
                     console.log(er);
@@ -288,11 +289,11 @@
                     //多文件
                     "file":{
                         //file为name字段 后台可以通过$_FILES["file"]获得
-                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                        "file":document.getElementsByName("file2")[0].files[0]//文件数组
                     }
                 },
-                onload:function(data){
-                    $("#idCardFront").val(data.comment);
+                onload:function(data2){
+                    $("#idCardFront").val(data2.comment);
                 },
                 onerror:function(er){
                     console.log(er);
@@ -309,11 +310,14 @@
                     //多文件
                     "file":{
                         //file为name字段 后台可以通过$_FILES["file"]获得
-                        "file":document.getElementsByName("file")[0].files[0]//文件数组
+                        "file":document.getElementsByName("file3")[0].files[0]//文件数组
                     }
                 },
-                onload:function(data){
-                    $("#idCardBack").val(data.comment);
+                onload:function(data3){
+
+                        $("#idCardBack").val(data3.comment);
+
+
                 },
                 onerror:function(er){
                     console.log(er);
@@ -453,7 +457,10 @@
         enterpriseDatagrid.datagrid('load', {
             enterpriseNo : $('#enterpriseNo').val(),
             shorthandName : $('#shorthandName').val(),
+            enterpriseType:'default',
+            type:'enterprise',
             isUse : '1'
+
         });
     }
 

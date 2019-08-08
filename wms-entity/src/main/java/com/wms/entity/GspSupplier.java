@@ -40,6 +40,65 @@ public class GspSupplier implements Serializable {
   private Date clientEndDate;
   private String clientTerm;
 
+
+  private String costomerid;
+  private String empowerUnit;
+  private String empowerPhoto;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date empowerStartdate;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date empowerEnddate;
+  private String empowerContent;
+
+
+  public String getCostomerid() {
+    return costomerid;
+  }
+
+  public void setCostomerid(String costomerid) {
+    this.costomerid = costomerid;
+  }
+
+  public String getEmpowerUnit() {
+    return empowerUnit;
+  }
+
+  public void setEmpowerUnit(String empowerUnit) {
+    this.empowerUnit = empowerUnit;
+  }
+
+  public String getEmpowerPhoto() {
+    return empowerPhoto;
+  }
+
+  public void setEmpowerPhoto(String empowerPhoto) {
+    this.empowerPhoto = empowerPhoto;
+  }
+
+  public Date getEmpowerStartdate() {
+    return empowerStartdate;
+  }
+
+  public void setEmpowerStartdate(Date empowerStartdate) {
+    this.empowerStartdate = empowerStartdate;
+  }
+
+  public Date getEmpowerEnddate() {
+    return empowerEnddate;
+  }
+
+  public void setEmpowerEnddate(Date empowerEnddate) {
+    this.empowerEnddate = empowerEnddate;
+  }
+
+  public String getEmpowerContent() {
+    return empowerContent;
+  }
+
+  public void setEmpowerContent(String empowerContent) {
+    this.empowerContent = empowerContent;
+  }
+
   public String getContractNo() {
     return contractNo;
   }

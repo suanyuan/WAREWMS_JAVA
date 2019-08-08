@@ -573,6 +573,10 @@ where 1=1
 	delete  from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>
 
+<delete id="deleteByEnterpriseId" parameterType="Object">
+	delete  from  Bas_Customer  where enterprise_id=#{enterpriseId,jdbcType=VARCHAR}
+</delete>
+
 <delete id="deleteBascustomerByCustomerID" parameterType="Object">
 	delete  from  Bas_Customer  where customerid=#{customerid,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </delete>

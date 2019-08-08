@@ -33,6 +33,64 @@ public class GspSupplierVO {
 	private java.lang.String clientTerm;
 
 
+	private java.lang.String costomerid;
+	private java.lang.String empowerUnit;
+	private java.lang.String empowerPhoto;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String empowerStartdate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private java.lang.String empowerEnddate;
+	private java.lang.String empowerContent;
+
+
+	public String getCostomerid() {
+		return costomerid;
+	}
+
+	public void setCostomerid(String costomerid) {
+		this.costomerid = costomerid;
+	}
+
+	public String getEmpowerUnit() {
+		return empowerUnit;
+	}
+
+	public void setEmpowerUnit(String empowerUnit) {
+		this.empowerUnit = empowerUnit;
+	}
+
+	public String getEmpowerPhoto() {
+		return empowerPhoto;
+	}
+
+	public void setEmpowerPhoto(String empowerPhoto) {
+		this.empowerPhoto = empowerPhoto;
+	}
+
+	public String getEmpowerStartdate() {
+		return empowerStartdate;
+	}
+
+	public void setEmpowerStartdate(String empowerStartdate) {
+		this.empowerStartdate = empowerStartdate;
+	}
+
+	public String getEmpowerEnddate() {
+		return empowerEnddate;
+	}
+
+	public void setEmpowerEnddate(String empowerEnddate) {
+		this.empowerEnddate = empowerEnddate;
+	}
+
+	public String getEmpowerContent() {
+		return empowerContent;
+	}
+
+	public void setEmpowerContent(String empowerContent) {
+		this.empowerContent = empowerContent;
+	}
+
 	public String getContractNo() {
 		return contractNo;
 	}
