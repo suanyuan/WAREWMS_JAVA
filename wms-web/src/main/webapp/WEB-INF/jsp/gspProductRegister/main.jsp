@@ -182,7 +182,8 @@ $(function () {
             $('#classifyCatalog').combobox({
                 url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox&version='+newValue,
                 valueField:'id',
-                textField:'value'
+                textField:'value',
+				panelHeight : '420'
             });
         }
     });
@@ -195,10 +196,10 @@ $(function () {
     });
 
     $('#classifyCatalog').combobox({
-        panelHeight: 'auto',
         url:sy.bp()+'/gspInstrumentCatalogController.do?getCombobox&version=',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+		panelHeight: '420'
     });
 
     $('#isUse').combobox({
