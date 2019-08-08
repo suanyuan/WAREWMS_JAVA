@@ -10,6 +10,9 @@ import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
+import com.wms.result.PdaResult;
+import com.wms.utils.BeanUtils;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
@@ -22,10 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -139,6 +139,9 @@ public class DocPaService {
             SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
             List<DocPaDTO> listDTO = docAsnDetailsMybatisDao.queryDocPaDTO(arr);
             if (listDTO != null && listDTO.size() > 0) {
+
+                List<PdaDocQcDetailForm> pdaDocQcDetailFormArrayList = new ArrayList<>();
+
                 for(DocPaDTO docPaDTO : listDTO){
                     if(!docPaDTO.getAsnstatus().equals("00")){
                         return Json.error("只有创建状态的通知单才能确认收货");
@@ -148,11 +151,16 @@ public class DocPaService {
                         throw new Exception("收货失败");
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
-                    if(docPaDTO.getAsntype().equals("DX")){
+                    //引用入库和定向订单基本上相同，多出来的就是需要自动生成验收结果
+                    if(docPaDTO.getAsntype().equals("DX") || docPaDTO.getAsntype().equals("YY")){
 
                         String paNo;
                         String qcNo;
                         BasSku basSku = basSkuService.getSkuInfo(docPaDTO.getCustomerid(),docPaDTO.getSku());
+
+                        DocAsnDetail docAsnDetail = new DocAsnDetail();
+                        BeanUtils.copyProperties(docPaDTO, docAsnDetail);
+                        docAsnDetail = docAsnDetailService.configDxLocation(docAsnDetail);
 
                         //上架
                         DocPaHeader docPaHeader = docPaHeaderService.queryByAsnno(docPaDTO.getAsnno());
@@ -164,7 +172,7 @@ public class DocPaService {
                             docPaHeaderForm.setPano(paNo);
                             docPaHeaderForm.setAsnno(docPaDTO.getAsnno());
                             docPaHeaderForm.setCustomerid(docPaDTO.getCustomerid());
-                            docPaHeaderForm.setPatype("EA");//随便插的
+                            docPaHeaderForm.setPatype("*");//随便插的
                             docPaHeaderForm.setPastatus("40");
                             docPaHeaderForm.setAddtime(new Date());
                             docPaHeaderForm.setAddwho(login.getId());
@@ -188,11 +196,11 @@ public class DocPaService {
                         docPaDetailsForm.setAsnqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docPaDetailsForm.setPutwayqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docPaDetailsForm.setPutwayqtyCompleted(docPaDTO.getExpectedqty().doubleValue());
-                        docPaDetailsForm.setUserdefine1(docPaDTO.getReceivinglocation());
+                        docPaDetailsForm.setUserdefine1(docAsnDetail.getReceivinglocation());
                         docPaDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docPaDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docPaDetailsForm.setUserdefine4(docPaDTO.getLotatt05());
-                        docPaDetailsForm.setUserdefine5("DJ");
+                        docPaDetailsForm.setUserdefine5(docPaDTO.getAsntype().equals("DX") ? "DJ" : "HG");
                         docPaDetailsForm.setAddtime(new Date());
                         docPaDetailsForm.setAddwho(login.getId());
                         docPaDetailsForm.setPackid(basSku.getPackid());
@@ -233,7 +241,7 @@ public class DocPaService {
                         docQcDetailsForm.setPaqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docQcDetailsForm.setQcqtyExpected(docPaDTO.getExpectedqty().doubleValue());
                         docQcDetailsForm.setQcqtyCompleted(0d);
-                        docQcDetailsForm.setUserdefine1(docPaDTO.getReceivinglocation());
+                        docQcDetailsForm.setUserdefine1(docAsnDetail.getReceivinglocation());
                         docQcDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docQcDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docQcDetailsForm.setUserdefine4(docPaDTO.getLotatt05());
@@ -246,6 +254,31 @@ public class DocPaService {
                         docQcDetailsForm.setPackid(basSku.getPackid());
                         docQcDetailsForm.setTransactionid("");
                         docQcDetailsService.addDocQcDetails(docQcDetailsForm);
+
+                        if (docPaDTO.getAsntype().equals("YY")) {
+
+                            PdaDocQcDetailForm pdaDocQcDetailForm = new PdaDocQcDetailForm();
+                            BeanUtils.copyProperties(docQcDetailsForm, pdaDocQcDetailForm);
+                            pdaDocQcDetailForm.setAllqcflag(0);
+                            pdaDocQcDetailForm.setQcqty(docQcDetailsForm.getQcqtyExpected().toString());
+                            pdaDocQcDetailForm.setWarehouseid(login.getWarehouse().getId());
+                            pdaDocQcDetailForm.setUserid(login.getId());
+                            pdaDocQcDetailForm.setLanguage("CN");
+                            pdaDocQcDetailFormArrayList.add(pdaDocQcDetailForm);
+                        }
+                    }
+                }
+
+                if (pdaDocQcDetailFormArrayList.size() > 0) {
+
+                    //------------------------  验收执行(引用入库)
+                    for (PdaDocQcDetailForm form : pdaDocQcDetailFormArrayList) {
+
+                        PdaResult result = docQcDetailsService.submitDocQc(form);
+                        if (result.getErrorCode() != PdaResult.CODE_SUCCESS) {
+
+                            throw new Exception();
+                        }
                     }
                 }
                 return Json.success("收货成功");

@@ -18,7 +18,9 @@ import java.util.Date;
 public class DocAsnDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public final static String DX_RECEIVING_LOCATION = "DX-01-01-01";
+	public final static String DX_RECEIVING_LOCATION = "DX-01-01-01";//定向订单库位
+
+    public final static String YY_RECEIVING_LOCATION = "YY-01-01-01";//引入入库库位
 	
 	private String warehouseid;
 	private String result;

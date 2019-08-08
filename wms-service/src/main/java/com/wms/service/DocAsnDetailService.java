@@ -284,9 +284,9 @@ public class DocAsnDetailService extends BaseService {
 	}
 
     /**
-     * 处理定向订单的上架库位
+     * 处理定向订单 || 引用入库 的上架库位
      */
-	private DocAsnDetail configDxLocation(DocAsnDetail docAsnDetail) {
+	public DocAsnDetail configDxLocation(DocAsnDetail docAsnDetail) {
 
 	    if (docAsnDetail == null || docAsnDetail.getAsnno() == null || docAsnDetail.getAsnno().length() == 0) {
 	        return docAsnDetail;
@@ -295,12 +295,18 @@ public class DocAsnDetailService extends BaseService {
 	    if (docAsnHeader == null || docAsnHeader.getAsntype() == null || docAsnHeader.getAsntype().length() == 0) {
 	        return docAsnDetail;
         }
-	    if (docAsnHeader.getAsntype().equals("DX") &&
-                (docAsnDetail.getReceivinglocation() == null ||
-                        docAsnDetail.getReceivinglocation().length() == 0)) {
+        if (docAsnDetail.getReceivinglocation() == null ||
+                docAsnDetail.getReceivinglocation().length() == 0) {
 
-	        docAsnDetail.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);
+            if (docAsnHeader.getAsntype().equals("DX")) {
+
+                docAsnDetail.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);
+            }else if (docAsnHeader.getAsntype().equals("YY")) {
+
+                docAsnDetail.setReceivinglocation(DocAsnDetail.YY_RECEIVING_LOCATION);
+            }
         }
+
         return docAsnDetail;
     }
 }
