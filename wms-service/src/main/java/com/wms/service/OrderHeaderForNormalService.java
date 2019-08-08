@@ -14,10 +14,7 @@ import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
-import com.wms.query.ActAllocationDetailsQuery;
-import com.wms.query.BasPackageQuery;
-import com.wms.query.InvLotAttQuery;
-import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
 import com.wms.utils.*;
@@ -71,6 +68,8 @@ public class OrderHeaderForNormalService extends BaseService {
 	private ImportOrderDataService importOrderDataService;
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
+	@Autowired
+	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
 	/**
 	 * 订单列表显示
 	 */
@@ -171,7 +170,7 @@ public class OrderHeaderForNormalService extends BaseService {
 		orderHeaderForNormal.setAddtime(addtime);
 		orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
 		json.setSuccess(true);
-		json.setMsg("000");
+		json.setMsg("资料处理成功！");
 		return json;
 	}
 	/**
@@ -1132,7 +1131,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
 			if (StringUtils.isNotEmpty(orderNo)) {
 
-				document = new Document(PDFUtil.getTemplate("wms_accompanying_jhck.pdf").getPageSize(1));
+				document = new Document(PDFUtil.getTemplate("wms_shipped_jhck.pdf").getPageSize(1));
 				PdfCopy pdfCopy = new PdfCopy(document, os);
 				document.open();
 
@@ -1144,6 +1143,10 @@ public class OrderHeaderForNormalService extends BaseService {
 				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 				orderHeaderForNormalQuery.setOrderno(orderNo);
 				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryByPickingList(orderHeaderForNormalQuery);
+				if(orderHeaderForNormal == null){
+					return;
+				}
+
 				if(orderHeaderForNormal.getOrderDetailsForNormalList()==null){
 					return;
 				}
@@ -1155,13 +1158,13 @@ public class OrderHeaderForNormalService extends BaseService {
 				for(int i = 0 ; i < pageSize ; i++){
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					baos = new ByteArrayOutputStream();
-					stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking_jhck.pdf"), baos);
+					stamper = new PdfStamper(PDFUtil.getTemplate("wms_shipped_jhck.pdf"), baos);
 					form = stamper.getAcroFields();
 					form.setField("orderno", orderHeaderForNormal.getOrderno());
 					//basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
 					form.setField("expectedShipmentTime", DateUtil.format(orderHeaderForNormal.getExpectedshipmenttime1(),"yyyy-MM-dd"));
 					form.setField("carrierName", orderHeaderForNormal.getCarriername());
-					form.setField("consigneeName", orderHeaderForNormal.getCarriername());
+					form.setField("consigneeName", orderHeaderForNormal.getConsigneename());
 					form.setField("cContact", orderHeaderForNormal.getCContact());
 					form.setField("userdefine1", orderHeaderForNormal.getUserdefine1());
 					form.setField("cAddress1", orderHeaderForNormal.getCAddress1());
@@ -1170,10 +1173,11 @@ public class OrderHeaderForNormalService extends BaseService {
 					form.setField("sOReference1", orderHeaderForNormal.getSoreference1());
 					form.setField("notes", orderHeaderForNormal.getNotes());
 
-					/*for(int j = 0 ; j < row ; j++){
+					for(int j = 0 ; j < row ; j++){
 						if(totalNum > (row * i + j)){
 							BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(),detailsList.get(row * i + j).getSku());
-							form.setField("location."+(j), "");
+							form.setField("lineNo."+j,j+1+"");
+							form.setField("location."+(j), detailsList.get(row * i + j).getLocation());
 							form.setField("sku."+(j), detailsList.get(row * i + j).getSku());
 							form.setField("skuN."+(j), detailsList.get(row * i + j).getSkuName());
 							form.setField("regNo."+(j), basSku.getReservedfield03());
@@ -1190,8 +1194,8 @@ public class OrderHeaderForNormalService extends BaseService {
 							form.setField("report."+(j), basSku.getSkuGroup8());
 							form.setField("remark."+(j), "");
 						}
-					}*/
-					//form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
+					}
+					form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
 					stamper.setFormFlattening(true);
 					stamper.close();
 					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
@@ -1234,6 +1238,95 @@ public class OrderHeaderForNormalService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public List<EasyuiCombobox> getRefOut(){
+		MybatisCriteria criteria = new MybatisCriteria();
+		OrderHeaderForNormalQuery query = new OrderHeaderForNormalQuery();
+		query.setOrderStatus("80");
+		criteria.setCondition(query);
+		List<EasyuiCombobox> comboboxList = new ArrayList<>();
+		List<OrderHeaderForNormal> list = orderHeaderForNormalMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			for(OrderHeaderForNormal h : list){
+				EasyuiCombobox comb = new EasyuiCombobox();
+				comb.setId(h.getOrderno());
+				comb.setValue(h.getOrderno());
+				comboboxList.add(comb);
+			}
+		}
+		return comboboxList;
+	}
+
+	/**
+	 * 引用出库
+	 * @param orderno
+	 * @return
+	 */
+	public Json doRefOut(String orderno,String refOrderno) throws Exception{
+		OrderHeaderForNormal head = orderHeaderForNormalMybatisDao.queryById(orderno);
+		if(head == null || !head.getSostatus().equals("00")){
+			return Json.error("只有新建状态的出库单才能引用出库");
+		}
+		//已选出库单明细
+		OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
+		query.setOrderno(orderno);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		List<OrderDetailsForNormal> detailsForNormals = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
+		if(detailsForNormals!=null && detailsForNormals.size()>0){
+			OrderDetailsForNormalQuery queryRef = new OrderDetailsForNormalQuery();
+			queryRef.setOrderno(refOrderno);
+			MybatisCriteria criteriaRef = new MybatisCriteria();
+			criteriaRef.setCondition(queryRef);
+			List<OrderDetailsForNormal> detailsForNormalsRef = orderDetailsForNormalMybatisDao.queryByPageList(criteriaRef);
+			if(detailsForNormalsRef == null || detailsForNormalsRef.size() == 0){
+				return Json.error("操作失败，引用出库单明细为空");
+			}
+			Map<String,OrderDetailsForNormal> map = new HashMap<>();
+			for(OrderDetailsForNormal detail : detailsForNormalsRef){
+				map.put(getKey(detail),detail);
+			}
+			//判断是否明细正确
+			for(OrderDetailsForNormal d : detailsForNormals){
+				OrderDetailsForNormal dRef = map.get(getKey(d));
+				if(dRef == null){
+					return Json.error("操作失败，引用单据明细不匹配");
+				}
+			}
+			//分配库存
+			Json result = allocation(orderno);
+			if(result.isSuccess()){
+				head = orderHeaderForNormalMybatisDao.queryById(orderno);
+				if(head.getSostatus().equals("40")){
+					Json json = picking(orderno);
+					if(json.isSuccess()){
+						OrderHeaderForNormalForm form = new OrderHeaderForNormalForm();
+						form.setOrderno(orderno);
+						result = shipment(form);
+						if(result.isSuccess()){
+							return Json.error("发运成功");
+						}else {
+							return Json.error("发运失败");
+						}
+					}else {
+						return Json.error("拣货失败");
+					}
+				}else{
+					return Json.error("分配库存失败");
+				}
+			}else {
+				return Json.error("分配库存失败");
+			}
+		}else{
+			return Json.error("操作失败，出库单明细为空");
+		}
+	}
+
+	private String getKey(OrderDetailsForNormal detail){
+		return detail.getSku()+""+detail.getLotatt01()+detail.getLotatt02()+detail.getLotatt03()+detail.getLotatt04()
+				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt07()+detail.getLotatt08()+detail.getLotatt09()
+				+detail.getLotatt10()+detail.getLotatt11()+detail.getLotatt12()+detail.getLotatt13()+detail.getLotatt13();
 	}
 
 }

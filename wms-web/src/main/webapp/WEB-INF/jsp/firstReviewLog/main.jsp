@@ -43,7 +43,7 @@ $(function() {
             {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
 			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
 			{field: 'applyContent',		title: '内容',	width: 71 },
-			{field: 'applyState',		title: '状态',	width: 57 ,
+			{field: 'applyState',		title: '状态',	width: 100 ,
 				formatter:checkStateTypeFormatter
 			},
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },

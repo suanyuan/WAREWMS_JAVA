@@ -1433,6 +1433,73 @@ function afterCheckButtion(rowData) {
         $("#ezuiBtn_merge").linkbutton('disable');
 	}
 }
+
+/**
+ * 引用入库
+ */
+var refInDialog;
+//初始化
+$(function () {
+    /**
+     * 引用出库
+     */
+    refInDialog = $('#refInDialog').dialog({
+        modal : true,
+        title : '引用入库',
+        buttons : '',
+        width:250,
+        height:100,
+        onOpen : function() {
+        },
+        onClose : function() {
+
+        }
+    }).dialog('close');
+
+    $("#refInNo").combobox({
+        panelHeight: 'auto',
+        editable: false,
+        url:'/docOrderHeaderController.do?getRefOutOrder',
+        valueField: 'id',
+        textField: 'value',
+        width:150
+    })
+})
+
+function showRefIn() {
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    if(checkedItems.length>1 || checkedItems.length == 0){
+        showMsg("请选择一张单据进行引用");
+        return;
+    }
+    refInDialog.dialog("open");
+    $("#refInNo").combobox("clear");
+}
+
+function closeRefIn() {
+    refInDialog.dialog("close");
+}
+
+function doRefIn() {
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    $.ajax({
+        url : 'docAsnHeaderController.do?doRefIn',
+        data : {orderno : checkedItems[0].asnno,refOrderno:$("#refInNo").combobox("getValue")},
+        type : 'POST',
+        dataType : 'JSON',
+        success : function(result){
+            try {
+                if(result.success){
+                    refInDialog.dialog("close");
+                }
+                showMsg(result.msg)
+            } catch (e) {
+                return;
+            };
+        }
+    });
+
+}
 </script>
 </head>
 <body>
@@ -1504,7 +1571,7 @@ function afterCheckButtion(rowData) {
 					<a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关单</a>
 					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
-					<a onclick='' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
+					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
 				</div>
@@ -1553,6 +1620,25 @@ function afterCheckButtion(rowData) {
 		<a onclick='commitImportData();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
+
+	<!--引用出库 -->
+	<div id="refInDialog" style="display: none;text-align: center">
+		<table width="100%">
+			<tr>
+				<td>SO编号</td>
+				<td>
+					<input id="refInNo" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<a onclick='closeRefIn()' id='closeRefIn' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>关闭</a>
+					<a onclick='doRefIn()' id='doRefIn' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>引用</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 	<!-- 导入end -->
 	<c:import url='/WEB-INF/jsp/docAsnHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/custDialog.jsp' />

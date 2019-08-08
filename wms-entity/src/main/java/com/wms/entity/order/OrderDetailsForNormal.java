@@ -26,41 +26,41 @@ public class OrderDetailsForNormal implements Serializable {
 
     private String lotnum;
 
-    private String lotatt01;
+    private String lotatt01 = "";
 
-    private String lotatt02;
+    private String lotatt02 = "";
 
-    private String lotatt03;
+    private String lotatt03 = "";
 
-    private String lotatt04;
+    private String lotatt04 = "";
 
-    private String lotatt05;
+    private String lotatt05 = "";
 
-    private String lotatt06;
+    private String lotatt06 = "";
 
-    private String lotatt07;
+    private String lotatt07 = "";
 
-    private String lotatt08;
+    private String lotatt08 = "";
 
-    private String lotatt09;
+    private String lotatt09 = "";
 
-    private String lotatt10;
+    private String lotatt10 = "";
 
-    private String lotatt11;
+    private String lotatt11 = "";
 
-    private String lotatt12;
+    private String lotatt12 = "";
 
-    private String lotatt13;
+    private String lotatt13 = "";
 
-    private String lotatt14;
+    private String lotatt14 = "";
 
-    private String lotatt15;
+    private String lotatt15 = "";
 
-    private String lotatt16;
+    private String lotatt16 = "";
 
-    private String lotatt17;
+    private String lotatt17 = "";
 
-    private String lotatt18;
+    private String lotatt18 = "";
 
     private String pickzone;//拣货区
 

@@ -38,6 +38,14 @@ public class OrderHeaderForNormalForm {
 	private String docOrderHeaderId;
 	private String sostatus;
 	private String releasestatus;
+	/**
+	 * 自定义1
+	 */
+	private String userdefine1;
+	/**
+	 * 自定义2
+	 */
+	private String userdefine2;
 
 	public String getOrderno() {
 		return orderno;
@@ -301,5 +309,21 @@ public class OrderHeaderForNormalForm {
 
 	public void setConsigneeid(String consigneeid) {
 		this.consigneeid = consigneeid;
+	}
+
+	public String getUserdefine1() {
+		return userdefine1;
+	}
+
+	public void setUserdefine1(String userdefine1) {
+		this.userdefine1 = userdefine1;
+	}
+
+	public String getUserdefine2() {
+		return userdefine2;
+	}
+
+	public void setUserdefine2(String userdefine2) {
+		this.userdefine2 = userdefine2;
 	}
 }

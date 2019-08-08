@@ -15,7 +15,11 @@ import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.entity.order.OrderDetailsForNormal;
+import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
+import com.wms.query.*;
 import com.wms.result.PdaResult;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
@@ -59,10 +63,6 @@ import com.wms.vo.form.DocAsnHeaderForm;
 import com.wms.vo.form.DocAsnHeaderForm;
 import com.wms.vo.form.ViewInvTranForm;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.query.DocAsnHeaderQuery;
-import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
 
 @Service("docAsnHeaderService")
@@ -73,6 +73,12 @@ public class DocAsnHeaderService extends BaseService {
 	
 	@Autowired
 	private ImportAsnDataService importAsnDataService;
+	@Autowired
+	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
+	@Autowired
+	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+	@Autowired
+	private DocPaService docPaService;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -380,4 +386,80 @@ public class DocAsnHeaderService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
+
+	/**
+	 * 引用入库
+	 * @param orderno
+	 * @param refOrderno
+	 * @return
+	 * @throws Exception
+	 */
+    public Json doRefIn(String orderno,String refOrderno) throws Exception {
+		DocAsnHeader head = docAsnHeaderMybatisDao.queryById(orderno);
+		if(head == null){
+			return Json.error("查询不到对应的单据");
+		}
+		if(!head.getAsnstatus().equals("00")){
+			return Json.error("只有新建状态的出库单才能引用入库");
+		}
+		DocAsnDetailQuery query = new DocAsnDetailQuery();
+		query.setAsnno(orderno);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		List<DocAsnDetail> list = docAsnDetailsMybatisDao.queryByPageList(criteria);
+		if(list == null || list.size() == 0){
+			return Json.error("操作失败，入库单明细为空");
+		}else{
+			OrderDetailsForNormalQuery queryRef = new OrderDetailsForNormalQuery();
+			queryRef.setOrderno(refOrderno);
+			MybatisCriteria criteriaRef = new MybatisCriteria();
+			criteriaRef.setCondition(queryRef);
+			List<OrderDetailsForNormal> detailsForNormalsRef = orderDetailsForNormalMybatisDao.queryByPageList(criteriaRef);
+			if(detailsForNormalsRef == null || detailsForNormalsRef.size() == 0){
+				return Json.error("操作失败，引用出库单明细为空");
+			}
+			Map<String,OrderDetailsForNormal> map = new HashMap<>();
+			for(OrderDetailsForNormal detail : detailsForNormalsRef){
+				map.put(getKey(detail),detail);
+			}
+
+			List<String> arrList = new ArrayList<>();
+			//判断是否明细正确
+			for(DocAsnDetail d : list){
+				OrderDetailsForNormal dRef = map.get(getAsnKey(d));
+				if(dRef == null){
+					return Json.error("操作失败，引用单据明细不匹配");
+				}
+				arrList.add(d.getAsnno());
+			}
+
+			Json result = docPaService.confirmReceiving(arrList.toString());
+			if(!result.isSuccess()){
+				return Json.error("确认收货失败");
+			}else {
+				head = docAsnHeaderMybatisDao.queryById(orderno);
+				if(head!=null && head.getAsnstatus().equals("40")){
+					closeDocAsnHeader(orderno);
+					return Json.success("引用入库成功");
+				}else {
+					return Json.error("确认收货失败");
+				}
+			}
+		}
+
+	}
+
+	private String getKey(OrderDetailsForNormal detail){
+		return detail.getSku()+""+detail.getLotatt01()+detail.getLotatt02()+detail.getLotatt03()+detail.getLotatt04()
+				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt07()+detail.getLotatt08()+detail.getLotatt09()
+				+detail.getLotatt10()+detail.getLotatt11()+detail.getLotatt12()+detail.getLotatt13();
+	}
+
+	private String getAsnKey(DocAsnDetail detail){
+    	return detail.getSku()+""+detail.getLotatt01()+""+detail.getLotatt02()+""+detail.getLotatt03()+""+detail.getLotatt04()
+				+""+detail.getLotatt05()+""+detail.getLotatt06()+""+detail.getLotatt07()+""+detail.getLotatt08()
+				+""+detail.getLotatt09()+""+detail.getLotatt10()+""+detail.getLotatt11()+""+detail.getLotatt12()
+				+""+detail.getLotatt13();
+	}
+
 }
