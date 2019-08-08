@@ -4,12 +4,10 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.InvLotAtt;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
@@ -56,6 +54,9 @@ public class DocAsnDetailService extends BaseService {
 	@Autowired
 	private InvLotAttService invLotAttService;
 
+	@Autowired
+	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -93,15 +94,32 @@ public class DocAsnDetailService extends BaseService {
 		BasSkuQuery skuQuery = new BasSkuQuery();
 		skuQuery.setCustomerid(docAsnDetail.getCustomerid());
 		skuQuery.setSku(docAsnDetail.getSku());
-		skuQuery.setQty(docAsnDetail.getExpectedqty());
-		BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+//		skuQuery.setQty(docAsnDetail.getExpectedqty());
+		BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
 
+		//入库日期
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        docAsnDetail.setLotatt03(formatter.format(new Date()));
+
+        //产品名称
 		if(basSku!=null){
-			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
-			docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
-			docAsnDetail.setLotatt15(basSku.getSkuGroup6());
+//			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
+            docAsnDetail.setLotatt06(basSku.getReservedfield03());
+			docAsnDetail.setLotatt12(basSku.getReservedfield01());
 		}
 
+		//质量状态
+        docAsnDetail.setLotatt10("DJ");
+
+		//预入库单号
+        docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
+
+		//生产厂家
+		if (docAsnDetail.getLotatt06() != null && !docAsnDetail.getLotatt06().equals("")) {
+
+            PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(docAsnDetail.getLotatt06());
+            docAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
+        }
 
 		//判断预入库明细里面的sku和客户id下的18个批属是否存在
 		InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);

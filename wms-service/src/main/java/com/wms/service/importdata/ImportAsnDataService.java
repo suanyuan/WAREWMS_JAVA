@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.service.BasGtnLotattService;
 import com.wms.service.InvLotAttService;
@@ -49,6 +50,8 @@ public class ImportAsnDataService {
 	private InvLotAttService invLotAttService;
 	@Autowired
 	private BasGtnLotattService basGtnLotattService;
+	@Autowired
+	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 	/**
 	 * 导入入库单
 	 * @param excelFile
@@ -479,14 +482,26 @@ public class ImportAsnDataService {
 					BasSkuQuery skuQuery = new BasSkuQuery();
 					skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());
 					skuQuery.setSku(importDetailsDataVO.getSku());
-					skuQuery.setQty(importDetailsDataVO.getExpectedqty());
-					BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+//					skuQuery.setQty(importDetailsDataVO.getExpectedqty());
+					BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
 
+                    //入库日期
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    asnDetails.setLotatt03(formatter.format(new Date()));
+
+					//产品名称
 					if(basSku!=null){
-						asnDetails.setLotatt13(basSku.getSkuGroup7());
+						asnDetails.setLotatt12(basSku.getReservedfield01());
+						asnDetails.setLotatt06(basSku.getReservedfield03());
 					}
+					//预入库单号
 					asnDetails.setLotatt14(resultNo);
-					asnDetails.setLotatt15(basSku.getSkuGroup6());
+					//生产厂家
+                    if (asnDetails.getLotatt06() != null && !asnDetails.getLotatt06().equals("")) {
+
+                        PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(asnDetails.getLotatt06());
+                        asnDetails.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
+                    }
 					//赋值
 					asnDetails.setAsnlineno(asnlineno + 1);
 					asnDetails.setPackid(basSku.getPackid());
