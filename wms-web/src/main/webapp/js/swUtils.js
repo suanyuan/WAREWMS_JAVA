@@ -135,6 +135,9 @@ var ezuiFormClear = function(ezuiForm){
     $(ezuiForm).find('input[name=enterpriseId]').each(function(){
         $(this).val('');
     });
+	$(ezuiForm).find('input[name=supplierid]').each(function(){
+		$(this).val('');
+	});
 	$(ezuiForm).find('input[type=checkbox]').each(function(){
 		$(this).attr('checked',false);
 	});

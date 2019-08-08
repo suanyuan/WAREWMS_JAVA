@@ -218,7 +218,7 @@
                 }]
             });
 //查询控件初始化
-            $("#supplierid").textbox({
+            $("#supplieridName").textbox({
                 icons:[{
                     iconCls:'icon-search',
                     handler: function(e){
@@ -1012,7 +1012,9 @@
             if(row.customerType == "OW"){
                 $("#customerid").textbox('setValue',row.customerid);
             }else if(row.customerType == "VE"){
-                $("#supplierid").textbox('setValue',row.customerid);
+                $("#supplierid").val(row.customerid);
+                $("#supplieridName").textbox('setValue',row.descrC);
+
             }
             ezuiCustDataDialog.dialog('close');
         };
@@ -1022,7 +1024,7 @@
             if(row.customerType == "OW"){
                     $("#ezuiDialog #customerid").textbox('setValue',row.customerid);
                 }else if(row.customerType == "VE"){
-                    $("#ezuiDialog #supplierId").textbox('setValue',row.customerid);
+                    $("#ezuiDialog #supplierid").val(row.customerid);
                     $("#ezuiDialog #supplierName").textbox('setValue',row.descrC);
                 }
                 ezuiCustDataDialog.dialog('close');
@@ -1105,7 +1107,7 @@
         var selectSku = function(){
             var row = ezuiSkuDataDialogId.datagrid('getSelected');
             if(row){
-                $("#ezuiDetailsForm #sku").textbox('setValue',row.sku);
+                $("#ezuiDetailsForm #sku").val(row.sku);
                 $("#ezuiDetailsForm #skudescrc").textbox('setValue',row.descrC);
                 $("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
                 $("#ezuiDetailsForm #expectedqty").numberbox('clear');
@@ -1201,7 +1203,8 @@
 
 
                         <th>供应商</th>
-                        <td><input type='text' id='supplierid' class='easyui-textbox' size='16' data-options=''/></td>
+                        <td><input type='hidden' id='supplierid'  name='supplierid' data-options=''/>
+                           <input type='text' id='supplieridName' class='easyui-textbox' size='16' data-options=''/></td>
 
                     </tr>
                     <tr>
