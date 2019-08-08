@@ -53,10 +53,16 @@
 				<th>样品属性</th>
 				<td><input type='text' name='lotatt09' id='lotatt09'/></td>
 				<th>质量状态</th>
-				<td><input type='text' name='lotatt10' id='lotatt10'/></td>
+				<td>
+                    <!--<input type='text' name='lotatt10' id='lotatt10'/>-->
+                    <select name='lotatt10' id='lotatt10' class="easyui-combobox" data-options='width:110'>
+                        <option value="HG">合格</option>
+                        <option value="BHG">不合格</option>
+                    </select>
+                </td>
 				<th>供应商</th>
 				<td>
-                    <input type='text' id='supplierIdChose'/>
+                    <input type='text' id='supplierIdChose' class='easyui-textbox'/>
                     <input type='hidden' name='lotatt08' id='lotatt08' />
                 </td>
 				<th>入库单号</th>
@@ -118,19 +124,17 @@
             url:sy.bp()+'/commonController.do?sampleAttr',
             valueField:'id',
             textField:'value',
-            width:110,
-            required:true
+            width:110
         });
 
-        $("#lotatt10").combobox({
+        /*$("#lotatt10").combobox({
             panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?qcState',
             valueField:'id',
             textField:'value',
             width:110,
             required:true
-        });
-
+        });*/
         /* 控件初始化start */
         $("#ezuiDetailsForm #supplierIdChose").textbox({
             width:110,
@@ -178,7 +182,7 @@
                         }}
                 ]],
                 onDblClickCell: function(index,field,value){
-                    selectCust();
+                    selectSupplierCust();
                 },
                 onRowContextMenu : function(event, rowIndex, rowData) {
                 },onLoadSuccess:function(data){
@@ -188,6 +192,17 @@
 
             ezuiCustDataDialog.dialog('open');
         };
+
+        /* 客户选择-主界面 */
+        var selectSupplierCust = function(){
+            var row = ezuiCustDataDialogId.datagrid('getSelected');
+            if(row){
+                $("#ezuiDetailsForm #supplierIdChose").textbox('setValue',row.customerid);
+                $("#ezuiDetailsForm #lotatt08").val(row.customerid);
+                ezuiCustDataDialog.dialog('close');
+            };
+        };
+
 
     })
 </script>

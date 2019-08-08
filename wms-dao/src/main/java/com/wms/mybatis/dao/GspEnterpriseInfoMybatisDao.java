@@ -25,6 +25,7 @@ public interface GspEnterpriseInfoMybatisDao extends BaseDao {
 
 	 List<GspEnterpriseBusinessDTO> queryBusinessLicenseOutTime(@Param("enterpriseId") String enterpriseId,@Param("type") String type,@Param("diffCount") Integer diffCount);
 
+	public <T> T queryByEnterpriseId(Object id);
 	/**
 	 * 根据企业信息id查询企业申请列表
 	 * @param enterpriseId

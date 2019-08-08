@@ -27,11 +27,17 @@
 	<result column="client_end_date" property="clientEndDate"/>
 	<result column="client_term" property="clientTerm"/>
 
+	<result column="costomerid" property="costomerid"/>
+	<result column="empower_unit" property="empowerUnit"/>
+	<result column="empower_photo" property="empowerPhoto"/>
+	<result column="empower_start_date" property="empowerStartdate"/>
+	<result column="empower_end_date" property="empowerEnddate"/>
+	<result column="empower_content" property="empowerContent"/>
 </resultMap>
        
 <!-- gsp_supplier table all fields -->
 <sql id="Base_Column_List" >
-	 supplier_id,enterprise_id,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state,contractNo,contractUrl,clientContent,clientStartDate,clientEndDate,clientTerm
+	 supplier_id,enterprise_id,costomerid,empower_unit,empower_photo,empower_start_date,empower_end_date,empower_content,is_check,operate_type,create_id,create_date,edit_id,edit_date,is_use,first_state,contractNo,contractUrl,clientContent,clientStartDate,clientEndDate,clientTerm
 </sql>
    
    
@@ -101,9 +107,9 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into gsp_supplier(supplier_id,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term
+  insert into gsp_supplier(supplier_id,costomerid,empower_unit,empower_photo,empower_start_date,empower_end_date,empower_content,enterprise_id,is_check,operate_type,create_id,first_state,create_date,edit_id,edit_date,is_use,contract_no,contract_url,client_content,client_start_date,client_end_date,client_term
 )
- values(#{supplierId},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm})
+ values(#{supplierId},#{costomerid},#{empowerUnit},#{empowerPhoto},#{empowerStartdate},#{empowerEnddate},#{empowerContent},#{enterpriseId},#{isCheck},#{operateType},#{createId},#{firstState},#{createDate},#{editId},#{editDate},#{isUse},#{contractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -166,6 +172,24 @@ where 1=1
 	<if test="isUse != null  ">
 		is_use=#{isUse},
 	</if>
+		<if test="costomerid != null  ">
+			costomerid=#{costomerid},
+		</if>
+		<if test="empowerUnit != null  ">
+			empower_unit=#{empowerUnit},
+		</if>
+		<if test="empowerPhoto != null  ">
+			empower_photo=#{empowerPhoto},
+		</if>
+		<if test="empowerStartdate != null  ">
+			empower_start_date=#{empowerStartdate},
+		</if>
+		<if test="empowerEnddate != null  ">
+			empower_end_date=#{empowerEnddate},
+		</if>
+		<if test="empowerContent != null  ">
+			empower_content=#{empowerContent}
+		</if>
 	</trim> where supplier_id=#{supplierId}
 </update>
 

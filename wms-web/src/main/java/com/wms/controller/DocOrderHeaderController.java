@@ -254,6 +254,13 @@ public class DocOrderHeaderController {
 		return orderHeaderForNormalService.getReleasestatusCombobox();
 	}
 
+	@Login
+	@RequestMapping(params = "getRefOutOrder")
+	@ResponseBody
+	public List<EasyuiCombobox> getRefOutOrder() {
+		return orderHeaderForNormalService.getRefOut();
+	}
+
 	/**
 	 * 打印拣货
 	 * @param response
@@ -271,7 +278,7 @@ public class DocOrderHeaderController {
 	}
 
 	/**
-	 * 打印拣货
+	 * 随货清单
 	 * @param response
 	 * @param orderCodeList
 	 * @throws Exception
@@ -291,5 +298,12 @@ public class DocOrderHeaderController {
 	@ResponseBody
 	public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku,String customerId){
 		return orderHeaderForNormalService.getLotAttBySkuCustomerId(sku,customerId);
+	}
+
+	@Login
+	@RequestMapping(params = "doRefOut",method = RequestMethod.POST)
+	@ResponseBody
+	public Json doRefOut(String orderno,String refOrderno) throws Exception{
+		return orderHeaderForNormalService.doRefOut(orderno,refOrderno);
 	}
 }

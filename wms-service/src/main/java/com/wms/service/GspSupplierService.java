@@ -76,6 +76,7 @@ public class GspSupplierService extends BaseService {
 			if(gspSupplier.getClientEndDate()!=null){
 				gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
 			}
+
 			basGtnVOList.add(gspSupplierVO);
 		}
 
@@ -141,6 +142,12 @@ public class GspSupplierService extends BaseService {
 		}
 		if(gspSupplier.getClientEndDate()!=null){
 			gspSupplierVO.setClientEndDate(simpleDateFormat.format(gspSupplier.getClientEndDate()));
+		}
+		if(gspSupplier.getEmpowerEnddate()!=null){
+			gspSupplierVO.setEmpowerEnddate(simpleDateFormat.format(gspSupplier.getEmpowerEnddate()));
+		}
+		if(gspSupplier.getEmpowerStartdate()!=null){
+			gspSupplierVO.setEmpowerStartdate(simpleDateFormat.format(gspSupplier.getEmpowerStartdate()));
 		}
 		//System.out.println("gspSupplierVO============="+gspSupplierVO.getCreateDate()+"==========="+gspSupplierVO.getCreateDate());
 		if(gspSupplier == null){

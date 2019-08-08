@@ -185,4 +185,11 @@ public class DocAsnHeaderController {
 		return docPaService.confirmReceiving(asnNos);
 	}
 
+	@Login
+	@RequestMapping(params = "doRefIn",method = RequestMethod.POST)
+	@ResponseBody
+	public Json doRefIn(String orderno,String refOrderno) throws Exception{
+		return docAsnHeaderService.doRefIn(orderno,refOrderno);
+	}
+
 }

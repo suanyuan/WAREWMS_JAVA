@@ -41,7 +41,7 @@
 																											valueField: 'id',
 																											textField: 'value'"/></td>
 					<th>快递公司</th>
-					<td><input type='text' id='carrierid' name='carrierid' data-options=''/></td>
+					<td><input type='text' id='carrierId' name='carrierId' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>收货地址</th>
@@ -96,7 +96,7 @@
 </div>
 <script>
 	$(function () {
-        $("#carrierid").combobox({
+        $("#carrierId").combobox({
             panelHeight: 'auto',
             url:sy.bp()+'/basCarrierLicenseController.do?getCombobox',
             valueField:'id',

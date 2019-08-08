@@ -84,7 +84,7 @@ $(function() {
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
         left:400,
-        width:450,
+        width:900,
         height:600,
         title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',

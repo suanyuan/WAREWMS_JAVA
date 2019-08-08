@@ -371,6 +371,7 @@ var edit = function(srow){
 	processType = 'edit';
 	$('#docOrderHeaderId').val(0);
 	var row = srow || ezuiDatagrid.datagrid('getSelected');
+	console.log(srow);
 	if(row){
 		ezuiForm.form('load',{
 			customerid : row.customerid,
@@ -393,6 +394,7 @@ var edit = function(srow){
             userdefine1:row.userdefine1,
             userdefine2:row.userdefine2,
             consigneeid:row.consigneeid
+
 		});
 		if (row.sostatus == '90' || row.sostatus == '99') {
 			$("#ezuiForm #customerid").textbox({
@@ -837,6 +839,7 @@ var printPacking = function(){
 	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
 
+
 var printAccompanying = function () {
     orderList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
@@ -1162,7 +1165,8 @@ var detailsEdit = function(){
                 lotatt15: row.lotatt15,
                 lotatt16: row.lotatt16,
                 lotatt17: row.lotatt17,
-                lotatt18: row.lotatt18
+                lotatt18: row.lotatt18,
+                supplierIdChose:row.lotatt08
 
 
 			});
@@ -1645,6 +1649,70 @@ var docOrderRowStyler = function (index,row) {
         return 'color:red;';
     }
 }
+
+var refOutDialog;
+//初始化
+$(function () {
+    /**
+     * 引用出库
+     */
+    refOutDialog = $('#refOutDialog').dialog({
+        modal : true,
+        title : '引用出库',
+        buttons : '',
+		width:250,
+		height:100,
+        onOpen : function() {
+        },
+        onClose : function() {
+
+        }
+    }).dialog('close');
+
+	$("#refOutNo").combobox({
+        panelHeight: 'auto',
+        editable: false,
+        url:'/docOrderHeaderController.do?getRefOutOrder',
+        valueField: 'id',
+        textField: 'value',
+		width:150
+	})
+})
+
+function showRefOut() {
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    if(checkedItems.length>1 || checkedItems.length == 0){
+        showMsg("请选择一张单据进行引用");
+        return;
+	}
+    refOutDialog.dialog("open");
+    $("#refOutNo").combobox("clear");
+}
+
+function closeRefOut() {
+    refOutDialog.dialog("close");
+}
+
+function doRefOut() {
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    $.ajax({
+        url : 'docOrderHeaderController.do?doRefOut',
+        data : {orderno : checkedItems[0].orderno,refOrderno:$("#refOutNo").combobox("getValue")},
+        type : 'POST',
+        dataType : 'JSON',
+        success : function(result){
+            try {
+
+               showMsg(result.msg)
+                refOutDialog.dialog("close");
+            } catch (e) {
+                return;
+            };
+        }
+    });
+
+}
+
 </script>
 </head>
 <body>
@@ -1762,10 +1830,10 @@ var docOrderRowStyler = function (index,row) {
                     <a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
                    <!-- <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> -->
 					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
-                    <a onclick='' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>
+                    <a onclick='showRefOut()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>
 
                     <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
-                    <a onclick='javascript:void(0);' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
+                    <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
 					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
                     <!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
@@ -1828,6 +1896,24 @@ var docOrderRowStyler = function (index,row) {
 	</div>
 	<div id='ezuiOperateResultDataDialogBtn'>
 		<a onclick='ezuiDialogClose("#ezuiOperateResultDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+	</div>
+
+	<!--引用出库 -->
+	<div id="refOutDialog" style="display: none;text-align: center">
+		<table width="100%">
+			<tr>
+				<td>SO编号</td>
+				<td>
+					<input id="refOutNo" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<a onclick='closeRefOut()' id='closeRefOut' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>关闭</a>
+					<a onclick='doRefOut()' id='doRefOut' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>引用</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<!-- 批量操作返回end -->
 	

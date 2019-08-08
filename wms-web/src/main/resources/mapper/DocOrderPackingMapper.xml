@@ -245,12 +245,12 @@
 	and a.orderno = c.orderno
 	and c.customerid = d.customerid
 	and a.sku = d.sku
-	)
+	) t
 	where 1 = 1
+	order by orderno desc, cartonno desc, sku
 	<if test="limitClause != null and limitClause != ''" >
 		${limitClause}
 	</if>
-	order by orderno desc, cartonno desc, sku
 </select>
 
 <!--查询订单对应箱数-->

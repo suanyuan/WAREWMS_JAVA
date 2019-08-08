@@ -38,6 +38,7 @@
 					<th>入库单类型</th>
 					<td><input type='text' id='asntype' name='asntype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																											editable: false,
+																											required:true,
 																											url:'<c:url value="/docAsnHeaderController.do?getAsnTypeCombobox"/>',
 																											valueField: 'id',
 																											textField: 'value'"/></td>

@@ -181,6 +181,11 @@ where 1=1
 	 left join (select * from gsp_second_record where is_use = '1')  gr on g.enterprise_id=gr.enterprise_id
     where g.enterprise_id = #{enterpriseId}
 </select>
+	<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+	select *
+	from gsp_enterprise_info
+	where enterprise_id = #{enterpriseId} and is_use = '1'
+</select>
 
 <!-- 企业信息 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

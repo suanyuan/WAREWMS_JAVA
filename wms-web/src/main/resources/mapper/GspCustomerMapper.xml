@@ -201,25 +201,25 @@ where 1=1
 		<if test="contacts != null  ">
 			contacts=#{contacts},
 		</if>
-		<if test="isUse != null  ">
+		<if test="idCardNumber != null  ">
 			id_card_number=#{idCardNumber},
 		</if>
-		<if test="editId != null  ">
+		<if test="telephone != null  ">
 			telephone=#{telephone},
 		</if>
-		<if test="editDate != null  ">
+		<if test="idCardFront != null  ">
 			id_card_front=#{idCardFront},
 		</if>
-		<if test="isUse != null  ">
+		<if test="idCardBack != null  ">
 			id_card_back=#{idCardBack},
 		</if>
-		<if test="editId != null  ">
+		<if test="empowerStartDate != null  ">
 			empower_start_date=#{empowerStartDate},
 		</if>
-		<if test="editDate != null  ">
+		<if test="empowerEndDate != null  ">
 			empower_end_date=#{empowerEndDate},
 		</if>
-		<if test="isUse != null  ">
+		<if test="empowerPhoto != null  ">
 			empower_photo=#{empowerPhoto},
 		</if>
 

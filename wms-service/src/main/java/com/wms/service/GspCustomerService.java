@@ -7,6 +7,7 @@ import java.util.List;
 import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.MybatisCriteria;
+
 import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -80,7 +81,21 @@ public class GspCustomerService extends BaseService {
 			gspCustomer.setIsCooperation(Constant.CODE_YES_OR_YES);
 			gspCustomer.setClientStartDate(DateUtil.parse(gspCustomerForm.getClientStartDate(),"yyyy-MM-dd"));
 			gspCustomer.setClientEndDate(DateUtil.parse(gspCustomerForm.getClientEndDate(),"yyyy-MM-dd"));
+			gspCustomer.setEmpowerEndDate(DateUtil.parse(gspCustomerForm.getEmpowerEndDate(),"yyyy-MM-dd"));
+			gspCustomer.setEmpowerStartDate(DateUtil.parse(gspCustomerForm.getEmpowerStartDate(),"yyyy-MM-dd"));
+
 			gspCustomer.setIsUse(Constant.IS_USE_YES);
+			if(" value=".equals(gspCustomer.getIdCardFront())){
+				gspCustomer.setIdCardFront("");
+			}
+			if(" value=".equals(gspCustomer.getIdCardBack())){
+				gspCustomer.setIdCardBack("");
+			}if(" value=".equals(gspCustomer.getContractUrl())){
+				gspCustomer.setContractUrl("");
+			}if(" value=".equals(gspCustomer.getEmpowerPhoto())){
+
+				gspCustomer.setEmpowerPhoto("");
+			}
 			gspCustomerMybatisDao.add(gspCustomer);
 
 			FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
@@ -101,7 +116,7 @@ public class GspCustomerService extends BaseService {
 
 	}
 //修改
-	public Json editGspCustomer(GspCustomerForm gspCustomerForm) {
+	public Json editGspCustomer(GspCustomerForm gspCustomerForm) throws Exception {
 		Json json = new Json();
 		GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(gspCustomerForm.getClientId());
 		if(gspCustomer ==null){
@@ -113,6 +128,12 @@ public class GspCustomerService extends BaseService {
 		}
 
 		BeanUtils.copyProperties(gspCustomerForm, gspCustomer);
+
+		gspCustomer.setClientStartDate(DateUtil.parse(gspCustomerForm.getClientStartDate(),"yyyy-MM-dd"));
+		gspCustomer.setClientEndDate(DateUtil.parse(gspCustomerForm.getClientEndDate(),"yyyy-MM-dd"));
+		gspCustomer.setEmpowerEndDate(DateUtil.parse(gspCustomerForm.getEmpowerEndDate(),"yyyy-MM-dd"));
+		gspCustomer.setEmpowerStartDate(DateUtil.parse(gspCustomerForm.getEmpowerStartDate(),"yyyy-MM-dd"));
+
 		gspCustomerMybatisDao.updateBySelective(gspCustomer);
 		json.setSuccess(true);
 		json.setMsg("资料处理成功!");
