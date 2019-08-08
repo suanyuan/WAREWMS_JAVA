@@ -412,8 +412,11 @@
 			</if>
 			<if test="condition.sku!=null and condition.sku!=''">
 				and sku =  #{condition.sku}
-				group by e.pono
+
 			</if>
+				<if test="true">
+					group by e.pono
+				</if>
 		</trim>
 	</sql>
    
