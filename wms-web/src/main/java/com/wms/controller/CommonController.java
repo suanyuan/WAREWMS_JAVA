@@ -32,9 +32,6 @@ import java.util.*;
 @RequestMapping("commonController")
 public class CommonController {
 
-    private static final String uploadUrl = "/Users/quendi/fileUpload";
-    //private static final String uploadUrl = "/root/uploadDir";
-
     @Autowired
     private BasCodesService basCodesService;
 
@@ -57,7 +54,7 @@ public class CommonController {
             byte[] buffer = new byte[stream.available()];
             stream.read(buffer);
 
-            File targetFile = new File(uploadUrl+File.separator+file_name);
+            File targetFile = new File(Constant.uploadUrl+File.separator+file_name);
             System.out.println("targetFile=="+targetFile);
             Files.write(buffer,targetFile);
             uploadResult.setSuccess(true);
@@ -89,7 +86,7 @@ public class CommonController {
         }
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
-        File file = new File(uploadUrl+File.separator+url);
+        File file = new File(Constant.uploadUrl+File.separator+url);
         if(file.exists()){
             long fileLength = file.length();
             response.setContentType("application/x-msdownload;");

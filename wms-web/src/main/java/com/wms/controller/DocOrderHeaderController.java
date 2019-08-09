@@ -306,4 +306,21 @@ public class DocOrderHeaderController {
 	public Json doRefOut(String orderno,String refOrderno) throws Exception{
 		return orderHeaderForNormalService.doRefOut(orderno,refOrderno);
 	}
+
+	@Login
+	@RequestMapping(params = "reqDouble",method = RequestMethod.POST)
+	@ResponseBody
+	public Json reqDouble(String orderno) throws Exception{
+		return orderHeaderForNormalService.reqDouble(orderno);
+	}
+
+	@Login
+	@RequestMapping(params = "printH")
+	public void printH(HttpServletResponse response, String orderCodeList) throws Exception {
+		try {
+			orderHeaderForNormalService.printH(response,orderCodeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

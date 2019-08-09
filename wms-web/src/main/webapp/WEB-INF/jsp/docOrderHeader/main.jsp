@@ -1710,7 +1710,43 @@ function doRefOut() {
             };
         }
     });
+}
 
+function printH() {
+    orderList = null;
+    var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+    $.each(checkedItems, function(index, item){
+        if (orderList == null) {
+            orderList = item.orderno;
+        } else {
+            orderList = orderList + ',' + item.orderno;
+        }
+    });
+    if (orderList == null) {
+        return;
+    }
+    console.log(orderList);
+    window.open(sy.bp()+"/docOrderHeaderController.do?printH&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
+}
+
+function rDouble(){
+    var checkedItems = ezuiDatagrid.datagrid('getSelections');
+    $.each(checkedItems, function(index, item){
+        $.ajax({
+            url : 'docOrderHeaderController.do?reqDouble',
+            data : {orderno : item.orderno},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+                try {
+                    showMsg(result.msg)
+                    refOutDialog.dialog("close");
+                } catch (e) {
+                    return;
+                };
+            }
+        });
+    })
 }
 
 </script>
@@ -1835,7 +1871,9 @@ function doRefOut() {
                     <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
                     <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
 					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
-                    <!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
+					<a onclick='rDouble()' id='ezuiBtn_double' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>匹配双证</a>
+					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
+					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

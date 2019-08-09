@@ -55,6 +55,7 @@ public class DocPaHeaderService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        mybatisCriteria.setOrderByClause("addtime desc");
         List<DocPaHeader> docOrderHeaderList = docPaHeaderDao.queryByList(mybatisCriteria);
         DocPaHeaderVO docOrderHeaderVO = null;
         List<DocPaHeaderVO> docOrderHeaderVOList = new ArrayList<DocPaHeaderVO>();
@@ -238,7 +239,7 @@ public class DocPaHeaderService extends BaseService {
                                     DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
 
                                     form.setField("sku."+j, docPaDetails.getSku());
-                                    form.setField("skuN."+j, basSku.getDescrC());
+                                    form.setField("skuN."+j, basSku.getReservedfield01());
                                     form.setField("regNo."+j, basSku.getReservedfield03());
                                     form.setField("desc."+j, basSku.getDescrE());
                                     form.setField("batchNo."+j, docPaDetails.getUserdefine3());

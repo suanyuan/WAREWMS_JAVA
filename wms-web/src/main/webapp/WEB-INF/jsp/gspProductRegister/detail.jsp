@@ -30,7 +30,7 @@
                                 <th>产品名称</th>
                                 <td><input type='text' name='productNameMain' class='easyui-textbox' value="${gspProductRegister.productNameMain}" data-options='required:true'/></td>
                                 <th>批准日期</th>
-                                <td><input type='text' id="approveDate" name='approveDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.approveDate}"/>" data-options='required:true,editable:false,width:185'/></td>
+                                <td><input type='text' id="approveDate" name='approveDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.approveDate}"/>" data-options='required:true,width:185'/></td>
                             </tr>
                             <tr>
                                 <th>管理分类</th>
@@ -39,7 +39,7 @@
                                 <%--<th>有效期至</th>--%>
                                 <%--<td><input type='text' id="productExpiryDate" name='productExpiryDate' class='easyui-datebox' value="${gspProductRegister.productExpiryDate}" data-options='required:true,editable:false,width:185'/></td>--%>
                                 <th>有效期至</th>
-                                <td><input type='text' id="productRegisterExpiryDate" name='productRegisterExpiryDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.productRegisterExpiryDate}"/>" data-options='required:true,editable:false,width:185'/></td>
+                                <td><input type='text' id="productRegisterExpiryDate" name='productRegisterExpiryDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.productRegisterExpiryDate}"/>" data-options='required:true,width:185'/></td>
                             </tr>
                             <tr>
                                <th>注册证版本</th>
@@ -209,6 +209,7 @@
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '上传',  //按钮说明文字
+            required:true,
             onChange:function(data){
                 if(data){
                     doUpload(data);
@@ -624,6 +625,7 @@
     $("#enterpriseName").textbox({
         width:185,
         required:true,
+        editable:false,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -651,7 +653,8 @@
     }
 
     function selectEnterprise() {
-        var rows = enterpriseDatagrid.datagrid("getSelected");
+        var rows = enterpriseDatagrid.datagrid("getSelected") || enterpriseDatagrid.datagrid("getChecked");
+        console.log(rows);
         if(rows){
             $("#enterpriseId").val(rows.enterpriseId);
             $("#enterpriseName").textbox("setValue",rows.enterpriseName);
@@ -685,6 +688,10 @@
 
     function productQuery() {
         enterpriseDatagrid.datagrid("reload",{"enterpriseNo":$("#enterpriseNo").textbox("getValue"),"shorthandName":$("#shorthandName").textbox("getValue"),"isUse":"1"})
+    }
+
+    function productChose() {
+        selectEnterprise();
     }
 </script>
 </body>

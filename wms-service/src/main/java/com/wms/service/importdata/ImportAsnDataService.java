@@ -493,6 +493,7 @@ public class ImportAsnDataService {
 					if(basSku!=null){
 						asnDetails.setLotatt12(basSku.getReservedfield01());
 						asnDetails.setLotatt06(basSku.getReservedfield03());
+						asnDetails.setLotatt08(basSku.getSkuGroup6());
 					}
 					//预入库单号
 					asnDetails.setLotatt14(resultNo);
