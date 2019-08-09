@@ -314,6 +314,8 @@ var doExport = function(){
 		param.put("fmlocation", $('#fmlocation').val());
 		param.put("fmsku", $('#fmsku').val());
 		param.put("skudescrc", $('#skudescrc').val());
+		param.put("name", $('#name').val());
+		param.put("lotatt04", $('#lotatt04').val());
 
 		//--导出Excel
 		var formId = ajaxDownloadFile(sy.bp()+"/viewInvLocationController.do?exportViewInvLocationDataToExcel", param);

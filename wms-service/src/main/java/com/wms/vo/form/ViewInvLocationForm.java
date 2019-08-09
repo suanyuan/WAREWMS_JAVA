@@ -23,6 +23,33 @@ public class ViewInvLocationForm {
 	private java.math.BigDecimal totalcubic;
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
+	private java.lang.String name;
+	private java.lang.String lotatt04;
+	private java.lang.String lotatt12;
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
+	public String getLotatt04() {
+		return lotatt04;
+	}
+
+	public void setLotatt04(String lotatt04) {
+		this.lotatt04 = lotatt04;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public java.lang.String getFmcustomerid() {
 		return fmcustomerid;
