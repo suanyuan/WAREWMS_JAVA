@@ -3,8 +3,10 @@ package com.wms.service;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnHeader;
+import com.wms.entity.DocPaHeader;
 import com.wms.entity.DocQcHeader;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
 import com.wms.mybatis.dao.DocQcHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.DocQcHeaderQuery;
@@ -29,6 +31,9 @@ public class DocQcHeaderService extends BaseService {
 
 	@Autowired
     private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+
+	@Autowired
+	private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
 
 	public EasyuiDatagrid<DocQcHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
         EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -108,7 +113,13 @@ public class DocQcHeaderService extends BaseService {
             BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
 
             //订单类型
-            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+            DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(docQcHeader.getQcno());
+            String[] asnnos = docPaHeader.getAsnno().split(",");
+            String asnno = asnnos[0];
+            DocAsnHeader queryHeader = new DocAsnHeader();
+            queryHeader.setAsnno(asnno);
+
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(queryHeader);
             pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
             pdaDocQcHeaderVOList.add(pdaDocQcHeaderVO);
         }
@@ -129,7 +140,13 @@ public class DocQcHeaderService extends BaseService {
             BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
 
             //订单类型
-            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+            DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(docQcHeader.getQcno());
+            String[] asnnos = docPaHeader.getAsnno().split(",");
+            String asnno = asnnos[0];
+            DocAsnHeader queryHeader = new DocAsnHeader();
+            queryHeader.setAsnno(asnno);
+
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(queryHeader);
             pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
         }
         return pdaDocQcHeaderVO;
@@ -146,7 +163,13 @@ public class DocQcHeaderService extends BaseService {
         BeanUtils.copyProperties(docQcHeader, pdaDocQcHeaderVO);
 
         //订单类型
-        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryByQcNo(docQcHeader.getQcno());
+        DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(docQcHeader.getQcno());
+        String[] asnnos = docPaHeader.getAsnno().split(",");
+        String asnno = asnnos[0];
+        DocAsnHeader queryHeader = new DocAsnHeader();
+        queryHeader.setAsnno(asnno);
+
+        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(queryHeader);
         pdaDocQcHeaderVO.setAsnType(docAsnHeader.getAsntype());
 
         return pdaDocQcHeaderVO;

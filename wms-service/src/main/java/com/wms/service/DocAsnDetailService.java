@@ -146,6 +146,11 @@ public class DocAsnDetailService extends BaseService {
 		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
+        //判断预入库明细里面的sku和客户id下的18个批属是否存在
+        InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
+        //判断是否要插入扫码批次匹配表
+        basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
+
 		//定向订单库位
 		docAsnDetail = configDxLocation(docAsnDetail);
 
