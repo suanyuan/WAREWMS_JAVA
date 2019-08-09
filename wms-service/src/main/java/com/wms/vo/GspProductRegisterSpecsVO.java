@@ -80,6 +80,16 @@ public class GspProductRegisterSpecsVO {
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
 
+	private java.lang.String type;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getLicenseNo() {
 		return licenseNo;
 	}

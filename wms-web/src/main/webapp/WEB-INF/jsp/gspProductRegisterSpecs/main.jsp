@@ -255,7 +255,11 @@ var commit = function(){
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-
+	if(infoObj["productRegisterId"] ==null || infoObj["productRegisterId"] =="" ){
+		$.messager.show({
+			msg : '请添加产品注册证', title : '提示'
+		});
+	}else{
     console.log(infoObj);
     var url = '';
     if (processType == 'edit') {
@@ -284,15 +288,8 @@ var commit = function(){
             }
         });
 
-
-
-
-
-
-
-
     }
-
+    }
 
 	/*var url = '';
 	if (processType == 'edit') {

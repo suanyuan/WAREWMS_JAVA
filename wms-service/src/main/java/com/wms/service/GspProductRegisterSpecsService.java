@@ -71,6 +71,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
 		criteria.setOrderByClause("create_date desc");
+
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
 		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(criteria);
@@ -99,6 +100,8 @@ public class GspProductRegisterSpecsService extends BaseService {
 		datagrid.setRows(basGtnVOList);
 		return datagrid;
 	}
+
+
 
 	public Json addGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) throws Exception {
 		Json json = new Json();
@@ -188,7 +191,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 			//通过getEnterpriseId查出生产企业信息
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
 			gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
-//产品许可证 备案号
+			//产品许可证 备案号
 			if(gspEnterpriseInfo.getLicenseNo()!=null){
 				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
 			}else{
