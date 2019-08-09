@@ -13,10 +13,13 @@ var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
 
-var ezuiCustDataDialog;
-var ezuiCustDataDialogId;
-var ezuiLocDataDialog;
-var ezuiLocDataDialogId;
+var ezuiCustDataDialog;        //货主编码
+var ezuiCustDataDialogId;      //货主编码
+var ezuiLocDataDialog;         //库位选择框
+var ezuiLocDataDialogId;       //库位选择框
+var ezuiSkuDataDialog;         //产品名称选择框
+var ezuiSkuDataDialogId;       //产品名称选择框
+var productDialog_viewInvLocation;//主页产品代码选择框
 
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -89,6 +92,25 @@ $(function() {
 // 			$(this).datagrid('unselectAll');
 // 		}
 	});
+	//产品代码控件初始化 载入公用弹窗页面
+	$("#fmsku").textbox({
+		icons:[{
+			iconCls:'icon-search',
+			handler: function(e){
+				productDialog_viewInvLocation = $('#ezuiSkuSearchDialog').dialog({
+					modal : true,
+					title : '查询',
+					href:sy.bp()+"/basSkuController.do?toSearchDialog&target=viewInvLocation",
+					width:850,
+					height:500,
+					cache:false,
+					onClose : function() {
+
+					}
+				})
+			}
+		}]
+	});
 	//库位
 	$("#fmlocation").textbox({
 		editable:false,
@@ -98,6 +120,18 @@ $(function() {
 				$("#ezuiLocDataDialog #locationid").textbox('clear');
 				ezuiLocDataClick();
 				ezuiLocDataSearch();
+			}
+		}]
+	});
+	//主页产品名称查询
+	$("#skudescrc").textbox({
+		// editable: false,
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiSkuDataDialog #sku").textbox('clear');
+				ezuiSkuDataClick();
+				ezuiSkuDataSearch();
 			}
 		}]
 	});
@@ -115,6 +149,18 @@ $(function() {
 
 	//库位选择弹框
 	ezuiLocDataDialog = $('#ezuiLocDataDialog').dialog({
+		modal : true,
+		title : '<spring:message code="common.dialog.title"/>',
+		buttons : '',
+		onOpen : function() {
+
+		},
+		onClose : function() {
+
+		}
+	}).dialog('close');
+	//产品名称选择弹框
+	ezuiSkuDataDialog = $('#ezuiSkuDataDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '',
@@ -293,7 +339,9 @@ var doSearch = function(){
 		fmcustomerid : $('#fmcustomerid').val(),
 		fmlocation : $('#fmlocation').val(),
 		fmsku : $('#fmsku').val(),
-		skudescrc : $('#skudescrc').val(),
+		lotatt12 : $('#skudescrc').val(),
+		name : $('#name').val(),
+		lotatt04 : $('#lotatt04').val(),
 	});
 };
 /* 库位选择弹框查询 */
@@ -352,6 +400,95 @@ var selectLocation = function(){
 		ezuiLocDataDialog.dialog('close');
 	};
 };
+
+
+// 产品名称选择弹框-
+var ezuiSkuDataClick = function(){
+	// $("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
+	// $("#ezuiSkuDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+	ezuiSkuDataDialogId = $('#ezuiSkuDataDialogId').datagrid({
+		url:'<c:url value="/basSkuController.do?showDatagrid"/>',
+		method:'POST',
+		toolbar:'#ezuiSkuToolbar',
+		title:'商品档案',
+		pageSize:50,
+		pageList:[50, 100, 200],
+		fit:true,
+		border:false,
+		fitColumns:false,
+		nowrap:false,
+		striped:true,
+		collapsible:false,
+		pagination:true,
+		rownumbers:true,
+		singleSelect:true,
+		// queryParams:{
+		// 	customerid : $("#ezuiDetailsForm #customerid").textbox("getValue"),
+		// 	activeFlag : $("#ezuiSkuDataDialog #activeFlag").combobox('getValue')
+		// },
+		idField : 'sku',
+		columns : [[
+			{field: 'customerid',	title: '客户代码',	width: 80},
+			{field: 'sku',			title: '商品编码',	width: 120},
+			{field: 'descrC',		title: '中文名称',	width: 160},
+			{field: 'descrE',		title: '英文名称',	width: 160},
+			{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
+					return rowData.activeFlag == '1' ? '是' : '否';
+				}},
+			{field: 'alternateSku1',title: '商品条码',	width: 120},
+			{field: 'packid',		title: '包装代码',	width: 80},
+			{field: 'qty',			title: '库存数',	width: 60},
+			{field: 'qtyallocated',	title: '分配数',	width: 60},
+			{field: 'qtyonhold',	title: '冻结数',	width: 60}
+		]],
+		onDblClickCell: function(index,field,value){
+			selectSku();
+		},
+		onRowContextMenu : function(event, rowIndex, rowData) {
+		},onLoadSuccess:function(data){
+			$(this).datagrid('unselectAll');
+		}
+	});
+
+	ezuiSkuDataDialog.dialog('open');
+};
+// 产品名称选择弹框查询-
+var ezuiSkuDataSearch = function(){
+	ezuiSkuDataDialogId.datagrid('load', {
+		customerid : $("#ezuiSkuDataDialog #customerid").textbox("getValue"),
+		sku : $("#ezuiSkuDataDialog #sku").textbox("getValue"),
+		activeFlag : $("#ezuiSkuDataDialog #activeFlag").combobox('getValue')
+	});
+};
+// 产品名称选择弹框清空
+var ezuiSkuToolbarClear = function(){
+	$("#ezuiSkuDataDialog #sku").textbox('clear');
+};
+// 产品名称选择-主页
+var selectSku = function(){
+	var row = ezuiSkuDataDialogId.datagrid('getSelected');
+	if(row){
+		$("#skudescrc").textbox('setValue',row.descrC);
+		ezuiSkuDataDialog.dialog('close');
+	}
+};
+
+// 主页产品代码框选择
+function choseSelect_product_viewInvLocation(row){
+	var fmsku;
+	if(row){
+		fmsku = row;
+	}else{
+		row = $("#productSearchGrid_viewInvLocation").datagrid("getSelections");
+		if(row){
+			fmsku = row[0]
+		}
+	}
+	if(fmsku){
+		$("#fmsku").textbox("setValue",fmsku.sku);
+	}
+	productDialog_viewInvLocation.dialog("close");
+}
 </script>
 </head>
 <body>
@@ -366,7 +503,11 @@ var selectLocation = function(){
 							<th>货主编码</th><td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>库位</th><td><input type='text' id='fmlocation' class='easyui-textbox' size='16' data-options=''/></td>
+						<tr>
+						</tr>
 							<th>产品名称</th><td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th><td><input type='text' id='name' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -494,5 +635,11 @@ var selectLocation = function(){
 	</div>
 	<%--导入页面--%>
 	<c:import url='/WEB-INF/jsp/viewInvLocation/locDialog.jsp' />
+	<c:import url='/WEB-INF/jsp/viewInvLocation/skuDialog.jsp' />
+
+	<!--产品代码查询弹窗 -->
+	<div id="ezuiSkuSearchDialog">
+
+	</div>
 </body>
 </html>

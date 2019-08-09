@@ -48,7 +48,7 @@
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt10,lotatt14,customerid,enterprise_name,name
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt10,lotatt14,customerid,enterprise_name,`name`
 </sql>
    
 
@@ -147,7 +147,7 @@ where 1=1
 	    and lotatt14 =  #{condition.lotatt14}
 	</if>
 	<if test="condition.name != null and condition.name != ''" >
-	    and name =  #{condition.name}
+	    and `name` =  #{condition.name}
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 	    and enterprise_name =  #{condition.enterpriseName}

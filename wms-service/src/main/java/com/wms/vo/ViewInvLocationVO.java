@@ -86,6 +86,15 @@ public class ViewInvLocationVO {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
 	private String productRegisterNo;
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public BigDecimal getFmqtyEach() {
 		return fmqtyEach;
