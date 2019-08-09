@@ -71,14 +71,53 @@ public class ViewInvLocationVO {
 	private java.math.BigDecimal iRp;
 	private java.math.BigDecimal oMv;
 	private java.math.BigDecimal oRp;
-	private java.math.BigDecimal qtyallocated;
-	private java.math.BigDecimal qtyavailed;
-	private java.math.BigDecimal qtyholded;
+
+	private BigDecimal fmqtyEach; //数量
+
+	private BigDecimal qtyallocated;//分配件数
+	private BigDecimal qtyallocatedEach ;//分配数量
+	private BigDecimal qtyavailed; //可用数量
+	private BigDecimal qtyholdedEach;//冻结数量
+
+	private BigDecimal qtyholded;//冻结件数
 	private java.lang.String skudescrc;
 	private java.lang.String skudescre;
 	private java.math.BigDecimal totalcubic;
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
+	private String productRegisterNo;
+
+	public BigDecimal getFmqtyEach() {
+		return fmqtyEach;
+	}
+
+	public void setFmqtyEach(BigDecimal fmqtyEach) {
+		this.fmqtyEach = fmqtyEach;
+	}
+
+	public BigDecimal getQtyallocatedEach() {
+		return qtyallocatedEach;
+	}
+
+	public void setQtyallocatedEach(BigDecimal qtyallocatedEach) {
+		this.qtyallocatedEach = qtyallocatedEach;
+	}
+
+	public BigDecimal getQtyholdedEach() {
+		return qtyholdedEach;
+	}
+
+	public void setQtyholdedEach(BigDecimal qtyholdedEach) {
+		this.qtyholdedEach = qtyholdedEach;
+	}
+
+	public String getProductRegisterNo() {
+		return productRegisterNo;
+	}
+
+	public void setProductRegisterNo(String productRegisterNo) {
+		this.productRegisterNo = productRegisterNo;
+	}
 
 	public String getLotatt14() {
 		return lotatt14;

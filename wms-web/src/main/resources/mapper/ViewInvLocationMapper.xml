@@ -15,8 +15,11 @@
 	<result column="i_rp" property="iRp"/>
 	<result column="o_mv" property="oMv"/>
 	<result column="o_rp" property="oRp"/>
+	<result column="fmqty_each" property="fmqtyEach"/>
 	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyallocated_each" property="qtyallocatedEach"/>
 	<result column="qtyavailed" property="qtyavailed"/>
+	<result column="qtyholded_each" property="qtyholdedEach"/>
 	<result column="qtyholded" property="qtyholded"/>
 	<result column="skudescrc" property="skudescrc"/>
 	<result column="skudescre" property="skudescre"/>
@@ -29,14 +32,15 @@
 	<result column="lotatt12" property="lotatt12"/>
 	<result column="lotatt04" property="lotatt04"/>
 	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
 	<result column="lotatt07" property="lotatt07"/>
 	<result column="lotatt01" property="lotatt01"/>
 	<result column="lotatt02" property="lotatt02"/>
 	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="name" property="name"/>
-	<result column="product_register_no" property="productRegisterNo"/>
 	<result column="enterprise_name" property="enterpriseName"/>
 	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
 
@@ -44,10 +48,10 @@
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,qtyallocated,defaultreceivinguom,qtyavailed,qtyholded,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt08,lotatt10,lotatt14,customerid,product_register_no,enterprise_name,name
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt10,lotatt14,customerid,enterprise_name,name
 </sql>
    
-   
+
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
 where 1=1
@@ -147,9 +151,6 @@ where 1=1
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 	    and enterprise_name =  #{condition.enterpriseName}
-	</if>
-	<if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
-	    and product_register_no =  #{condition.productRegisterNo}
 	</if>
 	<if test="condition.customerSet != null" >
 		<if test="condition.customerSet.isEmpty() == false" >

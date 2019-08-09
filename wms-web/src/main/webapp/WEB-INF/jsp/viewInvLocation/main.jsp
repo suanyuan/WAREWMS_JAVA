@@ -15,6 +15,8 @@ var ezuiDatagrid;
 
 var ezuiCustDataDialog;
 var ezuiCustDataDialogId;
+var ezuiLocDataDialog;
+var ezuiLocDataDialogId;
 
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -37,28 +39,37 @@ $(function() {
 		singleSelect:true,
 		idField : 'customerid',
 		columns : [[
-            {field: 'lotatt14',		title: '入库单号',	width: 91 },
+			{field: 'fmlocation',		title: '库位',	width: 100 },
             {field: 'customerid',		title: '货主',	width: 71 },
-			{field: 'lotatt03',		title: '入库日期',	width: 91 },
-
 			{field: 'fmsku',		title: '产品代码',	width: 100 },
 			{field: 'lotatt12',		title: '产品名称',	width: 101 },
+			{field: 'fmqty',		title: '库存件数',	width: 100 },
+			{field: 'fmqtyEach',		title: '库存数量',	width: 100 },
+
+			{field: 'qtyallocated',		title: '分配件数',	width: 100 },
+			{field: 'qtyallocatedEach',		title: '分配数量',	width: 100 },
+			{field: 'qtyavailed',		title: '可用件数',	width: 100 },
+			{field: 'qtyholded',		title: '冻结件数',	width: 100 },
+			{field: 'qtyholdedEach',		title: '冻结数量',	width: 100 },
+			{field: 'defaultreceivinguom',		title: '单位',	width: 100 },
 			{field: 'lotatt06',		title: '注册证号/备案凭证号',	width: 150 },//加个字段
 			{field: 'skudescre',		title: '规格型号',	width: 103 },
-
 			{field: 'lotatt04',		title: '生产批号',	width: 95 },
 			{field: 'lotatt05',		title: '序列号',	width: 110 },
 			{field: 'lotatt07',		title: '灭菌批号',	width: 120},
+			{field: 'lotatt03',		title: '入库日期',	width: 91 },
 			{field: 'lotatt01',		title: '生产日期',	width: 112 },
 			{field: 'lotatt02',		title: '有效期/失效期',	width: 113 },
 			{field: 'lotatt08',		title: '供应商',	width: 200 },
-			{field: 'fmqty',		title: '库存数量',	width: 100 },
-			{field: 'defaultreceivinguom',		title: '单位',	width: 100 },
+			{field: 'lotatt09',		title: '样品属性',	width: 200 },
+			{field: 'lotatt14',		title: '入库单号',	width: 91 },
+
+
 			{field: 'lotatt11',		title: '存储条件',	width: 150 },
 			{field: 'enterpriseName',		title: '生产厂家',	width: 100 },
 
-			{field: 'lotatt10',		title: '质量状态',	width: 100 },
-			{field: 'fmlocation',		title: '库位',	width: 100 },
+			{field: 'lotatt10',		title: '质量状态',	width: 100 ,formatter:ZL_TYPstatusFormatter},
+
             {field: 'name',		title: '产品线',	width: 100 },
             // {field: 'lotatt10',		title: '备注',	width: 71 },
 		]],
@@ -78,6 +89,18 @@ $(function() {
 // 			$(this).datagrid('unselectAll');
 // 		}
 	});
+	//库位
+	$("#fmlocation").textbox({
+		editable:false,
+		icons:[{
+			iconCls:'icon-search',
+			handler: function(e){
+				$("#ezuiLocDataDialog #locationid").textbox('clear');
+				ezuiLocDataClick();
+				ezuiLocDataSearch();
+			}
+		}]
+	});
 	//查询条件货主字段初始化
 	$("#fmcustomerid").textbox({
 		icons:[{
@@ -89,6 +112,19 @@ $(function() {
 			}
 		}]
 	});
+
+	//库位选择弹框
+	ezuiLocDataDialog = $('#ezuiLocDataDialog').dialog({
+		modal : true,
+		title : '<spring:message code="common.dialog.title"/>',
+		buttons : '',
+		onOpen : function() {
+
+		},
+		onClose : function() {
+
+		}
+	}).dialog('close');
 	//货主查询弹框初始化
 	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
 		modal : true,
@@ -260,7 +296,62 @@ var doSearch = function(){
 		skudescrc : $('#skudescrc').val(),
 	});
 };
-
+/* 库位选择弹框查询 */
+var ezuiLocDataSearch = function(){
+	ezuiLocDataDialogId.datagrid('load', {
+		locationid : $("#ezuiLocDataDialog #locationid").textbox("getValue")
+	});
+};
+/* 库位选择弹框清空 */
+var ezuiLocToolbarClear = function(){
+	$("#ezuiLocDataDialog #locationid").textbox('clear');
+	$("#ezuiLocDataDialog #locationcategory").combobox('clear');
+};
+/* 库位选择弹框 */
+var ezuiLocDataClick = function(){
+	ezuiLocDataDialogId = $('#ezuiLocDataDialogId').datagrid({
+		url:'<c:url value="/basLocationController.do?showDatagrid"/>',
+		method:'POST',
+		toolbar:'#ezuiLocToolbar',
+		title:'库位选择',
+		pageSize:50,
+		pageList:[50, 100, 200],
+		fit:true,
+		border:false,
+		fitColumns:true,
+		nowrap:false,
+		striped:true,
+		collapsible:false,
+		pagination:true,
+		rownumbers:true,
+		singleSelect:true,
+		idField : 'locationid',
+		columns : [[
+			{field: 'locationid',				title: '库位',	width: 80},
+			{field: 'locationusageName',		title: '库位使用',	width: 100},
+			{field: 'locationcategoryName', 	title: '库位类型',	width: 100},
+			{field: 'locationattributeName',	title: '库位属性',	width: 100},
+			{field: 'putawayzoneName',			title: '上架区',	width: 100},
+			{field: 'pickzoneName',				title: '拣货区',	width: 100}
+		]],
+		onDblClickCell: function(index,field,value){
+			selectLocation();
+		},
+		onRowContextMenu : function(event, rowIndex, rowData) {
+		},onLoadSuccess:function(data){
+			$(this).datagrid('unselectAll');
+		}
+	});
+	ezuiLocDataDialog.dialog('open');
+};
+/* 库位选择 */
+var selectLocation = function(){
+	var row = ezuiLocDataDialogId.datagrid('getSelected');
+	if(row){
+		$("#fmlocation").textbox('setValue',row.locationid);
+		ezuiLocDataDialog.dialog('close');
+	};
+};
 </script>
 </head>
 <body>
@@ -272,10 +363,10 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>客户编码</th><td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>商品编码</th><td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主编码</th><td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>库位</th><td><input type='text' id='fmlocation' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>商品名称</th><td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品名称</th><td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -352,6 +443,8 @@ var doSearch = function(){
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 	</div>
+
+
 	
 	<!-- 客户选择弹框 -->
 	<div id='ezuiCustDataDialog'  style="width:700px;height:480px;padding:10px 20px"   >
@@ -399,5 +492,7 @@ var doSearch = function(){
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
+	<%--导入页面--%>
+	<c:import url='/WEB-INF/jsp/viewInvLocation/locDialog.jsp' />
 </body>
 </html>

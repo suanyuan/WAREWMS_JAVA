@@ -177,5 +177,24 @@
             case "90" : return "订单完成";
         }
     }
+//上架状态
+	var pastatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "00" : return "订单创建";
+			case "30" : return "部分上架";
+			case "40" : return "完全上架";
+			case "90" : return "上架取消";
+			case "99" : return "上架关闭";
+		}
+	}
+//质量状态
+	var ZL_TYPstatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "BHG" : return "不合格";
+			case "DCL" : return "待处理";
+			case "DJ" : return "待检";
+			case "HG" : return "合格";
+		}
+	}
 
 </script>
