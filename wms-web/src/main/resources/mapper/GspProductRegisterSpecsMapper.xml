@@ -69,12 +69,18 @@
         where 1=1
         <trim suffixOverrides=",">
 
+
+            <if test="condition.type == 'CER' ">
+                and  t1.product_register_id is not null and t1.product_register_id !=''
+            </if>
+
             <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
                 and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
             </if>
             <if test="condition.productNameMain != null and condition.productNameMain != ''">
                 and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
             </if>
+
             <if test="condition.productRegisterId != null and condition.productRegisterId != ''">
                 and t1.product_register_id = ${condition.productRegisterId,jdbcType=VARCHAR}
             </if>

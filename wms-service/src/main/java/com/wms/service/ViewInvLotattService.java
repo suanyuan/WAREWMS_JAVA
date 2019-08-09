@@ -34,7 +34,7 @@ public class ViewInvLotattService extends BaseService {
 
 	public EasyuiDatagrid<ViewInvLotattVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
 		EasyuiDatagrid<ViewInvLotattVO> datagrid = new EasyuiDatagrid<ViewInvLotattVO>();
-		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());

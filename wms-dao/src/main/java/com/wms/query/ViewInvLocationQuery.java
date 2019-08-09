@@ -29,7 +29,34 @@ public class ViewInvLocationQuery implements IQuery {
 	private java.lang.String warehouseid;
 
 	private java.lang.String defaultreceivinguom;
+	private  String name;
+	private  String lotatt04;
+	private  String lotatt12;
 	private Set<SfcCustomer> customerSet;
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLotatt04() {
+		return lotatt04;
+	}
+
+	public void setLotatt04(String lotatt04) {
+		this.lotatt04 = lotatt04;
+	}
 
 	public String getDefaultreceivinguom() {
 		return defaultreceivinguom;

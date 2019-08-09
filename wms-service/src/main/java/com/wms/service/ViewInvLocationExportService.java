@@ -53,8 +53,10 @@ public class ViewInvLocationExportService {
 
         viewInvLocationForm.setFmcustomerid(form.getFmcustomerid());
         viewInvLocationForm.setFmsku(form.getFmsku());
-        viewInvLocationForm.setSkudescrc(form.getSkudescrc());
+        viewInvLocationForm.setLotatt12(form.getSkudescrc());
         viewInvLocationForm.setFmlocation(form.getFmlocation());
+        viewInvLocationForm.setName(form.getName());
+        viewInvLocationForm.setLotatt04(form.getLotatt04());
 
         try {
             ViewInvLocationQuery query = new ViewInvLocationQuery();
@@ -79,6 +81,7 @@ public class ViewInvLocationExportService {
                      //质量状态id对比
                     if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
 						viewInvLocation.setLotatt10(easyuiCombobox.getValue());
+						break;
                     }
                 }
             }

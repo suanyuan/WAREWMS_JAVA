@@ -7,7 +7,26 @@ public class ViewInvLocationExportForm {
 	private java.lang.String fmsku;
 	private java.lang.String skudescrc;
 	private java.lang.String warehouseid;
+	private java.lang.String name;
+	private java.lang.String lotatt04;
 	private String token;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLotatt04() {
+		return lotatt04;
+	}
+
+	public void setLotatt04(String lotatt04) {
+		this.lotatt04 = lotatt04;
+	}
+
 	public java.lang.String getFmcustomerid() {
 		return fmcustomerid;
 	}
