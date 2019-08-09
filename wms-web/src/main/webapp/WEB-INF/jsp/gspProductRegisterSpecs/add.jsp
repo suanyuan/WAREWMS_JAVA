@@ -145,7 +145,7 @@
         </tr>
         <tr>
             <th>冷链标志</th>
-            <td><input type='text' data="1"  id="coldHainMark" name='coldHainMark' class='easyui-textbox' size='50' data-options='required:true' /></td>
+            <td><input type='text' data="1"  id="coldHainMark" name='coldHainMark' class='easyui-textbox' size='50' data-options='required:false' /></td>
             <th>自赋码4</th>
             <td><input type='text' data="1" id="alternatName3" name='alternatName4' class='easyui-textbox' size='50' data-options=''/></td>
             <%--<th>管理分类</th>--%>

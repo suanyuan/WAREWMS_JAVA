@@ -50,7 +50,15 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String alternatName4;
 	private String alternatName5;
 
+	private String type;
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getPackingRequire() {
 		return packingRequire;
