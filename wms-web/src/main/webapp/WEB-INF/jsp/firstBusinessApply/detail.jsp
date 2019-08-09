@@ -508,7 +508,7 @@
     }
     
     function searchProduct() {
-        dataGridProduct.datagrid("load",{"productCode":$("#productCode").val(),"productName":$("#productName").val(),"productRegisterNo":$("#registerNo").val(),"isUse":"1"})
+        dataGridProduct.datagrid("load",{"productCode":$("#ezuiDialogSpec #productCode").val(),"productName":$("#ezuiDialogSpec #productName").val(),"productRegisterNo":$("#ezuiDialogSpec #registerNo").val(),"isUse":"1"})
     }
     
     function submitApply() {

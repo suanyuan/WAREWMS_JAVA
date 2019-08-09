@@ -269,8 +269,8 @@ where 1=1
 					and gs.first_state = '40'
 				</when>
 				<when test="condition.type == 'enterprise'">
-					and ( cus.enterprise_id is null)
-					and ( gs.enterprise_id is null)
+					and ( cus.enterprise_id is null or cus.first_state != '40')
+					and ( gs.enterprise_id is null or gs.first_state != '40')
 				</when>
 			</choose>
 		</if>

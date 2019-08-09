@@ -7,6 +7,7 @@ import com.wms.entity.ExportOrderData;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
+import com.wms.result.ReceiptResult;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderHeaderForNormalMybatisDao extends BaseDao {
@@ -25,7 +26,7 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 	
 	OrderHeaderForNormal queryByPickingList(OrderHeaderForNormalQuery query);
 
-	OrderHeaderForNormal queryByReceiptList(OrderHeaderForNormalQuery query);
+	List<ReceiptResult> queryByReceiptList(OrderHeaderForNormalQuery query);
 
 	//List<ExportOrderData> queryByExportList(MybatisCriteria mybatisCriteria);
 	

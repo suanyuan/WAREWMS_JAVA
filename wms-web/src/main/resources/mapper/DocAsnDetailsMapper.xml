@@ -111,6 +111,8 @@
 		<result column="linestatus" property="linestatus"/>
 		<result column="asnlineno" property="asnlineno"/>
 		<result column="customerid" property="customerid"/>
+		<result column="userdefine3" property="userdefine3"/>
+		<result column="userdefine4" property="userdefine4"/>
 		<result column="sku" property="sku"/>
 		<result column="lotatt01" property="lotatt01"/>
 		<result column="lotatt02" property="lotatt02"/>
@@ -455,7 +457,7 @@ insert into doc_asn_details
          editwho,
          createsource,
          palletizeqty_each,
-         lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,
+         lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18
          reserve_flag)
         values(#{asnno},
                #{asnlineno},
@@ -490,7 +492,8 @@ insert into doc_asn_details
                #{lotatt04, jdbcType=VARCHAR},#{lotatt05, jdbcType=VARCHAR},#{lotatt06, jdbcType=VARCHAR},
                #{lotatt07, jdbcType=VARCHAR},#{lotatt08, jdbcType=VARCHAR},#{lotatt09, jdbcType=VARCHAR},
                #{lotatt10, jdbcType=VARCHAR},#{lotatt11, jdbcType=VARCHAR},#{lotatt12, jdbcType=VARCHAR},
-               #{lotatt13, jdbcType=VARCHAR},#{lotatt14, jdbcType=VARCHAR},
+               #{lotatt13, jdbcType=VARCHAR},#{lotatt14, jdbcType=VARCHAR},#{lotatt15, jdbcType=VARCHAR},
+               #{lotatt16, jdbcType=VARCHAR},#{lotatt17, jdbcType=VARCHAR},#{lotatt18, jdbcType=VARCHAR},
                'N'
                )
 </insert>
@@ -954,7 +957,7 @@ insert into doc_asn_details
 <!-- 根据id查询 入库单管理明细 -->
 <select id="queryDocPaDTO"  resultMap="DocPaDTOMap">
 	select h.asnstatus,h.asnno,de.linestatus,de.asnlineno,de.customerid,de.sku,'DJ' as lotatt10,de.packid, ia.lotnum,de.customerid,de.expectedqty,de.receivinglocation,
-	de.lotatt02,de.lotatt03,de.lotatt04,de.lotatt05,de.lotatt06,de.lotatt07,de.lotatt08,de.lotatt09,de.lotatt11,de.lotatt12,de.lotatt13,de.lotatt14,h.asntype,de.receivedqty
+	de.userdefine3,de.userdefine4,de.lotatt01,de.lotatt02,de.lotatt03,de.lotatt04,de.lotatt05,de.lotatt06,de.lotatt07,de.lotatt08,de.lotatt09,de.lotatt11,de.lotatt12,de.lotatt13,de.lotatt14,h.asntype,de.receivedqty
 	from doc_asn_header h
     left join doc_asn_details de on h.asnno = de.asnno
     left join inv_lot_att ia on

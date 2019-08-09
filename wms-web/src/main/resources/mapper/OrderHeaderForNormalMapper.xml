@@ -221,6 +221,40 @@
 	</collection>
 </resultMap>
 
+<resultMap id="ReceiptMap" type="com.wms.result.ReceiptResult" >
+    <result column="orderno" property="orderno"/>
+    <result column="edittime" property="edittime"/>
+    <result column="carrierName" property="carrierName"/>
+    <result column="consigneename" property="consigneename"/>
+    <result column="cContact" property="cContact"/>
+    <result column="userdefine1" property="userdefine1"/>
+    <result column="address" property="address"/>
+    <result column="cTel1" property="cTel1"/>
+    <result column="userdefine2" property="userdefine2"/>
+    <result column="soreference1" property="soreference1"/>
+    <result column="notes" property="notes"/>
+    <result column="customerid" property="customerid"/>
+    <result column="sku" property="sku"/>
+    <result column="lotatt12" property="lotatt12"/>
+    <result column="reservedfield02" property="reservedfield02"/>
+    <result column="lotatt06" property="lotatt06"/>
+    <result column="descrE" property="descrE"/>
+    <result column="lotatt04" property="lotatt04"/>
+    <result column="lotatt05" property="lotatt05"/>
+    <result column="lotatt07" property="lotatt07"/>
+    <result column="lotatt02" property="lotatt02"/>
+    <result column="lotatt01" property="lotatt01"/>
+    <result column="qtyEach" property="qtyEach"/>
+    <result column="defaultreceivinguom" property="defaultreceivinguom"/>
+    <result column="descr" property="descr"/>
+    <result column="qty" property="qty"/>
+    <result column="lotatt11" property="lotatt11"/>
+    <result column="lotatt15" property="lotatt15"/>
+    <result column="doubleCertificate" property="doubleCertificate"/>
+    <result column="certificate" property="certificate"/>
+    <result column="descrC" property="descrC"/>
+</resultMap>
+
 
 	<!-- doc_order_header table all fields -->
 	<sql id="Base_Column_List" >
@@ -1346,9 +1380,49 @@
 				f.lotatt18
 	</select>
 
-	<!--  -->
-	<select id="queryByReceiptList"  resultMap="BaseResultMap" parameterType="Object">
 
+	<!--随货清单  -->
+	<select id="queryByReceiptList"  resultMap="ReceiptMap" parameterType="Object">
+		select h.orderno,
+		h.edittime,
+		h.CarrierName carriername,
+		h.ConsigneeName consigneename,
+		h.C_Contact cContact,
+		h.userdefine1,
+		concat(h.C_Province,h.C_City,h.C_Address2,h.C_Address1) as address,
+		h.C_Tel1 cTel1,
+		h.userdefine2,
+		h.soreference1,
+		h.Notes notes,
+		h.customerid, -- plus货主
+		bs.sku,
+		ia.lotatt12, -- 名称
+		bs.reservedfield02, -- 描述
+		ia.lotatt06, -- 注册证号
+		bs.descr_e descrE, -- 型号
+		ia.lotatt04, -- 批号
+		ia.lotatt05, -- 序号
+		ia.lotatt07, -- 灭菌
+		ia.lotatt02, -- 效期
+		ia.lotatt01, -- 生产日期
+		format(d.QtyAllocated * p.qty1,0) as qtyEach, -- 数量
+		bs.defaultreceivinguom,
+		p.descr, -- 包装描述
+		format(d.QtyAllocated,0) as qty, -- 件数
+		ia.lotatt11,-- 储存条件
+		ia.lotatt15,-- 生产企业
+		IF(ifnull(d.lotatt13,0) = 0,'未匹配','已匹配') as doubleCertificate,-- 双证
+		IF(ifnull(c.lotatt04,0) = 0,'未绑定','已绑定') as certificate, -- 合格证
+		bc.descr_c descrC-- 供应商名称
+		from doc_order_details d
+		LEFT JOIN doc_order_header h on h.orderno = d.orderno
+		left join bas_sku bs on bs.customerid = d.customerid and bs.sku = d.sku
+		left join inv_lot_att ia on ia.customerid = d.customerid and ia.sku = d.sku and ia.lotnum = d.lotnum
+		left join bas_package p on p.packid = bs.packid
+		left join bas_customer bc on bc.customerid = ia.lotatt08
+		left join doc_asn_certificate c on c.customerid = ia.customerid and c.sku = ia.sku and c.lotatt04 = ia.lotatt04
+		where h.sostatus &gt;= 30
+		and h.orderno = #{orderno,jdbcType=VARCHAR}
 	</select>
 
 	<update id="allocationByOrder" statementType="CALLABLE" parameterType="java.util.Map">

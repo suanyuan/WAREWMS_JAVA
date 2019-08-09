@@ -148,7 +148,7 @@ public class DocPaService {
                     }
                     Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
                     if(!json.isSuccess()){
-                        throw new Exception("收货失败");
+                        throw new Exception(json.getMsg());
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
                     //引用入库和定向订单基本上相同，多出来的就是需要自动生成验收结果
@@ -264,6 +264,7 @@ public class DocPaService {
                             pdaDocQcDetailForm.setWarehouseid(login.getWarehouse().getId());
                             pdaDocQcDetailForm.setUserid(login.getId());
                             pdaDocQcDetailForm.setLanguage("CN");
+                            pdaDocQcDetailForm.setQcdescr("未见异常，检查验收合格");
                             pdaDocQcDetailFormArrayList.add(pdaDocQcDetailForm);
                         }
                     }

@@ -106,6 +106,7 @@ public class DocAsnDetailService extends BaseService {
 //			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
             docAsnDetail.setLotatt06(basSku.getReservedfield03());
 			docAsnDetail.setLotatt12(basSku.getReservedfield01());
+			docAsnDetail.setLotatt08(basSku.getSkuGroup6());
 		}
 
 		//质量状态
@@ -119,7 +120,8 @@ public class DocAsnDetailService extends BaseService {
 
             PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(docAsnDetail.getLotatt06());
             docAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
-        }
+
+		}
 
 		//判断预入库明细里面的sku和客户id下的18个批属是否存在
 		InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
