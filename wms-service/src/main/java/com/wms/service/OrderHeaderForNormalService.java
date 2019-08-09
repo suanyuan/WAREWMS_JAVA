@@ -1360,7 +1360,7 @@ public class OrderHeaderForNormalService extends BaseService {
             if (detailsForNormals != null && detailsForNormals.size() > 0) {
                 List<OrderDetailsForNormal> needDouble = new ArrayList<>();
                 for (OrderDetailsForNormal d : detailsForNormals) {
-                    BasSku basSku = basSkuService.getSkuInfo(d.getSku(), d.getCustomerid());
+                    BasSku basSku = basSkuService.getSkuInfo(d.getCustomerid(), d.getSku());
                     if (basSku != null) {
                         if (basSku.getSkuGroup7().equals("1")) {
                             d.setBasSku(basSku);
@@ -1371,7 +1371,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 DocAsnDoublecQuery doublecQuery = new DocAsnDoublecQuery();
                 MybatisCriteria criteria1 = new MybatisCriteria();
                 criteria1.setCondition(doublecQuery);
-                List<DocAsnDoublec> docAsnDoublecList = docAsnDoublecMybatisDao.queryByPageList(criteria1);
+                List<DocAsnDoublec> docAsnDoublecList = docAsnDoublecMybatisDao.queryByList(criteria1);
                 if (needDouble.size() == 0) {
                     return Json.error("没有需要匹配双证的产品");
                 }

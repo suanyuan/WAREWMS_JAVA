@@ -242,7 +242,7 @@ public class GspCustomerService extends BaseService {
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				gspCustomer.setIsCheck(Constant.CODE_YES_OR_YES);
 				gspCustomer.setIsCooperation(Constant.CODE_YES_OR_YES);
-				gspCustomer.setIsUse(Constant.IS_USE_NO);
+				gspCustomer.setIsUse(Constant.IS_USE_YES);
 				gspCustomerMybatisDao.add(gspCustomer);
 
 				//插入新的日志

@@ -231,7 +231,12 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	delete 	 from gsp_customer where client_id = #{clientId}
 </delete>
- 
+	<!-- 假删除 记录 -->
+	<delete id="deleteF" parameterType="Object">
+
+	update gsp_customer set is_use='0' where client_id = #{clientId}
+</delete>
+
 <!-- 根据id查询 产品注册证 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 

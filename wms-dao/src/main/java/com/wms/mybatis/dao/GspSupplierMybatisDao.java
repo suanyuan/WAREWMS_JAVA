@@ -12,4 +12,7 @@ public interface GspSupplierMybatisDao extends BaseDao {
     public void deleteNotUse(Object id);
 
     Long updateFirstState(@Param("no") String no, @Param("state") String state);
+
+
+    public <T> T queryByEnterpriseId(Object id);
 }

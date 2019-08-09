@@ -110,7 +110,10 @@ public class GspSupplierService extends BaseService {
 			gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);//首营状态 审核通过 代码
 			firstReviewLog.setApplyContent("无需审核");
 		}
-
+		GspSupplier  gspSupplier1=gspSupplierMybatisDao.queryByEnterpriseId(gspSupplier.getEnterpriseId());
+		if(gspSupplier1!=null){
+			return Json.error("同一个企业不能重复申请");
+		}
 
 		firstReviewLogMybatisDao.add(firstReviewLog);
 

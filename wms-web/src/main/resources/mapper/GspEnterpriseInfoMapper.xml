@@ -269,8 +269,9 @@ where 1=1
 					and gs.first_state = '40'
 				</when>
 				<when test="condition.type == 'enterprise'">
-					and ( cus.enterprise_id is null or cus.first_state != '40')
-					and ( gs.enterprise_id is null or gs.first_state != '40')
+					and ( cus.enterprise_id is null or cus.first_state = '60' or cus.first_state = '90' or cus.is_use = '0')
+					and ( gs.enterprise_id is null or gs.first_state = '60' or gs.first_state = '90' or gs.is_use = '0')
+
 				</when>
 			</choose>
 		</if>
@@ -281,7 +282,7 @@ where 1=1
 <!-- 查询企业信息列表 -->
 <select id="queryPageListByType" resultMap="BaseResultMap"  parameterType="Object">
 	select
-	g.enterprise_id,g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
+	DISTINCT(g.enterprise_id),g.enterprise_no,g.shorthand_name,g.enterprise_name,g.enterprise_type,g.contacts,g.contacts_phone,g.remark,g.create_id,g.create_date,g.edit_id,g.edit_date,g.is_use
 	from gsp_enterprise_info g
 	left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
 	left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
