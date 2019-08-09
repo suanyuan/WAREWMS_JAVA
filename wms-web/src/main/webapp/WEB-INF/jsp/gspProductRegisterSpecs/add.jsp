@@ -40,7 +40,7 @@
             <th>规格</th>
             <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <th>单位</th>
-            <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true,editable:false'/></td>
+            <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <%--<th>商品名称</th>--%>
             <%--<td><input type='text' data="1" id="productName" name='productName' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
@@ -240,6 +240,7 @@
 //包装规格下拉框
         $('#packingUnit').combobox({
             panelHeight: 'auto',
+            editable:false,
             url:sy.bp()+'/basPackageController.do?getCombobox',
             valueField:'value',
             textField:'value'
@@ -247,7 +248,31 @@
 //单位下拉框
         $('#unit').combobox({
             panelHeight: 'auto',
+            editable:false,
             url:sy.bp()+'/commonController.do?getUOM',
+            valueField:'id',
+            textField:'value'
+        });
+//冷链标志下拉框
+        $('#coldHainMark').combobox({
+            editable:false,
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?getColdHainMark',
+            valueField:'id',
+            textField:'value'
+        });
+//灭菌标志下拉框
+//         $('#sterilizationMarkers').combobox({
+//             panelHeight: 'auto',
+//             url:sy.bp()+'/commonController.do?getUOM',
+//             valueField:'id',
+//             textField:'value'
+//         });
+//医疗器械标志下拉框
+          $('#medicalDeviceMark').combobox({
+              editable:false,
+            panelHeight: 'auto',
+            url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
         });
@@ -273,7 +298,7 @@
         })
     }
     //点击注册证编号之后datagrid放大镜事件
-    function choseSelect(id,no,name,address,enterpriseId,enterpriseName,licenseNo,recordNo) {
+    function choseSelect(id,no,name,address,enterpriseId,enterpriseName,licenseNo,recordNo,storageConditions) {
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
@@ -286,6 +311,8 @@
         $("#productRegisterNo").textbox("setValue",no);
         $("#productRegisterId").textbox("setValue",id);
         $("#enterpriseName").textbox("setValue",enterpriseName);
+        //储存条件
+        $("#storageCondition").textbox("setValue",storageConditions);
         $("#enterpriseId").val(enterpriseId);
         //生产许可证号 备案号
         if(licenseNo!=null&&licenseNo!=""){
