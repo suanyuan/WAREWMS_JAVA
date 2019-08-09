@@ -450,9 +450,6 @@ where 1=1
         and a.customerid = #{customerid, jdbcType=VARCHAR}
         and a.sku = #{sku, jdbcType=VARCHAR}
         and a.lotnum = b.lotnum
-        <if test="lotatt02 != null and lotatt02 != ''">
-            and b.lotatt02 = #{lotatt02, jdbcType=VARCHAR}
-        </if>
         <if test="lotatt04 != null and lotatt04 != ''">
             and b.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
         </if>
