@@ -11,6 +11,8 @@ public class PdaBasSkuQuery extends BaseLotatt {
 
     private String GTIN;//Global Trade Item Number
 
+    private String customerid;
+
     private String alternate_sku1;//自编码
 
     private String alternate_sku2;

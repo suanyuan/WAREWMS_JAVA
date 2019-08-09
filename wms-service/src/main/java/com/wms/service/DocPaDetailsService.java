@@ -152,6 +152,7 @@ public class DocPaDetailsService extends BaseService {
         PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
         PdaDocPaDetailQuery detailQuery = new PdaDocPaDetailQuery();
 
+        skuQuery.setCustomerid(form.getCustomerid());
         skuQuery.setLotatt04(form.getUserdefine3());
         skuQuery.setLotatt05(form.getUserdefine4());
         skuQuery.setGTIN(form.getGTIN());

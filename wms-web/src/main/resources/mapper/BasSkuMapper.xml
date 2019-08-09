@@ -819,7 +819,7 @@ where 1=1
         select
         <include refid="Base_Column_List"/>
         from bas_sku
-        where sku in (
+        where customerid = #{customerid} and sku in (
             select
               DISTINCT a.sku
             from bas_sku a
