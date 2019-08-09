@@ -139,12 +139,13 @@ var edit = function(){
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
+	//row.clientId
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
 					url : 'gspCustomerController.do?delete',
-					data : {id : row.id},
+					data : {id : row.clientId},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
