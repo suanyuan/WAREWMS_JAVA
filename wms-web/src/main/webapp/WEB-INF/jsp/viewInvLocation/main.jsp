@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        table th{
+            text-align: right;
+        }
+    </style>
     <c:import url='/WEB-INF/jsp/include/meta.jsp'/>
     <c:import url='/WEB-INF/jsp/include/easyui.jsp'/>
     <script type='text/javascript'>
@@ -12,6 +17,7 @@
         var ezuiForm;
         var ezuiDialog;
         var ezuiDatagrid;
+        var ezuiDatagridAll;
 
         var ezuiCustDataDialog;        //货主编码
         var ezuiCustDataDialogId;      //货主编码
@@ -29,8 +35,8 @@
                 method: 'POST',
                 toolbar: '#toolbar',
                 title: '库存余量_按商品/库位',
-                pageSize: 50,
-                pageList: [50, 100, 200],
+                pageSize:5,
+                pageList: [5, 100, 200],
                 fit: true,
                 border: false,
                 fitColumns: false,
@@ -40,6 +46,7 @@
                 pagination: true,
                 rownumbers: true,
                 singleSelect: true,
+                showFooter:true,
                 idField: 'customerid',
                 columns: [[
                     {field: 'fmlocation', title: '库位', width: 100},
@@ -75,7 +82,22 @@
 
                     {field: 'name', title: '产品线', width: 100},
                     // {field: 'lotatt10',		title: '备注',	width: 71 },
-                ]],
+                ]],onDblClickCell: function(index,field,value){
+                    edit();
+                },
+                onLoadSuccess: function (index,field,value) {
+
+                    $('#ezuiDatagrid').datagrid('reloadFooter',[
+                        {name:'合计:',fmqty: fmqtySum(),fmqtyEach: fmqtyEachSum(),qtyallocated:qtyallocatedSum(),
+                       qtyallocatedEach:qtyallocatedEachSum(),qtyavailed:qtyavailedSum(),qtyholded:qtyholdedSum(),
+                       qtyholdedEach:qtyholdedEachSum()},
+                        {name:'合计:',fmqty: fmqtySumAll(),fmqtyEach: fmqtyEachSumAll(),qtyallocated:qtyallocatedSumAll(),
+                       qtyallocatedEach:qtyallocatedEachSumAll(),qtyavailed:qtyavailedSumAll(),qtyholded:qtyholdedSumAll(),
+                       qtyholdedEach:qtyholdedEachSumAll()},
+
+
+                    ]);
+                },
                 // onDblClickCell: function(index,field,value){
                 // 	edit();
                 // },
@@ -92,6 +114,8 @@
 // 			$(this).datagrid('unselectAll');
 // 		}
             });
+            ezuiDatagridAll = $('#ezuiDatagridAll').datagrid({
+                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>'});
             //产品代码控件初始化 载入公用弹窗页面
             $("#fmsku").textbox({
                 icons: [{
@@ -212,7 +236,7 @@
                     lotatt08: row.lotatt08,
                     lotatt12: row.lotatt12,
                     lotatt06: row.lotatt06,
-                    sku: row.sku,
+                    sku : row.fmsku,
                     qtyallocated: row.qtyallocated,
                     qtyholded: row.qtyholded,
                     fmuomName: row.fmuomName,
@@ -506,6 +530,123 @@
             }
             productDialog_viewInvLocation.dialog("close");
         }
+        // 统计合计
+        var fmqtySum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['fmqty']; //获取指定列
+            }
+            return total;
+        }
+        var fmqtyEachSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['fmqtyEach']; //获取指定列
+            }
+            return total;
+        }
+
+        var qtyallocatedSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyallocated']; //获取指定列
+            }
+            return total;
+        }
+        var qtyallocatedEachSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyallocatedEach']; //获取指定列
+            }
+            return total;
+        }
+        var qtyavailedSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyavailed']; //获取指定列
+            }
+            return total;
+        }
+        var qtyholdedSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyholded']; //获取指定列
+            }
+            return total;
+        }
+        var qtyholdedEachSum = function(){
+            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyholdedEach']; //获取指定列
+            }
+            return total;
+        }
+        // 统计总计
+        var fmqtySumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['fmqty']; //获取指定列
+            }
+            return total;
+        }
+        var fmqtyEachSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['fmqtyEach']; //获取指定列
+            }
+            return total;
+        }
+
+        var qtyallocatedSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyallocated']; //获取指定列
+            }
+            return total;
+        }
+        var qtyallocatedEachSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyallocatedEach']; //获取指定列
+            }
+            return total;
+        }
+        var qtyavailedSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyavailed']; //获取指定列
+            }
+            return total;
+        }
+        var qtyholdedSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyholded']; //获取指定列
+            }
+            return total;
+        }
+        var qtyholdedEachSumAll = function(){
+            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
+            var total = 0;
+            for (var i = 0; i < rows.length; i++) {
+                total += rows[i]['qtyholdedEach']; //获取指定列
+            }
+            return total;
+        }
+
     </script>
 </head>
 <body>
@@ -571,59 +712,55 @@
 <div id='ezuiDialog' style='padding: 10px;'>
     <form id='ezuiForm' method='post'>
         <input type='hidden' id='viewInvLocationId' name='viewInvLocationId'/>
-        <table>
+        🍉麻瓜 2019/8/12 16:44:34
+        <table >
             <tr>
                 <th>货主</th>
-                <td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
+                <td><input type='text' name='customerid' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>入库单号</th>
-                <td><input type='text' name='lotatt14' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
+                <td><input type='text' name='lotatt14' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
                 <th>入库日期</th>
-                <td><input type='text' name='lotatt03' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
+                <td><input type='text' name='lotatt03' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>产品代码</th>
-                <td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='sku' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
                 <th>产品名称</th>
-                <td><input type='text' name='lotatt12' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
-            </tr>
-            <tr>
+                <td><input type='text' name='lotatt12' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>注册证号/备案凭证号</th>
-                <td><input type='text' name='lotatt06' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
-                <th>规格型号</th>
-                <td><input type='text' name='qtyallocated' class='easyui-textbox' size='16'
-                           data-options='required:true'/></td>
-                <th>冻结数量</th>
-                <td><input type='text' name='qtyholded' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
-                <th>单位</th>
-                <td><input type='text' name='fmuomName' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
+                <td><input type='text' name='lotatt06' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
+                <th>规格型号</th>
+                <td><input type='text' name='qtyallocated' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>冻结数量</th>
+                <td><input type='text' name='qtyholded' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>单位</th>
+                <td><input type='text' name='fmuomName' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>待上架数量</th>
-                <td><input type='text' name='iPa' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='iPa' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
                 <th>待移入数量</th>
-                <td><input type='text' name='iMv' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='iMv' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>待移出数量</th>
-                <td><input type='text' name='oMv' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='oMv' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
                 <th>补货待上架</th>
-                <td><input type='text' name='iRp' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='iRp' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>补货待下架</th>
-                <td><input type='text' name='oRp' class='easyui-textbox' size='16' data-options='required:true'/></td>
+                <td><input type='text' name='oRp' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
                 <th>体积</th>
-                <td><input type='text' name='totalcubic' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
+                <td><input type='text' name='totalcubic' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>毛重</th>
-                <td><input type='text' name='totalgrossweight' class='easyui-textbox' size='16'
-                           data-options='required:true'/></td>
-                <th>仓库编码</th>
-                <td><input type='text' name='warehouseid' class='easyui-textbox' size='16'
-                           data-options='required:true'/></td>
+                <td><input type='text' name='totalgrossweight' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
         </table>
     </form>
@@ -711,5 +848,7 @@
 <div id="ezuiSkuSearchDialog">
 
 </div>
+<%--查询所有数据datagrid--%>
+<div id="ezuiDatagridAll" hidden="true"></div>
 </body>
 </html>
