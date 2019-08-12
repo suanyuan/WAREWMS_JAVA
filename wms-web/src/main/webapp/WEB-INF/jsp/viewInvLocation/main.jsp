@@ -45,7 +45,7 @@
                     {field: 'fmlocation', title: '库位', width: 100},
                     {field: 'customerid', title: '货主', width: 71},
                     {field: 'fmsku', title: '产品代码', width: 100},
-                    {field: 'lotatt12', title: '产品名称', width: 101},
+                    {field: 'lotatt12', title: '产品名称', width: 330},
                     {field: 'fmqty', title: '库存件数', width: 100},
                     {field: 'fmqtyEach', title: '库存数量', width: 100},
 
@@ -536,7 +536,7 @@
                     <tr>
                         <th>序列号</th>
                         <td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
-                        <th>有效期/失效期</th>
+                        <th>效期</th>
                         <td><input type='text' id='lotatt02Start' class='easyui-datebox' size='16' data-options=''/>
                         </td>
                         <th>至
