@@ -42,6 +42,7 @@ public class Constant {
     public static final String CODE_ENT_TYP_KD = "KD";//快递
     public static final String CODE_ENT_TYP_YL = "YL";//医疗单位
     public static final String CODE_ENT_TYP_ZT = "ZT";//主体
+    public static final String CODE_ENT_TYP_GW = "GW";
 
 //  客户类型
     public static final String CODE_CUS_TYP_CA = "CA";//承运商
@@ -92,8 +93,8 @@ public class Constant {
 //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 
-    public static final String uploadUrl = "/Users/quendi/fileUpload";
-    //public static final String uploadUrl = "/root/uploadDir";
+    //public static final String uploadUrl = "/Users/quendi/fileUpload";
+    public static final String uploadUrl = "/root/uploadDir";
 
 
 

@@ -1378,6 +1378,7 @@
 				f.lotatt16,
 				f.lotatt17,
 				f.lotatt18
+				order by a.location
 	</select>
 
 

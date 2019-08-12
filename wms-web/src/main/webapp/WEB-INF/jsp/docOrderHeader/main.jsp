@@ -752,7 +752,7 @@ var shipment = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg == '000') {
+						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理成功" + "\n";
 						} else {

@@ -102,6 +102,22 @@ public class DocAsnHeaderService extends BaseService {
 		return datagrid;
 	}
 
+	/**
+	 * 判断客户单号是否重复
+	 * @param customerNo
+	 * @return
+	 */
+	public boolean checkIsRept(String customerNo){
+		DocAsnHeaderQuery query = new DocAsnHeaderQuery();
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		List<DocAsnHeader> list = docAsnHeaderMybatisDao.queryByList(criteria);
+		if(list != null && list.size()>0){
+			return true;
+		}
+		return false;
+	}
+
 	public Json addDocAsnHeader(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 		Json json = new Json();
 		/*获取新的订单号*/
