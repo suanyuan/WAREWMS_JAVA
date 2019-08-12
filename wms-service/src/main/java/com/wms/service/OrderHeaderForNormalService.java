@@ -1,9 +1,10 @@
 package com.wms.service;
 
-import com.itextpdf.text.Document;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.*;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -32,12 +33,16 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1377,7 +1382,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
                 if (docAsnDoublecList != null && docAsnDoublecList.size() >= needDouble.size()) {
                     for (OrderDetailsForNormal d : needDouble) {
-                        d.setLotatt13(docAsnDoublecList.get(0).getDoublecno());
+                        d.setLotatt13("Y");
+                        orderDetailsForNormalMybatisDao.updateBySelective(d);
                         docAsnDoublecList.remove(0);
                         DocAsnDoublec doublec = new DocAsnDoublec();
                         doublec.setDoublecno(d.getLotatt13());
@@ -1412,7 +1418,7 @@ public class OrderHeaderForNormalService extends BaseService {
         query.setSku(sku);
         query.setLotatt04(lotatt4);
         criteria.setCondition(query);
-        List<DocAsnCertificate> list = docAsnCertificateMybatisDao.queryByPageList(criteria);
+        List<DocAsnCertificate> list = docAsnCertificateMybatisDao.queryByList(criteria);
         if(list!=null && list.size()>0){
             return list.get(0).getCertificateContext();
         }
@@ -1440,7 +1446,16 @@ public class OrderHeaderForNormalService extends BaseService {
                 PdfWriter writer = PdfWriter.getInstance(doc,os);
                 doc.open();
                 for(String order : orderNoArr){
-                    doc.add(new Paragraph(order));
+                   // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+                    //doc.add(new Paragraph(order).setFont(font).setFixedPosition(1, 200, bottom, width));
+
+                    PdfContentByte cb = writer.getDirectContent();
+                    BaseFont bf= BaseFont.createFont("STSong-Light", "UniGB-UCS2-H",BaseFont.EMBEDDED);
+                    cb.beginText();
+                    cb.setFontAndSize(bf, 20);
+                    cb.showTextAligned(PdfContentByte.ALIGN_LEFT, order , 0, 850, 0);
+                    cb.endText();
+
                     MybatisCriteria criteria = new MybatisCriteria();
                     OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
                     query.setOrderno(order);
@@ -1476,5 +1491,8 @@ public class OrderHeaderForNormalService extends BaseService {
             return "是";
         }
     }
+
+
+
 
 }

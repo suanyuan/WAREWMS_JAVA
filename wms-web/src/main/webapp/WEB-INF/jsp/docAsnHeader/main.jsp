@@ -56,7 +56,7 @@ $(function() {
 			{field: 'asntypeName',		title: '入库类型',	width: 71 },
 			{field: 'asnstatusName',		title: '入库状态',	width: 71 },
 			{field: 'asnreference1',		title: '客户订单号',	width: 131 },
-			{field: 'expectedarrivetime1',		title: '预期到货时间',	width: 137 },
+			{field: 'expectedarrivetime1',		title: '预期到货时间',	width: 137 ,formatter:dateFormat2},
 			{field: 'asnreference2',		title: '参考编号2',	width: 101 },
 			//{field: 'asnreference3',		title: '参考编号3',	width: 50 },
 			//{field: 'asnreference4',		title: '参考编号4',	width: 50 },

@@ -74,10 +74,11 @@ public class DocPaService {
                 map.put("warehouseid", login.getWarehouse().getId());
                 map.put("resultNo", "");
                 map.put("resultCode", "");
+                int length = asnNos.length() >= 200 ? 200 : asnNos.length();
                 docAsnDetailsMybatisDao.getIdSequence(map);
                 String panno = map.get("resultNo").toString();
                 docPaHeaderForm.setPano(panno);
-                docPaHeaderForm.setAsnno(asnNos);
+                docPaHeaderForm.setAsnno(asnNos.substring(0,length));
                 docPaHeaderForm.setPastatus("00");
                 docPaHeaderForm.setAddtime(new Date());
                 docPaHeaderForm.setAddwho(login.getId());
