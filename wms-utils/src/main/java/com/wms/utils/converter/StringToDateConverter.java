@@ -16,6 +16,7 @@ public class StringToDateConverter implements Converter<String, Date> {
         //定义数组，格式
         SimpleDateFormat[] sdfs = new SimpleDateFormat[]{
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
+                new SimpleDateFormat("yyyy-MM-dd"),
         };
         Date date = null;
         for (SimpleDateFormat sdf : sdfs) {

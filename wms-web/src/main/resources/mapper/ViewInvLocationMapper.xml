@@ -123,10 +123,10 @@ where 1=1
 	    and lotatt03 =  #{condition.lotatt03}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-	    and lotatt04 =  #{condition.lotatt04}
+	    and lotatt04 like concat('%',#{condition.lotatt04},'%')
 	</if>
 	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-	    and lotatt05 =  #{condition.lotatt05}
+	    and lotatt05 like concat('%',#{condition.lotatt05},'%')
 	</if>
 	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
 	    and lotatt07 =  #{condition.lotatt07}
@@ -147,7 +147,13 @@ where 1=1
 	    and lotatt14 =  #{condition.lotatt14}
 	</if>
 	<if test="condition.name != null and condition.name != ''" >
-	    and `name` =  #{condition.name}
+	    and `name` like concat('%',#{condition.name},'%')
+	</if>
+	<if test="condition.lotatt02Start != null" >
+		and lotatt02 &gt;= #{condition.lotatt02Start}
+	</if>
+	<if test="condition.lotatt02End != null" >
+		and lotatt02 &lt;= #{condition.lotatt02End}
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 	    and enterprise_name =  #{condition.enterpriseName}

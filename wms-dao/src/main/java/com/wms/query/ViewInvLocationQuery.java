@@ -1,5 +1,6 @@
 package com.wms.query;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -9,10 +10,10 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class ViewInvLocationQuery implements IQuery {
 
-	private java.lang.String fmcustomerid;
-	private java.lang.String fmlocation;
+	private java.lang.String fmcustomerid; //货主编码
+	private java.lang.String fmlocation;   //库位
 	private java.math.BigDecimal fmqty;
-	private java.lang.String fmsku;
+	private java.lang.String fmsku;        //产品代码
 	private java.lang.String fmuomName;
 	private java.math.BigDecimal iMv;
 	private java.math.BigDecimal iPa;
@@ -29,10 +30,38 @@ public class ViewInvLocationQuery implements IQuery {
 	private java.lang.String warehouseid;
 
 	private java.lang.String defaultreceivinguom;
-	private  String name;
-	private  String lotatt04;
-	private  String lotatt12;
+	private  String name;          //产品线
+	private  String lotatt04;      //批号
+	private  String lotatt05;      //序列号
+	private  String lotatt12;      //产品名称
+	private  Date lotatt02Start;      //失效期查询开始
+	private  Date lotatt02End;      //失效期查询结束
+
 	private Set<SfcCustomer> customerSet;
+
+	public String getLotatt05() {
+		return lotatt05;
+	}
+
+	public void setLotatt05(String lotatt05) {
+		this.lotatt05 = lotatt05;
+	}
+
+	public Date getLotatt02Start() {
+		return lotatt02Start;
+	}
+
+	public void setLotatt02Start(Date lotatt02Start) {
+		this.lotatt02Start = lotatt02Start;
+	}
+
+	public Date getLotatt02End() {
+		return lotatt02End;
+	}
+
+	public void setLotatt02End(Date lotatt02End) {
+		this.lotatt02End = lotatt02End;
+	}
 
 	public String getLotatt12() {
 		return lotatt12;
