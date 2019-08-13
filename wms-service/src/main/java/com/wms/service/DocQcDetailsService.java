@@ -22,6 +22,8 @@ import com.wms.vo.DocQcDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQcDetailsForm;
 import com.wms.vo.pda.PdaDocQcDetailVO;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -214,9 +216,17 @@ public class DocQcDetailsService extends BaseService {
 
             pdaDocQcDetailVO = new PdaDocQcDetailVO();
             BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
+
+            //批次属性
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
             String jsonStr1 = JSON.toJSONString(invLotAtt, SerializerFeature.DisableCircularReferenceDetect);
             pdaDocQcDetailVO.setInvLotAtt(JSONObject.parseObject(jsonStr1, InvLotAtt.class));
+
+            //产品档案
+            BasSkuQuery basSkuQuery = new BasSkuQuery(docQcDetails.getCustomerid(), docQcDetails.getSku());
+            BasSku basSku = basSkuMybatisDao.queryById(basSkuQuery);
+            pdaDocQcDetailVO.setBasSku(JSONObject.parseObject(JSON.toJSONString(basSku, SerializerFeature.DisableCircularReferenceDetect), BasSku.class));
+
             docQcDetailVOList.add(pdaDocQcDetailVO);
         }
 
@@ -261,6 +271,8 @@ public class DocQcDetailsService extends BaseService {
             e.printStackTrace();
 
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "验收系统错误");
         }
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 
@@ -313,7 +325,13 @@ public class DocQcDetailsService extends BaseService {
                 */
                 InvLotAtt lotatt_history = invLotAttMybatisDao.queryById(qcDetails.getLotnum());
                 InvLotAttQuery lotAttQuery = new InvLotAttQuery(lotatt_history);
+                lotAttQuery.setLotatt01(form.getLotatt01());
+                lotAttQuery.setLotatt02(form.getLotatt02());
+                lotAttQuery.setLotatt04(form.getLotatt04());
+                lotAttQuery.setLotatt06(form.getLotatt06());
                 lotAttQuery.setLotatt10("HG");
+                lotAttQuery.setLotatt11(form.getLotatt11());
+                lotAttQuery.setLotatt15(form.getLotatt15());
                 mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(lotAttQuery));
                 List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByList(mybatisCriteria);
                 /*
@@ -329,7 +347,13 @@ public class DocQcDetailsService extends BaseService {
 
                     BeanUtils.copyProperties(lotatt_history, lotatt_hg);
                     lotatt_hg.setLotnum(idSequence.getResultNo());
+                    lotatt_hg.setLotatt01(form.getLotatt01());
+                    lotatt_hg.setLotatt02(form.getLotatt02());
+                    lotatt_hg.setLotatt04(form.getLotatt04());
+                    lotatt_hg.setLotatt06(form.getLotatt06());
                     lotatt_hg.setLotatt10("HG");
+                    lotatt_hg.setLotatt11(form.getLotatt11());
+                    lotatt_hg.setLotatt15(form.getLotatt15());
                     lotatt_hg.setAddwho("Gizmo");
                     lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
                     invLotAttMybatisDao.add(lotatt_hg);
@@ -457,6 +481,9 @@ public class DocQcDetailsService extends BaseService {
                     pdaDocQcDetailQuery.setLotatt10("HG");
                     pdaDocQcDetailQuery.setLotnum(lotatt_hg.getLotnum());
                     DocQcDetails normalDocQcDetails = docQcDetailsDao.queryDocQcDetail(pdaDocQcDetailQuery);
+                    if (normalDocQcDetails == null) {
+                        throw new Exception();
+                    }
                     normalDocQcDetails.setPaqtyExpected(normalDocQcDetails.getPaqtyExpected() + qcDetails.getPaqtyExpected());
                     normalDocQcDetails.setQcqtyExpected(normalDocQcDetails.getQcqtyExpected() + qcDetails.getQcqtyExpected());
                     normalDocQcDetails.setQcqtyCompleted(normalDocQcDetails.getQcqtyCompleted() + qcDetails.getQcqtyExpected());
@@ -527,10 +554,13 @@ public class DocQcDetailsService extends BaseService {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-            System.out.println(e.getMessage());
-            if (e.getMessage().equals("111")) {
+            if (StringUtils.isEmpty(e.getMessage())) {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败");
+            }else if (e.getMessage().equals("111")) {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
             }else if (e.getMessage().equals("222")) {
