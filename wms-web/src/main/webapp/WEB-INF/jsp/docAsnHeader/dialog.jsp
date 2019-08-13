@@ -45,7 +45,7 @@
 				</tr>
 				<tr>
 					<th>预计收货时间</th>
-					<td><input type='text' id='expectedarrivetime1' name='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options='required:true'/></td>
+					<td><input type='text' id='expectedarrivetime1' name='expectedarrivetime1' class='easyui-datebox' size='16' data-options='required:true'/></td>
 					<th>订单创建时间</th>
 					<td><input type='text' id='addtime' name='addtime' class='easyui-datetimebox' size='16' data-options='editable: false'/></td>
 				</tr>

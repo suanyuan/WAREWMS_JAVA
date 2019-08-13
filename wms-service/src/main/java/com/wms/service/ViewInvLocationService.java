@@ -42,5 +42,24 @@ public class ViewInvLocationService extends BaseService {
 		datagrid.setRows(viewInvLocationVOList);
 		return datagrid;
 	}
+//根据条件查询库所有列表 不分页
+	public EasyuiDatagrid<ViewInvLocationVO> getPagedDatagridAll(ViewInvLocationQuery query) {
+		EasyuiDatagrid<ViewInvLocationVO> datagrid = new EasyuiDatagrid<ViewInvLocationVO>();
+		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<ViewInvLocation> viewInvLocationList = viewInvLocationMybatisDao.queryByListAll(mybatisCriteria);
+		ViewInvLocationVO viewInvLocationVO = null;
+		List<ViewInvLocationVO> viewInvLocationVOList = new ArrayList<ViewInvLocationVO>();
+		for (ViewInvLocation viewInvLocation : viewInvLocationList) {
+			viewInvLocationVO = new ViewInvLocationVO();
+			BeanUtils.copyProperties(viewInvLocation, viewInvLocationVO);
+			viewInvLocationVOList.add(viewInvLocationVO);
+		}
+		datagrid.setTotal((long)viewInvLocationMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(viewInvLocationVOList);
+		return datagrid;
+	}
 
 }

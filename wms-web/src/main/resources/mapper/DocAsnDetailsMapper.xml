@@ -984,6 +984,7 @@ insert into doc_asn_details
 	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
 	</foreach>
+	and asn_print_flag &lt;&gt; 'Y'
 </select>
 
     <select id="queryForScan" parameterType="java.util.Map" resultMap="ExtendDetailMap">

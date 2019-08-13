@@ -49,6 +49,7 @@ $(function() {
 		rownumbers:true,
 		singleSelect:false,
 		idField : 'asnno',
+		rowStyler:asnRowStyle,
 		columns : [[
             {field: 'ck',checkbox:true },
 			{field: 'customerid',		title: '客户编码',	width: 71 },
@@ -68,7 +69,7 @@ $(function() {
 			{field: 'releasestatusName',		title: '释放状态',	width: 71 },
 			{field: 'warehouseid',		title: '仓库编码',	width: 71 },
 			{field: 'notes',		title: '备注',	width: 250 },
-			{field: 'asnstatus',		title: '入库状态',	width: 71 },
+			// {field: 'asnstatus',		title: '入库状态',	width: 71 },
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -1310,6 +1311,7 @@ var ezuiSkuDataClick = function(){
 var selectSku = function(){
 	var row = ezuiSkuDataDialogId.datagrid('getSelected');
 	if(row){
+	    //TODO 去除产品档案信息会写界面
 		$("#ezuiDetailsForm #sku").textbox('setValue',row.sku);
 		$("#ezuiDetailsForm #skuName").textbox('setValue',row.descrC);
 		$("#ezuiDetailsForm #skudescrc").textbox('setValue',row.descrE);
@@ -1500,6 +1502,12 @@ function doRefIn() {
     });
 
 }
+
+function asnRowStyle(index,row) {
+    if(row.asnstatus == "70"){
+        return 'color:green;';
+    }
+}
 </script>
 </head>
 <body>
@@ -1569,7 +1577,7 @@ function doRefIn() {
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关单</a>
-					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消</a>
+					<!--<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消</a>-->
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
