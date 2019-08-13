@@ -123,8 +123,37 @@ var edit = function(row){
 };
 
 var del = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
+	//var row = ezuiDatagrid.datagrid('getSelected');
+    var checkedItems = ezuiDatagrid.datagrid('getSelections');
+    if(checkedItems && ezuiDatagrid.length>0){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+            if(confirm){
+                $.each(checkedItems, function(index, item){
+                    $.ajax({
+                        url : 'docPaHeaderController.do?delete',
+                        data : {id : item.pano},
+                        type : 'POST',
+                        dataType : 'JSON',
+                        success : function(result){
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                });
+            }
+        });
+	}
+
+	/*if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
@@ -152,7 +181,8 @@ var del = function(){
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
-	}
+	}*/
+
 };
 
 var commit = function(){
@@ -244,8 +274,10 @@ var batchPrint = function(){
     }
 };
 
-var callBackRedraw = function () {
-
+var parowStyle = function (index,row) {
+	if(row.pastatus == "30"){
+        return 'color:red;';
+	}
 }
 </script>
 </head>
@@ -278,9 +310,8 @@ var callBackRedraw = function () {
 				</fieldset>
 				<div>
 					<a onclick='batchPrint();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印</a>
-					<!--<a onclick='callBackRedraw();' id='ezuiBtn_callBackRedraw' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印</a>-->
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<!--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>-->
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>

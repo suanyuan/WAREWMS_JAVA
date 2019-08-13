@@ -1172,7 +1172,7 @@ insert into doc_asn_header
 	<if test="zonegroup != null  ">
 		zonegroup=#{zonegroup},
 	</if>
-	</trim> where actualarrivetime=#{actualarrivetime}
+	</trim> where asnno = #{asnno}
 </update>
 
 <!-- 删除记录 -->
