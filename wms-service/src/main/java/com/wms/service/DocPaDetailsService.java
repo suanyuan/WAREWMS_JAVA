@@ -139,6 +139,20 @@ public class DocPaDetailsService extends BaseService {
             docPaDetailVO.setBasSku(basSku);
         }
 
+        //查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
+        DocPaDetailsQuery similarQuery = new DocPaDetailsQuery();
+        similarQuery.setPano(query.getPano());
+        similarQuery.setCustomerid(query.getCustomerid());
+        similarQuery.setSku(basSku.getSku());
+        similarQuery.setUserdefine3(query.getLotatt04());
+        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.querySimilarDetail(similarQuery);
+        if (docPaDetailsList.size() == 0) {
+            docPaDetailVO.setUserdefine1("");
+        }else {
+            DocPaDetails similarDetail = docPaDetailsList.get(0);
+            docPaDetailVO.setUserdefine1(similarDetail.getUserdefine1());
+        }
+
         return docPaDetailVO;
     }
 
