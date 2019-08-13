@@ -2,10 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.dto.DocPaDTO;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocPaHeader;
-import com.wms.entity.DocQcHeader;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.entity.IdSequence;
@@ -122,8 +119,16 @@ public class DocPaService {
                         return Json.error("合并上架清单系统异常");
                     }*/
                 }
+                for(String asnNo : arr){
+                    DocAsnHeader header = new DocAsnHeader();
+                    header.setAsnno(asnNo);
+                    header.setAsnPrintFlag("Y");
+                    docAsnHeaderMybatisDao.updateBySelective(header);
+                }
+                return Json.success("合并成功");
+            }else{
+                return Json.error("单据已经合并过");
             }
-            return Json.success("合并成功");
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -289,7 +294,7 @@ public class DocPaService {
         }catch (Exception e){
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Json.error("确认收货系统异常");
+            return Json.error("确认收货系统异常"+e.getMessage());
         }
     }
 }

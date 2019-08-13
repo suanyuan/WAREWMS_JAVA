@@ -25,8 +25,6 @@
     <table id="enterpriseSearchGrid">
 
     </table>
-
-    <div id='enterpriseDialog' style='padding: 10px;'></div>
 <script>
     var enterpriseSearchGrid;
     $(function () {
@@ -81,19 +79,6 @@
         })
     })
 
-    <%--function operateGrid(id) {--%>
-        <%--$('#enterpriseDialog').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache:false,--%>
-            <%--onClose : function() {--%>
-
-            <%--}--%>
-        <%--})--%>
-    <%--}--%>
     var doSearchEnterprise = function(){
         console.log($('#productRegisterNo1').textbox("getValue"));
         console.log($('#productRegisterNo1').val());
