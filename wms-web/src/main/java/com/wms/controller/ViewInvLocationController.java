@@ -52,6 +52,13 @@ public class ViewInvLocationController {
 	public EasyuiDatagrid<ViewInvLocationVO> showDatagrid(EasyuiDatagridPager pager, ViewInvLocationQuery query) {
 		return viewInvLocationService.getPagedDatagrid(pager, query);
 	}
+//	根据条件查询所有 不分页
+	@Login
+	@RequestMapping(params = "showDatagridAll")
+	@ResponseBody
+	public EasyuiDatagrid<ViewInvLocationVO> showDatagridAll(ViewInvLocationQuery query) {
+		return viewInvLocationService.getPagedDatagridAll(query);
+	}
 
 	@Login
 	@RequestMapping(params = "getBtn")
