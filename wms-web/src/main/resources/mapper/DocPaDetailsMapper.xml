@@ -284,5 +284,17 @@ where 1=1
     <select id="queryMaxLineNo" parameterType="Object" resultType="int">
        SELECT ifnull(MAX(palineno + 0),0) FROM doc_pa_details WHERE pano = #{pano};
     </select>
+
+    <select id="querySimilarDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_pa_details
+        where pano = #{pano}
+          and customerid = #{customerid}
+          and sku = #{sku}
+          and userdefine3 = #{userdefine3}
+          <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
+        order by addtime, edittime desc
+    </select>
   	
 </mapper>   

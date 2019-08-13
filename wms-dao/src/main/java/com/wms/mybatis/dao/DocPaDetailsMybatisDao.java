@@ -3,6 +3,7 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.DocPaDetails;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
+import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,4 +47,9 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
 	int updateBatchQc(DocPaDetails docPaDetails);
 
     int queryMaxLineNo(@Param("pano")String pano);
+
+    /**
+     * 查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号)
+     */
+    List<DocPaDetails> querySimilarDetail(DocPaDetailsQuery query);
 }
