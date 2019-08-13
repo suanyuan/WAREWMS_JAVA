@@ -68,7 +68,7 @@ $(function() {
 			{field: 'releasestatusName',		title: '释放状态',	width: 71 },
 			{field: 'warehouseid',		title: '仓库编码',	width: 71 },
 			{field: 'notes',		title: '备注',	width: 250 },
-			{field: 'asnstatus',		title: '入库状态',	width: 71 },
+			// {field: 'asnstatus',		title: '入库状态',	width: 71 },
 
 		]],
 		onDblClickCell: function(index,field,value){

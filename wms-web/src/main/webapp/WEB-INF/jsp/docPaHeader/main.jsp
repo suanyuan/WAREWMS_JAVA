@@ -36,7 +36,7 @@ $(function() {
 			{field:'ck',checkbox:true},
 			{field: 'pano',		title: '上架任务单号',	width: 150 },
 			{field: 'asnno',		title: '入库单号',	width: 150},
-			{field: 'patype',		title: '类型',	width: 71 },
+			// {field: 'patype',		title: '类型',	width: 71 },
 			{field: 'pastatus',		title: '上架状态',	width: 71,formatter: pastatusFormatter},
 			{field: 'addtime',		title: '创建时间',	width: 150},
 			{field: 'addwho',		title: '创建人',	width: 150 },
@@ -84,6 +84,10 @@ $(function() {
 var edit = function(row){
 	processType = 'edit';
 	var row = row;
+	if (row == null) {
+		row=ezuiDatagrid.datagrid('getSelected');
+	}
+
 	if(row){
 		ezuiForm.form('load',{
 			pano : row.pano,
@@ -289,103 +293,69 @@ var callBackRedraw = function () {
 			<input type='hidden' id='docPaHeaderId' name='docPaHeaderId'/>
 			<table>
 				<tr>
-					<th>待输入0</th>
+					<th>上架任务单号</th>
 					<td><input type='text' name='pano' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入1</th>
+					<th>入库单号</th>
 					<td><input type='text' name='asnno' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
+
+<%--				<tr>--%>
+<%--					<th>类型</th>--%>
+<%--					<td><input type='text' name='patype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',--%>
+<%--																										editable: false,--%>
+<%--																										url:'<c:url value="/commonController.do?getPaState"/>',--%>
+<%--																										valueField: 'id',--%>
+<%--																										textField: 'value'"/></td>--%>
+<%--				</tr>--%>
 				<tr>
-					<th>待输入2</th>
-					<td><input type='text' name='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>上架状态</th>
+					<td><input type='text' name='pastatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																										editable: false,
+																										url:'<c:url value="/commonController.do?getPaState"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
+				</tr>
+
+				<tr>
+					<th>创建时间</th>
+					<td><input type='text' name='addtime' class='easyui-datetimebox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入3</th>
-					<td><input type='text' name='pareference1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入4</th>
-					<td><input type='text' name='pareference2' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入5</th>
-					<td><input type='text' name='pareference3' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入6</th>
-					<td><input type='text' name='pareference4' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入7</th>
-					<td><input type='text' name='pareference5' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入8</th>
-					<td><input type='text' name='patype' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入9</th>
-					<td><input type='text' name='pastatus' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入10</th>
-					<td><input type='text' name='pacreationtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入11</th>
-					<td><input type='text' name='userdefine1' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入12</th>
-					<td><input type='text' name='userdefine2' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入13</th>
-					<td><input type='text' name='userdefine3' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入14</th>
-					<td><input type='text' name='userdefine4' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入15</th>
-					<td><input type='text' name='userdefine5' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入16</th>
-					<td><input type='text' name='notes' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入17</th>
-					<td><input type='text' name='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
-					<th>待输入18</th>
+					<th>创建人</th>
 					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入19</th>
-					<td><input type='text' name='edittime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>编辑时间</th>
+					<td><input type='text' name='edittime' class='easyui-datetimebox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入20</th>
+					<th>编辑人</th>
 					<td><input type='text' name='editwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>待输入21</th>
-					<td><input type='text' name='paPrintFlag' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>是否打印</th>
+					<td><input type='text' name='paPrintFlag' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																										editable: false,
+																										url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
 				</tr>
 				<tr>
-					<th>待输入22</th>
-					<td><input type='text' name='warehouseid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>仓库</th>
+					<td><input type='text' name='warehouseid' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																											editable: false,
+																											url:'<c:url value="/docPoHeaderController.do?getWarehouseCombobox"/>',
+																											valueField: 'id',
+																											textField: 'value'"/></td>
 				</tr>
 			</table>
 		</form>
 	</div>
 	<div id='ezuiDialogBtn'>
-		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+<%--		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
+<%--		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
 	</div>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>

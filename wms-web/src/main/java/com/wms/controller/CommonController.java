@@ -260,7 +260,8 @@ public class CommonController {
     @ResponseBody
     public List<EasyuiCombobox> getQcState(){
         return basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
-    }/**
+    }
+    /**
      * 冷链标志
      * @return
      * */
@@ -268,6 +269,15 @@ public class CommonController {
     @ResponseBody
     public List<EasyuiCombobox> getColdHainMark(){
         return basCodesService.getBy(Constant.CODE_CATALOG_COLDHAINMARK);
+    }
+    /**
+     * 上架状态
+     * @return
+     * */
+    @RequestMapping(params = "getPaState")
+    @ResponseBody
+    public List<EasyuiCombobox> getPASTS(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_PASTS);
     }
 
 }

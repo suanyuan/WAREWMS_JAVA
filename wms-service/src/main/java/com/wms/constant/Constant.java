@@ -32,6 +32,7 @@ public class Constant {
     public static final String CODE_CATALOG_SETTLEMENT = "JS_FS";//结算方式
     public static final String CODE_CATALOG_QCSTATE = "ZL_TYP";//质量状态
     public static final String CODE_CATALOG_COLDHAINMARK= "LL_TYP";//冷链标志
+    public static final String CODE_CATALOG_PASTS= "PA_STS";//上架状态
 
 
 
