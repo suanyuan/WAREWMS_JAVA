@@ -3,6 +3,8 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class ViewInvLocationForm {
 
 	private java.lang.String fmcustomerid;
@@ -24,8 +26,35 @@ public class ViewInvLocationForm {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String warehouseid;
 	private java.lang.String name;
-	private java.lang.String lotatt04;
-	private java.lang.String lotatt12;
+	private java.lang.String lotatt04;//批号
+	private java.lang.String lotatt05;//序列号
+	private java.lang.String lotatt12;//产品名称
+	private Date lotatt02Start;      //失效期查询开始
+	private  Date lotatt02End;      //失效期查询结束
+
+	public Date getLotatt02Start() {
+		return lotatt02Start;
+	}
+
+	public void setLotatt02Start(Date lotatt02Start) {
+		this.lotatt02Start = lotatt02Start;
+	}
+
+	public Date getLotatt02End() {
+		return lotatt02End;
+	}
+
+	public void setLotatt02End(Date lotatt02End) {
+		this.lotatt02End = lotatt02End;
+	}
+
+	public String getLotatt05() {
+		return lotatt05;
+	}
+
+	public void setLotatt05(String lotatt05) {
+		this.lotatt05 = lotatt05;
+	}
 
 	public String getLotatt12() {
 		return lotatt12;

@@ -50,13 +50,16 @@ public class ViewInvLocationExportService {
         response.setContentType(ContentTypeEnum.csv.getContentType());
 
         ViewInvLocationForm viewInvLocationForm = new ViewInvLocationForm();
-
+//根据查询条件导出excel
         viewInvLocationForm.setFmcustomerid(form.getFmcustomerid());
         viewInvLocationForm.setFmsku(form.getFmsku());
-        viewInvLocationForm.setLotatt12(form.getSkudescrc());
+        viewInvLocationForm.setLotatt12(form.getLotatt12());
         viewInvLocationForm.setFmlocation(form.getFmlocation());
         viewInvLocationForm.setName(form.getName());
         viewInvLocationForm.setLotatt04(form.getLotatt04());
+        viewInvLocationForm.setLotatt05(form.getLotatt05());
+        viewInvLocationForm.setLotatt02Start(form.getLotatt02Start());
+        viewInvLocationForm.setLotatt02End(form.getLotatt02End());
 
         try {
             ViewInvLocationQuery query = new ViewInvLocationQuery();
