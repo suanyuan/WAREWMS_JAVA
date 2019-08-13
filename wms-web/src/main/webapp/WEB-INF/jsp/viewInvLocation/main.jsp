@@ -17,7 +17,7 @@
         var ezuiForm;
         var ezuiDialog;
         var ezuiDatagrid;
-        var ezuiDatagridAll;
+        var ezuiDatagridAll;    //隐藏的datagrid  用于总计的数据获取
 
         var ezuiCustDataDialog;        //货主编码
         var ezuiCustDataDialogId;      //货主编码
@@ -27,95 +27,39 @@
         var ezuiSkuDataDialogId;       //产品名称选择框
         var productDialog_viewInvLocation;//主页产品代码选择框
 
+        var getTotalInit; //初始化合计
+        var getTotalAllInit; //初始化总计
+
         $(function () {
             ezuiMenu = $('#ezuiMenu').menu();
             ezuiForm = $('#ezuiForm').form();
-            ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
-                method: 'POST',
-                toolbar: '#toolbar',
-                title: '库存余量_按商品/库位',
-                pageSize:5,
-                pageList: [5, 100, 200],
-                fit: true,
-                border: false,
-                fitColumns: false,
-                nowrap: true,
-                striped: true,
-                collapsible: false,
-                pagination: true,
-                rownumbers: true,
-                singleSelect: true,
-                showFooter:true,
-                idField: 'customerid',
-                columns: [[
-                    {field: 'fmlocation', title: '库位', width: 100},
-                    {field: 'customerid', title: '货主', width: 71},
-                    {field: 'fmsku', title: '产品代码', width: 100},
-                    {field: 'lotatt12', title: '产品名称', width: 330},
-                    {field: 'fmqty', title: '库存件数', width: 100},
-                    {field: 'fmqtyEach', title: '库存数量', width: 100},
-
-                    {field: 'qtyallocated', title: '分配件数', width: 100},
-                    {field: 'qtyallocatedEach', title: '分配数量', width: 100},
-                    {field: 'qtyavailed', title: '可用件数', width: 100},
-                    {field: 'qtyholded', title: '冻结件数', width: 100},
-                    {field: 'qtyholdedEach', title: '冻结数量', width: 100},
-                    {field: 'defaultreceivinguom', title: '单位', width: 100},
-                    {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
-                    {field: 'skudescre', title: '规格型号', width: 103},
-                    {field: 'lotatt04', title: '生产批号', width: 95},
-                    {field: 'lotatt05', title: '序列号', width: 110},
-                    {field: 'lotatt07', title: '灭菌批号', width: 120},
-                    {field: 'lotatt03', title: '入库日期', width: 91},
-                    {field: 'lotatt01', title: '生产日期', width: 112},
-                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
-                    {field: 'lotatt08', title: '供应商', width: 200},
-                    {field: 'lotatt09', title: '样品属性', width: 200},
-                    {field: 'lotatt14', title: '入库单号', width: 91},
-
-
-                    {field: 'lotatt11', title: '存储条件', width: 150},
-                    {field: 'enterpriseName', title: '生产厂家', width: 100},
-
-                    {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
-
-                    {field: 'name', title: '产品线', width: 100},
-                    // {field: 'lotatt10',		title: '备注',	width: 71 },
-                ]],onDblClickCell: function(index,field,value){
-                    edit();
-                },
-                onLoadSuccess: function (index,field,value) {
-
-                    $('#ezuiDatagrid').datagrid('reloadFooter',[
-                        {name:'合计:',fmqty: fmqtySum(),fmqtyEach: fmqtyEachSum(),qtyallocated:qtyallocatedSum(),
-                       qtyallocatedEach:qtyallocatedEachSum(),qtyavailed:qtyavailedSum(),qtyholded:qtyholdedSum(),
-                       qtyholdedEach:qtyholdedEachSum()},
-                        {name:'合计:',fmqty: fmqtySumAll(),fmqtyEach: fmqtyEachSumAll(),qtyallocated:qtyallocatedSumAll(),
-                       qtyallocatedEach:qtyallocatedEachSumAll(),qtyavailed:qtyavailedSumAll(),qtyholded:qtyholdedSumAll(),
-                       qtyholdedEach:qtyholdedEachSumAll()},
-
-
-                    ]);
-                },
-                // onDblClickCell: function(index,field,value){
-                // 	edit();
-                // },
-// 		onRowContextMenu : function(event, rowIndex, rowData) {
-// 			event.preventDefault();
-// 			$(this).datagrid('unselectAll');
-// 			$(this).datagrid('selectRow', rowIndex);
-// 			ezuiMenu.menu('show', {
-// 				left : event.pageX,
-// 				top : event.pageY
-// 			});
-// 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLocationController.do?getBtn"/>', ezuiMenu);
-// 			$(this).datagrid('unselectAll');
-// 		}
-            });
+            //隐藏的datagrid  用于总计的数据获取
             ezuiDatagridAll = $('#ezuiDatagridAll').datagrid({
-                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>'});
+                url: '<c:url value="/viewInvLocationController.do?showDatagridAll"/>',
+                method: 'POST',
+                onLoadSuccess:function (index,field,value) {
+                    //判断ezuiDatagrid是否初始化
+                    if(ezuiDatagrid){
+                        ezuiDatagrid.datagrid('load', {
+                            fmcustomerid: $('#fmcustomerid').val(),//货主编码
+                            fmlocation: $('#fmlocation').val(),  //库位
+                            fmsku: $('#fmsku').val(),           //产品代码
+                            lotatt12: $('#skudescrc').val(),  //产品名称
+                            name: $('#name').val(),          //产品线
+                            lotatt04: $('#lotatt04').val(),//批号
+                            lotatt05: $('#lotatt05').val(),//序列号
+                            lotatt02Start: $('#lotatt02Start').datebox('getValue'),//时间查询
+                            lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
+                        });
+                    }else{
+                            initDateGrid();//隐藏的datagrif初始化成功 然后初始化主页的datagrid
+                        }
+
+
+                }
+            });
+
+
             //产品代码控件初始化 载入公用弹窗页面
             $("#fmsku").textbox({
                 icons: [{
@@ -307,6 +251,94 @@
             $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
             ezuiCustDataDialog.dialog('open');
         };
+        //主页datagrid 党隐藏datagrid加载完毕之后加载
+        var initDateGrid=function(){
+            ezuiDatagrid = $('#ezuiDatagrid').datagrid({
+                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
+                method: 'POST',
+                toolbar: '#toolbar',
+                title: '库存余量_按商品/库位',
+                pageSize:10,
+                pageList: [10, 100, 200],
+                fit: true,
+                border: false,
+                fitColumns: false,
+                nowrap: true,
+                striped: true,
+                collapsible: false,
+                pagination: true,
+                rownumbers: true,
+                singleSelect: true,
+                showFooter:true,
+                idField: 'customerid',
+                columns: [[
+                    {field: 'fmlocation', title: '库位', width: 100},
+                    {field: 'customerid', title: '货主', width: 71},
+                    {field: 'fmsku', title: '产品代码', width: 100},
+                    {field: 'lotatt12', title: '产品名称', width: 330},
+                    {field: 'fmqty', title: '库存件数', width: 100},
+                    {field: 'fmqtyEach', title: '库存数量', width: 100},
+
+                    {field: 'qtyallocated', title: '分配件数', width: 100},
+                    {field: 'qtyallocatedEach', title: '分配数量', width: 100},
+                    {field: 'qtyavailed', title: '可用件数', width: 100},
+                    {field: 'qtyholded', title: '冻结件数', width: 100},
+                    {field: 'qtyholdedEach', title: '冻结数量', width: 100},
+                    {field: 'defaultreceivinguom', title: '单位', width: 100},
+                    {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
+                    {field: 'skudescre', title: '规格型号', width: 103},
+                    {field: 'lotatt04', title: '生产批号', width: 95},
+                    {field: 'lotatt05', title: '序列号', width: 110},
+                    {field: 'lotatt07', title: '灭菌批号', width: 120},
+                    {field: 'lotatt03', title: '入库日期', width: 91},
+                    {field: 'lotatt01', title: '生产日期', width: 112},
+                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
+                    {field: 'lotatt08', title: '供应商', width: 200},
+                    {field: 'lotatt09', title: '样品属性', width: 200},
+                    {field: 'lotatt14', title: '入库单号', width: 91},
+
+
+                    {field: 'lotatt11', title: '存储条件', width: 150},
+                    {field: 'enterpriseName', title: '生产厂家', width: 100},
+
+                    {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
+
+                    {field: 'name', title: '产品线', width: 100},
+                    // {field: 'lotatt10',		title: '备注',	width: 71 },
+                ]]
+                ,onDblClickCell: function(index,field,value){
+                    edit();
+                },
+                onLoadSuccess: function (index,field,value) {
+                    getTotalInit=getTotal();
+                    getTotalAllInit=getTotalAll();
+                    ezuiDatagrid.datagrid('reloadFooter',[
+                        {fmlocation:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
+                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyholded:getTotalInit.qtyholded,
+                            qtyholdedEach:getTotalInit.qtyholdedEach},
+                        {fmlocation:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
+                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyholded:getTotalAllInit.qtyholded,
+                            qtyholdedEach:getTotalAllInit.qtyholdedEach}
+                    ]);
+                }
+                // onDblClickCell: function(index,field,value){
+                // 	edit();
+                // },
+// 		onRowContextMenu : function(event, rowIndex, rowData) {
+// 			event.preventDefault();
+// 			$(this).datagrid('unselectAll');
+// 			$(this).datagrid('selectRow', rowIndex);
+// 			ezuiMenu.menu('show', {
+// 				left : event.pageX,
+// 				top : event.pageY
+// 			});
+// 		},onLoadSuccess:function(data){
+// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLocationController.do?getBtn"/>', ezuiMenu);
+// 			$(this).datagrid('unselectAll');
+// 		}
+            });
+        }
+
         //货主查询弹框查询按钮
         var ezuiCustDataDialogSearch = function () {
             ezuiCustDataDialogId.datagrid('load', {
@@ -370,7 +402,7 @@
         /* 导出end */
 
         var doSearch = function () {
-            ezuiDatagrid.datagrid('load', {
+            ezuiDatagridAll.datagrid('load', {
                 fmcustomerid: $('#fmcustomerid').val(),//货主编码
                 fmlocation: $('#fmlocation').val(),  //库位
                 fmsku: $('#fmsku').val(),           //产品代码
@@ -382,6 +414,7 @@
                 lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
             });
         };
+
         /* 库位选择弹框查询 */
         var ezuiLocDataSearch = function () {
             ezuiLocDataDialogId.datagrid('load', {
@@ -530,127 +563,85 @@
             }
             productDialog_viewInvLocation.dialog("close");
         }
-        // 统计合计
-        var fmqtySum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+        // 统计合计 start
+        var getTotal = function(){
+           var sums=new Object();
+             var rows = ezuiDatagrid.datagrid('getRows');//获取当前页的数据行
+            sums.fmqty = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['fmqty']; //获取指定列
+                sums.fmqty  += rows[i]['fmqty']; //获取指定列
             }
-            return total;
-        }
-        var fmqtyEachSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.fmqtyEach = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['fmqtyEach']; //获取指定列
+             sums.fmqtyEach += rows[i]['fmqtyEach']; //获取指定列
             }
-            return total;
-        }
-
-        var qtyallocatedSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyallocated= 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyallocated']; //获取指定列
+                sums.qtyallocated+= rows[i]['qtyallocated']; //获取指定列
             }
-            return total;
-        }
-        var qtyallocatedEachSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyallocatedEach= 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyallocatedEach']; //获取指定列
+                sums.qtyallocatedEach+= rows[i]['qtyallocatedEach']; //获取指定列
             }
-            return total;
-        }
-        var qtyavailedSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyholded = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyavailed']; //获取指定列
+                sums.qtyholded += rows[i]['qtyholded']; //获取指定列
             }
-            return total;
-        }
-        var qtyholdedSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyholdedEach = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyholded']; //获取指定列
+                sums.qtyholdedEach+= rows[i]['qtyholdedEach']; //获取指定列
             }
-            return total;
-        }
-        var qtyholdedEachSum = function(){
-            var rows = $('#ezuiDatagrid').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyavailed = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyholdedEach']; //获取指定列
+                sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
             }
-            return total;
-        }
-        // 统计总计
-        var fmqtySumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
-            for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['fmqty']; //获取指定列
-            }
-            return total;
-        }
-        var fmqtyEachSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
-            for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['fmqtyEach']; //获取指定列
-            }
-            return total;
+            return sums;
         }
 
-        var qtyallocatedSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+        // 统计合计 end
+        // 统计总计 start
+        var getTotalAll = function(){
+           var sums=new Object();
+             var rows = ezuiDatagridAll.datagrid('getRows');//获取当前页的数据行
+            sums.fmqty = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyallocated']; //获取指定列
+                sums.fmqty  += rows[i]['fmqty']; //获取指定列
             }
-            return total;
-        }
-        var qtyallocatedEachSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.fmqtyEach = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyallocatedEach']; //获取指定列
+             sums.fmqtyEach += rows[i]['fmqtyEach']; //获取指定列
             }
-            return total;
-        }
-        var qtyavailedSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyallocated= 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyavailed']; //获取指定列
+                sums.qtyallocated+= rows[i]['qtyallocated']; //获取指定列
             }
-            return total;
-        }
-        var qtyholdedSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyallocatedEach= 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyholded']; //获取指定列
+                sums.qtyallocatedEach+= rows[i]['qtyallocatedEach']; //获取指定列
             }
-            return total;
-        }
-        var qtyholdedEachSumAll = function(){
-            var rows = $('#ezuiDatagridAll').datagrid('getRows')//获取当前页的数据行
-            var total = 0;
+            sums.qtyholded = 0;
             for (var i = 0; i < rows.length; i++) {
-                total += rows[i]['qtyholdedEach']; //获取指定列
+                sums.qtyholded += rows[i]['qtyholded']; //获取指定列
             }
-            return total;
+            sums.qtyholdedEach = 0;
+            for (var i = 0; i < rows.length; i++) {
+                sums.qtyholdedEach+= rows[i]['qtyholdedEach']; //获取指定列
+            }
+            sums.qtyavailed = 0;
+            for (var i = 0; i < rows.length; i++) {
+                sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
+            }
+            return sums;
         }
+
+        // 统计总计 end
 
     </script>
 </head>
 <body>
+
 <input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
+<!--查询数据datagrid-->
 <div class='easyui-layout' data-options='fit:true,border:false'>
     <div data-options='region:"center",border:false' style='overflow: hidden;'>
         <div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
@@ -709,10 +700,13 @@
         <table id='ezuiDatagrid'></table>
     </div>
 </div>
+
+<!--查询所有数据datagrid隐藏-->
+<table id='ezuiDatagridAll' hidden="true"></table>
+
 <div id='ezuiDialog' style='padding: 10px;'>
     <form id='ezuiForm' method='post'>
         <input type='hidden' id='viewInvLocationId' name='viewInvLocationId'/>
-        🍉麻瓜 2019/8/12 16:44:34
         <table >
             <tr>
                 <th>货主</th>
@@ -848,7 +842,6 @@
 <div id="ezuiSkuSearchDialog">
 
 </div>
-<%--查询所有数据datagrid--%>
-<div id="ezuiDatagridAll" hidden="true"></div>
+
 </body>
 </html>

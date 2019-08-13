@@ -206,5 +206,14 @@ where 1=1
        order by fmcustomerid,fmsku,fmlocation
     </if>
 </select>
+<!-- 查询库所有列表 不分页 -->
+<select id="queryByListAll" resultMap="BaseResultMap"  parameterType="Object">
+	select
+	<include refid="Base_Column_List"/>
+	from view_inv_location
+	<include refid="Example_Where_Clause"/>
+       order by fmcustomerid,fmsku,fmlocation
+
+</select>
   	
 </mapper>   
