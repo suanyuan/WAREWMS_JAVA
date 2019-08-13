@@ -285,6 +285,7 @@
     })
 
     function searchEnterprise() {
+
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
@@ -293,7 +294,7 @@
             height: 500,
             cache: false,
             onClose: function () {
-
+                $(this).dialog('destroy');
             }
         })
     }
