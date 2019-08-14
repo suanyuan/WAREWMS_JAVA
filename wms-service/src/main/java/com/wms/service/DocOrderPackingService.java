@@ -572,6 +572,10 @@ public class DocOrderPackingService extends BaseService {
             return map;
         }
 
+        if (query.getOtherCode() != null && !query.getOtherCode().equals("")) {
+
+
+        }
 
 	    PdaDocPackageVO pdaDocPackageVO = new PdaDocPackageVO();
 
