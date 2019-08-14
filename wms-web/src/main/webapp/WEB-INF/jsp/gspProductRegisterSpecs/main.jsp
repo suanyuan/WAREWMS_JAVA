@@ -104,12 +104,13 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
+
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
         left:0,
         top:0,
-		width:1050,
-		height:550,
+        width:1050,
+        height:550,
         title : '<spring:message code="common.dialog.title"/>',
         buttons : '#ezuiDialogBtn',
         href:dialogUrl,
@@ -130,7 +131,18 @@ $(function() {
         }
     }).dialog('close');
     /* 控件初始化end */
+	//
+    <%--enterpriseDialog = $('#enterpriseDialog').dialog({--%>
+        <%--modal: true,--%>
+        <%--title: '<spring:message code="common.dialog.title"/>',--%>
+        <%--href: sy.bp() + "/gspProductRegisterSpecsController.do?toSearchDialog",--%>
+        <%--width: 850,--%>
+        <%--height: 500,--%>
+        <%--cache: false,--%>
+        <%--onClose: function () {--%>
 
+        <%--}--%>
+    <%--})--%>
 });
 
 
@@ -138,7 +150,21 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspProductRegisterSpecsId').val(0);
-	ezuiDialog.dialog('open');
+    ezuiDialog = $('#ezuiDialog').dialog({
+        modal : true,
+        left:0,
+        top:0,
+        width:1050,
+        height:550,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        cache: false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    })
+	// ezuiDialog.dialog('open');
 };
 var edit = function(){
 	processType = 'edit';
@@ -507,7 +533,7 @@ var toImportData = function(){
 		</div>
 	</div>
 	<div id='ezuiDialog' style='padding: 10px;'>
-		//////
+
 	</div>
 	<div id='ezuiDialogBtn'>
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>

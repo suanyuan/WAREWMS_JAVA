@@ -10,8 +10,14 @@ import java.util.Date;
 @Entity
 public class BasCustomer  implements Serializable {
 	private String receivingAddressId;
+
 	private String supContractNo;
-	
+	private String contractUrl;
+	private String clientContent;
+	private java.util.Date clientStartDate;
+	private java.util.Date clientEndDate;
+	private String clientTerm;
+
 
 	private String customerid;
 	private String isChineseLabel;
@@ -128,6 +134,10 @@ public class BasCustomer  implements Serializable {
 	private java.util.Date addtime;
 
 	private String addwho;
+
+
+
+
 
 	public Date getAddtime() {
 		return addtime;

@@ -6,6 +6,7 @@ var CODE_ENT_TYP = {
     CODE_ENT_TYP_KD : "KD",
     CODE_ENT_TYP_YL : "YL",
     CODE_ENT_TYP_ZT : "ZT",
+    CODE_ENT_TYP_GW : "GW",
     CODE_ENT_TYP_SCJY : "SCJY"
 };
 

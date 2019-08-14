@@ -92,7 +92,7 @@ public class BasCustomerVO {
 
 	private java.util.Date clientEndDate;
 
-	private Long clientTerm;
+	private String clientTerm;
 
 	private Long isChineseLabel;
 
@@ -144,11 +144,11 @@ public class BasCustomerVO {
 		this.clientEndDate = clientEndDate;
 	}
 
-	public Long getClientTerm() {
+	public String getClientTerm() {
 		return clientTerm;
 	}
 
-	public void setClientTerm(Long clientTerm) {
+	public void setClientTerm(String clientTerm) {
 		this.clientTerm = clientTerm;
 	}
 

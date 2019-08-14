@@ -260,7 +260,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             height: 500,
             cache: false,
             onClose: function () {
-
+                $(this).dialog('destroy');
             }
         })
     }
@@ -435,7 +435,10 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                 cache: false,
                 onClose : function() {
                     ezuiFormClear(ezuiDialog1);
-                }
+                },
+
+
+
             }).dialog('close');
         })
         //processType = 'add';
