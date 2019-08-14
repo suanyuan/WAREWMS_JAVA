@@ -97,7 +97,7 @@
             onLoadSuccess:function(){
                 $("#enterpriseType").combobox("select",enterpriseType);
             },onChange:function (newValue,oldValue) {
-                if(newValue == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || newValue == CODE_ENT_TYP.CODE_ENT_TYP_JY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
+                if(newValue == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || newValue == CODE_ENT_TYP.CODE_ENT_TYP_JY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_SCJY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_GW){
                     $("#ezuiFormInfo input[id='contacts']").textbox({"required":false});
                     $("#ezuiFormInfo input[id='contactsPhone']").textbox({"required":false})
                 }else{

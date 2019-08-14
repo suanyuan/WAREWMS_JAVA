@@ -181,14 +181,14 @@ var commit = function(){
         showMsg("企业基础信息未填全！");
         return;
 	}
-
+    console.log(infoObj.enterpriseType+"============="+CODE_ENT_TYP.CODE_ENT_TYP_GW);
 	//判断营业执照信息
 	isVal = checkFormData("ezuiFormBusiness",businessObj);
-	if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && !checkObjIsEmpty(businessObj)){
+	if(infoObj.enterpriseType  != CODE_ENT_TYP.CODE_ENT_TYP_GW && !checkObjIsEmpty(businessObj)){
         showMsg("必须填写营业执照信息！");
         return;
 	}
-    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GWSC && isVal == false){
+    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GW && isVal == false){
         showMsg("营业执照信息填写不完全！");
         return;
     }

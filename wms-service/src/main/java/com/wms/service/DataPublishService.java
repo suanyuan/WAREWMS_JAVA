@@ -75,13 +75,21 @@ public class DataPublishService extends BaseService {
             form.setCustomerType(Constant.CODE_CUS_TYP_OW);
             form.setEnterpriseId(customer.getEnterpriseId());
             form.setOperateType(customer.getOperateType());
-            form.setContractNo(customer.getContractNo());
+//            form.setContractNo(customer.getContractNo());
             form.setContractUrl(customer.getContractUrl());
             form.setClientContent(customer.getClientContent());
             form.setClientStartDate(customer.getClientStartDate());
             form.setClientEndDate(customer.getClientEndDate());
-            form.setClientTerm(Long.parseLong(customer.getClientTerm()));
+            form.setClientTerm(customer.getClientTerm());
             form.setIsChineseLabel(Long.parseLong(customer.getIsChineseLabel()));
+            //form.setContractNo();
+            form.setSupContractNo(customer.getContractNo());
+            form.setContractUrl(customer.getContractUrl());
+            form.setClientContent(customer.getClientContent());
+            form.setClientStartDate(customer.getClientStartDate());
+            form.setClientEndDate(customer.getClientEndDate());
+//            form.setClientTerm(Long.parseLong(customer.getClientTerm()));
+
             form.setActiveFlag(Constant.IS_USE_YES);
             form.setBankaccount(no);
             form.setBillclass(gspCustomerForm.getFirstState());
@@ -111,16 +119,16 @@ public class DataPublishService extends BaseService {
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
             form.setEnterpriseId(supplier.getEnterpriseId());
             form.setOperateType(supplier.getOperateType());
-            form.setContractNo(supplier.getContractNo());
+            form.setSupContractNo(supplier.getContractNo());
             form.setContractUrl(supplier.getContractUrl());
             form.setClientContent(supplier.getClientContent());
             form.setClientStartDate(DateUtil.parse(supplier.getClientStartDate(),"yyyy-MM-dd"));
             form.setClientEndDate(DateUtil.parse(supplier.getClientEndDate(),"yyyy-MM-dd"));
-            Long clientTerm = 0l;
-            if(null == supplier.getClientTerm() || "".equals(supplier.getClientTerm())){
-                clientTerm = Long.parseLong(supplier.getClientTerm());
-            }
-            form.setClientTerm(clientTerm);
+//            Long clientTerm = 0l;
+//            if(null == supplier.getClientTerm() || "".equals(supplier.getClientTerm())){
+//                clientTerm = Long.valueOf(supplier.getClientTerm());
+//            }
+            form.setClientTerm(supplier.getClientTerm());
             form.setActiveFlag(Constant.IS_USE_YES);
             form.setBankaccount(no);
             form.setBillclass(supplier.getFirstState());
@@ -349,6 +357,25 @@ public class DataPublishService extends BaseService {
         form.setCustomerid(gspEnterpriseInfoForm.getEnterpriseNo());
         form.setDescrC(gspEnterpriseInfoForm.getEnterpriseName());
         form.setCustomerType(Constant.CODE_CUS_TYP_WH);
+        form.setEnterpriseId(gspEnterpriseInfoForm.getEnterpriseId());
+        form.setOperateType(gspEnterpriseInfoForm.getEnterpriseType());
+        form.setActiveFlag(Constant.IS_USE_YES);
+        form.setBankaccount("");
+        form.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+
+        return basCustomerService.clientAddCustomer(form);
+    }
+    /**
+     * 直接下发主体信息
+     * @param gspEnterpriseInfoForm
+     * @return
+     */
+    public Json publishGWDataWithOutApply(GspEnterpriseInfoForm gspEnterpriseInfoForm){
+
+        BasCustomerForm form = new BasCustomerForm();
+        form.setCustomerid(gspEnterpriseInfoForm.getEnterpriseNo());
+        form.setDescrC(gspEnterpriseInfoForm.getEnterpriseName());
+        form.setCustomerType(Constant.CODE_CUS_TYP_PR);
         form.setEnterpriseId(gspEnterpriseInfoForm.getEnterpriseId());
         form.setOperateType(gspEnterpriseInfoForm.getEnterpriseType());
         form.setActiveFlag(Constant.IS_USE_YES);

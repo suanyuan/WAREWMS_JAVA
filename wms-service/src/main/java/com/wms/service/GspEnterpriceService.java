@@ -91,6 +91,9 @@ public class GspEnterpriceService extends BaseService {
                 if(gspEnterpriseInfoForm.getEnterpriseType().equals(Constant.CODE_ENT_TYP_ZT)){
                     dataPublishService.publishDataWithOutApply(gspEnterpriseInfoForm);
                 }
+//                if(gspEnterpriseInfoForm.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GW)){
+////
+////                }
             }else{
                 //判断首营状态
                 GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);

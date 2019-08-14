@@ -230,7 +230,7 @@ where 1=1
 					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
 				</when>
 				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
-					and (g.enterprise_type != 'ZT')
+					and (g.enterprise_type != 'ZT' and g.enterprise_type !='GW' )
 				</when>
 				<otherwise>
 					and g.enterprise_type = #{condition.enterpriseType}
