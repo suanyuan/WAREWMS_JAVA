@@ -123,6 +123,7 @@
             case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
 			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
 			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GW : return "国外企业";
         }
     }
 

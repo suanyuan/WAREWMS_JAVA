@@ -263,6 +263,7 @@ public class BasCustomerService extends BaseService {
 		basCustomer.setOperateType(basCustomerForm.getOperateType());
 		basCustomer.setActiveFlag(basCustomerForm.getActiveFlag());
 		basCustomer.setDescrC(basCustomerForm.getDescrC());*/
+//			basCustomer.setSupContractNo();
 			basCustomer.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basCustomer.setAddtime(new Date());

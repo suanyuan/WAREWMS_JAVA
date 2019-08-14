@@ -285,7 +285,6 @@
     })
 
     function searchEnterprise() {
-
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',

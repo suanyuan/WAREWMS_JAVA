@@ -68,6 +68,14 @@
 	<result column="enterprise_id" property="enterpriseId"/>
 	<result column="receiving_address_id" property="receivingAddressId"/>
 
+	<result column="sup_contract_no" property="supContractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+
+
 </resultMap>
 	<resultMap id="ResultMap" type="com.wms.entity.GspReceivingAddress" >
 		<result column="receiving_address_id" property="receivingAddressId"/>
@@ -95,7 +103,7 @@
 <sql id="Base_Column_List" >
 	customerid,
 	customer_type,
-	active_flag,
+	active_flag,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,
 	address1,
 	address2,
 	address3,
@@ -245,7 +253,24 @@ where 1=1
 	<if test="overreceiving != null  ">
 		overreceiving,
 	</if>
-
+	<if test="supContractNo != null  ">
+		sup_contract_no,
+	</if>
+	<if test="contractUrl != null  ">
+		contract_url,
+	</if>
+	<if test="clientContent != null  ">
+		client_content,
+	</if>
+	<if test="clientStartDate != null  ">
+		client_start_date,
+	</if>
+	<if test="clientEndDate != null  ">
+		client_end_date,
+	</if>
+	<if test="clientTerm != null  ">
+		client_term,
+	</if>
 	easycode,
 	addtime,
 	addwho,
@@ -305,6 +330,24 @@ where 1=1
 	</if>
 	<if test="overreceiving != null  ">
 		#{overreceiving},
+	</if>
+	<if test="supContractNo != null  ">
+		#{supContractNo},
+	</if>
+	<if test="contractUrl != null  ">
+		#{contractUrl},
+	</if>
+	<if test="clientContent != null  ">
+		#{clientContent},
+	</if>
+	<if test="clientStartDate != null  ">
+		#{clientStartDate},
+	</if>
+	<if test="clientEndDate != null  ">
+		#{clientEndDate},
+	</if>
+	<if test="clientTerm != null  ">
+		#{clientTerm},
 	</if>
 	'',
 	now(),
