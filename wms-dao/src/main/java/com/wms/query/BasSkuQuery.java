@@ -126,11 +126,12 @@ public class BasSkuQuery implements IQuery {
 		this.skuGroup9 = skuGroup9;
 	}
 
+    public BasSkuQuery(String customerid, String sku) {
+        this.customerid = customerid;
+        this.sku = sku;
+    }
 
-
-
-
-	public BasSkuQuery() {
+    public BasSkuQuery() {
 	}
 
 	public java.lang.String getCustomerid() {

@@ -1,5 +1,8 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -11,6 +14,7 @@ import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
 import com.wms.mybatis.dao.InvLotAttMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
+import com.wms.query.BasSkuQuery;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
@@ -153,6 +157,14 @@ public class DocPaDetailsService extends BaseService {
             docPaDetailVO.setUserdefine1(similarDetail.getUserdefine1());
         }
 
+        //已上架件数计算
+        Double paCompleted = 0d;
+        for (DocPaDetails qtyDetail : docPaDetailsList) {
+
+            paCompleted += qtyDetail.getPutwayqtyCompleted();
+        }
+        docPaDetailVO.setPutwayqtyCompleted(paCompleted);//同批号的上架件数
+
         return docPaDetailVO;
     }
 
@@ -228,6 +240,13 @@ public class DocPaDetailsService extends BaseService {
                 detailsList) {
             detailVO = new PdaDocPaDetailVO();
             BeanUtils.copyProperties(detail, detailVO);
+
+            //bassku
+            BasSkuQuery basSkuQuery = new BasSkuQuery(detail.getCustomerid(), detail.getSku());
+            BasSku basSku = basSkuMybatisDao.queryById(basSkuQuery);
+            String jsonStr = JSON.toJSONString(basSku, SerializerFeature.DisableCircularReferenceDetect);
+            detailVO.setBasSku(JSONObject.parseObject(jsonStr, BasSku.class));
+
             detailVOList.add(detailVO);
         }
         return detailVOList;

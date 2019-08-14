@@ -290,7 +290,8 @@ where 1=1
         {call spasn_qc_process(#{allqcflag, mode=IN, jdbcType=INTEGER},#{qcno, mode=IN, jdbcType=VARCHAR},
         #{qclineno, mode=IN, jdbcType=VARCHAR},#{qcqty, mode=IN, jdbcType=VARCHAR},#{lotatt01, mode=IN, jdbcType=VARCHAR},
         #{lotatt02, mode=IN, jdbcType=VARCHAR},#{lotatt06, mode=IN, jdbcType=VARCHAR},#{lotatt10, mode=IN, jdbcType=VARCHAR},
-        #{lotatt11, mode=IN, jdbcType=VARCHAR},#{qcdescr, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},
+        #{lotatt11, mode=IN, jdbcType=VARCHAR},#{lotatt15, mode=IN, jdbcType=VARCHAR},#{qcdescr, mode=IN, jdbcType=VARCHAR},
+        #{userid, mode=IN, jdbcType=VARCHAR},
         #{warehouseid, mode=IN, jdbcType=VARCHAR},#{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
     </update>
 
