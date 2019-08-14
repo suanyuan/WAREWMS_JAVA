@@ -671,6 +671,6 @@
 	</select>
 <!--新增订单号 -->
 <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','PANO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','PONO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
 </select>
 </mapper>   

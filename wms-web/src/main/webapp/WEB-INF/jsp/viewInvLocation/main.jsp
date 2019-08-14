@@ -167,7 +167,18 @@
             var row = ezuiDatagrid.datagrid('getSelected');
             if (row) {
                 ezuiForm.form('load', {
+                    fmlocation: row.fmlocation,
                     customerid: row.customerid,
+                    fmsku: row.fmsku,
+                    fmqty: row.fmqty,
+                    fmqtyEach: row.fmqtyEach,
+                    qtyallocated: row.qtyallocated,
+                    qtyallocatedEach: row.qtyallocatedEach,
+                    qtyavailed: row.qtyavailed,
+                    qtyholded: row.qtyholded,
+                    qtyholdedEach: row.qtyholdedEach,
+                    defaultreceivinguom: row.defaultreceivinguom,
+                    skudescre: row.skudescre,
                     lotatt14: row.lotatt14,
                     lotatt03: row.lotatt03,
                     lotatt01: row.lotatt01,
@@ -178,20 +189,9 @@
                     lotatt07: row.lotatt07,
                     lotatt11: row.lotatt11,
                     lotatt08: row.lotatt08,
+                    lotatt09: row.lotatt09,
                     lotatt12: row.lotatt12,
                     lotatt06: row.lotatt06,
-                    sku : row.fmsku,
-                    qtyallocated: row.qtyallocated,
-                    qtyholded: row.qtyholded,
-                    fmuomName: row.fmuomName,
-                    defaultreceivinguom: row.defaultreceivinguom,
-                    iPa: row.iPa,
-                    iMv: row.iMv,
-                    oMv: row.oMv,
-                    iRp: row.iRp,
-                    oRp: row.oRp,
-                    totalcubic: row.totalcubic,
-                    totalgrossweight: row.totalgrossweight,
                     name: row.name,
                     enterpriseName: row.enterpriseName,
                     warehouseid: row.warehouseid
@@ -709,52 +709,92 @@
         <input type='hidden' id='viewInvLocationId' name='viewInvLocationId'/>
         <table >
             <tr>
+                <th>库位</th>
+                <td><input type='text' name='fmlocation' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>货主</th>
                 <td><input type='text' name='customerid' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>入库单号</th>
-                <td><input type='text' name='lotatt14' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
             </tr>
             <tr>
-                <th>入库日期</th>
-                <td><input type='text' name='lotatt03' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>产品代码</th>
-                <td><input type='text' name='sku' class='easyui-textbox' size='50' data-options='required:true'/></td>
-            </tr>
-            <tr>
+                <td><input type='text' name='fmsku' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>产品名称</th>
                 <td><input type='text' name='lotatt12' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>库存件数</th>
+                <td><input type='text' name='fmqty' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>库存数量</th>
+                <td><input type='text' name='fmqtyEach' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>分配件数</th>
+                <td><input type='text' name='qtyallocated' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>分配数量</th>
+                <td><input type='text' name='qtyallocatedEach' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>冻结件数</th>
+                <td><input type='text' name='qtyholded' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>冻结数量</th>
+                <td><input type='text' name='qtyholdedEach' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>可用件数</th>
+                <td><input type='text' name='qtyavailed' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>单位</th>
+                <td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
                 <th>注册证号/备案凭证号</th>
                 <td><input type='text' name='lotatt06' class='easyui-textbox' size='50' data-options='required:true'/></td>
-            </tr>
-            <tr>
                 <th>规格型号</th>
-                <td><input type='text' name='qtyallocated' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>冻结数量</th>
-                <td><input type='text' name='qtyholded' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <td><input type='text' name='skudescre' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
-                <th>单位</th>
-                <td><input type='text' name='fmuomName' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>待上架数量</th>
-                <td><input type='text' name='iPa' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>生产批号</th>
+                <td><input type='text' name='lotatt04' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>序列号</th>
+                <td><input type='text' name='lotatt05' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
-                <th>待移入数量</th>
-                <td><input type='text' name='iMv' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>待移出数量</th>
-                <td><input type='text' name='oMv' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>灭菌批号</th>
+                <td><input type='text' name='lotatt07' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>入库日期</th>
+                <td><input type='text' name='lotatt03' class='easyui-datebox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
-                <th>补货待上架</th>
-                <td><input type='text' name='iRp' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>补货待下架</th>
-                <td><input type='text' name='oRp' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>生产日期</th>
+                <td><input type='text' name='lotatt01' class='easyui-datebox' size='50' data-options='required:true'/></td>
+                <th>有效期/失效期</th>
+                <td><input type='text' name='lotatt02' class='easyui-datebox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
-                <th>体积</th>
-                <td><input type='text' name='totalcubic' class='easyui-textbox' size='50' data-options='required:true'/></td>
-                <th>毛重</th>
-                <td><input type='text' name='totalgrossweight' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>供应商</th>
+                <td><input type='text' name='lotatt08' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>样品属性</th>
+                <td><input type='text' name='lotatt09' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>入库单号</th>
+                <td><input type='text' name='lotatt14' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>存储条件</th>
+                <td><input type='text' name='lotatt11' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            </tr>
+            <tr>
+                <th>生产厂家</th>
+                <td><input type='text' name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <th>质量状态</th>
+                <td><input type='text' name='lotatt10' class='easyui-combobox' size='50' data-options="panelHeight: 'auto',
+																										editable: false,
+																										url:'<c:url value="/commonController.do?qcState"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
+            </tr>
+            <tr>
+                <th>产品线</th>
+                <td><input type='text' name='name' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
             </tr>
         </table>
     </form>
