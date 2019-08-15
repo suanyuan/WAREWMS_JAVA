@@ -74,7 +74,7 @@
 <div id='ezuiDialog' style='padding: 10px;'>
     <form id='ezuiForm' method='post'>
         <input type='hidden' id='productLineId' name='productLineId' value="${productLine.productLineId}"/>
-        <input type='hidden' id='customerid' name='customerid' />
+        <input type='hidden' id='customerid' name='customerid' value="${productLine.customerid}"/>
         <table>
             <tr>
                 <th>产品线名称</th>
@@ -87,6 +87,15 @@
             <tr>
                 <th>说明</th>
                 <td><input type='text' name='expression' value="${productLine.expression}" class='easyui-textbox' size='16' data-options=''/></td>
+            </tr>
+            <tr>
+
+            <th>记录序列号</th>
+                <td><input type='text' name ='serialFlag'  id='serialFlag' value="${productLine.serialFlag}" class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																										                                    editable: false,
+																										                                    url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
+																									                                 	    valueField: 'id',
+																										                                    textField: 'value'"/></td>
             </tr>
         </table>
     </form>
@@ -131,7 +140,7 @@
 
 
         $("#descrC").textbox({
-            width:145,
+
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){

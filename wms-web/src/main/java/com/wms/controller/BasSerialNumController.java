@@ -13,9 +13,12 @@ import com.wms.vo.form.BasSerialNumForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,11 @@ public class BasSerialNumController {
 	@Autowired
 	private BasSerialNumService basSerialNumService;
 
+	/**
+	 * 返回主页面
+	 * @param menuId
+	 * @return
+	 */
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -35,6 +43,12 @@ public class BasSerialNumController {
 		return new ModelAndView("basSerialNum/main", model);
 	}
 
+	/**
+	 * 显示主页datagrid数据
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
@@ -83,6 +97,19 @@ public class BasSerialNumController {
 	@ResponseBody
 	public Json getBtn(String id, HttpSession session) {
 		return basSerialNumService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+	}
+	//下载导入模板
+	@Login
+	@RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
+	public void exportTemplate(HttpServletResponse response, String token) throws Exception {
+		basSerialNumService.exportTemplate(response, token);
+	}
+	//导入excel到表单
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return basSerialNumService.importExcelData(mhsr);
 	}
 
 //	@Login

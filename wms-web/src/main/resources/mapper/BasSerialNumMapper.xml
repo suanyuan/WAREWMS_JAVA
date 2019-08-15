@@ -11,7 +11,7 @@
 	<result column="expire_date" property="expireDate"/>
 	<result column="product_date" property="productDate"/>
 	<result column="batch_flag" property="batchFlag"/>
-	<result column="out_flag" property="outFlag"/>
+<!--	<result column="out_flag" property="outFlag"/>-->
 	<result column="uom" property="uom"/>
 	<result column="purchase_order" property="purchaseOrder"/>
 	<result column="package_num" property="packageNum"/>
@@ -103,8 +103,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into bas_serial_num(serial_num,batch_num,material_num,expire_date,product_date,batch_flag,out_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime)
- values(#{serialNum},#{batchNum},#{materialNum},#{expireDate},#{productDate},#{batchFlag},#{outFlag},#{uom},#{purchaseOrder},#{packageNum},#{deliveryNum},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addwho},#{addtime},#{editwho},#{edittime})
+  insert into bas_serial_num(serial_num,batch_num,material_num,expire_date,product_date,batch_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime)
+ values(#{serialNum},#{batchNum},#{materialNum},#{expireDate},#{productDate},#{batchFlag},#{uom},#{purchaseOrder},#{packageNum},#{deliveryNum},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addwho},now(),#{editwho},now())
 </insert>
 
 <!-- 根据id，修改记录-->  

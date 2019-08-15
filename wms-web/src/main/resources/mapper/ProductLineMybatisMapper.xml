@@ -10,6 +10,7 @@
 	<result column="enterprise_name" property="enterpriseName"/>
 	<result column="name" property="name"/>
 	<result column="expression" property="expression"/>
+	<result column="serial_flag" property="serialFlag"/>
 	<result column="create_id" property="createId"/>
 	<result column="create_date" property="createDate" />
 	<result column="edit_id" property="editId"/>
@@ -19,7 +20,7 @@
        
 <!-- product_line table all fields -->
 <sql id="Base_Column_List" >
-	 product_line_id,customerid,enterprise_name,name,expression,create_id,create_date ,edit_id,edit_date,is_use
+	 product_line_id,customerid,enterprise_name,name,expression,serial_flag,create_id,create_date ,edit_id,edit_date,is_use
 </sql>
    
    
@@ -64,8 +65,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into product_line(product_line_id,customerid,enterprise_name,name,expression,create_id,create_date,edit_id,edit_date,is_use)
- values(null,#{customerid},#{enterpriseName},#{name},#{expression},#{createId},now(),#{editId},now(),#{isUse})
+  insert into product_line(product_line_id,customerid,enterprise_name,name,expression,serial_flag,create_id,create_date,edit_id,edit_date,is_use)
+ values(null,#{customerid},#{enterpriseName},#{name},#{expression},#{serialFlag},#{createId},now(),#{editId},now(),#{isUse})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -88,6 +89,9 @@ where 1=1
 	</if>
 	<if test="expression != null  ">
 		expression=#{expression},
+	</if>
+	<if test="serialFlag != null  ">
+		serial_flag=#{serialFlag},
 	</if>
 	<if test="customerid != null  ">
 			customerid=#{customerid},
@@ -164,8 +168,8 @@ where 1=1
 </select>
 <!-- 插入记录 -->
 <insert id="insert" parameterType="Object" >
-  insert into product_line(product_line_id,customerid,enterprise_name,name,expression,create_id,create_date,edit_id,edit_date,is_use)
- values(null,#{customerid},#{enterpriseName},#{name},#{expression},#{createId},now(),#{editId},now(),#{isUse})
+  insert into product_line(product_line_id,customerid,enterprise_name,name,expression,serial_flag,create_id,create_date,edit_id,edit_date,is_use)
+ values(null,#{customerid},#{enterpriseName},#{name},#{expression},#{serialFlag} ,#{createId},now(),#{editId},now(),#{isUse})
 </insert>
   	
 </mapper>   

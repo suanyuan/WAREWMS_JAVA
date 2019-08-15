@@ -44,6 +44,9 @@ $(function() {
 			{field: 'descrC',		title: '货主',	width: 88 },
 			//{field: 'name',		title: '货主',	width: 88,hidden:true },
 			{field: 'expression',		title: '说明',	width: 88 },
+			{field: 'serialFlag',		title: '记录序列号',	width: 88 ,formatter:function(value,rowData,rowIndex){
+		       return rowData.serialFlag == '1' ? '是' : '否';
+	           }},
 			{field: 'createId',		title: '创建人',	width: 88 },
 			{field: 'createDate',		title: '创建日期',	width: 88 },
 			{field: 'editId',		title: '修改人',	width: 88 },
@@ -95,6 +98,7 @@ var edit = function(){
             enterpriseName : row.enterpriseName,
             descrC : row.descrC,
             expression : row.expression,
+			customerid:row.customerid
 		});
         //$("#ezuiForm input[name='enterpriseName']").textbox('setValue', row.enterpriseName);
         $('#ezuiDialog').dialog({

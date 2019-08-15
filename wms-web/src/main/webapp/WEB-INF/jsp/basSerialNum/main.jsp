@@ -8,13 +8,17 @@
 <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
 <script type='text/javascript'>
 var processType;
-var ezuiMenu;
-var ezuiForm;
-var ezuiDialog;
-var ezuiDatagrid;
+var ezuiMenu;       //右键菜单
+var ezuiForm;       //主页一级弹窗dialog
+var ezuiDialog;     //主页一级弹窗dialog
+var ezuiDatagrid;   //主页datagrid
+var ezuiImportDataDialog;  //导入弹窗
+var ezuiImportDataForm;    //导入表单
 $(function() {
-	ezuiMenu = $('#ezuiMenu').menu();
-	ezuiForm = $('#ezuiForm').form();
+	ezuiMenu = $('#ezuiMenu').menu();//右键菜单
+	ezuiForm = $('#ezuiForm').form();//主页一级弹窗dialog
+	ezuiImportDataForm=$('#ezuiImportDataForm').form();//导入表单
+//主页datagrid初始化
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/basSerialNumController.do?showDatagrid"/>',
 		method:'POST',
@@ -24,7 +28,7 @@ $(function() {
 		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -33,42 +37,41 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'serialNum',		title: '待输入栏位0',	width: 42 },
-			{field: 'batchNum',		title: '待输入栏位1',	width: 42 },
-			{field: 'materialNum',		title: '待输入栏位2',	width: 42 },
-			{field: 'expireDate',		title: '待输入栏位3',	width: 42 },
-			{field: 'productDate',		title: '待输入栏位4',	width: 42 },
-			{field: 'batchFlag',		title: '待输入栏位5',	width: 42 },
-			{field: 'uom',		title: '待输入栏位6',	width: 42 },
-			{field: 'purchaseOrder',		title: '待输入栏位7',	width: 42 },
-			{field: 'packageNum',		title: '待输入栏位8',	width: 42 },
-			{field: 'deliveryNum',		title: '待输入栏位9',	width: 42 },
-			{field: 'userdefine1',		title: '待输入栏位10',	width: 42 },
-			{field: 'userdefine2',		title: '待输入栏位11',	width: 42 },
-			{field: 'userdefine3',		title: '待输入栏位12',	width: 42 },
-			{field: 'userdefine4',		title: '待输入栏位13',	width: 42 },
-			{field: 'userdefine5',		title: '待输入栏位14',	width: 42 },
-			{field: 'addwho',		title: '待输入栏位15',	width: 42 },
-			{field: 'addtime',		title: '待输入栏位16',	width: 42 },
-			{field: 'editwho',		title: '待输入栏位17',	width: 42 },
-			{field: 'edittime',		title: '待输入栏位18',	width: 42 }
+			{field: 'serialNum',		title: '序列号',	width:100 },
+			{field: 'batchNum',		title: '批号',	width: 100 },
+			{field: 'materialNum',		title: '产品代码',	width: 100 },
+			{field: 'expireDate',		title: '效期',	width: 100 },
+			{field: 'productDate',		title: '生产日期',	width: 100 },
+			{field: 'batchFlag',		title: '不知道是啥',	width: 100 },
+			{field: 'uom',		title: '单位',	width: 100 },
+			{field: 'purchaseOrder',		title: '销售单号',	width: 100 },
+			{field: 'packageNum',		title: '包装号',	width: 100 },
+			{field: 'deliveryNum',		title: '运输单号',	width: 100 },
+			{field: 'addwho',		title: '创建人',	width: 100 },
+			{field: 'addtime',		title: '创建时间',	width: 100 },
+			{field: 'editwho',		title: '编辑人',	width: 100 },
+			{field: 'edittime',		title: '编辑时间',	width: 100 },
+			{field: 'outFlag',		title: '是否出库',	width: 100 }
+
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();
-		},
-		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
-		},onLoadSuccess:function(data){
+		}
+		// , onRowContextMenu : function(event, rowIndex, rowData) {
+		// 	event.preventDefault();
+		// 	$(this).datagrid('unselectAll');
+		// 	$(this).datagrid('selectRow', rowIndex);
+		// 	ezuiMenu.menu('show', {
+		// 		left : event.pageX,
+		// 		top : event.pageY
+		// 	});
+		// }
+		,onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/basSerialNumController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});
+//主页一级弹窗dialog初始化
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
@@ -77,12 +80,23 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
+//导入dialog初始化
+	ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
+		modal : true,
+		title : '导入',
+		buttons : '#ezuiImportDataDialogBtn',
+		onClose : function() {
+			ezuiFormClear(ezuiImportDataForm);
+		}
+	}).dialog('close');
 });
+//增加
 var add = function(){
 	processType = 'add';
 	$('#basSerialNumId').val(0);
 	ezuiDialog.dialog('open');
 };
+//编辑
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
@@ -115,6 +129,7 @@ var edit = function(){
 		});
 	}
 };
+//删除
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
@@ -147,6 +162,7 @@ var del = function(){
 		});
 	}
 };
+//主页一级弹窗dialog提交
 var commit = function(){
 	var url = '';
 	if (processType == 'edit') {
@@ -189,6 +205,7 @@ var commit = function(){
 		}
 	});
 };
+//主页查询
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		serialNum : $('#serialNum').val(),
@@ -212,10 +229,76 @@ var doSearch = function(){
 		edittime : $('#edittime').val()
 	});
 };
+/* 导入提交按钮 */
+var commitImportData = function(obj){
+	ezuiImportDataForm.form('submit',{
+		url : '<c:url value="/basSerialNumController.do?importExcelData"/>',
+		onSubmit : function(){
+			if(ezuiImportDataForm.form('validate')){
+				$.messager.progress({
+					text : '<spring:message code="common.message.data.processing"/>', interval : 100
+				});
+				return true;
+			}else{
+				return false;
+			}
+		},
+		success : function(data) {
+			var msg='';
+			try {
+				var result = $.parseJSON(data);
+				if(result.success){
+					msg = result.msg.replace(/ /g, '\n');
+					ezuiDatagrid.datagrid('reload');
+				}else{
+					msg = result.msg.replace(/ /g, '\n');
+				}
+			} catch (e) {
+				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+			} finally {
+				ezuiFormClear(ezuiImportDataForm);
+				$('#importResult').textbox('setValue',msg);
+				$.messager.progress('close');
+			}
+		}
+	});
+};
+/* 下载导入模板 */
+var downloadTemplate = function(){
+	if(navigator.cookieEnabled){
+		$('#ezuiBtn_downloadTemplate').linkbutton('disable');
+		var token = new Date().getTime();
+		var param = new HashMap();
+		param.put("token", token);
+		var formId = ajaxDownloadFile(sy.bp()+"/basSerialNumController.do?exportTemplate", param);
+		downloadCheckTimer = window.setInterval(function () {
+			var list = new cookieList('downloadToken');
+			if (list.items() == token){
+				window.clearInterval(downloadCheckTimer);
+				list.clear();
+				$('#'+formId).remove();
+				$('#ezuiBtn_downloadTemplate').linkbutton('enable');
+				$.messager.show({
+					msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+				});
+			};
+		}, 1000);
+	}else{
+		$.messager.show({
+			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+		});
+	};
+};
+/* 导入按钮 */
+var toImportData = function(){
+	ezuiImportDataDialog.dialog('open');
+};
 </script>
 </head>
 <body>
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
+<%--主页datagrid--%>
 	<div class='easyui-layout' data-options='fit:true,border:false'>
 		<div data-options='region:"center",border:false' style='overflow: hidden;'>
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
@@ -223,25 +306,8 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>待输入名称0：</th><td><input type='text' id='serialNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称1：</th><td><input type='text' id='batchNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称2：</th><td><input type='text' id='materialNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称3：</th><td><input type='text' id='expireDate' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称4：</th><td><input type='text' id='productDate' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称5：</th><td><input type='text' id='batchFlag' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称6：</th><td><input type='text' id='uom' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称7：</th><td><input type='text' id='purchaseOrder' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称8：</th><td><input type='text' id='packageNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称9：</th><td><input type='text' id='deliveryNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称10：</th><td><input type='text' id='userdefine1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称11：</th><td><input type='text' id='userdefine2' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称12：</th><td><input type='text' id='userdefine3' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称13：</th><td><input type='text' id='userdefine4' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称14：</th><td><input type='text' id='userdefine5' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称15：</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称16：</th><td><input type='text' id='addtime' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称17：</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>待输入名称18：</th><td><input type='text' id='edittime' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>序列号</th><td><input type='text' id='serialNum' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='batchNum' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -254,11 +320,14 @@ var doSearch = function(){
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+					<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 
 		</div>
 	</div>
+
+<%--主页一级弹窗dialog--%>
 	<div id='ezuiDialog' style='padding: 10px;'>
 		<form id='ezuiForm' method='post'>
 			<input type='hidden' id='basSerialNumId' name='basSerialNumId'/>
@@ -346,10 +415,35 @@ var doSearch = function(){
 		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
+<%--	右键菜单--%>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 	</div>
+<!-- 导入start 页面 -->
+	<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
+		<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>
+			<table>
+				<tr>
+					<th>档案</th>
+					<td>
+						<input type="text" id="uploadData" name="uploadData" class="easyui-filebox" size="36" data-options="buttonText:'选择',validType:['filenameExtension[\'xls\']']"/>
+						<a onclick='downloadTemplate();' id='ezuiBtn_downloadTemplate' class='easyui-linkbutton' href='javascript:void(0);'>下载档案模版</a>
+					</td>
+				</tr>
+				<tr>
+					<th>执行结果</th>
+					<td><input id='importResult' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+<%--导入按钮--%>
+	<div id='ezuiImportDataDialogBtn'>
+		<a onclick='commitImportData();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+	</div>
+<!-- 导入end -->
 </body>
 </html>
