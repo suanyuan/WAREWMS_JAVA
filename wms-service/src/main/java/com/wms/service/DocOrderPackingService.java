@@ -65,6 +65,9 @@ public class DocOrderPackingService extends BaseService {
 
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
+
+	@Autowired
+	private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
 	
 	public EasyuiDatagrid<DocOrderPackingVO> getPagedDatagrid(EasyuiDatagridPager pager, DocOrderPackingQuery query) {
 		EasyuiDatagrid<DocOrderPackingVO> datagrid = new EasyuiDatagrid<DocOrderPackingVO>();
@@ -352,12 +355,20 @@ public class DocOrderPackingService extends BaseService {
 					json.setMsg("取消装箱失败：当前状态订单不允许进行取消装箱操作！");
 					return json;
 				} else {
+
+				    //删除整箱的序列号记录
+                    DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord();
+                    docSerialNumRecord.setOrderNo(orderNo);
+                    docSerialNumRecord.setCartonNo(cartonNo);
+                    docSerialNumRecordMybatisDao.clearRecordByTraceid(docSerialNumRecord);
+
+                    //删除包装记录
 					DocOrderPacking docOrderPacking = new DocOrderPacking();
 					docOrderPacking.setOrderNo(orderNo);
 					docOrderPacking.setCartonNo(cartonNo);
 					docOrderPackingMybatisDao.packingCartonDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonInfoDelete(docOrderPacking);
-					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);
+					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);//？？？TODO 待确认
 					json.setSuccess(true);
 					json.setMsg("取消装箱成功！");
 					return json;
@@ -567,6 +578,11 @@ public class DocOrderPackingService extends BaseService {
 		}
 	}
 
+    /**
+     * 扫码查询复核任务明细
+     * @param query ~
+     * @return ~
+     */
 	public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {
 
 	    Map<String, Object> map = new HashMap<>();
@@ -603,7 +619,7 @@ public class DocOrderPackingService extends BaseService {
             return map;
         }
 
-        /**
+        /*
          * 产品档案
          */
         pdaDocPackageVO.setBasSku(basSku);
@@ -615,7 +631,25 @@ public class DocOrderPackingService extends BaseService {
          */
         ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
         ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        boolean isSerialManagement = (productLine != null);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
+        /*
+        如果是强生产品线的，需要将序列号记录下来，在复核提交的时候保存起来
+         */
+        if (isSerialManagement) {
+            //如果在出库序列号记录中查询到对应的，则提示已复核过了
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(query.getOrderno(),
+                    StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            mybatisCriteria.setCondition(docSerialNumRecord);
+            List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
+            if (docSerialNumRecordList.size() > 0) {
+                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此序列号已记录复核"));
+                return map;
+            }
+
+            pdaDocPackageVO.setSerialNum(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+        }
 
         ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
         actAllocationDetailsQuery.setOrderno(query.getOrderno());
@@ -623,7 +657,7 @@ public class DocOrderPackingService extends BaseService {
         actAllocationDetailsQuery.setSku(basSku.getSku());
 //        actAllocationDetailsQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));//效期不参与查询
         actAllocationDetailsQuery.setLotatt04(query.getLotatt04());
-        actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
+        if (isSerialManagement) actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
         actAllocationDetailsQuery.setPackflag("0");
         List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryForScan(actAllocationDetailsQuery);
         if (actAllocationDetailsList == null || actAllocationDetailsList.size() == 0) {
@@ -647,43 +681,6 @@ public class DocOrderPackingService extends BaseService {
          */
         pdaDocPackageVO.setActAllocationDetails(actAllocationDetails);
         pdaDocPackageVO.setOrderDetailsForNormal(orderDetail);
-
-
-
-
-
-
-
-
-//        OrderDetailsForNormalQuery orderDetailQuery = new OrderDetailsForNormalQuery();
-//        orderDetailQuery.setOrderno(query.getOrderno());
-//        orderDetailQuery.setCustomerid(query.getCustomerid());
-//        orderDetailQuery.setSku(basSku.getSku());
-//        orderDetailQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));
-//        orderDetailQuery.setLotatt04(query.getLotatt04());
-//        orderDetailQuery.setLotatt05(query.getLotatt05());
-//        List<OrderDetailsForNormal> orderDetailList = orderDetailsForNormalMybatisDao.queryForScan(orderDetailQuery);
-//
-//        if (orderDetailList == null || orderDetailList.size() == 0) {
-//            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品的出库明细"));
-//            return map;
-//        }else if (orderDetailList.size() > 1) {
-//            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品出库明细数异常"));
-//            return map;
-//        }
-//        OrderDetailsForNormal orderDetailsForNormal = orderDetailList.get(0);
-//
-//        ActAllocationDetails allocationQuery = new ActAllocationDetails();
-//        //orderno, orderlienno, customerid, sku status(60 || 62)
-//        BeanUtils.copyProperties(orderDetailsForNormal, allocationQuery);
-//        List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByOrder(allocationQuery);
-//        if (actAllocationDetailsList == null || actAllocationDetailsList.size() == 0) {
-//            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品的分配明细"));
-//            return map;
-//        }
-//        ActAllocationDetails actAllocationDetails = actAllocationDetailsList.get(0);
-//        //分配明细
-//        pdaDocPackageVO.setActAllocationDetails(actAllocationDetails);
 
 
         InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
@@ -716,21 +713,14 @@ public class DocOrderPackingService extends BaseService {
         }
         pdaDocPackageVO.setCartonNum(cartonNum);
 
-
-        //包装复核记录
-        List<DocOrderPackingCarton> packingCartonList = docOrderPackingMybatisDao.queryPackedDetail(cartonQuery);
-        DocOrderPackingCarton okPackingCarton = null;
-        if (packingCartonList != null && packingCartonList.size() > 0) {
-            //随便取一个箱子里的合格结果明细
-            okPackingCarton = packingCartonList.get(0);
-        }
-        pdaDocPackageVO.setDocOrderPackingCarton(okPackingCarton);
-
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         map.put(Constant.DATA, pdaDocPackageVO);
         return map;
     }
 
+    /**
+     * 复核/包装复核提交
+     */
     public PdaResult packageCommit(DocOrderPackingForm form) {
 
         Json statusJson = orderStatusCheck(form.getOrderno());
@@ -755,9 +745,21 @@ public class DocOrderPackingService extends BaseService {
 
         try {
 
+            //记录序列号出库
+            if (StringUtil.isNotEmpty(form.getSerialNums())) {
+
+                String[] serialNumList = form.getSerialNums().split(",");
+                for (String serialNum : serialNumList) {
+
+                    if (StringUtil.isNotEmpty(serialNum)) {
+
+                        DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(Integer.valueOf(form.getTraceid().split("#")[1]), form.getOrderno(), serialNum);
+                        docSerialNumRecordMybatisDao.add(docSerialNumRecord);
+                    }
+                }
+            }
+
             //如果包装数和分配数相同要将分配明细的packflag set 1
-
-
             packingCartonQuery.setTraceid(form.getTraceid());
             packingCartonQuery.setSku(form.getSku());
             packingCartonQuery.setLotnum(form.getLotnum());
@@ -769,7 +771,7 @@ public class DocOrderPackingService extends BaseService {
             }
 
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
-            invLotAtt.setLotatt11(form.getLotatt11());
+//            invLotAtt.setLotatt11(form.getLotatt11());//2019-08-15 仓储部不需要储存条件编辑功能
 
             DocOrderPackingCartonInfo packingCartonInfo = docOrderPackingMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
             if (packingCartonInfo == null) {
@@ -807,6 +809,7 @@ public class DocOrderPackingService extends BaseService {
                 packingCarton.setEditwho("Gizmo");
                 docOrderPackingMybatisDao.updatePackingCarton(packingCarton);
             }
+
         }catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
@@ -816,6 +819,9 @@ public class DocOrderPackingService extends BaseService {
         return new PdaResult(PdaResult.CODE_SUCCESS, "包装复核成功");
     }
 
+    /**
+     * 提交记录箱型
+     */
     public PdaResult commitCartonType(DocOrderPackingForm form) {
 
         Json statusJson = orderStatusCheck(form.getOrderno());
@@ -839,6 +845,11 @@ public class DocOrderPackingService extends BaseService {
         return new PdaResult(PdaResult.CODE_SUCCESS, "装箱结束成功");
     }
 
+    /**
+     * 结束复核
+     * @param orderno 单号
+     * @return ~
+     */
     public PdaResult endPacking(String orderno) {
 
 	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
@@ -847,12 +858,8 @@ public class DocOrderPackingService extends BaseService {
             return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
         }
         try {
-            //1,更改出库单状态 不用修改，拣货procedure处理
-//            orderHeaderForNormal.setSostatus("60");
-//            orderHeaderForNormal.setEditwho("Gizmo");
-//            orderHeaderForNormalMybatisDao.updateSOTask(orderHeaderForNormal);
 
-            //2,查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
+            //查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
             Map<String, Object> condition = new HashMap<>();
             condition.put("orderno", orderno);
             MybatisCriteria mybatisCriteria = new MybatisCriteria();

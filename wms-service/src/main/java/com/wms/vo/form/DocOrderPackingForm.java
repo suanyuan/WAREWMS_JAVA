@@ -43,4 +43,9 @@ public class DocOrderPackingForm {
     private String editwho;
 
     private String skudesce;//包装规格
+
+    //强生产品线序列号记录
+    // ex. lotatt05,lotatt05,lotatt05
+    // 以英文逗号分割
+    private String serialNums;
 }

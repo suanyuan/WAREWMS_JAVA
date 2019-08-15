@@ -1,7 +1,5 @@
 package com.wms.query;
 
-import java.util.Date;
-
 public class ProductLineQuery implements IQuery {
 
 	private String productLineId;
