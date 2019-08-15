@@ -5,6 +5,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.constant.Constant;
+import com.wms.query.pda.PdaDocPackageQuery;
+import com.wms.result.PdaResult;
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +74,8 @@ public class DocOrderPackingController {
 	@Login
 	@RequestMapping(params = "skuScanCheck")
 	@ResponseBody
-	public Json skuScanCheck(String orderNo, Integer cartonNo, String skuCode) {
-		Json json = docOrderPackingService.skuScanCheck(orderNo, cartonNo, skuCode);
+	public Json skuScanCheck(String orderNo, String skuCode) {
+		Json json = docOrderPackingService.skuScanCheck(orderNo, skuCode);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -94,8 +98,8 @@ public class DocOrderPackingController {
 	@Login
 	@RequestMapping(params = "packingCommit")
 	@ResponseBody
-	public Json packingCommit(String orderNo, Integer cartonNo, Double grossWeight, Double cube) {
-		Json json = docOrderPackingService.packingCommit(orderNo, cartonNo, grossWeight, cube);
+	public Json packingCommit(String orderNo) {
+		Json json = docOrderPackingService.packingCommit(orderNo);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -106,8 +110,8 @@ public class DocOrderPackingController {
 	@Login
 	@RequestMapping(params = "orderCommit")
 	@ResponseBody
-	public Json orderCommit(String orderNo, Integer cartonNo, Double grossWeight, Double cube) {
-		Json json = docOrderPackingService.orderCommit(orderNo, cartonNo, grossWeight, cube);
+	public Json orderCommit(String orderNo, String cartonNo, String cartontype) {
+		Json json = docOrderPackingService.orderCommit(orderNo, cartonNo, cartontype);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -118,7 +122,7 @@ public class DocOrderPackingController {
 	@Login
 	@RequestMapping(params = "singlePackingCancel")
 	@ResponseBody
-	public Json singlePackingCancel(String orderNo, Integer cartonNo) {
+	public Json singlePackingCancel(String orderNo, String cartonNo) {
 		Json json = docOrderPackingService.singlePackingCancel(orderNo, cartonNo);
 		if(json == null){
 			json = new Json();

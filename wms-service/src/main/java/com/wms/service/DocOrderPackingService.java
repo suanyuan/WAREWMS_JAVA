@@ -169,8 +169,8 @@ public class DocOrderPackingService extends BaseService {
 		return json;
 	}
 
-	public Json skuScanCheck(String orderNo, Integer cartonNo, String skuCode) {
-		Json json = new Json();
+	public Json skuScanCheck(String orderNo, String skuCode) {
+		/*Json json = new Json();
 		DocOrderPackingQuery docOrderPackingQuery = new DocOrderPackingQuery();
 		docOrderPackingQuery.setOrderNo(orderNo);
 		docOrderPackingQuery.setCartonNo(cartonNo);
@@ -191,7 +191,44 @@ public class DocOrderPackingService extends BaseService {
 		json.setMsg("000");
 		json.setSuccess(true);
 		json.setObj(docOrderPacking);
-		return json;
+		return json;*/
+		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+		orderHeaderForNormalQuery.setOrderno(orderNo);
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		//解析code
+		GS1Code128DataUtil gs1 = new GS1Code128DataUtil(skuCode);
+		PdaDocPackageQuery query = new PdaDocPackageQuery();
+		query.setOrderno(orderNo);
+		query.setGTIN(gs1.getGTIN());
+		query.setLotatt05(gs1.getSerialNum());
+		query.setLotatt02(gs1.getExpDate());
+		query.setLotatt04(gs1.getLotNum());
+		query.setOtherCode(gs1.getOtherCode());
+
+		query.setCustomerid(orderHeaderForNormal.getCustomerid());
+		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+		Map<String,Object> map = queryDocPackage(query);
+		PdaResult result = (PdaResult)map.get(Constant.RESULT);
+		if(result.getErrorCode() == PdaResult.CODE_SUCCESS){
+			//TODO
+			DocOrderPackingForm form = new DocOrderPackingForm();
+			PdaDocPackageVO packageVO = (PdaDocPackageVO)map.get(Constant.DATA);
+			form.setOrderno(orderNo);
+			form.setTraceid(packageVO.getCartonNum());//箱号
+			form.setCustomerid(packageVO.getBasSku().getCustomerid());
+			form.setSku(packageVO.getBasSku().getSku());
+			form.setQty(1);
+			form.setAllocationdetailsid(packageVO.getActAllocationDetails().getAllocationdetailsid());
+			form.setDescription("");
+			form.setConclusion("合格");
+			form.setSkudesce("");
+			form.setLotnum(packageVO.getActAllocationDetails().getLotnum());
+			form.setLotatt11(packageVO.getInvLotAtt().getLotatt11());
+			packageCommit(form);
+			return Json.success(result.getMsg(),map.get(Constant.DATA));
+		}else{
+			return Json.error(result.getMsg());
+		}
 	}
 
 	@Transactional
@@ -232,6 +269,10 @@ public class DocOrderPackingService extends BaseService {
 					docOrderPacking.setScanQty(scanQty);
 					docOrderPacking.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 					if (cartonCount == 0) {
+						/*DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();
+						docOrderPackingCartonInfo.setOrderno(orderNo);
+						docOrderPackingCartonInfo.setTraceid(docOrderPacking.getTraceId());
+						docOrderPackingCartonInfo.set*/
 						docOrderPackingMybatisDao.packingCartonInfoInsert(docOrderPacking);
 					}
 					if (checkCount == 0) {
@@ -252,25 +293,29 @@ public class DocOrderPackingService extends BaseService {
 		return json;
 	}
 
-	public Json packingCommit(String orderNo, Integer cartonNo, Double grossWeight, Double cube) {
-		Json json = new Json();
-		DocOrderPacking docOrderPacking = new DocOrderPacking();
-		docOrderPacking.setOrderNo(orderNo);
-		docOrderPacking.setCartonNo(cartonNo);
-		docOrderPacking.setGrossWeight(grossWeight);
-		docOrderPacking.setCube(cube);
-		docOrderPackingMybatisDao.packingCartonInfoUpdate(docOrderPacking);
-		json.setSuccess(true);
-		json.setMsg("装箱完成提交成功！");
-		return json;
+	public Json packingCommit(String orderNo) {
+		DocOrderPackingForm form = new DocOrderPackingForm();
+		form.setOrderno(orderNo);
+		PdaResult pdaResult = commitCartonType(form);
+		if(pdaResult == null || pdaResult.getErrorCode() == PdaResult.CODE_FAILURE){
+			return Json.error(pdaResult.getMsg());
+		}else{
+			return Json.success(pdaResult.getMsg());
+		}
 	}
 
-	public Json orderCommit(String orderNo, Integer cartonNo, Double grossWeight, Double cube) {
-		Json json = new Json();
+	public Json orderCommit(String orderNo, String cartonNo, String cartontype) {
+		PdaResult pdaResult = endPacking(orderNo);
+		if(pdaResult == null || pdaResult.getErrorCode() == PdaResult.CODE_FAILURE){
+			return Json.error(pdaResult.getMsg());
+		}else{
+			return Json.success(pdaResult.getMsg());
+		}
+		/*Json json = new Json();
 		DocOrderPacking docOrderPacking = new DocOrderPacking();
 		docOrderPacking.setOrderNo(orderNo);
-		docOrderPacking.setGrossWeight(grossWeight);
-		docOrderPacking.setCube(cube);
+		docOrderPacking.setTraceId(cartonNo);
+		docOrderPacking
 		List<DocOrderPacking> subDocOrderPackingList = null;
 		subDocOrderPackingList = docOrderPackingMybatisDao.checkPackingCommitById(docOrderPacking);
 		if (subDocOrderPackingList != null && subDocOrderPackingList.size() > 0) {
@@ -333,10 +378,10 @@ public class DocOrderPackingService extends BaseService {
 //		}
 		json.setSuccess(true);
 		json.setMsg("复核完成提交成功！");
-		return json;
+		return json;*/
 	}
 
-	public Json singlePackingCancel(String orderNo, Integer cartonNo) {
+	public Json singlePackingCancel(String orderNo, String cartonNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 		orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -347,14 +392,14 @@ public class DocOrderPackingService extends BaseService {
 				json.setMsg("取消装箱失败：当前状态订单不允许进行取消装箱操作！");
 				return json;
 			} else {
-				if (orderHeaderForNormal.getPackingFlag().equals("Y")) {
+				if (orderHeaderForNormal.getPackingFlag()!=null && orderHeaderForNormal.getPackingFlag().equals("Y")) {
 					json.setSuccess(false);
 					json.setMsg("取消装箱失败：当前状态订单不允许进行取消装箱操作！");
 					return json;
 				} else {
 					DocOrderPacking docOrderPacking = new DocOrderPacking();
 					docOrderPacking.setOrderNo(orderNo);
-					docOrderPacking.setCartonNo(cartonNo);
+					docOrderPacking.setTraceId(cartonNo);
 					docOrderPackingMybatisDao.packingCartonDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonInfoDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);
