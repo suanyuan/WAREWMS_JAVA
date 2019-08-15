@@ -5,7 +5,6 @@
 <mapper namespace="com.wms.mybatis.dao.DocOrderPackingMybatisDao" > 
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.DocOrderPacking" >
-	<result column="traceId" property="traceId"/>
 	<result column="orderNo" property="orderNo"/>
 	<result column="orderCode" property="orderCode"/>
 	<result column="cartonNo" property="cartonNo"/>
@@ -22,6 +21,7 @@
 	<result column="cartonQty" property="cartonQty"/>
 	<result column="grossWeight" property="grossWeight"/>
 	<result column="cube" property="cube"/>
+	<result column="traceid" property="traceId"/>
 </resultMap>
 <!-- Result Map-->
 <resultMap id="PackingResultMap" type="com.wms.entity.DocOrderPacking" >
@@ -180,7 +180,7 @@
 <delete id="packingCartonDelete" parameterType="Object">
 	delete from Doc_Order_Packing_Carton where orderno = #{orderNo,jdbcType=VARCHAR}
 	<if test="cartonNo != null" >
-		and cartonno =  #{cartonNo,jdbcType=INTEGER}
+		and traceid =  #{cartonNo,jdbcType=INTEGER}
 	</if>
 </delete>
 
@@ -188,7 +188,7 @@
 <delete id="packingCartonInfoDelete" parameterType="Object">
 	delete from Doc_Order_Packing_Carton_Info where orderno = #{orderNo,jdbcType=VARCHAR}
 	<if test="cartonNo != null" >
-		and cartonno =  #{cartonNo,jdbcType=INTEGER}
+		and traceid =  #{cartonNo,jdbcType=INTEGER}
 	</if>
 </delete>
 
@@ -217,7 +217,8 @@
 	descr_c as skuName,
 	qty as scanQty,
 	grossweight as grossWeight,
-	cube as cube
+	cube as cube,
+	traceid
 	from (select c.customerid,
 	a.orderno,
 	c.soreference1,
@@ -226,7 +227,8 @@
 	d.descr_c,
 	a.qty,
 	b.grossweight,
-	b.cube
+	b.cube,
+	traceid
 	from (select orderno, cartonno, sku, sum(qty) as qty
 	from Doc_Order_Packing_Carton
 	where 1 = 1
@@ -487,7 +489,7 @@ select a.orderno as orderNo,
 	and b.customerid = c.customerid
 	and a.sku = c.sku
 	and a.orderno = #{orderNo,jdbcType=VARCHAR}
-	and a.cartonno = #{cartonNo,jdbcType=INTEGER}
+	and a.traceid = #{cartonNo,jdbcType=INTEGER}
 	group by a.orderno, a.cartonno
 </select>
  
