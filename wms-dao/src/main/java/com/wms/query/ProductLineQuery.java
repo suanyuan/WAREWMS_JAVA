@@ -1,7 +1,5 @@
 package com.wms.query;
 
-import java.util.Date;
-
 public class ProductLineQuery implements IQuery {
 
 	private String productLineId;
@@ -16,7 +14,14 @@ public class ProductLineQuery implements IQuery {
 	private String editDate;
 	private String isUse;
 
-	public String getCustomerid() {
+    public ProductLineQuery(String productLineId) {
+        this.productLineId = productLineId;
+    }
+
+    public ProductLineQuery() {
+    }
+
+    public String getCustomerid() {
 		return customerid;
 	}
 

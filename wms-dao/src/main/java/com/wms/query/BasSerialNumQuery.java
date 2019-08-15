@@ -1,8 +1,8 @@
 package com.wms.query;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import lombok.Data;
 
+@Data
 public class BasSerialNumQuery implements IQuery {
 
 	private String serialNum;
@@ -26,164 +26,11 @@ public class BasSerialNumQuery implements IQuery {
 	private String editwho;
 	private String edittime;
 
-	public String getOutFlag() {
-		return outFlag;
-	}
+    public BasSerialNumQuery() {
+    }
 
-	public void setOutFlag(String outFlag) {
-		this.outFlag = outFlag;
-	}
-
-	public String getSerialNum() {
-		return serialNum;
-	}
-
-	public void setSerialNum(String serialNum) {
-		this.serialNum = serialNum;
-	}
-
-	public String getBatchNum() {
-		return batchNum;
-	}
-
-	public void setBatchNum(String batchNum) {
-		this.batchNum = batchNum;
-	}
-
-	public String getMaterialNum() {
-		return materialNum;
-	}
-
-	public void setMaterialNum(String materialNum) {
-		this.materialNum = materialNum;
-	}
-
-	public String getExpireDate() {
-		return expireDate;
-	}
-
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
-
-	public String getProductDate() {
-		return productDate;
-	}
-
-	public void setProductDate(String productDate) {
-		this.productDate = productDate;
-	}
-
-	public String getBatchFlag() {
-		return batchFlag;
-	}
-
-	public void setBatchFlag(String batchFlag) {
-		this.batchFlag = batchFlag;
-	}
-
-	public String getUom() {
-		return uom;
-	}
-
-	public void setUom(String uom) {
-		this.uom = uom;
-	}
-
-	public String getPurchaseOrder() {
-		return purchaseOrder;
-	}
-
-	public void setPurchaseOrder(String purchaseOrder) {
-		this.purchaseOrder = purchaseOrder;
-	}
-
-	public String getPackageNum() {
-		return packageNum;
-	}
-
-	public void setPackageNum(String packageNum) {
-		this.packageNum = packageNum;
-	}
-
-	public String getDeliveryNum() {
-		return deliveryNum;
-	}
-
-	public void setDeliveryNum(String deliveryNum) {
-		this.deliveryNum = deliveryNum;
-	}
-
-	public String getUserdefine1() {
-		return userdefine1;
-	}
-
-	public void setUserdefine1(String userdefine1) {
-		this.userdefine1 = userdefine1;
-	}
-
-	public String getUserdefine2() {
-		return userdefine2;
-	}
-
-	public void setUserdefine2(String userdefine2) {
-		this.userdefine2 = userdefine2;
-	}
-
-	public String getUserdefine3() {
-		return userdefine3;
-	}
-
-	public void setUserdefine3(String userdefine3) {
-		this.userdefine3 = userdefine3;
-	}
-
-	public String getUserdefine4() {
-		return userdefine4;
-	}
-
-	public void setUserdefine4(String userdefine4) {
-		this.userdefine4 = userdefine4;
-	}
-
-	public String getUserdefine5() {
-		return userdefine5;
-	}
-
-	public void setUserdefine5(String userdefine5) {
-		this.userdefine5 = userdefine5;
-	}
-
-	public String getAddwho() {
-		return addwho;
-	}
-
-	public void setAddwho(String addwho) {
-		this.addwho = addwho;
-	}
-
-	public String getAddtime() {
-		return addtime;
-	}
-
-	public void setAddtime(String addtime) {
-		this.addtime = addtime;
-	}
-
-	public String getEditwho() {
-		return editwho;
-	}
-
-	public void setEditwho(String editwho) {
-		this.editwho = editwho;
-	}
-
-	public String getEdittime() {
-		return edittime;
-	}
-
-	public void setEdittime(String edittime) {
-		this.edittime = edittime;
-	}
-
+    //Query
+    public BasSerialNumQuery(String serialNum) {
+        this.serialNum = serialNum;
+    }
 }

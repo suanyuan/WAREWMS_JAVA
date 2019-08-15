@@ -11,10 +11,7 @@ import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
-import com.wms.query.ActAllocationDetailsQuery;
-import com.wms.query.DocOrderPackingQuery;
-import com.wms.query.OrderDetailsForNormalQuery;
-import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.query.*;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
@@ -23,6 +20,7 @@ import com.wms.vo.DocOrderPackingVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.pda.PdaDocPackageVO;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +59,12 @@ public class DocOrderPackingService extends BaseService {
 
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
+
+	@Autowired
+	private BasSerialNumMybatisDao basSerialNumMybatisDao;
+
+	@Autowired
+	private ProductLineMybatisDao productLineMybatisDao;
 	
 	public EasyuiDatagrid<DocOrderPackingVO> getPagedDatagrid(EasyuiDatagridPager pager, DocOrderPackingQuery query) {
 		EasyuiDatagrid<DocOrderPackingVO> datagrid = new EasyuiDatagrid<DocOrderPackingVO>();
@@ -572,15 +576,27 @@ public class DocOrderPackingService extends BaseService {
             return map;
         }
 
-        if (query.getOtherCode() != null && !query.getOtherCode().equals("")) {
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
+        StringUtil.isNotEmpty(query.getLotatt05())) {
 
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
 
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                query.setLotatt04(basSerialNum.getBatchNum());
+            }
         }
 
 	    PdaDocPackageVO pdaDocPackageVO = new PdaDocPackageVO();
 
 	    PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
 	    BeanUtils.copyProperties(query, basSkuQuery);
+	    basSkuQuery.setLotatt05("");//序列号不参与查询，同批号的SKU必然是相同的。（DISTINCT）
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
         if (basSku == null) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案"));
@@ -593,11 +609,19 @@ public class DocOrderPackingService extends BaseService {
         pdaDocPackageVO.setBasSku(basSku);
 
 
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null);
+
         ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
         actAllocationDetailsQuery.setOrderno(query.getOrderno());
         actAllocationDetailsQuery.setCustomerid(query.getCustomerid());
         actAllocationDetailsQuery.setSku(basSku.getSku());
-        actAllocationDetailsQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));
+//        actAllocationDetailsQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));//效期不参与查询
         actAllocationDetailsQuery.setLotatt04(query.getLotatt04());
         actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
         actAllocationDetailsQuery.setPackflag("0");
