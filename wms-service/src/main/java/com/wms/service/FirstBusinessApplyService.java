@@ -154,6 +154,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApplyPageVO.setSpecsName(result.getSpecsName());
 				firstBusinessProductApplyPageVO.setProductModel(result.getProductModel());
 				firstBusinessProductApplyPageVO.setSpecsId(result.getSpecsId());
+				firstBusinessProductApplyPageVO.setSupplierName(result.getSupplierName());
 				voList.add(firstBusinessProductApplyPageVO);
 			}
 		}

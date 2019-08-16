@@ -25,6 +25,8 @@ var ezuiDatagrid;
 var ezuiDetailsDatagrid;
 var ezuiCustDataDialog;
 var ezuiCustDataDialogId;
+var ezuiReceDataDialog;
+var ezuiReceDataDialogId;
 var ezuiSkuDataDialog;
 var ezuiSkuDataDialogId;
 var ezuiLocDataDialog;
@@ -262,6 +264,19 @@ $(function() {
 		}
 	}).dialog('close');
 
+    //收货单位选择弹框
+    ezuiReceDataDialog = $('#ezuiReceDataDialog').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '',
+        onOpen : function() {
+
+        },
+        onClose : function() {
+
+        }
+    }).dialog('close');
+
 	//商品选择弹框
 	ezuiSkuDataDialog = $('#ezuiSkuDataDialog').dialog({
 		modal : true,
@@ -352,6 +367,19 @@ var add = function(){
 			}
 		}]
 	});
+    //TODO ----------------------
+    $("#ezuiForm #consigneeid").textbox({
+        editable:false,
+        icons:[{
+            iconCls:'icon-search',
+            handler: function(e){
+                $("#ezuiReceDataDialog #consigneeid").textbox('clear');
+                ezuiReceDataDialogClick();
+                ezuiReceDataDialogSearch();
+            }
+        }]
+    });
+
 	$('#ezuiForm #soreference1').textbox({editable:true});
 	$('#ezuiForm #soreference2').textbox({editable:true});
 	$('#ezuiForm #consigneename').textbox({editable:true});
@@ -393,7 +421,10 @@ var edit = function(srow){
             carrierid:row.carrierid,
             userdefine1:row.userdefine1,
             userdefine2:row.userdefine2,
-            consigneeid:row.consigneeid
+            consigneeid:row.consigneeid,
+            cProvince:row.cProvince,
+            cCity:row.cCity,
+            cAddress2:row.cAddress2
 
 		});
 		if (row.sostatus == '90' || row.sostatus == '99') {
@@ -923,7 +954,10 @@ var doSearch = function(){
 		ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
 		ordertype : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
-		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "" : "N"
+		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "" : "N",
+        cProvince : $("#cc1").textbox("getValue"),
+        cCity : $("#cc2").textbox("getValue"),
+        cAddress2 : $("#cc3").textbox("getValue")
 	});
 };
 
@@ -1377,6 +1411,15 @@ var ezuiCustDataDialogSearch = function(){
 		activeFlag : $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
 	});
 };
+
+/* 收货单位选择弹框查询 */
+var ezuiReceDataDialogSearch = function(){
+    ezuiReceDataDialogId.datagrid('load', {
+        customerid : $("#ezuiReceDataDialog #customerid").textbox("getValue"),
+        customerType : $("#ezuiReceDataDialog #customerType").combobox('getValue'),
+        activeFlag : $("#ezuiReceDataDialog #activeFlag").combobox('getValue')
+    });
+};
 /* 客户选择弹框清空 */
 var ezuiCustToolbarClear = function(){
 	$("#ezuiCustDataDialog #customerid").textbox('clear');
@@ -1471,7 +1514,7 @@ var ezuiCustDataDialogClick = function(){
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
-		selectDialogCust();
+        selectDialogCust();
 	},
 	onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
@@ -1488,6 +1531,62 @@ var selectDialogCust = function(){
 		$("#ezuiDialog #customerid").textbox('setValue',row.customerid);
 		ezuiCustDataDialog.dialog('close');
 	};
+};
+
+/* 收货单位选择 */
+var selectDialogRece = function(){
+    var row = ezuiReceDataDialogId.datagrid('getSelected');
+    if(row){
+        $("#ezuiDialog #consigneeid").textbox('setValue',row.customerid);
+        ezuiReceDataDialog.dialog('close');
+    };
+};
+
+/*收货单位选择*/
+/* 客户选择弹框-订单信息界面 */
+var ezuiReceDataDialogClick = function(){
+    $("#ezuiReceDataDialog #customerType").combobox('setValue','CO').combo('readonly', true);
+    $("#ezuiReceDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+    ezuiReceDataDialogId = $('#ezuiReceDataDialogId').datagrid({
+        url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
+        method:'POST',
+        toolbar : '#ezuiReceToolbar',
+        title: '客户档案',
+        pageSize : 50,
+        pageList : [50, 100, 200],
+        fit: true,
+        border: false,
+        fitColumns : true,
+        nowrap: false,
+        striped: true,
+        collapsible:false,
+        pagination:true,
+        rownumbers:true,
+        singleSelect:true,
+        queryParams:{
+            customerType : $("#ezuiReceDataDialog #customerType").combobox('getValue'),
+            activeFlag : $("#ezuiReceDataDialog #activeFlag").combobox('getValue')
+        },
+        idField : 'customerid',
+        columns : [[
+            {field: 'customerid',		title: '客户代码',	width: 15},
+            {field: 'descrC',			title: '中文名称',	width: 50},
+            {field: 'descrE',			title: '英文名称',	width: 50},
+            {field: 'customerTypeName',	title: '类型',	width: 15},
+            {field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }}
+        ]],
+        onDblClickCell: function(index,field,value){
+            selectDialogRece();
+        },
+        onRowContextMenu : function(event, rowIndex, rowData) {
+        },onLoadSuccess:function(data){
+            $(this).datagrid('unselectAll');
+        }
+    });
+
+    ezuiReceDataDialog.dialog('open');
 };
 
 
@@ -1868,12 +1967,14 @@ function rDouble(){
 					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelOrder'/></a>
                     <a onclick='showRefOut()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>
 
-                    <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
-                    <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
-					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
-					<a onclick='rDouble()' id='ezuiBtn_double' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>匹配双证</a>
-					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
+					<a onclick='rDouble()' id='ezuiBtn_double' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>匹配双证</a>
 					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
+				</div>
+				<div>
+					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
+					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
+					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
+					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>
@@ -1957,6 +2058,7 @@ function rDouble(){
 	
 	<c:import url='/WEB-INF/jsp/docOrderHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/custDialog.jsp' />
+    <c:import url='/WEB-INF/jsp/docOrderHeader/receDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/detailsDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/skuDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/locDialog.jsp' />

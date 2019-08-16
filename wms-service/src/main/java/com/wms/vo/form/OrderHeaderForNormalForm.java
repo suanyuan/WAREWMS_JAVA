@@ -17,6 +17,9 @@ public class OrderHeaderForNormalForm {
 	private String orderTypeName;
 	private String consigneename;
 	private String consigneeid;
+	private String cProvince;
+	private String cCity;
+	private String cAddress2;
 	private String province;
 	private String city;
 	private String district;
@@ -325,5 +328,29 @@ public class OrderHeaderForNormalForm {
 
 	public void setUserdefine2(String userdefine2) {
 		this.userdefine2 = userdefine2;
+	}
+
+	public String getcProvince() {
+		return cProvince;
+	}
+
+	public void setcProvince(String cProvince) {
+		this.cProvince = cProvince;
+	}
+
+	public String getcCity() {
+		return cCity;
+	}
+
+	public void setcCity(String cCity) {
+		this.cCity = cCity;
+	}
+
+	public String getcAddress2() {
+		return cAddress2;
+	}
+
+	public void setcAddress2(String cAddress2) {
+		this.cAddress2 = cAddress2;
 	}
 }

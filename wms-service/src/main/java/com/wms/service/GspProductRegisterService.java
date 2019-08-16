@@ -179,6 +179,26 @@ public class GspProductRegisterService extends BaseService {
 		return comboboxList;
 	}
 
+	public Json confirmSubmit(String id){
+		try{
+			if(StringUtils.isEmpty(id)){
+				return Json.error("请选择要确认的数据");
+			}
+
+			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(id);
+			gspProductRegister.setCheckDate(new Date());
+			gspProductRegister.setCheckerId(SfcUserLoginUtil.getLoginUser().getId());
+			gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
+
+//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+			return Json.success("确认成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.error("操作失败");
+		}
+
+	}
 	/**
 	 * 查询产品注册证规格
 	 * @param pager
@@ -334,6 +354,5 @@ public class GspProductRegisterService extends BaseService {
 		return  gspProductRegisterMybatisDao.queryByproductNameMain(productNameMain);
 
 	}
-
 
 }

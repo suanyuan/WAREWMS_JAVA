@@ -53,18 +53,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
-//		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
-//		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsDao.getPagedDatagrid(pager, query);
-//		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
-//		List<GspProductRegisterSpecsVO> gspProductRegisterSpecsVOList = new ArrayList<GspProductRegisterSpecsVO>();
-//		for (GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList) {
-//			gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
-//			BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
-//			gspProductRegisterSpecsVOList.add(gspProductRegisterSpecsVO);
-//		}
-//		datagrid.setTotal(gspProductRegisterSpecsDao.countAll(query));
-//		datagrid.setRows(gspProductRegisterSpecsVOList);
-//		return datagrid;
+
 		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -101,6 +90,34 @@ public class GspProductRegisterSpecsService extends BaseService {
 		return datagrid;
 	}
 
+
+	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedProductSUPDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
+		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<GspProductRegisterSpecsVO>();
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCurrentPage(pager.getPage());
+		criteria.setPageSize(pager.getRows());
+		criteria.setCondition(query);
+		criteria.setOrderByClause("create_date desc");
+		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
+		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
+		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryProductSUPByList(criteria);
+		for (GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList) {
+			System.out.println(gspProductRegisterSpecs.getCreateDate()+"==============================================");
+			gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
+			BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
+			if(gspProductRegisterSpecs.getCreateDate()!=null){
+				gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
+			}
+			if(gspProductRegisterSpecs.getEditDate()!=null){
+				gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
+			}
+			basGtnVOList.add(gspProductRegisterSpecsVO);
+		}
+		int total = gspProductRegisterSpecsMybatisDao.queryProductSUPByCount(criteria);
+		datagrid.setTotal(Long.parseLong(total+""));
+		datagrid.setRows(basGtnVOList);
+		return datagrid;
+	}
 
 
 	public Json addGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) throws Exception {

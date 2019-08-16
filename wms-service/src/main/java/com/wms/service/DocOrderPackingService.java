@@ -483,9 +483,9 @@ public class DocOrderPackingService extends BaseService {
 		docOrderPackingQuery.setOrderNo(orderNo);
 		List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryOrderPackingInfoById(docOrderPackingQuery);
 		if (docOrderPackingList.size() > 0) {
+			json.setObj(docOrderPackingList);
 			json.setSuccess(false);
 			json.setMsg("当前有未完成的复核任务！");
-			json.setObj(docOrderPackingList);
 			return json;
 		} else {
 			json.setSuccess(true);
