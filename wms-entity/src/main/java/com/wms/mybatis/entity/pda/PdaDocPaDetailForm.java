@@ -53,4 +53,5 @@ public class PdaDocPaDetailForm {
 
     //和procedure没关系，单纯为了传参
     private String GTIN;
+    private String otherCode;
 }

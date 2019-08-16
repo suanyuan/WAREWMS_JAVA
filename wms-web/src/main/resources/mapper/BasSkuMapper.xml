@@ -815,42 +815,78 @@ where 1=1
 	   {call SPBAS_Check(#{warehouseid,mode=IN,jdbcType=VARCHAR},'Delete','BAS_SKU',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
+    <!--<select id="queryForScan" resultMap="BaseResultMap" parameterType="java.util.Map">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from bas_sku-->
+        <!--where customerid = #{customerid} and sku in (-->
+            <!--select-->
+              <!--DISTINCT a.sku-->
+            <!--from bas_sku a-->
+            <!--LEFT JOIN bas_gtn_lotatt b ON a.customerid = b.customerid AND a.sku = b.sku-->
+            <!--LEFT JOIN bas_gtn c ON a.sku = c.sku-->
+            <!--WHERE 0=1-->
+
+                <!--<if test="GTIN != null and GTIN != ''">-->
+                    <!--or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}-->
+                <!--</if>-->
+                <!--<if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">-->
+                    <!--or (ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')-->
+                        <!--AND-->
+                        <!--ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')-->
+                    <!--)-->
+                <!--</if>-->
+                <!--<if test="alternate_sku1 != null and alternate_sku1 != ''">-->
+                    <!--or a.alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}-->
+                <!--</if>-->
+                <!--<if test="alternate_sku2 != null and alternate_sku2 != ''">-->
+                    <!--or a.alternate_sku2 = #{alternate_sku2, jdbcType=VARCHAR}-->
+                <!--</if>-->
+                <!--<if test="alternate_sku3 != null and alternate_sku3 != ''">-->
+                    <!--or a.alternate_sku3 = #{alternate_sku3, jdbcType=VARCHAR}-->
+                <!--</if>-->
+                <!--<if test="alternate_sku4 != null and alternate_sku4 != ''">-->
+                    <!--or a.alternate_sku4 = #{alternate_sku4, jdbcType=VARCHAR}-->
+                <!--</if>-->
+                <!--<if test="alternate_sku5 != null and alternate_sku5 != ''">-->
+                    <!--or a.alternate_sku5 = #{alternate_sku5, jdbcType=VARCHAR}-->
+                <!--</if>-->
+        <!--)-->
+    <!--</select>-->
+
     <select id="queryForScan" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List"/>
         from bas_sku
         where customerid = #{customerid} and sku in (
-            select
-              DISTINCT a.sku
-            from bas_sku a
-            LEFT JOIN bas_gtn_lotatt b ON a.customerid = b.customerid AND a.sku = b.sku
-            LEFT JOIN bas_gtn c ON a.sku = c.sku
-            WHERE 0=1
+        select
+        DISTINCT a.sku
+        from bas_sku a
+        LEFT JOIN bas_gtn_lotatt b ON a.customerid = b.customerid AND a.sku = b.sku
+        LEFT JOIN bas_gtn c ON a.sku = c.sku
+        WHERE 0=1
 
-                <if test="GTIN != null and GTIN != ''">
-                    or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}
-                </if>
-                <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
-                    or (ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
-                        AND
-                        ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
-                    )
-                </if>
-                <if test="alternate_sku1 != null and alternate_sku1 != ''">
-                    or a.alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}
-                </if>
-                <if test="alternate_sku2 != null and alternate_sku2 != ''">
-                    or a.alternate_sku2 = #{alternate_sku2, jdbcType=VARCHAR}
-                </if>
-                <if test="alternate_sku3 != null and alternate_sku3 != ''">
-                    or a.alternate_sku3 = #{alternate_sku3, jdbcType=VARCHAR}
-                </if>
-                <if test="alternate_sku4 != null and alternate_sku4 != ''">
-                    or a.alternate_sku4 = #{alternate_sku4, jdbcType=VARCHAR}
-                </if>
-                <if test="alternate_sku5 != null and alternate_sku5 != ''">
-                    or a.alternate_sku5 = #{alternate_sku5, jdbcType=VARCHAR}
-                </if>
+        <if test="GTIN != null and GTIN != ''">
+            or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt04 != null and lotatt04 != ''">
+            or ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
+        </if>
+        <if test="alternate_sku1 != null and alternate_sku1 != ''">
+            or a.alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}
+        </if>
+        <if test="alternate_sku2 != null and alternate_sku2 != ''">
+            or a.alternate_sku2 = #{alternate_sku2, jdbcType=VARCHAR}
+        </if>
+        <if test="alternate_sku3 != null and alternate_sku3 != ''">
+            or a.alternate_sku3 = #{alternate_sku3, jdbcType=VARCHAR}
+        </if>
+        <if test="alternate_sku4 != null and alternate_sku4 != ''">
+            or a.alternate_sku4 = #{alternate_sku4, jdbcType=VARCHAR}
+        </if>
+        <if test="alternate_sku5 != null and alternate_sku5 != ''">
+            or a.alternate_sku5 = #{alternate_sku5, jdbcType=VARCHAR}
+        </if>
         )
     </select>
 
