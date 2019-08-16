@@ -304,7 +304,8 @@
             cache: false,
             onClose: function () {
                 $(this).dialog('destroy');
-            }
+            },
+
         })
     }
     //点击注册证编号之后datagrid放大镜事件

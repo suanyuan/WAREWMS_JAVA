@@ -37,16 +37,20 @@
 </div>
 
 <%--供应商--%>
-<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
+<div id='ezuiDialogSupplierDetail' style='padding: 10px;display: none' >
 	<div id='TB' class='datagrid-toolbar' style=''>
 		<fieldset>
 			<legend>货主信息</legend>
 			<table>
 				<tr>
-					<th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>
-					<th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>
-				</tr>
-				<tr>
+					<th>客户代码：</th><td><input id="kehudaima" type='text'   class='easyui-textbox' data-options='width:200'/></td>
+					<th>客户名称：</th><td><input id="kehumingcheng" type='text'   class='easyui-textbox' data-options='width:200'/></td>
+                    <td>
+                        <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
+                </tr>
+
 					<%--<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>
                     <th>企业名称：</th><td><input id="qiyemingcheng1" type='text'  class='easyui-textbox' data-options=''/></td>--%>
 					<%--<td>
@@ -54,11 +58,7 @@
                         <input type="hidden" class="easyui-textvalue" name="enterpriseId">
                         <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                     </td>--%>
-					<td>
-						<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-						<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-					</td>
-				</tr>
+
 			</table>
 		</fieldset>
 
@@ -69,7 +69,7 @@
 </div>
 
 <!--产品查询列表dialog -->
-<div id='ezuiDialogSpec' style='padding: 10px;'>
+<div id='ezuiDialogSpec' style='padding: 10px;display: none' >
 	<div id='productToolbar' class='datagrid-toolbar' style=''>
 		<fieldset>
 			<legend>产品注册证信息</legend>
@@ -198,23 +198,26 @@
         });
 		//搜索打开供应商弹窗
         function searchSupplier() {
-            if(ezuiDialogSupplierDetail){
-                ezuiDialogSupplierDetail.dialog('open');
-            }
+            ezuiDialogSupplierDetail = $('#ezuiDialogSupplierDetail').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                width:850,
+                height:500,
+                cache: false,
+                onClose : function() {
+
+                    // ezuiFormClear(ezuiForm);
+                    // $(this).dialog('destroy');
+                }
+            });
+            // if(ezuiDialogSupplierDetail){
+            //     ezuiDialogSupplierDetail.dialog('open');
+            //     $(this).dialog('destroy');
+            // }
         }
 
 		//供应商弹窗
-        ezuiDialogSupplierDetail = $('#ezuiDialogSupplierDetail').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
 
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
 		//双击选中供应商
         function choseSupplierSelect() {
             var row = supplierDatagrid.datagrid("getSelected");
@@ -309,35 +312,26 @@
             }
         });
         //产品
-        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
 
-            }
-        }).dialog('close');
 
 		//搜索打开产品弹窗
         function searchProduct() {
-            if(ezuiDialogSpec){
-                ezuiDialogSpec.dialog('open');
-                $(this).dialog('destroy');
-            }
+            // if(ezuiDialogSpec){
+                // ezuiDialogSpec.dialog('open');
+                //
+                ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+                    modal : true,
+                    title : '<spring:message code="common.dialog.title"/>',
+                    width:850,
+                    height:500,
+                    cache: false,
+                    onClose : function() {
+                        // ezuiFormClear(ezuiForm);
+                        // $(this).dialog('destroy');
+                    }
+                })
+            // }
         }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -351,11 +345,23 @@
         // console.log($("#hiddenreceivingId").val());
     });
 
+    //供应商弹窗搜索功能
+    function doSearchSupplier() {
+        supplierDatagrid.datagrid('load', {
+            // enterpriseName : $('#qiyemingcheng1').val(),
+            // enterpriseNo : $('#qiyexinxidaima').val(),
+            descrC : $('#kehumingcheng').val(),
+            customerid : $('#kehudaima').val(),
+            activeFlag : '1',
+            isUse : '1',
+            customerType:'VE'
+        });
+    }
     //查询产品
     function searchProduct1() {
         dataGridProduct.datagrid("load", {
             "productCode":$("#ezuiDialogSpec #productCode").val(),
-            "productName":$("#ezuiDialogSpec #productName").val(),
+            "productName":$("#ezuiDialogSpec #productName1").val(),
             "productRegisterNo":$("#ezuiDialogSpec #registerNo").val(),
             "isUse":"1",
             "supplierId" : $('#supplierId').val(),

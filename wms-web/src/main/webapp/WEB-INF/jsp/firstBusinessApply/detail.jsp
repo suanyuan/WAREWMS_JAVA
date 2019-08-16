@@ -137,50 +137,50 @@
     </table>
 </div>
 
-<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
-    <div id='TB' class='datagrid-toolbar' style=''>
-        <fieldset>
-            <legend>货主信息</legend>
-            <table>
-                <tr>
-                    <th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>
-                    <th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>
-                </tr>
-                <tr>
-                    <%--<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>
-                    <th>企业名称：</th><td><input id="qiyemingcheng1" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                    <%--<td>
-                        <input type='text' style="width: 170px;"/>
-                        <input type="hidden" class="easyui-textvalue" name="enterpriseId">
-                        <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
-                    </td>--%>
-                    <td>
-                        <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-        <%-- <fieldset>
-             <legend>供应商信息</legend>
-             <table>
-                 <tr>
-                     <th>供应商</th>
-                     <td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>
-                     <th>类型</th>
-                     <td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>
-                     <td>
-                         <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                         <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                     </td>
-                 </tr>
-             </table>
-         </fieldset>--%>
-    </div>
-    <table id="dataGridSupplierDetail">
+<%--<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>--%>
+    <%--<div id='TB' class='datagrid-toolbar' style=''>--%>
+        <%--<fieldset>--%>
+            <%--<legend>货主信息</legend>--%>
+            <%--<table>--%>
+                <%--<tr>--%>
+                    <%--<th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
+                    <%--<th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                    <%--&lt;%&ndash;<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
+                    <%--<th>企业名称：</th><td><input id="qiyemingcheng1" type='text'  class='easyui-textbox' data-options=''/></td>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<td>--%>
+                        <%--<input type='text' style="width: 170px;"/>--%>
+                        <%--<input type="hidden" class="easyui-textvalue" name="enterpriseId">--%>
+                        <%--<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->--%>
+                    <%--</td>&ndash;%&gt;--%>
+                    <%--<td>--%>
+                        <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+                        <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
+            <%--</table>--%>
+        <%--</fieldset>--%>
+        <%--&lt;%&ndash; <fieldset>--%>
+             <%--<legend>供应商信息</legend>--%>
+             <%--<table>--%>
+                 <%--<tr>--%>
+                     <%--<th>供应商</th>--%>
+                     <%--<td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>--%>
+                     <%--<th>类型</th>--%>
+                     <%--<td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>--%>
+                     <%--<td>--%>
+                         <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+                         <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+                     <%--</td>--%>
+                 <%--</tr>--%>
+             <%--</table>--%>
+         <%--</fieldset>&ndash;%&gt;--%>
+    <%--</div>--%>
+    <%--<table id="dataGridSupplierDetail">--%>
 
-    </table>
-</div>
+    <%--</table>--%>
+<%--</div>--%>
 <div id="enterpriseDialog">
 
 </div>
@@ -781,26 +781,25 @@
         }
     }
 
-    //供应商弹窗搜索功能
-    function doSearchSupplier() {
-        supplierDatagrid.datagrid('load', {
-            enterpriseName : $('#qiyemingcheng1').val(),
-            enterpriseNo : $('#qiyexinxidaima').val(),
-            descrC : $('#kehumingcheng').val(),
-            customerid : $('#kehudaima').val(),
-            activeFlag : '1',
-            isUse : '1',
-            customerType:'VE'
-        });
-    }
+    // //供应商弹窗搜索功能
+    // function doSearchSupplier() {
+    //     supplierDatagrid.datagrid('load', {
+    //         enterpriseName : $('#qiyemingcheng1').val(),
+    //         enterpriseNo : $('#qiyexinxidaima').val(),
+    //         descrC : $('#kehumingcheng').val(),
+    //         customerid : $('#kehudaima').val(),
+    //         activeFlag : '1',
+    //         isUse : '1',
+    //         customerType:'VE'
+    //     });
+    // }
     //搜索打开供应商弹窗
-    function searchSupplier() {
-        if(ezuiDialogSupplierDetail){
-            ezuiDialogSupplierDetail.dialog('open');
-
-        }
-
-    }
+    // function searchSupplier() {
+    //     if(ezuiDialogSupplierDetail){
+    //         ezuiDialogSupplierDetail.dialog('open');
+    //
+    //     }
+    // }
 
     //查询货主信息条件
     function doSearchClient() {

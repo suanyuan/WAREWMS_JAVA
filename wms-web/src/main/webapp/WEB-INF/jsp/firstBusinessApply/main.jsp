@@ -99,6 +99,8 @@ var add = function(){
 	processType = 'add';
 	$('#applyId').val(0);
 	ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id=");
+
+
 };
 var edit = function(){
 	processType = 'edit';
