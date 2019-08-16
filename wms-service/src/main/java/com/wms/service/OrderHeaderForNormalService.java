@@ -99,6 +99,11 @@ public class OrderHeaderForNormalService extends BaseService {
         for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
+
+            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(),Constant.CODE_CUS_TYP_CO);
+            if(customer!=null){
+                orderHeaderForNormalVO.setConsigneename(customer.getDescrC());
+            }
             orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
         }
         datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
@@ -1449,12 +1454,12 @@ public class OrderHeaderForNormalService extends BaseService {
                    // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
                     //doc.add(new Paragraph(order).setFont(font).setFixedPosition(1, 200, bottom, width));
 
-                    PdfContentByte cb = writer.getDirectContent();
+                    /*PdfContentByte cb = writer.getDirectContent();
                     BaseFont bf= BaseFont.createFont("STSong-Light", "UniGB-UCS2-H",BaseFont.EMBEDDED);
                     cb.beginText();
                     cb.setFontAndSize(bf, 20);
                     cb.showTextAligned(PdfContentByte.ALIGN_LEFT, order , 0, 850, 0);
-                    cb.endText();
+                    cb.endText();*/
 
                     MybatisCriteria criteria = new MybatisCriteria();
                     OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
@@ -1464,7 +1469,9 @@ public class OrderHeaderForNormalService extends BaseService {
                     for(OrderDetailsForNormal de : details){
                         String url = getCertificate(de.getCustomerid(),de.getSku(),de.getLotatt04());
                         if(!"".equals(url)){
+                            doc.add(new Paragraph(order));
                             Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
+                            png.scaleAbsolute(500.0F,750F);
                             doc.add(png);
                         }
 

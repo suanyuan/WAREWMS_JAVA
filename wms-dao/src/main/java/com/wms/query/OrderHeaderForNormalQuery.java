@@ -17,4 +17,7 @@ public class OrderHeaderForNormalQuery implements IQuery {
 	private java.util.Date currentTime;
 	private String warehouseId;
 	private Set<SfcCustomer> customerSet;
+	private String cProvince;
+	private String cCity;
+	private String cAddress2;
 }

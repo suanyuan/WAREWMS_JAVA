@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.wms.entity.BasPackage;
-import com.wms.entity.BasSku;
+import com.wms.constant.Constant;
+import com.wms.entity.*;
 import com.wms.query.BasPackageQuery;
+import com.wms.query.GspOperateLicenseQuery;
+import com.wms.vo.GspOperateDetailVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,14 @@ public class OrderDetailsForNormalService extends BaseService {
 	private BasSkuService basSkuService;
 	@Autowired
 	private BasPackageService basPackageService;
+	@Autowired
+	private BasCustomerService basCustomerService;
+	@Autowired
+	private GspProductRegisterService gspProductRegisterService;
+	@Autowired
+	private GspOperateLicenseService gspOperateLicenseService;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
@@ -62,6 +72,12 @@ public class OrderDetailsForNormalService extends BaseService {
 
 	public Json add(OrderDetailsForNormalForm orderDetailsForNormalForm) throws Exception {
 		Json json = new Json();
+		String orderNo = orderDetailsForNormalForm.getOrderno();
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderNo);
+		if(orderHeaderForNormal == null){
+			return Json.error("没有对应的表头单据");
+		}
+
 		OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
 		orderDetailsForNormalQuery.setOrderno(orderDetailsForNormalForm.getOrderno());
 		/*获取新的订单明细行号*/
@@ -89,6 +105,16 @@ public class OrderDetailsForNormalService extends BaseService {
 			}
 			orderDetailsForNormal.setQtyorderedEach(orderDetailsForNormal.getQtyordered()*basPackage.getQty1().doubleValue());
 		}
+
+		//判断经营范围是否匹配
+		Json operateJson = isRightOperate(orderHeaderForNormal.getCustomerid(),orderHeaderForNormal.getConsigneeid(),orderDetailsForNormalForm.getSku());
+		if(!operateJson.isSuccess()){
+			return operateJson;
+		}
+		//效期
+		//证照期限
+
+		orderDetailsForNormal.setLotatt14(orderHeaderForNormal.getSoreference2());
 		orderDetailsForNormal.setOrderlineno((double) orderLineNo + 1);
 		orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -232,5 +258,49 @@ public class OrderDetailsForNormalService extends BaseService {
 			json.setMsg("分配取消成功！");
 			return json;
 		}
+	}
+
+	public Json isRightOperate(String customerId,String receId,String sku){
+		BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
+		BasCustomer basCustomer = basCustomerService.selectCustomerById(receId, Constant.CODE_CUS_TYP_CO);
+		if(basSku == null){
+			return Json.error("查询不到产品档案");
+		}
+		if(basCustomer == null){
+			return Json.error("查询不到收货单位");
+		}
+		String gspregisterNo = basSku.getReservedfield03();
+		String enterpriseId = basCustomer.getEnterpriseId();
+		GspOperateLicenseQuery query = new GspOperateLicenseQuery();
+		query.setEnterpriseId(enterpriseId);
+		query.setIsUse(Constant.IS_USE_YES);
+		GspProductRegister gspProductRegister = gspProductRegisterService.queryByRegisterNo(gspregisterNo);
+		GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
+		List<GspOperateDetailVO> registerOperate = gspOperateDetailService.queryOperateDetailByLicense(gspProductRegister.getProductRegisterId());
+		List<GspOperateDetailVO> operateDetailVOS = gspOperateDetailService.queryOperateDetailByLicense(gspOperateLicense.getOperateId());
+
+		if(registerOperate == null || registerOperate.size() == 0){
+			return Json.error("注册证分类目录为空");
+		}
+
+		if(operateDetailVOS == null || operateDetailVOS.size() == 0){
+			return Json.error("经营许可证经营范围为空");
+		}
+
+		List<String> arrregister = new ArrayList<>();
+		List<String> arroperate = new ArrayList<>();
+
+		for(GspOperateDetailVO v : registerOperate){
+			arrregister.add(v.getOperateId());
+		}
+		for(GspOperateDetailVO v : operateDetailVOS){
+			arroperate.add(v.getOperateId());
+		}
+		for(String s : arrregister){
+			if(arroperate.toString().indexOf(s)==-1){
+				return Json.error("经营范围不匹配");
+			}
+		}
+		return Json.success("");
 	}
 }

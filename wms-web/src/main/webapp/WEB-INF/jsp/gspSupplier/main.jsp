@@ -541,7 +541,7 @@ var doSearch = function(){
         enterpriseDialog_gspSupplier = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier&enterpriseType=supplier&type=orther",
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier&type=noSupplier",
             width: 850,
             height: 500,
             cache: false,

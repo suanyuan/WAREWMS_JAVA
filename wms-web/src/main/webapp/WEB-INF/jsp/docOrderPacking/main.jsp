@@ -50,9 +50,7 @@ $(function() {
 		            {field: 'traceId',				title: '箱号',		width: 20 	},
 					{field: 'sku',					title: '产品编码',		width: 20	},
 					{field: 'skuName',				title: '产品名称',		width: 40	},
-					{field: 'scanQty',				title: '装箱数量',		width: 20 	},
-		            {field: 'cube',					title: '装箱体积',		width: 20 	},
-					{field: 'grossWeight',			title: '装箱重量',		width: 20 	}
+					{field: 'scanQty',				title: '装箱件数',		width: 20 	}
 		]],
 		onDblClickCell: function(index,field,value){
 		},
@@ -337,12 +335,22 @@ var packingCommit = function(){
 		dataType : 'JSON',
 		success : function(result){
 			try {
-				if (result.success) {
+				/*if (result.success) {
 					msg = result.msg;
 					//$('#grossWeight').numberbox('setValue', result.obj.grossWeight);
 					//$('#cube').numberbox('setValue', result.obj.cube);
+				}*/
+				var resultMsg = result.msg+"<br/>";
+				for(var i = 0;i<result.obj.length;i++){
+				    resultMsg += result.obj[i].batchNum+":"+result.obj[i].differentQty;
 				}
-			} catch (e) {
+                $.messager.confirm('提示', resultMsg+'<br/>是否确认复合完成？', function(r){
+                    if(r){
+                        commit();
+                    }
+                });
+
+            } catch (e) {
 				msg = '<spring:message code="common.message.data.process.failed"/>';
 				$.messager.show({
 					msg : msg, title : '<spring:message code="common.message.prompt"/>'
@@ -352,11 +360,6 @@ var packingCommit = function(){
 	});
 	/*$('#ezuiPackingDialog').panel({title: "确认是否完成复核操作？"});
 	ezuiPackingDialog.dialog('open');*/
-    $.messager.confirm('提示', '是否确认复合完成？', function(r){
-        if(r){
-            commit();
-        }
-    });
 
 };
 /* 提交 */
