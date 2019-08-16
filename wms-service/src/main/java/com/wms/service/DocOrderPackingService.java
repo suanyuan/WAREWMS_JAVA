@@ -689,6 +689,13 @@ public class DocOrderPackingService extends BaseService {
         如果是强生产品线的，需要将序列号记录下来，在复核提交的时候保存起来
          */
         if (isSerialManagement) {
+            //如果想BW这种只扫描序列号的如果是扫描的批号，得提醒他们扫错了
+            if (StringUtil.isEmpty(query.getOtherCode()) ||
+                    StringUtil.isEmpty(query.getLotatt05())) {
+                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品出库需要记录序列号，请扫描带序列号的条码"));
+                return map;
+            }
+
             //如果在出库序列号记录中查询到对应的，则提示已复核过了
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(query.getOrderno(),
