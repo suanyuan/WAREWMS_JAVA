@@ -213,7 +213,6 @@ public class DocOrderPackingService extends BaseService {
 		Map<String,Object> map = queryDocPackage(query);
 		PdaResult result = (PdaResult)map.get(Constant.RESULT);
 		if(result.getErrorCode() == PdaResult.CODE_SUCCESS){
-			//TODO
 			DocOrderPackingForm form = new DocOrderPackingForm();
 			PdaDocPackageVO packageVO = (PdaDocPackageVO)map.get(Constant.DATA);
 			form.setOrderno(orderNo);
@@ -227,6 +226,7 @@ public class DocOrderPackingService extends BaseService {
 			form.setSkudesce("");
 			form.setLotnum(packageVO.getActAllocationDetails().getLotnum());
 			form.setLotatt11(packageVO.getInvLotAtt().getLotatt11());
+			form.setSerialNums(packageVO.getSerialNum());
 			packageCommit(form);
 			return Json.success(result.getMsg(),map.get(Constant.DATA));
 		}else{
@@ -384,7 +384,7 @@ public class DocOrderPackingService extends BaseService {
 		return json;*/
 	}
 
-	public Json singlePackingCancel(String orderNo, String cartonNo) {
+	public Json singlePackingCancel(String orderNo, Integer cartonNo) {
 		Json json = new Json();
 		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
 		orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -410,7 +410,7 @@ public class DocOrderPackingService extends BaseService {
                     //删除包装记录
 					DocOrderPacking docOrderPacking = new DocOrderPacking();
 					docOrderPacking.setOrderNo(orderNo);
-					docOrderPacking.setTraceId(cartonNo);
+					docOrderPacking.setCartonNo(cartonNo);
 					docOrderPackingMybatisDao.packingCartonDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonInfoDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);//？？？TODO 待确认

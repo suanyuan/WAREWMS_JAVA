@@ -46,6 +46,7 @@ $(function() {
 			orderNo : '0'
 		},
 		columns : [[
+           			 {field: 'cartonNo',				title: '装箱序号',		width: 20 	},
 		            {field: 'traceId',				title: '箱号',		width: 20 	},
 					{field: 'sku',					title: '产品编码',		width: 20	},
 					{field: 'skuName',				title: '产品名称',		width: 40	},
@@ -635,8 +636,8 @@ var printPackingList = function(){
 						<td><input type='text' name='orderNo'  id='orderNo' class='easyui-textbox' size='16' data-options='required:true' /></td>
 					</tr>
 					<tr>
-						<th>箱号</th>
-						<td><input type='text' name='cartonNo'  id='cartonNo' class='easyui-textbox' size='16' data-options='required:true'/></td>
+						<th>装箱序号</th>
+						<td><input type='text' name='cartonNo'  id='cartonNo' class='easyui-numberbox' size='16' data-options='required:true'/></td>
 					</tr>
 				</table>
 			</div>

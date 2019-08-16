@@ -122,7 +122,7 @@ public class DocOrderPackingController {
 	@Login
 	@RequestMapping(params = "singlePackingCancel")
 	@ResponseBody
-	public Json singlePackingCancel(String orderNo, String cartonNo) {
+	public Json singlePackingCancel(String orderNo, Integer cartonNo) {
 		Json json = docOrderPackingService.singlePackingCancel(orderNo, cartonNo);
 		if(json == null){
 			json = new Json();
