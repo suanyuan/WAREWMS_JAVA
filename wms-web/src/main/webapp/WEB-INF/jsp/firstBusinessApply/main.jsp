@@ -104,7 +104,6 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-
 		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id="+row.applyId);
 	}else{
 		$.messager.show({

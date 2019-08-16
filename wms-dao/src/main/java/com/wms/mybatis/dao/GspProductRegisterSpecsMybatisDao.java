@@ -24,4 +24,7 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
 
     public <T> T selectByProductCode(Object id);
 
+    public <T> List<T> queryProductSUPByList(MybatisCriteria criteria);//总查询不分页，一般导出时使用
+    public int queryProductSUPByCount(MybatisCriteria criteria);
+
 }

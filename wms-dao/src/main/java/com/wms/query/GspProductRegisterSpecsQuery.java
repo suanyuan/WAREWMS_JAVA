@@ -51,6 +51,15 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String alternatName5;
 
 	private String type;
+	private String supplierId;
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
 
 	public String getType() {
 		return type;

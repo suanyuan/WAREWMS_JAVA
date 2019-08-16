@@ -327,7 +327,64 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id,t1.product_name
         from gsp_product_register_specs t1 left join gsp_product_register t2
         ON t1.product_register_id = t2.product_register_id
+
         <include refid="Example_Where_Clause"/>
+        <if test="orderByClause != null and orderByClause != ''">
+            order by ${orderByClause}
+        </if>
+        <if test="limitClause != null and limitClause != ''">
+            ${limitClause}
+        </if>
+    </select>
+
+
+
+    <!-- 已下发供应商 的 产品注册证规格  列表总数-->
+    <select id="queryProductSUPByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+        left join bas_customer t3 on t3.enterprise_id = t2.enterprise_id
+        where 1 = 1 and t3.active_flag = '1'
+        <if test="condition.supplierId == '' or condition.supplierId == null">
+            and  t3.customerid = '000000000000000000000000'
+        </if>
+        <if test="condition.supplierId != '' and condition.supplierId != null">
+            and  t3.customerid = #{condition.supplierId}
+        </if>
+        <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
+            and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
+        </if>
+        <if test="condition.productNameMain != null and condition.productNameMain != ''">
+            and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
+        </if>
+        <if test="condition.productCode != null and condition.productCode != ''">
+            and product_code like CONCAT('%',#{condition.productCode},'%')
+        </if>
+    </select>
+    <!-- 已下发供应商 的 查询产品注册证规格列表 -->
+    <select id="queryProductSUPByList" resultMap="BaseResultMap" parameterType="Object">
+        select
+        t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id,t1.product_name
+        from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id
+        left join bas_customer t3 on t3.enterprise_id = t2.enterprise_id
+        where 1 = 1 and t3.active_flag = '1'
+        <if test="condition.supplierId == '' or condition.supplierId == null">
+            and  t3.customerid = '000000000000000000000000'
+        </if>
+        <if test="condition.supplierId != '' and condition.supplierId != null">
+            and  t3.customerid = #{condition.supplierId}
+        </if>
+        <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''">
+            and product_register_no like CONCAT('%',#{condition.productRegisterNo},'%')
+        </if>
+        <if test="condition.productNameMain != null and condition.productNameMain != ''">
+            and product_name_main like CONCAT('%',#{condition.productNameMain},'%')
+        </if>
+        <if test="condition.productCode != null and condition.productCode != ''">
+            and product_code like CONCAT('%',#{condition.productCode},'%')
+        </if>
+
         <if test="orderByClause != null and orderByClause != ''">
             order by ${orderByClause}
         </if>

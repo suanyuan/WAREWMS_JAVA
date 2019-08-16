@@ -133,6 +133,12 @@ public class GspProductRegisterController {
 		return gspProductRegisterService.getGspProductRegisterCombobox();
 	}
 
+	@Login
+	@RequestMapping(params = "confirmSubmit")
+	@ResponseBody
+	public Json confirmSubmit(String id){
+		return gspProductRegisterService.confirmSubmit(id);
+	}
 
 	@Login
 	@RequestMapping(params = "toDetail")
