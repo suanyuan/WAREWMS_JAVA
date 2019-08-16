@@ -546,7 +546,7 @@ var doSearch = function(){
             height: 500,
             cache: false,
             onClose: function () {
-
+				
             }
         })
     }

@@ -388,7 +388,7 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'',
+                enterpriseType:'default',
                 type:'noCustomer'
             },
             fit:true,
@@ -456,6 +456,7 @@
             enterpriseNo : $('#enterpriseNo').val(),
             shorthandName : $('#shorthandName').val(),
             type:'noCustomer',
+            enterpriseType:'default',
             isUse : '1'
 
         });
