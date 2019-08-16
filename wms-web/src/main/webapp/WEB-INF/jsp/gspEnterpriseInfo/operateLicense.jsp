@@ -54,7 +54,7 @@
                     <th>经营/生产许可证照片</th>
                     <td>
                         <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}" atth="fileUpload">
-                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlOperate()">查看</a>
                         <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
@@ -318,7 +318,7 @@
         $(ezuidialogChoseScopeOperate).dialog("close");
     }
 
-    function viewUrl(url) {
+    function viewUrlOperate(url) {
         if(url){
             showUrl(url);
         }else{
