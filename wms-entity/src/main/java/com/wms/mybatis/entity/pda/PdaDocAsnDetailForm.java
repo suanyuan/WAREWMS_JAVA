@@ -10,6 +10,7 @@ public class PdaDocAsnDetailForm extends BaseLotatt {
 
     private String result = "";//procedure执行结果
 
+    private String otherCode;//pda
     private String warehouseid; //pda传参
     private String GTIN;//pda
     private String asnno;

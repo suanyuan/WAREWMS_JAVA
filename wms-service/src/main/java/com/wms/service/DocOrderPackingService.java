@@ -664,7 +664,6 @@ public class DocOrderPackingService extends BaseService {
 
 	    PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
 	    BeanUtils.copyProperties(query, basSkuQuery);
-	    basSkuQuery.setLotatt05("");//序列号不参与查询，同批号的SKU必然是相同的。（DISTINCT）
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
         if (basSku == null) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案"));
@@ -690,7 +689,7 @@ public class DocOrderPackingService extends BaseService {
          */
         if (isSerialManagement) {
             //如果想BW这种只扫描序列号的如果是扫描的批号，得提醒他们扫错了
-            if (StringUtil.isEmpty(query.getOtherCode()) ||
+            if (StringUtil.isEmpty(query.getOtherCode()) &&
                     StringUtil.isEmpty(query.getLotatt05())) {
                 map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品出库需要记录序列号，请扫描带序列号的条码"));
                 return map;
@@ -716,7 +715,7 @@ public class DocOrderPackingService extends BaseService {
         actAllocationDetailsQuery.setSku(basSku.getSku());
 //        actAllocationDetailsQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));//效期不参与查询
         actAllocationDetailsQuery.setLotatt04(query.getLotatt04());
-        if (isSerialManagement) actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
+        if (!isSerialManagement) actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
         actAllocationDetailsQuery.setPackflag("0");
         List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryForScan(actAllocationDetailsQuery);
         if (actAllocationDetailsList == null || actAllocationDetailsList.size() == 0) {

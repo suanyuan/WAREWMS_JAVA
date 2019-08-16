@@ -18,6 +18,7 @@ import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQcDetailsForm;
@@ -63,6 +64,12 @@ public class DocQcDetailsService extends BaseService {
 
 	@Autowired
 	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
+
+    @Autowired
+    private BasSerialNumMybatisDao basSerialNumMybatisDao;
+
+    @Autowired
+    private ProductLineMybatisDao productLineMybatisDao;
 
 
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
@@ -138,6 +145,22 @@ public class DocQcDetailsService extends BaseService {
         Map<String, Object> map = new HashMap<>();
         PdaDocQcDetailVO pdaDocQcDetailVO = new PdaDocQcDetailVO();
 
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
+                StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
+
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                query.setLotatt04(basSerialNum.getBatchNum());
+            }
+        }
+
         //获取BasSku
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
@@ -159,8 +182,17 @@ public class DocQcDetailsService extends BaseService {
         }
         pdaDocQcDetailVO.setBasPackage(basPackage);
 
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
         //DocQcDetails
         query.setSku(basSku.getSku());
+        if (isSerialManagement) query.setLotatt05("");
         DocQcDetails docQcDetails = docQcDetailsDao.queryDocQcDetail(query);
 
         if (docQcDetails == null || docQcDetails.getQcno() == null) {
