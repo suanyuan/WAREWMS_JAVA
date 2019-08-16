@@ -41,7 +41,7 @@
                     <td>
                         <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
                         <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}" atth="fileUpload">
-                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlSecond()">查看</a>
                     </td>
                 </tr>
                 <tr>
@@ -227,7 +227,7 @@
         $(ezuidialogChoseScopeRecord).dialog("close");
     }
 
-    function viewUrl(url) {
+    function viewUrlSecond(url) {
         if(url){
             showUrl(url);
         }else{

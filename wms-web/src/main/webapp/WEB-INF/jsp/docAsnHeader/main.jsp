@@ -500,7 +500,7 @@ var edit = function(row){
 		    	$('#ezuiForm #releasestatus').combobox('setValue',result.releasestatus);
 		    	$('#ezuiForm #asntype').combobox('setValue',result.asntype);
 		    	$('#ezuiForm #addtime').datetimebox('setValue',result.addtime);//？？？
-		    	$('#ezuiForm #expectedarrivetime1').datetimebox('setValue',result.expectedarrivetime1);
+		    	$('#ezuiForm #expectedarrivetime1').datebox('setValue',result.expectedarrivetime1);
 		    	$('#ezuiForm #notes').textbox('setValue',result.notes);
 		    }
 		});
