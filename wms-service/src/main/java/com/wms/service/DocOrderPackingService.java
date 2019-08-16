@@ -470,20 +470,27 @@ public class DocOrderPackingService extends BaseService {
 		}
 	}
 
+    /**
+     * 获取当前出库单是否有未完成的复核任务
+     * success : false 有未完成的任务，返回未完成批号list
+     * success : true 无未完成，可直接结束
+     * @param orderNo ~
+     * @return ~
+     */
 	public Json getOrderPackingInfo(String orderNo) {
 		Json json = new Json();
 		DocOrderPackingQuery docOrderPackingQuery = new DocOrderPackingQuery();
 		docOrderPackingQuery.setOrderNo(orderNo);
-		//
-		DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryOrderPackingInfoById(docOrderPackingQuery);
-		if (docOrderPacking != null) {
-			json.setSuccess(true);
-			json.setMsg("");
-			json.setObj(docOrderPacking);
+		List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryOrderPackingInfoById(docOrderPackingQuery);
+		if (docOrderPackingList.size() > 0) {
+			json.setSuccess(false);
+			json.setMsg("当前有未完成的复核任务！");
+			json.setObj(docOrderPackingList);
 			return json;
 		} else {
-			json.setSuccess(false);
-			json.setMsg("数据异常！");
+			json.setSuccess(true);
+			json.setMsg("当前出库单可结束复核");
+			json.setObj(new ArrayList<DocOrderPacking>());
 			return json;
 		}
 	}
@@ -889,6 +896,8 @@ public class DocOrderPackingService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "装箱结束成功");
     }
+
+
 
     /**
      * 结束复核

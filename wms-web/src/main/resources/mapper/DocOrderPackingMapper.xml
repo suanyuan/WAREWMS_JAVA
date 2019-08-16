@@ -50,6 +50,11 @@
 	</collection>
 </resultMap>
 
+    <resultMap id="PackingDifferenceMap" type="com.wms.entity.DocOrderPacking">
+        <result column="differentQty" property="differentQty"/>
+        <result column="batchNum" property="batchNum"/>
+    </resultMap>
+
     <resultMap id="PackingCartonMap" type="com.wms.entity.DocOrderPackingCarton">
         <result column="orderno" property="orderno"/>
         <result column="traceid" property="traceid"/>
@@ -493,14 +498,26 @@ select a.orderno as orderNo,
 	group by a.orderno, a.cartonno
 </select>
  
-<!--按已装箱数据合计重量、体积-->
-<select id="queryOrderPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
-	select orderno as orderNo,
-	sum(IFNULL(grossweight, 0)) as grossWeight,
-	sum(IFNULL(cube, 0)) as cube
-	from Doc_Order_Packing_Carton_Info
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	group by orderno
+<!--按已装箱数据合计生产批号对应的装箱件数-->
+<select id="queryOrderPackingInfoById"  resultMap="PackingDifferenceMap" parameterType="Object">
+    SELECT tmpB.batchNum as batchNum, (IFNULL(tmpA.boxQty,0) - IFNULL(tmpB.allocationQty,0)) as differentQty
+    FROM
+        (
+            SELECT b.lotatt04 as batchNum, SUM(a.qty) AS allocationQty
+            FROM act_allocation_details a
+            LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
+            WHERE a.orderno = #{orderNo} GROUP BY b.lotatt04
+        )
+        AS tmpB
+    LEFT JOIN
+        (
+            SELECT lotatt04, SUM(qty) AS boxQty
+            FROM doc_order_packing_carton
+            WHERE orderno = #{orderNo} GROUP BY lotatt04
+        )
+        AS tmpA
+        ON IFNULL(tmpA.lotatt04,'') = IFNULL(tmpB.batchNum,'')
+          <![CDATA[ AND tmpA.boxQty <> tmpB.allocationQty ]]>
 </select>
  
 <!--打印装箱标签数据-->
