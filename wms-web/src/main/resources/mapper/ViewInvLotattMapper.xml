@@ -355,23 +355,15 @@ where 1=1
 原因描述lotatt12text
 -->
 <select id="invAdj" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPINV_Adjustment_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},to_char(SYSDATE,'yyyy-mm-dd hh24:mi'),'0.000','0.000','0','0.00000','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPINV_Adjustment_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},now(),'0.000','0.000','0','0.00000','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
-<!-- 库存移动 
-目标库位lotatt11text
-移动数量lotatt11
-移动原因 lotatt12
-原因描述lotatt12text
--->
+
 <select id="invMov" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPINV_Movement_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11text,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},to_char(SYSDATE,'yyyy-mm-dd hh24:mi'),'CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPINV_Movement_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11text,mode=IN,jdbcType=VARCHAR},'*',#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
-<!-- 库存冻结 
-冻结原因 lotatt12
-原因描述lotatt12text
--->
+
 <select id="invHold" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call SPINV_Hold_Release(#{warehouseid,mode=IN,jdbcType=VARCHAR},'HOLD','5','',#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>

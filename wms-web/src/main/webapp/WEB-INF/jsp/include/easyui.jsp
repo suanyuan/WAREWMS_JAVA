@@ -197,5 +197,13 @@
 			case "HG" : return "合格";
 		}
 	}
+//样品属性
+	var YP_TYPstatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "TS" : return "投诉";
+			case "YP" : return "样品";
+			case "ZC" : return "正常";
+		}
+	}
 
 </script>

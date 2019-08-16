@@ -1,5 +1,7 @@
 package com.wms.vo.form;
 
+import java.math.BigDecimal;
+
 public class ViewInvLotattForm {
 
 	private java.lang.String allocationrule;
@@ -73,6 +75,30 @@ public class ViewInvLotattForm {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String uom;
 	private java.lang.String warehouseid;
+
+	public BigDecimal getiMv() {
+		return iMv;
+	}
+
+	public void setiMv(BigDecimal iMv) {
+		this.iMv = iMv;
+	}
+
+	public BigDecimal getiPa() {
+		return iPa;
+	}
+
+	public void setiPa(BigDecimal iPa) {
+		this.iPa = iPa;
+	}
+
+	public BigDecimal getoMv() {
+		return oMv;
+	}
+
+	public void setoMv(BigDecimal oMv) {
+		this.oMv = oMv;
+	}
 
 	public java.lang.String getAllocationrule() {
 		return allocationrule;

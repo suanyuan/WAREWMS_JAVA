@@ -165,6 +165,34 @@ public class ViewInvLotatt implements Serializable {
 	public ViewInvLotatt() {
 	}
 
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public BigDecimal getiMv() {
+		return iMv;
+	}
+
+	public void setiMv(BigDecimal iMv) {
+		this.iMv = iMv;
+	}
+
+	public BigDecimal getiPa() {
+		return iPa;
+	}
+
+	public void setiPa(BigDecimal iPa) {
+		this.iPa = iPa;
+	}
+
+	public BigDecimal getoMv() {
+		return oMv;
+	}
+
+	public void setoMv(BigDecimal oMv) {
+		this.oMv = oMv;
+	}
+
 	public String getAllocationrule() {
 		return this.allocationrule;
 	}

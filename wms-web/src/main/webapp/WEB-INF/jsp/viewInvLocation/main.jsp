@@ -294,7 +294,7 @@
                     {field: 'lotatt01', title: '生产日期', width: 112},
                     {field: 'lotatt02', title: '有效期/失效期', width: 113},
                     {field: 'lotatt08', title: '供应商', width: 200},
-                    {field: 'lotatt09', title: '样品属性', width: 200},
+                    {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
                     {field: 'lotatt14', title: '入库单号', width: 91},
 
 
@@ -542,7 +542,7 @@
         var selectSku = function () {
             var row = ezuiSkuDataDialogId.datagrid('getSelected');
             if (row) {
-                $("#skudescrc").textbox('setValue', row.descrC);
+                $("#skudescrc").textbox('setValue', row.reservedfield01);
                 ezuiSkuDataDialog.dialog('close');
             }
         };
