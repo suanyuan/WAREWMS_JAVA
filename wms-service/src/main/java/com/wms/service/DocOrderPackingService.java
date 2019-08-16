@@ -413,7 +413,7 @@ public class DocOrderPackingService extends BaseService {
 					docOrderPacking.setCartonNo(cartonNo);
 					docOrderPackingMybatisDao.packingCartonDelete(docOrderPacking);
 					docOrderPackingMybatisDao.packingCartonInfoDelete(docOrderPacking);
-					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);//？？？TODO 待确认
+//					docOrderPackingMybatisDao.packingCartonFlagUpdate(docOrderPacking);//？？？TODO 待确认
 					json.setSuccess(true);
 					json.setMsg("取消装箱成功！");
 					return json;

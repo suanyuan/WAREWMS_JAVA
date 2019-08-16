@@ -180,7 +180,7 @@
 <delete id="packingCartonDelete" parameterType="Object">
 	delete from Doc_Order_Packing_Carton where orderno = #{orderNo,jdbcType=VARCHAR}
 	<if test="cartonNo != null" >
-		and traceid =  #{cartonNo,jdbcType=INTEGER}
+		and cartonno =  #{cartonNo,jdbcType=INTEGER}
 	</if>
 </delete>
 
@@ -188,7 +188,7 @@
 <delete id="packingCartonInfoDelete" parameterType="Object">
 	delete from Doc_Order_Packing_Carton_Info where orderno = #{orderNo,jdbcType=VARCHAR}
 	<if test="cartonNo != null" >
-		and traceid =  #{cartonNo,jdbcType=INTEGER}
+		and cartonno =  #{cartonNo,jdbcType=INTEGER}
 	</if>
 </delete>
 
