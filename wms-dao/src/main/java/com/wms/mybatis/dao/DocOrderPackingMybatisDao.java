@@ -70,8 +70,8 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
 	void packingCartonInfoDelete(DocOrderPacking docOrderPacking);
 	//按产品档案计算装箱重量、体积
 	DocOrderPacking queryPackingInfoById(DocOrderPackingQuery docOrderPackingQuery);
-	//按已装箱数据合计重量、体积
-	DocOrderPacking queryOrderPackingInfoById(DocOrderPackingQuery docOrderPackingQuery);
+	//按已装箱数据合计生产批号对应的装箱件数和批号对应的分配数的相差数
+	List<DocOrderPacking> queryOrderPackingInfoById(DocOrderPackingQuery docOrderPackingQuery);
 
 	//获取当前产品的装箱箱号
 	DocOrderPackingCarton queryGoodsPackage(DocOrderPackingCarton docOrderPackingCarton);

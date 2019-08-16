@@ -18,6 +18,7 @@ public class FirstBusinessApplyVO {
 	private String firstState;
 	private String productLine;
 
+
 	public String getApplyId() {
 		return applyId;
 	}

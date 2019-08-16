@@ -154,6 +154,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApplyPageVO.setSpecsName(result.getSpecsName());
 				firstBusinessProductApplyPageVO.setProductModel(result.getProductModel());
 				firstBusinessProductApplyPageVO.setSpecsId(result.getSpecsId());
+				firstBusinessProductApplyPageVO.setSupplierName(result.getSupplierName());
 				voList.add(firstBusinessProductApplyPageVO);
 			}
 		}
@@ -183,20 +184,23 @@ public class FirstBusinessApplyService extends BaseService {
 			if(!checkScopeResult.isSuccess()){
 				return checkScopeResult;
 			}
-
-			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
-			String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-			firstBusinessApply.setApplyId(no);
-			firstBusinessApply.setClientId(clientId);
-			firstBusinessApply.setSupplierId(supplierId);
-			firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			firstBusinessApply.setIsUse(Constant.IS_USE_YES);
-			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
-			firstBusinessApply.setProductline(productLine);
-			firstBusinessApplyMybatisDao.add(firstBusinessApply);
-
 			String[] arr = productArr.split(",");
+//			for(int a =0;arr.length>0;a++){
+
 			for(String specsId : arr){
+				FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+				String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+				firstBusinessApply.setApplyId(no);
+				firstBusinessApply.setClientId(clientId);
+				firstBusinessApply.setSupplierId(supplierId);
+				firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstBusinessApply.setIsUse(Constant.IS_USE_YES);
+				firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+				firstBusinessApply.setProductline(productLine);
+				firstBusinessApplyMybatisDao.add(firstBusinessApply);
+
+//			String[] arr = productArr.split(",");
+
 				FirstBusinessProductApply firstBusinessProductApply = new FirstBusinessProductApply();
 				firstBusinessProductApply.setProductApplyId(no);
 				firstBusinessProductApply.setApplyId(firstBusinessApply.getApplyId());
@@ -205,16 +209,15 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApply.setIsUse(Constant.IS_USE_YES);
 
 				firstBusinessProductApplyMybatisDao.add(firstBusinessProductApply);
+
+				//添加申请记录
+				FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
+				firstReviewLogForm.setReviewId(RandomUtil.getUUID());
+				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+				firstReviewLogForm.setReviewTypeId(no);
+				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 			}
-
-			//添加申请记录
-			FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
-			firstReviewLogForm.setReviewId(RandomUtil.getUUID());
-			firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
-			firstReviewLogForm.setReviewTypeId(no);
-			firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
-
 			return Json.success("申请成功");
 		}catch (Exception e){
 			e.printStackTrace();

@@ -26,4 +26,6 @@ public class FirstBusinessProductApplyPageVO implements Serializable {
     private String productName;
     private String specsName;
     private String productModel;
+
+    private String supplierName;
 }

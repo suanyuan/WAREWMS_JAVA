@@ -268,10 +268,15 @@ where 1=1
 					and gs.enterprise_id is not null
 					and gs.first_state = '40'
 				</when>
+				<when test="condition.type == 'noCustomer'">
+					and ( cus.enterprise_id is null)
+				</when>
+				<when test="condition.type == 'noSupplier'">
+					and ( gs.enterprise_id is null)
+				</when>
 				<when test="condition.type == 'enterprise'">
 					and ( cus.enterprise_id is null or cus.first_state = '60' or cus.first_state = '90' or cus.is_use = '0')
 					and ( gs.enterprise_id is null or gs.first_state = '60' or gs.first_state = '90' or gs.is_use = '0')
-
 				</when>
 			</choose>
 		</if>

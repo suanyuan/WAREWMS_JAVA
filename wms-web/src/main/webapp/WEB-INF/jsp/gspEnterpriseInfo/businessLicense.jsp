@@ -55,7 +55,7 @@
                     <th>营业执照照片</th>
                     <td>
                         <input id="file" name='file' value="${gspBusinessLicense.attachmentUrl}" atth="fileUpload">
-                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
+                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlBusiness()">查看</a>
                         <input type="hidden" data="2" class="textbox-value" name="attachmentUrl" id="attachmentUrl" value="${gspBusinessLicense.attachmentUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
@@ -316,7 +316,7 @@
         $(ezuidialogChoseScope).dialog("close");
     }
     
-    function viewUrl(url) {
+    function viewUrlBusiness(url) {
         if(url){
             showUrl(url);
         }else{

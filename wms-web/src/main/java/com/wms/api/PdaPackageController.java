@@ -5,6 +5,7 @@ import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocOrderPackingService;
 import com.wms.service.OrderHeaderForNormalService;
+import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.form.pda.PageForm;
@@ -106,6 +107,24 @@ public class PdaPackageController {
     }
 
     /**
+     *
+     */
+    @RequestMapping(params = "getOrderPackingInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getOrderPackingInfo(String orderNo) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Json json = docOrderPackingService.getOrderPackingInfo(orderNo);
+        if (json.isSuccess()) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
+            return resultMap;
+        }
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
+        resultMap.put(Constant.DATA, json.getObj());//List<DocOrderPacking>
+        return resultMap;
+    }
+
+    /**
      * 包装复核装箱结束提交
      * @param form ~
      * @return ~
@@ -121,6 +140,8 @@ public class PdaPackageController {
 
     /**
      * 包装复核结束提交
+     * 先查询包装复核是否完全装箱（根据分配明细来）
+     * 完全才能结束
      * @param orderno ~
      * @return ~
      */
@@ -129,7 +150,13 @@ public class PdaPackageController {
     public Map<String, Object> endPacking(String orderno) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(orderno));
+        Json json = docOrderPackingService.getOrderPackingInfo(orderno);
+        if (json.isSuccess()) {
+            resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(orderno));
+            return resultMap;
+        }
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
+        resultMap.put(Constant.DATA, json.getObj());//List<DocOrderPacking>
         return resultMap;
     }
 }

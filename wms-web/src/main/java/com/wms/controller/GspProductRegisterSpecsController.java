@@ -64,6 +64,14 @@ public class GspProductRegisterSpecsController {
 		return gspProductRegisterSpecsService.getPagedDatagrid(pager, query);
 	}
 
+
+
+	@Login
+	@RequestMapping(params = "showProductSUPDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<GspProductRegisterSpecsVO> showProductSUPDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
+		return gspProductRegisterSpecsService.getPagedProductSUPDatagrid(pager, query);
+	}
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody

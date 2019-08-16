@@ -8,13 +8,16 @@ import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
+import com.wms.query.BasSerialNumQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
+import com.wms.query.ProductLineQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnDetailForm;
@@ -56,6 +59,12 @@ public class DocAsnDetailService extends BaseService {
 
 	@Autowired
 	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+
+	@Autowired
+	private BasSerialNumMybatisDao basSerialNumMybatisDao;
+
+	@Autowired
+	private ProductLineMybatisDao productLineMybatisDao;
 
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
@@ -229,6 +238,22 @@ public class DocAsnDetailService extends BaseService {
 
 	    PdaDocAsnDetailVO pdaDocAsnDetailVO = new PdaDocAsnDetailVO();
 
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
+                StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
+
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                query.setLotatt04(basSerialNum.getBatchNum());
+            }
+        }
+
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
@@ -238,7 +263,16 @@ public class DocAsnDetailService extends BaseService {
             return pdaDocAsnDetailVO;
         }
 
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
         query.setSku(basSku.getSku());
+        if (isSerialManagement) query.setLotatt05("");
         DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryForScan(query);
         if (docAsnDetail != null) {
             BeanUtils.copyProperties(docAsnDetail, pdaDocAsnDetailVO);
@@ -256,6 +290,23 @@ public class DocAsnDetailService extends BaseService {
 
         PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
         PdaDocAsnDetailQuery detailQuery = new PdaDocAsnDetailQuery();
+
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(form.getOtherCode()) ||
+                StringUtil.isNotEmpty(form.getLotatt05())) {
+
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
+
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                form.setLotatt04(basSerialNum.getBatchNum());
+            }
+        }
+
         BeanUtils.copyProperties(form, skuQuery);
         BeanUtils.copyProperties(form, detailQuery);
 
@@ -275,6 +326,15 @@ public class DocAsnDetailService extends BaseService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         form.setReceivingtime(dateFormat.format(new Date()));
         form.setReceivinglocation("STAGE01");
+
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+        if (isSerialManagement) form.setLotatt05("");
 
         //收货
         try {

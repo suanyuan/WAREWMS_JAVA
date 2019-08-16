@@ -94,8 +94,8 @@ public class Constant {
 //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 
-    //public static final String uploadUrl = "/Users/quendi/fileUpload";
-    public static final String uploadUrl = "/root/uploadDir";
+    public static final String uploadUrl = "/Users/quendi/fileUpload";
+    //public static final String uploadUrl = "/root/uploadDir";
 
 
 

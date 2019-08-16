@@ -6,20 +6,18 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocPaDetails;
-import com.wms.entity.InvLotAtt;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
-import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
-import com.wms.mybatis.dao.InvLotAttMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
+import com.wms.query.BasSerialNumQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocPaDetailsQuery;
+import com.wms.query.ProductLineQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.DocPaDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
@@ -47,6 +45,12 @@ public class DocPaDetailsService extends BaseService {
 
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
+
+	@Autowired
+	private BasSerialNumMybatisDao basSerialNumMybatisDao;
+
+	@Autowired
+	private ProductLineMybatisDao productLineMybatisDao;
 
 	public EasyuiDatagrid<DocPaDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaDetailsQuery query) {
         EasyuiDatagrid<DocPaDetailsVO> datagrid = new EasyuiDatagrid<>();
@@ -125,6 +129,22 @@ public class DocPaDetailsService extends BaseService {
 
         PdaDocPaDetailVO docPaDetailVO = new PdaDocPaDetailVO();
 
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
+                StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
+
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                query.setLotatt04(basSerialNum.getBatchNum());
+            }
+        }
+
         //获取BasSku
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
@@ -135,7 +155,16 @@ public class DocPaDetailsService extends BaseService {
             return docPaDetailVO;
         }
 
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
         query.setSku(basSku.getSku());
+        if (isSerialManagement) query.setLotatt05("");
         DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(query);
         if (docPaDetails != null) {
 
@@ -178,19 +207,42 @@ public class DocPaDetailsService extends BaseService {
         PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
         PdaDocPaDetailQuery detailQuery = new PdaDocPaDetailQuery();
 
+        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
+        // 这里处理的有两种情况：
+        //  1.扫描序列号出库
+        //  2.扫描带序列号的条码出库
+        if (StringUtil.isNotEmpty(form.getOtherCode()) ||
+                StringUtil.isNotEmpty(form.getUserdefine4())) {
+
+            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getUserdefine4());
+            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            if (basSerialNum != null) {
+
+                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
+                form.setUserdefine3(basSerialNum.getBatchNum());
+            }
+        }
+
         skuQuery.setCustomerid(form.getCustomerid());
         skuQuery.setLotatt04(form.getUserdefine3());
-        skuQuery.setLotatt05(form.getUserdefine4());
         skuQuery.setGTIN(form.getGTIN());
         //sku
         BasSku basSku = basSkuMybatisDao.queryForScan(skuQuery);
 
         if (basSku == null) return new PdaResult(PdaResult.CODE_FAILURE, "产品档案缺失");
 
+        /*
+        产品线 为空则默认正常流程
+        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
         //DocPaDetails
         BeanUtils.copyProperties(form, detailQuery);
         detailQuery.setLotatt04(form.getUserdefine3());
-        detailQuery.setLotatt05(form.getUserdefine4());
+        if (!isSerialManagement) detailQuery.setLotatt05(form.getUserdefine4());
         detailQuery.setSku(basSku.getSku());
         DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(detailQuery);
 
@@ -204,9 +256,10 @@ public class DocPaDetailsService extends BaseService {
         BeanUtils.copyProperties(docPaDetails, form);
         form.setUserdefine1(locationid);
         form.setUserdefine5(userdefine5);
-        if (form.getLotatt01().equals("")) {
-            form.setLotatt01(invLotAtt.getLotatt01());
-        }
+
+        if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
+        if (isSerialManagement) form.setUserdefine4("");
+
         form.setUserid("Gizmo");
         form.setLanguage("CN");
         form.setReturncode("");

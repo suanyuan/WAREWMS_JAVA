@@ -327,12 +327,12 @@ var doSearch = function(){
         enterpriseDialog_gspCustomer = $('#enterpriseDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toSearchDialog&target=gspCustomer",
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toSearchDialog&target=gspCustomer&type=noCustomer",
             width:850,
             height:500,
             cache:false,
             onClose : function() {
-
+                enterpriseDialog_gspCustomer.dialog("destroy")
             }
         })
 		/*
