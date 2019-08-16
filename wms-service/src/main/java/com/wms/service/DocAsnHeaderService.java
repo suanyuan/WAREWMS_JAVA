@@ -118,6 +118,10 @@ public class DocAsnHeaderService extends BaseService {
 		return false;
 	}
 
+
+
+
+
 	public Json addDocAsnHeader(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 		Json json = new Json();
 		/*获取新的订单号*/
@@ -126,20 +130,21 @@ public class DocAsnHeaderService extends BaseService {
 		docAsnHeaderMybatisDao.getIdSequence(map);
 		String resultCode = map.get("resultCode").toString();
 		String resultNo = map.get("resultNo").toString();
-		if (resultCode.substring(0,3).equals("000")) {
-			DocAsnHeader docAsnHeader = new DocAsnHeader();
+        DocAsnHeader docAsnHeader = new DocAsnHeader();
+        int flag =  docAsnHeaderMybatisDao.showAsnreference1(docAsnHeaderForm.getAsnreference1());
+		if (resultCode.substring(0,3).equals("000") && flag == 0) {
 			BeanUtils.copyProperties(docAsnHeaderForm, docAsnHeader);
 			docAsnHeader.setAsnno(resultNo);
 			docAsnHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			docAsnHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			docAsnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			docAsnHeaderMybatisDao.add(docAsnHeader);
-			json.setSuccess(true);
+            json.setSuccess(true);
 			json.setMsg(resultNo);
 			return json;
 		} else {
 			json.setSuccess(false);
-			json.setMsg(resultCode);
+			json.setMsg("客户单号重复！");
 			return json;
 		}
 	}

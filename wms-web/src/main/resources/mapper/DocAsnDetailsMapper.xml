@@ -140,7 +140,6 @@
 	 addtime,addwho,alternativedescr_c,alternativesku,asnlinefilter,asnlineno,asnno,containerid,createsource,customerid,damagedqty_each,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,edittime,editwho,expectedqty,expectedqty_each,holdrejectcode,holdrejectreason,linestatus,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,notes,operator,overrcvpercentage,packid,palletizemethod,palletizeqty_each,plantoloc,polineno,pono,prereceivedqty_each,printlabel,productstatus,productstatus_descr,qcstatus,receivedqty,receivedqty_each,receivedtime,receivinglocation,referencelineno,rejectedqty,rejectedqty_each,reserve_flag,sku,skudescrc,skudescre,totalcubic,totalgrossweight,totalnetweight,totalprice,uom,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6
 </sql>
    
-   
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
 where 1=1
@@ -466,7 +465,7 @@ insert into doc_asn_details
                #{skudescrc,jdbcType=VARCHAR},
                '00',
                #{expectedqty},
-               #{expectedqty},
+               #{expectedqtyEach},
                0,
                0,
                0,
@@ -997,6 +996,10 @@ insert into doc_asn_details
         and detail.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
         and detail.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
     </select>
-
-
-</mapper>   
+	<select id="queryByList"  resultMap="DocAsnDetailMap" parameterType="Object">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM doc_asn_details
+		<include refid="Example_Where_Clause"/>
+	</select>
+</mapper>
