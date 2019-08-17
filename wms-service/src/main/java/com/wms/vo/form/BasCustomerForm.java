@@ -97,8 +97,9 @@ public class BasCustomerForm {
 
 	private String remark;
 
-	private String contractNo;
+	private String contractNo;//误
 
+	private String supContractNo;
 	private String contractUrl;
 
 	private String clientContent;
@@ -107,13 +108,30 @@ public class BasCustomerForm {
 
 	private java.util.Date clientEndDate;
 
-	private Long clientTerm;
+	private String clientTerm;
 
 	private Long isChineseLabel;
 
 	private String bankaccount;
 
 	private String billclass;
+
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
+	public String getSupContractNo() {
+		return supContractNo;
+	}
+
+	public void setSupContractNo(String supContractNo) {
+		this.supContractNo = supContractNo;
+	}
 
 	public String getToken() {
 		return token;
@@ -363,13 +381,7 @@ public class BasCustomerForm {
 		this.clientEndDate = clientEndDate;
 	}
 
-	public Long getClientTerm() {
-		return clientTerm;
-	}
 
-	public void setClientTerm(Long clientTerm) {
-		this.clientTerm = clientTerm;
-	}
 
 	public Long getIsChineseLabel() {
 		return isChineseLabel;

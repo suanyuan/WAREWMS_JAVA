@@ -15,6 +15,7 @@
 	<result column="is_use" property="isUse"/>
 	<result column="first_state" property="firstState"/>
 	<result column="productline" property="productline"/>
+	<result column="supplier_name" property="supplierName"/>
 </resultMap>
 
 <!-- Result Map-->
@@ -199,6 +200,7 @@ where 1=1
 	left join gsp_product_register_specs sp on t2.specs_id = sp.specs_id
 	left join gsp_enterprise_info eic on client_id = eic.enterprise_id
 	left join gsp_enterprise_info eis on client_id = eis.enterprise_id
+
 	<!-- 查询条件 -->
 	<include refid="Example_Where_Clause_Page"/>
 

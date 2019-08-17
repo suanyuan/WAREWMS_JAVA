@@ -17,7 +17,7 @@ public class GspBusinessLicenseForm {
 	private java.util.Date establishmentDate;
 	private java.util.Date businessStartDate;
 	private java.util.Date businessEndDate;
-	private Long isLong;
+	private String isLong;
 	private String businessScope;
 	private java.util.Date issueDate;
 	private String registrationAuthority;
@@ -125,11 +125,11 @@ public class GspBusinessLicenseForm {
 		this.businessEndDate = businessEndDate;
 	}
 
-	public Long getIsLong() {
+	public String getIsLong() {
 		return isLong;
 	}
 
-	public void setIsLong(Long isLong) {
+	public void setIsLong(String isLong) {
 		this.isLong = isLong;
 	}
 

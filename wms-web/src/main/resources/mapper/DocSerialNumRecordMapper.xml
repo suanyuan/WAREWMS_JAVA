@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocSerialNumRecordMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocSerialNumRecord" >
+	<result column="id" property="id"/>
+	<result column="carton_no" property="cartonNo"/>
+	<result column="order_no" property="orderNo"/>
+	<result column="serial_num" property="serialNum"/>
+</resultMap>
+       
+<!-- doc_serial_num_record table all fields -->
+<sql id="Base_Column_List" >
+	 id,carton_no,order_no,serial_num
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.cartonNo != null and condition.cartonNo != ''" >
+	    and carton_no =  #{condition.cartonNo}
+	</if>
+	<if test="condition.orderNo != null and condition.orderNo != ''" >
+	    and order_no =  #{condition.orderNo}
+	</if>
+	<if test="condition.serialNum != null and condition.serialNum != ''" >
+	    and serial_num =  #{condition.serialNum}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_serial_num_record(carton_no,order_no,serial_num)
+ values(#{cartonNo},#{orderNo},#{serialNum})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_serial_num_record set carton_no=#{cartonNo},order_no=#{orderNo},serial_num=#{serialNum} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_serial_num_record set 
+	<trim  suffixOverrides="," >
+	<if test="cartonNo != null  ">
+		carton_no=#{cartonNo},
+	</if>
+	<if test="orderNo != null  ">
+		order_no=#{orderNo},
+	</if>
+	<if test="serialNum != null  ">
+		serial_num=#{serialNum},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_serial_num_record where id = #{id}
+</delete>
+ 
+<!-- 根据id查询 出库序列号记录表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_serial_num_record where id = #{id}
+</select>
+
+<!-- 出库序列号记录表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_serial_num_record 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询出库序列号记录表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_serial_num_record 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+    <delete id="clearRecordByTraceid" parameterType="java.util.Map">
+        delete from doc_serial_num_record
+        where order_no = #{orderNo} and carton_no = #{cartonNo}
+    </delete>
+</mapper>   

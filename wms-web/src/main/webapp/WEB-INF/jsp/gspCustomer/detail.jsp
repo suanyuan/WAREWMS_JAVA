@@ -389,7 +389,7 @@
             queryParams:{
                 isUse : '1',
                 enterpriseType:'default',
-                type:'enterprise'
+                type:'noCustomer'
             },
             fit:true,
             collapsible:false,
@@ -422,16 +422,6 @@
             }
         })
 
-        dataGridDetail = $('#ezuiDialogDetail').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
 
         dialogEnterprise = $('#dialogEnterprise').dialog({
             modal : true,
@@ -447,9 +437,17 @@
     })
 
     function searchEnterprise() {
-        if(dataGridDetail){
-            dataGridDetail.dialog('open');
-        }
+        dataGridDetail = $('#ezuiDialogDetail').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiDialogDetail.dialog("destroy");
+                ezuiFormClear(ezuiForm);
+            }
+        })
 
     }
 
@@ -457,8 +455,8 @@
         enterpriseDatagrid.datagrid('load', {
             enterpriseNo : $('#enterpriseNo').val(),
             shorthandName : $('#shorthandName').val(),
+            type:'noCustomer',
             enterpriseType:'default',
-            type:'enterprise',
             isUse : '1'
 
         });

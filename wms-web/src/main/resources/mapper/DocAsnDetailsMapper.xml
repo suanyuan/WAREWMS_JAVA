@@ -993,8 +993,8 @@ insert into doc_asn_details
         where detail.asnno = #{asnno, jdbcType=VARCHAR}
         and detail.customerid = #{customerid, jdbcType=VARCHAR}
         and detail.sku = #{sku, jdbcType=VARCHAR}
-        and detail.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
-        and detail.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+        and IFNULL(detail.lotatt04,'') = IFNULL(rtrim(#{lotatt04, jdbcType=VARCHAR}),'')
+        and IFNULL(detail.lotatt05,'') = IFNULL(rtrim(#{lotatt05, jdbcType=VARCHAR}),'')
     </select>
 	<select id="queryByList"  resultMap="DocAsnDetailMap" parameterType="Object">
 		SELECT

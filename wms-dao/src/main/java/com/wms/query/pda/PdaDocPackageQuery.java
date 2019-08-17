@@ -10,4 +10,6 @@ public class PdaDocPackageQuery extends PdaBasSkuQuery {
     private String warehouseid;
 
     private String customerid;
+
+    private String otherCode;
 }

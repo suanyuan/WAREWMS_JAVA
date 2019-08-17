@@ -32,6 +32,11 @@ public class ViewInvLotattService extends BaseService {
 //	private ViewInvLotattDao viewInvLotattDao;
 	private ViewInvLotattMybatisDao viewInvLotattMybatisDao;
 
+	/**
+	 * 根据分页显示
+	 * @param query
+	 * @return
+	 */
 	public EasyuiDatagrid<ViewInvLotattVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
 		EasyuiDatagrid<ViewInvLotattVO> datagrid = new EasyuiDatagrid<ViewInvLotattVO>();
 //		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -53,6 +58,11 @@ public class ViewInvLotattService extends BaseService {
 		return datagrid;
 	}
 
+	/**
+	 * 库存调整
+	 * @param viewInvLotattForm
+	 * @return
+	 */
 	public Json adjViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
 		Json json = new Json();
 //		ViewInvLotatt viewInvLotatt = viewInvLotattMybatisDao.queryById(viewInvLotattForm.getFmid());//james
@@ -84,23 +94,27 @@ public class ViewInvLotattService extends BaseService {
 		}
 		return json;
 	}
-	
+	/**
+	 * 库存移动
+	 * @param viewInvLotattForm
+	 * @return
+	 */
 
 	public Json movViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
 		Json json = new Json();
 		
 		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());
-		map.put("fmsku",  viewInvLotattForm.getFmsku());
-		map.put("fmlotnum",  viewInvLotattForm.getFmlotnum());
-		map.put("fmlocation",  viewInvLotattForm.getFmlocation());
-		map.put("fmid",  viewInvLotattForm.getFmid());
-		map.put("fmqty",  String.valueOf(viewInvLotattForm.getFmqty()));
+		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());//仓库
+		map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());//货主
+		map.put("fmsku",  viewInvLotattForm.getFmsku());             //产品代码
+		map.put("fmlotnum",  viewInvLotattForm.getFmlotnum());       //批号
+		map.put("fmlocation",  viewInvLotattForm.getFmlocation());   //库位
+		map.put("fmid",  viewInvLotattForm.getFmid());               //跟踪号
+		map.put("fmqty",  String.valueOf(viewInvLotattForm.getFmqty()));//可用件数
 		map.put("lotatt11text", viewInvLotattForm.getLotatt11text());//目标库位
 		map.put("lotatt11", viewInvLotattForm.getLotatt11());//移动数量
 		map.put("lotatt12",  viewInvLotattForm.getLotatt12());//移动原因
-		map.put("lotatt12text",  viewInvLotattForm.getLotatt12text());//原因说明
+		map.put("lotatt12text",viewInvLotattForm.getLotatt12text());//原因描述
 		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
 		ViewInvLotatt viewInvLotatt = viewInvLotattMybatisDao.queryById(map);
 		if(viewInvLotatt != null){
@@ -116,7 +130,11 @@ public class ViewInvLotattService extends BaseService {
 		}
 		return json;
 	}
-	
+	/**
+	 * 库存冻结
+	 * @param viewInvLotattForm
+	 * @return
+	 */
 	public Json holdViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
 		Json json = new Json();
 		

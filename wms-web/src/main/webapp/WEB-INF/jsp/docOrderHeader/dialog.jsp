@@ -44,18 +44,58 @@
 					<td><input type='text' id='carrierId' name='carrierId' data-options=''/></td>
 				</tr>
 				<tr>
+					<th>省</th>
+					<td>
+						<!--<input type='text' id='cProvince' class='easyui-textbox' size='16' data-options=''/>-->
+						<input id="cProvince" class="easyui-combobox" name="cProvince"  editable="false" data-options="
+								valueField: 'name',
+								textField: 'name',
+								width:110,
+								required:true,
+								url: 'gspReceivingAddressController.do?getArea&pid=0',
+								onSelect: function(rec){
+									$('#cCity').combobox('clear');
+									$('#cAddress2').combobox('clear');
+									var url= 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+									$('#cCity').combobox('reload',url);
+							}">
+					</td>
+					<th>市</th>
+					<td>
+						<!--<input type='text' id='cCity' class='easyui-textbox' size='16' data-options=''/>-->
+						<input id="cCity" class="easyui-combobox" name="cCity" editable="false" data-options="
+								valueField: 'name',
+								textField: 'name',
+								width:110,
+								required:true,
+								onSelect: function(rec){
+									$('#cCity').combobox('reload', url);
+									$('#cAddress2').combobox('clear');
+									var url = 'gspReceivingAddressController.do?getArea&pid='+rec.id;
+									$('#cAddress2').combobox('reload', url);
+								}">
+					</td>
+					<th>区</th>
+					<td>
+						<!--<input type='text' id='cCountry' class='easyui-textbox' size='16' data-options=''/>-->
+						<input id="cAddress2" class="easyui-combobox" name="cAddress2"  editable="false" data-options="
+								width:110,
+								valueField:'name',
+								required:true,
+								textField:'name'">
+					</td>
 					<th>收货地址</th>
-					<td colspan="5"><input type='text' id='cAddress1' name='cAddress1' class='easyui-textbox' size='78' data-options='required:true'/></td>
+					<td colspan="3"><input type='text' id='cAddress1' name='cAddress1' class='easyui-textbox' size='45' data-options='required:true'/></td>
+				</tr>
+				<tr>
+					<th>备注</th>
+					<td colspan="3"><input type='text' id='notes' name='notes' class='easyui-textbox' size='45' style="height:30px" data-options="multiline:true,validType:['length[200]']"/></td>
+					<th>结算方式</th>
+					<td><input type='text' id='userdefine2' name='userdefine2' data-options=''/></td>
 					<th>订单发运时间</th>
 					<td><input type='text' id='lastshipmenttime' name='lastshipmenttime' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<th>发运方式</th>
 					<td><input type='text' id='userdefine1' name='userdefine1' data-options=''/></td>
-				</tr>
-				<tr>
-					<th>备注</th>
-					<td colspan="5"><input type='text' id='notes' name='notes' class='easyui-textbox' size='78' style="height:30px" data-options="multiline:true,validType:['length[200]']"/></td>
-					<th>结算方式</th>
-					<td><input type='text' id='userdefine2' name='userdefine2' data-options=''/></td>
 				</tr>
 				<tr>
 					<th>订单创建时间</th>

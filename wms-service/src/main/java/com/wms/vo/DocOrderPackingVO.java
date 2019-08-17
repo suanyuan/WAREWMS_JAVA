@@ -11,6 +11,7 @@ public class DocOrderPackingVO {
 	private Double grossWeight;
 	private Double cube;
 	private String allocationDetailsId;
+	private String traceId;
 
 	public String getOrderNo() {
 		return orderNo;
@@ -82,5 +83,13 @@ public class DocOrderPackingVO {
 
 	public void setAllocationDetailsId(String allocationDetailsId) {
 		this.allocationDetailsId = allocationDetailsId;
+	}
+
+	public String getTraceId() {
+		return traceId;
+	}
+
+	public void setTraceId(String traceId) {
+		this.traceId = traceId;
 	}
 }

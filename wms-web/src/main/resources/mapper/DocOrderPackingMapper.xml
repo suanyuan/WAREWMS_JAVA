@@ -5,7 +5,6 @@
 <mapper namespace="com.wms.mybatis.dao.DocOrderPackingMybatisDao" > 
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.DocOrderPacking" >
-	<result column="traceId" property="traceId"/>
 	<result column="orderNo" property="orderNo"/>
 	<result column="orderCode" property="orderCode"/>
 	<result column="cartonNo" property="cartonNo"/>
@@ -22,6 +21,7 @@
 	<result column="cartonQty" property="cartonQty"/>
 	<result column="grossWeight" property="grossWeight"/>
 	<result column="cube" property="cube"/>
+	<result column="traceid" property="traceId"/>
 </resultMap>
 <!-- Result Map-->
 <resultMap id="PackingResultMap" type="com.wms.entity.DocOrderPacking" >
@@ -49,6 +49,11 @@
 		<result column="scanQty" property="scanQty"/>
 	</collection>
 </resultMap>
+
+    <resultMap id="PackingDifferenceMap" type="com.wms.entity.DocOrderPacking">
+        <result column="differentQty" property="differentQty"/>
+        <result column="batchNum" property="batchNum"/>
+    </resultMap>
 
     <resultMap id="PackingCartonMap" type="com.wms.entity.DocOrderPackingCarton">
         <result column="orderno" property="orderno"/>
@@ -217,7 +222,8 @@
 	descr_c as skuName,
 	qty as scanQty,
 	grossweight as grossWeight,
-	cube as cube
+	cube as cube,
+	traceid
 	from (select c.customerid,
 	a.orderno,
 	c.soreference1,
@@ -226,7 +232,8 @@
 	d.descr_c,
 	a.qty,
 	b.grossweight,
-	b.cube
+	b.cube,
+	traceid
 	from (select orderno, cartonno, sku, sum(qty) as qty
 	from Doc_Order_Packing_Carton
 	where 1 = 1
@@ -487,18 +494,32 @@ select a.orderno as orderNo,
 	and b.customerid = c.customerid
 	and a.sku = c.sku
 	and a.orderno = #{orderNo,jdbcType=VARCHAR}
-	and a.cartonno = #{cartonNo,jdbcType=INTEGER}
+	and a.traceid = #{cartonNo,jdbcType=INTEGER}
 	group by a.orderno, a.cartonno
 </select>
  
-<!--按已装箱数据合计重量、体积-->
-<select id="queryOrderPackingInfoById"  resultMap="PackingResultMap" parameterType="Object">
-	select orderno as orderNo,
-	sum(IFNULL(grossweight, 0)) as grossWeight,
-	sum(IFNULL(cube, 0)) as cube
-	from Doc_Order_Packing_Carton_Info
-	where orderno = #{orderNo,jdbcType=VARCHAR}
-	group by orderno
+<!--按已装箱数据合计生产批号对应的装箱件数-->
+<select id="queryOrderPackingInfoById"  resultMap="PackingDifferenceMap" parameterType="Object">
+    select sub_tb.batchNum, sub_tb.differentQty from (
+        SELECT tmpB.batchNum as batchNum, (IFNULL(tmpA.boxQty,0) - IFNULL(tmpB.allocationQty,0)) as differentQty
+        FROM
+            (
+                SELECT lotatt04, SUM(qty) AS boxQty
+                FROM doc_order_packing_carton
+                WHERE orderno = #{orderNo} GROUP BY lotatt04
+            )
+            AS tmpA
+        LEFT JOIN
+            (
+                SELECT b.lotatt04 as batchNum, SUM(a.qty) AS allocationQty
+                FROM act_allocation_details a
+                LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
+                WHERE a.orderno = #{orderNo} GROUP BY b.lotatt04
+            )
+            AS tmpB
+            ON IFNULL(tmpA.lotatt04,'') = IFNULL(tmpB.batchNum,'')
+              <![CDATA[ AND tmpA.boxQty <> tmpB.allocationQty ]]>
+    ) as sub_tb where sub_tb.batchNum IS NOT NULL
 </select>
  
 <!--打印装箱标签数据-->

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasSerialNumMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasSerialNum" >
+	<result column="serial_num" property="serialNum"/>
+	<result column="batch_num" property="batchNum"/>
+	<result column="material_num" property="materialNum"/>
+	<result column="expire_date" property="expireDate"/>
+	<result column="product_date" property="productDate"/>
+	<result column="batch_flag" property="batchFlag"/>
+<!--	<result column="out_flag" property="outFlag"/>-->
+	<result column="uom" property="uom"/>
+	<result column="purchase_order" property="purchaseOrder"/>
+	<result column="package_num" property="packageNum"/>
+	<result column="delivery_num" property="deliveryNum"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="addwho" property="addwho"/>
+	<result column="addtime" property="addtime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edittime" property="edittime"/>
+</resultMap>
+       
+<!-- bas_serial_num table all fields -->
+<sql id="Base_Column_List" >
+	 serial_num,batch_num,material_num,expire_date,product_date,batch_flag,out_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.serialNum != null and condition.serialNum != ''" >
+	    and serial_num =  #{condition.serialNum}
+	</if>
+	<if test="condition.batchNum != null and condition.batchNum != ''" >
+	    and batch_num =  #{condition.batchNum}
+	</if>
+	<if test="condition.materialNum != null and condition.materialNum != ''" >
+	    and material_num =  #{condition.materialNum}
+	</if>
+	<if test="condition.expireDate != null and condition.expireDate != ''" >
+	    and expire_date =  #{condition.expireDate}
+	</if>
+	<if test="condition.productDate != null and condition.productDate != ''" >
+	    and product_date =  #{condition.productDate}
+	</if>
+	<if test="condition.batchFlag != null and condition.batchFlag != ''" >
+	    and batch_flag =  #{condition.batchFlag}
+	</if>
+	<if test="condition.outFlag != null and condition.outFlag != ''" >
+	    and out_flag =  #{condition.outFlag}
+	</if>
+	<if test="condition.uom != null and condition.uom != ''" >
+	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.purchaseOrder != null and condition.purchaseOrder != ''" >
+	    and purchase_order =  #{condition.purchaseOrder}
+	</if>
+	<if test="condition.packageNum != null and condition.packageNum != ''" >
+	    and package_num =  #{condition.packageNum}
+	</if>
+	<if test="condition.deliveryNum != null and condition.deliveryNum != ''" >
+	    and delivery_num =  #{condition.deliveryNum}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_serial_num(serial_num,batch_num,material_num,expire_date,product_date,batch_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime)
+ values(#{serialNum},#{batchNum},#{materialNum},#{expireDate},#{productDate},#{batchFlag},#{uom},#{purchaseOrder},#{packageNum},#{deliveryNum},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addwho},now(),#{editwho},now())
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_serial_num set batch_num=#{batchNum},material_num=#{materialNum},expire_date=#{expireDate},product_date=#{productDate},batch_flag=#{batchFlag},out_flag=#{outFlag},uom=#{uom},purchase_order=#{purchaseOrder},package_num=#{packageNum},delivery_num=#{deliveryNum},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},addwho=#{addwho},addtime=#{addtime},editwho=#{editwho},edittime=#{edittime} where serial_num=#{serialNum}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_serial_num set 
+	<trim  suffixOverrides="," >
+	<if test="batchNum != null  ">
+		batch_num=#{batchNum},
+	</if>
+	<if test="materialNum != null  ">
+		material_num=#{materialNum},
+	</if>
+	<if test="expireDate != null  ">
+		expire_date=#{expireDate},
+	</if>
+	<if test="productDate != null  ">
+		product_date=#{productDate},
+	</if>
+	<if test="batchFlag != null  ">
+		batch_flag=#{batchFlag},
+	</if>
+	<if test="outFlag != null  ">
+		out_flag=#{outFlag},
+	</if>
+	<if test="uom != null  ">
+		uom=#{uom},
+	</if>
+	<if test="purchaseOrder != null  ">
+		purchase_order=#{purchaseOrder},
+	</if>
+	<if test="packageNum != null  ">
+		package_num=#{packageNum},
+	</if>
+	<if test="deliveryNum != null  ">
+		delivery_num=#{deliveryNum},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	</trim> where serial_num=#{serialNum}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_serial_num where serial_num = #{serialNum}
+</delete>
+ 
+<!-- 根据id查询 序列号管理 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_serial_num where serial_num = #{serialNum}
+</select>
+
+<!-- 序列号管理 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_serial_num 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询序列号管理列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_serial_num 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

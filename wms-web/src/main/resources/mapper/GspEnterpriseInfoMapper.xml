@@ -230,7 +230,7 @@ where 1=1
 					and (g.enterprise_type = 'JY' or g.enterprise_type = 'GNSC' or g.enterprise_type = 'SCJY')
 				</when>
 				<when test="condition.enterpriseType == 'default'"><!--默认去除ZT -->
-					and (g.enterprise_type != 'ZT')
+					and (g.enterprise_type != 'ZT' and g.enterprise_type !='GW' )
 				</when>
 				<otherwise>
 					and g.enterprise_type = #{condition.enterpriseType}
@@ -268,10 +268,15 @@ where 1=1
 					and gs.enterprise_id is not null
 					and gs.first_state = '40'
 				</when>
+				<when test="condition.type == 'noCustomer'">
+					and ( cus.enterprise_id is null)
+				</when>
+				<when test="condition.type == 'noSupplier'">
+					and ( gs.enterprise_id is null)
+				</when>
 				<when test="condition.type == 'enterprise'">
 					and ( cus.enterprise_id is null or cus.first_state = '60' or cus.first_state = '90' or cus.is_use = '0')
 					and ( gs.enterprise_id is null or gs.first_state = '60' or gs.first_state = '90' or gs.is_use = '0')
-
 				</when>
 			</choose>
 		</if>

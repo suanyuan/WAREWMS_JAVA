@@ -3,7 +3,7 @@
     <input type='hidden' id='gspProductRegisterSpecsId' name='gspProductRegisterSpecsId'/>
     <table>
         <tr style="display: none">
-            <td><input type="hidden"  name='specsId'  id="specsId" value="${specsId}"/></td>
+            <td><input type="hidden"  name='specsId'  id="specsId" value="${specsId}" /></td>
         </tr>
         <tr style="display: none">
             <th>产品注册证表主键</th>
@@ -203,9 +203,19 @@
 </div>
 <script>
     var enterpriseDialog;
+    var id;
     $(function(){
         //主页编辑
         var row = ezuiDatagrid.datagrid('getSelected');
+        //alert(row.specsId);
+        // if(row.specsId=="" || row.specsId==null){
+        //    id = $("#specsId").val();
+        // }else{
+        //     id = row.specsId;
+        // }
+//alert()
+//             processType == 'edit';
+//         id = row.specsId;
 
         if(row){
             if(processType == 'edit'){
@@ -285,7 +295,6 @@
     })
 
     function searchEnterprise() {
-
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
@@ -295,7 +304,8 @@
             cache: false,
             onClose: function () {
                 $(this).dialog('destroy');
-            }
+            },
+
         })
     }
     //点击注册证编号之后datagrid放大镜事件

@@ -16,6 +16,15 @@ public class FirstBusinessProductApplyQuery implements IQuery {
 	private String editId;
 	private String editDate;
 	private String isUse;
+	private String supplierName;
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
 
 	public String getProductApplyId() {
 		return productApplyId;

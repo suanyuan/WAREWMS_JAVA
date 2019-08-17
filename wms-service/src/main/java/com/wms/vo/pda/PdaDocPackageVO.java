@@ -16,6 +16,11 @@ public class PdaDocPackageVO {
     String cartonNum;
 
     /**
+     * 记录本次扫码是否是序列号扫码出库类型，是的话就返回给前端、移动端，用作包装复核提交中进行序列号记录
+     */
+    String serialNum;
+
+    /**
      * 分配明细
      */
     private ActAllocationDetails actAllocationDetails;
@@ -37,6 +42,9 @@ public class PdaDocPackageVO {
 
     /**
      * 如果此产品已经包装复核合格过了，会有
+     * **************************
+     * ******* Deprecated *******
+     * **************************
      */
     private DocOrderPackingCarton docOrderPackingCarton;
 }

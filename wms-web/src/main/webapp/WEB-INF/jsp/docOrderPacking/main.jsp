@@ -46,12 +46,11 @@ $(function() {
 			orderNo : '0'
 		},
 		columns : [[
-		            {field: 'cartonNo',				title: '箱号',		width: 20 	},
-		            {field: 'cube',					title: '装箱体积',		width: 20 	},
-					{field: 'grossWeight',			title: '装箱重量',		width: 20 	},
+           			 {field: 'cartonNo',				title: '装箱序号',		width: 20 	},
+		            {field: 'traceId',				title: '箱号',		width: 20 	},
 					{field: 'sku',					title: '产品编码',		width: 20	},
 					{field: 'skuName',				title: '产品名称',		width: 40	},
-					{field: 'scanQty',				title: '装箱数量',		width: 20 	}
+					{field: 'scanQty',				title: '装箱件数',		width: 20 	}
 		]],
 		onDblClickCell: function(index,field,value){
 		},
@@ -62,6 +61,12 @@ $(function() {
 			ajaxBtn($('#menuId').val(), '<c:url value="/docOrderPackingController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('scrollTo',0);
 			$(this).datagrid('unselectAll');
+            var grid = ezuiDatagrid.datagrid("getData");
+            if(grid.rows.length>0){
+                $('#ezuiBtn_packing').linkbutton('enable');
+                //复核完成按钮
+                $('#ezuiBtn_packingCommit').linkbutton('enable');
+            }
 		}
 	});
 	
@@ -162,7 +167,9 @@ var orderStatusCheck = function(){
 						orderNo : $('#orderNo').val()
 					});
 					/* 生成新的箱号 */
-					generateCartonNo();
+					//generateCartonNo();
+					//跳转sku焦点
+                    skuCodeInit();
 				} else {
 					ezuiClear();
 					msg = '<font color="red">' + result.msg + '</font>';
@@ -187,30 +194,19 @@ var skuScanCheck = function(){
 	$.ajax({
 		async: false,
 		url : 'docOrderPackingController.do?skuScanCheck',
-		data : {orderNo : $('#orderNo').val(), cartonNo : $('#cartonNo').numberbox('getValue'), skuCode : $('#skuCode').val()},
+		data : {orderNo : $('#orderNo').val(), skuCode : $('#skuCode').val()},
 		type : 'POST',
 		dataType : 'JSON',
 		success : function(result){
 			var msg = '';
 			try {
 				if (result.success) {
-					/* 显示SKU扫描信息 */
-					$('#skuName').textbox('setValue',result.obj.skuName);
-					$('#allocationQty').numberbox('setValue',result.obj.allocationQty);
-					$('#scanQty').numberbox('setValue',result.obj.scanQty);
-					/* 判断是否批量确认 */
-					if ($("input[name='ScanType']:checked").val() == 'batch') {
-						$('#skuCode').textbox('readonly',true);
-						$('#batchQty').numberbox('clear').numberbox('readonly',false).textbox('textbox').focus();
-						/* $('#batchQty').numberbox('textbox').keydown(function (e) {
-					        if (e.keyCode == 13) {
-					        	skuBatchScan();
-					        }
-					    }); */
-					} else {
-						$("#batchQty").numberbox('clear').numberbox('readonly',true);
-			        	skuScan();
-					}
+                    $('#cartonNo').numberbox('setValue',result.obj.cartonNum);
+                    ezuiDatagrid.datagrid('reload');
+                    skuCodeInit();
+                    $('#ezuiBtn_packing').linkbutton('enable');
+                    //复核完成按钮
+                    $('#ezuiBtn_packingCommit').linkbutton('enable');
 				} else {
 					skuCodeInit();
 					msg = '<font color="red">' + result.msg + '</font>';
@@ -339,12 +335,22 @@ var packingCommit = function(){
 		dataType : 'JSON',
 		success : function(result){
 			try {
-				if (result.success) {
+				/*if (result.success) {
 					msg = result.msg;
-					$('#grossWeight').numberbox('setValue', result.obj.grossWeight);
-					$('#cube').numberbox('setValue', result.obj.cube);
+					//$('#grossWeight').numberbox('setValue', result.obj.grossWeight);
+					//$('#cube').numberbox('setValue', result.obj.cube);
+				}*/
+				var resultMsg = result.msg+"<br/>";
+				for(var i = 0;i<result.obj.length;i++){
+				    resultMsg += result.obj[i].batchNum+":"+result.obj[i].differentQty;
 				}
-			} catch (e) {
+                $.messager.confirm('提示', resultMsg+'<br/>是否确认复合完成？', function(r){
+                    if(r){
+                        commit();
+                    }
+                });
+
+            } catch (e) {
 				msg = '<spring:message code="common.message.data.process.failed"/>';
 				$.messager.show({
 					msg : msg, title : '<spring:message code="common.message.prompt"/>'
@@ -352,22 +358,27 @@ var packingCommit = function(){
 			};
 		}
 	});
-	$('#ezuiPackingDialog').panel({title: "确认是否完成复核操作？"});
-	ezuiPackingDialog.dialog('open');
+	/*$('#ezuiPackingDialog').panel({title: "确认是否完成复核操作？"});
+	ezuiPackingDialog.dialog('open');*/
+
 };
 /* 提交 */
 var commit = function(){
-	if(ezuiForm.form('validate')){
+		if(commitType == 'packingCommit' && !ezuiForm.form('validate')){
+			return;
+		}
 		var url = '';
 		if (commitType == 'packingCommit') {
 			url = '<c:url value="/docOrderPackingController.do?packingCommit"/>';
 		} else {
 			url = '<c:url value="/docOrderPackingController.do?orderCommit"/>';
 		}
+		var selectRow = ezuiDatagrid.datagrid("getSelected");
+		console.log(selectRow);
 		$.ajax({
 			async: false,
 			url : url,
-			data : {orderNo : $('#orderNo').val(), cartonNo : $('#cartonNo').numberbox('getValue'), grossWeight : $('#grossWeight').numberbox('getValue'), cube : $('#cube').numberbox('getValue')},
+			data : {orderNo : $('#orderNo').val()},
 			type : 'POST',
 			dataType : 'JSON',
 			success : function(result){
@@ -413,7 +424,6 @@ var commit = function(){
 				};
 			}
 		});
-	}
 };
 /* 取消复核（按箱） */
 var singlePackingCancel = function(){
@@ -591,8 +601,8 @@ var printPackingList = function(){
 								<a onclick='packingCommit();' id='ezuiBtn_packingCommit' class='easyui-linkbutton' data-options='iconCls:"icon-save"' style="width:90px" href='javascript:void(0);'>复核完成</a>
 								<a onclick='singlePackingCancel();' id='ezuiBtn_singlePackingCancel' class='easyui-linkbutton' data-options='iconCls:"icon-remove"' style="width:90px" href='javascript:void(0);'>取消装箱</a>
 								<!-- <a onclick='orderPackingCancel();' id='ezuiBtn_orderPackingCancel' class='easyui-linkbutton' data-options='iconCls:"icon-remove"' style="width:90px" href='javascript:void(0);'>取消复核</a> -->
-								<a onclick='printPackingLabel();' id='ezuiBtn_printPackingLabel' class='easyui-linkbutton' data-options='iconCls:"icon-print"' style="width:120px" href='javascript:void(0);'>打印装箱标签</a>
-								<a onclick='printPackingList();' id='ezuiBtn_printPackingList' class='easyui-linkbutton' data-options='iconCls:"icon-print"' style="width:120px" href='javascript:void(0);'>打印装箱清单</a>
+								<!--<a onclick='printPackingLabel();' id='ezuiBtn_printPackingLabel' class='easyui-linkbutton' data-options='iconCls:"icon-print"' style="width:120px" href='javascript:void(0);'>打印装箱标签</a>
+								<a onclick='printPackingList();' id='ezuiBtn_printPackingList' class='easyui-linkbutton' data-options='iconCls:"icon-print"' style="width:120px" href='javascript:void(0);'>打印装箱清单</a>-->
 							</td>
 						</tr>
 					</table>
@@ -605,13 +615,13 @@ var printPackingList = function(){
 			<div class='easyui-layout' data-options='border:false'>
 				<table>
 					<tr>
-						<th>重量（公斤）</th>
-						<td><input type='text' name='grossWeight'  id='grossWeight' class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3' style='width:120px;height:32px;'/></td>
+						<th>箱型</th>
+						<td><input type='text' name='cartontype'  id='cartontype' class='easyui-textbox' data-options='required:true,' style='width:180px;height:32px;'/></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<th>体积（立方）</th>
 						<td><input type='text' name='cube' id="cube" class='easyui-numberbox' size='16' data-options='required:true,min:0,precision:3' style='width:120px;height:32px;'/></td>
-					</tr>
+					</tr>-->
 				</table>
 			</div>
 		</form>
@@ -629,8 +639,8 @@ var printPackingList = function(){
 						<td><input type='text' name='orderNo'  id='orderNo' class='easyui-textbox' size='16' data-options='required:true' /></td>
 					</tr>
 					<tr>
-						<th>箱号</th>
-						<td><input type='text' name='cartonNo'  id='cartonNo' class='easyui-numberbox' size='16' data-options='required:true,min:1,precision:0'/></td>
+						<th>装箱序号</th>
+						<td><input type='text' name='cartonNo'  id='cartonNo' class='easyui-numberbox' size='16' data-options='required:true'/></td>
 					</tr>
 				</table>
 			</div>

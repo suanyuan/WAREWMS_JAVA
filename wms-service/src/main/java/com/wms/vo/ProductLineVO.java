@@ -10,11 +10,20 @@ public class ProductLineVO {
 	private String customerid;
 	private String name;
 	private String expression;
+	private int serialFlag;//是否记录序列号
 	private String createId;
 	private String createDate;
 	private String editId;
 	private String editDate;
 	private String isUse;
+
+	public int getSerialFlag() {
+		return serialFlag;
+	}
+
+	public void setSerialFlag(int serialFlag) {
+		this.serialFlag = serialFlag;
+	}
 
 	public String getCustomerid() {
 		return customerid;

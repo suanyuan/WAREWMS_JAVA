@@ -26,11 +26,11 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 
 	public int queryByDetailCount(MybatisCriteria criteria);
 	
-	public String getIdSequence(Map<String, Object> map);
+	void getIdSequence(Map<String, Object> map);
 	
-	public String close(Map<String, Object> map);
+	void close(Map<String, Object> map);
 	
-	public String cancel(Map<String, Object> map);
+	void cancel(Map<String, Object> map);
 
 	/**
 	 * 查询未完成的收货任务单

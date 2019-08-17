@@ -123,6 +123,7 @@
             case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
 			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
 			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
+            case CODE_ENT_TYP.CODE_ENT_TYP_GW : return "国外企业";
         }
     }
 
@@ -194,6 +195,14 @@
 			case "DCL" : return "待处理";
 			case "DJ" : return "待检";
 			case "HG" : return "合格";
+		}
+	}
+//样品属性
+	var YP_TYPstatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "TS" : return "投诉";
+			case "YP" : return "样品";
+			case "ZC" : return "正常";
 		}
 	}
 

@@ -50,6 +50,15 @@ public class FirstBusinessApplyController {
 		}
 		return new ModelAndView("firstBusinessApply/detail", model);
 	}
+	@Login
+	@RequestMapping(params = "toDialogProductAndSupplier")
+	public ModelAndView toDialogAddress(String id) {
+		Map<String, Object> model = new HashMap<String, Object>();
+//		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(receivingAddressId);
+//		model.put("receivingId", receivingId);
+//		model.put("gspReceivingAddress", gspReceivingAddress);
+		return new ModelAndView("firstBusinessApply/dialogProductASupplier", model);
+	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
@@ -57,6 +66,7 @@ public class FirstBusinessApplyController {
 	public EasyuiDatagrid<FirstBusinessApplyVO> showDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		return firstBusinessApplyService.getPagedDatagrid(pager, query);
 	}
+
 
 	/**
 	 * 查询首营申请产品

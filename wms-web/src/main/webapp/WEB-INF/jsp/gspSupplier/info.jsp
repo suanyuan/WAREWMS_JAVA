@@ -255,12 +255,12 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplierInfo&enterpriseType=supplier&type=enterprise",
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplierInfo&&type=noSupplier&enterpriseType=default",
             width: 850,
             height: 500,
             cache: false,
             onClose: function () {
-
+                $(this).dialog('destroy');
             }
         })
     }
@@ -271,8 +271,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         enterpriseSearchGrid_gspSupplierInfo.datagrid('load', {
             enterpriseNo : $("#enterpriseSearchGridToolbar_gspSupplierInfo input[id='enterpriseNo']").textbox("getValue"),
             shorthandName:$("#enterpriseSearchGridToolbar_gspSupplierInfo input[id='shorthandName']").textbox("getValue"),
-            type :'enterprise',
-            enterpriseType:'supplier',
+            type :'noSupplier',
+            enterpriseType:'default',
             isUse : '1'
         });
     };
@@ -435,7 +435,10 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                 cache: false,
                 onClose : function() {
                     ezuiFormClear(ezuiDialog1);
-                }
+                },
+
+
+
             }).dialog('close');
         })
         //processType = 'add';

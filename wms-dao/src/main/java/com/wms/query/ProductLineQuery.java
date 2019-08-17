@@ -1,7 +1,5 @@
 package com.wms.query;
 
-import java.util.Date;
-
 public class ProductLineQuery implements IQuery {
 
 	private String productLineId;
@@ -10,11 +8,27 @@ public class ProductLineQuery implements IQuery {
 	private String descrC;
 	private String name;
 	private String expression;
+	private int serialFlag;//是否记录序列号
 	private String createId;
 	private String  createDate;
 	private String editId;
 	private String editDate;
 	private String isUse;
+
+    public ProductLineQuery(String productLineId) {
+        this.productLineId = productLineId;
+    }
+
+    public ProductLineQuery() {
+    }
+
+	public int getSerialFlag() {
+		return serialFlag;
+	}
+
+	public void setSerialFlag(int serialFlag) {
+		this.serialFlag = serialFlag;
+	}
 
 	public String getCustomerid() {
 		return customerid;

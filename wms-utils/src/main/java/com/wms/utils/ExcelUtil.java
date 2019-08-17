@@ -611,8 +611,11 @@ public class ExcelUtil {
 				colMap.put(excelFieldNames[i], firstRow[i].getColumn());
 			}
 
-			// 判断是否有重复行
+			// 判断是否有重复行 如果uniqueFields为空 不检查重复行
 			// 1.获取uniqueFields指定的列
+			if (uniqueFields != null) {
+
+
 			Cell[][] uniqueCells = new Cell[uniqueFields.length][];
 			for (int i = 0; i < uniqueFields.length; i++) {
 				int col = colMap.get(uniqueFields[i]);
@@ -638,7 +641,7 @@ public class ExcelUtil {
 					throw new ExcelException("Excel中有重复行，请检查");
 				}
 			}
-
+			}
 			// 将sheet转换为list
 			for (int i = 1; i < realRows; i++) {
 				// 新建要转换的对象

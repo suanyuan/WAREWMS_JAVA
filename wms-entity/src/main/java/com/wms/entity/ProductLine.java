@@ -21,6 +21,7 @@ public class ProductLine implements Serializable {
     private String name;
 
     private String expression;
+    private int serialFlag;//是否记录序列号
 
     private String createId;
 
@@ -32,6 +33,22 @@ public class ProductLine implements Serializable {
     private String editDate;
 
     private String isUse;
+
+    public String getCustomerid() {
+        return customerid;
+    }
+
+    public void setCustomerid(String customerid) {
+        this.customerid = customerid;
+    }
+
+    public int getSerialFlag() {
+        return serialFlag;
+    }
+
+    public void setSerialFlag(int serialFlag) {
+        this.serialFlag = serialFlag;
+    }
 
     public String getProductLineId() {
         return productLineId;

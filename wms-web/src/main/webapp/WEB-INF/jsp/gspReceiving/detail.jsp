@@ -441,22 +441,22 @@
         // }
 
 
-        function operateGrid(id) {
-            $('#enterpriseDialog').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,
-                width:850,
-                height:500,
-                cache:false,
-                onClose : function() {
+        <%--function operateGrid(id) {--%>
+            <%--$('#enterpriseDialog').dialog({--%>
+                <%--modal : true,--%>
+                <%--title : '<spring:message code="common.dialog.title"/>',--%>
+                <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,--%>
+                <%--width:850,--%>
+                <%--height:500,--%>
+                <%--cache:false,--%>
+                <%--onClose : function() {--%>
 
-                }
-            })
-        }
-        function formatOper(value,row,index){
-            return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
-        }
+                <%--}--%>
+            <%--})--%>
+        <%--}--%>
+        <%--function formatOper(value,row,index){--%>
+            <%--return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";--%>
+        <%--}--%>
 
 
         dataGridDetail = $('#ezuiDialogDetail').dialog({

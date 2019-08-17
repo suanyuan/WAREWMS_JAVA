@@ -471,16 +471,23 @@ public class DocAsnHeaderService extends BaseService {
 	}
 
 	private String getKey(OrderDetailsForNormal detail){
-		return detail.getSku()+""+detail.getLotatt01()+detail.getLotatt02()+detail.getLotatt03()+detail.getLotatt04()
-				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt07()+detail.getLotatt08()+detail.getLotatt09()
-				+detail.getLotatt10()+detail.getLotatt11()+detail.getLotatt12()+detail.getLotatt13();
+		/*return detail.getSku()+""+detail.getLotatt01()+""+detail.getLotatt02()+""+detail.getLotatt03()+""+detail.getLotatt04()
+				+""+detail.getLotatt05()+""+detail.getLotatt06()+""+detail.getLotatt07()+""+detail.getLotatt08()
+				+""+detail.getLotatt09()+""+detail.getLotatt10()+""+detail.getLotatt11()+""+detail.getLotatt12()
+				+""+detail.getLotatt13();*/
+		return detail.getSku()+detail.getLotatt01()+detail.getLotatt02()+detail.getLotatt04()
+				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt08()
+				+detail.getLotatt09();
 	}
 
 	private String getAsnKey(DocAsnDetail detail){
-    	return detail.getSku()+""+detail.getLotatt01()+""+detail.getLotatt02()+""+detail.getLotatt03()+""+detail.getLotatt04()
+    	/*return detail.getSku()+""+detail.getLotatt01()+""+detail.getLotatt02()+""+detail.getLotatt03()+""+detail.getLotatt04()
 				+""+detail.getLotatt05()+""+detail.getLotatt06()+""+detail.getLotatt07()+""+detail.getLotatt08()
 				+""+detail.getLotatt09()+""+detail.getLotatt10()+""+detail.getLotatt11()+""+detail.getLotatt12()
-				+""+detail.getLotatt13();
+				+""+detail.getLotatt13();*/
+		return detail.getSku()+detail.getLotatt01()+detail.getLotatt02()+detail.getLotatt04()
+				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt08()
+				+detail.getLotatt09();
 	}
 
 }
