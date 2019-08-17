@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface DocPaDetailsMybatisDao extends BaseDao {
 
-	DocPaDetails queryDocPaDetail(PdaDocPaDetailQuery query);
+	List<DocPaDetails> queryDocPaDetail(PdaDocPaDetailQuery query);
 
     /**
      * 通过单号 + 行号，mybatis-generate生成的代码是只有asnno，❎

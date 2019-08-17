@@ -165,9 +165,10 @@ public class DocPaDetailsService extends BaseService {
 
         query.setSku(basSku.getSku());
         if (isSerialManagement) query.setLotatt05("");
-        DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(query);
-        if (docPaDetails != null) {
+        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(query);
+        if (docPaDetailsList.size() > 0) {
 
+            DocPaDetails docPaDetails = docPaDetailsList.get(0);
             BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
             docPaDetailVO.setBasSku(basSku);
         }
@@ -178,17 +179,17 @@ public class DocPaDetailsService extends BaseService {
         similarQuery.setCustomerid(query.getCustomerid());
         similarQuery.setSku(basSku.getSku());
         similarQuery.setUserdefine3(query.getLotatt04());
-        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.querySimilarDetail(similarQuery);
-        if (docPaDetailsList.size() == 0) {
+        List<DocPaDetails> similarDetailList = docPaDetailsMybatisDao.querySimilarDetail(similarQuery);
+        if (similarDetailList.size() == 0) {
             docPaDetailVO.setUserdefine1("");
         }else {
-            DocPaDetails similarDetail = docPaDetailsList.get(0);
+            DocPaDetails similarDetail = similarDetailList.get(0);
             docPaDetailVO.setUserdefine1(similarDetail.getUserdefine1());
         }
 
         //已上架件数计算
         Double paCompleted = 0d;
-        for (DocPaDetails qtyDetail : docPaDetailsList) {
+        for (DocPaDetails qtyDetail : similarDetailList) {
 
             paCompleted += qtyDetail.getPutwayqtyCompleted();
         }
@@ -244,7 +245,15 @@ public class DocPaDetailsService extends BaseService {
         detailQuery.setLotatt04(form.getUserdefine3());
         if (!isSerialManagement) detailQuery.setLotatt05(form.getUserdefine4());
         detailQuery.setSku(basSku.getSku());
-        DocPaDetails docPaDetails = docPaDetailsMybatisDao.queryDocPaDetail(detailQuery);
+        DocPaDetails docPaDetails = null;
+        if (StringUtil.isNotEmpty(form.getPalineno())) {
+            docPaDetails = docPaDetailsMybatisDao.queryByLineNo(form.getPano(), Integer.valueOf(form.getPalineno()));
+        }else {
+            List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(detailQuery);
+            if (docPaDetailsList.size() > 0) {
+                docPaDetails = docPaDetailsList.get(0);//默认取第一个进行上架操作
+            }
+        }
 
         if (docPaDetails == null) return new PdaResult(PdaResult.CODE_FAILURE, "上架明细数据缺失");
 

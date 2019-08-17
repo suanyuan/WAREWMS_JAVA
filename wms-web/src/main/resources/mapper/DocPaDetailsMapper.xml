@@ -264,7 +264,16 @@ where 1=1
     </select>
 
     <update id="putawayGoods" statementType="CALLABLE" parameterType="java.util.Map">
-        {call spasn_putawaying_process(#{pano, mode=IN, jdbcType=VARCHAR},#{palineno, mode=IN, jdbcType=VARCHAR},#{lotatt01, mode=IN, jdbcType=VARCHAR},#{asnno, mode=IN, jdbcType=VARCHAR},#{asnlineno, mode=IN, jdbcType=VARCHAR},#{customerid, mode=IN, jdbcType=VARCHAR},#{sku, mode=IN, jdbcType=VARCHAR},#{userdefine1, mode=IN, jdbcType=VARCHAR},#{userdefine2, mode=IN, jdbcType=VARCHAR},#{userdefine3, mode=IN, jdbcType=VARCHAR},#{userdefine4, mode=IN, jdbcType=VARCHAR},#{userdefine5, mode=IN, jdbcType=VARCHAR},#{packid, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},#{paqty, mode=IN, jdbcType=DECIMAL},#{warehouseid, mode=IN, jdbcType=VARCHAR},#{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
+        {call spasn_putawaying_process(
+        #{pano, mode=IN, jdbcType=VARCHAR},#{palineno, mode=IN, jdbcType=VARCHAR},
+        #{lotatt01, mode=IN, jdbcType=VARCHAR},#{asnno, mode=IN, jdbcType=VARCHAR},
+        #{asnlineno, mode=IN, jdbcType=VARCHAR},#{customerid, mode=IN, jdbcType=VARCHAR},
+        #{sku, mode=IN, jdbcType=VARCHAR},#{userdefine1, mode=IN, jdbcType=VARCHAR},
+        #{userdefine2, mode=IN, jdbcType=VARCHAR},#{userdefine3, mode=IN, jdbcType=VARCHAR},
+        #{userdefine4, mode=IN, jdbcType=VARCHAR},#{userdefine5, mode=IN, jdbcType=VARCHAR},
+        #{packid, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},
+        #{paqty, mode=IN, jdbcType=DECIMAL},#{warehouseid, mode=IN, jdbcType=VARCHAR},
+        #{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
     </update>
 
     <select id="queryDocPaList" parameterType="java.lang.String" resultMap="ExtendResultMap">
