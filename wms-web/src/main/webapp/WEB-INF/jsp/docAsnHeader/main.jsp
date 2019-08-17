@@ -520,7 +520,7 @@ var edit = function(row){
 
 /* 取消按钮 */
 var cancel = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
+	var row = ezuiDatagrid.datagrid('getChecked');
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认取消？', function(confirm) {
 			if(confirm){
@@ -683,7 +683,7 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
-		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "" : "N"
+		asnstatusCheck : $('#asnstatusCheck:checked') == true ? "" : "N"
 	});
 };
 
@@ -1576,12 +1576,12 @@ function asnRowStyle(index,row) {
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-					<a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关单</a>
-					<!--<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消</a>-->
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
+                    <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
+                    <a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关单订单</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

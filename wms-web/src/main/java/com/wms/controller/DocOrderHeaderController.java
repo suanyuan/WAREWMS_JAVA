@@ -178,8 +178,8 @@ public class DocOrderHeaderController {
 	@Login
 	@RequestMapping(params = "cancel")
 	@ResponseBody
-	public Json cancel(String orderNo) {
-		Json json = orderHeaderForNormalService.cancel(orderNo);
+	public Json cancel(String orderno) {
+		Json json = orderHeaderForNormalService.cancel(orderno);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

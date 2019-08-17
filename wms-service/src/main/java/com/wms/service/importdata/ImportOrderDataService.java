@@ -277,7 +277,7 @@ public class ImportOrderDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号",           "seq");
-	    map.put("客户代码",        "customerid");
+	    map.put("货主代码",        "customerid");
 	    map.put("客户单号1", 	      "orderno");
 	    map.put("收货人",          "consigneeName");
 	    map.put("收货地址",        "cAddress1");
@@ -294,10 +294,10 @@ public class ImportOrderDataService {
 		map.put("序列号",          "lotatt05");
 		map.put("产品注册证号",     "lotatt06");
 		map.put("灭菌批号",         "lotatt07");
-		map.put("供应商",          "lotatt08");
+		map.put("供应商代码",          "lotatt08");
 		map.put("样品属性",         "lotatt09");
 		map.put("质量状态",         "lotatt10");
-		map.put("存储状态",         "lotatt11");
+		map.put("存储条件",         "lotatt11");
 		map.put("产品名称",         "lotatt12");
 		map.put("双证",           "lotatt13");
 		map.put("入库单号",         "lotatt14");
@@ -315,7 +315,7 @@ public class ImportOrderDataService {
 				sku = basSkuMybatisDao.queryById(skuQuery);
 				if(sku == null){
 					resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
-							 .append("，客户代码：").append(importDataVO.getCustomerid())
+							 .append("，货主代码：").append(importDataVO.getCustomerid())
 							 .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品代码查无商品资料").append(" ");
 				}
 			}
@@ -330,7 +330,7 @@ public class ImportOrderDataService {
 			customerQuery.setCustomerType("OW");
 			customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(),customerQuery.getCustomerType());
 			if (customer == null) {// 是否有客户资料
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户资料").append(" ");
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
 			}
 		}
 	}
@@ -344,7 +344,7 @@ public class ImportOrderDataService {
 			customerQuery.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 			customer = basCustomerMybatisDao.queryById(customerQuery);
 			if (customer == null) {// 是否有客户权限
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户权限").append(" ");
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户权限").append(" ");
 			}
 		}
 	}
@@ -409,6 +409,9 @@ public class ImportOrderDataService {
 					orderDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 					orderDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 					orderDetails.setAddtime(new Date());
+					if(StringUtils.isEmpty(orderDetails.getLotatt10())){
+						orderDetails.setLotatt10("HG");
+					}
 					//保存订单明细信息
 					orderDetailsForNormalMybatisDao.add(orderDetails);
 				}

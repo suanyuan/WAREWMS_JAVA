@@ -251,7 +251,7 @@
 
         //产品
         dataGridProduct = $("#dataGridProduct").datagrid({
-            url : sy.bp()+'/gspProductRegisterSpecsController.do?showProductSUPDatagrid',
+            url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',
             method:'POST',
             toolbar : '#productToolbar',
             title: '',

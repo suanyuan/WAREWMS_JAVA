@@ -69,6 +69,7 @@
 					<td colspan="2">
 						<a onclick='renew();' id='ezuiBtn_renew' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>新增</a>
 						<a onclick='commit();' id='ezuiBtn_recommit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+						<a onclick='copyDetail();' id='ezuiBtn_copyDetail' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>明细复用</a>
 					</td>
 				</tr>
 			</table>
@@ -89,3 +90,10 @@
 	<%-- <a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a> --%>
 	<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
+
+<script>
+	//信息复用
+	function copyDetail() {
+
+    }
+</script>

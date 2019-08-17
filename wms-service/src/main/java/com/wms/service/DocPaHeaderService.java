@@ -5,9 +5,11 @@ import com.itextpdf.text.pdf.*;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
+import com.wms.entity.DocAsnHeader;
 import com.wms.entity.DocPaDetails;
 import com.wms.entity.DocPaHeader;
 import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
@@ -48,6 +50,8 @@ public class DocPaHeaderService extends BaseService {
 	private BasSkuService basSkuService;
 	@Autowired
 	private DocAsnDetailService docAsnDetailService;
+	@Autowired
+	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -91,6 +95,15 @@ public class DocPaHeaderService extends BaseService {
 		Json json = new Json();
 		DocPaHeader docPaHeader = docPaHeaderDao.queryById(id);
 		if(docPaHeader != null){
+		    //更新打印标记
+            String asn = docPaHeader.getAsnno();
+            String[] arrAsn = asn.split(",");
+            for(String s:arrAsn){
+                DocAsnHeader docAsnHeader = new DocAsnHeader();
+                docAsnHeader.setAsnPrintFlag("N");
+                docAsnHeader.setAsnno(s);
+                docAsnHeaderMybatisDao.updateBySelective(docAsnHeader);
+            }
 			docPaHeaderDao.delete(docPaHeader);
 		}
 		json.setSuccess(true);

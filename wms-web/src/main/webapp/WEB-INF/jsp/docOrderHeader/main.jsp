@@ -157,7 +157,7 @@ $(function() {
 		},
 		onLoadSuccess:function(data){
 			$(this).datagrid('unselectAll');
-			$(this).datagrid("resize",{height:200});
+			//$(this).datagrid("resize",{height:195});
 		}
 	});
 
@@ -193,7 +193,7 @@ $(function() {
         },
         onLoadSuccess:function(data){
             $(this).datagrid('unselectAll');
-            $(this).datagrid("resize",{height:200});
+            //$(this).datagrid("resize",{height:195});
         }
     });
 
@@ -494,7 +494,7 @@ var del = function(){
                     msg = result.msg;
                     if (msg == '000') {
                         operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                        operateResult = operateResult + "处理成功" + "\n";
+                        operateResult = operateResult + "处理完毕" + "\n";
                     } else {
                         operateResult = operateResult + "订单编号：" + item.orderno + ",";
                         operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -573,7 +573,7 @@ var allocation = function(){
 						msg = result.msg;
 						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理成功" + "\n";
+							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -614,7 +614,7 @@ var deAllocation = function(){
 						msg = result.msg;
 						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理成功" + "\n";
+							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -654,9 +654,9 @@ var picking = function(){
 					try {
 					    console.log(result);
 						msg = result.msg;
-						if (msg == '000') {
+						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理成功" + "\n";
+							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -697,7 +697,7 @@ var unPicking = function(){
 						msg = result.msg;
 						if (msg == '000') {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理成功" + "\n";
+							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -740,7 +740,7 @@ var unPacking = function(){
 								msg = result.msg;
 								if (msg == '000') {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
-									operateResult = operateResult + "处理成功" + "\n";
+									operateResult = operateResult + "处理完毕" + "\n";
 								} else {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -785,7 +785,7 @@ var shipment = function(){
 						msg = result.msg;
 						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理成功" + "\n";
+							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
@@ -826,9 +826,9 @@ var cancel = function(){
 							var msg = '';
 							try {
 								msg = result.msg;
-								if (msg == '000') {
+								if (result.success) {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
-									operateResult = operateResult + "处理成功" + "\n";
+									operateResult = operateResult + "处理完毕" + "\n";
 								} else {
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理时错误：" + msg + "\n";

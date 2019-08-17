@@ -644,13 +644,13 @@
             });
             return;
         }
-        if($("#supplierId").val() == ""){
+        /*if($("#supplierId").val() == ""){
 
             $.messager.show({
                 msg : "请选择供应商", title : '<spring:message code="common.message.prompt"/>'
             });
             return;
-        }
+        }*/
         $.ajax({
             url : sy.bp()+"/firstBusinessApplyController.do?apply",
             data : {
