@@ -149,11 +149,12 @@ public class DocQcDetailsService extends BaseService {
         // 这里处理的有两种情况：
         //  1.扫描序列号出库
         //  2.扫描带序列号的条码出库
+        BasSerialNum basSerialNum = null;
         if (StringUtil.isNotEmpty(query.getOtherCode()) ||
                 StringUtil.isNotEmpty(query.getLotatt05())) {
 
             BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
             if (basSerialNum != null) {
 
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
@@ -164,6 +165,7 @@ public class DocQcDetailsService extends BaseService {
         //获取BasSku
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
+        if (basSerialNum != null) basSkuQuery.setLotatt05("");
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
         if (basSku == null || basSku.getSku() == null) {

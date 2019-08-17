@@ -133,11 +133,12 @@ public class DocPaDetailsService extends BaseService {
         // 这里处理的有两种情况：
         //  1.扫描序列号出库
         //  2.扫描带序列号的条码出库
+        BasSerialNum basSerialNum = null;
         if (StringUtil.isNotEmpty(query.getOtherCode()) ||
                 StringUtil.isNotEmpty(query.getLotatt05())) {
 
             BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
             if (basSerialNum != null) {
 
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
@@ -148,6 +149,7 @@ public class DocPaDetailsService extends BaseService {
         //获取BasSku
         PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
         BeanUtils.copyProperties(query, basSkuQuery);
+        if (basSerialNum != null) basSkuQuery.setLotatt05("");
         BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
 
         if (basSku == null) {
@@ -212,11 +214,12 @@ public class DocPaDetailsService extends BaseService {
         // 这里处理的有两种情况：
         //  1.扫描序列号出库
         //  2.扫描带序列号的条码出库
+        BasSerialNum basSerialNum = null;
         if (StringUtil.isNotEmpty(form.getOtherCode()) ||
                 StringUtil.isNotEmpty(form.getUserdefine4())) {
 
             BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getUserdefine4());
-            BasSerialNum basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
+            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
             if (basSerialNum != null) {
 
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
@@ -226,6 +229,7 @@ public class DocPaDetailsService extends BaseService {
 
         skuQuery.setCustomerid(form.getCustomerid());
         skuQuery.setLotatt04(form.getUserdefine3());
+        if (basSerialNum == null) skuQuery.setLotatt05(form.getUserdefine4());
         skuQuery.setGTIN(form.getGTIN());
         //sku
         BasSku basSku = basSkuMybatisDao.queryForScan(skuQuery);
