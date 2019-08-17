@@ -49,4 +49,20 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
      * 通过验收任务单号查询预入库通知单
      */
 	DocAsnHeader queryByQcNo(@Param("qcno") String qcno);
+
+
+	/**
+	 * 客户单号是否存在
+	 * @param asnreference1
+	 * @return
+	 */
+	public int showAsnreference1(@Param("asnreference1") String asnreference1);
+
+	/**
+	 * 导入时查询主表是否存在
+	 * @param criteria
+	 * @param <T>
+	 * @return
+	 */
+	public <T> List<T> queryByGetHeader(MybatisCriteria criteria);
 }
