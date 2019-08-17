@@ -943,7 +943,7 @@ public class DocOrderPackingService extends BaseService {
                         "Gizmo");
                 actAllocationDetailsMybatisDao.callPickingProcedure(packingForm);
                 if (!packingForm.getResult().equals("000")) {
-                    throw new Exception("包装复核拣货数回写失败");
+                    throw new Exception(packingForm.getResult());
                 }
             }
         }catch (Exception e) {
