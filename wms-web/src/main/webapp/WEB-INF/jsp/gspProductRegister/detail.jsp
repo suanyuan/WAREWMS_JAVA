@@ -271,7 +271,7 @@
             queryParams:{
                 isUse : '1',
                 enterpriseType:'supplier',
-                type:'supplier'
+                type:''
             },
             fit:true,
             collapsible:false,

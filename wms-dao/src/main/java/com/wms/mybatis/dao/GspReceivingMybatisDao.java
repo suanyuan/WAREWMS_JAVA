@@ -16,4 +16,6 @@ public interface GspReceivingMybatisDao extends BaseDao {
 	Long updateFirstState(@Param("no") String no,@Param("state") String state);
 
 	//public GspReceiving queryByEnterprise(Object id);
+
+	public int  selectByClientIdAndReceiving(Object id);
 }

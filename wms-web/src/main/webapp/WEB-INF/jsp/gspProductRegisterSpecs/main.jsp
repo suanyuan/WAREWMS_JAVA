@@ -46,7 +46,7 @@ $(function() {
 
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
 
-			{field: 'specsName',		title: '规格名称',	width: 150 },
+			{field: 'specsName',		title: '规格',	width: 150 },
 			{field: 'productCode',		title: '产品代码',	width: 100 },
 			{field: 'productName',		title: '产品名称',	width: 170 },
 			{field: 'productRemark',		title: '产品描述',	width:350 },
@@ -85,7 +85,7 @@ $(function() {
 			// {field: 'alternatName4',		title: '自赋码4',	width: 25 },
 			// {field: 'alternatName5',		title: '自赋码5',	width: 25 },
 
-            {field: 'productRegisterNo',		title: '注册证编号',	width: 100 },
+            {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
             // {field: 'productNameMain',		title: '产品名称',	width: 200 }
 		]],
 		onDblClickCell: function(index,field,value){
@@ -479,7 +479,7 @@ var toImportData = function(){
 						<tr>
 							<th>注册证编号</th><td><input type='text' id='productRegisterNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
 						   <th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>规格名称</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>规格</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 						   <%--<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>--%>
 

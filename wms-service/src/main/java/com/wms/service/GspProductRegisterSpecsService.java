@@ -127,10 +127,17 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
+		GspProductRegisterSpecs gspProductRegisterSpecs1 = gspProductRegisterSpecsMybatisDao.selectByProductCode(gspProductRegisterSpecs.getProductCode());
+
+		if(gspProductRegisterSpecs1 !=null  ){
+			return Json.error("产品代码存在！");
+		}
+//		gspProductRegisterSpecs.getProductCode();
 		System.out.println(gspProductRegisterSpecs.getIsCertificate()+"==================gspProductRegisterSpecs.getIsCertificate()="+gspProductRegisterSpecs.getIsDoublec());
 //		gspProductRegisterSpecs.setEditDate(new Date());
 		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 		json.setSuccess(true);
+		json.setMsg("资料添加成功");
 		return json;
 	}
 
@@ -196,8 +203,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
-//主页grid点击编辑页面获取数据
-
+	//主页grid点击编辑页面获取数据
 	public Json getGspProductRegisterSpecsInfo(String id){
          //	根据specs_id查出单挑getGspProductRegisterSpecs
 		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
@@ -207,7 +213,10 @@ public class GspProductRegisterSpecsService extends BaseService {
 			info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
 			//通过getEnterpriseId查出生产企业信息
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
-			gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+			if(gspEnterpriseInfo.getEnterpriseName() !=null){
+				gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+
+			}
 			//产品许可证 备案号
 			if(gspEnterpriseInfo.getLicenseNo()!=null){
 				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
