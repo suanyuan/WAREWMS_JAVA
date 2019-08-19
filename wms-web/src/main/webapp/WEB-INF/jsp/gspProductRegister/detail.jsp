@@ -270,8 +270,8 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'supplier',
-                type:''
+                enterpriseType:'SCQY',
+                type:'1'
             },
             fit:true,
             collapsible:false,

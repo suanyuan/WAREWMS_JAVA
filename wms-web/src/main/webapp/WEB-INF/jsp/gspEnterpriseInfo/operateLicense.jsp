@@ -140,7 +140,7 @@
             required: true,
             onChange:function(data){
                 if(data){
-                    doUpload(data);
+                    doUploadOperateLisense(data);
                 }
             }
         });
@@ -277,7 +277,7 @@
         });
     }
 
-    function doUpload(data) {
+    function doUploadOperateLisense(data) {
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
