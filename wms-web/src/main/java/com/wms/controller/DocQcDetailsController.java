@@ -34,7 +34,12 @@ public class DocQcDetailsController {
 		model.put("menuId", menuId);
 		return new ModelAndView("docQcDetails/main", model);
 	}
-
+	/**
+	 * 显示细单 分页
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

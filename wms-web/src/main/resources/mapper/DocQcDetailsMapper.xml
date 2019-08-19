@@ -5,6 +5,7 @@
 <mapper namespace="com.wms.mybatis.dao.DocQcDetailsMybatisDao" >
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.DocQcDetails" >
+	<result column="pano" property="pano"/>
 	<result column="qcno" property="qcno"/>
 	<result column="qclineno" property="qclineno"/>
 	<result column="linestatus" property="linestatus"/>
@@ -34,7 +35,7 @@
        
 <!-- doc_qc_details table all fields -->
 <sql id="Base_Column_List" >
-	 qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid
+	pano,qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid
 </sql>
    
    
@@ -42,8 +43,11 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
+	<if test="condition.pano != null and condition.pano != ''" >
+		and pano like concat('%',#{condition.pano},'%')
+	</if>
 	<if test="condition.qcno != null and condition.qcno != ''" >
-	    and qcno =  #{condition.qcno}
+	    and qcno like concat('%',#{condition.qcno},'%')
 	</if>
 	<if test="condition.qclineno != null and condition.qclineno != ''" >
 	    and qclineno =  #{condition.qclineno}
@@ -79,10 +83,10 @@ where 1=1
 	    and userdefine2 =  #{condition.userdefine2}
 	</if>
 	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
-	    and userdefine3 =  #{condition.userdefine3}
+	    and userdefine3 like concat('%',#{condition.userdefine3},'%')
 	</if>
 	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
-	    and userdefine4 =  #{condition.userdefine4}
+	    and userdefine4 like concat('%',#{condition.userdefine4},'%')
 	</if>
 	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
 	    and userdefine5 =  #{condition.userdefine5}
@@ -224,7 +228,12 @@ where 1=1
 
 <!-- 验收明细档 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from doc_qc_details 
+	select
+	count(1)
+	from (
+	SELECT  d.*,h.pano FROM doc_qc_details  d
+	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	) as a
 	<include refid="Example_Where_Clause"/>
 </select>
   	
@@ -232,7 +241,10 @@ where 1=1
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
-	from doc_qc_details 
+	from (
+	  SELECT  d.*,h.pano FROM doc_qc_details  d
+	  LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	) as a
 	<include refid="Example_Where_Clause"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
