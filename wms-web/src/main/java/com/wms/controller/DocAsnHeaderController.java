@@ -98,10 +98,10 @@ public class DocAsnHeaderController {
 	}
 
 	@Login
-	@RequestMapping(params = "cancel")
+	@RequestMapping(params = "cancel", method = RequestMethod.POST)
 	@ResponseBody
-	public Json cancel(String id) {
-		Json json = docAsnHeaderService.cancelDocAsnHeader(id);
+	public Json cancel(String asnnos) {
+		Json json = docAsnHeaderService.cancelDocAsnHeader(asnnos);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

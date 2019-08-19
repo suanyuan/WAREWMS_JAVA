@@ -1,30 +1,32 @@
 package com.wms.service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocAsnDetail;
+import com.wms.entity.DocAsnHeader;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
-import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.mybatis.dao.*;
+import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
+import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
-import com.wms.query.*;
+import com.wms.query.DocAsnDetailQuery;
+import com.wms.query.DocAsnHeaderQuery;
+import com.wms.query.OrderDetailsForNormalQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.importdata.ImportAsnDataService;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
+import com.wms.vo.DocAsnHeaderVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocAsnHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,37 +35,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.ViewInvTran;
-import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.service.importdata.ImportAsnDataService;
-import com.wms.service.importdata.ImportOrderDataService;
-import com.wms.utils.BarcodeGeneratorUtil;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.DocAsnHeaderVO;
-import com.wms.vo.DocAsnDetailVO;
-import com.wms.vo.DocAsnHeaderVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocAsnHeaderForm;
-import com.wms.vo.form.DocAsnHeaderForm;
-import com.wms.vo.form.ViewInvTranForm;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.query.DocAsnHeaderQuery;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("docAsnHeaderService")
 public class DocAsnHeaderService extends BaseService {
@@ -186,30 +164,42 @@ public class DocAsnHeaderService extends BaseService {
 		return json;
 	}
 	
-	public Json cancelDocAsnHeader(String id) {
+	public Json cancelDocAsnHeader(String asnnos) {
 		Json json = new Json();
-		System.out.print("111111111111111");
-		System.out.print("++++++++++++++++++++++++++"+id);
-		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		map.put("asnno", id);
-		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
-		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-		docAsnHeaderQuery.setAsnno(id);
-		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
-		if(docAsnHeader != null){
-			System.out.print("222222222222");
-			System.out.print("++++++++++++++++++++++++++"+map.get("asnno"));
-			docAsnHeaderMybatisDao.cancel(map);
-			String result = map.get("result").toString();
-			if (result.substring(0,3).equals("000")) {
-				json.setSuccess(true);
-				json.setMsg("取消成功！");
-			} else {
-				json.setSuccess(false);
-				json.setMsg("取消失败！"+result);
-			}
-		}
+		StringBuilder message = new StringBuilder();
+		if (StringUtil.isNotEmpty(asnnos)) {
+
+		    String[] asnnoList = asnnos.split(",");
+            for (String asnno : asnnoList) {
+
+                if (StringUtil.isNotEmpty(asnno)) {
+
+                    DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+                    docAsnHeaderQuery.setAsnno(asnno);
+                    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+                    if (docAsnHeader != null) {
+
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                        map.put("asnno", asnno);
+                        map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
+                        docAsnHeaderMybatisDao.cancel(map);
+                        String result = map.get("result").toString();
+                        if (result.substring(0, 3).equals("000")) {
+                            message.append("取消成功：").append(asnno).append(";");
+                        } else {
+                            message.append("取消失败：").append(asnno).append("(").append(result).append(");");
+                        }
+                    }
+                }
+            }
+            json.setSuccess(true);
+            json.setMsg(message.toString());
+        }else {
+
+            json.setSuccess(false);
+            json.setMsg("取消失败！(无预入库单号传入)");
+        }
 		return json;
 	}
 	

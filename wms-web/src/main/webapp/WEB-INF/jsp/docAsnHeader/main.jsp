@@ -171,6 +171,7 @@ $(function() {
 					$('#ezuiDetailsBtn_edit').linkbutton('enable');
 					$('#ezuiDetailsBtn_del').linkbutton('enable');
 					$('#ezuiDetailsBtn_receive').linkbutton('enable');
+                    $('#ezuiDetailsBtn_add').linkbutton('enable');
                     $("#ezuiBtn_merge").linkbutton('disable');
 				}else{
 				    if(rowData.linestatus == '40'){//完全收货状态可以进行上架任务、
@@ -181,6 +182,7 @@ $(function() {
 					$('#ezuiDetailsBtn_edit').linkbutton('disable');
 					$('#ezuiDetailsBtn_del').linkbutton('disable');
 					$('#ezuiDetailsBtn_receive').linkbutton('disable');
+                    $('#ezuiDetailsBtn_add').linkbutton('disable');
                     $("#ezuiBtn_merge").linkbutton('disable');
 				};
 			};
@@ -520,19 +522,32 @@ var edit = function(row){
 
 /* 取消按钮 */
 var cancel = function(){
-	var row = ezuiDatagrid.datagrid('getChecked');
+	var row = ezuiDatagrid.datagrid('getSelections');
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认取消？', function(confirm) {
 			if(confirm){
+                var arr = new Array();
+                for(var i=0;i<row.length;i++){
+                    arr.push(row[i].asnno);
+                }
+                console.log(arr);
 				$.ajax({
 					url : 'docAsnHeaderController.do?cancel',
-					data : {id : row.asnno},
+					data : {'asnnos' : arr.join(",")},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
 						var msg = '';
 						try {
-							msg = result.msg;
+                            var strs = [];
+                            strs = result.msg.split(";");
+                            for (i = 0; i < strs.length; i++ ){
+                                if (i == strs.length - 1) {
+                                    msg = msg + strs[i];
+                                } else {
+                                    msg = msg + strs[i] + "<br/>";
+                                }
+                            }
 						} catch (e) {
 							msg = '取消异常';
 						} finally {
@@ -836,6 +851,7 @@ var commit = function(){
 						ezuiDatagrid.datagrid('reload');
 						msg = '<font color="red">' + '提交成功' + '</font>';
 						$('#ezuiBtn_renew').linkbutton('enable');
+                        $('#ezuiDetailsBtn_add').linkbutton('enable');
 						$('#ezuiBtn_recommit').linkbutton('disable');
 						/* ezuiDialog.dialog('close'); */
 					}else{
@@ -1410,7 +1426,7 @@ function afterCheckButtion(rowData) {
     }else if(rowData.asnstatus == '40' || rowData.asnstatus == '30'){
         $('#ezuiBtn_close').linkbutton('enable');
         $('#ezuiBtn_cancel').linkbutton('disable');
-        $('#ezuiDetailsBtn_add').linkbutton('enable');
+        $('#ezuiDetailsBtn_add').linkbutton('disable');
         $('#ezuiDetailsBtn_edit').linkbutton('disable');
         $('#ezuiDetailsBtn_del').linkbutton('disable');
         $('#ezuiDetailsBtn_receive').linkbutton('disable');
