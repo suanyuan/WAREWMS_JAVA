@@ -97,7 +97,6 @@ $(function() {
 	});
 //查询条件货主字段初始化
 	$("#fmcustomerid").textbox({
-		editable: false,
 		icons:[{
 			iconCls:'icon-search',
 			handler: function(e){
@@ -774,6 +773,7 @@ var doSearch = function(){
 		lotatt04 : $('#lotatt04').combobox('getValue'),
 		lotatt05 : $('#lotatt05').val(),
 		lotatt06 : $('#lotatt06').val(),
+		lotatt12 : $('#skudescrc').val(),
 	});
 };
 /* 库位选择弹框查询 */
@@ -858,19 +858,16 @@ var ismove=function (location) {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>客户编码</th><td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主编码</th><td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>库位</th><td><input type='text' id='fmlocation' name='fmlocation' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>商品编码</th><td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>商品名称</th><td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
-							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
-							</td>
+							<th>产品代码</th><td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
+
 						</tr>
 						<tr>
 							<th>生产日期</th><td><input type='text' id='lotatt01' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 							<th>至</th><td><input type='text' id='lotatt01text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
+							<th>产品名称</th><td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
+
 						</tr>
 						<tr>
 							<th>失效日期</th><td><input type='text' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
@@ -891,6 +888,11 @@ var ismove=function (location) {
 																															]"/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
+							<td>
+								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+							</td>
 						</tr>
 					</table>
 				</fieldset>

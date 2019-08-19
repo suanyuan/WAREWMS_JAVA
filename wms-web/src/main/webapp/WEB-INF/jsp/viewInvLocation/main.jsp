@@ -45,11 +45,15 @@
                             fmlocation: $('#fmlocation').val(),  //库位
                             fmsku: $('#fmsku').val(),           //产品代码
                             lotatt12: $('#skudescrc').val(),  //产品名称
-                            name: $('#name').val(),          //产品线
+                            name: $('#name').combobox('getText'),          //产品线
                             lotatt04: $('#lotatt04').val(),//批号
                             lotatt05: $('#lotatt05').val(),//序列号
+                            lotatt14: $('#lotatt14').val(),//入库单号
                             lotatt02Start: $('#lotatt02Start').datebox('getValue'),//时间查询
                             lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
+                            lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
+                            lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
+
                         });
                     }else{
                             initDateGrid();//隐藏的datagrif初始化成功 然后初始化主页的datagrid
@@ -81,7 +85,6 @@
             });
             //库位
             $("#fmlocation").textbox({
-                editable: false,
                 icons: [{
                     iconCls: 'icon-search',
                     handler: function (e) {
@@ -374,11 +377,14 @@
                 param.put("fmlocation", $('#fmlocation').val());//库位
                 param.put("fmsku", $('#fmsku').val());//产品代码
                 param.put("lotatt12", $('#skudescrc').val());//产品名称
-                param.put("name", $('#name').val());//产品线
+                param.put("name", $('#name').combobox('getText'));//产品线
                 param.put("lotatt04", $('#lotatt04').val());//批号
                 param.put("lotatt05", $('#lotatt05').val());//序列号
+                param.put("lotatt14", $('#lotatt14').val());//入库单号
                 param.put("lotatt02Start",$('#lotatt02Start').datebox('getValue'));//时间查询
                 param.put("lotatt02End",$('#lotatt02End').datebox('getValue'));//时间查询
+                param.put("lotatt03Start",$('#lotatt03Start').datebox('getValue'));//入库单号时间查询
+                param.put("lotatt03End",$('#lotatt03End').datebox('getValue'));//入库单号时间查询
 
                 //--导出Excel
                 var formId = ajaxDownloadFile(sy.bp() + "/viewInvLocationController.do?exportViewInvLocationDataToExcel", param);
@@ -402,16 +408,20 @@
         /* 导出end */
 
         var doSearch = function () {
+            //隐藏datagridAll加载  主页datagrid查询在datagridAll初始化中
             ezuiDatagridAll.datagrid('load', {
                 fmcustomerid: $('#fmcustomerid').val(),//货主编码
                 fmlocation: $('#fmlocation').val(),  //库位
                 fmsku: $('#fmsku').val(),           //产品代码
                 lotatt12: $('#skudescrc').val(),  //产品名称
-                name: $('#name').val(),          //产品线
+                name: $('#name').combobox('getText'),          //产品线
                 lotatt04: $('#lotatt04').val(),//批号
                 lotatt05: $('#lotatt05').val(),//序列号
+                lotatt14: $('#lotatt14').val(),//入库单号
                 lotatt02Start: $('#lotatt02Start').datebox('getValue'),//时间查询
                 lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
+                lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
+                lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
             });
         };
 
@@ -660,10 +670,23 @@
                         <th>产品名称</th>
                         <td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>产品线</th>
-                        <td><input type='text' id='name' class='easyui-textbox' size='16' data-options=''/></td>
+                        <td><input type='text' id='name' class='easyui-combobox' size='16' data-options="
+																										url:'<c:url value="/productLineController.do?getCombobox"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
                         <th>批号</th>
                         <td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 
+                    </tr>
+                    <tr>
+                        <th>入库单号</th>
+                        <td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>入库日期</th>
+                        <td><input type='text' id='lotatt03Start' class='easyui-datebox' size='16' data-options=''/>
+                        </td>
+                        <th>至
+                        </th>
+                        <td><input type='text' id='lotatt03End' class='easyui-datebox' size='16' data-options=''/></td>
                     </tr>
                     <tr>
                         <th>序列号</th>
@@ -773,7 +796,11 @@
                 <th>供应商</th>
                 <td><input type='text' name='lotatt08' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>样品属性</th>
-                <td><input type='text' name='lotatt09' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <td><input type='text' name='lotatt09' class='easyui-combobox' size='50' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?sampleAttr"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
             </tr>
             <tr>
                 <th>入库单号</th>

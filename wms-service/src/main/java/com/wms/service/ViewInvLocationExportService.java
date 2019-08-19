@@ -54,12 +54,15 @@ public class ViewInvLocationExportService {
         viewInvLocationForm.setFmcustomerid(form.getFmcustomerid());
         viewInvLocationForm.setFmsku(form.getFmsku());
         viewInvLocationForm.setLotatt12(form.getLotatt12());
+        viewInvLocationForm.setLotatt14(form.getLotatt14());
         viewInvLocationForm.setFmlocation(form.getFmlocation());
         viewInvLocationForm.setName(form.getName());
         viewInvLocationForm.setLotatt04(form.getLotatt04());
         viewInvLocationForm.setLotatt05(form.getLotatt05());
         viewInvLocationForm.setLotatt02Start(form.getLotatt02Start());
         viewInvLocationForm.setLotatt02End(form.getLotatt02End());
+        viewInvLocationForm.setLotatt03Start(form.getLotatt03Start());
+        viewInvLocationForm.setLotatt03End(form.getLotatt03End());
 
         try {
             ViewInvLocationQuery query = new ViewInvLocationQuery();
