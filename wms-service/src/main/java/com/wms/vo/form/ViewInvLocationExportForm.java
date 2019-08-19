@@ -12,8 +12,11 @@ public class ViewInvLocationExportForm {
 	private java.lang.String lotatt04;//批号
 	private  String lotatt05;      //序列号
 	private  String lotatt12;      //产品名称
+	private  String lotatt14;      //入库单号
 	private Date  lotatt02Start;      //失效期查询开始
 	private  Date lotatt02End;      //失效期查询结束
+	private Date  lotatt03Start;      //入库日期查询开始
+	private  Date lotatt03End;      //入库日期查询结束
 	private String token;
 
 	public String getLotatt05() {
@@ -30,6 +33,30 @@ public class ViewInvLocationExportForm {
 
 	public void setLotatt12(String lotatt12) {
 		this.lotatt12 = lotatt12;
+	}
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
+	}
+
+	public Date getLotatt03Start() {
+		return lotatt03Start;
+	}
+
+	public void setLotatt03Start(Date lotatt03Start) {
+		this.lotatt03Start = lotatt03Start;
+	}
+
+	public Date getLotatt03End() {
+		return lotatt03End;
+	}
+
+	public void setLotatt03End(Date lotatt03End) {
+		this.lotatt03End = lotatt03End;
 	}
 
 	public Date getLotatt02Start() {

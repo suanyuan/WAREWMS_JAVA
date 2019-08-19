@@ -152,12 +152,12 @@ public class ProductLineService extends BaseService {
 	public List<EasyuiCombobox> getProductLineCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<ProductLine> productLineList = productLineMybatisDao.queryListByAll();
+		List<ProductLine> productLineList = productLineMybatisDao.getProductLineName();
 		if(productLineList != null && productLineList.size() > 0){
 			for(ProductLine productLine : productLineList){
 				combobox = new EasyuiCombobox();
 				combobox.setId(String.valueOf(productLine.getProductLineId()));
-				combobox.setValue(productLine.getEnterpriseName());
+				combobox.setValue(productLine.getName());
 				comboboxList.add(combobox);
 			}
 		}

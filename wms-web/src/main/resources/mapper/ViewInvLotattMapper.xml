@@ -113,13 +113,13 @@ where 1=1
 	    and configlist02 =  #{condition.configlist02}
 	</if>
 	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
-	    and fmcustomerid =  #{condition.fmcustomerid}
+	    and fmcustomerid like concat('%',#{condition.fmcustomerid},'%')
 	</if>
 	<if test="condition.fmid != null and condition.fmid != ''" >
 	    and fmid =  #{condition.fmid}
 	</if>
 	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
-	    and fmlocation =  #{condition.fmlocation}
+	    and fmlocation like concat('%',#{condition.fmlocation},'%')
 	</if>
 	<if test="condition.fmlotnum != null and condition.fmlotnum != ''" >
 	    and fmlotnum =  #{condition.fmlotnum}
@@ -128,7 +128,7 @@ where 1=1
 	    and fmqty =  #{condition.fmqty}
 	</if>
 	<if test="condition.fmsku != null and condition.fmsku != ''" >
-	    and fmsku =  #{condition.fmsku}
+	    and fmsku like concat('%',#{condition.fmsku},'%')
 	</if>
 	<if test="condition.fmuomName != null and condition.fmuomName != ''" >
 	    and fmuom_name =  #{condition.fmuomName}
@@ -142,14 +142,23 @@ where 1=1
 	<if test="condition.iPa != null and condition.iPa != ''" >
 	    and i_pa =  #{condition.iPa}
 	</if>
-	<if test="condition.lotatt01 != null and condition.lotatt01 != '' and condition.lotatt01text != null and condition.lotatt01text != ''" >
-	    and to_char(to_date(lotatt01,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt01} and #{condition.lotatt01text}
+	<if test="condition.lotatt01 != null and condition.lotatt01!=''" >
+		and lotatt01 &gt;= #{condition.lotatt01}
 	</if>
-	<if test="condition.lotatt02 != null and condition.lotatt02 != '' and condition.lotatt02text != null and condition.lotatt02text != ''" >
-	    and to_char(to_date(lotatt02,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt02} and #{condition.lotatt02text}
+	<if test="condition.lotatt01text != null and condition.lotatt01text!=''" >
+		and lotatt01 &lt;= #{condition.lotatt01text}
 	</if>
-	<if test="condition.lotatt03 != null and condition.lotatt03 != '' and condition.lotatt03text != null and condition.lotatt03text != ''" >
-	    and to_char(to_date(lotatt03,'yyyy-mm-dd'),'yyyy-mm-dd') between #{condition.lotatt03} and #{condition.lotatt03text}
+	<if test="condition.lotatt02 != null and condition.lotatt02!=''" >
+		and lotatt02 &gt;= #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt02text != null and condition.lotatt02text!=''" >
+		and lotatt02 &lt;= #{condition.lotatt02text}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03!=''" >
+		and lotatt03 &gt;= #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt03text != null and condition.lotatt03text!=''" >
+		and lotatt03 &lt;= #{condition.lotatt03text}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
 	    and lotatt04 =  #{condition.lotatt04}
@@ -158,13 +167,13 @@ where 1=1
 	    and lotatt04text =  #{condition.lotatt04text}
 	</if>
 	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-	    and lotatt05 =  #{condition.lotatt05}
+	    and lotatt05 like concat('%',#{condition.lotatt05},'%')
 	</if>
 	<if test="condition.lotatt05text != null and condition.lotatt05text != ''" >
 	    and lotatt05text =  #{condition.lotatt05text}
 	</if>
 	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
-	    and lotatt06 =  #{condition.lotatt06}
+	    and lotatt06 like concat('%',#{condition.lotatt06},'%')
 	</if>
 	<if test="condition.lotatt06text != null and condition.lotatt06text != ''" >
 	    and lotatt06text =  #{condition.lotatt06text}
@@ -200,7 +209,7 @@ where 1=1
 	    and lotatt11text =  #{condition.lotatt11text}
 	</if>
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-	    and lotatt12 =  #{condition.lotatt12}
+	    and lotatt12 like  concat('%',#{condition.lotatt12},'%')
 	</if>
 	<if test="condition.lotatt12text != null and condition.lotatt12text != ''" >
 	    and lotatt12text =  #{condition.lotatt12text}
