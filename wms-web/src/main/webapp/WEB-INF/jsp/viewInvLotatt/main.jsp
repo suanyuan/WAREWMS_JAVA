@@ -273,9 +273,10 @@ var doExport = function(){
 		param.put("lotatt02text", $('#lotatt02text').datebox("getValue"));
 		param.put("lotatt03", $('#lotatt03').datebox("getValue"));
 		param.put("lotatt03text", $('#lotatt03text').datebox("getValue"));
-		param.put("lotatt04", $('#lotatt04').combobox('getValue'));
+		param.put("lotatt10", $('#lotatt10').combobox('getValue'));
 		param.put("lotatt05", $('#lotatt05').val());
 		param.put("lotatt06", $('#lotatt06').val());
+		param.put("lotatt12", $('#skudescrc').val());
 
 		//--导出Excel
 		var formId = ajaxDownloadFile(sy.bp()+"/viewInvLotattController.do?exportViewInvLotattDataToExcel", param);
@@ -770,7 +771,7 @@ var doSearch = function(){
 		lotatt02text : $('#lotatt02text').datebox("getValue"),
 		lotatt03 : $('#lotatt03').datebox("getValue"),
 		lotatt03text : $('#lotatt03text').datebox("getValue"),
-		lotatt04 : $('#lotatt04').combobox('getValue'),
+		lotatt10 : $('#lotatt10').combobox('getValue'),
 		lotatt05 : $('#lotatt05').val(),
 		lotatt06 : $('#lotatt06').val(),
 		lotatt12 : $('#skudescrc').val(),
@@ -878,14 +879,11 @@ var ismove=function (location) {
 							<th>至</th><td><input type='text' id='lotatt03text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 						</tr>
 						<tr>	
-							<th>库存状态</th><td><input type='text' id='lotatt04' class='easyui-combobox' size='16' data-options="required:false,panelHeight:'auto',
-																																editable:true,
-																																valueField: 'id',
-																																textField: 'value',
-																																data: [
-																																{id: 'HG', value: '合格'}, 
-																																{id: 'CC', value: '残次'}, 
-																															]"/></td>
+							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>

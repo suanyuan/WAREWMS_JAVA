@@ -1,38 +1,27 @@
 package com.wms.service;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.wms.entity.BasSku;
+import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.entity.ViewInvLotatt;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
-import com.wms.query.BasSkuQuery;
 import com.wms.query.ViewInvLotattQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.BeanUtils;
-import com.wms.utils.DateUtil;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
-import com.wms.utils.ExcelUtil;
-import com.wms.vo.form.BasSkuExportForm;
-import com.wms.vo.form.BasSkuForm;
 import com.wms.vo.form.ViewInvLotattExportForm;
 import com.wms.vo.form.ViewInvLotattForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 汇出资料用service
@@ -45,6 +34,8 @@ public class ViewInvLotattExportService {
 	
 	@Autowired
 	private ViewInvLotattMybatisDao viewInvLotattMybatisDao;
+	@Autowired
+	private BasCodesService basCodesService;
 	
 	public void exportViewInvLotattDataToExcel(HttpServletResponse response, ViewInvLotattExportForm form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
@@ -56,7 +47,6 @@ public class ViewInvLotattExportService {
 		
 		viewInvLotattForm.setFmcustomerid(form.getFmcustomerid());
 		viewInvLotattForm.setFmsku(form.getFmsku());
-		viewInvLotattForm.setSkudescrc(form.getSkudescrc());
 		viewInvLotattForm.setFmlocation(form.getFmlocation());
 		viewInvLotattForm.setLotatt01(form.getLotatt01());
 		viewInvLotattForm.setLotatt01text(form.getLotatt01text());
@@ -67,10 +57,12 @@ public class ViewInvLotattExportService {
 		viewInvLotattForm.setLotatt04(form.getLotatt04());
 		viewInvLotattForm.setLotatt05(form.getLotatt05());
 		viewInvLotattForm.setLotatt06(form.getLotatt06());
+		viewInvLotattForm.setLotatt10(form.getLotatt10());
+		viewInvLotattForm.setLotatt12(form.getLotatt12());
 		try {  
 			ViewInvLotattQuery query = new ViewInvLotattQuery();
 			//权限控制
-			query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			//query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 			BeanUtils.copyProperties(viewInvLotattForm, query);
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -81,6 +73,19 @@ public class ViewInvLotattExportService {
 	        String sheetName = "库存查询结果";  
 	        // excel要导出的数据  
 	        List<ViewInvLotatt> vList = viewInvLotattMybatisDao.queryByList(mybatisCriteria); //要权限！james
+			//质量状态
+			List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
+			for (ViewInvLotatt viewInvLotatt : vList
+			) {
+				for (EasyuiCombobox easyuiCombobox : Lotatt10List
+				) {
+					//质量状态id对比
+					if (viewInvLotatt.getLotatt10().equals(easyuiCombobox.getId())) {
+						viewInvLotatt.setLotatt10(easyuiCombobox.getValue());
+						break;
+					}
+				}
+			}
 	        // 导出  
 	        if (vList == null || vList.size() == 0) {  
 	        	System.out.println("题库为空");  
@@ -108,25 +113,26 @@ public class ViewInvLotattExportService {
 		superClassMap.put("fmid", "跟踪号");
 		superClassMap.put("fmlotnum", "批号");
 		superClassMap.put("fmlocation", "库位");
-		superClassMap.put("fmsku", "商品编码");
-		superClassMap.put("skudescrc", "商品名称");
+		superClassMap.put("fmsku", "产品代码");
+		superClassMap.put("lotatt12", "产品名称");
 		superClassMap.put("uom", "单位");
-		superClassMap.put("fmqty", "库存数量");
-		superClassMap.put("qtyallocated", "分配数量");
-		superClassMap.put("qtyavailed", "可用数量");
-		superClassMap.put("qtyholded", "冻结数量");
+		superClassMap.put("fmqty", "库存件数");
+		superClassMap.put("qtyallocated", "分配件数");
+		superClassMap.put("qtyavailed", "可用件数");
+		superClassMap.put("qtyholded", "冻结件数");
 		superClassMap.put("iPa", "待上架数量");
 		superClassMap.put("toadjqty", "待调整数量");
 		superClassMap.put("iMv", "待移入数量");
 		superClassMap.put("oMv", "待移出数量");
 		superClassMap.put("qtyrpin", "补货待上架");
 		superClassMap.put("qtyrpout", "补货待下架");
-		superClassMap.put("lotatt01", "批属1");
-		superClassMap.put("lotatt02", "批属2");
-		superClassMap.put("lotatt03", "批属3");
-		superClassMap.put("lotatt04", "批属4");
-		superClassMap.put("lotatt05", "批属5");
-		superClassMap.put("lotatt06", "批属6");
+		superClassMap.put("lotatt01", "生产日期");
+		superClassMap.put("lotatt02", "有效期/失效期");
+		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("lotatt04", "生产批号");
+		superClassMap.put("lotatt05", "序列号");
+		superClassMap.put("lotatt06", "注册证号/备案凭证号");
+		superClassMap.put("lotatt10", "质量状态");
 		superClassMap.put("lpn", "LPN");
 		superClassMap.put("netweight", "净重");
 		superClassMap.put("totalgrossweight", "毛重");
