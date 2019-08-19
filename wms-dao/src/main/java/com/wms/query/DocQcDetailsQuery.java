@@ -1,14 +1,12 @@
 package com.wms.query;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
-
 public class DocQcDetailsQuery implements IQuery {
 
-	private String qcno;
-	private String qclineno;
-	private String linestatus;
-	private String palineno;
+	private String qcno;         //验收单号
+	private String pano;         //上架单号
+	private String qclineno;     //验收细单行号
+	private String linestatus;   //验收状态
+	private String palineno;     //上架细单行号
 	private String customerid;
 	private String sku;
 	private String lotnum;
@@ -45,6 +43,14 @@ public class DocQcDetailsQuery implements IQuery {
 
 	public void setQclineno(String qclineno) {
 		this.qclineno = qclineno;
+	}
+
+	public String getPano() {
+		return pano;
+	}
+
+	public void setPano(String pano) {
+		this.pano = pano;
 	}
 
 	public String getLinestatus() {

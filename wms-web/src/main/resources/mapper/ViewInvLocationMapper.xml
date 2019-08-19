@@ -57,10 +57,10 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
-	    and fmcustomerid =  #{condition.fmcustomerid}
+	    and fmcustomerid like  concat('%',#{condition.fmcustomerid},'%')
 	</if>
 	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
-	    and fmlocation =  #{condition.fmlocation}
+	    and fmlocation like  concat('%',#{condition.fmlocation},'%')
 	</if>
 	<if test="condition.fmqty != null and condition.fmqty != ''" >
 	    and fmqty =  #{condition.fmqty}
@@ -141,10 +141,10 @@ where 1=1
 	    and lotatt11 =  #{condition.lotatt11}
 	</if>
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-	    and lotatt12 =  #{condition.lotatt12}
+	    and lotatt12  like concat('%',#{condition.lotatt12},'%')
 	</if>
 	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
-	    and lotatt14 =  #{condition.lotatt14}
+	    and lotatt14 like concat('%',#{condition.lotatt14},'%')
 	</if>
 	<if test="condition.name != null and condition.name != ''" >
 	    and `name` like concat('%',#{condition.name},'%')
@@ -154,6 +154,12 @@ where 1=1
 	</if>
 	<if test="condition.lotatt02End != null" >
 		and lotatt02 &lt;= #{condition.lotatt02End}
+	</if>
+	<if test="condition.lotatt03Start != null" >
+		and lotatt03 &gt;= #{condition.lotatt03Start}
+	</if>
+	<if test="condition.lotatt03End != null" >
+		and lotatt03 &lt;= #{condition.lotatt03End}
 	</if>
 	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
 	    and enterprise_name =  #{condition.enterpriseName}
@@ -184,9 +190,6 @@ where 1=1
 	<include refid="Base_Column_List"/>
 	from view_inv_location
 	<include refid="Example_Where_Clause"/>
-<!-- 	<if test="orderByClause != null and orderByClause != ''" > -->
-<!--        order by fmcustomerid,fmsku,fmlocation -->
-<!--     </if> -->
     order by fmcustomerid,fmsku,fmlocation
     ) a 
 	) b
@@ -202,9 +205,9 @@ where 1=1
 	<include refid="Base_Column_List"/>
 	from view_inv_location
 	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
+
        order by fmcustomerid,fmsku,fmlocation
-    </if>
+
 </select>
 <!-- 查询库所有列表 不分页 -->
 <select id="queryByListAll" resultMap="BaseResultMap"  parameterType="Object">

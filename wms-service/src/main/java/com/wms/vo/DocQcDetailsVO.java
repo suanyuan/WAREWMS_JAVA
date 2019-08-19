@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class DocQcDetailsVO {
 
+	private String pano;     //上架单号
 	private String qcno;
 	private String qclineno;
 	private String linestatus;
@@ -30,6 +31,14 @@ public class DocQcDetailsVO {
 	private String editwho;
 	private String packid;
 	private String transactionid;
+
+	public String getPano() {
+		return pano;
+	}
+
+	public void setPano(String pano) {
+		this.pano = pano;
+	}
 
 	public String getQcno() {
 		return qcno;

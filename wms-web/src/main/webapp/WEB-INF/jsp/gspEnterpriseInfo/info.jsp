@@ -8,6 +8,8 @@
         <tr>
             <th>企业代码</th>
             <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <%--<td><input onkeyup="value=value.replace(/[\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))" type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'><td>--%>
+            <%--<td><input id="enterpriseNo" class="easyui-validatebox" data-options="required:true,validType:'account[5,20]'" /></td>--%>
         </tr>
         <tr>
             <th>简称</th>
@@ -107,5 +109,33 @@
             }
         });
 
+    })
+
+    $(function () {
+        //设置text需要验证
+        $('#enterpriseNo').validatebox();
+    })
+    var fg=true;
+    $.extend($.fn.validatebox.defaults.rules, {
+        //验证(只能包括 _ 数字 字母)
+        account: {//param的值为[]中值
+            validator: function (value, param) {
+                if (!/^[\w]+$/.test(value)) {
+                    $.fn.validatebox.defaults.rules.account.message = '用户名只能数字、字母、下划线组成.';
+                    //$('#enterpriseNo').val('111111');
+                    fg=false;
+                    return false;
+                } else {
+                    if (value.length < param[0] || value.length > param[1]) {
+                        $.fn.validatebox.defaults.rules.account.message = '用户名长度必须在' + param[0] + '至' + param[1] + '范围';
+                        fg=false;
+                        return false;
+                    } else {
+                        fg=true;
+                        return true;
+                    }
+                }
+            }, message: ''
+        }
     })
 </script>

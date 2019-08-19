@@ -139,7 +139,7 @@
             required: true,
             onChange:function(data){
                 if(data){
-                    doUpload(data);
+                    doUploadSecondRecord(data);
                 }
             }
         });
@@ -167,7 +167,7 @@
         });
     }
 
-    function doUpload(data) {
+    function doUploadSecondRecord(data) {
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",

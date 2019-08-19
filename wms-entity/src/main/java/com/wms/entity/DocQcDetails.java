@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Entity
 public class DocQcDetails  implements Serializable {
 
+	private String pano;     //上架单号
 	private String qcno;
 
 	private String qclineno;
