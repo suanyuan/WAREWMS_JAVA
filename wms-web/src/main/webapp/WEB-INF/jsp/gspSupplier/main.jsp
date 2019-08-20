@@ -98,11 +98,29 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#gspSupplierId').val(0);
-	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+    $('#enterpriseId').val('');
+    // $('#contractUrlFile').val('');
+    // $('#contractUrlFile1').val('');
+    // $('#ezuiDialog').dialog('destroy');
+    ezuiDialog = $('#ezuiDialog').dialog({
+        modal : true,
+        left:400,
+        width:900,
+        height:600,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:dialogUrl,
+        cache: false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    });
+
+	// ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+    $('#enterpriseDialog').dialog('destroy');
+
 };
 var edit = function(){
-
-
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	// alert(row.supplierId);
@@ -118,17 +136,26 @@ var edit = function(){
         // 	// editDate : row.editDate,
         // 	// isUse : row.isUse
         // });
-
-        ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+        ezuiDialog = $('#ezuiDialog').dialog({
+            modal : true,
+            left:400,
+            width:900,
+            height:600,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+            href:dialogUrl+"&id="+row.supplierId,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        });
+        // ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.supplierId);
+        $('#enterpriseDialog').dialog('destroy');
     }else{
         $.messager.show({
             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
         });
     }
-
-
-
-
 };
 
 var check = function () {
@@ -180,46 +207,49 @@ var check = function () {
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 
-	if(row.firstState=="10" || row.firstState=="40"){
-        $.messager.show({
-            msg : '审核中与审核通过的申请无法删除', title : '提示'
-        });
-	}else{
+
         if(row){
-            $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
-                if(confirm){
-                    $.ajax({
-                        url : 'gspSupplierController.do?delete',
-                        data : {id : row.supplierId},
-                        type : 'POST',
-                        dataType : 'JSON',
-                        success : function(result){
-                            $.ajax({
-                                url : 'basCustomerController.do?delete',
-                                data : {enterpriseId : row.enterpriseId,customerType:"VE"},
-                                type : 'POST',
-                                dataType : 'JSON',
-                                success : function(date){
 
-                                }
-                            });
+            if(row.firstState=="10" || row.firstState=="40"){
+                $.messager.show({
+                    msg : '审核中与审核通过的申请无法删除', title : '提示'
+                });
+            }else {
+                $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function (confirm) {
+                    if (confirm) {
+                        $.ajax({
+                            url: 'gspSupplierController.do?delete',
+                            data: {id: row.supplierId},
+                            type: 'POST',
+                            dataType: 'JSON',
+                            success: function (result) {
+                                $.ajax({
+                                    url: 'basCustomerController.do?delete',
+                                    data: {enterpriseId: row.enterpriseId, customerType: "VE"},
+                                    type: 'POST',
+                                    dataType: 'JSON',
+                                    success: function (date) {
 
-
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                            } catch (e) {
-                                msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            } finally {
-                                $.messager.show({
-                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                    }
                                 });
-                                ezuiDatagrid.datagrid('reload');
+
+
+                                var msg = '';
+                                try {
+                                    msg = result.msg;
+                                } catch (e) {
+                                    msg = '<spring:message code="common.message.data.delete.failed"/>';
+                                } finally {
+                                    $.messager.show({
+                                        msg: msg, title: '<spring:message code="common.message.prompt"/>'
+                                    });
+                                    ezuiDatagrid.datagrid('reload');
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
         }else{
             $.messager.show({
                 msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -227,7 +257,7 @@ var del = function(){
         }
 
 
-	}
+
 
 };
 
@@ -392,10 +422,10 @@ var doSearch = function(){
         isUse : $('#isUse').combobox('getValue'),
         editDateEnd : $('#editDateEnd').datebox("getValue"),
         //productionAddress : $('#productionAddress').combobox("getValue"),
-        shorthandName : $('#shorthandName').val(),
+        shorthandName : $('#shorthandNameQuery').val(),
 		// editId : $('#editId').val(),
 		//editDate : $('#editDate').val(),
-        enterpriseNo: $('#enterpriseNo').val()
+        enterpriseNo: $('#enterpriseNoQuery').val()
 
 	});
 };
@@ -411,8 +441,8 @@ var doSearch = function(){
 					<table>
 						<tr>
 							<%--<th>企业流水号</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<th>企业代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>企业代码</th><td><input type='text' id='enterpriseNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>简称</th><td><input type='text' id='shorthandNameQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>企业</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<th>企业</th>
 							<td>
@@ -497,78 +527,188 @@ var doSearch = function(){
 	<div id='enterpriseDialog' style='padding: 10px;'>
 
 	</div>
+
+
+
+
+	<div id='ezuiDialogDetail' style='padding: 10px;'>
+		<div id='enterpriseSearchGridToolbar_gspSupplier' class='datagrid-toolbar' style=''>
+			<fieldset>
+				<legend>企业信息</legend>
+				<table>
+					<tr>
+						<th>代码</th>
+						<td><input type='text' id='enterpriseNo1' class='easyui-textbox' data-options='width:200'/></td>
+						<th>简称</th>
+						<td><input type='text' id='shorthandName1' class='easyui-textbox' data-options='width:200'/></td>
+						<td>
+							<a onclick='doSearchEnterprise1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+							<a onclick='choseSelect_gspSupplier()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<table id="enterpriseSearchGrid_gspSupplier">
+
+		</table>
+	</div>
+
+
+	<%--<div id='enterpriseDialog1_gspSupplier' style='padding: 10px;'></div>--%>
+
 <script>
-    var enterpriseDialog_gspSupplier;
+    var enterpriseDialog1_gspSupplier;
+    var ezuiDialogDetail;
+	var enterpriseSearchGrid_gspSupplier;
+    $(function () {
+
+
+        enterpriseSearchGrid_gspSupplier = $("#enterpriseSearchGrid_gspSupplier").datagrid({
+            url : '/gspEnterpriseInfoController.do?showDatagridSearch',
+            method:'POST',
+            toolbar : '#enterpriseSearchGridToolbar_gspSupplier',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                isUse : '1',
+                enterpriseType:'default',
+                <%--enterpriseType:'${enterpriseType}'--%>
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'enterpriseId',
+            columns : [[
+                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'shorthandName',		title: '简称',	width: '20%' },
+                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
+                {field: '_operate',		title: '操作',	width: '20%',
+                    formatter: formatOper_gspSupplier
+                }
+            ]],
+            onDblClickRow: function(index,row){
+                choseSelect_gspSupplier(row.enterpriseId,row.enterpriseName);
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+
+
+        })
+
+        ezuiDialogDetail = $('#ezuiDialogDetail').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+
+
+
+
+
+    });
+
+    $("#enterpriseIdQuery").textbox({
+        width:146,
+        icons:[{
+            iconCls:'icon-search',
+            handler: function(e){
+                searchMainEnterprise();
+            }
+        }]
+    });
+    function searchMainEnterprise() {
+        if(ezuiDialogDetail){
+            ezuiDialogDetail.dialog('open');
+        }
+
+    }
+
+    function doSearchEnterprise1(){
+        console.log($("#enterpriseSearchGridToolbar_gspSupplier input[id='enterpriseNo1']").textbox("getValue"));
+        // console.log($('#shorthandName1').val());
+        // console.log($('#shorthandName1').textbox('getValue'));
+        enterpriseSearchGrid_gspSupplier.datagrid('load', {
+            enterpriseNo : $("#enterpriseSearchGridToolbar_gspSupplier input[id='enterpriseNo1']").textbox("getValue"),
+            shorthandName:$("#enterpriseSearchGridToolbar_gspSupplier input[id='shorthandName1']").textbox("getValue"),
+            // type :'noSupplier',
+            enterpriseType:'default',
+            isUse : '1'
+        });
+    };
+
+
     $("#isCheck").combobox({
         panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
         valueField:'id',
         textField:'value'
     });
-	//
-    // $("#isCooperation").combobox({
-    //     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
-    //     valueField:'id',
-    //     textField:'value'
-    // });
-	//
-    // $("#isChineseLabel").combobox({
-    //     url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
-    //     valueField:'id',
-    //     textField:'value'
-    // });
-	//
+
+
+
     $("#isUse").combobox({
         panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
         textField:'value'
     });
-	//
-    // $("#firstState").combobox({
-    //     url:sy.bp()+'/commonController.do?getCatalogFirstState',
-    //     valueField:'id',
-    //     textField:'value'
-    // });
-	//
-    // $("#operateType").combobox({
-    //     url:sy.bp()+'/commonController.do?getEntType',
-    //     valueField:'id',
-    //     textField:'value'
-    // });
 
-    function searchMainEnterprise() {
-        enterpriseDialog_gspSupplier = $('#enterpriseDialog').dialog({
-            modal: true,
-            title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier&type=noSupplier",
-            width: 850,
-            height: 500,
-            cache: false,
-            onClose: function () {
-				
+
+
+    function operateGrid_gspSupplier(id) {
+        $('#enterpriseDialog_gspSupplier').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,
+            width:850,
+            height:500,
+            cache:false,
+            onClose : function() {
+
             }
         })
     }
+
+    function formatOper_gspSupplier(value,row,index){
+        return "<a onclick=\"operateGrid_gspSupplier('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    }
+
+
+
+
     function choseSelect_gspSupplier(id,name) {
         console.log(id)
         console.log(name)
         $("input[name='enterpriseId']").val(id);
         $("#enterpriseIdQuery").textbox("setValue",name);
-        enterpriseDialog_gspSupplier.dialog("close");
+        ezuiDialogDetail.dialog("close");
     }
 
-    $(function () {
-        $("#enterpriseIdQuery").textbox({
-            width:146,
-            icons:[{
-                iconCls:'icon-search',
-                handler: function(e){
-                    searchMainEnterprise();
-                }
-            }]
-        })
-    })
+
 </script>
 
 

@@ -71,13 +71,13 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             <td>
                 <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value="" />
                 <%--<input class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>--%>
-                <input id="contractUrlFile" name='file'   />
+                <input id="contractUrlFile" name='file'  value="${gspSupplier.contractUrl}"  />
                 <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
             <th>授权照片</th>
             <td>
                 <input type="hidden" class="textbox-value" data="1" name="empowerPhoto" id="empowerPhoto" />
-                <input id="contractUrlFile1" name='file1'  />
+                <input id="contractUrlFile1" name='file1' value="${gspSupplier.empowerPhoto}"  />
                 <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl1()">查看</a>
             </td>
         </tr>
@@ -212,7 +212,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                         $("#empowerPhoto").val(result.obj.empowerPhoto);
                         $("#contractUrlFile1").val('setValue',result.obj.empowerPhoto);
                         $("#contractUrl").val(result.obj.contractUrl);
-                        $("#ezuiFormInfo input[id='contractUrlFile']").textbox('setValue',result.obj.contractUrl);
+                        // $("#ezuiFormInfo input[id='contractUrlFile']").textbox('setValue',result.obj.contractUrl);
                         // $("#contractUrlFile").val(result.obj.contractUrl);
                         // $("#contractUrlFile").val(result.obj.contractUrl);
                         // $("#empowerPhoto").val(result.obj.empowerPhoto);
@@ -251,16 +251,29 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             }]
         })
     })
+
+    enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
+        modal: true,
+        title: '<spring:message code="common.dialog.title"/>',
+        href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplierInfo&&type=noSupplier&enterpriseType=default",
+        width: 850,
+        height: 500,
+        cache: false,
+        onClose: function () {
+
+        }
+    }).dialog('close');
+
     function searchEnterprise() {
         enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
-            href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplierInfo&&type=noSupplier&enterpriseType=default",
+            // href: sy.bp() + "/gspEnterpriseInfoController.do?toSearchDialog&target=gspSupplier&type=noSupplier&enterpriseType=default",
             width: 850,
             height: 500,
             cache: false,
             onClose: function () {
-                $(this).dialog('destroy');
+
             }
         })
     }
@@ -428,7 +441,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                 modal : true,
                 title : '<spring:message code="common.dialog.title"/>',
                 buttons : '',
-                href:dialogUrl,
+                href:dialogUrl1,
                 width:1200,
                 height:530,
                 closable:true,
