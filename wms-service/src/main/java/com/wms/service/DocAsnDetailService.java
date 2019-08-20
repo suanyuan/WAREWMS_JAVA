@@ -43,7 +43,7 @@ public class DocAsnDetailService extends BaseService {
 	private BasSkuMybatisDao basSkuMybatisDao;
 
 	@Autowired
-	private BasGtnMybatisDao basGtnMybatisDao;
+	private BasPackageMybatisDao basPackageMybatisDao;
 
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
@@ -174,20 +174,30 @@ public class DocAsnDetailService extends BaseService {
 //		skuQuery.setQty(docAsnDetail.getExpectedqty());
 		BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
 
+		//预期收货数量
+        BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+        docAsnDetail.setExpectedqtyEach(basPackage.getQty1().multiply(docAsnDetail.getExpectedqty()));
+
 		//入库日期
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         docAsnDetail.setLotatt03(formatter.format(new Date()));
 
-        //产品名称
-		if(basSku!=null){
-//			docAsnDetail.setLotatt13(basSku.getSkuGroup7());
-            docAsnDetail.setLotatt06(basSku.getReservedfield03());
-			docAsnDetail.setLotatt12(basSku.getReservedfield01());
-			docAsnDetail.setLotatt08(basSku.getSkuGroup6());
-		}
+        //产品双证
+//        docAsnDetail.setLotatt13(basSku.getSkuGroup7());
 
-		//质量状态
+        //产品注册证
+        docAsnDetail.setLotatt06(basSku.getReservedfield03());
+
+        docAsnDetail.setLotatt08(basSku.getSkuGroup6());
+
+        //质量状态
         docAsnDetail.setLotatt10("DJ");
+
+        //储存条件
+        docAsnDetail.setLotatt11(basSku.getSkuGroup4());
+
+        //产品名称
+        docAsnDetail.setLotatt12(basSku.getReservedfield01());
 
 		//预入库单号
         docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
@@ -196,9 +206,15 @@ public class DocAsnDetailService extends BaseService {
 		if (docAsnDetail.getLotatt06() != null && !docAsnDetail.getLotatt06().equals("")) {
 
             PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(docAsnDetail.getLotatt06());
-            docAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
+            if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
 
+                docAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
+            }
 		}
+
+		//赋值
+		docAsnDetail.setPackid(basSku.getPackid());
+		docAsnDetail.setAlternativesku(basSku.getAlternateSku1());
 
 		//判断预入库明细里面的sku和客户id下的18个批属是否存在
 		InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
