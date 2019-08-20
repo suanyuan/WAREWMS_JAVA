@@ -83,7 +83,6 @@ $(function() {
 	});
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
-        left:400,
         width:900,
         height:600,
         title : '<spring:message code="common.dialog.title"/>',
@@ -104,7 +103,6 @@ var add = function(){
     // $('#ezuiDialog').dialog('destroy');
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
-        left:400,
         width:900,
         height:600,
         title : '<spring:message code="common.dialog.title"/>',
@@ -138,7 +136,6 @@ var edit = function(){
         // });
         ezuiDialog = $('#ezuiDialog').dialog({
             modal : true,
-            left:400,
             width:900,
             height:600,
             title : '<spring:message code="common.dialog.title"/>',
@@ -648,8 +645,9 @@ var doSearch = function(){
     }
 
     function doSearchEnterprise1(){
-        console.log($("#enterpriseSearchGridToolbar_gspSupplier input[id='enterpriseNo1']").textbox("getValue"));
-        // console.log($('#shorthandName1').val());
+        //console.log("-----");
+        //console.log($("#enterpriseSearchGridToolbar_gspSupplier input[id='enterpriseNo1']").textbox("getValue"));
+        //console.log($('#shorthandName1').val());
         // console.log($('#shorthandName1').textbox('getValue'));
         enterpriseSearchGrid_gspSupplier.datagrid('load', {
             enterpriseNo : $("#enterpriseSearchGridToolbar_gspSupplier input[id='enterpriseNo1']").textbox("getValue"),

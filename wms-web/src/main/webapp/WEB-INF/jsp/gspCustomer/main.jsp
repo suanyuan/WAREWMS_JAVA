@@ -76,7 +76,7 @@ $(function() {
 			});
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/gspCustomerController.do?getBtn"/>', ezuiMenu);
-			$(this).datagrid('unselectAll');
+			//$(this).datagrid('unselectAll');
 		},
         onSelect: function(rowIndex, rowData) {
             if (rowIndex - 1){
@@ -101,7 +101,6 @@ var add = function(){
 	$('#gspCustomerId').val(0);
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
-		left:400,
         width:900,
         height:550,
         title : '<spring:message code="common.dialog.title"/>',
@@ -120,7 +119,6 @@ var edit = function(){
         //ezuiDialog.dialog('refresh', dialogUrl+"&id="+row.clientId).dialog('open');
         ezuiDialog = $('#ezuiDialog').dialog({
             modal : true,
-            left:400,
 			width:900,
 			height:550,
             title : '<spring:message code="common.dialog.title"/>',

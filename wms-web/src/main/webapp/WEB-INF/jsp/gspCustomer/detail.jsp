@@ -452,9 +452,11 @@
     }
 
     function doSearchEnterprise() {
+        //
+        //console.log($('#ezuiDialogDetail #enterpriseNo').textbox("getValue"))
         enterpriseDatagrid.datagrid('load', {
-            enterpriseNo : $('#enterpriseNo').val(),
-            shorthandName : $('#shorthandName').val(),
+            enterpriseNo : $('#ezuiDialogDetail #enterpriseNo').textbox("getValue"),
+            shorthandName : $('#ezuiDialogDetail #shorthandName').textbox("getValue"),
             type:'noCustomer',
             enterpriseType:'default',
             isUse : '1'

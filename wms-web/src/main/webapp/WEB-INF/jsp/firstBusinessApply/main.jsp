@@ -44,7 +44,7 @@ $(function() {
 			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
-			// edit();
+			//edit(); TODO 不能修改需要提示
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			// event.preventDefault();
