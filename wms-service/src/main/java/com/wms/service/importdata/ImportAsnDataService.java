@@ -89,6 +89,9 @@ public class ImportAsnDataService {
                 asnList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
             } catch (ExcelException e) {
                 e.printStackTrace();
+                json.setMsg(e.getMessage());
+                json.setSuccess(false);
+                return json;
             }
             //保存实体集合
             List<DocAsnHeaderVO> importDataList = this.listToBean(asnList, resultMsg);
