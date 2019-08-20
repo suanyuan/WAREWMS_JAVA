@@ -35,6 +35,10 @@
        
 <!-- doc_qc_details table all fields -->
 <sql id="Base_Column_List" >
+	qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid
+</sql>
+	<!-- doc_qc_details table all fields -->
+<sql id="Base_Column_List1" >
 	pano,qcno,qclineno,linestatus,palineno,customerid,sku,lotnum,paqty_expected,qcqty_expected,qcqty_completed,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,qcdescr,qcresult,filecontent,notes,addtime,addwho,edittime,editwho,packid,transactionid
 </sql>
    
@@ -230,17 +234,37 @@ where 1=1
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select
 	count(1)
-	from (
-	SELECT  d.*,h.pano FROM doc_qc_details  d
-	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
-	) as a
+	FROM doc_qc_details
 	<include refid="Example_Where_Clause"/>
+</select>
+<!-- 验收明细档 列表总数Pano-->
+<select id="queryByCountPano" resultType="java.lang.Integer"  parameterType="Object">
+		select
+		count(1)
+		from (
+		SELECT  d.*,h.pano FROM doc_qc_details  d
+		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+		) as a
+		<include refid="Example_Where_Clause"/>
 </select>
   	
 <!-- 查询验收明细档列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
+	     FROM doc_qc_details
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+<!-- 查询验收明细档列表 pano -->
+<select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
+	select
+	<include refid="Base_Column_List1"/>
 	from (
 	  SELECT  d.*,h.pano FROM doc_qc_details  d
 	  LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
