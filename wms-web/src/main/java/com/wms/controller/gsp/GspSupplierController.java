@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.entity.GspSupplier;
+import com.wms.mybatis.dao.GspSupplierMybatisDao;
 import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ public class GspSupplierController {
 
 	@Autowired
 	private GspSupplierService gspSupplierService;
+	@Autowired
+	private GspSupplierMybatisDao gspSupplierMybatisDao;
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -43,10 +47,12 @@ public class GspSupplierController {
 
 	@Login
 	@RequestMapping(params = "toAdd")
-	public ModelAndView toAdd(String menuId) {
+	public ModelAndView toAdd(String id) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
+//		model.put("id", id);
+		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
+		model.put("gspSupplier", gspSupplier);
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);

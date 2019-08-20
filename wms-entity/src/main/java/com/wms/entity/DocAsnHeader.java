@@ -17,6 +17,17 @@ import java.util.Set;
 @Table(name="DOC_ASN_HEADER")
 @NamedQuery(name="DocAsnHeader.findAll", query="SELECT d FROM DocAsnHeader d")
 public class DocAsnHeader implements Serializable {
+
+    /**
+     * 定向订单
+     */
+    public static String ASN_TYPE_DX = "DX";
+
+    /**
+     * 引用订单
+     */
+    public static String ASN_TYPE_YY = "YY";
+
 	private static final long serialVersionUID = 1L;
 
 	@Id

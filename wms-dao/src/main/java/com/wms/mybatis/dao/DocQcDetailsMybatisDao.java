@@ -8,6 +8,7 @@ import com.wms.query.DocOrderPackingQuery;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import org.apache.ibatis.annotations.Param;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
 
@@ -86,4 +87,13 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      * @return ~
      */
 	DocQcDetails queryAcceptQty(PdaDocQcDetailQuery query);
+
+
+	/**
+	 * 验收作业分页查询 显示pano
+	 * @param criteria
+	 * @return
+	 */
+	public <T> List<T> queryByListPano(MybatisCriteria criteria);
+	public int queryByCountPano(MybatisCriteria criteria);
 }
