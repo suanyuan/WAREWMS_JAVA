@@ -176,6 +176,15 @@ public class BasSku implements Serializable {
 	private BigDecimal qtyallocated;
 
 	private BigDecimal qtyonhold;
+	private String productLineName;
+
+	public String getProductLineName() {
+		return productLineName;
+	}
+
+	public void setProductLineName(String productLineName) {
+		this.productLineName = productLineName;
+	}
 
 	public BasSku() {
 	}
