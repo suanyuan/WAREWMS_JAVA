@@ -1,8 +1,9 @@
 package com.wms.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
-
-import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * The persistent class for the DOC_ASN_HEADER database table.
@@ -242,4 +243,21 @@ public class ImportAsnData implements Serializable {
 	public void setAsntype(String asntype) {
 		this.asntype = asntype;
 	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ImportAsnData)) return false;
+		ImportAsnData that = (ImportAsnData) o;
+		return this.customerid.equals(that.customerid) &&
+				this.asnreference1.equals(that.asnreference1)  &&
+				this.expectedarrivetime1.equals(that.expectedarrivetime1);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.customerid, this.asnreference1, this.expectedarrivetime1 );
+	}
+
 }

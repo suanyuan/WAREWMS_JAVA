@@ -1310,12 +1310,4 @@ insert into doc_asn_header
 	<select id="showAsnreference1"  resultType="java.lang.Integer"  parameterType="Object">
 		select count(*) from doc_asn_header  where asnreference1 = #{asnreference1};
 	</select>
-	<select id="queryByGetHeader" resultMap="DocAsnHeaderMap"  parameterType="Object">
-		select
-		<include refid="Base_Column_List"/>
-		from
-		doc_asn_header
-		<include refid="Example_Where_Clause"/>
-	</select>
-
 </mapper>

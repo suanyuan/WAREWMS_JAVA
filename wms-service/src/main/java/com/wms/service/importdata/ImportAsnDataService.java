@@ -19,7 +19,7 @@ import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.service.BasGtnLotattService;
 import com.wms.service.InvLotAttService;
-import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.*;
 import com.wms.vo.BasSkuVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wms.utils.BeanUtils;
-import com.wms.utils.ExcelUtil;
-import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.DocAsnDetailVO;
@@ -127,13 +124,12 @@ public class ImportAsnDataService {
         DocAsnDetailVO importDetailsDataVO = null;
         String quantityData = null;
         Integer count = 1;
-        String customerid = "", asnreference1 = "", asnreference2 = "", expectedarrivetime1 = "";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
         format.setLenient(false);
         formatRQ.setLenient(false);
-
+        List<ImportAsnData> compareList = new ArrayList<>();
         for (ImportAsnData dataArray : asnList) {
             try {
                 if (Integer.parseInt(dataArray.getSeq()) <= 0) {
@@ -273,87 +269,138 @@ public class ImportAsnDataService {
                     importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
                     importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
                     importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
+                    //查询条件的保存
                     importDetailsDataVO.setNotes(dataArray.getNotes());
-                    importDetailsDataVOList.add(importDetailsDataVO);
-                } else if (dataArray.getCustomerid().toUpperCase().equals(customerid) &&
-                        dataArray.getAsnreference1().equals(asnreference1) &&
-                        dataArray.getAsnreference2().equals(asnreference2) &&
-                        dataArray.getExpectedarrivetime1().equals(expectedarrivetime1)) {
-                    //表头信息一致则只增加明细信息
-
-                    //判断明细是否一致(明细不一致新增明细)
-
-                    importDetailsDataVO = new DocAsnDetailVO();
-                    importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-                    importDataVO.setAsntype(dataArray.getAsntype());
-                    importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
-                    importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
-                    importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
-                    importDetailsDataVO.setReceivinglocation(dataArray.getReceivinglocation());
-                    importDetailsDataVO.setTotalgrossweight(new BigDecimal(dataArray.getTotalgrossweight()));
-                    importDetailsDataVO.setTotalcubic(new BigDecimal(dataArray.getTotalcubic()));
-                    importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
-                    importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
-                    importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
-                    importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
-                    importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
-                    importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
-                    importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
-                    importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
-                    importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
-                    importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
-                    importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
-                    importDetailsDataVO.setNotes(dataArray.getNotes());
-                    importDetailsDataVOList.add(importDetailsDataVO);
+                    List<DocAsnDetailVO> DocAsnDetailVoTake = new ArrayList<>();
+                    DocAsnDetailVoTake.add(importDetailsDataVO);
+//                     importDetailsDataVOList.add(importDetailsDataVO);
+                    importDataVO.setDocAsnDetailVOList(DocAsnDetailVoTake);
+                    importData.add(importDataVO);
                 } else {
-                    //表头信息不一致则生成新的订单
-                    importDataVO.setDocAsnDetailVOList(importDetailsDataVOList);
-                    importData.add(importDataVO);
-                    importDetailsDataVOList = new ArrayList<DocAsnDetailVO>();
-                    importDataVO = new DocAsnHeaderVO();
-                    importDataVO.setAsntype(dataArray.getAsntype());
-                    importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
-                    importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
-                    importDataVO.setAsnreference1(dataArray.getAsnreference1());
-                    importDataVO.setAsnreference2(dataArray.getAsnreference2());
-                    try {
-                        importDataVO.setExpectedarrivetime1(format.parse(dataArray.getExpectedarrivetime1()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    ImportAsnData compareData = new ImportAsnData();
+                    compareData.setCustomerid(dataArray.getCustomerid());
+                    compareData.setAsnreference1(dataArray.getAsnreference1());
+                    compareData.setExpectedarrivetime1(dataArray.getExpectedarrivetime1());
+                    //读取表中的数据与当前读取的数据相等
+
+                    if (compareList.contains(compareData)) {
+
+                        boolean isBreak = false;
+
+                        DocAsnHeaderVO DocAsnHeaderVoSense = null;
+                        for (DocAsnHeaderVO docAsnHeaderVO : importData) {
+
+                            if (docAsnHeaderVO.getCustomerid().equals(compareData.getCustomerid()) &&
+                                    docAsnHeaderVO.getAsnreference1().equals(compareData.getAsnreference1()) &&
+                                    format.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
+                                DocAsnHeaderVoSense = docAsnHeaderVO;
+                            }
+                            //遍历明细信息
+                            for (DocAsnDetailVO docAsnDetailVO : docAsnHeaderVO.getDocAsnDetailVOList()) {
+
+                                if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
+                                        docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
+                                        docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
+                                        docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
+                                ) {
+
+                                    docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
+                                    isBreak = true;
+                                    break;
+                                }
+                            }
+                            if (isBreak) break;
+                        }
+                        if (!isBreak) {
+                            //DocasnDetail new
+//                          DocAsnDetailVO docAsnDetailVO = new DocAsnDetailVO();
+                            importDetailsDataVO = new DocAsnDetailVO();
+                            importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
+                            importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+                            importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+                            importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
+                            importDetailsDataVO.setReceivinglocation(dataArray.getReceivinglocation());
+                            importDetailsDataVO.setTotalgrossweight(new BigDecimal(dataArray.getTotalgrossweight()));
+                            importDetailsDataVO.setTotalcubic(new BigDecimal(dataArray.getTotalcubic()));
+                            importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
+                            importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
+                            importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
+                            importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
+                            importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
+                            importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
+                            importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
+                            importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
+                            importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
+                            importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
+                            importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
+                            importDetailsDataVO.setNotes(dataArray.getNotes());
+//                            importDetailsDataVOList.add(importDetailsDataVO);
+                            if (DocAsnHeaderVoSense != null)
+                                DocAsnHeaderVoSense.getDocAsnDetailVOList().add(importDetailsDataVO);
+                        }
+                    } else {
+
+                        //Header
+                        importDataVO = new DocAsnHeaderVO();
+                        importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
+                        importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
+                        importDataVO.setAsnreference1(dataArray.getAsnreference1());
+                        importDataVO.setAsnreference2(dataArray.getAsnreference2());
+                        importDataVO.setAsntype(dataArray.getAsntype());
+                        try {
+                            importDataVO.setExpectedarrivetime1(format.parse(dataArray.getExpectedarrivetime1()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        //Detail
+                        importDetailsDataVO = new DocAsnDetailVO();
+                        importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
+                        importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+                        importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+                        importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
+                        importDetailsDataVO.setReceivinglocation(dataArray.getReceivinglocation());
+                        importDetailsDataVO.setTotalgrossweight(new BigDecimal(dataArray.getTotalgrossweight()));
+                        importDetailsDataVO.setTotalcubic(new BigDecimal(dataArray.getTotalcubic()));
+                        importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
+                        importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
+                        importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
+                        importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
+                        importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
+                        importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
+                        importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
+                        importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
+                        importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
+                        importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
+                        importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
+                        importDetailsDataVO.setNotes(dataArray.getNotes());
+//                        importDetailsDataVOList.add(importDetailsDataVO);
+                        List<DocAsnDetailVO> tempDetailDataList = new ArrayList<>();
+                        tempDetailDataList.add(importDetailsDataVO);
+                        importDataVO.setDocAsnDetailVOList(tempDetailDataList);
+                        importData.add(importDataVO);
                     }
-                    importDetailsDataVO = new DocAsnDetailVO();
-                    importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-                    importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
-                    importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
-                    importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
-                    importDetailsDataVO.setReceivinglocation(dataArray.getReceivinglocation());
-                    importDetailsDataVO.setTotalgrossweight(new BigDecimal(dataArray.getTotalgrossweight()));
-                    importDetailsDataVO.setTotalcubic(new BigDecimal(dataArray.getTotalcubic()));
-                    importDetailsDataVO.setTotalprice(new BigDecimal(dataArray.getTotalprice()));
-                    importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
-                    importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
-                    importDetailsDataVO.setLotatt03(dataArray.getLotatt03());
-                    importDetailsDataVO.setLotatt04(dataArray.getLotatt04());
-                    importDetailsDataVO.setLotatt05(dataArray.getLotatt05());
-                    importDetailsDataVO.setLotatt06(dataArray.getLotatt06());
-                    importDetailsDataVO.setLotatt07(dataArray.getLotatt07());
-                    importDetailsDataVO.setLotatt08(dataArray.getLotatt08());
-                    importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
-                    importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
-                    importDetailsDataVO.setNotes(dataArray.getNotes());
-                    importDetailsDataVOList.add(importDetailsDataVO);
+
                 }
+                ImportAsnData compareData = new ImportAsnData();
+                compareData.setCustomerid(dataArray.getCustomerid());
+                compareData.setAsnreference1(dataArray.getAsnreference1());
+//            compareData.setSku(dataArray.getSku());
+//            compareData.setLotatt04(dataArray.getLotatt04());
+                compareData.setExpectedarrivetime1(dataArray.getExpectedarrivetime1());
+                compareList.add(compareData);
+
+
                 //最后一行结束操作
-                if (count == asnList.size()) {
-                    importDataVO.setDocAsnDetailVOList(importDetailsDataVOList);
-                    importData.add(importDataVO);
-                }
+//                if (count == asnList.size()) {
+//                    importDataVO.setDocAsnDetailVOList(importDetailsDataVOList);
+//                    importData.add(importDataVO);
+//                }
             }
 
-            customerid = dataArray.getCustomerid();
-            asnreference1 = dataArray.getAsnreference1();
-            asnreference2 = dataArray.getAsnreference2();
-            expectedarrivetime1 = dataArray.getExpectedarrivetime1();
+//            customerid = dataArray.getCustomerid();
+//            asnreference1 = dataArray.getAsnreference1();
+//            asnreference2 = dataArray.getAsnreference2();
+//            expectedarrivetime1 = dataArray.getExpectedarrivetime1();
             count = count + 1;
         }
         for (DocAsnHeaderVO aa : importData) {
@@ -369,7 +416,7 @@ public class ImportAsnDataService {
         map.put("序号", "seq");
         map.put("货主代码", "customerid");
         map.put("客户单号1", "asnreference1");
-        map.put("客户单号2", "asnreference2");
+        map.put("客户采购单号", "asnreference2");
         map.put("入库单类型", "asntype");
         map.put("预期到货时间", "expectedarrivetime1");
         map.put("产品代码", "sku");
@@ -471,7 +518,8 @@ public class ImportAsnDataService {
                 asnHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                 asnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
                 asnHeader.setAsnno(resultNo);
-                //如果没有序列号不需要导入
+                docAsnHeaderMybatisDao.add(asnHeader);
+              /*  //如果没有序列号不需要导入
                 if(!StringUtils.isEmpty(importDataVO.getAsnreference1())){
                     //条件
                     DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
@@ -490,8 +538,7 @@ public class ImportAsnDataService {
                         resultMsg.append("客户单号：").append(importDataVO.getAsnreference1()).append("资料重复，导入失败").append(" ");
                         continue;
                     }
-                }
-
+                }*/
                 for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
                     //判断预入库明细里面的sku和客户id下的18个批属是否存在
@@ -527,15 +574,15 @@ public class ImportAsnDataService {
                     if (basSku != null) {
                         asnDetails.setLotatt12(basSku.getReservedfield01());
 
-                        if(StringUtils.isEmpty(asnDetails.getLotatt06())){
-							asnDetails.setLotatt06(basSku.getReservedfield03());
-						}
+                        if (StringUtils.isEmpty(asnDetails.getLotatt06())) {
+                            asnDetails.setLotatt06(basSku.getReservedfield03());
+                        }
                         asnDetails.setLotatt08(basSku.getSkuGroup6());
                     }
 
-					if(StringUtils.isEmpty(asnDetails.getLotatt09())){
-						asnDetails.setLotatt09("ZC");
-					}
+                    if (StringUtils.isEmpty(asnDetails.getLotatt09())) {
+                        asnDetails.setLotatt09("ZC");
+                    }
 
                     //预入库单号
                     asnDetails.setLotatt14(resultNo);
@@ -543,10 +590,10 @@ public class ImportAsnDataService {
                     if (asnDetails.getLotatt06() != null && !asnDetails.getLotatt06().equals("")) {
                         PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(asnDetails.getLotatt06());
                         //获取产品注册证
-                        if(productRegister!=null){
-                        	GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(productRegister.getEnterpriseId());
-							asnDetails.setLotatt15(enterpriseInfo.getEnterpriseName());
-						}
+                        if (productRegister != null) {
+                            GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(productRegister.getEnterpriseId());
+                            asnDetails.setLotatt15(enterpriseInfo.getEnterpriseName());
+                        }
 
                     }
 
