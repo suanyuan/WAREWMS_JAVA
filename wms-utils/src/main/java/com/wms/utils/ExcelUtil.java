@@ -592,17 +592,19 @@ public class ExcelUtil {
 
 			// 判断需要的字段在Excel中是否都存在
 			boolean isExist = true;
+			String errorMsg = "";
 			List<String> excelFieldList = Arrays.asList(excelFieldNames);
 			for (String cnName : fieldMap.keySet()) {
 				if (!excelFieldList.contains(cnName)) {
 					isExist = false;
+					errorMsg = cnName;
 					break;
 				}
 			}
 
 			// 如果有列名不存在，则抛出异常，提示错误
 			if (!isExist) {
-				throw new ExcelException("Excel中缺少必要的字段，或字段名称有误");
+				throw new ExcelException("Excel中缺少必要的字段，或字段名称有误 [" + errorMsg + "]");
 			}
 
 			// 将列名和列号放入Map中,这样通过列名就可以拿到列号

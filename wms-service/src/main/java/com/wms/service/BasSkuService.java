@@ -102,7 +102,7 @@ public class BasSkuService extends BaseService {
 		this.validateSku(basSkuForm, resultMsg);// 验证商品是否存在
 
 		if (resultMsg.length() == 0) {
-			
+
 			//
 			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -112,6 +112,7 @@ public class BasSkuService extends BaseService {
 			basSkuMybatisDao.add(basSku);
 		} else {
 			json.setSuccess(false);
+
 			json.setMsg(resultMsg.toString());
 			return json;
 		}

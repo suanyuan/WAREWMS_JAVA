@@ -546,37 +546,6 @@ public class DocQcDetailsService extends BaseService {
                     qcDetails.setEditwho("Gizmo");
                     docQcDetailsDao.updateQcDetail(qcDetails);
                 }
-
-
-
-                /* ********************************doc_qc_header******************************** */
-
-                /*
-                通过qcdetails.qcno-header-pano，再取得此上架任务单的总件数，all_pa_qty(前提上架任务单 是40)
-                获取 doc_qc_details 此验收任务单里总的已验收完成件数，all_qc_qty
-                做件数判断
-                * */
-                //获取上架任务单的状态
-                DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(qcDetails.getQcno());
-                PdaDocQcStatusForm statusForm = new PdaDocQcStatusForm();
-                statusForm.setQcno(qcDetails.getQcno());
-                statusForm.setEditwho("Gizmo");
-                if (docPaHeader.getPastatus().equals("40")) {
-
-                    int all_pa_qty = docQcDetailsDao.queryCompletedPaQty(qcDetails.getQcno());
-                    int all_qc_qty = docQcDetailsDao.queryCompletedQcQty(qcDetails.getQcno());
-                    if (all_qc_qty < all_pa_qty) {
-                        //30
-                        statusForm.setQcstatus("30");
-                    }else {
-                        //40
-                        statusForm.setQcstatus("40");
-                    }
-                }else {
-                    //30
-                    statusForm.setQcstatus("30");
-                }
-                docQcHeaderMybatisDao.updateTaskStatus(statusForm);
             }
 
             /* ********************************doc_pa_details******************************** */
@@ -591,6 +560,16 @@ public class DocQcDetailsService extends BaseService {
             docPaDetails.setUserdefine5("DJ");
             docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
 
+            /* ********************************doc_qc_header******************************** */
+
+            /*
+                验收单状态变更
+                如果验收完全，会更新相关联的预入库单状态
+            */
+            PdaDocQcDetailForm statusForm = new PdaDocQcDetailForm();
+            statusForm.setWarehouseid(form.getWarehouseid());
+            statusForm.setQcno(currentQcDetail.getQcno());
+            docQcHeaderMybatisDao.updateTaskStatus(statusForm);
 
             /* ********************************清除0库存******************************** */
             CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", "Gizmo");

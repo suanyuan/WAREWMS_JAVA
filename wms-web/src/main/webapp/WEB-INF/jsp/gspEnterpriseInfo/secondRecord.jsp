@@ -190,7 +190,7 @@
     }
 
     function formatOperAttachmentRecord(value,row,index){
-        return "<a onclick=\"viewUrl('"+row.recordUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        return "<a onclick=\"viewUrlSecond('"+row.recordUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
     /**

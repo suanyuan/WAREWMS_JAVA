@@ -178,7 +178,7 @@
 <resultMap id="PickingMap" type="com.wms.entity.order.OrderHeaderForNormal" >
 	<result column="customerId" property="customerid"/>
 	<!--<result column="customerShortName" property=""/>-->
-	<result column="orderNo" property="orderno"/>
+	<result column="orderno" property="orderno"/>
 	<result column="orderCode" property="orderCode"/>
 	<result column="totalQty" property="totalQty"/>
 	<result column="totalGrossWeight" property="totalGrossWeight"/>
@@ -218,6 +218,7 @@
 		<result column="lotatt17" property="lotatt17"/>
 		<result column="lotatt18" property="lotatt18"/>
 		<result column="qtyAllocated" property="qtyallocated"/>
+        <result column="qtyallocatedEach" property="qtyallocatedEach"/>
 	</collection>
 </resultMap>
 
@@ -226,6 +227,7 @@
     <result column="edittime" property="edittime"/>
     <result column="carrierName" property="carrierName"/>
     <result column="consigneename" property="consigneename"/>
+	<result column="consigneeCompany" property="consigneeCompany"/>
     <result column="cContact" property="cContact"/>
     <result column="userdefine1" property="userdefine1"/>
     <result column="address" property="address"/>
@@ -1300,12 +1302,12 @@
 				b.notes as notes,
 				b.expectedshipmenttime1,
 				b.carriername,
-				b.consigneename,
+				rece.enterprise_name as consigneename,
 				b.c_contact,
-				b.userdefine1,
+				fy.orderTypeName as userdefine1,
 				b.c_address1,
 				b.c_tel1,
-				b.userdefine2,
+				js.orderTypeName as userdefine2,
 				b.soreference1,
 				b.notes,
 				f.lotatt01,
@@ -1327,6 +1329,7 @@
 				f.lotatt17,
 				f.lotatt18,
 				sum(a.qty) as qtyAllocated,
+				sum(a.qty_each) as qtyallocatedEach,
 				a.location as locationId,
 				(@rowNum :=@rowNum + 1) as orderLineNo
 				from ACT_Allocation_Details a
@@ -1335,6 +1338,9 @@
 				inner join Bas_Sku d on a.customerid = d.customerid and a.sku = d.sku
 				left join Bas_Location e on a.location = e.locationid
 				left join Inv_Lot_Att f on a.lotnum = f.lotnum
+				left join (select code as orderType,codename_c as orderTypeName from Bas_Codes where codeid = 'FY_FS' order by show_sequence) fy on b.userdefine1 = fy.orderType
+				left join (select code as orderType,codename_c as orderTypeName from Bas_Codes where codeid = 'JS_FS' order by show_sequence) js on b.userdefine2 = js.orderType
+		        left join (select enterprise_name,receiving_id from gsp_receiving r left join gsp_enterprise_info info on r.enterprise_id = info.enterprise_id) rece on b.consigneeid = rece.receiving_id
 				inner join
 				(select x.orderno,
 				sum(x.qty) total_qty,
@@ -1345,7 +1351,7 @@
 				and x.sku = y.sku
 				and x.orderno = #{orderno,jdbcType=VARCHAR}
 				group by x.orderno) g on a.orderno = g.orderno,
-				(SELECT(@rowNum := 0)) e
+		        (SELECT(@rowNum := 0)) e
 				where 1 = 1
 				group by c.customerid,
 				c.h_edi_01,
@@ -1377,7 +1383,10 @@
 				f.lotatt15,
 				f.lotatt16,
 				f.lotatt17,
-				f.lotatt18
+				f.lotatt18,
+				fy.orderTypeName,
+				js.orderTypeName,
+				rece.enterprise_name
 				order by a.location
 	</select>
 
@@ -1388,11 +1397,12 @@
 		h.edittime,
 		h.CarrierName carriername,
 		h.ConsigneeName consigneename,
+		rece.enterprise_name consigneeCompany,
 		h.C_Contact cContact,
-		h.userdefine1,
+		fy.orderTypeName userdefine1,
 		concat(h.C_Province,h.C_City,h.C_Address2,h.C_Address1) as address,
 		h.C_Tel1 cTel1,
-		h.userdefine2,
+		js.orderTypeName userdefine2,
 		h.soreference1,
 		h.Notes notes,
 		h.customerid, -- plus货主
@@ -1422,6 +1432,9 @@
 		left join bas_package p on p.packid = bs.packid
 		left join bas_customer bc on bc.customerid = ia.lotatt08
 		left join doc_asn_certificate c on c.customerid = ia.customerid and c.sku = ia.sku and c.lotatt04 = ia.lotatt04
+		left join (select code as orderType,codename_c as orderTypeName from Bas_Codes where codeid = 'FY_FS' order by show_sequence) fy on h.userdefine1 = fy.orderType
+		left join (select code as orderType,codename_c as orderTypeName from Bas_Codes where codeid = 'JS_FS' order by show_sequence) js on h.userdefine2 = js.orderType
+		left join (select enterprise_name,receiving_id from gsp_receiving r left join gsp_enterprise_info info on r.enterprise_id = info.enterprise_id) rece on h.consigneeid = rece.receiving_id
 		where h.sostatus &gt;= 30
 		and h.orderno = #{orderno,jdbcType=VARCHAR}
 	</select>

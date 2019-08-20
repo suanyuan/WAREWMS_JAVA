@@ -37,7 +37,7 @@ $(function () {
 	forgetPwdForm = $('#forgetPwdForm').form();
 	loginDialog = $('#loginDialog').dialog({
 		modal : true,
-		title : '使用者登入',
+		title : '上海嘉和诚康医疗器械有限公司WMS系统',
 		closable : false,
 		cache: false,
 		buttons : '#loginDialogBtn',

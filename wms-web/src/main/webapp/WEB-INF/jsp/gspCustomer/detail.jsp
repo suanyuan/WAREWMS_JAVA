@@ -135,7 +135,7 @@
 </form>
 
 <%--查看企业弹窗--%>
-<div id='ezuiDialogDetail' style='padding: 10px;'>
+<div id='ezuiDialogDetail' style='padding: 10px;display: none'>
     <div id='detailToolbar' class='datagrid-toolbar' style='background-color: #ffffff'>
         <fieldset>
             <legend>企业信息</legend>
@@ -452,9 +452,11 @@
     }
 
     function doSearchEnterprise() {
+        //
+        //console.log($('#ezuiDialogDetail #enterpriseNo').textbox("getValue"))
         enterpriseDatagrid.datagrid('load', {
-            enterpriseNo : $('#enterpriseNo').val(),
-            shorthandName : $('#shorthandName').val(),
+            enterpriseNo : $('#ezuiDialogDetail #enterpriseNo').textbox("getValue"),
+            shorthandName : $('#ezuiDialogDetail #shorthandName').textbox("getValue"),
             type:'noCustomer',
             enterpriseType:'default',
             isUse : '1'

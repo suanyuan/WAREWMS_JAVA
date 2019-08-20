@@ -143,8 +143,6 @@ var add = function(){
                ezuiDialogA.dialog('open');*/
     $('#ezuiDialog').dialog({
         modal : true,
-		top:0,
-		left:0,
         width:1000,
         height:530,
         title : '<spring:message code="common.dialog.title"/>',
@@ -183,8 +181,6 @@ var edit = function(){
                   $('#ezuiDialog').dialog({
                        modal : true,
 					   title : '<spring:message code="common.dialog.title"/>',
-                       top:0,
-                       left:0,
                        width:1000,
                        height:530,
 					   cache:false,
