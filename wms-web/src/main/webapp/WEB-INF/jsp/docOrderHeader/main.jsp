@@ -77,7 +77,7 @@ $(function() {
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
-					{field: 'consigneename',		title: '收货人',		width: 100 },
+					{field: 'cContact',		title: '收货人',		width: 100 },
                     {field: 'cProvince',			title: '省',		width: 100 },
                     {field: 'cCity',			title: '市',		width: 100 },
                     {field: 'cAddress2',			title: '区',		width: 100 },
