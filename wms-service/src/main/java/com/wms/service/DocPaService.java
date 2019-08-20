@@ -53,9 +53,6 @@ public class DocPaService {
 
     /**
      * 编号列表
-     *
-     * @param asnNos
-     * @return
      */
     public Json mergeDocPa(String asnNos) {
         if (StringUtils.isEmpty(asnNos)) {
@@ -65,6 +62,22 @@ public class DocPaService {
             String[] arr = asnNos.split(",");
             List<DocPaDTO> listDTO = docAsnDetailsMybatisDao.queryDocPaDTO(arr);
             if (listDTO != null && listDTO.size() > 0) {
+
+                /* Begin ========================
+                * add by Gizmo 2019-08-20
+                * 定向订单/引用订单无需生成上架任务，否则打印出来的上架单是错误的。
+                * 这两个类型的订单在确认收货后已经上架完成了
+                * */
+                for (DocPaDTO typeDto:
+                     listDTO) {
+                    if (typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
+                    typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
+                        return Json.error("定向订单/引用订单无需生成上架任务！");
+                    }
+                }
+                /*
+                * End    ======================== */
+
                 SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
                 DocPaHeaderForm docPaHeaderForm = new DocPaHeaderForm();
                 Map<String, Object> map = new HashMap<>();
@@ -158,7 +171,8 @@ public class DocPaService {
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
                     //引用入库和定向订单基本上相同，多出来的就是需要自动生成验收结果
-                    if(docPaDTO.getAsntype().equals("DX") || docPaDTO.getAsntype().equals("YY")){
+                    if(docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
+                            docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)){
 
                         String paNo;
                         String qcNo;
@@ -206,7 +220,7 @@ public class DocPaService {
                         docPaDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docPaDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docPaDetailsForm.setUserdefine4(docPaDTO.getLotatt05());
-                        docPaDetailsForm.setUserdefine5(docPaDTO.getAsntype().equals("DX") ? "DJ" : "HG");
+                        docPaDetailsForm.setUserdefine5(docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ? "DJ" : "HG");
                         docPaDetailsForm.setAddtime(new Date());
                         docPaDetailsForm.setAddwho(login.getId());
                         docPaDetailsForm.setPackid(basSku.getPackid());
@@ -261,7 +275,7 @@ public class DocPaService {
                         docQcDetailsForm.setTransactionid("");
                         docQcDetailsService.addDocQcDetails(docQcDetailsForm);
 
-                        if (docPaDTO.getAsntype().equals("YY")) {
+                        if (docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
 
                             PdaDocQcDetailForm pdaDocQcDetailForm = new PdaDocQcDetailForm();
                             BeanUtils.copyProperties(docQcDetailsForm, pdaDocQcDetailForm);

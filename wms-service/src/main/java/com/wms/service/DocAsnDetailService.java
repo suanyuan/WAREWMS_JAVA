@@ -457,10 +457,10 @@ public class DocAsnDetailService extends BaseService {
         if (docAsnDetail.getReceivinglocation() == null ||
                 docAsnDetail.getReceivinglocation().length() == 0) {
 
-            if (docAsnHeader.getAsntype().equals("DX")) {
+            if (docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX)) {
 
                 docAsnDetail.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);
-            }else if (docAsnHeader.getAsntype().equals("YY")) {
+            }else if (docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
 
                 docAsnDetail.setReceivinglocation(DocAsnDetail.YY_RECEIVING_LOCATION);
             }

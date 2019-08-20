@@ -519,26 +519,7 @@ public class ImportAsnDataService {
                 asnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
                 asnHeader.setAsnno(resultNo);
                 docAsnHeaderMybatisDao.add(asnHeader);
-              /*  //如果没有序列号不需要导入
-                if(!StringUtils.isEmpty(importDataVO.getAsnreference1())){
-                    //条件
-                    DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-                    docAsnHeaderQuery.setCustomerid(importDataVO.getCustomerid());
-                    docAsnHeaderQuery.setAsnreference1(importDataVO.getAsnreference1());
-                    docAsnHeaderQuery.setAsnreference2(importDataVO.getAsnreference2());
-                    docAsnHeaderQuery.setExpectedarrivetime1(importDataVO.getExpectedarrivetime1());
-                    //信息是否存在
-                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
-                    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByGetHeader(mybatisCriteria);
-                    //保存订单主信息
-                    if (docAsnHeaderList.size() == 0) {
-                        docAsnHeaderMybatisDao.add(asnHeader);
-                    } else {
-                        resultMsg.append("客户单号：").append(importDataVO.getAsnreference1()).append("资料重复，导入失败").append(" ");
-                        continue;
-                    }
-                }*/
+
                 for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
                     //判断预入库明细里面的sku和客户id下的18个批属是否存在
@@ -574,12 +555,18 @@ public class ImportAsnDataService {
                     if (basSku != null) {
                         asnDetails.setLotatt12(basSku.getReservedfield01());
 
+                        //产品注册证
                         if (StringUtils.isEmpty(asnDetails.getLotatt06())) {
                             asnDetails.setLotatt06(basSku.getReservedfield03());
                         }
+                        //供应商
                         asnDetails.setLotatt08(basSku.getSkuGroup6());
+
+                        //储存条件
+                        asnDetails.setLotatt11(basSku.getSkuGroup4());
                     }
 
+                    //样品属性
                     if (StringUtils.isEmpty(asnDetails.getLotatt09())) {
                         asnDetails.setLotatt09("ZC");
                     }
@@ -587,12 +574,12 @@ public class ImportAsnDataService {
                     //预入库单号
                     asnDetails.setLotatt14(resultNo);
                     //生产厂家
-                    if (asnDetails.getLotatt06() != null && !asnDetails.getLotatt06().equals("")) {
+                    if (StringUtil.isNotEmpty(asnDetails.getLotatt06())) {
                         PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(asnDetails.getLotatt06());
-                        //获取产品注册证
-                        if (productRegister != null) {
-                            GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(productRegister.getEnterpriseId());
-                            asnDetails.setLotatt15(enterpriseInfo.getEnterpriseName());
+                        //生产厂家
+                        if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
+
+                            asnDetails.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
                         }
 
                     }
@@ -621,7 +608,7 @@ public class ImportAsnDataService {
                     asnDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                     asnDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
-                    if (asnHeader.getAsntype().equals("DX") &&
+                    if (asnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) &&
                             (importDetailsDataVO.getReceivinglocation() == null ||
                                     importDetailsDataVO.getReceivinglocation().length() == 0)) {
                         asnDetails.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);//定向订单库位
@@ -636,7 +623,7 @@ public class ImportAsnDataService {
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
 
             } else {
-                resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
+                resultMsg.append("序号：").append(importDataVO.getSeq()).append("预入库单号获取失败").append(" ");
             }
         }
     }
