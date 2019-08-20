@@ -17,4 +17,7 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	Long queryPageListCount(MybatisCriteria criteria);
 
 	Long updateBusinessByNo(@Param("no") String no,@Param("state") String state);
+
+	public int  selectFirstBusinessBySupplierAndProduct(Object id);
+
 }

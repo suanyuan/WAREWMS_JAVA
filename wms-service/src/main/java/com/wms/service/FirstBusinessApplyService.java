@@ -82,6 +82,9 @@ public class FirstBusinessApplyService extends BaseService {
 	public Json addFirstBusinessApply(FirstBusinessApplyForm firstBusinessApplyForm) throws Exception {
 		Json json = new Json();
 		FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+
+
+
 		BeanUtils.copyProperties(firstBusinessApplyForm, firstBusinessApply);
 		firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		firstBusinessApply.setIsUse(Constant.IS_USE_YES);
@@ -186,7 +189,20 @@ public class FirstBusinessApplyService extends BaseService {
 			}
 			String[] arr = productArr.split(",");
 //			for(int a =0;arr.length>0;a++){
-
+			boolean flag = true;
+			for(String specsId : arr) {
+				FirstBusinessApply firstBusinessApply1= new FirstBusinessApply();
+				firstBusinessApply1.setSupplierId(supplierId);
+				firstBusinessApply1.setSpecsId(specsId);
+				int num = firstBusinessApplyMybatisDao.selectFirstBusinessBySupplierAndProduct(firstBusinessApply1);
+				if(num>0){
+					flag = false;
+				}
+			}
+			if(!flag){
+				return 	Json.error("同一供应商与产品！  不能重复申请！");
+			}
+			//specsId   产品id
 			for(String specsId : arr){
 				FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 				String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

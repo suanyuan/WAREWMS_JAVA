@@ -58,11 +58,5 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 	 */
 	public int showAsnreference1(@Param("asnreference1") String asnreference1);
 
-	/**
-	 * 导入时查询主表是否存在
-	 * @param criteria
-	 * @param <T>
-	 * @return
-	 */
-	public <T> List<T> queryByGetHeader(MybatisCriteria criteria);
+
 }
