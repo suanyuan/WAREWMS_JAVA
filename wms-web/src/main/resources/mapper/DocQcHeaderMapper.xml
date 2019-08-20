@@ -238,12 +238,9 @@ where 1=1
         limit #{start}, #{pageSize}
     </select>
 
-    <update id="updateTaskStatus" parameterType="java.util.Map">
-        update doc_qc_header set
-        qcstatus = #{qcstatus, jdbcType=VARCHAR},
-        editwho = #{editwho, jdbcType=VARCHAR},
-        edittime = NOW()
-        where qcno = #{qcno, jdbcType=VARCHAR}
+    <update id="updateTaskStatus" statementType="CALLABLE" parameterType="java.util.Map">
+        {call spasn_change_qcstatus(#{warehouseid, mode=IN, jdbcType=VARCHAR}, #{qcno, mode=IN, jdbcType=VARCHAR},
+        #{returncode, mode=IN, jdbcType=VARCHAR})}
     </update>
 
     <select id="queryByPano" parameterType="java.util.Map" resultMap="BaseResultMap">
