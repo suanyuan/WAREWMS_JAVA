@@ -935,6 +935,7 @@
             descrC : $('#kehumingcheng').val(),
             customerid : $('#kehudaima').val(),
             isUse : '1',
+            activeFlag : '1',
             customerType:'VE'
         });
     }
