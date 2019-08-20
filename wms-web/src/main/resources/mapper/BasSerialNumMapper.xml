@@ -38,10 +38,10 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.serialNum != null and condition.serialNum != ''" >
-	    and serial_num =  #{condition.serialNum}
+	    and serial_num like concat('%',#{condition.serialNum},'%')
 	</if>
 	<if test="condition.batchNum != null and condition.batchNum != ''" >
-	    and batch_num =  #{condition.batchNum}
+	    and batch_num  like concat('%',#{condition.batchNum},'%')
 	</if>
 	<if test="condition.materialNum != null and condition.materialNum != ''" >
 	    and material_num =  #{condition.materialNum}
