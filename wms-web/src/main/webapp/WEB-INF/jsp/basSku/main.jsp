@@ -62,7 +62,7 @@ $(function() {
 			{field: 'reservedfield02',		title: '产品描述',	width: 300 },
 			{field: 'reservedfield03',		title: '注册证号',	width: 180 },
 
-            {field: 'skuGroup1',		title: '产品线',	width: 100 },
+            {field: 'productLineName',		title: '产品线',	width: 100 },
             {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
 
             {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
