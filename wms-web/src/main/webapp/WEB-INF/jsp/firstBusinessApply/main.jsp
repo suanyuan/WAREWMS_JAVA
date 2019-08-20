@@ -44,16 +44,16 @@ $(function() {
 			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+			// edit();
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
+			// event.preventDefault();
+			// $(this).datagrid('unselectAll');
+			// $(this).datagrid('selectRow', rowIndex);
+			// ezuiMenu.menu('show', {
+			// 	left : event.pageX,
+			// 	top : event.pageY
+			// });
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/firstBusinessApplyController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
@@ -99,8 +99,8 @@ var add = function(){
 	processType = 'add';
 	$('#applyId').val(0);
 	ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id=");
-
-
+    $('#enterpriseProduct').dialog('destroy');
+    $('#ezuiDatagridDetail').dialog('destroy');
 };
 var edit = function(){
 	processType = 'edit';
@@ -112,38 +112,48 @@ var edit = function(){
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
+    $('#ezuiDatagridDetail').dialog('destroy');
+    $('#enterpriseProduct').dialog('destroy');
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
-			if(confirm){
-				$.ajax({
-					url : 'firstBusinessApplyController.do?delete',
-					data : {id : row.applyId},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							msg = result.msg;
-						} catch (e) {
-							msg = '<spring:message code="common.message.data.delete.failed"/>';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
+
+	if(row.firstState == '10' || row.firstState =='40'){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法删除', title : '提示'
+        });
 	}else{
-		$.messager.show({
-			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-		});
-	}
+
+		if(row){
+			$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+				if(confirm){
+					$.ajax({
+						url : 'firstBusinessApplyController.do?delete',
+						data : {id : row.applyId},
+						type : 'POST',
+						dataType : 'JSON',
+						success : function(result){
+							var msg = '';
+							try {
+								msg = result.msg;
+							} catch (e) {
+								msg = '<spring:message code="common.message.data.delete.failed"/>';
+							} finally {
+								$.messager.show({
+									msg : msg, title : '<spring:message code="common.message.prompt"/>'
+								});
+								ezuiDatagrid.datagrid('reload');
+							}
+						}
+					});
+				}
+			});
+		}else{
+			$.messager.show({
+				msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+			});
+		}
+    }
 };
 var commit = function(){
 	var url = '';
@@ -152,40 +162,48 @@ var commit = function(){
 	}else{
 		url = '<c:url value="/firstBusinessApplyController.do?add"/>';
 	}
-	ezuiForm.form('submit', {
-		url : url,
-		onSubmit : function(){
-			if(ezuiForm.form('validate')){
-				$.messager.progress({
-					text : '<spring:message code="common.message.data.processing"/>', interval : 100
-				});
-				return true;
-			}else{
-				return false;
-			}
-		},
-		success : function(data) {
-			var msg='';
-			try {
-				var result = $.parseJSON(data);
-				if(result.success){
-					msg = result.msg;
-					ezuiDatagrid.datagrid('reload');
-					ezuiDialog.dialog('close');
-				}else{
-					msg = '<font color="red">' + result.msg + '</font>';
-				}
-			} catch (e) {
-				msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-				msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-			} finally {
-				$.messager.show({
-					msg : msg, title : '<spring:message code="common.message.prompt"/>'
-				});
-				$.messager.progress('close');
-			}
-		}
-	});
+
+
+    if(row.firstState == '10' || row.firstState =='40'){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法编辑', title : '提示'
+        });
+    }else{
+        ezuiForm.form('submit', {
+            url: url,
+            onSubmit: function () {
+                if (ezuiForm.form('validate')) {
+                    $.messager.progress({
+                        text: '<spring:message code="common.message.data.processing"/>', interval: 100
+                    });
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            success: function (data) {
+                var msg = '';
+                try {
+                    var result = $.parseJSON(data);
+                    if (result.success) {
+                        msg = result.msg;
+                        ezuiDatagrid.datagrid('reload');
+                        ezuiDialog.dialog('close');
+                    } else {
+                        msg = '<font color="red">' + result.msg + '</font>';
+                    }
+                } catch (e) {
+                    msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                    msg = '<spring:message code="common.message.data.process.failed"/><br/>' + msg;
+                } finally {
+                    $.messager.show({
+                        msg: msg, title: '<spring:message code="common.message.prompt"/>'
+                    });
+                    $.messager.progress('close');
+                }
+            }
+		});
+	}
 };
 //主页查询
 var doSearch = function(){
@@ -300,7 +318,7 @@ var reApply = function () {
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
-					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
+					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
 					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>

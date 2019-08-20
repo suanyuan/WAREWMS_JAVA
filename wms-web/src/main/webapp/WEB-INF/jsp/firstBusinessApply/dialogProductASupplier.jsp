@@ -40,7 +40,7 @@
 <div id='ezuiDialogSupplierDetail' style='padding: 10px;display: none' >
 	<div id='TB' class='datagrid-toolbar' style=''>
 		<fieldset>
-			<legend>货主信息</legend>
+			<legend>供应商信息</legend>
 			<table>
 				<tr>
 					<th>客户代码：</th><td><input id="kehudaima" type='text'   class='easyui-textbox' data-options='width:200'/></td>
@@ -76,7 +76,7 @@
 			<table>
 				<tr>
 					<th>产品代码</th>
-					<td><input type='text' id='productCode'  size='16' data-options=''/></td>
+					<td><input type='text' id='productCode1'  size='16' data-options=''/></td>
 					<th>产品名称</th>
 					<td><input type='text' id='productName1'  size='16' data-options=''/></td>
 					<th>注册证号</th>
@@ -198,6 +198,7 @@
         });
 		//搜索打开供应商弹窗
         function searchSupplier() {
+            // $('#ezuiDialogSupplierDetail').dialog('destroy');
             ezuiDialogSupplierDetail = $('#ezuiDialogSupplierDetail').dialog({
                 modal : true,
                 title : '<spring:message code="common.dialog.title"/>',
@@ -209,10 +210,11 @@
                     // ezuiFormClear(ezuiForm);
                     // $(this).dialog('destroy');
                 }
+
             });
             // if(ezuiDialogSupplierDetail){
             //     ezuiDialogSupplierDetail.dialog('open');
-            //     $(this).dialog('destroy');
+            //     $('#ezuiDialogSupplierDetail').dialog('destroy');
             // }
         }
 
@@ -238,12 +240,12 @@
                 console.log($("#supplierId").val());
                 //供应商弹窗搜索功能
 
-                dataGridProduct.datagrid('load', {
-                    type:'CER',
-                    supplierId : $('#supplierId').val(),
-                    isUse : '1',
-                    // customerType:'VE'
-                });
+                // dataGridProduct.datagrid('load', {
+                //     type:'CER',
+                //     supplierId : $('#supplierId').val(),
+                //     isUse : '1',
+                //     // customerType:'VE'
+                // });
 
                 // dataGridProduct.datagrid('reload');
             }
@@ -268,7 +270,7 @@
             queryParams:{
                 isUse : '1',
                 type:'CER',
-                supplierId:$("#supplierId").val(),
+                // supplierId:$("#supplierId").val(),
             },
             rownumbers:true,
             idField : 'specsId',
@@ -313,23 +315,25 @@
         });
         //产品
 
+        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+			modal : true,
+			title : '<spring:message code="common.dialog.title"/>',
+			width:850,
+			height:500,
+			cache: false,
+			onClose : function() {
+			// ezuiFormClear(ezuiForm);
+			// $(this).dialog('destroy');
 
+			}
+        }).dialog('close')
 		//搜索打开产品弹窗
         function searchProduct() {
             // if(ezuiDialogSpec){
-                // ezuiDialogSpec.dialog('open');
+                ezuiDialogSpec.dialog('open');
                 //
-                ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-                    modal : true,
-                    title : '<spring:message code="common.dialog.title"/>',
-                    width:850,
-                    height:500,
-                    cache: false,
-                    onClose : function() {
-                        // ezuiFormClear(ezuiForm);
-                        // $(this).dialog('destroy');
-                    }
-                })
+
+
             // }
         }
 
@@ -359,12 +363,13 @@
     }
     //查询产品
     function searchProduct1() {
-        dataGridProduct.datagrid("load", {
-            "productCode":$("#ezuiDialogSpec #productCode").val(),
+        dataGridProduct.datagrid("reload", {
+
+            "productCode":$("#ezuiDialogSpec #productCode1").val(),
             "productName":$("#ezuiDialogSpec #productName1").val(),
             "productRegisterNo":$("#ezuiDialogSpec #registerNo").val(),
             "isUse":"1",
-            "supplierId" : $('#supplierId').val(),
+            // "supplierId" : $('#supplierId').val(),
             "type":"CER"
         })
     }

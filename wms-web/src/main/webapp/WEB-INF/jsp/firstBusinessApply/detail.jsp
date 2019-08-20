@@ -27,7 +27,7 @@
                     <%--</td>--%>
                     <th>产品线</th>
                     <td>
-                        <input id="productLine" name="productLine"  type="text"/>
+                        <input id="productLine" name="productLine"    type="text"/>
                     </td>
                     <!--<th>创建人</th>
                     <td><input type='text' name='createId' class='easyui-textbox' data-options='required:true,width:200'/></td>
@@ -195,8 +195,10 @@
     var arr;
     var arr1;
     var enterpriseProduct;
+    <%--alert(${firstBusinessApply.productline}+'111111111111');--%>
     $(function () {
         // ezuiDialogSpec.close();
+
 
         //主页面
         ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
@@ -518,15 +520,27 @@
         });
 
 
+        // console.log(customerid);
+        // $("#productLine").combobox({
+        //     panelHeight: 'auto',
+        //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
+        //     valueField:'id',
+        //     textField:'value',
+        //     onLoadSuccess:function () {
+        //
+        //     }
+        // });
+        var customerid = $("#clientId").val();
         <c:choose>
-            <c:when test="${firstBusinessApply.productLine != null}">
+            <c:when test="${firstBusinessApply.productline != null}">
+
                 $("#productLine").combobox({
                     panelHeight: 'auto',
-                    url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId',
+                    url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
                     valueField:'id',
-                    textField:'text',
+                    textField:'value',
                     onLoadSuccess:function () {
-                        $("#productLine").combobox("setValue",'${firstBusinessApply.productLine}');
+                        $("#productLine").combobox("setValue",'${firstBusinessApply.productline}');
                     }
                 })
             </c:when>
@@ -618,7 +632,8 @@
             }
         })
 
-
+        $('#ezuiDialogSupplierDetail').dialog('destroy');
+        $('#dataGridProduct').dialog('destroy');
     }
     //查询产品
     // function searchProduct() {
@@ -632,15 +647,24 @@
     // }
     
     function submitApply() {
-        if(arr.length==0){
-            $.messager.show({
-                msg : "请选择要首营的产品", title : '<spring:message code="common.message.prompt"/>'
-            });
-            return;
-        }
+
         if($("#clientId").val() == ""){
             $.messager.show({
                 msg : "请选择委托客户", title : '<spring:message code="common.message.prompt"/>'
+            });
+            return;
+        }
+        if($("#productLine").combobox("getValue") == ""){
+            $.messager.show({
+                msg : "请选择产品线", title : '<spring:message code="common.message.prompt"/>'
+            });
+            return;
+        }
+        var row = ezuiDatagridDetail.datagrid('getSelected');
+
+        if(arr.length==0){
+            $.messager.show({
+                msg : "请选择要首营的产品", title : '<spring:message code="common.message.prompt"/>'
             });
             return;
         }
@@ -762,24 +786,24 @@
         }
     }
 
-    //双击选中供应商
-    function choseSupplierSelect() {
-        var row = supplierDatagrid.datagrid("getSelected");
-        console.log(row);
-        if(row){
-            $("#supplierId").val(row.customerid);
-            $("#supplierName").textbox("setValue",row.descrC)
-            // $("#productLine").combobox({
-            //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
-            //     valueField:'id',
-            //     textField:'value',
-            //     onLoadSuccess:function () {
-            //
-            //     }
-            // })
-            ezuiDialogSupplierDetail.dialog('close');
-        }
-    }
+    // //双击选中供应商
+    // function choseSupplierSelect() {
+    //     var row = supplierDatagrid.datagrid("getSelected");
+    //     console.log(row);
+    //     if(row){
+    //         $("#supplierId").val(row.customerid);
+    //         $("#supplierName").textbox("setValue",row.descrC)
+    //         // $("#productLine").combobox({
+    //         //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
+    //         //     valueField:'id',
+    //         //     textField:'value',
+    //         //     onLoadSuccess:function () {
+    //         //
+    //         //     }
+    //         // })
+    //         ezuiDialogSupplierDetail.dialog('close');
+    //     }
+    // }
 
     // //供应商弹窗搜索功能
     // function doSearchSupplier() {
