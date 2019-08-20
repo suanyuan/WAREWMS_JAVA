@@ -205,5 +205,13 @@
 			case "ZC" : return "正常";
 		}
 	}
+//验收状态
+	var AcceptancestatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "00" : return "未验收";
+			case "30" : return "部分验收";
+			case "40" : return "已验收";
+		}
+	}
 
 </script>

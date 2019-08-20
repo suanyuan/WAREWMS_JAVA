@@ -71,14 +71,19 @@ public class DocQcDetailsService extends BaseService {
     @Autowired
     private ProductLineMybatisDao productLineMybatisDao;
 
-
+    /**
+     * 显示细单 分页
+     * @param pager
+     * @param query
+     * @return
+     */
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByPageList(mybatisCriteria);
+        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByList(mybatisCriteria);
         DocQcDetailsVO docQcHeaderVO = null;
         List<DocQcDetailsVO> docQcHeaderVOList = new ArrayList<>();
         for (DocQcDetails docPaDetails : docQcHeaderList) {

@@ -35,6 +35,12 @@ public class DocQcHeaderController {
 		return new ModelAndView("docQcHeader/main", model);
 	}
 
+	/**
+	 * 分页 显示主单
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

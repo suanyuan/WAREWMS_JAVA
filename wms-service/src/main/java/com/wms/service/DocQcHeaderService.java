@@ -34,7 +34,12 @@ public class DocQcHeaderService extends BaseService {
 
 	@Autowired
 	private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
-
+    /**
+     * 分页 显示主单
+     * @param pager
+     * @param query
+     * @return
+     */
 	public EasyuiDatagrid<DocQcHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
         EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();

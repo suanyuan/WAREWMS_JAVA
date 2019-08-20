@@ -8,10 +8,7 @@ import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
-import com.wms.query.BasSerialNumQuery;
-import com.wms.query.BasSkuQuery;
-import com.wms.query.DocAsnDetailQuery;
-import com.wms.query.ProductLineQuery;
+import com.wms.query.*;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
@@ -85,7 +82,78 @@ public class DocAsnDetailService extends BaseService {
 		return datagrid;
 	}
 
+    /**
+     * 检查预入库单是否可新增
+     * @param asnno 预入库单号
+     * @return 反馈
+     */
+	public Json asnStatusCheck(String asnno) {
+        DocAsnHeaderQuery query = new DocAsnHeaderQuery();
+        query.setAsnno(asnno);
+	    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(query);
+	    return asnObjCheck(docAsnHeader);
+    }
+
+    private Json asnObjCheck(DocAsnHeader docAsnHeader) {
+        Json json = new Json();
+        if(docAsnHeader != null){
+
+            /*
+             * H - 订单冻结
+             * N - 订单未释放
+             * R - 订单任务下发
+             * Y - 订单释放
+             */
+            switch (docAsnHeader.getReleasestatus()) {
+                case "H":
+                    json.setSuccess(false);
+                    json.setMsg("当前预入库单已冻结！");
+                    return json;
+//                case "N":
+//                    json.setSuccess(false);
+//                    json.setMsg("当前预入库未释放");
+//                    return json;
+                default:
+                    break;
+            }
+
+            switch (docAsnHeader.getAsnstatus()) {
+                case "00":
+                case "10":
+                    json.setSuccess(true);
+                    json.setMsg("000");
+                    return json;
+                case "30":
+//                    json.setSuccess(false);
+//                    json.setMsg("当前预入库单已部分收货！");
+//                    return json;
+                case "40":
+//                    json.setSuccess(false);
+//                    json.setMsg("当前预入库单已完全收货！");
+//                    return json;
+                case "70":
+//                    json.setSuccess(false);
+//                    json.setMsg("当前预入库单已完全验收！");
+//                    return json;
+                default:
+                    json.setSuccess(false);
+                    json.setMsg("当前状态下预入库单不允许进行操作！");
+                    return json;
+            }
+        } else {
+            json.setSuccess(false);
+            json.setMsg("查无此预入库单号！");
+            return json;
+        }
+    }
+
+
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
+
+	    Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
+	    if (!statusJson.isSuccess()) {
+	        return statusJson;
+        }
 
 	    DocAsnDetail docAsnDetail = new DocAsnDetail();
 	    BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
@@ -147,6 +215,11 @@ public class DocAsnDetailService extends BaseService {
 	}
 
 	public Json editDocAsnDetail(DocAsnDetailForm docAsnDetailForm) {
+        Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
+        if (!statusJson.isSuccess()) {
+            return statusJson;
+        }
+
 		Json json = new Json();
 		DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
 		docAsnDetailQuery.setAsnno(docAsnDetailForm.getAsnno());
@@ -200,9 +273,6 @@ public class DocAsnDetailService extends BaseService {
 			docAsnDetail.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			docAsnDetailsMybatisDao.receiveByAsn(docAsnDetail);
 			result = docAsnDetail.getResult();
-			System.out.println("<---------------------------->");
-			System.out.println(result);
-			System.out.println("<---------------------------->");
 		}
 		if (result.substring(0,3).equals("000")) {
 			json.setSuccess(true);

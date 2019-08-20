@@ -5,7 +5,6 @@ public class ViewInvLotattExportForm {
 	private java.lang.String fmcustomerid;
 	private java.lang.String fmlocation;
 	private java.lang.String fmsku;
-	private java.lang.String skudescrc;
 	private java.lang.String lotatt01;
 	private java.lang.String lotatt02;
 	private java.lang.String lotatt03;
@@ -15,6 +14,8 @@ public class ViewInvLotattExportForm {
 	private java.lang.String lotatt04;
 	private java.lang.String lotatt05;
 	private java.lang.String lotatt06;
+	private java.lang.String lotatt10;
+	private java.lang.String lotatt12;
 	private java.lang.String warehouseid;
 	private String token;
 	
@@ -96,18 +97,30 @@ public class ViewInvLotattExportForm {
 	public void setLotatt06(java.lang.String lotatt06) {
 		this.lotatt06 = lotatt06;
 	}
+
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
+	}
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
 	public java.lang.String getWarehouseid() {
 		return warehouseid;
 	}
 	public void setWarehouseid(java.lang.String warehouseid) {
 		this.warehouseid = warehouseid;
 	}
-	public java.lang.String getSkudescrc() {
-		return skudescrc;
-	}
-	public void setSkudescrc(java.lang.String skudescrc) {
-		this.skudescrc = skudescrc;
-	}
+
 
 
 }

@@ -16,4 +16,7 @@ public interface ProductLineMybatisDao extends BaseDao {
 
 
     public  void insert(ProductLine t);
+
+
+     List<ProductLine> getProductLineName();
 }

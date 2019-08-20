@@ -1,5 +1,6 @@
 package com.wms.query;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -34,10 +35,69 @@ public class ViewInvLocationQuery implements IQuery {
 	private  String lotatt04;      //批号
 	private  String lotatt05;      //序列号
 	private  String lotatt12;      //产品名称
+	private  String lotatt14;      //入库单号
 	private  Date lotatt02Start;      //失效期查询开始
 	private  Date lotatt02End;      //失效期查询结束
+	private  Date lotatt03Start;      //入库日期查询开始
+	private  Date lotatt03End;      //入库日期查询结束
 
 	private Set<SfcCustomer> customerSet;
+
+	public BigDecimal getiMv() {
+		return iMv;
+	}
+
+	public void setiMv(BigDecimal iMv) {
+		this.iMv = iMv;
+	}
+
+	public BigDecimal getiPa() {
+		return iPa;
+	}
+
+	public void setiPa(BigDecimal iPa) {
+		this.iPa = iPa;
+	}
+
+	public BigDecimal getiRp() {
+		return iRp;
+	}
+
+	public void setiRp(BigDecimal iRp) {
+		this.iRp = iRp;
+	}
+
+	public BigDecimal getoMv() {
+		return oMv;
+	}
+
+	public void setoMv(BigDecimal oMv) {
+		this.oMv = oMv;
+	}
+
+	public BigDecimal getoRp() {
+		return oRp;
+	}
+
+	public void setoRp(BigDecimal oRp) {
+		this.oRp = oRp;
+	}
+
+	public Date getLotatt03Start() {
+		return lotatt03Start;
+	}
+
+	public void setLotatt03Start(Date lotatt03Start) {
+		this.lotatt03Start = lotatt03Start;
+	}
+
+	public Date getLotatt03End() {
+		return lotatt03End;
+	}
+
+	public void setLotatt03End(Date lotatt03End) {
+		this.lotatt03End = lotatt03End;
+	}
 
 	public String getLotatt05() {
 		return lotatt05;
@@ -85,6 +145,14 @@ public class ViewInvLocationQuery implements IQuery {
 
 	public void setLotatt04(String lotatt04) {
 		this.lotatt04 = lotatt04;
+	}
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
 	}
 
 	public String getDefaultreceivinguom() {
