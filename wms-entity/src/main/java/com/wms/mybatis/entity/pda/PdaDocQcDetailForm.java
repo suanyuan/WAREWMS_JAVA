@@ -19,11 +19,19 @@ public class PdaDocQcDetailForm extends BaseLotatt {
     private String qcqty;
 
     private String qcdescr;
+    private String lotnum;
 
     private String warehouseid;
 
     //--------------------上面是pda传参、lotatt01、02、04、06、11
 
+//    private String lotatt01;//生产日期
+//    private String lotatt02;//效期
+//    private String lotatt04;//生产批号
+//    private String lotatt06;//产品注册证
+//    private String lotatt10;//合格 不合格
+//    private String lotatt11;//存储条件
+//    private String lotatt15;//生产厂商名称
     private String userid;
 
     private String language;
@@ -100,5 +108,14 @@ public class PdaDocQcDetailForm extends BaseLotatt {
 
     public void setReturncode(String returncode) {
         this.returncode = returncode;
+    }
+
+
+    public String getLotnum() {
+        return lotnum;
+    }
+
+    public void setLotnum(String lotnum) {
+        this.lotnum = lotnum;
     }
 }

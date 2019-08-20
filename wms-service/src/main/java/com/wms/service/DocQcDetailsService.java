@@ -18,12 +18,12 @@ import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQcDetailsForm;
 import com.wms.vo.pda.PdaDocQcDetailVO;
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,26 +72,32 @@ public class DocQcDetailsService extends BaseService {
     private ProductLineMybatisDao productLineMybatisDao;
 
     /**
-     * 显示细单 分页
+     * 显示细单 分页 pano
      * @param pager
      * @param query
      * @return
      */
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
+        List<DocQcDetailsVO> docQcHeaderVOList = new ArrayList<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByList(mybatisCriteria);
+        if(query.getQcno()==null||query.getQcno()==""){
+            datagrid.setRows(docQcHeaderVOList);
+            datagrid.setTotal((long)0);
+            return datagrid;
+        }
+        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByListPano(mybatisCriteria);
         DocQcDetailsVO docQcHeaderVO = null;
-        List<DocQcDetailsVO> docQcHeaderVOList = new ArrayList<>();
         for (DocQcDetails docPaDetails : docQcHeaderList) {
             docQcHeaderVO = new DocQcDetailsVO();
+            docPaDetails.setQcqtyExpected(docPaDetails.getQcqtyExpected()-docPaDetails.getQcqtyCompleted());
             BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
             docQcHeaderVOList.add(docQcHeaderVO);
         }
-        datagrid.setTotal((long) docQcDetailsDao.queryByCount(mybatisCriteria));
+        datagrid.setTotal((long) docQcDetailsDao.queryByCountPano(mybatisCriteria));
         datagrid.setRows(docQcHeaderVOList);
         return datagrid;
 	}
@@ -293,11 +299,10 @@ public class DocQcDetailsService extends BaseService {
      * @return ~
      */
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
-
         form.setUserid("Gizmo");
         form.setLanguage("CN");
+        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
-
         DocQcDetails docQcDetails = new DocQcDetails();
         if (form.getAllqcflag() == 1) {
             docQcDetails = docQcDetailsDao.queryById(form);
@@ -313,7 +318,7 @@ public class DocQcDetailsService extends BaseService {
 
             return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "验收系统错误");
         }
-        if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
+        if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {//判断是否验收成功
 
             if (form.getAllqcflag() == 1) {
 
@@ -592,5 +597,46 @@ public class DocQcDetailsService extends BaseService {
 
     public int queryMaxLineNo(String qcno){
         return docQcDetailsDao.queryMaxLineNo(qcno);
+    }
+
+    /**
+     * 批量验收
+     */
+    public Json submitDocQcList(String forms){
+        Json json=new Json();
+        StringBuffer result=new StringBuffer();
+//        json转集合
+        List<PdaDocQcDetailForm> list=JSON.parseArray(forms,PdaDocQcDetailForm.class);
+        Boolean con=true;
+        for (PdaDocQcDetailForm detailForm : list) {
+            InitPdaDocQcDetailForm(detailForm);//完善form值
+            PdaResult pdaResult = submitDocQc(detailForm);//调用验收作业方法 单个验收
+            if(pdaResult.getErrorCode()==200){
+                result.append("验收单号:"+detailForm.getQcno()+",行号:"+detailForm.getQclineno()).append("<br/>");
+                con=false;
+            }
+        }
+         if(con){
+             json.setSuccess(true);
+             json.setMsg("验收成功!");
+         }else{
+             json.setSuccess(false);
+             json.setMsg("可能部分验收未成功!<br/>"+result.toString());
+         }
+         return json;
+    }
+    /**
+     * 查批属 赋给form
+     */
+    public void InitPdaDocQcDetailForm(PdaDocQcDetailForm form){
+
+        InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(form.getLotnum());
+        form.setLotatt01(invLotAtt.getLotatt01());
+        form.setLotatt02(invLotAtt.getLotatt02());
+        form.setLotatt04(invLotAtt.getLotatt04());
+        form.setLotatt06(invLotAtt.getLotatt06());
+        form.setLotatt11(invLotAtt.getLotatt11());
+        form.setLotatt15(invLotAtt.getLotatt15());
+
     }
 }
