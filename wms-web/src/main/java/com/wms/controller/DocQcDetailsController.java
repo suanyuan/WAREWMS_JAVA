@@ -1,8 +1,8 @@
 package com.wms.controller;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,6 @@ import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
 import com.wms.vo.DocQcDetailsVO;
-import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.DocQcDetailsForm;
@@ -47,7 +46,19 @@ public class DocQcDetailsController {
 		return docQcDetailsService.getPagedDatagrid(pager, query);
 	}
 
+	/**
+	 * 批量验收 传json集合
+	 * @param forms
+	 * @return
+	 * @throws Exception
+	 */
 	@Login
+	@RequestMapping(params = "submitDocQcList")
+	@ResponseBody
+	public Json submitDocQcList(String forms) throws Exception {
+		return docQcDetailsService.submitDocQcList(forms);
+	}
+@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
 	public Json add(DocQcDetailsForm docQcDetailsForm) throws Exception {
