@@ -108,26 +108,11 @@
         console.log($("#hiddenreceivingId").val());
     });
 
-    function doSubmitAddress() {
-        var infoObj = new Object();
-        $("#dialogAddAddressForm input[class='textbox-value']").each(function (index) {
-            infoObj[""+$(this).attr("name")+""] = $(this).val();
-        });
-
-var defaultAddress=$('#isDefault').combobox('getValue');
-
-
-        var url = '';
-   if (defaultAddress=='0'){
-        if (processTypeAddress == 'editAddress') {
-            url = '<c:url value="/gspReceivingAddressController.do?edit"/>';
-        }else{
-            url = '<c:url value="/gspReceivingAddressController.do?add"/>';
-        }
-
+    function addOredit(infoObj,url){
         $.ajax({
             url : url,
-            data : {"gspReceivingAddressFormStr":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
+            data : {"gspReceivingAddressFormStr":JSON.stringify(infoObj)},
+				type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
                 //console.log(result);
                 var msg='';
@@ -152,43 +137,39 @@ var defaultAddress=$('#isDefault').combobox('getValue');
                 }
             }
         });
+	}
 
-    }else {
 
-       if (processTypeAddress == 'editAddress') {
-           url = '<c:url value="/gspReceivingAddressController.do?editDefault"/>';
-       }else{
-           url = '<c:url value="/gspReceivingAddressController.do?addDefault"/>';
-       }
+    function doSubmitAddress() {
+        var infoObj = new Object();
+        $("#dialogAddAddressForm input[class='textbox-value']").each(function (index) {
+            infoObj[""+$(this).attr("name")+""] = $(this).val();
+        });
 
-       $.ajax({
-           url : url,
-           data : {"gspReceivingAddressFormStr":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
-           success : function(result){
-               //console.log(result);
-               var msg='';
-               try{
-                   if(result.success){
-                       msg = result.msg;
-                       newreceivingId=result.obj;
-                       ezuiDetailsDatagrid.datagrid('reload');
-                       $("#dialogAddAddress").dialog('close');
+		var defaultAddress=$('#isDefault').combobox('getValue');
 
-                   }else{
-                       msg = '<font color="red">' + result.msg + '</font>';
-                   }
-               }catch (e) {
-                   //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
-                   msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
-               } finally {
-                   $.messager.show({
-                       msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                   });
-                   $.messager.progress('close');
-               }
-           }
-       });
-   }
+
+        var url = '';
+	   if (defaultAddress=='0'){
+			if (processTypeAddress == 'editAddress') {
+
+				url = '<c:url value="/gspReceivingAddressController.do?edit"/>';
+			}else{
+				url = '<c:url value="/gspReceivingAddressController.do?add"/>';
+			}
+
+           addOredit(infoObj,url);
+
+		}else {
+
+		   if (processTypeAddress == 'editAddress') {
+			   url = '<c:url value="/gspReceivingAddressController.do?editDefault"/>';
+		   }else{
+			   url = '<c:url value="/gspReceivingAddressController.do?addDefault"/>';
+		   }
+           addOredit(infoObj,url);
+
+	   }
 
     }
 
