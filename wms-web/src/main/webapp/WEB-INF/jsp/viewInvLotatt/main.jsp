@@ -607,10 +607,10 @@ var commitMov = function(){
 //库存移动多条提交
 var commitMovAll = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
-	var datas=[];
+	var forms=[];
 	var data=null;
 	var msg='';
-	url = '<c:url value="/viewInvLotattController.do?mov"/>';
+	url = '<c:url value="/viewInvLotattController.do?movList"/>';
 	//判断目标库位是否可以移动
 	var location=$('#ezuiDialogMovAll #lotatt11text').val();
       if(!ismove(location)){
@@ -632,50 +632,50 @@ var commitMovAll = function(){
 		data.lotatt11text=$('#ezuiDialogMovAll #lotatt11text').val();
 		data.lotatt12=$('#ezuiDialogMovAll #lotatt12').combobox("getValue");
 		data.lotatt12text=$('#ezuiDialogMovAll #lotatt12text').val();
-		datas.push(data);
+		forms.push(data);
 
 	}
 
 	if(ezuiFormMovAll.form('validate')) {
-		var num=0;
 		$.messager.progress({
 			text: '<spring:message code="common.message.data.processing"/>', interval: 100
 		});
-		for (var i = 0; i < datas.length; i++) {
-			var data = new Object();
-			data = datas[i];
+
 			$.ajax({
 				url: url,
-				data: data,
-				dataType: 'text',
-				error: function () {
-					num=1;
-					msg='可能部分库位移动失败!';
+				data:"forms="+JSON.stringify(forms),
+				dataType: 'json',
+				error: function (a,b,c) {
+					alert(a+b+c);
 				},
 				success: function (result) {
 					try{
-					  var result = $.parseJSON(result);
 					  if(result.success){
+					  	  msg=result.msg;
 						  ezuiDatagrid.datagrid('reload');
+						  ezuiDialogMovAll.dialog('close');
+						  $.messager.show({
+							  msg:msg, title : '<spring:message code="common.message.prompt"/>'
+						  });
+						  $.messager.progress('close');
 					  }else{
-					  	num=1;
-					  	msg='可能部分库位移动失败!';
+						  msg=result.msg;
+						  ezuiDatagrid.datagrid('reload');
+						  ezuiDialogMovAll.dialog('close');
+						  $.messager.show({
+							  msg :msg, title : '<spring:message code="common.message.prompt"/>'
+						  });
+						  $.messager.progress('close');
 					  }
 					}catch (e) {
-
+						$.messager.show({
+							msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+						});
+						$.messager.progress('close');
 					}
 				}
 			});
-		}
-		if(num==0){
-			msg='库存移动成功!';
-		}
 
-		ezuiDialogMovAll.dialog('close');
-		$.messager.show({
-			msg : msg, title : '<spring:message code="common.message.prompt"/>'
-		});
-		$.messager.progress('close');
 	}else{
 		msg = '<font color="red">' +'请输入完整!'+ '</font>';
 		$.messager.show({
@@ -1045,7 +1045,7 @@ var ismove=function (location) {
 					<th>库存件数</th>
 					<td><input type='text' name='fmqty' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 					<th>移动数量</th>
-					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 				</tr>
 				<tr>
 					<th>原库位</th>

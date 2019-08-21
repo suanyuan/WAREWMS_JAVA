@@ -65,12 +65,35 @@ public class ViewInvLotattController {
 		}
 		return json;
 	}
-	
+
+	/**
+	 * 单条库位移动
+ 	 * @param viewInvLotattForm
+	 * @return
+	 * @throws Exception
+	 */
 	@Login
 	@RequestMapping(params = "mov")
 	@ResponseBody
 	public Json mov(ViewInvLotattForm viewInvLotattForm) throws Exception {
 		Json json = viewInvLotattService.movViewInvLotatt(viewInvLotattForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+	/**
+	 * 多条库位移动
+ 	 * @param forms
+	 * @return
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "movList")
+	@ResponseBody
+	public Json mov(String forms) throws Exception {
+		Json json = viewInvLotattService.movViewInvLotattList(forms);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
