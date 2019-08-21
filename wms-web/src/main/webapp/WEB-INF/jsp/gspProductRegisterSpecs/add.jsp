@@ -74,7 +74,7 @@
 
         <tr>
             <th>储存条件</th>
-            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true,editable:false'/></td>
             <th>宽</th>
             <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
@@ -91,7 +91,7 @@
           </tr>
        <tr>
            <th>生产许可证号/备案号</th>
-           <td><input type='text' data="1" id="licenseNo"  name='licenseNo' class='easyui-textbox' size='50' data-options='editable:false'/></td>
+           <td><input type='text' data="1" id="licenseOrRecordNo"  name='licenseOrRecordNo' class='easyui-combobox' size='50' data-options="editable:false,panelHeight: 'auto'"/></td>
            <th>重量</th>
            <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='47' data-options=''/>(kg)</td>
        </tr>
@@ -303,7 +303,7 @@
             height: 500,
             cache: false,
             onClose: function () {
-                $(this).dialog('destroy');
+
             },
 
         })
@@ -325,12 +325,23 @@
         //储存条件
         $("#storageCondition").textbox("setValue",storageConditions);
         $("#enterpriseId").val(enterpriseId);
+
+
         //生产许可证号 备案号
-        if(licenseNo!=null&&licenseNo!=""){
-            $("#licenseNo").textbox("setValue",licenseNo);
-        }else{
-            $("#licenseNo").textbox("setValue",recordNo);
-        }
+
+            $("#ezuiFormInfo #licenseOrRecordNo").combobox({
+                panelHeight: 'auto',
+                valueField: 'label',
+                textField: 'value',
+                data: [{
+                    label: licenseNo,
+                    value: licenseNo
+                }, {
+                    label: recordNo,
+                    value: recordNo
+                }]
+
+            })
 
 
 

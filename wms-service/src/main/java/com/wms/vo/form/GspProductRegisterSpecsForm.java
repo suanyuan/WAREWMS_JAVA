@@ -42,6 +42,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String maintenanceCycle;//养护周期
 	private java.lang.String wight;//重量
 	private java.lang.String packagingUnit;//包装单位
+	private String licenseOrRecordNo;//产品许可证 备案号
 
 
 
@@ -50,6 +51,14 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	public String getLicenseOrRecordNo() {
+		return licenseOrRecordNo;
+	}
+
+	public void setLicenseOrRecordNo(String licenseOrRecordNo) {
+		this.licenseOrRecordNo = licenseOrRecordNo;
+	}
 
 	public String getPackagingUnit() {
 		return packagingUnit;
