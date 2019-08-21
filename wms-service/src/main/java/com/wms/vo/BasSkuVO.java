@@ -79,6 +79,15 @@ public class BasSkuVO {
 
 	private java.lang.String skuGroup7;
 	private java.lang.String skuGroup8;
+	private java.lang.String productLineName;
+
+	public String getProductLineName() {
+		return productLineName;
+	}
+
+	public void setProductLineName(String productLineName) {
+		this.productLineName = productLineName;
+	}
 
 	public String getDescr() {
 		return descr;

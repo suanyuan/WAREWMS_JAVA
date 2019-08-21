@@ -1,6 +1,8 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.DocQcHeader;
+import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocQcStatusForm;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,11 +22,11 @@ public interface DocQcHeaderMybatisDao extends BaseDao {
     List<DocQcHeader> queryUndoneList(@Param("start") int start, @Param("pageSize") int pageSize);
 
     /**
-     * 更新验收任务单
-     * @param form ~
-     * @return 1 || 0
+     * 修改验收单状态
+     * 如果验收完成，相关联的预入库单会设置成 "70" 完全验收
+     * @param form warehouseid, qcno, returncode
      */
-    int updateTaskStatus(PdaDocQcStatusForm form);
+    void updateTaskStatus(PdaDocQcDetailForm form);
 
     DocQcHeader queryByPano(@Param("pano") String pano);
 }

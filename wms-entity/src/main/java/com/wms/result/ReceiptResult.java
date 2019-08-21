@@ -43,4 +43,5 @@ public class ReceiptResult implements Serializable {
     private String certificate;
     private String descrC;
     private String lotatt01;
+    private String consigneeCompany;
 }

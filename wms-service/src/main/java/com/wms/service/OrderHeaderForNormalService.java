@@ -40,6 +40,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -758,8 +759,11 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 int totalNum = 0;
                 List<OrderDetailsForNormal> detailsList = null;
-                int row = 10;
+                int row = 7;
                 int pageSize = 0;
+                int totalQtyE = 0;
+                int totalQty = 0;
+
                 detailsList = new ArrayList<OrderDetailsForNormal>();
                 OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
                 orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -775,13 +779,15 @@ public class OrderHeaderForNormalService extends BaseService {
                     totalNum++;
                     detailsList.add(orderDetails);
                 }
+
                 pageSize = (int) Math.ceil((double) totalNum / row);
+
                 for (int i = 0; i < pageSize; i++) {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     baos = new ByteArrayOutputStream();
                     stamper = new PdfStamper(PDFUtil.getTemplate("wms_picking_jhck.pdf"), baos);
                     form = stamper.getAcroFields();
-                    form.setField("orderno", orderHeaderForNormal.getOrderno());
+                    form.setField("orderNo", orderHeaderForNormal.getOrderno());
                     //basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
                     form.setField("expectedShipmentTime", DateUtil.format(orderHeaderForNormal.getExpectedshipmenttime1(), "yyyy-MM-dd"));
                     form.setField("carrierName", orderHeaderForNormal.getCarriername());
@@ -791,8 +797,9 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("cAddress1", orderHeaderForNormal.getCAddress1());
                     form.setField("c_Tel1", orderHeaderForNormal.getCTel1());
                     form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
-                    form.setField("sOReference1", orderHeaderForNormal.getSoreference1());
+                    form.setField("sOReference1", orderHeaderForNormal.getOrderCode());
                     form.setField("notes", orderHeaderForNormal.getNotes());
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
@@ -807,15 +814,19 @@ public class OrderHeaderForNormalService extends BaseService {
                             form.setField("seriNo." + (j), detailsList.get(row * i + j).getLotatt05());
                             form.setField("ill." + (j), detailsList.get(row * i + j).getLotatt01());
                             form.setField("lot01." + (j), detailsList.get(row * i + j).getLotatt02());
-                            form.setField("qtyE." + (j), detailsList.get(row * i + j).getQtyallocated().toString());
-                            form.setField("uom." + (j), detailsList.get(row * i + j).getUom());
+                            form.setField("qtyE." + (j), doubleTrans(detailsList.get(row * i + j).getQtyallocated()));
+                            form.setField("uom." + (j), doubleTrans(detailsList.get(row * i + j).getQtyallocatedEach()));
                             form.setField("qty." + (j), "");
                             form.setField("double." + (j), getYesNo(basSku.getSkuGroup7()));
                             form.setField("card." + (j), getYesNo(basSku.getSkuGroup2()));
                             form.setField("report." + (j), getYesNo(basSku.getSkuGroup8()));
                             form.setField("remark." + (j), "");
+                            totalQtyE += detailsList.get(row * i + j).getQtyallocated();
+                            totalQty += detailsList.get(row * i + j).getQtyallocatedEach();
                         }
                     }
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1163,8 +1174,11 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 int totalNum = 0;
                 List<ReceiptResult> detailsList = null;
-                int row = 10;
+                int row = 7;
                 int pageSize = 0;
+                int totalQtyE = 0;
+                int totalQty = 0;
+
                 detailsList = new ArrayList<ReceiptResult>();
                 OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
                 orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -1184,11 +1198,11 @@ public class OrderHeaderForNormalService extends BaseService {
                     baos = new ByteArrayOutputStream();
                     stamper = new PdfStamper(PDFUtil.getTemplate("wms_shipped_jhck.pdf"), baos);
                     form = stamper.getAcroFields();
-                    form.setField("orderno", obj.getOrderno());
+                    form.setField("orderNo", obj.getOrderno());
                     //basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
                     form.setField("expectedShipmentTime", DateUtil.format(obj.getEdittime(), "yyyy-MM-dd"));
                     form.setField("carrierName", obj.getCarrierName());
-                    form.setField("consigneeName", obj.getConsigneename());
+                    form.setField("consigneeName", obj.getConsigneeCompany());
                     form.setField("cContact", obj.getCContact());
                     form.setField("userdefine1", obj.getUserdefine1());
                     form.setField("cAddress1", obj.getAddress());
@@ -1196,6 +1210,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("userdefine2", obj.getUserdefine2());
                     form.setField("sOReference1", obj.getSoreference1());
                     form.setField("notes", obj.getNotes());
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
@@ -1217,8 +1232,12 @@ public class OrderHeaderForNormalService extends BaseService {
                             form.setField("card." + (j), detailsList.get(row * i + j).getDoubleCertificate());
                             form.setField("report." + (j), detailsList.get(row * i + j).getCertificate());
                             form.setField("remark." + (j), "");
+                            totalQtyE += Integer.parseInt(detailsList.get(row * i + j).getQtyEach());
+                            totalQty += Integer.parseInt(detailsList.get(row * i + j).getQty());
                         }
                     }
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(obj.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1497,6 +1516,13 @@ public class OrderHeaderForNormalService extends BaseService {
         }else{
             return "是";
         }
+    }
+
+    public static String doubleTrans(double d) {
+        if (Math.round(d) - d == 0) {
+            return String.valueOf((long) d);
+        }
+        return String.valueOf(d);
     }
 
 

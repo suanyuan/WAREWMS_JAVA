@@ -89,6 +89,9 @@ public class ImportAsnDataService {
                 asnList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
             } catch (ExcelException e) {
                 e.printStackTrace();
+                json.setMsg(e.getMessage());
+                json.setSuccess(false);
+                return json;
             }
             //保存实体集合
             List<DocAsnHeaderVO> importDataList = this.listToBean(asnList, resultMsg);
@@ -549,25 +552,27 @@ public class ImportAsnDataService {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     asnDetails.setLotatt03(formatter.format(new Date()));
 
-                    //产品名称
-                    if (basSku != null) {
-                        asnDetails.setLotatt12(basSku.getReservedfield01());
-
-                        //产品注册证
-                        if (StringUtils.isEmpty(asnDetails.getLotatt06())) {
-                            asnDetails.setLotatt06(basSku.getReservedfield03());
-                        }
-                        //供应商
-                        asnDetails.setLotatt08(basSku.getSkuGroup6());
-
-                        //储存条件
-                        asnDetails.setLotatt11(basSku.getSkuGroup4());
+                    //产品注册证
+                    if (StringUtils.isEmpty(asnDetails.getLotatt06())) {
+                        asnDetails.setLotatt06(basSku.getReservedfield03());
                     }
+
+                    //供应商
+                    asnDetails.setLotatt08(basSku.getSkuGroup6());
 
                     //样品属性
                     if (StringUtils.isEmpty(asnDetails.getLotatt09())) {
                         asnDetails.setLotatt09("ZC");
                     }
+
+                    //质量状态
+                    asnDetails.setLotatt10("DJ");
+
+                    //储存条件
+                    asnDetails.setLotatt11(basSku.getSkuGroup4());
+
+                    //产品名称
+                    asnDetails.setLotatt12(basSku.getReservedfield01());
 
                     //预入库单号
                     asnDetails.setLotatt14(resultNo);
@@ -586,7 +591,6 @@ public class ImportAsnDataService {
                     asnDetails.setAsnlineno(asnlineno + 1);
                     asnDetails.setPackid(basSku.getPackid());
                     asnDetails.setAlternativesku(basSku.getAlternateSku1());
-                    asnDetails.setLotatt10("DJ");
                     //体积重量单价若不输入则从SKU里读取
                     if (importDetailsDataVO.getTotalgrossweight().compareTo(BigDecimal.ZERO) == 1) {
                         asnDetails.setTotalgrossweight(importDetailsDataVO.getTotalgrossweight());

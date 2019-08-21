@@ -196,6 +196,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield04(register.getClassifyId());
                 skuForm.setReservedfield05(register.getClassifyCatalog());
                 skuForm.setSku(specObj.getProductCode());
+
                 skuForm.setSkuGroup1(firstBusinessApply.getProductline());//specObj.getProductLine()产品线
                 skuForm.setSkuGroup2(specObj.getAttacheCardCategory());//附卡类别
                 skuForm.setSkuGroup3(specObj.getPackingRequire());//包装要求

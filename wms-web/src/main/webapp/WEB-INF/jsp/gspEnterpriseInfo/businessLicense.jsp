@@ -329,7 +329,7 @@
     }
     
     function formatOperAttachment(value,row,index){
-        return "<a onclick=\"viewUrl('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        return "<a onclick=\"viewUrlBusiness('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
     function businessCopy() {

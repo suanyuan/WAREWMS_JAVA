@@ -1537,7 +1537,7 @@ var selectDialogCust = function(){
 var selectDialogRece = function(){
     var row = ezuiReceDataDialogId.datagrid('getSelected');
     if(row){
-        $("#ezuiDialog #consigneeid").textbox('setValue',row.customerid);
+        $("#ezuiDialog #consigneeid").textbox('setValue',row.descrC);
         ezuiReceDataDialog.dialog('close');
     };
 };

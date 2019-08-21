@@ -87,7 +87,9 @@ public class ImportOrderDataService {
                 orderList = ExcelUtil.excelToList(in, sheetName, order, map, uniqueFields);
             } catch (ExcelException e) {
                 e.printStackTrace();
-
+                json.setMsg(e.getMessage());
+                json.setSuccess(false);
+                return json;
             }
             //保存实体集合
             List<OrderHeaderForNormalVO> importDataList = this.listToBean(orderList, resultMsg);
