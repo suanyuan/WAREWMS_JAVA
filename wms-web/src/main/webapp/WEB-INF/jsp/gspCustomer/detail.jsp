@@ -444,7 +444,7 @@
             height:500,
             cache: false,
             onClose : function() {
-                ezuiDialogDetail.dialog("destroy");
+                // ezuiDialogDetail.dialog("destroy");
                 ezuiFormClear(ezuiForm);
             }
         })

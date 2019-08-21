@@ -86,7 +86,7 @@ $(function() {
                     $('#ezuiBtn_reApply').linkbutton('disable');
                 }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40){
                     $('#ezuiBtn_reApply').linkbutton('enable');
-                    $('#ezuiBtn_confirm').linkbutton('disable');g
+                    $('#ezuiBtn_confirm').linkbutton('disable');
                 }else {
                     $('#ezuiBtn_reApply').linkbutton('disable');
                     $('#ezuiBtn_confirm').linkbutton('disable');
@@ -111,6 +111,7 @@ var add = function(){
             ezuiFormClear(ezuiForm);
         }
     })
+    $('#ezuiDialogDetail').dialog('destroy');
 };
 var edit = function(){
 	processType = 'edit';
@@ -129,6 +130,7 @@ var edit = function(){
                 ezuiFormClear(ezuiForm);
             }
         })
+        $('#ezuiDialogDetail').dialog('destroy');
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -276,8 +278,144 @@ var doSearch = function(){
     <div id='enterpriseDialog' style='padding: 10px;'>
 
     </div>
-<script>
+
+
+    <%--查询企业列表--%>
+    <div id='ezuiDialogDetail1' style='padding: 10px;'>
+        <div id='enterpriseSearchGridToolbar_gspCustomer' class='datagrid-toolbar' style=''>
+            <fieldset>
+                <legend>企业信息</legend>
+                <table>
+                    <tr>
+                        <th>代码</th>
+                        <td><input type='text' id='enterpriseNo1' class='easyui-textbox' data-options='width:200'/></td>
+                        <th>简称</th>
+                        <td><input type='text' id='shorthandName1' class='easyui-textbox' data-options='width:200'/></td>
+                        <td>
+                            <a onclick='doSearchEnterprise1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                            <a onclick='choseSelect_gspCustomer(id,name)' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+        <table id="enterpriseSearchGrid_gspCustomer">
+
+        </table>
+    </div>
+
+    <div id='enterpriseDialog_gspCustomer' style='padding: 10px;'></div>
+
+    <script>
     var enterpriseDialog_gspCustomer;
+    var enterpriseSearchGrid_gspCustomer;
+    var ezuiDialogDetail1;
+    $(function () {
+        enterpriseSearchGrid_gspCustomer = $("#enterpriseSearchGrid_gspCustomer").datagrid({
+            url : '/gspEnterpriseInfoController.do?showDatagridSearch',
+            method:'POST',
+            toolbar : '#enterpriseSearchGridToolbar_gspCustomer',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                isUse : '1',
+                // enterpriseType:'default',
+                <%--enterpriseType:'${enterpriseType}'--%>
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'enterpriseId',
+            columns : [[
+                {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
+                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'shorthandName',		title: '简称',	width: '20%' },
+                {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
+                {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
+                {field: '_operate',		title: '操作',	width: '20%',
+                    formatter: formatOper_gspCustomer
+                }
+            ]],
+            onDblClickRow: function(index,row){
+                choseSelect_gspCustomer(row.enterpriseId,row.enterpriseName);
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+
+
+        })
+
+        ezuiDialogDetail1 = $('#ezuiDialogDetail1').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
+
+
+
+    });
+
+    function searchMainEnterprise() {
+        if(ezuiDialogDetail1){
+            ezuiDialogDetail1.dialog('open');
+        }
+
+    }
+
+    function doSearchEnterprise1() {
+        //
+        //console.log($('#ezuiDialogDetail #enterpriseNo').textbox("getValue"))
+        enterpriseSearchGrid_gspCustomer.datagrid('load', {
+            enterpriseNo : $('#enterpriseSearchGridToolbar_gspCustomer #enterpriseNo1').textbox("getValue"),
+            shorthandName : $('#enterpriseSearchGridToolbar_gspCustomer #shorthandName1').textbox("getValue"),
+            // type:'noCustomer',
+            // enterpriseType:'default',
+
+            isUse : '1'
+
+        });
+    }
+
+    function operateGrid_gspCustomer(id) {
+        $('#enterpriseDialog_gspCustomer').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+id,
+            width:850,
+            height:500,
+            cache:false,
+            onClose : function() {
+
+            }
+        })
+    }
+
+    function formatOper_gspCustomer(value,row,index){
+        return "<a onclick=\"operateGrid_gspCustomer('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    }
+
+
+
     $("#isCheck").combobox({
         panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
@@ -321,37 +459,46 @@ var doSearch = function(){
     });
 
 
-    function searchMainEnterprise() {
-        enterpriseDialog_gspCustomer = $('#enterpriseDialog').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toSearchDialog&target=gspCustomer&type=noCustomer",
-            width:850,
-            height:500,
-            cache:false,
-            onClose : function() {
-                enterpriseDialog_gspCustomer.dialog("destroy")
-            }
-        })
-		/*
-		//查询条件货主字段初始化
-	$("#fmcustomerid").textbox({
-		icons:[{
-			iconCls:'icon-search',
-			handler: function(e){
-				$("#ezuiCustDataDialog #customerid").textbox('clear');
-				ezuiCustDataClick();
-				ezuiCustDataDialogSearch();
-			}
-		}]
-	});
-		 */
-    }
+    <%--function searchMainEnterprise() {--%>
+        <%--enterpriseDialog_gspCustomer = $('#enterpriseDialog').dialog({--%>
+            <%--modal : true,--%>
+            <%--title : '<spring:message code="common.dialog.title"/>',--%>
+            <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toSearchDialog&target=gspCustomer&type=noCustomer",--%>
+            <%--width:850,--%>
+            <%--height:500,--%>
+            <%--cache:false,--%>
+            <%--onClose : function() {--%>
+                <%--// enterpriseDialog_gspCustomer.dialog("destroy")--%>
+            <%--}--%>
+        <%--})--%>
+		<%--/*--%>
+		<%--//查询条件货主字段初始化--%>
+	<%--$("#fmcustomerid").textbox({--%>
+		<%--icons:[{--%>
+			<%--iconCls:'icon-search',--%>
+			<%--handler: function(e){--%>
+				<%--$("#ezuiCustDataDialog #customerid").textbox('clear');--%>
+				<%--ezuiCustDataClick();--%>
+				<%--ezuiCustDataDialogSearch();--%>
+			<%--}--%>
+		<%--}]--%>
+	<%--});--%>
+		 <%--*/--%>
+    <%--}--%>
 
     function choseSelect_gspCustomer(id,name) {
+
+        var row =enterpriseSearchGrid_gspCustomer.datagrid("getSelected");
+        console.log(id)
+        console.log(name)
+        if(id=="" || name==""){
+            id = row.enterpriseId;
+            name = row.enterpriseName;
+        }
+
         $("#enterpriseId").val(id);
         $("#enterpriseIdQuery").textbox("setValue",name);
-        enterpriseDialog_gspCustomer.dialog("close");
+        ezuiDialogDetail1.dialog("close");
     }
 
     function doConfirm(){
