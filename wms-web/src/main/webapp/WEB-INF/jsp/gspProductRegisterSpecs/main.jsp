@@ -66,11 +66,12 @@ $(function() {
 			// {field: 'packingRequire',		title: '包装要求',	width: 25 },
 			// {field: 'storageCondition',		title: '存储条件',	width: 25 },
 			// {field: 'transportCondition',		title: '运输条件',	width: 25 },
-			{field: 'createId',		title: '创建人',	width: 71 },
-			{field: 'createDate',		title: '创建时间',	width: 100 },
-			{field: 'editId',		title: '编辑人',	width: 71 },
-			{field: 'editDate',		title: '编辑时间',	width: 100 },
-			{field: 'isUse',		title: '是否有效',	width: 71, formatter:function(value,rowData,rowIndex){
+
+
+            {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
+
+
+            {field: 'isUse',		title: '是否有效',	width: 71, formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
                 }},
             {field: 'isDoublec',		title: '双证',	width: 90, formatter:function(value,rowData,rowIndex){
@@ -79,13 +80,20 @@ $(function() {
             {field: 'isCertificate',		title: '产品合格证',	width: 90, formatter:function(value,rowData,rowIndex){
                     return rowData.isDoublec == '1' ? '是' : '否';
                 }},
+
+
+			{field: 'createId',		title: '创建人',	width: 71 },
+			{field: 'createDate',		title: '创建时间',	width: 100 },
+			{field: 'editId',		title: '编辑人',	width: 71 },
+			{field: 'editDate',		title: '编辑时间',	width: 100 },
+
 			// {field: 'alternatName1',		title: '自赋码1',	width: 25 },
 			// {field: 'alternatName2',		title: '自赋码2',	width: 25 },
 			// {field: 'alternatName3',		title: '自赋码3',	width: 25 },
 			// {field: 'alternatName4',		title: '自赋码4',	width: 25 },
 			// {field: 'alternatName5',		title: '自赋码5',	width: 25 },
 
-            {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
+
             // {field: 'productNameMain',		title: '产品名称',	width: 200 }
 		]],
 		onDblClickCell: function(index,field,value){

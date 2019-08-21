@@ -552,7 +552,7 @@ var doSearch = function(){
 	</div>
 
 
-	<%--<div id='enterpriseDialog1_gspSupplier' style='padding: 10px;'></div>--%>
+	<div id='enterpriseDialog_gspSupplier' style='padding: 10px;'></div>
 
 <script>
     var enterpriseDialog1_gspSupplier;
@@ -620,9 +620,6 @@ var doSearch = function(){
                 ezuiFormClear(ezuiForm);
             }
         }).dialog('close');
-
-
-
 
 
 

@@ -86,7 +86,7 @@ $(function() {
                     $('#ezuiBtn_reApply').linkbutton('disable');
                 }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40){
                     $('#ezuiBtn_reApply').linkbutton('enable');
-                    $('#ezuiBtn_confirm').linkbutton('disable');g
+                    $('#ezuiBtn_confirm').linkbutton('disable');
                 }else {
                     $('#ezuiBtn_reApply').linkbutton('disable');
                     $('#ezuiBtn_confirm').linkbutton('disable');
@@ -330,7 +330,7 @@ var doSearch = function(){
             height:500,
             cache:false,
             onClose : function() {
-                enterpriseDialog_gspCustomer.dialog("destroy")
+                // enterpriseDialog_gspCustomer.dialog("destroy")
             }
         })
 		/*
