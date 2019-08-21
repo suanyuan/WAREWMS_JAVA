@@ -40,7 +40,8 @@
 </form>
 <div>
     <a onclick='choseProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>选择产品</a>
-    <a onclick='submitApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交申请</a>
+    <a onclick='delProduct();'   class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+    <a onclick='submitApply();'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交申请</a>
     <!--<a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>清空选择</a>-->
@@ -195,6 +196,21 @@
     var arr;
     var arr1;
     var enterpriseProduct;
+
+
+    Array.prototype.indexOf = function(val) { //prototype 给数组添加属性
+        for (var i = 0; i < this.length; i++) { //this是指向数组，this.length指的数组类元素的数量
+            if (this[i] == val) return i; //数组中元素等于传入的参数，i是下标，如果存在，就将i返回
+        }
+        return -1;
+    };
+    Array.prototype.remove = function(val) {  //prototype 给数组添加属性
+        var index = this.indexOf(val); //调用index()函数获取查找的返回值
+        if (index > -1) {
+            this.splice(index, 1); //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
+        }
+    };
+
     <%--alert(${firstBusinessApply.productline}+'111111111111');--%>
     $(function () {
         // ezuiDialogSpec.close();
@@ -551,6 +567,32 @@
         </c:choose>
     });
 
+
+    function delProduct(){
+        console.log(1111111111111111);
+
+        var row =  ezuiDatagridDetail.datagrid('getSelected');
+
+
+        arr.remove(row.specsId);
+        var rowIndex = ezuiDatagridDetail.datagrid('getRowIndex', row);
+        ezuiDatagridDetail.datagrid('deleteRow', rowIndex);
+
+
+            // row.specsId = '';
+            // row.productCode ='';
+            // row.productName ='';
+            // row.specsName ='';
+            // row.productModel ='';
+            // row.descrC ='';
+            // row.supplierId ='';
+
+    }
+
+
+
+
+
     function operateGrid1(id) {
         processType = 'edit';
         $('#enterpriseDialog').dialog({
@@ -632,8 +674,8 @@
             }
         })
 
-        $('#ezuiDialogSupplierDetail').dialog('destroy');
-        $('#dataGridProduct').dialog('destroy');
+        //$('#ezuiDialogSupplierDetail').dialog('destroy');
+        //$('#dataGridProduct').dialog('destroy');
     }
     //查询产品
     // function searchProduct() {
