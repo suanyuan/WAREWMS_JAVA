@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,9 +126,45 @@ public class ViewInvLotattService extends BaseService {
 				json.setMsg("库存移动成功！");
 			} else {
 				json.setSuccess(false);
-				json.setMsg("库存移动失败！"+result);
+				String loc=map.get("fmlocation")+"";
+				String sku=map.get("fmsku")+"";
+				String lotnum=map.get("fmlotnum")+"";
+				json.setMsg("库位:"+loc+",产品代码:"+sku+",批号:"+lotnum+"移动失败！"+result);
 			}
 		}
+		return json;
+	}
+	/**
+	 * 库存移动 多条
+	 * @param forms
+	 * @return
+	 */
+
+	public Json movViewInvLotattList(String forms) {
+		Json json=new Json();
+		StringBuffer results=new StringBuffer();
+//        json转集合
+		List<ViewInvLotattForm> list= JSON.parseArray(forms,ViewInvLotattForm.class);
+		Boolean con=true;
+		for (ViewInvLotattForm form : list) {
+			  Json json1=movViewInvLotatt(form);
+			  if(json1.isSuccess()){
+
+			  }else{
+				  con=false;
+			  	 results.append(json1.getMsg()).append("<br/>");
+			  }
+
+		}
+		if(con){
+			json.setSuccess(true);
+			json.setMsg("库存移动成功！!");
+		}else{
+			json.setSuccess(false);
+			json.setMsg("部分库存移动失败!<br/>"+results.toString());
+		}
+
+
 		return json;
 	}
 	/**
