@@ -289,7 +289,6 @@ public class ImportAsnDataService {
 
                         DocAsnHeaderVO DocAsnHeaderVoSense = null;
                         for (DocAsnHeaderVO docAsnHeaderVO : importData) {
-
                             if (docAsnHeaderVO.getCustomerid().equals(compareData.getCustomerid()) &&
                                     docAsnHeaderVO.getAsnreference1().equals(compareData.getAsnreference1()) &&
                                     format.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
@@ -297,13 +296,12 @@ public class ImportAsnDataService {
                             }
                             //遍历明细信息
                             for (DocAsnDetailVO docAsnDetailVO : docAsnHeaderVO.getDocAsnDetailVOList()) {
-
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
                                         docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
+                                        docAsnHeaderVO.getAsnreference1().equalsIgnoreCase(dataArray.getAsnreference1())&&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
                                 ) {
-
                                     docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
                                     isBreak = true;
                                     break;
