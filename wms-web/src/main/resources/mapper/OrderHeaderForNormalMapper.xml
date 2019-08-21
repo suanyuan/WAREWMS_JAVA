@@ -1302,7 +1302,7 @@
 				b.notes as notes,
 				b.expectedshipmenttime1,
 				b.carriername,
-				rece.enterprise_name as consigneename,
+				b.consigneeid as consigneename,
 				b.c_contact,
 				fy.orderTypeName as userdefine1,
 				b.c_address1,

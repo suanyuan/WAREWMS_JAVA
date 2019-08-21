@@ -82,11 +82,11 @@ public class GspEnterpriceService extends BaseService {
                     return Json.error("企业信息代码不能重复");
                 }
                 String code = gspEnterpriseInfoForm.getEnterpriseNo();
-                String reg="^[a-zA-Z0-9]{6,16}$";
+                String reg="^[a-zA-Z0-9]{2,16}$";
 //                String pwd="1234567890abcd";
                 boolean f=code.matches(reg);
                 if(!f){
-                    return Json.error("企业信息代码只能为数字字母");
+                    return Json.error("企业信息代码只能为2到16位数字字母");
                 }
                 gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
                 enterpriseId = RandomUtil.getUUID();
