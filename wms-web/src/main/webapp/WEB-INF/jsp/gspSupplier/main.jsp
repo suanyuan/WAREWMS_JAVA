@@ -540,7 +540,7 @@ var doSearch = function(){
 						<td><input type='text' id='shorthandName1' class='easyui-textbox' data-options='width:200'/></td>
 						<td>
 							<a onclick='doSearchEnterprise1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-							<a onclick='choseSelect_gspSupplier()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+							<a onclick='choseSelect_gspSupplier(id,name)' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
 						</td>
 					</tr>
 				</table>
@@ -634,6 +634,7 @@ var doSearch = function(){
             }
         }]
     });
+
     function searchMainEnterprise() {
         if(ezuiDialogDetail){
             ezuiDialogDetail.dialog('open');
@@ -696,8 +697,13 @@ var doSearch = function(){
 
 
     function choseSelect_gspSupplier(id,name) {
+        var row =enterpriseSearchGrid_gspSupplier.datagrid("getSelected");
         console.log(id)
         console.log(name)
+        if(id=="" || name==""){
+            id = row.enterpriseId;
+            name = row.enterpriseName;
+        }
         $("input[name='enterpriseId']").val(id);
         $("#enterpriseIdQuery").textbox("setValue",name);
         ezuiDialogDetail.dialog("close");
