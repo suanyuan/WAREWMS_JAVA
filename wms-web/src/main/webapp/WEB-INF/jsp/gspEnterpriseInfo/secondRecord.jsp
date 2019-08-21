@@ -79,11 +79,11 @@
 
     $(function () {
         //初始化显示企业信息
-        if($("#ezuiFormInfo input[id='enterpriseName']")){
+        /*if($("#ezuiFormInfo input[id='enterpriseName']")){
             $("#recordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
-        }
+        }*/
 
         //控件初始化
         ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({

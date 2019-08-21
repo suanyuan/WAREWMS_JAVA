@@ -55,7 +55,7 @@
 				<th>质量状态</th>
 				<td>
                     <!--<input type='text' name='lotatt10' id='lotatt10'/>-->
-                    <select name='lotatt10' id='lotatt10' class="easyui-combobox" data-options='width:110,required:true'>
+                    <select name='lotatt10' id='lotatt10' class="easyui-combobox" data-options='width:110,editable:false'>
                         <option value="HG">合格</option>
                         <option value="BHG">不合格</option>
                     </select>

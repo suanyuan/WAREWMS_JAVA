@@ -367,7 +367,7 @@ var add = function(){
 			}
 		}]
 	});
-    //TODO ----------------------
+
     $("#ezuiForm #consigneeid").textbox({
         editable:false,
         icons:[{
@@ -899,6 +899,10 @@ var commit = function(){
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
+		    if($("#ezuiForm #ordertype").combobox("getValue") == "DX" && $("#ezuiForm #soreference2")){
+				showMsg("定下订单需要填写定下入库单号");
+				return false;
+			}
 			if(ezuiForm.form('validate')){
 				$.messager.progress({
 					text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -1848,6 +1852,14 @@ function rDouble(){
     })
 }
 
+function choseOrderTypeAfter(value) {
+	if(value && value.id == "YF"){
+	    $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG");
+	}else{
+        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG");
+	}
+}
+
 </script>
 </head>
 <body>
@@ -1927,7 +1939,8 @@ function rDouble(){
 																																editable: false,
 																																url:'<c:url value="/docOrderHeaderController.do?getOrderTypeCombobox"/>',
 																																valueField: 'id',
-																																textField: 'value'"/></td>
+																																textField: 'value'
+																																"/></td>
                             <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',

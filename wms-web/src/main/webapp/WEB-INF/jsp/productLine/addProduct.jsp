@@ -91,11 +91,11 @@
             <tr>
 
             <th>记录序列号</th>
-                <td><input type='text' name ='serialFlag'  id='serialFlag' value="${productLine.serialFlag}" class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+                <td><input type='text' value="0" name ='serialFlag'  id='serialFlag' value="${productLine.serialFlag}" class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																										                                    editable: false,
 																										                                    url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
 																									                                 	    valueField: 'id',
-																										                                    textField: 'value'"/></td>
+																										                                    textField: 'value',required:true"/></td>
             </tr>
         </table>
     </form>

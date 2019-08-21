@@ -39,7 +39,11 @@
 																											editable: false,
 																											url:'<c:url value="/docOrderHeaderController.do?getOrderTypeCombobox"/>',
 																											valueField: 'id',
-																											textField: 'value'"/></td>
+																											textField: 'value',
+																											onSelect:function(value){
+																												choseOrderTypeAfter(value);
+																											}
+																											"/></td>
 					<th>快递公司</th>
 					<td><input type='text' id='carrierId' name='carrierId' data-options=''/></td>
 				</tr>
