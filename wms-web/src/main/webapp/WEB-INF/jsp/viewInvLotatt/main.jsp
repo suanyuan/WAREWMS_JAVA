@@ -385,6 +385,27 @@ var adj = function(){
 var mov = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	var num=rows.length;
+	var locs=new Map();
+//设置库位不可移出
+	if(num>0){
+		for (var i = 0; i < rows.length; i++) {
+			var loc=rows[i].fmlocation;
+			if(loc=='SORTATION01'||loc=='YY-01-01-01'||loc=='DX-01-01-01'){
+				locs.set(loc,"");
+			}
+
+		}
+	}
+	if(locs.size>0){
+		 var result="";
+		for(var key of locs.keys()){
+			result+=key+",";
+		}
+		$.messager.show({
+			msg :result+"不可移动", title : '<spring:message code="common.message.prompt"/>'
+		});
+		return;
+	}
 	//单条移动
 	if(num==1){
 		ezuiFormMov.form('load',{
@@ -897,7 +918,7 @@ var ismove=function (location) {
 				<div>
 					<a onclick='adj();' id='ezuiBtn_adj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.adj'/></a>
 					<a onclick='mov();' id='ezuiBtn_mov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.mov'/></a>
-					<a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>
+<%--					<a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 <%-- 					<a onclick='adj();' id='ezuiBtn_importAdj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.adjBatch'/></a> --%>
 <%-- 					<a onclick='mov();' id='ezuiBtn_importMov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.movBatch'/></a> --%>
