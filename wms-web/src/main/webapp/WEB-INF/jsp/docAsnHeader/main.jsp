@@ -530,7 +530,7 @@ var cancel = function(){
                 for(var i=0;i<row.length;i++){
                     arr.push(row[i].asnno);
                 }
-                console.log(arr);
+                // console.log(arr);
 				$.ajax({
 					url : 'docAsnHeaderController.do?cancel',
 					data : {'asnnos' : arr.join(",")},
@@ -539,15 +539,7 @@ var cancel = function(){
 					success : function(result){
 						var msg = '';
 						try {
-                            var strs = [];
-                            strs = result.msg.split(";");
-                            for (i = 0; i < strs.length; i++ ){
-                                if (i == strs.length - 1) {
-                                    msg = msg + strs[i];
-                                } else {
-                                    msg = msg + strs[i] + "<br/>";
-                                }
-                            }
+                            msg = result.msg;
 						} catch (e) {
 							msg = '取消异常';
 						} finally {
@@ -609,7 +601,7 @@ var mergeOrder = function () {
 
 var mergeReceiving = function () {
     var row = ezuiDatagrid.datagrid('getSelections');
-    console.log(row);
+    // console.log(row);
     if(row) {
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认收货？', function(confirm) {
             if (confirm) {
@@ -650,13 +642,17 @@ var mergeReceiving = function () {
 
 /* 关闭按钮 */
 var close1 = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
+	var row = ezuiDatagrid.datagrid('getSelections');
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认关单？', function(confirm) {
 			if(confirm){
+                var arr = new Array();
+                for(var i=0;i<row.length;i++){
+                    arr.push(row[i].asnno);
+                }
 				$.ajax({
 					url : 'docAsnHeaderController.do?close',
-					data : {id : row.asnno},
+                    data : {'asnnos' : arr.join(",")},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -1423,7 +1419,7 @@ function afterCheckButtion(rowData) {
         $('#ezuiDetailsBtn_edit').linkbutton('disable');
         $('#ezuiDetailsBtn_del').linkbutton('disable');
         $('#ezuiDetailsBtn_receive').linkbutton('disable');
-    }else if(rowData.asnstatus == '40' || rowData.asnstatus == '30'){
+    }else if(rowData.asnstatus == '40' || rowData.asnstatus == '30' || rowData.asnstatus == '70'){
         $('#ezuiBtn_close').linkbutton('enable');
         $('#ezuiBtn_cancel').linkbutton('disable');
         $('#ezuiDetailsBtn_add').linkbutton('disable');
