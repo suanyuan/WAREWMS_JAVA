@@ -75,10 +75,10 @@ $(function() {
                     return rowData.isUse == '1' ? '是' : '否';
                 }},
             {field: 'isDoublec',		title: '双证',	width: 90, formatter:function(value,rowData,rowIndex){
-                    return rowData.isCertificate == '1' ? '是' : '否';
+                    return rowData.isDoublec == '1' ? '是' : '否';
                 }},
             {field: 'isCertificate',		title: '产品合格证',	width: 90, formatter:function(value,rowData,rowIndex){
-                    return rowData.isDoublec == '1' ? '是' : '否';
+                    return rowData.isCertificate == '1' ? '是' : '否';
                 }},
 
 

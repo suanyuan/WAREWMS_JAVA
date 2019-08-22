@@ -778,6 +778,7 @@ where 1=1
 	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 	LEFT JOIN bas_package c ON a.packid=c.packid
 	left join product_line d on a.sku_group1 =  d.product_line_id
+
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>

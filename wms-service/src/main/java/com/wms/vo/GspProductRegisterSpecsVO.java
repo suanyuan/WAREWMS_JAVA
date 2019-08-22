@@ -71,6 +71,8 @@ public class GspProductRegisterSpecsVO {
 	private java.lang.String wight;
 	private String packagingUnit;//包装单位
 	private String licenseOrRecordNo;//产品许可证 备案号
+
+
 	//产品许可证 备案号
 	private String licenseNo;
 	private String recordNo;

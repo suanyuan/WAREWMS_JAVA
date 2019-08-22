@@ -22,6 +22,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wms.constant.Constant;
+import com.wms.entity.FirstBusinessApply;
+import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -60,7 +62,9 @@ public class BasSkuService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
-	
+	@Autowired
+	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
+
 	@Autowired
 	private ImportSkuDataService importSkuDataService;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -83,6 +87,11 @@ public class BasSkuService extends BaseService {
 		for (BasSku basSku : basSkuList) {
 			basSkuVO = new BasSkuVO();
 			BeanUtils.copyProperties(basSku, basSkuVO);
+
+
+
+			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
+			basSkuVO.setSupplierNum(num);
 			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));
 			basSkuVO.setEdittime(simpleDateFormat.format(basSku.getEdittime()));
 			basSkuVOList.add(basSkuVO);
@@ -110,12 +119,13 @@ public class BasSkuService extends BaseService {
 			basSku.setEdittime(today);
 			//
 			basSkuMybatisDao.add(basSku);
-		} else {
-			json.setSuccess(false);
-
-			json.setMsg(resultMsg.toString());
-			return json;
 		}
+//		else {
+//			json.setSuccess(false);
+//
+//			json.setMsg(resultMsg.toString());
+//			return json;
+//		}
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

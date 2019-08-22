@@ -677,6 +677,10 @@
         //$('#ezuiDialogSupplierDetail').dialog('destroy');
         //$('#dataGridProduct').dialog('destroy');
     }
+
+    var  clearDialog=function () {
+        $('#enterpriseProduct').dialog('close')
+    }
     //查询产品
     // function searchProduct() {
     //     dataGridProduct.datagrid("load", {
