@@ -301,7 +301,7 @@ public class DocQcDetailsService extends BaseService {
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
         form.setUserid("Gizmo");
         form.setLanguage("CN");
-        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
         DocQcDetails docQcDetails = new DocQcDetails();
         if (form.getAllqcflag() == 1) {

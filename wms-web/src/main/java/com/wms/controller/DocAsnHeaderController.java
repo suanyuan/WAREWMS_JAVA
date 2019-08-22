@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.DocAsnHeaderQuery;
+import com.wms.result.AsnDetailResult;
 import com.wms.service.DocAsnHeaderService;
 import com.wms.service.DocPaService;
 import com.wms.utils.ResourceUtil;
@@ -86,7 +87,7 @@ public class DocAsnHeaderController {
 	}
 
 	@Login
-	@RequestMapping(params = "edit")
+	@RequestMapping(params = "edit", method = RequestMethod.POST)
 	@ResponseBody
 	public Json edit(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 		Json json = docAsnHeaderService.editDocAsnHeader(docAsnHeaderForm);
@@ -110,10 +111,10 @@ public class DocAsnHeaderController {
 	}
 	
 	@Login
-	@RequestMapping(params = "close")
+	@RequestMapping(params = "close", method = RequestMethod.POST)
 	@ResponseBody
-	public Json close(String id) {
-		Json json = docAsnHeaderService.closeDocAsnHeader(id);
+	public Json close(String asnnos) {
+		Json json = docAsnHeaderService.closeDocAsnHeader(asnnos);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -191,6 +192,13 @@ public class DocAsnHeaderController {
 	@ResponseBody
 	public Json doRefIn(String orderno,String refOrderno) throws Exception{
 		return docAsnHeaderService.doRefIn(orderno,refOrderno);
+	}
+
+	@Login
+	@RequestMapping(params = "showAsnDetal")
+	@ResponseBody
+	public EasyuiDatagrid<AsnDetailResult> showAsnDetal(EasyuiDatagridPager pager, String ordero) {
+		return docAsnHeaderService.getAsnDetail(ordero);
 	}
 
 }

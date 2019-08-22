@@ -75,7 +75,14 @@
 			</table>
 		</fieldset>
 	</form>
-	<table id='ezuiDetailsDatagrid'></table>
+	<div class="easyui-tabs" style="width:950px;height:200px">
+		<div title="入库明细" style="padding:3px">
+			<table id='ezuiDetailsDatagrid'></table>
+		</div>
+		<div title="收货明细" style="padding:0px">
+			<table id='asnDetailsDatagrid'></table>
+		</div>
+	</div>
 	<form>
 		<div>
 			<a onclick='detailsAdd();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.skuAdd'/></a>

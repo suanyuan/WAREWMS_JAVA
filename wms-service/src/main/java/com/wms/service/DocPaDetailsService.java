@@ -273,6 +273,8 @@ public class DocPaDetailsService extends BaseService {
         if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
         if (isSerialManagement) form.setUserdefine4("");
 
+        form.setAsnlineno(docPaDetails.getAsnlineno());
+
         form.setUserid("Gizmo");
         form.setLanguage("CN");
         form.setReturncode("");
