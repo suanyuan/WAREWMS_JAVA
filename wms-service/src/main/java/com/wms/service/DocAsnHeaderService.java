@@ -137,28 +137,71 @@ public class DocAsnHeaderService extends BaseService {
 		return json;
 	}
 	
-	public Json closeDocAsnHeader(String id) {
+	public Json closeDocAsnHeader(String asnnos) {
 		Json json = new Json();
-		
-		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		map.put("asnno", id);
-		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
-		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-		docAsnHeaderQuery.setAsnno(id);
-		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
-		if(docAsnHeader != null){
-			docAsnHeaderMybatisDao.close(map);
-			String result = map.get("result").toString();
-			if (result.substring(0,3).equals("000")) {
-				json.setSuccess(true);
-				json.setMsg("关单成功！");
-			} else {
-				json.setSuccess(false);
-				json.setMsg("关单失败！"+result);
-			}
-		}
-		return json;
+
+        StringBuilder message = new StringBuilder();
+        if (StringUtil.isNotEmpty(asnnos)) {
+
+            String[] asnnoList = asnnos.split(",");
+            int count = 0;
+            String lineBreak = "<br/>";
+            for (String asnno : asnnoList) {
+
+                if (StringUtil.isNotEmpty(asnno)) {
+
+                    DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+                    docAsnHeaderQuery.setAsnno(asnno);
+                    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+                    if (docAsnHeader != null) {
+
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                        map.put("asnno", asnno);
+                        map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
+                        docAsnHeaderMybatisDao.close(map);
+                        String result = map.get("result").toString();
+                        message.append("[").append(asnno).append("]");
+                        if (result.substring(0, 3).equals("000")) {
+                            message.append(" 关单成功").append(";").append(lineBreak);
+                        } else {
+                            message.append(" 关单失败：").append(result).append(";").append(lineBreak);
+                        }
+                    }
+                    if (count == asnnoList.length - 1) {
+                        message = new StringBuilder(message.substring(0, message.length() - lineBreak.length()));
+                    }
+                }
+                count ++;
+            }
+            json.setSuccess(true);
+            json.setMsg(message.toString());
+        }else {
+
+            json.setSuccess(false);
+            json.setMsg("关单失败！(无预入库单号传入)");
+        }
+        return json;
+
+//		Map<String ,Object> map=new HashMap<String, Object>();
+//		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		map.put("asnno", id);
+//		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
+//		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+//		docAsnHeaderQuery.setAsnno(id);
+//		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+//		if(docAsnHeader != null){
+//			docAsnHeaderMybatisDao.close(map);
+//			String result = map.get("result").toString();
+//			if (result.substring(0,3).equals("000")) {
+//				json.setSuccess(true);
+//				json.setMsg("关单成功！");
+//			} else {
+//				json.setSuccess(false);
+//				json.setMsg("关单失败！"+result);
+//			}
+//		}
+//		return json;
 	}
 	
 	public Json cancelDocAsnHeader(String asnnos) {
@@ -167,6 +210,8 @@ public class DocAsnHeaderService extends BaseService {
 		if (StringUtil.isNotEmpty(asnnos)) {
 
 		    String[] asnnoList = asnnos.split(",");
+		    int count = 0;
+		    String lineBreak = "<br/>";
             for (String asnno : asnnoList) {
 
                 if (StringUtil.isNotEmpty(asnno)) {
@@ -182,13 +227,18 @@ public class DocAsnHeaderService extends BaseService {
                         map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
                         docAsnHeaderMybatisDao.cancel(map);
                         String result = map.get("result").toString();
+                        message.append("[").append(asnno).append("]");
                         if (result.substring(0, 3).equals("000")) {
-                            message.append("取消成功：").append(asnno).append(";");
+                            message.append(" 取消成功：").append(";").append(lineBreak);
                         } else {
-                            message.append("取消失败：").append(asnno).append("(").append(result).append(");");
+                            message.append(" 取消失败：").append(result).append(";").append(lineBreak);
                         }
                     }
+                    if (count == asnnoList.length - 1) {
+                        message = new StringBuilder(message.substring(0, message.length() - lineBreak.length()));
+                    }
                 }
+                count ++;
             }
             json.setSuccess(true);
             json.setMsg(message.toString());

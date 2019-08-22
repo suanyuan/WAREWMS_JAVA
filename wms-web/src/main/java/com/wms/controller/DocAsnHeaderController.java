@@ -87,7 +87,7 @@ public class DocAsnHeaderController {
 	}
 
 	@Login
-	@RequestMapping(params = "edit")
+	@RequestMapping(params = "edit", method = RequestMethod.POST)
 	@ResponseBody
 	public Json edit(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 		Json json = docAsnHeaderService.editDocAsnHeader(docAsnHeaderForm);
@@ -111,10 +111,10 @@ public class DocAsnHeaderController {
 	}
 	
 	@Login
-	@RequestMapping(params = "close")
+	@RequestMapping(params = "close", method = RequestMethod.POST)
 	@ResponseBody
-	public Json close(String id) {
-		Json json = docAsnHeaderService.closeDocAsnHeader(id);
+	public Json close(String asnnos) {
+		Json json = docAsnHeaderService.closeDocAsnHeader(asnnos);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

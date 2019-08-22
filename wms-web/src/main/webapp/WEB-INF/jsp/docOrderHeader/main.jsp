@@ -480,37 +480,42 @@ var edit = function(srow){
 var del = function(){
     var operateResult = '';
     var checkedItems = ezuiDatagrid.datagrid('getSelections');
-    $.each(checkedItems, function(index, item){
-        console.log(item);
-        $.ajax({
-            async: false,
-            url : 'docOrderHeaderController.do?delete',
-            data : {orderno : item.orderno},
-            type : 'POST',
-            dataType : 'JSON',
-            success : function(result){
-                var msg = '';
-                try {
-                    msg = result.msg;
-                    if (msg == '000') {
-                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                        operateResult = operateResult + "处理完毕" + "\n";
-                    } else {
-                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                        operateResult = operateResult + "处理时错误：" + msg + "\n";
-                    };
-                } catch (e) {
-                    msg = '<spring:message code="common.message.data.delete.failed"/>';
-                };
-            }
-        });
-    })
-    if (operateResult != '') {
-        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
-        ezuiOperateResultDataDialog.dialog('open');
-        ezuiDatagrid.datagrid('reload');
-    };
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+        if(confirm){
+            $.each(checkedItems, function(index, item){
+                console.log(item);
+                $.ajax({
+                    async: false,
+                    url : 'docOrderHeaderController.do?delete',
+                    data : {orderno : item.orderno},
+                    type : 'POST',
+                    dataType : 'JSON',
+                    success : function(result){
+                        var msg = '';
+                        try {
+                            msg = result.msg;
+                            if (msg == '000') {
+                                operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                operateResult = operateResult + "处理完毕" + "\n";
+                            } else {
+                                operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                operateResult = operateResult + "处理时错误：" + msg + "\n";
+                            };
+                        } catch (e) {
+                            msg = '<spring:message code="common.message.data.delete.failed"/>';
+                        };
+                    }
+                });
+            })
+            if (operateResult != '') {
+                $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
+                ezuiOperateResultDataDialog.dialog('open');
+                ezuiDatagrid.datagrid('reload');
+            };
+        }
+    });
+
 
 	/*var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
@@ -695,7 +700,7 @@ var unPicking = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg == '000') {
+						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理完毕" + "\n";
 						} else {

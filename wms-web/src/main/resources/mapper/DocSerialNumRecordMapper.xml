@@ -99,4 +99,9 @@ where 1=1
         delete from doc_serial_num_record
         where order_no = #{orderNo} and carton_no = #{cartonNo}
     </delete>
+
+    <delete id="clearRecordByOrderno" parameterType="java.util.Map">
+        delete from doc_serial_num_record
+        where order_no = #{orderNo}
+    </delete>
 </mapper>   

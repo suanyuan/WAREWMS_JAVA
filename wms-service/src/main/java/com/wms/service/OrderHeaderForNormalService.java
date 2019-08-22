@@ -1,8 +1,10 @@
 package com.wms.service;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -39,10 +41,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -60,7 +66,7 @@ public class OrderHeaderForNormalService extends BaseService {
     private CommonService commonService;
 
     @Autowired
-    private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
+    private  DocOrderPackingService docOrderPackingService;
     @Autowired
     private BasCustomerService basCustomerService;
     @Autowired
@@ -83,6 +89,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private DocAsnDoublecMybatisDao docAsnDoublecMybatisDao;
     @Autowired
     private DocAsnCertificateMybatisDao docAsnCertificateMybatisDao;
+    @Autowired
+    private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
 
     /**
      * 订单列表显示
@@ -464,7 +472,7 @@ public class OrderHeaderForNormalService extends BaseService {
                             ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);*/
 
                             json.setSuccess(true);
-                            json.setMsg("000");
+                            json.setMsg("出库处理成功！");
                             json.setObj(orderHeaderForNormal);
                             return json;
                         } else {
