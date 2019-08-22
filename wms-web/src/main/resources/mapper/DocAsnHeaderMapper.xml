@@ -248,7 +248,9 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.asnstatusCheck != null and condition.asnstatusCheck != ''" >
-	    and asnstatus not in ('90','99')
+		<if test="condition.asnstatusCheck eq 'Y'.toString() " >
+			and asnstatus not in ('90','99')
+		</if>
 	</if>
 	<if test="condition.actualarrivetime != null and condition.actualarrivetime != ''" >
 	    and actualarrivetime =  #{condition.actualarrivetime}
