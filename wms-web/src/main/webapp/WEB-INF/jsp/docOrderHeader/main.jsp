@@ -700,7 +700,7 @@ var unPicking = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg == '000') {
+						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
