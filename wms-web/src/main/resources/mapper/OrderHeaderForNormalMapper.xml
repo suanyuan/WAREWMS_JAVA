@@ -1296,7 +1296,7 @@
 				g.total_grossweight as totalGrossWeight,
 				g.total_cube as totalCubic,
 				a.sku as sku,
-				d.descr_c as skuName,
+				d.reservedfield01 as skuName,
 			    d.defaultreceivinguom as unit,
 			    b.soreference1 as orderCode,
 				b.notes as notes,
