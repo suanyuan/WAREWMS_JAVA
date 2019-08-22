@@ -65,7 +65,7 @@ public class DocAsnHeaderService extends BaseService {
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setOrderByClause("addtime desc");
 		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
 		DocAsnHeaderVO docAsnHeaderVO = null;

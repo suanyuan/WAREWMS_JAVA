@@ -698,7 +698,7 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
-		asnstatusCheck : $('#asnstatusCheck:checked') == true ? "" : "N"
+		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
 	});
 };
 
