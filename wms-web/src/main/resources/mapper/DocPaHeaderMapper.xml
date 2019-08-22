@@ -266,4 +266,8 @@ where 1=1
         where asnno = #{asnno, jdbcType=VARCHAR}
     </select>
 
+	<!--新增订单号 -->
+	<select id="resetAsn" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call spasn_redraw_process('JHCK',#{paNo,mode=IN,jdbcType=VARCHAR},'CN','ADMIN',#{codo,mode=OUT,jdbcType=VARCHAR})}
+	</select>
 </mapper>   

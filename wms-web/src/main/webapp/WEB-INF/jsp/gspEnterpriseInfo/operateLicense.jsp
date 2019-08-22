@@ -342,6 +342,7 @@
     //加载历史证照信息
     function initHistoryData(row) {
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
+            console.log($(this).attr("class"));
             if($(this).attr("class")){
                 if($(this).attr("id")) {
                     if ($(this).attr("class").indexOf('easyui-textbox') != -1) {

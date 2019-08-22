@@ -202,24 +202,15 @@ public class ImportGspProductRegisterDataService {
 			try {
                 if (StringUtils.isEmpty(dataArray.getProductNameMain())) {
 					throw new Exception();
-				}else if(dataArray.getProductNameMain()!=null){
-                	GspProductRegister gspProductRegister=gspProductRegisterService.queryByproductNameMain(dataArray.getProductNameMain());
-					//循环去重
-					for(GspProductRegisterVO vo:importData){
-						if(vo.getProductNameMain().equals(dataArray.getProductNameMain())){
-							throw new Exception();
-						}
-					}
-                	if(gspProductRegister!=null){
-						throw new Exception();
-					}else{
+				}else{
+
 						importDataVO.setProductNameMain(dataArray.getProductNameMain());
-					}
+
 
 				}
 
 			} catch (Exception e) {
-				rowResult.append("[产品名称],该产品名称已经存在或者没有输入").append(" ");
+				rowResult.append("[产品名称],该产品名称没有输入").append(" ");
 			}
 
 
@@ -269,13 +260,13 @@ public class ImportGspProductRegisterDataService {
 //分类目录
 			try{
 				if(dataArray.getClassifyCatalog()==null||dataArray.getClassifyCatalog().equals("")||dataArray.getClassifyCatalog().equals("/xxxxxx")){
-						throw new Exception();
+//						throw new Exception();
 				}else{
 					importDataVO.setClassifyCatalog(dataArray.getClassifyCatalog());
 				}
 
 			}catch (Exception e){
-      			rowResult.append("[分类目录]，未输入").append(" ");
+//      			rowResult.append("[分类目录]，未输入").append(" ");
 
 
 			}
@@ -330,6 +321,7 @@ public class ImportGspProductRegisterDataService {
 						if(info.getEnterpriseName().equals(dataArray.getEnterpriseName())){
 							importDataVO.setEnterpriseId(info.getEnterpriseId());
 							con=true;
+							break;
 						}
 					}
 					if(con==false){
@@ -345,65 +337,65 @@ public class ImportGspProductRegisterDataService {
 //注册人住所
 			try{
 				if(dataArray.getProductRegisterAddress()==null||dataArray.getProductRegisterAddress().equals("")||dataArray.getProductRegisterAddress().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setProductRegisterAddress(dataArray.getProductRegisterAddress());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[注册人住所]，未输入").append(" ");
+//				rowResult.append("[注册人住所]，未输入").append(" ");
 
 
 			}
 //生产地址
 			try{
 				if(dataArray.getProductProductionAddress()==null||dataArray.getProductProductionAddress().equals("")||dataArray.getProductProductionAddress().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setProductProductionAddress(dataArray.getProductProductionAddress());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[生产地址]，未输入").append(" ");
+//				rowResult.append("[生产地址]，未输入").append(" ");
 
 
 			}
 //代理人名称
 			try{
 				if(dataArray.getAgentName()==null||dataArray.getAgentName().equals("")||dataArray.getAgentName().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
-					importDataVO.setAgentName(dataArray.getAgentName());
+     				importDataVO.setAgentName(dataArray.getAgentName());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[代理人名称]，未输入").append(" ");
+//				rowResult.append("[代理人名称]，未输入").append(" ");
 
 
 			}
 //代理人住所
 			try{
 				if(dataArray.getAgentAddress()==null||dataArray.getAgentAddress().equals("")||dataArray.getAgentAddress().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setAgentAddress(dataArray.getAgentAddress());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[代理人住所]，未输入").append(" ");
+//				rowResult.append("[代理人住所]，未输入").append(" ");
 
 
 			}
 //审批部门
 			try{
 				if(dataArray.getApprovalDepartment()==null||dataArray.getApprovalDepartment().equals("")||dataArray.getApprovalDepartment().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setApprovalDepartment(dataArray.getApprovalDepartment());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[审批部门]，未输入").append(" ");
+//				rowResult.append("[审批部门]，未输入").append(" ");
 
 
 			}
@@ -417,7 +409,7 @@ public class ImportGspProductRegisterDataService {
 				}
 
 			}catch (Exception e){
-				rowResult.append("[批准日期]，未输入").append(" ");
+				rowResult.append("[批准日期]，未输入或者格式错误").append(" ");
 
 
 			}
@@ -431,7 +423,7 @@ public class ImportGspProductRegisterDataService {
 				}
 
 			}catch (Exception e){
-				rowResult.append("[结构及组成]，未输入").append(" ");
+				rowResult.append("[有效期至]，未输入或者格式错误").append(" ");
 
 
 			}
@@ -477,13 +469,13 @@ public class ImportGspProductRegisterDataService {
 //主要组成部门
 			try{
 				if(dataArray.getMainPart()==null||dataArray.getMainPart().equals("")||dataArray.getMainPart().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setMainPart(dataArray.getMainPart());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[主要组成部门]，未输入").append(" ");
+//				rowResult.append("[主要组成部门]，未输入").append(" ");
 
 
 			}

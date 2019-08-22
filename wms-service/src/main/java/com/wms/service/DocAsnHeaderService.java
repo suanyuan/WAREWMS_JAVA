@@ -15,6 +15,7 @@ import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.query.OrderDetailsForNormalQuery;
+import com.wms.result.AsnDetailResult;
 import com.wms.result.PdaResult;
 import com.wms.service.importdata.ImportAsnDataService;
 import com.wms.utils.BeanConvertUtil;
@@ -65,7 +66,7 @@ public class DocAsnHeaderService extends BaseService {
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setOrderByClause("addtime desc");
 		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
 		DocAsnHeaderVO docAsnHeaderVO = null;
@@ -95,10 +96,6 @@ public class DocAsnHeaderService extends BaseService {
 		}
 		return false;
 	}
-
-
-
-
 
 	public Json addDocAsnHeader(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 		Json json = new Json();
@@ -508,6 +505,14 @@ public class DocAsnHeaderService extends BaseService {
 			}
 		}
 
+	}
+
+	public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo){
+		EasyuiDatagrid<AsnDetailResult> datagrid = new EasyuiDatagrid<>();
+		List<AsnDetailResult> asnDetailResultList = docAsnHeaderMybatisDao.queryAsnDetailResult(asnNo);
+		datagrid.setTotal((long) asnDetailResultList.size());
+		datagrid.setRows(asnDetailResultList);
+		return datagrid;
 	}
 
 	private String getKey(OrderDetailsForNormal detail){

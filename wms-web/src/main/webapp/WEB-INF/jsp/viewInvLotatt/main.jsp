@@ -385,6 +385,27 @@ var adj = function(){
 var mov = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	var num=rows.length;
+	var locs=new Map();
+//设置库位不可移出
+	if(num>0){
+		for (var i = 0; i < rows.length; i++) {
+			var loc=rows[i].fmlocation;
+			if(loc=='SORTATION01'||loc=='YY-01-01-01'||loc=='DX-01-01-01'){
+				locs.set(loc,"");
+			}
+
+		}
+	}
+	if(locs.size>0){
+		 var result="";
+		for(var key of locs.keys()){
+			result+=key+",";
+		}
+		$.messager.show({
+			msg :result+"不可移动", title : '<spring:message code="common.message.prompt"/>'
+		});
+		return;
+	}
 	//单条移动
 	if(num==1){
 		ezuiFormMov.form('load',{
@@ -607,10 +628,10 @@ var commitMov = function(){
 //库存移动多条提交
 var commitMovAll = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
-	var datas=[];
+	var forms=[];
 	var data=null;
 	var msg='';
-	url = '<c:url value="/viewInvLotattController.do?mov"/>';
+	url = '<c:url value="/viewInvLotattController.do?movList"/>';
 	//判断目标库位是否可以移动
 	var location=$('#ezuiDialogMovAll #lotatt11text').val();
       if(!ismove(location)){
@@ -632,50 +653,50 @@ var commitMovAll = function(){
 		data.lotatt11text=$('#ezuiDialogMovAll #lotatt11text').val();
 		data.lotatt12=$('#ezuiDialogMovAll #lotatt12').combobox("getValue");
 		data.lotatt12text=$('#ezuiDialogMovAll #lotatt12text').val();
-		datas.push(data);
+		forms.push(data);
 
 	}
 
 	if(ezuiFormMovAll.form('validate')) {
-		var num=0;
 		$.messager.progress({
 			text: '<spring:message code="common.message.data.processing"/>', interval: 100
 		});
-		for (var i = 0; i < datas.length; i++) {
-			var data = new Object();
-			data = datas[i];
+
 			$.ajax({
 				url: url,
-				data: data,
-				dataType: 'text',
-				error: function () {
-					num=1;
-					msg='可能部分库位移动失败!';
+				data:"forms="+JSON.stringify(forms),
+				dataType: 'json',
+				error: function (a,b,c) {
+					alert(a+b+c);
 				},
 				success: function (result) {
 					try{
-					  var result = $.parseJSON(result);
 					  if(result.success){
+					  	  msg=result.msg;
 						  ezuiDatagrid.datagrid('reload');
+						  ezuiDialogMovAll.dialog('close');
+						  $.messager.show({
+							  msg:msg, title : '<spring:message code="common.message.prompt"/>'
+						  });
+						  $.messager.progress('close');
 					  }else{
-					  	num=1;
-					  	msg='可能部分库位移动失败!';
+						  msg=result.msg;
+						  ezuiDatagrid.datagrid('reload');
+						  ezuiDialogMovAll.dialog('close');
+						  $.messager.show({
+							  msg :msg, title : '<spring:message code="common.message.prompt"/>'
+						  });
+						  $.messager.progress('close');
 					  }
 					}catch (e) {
-
+						$.messager.show({
+							msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+						});
+						$.messager.progress('close');
 					}
 				}
 			});
-		}
-		if(num==0){
-			msg='库存移动成功!';
-		}
 
-		ezuiDialogMovAll.dialog('close');
-		$.messager.show({
-			msg : msg, title : '<spring:message code="common.message.prompt"/>'
-		});
-		$.messager.progress('close');
 	}else{
 		msg = '<font color="red">' +'请输入完整!'+ '</font>';
 		$.messager.show({
@@ -897,7 +918,7 @@ var ismove=function (location) {
 				<div>
 					<a onclick='adj();' id='ezuiBtn_adj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.adj'/></a>
 					<a onclick='mov();' id='ezuiBtn_mov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.mov'/></a>
-					<a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>
+<%--					<a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 <%-- 					<a onclick='adj();' id='ezuiBtn_importAdj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.adjBatch'/></a> --%>
 <%-- 					<a onclick='mov();' id='ezuiBtn_importMov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.movBatch'/></a> --%>
@@ -1045,7 +1066,7 @@ var ismove=function (location) {
 					<th>库存件数</th>
 					<td><input type='text' name='fmqty' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 					<th>移动数量</th>
-					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 				</tr>
 				<tr>
 					<th>原库位</th>

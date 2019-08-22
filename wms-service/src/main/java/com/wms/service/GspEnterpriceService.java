@@ -21,6 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,12 +85,20 @@ public class GspEnterpriceService extends BaseService {
                     return Json.error("企业信息代码不能重复");
                 }
                 String code = gspEnterpriseInfoForm.getEnterpriseNo();
-                String reg="^[a-zA-Z0-9]{6,16}$";
-//                String pwd="1234567890abcd";
-                boolean f=code.matches(reg);
-                if(!f){
-                    return Json.error("企业信息代码只能为数字字母");
+
+
+                Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+                Matcher m = p.matcher(code );
+                if (m.find()) {
+                    return Json.error("企业信息代码不能有中文");
                 }
+//                String reg="^[a-zA-Z0-9\\s\\/\\&]{2,100}$";
+//                String reg = "[\\u4e00-\\u9fa5]{0,100}$";
+//                String pwd="1234567890abcd";
+//                boolean f=code.matches(reg);
+//                if(f){
+//                    return Json.error("企业信息代码只能为2到16位数字字母");
+//                }
                 gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
                 enterpriseId = RandomUtil.getUUID();
                 gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);

@@ -5,6 +5,7 @@ import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -39,4 +40,10 @@ public interface DocPaHeaderMybatisDao extends BaseDao {
      * @return
      */
     DocPaHeader queryByAsnno(@Param("asnno") String asnno);
+
+    /**
+     * 收货回写
+     * @param map
+     */
+    void resetAsn(Map<String, Object> map);
 }

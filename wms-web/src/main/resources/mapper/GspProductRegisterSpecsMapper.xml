@@ -53,6 +53,7 @@
         <result column="maintenance_cycle" property="maintenanceCycle"/>
         <result column="wight" property="wight"/>
         <result column="packaging_unit" property="packagingUnit"/>
+        <result column="LicenseOrRecordNo" property="licenseOrRecordNo"/>
         <!--<result column="attache_card_category" property="attacheCardCategory"/>-->
 
 
@@ -60,7 +61,7 @@
 
     <!-- gsp_product_register_specs table all fields -->
     <sql id="Base_Column_List">
-	 specs_id,product_register_no,is_certificate,attache_card_category,wight,maintenance_cycle,medical_device_mark,sterilization_markers,cold_hain_mark,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit
+	 specs_id,product_register_no,is_certificate,attache_card_category,wight,maintenance_cycle,medical_device_mark,sterilization_markers,cold_hain_mark,is_doublec,product_name_main,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,categories,conversion_rate,long,wide,hight,manage_categories,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit,LicenseOrRecordNo
 </sql>
 
 
@@ -142,8 +143,8 @@
 
     <!-- 插入记录 -->
     <insert id="add" parameterType="Object">
-  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},now(),#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit})
+  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit,LicenseOrRecordNo)
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},now(),#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit},#{licenseOrRecordNo})
 </insert>
 
     <!-- 根据id，修改记录-->
@@ -277,7 +278,10 @@
                 alternat_name5=#{alternatName5},
             </if>
             <if test="packagingUnit != null  ">
-                packaging_unit=#{packagingUnit}
+                packaging_unit=#{packagingUnit},
+            </if>
+            <if test="licenseOrRecordNo!= null  ">
+                LicenseOrRecordNo=#{licenseOrRecordNo}
             </if>
         </trim>
         where specs_id=#{specsId}

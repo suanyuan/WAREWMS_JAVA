@@ -37,7 +37,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("docPaHeaderService")
 public class DocPaHeaderService extends BaseService {
@@ -224,12 +226,16 @@ public class DocPaHeaderService extends BaseService {
                        //根据主单pano获取子单所有的产品 orderCode==pano
                         List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
 
+                        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
+
                         totalNum = detailsList.size();//总条数
                         pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
                         for(int i=0;i<pageSize;i++){//单头内容
                             baos = new ByteArrayOutputStream();
                             stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
                             form = stamper.getAcroFields();
+                            form.setField("orderNo1",docAsnHeader.getAsnreference1());
+                            form.setField("orderNo2",docAsnHeader.getAsnreference2());
                             form.setField("putwayCode",docPaHeader.getPano());
                             form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
                             form.setField("warehouseid", docPaHeader.getWarehouseid());
@@ -301,5 +307,21 @@ public class DocPaHeaderService extends BaseService {
             e.printStackTrace();
         }
     }
+
+    public Json resetDocPa(String orderNo){
+        if(StringUtils.isEmpty(orderNo)){
+            return Json.error("请选择需要回写收货的上架任务单");
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put("paNo",orderNo);
+        docPaHeaderDao.resetAsn(result);
+        String codo = result.get("codo").toString();
+        if(codo.equals("000")){
+            return Json.success("收货回写成功");
+        }else{
+            return Json.error("收货回写异常");
+        }
+    }
+
 
 }

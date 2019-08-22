@@ -218,11 +218,11 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 			}
 			//产品许可证 备案号
-			if(gspEnterpriseInfo.getLicenseNo()!=null){
-				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
-			}else{
-				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getRecordNo());
-			}
+//			if(gspEnterpriseInfo.getLicenseNo()!=null){
+//				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
+//			}else{
+//				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getRecordNo());
+//			}
 		}
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);

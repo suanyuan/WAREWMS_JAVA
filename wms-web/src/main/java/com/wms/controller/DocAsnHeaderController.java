@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.DocAsnHeaderQuery;
+import com.wms.result.AsnDetailResult;
 import com.wms.service.DocAsnHeaderService;
 import com.wms.service.DocPaService;
 import com.wms.utils.ResourceUtil;
@@ -191,6 +192,13 @@ public class DocAsnHeaderController {
 	@ResponseBody
 	public Json doRefIn(String orderno,String refOrderno) throws Exception{
 		return docAsnHeaderService.doRefIn(orderno,refOrderno);
+	}
+
+	@Login
+	@RequestMapping(params = "showAsnDetal")
+	@ResponseBody
+	public EasyuiDatagrid<AsnDetailResult> showAsnDetal(EasyuiDatagridPager pager, String ordero) {
+		return docAsnHeaderService.getAsnDetail(ordero);
 	}
 
 }

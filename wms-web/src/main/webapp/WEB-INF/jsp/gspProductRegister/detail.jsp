@@ -55,7 +55,7 @@
                                 <th>分类目录</th>
                                 <td>
                                     <input type='text' id="classifyCatalog" name="classifyCatalog"  value="${gspProductRegister.classifyCatalog}"/>
-                                    <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                                    <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='required:true,plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                                 </td>
                                 <th>结构及组成</th>
                                 <td><input type='text' name='structureAndComposition' class='easyui-textbox' value="${gspProductRegister.structureAndComposition}" data-options=''/></td>

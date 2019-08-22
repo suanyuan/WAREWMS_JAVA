@@ -420,6 +420,7 @@ var selectAcceptance = function () {
 	if (row) {
 		// $("#toolbar #pano").textbox('setValue', row.pano);
 		$("#toolbar #qcno").textbox('setValue', row.qcno);
+		doSearch();
 		ezuiAccDataDialog.dialog('close');
 	}
 	;

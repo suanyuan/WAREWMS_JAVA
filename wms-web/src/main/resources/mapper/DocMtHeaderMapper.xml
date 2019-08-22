@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocMtHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocMtHeader" >
+	<result column="mtno" property="mtno"/>
+	<result column="mtstatus" property="mtstatus"/>
+	<result column="mttype" property="mttype"/>
+	<result column="fromdate" property="fromdate"/>
+	<result column="todate" property="todate"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+	<result column="remark" property="remark"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="warehouseid" property="warehouseid"/>
+</resultMap>
+       
+<!-- doc_mt_header table all fields -->
+<sql id="Base_Column_List" >
+	 mtno,mtstatus,mttype,fromdate,todate,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.mtno != null and condition.mtno != ''" >
+	    and mtno =  #{condition.mtno}
+	</if>
+	<if test="condition.mtstatus != null and condition.mtstatus != ''" >
+	    and mtstatus =  #{condition.mtstatus}
+	</if>
+	<if test="condition.mttype != null and condition.mttype != ''" >
+	    and mttype =  #{condition.mttype}
+	</if>
+	<if test="condition.fromdate != null and condition.fromdate != ''" >
+	    and fromdate =  #{condition.fromdate}
+	</if>
+	<if test="condition.todate != null and condition.todate != ''" >
+	    and todate =  #{condition.todate}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.remark != null and condition.remark != ''" >
+	    and remark =  #{condition.remark}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_mt_header(mtno,mtstatus,mttype,fromdate,todate,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid)
+ values(#{mtno},#{mtstatus},#{mttype},#{fromdate},#{todate},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{remark},#{addtime},#{addwho},#{edittime},#{editwho},#{warehouseid})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_mt_header set mtstatus=#{mtstatus},mttype=#{mttype},fromdate=#{fromdate},todate=#{todate},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5},remark=#{remark},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},warehouseid=#{warehouseid} where mtno=#{mtno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_mt_header set 
+	<trim  suffixOverrides="," >
+	<if test="mtstatus != null  ">
+		mtstatus=#{mtstatus},
+	</if>
+	<if test="mttype != null  ">
+		mttype=#{mttype},
+	</if>
+	<if test="fromdate != null  ">
+		fromdate=#{fromdate},
+	</if>
+	<if test="todate != null  ">
+		todate=#{todate},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	<if test="remark != null  ">
+		remark=#{remark},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="warehouseid != null  ">
+		warehouseid=#{warehouseid},
+	</if>
+	</trim> where mtno=#{mtno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_mt_header where mtno = #{mtno}
+</delete>
+ 
+<!-- 根据id查询 养护计划管理 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_mt_header where mtno = #{mtno}
+</select>
+
+<!-- 养护计划管理 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_mt_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询养护计划管理列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_mt_header 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

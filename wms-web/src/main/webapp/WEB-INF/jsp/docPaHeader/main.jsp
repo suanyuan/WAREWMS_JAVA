@@ -279,6 +279,41 @@ var parowStyle = function (index,row) {
         return 'color:red;';
 	}
 }
+
+function btnReset() {
+    var checkedItems = ezuiDatagrid.datagrid('getSelections');
+    if(checkedItems && ezuiDatagrid.length>0){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要回写收货数量？', function(confirm) {
+            if(confirm){
+                $.each(checkedItems, function(index, item){
+                    if(item.userdefine5 == '1'){
+                        showMsg("该任务已回写收货");
+                        return false;
+					}
+                    $.ajax({
+                        url : 'docPaHeaderController.do?resetDocPa',
+                        data : {orderNo : item.pano},
+                        type : 'POST',
+                        dataType : 'JSON',
+                        success : function(result){
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $.messager.show({
+                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                                });
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    }
+}
 </script>
 </head>
 <body>
@@ -310,6 +345,7 @@ var parowStyle = function (index,row) {
 				</fieldset>
 				<div>
 					<a onclick='batchPrint();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印</a>
+					<a onclick='btnReset();' id='ezuiBtn_reSet' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>收货回写</a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<!--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>-->
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
