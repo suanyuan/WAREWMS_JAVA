@@ -2,7 +2,6 @@ package com.wms.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,44 +9,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.DocPaHeaderService;
+import com.wms.service.DocMtDetailsService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
-import com.wms.vo.DocPaHeaderVO;
+import com.wms.vo.DocMtDetailsVO;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocPaHeaderForm;
-import com.wms.query.DocPaHeaderQuery;
+import com.wms.vo.form.DocMtDetailsForm;
+import com.wms.query.DocMtDetailsQuery;
 
 @Controller
-@RequestMapping("docPaHeaderController")
-public class DocPaHeaderController {
+@RequestMapping("docMtDetailsController")
+public class DocMtDetailsController {
 
 	@Autowired
-	private DocPaHeaderService docPaHeaderService;
+	private DocMtDetailsService docMtDetailsService;
 
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
-		return new ModelAndView("docPaHeader/main", model);
+		return new ModelAndView("docMtDetails/main", model);
 	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<DocPaHeaderVO> showDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
-		return docPaHeaderService.getPagedDatagrid(pager, query);
+	public EasyuiDatagrid<DocMtDetailsVO> showDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
+		return docMtDetailsService.getPagedDatagrid(pager, query);
 	}
 
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
-	public Json add(DocPaHeaderForm docPaHeaderForm) throws Exception {
-		Json json = docPaHeaderService.addDocPaHeader(docPaHeaderForm);
+	public Json add(DocMtDetailsForm docMtDetailsForm) throws Exception {
+		Json json = docMtDetailsService.addDocMtDetails(docMtDetailsForm);
 		if(json == null){
 			json = new Json();
 		}
@@ -58,8 +57,8 @@ public class DocPaHeaderController {
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
-	public Json edit(DocPaHeaderForm docPaHeaderForm) throws Exception {
-		Json json = docPaHeaderService.editDocPaHeader(docPaHeaderForm);
+	public Json edit(DocMtDetailsForm docMtDetailsForm) throws Exception {
+		Json json = docMtDetailsService.editDocMtDetails(docMtDetailsForm);
 		if(json == null){
 			json = new Json();
 		}
@@ -71,7 +70,7 @@ public class DocPaHeaderController {
 	@RequestMapping(params = "delete")
 	@ResponseBody
 	public Json delete(String id) {
-		Json json = docPaHeaderService.deleteDocPaHeader(id);
+		Json json = docMtDetailsService.deleteDocMtDetails(id);
 		if(json == null){
 			json = new Json();
 		}
@@ -83,36 +82,14 @@ public class DocPaHeaderController {
 	@RequestMapping(params = "getBtn")
 	@ResponseBody
 	public Json getBtn(String id, HttpSession session) {
-		return docPaHeaderService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+		return docMtDetailsService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
-	/**
-	 * 打印上架任务单
-	 * @param response
-	 * @param orderCodeList
-	 * @throws Exception
-	 */
 	@Login
-	@RequestMapping(params = "exportBatchPdf")
-	public void exportBatchPdf(HttpServletResponse response, String orderCodeList) throws Exception {
-		try {
-			//entryOrderHeaderForCrossDockingService.exportBatchPdf(response, orderCodeList);
-
-			docPaHeaderService.exportBatchPdf(response,orderCodeList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 收货回写
-	 * @param orderNo
-	 * @throws Exception
-	 */
-	@Login
-	@RequestMapping(params = "resetDocPa")
-	public Json resetDocPa(String orderNo) throws Exception {
-		return docPaHeaderService.resetDocPa(orderNo);
+	@RequestMapping(params = "getCombobox")
+	@ResponseBody
+	public List<EasyuiCombobox> getCombobox() {
+		return docMtDetailsService.getDocMtDetailsCombobox();
 	}
 
 }

@@ -192,6 +192,48 @@ $(function() {
 			$(this).datagrid("resize",{height:200});
 		}
 	});
+
+    /* 收货明细列表*/
+    asnDetailsDatagrid = $('#asnDetailsDatagrid').datagrid({
+        url : '<c:url value="/docAsnHeaderController.do?showAsnDetal"/>',
+        method : 'POST',
+        toolbar : '',
+        idField : 'docNo',
+        title : '',
+        border : false,
+        fitColumns : false,
+        nowrap : false,
+        striped : true,
+        collapsible : false,
+        rownumbers : true,
+        singleSelect : true,
+        columns : [[
+            //{field: 'docNo',	title: '产品代码',		width: 120 },
+            {field: 'docLineNo',				title: '行号',		width: 130 },
+            {field: 'fmSku',			title: '产品名称',		width: 130 },
+            {field: 'lotatt12',		title: '注册证号/备案凭证号',		width: 350 },
+            {field: 'lotatt06',		title: '产品注册证',		width: 200 },
+            {field: 'descC',		title: '规格/型号',		width: 130 },
+            {field: 'lotatt04',		title: '生产批号',		width: 130 },
+            {field: 'lotatt05',		title: '序列号',		width: 130 },
+            {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
+            {field: 'lotatt01',	title: '生产日期',		width: 130 },
+            {field: 'lotatt02',	title: '效期',		width: 130 },
+            {field: 'fmqty',	title: '数量',		width: 130 },
+            {field: 'fmqty_each',	title: '件数',		width: 130 },
+            {field: 'fmLocation',	title: '库位',		width: 130 },
+            {field: 'addTime',	title: '制单日期',		width: 200 },
+            {field: 'addWho',	title: '制单人',		width: 130 }
+        ]],
+        onDblClickCell: function(index,field,value){
+            detailsEdit();
+        },
+        onRowContextMenu : function(event, rowIndex, rowData) {
+        },
+        onLoadSuccess:function(data){
+
+        }
+    });
 	
 	/* 控件初始化start */
 	$("#customerid").textbox({
@@ -509,6 +551,7 @@ var edit = function(row){
 		/* 提交表单 */
 		$('#ezuiForm').submit();
 		ezuiDetailsDatagrid.datagrid('load',{asnno:row.asnno});
+        asnDetailsDatagrid.datagrid('load',{ordero:row.asnno});
 		$('#ezuiDetailsDatagrid').parent().parent().parent().show();
 		$('#ezuiBtn_renew').linkbutton('disable');
 		$('#ezuiBtn_recommit').linkbutton('enable');

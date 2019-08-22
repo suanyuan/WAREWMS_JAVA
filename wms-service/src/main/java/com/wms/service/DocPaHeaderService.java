@@ -37,7 +37,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("docPaHeaderService")
 public class DocPaHeaderService extends BaseService {
@@ -305,5 +307,21 @@ public class DocPaHeaderService extends BaseService {
             e.printStackTrace();
         }
     }
+
+    public Json resetDocPa(String orderNo){
+        if(StringUtils.isEmpty(orderNo)){
+            return Json.error("请选择需要回写收货的上架任务单");
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put("paNo",orderNo);
+        docPaHeaderDao.resetAsn(result);
+        String codo = result.get("codo").toString();
+        if(codo.equals("000")){
+            return Json.success("收货回写成功");
+        }else{
+            return Json.error("收货回写异常");
+        }
+    }
+
 
 }

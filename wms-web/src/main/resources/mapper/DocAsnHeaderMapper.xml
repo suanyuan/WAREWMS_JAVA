@@ -238,6 +238,25 @@
 	<result column="uom" property="uom"/>
 </resultMap>
 
+<resultMap id="DocAsnDetailResultMap" type="com.wms.result.AsnDetailResult">
+	<result column="DOCNO" property="docNo"/>
+	<result column="DOCLINENO" property="docLineNo"/>
+	<result column="FMSKU" property="fmSku"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="descr_c" property="descC"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="fmqty" property="fmqty"/>
+	<result column="fmqty_each" property="fmqty_each"/>
+	<result column="FMLOCATION" property="fmLocation"/>
+	<result column="ADDTIME" property="addTime"/>
+	<result column="ADDWHO" property="addWho"/>
+</resultMap>
+
 <!-- Doc_Asn_Header table all fields -->
 <sql id="Base_Column_List" >
 	 actualarrivetime,addtime,addwho,archiveflag,asncreationtime,asnno,asnreference1,asnreference2,asnreference3,asnreference4,asnreference5,asnstatus,asntype,asn_print_flag,billingclass_group,billingid,billingname,bytrace_flag,b_address1,b_address2,b_address3,b_address4,b_city,b_contact,b_country,b_fax,b_mail,b_province,b_tel1,b_tel2,b_zip,carrieraddress1,carrieraddress2,carrieraddress3,carrieraddress4,carriercity,carriercontact,carriercountry,carrierfax,carrierid,carriermail,carriername,carrierprovince,carriertel1,carriertel2,carrierzip,countryofdestination,countryoforigin,createsource,customerid,deliveryterms,deliverytermsdescr,deliveryvehicleno,deliveryvehicletype,door,driver,edisendflag,edisendtime,edisendtime2,edisendtime3,edisendtime4,edisendtime5,edittime,editwho,expectedarrivetime1,expectedarrivetime2,followup,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,h_edi_11,issuepartyid,issuepartyname,i_address1,i_address2,i_address3,i_address4,i_city,i_contact,i_country,i_fax,i_mail,i_province,i_tel1,i_tel2,i_zip,lastreceivingtime,medicalxmltime,notes,packmaterialconsume,paymentterms,paymenttermsdescr,placeofdelivery,placeofdischarge,placeofloading,pono,priority,qcstatus,receiveid,releasestatus,reserve_flag,return_print_flag,serialnocatch,supplierid,supplier_address1,supplier_address2,supplier_address3,supplier_address4,supplier_city,supplier_contact,supplier_country,supplier_fax,supplier_mail,supplier_name,supplier_province,supplier_tel1,supplier_tel2,supplier_zip,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,userdefine6,userdefinea,userdefineb,warehouseid,zonegroup
@@ -1312,4 +1331,13 @@ insert into doc_asn_header
 	<select id="showAsnreference1"  resultType="java.lang.Integer"  parameterType="Object">
 		select count(*) from doc_asn_header  where asnreference1 = #{asnreference1};
 	</select>
+
+	<select id="queryAsnDetailResult" parameterType="java.util.Map" resultMap="DocAsnDetailResultMap">
+       select tr.DOCNO,tr.DOCLINENO,tr.FMSKU,lt.lotatt12,lt.lotatt06,bs.descr_c,lt.lotatt04,lt.lotatt05,lt.lotatt07,lt.lotatt01,lt.lotatt02,sum(tr.FMQTY) as fmqty,sum(tr.FMQTY_EACH) fmqty_each,tr.FMLOCATION,tr.ADDTIME,tr.ADDWHO
+		 from act_transaction_log tr,inv_lot_att lt,bas_sku bs
+		where tr.FMLOTNUM = lt.lotnum and tr.FMSKU = bs.sku and tr.FMCUSTOMERID = bs.customerid
+			and tr.transactiontype = 'IN' and tr.status = '99'
+			and tr.docno = #{asnNo}
+		group by tr.DOCNO,tr.DOCLINENO,tr.FMSKU,lt.lotatt12,lt.lotatt06,bs.descr_c,lt.lotatt04,lt.lotatt05,lt.lotatt07,lt.lotatt01,lt.lotatt02,tr.FMLOCATION,tr.ADDTIME,tr.ADDWHO
+    </select>
 </mapper>

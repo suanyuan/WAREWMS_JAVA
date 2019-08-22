@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocMtDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocMtDetails" >
+	<result column="mtno" property="mtno"/>
+	<result column="mtlineno" property="mtlineno"/>
+	<result column="linestatus" property="linestatus"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="inventoryage" property="inventoryage"/>
+	<result column="locationid" property="locationid"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="mtqty_expected" property="mtqtyExpected"/>
+	<result column="mtqty_each_expected" property="mtqtyEachExpected"/>
+	<result column="mtqty_completed" property="mtqtyCompleted"/>
+	<result column="mtqty_each_completed" property="mtqtyEachCompleted"/>
+	<result column="uom" property="uom"/>
+	<result column="check_flag" property="checkFlag"/>
+	<result column="conclusion" property="conclusion"/>
+	<result column="conversedate" property="conversedate"/>
+	<result column="conversewho" property="conversewho"/>
+	<result column="storage_flag" property="storageFlag"/>
+	<result column="flow_flag" property="flowFlag"/>
+	<result column="sign_flag" property="signFlag"/>
+	<result column="fence_flag" property="fenceFlag"/>
+	<result column="sanitation_flag" property="sanitationFlag"/>
+	<result column="remark" property="remark"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+</resultMap>
+       
+<!-- doc_mt_details table all fields -->
+<sql id="Base_Column_List" >
+	 mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,storage_flag,flow_flag,sign_flag,fence_flag,sanitation_flag,remark,addtime,addwho,edittime,editwho
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.mtno != null and condition.mtno != ''" >
+	    and mtno =  #{condition.mtno}
+	</if>
+	<if test="condition.mtlineno != null and condition.mtlineno != ''" >
+	    and mtlineno =  #{condition.mtlineno}
+	</if>
+	<if test="condition.linestatus != null and condition.linestatus != ''" >
+	    and linestatus =  #{condition.linestatus}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.inventoryage != null and condition.inventoryage != ''" >
+	    and inventoryage =  #{condition.inventoryage}
+	</if>
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.mtqtyExpected != null and condition.mtqtyExpected != ''" >
+	    and mtqty_expected =  #{condition.mtqtyExpected}
+	</if>
+	<if test="condition.mtqtyEachExpected != null and condition.mtqtyEachExpected != ''" >
+	    and mtqty_each_expected =  #{condition.mtqtyEachExpected}
+	</if>
+	<if test="condition.mtqtyCompleted != null and condition.mtqtyCompleted != ''" >
+	    and mtqty_completed =  #{condition.mtqtyCompleted}
+	</if>
+	<if test="condition.mtqtyEachCompleted != null and condition.mtqtyEachCompleted != ''" >
+	    and mtqty_each_completed =  #{condition.mtqtyEachCompleted}
+	</if>
+	<if test="condition.uom != null and condition.uom != ''" >
+	    and uom =  #{condition.uom}
+	</if>
+	<if test="condition.checkFlag != null and condition.checkFlag != ''" >
+	    and check_flag =  #{condition.checkFlag}
+	</if>
+	<if test="condition.conclusion != null and condition.conclusion != ''" >
+	    and conclusion =  #{condition.conclusion}
+	</if>
+	<if test="condition.conversedate != null and condition.conversedate != ''" >
+	    and conversedate =  #{condition.conversedate}
+	</if>
+	<if test="condition.conversewho != null and condition.conversewho != ''" >
+	    and conversewho =  #{condition.conversewho}
+	</if>
+	<if test="condition.storageFlag != null and condition.storageFlag != ''" >
+	    and storage_flag =  #{condition.storageFlag}
+	</if>
+	<if test="condition.flowFlag != null and condition.flowFlag != ''" >
+	    and flow_flag =  #{condition.flowFlag}
+	</if>
+	<if test="condition.signFlag != null and condition.signFlag != ''" >
+	    and sign_flag =  #{condition.signFlag}
+	</if>
+	<if test="condition.fenceFlag != null and condition.fenceFlag != ''" >
+	    and fence_flag =  #{condition.fenceFlag}
+	</if>
+	<if test="condition.sanitationFlag != null and condition.sanitationFlag != ''" >
+	    and sanitation_flag =  #{condition.sanitationFlag}
+	</if>
+	<if test="condition.remark != null and condition.remark != ''" >
+	    and remark =  #{condition.remark}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,storage_flag,flow_flag,sign_flag,fence_flag,sanitation_flag,remark,addtime,addwho,edittime,editwho)
+ values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{storageFlag},#{flowFlag},#{signFlag},#{fenceFlag},#{sanitationFlag},#{remark},#{addtime},#{addwho},#{edittime},#{editwho})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_mt_details set mtlineno=#{mtlineno},linestatus=#{linestatus},customerid=#{customerid},sku=#{sku},inventoryage=#{inventoryage},locationid=#{locationid},lotnum=#{lotnum},mtqty_expected=#{mtqtyExpected},mtqty_each_expected=#{mtqtyEachExpected},mtqty_completed=#{mtqtyCompleted},mtqty_each_completed=#{mtqtyEachCompleted},uom=#{uom},check_flag=#{checkFlag},conclusion=#{conclusion},conversedate=#{conversedate},conversewho=#{conversewho},storage_flag=#{storageFlag},flow_flag=#{flowFlag},sign_flag=#{signFlag},fence_flag=#{fenceFlag},sanitation_flag=#{sanitationFlag},remark=#{remark},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho} where mtno=#{mtno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_mt_details set 
+	<trim  suffixOverrides="," >
+	<if test="mtlineno != null  ">
+		mtlineno=#{mtlineno},
+	</if>
+	<if test="linestatus != null  ">
+		linestatus=#{linestatus},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="inventoryage != null  ">
+		inventoryage=#{inventoryage},
+	</if>
+	<if test="locationid != null  ">
+		locationid=#{locationid},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="mtqtyExpected != null  ">
+		mtqty_expected=#{mtqtyExpected},
+	</if>
+	<if test="mtqtyEachExpected != null  ">
+		mtqty_each_expected=#{mtqtyEachExpected},
+	</if>
+	<if test="mtqtyCompleted != null  ">
+		mtqty_completed=#{mtqtyCompleted},
+	</if>
+	<if test="mtqtyEachCompleted != null  ">
+		mtqty_each_completed=#{mtqtyEachCompleted},
+	</if>
+	<if test="uom != null  ">
+		uom=#{uom},
+	</if>
+	<if test="checkFlag != null  ">
+		check_flag=#{checkFlag},
+	</if>
+	<if test="conclusion != null  ">
+		conclusion=#{conclusion},
+	</if>
+	<if test="conversedate != null  ">
+		conversedate=#{conversedate},
+	</if>
+	<if test="conversewho != null  ">
+		conversewho=#{conversewho},
+	</if>
+	<if test="storageFlag != null  ">
+		storage_flag=#{storageFlag},
+	</if>
+	<if test="flowFlag != null  ">
+		flow_flag=#{flowFlag},
+	</if>
+	<if test="signFlag != null  ">
+		sign_flag=#{signFlag},
+	</if>
+	<if test="fenceFlag != null  ">
+		fence_flag=#{fenceFlag},
+	</if>
+	<if test="sanitationFlag != null  ">
+		sanitation_flag=#{sanitationFlag},
+	</if>
+	<if test="remark != null  ">
+		remark=#{remark},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	</trim> where mtno=#{mtno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_mt_details where mtno = #{mtno}
+</delete>
+ 
+<!-- 根据id查询 养护计划管理 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_mt_details where mtno = #{mtno}
+</select>
+
+<!-- 养护计划管理 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_mt_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询养护计划管理列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_mt_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   
