@@ -2,6 +2,7 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.DocMtDetails;
+import com.wms.entity.DocMtHeader;
 import com.wms.query.DocMtHeaderQuery;
 
 import java.util.List;
@@ -24,5 +25,11 @@ public interface DocMtDetailsMybatisDao extends BaseDao {
      * @return
      */
     List<DocMtDetails>  getDocMtDetailsListByStatus();
-	
+    /**
+     * 细单号
+     * @return
+     */
+
+        long  getMtlinenoByMtno(DocMtHeaderQuery query);
+
 }

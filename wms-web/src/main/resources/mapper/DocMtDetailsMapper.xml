@@ -112,7 +112,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho,edittime,editwho)
- values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{storageFlag},#{flowFlag},#{signFlag},#{fenceFlag},#{sanitationFlag},#{remark},#{addtime},#{addwho},#{edittime},#{editwho})
+ values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},#{edittime},#{editwho})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -235,5 +235,9 @@ where 1=1
         INNER JOIN `doc_mt_header` h ON d.mtno=h.mtno
         WHERE mtstatus='30' OR mtstatus='00'
         GROUP BY lotnum,customerid,sku
+</select>
+<!--养护计划细行号-->
+<select id="getMtlinenoByMtno" resultType="java.lang.Long"  parameterType="Object">
+	select ifnull(max(mtlineno),0) from doc_mt_details where mtno = #{mtno,jdbcType=VARCHAR}
 </select>
 </mapper>   

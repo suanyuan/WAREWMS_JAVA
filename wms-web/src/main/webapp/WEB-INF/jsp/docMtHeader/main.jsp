@@ -52,7 +52,7 @@ $(function() {
 			{field: 'warehouseid',		title: '仓库编码',	width: 150 }
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+
 		},
 		// onRowContextMenu : function(event, rowIndex, rowData) {
 		// 	event.preventDefault();
@@ -194,9 +194,15 @@ var generationPlanT = function(){
 	url = '<c:url value="/docMtHeaderController.do?ToGenerationInfo"/>';
 	var rows=ezuiDetailsDatagrid.datagrid('getRows')
 	var data=new Object();
-	data.fromDate=rows[0].fromDate;
-	data.toDate=rows[0].fromDate;
+	var fromDate=rows[0].fromDate;
+	var toDate=rows[0].toDate;
+	data.fromdate=fromDate;
+	data.todate=toDate;
+
 	var msg='';
+	$.messager.progress({
+		text: '<spring:message code="common.message.data.processing"/>', interval: 100
+	});
 	$.ajax({
 		url: url,
 		data:data,
