@@ -18,18 +18,26 @@ import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.result.ReceiptResult;
 import com.wms.service.importdata.ImportOrderDataService;
+import com.wms.service.sfExpress.CallExpressServiceTools;
+import com.wms.service.sfExpress.RequestXmlUtil;
+import com.wms.service.sfExpress.sfXmlParse.ShunFengResponse;
+import com.wms.service.sfExpress.sfXmlParse.XmlHelper;
 import com.wms.utils.*;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import com.wms.vo.form.pda.PageForm;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -487,6 +495,12 @@ public class OrderHeaderForNormalService extends BaseService {
                         if (shippmentResult.equals("000")) {
                             orderHeaderForNormalQuery.setCurrentTime(new Date());
                             orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+                            /*//如果订单发运成功那么就进行顺丰下单  下单报文
+                            String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormalForm);
+                            //响应报文
+                            String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
+                            //解析响应报文
+                            ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);*/
 
                             //删除序列号出库记录
                             docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
@@ -1555,6 +1569,89 @@ public class OrderHeaderForNormalService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void printExpress(HttpServletResponse response, String orderCodeList, Model model) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("logo", "imgFile/sflogo.jpg");
+        map.put("sftelLogo", "imgFile/qiao.jpg");
+        map.put("proCode", "imgFile/FM/T4.jpg");
+        map.put("so", "imgFile/FM/so.jpg");
+
+        //二维码
+        // String binary = SfQrCodeUtils.creatRrCode("MMM={'k1':'755WF','k2':'755AQ','k3':'036','k4':'T4','k5':'619428034014','k6':'','k7':'dce4e1c6','k7':'3fc52389'}", 200,200);
+
+      /*  byte[] bytes = null;
+        bytes = new Base64().decode(binary);
+        for (int K = 0; K < bytes.length; ++K) {
+            if (bytes[K] < 0) {
+                bytes[K] = (byte) (bytes[K] + 256);
+            }
+        }*/
+
+        //map.put("QRcode",new ByteArrayInputStream(Base64.decodeBase64(binary.getBytes())));
+        map.put("ji", "imgFile/FM/ji.jpg");
+        map.put("tips5", "imgFile/FM/POD.jpg");
+
+        map.put("payMethod", "1");
+        map.put("expressType", "1");
+        map.put("codingMappingOut", "3A");
+        //打印时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = format.format(new Date());
+        map.put("electric", "SF  打印时间    " + str);
+        //piece
+        map.put("addedService", "POD");
+        //订单条码的生成
+        map.put("childMailNo", "217276730473");
+        //子单号
+        map.put("mailNo", "217276730473");
+        //打印单号
+        //map.put("addedService","A");
+        //母单号
+        map.put("mailNoStr", "单号   " + "217276730473");
+        //map.put("mailNoStr", "签回单号");
+        //map.put("childMailNoStr", "217276730473");
+        //打印原寄地
+        map.put("destRouteLabel", "021WG——021NA");
+        //收件人相关信息
+        map.put("consignerName", "郑洁");
+        map.put("consignerTel", "021-62091927");
+        map.put("consignerCompany", "上海嘉事嘉意医疗器材有限公司");
+        map.put("consignerProvince", "上海市");
+        map.put("consignerCity", "上海市");
+        map.put("consignerCounty", "浦东新区");
+        map.put("consignerAddress", "施湾八路1026号2号楼");
+        //支付方式
+        map.put("monthAccount", "7550385912");//月结卡号
+        map.put("payMethod", "1");
+        //金额
+        // map.put("codValue","9999.9");
+        //进港信息<去识别不同的代码>
+        map.put("codingMapping", "021NA");
+        //出港中转场代码
+        map.put("sourceTransferCode", "451W");
+
+        //寄件人的相关信息
+        map.put("deliverName", "高俊");
+        //map.put("deliverTel", "");
+        map.put("deliverMobile", "13766809097");
+        map.put("consignerCompany", "哈尔滨四圣商贸有限公司");
+        map.put("deliverProvince", "黑龙江省");
+        map.put("deliverCity", "哈尔滨市");
+        map.put("deliverCounty", "香坊区");
+        map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
+        map.put("PANO", "有点僵");
+
+        map.put("PALINENO", System.currentTimeMillis());
+        list.add(map);
+        JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
+        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mm.jasper");
+        model.addAttribute("format", "pdf");
+        model.addAttribute("jrMainDataSource", jrDataSource);
 
     }
 
