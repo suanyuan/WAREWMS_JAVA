@@ -8,6 +8,7 @@ import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.dao.BaseDao;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
+import com.wms.result.AsnDetailResult;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -58,5 +59,5 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 	 */
 	public int showAsnreference1(@Param("asnreference1") String asnreference1);
 
-
+	List<AsnDetailResult> queryAsnDetailResult(@Param("asnNo")String asnNo);
 }

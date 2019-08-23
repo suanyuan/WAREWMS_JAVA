@@ -206,5 +206,16 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+    <select id="queryAvailableNum" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bas_serial_num
+        where batch_num = #{batchNum} and material_num = #{materialNum} and delivery_num = #{userdefine2}
+          and serial_num not in (
+            select serial_num as serialNum from doc_serial_num_record
+            where order_no = #{userdefine1}
+          )
+    </select>
   	
 </mapper>   

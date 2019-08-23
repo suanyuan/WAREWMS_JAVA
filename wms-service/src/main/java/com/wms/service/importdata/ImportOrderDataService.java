@@ -376,7 +376,7 @@ public class ImportOrderDataService {
             if (!StringUtils.isEmpty(resultNo)) {
                 //赋值
                 orderHeader.setOrderno(resultNo);
-                orderHeader.setOrdertype("SO");
+                orderHeader.setOrdertype(importDataVO.getOrderTypeName());
                 orderHeader.setOrdertime(new Date());
                 orderHeader.setConsigneeid(importDataVO.getConsigneeid());
                 orderHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

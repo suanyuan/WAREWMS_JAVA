@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
@@ -181,6 +182,31 @@ public class ImportAsnDataService {
             } catch (ParseException e) {
                 rowResult.append("[失效日期]，格式错误").append(" ");
             }
+            try {
+                if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
+                    //根据供应商代码去查询是否存在
+                    BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(dataArray.getLotatt08());
+                    try {
+                        if (" ".equals(basCustomer) || null == basCustomer) {
+                            throw new Exception();
+                        } else {
+                            try {
+                                if (basCustomer.getActiveFlag().equals(Constant.IS_USE_NO)) {
+                                    throw new Exception();
+                                }
+                            } catch (Exception e) {
+                                rowResult.append("[供应商代码]，合作状态为未合作状态").append(" ");
+                            }
+                        }
+                    } catch (Exception e) {
+                        rowResult.append("[供应商代码]，查无资料").append(" ");
+                    }
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                rowResult.append("[供应商代码]，未输入").append(" ");
+            }
 			/*try {
 				formatRQ.parse(dataArray.getLotatt03());
 			} catch (ParseException e) {
@@ -302,7 +328,7 @@ public class ImportAsnDataService {
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
                                         docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
-                                        docAsnHeaderVO.getAsnreference1().equalsIgnoreCase(dataArray.getAsnreference1())&&
+                                        docAsnHeaderVO.getAsnreference1().equalsIgnoreCase(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
                                 ) {
                                     docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));

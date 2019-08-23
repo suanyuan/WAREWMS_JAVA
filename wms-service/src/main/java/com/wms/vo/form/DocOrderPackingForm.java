@@ -5,6 +5,10 @@ import lombok.Data;
 @Data
 public class DocOrderPackingForm {
 
+    public final static String DESCRIPTION_HG = "未见异常，检查合格";
+
+    public final static String CONCLUSION_HG = "合格";
+
 	private String orderno;
 
     private String traceid;//PDA cartonNum

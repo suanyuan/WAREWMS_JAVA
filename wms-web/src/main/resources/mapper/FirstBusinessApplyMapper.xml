@@ -192,6 +192,12 @@ where 1=1
 		</if>
 	</trim>
 </sql>
+	<select id="selectSupplierNumByProductAndState" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from first_review_log t1
+	LEFT JOIN first_business_product_apply t2 on t1.review_type_id = t2.apply_id
+	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
+	where t3.product_code = #{productCode} and  t1.apply_state = '40'
+	</select>
 
 	<select id="selectFirstBusinessBySupplierAndProduct" resultType="java.lang.Integer"  parameterType="Object">
 		select  count(1) from first_business_apply t1
@@ -201,13 +207,12 @@ where 1=1
 	</select>
 <!-- 查询产品首营申请记录列表 -->
 <select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
-	select
-	sp.product_code,sp.specs_id,sp.product_name,t1.apply_id,client_id,eic.enterprise_name client_name,supplier_id,eis.enterprise_name supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state,t1.productline
-	from first_business_apply t1 left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
+	select sp.product_code,sp.specs_id,sp.product_name,t1.apply_id,client_id,eic.descr_c client_name,supplier_id,eis.descr_c supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state,t1.productline
+	from first_business_apply t1
+	left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
 	left join gsp_product_register_specs sp on t2.specs_id = sp.specs_id
-	left join gsp_enterprise_info eic on client_id = eic.enterprise_id
-	left join gsp_enterprise_info eis on client_id = eis.enterprise_id
-
+	left join bas_customer eic on client_id = eic.customerid
+	left join bas_customer eis on supplier_id = eis.customerid
 	<!-- 查询条件 -->
 	<include refid="Example_Where_Clause_Page"/>
 

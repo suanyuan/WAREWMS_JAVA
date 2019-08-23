@@ -28,6 +28,9 @@ public class BasSkuVO {
 	private java.lang.String descrC;
 	private java.lang.String descrE;
 
+	private java.lang.Integer supplierNum;
+
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.lang.String edittime;
 	private java.lang.String editwho;
@@ -80,6 +83,15 @@ public class BasSkuVO {
 	private java.lang.String skuGroup7;
 	private java.lang.String skuGroup8;
 	private java.lang.String productLineName;
+
+
+	public Integer getSupplierNum() {
+		return supplierNum;
+	}
+
+	public void setSupplierNum(Integer supplierNum) {
+		this.supplierNum = supplierNum;
+	}
 
 	public String getProductLineName() {
 		return productLineName;

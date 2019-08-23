@@ -480,37 +480,42 @@ var edit = function(srow){
 var del = function(){
     var operateResult = '';
     var checkedItems = ezuiDatagrid.datagrid('getSelections');
-    $.each(checkedItems, function(index, item){
-        console.log(item);
-        $.ajax({
-            async: false,
-            url : 'docOrderHeaderController.do?delete',
-            data : {orderno : item.orderno},
-            type : 'POST',
-            dataType : 'JSON',
-            success : function(result){
-                var msg = '';
-                try {
-                    msg = result.msg;
-                    if (msg == '000') {
-                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                        operateResult = operateResult + "处理完毕" + "\n";
-                    } else {
-                        operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                        operateResult = operateResult + "处理时错误：" + msg + "\n";
-                    };
-                } catch (e) {
-                    msg = '<spring:message code="common.message.data.delete.failed"/>';
-                };
-            }
-        });
-    })
-    if (operateResult != '') {
-        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
-        ezuiOperateResultDataDialog.dialog('open');
-        ezuiDatagrid.datagrid('reload');
-    };
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+        if(confirm){
+            $.each(checkedItems, function(index, item){
+                console.log(item);
+                $.ajax({
+                    async: false,
+                    url : 'docOrderHeaderController.do?delete',
+                    data : {orderno : item.orderno},
+                    type : 'POST',
+                    dataType : 'JSON',
+                    success : function(result){
+                        var msg = '';
+                        try {
+                            msg = result.msg;
+                            if (msg == '000') {
+                                operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                operateResult = operateResult + "处理完毕" + "\n";
+                            } else {
+                                operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                operateResult = operateResult + "处理时错误：" + msg + "\n";
+                            };
+                        } catch (e) {
+                            msg = '<spring:message code="common.message.data.delete.failed"/>';
+                        };
+                    }
+                });
+            })
+            if (operateResult != '') {
+                $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
+                ezuiOperateResultDataDialog.dialog('open');
+                ezuiDatagrid.datagrid('reload');
+            };
+        }
+    });
+
 
 	/*var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
@@ -695,7 +700,7 @@ var unPicking = function(){
 					var msg = '';
 					try {
 						msg = result.msg;
-						if (msg == '000') {
+						if (result.success) {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
 							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
@@ -869,8 +874,6 @@ var printPacking = function(){
 	console.log(orderList);
 	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
-
-
 var printAccompanying = function () {
     orderList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
@@ -886,6 +889,23 @@ var printAccompanying = function () {
     }
     console.log(orderList);
     window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
+}
+
+var printExpress = function () {
+	orderList = null;
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+	$.each(checkedItems, function(index, item){
+		if (orderList == null) {
+			orderList = item.orderno;
+		} else {
+			orderList = orderList + ',' + item.orderno;
+		}
+	});
+	if (orderList == null) {
+		return;
+	}
+	console.log(orderList);
+	window.open(sy.bp()+"/docOrderHeaderController.do?printExpress&orderCodeList="+orderList);
 }
 
 /* 提交按钮 */
@@ -1986,7 +2006,7 @@ function choseOrderTypeAfter(value) {
 				<div>
 					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
 					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
-					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
+					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
 				</div>
 			</div>

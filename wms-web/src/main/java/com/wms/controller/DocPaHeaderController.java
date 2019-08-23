@@ -104,4 +104,15 @@ public class DocPaHeaderController {
 		}
 	}
 
+	/**
+	 * 收货回写
+	 * @param orderNo
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "resetDocPa")
+	public Json resetDocPa(String orderNo) throws Exception {
+		return docPaHeaderService.resetDocPa(orderNo);
+	}
+
 }

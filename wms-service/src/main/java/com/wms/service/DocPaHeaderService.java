@@ -4,10 +4,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.DocPaDetails;
-import com.wms.entity.DocPaHeader;
+import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
@@ -37,7 +34,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("docPaHeaderService")
 public class DocPaHeaderService extends BaseService {
@@ -52,6 +51,8 @@ public class DocPaHeaderService extends BaseService {
 	private DocAsnDetailService docAsnDetailService;
 	@Autowired
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+	@Autowired
+	private GspProductRegisterService gspProductRegisterService;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -239,16 +240,27 @@ public class DocPaHeaderService extends BaseService {
                             form.setField("warehouseid", docPaHeader.getWarehouseid());
                             form.setField("custName", docPaHeader.getCustomerid());
                             form.setField("supplier", "");
-                            form.setField("notes", docPaHeader.getNotes());
                             form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
                             //form.setField("barCode1", docPaHeader.getAsnno());
                             form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
                             //form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
-
+                            String note ="";
                             for(int j=0;j<row;j++){//主单产品明细
                                 if(totalNum > (row*i+j)){
                                     DocPaDetails docPaDetails = detailsList.get(row * i + j);
                                     BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
+
+                                    //获取冷链标志
+                                    if(StringUtils.isEmpty(note)){
+                                        if(!StringUtils.isEmpty(basSku.getReservedfield07())){
+                                            switch (basSku.getReservedfield07()){
+                                                case "LD" : note = "冷冻";break;
+                                                case "FLL" : note = "非冷链";break;
+                                                case "LC" : note = "冷藏";break;
+                                            }
+                                        }
+                                    }
+
                                     //根据某一个订单明细查询关联的Doc_Asn_Details
                                     DocAsnDetailQuery queryDetail = new DocAsnDetailQuery();
                                     queryDetail.setAsnno(docPaDetails.getAsnno());
@@ -266,10 +278,11 @@ public class DocPaHeaderService extends BaseService {
                                     form.setField("lot02."+j, detailVO.getLotatt02());
                                     form.setField("qtyE."+j, docPaDetails.getAsnqtyExpected().toString());
                                     form.setField("uom."+j, basSku.getDefaultreceivinguom());
-                                    form.setField("qty."+j, docPaDetails.getPutwayqtyExpected().toString());
-                                    form.setField("qtyA."+j, docPaDetails.getPutwayqtyCompleted().toString());
+                                    form.setField("qty."+j, doubleTrans(docPaDetails.getPutwayqtyExpected()));
+                                    form.setField("qtyA."+j, doubleTrans(docPaDetails.getPutwayqtyCompleted()));
                                 }
                             }
+                            form.setField("notes",note);
                             stamper.setFormFlattening(true);
                             stamper.close();
                             page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
@@ -304,6 +317,28 @@ public class DocPaHeaderService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Json resetDocPa(String orderNo){
+        if(StringUtils.isEmpty(orderNo)){
+            return Json.error("请选择需要回写收货的上架任务单");
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put("paNo",orderNo);
+        docPaHeaderDao.resetAsn(result);
+        String codo = result.get("codo").toString();
+        if(codo.equals("000")){
+            return Json.success("收货回写成功");
+        }else{
+            return Json.error("收货回写异常");
+        }
+    }
+
+    public static String doubleTrans(double d) {
+        if (Math.round(d) - d == 0) {
+            return String.valueOf((long) d);
+        }
+        return String.valueOf(d);
     }
 
 }

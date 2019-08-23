@@ -22,6 +22,7 @@ import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.pda.PdaDocPackageVO;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.exolab.castor.util.OrderedHashMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,11 @@ public class DocOrderPackingService extends BaseService {
 
 	@Autowired
 	private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
-	
+
+	@Autowired
+	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+
+
 	public EasyuiDatagrid<DocOrderPackingVO> getPagedDatagrid(EasyuiDatagridPager pager, DocOrderPackingQuery query) {
 		EasyuiDatagrid<DocOrderPackingVO> datagrid = new EasyuiDatagrid<DocOrderPackingVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -953,5 +958,122 @@ public class DocOrderPackingService extends BaseService {
         }
 
         return new PdaResult(PdaResult.CODE_SUCCESS, "包装复核结束成功");
+    }
+
+    /**
+     * 解决定向订单分配之后自动生成复核记录
+     * @param orderno ~
+     * @return ~
+     */
+    public Json fixOrderPacking(String orderno) {
+
+        Json json = new Json();
+
+        //查询预入库的客户单号
+        OrderHeaderForNormalQuery orderHeaderQuery = new OrderHeaderForNormalQuery();
+        orderHeaderQuery.setOrderno(orderno);
+        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderQuery);
+
+        if (StringUtil.isEmpty(orderHeaderForNormal.getSoreference2())) {
+
+            json.setSuccess(false);
+            json.setMsg("出库单号:" + orderno + ";定向出库单未绑定预入库单号！");
+            return json;
+        }
+        DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+        docAsnHeaderQuery.setAsnno(orderHeaderForNormal.getSoreference2());
+        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+
+        try {
+
+            Map<String, Object> condition = new HashMap<>();
+            condition.put("orderno", orderno);
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(condition);
+            List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+            for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
+
+                //产品档案
+                BasSkuQuery skuQuery = new BasSkuQuery(actAllocationDetails.getCustomerid(), actAllocationDetails.getSku());
+                BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
+
+                //箱号
+                String cartonNum;
+
+                DocOrderPackingCarton cartonQuery = new DocOrderPackingCarton();
+                cartonQuery.setOrderno(actAllocationDetails.getOrderno());
+                cartonQuery.setSku(actAllocationDetails.getSku());
+                cartonQuery.setCustomerid(actAllocationDetails.getCustomerid());
+                cartonQuery.setLotnum(actAllocationDetails.getLotnum());
+                DocOrderPackingCarton docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
+                if (docOrderPackingCarton == null) {
+                    DocOrderPackingQuery packingQuery = new DocOrderPackingQuery();
+                    packingQuery.setOrderNo(actAllocationDetails.getOrderno());
+                    DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryCartonNoById(packingQuery);
+                    cartonNum = String.format("%s#%03d", actAllocationDetails.getOrderno(), docOrderPacking.getCartonNo());
+                }else {
+
+                    cartonNum = docOrderPackingCarton.getTraceid();
+                }
+
+                //批次属性
+                InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
+
+                ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+                ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+                boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+
+                //复核提交
+                DocOrderPackingForm packingForm = new DocOrderPackingForm();
+                packingForm.setOrderno(actAllocationDetails.getOrderno());
+                packingForm.setTraceid(cartonNum);
+                packingForm.setCustomerid(actAllocationDetails.getCustomerid());
+                packingForm.setSku(actAllocationDetails.getSku());
+                packingForm.setQty(actAllocationDetails.getQty().intValue());
+                packingForm.setAllocationdetailsid(actAllocationDetails.getAllocationdetailsid());
+                packingForm.setLotnum(actAllocationDetails.getLotnum());
+                packingForm.setDescription(DocOrderPackingForm.DESCRIPTION_HG);
+                packingForm.setConclusion(DocOrderPackingForm.CONCLUSION_HG);
+                packingForm.setSkudesce(basSku.getDescrE());
+                if (isSerialManagement) {
+
+                    BasSerialNumQuery numQuery = new BasSerialNumQuery();
+                    numQuery.setBatchNum(invLotAtt.getLotatt04());
+                    numQuery.setMaterialNum(actAllocationDetails.getSku());
+                    numQuery.setUserdefine1(orderno);
+                    numQuery.setUserdefine2(docAsnHeader.getAsnreference1());//预入库的客户单号 流水号 delivery_number
+                    List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryAvailableNum(numQuery);
+
+                    StringBuilder serialNums = new StringBuilder();
+                    for (BasSerialNum serialNum : basSerialNumList) {
+                        serialNums.append(serialNum.getSerialNum()).append(",");
+                    }
+                    if (StringUtil.isNotEmpty(serialNums.toString())) {
+                        packingForm.setSerialNums(serialNums.toString());
+                    }
+                }
+
+                PdaResult result =  packageCommit(packingForm);
+                if (result.getErrorCode() != 200) {
+                    throw new Exception(result.getMsg());
+                }
+            }
+
+            //结束复核，件数回写
+            PdaResult endResult = endPacking(orderno);
+            if (endResult.getErrorCode() != 200) {
+                throw new Exception(endResult.getMsg());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            json.setSuccess(false);
+            json.setMsg("生成复核记录失败(系统错误:" + e.getMessage() + ")");
+            return json;
+        }
+
+        json.setSuccess(true);
+        json.setMsg("分配成功，生成复核记录成功！");
+        return json;
     }
 }

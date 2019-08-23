@@ -20,4 +20,6 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 
 	public int  selectFirstBusinessBySupplierAndProduct(Object id);
 
+
+	public int   selectSupplierNumByProductAndState(Object id);
 }
