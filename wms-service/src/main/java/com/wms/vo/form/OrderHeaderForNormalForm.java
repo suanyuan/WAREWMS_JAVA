@@ -41,6 +41,8 @@ public class OrderHeaderForNormalForm {
 	private String docOrderHeaderId;
 	private String sostatus;
 	private String releasestatus;
+	//收货人
+	private String cContact;
 	/**
 	 * 自定义1
 	 */
@@ -353,4 +355,8 @@ public class OrderHeaderForNormalForm {
 	public void setcAddress2(String cAddress2) {
 		this.cAddress2 = cAddress2;
 	}
+
+	public String getcContact() { return cContact; }
+
+	public void setcContact(String cContact) { this.cContact = cContact; }
 }
