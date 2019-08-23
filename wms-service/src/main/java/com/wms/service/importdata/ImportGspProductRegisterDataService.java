@@ -4,6 +4,8 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.GspInstrumentCatalog;
+import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegister;
 import com.wms.entity.ImportGPRData;
 import com.wms.mybatis.dao.*;
@@ -58,6 +60,10 @@ public class ImportGspProductRegisterDataService {
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
 	@Autowired
 	private GspProductRegisterService gspProductRegisterService;
+	@Autowired
+	private GspInstrumentCatalogMybatisDao gspInstrumentCatalogMybatisDao;
+	@Autowired
+	private GspOperateDetailMybatisDao gspOperateDetailMybatisDao;
 	/**
 	 * 导入入库单
 	 * @param excelFile
@@ -213,8 +219,24 @@ public class ImportGspProductRegisterDataService {
 				rowResult.append("[产品名称],该产品名称没有输入").append(" ");
 			}
 
+			GspInstrumentCatalog  gspInstrumentCatalog = new GspInstrumentCatalog();
+			//验证是否是存在的器械目录
+			try {
+				GspInstrumentCatalog gspInstrumentCatalog1 = new GspInstrumentCatalog();
+				gspInstrumentCatalog1.setClassifyId(dataArray.getClassifyId());			   //分类
+				gspInstrumentCatalog1.setVersion(dataArray.getProductRegisterVersion());   //版本
+				gspInstrumentCatalog1.setInstrumentCatalogName(dataArray.getClassifyCatalog()); //名称
 
-//管理分类
+				  gspInstrumentCatalog = gspInstrumentCatalogMybatisDao.queryByCPC(gspInstrumentCatalog1);
+				if(gspInstrumentCatalog==null){
+					throw new Exception();
+				}
+
+			} catch (Exception e) {
+				rowResult.append("[管理分类,注册证版本,分类目录]，匹配器械目录错误").append(" ");
+			}
+
+			//管理分类
 			try {
 				if(dataArray.getClassifyId()!=null){
 					boolean con=false;
@@ -315,7 +337,9 @@ public class ImportGspProductRegisterDataService {
 					throw new Exception();
 				}else{
 					boolean con=false;
-					EasyuiDatagrid<GspEnterpriseInfoVO>  pagedDatagrid=gspEnterpriseInfoService.getPagedDatagrid(new EasyuiDatagridPager(),new GspEnterpriseInfoQuery());
+					EasyuiDatagridPager e = new EasyuiDatagridPager();
+					e.setRows(100000000);
+					EasyuiDatagrid<GspEnterpriseInfoVO>  pagedDatagrid=gspEnterpriseInfoService.getPagedDatagrid(e,new GspEnterpriseInfoQuery());
 					List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList=pagedDatagrid.getRows();
 					for(GspEnterpriseInfoVO info :gspEnterpriseInfoVOList){
 						if(info.getEnterpriseName().equals(dataArray.getEnterpriseName())){
@@ -529,7 +553,11 @@ public class ImportGspProductRegisterDataService {
 				}
 				resultMsg.append("序号：").append(dataArray.getSeq()).append("资料有错 ").append(rowResult).append(" ");
 				rowResult.setLength(0);
+
+
 			} else {
+
+
 				importData.add(importDataVO);
 			}
 			//importData.add(importDataVO);
@@ -655,18 +683,35 @@ public class ImportGspProductRegisterDataService {
 //			String resultNo = map.get("resultNo").toString();
 //			if (resultCode.substring(0,3).equals("000")) {
 				//赋值
+
 				//gspProductRegisterSpecs.setProductRegisterId("PR");
 				//gspProductRegisterSpecs.setSpecsName(importDataVO.getSpecsName());
 				//gspProductRegisterSpecs.setSpecsId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-			    gspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+				String i = RandomUtil.getUUID();
+			    gspProductRegister.setProductRegisterId(i);
 				gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspProductRegister.setCreateDate(new Date());
 				gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 				gspProductRegister.setEditDate(new Date());
 				gspProductRegister.setIsUse(Constant.IS_USE_YES);
 				//保存订单主信息
-			   gspProductRegisterMybatisDao.add(gspProductRegister);
+			    gspProductRegisterMybatisDao.add(gspProductRegister);
 
+
+				GspInstrumentCatalog gspInstrumentCatalog1 = new GspInstrumentCatalog();
+				gspInstrumentCatalog1.setClassifyId(gspProductRegister.getClassifyId());				 //分类
+				gspInstrumentCatalog1.setVersion(gspProductRegister.getProductRegisterVersion());   	 //版本
+				gspInstrumentCatalog1.setInstrumentCatalogName(gspProductRegister.getClassifyCatalog()); //名称
+				GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogMybatisDao.queryByCPC1(gspInstrumentCatalog1);
+
+				GspOperateDetail gspOperateDetail = new GspOperateDetail();
+				gspOperateDetail.setOperateId(gspInstrumentCatalog.getInstrumentCatalogId());
+				gspOperateDetail.setLicenseId(i);
+				gspOperateDetail.setCreateDate(new Date());
+				gspOperateDetail.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspOperateDetail.setIsUse("1");
+				gspOperateDetail.setLicenseType(Constant.LICENSE_TYPE_REGISTER);
+				gspOperateDetailMybatisDao.add(gspOperateDetail);
 
 //				if(flag==true){
 //					resultMsg.delete(0, resultMsg.length());

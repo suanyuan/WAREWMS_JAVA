@@ -9,6 +9,6 @@ import com.wms.mybatis.dao.BaseDao;
  * <b>功能：</b>GspOperateLicenseDao<br>
  */
 public interface GspOperateLicenseMybatisDao extends BaseDao {
-	
-	
+
+    public <T> T queryByProductRegisterId(Object id);
 }

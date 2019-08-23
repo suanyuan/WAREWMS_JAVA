@@ -56,7 +56,7 @@ public class ImportGPRSData implements Serializable {
 	private java.lang.String medicalDeviceMark;//医疗器械标志
 	private java.lang.String maintenanceCycle;//养护周期
 	private java.lang.String wight;
-
+	private java.lang.String licenseOrRecordNo; //生产许可证/备案号
 
 
 	private String alternatName1;
@@ -64,6 +64,14 @@ public class ImportGPRSData implements Serializable {
 	private String alternatName3;
 	private String alternatName4;
 	private String alternatName5;
+
+	public String getLicenseOrRecordNo() {
+		return licenseOrRecordNo;
+	}
+
+	public void setLicenseOrRecordNo(String licenseOrRecordNo) {
+		this.licenseOrRecordNo = licenseOrRecordNo;
+	}
 
 	public String getSeq() {
 		return seq;

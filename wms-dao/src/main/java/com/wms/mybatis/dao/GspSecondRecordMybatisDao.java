@@ -7,6 +7,6 @@ package com.wms.mybatis.dao;
  * <b>功能：</b>GspSecondRecordDao<br>
  */
 public interface GspSecondRecordMybatisDao extends BaseDao {
-	
-	
+    public <T> T queryByProductRegisterId(Object id);
+
 }
