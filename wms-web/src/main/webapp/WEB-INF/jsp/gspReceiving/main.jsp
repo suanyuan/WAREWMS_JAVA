@@ -488,6 +488,8 @@ function xiafa() {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr>
+						<th>申请单号</th>
+						<td><input type='text' id='receivingIdemp' name="receivingId" class='easyui-textbox' size='16' data-options=''/></td>
 						<th>收货单位</th>
 						<td><input type='text' id='enterpriseNa' name="enterpriseName" class='easyui-textbox' size='16' data-options=''/></td>
 						<th>收货单位代码</th>
