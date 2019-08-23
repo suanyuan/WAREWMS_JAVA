@@ -26,11 +26,6 @@ public class DocMtDetails {
   private String conclusion;          //养护结论
   private Date conversedate; //养护日期
   private String conversewho;         //养护人
-  private long storageFlag;           //贮存条件 1||0
-  private long flowFlag;              //作业流程 1||0
-  private long signFlag;              //标志清晰 1||0
-  private long fenceFlag;             //防护措施 1||0
-  private long sanitationFlag;        //卫生环境 1||0
   private String remark;              //备注
   private Date addtime;
   private String addwho;
@@ -38,4 +33,5 @@ public class DocMtDetails {
   private String editwho;
 
 
+  private Date conversedatetest; //预期养护日期
 }

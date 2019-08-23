@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.wms.entity.InvLotLocId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,14 +36,28 @@ public class DocMtHeaderController {
 		model.put("menuId", menuId);
 		return new ModelAndView("docMtHeader/main", model);
 	}
-
+//分页查询
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<DocMtHeaderVO> showDatagrid(EasyuiDatagridPager pager, DocMtHeaderQuery query) {
 		return docMtHeaderService.getPagedDatagrid(pager, query);
 	}
-
+//获得养护信息 根据时间段
+	@Login
+	@RequestMapping(params = "getGenerationInfo")
+	@ResponseBody
+	public List<InvLotLocId> getGenerationInfo(DocMtHeaderQuery query) {
+		return docMtHeaderService.getGenerationInfo(query);
+	}
+//生成养护信息 根据时间段
+	@Login
+	@RequestMapping(params = "ToGenerationInfo")
+	@ResponseBody
+	public Json ToGenerationInfo(DocMtHeaderQuery query) {
+		return docMtHeaderService.ToGenerationInfo(query);
+	}
+//增加
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
@@ -53,7 +69,7 @@ public class DocMtHeaderController {
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
-
+//编辑
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
@@ -65,7 +81,7 @@ public class DocMtHeaderController {
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
-
+//删除
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody

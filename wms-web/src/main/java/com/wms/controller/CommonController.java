@@ -280,4 +280,14 @@ public class CommonController {
         return basCodesService.getBy(Constant.CODE_CATALOG_PASTS);
     }
 
+    /**
+     * 养护状态
+     * @return
+     * */
+    @RequestMapping(params = "getMtStatus")
+    @ResponseBody
+    public List<EasyuiCombobox> getMtStatus(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_MT_STS);
+    }
+
 }

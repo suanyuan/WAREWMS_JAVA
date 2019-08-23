@@ -10,6 +10,11 @@
 	<result column="mttype" property="mttype"/>
 	<result column="fromdate" property="fromdate"/>
 	<result column="todate" property="todate"/>
+	<result column="storage_flag" property="storageFlag"/>
+	<result column="flow_flag" property="flowFlag"/>
+	<result column="sign_flag" property="signFlag"/>
+	<result column="fence_flag" property="fenceFlag"/>
+	<result column="sanitation_flag" property="sanitationFlag"/>
 	<result column="userdefine1" property="userdefine1"/>
 	<result column="userdefine2" property="userdefine2"/>
 	<result column="userdefine3" property="userdefine3"/>
@@ -25,7 +30,7 @@
        
 <!-- doc_mt_header table all fields -->
 <sql id="Base_Column_List" >
-	 mtno,mtstatus,mttype,fromdate,todate,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid
+	 mtno,mtstatus,mttype,fromdate,todate,storage_flag,flow_flag,sign_flag,fence_flag,sanitation_flag,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid
 </sql>
    
    
@@ -34,10 +39,10 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.mtno != null and condition.mtno != ''" >
-	    and mtno =  #{condition.mtno}
+	    and mtno like concat('%',#{condition.mtno},'%')
 	</if>
 	<if test="condition.mtstatus != null and condition.mtstatus != ''" >
-	    and mtstatus =  #{condition.mtstatus}
+	    and mtstatus = #{condition.mtstatus}
 	</if>
 	<if test="condition.mttype != null and condition.mttype != ''" >
 	    and mttype =  #{condition.mttype}
@@ -87,8 +92,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into doc_mt_header(mtno,mtstatus,mttype,fromdate,todate,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid)
- values(#{mtno},#{mtstatus},#{mttype},#{fromdate},#{todate},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{remark},#{addtime},#{addwho},#{edittime},#{editwho},#{warehouseid})
+  insert into doc_mt_header(mtno,mtstatus,mttype,fromdate,todate,storage_flag,flow_flag,sign_flag,fence_flag,sanitation_flag,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid)
+ values(#{mtno},#{mtstatus},#{mttype},#{fromdate},#{todate},#{storageFlag},#{flowFlag},#{signFlag},#{fenceFlag},#{sanitationFlag},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{remark},#{addtime},#{addwho},#{edittime},#{editwho},#{warehouseid})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -111,6 +116,21 @@ where 1=1
 	</if>
 	<if test="todate != null  ">
 		todate=#{todate},
+	</if>
+		<if test="storageFlag != null  ">
+			storage_flag=#{storageFlag},
+	</if>
+		<if test="flowFlag != null  ">
+			flow_flag=#{flowFlag},
+	</if>
+		<if test="fenceFlag != null  ">
+			fence_flag=#{fenceFlag},
+	</if>
+		<if test="signFlag != null  ">
+			sign_flag=#{signFlag},
+	</if>
+		<if test="sanitationFlag != null  ">
+			sanitation_flag=#{sanitationFlag},
 	</if>
 	<if test="userdefine1 != null  ">
 		userdefine1=#{userdefine1},
@@ -177,6 +197,10 @@ where 1=1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
+</select>
+<!--新增mtno -->
+	<select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','MTNO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
     <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">

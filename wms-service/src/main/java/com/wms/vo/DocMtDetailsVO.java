@@ -22,11 +22,6 @@ public class DocMtDetailsVO {
 	private String conclusion;
 	private java.util.Date conversedate;
 	private String conversewho;
-	private long storageFlag;
-	private long flowFlag;
-	private long signFlag;
-	private long fenceFlag;
-	private long sanitationFlag;
 	private String remark;
 	private java.util.Date addtime;
 	private String addwho;
@@ -170,45 +165,6 @@ public class DocMtDetailsVO {
 		this.conversewho = conversewho;
 	}
 
-	public long getStorageFlag() {
-		return storageFlag;
-	}
-
-	public void setStorageFlag(long storageFlag) {
-		this.storageFlag = storageFlag;
-	}
-
-	public long getFlowFlag() {
-		return flowFlag;
-	}
-
-	public void setFlowFlag(long flowFlag) {
-		this.flowFlag = flowFlag;
-	}
-
-	public long getSignFlag() {
-		return signFlag;
-	}
-
-	public void setSignFlag(long signFlag) {
-		this.signFlag = signFlag;
-	}
-
-	public long getFenceFlag() {
-		return fenceFlag;
-	}
-
-	public void setFenceFlag(long fenceFlag) {
-		this.fenceFlag = fenceFlag;
-	}
-
-	public long getSanitationFlag() {
-		return sanitationFlag;
-	}
-
-	public void setSanitationFlag(long sanitationFlag) {
-		this.sanitationFlag = sanitationFlag;
-	}
 
 	public String getRemark() {
 		return remark;

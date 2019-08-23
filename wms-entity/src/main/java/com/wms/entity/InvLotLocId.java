@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -54,5 +55,15 @@ public class InvLotLocId  implements Serializable {
 	private String lpn;
 
 	private Double qtypa;
+
+	private Date lotatt03; //入库时间
+	private Date lotatt03test; //预期养护时间
+	private String reservedfield06; //养护周期
+	private Double qty1; //转换率
+	private Date fromDate;//回传到页面的时间
+	private Date toDate;
+
+
+
 
 }

@@ -38,7 +38,7 @@ $(function() {
 			{field: 'clientId',		title: '委托客户',	width: 100 },
             {field: 'clientName',		title: '委托客户名称',	width: 100 },
 
-            {field: 'supplierId',		title: '供应商客户',	width: 100 },
+            {field: 'supplierId',		title: '供应商',	width: 100 },
             {field: 'supplierName',		title: '供应商客户名称',	width: 100 },
 
             {field: 'productCode',		title: '产品代码',	width: 100 },
