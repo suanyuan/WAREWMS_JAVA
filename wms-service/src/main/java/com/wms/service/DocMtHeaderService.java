@@ -190,14 +190,20 @@ public class DocMtHeaderService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
-//删除
+//删除养护计划单
 	public Json deleteDocMtHeader(String id) {
 		Json json = new Json();
 		DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(id);
-		if(docMtHeader != null){
+        if(docMtHeader != null&&docMtHeader.getMtstatus().equals("00")){
 			docMtHeaderMybatisDao.delete(docMtHeader);
-		}
-		json.setSuccess(true);
+            docMtDetailsMybatisDao.delete(docMtHeader);
+            json.setSuccess(true);
+            json.setMsg("订单删除成功!");
+		}else {
+            json.setSuccess(false);
+            json.setMsg("订单不可删除!");
+        }
+
 		return json;
 	}
 
