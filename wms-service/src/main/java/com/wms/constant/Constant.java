@@ -33,6 +33,7 @@ public class Constant {
     public static final String CODE_CATALOG_QCSTATE = "ZL_TYP";//质量状态
     public static final String CODE_CATALOG_COLDHAINMARK= "LL_TYP";//冷链标志
     public static final String CODE_CATALOG_PASTS= "PA_STS";//上架状态
+    public static final String CODE_CATALOG_MT_STS= "MT_STS";//养护状态
 
 
 

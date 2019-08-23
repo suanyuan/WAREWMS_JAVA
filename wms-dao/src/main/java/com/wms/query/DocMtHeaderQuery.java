@@ -10,6 +10,11 @@ public class DocMtHeaderQuery implements IQuery {
 	private String mttype;
 	private String fromdate;
 	private String todate;
+	private long storageFlag;           //贮存条件 1||0
+	private long flowFlag;              //作业流程 1||0
+	private long signFlag;              //标志清晰 1||0
+	private long fenceFlag;             //防护措施 1||0
+	private long sanitationFlag;        //卫生环境 1||0
 	private String userdefine1;
 	private String userdefine2;
 	private String userdefine3;
@@ -21,6 +26,46 @@ public class DocMtHeaderQuery implements IQuery {
 	private String edittime;
 	private String editwho;
 	private String warehouseid;
+
+	public long getStorageFlag() {
+		return storageFlag;
+	}
+
+	public void setStorageFlag(long storageFlag) {
+		this.storageFlag = storageFlag;
+	}
+
+	public long getFlowFlag() {
+		return flowFlag;
+	}
+
+	public void setFlowFlag(long flowFlag) {
+		this.flowFlag = flowFlag;
+	}
+
+	public long getSignFlag() {
+		return signFlag;
+	}
+
+	public void setSignFlag(long signFlag) {
+		this.signFlag = signFlag;
+	}
+
+	public long getFenceFlag() {
+		return fenceFlag;
+	}
+
+	public void setFenceFlag(long fenceFlag) {
+		this.fenceFlag = fenceFlag;
+	}
+
+	public long getSanitationFlag() {
+		return sanitationFlag;
+	}
+
+	public void setSanitationFlag(long sanitationFlag) {
+		this.sanitationFlag = sanitationFlag;
+	}
 
 	public String getMtno() {
 		return mtno;

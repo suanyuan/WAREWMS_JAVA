@@ -2,6 +2,9 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.InvLotLocId;
+import com.wms.query.DocMtHeaderQuery;
+
+import java.util.List;
 
 /**
  * 
@@ -16,4 +19,9 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @return ~
      */
 	int updateQty(InvLotLocId invLotLocId);
+    /**
+     * 查出in_lot_att_id的list 养护计划
+     * @return ~
+     */
+    List<InvLotLocId> getLotLocIdistListByMaintenanceTime();
 }

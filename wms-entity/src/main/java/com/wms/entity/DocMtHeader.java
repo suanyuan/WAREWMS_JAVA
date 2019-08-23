@@ -15,6 +15,11 @@ public class DocMtHeader implements Serializable {
   private String mttype;
   private Date fromdate;        //yyyy-MM-dd
   private Date todate;          //yyyy-MM-dd
+  private long storageFlag;           //贮存条件 1||0
+  private long flowFlag;              //作业流程 1||0
+  private long signFlag;              //标志清晰 1||0
+  private long fenceFlag;             //防护措施 1||0
+  private long sanitationFlag;        //卫生环境 1||0
   private String userdefine1;
   private String userdefine2;
   private String userdefine3;

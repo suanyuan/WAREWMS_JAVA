@@ -21,16 +21,31 @@ public class DocMtDetailsQuery implements IQuery {
 	private String conclusion;
 	private String conversedate;
 	private String conversewho;
-	private String storageFlag;
-	private String flowFlag;
-	private String signFlag;
-	private String fenceFlag;
-	private String sanitationFlag;
 	private String remark;
 	private String addtime;
 	private String addwho;
 	private String edittime;
 	private String editwho;
+
+//	查询
+    private String fromdate;
+	private String todate;
+
+	public String getFromdate() {
+		return fromdate;
+	}
+
+	public void setFromdate(String fromdate) {
+		this.fromdate = fromdate;
+	}
+
+	public String getTodate() {
+		return todate;
+	}
+
+	public void setTodate(String todate) {
+		this.todate = todate;
+	}
 
 	public String getMtno() {
 		return mtno;
@@ -168,45 +183,7 @@ public class DocMtDetailsQuery implements IQuery {
 		this.conversewho = conversewho;
 	}
 
-	public String getStorageFlag() {
-		return storageFlag;
-	}
 
-	public void setStorageFlag(String storageFlag) {
-		this.storageFlag = storageFlag;
-	}
-
-	public String getFlowFlag() {
-		return flowFlag;
-	}
-
-	public void setFlowFlag(String flowFlag) {
-		this.flowFlag = flowFlag;
-	}
-
-	public String getSignFlag() {
-		return signFlag;
-	}
-
-	public void setSignFlag(String signFlag) {
-		this.signFlag = signFlag;
-	}
-
-	public String getFenceFlag() {
-		return fenceFlag;
-	}
-
-	public void setFenceFlag(String fenceFlag) {
-		this.fenceFlag = fenceFlag;
-	}
-
-	public String getSanitationFlag() {
-		return sanitationFlag;
-	}
-
-	public void setSanitationFlag(String sanitationFlag) {
-		this.sanitationFlag = sanitationFlag;
-	}
 
 	public String getRemark() {
 		return remark;

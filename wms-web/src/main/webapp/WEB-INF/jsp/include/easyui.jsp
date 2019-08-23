@@ -213,5 +213,15 @@
 			case "40" : return "已验收";
 		}
 	}
+//养护状态
+	var MT_STSstatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "00" : return "任务创建";
+			case "30" : return "部分养护";
+			case "40" : return "完全养护";
+			case "90" : return "养护取消";
+			case "99" : return "养护关闭";
+		}
+	}
 
 </script>

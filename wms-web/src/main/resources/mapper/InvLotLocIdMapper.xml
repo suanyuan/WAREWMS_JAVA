@@ -233,5 +233,14 @@ where 1=1
         qty = #{qty}, editwho = #{editwho}, edittime = now()
         where lotnum = #{lotnum} and locationid = #{locationid}
     </update>
-  	
+<!-- 查出in_lot_att_id的list  养护计划	-->
+<select id="getLotLocIdistListByMaintenanceTime" resultMap="BaseResultMap" >
+      SELECT i.*,a.lotatt03,DATE_ADD(a.lotatt03,INTERVAL s.reservedfield06 DAY)  lotatt03test,s.reservedfield06,p.qty1
+         FROM `inv_lot_loc_id`  i
+        INNER JOIN `bas_sku` s ON i.customerid=s.customerid AND i.sku=s.sku
+        INNER JOIN`inv_lot_att`   a ON  a.lotnum=i.lotnum
+        INNER JOIN bas_package p ON p.packid=s.packid
+        INNER JOIN `doc_asn_header` h ON a.lotatt14=h.asnno
+
+</select>
 </mapper>   
