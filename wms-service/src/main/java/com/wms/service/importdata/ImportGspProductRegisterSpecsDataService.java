@@ -95,7 +95,7 @@ public class ImportGspProductRegisterSpecsDataService {
             }
             //保存实体集合
 			if(GPRSList==null){
-				resultMsg.append("execel的Sheet表名应为:产品基础信息");
+				resultMsg.append("execel的Sheet表名应为:产品基础信息,字段需按模板匹配");
 			}else {
 				List<GspProductRegisterSpecsVO> importDataList = this.listToBean(GPRSList, resultMsg);
 				if (true) {
@@ -193,7 +193,7 @@ public class ImportGspProductRegisterSpecsDataService {
 			}
 
 			try {
-
+				boolean flag1 = false;
 
 				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
 
@@ -204,6 +204,15 @@ public class ImportGspProductRegisterSpecsDataService {
 				}else{
 					throw new Exception();
 				}
+				for(GspProductRegisterSpecsVO  a: importData){
+					if(dataArray.getProductCode().equals(a.getProductCode())){
+						flag1 = true;
+					}
+				}
+				if(flag1){
+					throw new Exception();
+				}
+
 				if (StringUtils.isEmpty(dataArray.getProductCode())) {
 					throw new Exception();
 				}
