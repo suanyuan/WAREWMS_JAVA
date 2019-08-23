@@ -18,6 +18,7 @@ import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -322,5 +323,16 @@ public class DocOrderHeaderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Login
+	@RequestMapping(params = "printExpress")
+	public String printExpress(HttpServletResponse response, String orderCodeList, Model model) throws Exception {
+		try {
+			orderHeaderForNormalService.printExpress(response,orderCodeList,model);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "iReportView";
 	}
 }

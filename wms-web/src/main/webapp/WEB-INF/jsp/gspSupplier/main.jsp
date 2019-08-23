@@ -407,7 +407,7 @@ var doSearch = function(){
    //alert( $('#operateType').combobox("getValue"));
     //alert( $('#enterpriseIdQuery').val());
 	ezuiDatagrid.datagrid('load', {
-		// supplierId : $('#supplierId').val(),
+		 supplierId : $('#supplierId').val(),
 		enterpriseId : $('#enterpriseId').val(),
         enterpriseIdQuery :$('#enterpriseIdQuery').val(),
         operateType : $('#operateType').combobox("getValue"),
@@ -438,6 +438,7 @@ var doSearch = function(){
 					<table>
 						<tr>
 							<%--<th>企业流水号</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>申请单号</th><td><input type='text' id='supplierId' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业代码</th><td><input type='text' id='enterpriseNoQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>简称</th><td><input type='text' id='shorthandNameQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>企业</th><td><input type='text' id='enterpriseId' class='easyui-textbox' size='16' data-options=''/></td>--%>

@@ -874,8 +874,6 @@ var printPacking = function(){
 	console.log(orderList);
 	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
-
-
 var printAccompanying = function () {
     orderList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
@@ -891,6 +889,23 @@ var printAccompanying = function () {
     }
     console.log(orderList);
     window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
+}
+
+var printExpress = function () {
+	orderList = null;
+	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+	$.each(checkedItems, function(index, item){
+		if (orderList == null) {
+			orderList = item.orderno;
+		} else {
+			orderList = orderList + ',' + item.orderno;
+		}
+	});
+	if (orderList == null) {
+		return;
+	}
+	console.log(orderList);
+	window.open(sy.bp()+"/docOrderHeaderController.do?printExpress&orderCodeList="+orderList);
 }
 
 /* 提交按钮 */
@@ -1991,7 +2006,7 @@ function choseOrderTypeAfter(value) {
 				<div>
 					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
 					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
-					<a onclick='javascript:void(0);' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
+					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
 				</div>
 			</div>
