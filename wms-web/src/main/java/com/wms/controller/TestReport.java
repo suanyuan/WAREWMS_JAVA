@@ -34,4 +34,18 @@ public class TestReport {
         model.addAttribute("jrMainDataSource",jrDataSource);
         return "iReportView";
     }
+
+    @RequestMapping(params = "testSf")
+    public String toTestSf(Model model) {
+        List<Map<String,Object>> list = new ArrayList<>();
+        //Map<String,Object> map = new HashMap<>();
+        //map.put("PANO","有点僵");
+        //map.put("PALINENO",System.currentTimeMillis());
+        //list.add(map);
+        JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
+        model.addAttribute("url","WEB-INF/jasper/V3.0.FM_poster_100mm210mm.jasper");
+        model.addAttribute("format","pdf");
+        model.addAttribute("jrMainDataSource",jrDataSource);
+        return "iReportView";
+    }
 }

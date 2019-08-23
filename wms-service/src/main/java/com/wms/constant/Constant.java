@@ -17,7 +17,7 @@ public class Constant {
     public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";
     public static final String LICENSE_TYPE_OPERATE = "OPERATE";
     public static final String LICENSE_TYPE_RECORD = "RECORD";
-    public static final String LICENSE_TYPE_REGISTER = "REGISTER";
+    public static final String LICENSE_TYPE_REGISTER = "zhuce";
 
 //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
@@ -94,8 +94,8 @@ public class Constant {
 //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 
-    public static final String uploadUrl = "/Users/quendi/fileUpload";
-    //public static final String uploadUrl = "/root/uploadDir";
+    //public static final String uploadUrl = "/Users/quendi/fileUpload";
+    public static final String uploadUrl = "/root/uploadDir";
 
 
 
