@@ -165,7 +165,7 @@ public class OrderHeaderForNormalService extends BaseService {
             OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
             BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
             orderHeaderForNormal.setOrderno(resultNo);
-            orderHeaderForNormal.setOrdertype("SO");
+            orderHeaderForNormal.setOrdertype(orderHeaderForNormal.getOrdertype());
             orderHeaderForNormal.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
             orderHeaderForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
             orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -241,25 +241,52 @@ public class OrderHeaderForNormalService extends BaseService {
         orderHeaderForNormalQuery.setOrderno(orderNo);
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
-            if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
-                Map<String, Object> map = new HashMap<String, Object>();
+            if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
+                Map<String, Object> map = new HashMap<>();
                 //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                 map.put("orderNo", orderNo);
                 map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
                 //map.put("result", "");
                 orderHeaderForNormalMybatisDao.allocationByOrder(map);
+
                 String result = map.get("result").toString();
-                json.setSuccess(true);
-                json.setMsg(result);
-                return json;
+
+                if (StringUtil.isNotEmpty(result) && result.equals("000")) {
+
+                    if (orderHeaderForNormal.getOrdertype().equals("DX")) {
+
+                        Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
+                        if (!fixReuslt.isSuccess()) {
+
+                            json.setSuccess(false);
+                            json.setMsg(fixReuslt.getMsg());
+                            return json;
+                        }else {
+
+                            json.setSuccess(true);
+                            json.setMsg("000");
+                            return json;
+                        }
+                    }else {
+
+                        json.setSuccess(true);
+                        json.setMsg("000");
+                        return json;
+                    }
+                }else {
+
+                    json.setSuccess(false);
+                    json.setMsg("分配失败");
+                    return json;
+                }
             } else {
-                json.setSuccess(true);
+                json.setSuccess(false);
                 json.setMsg("当前状态订单,不能操作分配!");
                 return json;
             }
         } else {
-            json.setSuccess(true);
-            json.setMsg("订单分配完成，请查询分配结果");
+            json.setSuccess(false);
+            json.setMsg("查无出库单数据");
             return json;
         }
     }
@@ -280,6 +307,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
                 orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
                 String result = map.get("result").toString();
+                //删除序列号记录 add by Gizmo 2019-08-22 21:39
+                if (result.contains("000")) {
+                    docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
+                }
                 json.setSuccess(true);
                 json.setMsg(result);
                 return json;
@@ -471,6 +502,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             //解析响应报文
                             ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);*/
 
+                            //删除序列号出库记录
+                            docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                             json.setSuccess(true);
                             json.setMsg("出库处理成功！");
                             json.setObj(orderHeaderForNormal);
@@ -523,6 +556,8 @@ public class OrderHeaderForNormalService extends BaseService {
                     if (shippmentResult.equals("000")) {
                         orderHeaderForNormalQuery.setCurrentTime(new Date());
                         orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+                        //删除序列号出库记录
+                        docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                         json.setSuccess(true);
                         json.setMsg("出库处理成功！");
                         json.setObj(orderHeaderForNormal);
