@@ -195,6 +195,14 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield03(specObj.getProductRegisterNo());
                 skuForm.setReservedfield04(register.getClassifyId());
                 skuForm.setReservedfield05(register.getClassifyCatalog());
+
+                skuForm.setReservedfield06(specObj.getLicenseOrRecordNo());
+                skuForm.setReservedfield07(specObj.getColdHainMark());
+                skuForm.setReservedfield08(specObj.getSterilizationMarkers());
+                skuForm.setReservedfield09(specObj.getMedicalDeviceMark());
+                skuForm.setReservedfield10(specObj.getMaintenanceCycle());
+                skuForm.setReservedfield11(specObj.getWight());
+                skuForm.setReservedfield12(specObj.getBarCode());
                 skuForm.setSku(specObj.getProductCode());
 
                 skuForm.setSkuGroup1(firstBusinessApply.getProductline());//specObj.getProductLine()产品线
