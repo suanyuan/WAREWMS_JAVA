@@ -24,7 +24,8 @@
 	
 <!-- 	<diskStore path="java.io.tmpdir" /> -->
 <!-- 	<diskStore path="/home/473103093/Backup/cachetmpdir" /> -->
-	<diskStore path="d:/cachetmpdir" />
+<!-- <diskStore path="d:/cachetmpdir" />  -->
+	<diskStore path="/Users/quendi/cachetmpdir" />
 	<defaultCache 
 		maxElementsInMemory="10000" 
 		eternal="false"

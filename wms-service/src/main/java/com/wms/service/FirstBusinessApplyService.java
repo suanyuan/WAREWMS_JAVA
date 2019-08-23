@@ -174,9 +174,9 @@ public class FirstBusinessApplyService extends BaseService {
 				return Json.error("请选择委托客户");
 			}
 
-			if("".equals(supplierId)){
+			/*if("".equals(supplierId)){
 				return Json.error("请选择供应商");
-			}
+			}*/
 
 			if("".equals(productArr)){
 				return Json.error("请选择首营产品");
@@ -247,9 +247,9 @@ public class FirstBusinessApplyService extends BaseService {
 			return Json.error("请选择委托客户");
 		}
 
-		if("".equals(supplierId)){
+		/*if("".equals(supplierId)){
 			return Json.error("请选择供应商");
-		}
+		}*/
 
 		if("".equals(productArr)){
 			return Json.error("请选择首营产品");
