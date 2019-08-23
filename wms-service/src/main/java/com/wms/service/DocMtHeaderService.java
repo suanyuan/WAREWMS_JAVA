@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.wms.mybatis.dao.DocMtHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.vo.form.pda.PageForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,4 +85,38 @@ public class DocMtHeaderService extends BaseService {
 		return comboboxList;
 	}
 
+    /**
+     * 查询未完成的预入库通知单
+     * @param form 分页
+     * @return ~
+     */
+    public List<DocMtHeaderVO> queryUndoneList(PageForm form) {
+
+        List<DocMtHeader> docMtHeaderList = docMtHeaderMybatisDao.queryUndoneList(form.getStart(), form.getPageSize());
+        List<DocMtHeaderVO> docMtHeaderVOList = new ArrayList<>();
+        DocMtHeaderVO docMtHeaderVO;
+        for (DocMtHeader docMtHeader : docMtHeaderList) {
+
+            docMtHeaderVO = new DocMtHeaderVO();
+            BeanUtils.copyProperties(docMtHeader, docMtHeaderVO);
+            docMtHeaderVOList.add(docMtHeaderVO);
+        }
+        return docMtHeaderVOList;
+    }
+
+    /**
+     * 通过mtno查询header
+     * @param mtno ~
+     * @return ~
+     */
+    public DocMtHeaderVO queryByMtno(String mtno) {
+
+        DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtno);
+        DocMtHeaderVO docMtHeaderVO = new DocMtHeaderVO();
+        if (docMtHeader != null) {
+
+            BeanUtils.copyProperties(docMtHeader, docMtHeaderVO);
+        }
+        return docMtHeaderVO;
+    }
 }

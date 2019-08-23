@@ -178,5 +178,13 @@ where 1=1
        ${limitClause}
     </if>
 </select>
-  	
+
+    <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_mt_header
+        where asnstatus = '00' or asnstatus = '30'
+        order by addtime desc
+        limit #{start}, #{pageSize}
+    </select>
 </mapper>   
