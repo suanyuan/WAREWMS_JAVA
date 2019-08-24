@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Param;
  * <br>
  * <b>功能：</b>DocAsnHeaderDao<br>
  */
-public interface DocAsnHeaderMybatisDao extends BaseDao {
+public  interface  DocAsnHeaderMybatisDao extends BaseDao {
 	List<DocAsnHeader> queryByAsnType();
 
 	List<DocAsnHeader> queryByAsnstatus();
@@ -60,4 +60,10 @@ public interface DocAsnHeaderMybatisDao extends BaseDao {
 	public int showAsnreference1(@Param("asnreference1") String asnreference1);
 
 	List<AsnDetailResult> queryAsnDetailResult(@Param("asnNo")String asnNo);
+
+	/**
+	 *  明细复用查询orderno
+	*/
+	public <T> List<T> queryAsnno(MybatisCriteria criteria);
+
 }
