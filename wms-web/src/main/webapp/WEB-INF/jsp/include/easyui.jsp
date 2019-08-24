@@ -114,11 +114,11 @@
         }
     }
     var QualifiedOrFailed = function(value,row,index) {
-        if(value == "1"){
-            return "合格";
-        }else{
-            return "不合格";
-        }
+		switch (value) {
+			case "1" : return "合格";
+			case "0" : return "不合格";
+			case "" : return "";
+		}
     }
 
     var entTypeFormatter = function(value,row,index) {

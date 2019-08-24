@@ -22,7 +22,7 @@ public class DocMtDetails {
   private double mtqtyCompleted;
   private double mtqtyEachCompleted;
   private String uom;                  //单位
-  private long checkFlag;              //检查内容（外观、包装等）
+  private String checkFlag;              //检查内容（外观、包装等）
   private String conclusion;          //养护结论
   private Date conversedate; //养护日期
   private String conversewho;         //养护人

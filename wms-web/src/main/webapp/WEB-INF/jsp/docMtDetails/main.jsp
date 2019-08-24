@@ -24,7 +24,7 @@ $(function() {
 		url : '<c:url value="/docMtDetailsController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '养护作业',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -618,7 +618,7 @@ var selectConservation = function () {
 				</tr>
 				<tr>
 					<th>备注</th>
-					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options="required:true"/></td>
+					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options=""/></td>
 				</tr>
 			</table>
 		</form>

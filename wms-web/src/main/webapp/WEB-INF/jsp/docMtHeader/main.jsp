@@ -202,7 +202,7 @@ var closegenerationPlan = function(){
 	var msg='';
     if(row) {
 		var mtno=row.mtno;
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '您要关闭所选项目?', function(confirm) {
 			if(confirm){
 			$.messager.progress({
 				text: '<spring:message code="common.message.data.processing"/>', interval: 100
