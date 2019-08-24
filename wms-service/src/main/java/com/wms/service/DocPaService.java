@@ -11,6 +11,7 @@ import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
 import com.wms.vo.form.DocPaHeaderForm;
@@ -68,11 +69,21 @@ public class DocPaService {
                 * 定向订单/引用订单无需生成上架任务，否则打印出来的上架单是错误的。
                 * 这两个类型的订单在确认收货后已经上架完成了
                 * */
+                String asnReference1 = "";
+                String asnReference2 = "";
                 for (DocPaDTO typeDto:
                      listDTO) {
                     if (typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
                     typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
                         return Json.error("定向订单/引用订单无需生成上架任务！");
+                    }
+                    if (!asnReference1.contains(StringUtil.fixNull(typeDto.getAsnreference1()))) {
+                        asnReference1 += StringUtil.fixNull(typeDto.getAsnreference1());
+                        asnReference1 += ",";
+                    }
+                    if (!asnReference2.contains(StringUtil.fixNull(typeDto.getAsnreference2()))) {
+                        asnReference2 += StringUtil.fixNull(typeDto.getAsnreference2());
+                        asnReference2 += ",";
                     }
                 }
                 /*
@@ -92,6 +103,8 @@ public class DocPaService {
                 docPaHeaderForm.setPastatus("00");
                 docPaHeaderForm.setAddtime(new Date());
                 docPaHeaderForm.setAddwho(login.getId());
+                docPaHeaderForm.setPareference1(asnReference1);
+                docPaHeaderForm.setPareference2(asnReference2);
                 docPaHeaderForm.setPaPrintFlag(Constant.CODE_YES_OR_NO);
                 docPaHeaderForm.setCustomerid(listDTO.get(0).getCustomerid());
                 //docPaHeader.setWarehouseid();
@@ -197,6 +210,8 @@ public class DocPaService {
                             docPaHeaderForm.setAddtime(new Date());
                             docPaHeaderForm.setAddwho(login.getId());
                             docPaHeaderForm.setPaPrintFlag("0");
+                            docPaHeaderForm.setPareference1(docPaDTO.getAsnreference1());
+                            docPaHeaderForm.setPareference2(docPaDTO.getAsnreference2());
                             docPaHeaderForm.setWarehouseid(login.getWarehouse().getId());
                             docPaHeaderService.addDocPaHeader(docPaHeaderForm);
                         }else {
