@@ -320,8 +320,8 @@
         var address = row.address;
         var enterpriseId = row.enterpriseId;
         var enterpriseName = row.enterpriseName;
-        var licenseNo = row.licenseOrRecordNo;
-        var recordNo = row.licenseOrRecordNo;
+        var licenseNo = row.licenseNo;
+        var recordNo = row.recordNo;
         var storageConditions = row.storageCondition;
         //console.log(1111111)
         //console.log(name)
