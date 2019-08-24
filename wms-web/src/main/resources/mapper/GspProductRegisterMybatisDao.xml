@@ -320,7 +320,10 @@
 		left join bas_codes vcs on r.classify_id = vcs.code
 		left join bas_codes vcc on r.classify_catalog = vcc.code
 		LEFT JOIN `gsp_enterprise_info` g ON r.enterprise_id=g.enterprise_id
-		LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
+
+		LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'OPERATE') gl on g.enterprise_id=gl.enterprise_id
+		LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'PROD') pl on g.enterprise_id=pl.enterprise_id
+
 		left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
 		<include refid="Example_Where_Clause"/>
 	</select>
@@ -338,7 +341,8 @@
 		LEFT JOIN bas_codes vcs ON r.classify_id = vcs.code
 		LEFT JOIN bas_codes vcc ON r.classify_catalog = vcc.code
 		LEFT JOIN `gsp_enterprise_info` g ON r.enterprise_id=g.enterprise_id
-		LEFT JOIN gsp_operate_license gl on g.enterprise_id=gl.enterprise_id
+		LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'OPERATE') gl on g.enterprise_id=gl.enterprise_id
+		LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'PROD') pl on g.enterprise_id=pl.enterprise_id
 		left join gsp_second_record  gr on g.enterprise_id=gr.enterprise_id
 		<include refid="Example_Where_Clause"/>
 		<if test="orderByClause != null and orderByClause != ''" >
