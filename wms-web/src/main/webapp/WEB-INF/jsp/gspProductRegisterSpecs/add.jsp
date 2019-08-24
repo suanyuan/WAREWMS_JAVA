@@ -309,7 +309,20 @@
         })
     }
     //点击注册证编号之后datagrid放大镜事件
-    function choseSelect(id,no,name,address,enterpriseId,enterpriseName,licenseNo,recordNo,storageConditions) {
+    function choseSelect(row) {
+        if(!row){
+            row = enterpriseSearchGrid.datagrid("getSelected");
+        }
+        console.log(row);
+        var id = row.id;
+        var no = row.productRegisterNo;
+        var name = row.name;
+        var address = row.address;
+        var enterpriseId = row.enterpriseId;
+        var enterpriseName = row.enterpriseName;
+        var licenseNo = row.licenseOrRecordNo;
+        var recordNo = row.licenseOrRecordNo;
+        var storageConditions = row.storageCondition;
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
@@ -325,6 +338,8 @@
         //储存条件
         $("#storageCondition").textbox("setValue",storageConditions);
         $("#enterpriseId").val(enterpriseId);
+        $("#ezuiFormInfo #licenseOrRecordNo").textbox("setValue",recordNo);
+
 
 
         //生产许可证号 备案号

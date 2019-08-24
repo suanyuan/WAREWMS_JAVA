@@ -65,8 +65,7 @@
                 // }
             ]],
             onDblClickRow: function(index,row){
-                choseSelect(row.productRegisterId,row.productRegisterNo,row.productNameMain,
-                    row.productionAddress,row.enterpriseId,row.enterpriseName,row.licenseNo,row.recordNo,row.storageConditions);
+                choseSelect(row);
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 
