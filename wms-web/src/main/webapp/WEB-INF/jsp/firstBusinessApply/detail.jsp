@@ -27,7 +27,7 @@
                     <%--</td>--%>
                     <th>产品线</th>
                     <td>
-                        <input id="productLine" name="productLine"    type="text"/>
+                        <input id="productLine" name="productLine"  data-options='required:true'  type="text"/>
                     </td>
                     <!--<th>创建人</th>
                     <td><input type='text' name='createId' class='easyui-textbox' data-options='required:true,width:200'/></td>
@@ -235,6 +235,8 @@
             idField : 'productApplyId',
             columns : [[
                 {field: 'productApplyId',title:'主键',hidden:true},
+                {field: 'specsId',title:'主键',hidden:true},
+                {field: 'customerid',title:'主键',hidden:true},
                 {field: 'productCode',title: '产品代码' ,width: '20%'},
                 {field: 'productName',title: '产品名称',width: '20%'},
                 {field: 'specsName',title: '规格名称' ,width: '20%'},
@@ -575,6 +577,7 @@
 
 
         arr.remove(row.specsId);
+        arr1.remove(row.customerid);
         var rowIndex = ezuiDatagridDetail.datagrid('getRowIndex', row);
         ezuiDatagridDetail.datagrid('deleteRow', rowIndex);
 
@@ -694,6 +697,42 @@
     
     function submitApply() {
 
+
+        // if(processType == 'edit'){
+        //      var applyId = $("#applyId").val();
+        //
+        //     // var  rowE  = ezuiDatagridDetail.datagrid('getSelected');
+        //     $.ajax({
+        //         url : sy.bp()+"/firstBusinessApplyController.do?apply",
+        //         data : {
+        //             applyId : applyId ,
+        //         },
+        //         type : 'POST',
+        //         dataType : 'JSON',
+        //         async  :true,
+        //         success : function(result){
+        //
+        //         }
+        //     });
+        //
+        //
+        //
+        //
+        //     alert(rowE.specsId+"==="+rowE.customerid)
+        //
+        //     arr1.push(rowE.customerid);
+        //     arr.push(rowE.specsId)
+        //     // supplierArr = $("#supplierArr").val(),
+        // }
+
+        var rowMain = ezuiDatagrid.datagrid('getSelected');
+        if(rowMain.firstState == '10' || rowMain.firstState =='40'){
+            $.messager.show({
+                msg : '审核中与审核通过的申请无法修改', title : '提示'
+            });
+            return;
+        }
+
         if($("#clientId").val() == ""){
             $.messager.show({
                 msg : "请选择委托客户", title : '<spring:message code="common.message.prompt"/>'
@@ -706,7 +745,7 @@
             });
             return;
         }
-        var row = ezuiDatagridDetail.datagrid('getSelected');
+        // var row = ezuiDatagridDetail.datagrid('getSelected');
 
         if(arr.length==0){
             $.messager.show({
@@ -721,13 +760,17 @@
             });
             return;
         }*/
+
+
+
         $.ajax({
             url : sy.bp()+"/firstBusinessApplyController.do?apply",
             data : {
                 "id":"${firstBusinessApply.applyId}",
                 "clientId":$("#clientId").val(),
-                "supplierId":$("#supplierId").val(),
+                "supplierArr":arr1.join(","),
                 "productArr":arr.join(","),
+
                 "productLine":$("#productLine").combobox("getValue")
 
                 },
@@ -758,7 +801,7 @@
         });
     }
     arr = new Array();
-
+    arr1 = new Array();
     // //选择
     // function choseSelect() {
     //     var rows = dataGridProduct.datagrid("getChecked");
@@ -800,6 +843,7 @@
 
         ezuiDatagridDetail.datagrid("reload",{"applyId":"empty"});
         arr.splice(0,arr.length);
+        arr1.splice(0,arr.length);
     }
 
     //打开货主弹窗

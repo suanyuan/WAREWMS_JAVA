@@ -112,6 +112,19 @@ public class FirstBusinessApplyService extends BaseService {
 		return json;
 	}
 
+
+
+	public Json getInfo(String supplierId){
+		GspSupplierVO gspSupplierVO = new GspSupplierVO();
+		System.out.println("supplierId==========="+supplierId);
+		GspSupplier gspSupplier = firstBusinessApplyMybatisDao.queryById(supplierId);
+		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
+		if(gspSupplier == null){
+			return Json.error("不存在！");
+		}
+
+		return Json.success("",gspSupplierVO);
+	}
 	public Json queryFirstBusinessApply(String id){
 		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(id);
 		if(firstBusinessApply!=null){
@@ -155,9 +168,11 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApplyPageVO.setProductCode(result.getProductCode());
 				firstBusinessProductApplyPageVO.setProductName(result.getProductName());
 				firstBusinessProductApplyPageVO.setSpecsName(result.getSpecsName());
+//				firstBusinessProductApplyPageVO.setSpecsId(result.getSpecsId());
 				firstBusinessProductApplyPageVO.setProductModel(result.getProductModel());
 				firstBusinessProductApplyPageVO.setSpecsId(result.getSpecsId());
 				firstBusinessProductApplyPageVO.setSupplierName(result.getSupplierName());
+				firstBusinessProductApplyPageVO.setCustomerid(result.getCustomerid());
 				voList.add(firstBusinessProductApplyPageVO);
 			}
 		}
@@ -167,7 +182,7 @@ public class FirstBusinessApplyService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addApply(String clientId,String supplierId,String productArr,String productLine){
+	public Json addApply(String clientId,String supplierArr,String productArr,String productLine){
 		try{
 
 			if("".equals(clientId)){
@@ -181,16 +196,21 @@ public class FirstBusinessApplyService extends BaseService {
 			if("".equals(productArr)){
 				return Json.error("请选择首营产品");
 			}
-
-			//检查经营范围
-			Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
-			if(!checkScopeResult.isSuccess()){
-				return checkScopeResult;
+			String[] arrSup = supplierArr.split(",");
+			for(String supplierId : arrSup){
+				//检查经营范围
+				Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
+				if(!checkScopeResult.isSuccess()){
+					return checkScopeResult;
+				}
 			}
 			String[] arr = productArr.split(",");
+
 //			for(int a =0;arr.length>0;a++){
 			boolean flag = true;
+			int n = 0;
 			for(String specsId : arr) {
+				String supplierId = arrSup[n];
 				FirstBusinessApply firstBusinessApply1= new FirstBusinessApply();
 				firstBusinessApply1.setSupplierId(supplierId);
 				firstBusinessApply1.setSpecsId(specsId);
@@ -199,12 +219,15 @@ public class FirstBusinessApplyService extends BaseService {
 				if(num>0){
 					flag = false;
 				}
+				n++;
 			}
 			if(!flag){
-				return 	Json.error("同一货主 供应商与产品！  不能重复申请！");
+				return 	Json.error("存在同一货主 供应商与产品！  不能重复申请！");
 			}
 			//specsId   产品id
+			int np = 0;
 			for(String specsId : arr){
+				String supplierId = arrSup[np];
 				FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
 				String no = commonService.generateSeq(Constant.APLPRONO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				firstBusinessApply.setApplyId(no);
@@ -234,6 +257,8 @@ public class FirstBusinessApplyService extends BaseService {
 				firstReviewLogForm.setReviewTypeId(no);
 				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
+
+				np++;
 			}
 			return Json.success("申请成功");
 		}catch (Exception e){

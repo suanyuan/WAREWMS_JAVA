@@ -418,9 +418,11 @@
                         "specsName":rows[i].specsName,
                         "productModel":rows[i].productModel,
 						"supplierName" :rows1[i].descrC
+
                     });
                     arr.push(rows[i].specsId);
-                    arr1 = rows1[i].supplierId;
+                    //arr1 = rows1[i].supplierId;
+                    arr1.push(rows1[i].customerid);
                     // arr1.push(rows1[i].supplierId);
                 }
 

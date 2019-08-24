@@ -23,7 +23,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         </tr>
         <tr><th>企业</th>
             <td>
-                <input type='text' data="1" id='enterpriseIdQuery1'  name="enterpriseName" data='1' class='easyui-textbox' data-options='required:true,width:200' style="width: 100px;"/>
+                <input type='text' data="1" id='enterpriseIdQuery1'  name="enterpriseName" data='1' class='easyui-textbox' data-options='required:true,width:200,editable:false'  style="width: 100px;"/>
                 <input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
                 <a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewEnterpriseUrl()">查看</a>

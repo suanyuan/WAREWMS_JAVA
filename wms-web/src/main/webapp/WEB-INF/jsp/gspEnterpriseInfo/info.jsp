@@ -22,7 +22,7 @@
         <tr>
             <th>企业类型</th>
             <td>
-                <input type='text' data="1" value="" id="enterpriseType" name='enterpriseType' class='easyui-combobox' size='50' />
+                <input type='text' data="1" value="" id="enterpriseType" name='enterpriseType' class='easyui-combobox' size='50'   data-options='required:true,editable:false'  />
             </td>
         </tr>
         <tr>
