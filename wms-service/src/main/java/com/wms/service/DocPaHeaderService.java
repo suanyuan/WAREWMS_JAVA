@@ -7,6 +7,7 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
 import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
@@ -19,6 +20,7 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PDFUtil;
 import com.wms.vo.DocAsnDetailVO;
+import com.wms.vo.DocPaDetailsVO;
 import com.wms.vo.DocPaHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaHeaderForm;
@@ -53,6 +55,9 @@ public class DocPaHeaderService extends BaseService {
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 	@Autowired
 	private GspProductRegisterService gspProductRegisterService;
+
+    @Autowired
+    private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -95,19 +100,26 @@ public class DocPaHeaderService extends BaseService {
 	public Json deleteDocPaHeader(String id) {
 		Json json = new Json();
 		DocPaHeader docPaHeader = docPaHeaderDao.queryById(id);
-		if(docPaHeader != null){
-		    //更新打印标记
+		if(docPaHeader != null && docPaHeader.getPastatus().equals("00")) {
+            //更新打印标记
             String asn = docPaHeader.getAsnno();
             String[] arrAsn = asn.split(",");
-            for(String s:arrAsn){
+            for (String s : arrAsn) {
                 DocAsnHeader docAsnHeader = new DocAsnHeader();
                 docAsnHeader.setAsnPrintFlag("N");
                 docAsnHeader.setAsnno(s);
                 docAsnHeaderMybatisDao.updateBySelective(docAsnHeader);
             }
-			docPaHeaderDao.delete(docPaHeader);
-		}
-		json.setSuccess(true);
+            docPaHeaderDao.delete(docPaHeader);
+
+            //删除上架明细
+            docPaDetailsMybatisDao.clearDetailsByPano(id);
+            json.setMsg("上架任务删除成功");
+            json.setSuccess(true);
+            return json;
+        }
+        json.setMsg("当前状态的上架单不可删除");
+		json.setSuccess(false);
 		return json;
 	}
 
@@ -225,7 +237,7 @@ public class DocPaHeaderService extends BaseService {
                        //根据主单pano获取子单所有的产品 orderCode==pano
                         List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
 
-                        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
+//                        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
 
                         totalNum = detailsList.size();//总条数
                         pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
@@ -233,8 +245,8 @@ public class DocPaHeaderService extends BaseService {
                             baos = new ByteArrayOutputStream();
                             stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
                             form = stamper.getAcroFields();
-                            form.setField("orderNo1",docAsnHeader.getAsnreference1());
-                            form.setField("orderNo2",docAsnHeader.getAsnreference2());
+                            form.setField("orderNo1",docPaHeader.getPareference1());
+                            form.setField("orderNo2",docPaHeader.getPareference2());
                             form.setField("putwayCode",docPaHeader.getPano());
                             form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
                             form.setField("warehouseid", docPaHeader.getWarehouseid());
