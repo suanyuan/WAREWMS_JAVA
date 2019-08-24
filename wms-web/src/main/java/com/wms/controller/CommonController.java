@@ -179,6 +179,27 @@ public class CommonController {
         easyuiComboboxUnUse.setValue("否");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
+    }/**
+     * 合格不合格
+     * @return
+     */
+    @RequestMapping(params = "getQualifiedOrFailedCombobox")
+    @ResponseBody
+    public List<EasyuiCombobox> getQualifiedOrFailedCombobox() {
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        easyuiCombobox.setId("");
+        easyuiCombobox.setValue("");
+        easyuiComboboxList.add(easyuiCombobox);
+        EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
+        easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);
+        easyuiComboboxUse.setValue("合格");
+        easyuiComboboxList.add(easyuiComboboxUse);
+        EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
+        easyuiComboboxUnUse.setId(Constant.CODE_YES_OR_NO);
+        easyuiComboboxUnUse.setValue("不合格");
+        easyuiComboboxList.add(easyuiComboboxUnUse);
+        return easyuiComboboxList;
     }
 
     /**

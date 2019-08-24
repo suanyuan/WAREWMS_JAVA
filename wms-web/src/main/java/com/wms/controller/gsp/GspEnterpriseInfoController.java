@@ -226,6 +226,27 @@ public class GspEnterpriseInfoController {
 	}
 
 	@Login
+	@RequestMapping(params = "toProdLicense")
+	public ModelAndView toProdLicense(@RequestParam(defaultValue = "") String id) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", id);
+		if(!"".equals(id)) {
+			Json json = gspEnterpriceService.getGspProdLicense(id);
+			if(json.isSuccess() && json.getObj()!=null){
+				GspOperateLicense prodLicense = (GspOperateLicense)json.getObj();
+				List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(prodLicense.getOperateId());
+				if(detailVOS!=null){
+					model.put("choseScope",initOperateDetail(detailVOS));
+				}
+				System.out.println();
+				model.put("gspProdLicense", prodLicense);
+			}
+		}
+		return new ModelAndView("gspEnterpriseInfo/prodLicense", model);
+	}
+
+
+	@Login
 	@RequestMapping(params = "toSecondRecord")
 	public ModelAndView toSecondRecord(@RequestParam(defaultValue = "") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -276,6 +297,14 @@ public class GspEnterpriseInfoController {
 	public Object getOperate(String enterpriseId) {
 		return gspEnterpriceService.getGspOperateLicense(enterpriseId);
 	}
+
+	@Login
+	@RequestMapping(params = "getProdLicense")
+	@ResponseBody
+	public Object getSCLicense(String enterpriseId) {
+		return gspEnterpriceService.getGspProdLicense(enterpriseId);
+	}
+
 
 	@Login
 	@RequestMapping(params = "getSecondRecord")

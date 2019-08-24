@@ -48,4 +48,6 @@ public class GspEnterpriseInfo implements Serializable {
 	private String licenseNo;
 	private String recordNo;
 
+	private String prodNo;//生产
+
 }

@@ -120,6 +120,7 @@ public class GspOperateLicenseService extends BaseService {
 					gspOperateLicenseForm.setEnterpriseId(enterpriceId);
 					gspOperateLicenseForm.setOperateId(gspOperateLicenseId);
 					gspOperateLicenseForm.setIsUse(Constant.IS_USE_YES);
+//					gspOperateLicenseForm.setOpType(opType);
 					addGspOperateLicense(gspOperateLicenseForm);
 
 					if(gspOperateDetailForm.size()>0){

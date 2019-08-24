@@ -25,6 +25,9 @@
 	<result column="user_define4" property="userDefine4"/>
 	<result column="license_no" property="licenseNo"/>
 	<result column="record_no" property="recordNo"/>
+	<result column="prod_no" property="prodNo"/>
+
+
 </resultMap>
 
 <resultMap id="GspEnterpriseBusinessResultMap" type="com.wms.dto.GspEnterpriseBusinessDTO" >
@@ -175,11 +178,11 @@ where 1=1
 
 	<!-- 根据id查询 企业信息 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select g.*,gl.license_no,gr.record_no
-	 from gsp_enterprise_info g
-	 LEFT JOIN (select * from gsp_operate_license where is_use = '1') gl on g.enterprise_id=gl.enterprise_id
-	 left join (select * from gsp_second_record where is_use = '1')  gr on g.enterprise_id=gr.enterprise_id
-    where g.enterprise_id = #{enterpriseId}
+	select g.*,gl.license_no,pl.license_no prod_no ,gr.record_no from gsp_enterprise_info g
+	LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'OPERATE') gl on g.enterprise_id=gl.enterprise_id
+	LEFT JOIN (select * from gsp_operate_license where is_use = '1' and operate_type = 'PROD') pl on g.enterprise_id=pl.enterprise_id
+	LEFT JOIN (select * from gsp_second_record where is_use = '1') gr on g.enterprise_id=gr.enterprise_id
+	where g.enterprise_id = #{enterpriseId}
 </select>
 	<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
 		select *

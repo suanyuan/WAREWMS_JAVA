@@ -15,10 +15,10 @@ public class Constant {
     public static final String LICENSE_SUBMIT_UPDATE = "update";
 
     public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";
-    public static final String LICENSE_TYPE_OPERATE = "OPERATE";
+    public static final String LICENSE_TYPE_OPERATE = "OPERATE"; //经营
     public static final String LICENSE_TYPE_RECORD = "RECORD";
     public static final String LICENSE_TYPE_REGISTER = "REGISTER";
-    public static final String LICENSE_TYPE_PROD = "PROD";
+    public static final String LICENSE_TYPE_PROD = "PROD";      //生产
 
 
 //  codeid
@@ -97,8 +97,8 @@ public class Constant {
 //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 
-    //public static final String uploadUrl = "/Users/quendi/fileUpload";
-    public static final String uploadUrl = "/root/uploadDir";
+    public static final String uploadUrl = "/Users/quendi/fileUpload";
+//    public static final String uploadUrl = "/root/uploadDir";
 
 
 
@@ -112,6 +112,8 @@ public class Constant {
     public static final String RESULT = "result";
 
     public static final String SUCCESS_MSG = "获取成功";
+
+    public static final String SUBMIT_SUCCESS_MSG = "提交成功";
 
     public static final int pageSize = 10;
 

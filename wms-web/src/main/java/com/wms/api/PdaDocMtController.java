@@ -1,6 +1,7 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.entity.DocMtProgressDetail;
 import com.wms.query.DocMtDetailsQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocMtDetailsService;
@@ -8,6 +9,8 @@ import com.wms.service.DocMtHeaderService;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocMtDetailsVO;
 import com.wms.vo.DocMtHeaderVO;
+import com.wms.vo.form.DocMtDetailsForm;
+import com.wms.vo.form.DocMtHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -92,31 +95,51 @@ public class PdaDocMtController {
         return resultMap;
     }
 
-//    /**
-//     * 收货提交 单次收货 + 连续收货
-//     * @param form 扫码结果
-//     * @return ~
-//     */
-//    @RequestMapping(params = "submit", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Map<String, Object> submit(PdaDocAsnDetailForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put(Constant.RESULT, docAsnDetailService.receiveGoods(form));
-//        return resultMap;
-//    }
-//
-//    /**
-//     * 结束收货
-//     * @param form 收货任务单号
-//     * @return ~
-//     */
-//    @RequestMapping(params = "endTask", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Map<String, Object> endTask(PdaDocAsnEndForm form) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put(Constant.RESULT, docAsnHeaderService.endTask(form));
-//        return resultMap;
-//    }
+    /**
+     * 养护提交
+     * @param form mtno mtlineno mtqtyCompleted checkflag conclusion remark
+     * @return ~
+     */
+    @RequestMapping(params = "submit", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> submit(DocMtDetailsForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docMtDetailsService.mtSubmit(form));
+        return resultMap;
+    }
+
+    /**
+     * 结束养护
+     * @param form 养护任务单号
+     * @return ~
+     */
+    @RequestMapping(params = "endTask", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> endTask(DocMtHeaderForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, docMtHeaderService.endDocMt(form.getMtno()));
+        return resultMap;
+    }
+
+    /**
+     * 获取养护进度明细列表
+     * @param mtno ~
+     * @return ~
+     */
+    @RequestMapping(params = "docMtList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocPaList(String mtno) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if (StringUtil.isEmpty(mtno)) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "计划单号缺失"));
+            return resultMap;
+        }
+        List<DocMtProgressDetail> docMtProgressDetails = docMtDetailsService.queryDocMtList(mtno);
+        resultMap.put(Constant.DATA, docMtProgressDetails);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
 }
