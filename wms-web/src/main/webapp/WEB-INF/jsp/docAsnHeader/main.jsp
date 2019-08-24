@@ -25,7 +25,6 @@ var ezuiLocDataDialogId;
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
 var productDialog_docAsnHeader;
-
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -164,6 +163,7 @@ $(function() {
 			detailsEdit();
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
+
 		},
 		onSelect: function(rowIndex, rowData) {
 			if (rowIndex - 1){
@@ -184,6 +184,7 @@ $(function() {
 					$('#ezuiDetailsBtn_receive').linkbutton('disable');
                     $('#ezuiDetailsBtn_add').linkbutton('disable');
                     $("#ezuiBtn_merge").linkbutton('disable');
+
 				};
 			};
 		},
@@ -192,7 +193,6 @@ $(function() {
 			$(this).datagrid("resize",{height:200});
 		}
 	});
-
     /* 收货明细列表*/
     asnDetailsDatagrid = $('#asnDetailsDatagrid').datagrid({
         url : '<c:url value="/docAsnHeaderController.do?showAsnDetal"/>',
@@ -318,7 +318,7 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
-	
+
 	//订单明细弹框
 	ezuiDetailsDialog = $('#ezuiDetailsDialog').dialog({
 		modal : true,
@@ -540,6 +540,11 @@ var edit = function(row){
 		    	$('#ezuiForm #asnreference3').textbox('setValue',result.asnreference3);
 		    	$('#ezuiForm #asnreference4').textbox('setValue',result.asnreference4);
 		    	$('#ezuiForm #asnreference5').textbox('setValue',result.asnreference5);
+                $('#ezuiForm #userdefine1').textbox('setValue',result.userdefine1);
+                $('#ezuiForm #userdefine2').textbox('setValue',result.userdefine2);
+                $('#ezuiForm #userdefine3').textbox('setValue',result.userdefine3);
+                $('#ezuiForm #userdefine4').textbox('setValue',result.userdefine4);
+                $('#ezuiForm #userdefine5').textbox('setValue',result.userdefine5);
 		    	$('#ezuiForm #asnstatus').combobox('setValue',result.asnstatus);
 		    	$('#ezuiForm #releasestatus').combobox('setValue',result.releasestatus);
 		    	$('#ezuiForm #asntype').combobox('setValue',result.asntype);
@@ -892,6 +897,7 @@ var commit = function(){
 						$('#ezuiBtn_renew').linkbutton('enable');
                         $('#ezuiDetailsBtn_add').linkbutton('enable');
 						$('#ezuiBtn_recommit').linkbutton('disable');
+						$('#ezuiBtn_copyDetail').linkbutton('enable');
 						/* ezuiDialog.dialog('close'); */
 					}else{
 						msg = '<font color="red">' + result.msg + '</font>';
@@ -1523,6 +1529,63 @@ $(function () {
     })
 })
 
+var reuseDialog;
+//初始化
+$(function () {
+	$('#ezuiBtn_copyDetail').linkbutton('disable');
+	reuseDialog = $('#reuseDialog').dialog({
+		modal: true,
+		title: '明细复用',
+		buttons: '',
+		width: 250,
+		height: 100,
+		onOpen: function () {
+		},
+		onClose: function () {
+
+		}
+	}).dialog('close');
+
+})
+//给明细复用入库编号文本框
+function  copyDetail() {
+	var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
+	$("#refInNoTo").combobox({
+		panelHeight: 'auto',
+		editable: false,
+		url:'/docAsnHeaderController.do?getDoHeaderAsnno&customerid='+customeridff,
+		valueField: 'id',
+		textField: 'value',
+		width:150
+	})
+	reuseDialog.dialog("open");
+}
+//明细——复用按钮
+function reuseDetailIn() {
+    var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
+    $.ajax({
+        url : 'docAsnHeaderController.do?addDoDetailReuse',
+        data : {headerAssno:$("#refInNoTo").combobox("getValue"),detailAssno :asnno1},
+        type : 'POST',
+        dataType : 'JSON',
+        success : function(result){
+            try {
+                if(result.success){
+					$('#ezuiBtn_copyDetail').linkbutton('disable');
+					$('#ezuiDetailsDatagrid').datagrid('load',{asnno:asnno1});
+					reuseDialog.dialog("close");
+                }
+                showMsg(result.msg)
+            } catch (e) {
+                return;
+            };
+        }
+    });
+}
+function closeReuse() {
+	reuseDialog.dialog("close");
+}
+
 function showRefIn() {
     var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
     if(checkedItems.length>1 || checkedItems.length == 0){
@@ -1701,7 +1764,24 @@ function asnRowStyle(index,row) {
 			</tr>
 		</table>
 	</div>
-
+	<!-- 明细复用 -->
+	<div id="reuseDialog" style="display: none;text-align: center">
+		<table width="100%">
+			<tr>
+				<td>入库单编号</td>
+				<td>
+					<input id="refInNoTo" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<a onclick='closeReuse()' id='closeRefInReuse' class='easyui-linkbutton' data-options=''
+					   href='javascript:void(0);'>关闭</a>
+					<a onclick='reuseDetailIn()' id='doRefInReuse' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>复用</a>
+				</td>
+			</tr>
+		</table>
+	</div>
 	<!-- 导入end -->
 	<c:import url='/WEB-INF/jsp/docAsnHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/custDialog.jsp' />

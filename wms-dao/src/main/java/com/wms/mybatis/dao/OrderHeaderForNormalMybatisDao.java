@@ -47,4 +47,7 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 	int updateSOTask(OrderHeaderForNormal orderHeaderForNormal);
 
 	//OrderHeaderForNormal queryPrintTemplate(OrderHeaderForNormalQuery query);
+
+
+    List<OrderHeaderForNormal> queryByAllocationCustomerid(@Param("customerid") String customerid);
 }

@@ -167,7 +167,7 @@
 
         </tr>
         <tr>
-            <th>养护周期</th>
+            <th>养护周期(天)</th>
             <td><input type='text' data="1"  id="maintenanceCycle" name='maintenanceCycle' class='easyui-textbox' size='50' data-options='required:true' /></td>
             <th>创建时间</th>
             <td><input type='text' data="1" value="${createDate}" id="createDate" name='createDate' class='easyui-textbox' size='50' data-options='' readonly/></td>

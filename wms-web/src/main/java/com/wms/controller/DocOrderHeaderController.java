@@ -5,6 +5,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.ActAllocationDetails;
 import com.wms.entity.order.OrderDetailsForNormal;
+import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
@@ -15,6 +16,7 @@ import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
+import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -334,5 +336,24 @@ public class DocOrderHeaderController {
 			e.printStackTrace();
 		}
 		return "iReportView";
+	}
+
+	@Login
+	@RequestMapping(params = "copyQueryOrderno")
+	@ResponseBody
+	public List<EasyuiCombobox>  copyQueryOrderno(String customerid)throws  Exception{
+		return orderHeaderForNormalService.copyQueryOrderno(customerid);
+	}
+
+	@Login
+	@RequestMapping(params = "copyDetailGo",method = RequestMethod.POST)
+	@ResponseBody
+	public Json copyDetailGo(String orderno ,String detailOrderno,String soreference2) throws  Exception{
+		Json json = orderHeaderForNormalService.copyDetailGo(orderno,detailOrderno,soreference2);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
 	}
 }

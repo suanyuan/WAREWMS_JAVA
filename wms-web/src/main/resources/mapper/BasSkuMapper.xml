@@ -282,6 +282,21 @@ where 1=1
 	<if test="reservedfield07 != null  ">
 		reservedfield07,
 	</if>
+	<if test="reservedfield08 != null  ">
+		reservedfield08,
+	</if>
+	<if test="reservedfield09 != null  ">
+		reservedfield09,
+	</if>
+	<if test="reservedfield10 != null  ">
+		reservedfield10,
+	</if>
+	<if test="reservedfield11 != null  ">
+		reservedfield11,
+	</if>
+	<if test="reservedfield12 != null  ">
+		reservedfield12,
+	</if>
 	<if test="packid != null  ">
 		packid,
 	</if>
@@ -411,6 +426,21 @@ where 1=1
     <if test="reservedfield07 != null  ">
         #{reservedfield07},
     </if>
+	<if test="reservedfield08 != null  ">
+		#{reservedfield08},
+	</if>
+	<if test="reservedfield09 != null  ">
+		#{reservedfield09},
+	</if>
+	<if test="reservedfield10 != null  ">
+		#{reservedfield10},
+	</if>
+	<if test="reservedfield11 != null  ">
+		#{reservedfield11},
+	</if>
+	<if test="reservedfield12 != null  ">
+		#{reservedfield12},
+	</if>
 	<if test="packid != null  ">
 		#{packid},
 	</if>

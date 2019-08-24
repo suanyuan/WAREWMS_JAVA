@@ -718,6 +718,11 @@ insert into doc_asn_header
 		<if test="notes != null  ">
 			notes,
 		</if>
+		userdefine1,
+		userdefine2,
+		userdefine3,
+		userdefine4,
+		userdefine5,
 		releasestatus<!--释放状态 -->
 		)
       values(#{asnno},
@@ -752,7 +757,23 @@ insert into doc_asn_header
 			<if test="notes != null  ">
 				#{notes},
 			</if>
-             'Y')
+			<if test="userdefine1 != null  ">
+				#{userdefine1},
+			</if>
+			<if test="userdefine2 != null  ">
+				#{userdefine2},
+			</if>
+			<if test="userdefine3 != null  ">
+				#{userdefine3},
+			</if>
+			<if test="userdefine4 != null  ">
+				#{userdefine4},
+			</if>
+			<if test="userdefine5 != null  ">
+				#{userdefine5},
+			</if>
+             'Y'
+			)
 </insert>
 
 <!-- 根据id，修改记录-->
@@ -1340,4 +1361,11 @@ insert into doc_asn_header
 			and tr.docno = #{asnNo}
 		group by tr.DOCNO,tr.DOCLINENO,tr.FMSKU,lt.lotatt12,lt.lotatt06,bs.descr_c,lt.lotatt04,lt.lotatt05,lt.lotatt07,lt.lotatt01,lt.lotatt02,tr.FMLOCATION,tr.ADDTIME,tr.ADDWHO
     </select>
+	<select id="queryAsnno" resultMap="DocAsnHeaderMap"  parameterType="Object">
+	select
+		<include refid="Base_Column_List"/>
+ 	from
+		doc_asn_header
+		<include refid="Example_Where_Clause"/>
+	</select>
 </mapper>

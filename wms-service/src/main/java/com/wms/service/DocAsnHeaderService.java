@@ -5,6 +5,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
+import com.wms.entity.InvLotAtt;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
@@ -12,6 +13,7 @@ import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.query.OrderDetailsForNormalQuery;
@@ -39,10 +41,8 @@ import org.xml.sax.SAXException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("docAsnHeaderService")
 public class DocAsnHeaderService extends BaseService {
@@ -58,6 +58,10 @@ public class DocAsnHeaderService extends BaseService {
 	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
 	@Autowired
 	private DocPaService docPaService;
+    @Autowired
+    private InvLotAttService invLotAttService;
+    @Autowired
+    private BasGtnLotattService basGtnLotattService;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -507,6 +511,94 @@ public class DocAsnHeaderService extends BaseService {
 
 	}
 
+
+	/**
+	 * 明细复用
+	 * @author Haki
+	 * @date 2019/8/23
+	*/
+	public  Json addDoDetailReuse(String headerAssno,String detailAssno ) throws  Exception{
+
+	    Json json = new Json();
+
+	    DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        docAsnDetailQuery.setAsnno(headerAssno);
+
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+        if(docAsnDetailList.size() > 0){
+            for (DocAsnDetail docAsnDetail: docAsnDetailList) {
+                DocAsnDetail docAsnDetailTo =  new DocAsnDetail();
+
+				BeanUtils.copyProperties(docAsnDetail, docAsnDetailTo);
+				DocAsnDetailQuery docAsnDetailQueryTo = new DocAsnDetailQuery();
+				docAsnDetailQueryTo.setAsnno(detailAssno);
+				/*获取新的明细行号*/
+				int orderlineno = docAsnDetailsMybatisDao.  getAsnlinenoById(docAsnDetailQueryTo);
+				docAsnDetailTo.setAsnlineno(orderlineno + 1);
+
+                docAsnDetailTo.setAsnno(detailAssno);
+               /* docAsnDetailTo.setCustomerid(docAsnDetail.getCustomerid());
+                docAsnDetailTo.setSku(docAsnDetail.getSku());*/
+
+                docAsnDetailTo.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                docAsnDetailTo.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+                //预期到货数量
+               // docAsnDetailTo.setExpectedqty(docAsnDetail.getExpectedqty());
+                //入库日期
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                docAsnDetailTo.setLotatt03(formatter.format(new Date()));
+                //质量状态
+                docAsnDetailTo.setLotatt10("DJ");
+
+                //判断预入库明细里面的sku和客户id下的18个批属是否存在
+                InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetailTo);
+                //判断是否要插入扫码批次匹配表
+                basGtnLotattService.queryInsertGtnLotatt(invLotAtt, headerAssno);
+
+                docAsnDetailsMybatisDao.add(docAsnDetailTo);
+
+            }
+			json.setSuccess(true);
+			json.setMsg("明细复用成功");
+        }else{
+            json.setSuccess(false);
+            json.setMsg("此客户没有明细数据—明细复用失败");
+        }
+		return json;
+	}
+
+
+
+	/**
+	 * 根据货主代码查询编号
+	 * @author Haki
+	 * @date 2019/8/23
+	*/
+	public  List<EasyuiCombobox> getDoHeaderAsnno(String customerid) {
+
+		//根据货主代码查询对应的编号
+		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		docAsnHeaderQuery.setCustomerid(customerid);
+
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
+		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryAsnno(mybatisCriteria);
+		List<EasyuiCombobox> comboboxList = new ArrayList<>();
+		if (docAsnHeaderList != null && docAsnHeaderList.size() > 0) {
+			for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+				EasyuiCombobox comb = new EasyuiCombobox();
+				comb.setId(docAsnHeader.getAsnno());
+				comb.setValue(docAsnHeader.getAsnno());
+				comboboxList.add(comb);
+			}
+		}
+		return comboboxList;
+	}
+
+
 	public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo){
 		EasyuiDatagrid<AsnDetailResult> datagrid = new EasyuiDatagrid<>();
 		List<AsnDetailResult> asnDetailResultList = docAsnHeaderMybatisDao.queryAsnDetailResult(asnNo);
@@ -534,5 +626,6 @@ public class DocAsnHeaderService extends BaseService {
 				+detail.getLotatt05()+detail.getLotatt06()+detail.getLotatt08()
 				+detail.getLotatt09();
 	}
+
 
 }
