@@ -336,7 +336,7 @@
 		other_content,r.remark,r.approve_date,product_register_expiry_date,product_register_version,vc.codename_c VERSION,checker_id,
 		check_date,r.create_id,r.create_date,r.edit_id,r.edit_date,r.is_use,attachment_url,vcs.codename_c classify_id,vcc.codename_c classify_catalog,
 		r.enterprise_id,g.enterprise_name,production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,
-		agent_address,gl.license_no,gr.record_no
+		agent_address,ifnull(gl.license_no,pl.license_no) license_no,gr.record_no
 		FROM gsp_product_register r LEFT JOIN bas_codes vc ON r.version = vc.code
 		LEFT JOIN bas_codes vcs ON r.classify_id = vcs.code
 		LEFT JOIN bas_codes vcc ON r.classify_catalog = vcc.code
