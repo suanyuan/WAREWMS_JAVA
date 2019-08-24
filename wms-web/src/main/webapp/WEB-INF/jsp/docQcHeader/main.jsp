@@ -50,7 +50,7 @@ $(function() {
 			{field: 'userdefine1',		title: '库位',	width: 134 },
 			{field: 'sku',		title: '产品代码',	width: 134 },
 			{field: 'customerid',		title: '货主代码',	width: 134 },
-			{field: 'lotnum',		title: 'lotnum',	width: 134 },
+			{field: 'lotnum',		title: '批次',	width: 134 },
 			{field: 'userdefine2',		title: '有效期/失效期',	width: 134 },
 			{field: 'addtime',		title: '创建时间',	width: 134 },
 			{field: 'addwho',		title: '创建人',	width: 134 },

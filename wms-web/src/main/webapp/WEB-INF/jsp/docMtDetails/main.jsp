@@ -45,7 +45,7 @@ $(function() {
 			{field: 'sku',		title: '产品代码',	width: 100 },
 			{field: 'inventoryage',		title: '库龄',	width: 50 },
 			{field: 'locationid',		title: '库位',	width: 100 },
-			{field: 'lotnum',		title: '批号',	width: 100 },
+			{field: 'lotnum',		title: '批次',	width: 100 },
 			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
 			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },
 			{field: 'mtqtyCompleted',		title: '完成养护件数',	width: 100 },
@@ -352,7 +352,7 @@ var doSearch = function() {
 	if ($('#mtno').val() == null || $('#mtno').val() == "") {
 		ezuiDatagrid.datagrid('load', {
 			mtno: $('#mtno').val(),                            //养护单号
-			lotnum: $('#lotnum').val(),              //批号
+			lotnum: $('#lotnum').val(),              //批次
 			sku: $('#sku').val(),              //产品代码
 			linestatus: $('#linestatus').combobox('getValue')  //养护状态
 		});
@@ -362,7 +362,7 @@ var doSearch = function() {
 	} else {
 		ezuiDatagrid.datagrid('load', {
 			mtno: $('#mtno').val(),                            //养护单号
-			lotnum: $('#lotnum').val(),              //批号
+			lotnum: $('#lotnum').val(),              //批次
 			sku: $('#sku').val(),              //产品代码
 			linestatus: $('#linestatus').combobox('getValue')  //养护状态
 		});
@@ -456,7 +456,7 @@ var selectConservation = function () {
 						</tr>
 						<tr>
 							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>批号</th><td><input type='text' id='lotnum' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批次</th><td><input type='text' id='lotnum' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
