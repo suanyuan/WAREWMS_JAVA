@@ -281,7 +281,9 @@ public class DocMtHeaderService extends BaseService {
      */
     public PdaResult endDocMt(String mtno) {
 
-        DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtno);
+        DocMtHeader mtHeader=new DocMtHeader();
+        mtHeader.setMtno(mtno);
+        DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtHeader);
         switch (docMtHeader.getMtstatus()) {
             case "00":
             case "30":

@@ -242,6 +242,7 @@ var commitAcceptance = function(type){
 		 var linestatus=rows[i].linestatus;
 		 //判断细单验收状态
 		 if(linestatus!='00'){
+			 msg="验收行号:"+rows[i].qclineno+" ,已验收不可重复验收!"
 			isCan=false;
 		 	break;
 		 }
@@ -267,7 +268,7 @@ var commitAcceptance = function(type){
 	}
     if(!isCan){
 		$.messager.show({
-			msg : "选择列表中存在已验收单号!不可重复验收!", title : '<spring:message code="common.message.prompt"/>'
+			msg : msg, title : '<spring:message code="common.message.prompt"/>'
 		});
 		return;
 	}

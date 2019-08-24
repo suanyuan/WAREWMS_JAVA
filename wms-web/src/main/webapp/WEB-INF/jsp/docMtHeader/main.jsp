@@ -36,7 +36,7 @@ $(function() {
 		columns : [[
 			{field: 'mtno',		title: '养护单号',	width: 150 },
 			{field: 'mtstatus',		title: '养护状态',	width: 150,formatter:MT_STSstatusFormatter},
-			{field: 'mttype',		title: '养护类型',	width: 150 },
+			{field: 'mttype',		title: '养护类型',	width: 150,formatter:MT_TYPstatusFormatter },
 			{field: 'fromdate',		title: '开始时间',	width: 150 },
 			{field: 'todate',		title: '结束时间',	width: 150 },
 			// {field: 'userdefine1',		title: '待输入栏位5',	width: 50 },
@@ -195,6 +195,58 @@ var generationPlan = function(){
 	doDialogSearch();//清空datagrid
 	ezuiDialog.dialog('open');
 };
+//关闭计划单
+var closegenerationPlan = function(){
+	url = '<c:url value="/docMtHeaderController.do?closegenerationPlan"/>';
+	var row = ezuiDatagrid.datagrid('getSelected');
+	var msg='';
+    if(row) {
+		var mtno=row.mtno;
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
+			if(confirm){
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
+			$.ajax({
+				url: url,
+				data:{mtno:mtno},
+				dataType: 'json',
+				error: function (a, b, c) {
+					alert(a + b + c);
+				},
+				success: function (result) {
+					try {
+						if (result.errorCode == "200") {
+							msg = result.msg;
+							ezuiDatagrid.datagrid('reload');
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						} else {
+							msg = result.msg;
+							ezuiDatagrid.datagrid('reload');
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						}
+					} catch (e) {
+						$.messager.show({
+							msg: '数据错误!', title: '<spring:message code="common.message.prompt"/>'
+						});
+						$.messager.progress('close');
+					}
+				}
+			});
+			}
+		});
+	}else{
+		$.messager.show({
+			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
 //生成 时间段查询完养护计划之后
 var generationPlanT = function(){
 	url = '<c:url value="/docMtHeaderController.do?ToGenerationInfo"/>';
@@ -346,6 +398,7 @@ var ezuiDialogzToolbarClear= function(){
 				</fieldset>
 				<div>
 					<a onclick='generationPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成计划</a>
+					<a onclick='closegenerationPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭计划单</a>
 
 				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>

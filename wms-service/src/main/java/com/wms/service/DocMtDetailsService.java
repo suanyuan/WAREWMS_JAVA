@@ -70,6 +70,8 @@ public class DocMtDetailsService extends BaseService {
 		DocMtDetailsVO docMtDetailsVO = null;
 		for (DocMtDetails docMtDetails : docMtDetailsList) {
 			docMtDetailsVO = new DocMtDetailsVO();
+			docMtDetails.setMtqtyExpected(docMtDetails.getMtqtyExpected()-docMtDetails.getMtqtyCompleted());
+			docMtDetails.setMtqtyEachExpected(docMtDetails.getMtqtyEachExpected()-docMtDetails.getMtqtyEachCompleted());
 			BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
 			docMtDetailsVOList.add(docMtDetailsVO);
 		}
@@ -119,6 +121,31 @@ public class DocMtDetailsService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+	/**
+	 * 批量养护
+	 */
+	public Json submitDocMtList(String forms){
+		Json json=new Json();
+		StringBuffer result=new StringBuffer();
+//        json转集合
+		List<DocMtDetailsForm> list=JSON.parseArray(forms,DocMtDetailsForm.class);
+		Boolean con=true;
+		for (DocMtDetailsForm detailForm : list) {
+			PdaResult pdaResult = mtSubmit(detailForm);//调用养护作业方法 单个验收
+			if(pdaResult.getErrorCode()==400){
+				result.append("养护单号:"+detailForm.getMtno()+",行号:"+detailForm.getMtlineno()).append(","+pdaResult.getMsg()).append("<br/>");
+				con=false;
+			}
+		}
+		if(con){
+			json.setSuccess(true);
+			json.setMsg("养护成功!");
+		}else{
+			json.setSuccess(false);
+			json.setMsg("部分养护未成功!<br/>"+result.toString());
+		}
+		return json;
 	}
 
     /**

@@ -41,7 +41,18 @@ public class DocMtDetailsController {
 	public EasyuiDatagrid<DocMtDetailsVO> showDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
 		return docMtDetailsService.getPagedDatagrid(pager, query);
 	}
-
+	/**
+	 * 批量养护 传json集合
+	 * @param forms
+	 * @return
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "submitDocMtList")
+	@ResponseBody
+	public Json submitDocMtList(String forms) throws Exception {
+		return docMtDetailsService.submitDocMtList(forms);
+	}
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
