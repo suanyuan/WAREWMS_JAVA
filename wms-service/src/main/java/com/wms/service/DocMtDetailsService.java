@@ -311,7 +311,7 @@ public class DocMtDetailsService extends BaseService {
             detailsQuery.setLinestatus("00");
             detailsQuery.setMtno(form.getMtno());
             MybatisCriteria mybatisCriteria22 = new MybatisCriteria();
-            mybatisCriteria.setCondition(detailsQuery);
+            mybatisCriteria22.setCondition(detailsQuery);
             List<DocMtDetails> unfinishedDetailList = docMtDetailsMybatisDao.queryByList(mybatisCriteria22);
 
             //更新养护单状态
