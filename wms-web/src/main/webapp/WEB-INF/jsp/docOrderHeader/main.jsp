@@ -87,6 +87,7 @@ $(function() {
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
+
 		},
         onDblClickRow(index,row){
             edit(row);
@@ -228,7 +229,7 @@ $(function() {
 	/* 产品编码限定大写字母 */
 	$("#ezuiSkuDataDialog #sku").textbox('textbox').css('text-transform','uppercase');
 	$("#ezuiDetailsForm #sku").textbox('textbox').css('text-transform','uppercase');
-	
+
 	//订单信息弹框
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
@@ -238,6 +239,16 @@ $(function() {
 		buttons : '#ezuiDialogBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
+		},
+		onOpen : function() {
+
+			/*var rows = ezuiDetailsDatagrid.datagrid('options');
+			console.log(rows);*/
+			/*if(rows.rows[0]){
+				$('#ezuiBtn_copyDetailGo').linkbutton('enable');
+			}else{
+				$('#ezuiBtn_copyDetailGo').linkbutton('disable');
+			}*/
 		}
 	}).dialog('close');
 	
@@ -467,8 +478,9 @@ var edit = function(srow){
 			$("#ezuiForm #ezuiBtn_orderCommit").linkbutton('enable');
 		}
 		ezuiDetailsDatagrid.datagrid('load',{orderno:row.orderno});
-        allocationDetailsDatagrid.datagrid('load',{ordero:row.orderno})
+        allocationDetailsDatagrid.datagrid('load',{ordero:row.orderno});
 		$('#ezuiDetailsDatagrid').parent().parent().parent().show();
+
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -949,6 +961,7 @@ var commit = function(){
 						});
 						$('#ezuiForm #orderno').textbox('setValue',result.obj.orderno);
 						ezuiDatagrid.datagrid('reload');
+						$('#ezuiBtn_copyDetailGo').linkbutton('enable');
 						ezuiDetailsDatagrid.datagrid('load',{orderno:result.obj.orderno});
 					};
 				}else{
@@ -1821,7 +1834,7 @@ function closeRefOut() {
 var reuseDialogGo;
 //初始化
 $(function () {
-    //$('#ezuiBtn_copyDetailGo').linkbutton('disable');
+    $('#ezuiBtn_copyDetailGo').linkbutton('disable');
     reuseDialogGo = $('#reuseDialogGo').dialog({
         modal: true,
         title: '明细复用',
@@ -1834,7 +1847,6 @@ $(function () {
 
         }
     }).dialog('close');
-
 })
 //给明细复用入库编号文本框
 function  copyDetailGo() {
@@ -1859,18 +1871,23 @@ function copyDodetails() {
         data : {orderno : $("#refInNoGo").combobox("getValue"),detailOrderno : newOrderno , soreference2: soreference2},
         type : 'POST',
         dataType : 'JSON',
-        success : function(result){
-            try {
-
-                showMsg(result.msg)
-                refOutDialog.dialog("close");
-            } catch (e) {
-                return;
-            };
-        }
+		success : function(result){
+			try {
+				if(result.success){
+					$('#ezuiBtn_copyDetailGo').linkbutton('disable');
+					$('#ezuiDetailsDatagrid').datagrid('load',{orderno:newOrderno});
+					reuseDialogGo.dialog("close");
+				}
+				showMsg(result.msg)
+			} catch (e) {
+				return;
+			};
+		}
     });
 }
-
+function closeReuseGo() {
+	reuseDialogGo.dialog("close");
+}
 
 
 
@@ -2158,7 +2175,7 @@ function choseOrderTypeAfter(value) {
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<a onclick='' id='closeRefInReuse' class='easyui-linkbutton' data-options=''
+					<a onclick='closeReuseGo();' id='closeRefInReuse' class='easyui-linkbutton' data-options=''
 					   href='javascript:void(0);'>关闭</a>
 					<a onclick='copyDodetails();' id='doRefInReuse' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>复用</a>
 				</td>
