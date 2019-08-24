@@ -1,12 +1,16 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.DocMtDetails;
-import com.wms.mybatis.dao.DocMtDetailsMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
+import com.wms.query.BasCustomerQuery;
 import com.wms.query.DocMtDetailsQuery;
+import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocMtDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocMtDetailsForm;
@@ -22,6 +26,18 @@ public class DocMtDetailsService extends BaseService {
 
 	@Autowired
 	private DocMtDetailsMybatisDao docMtDetailsMybatisDao;
+
+	@Autowired
+	private BasSkuMybatisDao basSkuMybatisDao;
+
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
+
+	@Autowired
+	private InvLotAttMybatisDao invLotAttMybatisDao;
+
+	@Autowired
+	private BasPackageMybatisDao basPackageMybatisDao;
 
 	public EasyuiDatagrid<DocMtDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
 		EasyuiDatagrid<DocMtDetailsVO> datagrid = new EasyuiDatagrid<DocMtDetailsVO>();
@@ -81,4 +97,47 @@ public class DocMtDetailsService extends BaseService {
 		return comboboxList;
 	}
 
+    /**
+     * 根据扫码结果查询养护明细
+     * 可能存在不同货主的相同产品
+     * @param query ~
+     * @return ~
+     */
+	public List<DocMtDetailsVO> queryMtDetail(DocMtDetailsQuery query) {
+
+	    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+	    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+	    List<DocMtDetails> docMtDetailsList= docMtDetailsMybatisDao.queryByList(mybatisCriteria);
+	    List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<>();
+	    DocMtDetailsVO docMtDetailsVO;
+        for (DocMtDetails docMtDetails : docMtDetailsList) {
+
+            docMtDetailsVO = new DocMtDetailsVO();
+            BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
+
+            //客户档案
+            BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(docMtDetails);
+            if (basCustomer == null) continue;
+            String jsonStr = JSON.toJSONString(basCustomer, SerializerFeature.DisableCircularReferenceDetect);
+            docMtDetailsVO.setBasCustomer(JSONObject.parseObject(jsonStr, BasCustomer.class));
+
+            //批次属性
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docMtDetails);
+            if (invLotAtt == null) continue;
+            docMtDetailsVO.setInvLotAtt(invLotAtt);
+
+            //产品档案
+            BasSku basSku = basSkuMybatisDao.queryById(docMtDetails);
+            if (basSku == null) continue;
+            docMtDetailsVO.setBasSku(basSku);
+
+            //包装规格
+            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+            if (basPackage == null) continue;
+            docMtDetailsVO.setBasPackage(basPackage);
+
+            docMtDetailsVOList.add(docMtDetailsVO);
+        }
+ 	    return docMtDetailsVOList;
+    }
 }

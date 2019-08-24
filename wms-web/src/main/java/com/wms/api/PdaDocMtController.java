@@ -1,7 +1,6 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
-import com.wms.entity.DocMtHeader;
 import com.wms.query.DocMtDetailsQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocMtDetailsService;
@@ -75,32 +74,23 @@ public class PdaDocMtController {
      * @param query 查询条件
      * @return detail数据
      */
-//    @RequestMapping(params = "docMtDetail", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Map<String, Object> queryDocMtDetail(DocMtDetailsQuery query) {
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        DocMtDetailsVO docMtDetailsVO = .queryDocAsnDetail(query);
-//
-//        if (pdaDocAsnDetailVO == null) {
-//            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "无收货明细信息"));
-//            return resultMap;
-//        }
-//        if (pdaDocAsnDetailVO.getBasPackage() == null || pdaDocAsnDetailVO.getBasSku() == null) {
-//
-//            PdaResult result =
-//                    new PdaResult(PdaResult.CODE_FAILURE,
-//                            pdaDocAsnDetailVO.getBasSku() == null ?
-//                                    "无产品信息" : "无包装信息");
-//            resultMap.put(Constant.RESULT, result);
-//            return resultMap;
-//        }
-//
-//        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
-//        resultMap.put(Constant.DATA, pdaDocAsnDetailVO);
-//        resultMap.put(Constant.RESULT, result);
-//        return resultMap;
-//    }
+    @RequestMapping(params = "docMtDetail", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocMtDetail(DocMtDetailsQuery query) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<DocMtDetailsVO> docMtDetailsVOList = docMtDetailsService.queryMtDetail(query);
+
+        if (docMtDetailsVOList.size() == 0) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无养护明细信息"));
+            return resultMap;
+        }
+
+        PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
+        resultMap.put(Constant.DATA, docMtDetailsVOList);
+        resultMap.put(Constant.RESULT, result);
+        return resultMap;
+    }
 
 //    /**
 //     * 收货提交 单次收货 + 连续收货

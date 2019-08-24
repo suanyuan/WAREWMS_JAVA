@@ -1,8 +1,12 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import com.wms.entity.BasCustomer;
+import com.wms.entity.BasPackage;
+import com.wms.entity.BasSku;
+import com.wms.entity.InvLotAtt;
+import lombok.Data;
 
+@Data
 public class DocMtDetailsVO {
 
 	private String mtno;
@@ -28,184 +32,11 @@ public class DocMtDetailsVO {
 	private java.util.Date edittime;
 	private String editwho;
 
-	public String getMtno() {
-		return mtno;
-	}
+	private BasCustomer basCustomer;
 
-	public void setMtno(String mtno) {
-		this.mtno = mtno;
-	}
+	private InvLotAtt invLotAtt;
 
-	public long getMtlineno() {
-		return mtlineno;
-	}
+	private BasSku basSku;
 
-	public void setMtlineno(long mtlineno) {
-		this.mtlineno = mtlineno;
-	}
-
-	public String getLinestatus() {
-		return linestatus;
-	}
-
-	public void setLinestatus(String linestatus) {
-		this.linestatus = linestatus;
-	}
-
-	public String getCustomerid() {
-		return customerid;
-	}
-
-	public void setCustomerid(String customerid) {
-		this.customerid = customerid;
-	}
-
-	public String getSku() {
-		return sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
-	public String getInventoryage() {
-		return inventoryage;
-	}
-
-	public void setInventoryage(String inventoryage) {
-		this.inventoryage = inventoryage;
-	}
-
-	public String getLocationid() {
-		return locationid;
-	}
-
-	public void setLocationid(String locationid) {
-		this.locationid = locationid;
-	}
-
-	public String getLotnum() {
-		return lotnum;
-	}
-
-	public void setLotnum(String lotnum) {
-		this.lotnum = lotnum;
-	}
-
-	public double getMtqtyExpected() {
-		return mtqtyExpected;
-	}
-
-	public void setMtqtyExpected(double mtqtyExpected) {
-		this.mtqtyExpected = mtqtyExpected;
-	}
-
-	public double getMtqtyEachExpected() {
-		return mtqtyEachExpected;
-	}
-
-	public void setMtqtyEachExpected(double mtqtyEachExpected) {
-		this.mtqtyEachExpected = mtqtyEachExpected;
-	}
-
-	public double getMtqtyCompleted() {
-		return mtqtyCompleted;
-	}
-
-	public void setMtqtyCompleted(double mtqtyCompleted) {
-		this.mtqtyCompleted = mtqtyCompleted;
-	}
-
-	public double getMtqtyEachCompleted() {
-		return mtqtyEachCompleted;
-	}
-
-	public void setMtqtyEachCompleted(double mtqtyEachCompleted) {
-		this.mtqtyEachCompleted = mtqtyEachCompleted;
-	}
-
-	public String getUom() {
-		return uom;
-	}
-
-	public void setUom(String uom) {
-		this.uom = uom;
-	}
-
-	public long getCheckFlag() {
-		return checkFlag;
-	}
-
-	public void setCheckFlag(long checkFlag) {
-		this.checkFlag = checkFlag;
-	}
-
-	public String getConclusion() {
-		return conclusion;
-	}
-
-	public void setConclusion(String conclusion) {
-		this.conclusion = conclusion;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getConversedate() {
-		return conversedate;
-	}
-
-	public void setConversedate(java.util.Date conversedate) {
-		this.conversedate = conversedate;
-	}
-
-	public String getConversewho() {
-		return conversewho;
-	}
-
-	public void setConversewho(String conversewho) {
-		this.conversewho = conversewho;
-	}
-
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getAddtime() {
-		return addtime;
-	}
-
-	public void setAddtime(java.util.Date addtime) {
-		this.addtime = addtime;
-	}
-
-	public String getAddwho() {
-		return addwho;
-	}
-
-	public void setAddwho(String addwho) {
-		this.addwho = addwho;
-	}
-
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEdittime() {
-		return edittime;
-	}
-
-	public void setEdittime(java.util.Date edittime) {
-		this.edittime = edittime;
-	}
-
-	public String getEditwho() {
-		return editwho;
-	}
-
-	public void setEditwho(String editwho) {
-		this.editwho = editwho;
-	}
-
+	private BasPackage basPackage;
 }
