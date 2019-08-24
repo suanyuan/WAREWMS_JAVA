@@ -223,5 +223,12 @@
 			case "99" : return "养护关闭";
 		}
 	}
+//养护类型
+	var MT_TYPstatusFormatter = function (value,row,index) {
+		switch (value) {
+			case "PC" : return "指定养护";
+			case "SC" : return "计划养护";
+		}
+	}
 
 </script>

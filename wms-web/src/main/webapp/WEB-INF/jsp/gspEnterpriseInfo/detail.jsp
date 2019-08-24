@@ -21,7 +21,9 @@
     </div>
     <div title="营业执照信息" data-options="href:'gspEnterpriseInfoController.do?toBusinessLicense&id=${enterpriseId}'" style="overflow:auto;padding:10px;display:none;">
     </div>
-    <div title="经营/生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toOperateLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
+    <div title="经营许可证信息" data-options="href:'gspEnterpriseInfoController.do?toOperateLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
+    </div>
+    <div title="生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toProdLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
     </div>
     <div title="备案凭证" data-options="href:'gspEnterpriseInfoController.do?toSecondRecord&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
     </div>

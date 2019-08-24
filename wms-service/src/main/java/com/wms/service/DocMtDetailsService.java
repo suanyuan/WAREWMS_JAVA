@@ -55,15 +55,25 @@ public class DocMtDetailsService extends BaseService {
 
 	public EasyuiDatagrid<DocMtDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
 		EasyuiDatagrid<DocMtDetailsVO> datagrid = new EasyuiDatagrid<DocMtDetailsVO>();
-		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByList(new MybatisCriteria());
-		DocMtDetailsVO docMtDetailsVO = null;
 		List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<DocMtDetailsVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		if(query.getMtno()==null||query.getMtno()==""){
+			datagrid.setRows(docMtDetailsVOList);
+			datagrid.setTotal((long)0);
+			return datagrid;
+		}
+
+		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByList(mybatisCriteria);
+		DocMtDetailsVO docMtDetailsVO = null;
 		for (DocMtDetails docMtDetails : docMtDetailsList) {
 			docMtDetailsVO = new DocMtDetailsVO();
 			BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
 			docMtDetailsVOList.add(docMtDetailsVO);
 		}
-		datagrid.setTotal((long)docMtDetailsMybatisDao.queryByCount(new MybatisCriteria()));
+		datagrid.setTotal((long)docMtDetailsMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(docMtDetailsVOList);
 		return datagrid;
 	}

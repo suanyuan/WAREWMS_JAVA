@@ -203,7 +203,8 @@ where 1=1
 		select  count(1) from first_business_apply t1
 		join first_business_product_apply t2 on t1.apply_id = t2.apply_id
 		where t1.supplier_id = #{supplierId,jdbcType=VARCHAR} and t2.specs_id = #{specsId,jdbcType=VARCHAR}
-		and t1.is_use = '1' and t2.is_use = '1'
+		and t1.client_id = #{clientId,jdbcType=VARCHAR}
+		and t1.is_use = '1' and t2.is_use = '1' 
 	</select>
 <!-- 查询产品首营申请记录列表 -->
 <select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
