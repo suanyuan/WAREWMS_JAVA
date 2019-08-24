@@ -34,4 +34,6 @@ public class FirstBusinessProductApply  implements Serializable {
 	private String firstState;
 
 	private String supplierName;
+
+	private String customerid;
 }

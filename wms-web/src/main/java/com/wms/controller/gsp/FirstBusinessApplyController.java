@@ -68,6 +68,15 @@ public class FirstBusinessApplyController {
 	}
 
 
+
+	@Login
+	@RequestMapping(params = "getInfo")
+	@ResponseBody
+	public Object getInfo(String supplierId) {
+		return firstBusinessApplyService.getInfo(supplierId);
+	}
+
+
 	/**
 	 * 查询首营申请产品
 	 * @param pager
@@ -124,14 +133,22 @@ public class FirstBusinessApplyController {
 		return firstBusinessApplyService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
+//	@Login
+//	@RequestMapping(params = "getBtn")
+//	@ResponseBody
+//	public Json getBtn(String id) {
+//		return firstBusinessApplyService.getBtn(id);
+//	}
+
+
 	@Login
 	@RequestMapping(params = "apply")
 	@ResponseBody
-	public Json apply(String id,String clientId,String supplierId,String productArr,String productLine) throws Exception {
+	public Json apply(String id,String clientId,String supplierArr,String productArr,String productLine) throws Exception {
 		if(!StringUtils.isEmpty(id)){
-			return firstBusinessApplyService.editApply(id,clientId,supplierId,productArr,productLine);
+			return firstBusinessApplyService.editApply(id,clientId,supplierArr,productArr,productLine);
 		}
-		return firstBusinessApplyService.addApply(clientId,supplierId,productArr,productLine);
+		return firstBusinessApplyService.addApply(clientId,supplierArr,productArr,productLine);
 	}
 
 	@Login

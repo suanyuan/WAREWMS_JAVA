@@ -39,6 +39,9 @@
 	<result column="product_model" property="productModel"/>
 	<result column="first_state" property="firstState"/>
     <result column="supplier_name" property="supplierName"/>
+	<result column="CUSTOMERID" property="customerid"/>
+
+
 </resultMap>
        
 <!-- first_business_product_apply table all fields -->
@@ -218,7 +221,7 @@ where 1=1
 
 <!-- 查询产品首营申请产品列表 -->
 <select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
-	select sp.specs_name,sp.product_model,sp.product_code,sp.product_name,t1.product_apply_id,t1.apply_id,t1.specs_id,t1.is_check,t1.is_operate,t1.is_cold,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t3.descr_c supplier_name
+	select sp.specs_name,sp.product_model,sp.product_code,sp.product_name,t1.product_apply_id,t1.apply_id,t1.specs_id,t1.is_check,t1.is_operate,t1.is_cold,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t3.descr_c supplier_name,t3.CUSTOMERID
 	from first_business_product_apply t1
 	left join gsp_product_register_specs sp on t1.specs_id = sp.specs_id
 	left join first_business_apply t2 on t1.apply_id = t2.apply_id
