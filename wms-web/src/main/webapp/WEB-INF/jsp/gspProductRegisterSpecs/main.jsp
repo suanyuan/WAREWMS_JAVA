@@ -47,8 +47,8 @@ $(function() {
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
 
 			{field: 'specsName',		title: '规格',	width: 150 },
-			{field: 'productCode',		title: '产品代码',	width: 100 },
-			{field: 'productName',		title: '产品名称',	width: 170 },
+			{field: 'productCode',		title: '产品代码',	width: 180 },
+			{field: 'productName',		title: '产品名称',	width: 200 },
 			{field: 'productRemark',		title: '产品描述',	width:350 },
 			{field: 'productModel',		title: '型号',	width: 100 },
 			{field: 'productionAddress',		title: '产地',	width: 150 },
