@@ -540,6 +540,11 @@ var edit = function(row){
 		    	$('#ezuiForm #asnreference3').textbox('setValue',result.asnreference3);
 		    	$('#ezuiForm #asnreference4').textbox('setValue',result.asnreference4);
 		    	$('#ezuiForm #asnreference5').textbox('setValue',result.asnreference5);
+                $('#ezuiForm #userdefine1').textbox('setValue',result.userdefine1);
+                $('#ezuiForm #userdefine2').textbox('setValue',result.userdefine2);
+                $('#ezuiForm #userdefine3').textbox('setValue',result.userdefine3);
+                $('#ezuiForm #userdefine4').textbox('setValue',result.userdefine4);
+                $('#ezuiForm #userdefine5').textbox('setValue',result.userdefine5);
 		    	$('#ezuiForm #asnstatus').combobox('setValue',result.asnstatus);
 		    	$('#ezuiForm #releasestatus').combobox('setValue',result.releasestatus);
 		    	$('#ezuiForm #asntype').combobox('setValue',result.asntype);

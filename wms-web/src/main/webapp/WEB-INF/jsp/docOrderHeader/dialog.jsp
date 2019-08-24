@@ -102,14 +102,20 @@
 					<td><input type='text' id='userdefine1' name='userdefine1' data-options=''/></td>
 				</tr>
 				<tr>
+					<th>冷链标记</th>
+					<td colspan="2">
+						<input type='text' id='coldTag' name="coldTag" size='16' data-options=''/>
+						<input type="hidden" name="userdefine3"/>
+						<a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlColdTag()">查看</a>
+					</td>
 					<th>订单创建时间</th>
 					<td><input type='text' id='ordertime' name='ordertime' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<th>订单创建人</th>
 					<td><input type='text' id='addwho' name='addwho' class='easyui-textbox' size='16' data-options='editable: false'/></td>
-					<th>最后修改时间</th>
+					<!--<th>最后修改时间</th>
 					<td><input type='text' id='edittime' name='edittime' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<th>最后修改人</th>
-					<td><input type='text' id='editwho' name='editwho' class='easyui-textbox' size='16' data-options='editable: false'/></td>
+					<td><input type='text' id='editwho' name='editwho' class='easyui-textbox' size='16' data-options='editable: false'/></td>-->
 					<td colspan="2">
 						<a onclick='commit();' id='ezuiBtn_orderCommit' class='easyui-linkbutton' data-options='iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 						<a onclick='copyDetailGo();' id='ezuiBtn_copyDetailGo' class='easyui-linkbutton'
@@ -140,6 +146,50 @@
 	<%-- <a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a> --%>
 	<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
+<script>
+    $('#coldTag').filebox({
+        prompt: '选择一个文件',//文本说明文件
+        width:150,
+        buttonText: '上传',  //按钮说明文字
+        required: true,
+        onChange:function(data){
+            if(data){
+                doUploadColdTag(data);
+            }
+        }
+    });
+
+    function doUploadColdTag(data) {
+        var ajaxFile = new uploadFile({
+            "url":sy.bp()+"/commonController.do?uploadFileLocal",
+            "dataType":"json",
+            "timeout":50000,
+            "async":true,
+            "data":{
+                //多文件
+                "file":{
+                    //file为name字段 后台可以通过$_FILES["file"]获得
+                    "file":document.getElementsByName("coldTag")[0].files[0]//文件数组
+                }
+            },
+            onload:function(data){
+                //$("#userdefine4").filebox("setValue",data.comment);
+                //$("#ezuiForm input[name='userdefine4']").eq(0).val(data.comment);
+                document.getElementsByName("userdefine3")[0].value = data.comment;
+            },
+            onerror:function(er){
+                console.log(er);
+            }
+        });
+    }
+
+    function viewUrlColdTag(url) {
+        if(url){
+            showUrl(url);
+        }
+    }
+</script>
 <script>
 	$(function () {
         $("#carrierId").combobox({

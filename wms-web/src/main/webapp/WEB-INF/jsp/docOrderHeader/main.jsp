@@ -421,6 +421,7 @@ var edit = function(srow){
             carrierid:row.carrierid,
             userdefine1:row.userdefine1,
             userdefine2:row.userdefine2,
+            userdefine3:row.userdefine3,
             consigneeid:row.consigneeid,
             cProvince:row.cProvince,
             cCity:row.cCity,
