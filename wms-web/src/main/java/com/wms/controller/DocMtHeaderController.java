@@ -89,8 +89,8 @@ public class DocMtHeaderController {
 		Json json = docMtHeaderService.deleteDocMtHeader(id);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
 		return json;
 	}
 

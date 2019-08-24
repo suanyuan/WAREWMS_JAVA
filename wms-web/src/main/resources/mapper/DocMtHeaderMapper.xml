@@ -93,7 +93,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into doc_mt_header(mtno,mtstatus,mttype,fromdate,todate,storage_flag,flow_flag,sign_flag,fence_flag,sanitation_flag,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,remark,addtime,addwho,edittime,editwho,warehouseid)
- values(#{mtno},#{mtstatus},#{mttype},#{fromdate},#{todate},#{storageFlag},#{flowFlag},#{signFlag},#{fenceFlag},#{sanitationFlag},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{remark},#{addtime},#{addwho},#{edittime},#{editwho},#{warehouseid})
+ values(#{mtno},#{mtstatus},#{mttype},#{fromdate},#{todate},#{storageFlag},#{flowFlag},#{signFlag},#{fenceFlag},#{sanitationFlag},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{remark},now(),#{addwho},#{edittime},#{editwho},#{warehouseid})
 </insert>
 
 <!-- 根据id，修改记录-->  

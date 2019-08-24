@@ -52,7 +52,7 @@ $(function() {
 			{field: 'warehouseid',		title: '仓库编码',	width: 150 }
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+
 		},
 		// onRowContextMenu : function(event, rowIndex, rowData) {
 		// 	event.preventDefault();
@@ -154,12 +154,18 @@ var edit = function(){
 //删除
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row.mtstatus!="00"){
+		$.messager.show({
+			msg : "只有养护状态为任务创建的状态才能删除!", title : '<spring:message code="common.message.prompt"/>'
+		});
+		return;
+	}
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
 					url : 'docMtHeaderController.do?delete',
-					data : {id : row.id},
+					data : {id : row.mtno},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -194,9 +200,15 @@ var generationPlanT = function(){
 	url = '<c:url value="/docMtHeaderController.do?ToGenerationInfo"/>';
 	var rows=ezuiDetailsDatagrid.datagrid('getRows')
 	var data=new Object();
-	data.fromDate=rows[0].fromDate;
-	data.toDate=rows[0].fromDate;
+	var fromDate=rows[0].fromDate;
+	var toDate=rows[0].toDate;
+	data.fromdate=fromDate;
+	data.todate=toDate;
+
 	var msg='';
+	$.messager.progress({
+		text: '<spring:message code="common.message.data.processing"/>', interval: 100
+	});
 	$.ajax({
 		url: url,
 		data:data,
@@ -333,10 +345,11 @@ var ezuiDialogzToolbarClear= function(){
 					</table>
 				</fieldset>
 				<div>
-<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
+					<a onclick='generationPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成计划</a>
+
+				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
-					<a onclick='generationPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成计划</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>

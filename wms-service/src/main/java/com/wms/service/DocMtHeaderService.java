@@ -130,22 +130,39 @@ public class DocMtHeaderService extends BaseService {
         if (resultCode.substring(0,3).equals("000")) {
             DocMtHeader docMtHeader=new DocMtHeader();
             docMtHeader.setMtno(resultNo);
+            query.setMtno(resultNo);
             docMtHeader.setMtstatus("00");
             docMtHeader.setMttype("*");
             docMtHeader.setFromdate(StringtoDate(query.getFromdate()));
             docMtHeader.setTodate(StringtoDate(query.getTodate()));
             docMtHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-            docMtHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getId());
-//            docMtHeaderMybatisDao.add(docMtHeader);
-//            if(docMtHeaderMybatisDao.queryById(docMtHeader)==null){
-//                return null;
-//            }
+            docMtHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            docMtHeaderMybatisDao.add(docMtHeader);
+          if(docMtHeaderMybatisDao.queryById(docMtHeader)==null){
+              json.setSuccess(true);
+              json.setMsg("生成计划失败!");
+               return json;
+          }
 
 //循环加入细单
             List<InvLotLocId> invLotLocIdList = getGenerationInfo(query);
             for (InvLotLocId invLotLocId : invLotLocIdList) {
-
-
+                DocMtDetails docMtDetails=new DocMtDetails();
+                docMtDetails.setMtno(resultNo);
+                docMtDetails.setMtlineno(docMtDetailsMybatisDao.getMtlinenoByMtno(query)+1);
+                docMtDetails.setLinestatus("00");
+                docMtDetails.setCustomerid(invLotLocId.getCustomerid());
+                docMtDetails.setSku(invLotLocId.getSku());
+                docMtDetails.setInventoryage((new Date().getTime()-invLotLocId.getLotatt03().getTime()+1000000)/(60*60*24*1000)+"");//库龄
+                docMtDetails.setLocationid(invLotLocId.getLocationid());
+                docMtDetails.setLotnum(invLotLocId.getLotnum());
+                docMtDetails.setMtqtyExpected(invLotLocId.getQty());  //养护件数
+                docMtDetails.setMtqtyEachExpected(invLotLocId.getQty()*invLotLocId.getQty1());//养护数量
+                docMtDetails.setMtqtyCompleted(0);
+                docMtDetails.setMtqtyEachCompleted(0);
+                docMtDetails.setUom(invLotLocId.getPackuom1());//单位
+                docMtDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                docMtDetailsMybatisDao.add(docMtDetails);
             }
             json.setSuccess(true);
             json.setMsg("生成计划成功!");
@@ -173,14 +190,20 @@ public class DocMtHeaderService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
-//删除
+//删除养护计划单
 	public Json deleteDocMtHeader(String id) {
 		Json json = new Json();
 		DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(id);
-		if(docMtHeader != null){
+        if(docMtHeader != null&&docMtHeader.getMtstatus().equals("00")){
 			docMtHeaderMybatisDao.delete(docMtHeader);
-		}
-		json.setSuccess(true);
+            docMtDetailsMybatisDao.delete(docMtHeader);
+            json.setSuccess(true);
+            json.setMsg("订单删除成功!");
+		}else {
+            json.setSuccess(false);
+            json.setMsg("订单不可删除!");
+        }
+
 		return json;
 	}
 
