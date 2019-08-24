@@ -72,10 +72,10 @@ public class DocPaHeaderController {
 	@ResponseBody
 	public Json delete(String id) {
 		Json json = docPaHeaderService.deleteDocPaHeader(id);
-		if(json == null){
-			json = new Json();
-		}
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+//		if(json == null){
+//			json = new Json();
+//		}
+//			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

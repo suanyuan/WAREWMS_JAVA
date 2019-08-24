@@ -113,6 +113,13 @@
             return "否";
         }
     }
+    var QualifiedOrFailed = function(value,row,index) {
+		switch (value) {
+			case "1" : return "合格";
+			case "0" : return "不合格";
+			case "" : return "";
+		}
+    }
 
     var entTypeFormatter = function(value,row,index) {
         switch (value) {

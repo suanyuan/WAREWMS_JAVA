@@ -53,7 +53,9 @@
         <result column="maintenance_cycle" property="maintenanceCycle"/>
         <result column="wight" property="wight"/>
         <result column="packaging_unit" property="packagingUnit"/>
-        <result column="LicenseOrRecordNo" property="licenseOrRecordNo"/>
+        <result column="licenseOrRecordNo" property="licenseOrRecordNo"/>
+        <result column="storage_condition" property="storageCondition"/>
+
         <!--<result column="attache_card_category" property="attacheCardCategory"/>-->
 
 

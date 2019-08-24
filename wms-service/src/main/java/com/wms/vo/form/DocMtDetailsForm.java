@@ -18,7 +18,7 @@ public class DocMtDetailsForm {
 	private double mtqtyCompleted;
 	private double mtqtyEachCompleted;
 	private String uom;
-	private long checkFlag;
+	private String checkFlag;
 	private String conclusion;
 	private java.util.Date conversedate;
 	private String conversewho;
@@ -132,11 +132,11 @@ public class DocMtDetailsForm {
 		this.uom = uom;
 	}
 
-	public long getCheckFlag() {
+	public String getCheckFlag() {
 		return checkFlag;
 	}
 
-	public void setCheckFlag(long checkFlag) {
+	public void setCheckFlag(String checkFlag) {
 		this.checkFlag = checkFlag;
 	}
 

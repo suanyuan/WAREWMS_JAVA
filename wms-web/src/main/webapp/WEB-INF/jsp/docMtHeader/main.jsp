@@ -36,7 +36,7 @@ $(function() {
 		columns : [[
 			{field: 'mtno',		title: '养护单号',	width: 150 },
 			{field: 'mtstatus',		title: '养护状态',	width: 150,formatter:MT_STSstatusFormatter},
-			{field: 'mttype',		title: '养护类型',	width: 150 },
+			{field: 'mttype',		title: '养护类型',	width: 150,formatter:MT_TYPstatusFormatter },
 			{field: 'fromdate',		title: '开始时间',	width: 150 },
 			{field: 'todate',		title: '结束时间',	width: 150 },
 			// {field: 'userdefine1',		title: '待输入栏位5',	width: 50 },
@@ -93,14 +93,14 @@ $(function() {
 		rownumbers: true,
 		singleSelect: true,
 		columns: [[
-			{field: 'lotnum', title: '批号', width: 100},
+			{field: 'lotnum', title: '批次', width: 100},
 			{field: 'locationid', title: '库位', width: 100},
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 100},
 			{field: 'qty', title: '养护件数', width: 100},
 			{field: 'lotatt03', title: '入库时间', width: 200},
 			{field: 'lotatt03test', title: '预期养护时间', width: 200},
-			{field: 'reservedfield06', title: '养护周期', width: 100},
+			{field: 'reservedfield10', title: '养护周期', width: 100},
 			//	用于回传后台时间
 			{field: 'fromDate', title: '开始时间', width: 100,hidden:true},
 			{field: 'toDate', title: '结束时间', width: 100,hidden:true},
@@ -194,6 +194,58 @@ var del = function(){
 var generationPlan = function(){
 	doDialogSearch();//清空datagrid
 	ezuiDialog.dialog('open');
+};
+//关闭计划单
+var closegenerationPlan = function(){
+	url = '<c:url value="/docMtHeaderController.do?closegenerationPlan"/>';
+	var row = ezuiDatagrid.datagrid('getSelected');
+	var msg='';
+    if(row) {
+		var mtno=row.mtno;
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '您要关闭所选项目?', function(confirm) {
+			if(confirm){
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
+			$.ajax({
+				url: url,
+				data:{mtno:mtno},
+				dataType: 'json',
+				error: function (a, b, c) {
+					alert(a + b + c);
+				},
+				success: function (result) {
+					try {
+						if (result.errorCode == "200") {
+							msg = result.msg;
+							ezuiDatagrid.datagrid('reload');
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						} else {
+							msg = result.msg;
+							ezuiDatagrid.datagrid('reload');
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						}
+					} catch (e) {
+						$.messager.show({
+							msg: '数据错误!', title: '<spring:message code="common.message.prompt"/>'
+						});
+						$.messager.progress('close');
+					}
+				}
+			});
+			}
+		});
+	}else{
+		$.messager.show({
+			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
 };
 //生成 时间段查询完养护计划之后
 var generationPlanT = function(){
@@ -346,6 +398,7 @@ var ezuiDialogzToolbarClear= function(){
 				</fieldset>
 				<div>
 					<a onclick='generationPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成计划</a>
+					<a onclick='closegenerationPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭计划单</a>
 
 				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>

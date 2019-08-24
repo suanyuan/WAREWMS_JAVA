@@ -233,7 +233,7 @@ where 1=1
 </select>
 <!--查询养护列表 主单状态99 40-->
 <select id="getDocMtDetailsList" resultMap="BaseResultMap">
-	SELECT d.lotnum,d.customerid,d.sku,MAX(conversedate) conversedate,DATE_ADD(MAX(conversedate),INTERVAL  reservedfield06 DAY) conversedatetest,s.reservedfield06
+	SELECT d.lotnum,d.customerid,d.sku,MAX(conversedate) conversedate,DATE_ADD(MAX(conversedate),INTERVAL  reservedfield10 DAY) conversedatetest,s.reservedfield10
 	 FROM `doc_mt_details` d
 	INNER JOIN `doc_mt_header` h ON d.mtno=h.mtno
 	INNER JOIN `bas_sku` s ON d.customerid=s.customerid AND d.sku=s.sku

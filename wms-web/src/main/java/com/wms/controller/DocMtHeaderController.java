@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.wms.entity.InvLotLocId;
+import com.wms.result.PdaResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,13 @@ public class DocMtHeaderController {
 	@ResponseBody
 	public Json ToGenerationInfo(DocMtHeaderQuery query) {
 		return docMtHeaderService.ToGenerationInfo(query);
+	}
+//关闭计划单
+	@Login
+	@RequestMapping(params = "closegenerationPlan")
+	@ResponseBody
+	public PdaResult closegenerationPlan(String mtno) {
+		return docMtHeaderService.endDocMt(mtno);
 	}
 //增加
 	@Login

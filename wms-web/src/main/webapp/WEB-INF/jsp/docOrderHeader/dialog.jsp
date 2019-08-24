@@ -152,7 +152,6 @@
         prompt: '选择一个文件',//文本说明文件
         width:150,
         buttonText: '上传',  //按钮说明文字
-        required: true,
         onChange:function(data){
             if(data){
                 doUploadColdTag(data);

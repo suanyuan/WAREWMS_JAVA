@@ -49,6 +49,12 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
     int queryMaxLineNo(@Param("pano")String pano);
 
     /**
+     * 根据上架单号删除上架明细
+     * @param pano ~
+     */
+    void clearDetailsByPano(@Param("pano") String pano);
+
+    /**
      * 查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号)
      */
     List<DocPaDetails> querySimilarDetail(DocPaDetailsQuery query);

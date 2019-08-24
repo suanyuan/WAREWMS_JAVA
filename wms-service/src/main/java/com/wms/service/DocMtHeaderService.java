@@ -121,7 +121,7 @@ public class DocMtHeaderService extends BaseService {
         }
 		return lotLocIdListFA;
 	}
-//获得养护计划
+//生成养护计划
 	public Json ToGenerationInfo(DocMtHeaderQuery query) {
           Json json=new Json();
         /*获取新的号*/
@@ -135,7 +135,7 @@ public class DocMtHeaderService extends BaseService {
             docMtHeader.setMtno(resultNo);
             query.setMtno(resultNo);
             docMtHeader.setMtstatus("00");
-            docMtHeader.setMttype("PC");
+            docMtHeader.setMttype("SC");
             docMtHeader.setFromdate(StringtoDate(query.getFromdate()));
             docMtHeader.setTodate(StringtoDate(query.getTodate()));
             docMtHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -281,7 +281,9 @@ public class DocMtHeaderService extends BaseService {
      */
     public PdaResult endDocMt(String mtno) {
 
-        DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtno);
+        DocMtHeader mtHeader=new DocMtHeader();
+        mtHeader.setMtno(mtno);
+        DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtHeader);
         switch (docMtHeader.getMtstatus()) {
             case "00":
             case "30":

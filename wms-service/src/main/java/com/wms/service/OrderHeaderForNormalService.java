@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1686,6 +1687,9 @@ public class OrderHeaderForNormalService extends BaseService {
         return easyuiList;
     }
 
+    /**
+     *  复用入库明细信息
+     */
     public Json copyDetailGo(String orderno,String detailOrderno,String soreference2){
         Json json = new Json();
         OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
@@ -1699,18 +1703,39 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 BeanUtils.copyProperties(orderDetailsForNormal, normal);
 
+                OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
+                orderDetailsForNormalQuery.setOrderno(detailOrderno);
+                /*获取新的订单明细行号*/
+                int orderLineNo = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
+
+                normal.setOrderno(detailOrderno);
+                normal.setOrderlineno((double) orderLineNo + 1);
                 normal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                 normal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
                 //日期
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 normal.setAddtime(new Date());
-
-
-
-
+                //如果定向入库订单存在
+                if(!soreference2.equals("") && soreference2 != null){
+                    normal.setLotatt14(soreference2);
+                }else{
+                    normal.setLotatt14("");
+                }
+                //状态为新建状态
+                normal.setLinestatus("00");
+                //预配数
+                normal.setQtysoftallocatedEach(0.00);
+                //分配数
+                normal.setQtyallocated(0.00);
+                //拣货件数
+                normal.setQtypickedEach(0.00);
+                //发货数
+                normal.setQtyshippedEach(0.00);
                 orderDetailsForNormalMybatisDao.add(normal);
             }
+            json.setSuccess(true);
+            json.setMsg("明细复用成功");
         }else {
             json.setSuccess(false);
             json.setMsg("没有明细信息");

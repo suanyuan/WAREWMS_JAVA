@@ -24,7 +24,7 @@ $(function() {
 		url : '<c:url value="/docMtDetailsController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '养护作业',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
@@ -45,14 +45,14 @@ $(function() {
 			{field: 'sku',		title: '产品代码',	width: 100 },
 			{field: 'inventoryage',		title: '库龄',	width: 50 },
 			{field: 'locationid',		title: '库位',	width: 100 },
-			{field: 'lotnum',		title: '批号',	width: 100 },
-			{field: 'mtqtyExpected',		title: '养护件数',	width: 100 },
-			{field: 'mtqtyEachExpected',		title: '养护数量',	width: 100 },
+			{field: 'lotnum',		title: '批次',	width: 100 },
+			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
+			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },
 			{field: 'mtqtyCompleted',		title: '完成养护件数',	width: 100 },
 			{field: 'mtqtyEachCompleted',		title: '完成养护数量',	width: 100 },
 			{field: 'uom',		title: '单位',	width: 100 },
-			{field: 'checkFlag',		title: '检查结论',	width: 100 },
-			{field: 'conclusion',		title: '养护结论',	width: 100 },
+			{field: 'checkFlag',		title: '检查结论',	width: 100,formatter:QualifiedOrFailed },
+			{field: 'conclusion',		title: '养护结论',	width: 100,formatter:QualifiedOrFailed },
 			{field: 'conversedate',		title: '养护日期',	width: 100 },
 			{field: 'conversewho',		title: '养护人',	width: 100 },
 			{field: 'remark',		title: '备注',	width: 150 },
@@ -93,7 +93,7 @@ $(function() {
 	ezuiConservationDialog = $('#ezuiConservationDialog').dialog({
 		modal : true,
 		width:270,
-		height:240,
+		height:230,
 		title : '资料',
 		buttons : '#ezuiConservationDialogBtn',
 		onClose : function() {
@@ -234,7 +234,7 @@ var commit = function(){
 };
 //养护作业提交
 var commitConservation = function(){
-	url = '<c:url value="/docQcDetailsController.do?submitDocQcList"/>';
+	url = '<c:url value="/docMtDetailsController.do?submitDocMtList"/>';
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	var forms=[];
 	var data=null;
@@ -244,6 +244,7 @@ var commitConservation = function(){
 		 var linestatus=rows[i].linestatus;
 		 //判断细单养护状态
 		 if(linestatus!='00'){
+		 	msg="养护行号:"+rows[i].mtlineno+" ,已养护不可重复养护!"
 			isCan=false;
 		 	break;
 		 }
@@ -255,18 +256,18 @@ var commitConservation = function(){
 		data.remark=$('#ezuiConservationForm #remark').textbox('getValue');         //备注
 		//判断养护的行数
 		if(rows.length==1){
-			var mtqtyExpected=$('#ezuiConservationForm #mtqtyExpectedC').textbox('getValue');
-		    data.mtqtyExpected=mtqtyExpected;
+			var mtqtyExpectedC=$('#ezuiConservationForm #mtqtyExpectedC').textbox('getValue');
+		    data.mtqtyCompleted=mtqtyExpectedC;
 		}else{
-			var qcqtyNumAll=rows[i].mtqtyExpected;
-			data.mtqtyExpected=qcqtyNumAll;
+			var mtqtyNumAll=rows[i].mtqtyExpected-rows[i].mtqtyCompleted;
+			data.mtqtyCompleted=mtqtyNumAll;
 		}
 		forms.push(data);
 
 	}
     if(!isCan){
 		$.messager.show({
-			msg : "选择列表中存在已养护单号!不可重复养护!", title : '<spring:message code="common.message.prompt"/>'
+			msg :msg, title : '<spring:message code="common.message.prompt"/>'
 		});
 		return;
 	}
@@ -351,7 +352,7 @@ var doSearch = function() {
 	if ($('#mtno').val() == null || $('#mtno').val() == "") {
 		ezuiDatagrid.datagrid('load', {
 			mtno: $('#mtno').val(),                            //养护单号
-			lotnum: $('#lotnum').val(),              //批号
+			lotnum: $('#lotnum').val(),              //批次
 			sku: $('#sku').val(),              //产品代码
 			linestatus: $('#linestatus').combobox('getValue')  //养护状态
 		});
@@ -361,7 +362,7 @@ var doSearch = function() {
 	} else {
 		ezuiDatagrid.datagrid('load', {
 			mtno: $('#mtno').val(),                            //养护单号
-			lotnum: $('#lotnum').val(),              //批号
+			lotnum: $('#lotnum').val(),              //批次
 			sku: $('#sku').val(),              //产品代码
 			linestatus: $('#linestatus').combobox('getValue')  //养护状态
 		});
@@ -455,7 +456,7 @@ var selectConservation = function () {
 						</tr>
 						<tr>
 							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>生产批号</th><td><input type='text' id='lotnum' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批次</th><td><input type='text' id='lotnum' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -617,7 +618,7 @@ var selectConservation = function () {
 				</tr>
 				<tr>
 					<th>备注</th>
-					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options="required:true"/></td>
+					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options=""/></td>
 				</tr>
 			</table>
 		</form>

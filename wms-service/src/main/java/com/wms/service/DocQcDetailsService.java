@@ -612,7 +612,7 @@ public class DocQcDetailsService extends BaseService {
             InitPdaDocQcDetailForm(detailForm);//完善form值
             PdaResult pdaResult = submitDocQc(detailForm);//调用验收作业方法 单个验收
             if(pdaResult.getErrorCode()==400){
-                result.append("验收单号:"+detailForm.getQcno()+",行号:"+detailForm.getQclineno()).append("<br/>");
+                result.append("验收单号:"+detailForm.getQcno()+",行号:"+detailForm.getQclineno()).append(","+pdaResult.getMsg()).append("<br/>");
                 con=false;
             }
         }
