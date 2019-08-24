@@ -32,6 +32,7 @@ public class DocMtDetails {
   private Date edittime;
   private String editwho;
 
+  private InvLotAtt invLotAtt;
 
   private Date conversedatetest; //预期养护日期
 }

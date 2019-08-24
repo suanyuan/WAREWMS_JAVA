@@ -36,4 +36,5 @@ public class DocMtDetailsQuery implements IQuery {
     private String lotatt04;//生产批号
     private String lotatt05;//序列号
     private String GTIN;//gtin
+    private String otherCode;
 }

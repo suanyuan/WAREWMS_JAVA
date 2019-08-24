@@ -1,9 +1,6 @@
 package com.wms.vo;
 
-import com.wms.entity.BasCustomer;
-import com.wms.entity.BasPackage;
-import com.wms.entity.BasSku;
-import com.wms.entity.InvLotAtt;
+import com.wms.entity.*;
 import lombok.Data;
 
 @Data
@@ -39,4 +36,6 @@ public class DocMtDetailsVO {
 	private BasSku basSku;
 
 	private BasPackage basPackage;
+
+	private ProductLine productLine;
 }
