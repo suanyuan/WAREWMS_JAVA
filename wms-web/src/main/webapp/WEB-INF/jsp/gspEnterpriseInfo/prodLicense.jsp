@@ -7,10 +7,10 @@
         text-align: right;
     }
 </style>
-<div id='detailOperateToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
-    <form id='ezuiFormOperate' method='post' style="padding: 0px;">
-        <input type='hidden' data="1" id='operateId' name='operateId' value="${gspOperateLicense.operateId}"/>
-        <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspOperateLicense.enterpriseId}"/>
+<div id='detailProdToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
+    <form id='ezuiFormProd' method='post' style="padding: 0px;">
+        <input type='hidden' data="1" id='operateId' name='operateId' value="${gspProdLicense.operateId}"/>
+        <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspProdLicense.enterpriseId}"/>
         <input type='hidden' id='choseScope' value="${choseScope}"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
@@ -18,89 +18,83 @@
             <table width="100%">
                 <tr>
                     <th>企业名称</th>
-                    <td><input type='text' value="${gspOperateLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:250'/></td>
-                    <th>经营/生产许可证编号</th>
+                    <td><input type='text' value="${gspProdLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <th>生产许可证编号</th>
                     <td>
-                        <input type='text' value="${gspOperateLicense.licenseNo}" data="1" id="licenseNo" name='licenseNo' class='easyui-textbox' data-options='required:true,width:250'/>
+                        <input type='text' value="${gspProdLicense.licenseNo}" data="1" id="licenseNo" name='licenseNo' class='easyui-textbox' data-options='required:true,width:250'/>
                     </td>
+                </tr>
+                <tr >
+                    <th>法定代表人</th>
+                    <td><input type='text' value="${gspProdLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <th rowspan="2">生产场所</th>
+                    <td rowspan="2"><input type='text' value="${gspProdLicense.businessResidence}" data="1" id="businessResidence" name='businessResidence' class='easyui-textbox' data-options='required:true,width:250,height:60'/></td>
 
                 </tr>
                 <tr>
-                    <th>经营方式</th>
-                    <td><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <th>企业负责人</th>
+                    <td><input type='text' value="${gspProdLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
 
-                    <th>法定代表人</th>
-                    <td><input type='text' value="${gspOperateLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:250'/></td>
-
-
-                  </tr>
+                 </tr>
                 <tr>
                     <th>住所</th>
-                    <td><input type='text' value="${gspOperateLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:250'/></td>
-                    <th>企业负责人</th>
-                    <td><input type='text' value="${gspOperateLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:250'/></td>
 
-
+                    <th rowspan="2">生产范围</th>
+                    <td rowspan="2">
+                        <input type='text' data="1" value="${gspProdLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:350,height:60,editable:false'/>
+                        <a onclick='selectOperateScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                    </td>
                 </tr>
-                <tr>
-                    <th>经营场所</th>
-                    <td><input type='text' value="${gspOperateLicense.businessResidence}" data="1" id="businessResidence" name='businessResidence' class='easyui-textbox' data-options='required:true,width:250'/></td>
 
-                    <th>发证部门</th>
-                    <td><input type='text' value="${gspOperateLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
-
-
-                </tr>
                 <tr>
                     <th>库房地址</th>
-                    <td><input type='text' value="${gspOperateLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                </tr>
+                <tr>
+                    <th>发证部门</th>
+                    <td><input type='text' value="${gspProdLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
+
                     <th>发证日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
-
-
-
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
                 </tr>
                 <tr>
                     <th>许可证照片</th>
                     <td>
-                        <input id="licenseUrlFile" name='licenseUrlFile' value="${gspOperateLicense.licenseUrl}" atth="fileUpload">
-                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlOperate()">查看</a>
-                        <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspOperateLicense.licenseUrl}"/>
+                        <input id="licenseUrlFile1" name='licenseUrlFile1' value="${gspProdLicense.licenseUrl}" atth="fileUpload">
+                        <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlOperate1()">查看</a>
+                        <input type="hidden" data="2" class="textbox-value" name="licenseUrl" id="licenseUrl" value="${gspProdLicense.licenseUrl}"/>
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                     <th>有效期限</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspOperateLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
 
-                </tr>
-                <tr>
-                    <th>经营范围</th>
-                    <td colspan="3">
-                        <input type='text' data="1" value="${gspOperateLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:350,editable:false'/>
-                        <a onclick='selectOperateScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
-                    </td>
+                    <%--<th>经营方式</th>--%>
+                    <%--<td colspan="2"><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:250'/></td>--%>
+
                 </tr>
             </table>
         </fieldset>
     </form>
     <div>
-        <a onclick='operateUpdate()' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
-        <a onclick='operateCopy()' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-back"' href='javascript:void(0);'>信息复用</a>
+        <a onclick='operateUpdate1()' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
+        <a onclick='operateCopy1()' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-back"' href='javascript:void(0);'>信息复用</a>
     </div>
     <fieldset>
         <legend>证照历史数据</legend>
-        <table id='ezuiOperateDatagridDetail' ></table>
+        <table id='ezuiOperateDatagridDetail1' ></table>
     </fieldset>
 </div>
-<div id="dialogChoseScopeOperate"></div>
+<div id="dialogChoseScopeOperate1"></div>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
-    var ezuiOperateDatagridDetail;
-    var ezuidialogChoseScopeOperate;
+    var ezuiOperateDatagridDetail1;
+    var ezuidialogChoseScopeOperate1;
     var url;
     var opType = "add";
     $(function () {
         //控件初始化
-        ezuiOperateDatagridDetail = $("#ezuiOperateDatagridDetail").datagrid({
+        ezuiOperateDatagridDetail1 = $("#ezuiOperateDatagridDetail1").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?operateHistoryDatagridList',
             method:'POST',
             toolbar : '',
@@ -113,8 +107,8 @@
             striped: true,
             collapsible:false,
             queryParams:{
-                'enterpriseId':'${gspOperateLicense.enterpriseId}',
-                'operateType': "OPERATE"
+                'enterpriseId':'${gspProdLicense.enterpriseId}',
+                'operateType': "PROD"
             },
             pagination:true,
             rownumbers:true,
@@ -130,7 +124,7 @@
                     }
                 },
                 {field: '_operate',		title: '许可证照片',	width: '20%',
-                    formatter: formatOperAttachmentOperate
+                    formatter: formatOperAttachmentOperate1
                 }
             ]],
             onDblClickCell: function(index,field,value){
@@ -148,15 +142,15 @@
                 //$(this).datagrid('selectRow',0);
             }
         })
-
-        $('#licenseUrlFile').filebox({
+        // $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
+        $("#ezuiFormProd input[id='licenseUrlFile1']").filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '250', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
                 if(data){
-                    doUploadOperateLisense(data);
+                    doUploadProdLisense(data);
                 }
             }
         });
@@ -280,20 +274,20 @@
     /**
      * 经营范围选择
      */
-    function selectOperateScope() {
-        ezuidialogChoseScopeOperate = $('#dialogChoseScopeOperate').dialog({
+    function selectOperateScope1() {
+        ezuidialogChoseScopeOperate1 = $('#dialogChoseScopeOperate1').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             width:800,
             height:500,
-            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=operateLicense&id=${gspOperateLicense.operateId}',
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=prodLicense&id=${gspProdLicense.operateId}',
             onClose : function() {
-                ezuidialogChoseScopeOperate.dialog('clear');
+                ezuidialogChoseScopeOperate1.dialog('clear');
             }
         });
     }
 
-    function doUploadOperateLisense(data) {
+    function doUploadProdLisense(data) {
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -303,12 +297,12 @@
                 //多文件
                 "file":{
                     //file为name字段 后台可以通过$_FILES["file"]获得
-                    "file":document.getElementsByName("licenseUrlFile")[0].files[0]//文件数组
+                    "file":document.getElementsByName("licenseUrlFile1")[0].files[0]//文件数组
                 }
             },
             onload:function(data){
                 console.log("url"+data);
-                $("#ezuiFormOperate input[id='licenseUrl']").val(data.comment);
+                $("#ezuiFormProd input[id='licenseUrl']").val(data.comment);
             },
             onerror:function(er){
                 console.log(er);
@@ -316,7 +310,7 @@
         });
     }
 
-    function choseSelect_Catalog_operateLicense(row) {
+    function choseSelect_Catalog_prodLicense(row) {
         var choseRowNameArr = new Array();
         var choseRowArrOperate = new Array();
         //var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
@@ -325,39 +319,39 @@
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormProd input[id='businessScope']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
-            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",row.instrumentCatalogName);
+            $("#ezuiFormProd input[id='businessScope']").textbox("setValue",row.instrumentCatalogName);
         }
-        $("#ezuiFormOperate input[id='choseScope']").val(choseRowArrOperate.join(","));
-        $(ezuidialogChoseScopeOperate).dialog("close");
+        $("#ezuiFormProd input[id='choseScope']").val(choseRowArrOperate.join(","));
+        $(ezuidialogChoseScopeOperate1).dialog("close");
     }
 
-    function viewUrlOperate(url) {
+    function viewUrlOperate1(url) {
         if(url){
             showUrl(url);
         }else{
-            if($("#ezuiFormOperate input[id='licenseUrl']").val()!=""){
-                showUrl($("#ezuiFormOperate input[id='licenseUrl']").val());
+            if($("#ezuiFormProd input[id='licenseUrl']").val()!=""){
+                showUrl($("#ezuiFormProd input[id='licenseUrl']").val());
             }else {
                 showMsg("请上传许可证附件！");
             }
         }
     }
 
-    function formatOperAttachmentOperate(value,row,index){
-        return "<a onclick=\"viewUrlOperate('"+row.licenseUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    function formatOperAttachmentOperate1(value,row,index){
+        return "<a onclick=\"viewUrlOperate1('"+row.licenseUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
-    function operateCopy() {
-        var row = ezuiOperateDatagridDetail.datagrid("getSelected");
-        initHistoryData(row);
+    function operateCopy1() {
+        var row = ezuiOperateDatagridDetail1.datagrid("getSelected");
+        initHistoryData1(row);
     }
 
     //加载历史证照信息
-    function initHistoryData(row) {
-        $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
+    function initHistoryData1(row) {
+        $("#ezuiFormProd input[type!=hidden]").each(function (index) {
             console.log($(this).attr("class"));
             if($(this).attr("class")){
                 if($(this).attr("id")) {
@@ -371,15 +365,15 @@
                 }
             }
         })
-       //  $("#ezuiFormOperate input[id='licenseUrl']").val(row['licenseUrl'])
-       // $("#licenseUrlFile").filebox("setValue",row['licenseUrl']);
+       //  $("#ezuiFormProd input[id='licenseUrl']").val(row['licenseUrl'])
+       // $("#licenseUrlFile1").filebox("setValue",row['licenseUrl']);
     }
 
     //换证清空当前数据
-    function operateUpdate() {
+    function operateUpdate1() {
         opType = "update";
-        $("#opType").val("update");
-        $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
+        $("#ezuiFormProd input[id='opType']").val("update");
+        $("#ezuiFormProd input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue","");
@@ -390,8 +384,8 @@
                 }
             }
         })
-        $("#ezuiFormOperate input[id='licenseUrl']").val("");
-        $("#licenseUrlFile").filebox("setValue","");
+        $("#ezuiFormProd input[id='licenseUrl']").val("");
+        $("#licenseUrlFile1").filebox("setValue","");
     }
 
 </script>

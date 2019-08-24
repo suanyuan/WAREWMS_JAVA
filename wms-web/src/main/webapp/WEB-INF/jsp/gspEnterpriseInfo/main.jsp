@@ -161,6 +161,8 @@ var commit = function(){
     var businessObj = new Object();
     var operateobj = new Object();
     var secondRecord = new Object();
+    var prodObj = new Object();
+
     var url = '';
     var isVal = true;
 
@@ -195,15 +197,30 @@ var commit = function(){
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
-    //生产企业判断
-    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
+    //企业判断
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_JY || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if(!checkObjIsEmpty(operateobj) || isVal == false){
-            showMsg("生产类型企业需要填写经营生产许可证！");
+            showMsg("经营类型企业需要填写经营许可证！");
             return;
         }
     }else{
         if(checkObjIsEmpty(operateobj) && isVal == false){
-            showMsg("经营生产许可证填写不完全！");
+            showMsg("经营许可证填写不完全！");
+            return;
+        }
+    }
+
+    //判断生产许可证
+    isVal = checkFormData("ezuiFormProd",prodObj);
+    //生产企业判断
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
+        if(!checkObjIsEmpty(prodObj) || isVal == false){
+            showMsg("生产类型企业需要填写生产许可证！");
+            return;
+        }
+    }else{
+        if(checkObjIsEmpty(prodObj) && isVal == false){
+            showMsg("生产许可证填写不完全！");
             return;
         }
     }
@@ -215,9 +232,12 @@ var commit = function(){
         return;
     }
 
+
     gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
     gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
     gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
+    gspEnterpriceFrom["gspProdLicenseForm"] = prodObj;
+
     gspEnterpriceFrom["gspSecondRecordForm"] = secondRecord;
 	console.log(gspEnterpriceFrom);
 	//提交

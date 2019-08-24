@@ -194,13 +194,14 @@ public class FirstBusinessApplyService extends BaseService {
 				FirstBusinessApply firstBusinessApply1= new FirstBusinessApply();
 				firstBusinessApply1.setSupplierId(supplierId);
 				firstBusinessApply1.setSpecsId(specsId);
+				firstBusinessApply1.setClientId(clientId);
 				int num = firstBusinessApplyMybatisDao.selectFirstBusinessBySupplierAndProduct(firstBusinessApply1);
 				if(num>0){
 					flag = false;
 				}
 			}
 			if(!flag){
-				return 	Json.error("同一供应商与产品！  不能重复申请！");
+				return 	Json.error("同一货主 供应商与产品！  不能重复申请！");
 			}
 			//specsId   产品id
 			for(String specsId : arr){
