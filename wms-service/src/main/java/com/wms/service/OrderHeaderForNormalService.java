@@ -1596,7 +1596,6 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("ji", "imgFile/FM/ji.jpg");
         map.put("tips5", "imgFile/FM/POD.jpg");
 
-        map.put("payMethod", "1");
         map.put("expressType", "1");
         map.put("codingMappingOut", "3A");
         //打印时间
@@ -1608,7 +1607,7 @@ public class OrderHeaderForNormalService extends BaseService {
         //订单条码的生成
         map.put("childMailNo", "217276730473");
         //子单号
-        map.put("mailNo", "217276730473");
+        //map.put("mailNo", "217276730473");
         //打印单号
         //map.put("addedService","A");
         //母单号
@@ -1644,7 +1643,18 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverCity", "哈尔滨市");
         map.put("deliverCounty", "香坊区");
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
-        map.put("PANO", "有点僵");
+
+        //备注
+        map.put("remark","");
+        //托寄物
+        map.put("cargo","");
+        //计费重量
+        map.put("cargoTotalWeight","");
+        //实际重量
+        map.put("cargoTotalWeight","");
+        //费用合计
+        map.put("totalFee","");
+
 
         map.put("PALINENO", System.currentTimeMillis());
         list.add(map);
