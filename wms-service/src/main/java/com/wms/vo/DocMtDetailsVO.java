@@ -19,7 +19,7 @@ public class DocMtDetailsVO {
 	private double mtqtyCompleted;
 	private double mtqtyEachCompleted;
 	private String uom;
-	private long checkFlag;
+	private String checkFlag;
 	private String conclusion;
 	private java.util.Date conversedate;
 	private String conversewho;
