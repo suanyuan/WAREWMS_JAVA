@@ -132,7 +132,7 @@ public class DocMtHeaderService extends BaseService {
             docMtHeader.setMtno(resultNo);
             query.setMtno(resultNo);
             docMtHeader.setMtstatus("00");
-            docMtHeader.setMttype("*");
+            docMtHeader.setMttype("PC");
             docMtHeader.setFromdate(StringtoDate(query.getFromdate()));
             docMtHeader.setTodate(StringtoDate(query.getTodate()));
             docMtHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -201,7 +201,7 @@ public class DocMtHeaderService extends BaseService {
             json.setMsg("订单删除成功!");
 		}else {
             json.setSuccess(false);
-            json.setMsg("订单不可删除!");
+            json.setMsg("订单不可删除或者不存在!");
         }
 
 		return json;

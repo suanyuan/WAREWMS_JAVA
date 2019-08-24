@@ -49,19 +49,19 @@ where 1=1
 	    and linestatus =  #{condition.linestatus}
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
+	    and customerid like concat('%',#{condition.customerid},'%')
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =  #{condition.sku}
+	    and sku like concat('%',#{condition.sku},'%')
 	</if>
 	<if test="condition.inventoryage != null and condition.inventoryage != ''" >
 	    and inventoryage =  #{condition.inventoryage}
 	</if>
 	<if test="condition.locationid != null and condition.locationid != ''" >
-	    and locationid =  #{condition.locationid}
+	    and locationid like concat('%',#{condition.locationid},'%')
 	</if>
 	<if test="condition.lotnum != null and condition.lotnum != ''" >
-	    and lotnum =  #{condition.lotnum}
+	    and lotnum like concat('%',#{condition.lotnum},'%')
 	</if>
 	<if test="condition.mtqtyExpected != null and condition.mtqtyExpected != ''" >
 	    and mtqty_expected =  #{condition.mtqtyExpected}

@@ -1,5 +1,6 @@
 package com.wms.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
@@ -8,7 +9,9 @@ public class DocMtHeaderVO {
 	private String mtno;
 	private String mtstatus;
 	private String mttype;
+	@JSONField(format = "yyyy-MM-dd")
 	private java.util.Date fromdate;
+	@JSONField(format = "yyyy-MM-dd")
 	private java.util.Date todate;
 	private long storageFlag;           //贮存条件 1||0
 	private long flowFlag;              //作业流程 1||0
