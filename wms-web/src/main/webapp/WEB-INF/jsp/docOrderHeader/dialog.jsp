@@ -112,6 +112,8 @@
 					<td><input type='text' id='editwho' name='editwho' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<td colspan="2">
 						<a onclick='commit();' id='ezuiBtn_orderCommit' class='easyui-linkbutton' data-options='iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+						<a onclick='copyDetailGo();' id='ezuiBtn_copyDetailGo' class='easyui-linkbutton'
+						   data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>明细复用</a>
 					</td>
 				</tr>
 			</table>

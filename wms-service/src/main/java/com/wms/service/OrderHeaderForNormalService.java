@@ -26,6 +26,7 @@ import com.wms.utils.*;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
+import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import com.wms.vo.form.pda.PageForm;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -1663,6 +1664,59 @@ public class OrderHeaderForNormalService extends BaseService {
         model.addAttribute("format", "pdf");
         model.addAttribute("jrMainDataSource", jrDataSource);
 
+    }
+
+
+    /**
+     *  查询相同货主下的编号
+    */
+    public List<EasyuiCombobox> copyQueryOrderno(String customerid){
+
+        List<OrderHeaderForNormal> orderList = orderHeaderForNormalMybatisDao.queryByAllocationCustomerid(customerid);
+
+        List<EasyuiCombobox> easyuiList = new ArrayList<>();
+        if (orderList != null && orderList.size() > 0) {
+            for (OrderHeaderForNormal orderHeaderForNormalUse : orderList) {
+                EasyuiCombobox comb = new EasyuiCombobox();
+                comb.setId(orderHeaderForNormalUse.getOrderno());
+                comb.setValue(orderHeaderForNormalUse.getOrderno());
+                easyuiList.add(comb);
+            }
+        }
+        return easyuiList;
+    }
+
+    public Json copyDetailGo(String orderno,String detailOrderno,String soreference2){
+        Json json = new Json();
+        OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
+        query.setOrderno(orderno);
+        MybatisCriteria criteria = new MybatisCriteria();
+        criteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<OrderDetailsForNormal> detailsForNormals = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
+        if(detailsForNormals.size() > 0){
+            for ( OrderDetailsForNormal orderDetailsForNormal: detailsForNormals) {
+                OrderDetailsForNormal normal = new OrderDetailsForNormal();
+
+                BeanUtils.copyProperties(orderDetailsForNormal, normal);
+
+                normal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                normal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+                //日期
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                normal.setAddtime(new Date());
+
+
+
+
+                orderDetailsForNormalMybatisDao.add(normal);
+            }
+        }else {
+            json.setSuccess(false);
+            json.setMsg("没有明细信息");
+
+        }
+        return json;
     }
 
     private String getKey(OrderDetailsForNormal detail) {

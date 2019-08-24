@@ -28,7 +28,18 @@
 	<result column="edittime" property="edittime"/>
 	<result column="editwho" property="editwho"/>
 </resultMap>
-       
+
+    <resultMap id="MtProgressMap" type="com.wms.entity.DocMtProgressDetail">
+        <result column="mtno" property="mtno"/>
+        <result column="goodsModel" property="goodsModel"/>
+        <result column="unmtPiece" property="unmtPiece"/>
+        <result column="mtedPiece" property="mtedPiece"/>
+        <result column="serialNum" property="serialNum"/>
+        <result column="batchNum" property="batchNum"/>
+        <result column="locationid" property="locationid"/>
+        <result column="lotnum" property="lotnum"/>
+    </resultMap>
+
 <!-- doc_mt_details table all fields -->
 <sql id="Base_Column_List" >
 	 mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho,edittime,editwho
@@ -49,19 +60,19 @@ where 1=1
 	    and linestatus =  #{condition.linestatus}
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
+	    and customerid like concat('%',#{condition.customerid},'%')
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =  #{condition.sku}
+	    and sku like concat('%',#{condition.sku},'%')
 	</if>
 	<if test="condition.inventoryage != null and condition.inventoryage != ''" >
 	    and inventoryage =  #{condition.inventoryage}
 	</if>
 	<if test="condition.locationid != null and condition.locationid != ''" >
-	    and locationid =  #{condition.locationid}
+	    and locationid like concat('%',#{condition.locationid},'%')
 	</if>
 	<if test="condition.lotnum != null and condition.lotnum != ''" >
-	    and lotnum =  #{condition.lotnum}
+	    and lotnum like concat('%',#{condition.lotnum},'%')
 	</if>
 	<if test="condition.mtqtyExpected != null and condition.mtqtyExpected != ''" >
 	    and mtqty_expected =  #{condition.mtqtyExpected}
@@ -111,8 +122,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho,edittime,editwho)
- values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},#{edittime},#{editwho})
+  insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho)
+ values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -198,7 +209,7 @@ where 1=1
 <!-- 根据id查询 养护计划管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_mt_details where mtno = #{mtno}
+	 from doc_mt_details where mtno = #{mtno} and mtlineno = #{mtlineno}
 </select>
 
 <!-- 养护计划管理 列表总数-->
@@ -240,4 +251,43 @@ where 1=1
 <select id="getMtlinenoByMtno" resultType="java.lang.Long"  parameterType="Object">
 	select ifnull(max(mtlineno),0) from doc_mt_details where mtno = #{mtno,jdbcType=VARCHAR}
 </select>
+
+    <select id="queryUnfinishedDetails" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_mt_details
+        where mtno = #{mtno} and locationid = #{locationid} and linestatus in ('00', '30')
+    </select>
+
+    <update id="updateDetailQty" parameterType="java.util.Map">
+        update doc_mt_details
+        set mtqty_expected = #{mtqtyExpected}, mtqty_each_expected = #{mtqtyEachExpected},
+        mtqty_completed = #{mtqtyCompleted}, mtqty_each_completed = #{mtqtyEachCompleted},
+        editwho = #{editwho}, edittime = now()
+        where mtno = #{mtno} and mtlineno = #{mtlineno}
+    </update>
+
+    <delete id="clearZeroTask">
+        delete from doc_mt_details
+        where ifnull(mtqty_expected, 0) = 0
+          and ifnull(mtqty_each_expected, 0) = 0
+    </delete>
+
+    <select id="queryDocMtList" parameterType="java.lang.String" resultMap="MtProgressMap">
+        select
+        a.mtno, a.locationid, a.lotnum, c.descr_e as goodsModel,
+        a.sum_qty_expected as unmtPiece, a.sum_qty_completed as mtedPiece,
+        b.lotatt05 as serialNum, b.lotatt04 as batchNum
+        from (
+              select detail.mtno, detail.lotnum, detail.customerid, detail.locationid, detail.sku,
+              (ifnull(sum(detail.mtqty_expected), 0) - ifnull(sum(detail.mtqty_completed), 0)) as sum_qty_expected,
+              ifnull(sum(detail.mtqty_completed), 0) as sum_qty_completed
+              from doc_mt_details detail
+              group by detail.mtno, detail.customerid, detail.locationid, detail.lotnum, detail.sku
+        ) as a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        left join bas_sku c on a.sku = c.sku and a.customerid = c.customerid
+        where a.mtno = #{mtno}
+        order by a.locationid asc, a.sku asc, a.customerid asc
+    </select>
 </mapper>   

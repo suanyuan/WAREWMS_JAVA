@@ -3,7 +3,10 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.DocMtDetails;
 import com.wms.entity.DocMtHeader;
+import com.wms.entity.DocMtProgressDetail;
+import com.wms.query.DocMtDetailsQuery;
 import com.wms.query.DocMtHeaderQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,7 +32,27 @@ public interface DocMtDetailsMybatisDao extends BaseDao {
      * 细单号
      * @return
      */
+    long  getMtlinenoByMtno(DocMtHeaderQuery query);
 
-        long  getMtlinenoByMtno(DocMtHeaderQuery query);
+    /**
+     * 养护明细查询
+     */
+    List<DocMtDetails> queryUnfinishedDetails(DocMtDetailsQuery docMtDetails);
 
+    /**
+     * 更新养护数
+     */
+    void updateDetailQty(DocMtDetails docMtDetails);
+
+    /**
+     * 清除预期数为0 的养护明细
+     */
+    void clearZeroTask();
+
+    /**
+     * 查询养护进度明细列表
+     * @param mtno ~
+     * @return ~
+     */
+    List<DocMtProgressDetail> queryDocMtList(@Param("mtno") String mtno);
 }

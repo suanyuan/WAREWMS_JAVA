@@ -1816,6 +1816,63 @@ function closeRefOut() {
     refOutDialog.dialog("close");
 }
 
+//明细复用
+var reuseDialogGo;
+//初始化
+$(function () {
+    //$('#ezuiBtn_copyDetailGo').linkbutton('disable');
+    reuseDialogGo = $('#reuseDialogGo').dialog({
+        modal: true,
+        title: '明细复用',
+        buttons: '',
+        width: 250,
+        height: 100,
+        onOpen: function () {
+        },
+        onClose: function () {
+
+        }
+    }).dialog('close');
+
+})
+//给明细复用入库编号文本框
+function  copyDetailGo() {
+    var customeridTo =  $("#ezuiDialog  #customerid").textbox('getValue');//获取的货主代码
+    console.log(customeridTo);
+    $("#refInNoGo").combobox({
+        panelHeight: 'auto',
+        editable: false,
+        url:'/docOrderHeaderController.do?copyQueryOrderno&customerid='+customeridTo,
+        valueField: 'id',
+        textField: 'value',
+        width:150
+    })
+    reuseDialogGo.dialog("open");
+}
+
+function copyDodetails() {
+    var newOrderno =  $("#ezuiDialog  #orderno").textbox('getValue');//新增SO编号
+    var soreference2 =  $("#ezuiDialog  #soreference2").textbox('getValue');//定向入库单号
+    $.ajax({
+        url : 'docOrderHeaderController.do?copyDetailGo',
+        data : {orderno : $("#refInNoGo").combobox("getValue"),detailOrderno : newOrderno , soreference2: soreference2},
+        type : 'POST',
+        dataType : 'JSON',
+        success : function(result){
+            try {
+
+                showMsg(result.msg)
+                refOutDialog.dialog("close");
+            } catch (e) {
+                return;
+            };
+        }
+    });
+}
+
+
+
+
 function doRefOut() {
     var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
     $.ajax({
@@ -1879,6 +1936,8 @@ function choseOrderTypeAfter(value) {
         $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG");
 	}
 }
+
+
 
 </script>
 </head>
@@ -2087,6 +2146,25 @@ function choseOrderTypeAfter(value) {
 			</tr>
 		</table>
 	</div>
+	<!-- 明细复用 -->
+	<div id="reuseDialogGo" style="display: none;text-align: center">
+		<table width="100%">
+			<tr>
+				<td>SO编号</td>
+				<td>
+					<input id="refInNoGo" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<a onclick='' id='closeRefInReuse' class='easyui-linkbutton' data-options=''
+					   href='javascript:void(0);'>关闭</a>
+					<a onclick='copyDodetails();' id='doRefInReuse' class='easyui-linkbutton' data-options='' href='javascript:void(0);'>复用</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 	<!-- 批量操作返回end -->
 	
 	<c:import url='/WEB-INF/jsp/docOrderHeader/dialog.jsp' />

@@ -1495,5 +1495,12 @@
         sostatus = #{sostatus}, editwho = #{editwho}, edittime = now()
         where orderno = #{orderno}
     </update>
+	<select id="queryByAllocationCustomerid" resultMap="BaseResultMap" parameterType="Object">
+		select
+			orderno
+ 		from
+			doc_order_header
+			where customerid = #{customerid}
+	</select>
 
 </mapper>   

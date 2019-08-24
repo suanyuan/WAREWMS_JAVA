@@ -16,7 +16,9 @@ import java.util.Map;
 public interface DocMtHeaderMybatisDao extends BaseDao {
 
     //新增MTNO
-    String getIdSequence(Map<String, Object> map);
+    void getIdSequence(Map<String, Object> map);
+
+    void updateStatus(DocMtHeader header);
 
     /**
      * 查询未完成的养护任务单
