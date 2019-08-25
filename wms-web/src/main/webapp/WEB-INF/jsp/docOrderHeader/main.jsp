@@ -932,7 +932,7 @@ var commit = function(){
 	ezuiForm.form('submit', {
 		url : url,
 		onSubmit : function(){
-		    if($("#ezuiForm #ordertype").combobox("getValue") == "DX" && $("#ezuiForm #soreference2")){
+		    if($("#ezuiForm #ordertype").combobox("getValue") == "DX" && $("#ezuiForm #soreference2").textbox("getValue") == ""){
 				showMsg("定下订单需要填写定下入库单号");
 				return false;
 			}
