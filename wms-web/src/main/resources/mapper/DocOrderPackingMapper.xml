@@ -669,4 +669,10 @@ select a.orderno as orderNo,
         packingflag = #{packingflag}
         where orderno = #{orderno} and traceid = #{traceid}
     </update>
+    
+    <select id="queryPackageExist" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select 
+        <include refid="Carton_Info_Column_List"/>
+        from doc_order_packing_carton_info where orderno = #{orderno}
+    </select>
 </mapper>   

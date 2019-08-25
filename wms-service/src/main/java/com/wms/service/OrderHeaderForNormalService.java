@@ -94,6 +94,9 @@ public class OrderHeaderForNormalService extends BaseService {
     @Autowired
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
 
+    @Autowired
+    private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
+
     /**
      * 订单列表显示
      */
@@ -340,6 +343,14 @@ public class OrderHeaderForNormalService extends BaseService {
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
+
+                List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryPackageExist(orderNo);
+                if (docOrderPackingList.size() > 0) {
+                    json.setSuccess(false);
+                    json.setMsg("此出库单已开始装箱，不可一键拣货");
+                    return json;
+                }
+
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
                 if (allocationDetailsIdList != null && allocationDetailsIdList.size() > 0) {
                     for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {

@@ -94,4 +94,11 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
 	int updatePackingCarton(DocOrderPackingCarton docOrderPackingCarton);
 
     int updatePackingCartonInfo(DocOrderPackingCartonInfo docOrderPackingCartonInfo);
+
+    /**
+     * 获取单号下是否有装箱记录
+     * @param orderno ~
+     * @return ~
+     */
+    List<DocOrderPacking> queryPackageExist(@Param("orderno") String orderno);
 }
