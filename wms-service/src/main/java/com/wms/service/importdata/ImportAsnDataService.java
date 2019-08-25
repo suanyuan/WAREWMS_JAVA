@@ -182,8 +182,7 @@ public class ImportAsnDataService {
             } catch (ParseException e) {
                 rowResult.append("[失效日期]，格式错误").append(" ");
             }
-            try {
-                if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
+            if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
                     //根据供应商代码去查询是否存在
                     BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(dataArray.getLotatt08());
                     try {
@@ -201,12 +200,8 @@ public class ImportAsnDataService {
                     } catch (Exception e) {
                         rowResult.append("[供应商代码]，查无资料").append(" ");
                     }
-                } else {
-                    throw new Exception();
                 }
-            } catch (Exception e) {
-                rowResult.append("[供应商代码]，未输入").append(" ");
-            }
+
 			/*try {
 				formatRQ.parse(dataArray.getLotatt03());
 			} catch (ParseException e) {
@@ -583,8 +578,10 @@ public class ImportAsnDataService {
                         asnDetails.setLotatt06(basSku.getReservedfield03());
                     }
 
-                    //供应商
-                    asnDetails.setLotatt08(basSku.getSkuGroup6());
+                    if(asnDetails.getLotatt08().equals("") && asnDetails.getLotatt08() == null){
+                        //供应商
+                        asnDetails.setLotatt08(basSku.getSkuGroup6());
+                    }
 
                     //样品属性
                     if (StringUtils.isEmpty(asnDetails.getLotatt09())) {
