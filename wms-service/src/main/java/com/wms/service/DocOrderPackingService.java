@@ -830,7 +830,16 @@ public class DocOrderPackingService extends BaseService {
             packingCartonQuery.setLotnum(form.getLotnum());
             DocOrderPackingCarton packingCarton = docOrderPackingMybatisDao.queryAvailablePackedDetail(packingCartonQuery);
             int matchQty = packingCarton == null ? 0 : packingCarton.getQty();
-            if (matchDetails.getQty() == (form.getQty() + matchQty)) {
+
+            //装箱完成同批号的产品
+            ActAllocationDetailsQuery allocationDetailsQuery = new ActAllocationDetailsQuery();
+            allocationDetailsQuery.setOrderno(form.getOrderno());
+            allocationDetailsQuery.setCustomerid(form.getCustomerid());
+            allocationDetailsQuery.setSku(form.getSku());
+            allocationDetailsQuery.setLotnum(form.getLotnum());
+            int batchPackNum = actAllocationDetailsMybatisDao.queryPackedNum(allocationDetailsQuery);
+
+            if (matchDetails.getQty() == (form.getQty() + (matchQty - batchPackNum))) {
 
                 actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
             }
@@ -934,12 +943,12 @@ public class DocOrderPackingService extends BaseService {
             List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
             for (ActAllocationDetails allocationDetails : actAllocationDetailsList) {
 
-                DocOrderPackingCarton packedQuery = new DocOrderPackingCarton();
-                packedQuery.setAllocationdetailsid(allocationDetails.getAllocationdetailsid());
-                packedQuery.setOrderno(orderno);
-                int packedNum = docOrderPackingMybatisDao.queryPackedNum(packedQuery);
-                allocationDetails.setPrice(packedNum + 0.0);
-                actAllocationDetailsMybatisDao.update(allocationDetails);//分配明细
+//                DocOrderPackingCarton packedQuery = new DocOrderPackingCarton();
+//                packedQuery.setAllocationdetailsid(allocationDetails.getAllocationdetailsid());
+//                packedQuery.setOrderno(orderno);
+//                int packedNum = docOrderPackingMybatisDao.queryPackedNum(packedQuery);
+//                allocationDetails.setPrice(packedNum + 0.0);
+//                actAllocationDetailsMybatisDao.update(allocationDetails);//分配明细
 
                 PdaOrderPackingForm packingForm = new PdaOrderPackingForm(
                         orderHeaderForNormal.getWarehouseid(),

@@ -110,10 +110,10 @@ public class OrderDetailsForNormalService extends BaseService {
 		}
 
 		//判断经营范围是否匹配
-		Json operateJson = isRightOperate(orderHeaderForNormal.getCustomerid(),orderHeaderForNormal.getConsigneeid(),orderDetailsForNormalForm.getSku());
-		if(!operateJson.isSuccess()){
-			return operateJson;
-		}
+//		Json operateJson = isRightOperate(orderHeaderForNormal.getCustomerid(),orderHeaderForNormal.getConsigneeid(),orderDetailsForNormalForm.getSku());
+//		if(!operateJson.isSuccess()){
+//			return operateJson;
+//		}
 		//效期
 		//证照期限
 

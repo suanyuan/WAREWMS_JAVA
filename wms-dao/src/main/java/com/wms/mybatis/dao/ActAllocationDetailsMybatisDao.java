@@ -39,4 +39,6 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
      * 通过已完成的包装复合回写到分配明细中
      */
 	void callPickingProcedure(PdaOrderPackingForm form);
+
+	int queryPackedNum(ActAllocationDetailsQuery query);
 }

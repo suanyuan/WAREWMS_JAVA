@@ -624,7 +624,8 @@ select a.orderno as orderNo,
     <select id="queryGoodsPackage" parameterType="java.util.Map" resultMap="PackingCartonMap">
         select a.* from doc_order_packing_carton a
         left join doc_order_packing_carton_info b on a.orderno = b.orderno and a.traceid = b.traceid
-        where a.orderno = #{orderno, jdbcType=VARCHAR} and a.sku = #{sku, jdbcType=VARCHAR} and a.customerid = #{customerid, jdbcType=VARCHAR} and a.lotnum = #{lotnum, jdbcType=VARCHAR}
+        where a.orderno = #{orderno, jdbcType=VARCHAR} and a.sku = #{sku, jdbcType=VARCHAR}
+          and a.customerid = #{customerid, jdbcType=VARCHAR} and a.lotnum = #{lotnum, jdbcType=VARCHAR}
           and b.packingflag = 0
     </select>
 

@@ -463,7 +463,8 @@ where 1=1
 
     <update id="finishPacking" parameterType="java.util.Map">
       update act_allocation_details set
-      packflag = '1' where allocationdetailsid = #{allocationdetailsid}
+      packflag = '1', price = qty
+       where allocationdetailsid = #{allocationdetailsid}
     </update>
 
     <update id="callPickingProcedure" statementType="CALLABLE" parameterType="java.util.Map">
@@ -471,5 +472,11 @@ where 1=1
         #{allocationdetailsid,mode=IN,jdbcType=VARCHAR},'CN',#{userid,mode=IN,jdbcType=VARCHAR},
         #{result,mode=OUT,jdbcType=VARCHAR})}
     </update>
-  	
+
+    <select id="queryPackedNum" parameterType="java.util.Map" resultType="integer">
+        select ifnull(sum(a.qty), 0) from act_allocation_details a
+        where a.orderno = #{orderno} and a.customerid = #{customerid} and a.sku = #{sku} and a.lotnum = #{lotnum}
+        and a.packflag = 1
+    </select>
+
 </mapper>   
