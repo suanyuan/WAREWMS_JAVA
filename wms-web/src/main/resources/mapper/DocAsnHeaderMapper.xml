@@ -718,11 +718,21 @@ insert into doc_asn_header
 		<if test="notes != null  ">
 			notes,
 		</if>
+		<if test="userdefine1 != null  ">
 		userdefine1,
+		</if>
+		<if test="userdefine2 != null  ">
 		userdefine2,
+		</if>
+		<if test="userdefine3 != null  ">
 		userdefine3,
+		</if>
+		<if test="userdefine4 != null  ">
 		userdefine4,
+		</if>
+		<if test="userdefine5 != null  ">
 		userdefine5,
+		</if>
 		releasestatus<!--释放状态 -->
 		)
       values(#{asnno},

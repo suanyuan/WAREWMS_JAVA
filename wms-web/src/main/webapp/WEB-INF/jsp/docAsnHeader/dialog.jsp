@@ -77,7 +77,7 @@
                                data-options=''/></td>
                 </tr>
                 <tr>
-                    <th>冷链标记</th>
+                    <th>温度记录表</th>
                     <td colspan="2">
 						<input type='text' id='coldTag' name="coldTag" size='16' data-options=''/>
 						<input type="hidden" name="userdefine4"/>

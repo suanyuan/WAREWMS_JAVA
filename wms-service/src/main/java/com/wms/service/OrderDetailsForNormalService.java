@@ -269,7 +269,9 @@ public class OrderDetailsForNormalService extends BaseService {
 	}
 
 	public Json isRightOperate(String customerId,String receId,String sku){
-		BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
+		//TODO 经营范围匹配修改（经营生产拆分后需要区分证照）
+		return Json.success("ok");
+		/*BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
 		BasCustomer basCustomer = basCustomerService.selectCustomerById(receId, Constant.CODE_CUS_TYP_CO);
 		if(basSku == null){
 			return Json.error("查询不到产品档案");
@@ -284,6 +286,7 @@ public class OrderDetailsForNormalService extends BaseService {
 		query.setIsUse(Constant.IS_USE_YES);
 		GspProductRegister gspProductRegister = gspProductRegisterService.queryByRegisterNo(gspregisterNo);
 		GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
+
 		List<GspOperateDetailVO> registerOperate = gspOperateDetailService.queryOperateDetailByLicense(gspProductRegister.getProductRegisterId());
 		List<GspOperateDetailVO> operateDetailVOS = gspOperateDetailService.queryOperateDetailByLicense(gspOperateLicense.getOperateId());
 
@@ -309,6 +312,6 @@ public class OrderDetailsForNormalService extends BaseService {
 				return Json.error("经营范围不匹配");
 			}
 		}
-		return Json.success("");
+		return Json.success("");*/
 	}
 }
