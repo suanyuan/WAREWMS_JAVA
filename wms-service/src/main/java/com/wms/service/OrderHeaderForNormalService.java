@@ -1,10 +1,9 @@
 package com.wms.service;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.Font;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.*;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -18,20 +17,14 @@ import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.result.ReceiptResult;
 import com.wms.service.importdata.ImportOrderDataService;
-import com.wms.service.sfExpress.CallExpressServiceTools;
-import com.wms.service.sfExpress.RequestXmlUtil;
-import com.wms.service.sfExpress.sfXmlParse.ShunFengResponse;
-import com.wms.service.sfExpress.sfXmlParse.XmlHelper;
 import com.wms.utils.*;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
-import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import com.wms.vo.form.pda.PageForm;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -42,18 +35,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {

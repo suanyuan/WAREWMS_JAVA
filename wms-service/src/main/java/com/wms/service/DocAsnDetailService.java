@@ -63,6 +63,9 @@ public class DocAsnDetailService extends BaseService {
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
 
+	@Autowired
+	private BasSkuService basSkuService;
+
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -243,6 +246,14 @@ public class DocAsnDetailService extends BaseService {
 		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(docAsnDetailQuery);
 		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+
+        BasSku basSku = basSkuService.getSkuInfo(docAsnDetail.getCustomerid(),docAsnDetail.getSku());
+        if(basSku!=null){
+
+            //数量换算
+            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+            docAsnDetail.setExpectedqtyEach(docAsnDetail.getExpectedqty().multiply(basPackage.getQty1()));
+        }
 
         //判断预入库明细里面的sku和客户id下的18个批属是否存在
         InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
