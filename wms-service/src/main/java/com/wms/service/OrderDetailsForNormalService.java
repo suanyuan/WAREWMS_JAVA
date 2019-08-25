@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.BasPackageMybatisDao;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.GspOperateLicenseQuery;
 import com.wms.vo.GspOperateDetailVO;
@@ -50,6 +51,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	private GspOperateLicenseService gspOperateLicenseService;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private BasPackageMybatisDao basPackageMybatisDao;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
@@ -134,7 +137,12 @@ public class OrderDetailsForNormalService extends BaseService {
 		BasSku basSku = basSkuService.getSkuInfo(orderDetailsForNormalForm.getCustomerid(),orderDetailsForNormalForm.getSku());
 		if(basSku!=null){
 			orderDetailsForNormal.setUom(basSku.getPackid());
+
+			//数量换算
+            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+            orderDetailsForNormal.setQtyorderedEach(orderDetailsForNormal.getQtyordered() * basPackage.getQty1().doubleValue());
 		}
+
 		orderDetailsForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		orderDetailsForNormalMybatisDao.updateBySelective(orderDetailsForNormal);
 		json.setSuccess(true);
