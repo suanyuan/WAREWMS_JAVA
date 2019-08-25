@@ -202,4 +202,11 @@ public class OrderDetailsForNormalVO {
     private Double qtyreleased;
 
     private String freegift;
+
+    private String soreference1;
+    private String soreference2;
+
+    private String cContact;
+    private String consigneeid;
+
 }

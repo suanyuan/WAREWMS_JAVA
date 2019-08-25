@@ -439,7 +439,10 @@ public class ImportOrderDataService {
         importDetailsDataVO.setSeq(dataArray.getSeq());
         importDetailsDataVO.setOrderno(dataArray.getOrderno());
         importDetailsDataVO.setCustomerid(dataArray.getCustomerid());
+        importDetailsDataVO.setConsigneeid(dataArray.getcContact());
         importDetailsDataVO.setSku(dataArray.getSku());
+        importDetailsDataVO.setSoreference1(dataArray.getSoreference1());
+        importDetailsDataVO.setSoreference2(dataArray.getSoreference2());
         importDetailsDataVO.setQtyordered(Double.parseDouble(dataArray.getQtyordered()));
         importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
         importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
@@ -456,6 +459,7 @@ public class ImportOrderDataService {
         importDetailsDataVO.setLotatt13(dataArray.getLotatt13());
         importDetailsDataVO.setLotatt14(dataArray.getLotatt14());
         importDetailsDataVO.setLotatt15(dataArray.getLotatt15());
+
         return importDetailsDataVO;
     }
 }

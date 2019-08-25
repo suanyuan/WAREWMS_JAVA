@@ -724,15 +724,15 @@
         //     arr.push(rowE.specsId)
         //     // supplierArr = $("#supplierArr").val(),
         // }
-
-        var rowMain = ezuiDatagrid.datagrid('getSelected');
-        if(rowMain.firstState == '10' || rowMain.firstState =='40'){
-            $.messager.show({
-                msg : '审核中与审核通过的申请无法修改', title : '提示'
-            });
-            return;
+        if(processType == 'edit'){
+            var rowMain = ezuiDatagrid.datagrid('getSelected');
+            if(rowMain.firstState == '10' || rowMain.firstState =='40'){
+                $.messager.show({
+                    msg : '审核中与审核通过的申请无法修改', title : '提示'
+                });
+                return;
+            }
         }
-
         if($("#clientId").val() == ""){
             $.messager.show({
                 msg : "请选择委托客户", title : '<spring:message code="common.message.prompt"/>'

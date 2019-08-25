@@ -64,8 +64,9 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/gspEnterpriseInfoController.do?getBtn"/>', ezuiMenu);
-			$(this).datagrid('unselectAll');
+			//ajaxBtn($('#menuId').val(), '<c:url value="/gspEnterpriseInfoController.do?getBtn"/>', ezuiMenu);
+			//$(this).datagrid('unselectAll');
+            $('#ezuiDatagrid').datagrid('clearSelections');
 		}
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
