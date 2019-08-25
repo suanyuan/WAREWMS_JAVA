@@ -769,51 +769,9 @@ var downloadTemplate = function(){
 				<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
 				</tr>
 
-				<tr>
-					<th>生产许可证号/备案号</th>
-					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
-					<th>冷链标志</th>
-					<td><input type='text' name='reservedfield07' id="reservedfield07" class='easyui-combobox' size='16' data-options="required:false,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
 
-				</tr>
 
-				<tr>
-					<th>灭菌标志</th>
-					<td><input type='text' name='reservedfield08' id="reservedfield08" class='easyui-combobox' size='16' data-options="required:false,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
-					<th>医疗器械标志</th>
-					<td><input type='text' name='reservedfield09' id="reservedfield09" class='easyui-combobox' size='16' data-options="required:false,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
-				</tr>
 
-				<tr>
-					<th>养护周期(天)</th>
-					<td><input type='text' name='reservedfield10' class='easyui-textbox' size='16' value="tian" /></td>
-					<th>重量</th>
-					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
-				</tr>
 
 
 
@@ -896,33 +854,6 @@ var downloadTemplate = function(){
 																															]" readonly/></td>
 				</tr>
 				<tr>
-					<th>是否冷链</th>
-					<td><input type='text' name='reservedfield06' id="reservedfield06" class='easyui-combobox' size='16' data-options="required:false,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
-					<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
-					<%--<th>产地</th>--%>
-					<%--<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>--%>
-					<th>是否医疗器械</th>
-					<td><input type='text' name='reservedfield07' id="reservedfield07" class='easyui-combobox' size='16' data-options="required:false,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
-					<%--<th>宽</th>--%>
-					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
-				</tr>
-				<tr>
 					<th>是否需要产品合格证</th>
 					<td><input type='text' name='skuGroup8' id="skuGroup8" class='easyui-combobox' size='16' data-options="required:true,
 																															panelHeight:'auto',
@@ -939,6 +870,52 @@ var downloadTemplate = function(){
 					<%--<th>宽</th>--%>
 					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
 				</tr>
+				<tr>
+					<th>生产许可证号/备案号</th>
+					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
+					<th>冷链标志</th>
+					<td><input type='text' name='reservedfield07' id="reservedfield07" class='easyui-combobox' size='16' data-options="required:false,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: 'LD', value: '冷冻'},
+																																{id: 'LC', value: '冷藏'},
+																																{id: 'FLL', value: '非冷链'}
+																															]" readonly/></td>
+
+				</tr>
+				<tr>
+					<th>灭菌标志</th>
+					<td><input type='text' name='reservedfield08' id="reservedfield08" class='easyui-combobox' size='16' data-options="required:false,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
+																															]" readonly/></td>
+					<th>医疗器械标志</th>
+					<td><input type='text' name='reservedfield09' id="reservedfield09" class='easyui-combobox' size='16' data-options="required:false,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
+																															]" readonly/></td>
+				</tr>
+
+				<tr>
+					<th>养护周期(天)</th>
+					<td><input type='text' name='reservedfield10' class='easyui-textbox' size='16' value="tian" /></td>
+					<th>重量</th>
+					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
+				</tr>
+
 				<tr>
 					<th>商品条码</th>
 					<td><input type='text' name='reservedfield12' class='easyui-textbox' size='16' /></td>
