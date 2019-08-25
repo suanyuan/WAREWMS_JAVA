@@ -133,6 +133,21 @@ public class PdaPutawayController {
     }
 
     /**
+     * 结束上架可行性校验
+     * @param form 上架任务单号
+     * @return ~
+     */
+    @RequestMapping(params = "queryEndAvailable", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> endAvailableQuery(PdaDocPaEndForm form) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        resultMap.put(Constant.DATA, docPaHeaderService.endAvailableQuery(form));
+        return resultMap;
+    }
+
+    /**
      * 获取上架进度明细列表
      * @param pano ~
      * @return ~

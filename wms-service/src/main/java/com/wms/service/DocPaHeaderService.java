@@ -198,6 +198,30 @@ public class DocPaHeaderService extends BaseService {
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }
+
+    /**
+     * 结束上架可行性校验
+     * @param form 上架任务单号
+     * @return ~
+     */
+    public List<DocPaDetailsVO> endAvailableQuery(PdaDocPaEndForm form) {
+
+        List<DocPaDetails> detailsList = docPaDetailsMybatisDao.queryDocPaList(form.getPano());
+        List<DocPaDetailsVO> docPaDetailsVOList = new ArrayList<>();
+        DocPaDetailsVO docPaDetailsVO;
+        for (DocPaDetails docPaDetails : detailsList) {
+
+            if (docPaDetails.getLinestatus().equals("00")) {
+
+                docPaDetailsVO = new DocPaDetailsVO();
+                BeanUtils.copyProperties(docPaDetails, docPaDetailsVO);
+                docPaDetailsVOList.add(docPaDetailsVO);
+            }
+        }
+
+        return docPaDetailsVOList;
+    }
+
 /*打印*/
     public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
         StringBuilder sb = new StringBuilder();
