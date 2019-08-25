@@ -313,16 +313,18 @@
         if(!row){
             row = enterpriseSearchGrid.datagrid("getSelected");
         }
+        //id,no,name,address,enterpriseId,enterpriseName,licenseNo,recordNo,storageConditions
+        //(row.productRegisterId,row.productRegisterNo,row.productNameMain,row.productionAddress,row.enterpriseId,row.enterpriseName,row.licenseNo,row.recordNo,row.storageConditions);
         console.log(row);
-        var id = row.id;
+        var id = row.productRegisterId;
         var no = row.productRegisterNo;
-        var name = row.name;
-        var address = row.address;
+        var name = row.productNameMain;
+        var address = row.productionAddress;
         var enterpriseId = row.enterpriseId;
         var enterpriseName = row.enterpriseName;
         var licenseNo = row.licenseNo;
         var recordNo = row.recordNo;
-        var storageConditions = row.storageCondition;
+        var storageConditions = row.storageConditions;
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
