@@ -23,6 +23,7 @@ public class ImportAsnData implements Serializable {
 	private long asnlineno;
 	private String sku;
 	private String expectedqty;
+	private String expectedqtyEach;
 	private String receivinglocation;
 	private String totalgrossweight;
 	private String totalcubic;
@@ -244,6 +245,13 @@ public class ImportAsnData implements Serializable {
 		this.asntype = asntype;
 	}
 
+	public String getExpectedqtyEach() {
+		return expectedqtyEach;
+	}
+
+	public void setExpectedqtyEach(String expectedqtyEach) {
+		this.expectedqtyEach = expectedqtyEach;
+	}
 
 	@Override
 	public boolean equals(Object o) {

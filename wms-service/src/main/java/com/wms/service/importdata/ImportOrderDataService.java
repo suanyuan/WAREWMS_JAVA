@@ -388,6 +388,9 @@ public class ImportOrderDataService {
                 orderHeader.setArchiveflag(Constant.IS_USE_YES);
                 orderHeader.setSostatus("00");
                 orderHeader.setReleasestatus("Y");
+                orderHeader.setSoreference1(importDataVO.getSoreference1());
+                orderHeader.setSoreference2(importDataVO.getSoreference2());
+                orderHeader.setConsigneeid(importDataVO.getConsigneeid());
                 //保存订单主信息
                 orderHeaderForNormalMybatisDao.add(orderHeader);
                 for (OrderDetailsForNormalVO importDetailsDataVO : importDataVO.getOrderDetailsForNormalVOList()) {

@@ -1363,7 +1363,7 @@ var detailsDel = function(){
 					if(confirm){
 						$.ajax({
 							url : 'docOrderDetailsController.do?delete',
-							data : {orderno : row.orderno, orderlineno : row.orderlineno},
+							data : {orderNo : row.orderno, orderLineNo : row.orderlineno},
 							type : 'POST',
 							dataType : 'JSON',
 							success : function(result){
@@ -1398,6 +1398,10 @@ var detailsCommit = function(){
 		url = '<c:url value="/docOrderDetailsController.do?edit"/>';
 	}else{
 		url = '<c:url value="/docOrderDetailsController.do?add"/>';
+	}
+    if($("#ezuiDetailsForm #lotatt04").combobox("getValue") == "" && $("#ezuiDetailsForm #lotatt05").textbox("getValue") == ""){
+        showMsg("序列号和生产批号必须有一个");
+        return;
 	}
 	ezuiDetailsForm.form('submit', {
 		url : url,
@@ -1710,7 +1714,6 @@ var selectSku = function(){
             valueField:'id',
             textField:'value',
             width:110,
-            required:true,
             onSelect:function (record) {
                /* console.log(record);
                 $("#ezuiDetailsForm #lotatt09").combobox('setValue',record.option.lotatt09);

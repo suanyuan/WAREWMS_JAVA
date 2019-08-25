@@ -208,5 +208,5 @@ public class OrderDetailsForNormalVO {
 
     private String cContact;
     private String consigneeid;
-
+    private String skuName;
 }

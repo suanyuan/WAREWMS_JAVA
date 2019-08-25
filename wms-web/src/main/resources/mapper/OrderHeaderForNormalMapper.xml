@@ -271,8 +271,8 @@
 			<if test="condition.orderno != null and condition.orderno != ''" >
 				and orderno =  #{condition.orderno}
 			</if>
-			<if test="condition.customerId != null and condition.customerId != ''" >
-				and customerid =  #{condition.customerId}
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid =  #{condition.customerid}
 			</if>
 			<if test="condition.soreference1 != null and condition.soreference1 != ''" >
 				and soreference1 =  #{condition.soreference1}
