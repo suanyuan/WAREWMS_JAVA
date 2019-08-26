@@ -165,7 +165,7 @@ public class ImportAsnDataService {
                 rowResult.append("[预期到货时间]，未输入").append(" ");
             }
             try {
-                formatEx1.parse(dataArray.getExpectedarrivetime1());
+                format.parse(dataArray.getExpectedarrivetime1());
             } catch (ParseException e) {
                 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
                 rowResult.append("[预期到货时间]，格式错误").append(" ");
@@ -345,7 +345,11 @@ public class ImportAsnDataService {
                                         docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
                                 ) {
-                                    docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
+                                    if (StringUtil.isEmpty(dataArray.getExpectedqtyEach())) {
+                                        docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
+                                    }else {
+                                        docAsnDetailVO.setExpectedqtyEach(docAsnDetailVO.getExpectedqtyEach().add(new BigDecimal(dataArray.getExpectedqtyEach())));
+                                    }
                                     isBreak = true;
                                     break;
                                 }
