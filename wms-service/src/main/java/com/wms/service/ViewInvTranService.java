@@ -36,7 +36,7 @@ public class ViewInvTranService extends BaseService {
 //返回主页datagrid
 	public EasyuiDatagrid<ViewInvTranVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvTranQuery query) {
 		EasyuiDatagrid<ViewInvTranVO> datagrid = new EasyuiDatagrid<ViewInvTranVO>();
-		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+		//query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId()); TODO 事务表暂时没有仓库id
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());

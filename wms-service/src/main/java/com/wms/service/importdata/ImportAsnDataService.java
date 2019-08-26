@@ -170,7 +170,7 @@ public class ImportAsnDataService {
                 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
                 rowResult.append("[预期到货时间]，格式错误").append(" ");
             }
-            //生产日期、失效日期、入库日期
+            //生产日期、失效日期、入库日期co
             try {
                 if (StringUtils.isNotEmpty(dataArray.getLotatt01())) {
                     formatRQ.parse(dataArray.getLotatt01());
