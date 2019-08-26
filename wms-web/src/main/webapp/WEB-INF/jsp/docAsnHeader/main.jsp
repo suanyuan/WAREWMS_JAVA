@@ -1549,23 +1549,15 @@ $(function () {
 })
 //给明细复用入库编号文本框
 function  copyDetail() {
-	var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
-	$("#refInNoTo").combobox({
-		panelHeight: 'auto',
-		editable: false,
-		url:'/docAsnHeaderController.do?getDoHeaderAsnno&customerid='+customeridff,
-		valueField: 'id',
-		textField: 'value',
-		width:150
-	})
 	reuseDialog.dialog("open");
 }
 //明细——复用按钮
 function reuseDetailIn() {
-    var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
+	var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
+	var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
     $.ajax({
         url : 'docAsnHeaderController.do?addDoDetailReuse',
-        data : {headerAssno:$("#refInNoTo").combobox("getValue"),detailAssno :asnno1},
+        data : {headerOrdern:$("#refInNoTo").val(),detailAssno :asnno1 , customerid :customeridff},
         type : 'POST',
         dataType : 'JSON',
         success : function(result){
@@ -1574,6 +1566,7 @@ function reuseDetailIn() {
 					$('#ezuiBtn_copyDetail').linkbutton('disable');
 					$('#ezuiDetailsDatagrid').datagrid('load',{asnno:asnno1});
 					reuseDialog.dialog("close");
+					$('#refInNoTo').textbox('clear')
                 }
                 showMsg(result.msg)
             } catch (e) {
@@ -1768,9 +1761,9 @@ function asnRowStyle(index,row) {
 	<div id="reuseDialog" style="display: none;text-align: center">
 		<table width="100%">
 			<tr>
-				<td>入库单编号</td>
+				<td>SO编号</td>
 				<td>
-					<input id="refInNoTo" type="text"/>
+					<input id="refInNoTo" type="text" class='easyui-textbox' size='16' data-options="panelHeight: 'auto', width:'150'"/>
 				</td>
 			</tr>
 			<tr>

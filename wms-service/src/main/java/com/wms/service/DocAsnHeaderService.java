@@ -41,6 +41,7 @@ import org.xml.sax.SAXException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -515,51 +516,67 @@ public class DocAsnHeaderService extends BaseService {
 	/**
 	 * 明细复用
 	 * @author Haki
-	 * @date 2019/8/23
 	*/
-	public  Json addDoDetailReuse(String headerAssno,String detailAssno ) throws  Exception{
-
+	public  Json addDoDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws  Exception{
 	    Json json = new Json();
+	    DocAsnDetail details = new DocAsnDetail();
+	    Integer index = 1 ;
 
-	    DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+		OrderDetailsForNormalQuery normalQuery = new OrderDetailsForNormalQuery();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        docAsnDetailQuery.setAsnno(headerAssno);
+        normalQuery.setOrderno(headerOrdern);
+        normalQuery.setCustomerid(customerid);
 
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
-        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
-        if(docAsnDetailList.size() > 0){
-            for (DocAsnDetail docAsnDetail: docAsnDetailList) {
-                DocAsnDetail docAsnDetailTo =  new DocAsnDetail();
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(normalQuery));
+        List<OrderDetailsForNormal> normals = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+        if(normals.size() > 0){
+            for (OrderDetailsForNormal orderDetailsForNormal: normals) {
+				details.setAsnno(detailAssno);
+				details.setAsnlineno(index);
+				details.setCustomerid(orderDetailsForNormal.getCustomerid());
+				details.setLinestatus("00");
+				details.setSku(orderDetailsForNormal.getSku());
+				details.setSkudescrc(orderDetailsForNormal.getSkuName());
+				details.setQcstatus("DJ");
+				details.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyallocated()));
+				details.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyallocatedEach()));
+				details.setReceivedqty(BigDecimal.ZERO);
+				details.setReceivinglocation(orderDetailsForNormal.getLocation());
+				details.setLotatt01(orderDetailsForNormal.getLotatt01());
+				//拼接转换日期格式
+				/*String[] dataArr = de.getUBD().split("/");
+				String newDate = dataArr[0]+"-" + (dataArr[1].length()> 1 ? dataArr[1] : "0"+dataArr[1])+"-" + dataArr[2];*/
+				details.setLotatt02(orderDetailsForNormal.getLotatt02());
+				details.setLotatt03(orderDetailsForNormal.getLotatt03());
+				details.setLotatt04(orderDetailsForNormal.getLotatt04());
+				details.setLotatt05(orderDetailsForNormal.getLotatt05());
+				details.setLotatt06(orderDetailsForNormal.getLotatt06());
+				details.setLotatt07(orderDetailsForNormal.getLotatt07());
+				details.setLotatt08(orderDetailsForNormal.getLotatt08());
+				details.setLotatt09("ZC");
+				details.setLotatt10("DJ");
+				details.setLotatt11(orderDetailsForNormal.getLotatt11());
+				details.setLotatt12(orderDetailsForNormal.getLotatt12());
+				details.setLotatt13(orderDetailsForNormal.getLotatt13());
+				details.setLotatt14(detailAssno);
+				details.setTotalgrossweight(BigDecimal.ZERO);
+				details.setTotalcubic(BigDecimal.ZERO);
+				details.setTotalprice(BigDecimal.ZERO);
+				details.setUom(orderDetailsForNormal.getUom());
+				details.setPackid(orderDetailsForNormal.getPackid());
+				details.setTotalcubic( new BigDecimal(orderDetailsForNormal.getCubic()));
+				details.setTotalgrossweight( new BigDecimal(orderDetailsForNormal.getGrossweight()));
+				details.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));
+				//总价
+				details.setTotalprice(new BigDecimal(orderDetailsForNormal.getPrice()));
+				details.setReserveFlag("N");
+				details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				details.setAddtime(new Date());
+				details.setEdittime(new Date());
+				details.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
-				BeanUtils.copyProperties(docAsnDetail, docAsnDetailTo);
-				DocAsnDetailQuery docAsnDetailQueryTo = new DocAsnDetailQuery();
-				docAsnDetailQueryTo.setAsnno(detailAssno);
-				/*获取新的明细行号*/
-				int orderlineno = docAsnDetailsMybatisDao.  getAsnlinenoById(docAsnDetailQueryTo);
-				docAsnDetailTo.setAsnlineno(orderlineno + 1);
-
-                docAsnDetailTo.setAsnno(detailAssno);
-               /* docAsnDetailTo.setCustomerid(docAsnDetail.getCustomerid());
-                docAsnDetailTo.setSku(docAsnDetail.getSku());*/
-
-                docAsnDetailTo.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                docAsnDetailTo.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-
-                //预期到货数量
-               // docAsnDetailTo.setExpectedqty(docAsnDetail.getExpectedqty());
-                //入库日期
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                docAsnDetailTo.setLotatt03(formatter.format(new Date()));
-                //质量状态
-                docAsnDetailTo.setLotatt10("DJ");
-
-                //判断预入库明细里面的sku和客户id下的18个批属是否存在
-                InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetailTo);
-                //判断是否要插入扫码批次匹配表
-                basGtnLotattService.queryInsertGtnLotatt(invLotAtt, headerAssno);
-
-                docAsnDetailsMybatisDao.add(docAsnDetailTo);
-
+				index += 1 ;
+                docAsnDetailsMybatisDao.add(details);
             }
 			json.setSuccess(true);
 			json.setMsg("明细复用成功");
@@ -570,33 +587,6 @@ public class DocAsnHeaderService extends BaseService {
 		return json;
 	}
 
-
-
-	/**
-	 * 根据货主代码查询编号
-	 * @author Haki
-	 * @date 2019/8/23
-	*/
-	public  List<EasyuiCombobox> getDoHeaderAsnno(String customerid) {
-
-		//根据货主代码查询对应的编号
-		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		docAsnHeaderQuery.setCustomerid(customerid);
-
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
-		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryAsnno(mybatisCriteria);
-		List<EasyuiCombobox> comboboxList = new ArrayList<>();
-		if (docAsnHeaderList != null && docAsnHeaderList.size() > 0) {
-			for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
-				EasyuiCombobox comb = new EasyuiCombobox();
-				comb.setId(docAsnHeader.getAsnno());
-				comb.setValue(docAsnHeader.getAsnno());
-				comboboxList.add(comb);
-			}
-		}
-		return comboboxList;
-	}
 
 
 	public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo){

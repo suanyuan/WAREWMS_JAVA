@@ -204,8 +204,8 @@ public class DocAsnHeaderController {
 	@Login
 	@RequestMapping(params = "addDoDetailReuse",method = RequestMethod.POST)
 	@ResponseBody
-	public Json addAsnDetailReuse(String headerAssno,String detailAssno ) throws Exception {
-		Json json = docAsnHeaderService.addDoDetailReuse(headerAssno,detailAssno);
+	public Json addAsnDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws Exception {
+		Json json = docAsnHeaderService.addDoDetailReuse(headerOrdern,detailAssno,customerid);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -213,12 +213,7 @@ public class DocAsnHeaderController {
 		return json;
 	}
 
-	@Login
-	@RequestMapping(params = "getDoHeaderAsnno")
-	@ResponseBody
-	public List<EasyuiCombobox> getDoHeaderAsnno(String customerid) {
-		return  docAsnHeaderService.getDoHeaderAsnno(customerid);
-	}
+
 
 
 }

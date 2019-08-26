@@ -107,7 +107,6 @@ $(function() {
 			$(this).datagrid('clearChecked');
 		}
 	});
-	
 	//订单明细列表
 	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
 		url : '<c:url value="/docOrderDetailsController.do?showDatagrid"/>',
@@ -225,7 +224,6 @@ $(function() {
             return date <= validateDate;
         }
     });
-	
 	/* 产品编码限定大写字母 */
 	$("#ezuiSkuDataDialog #sku").textbox('textbox').css('text-transform','uppercase');
 	$("#ezuiDetailsForm #sku").textbox('textbox').css('text-transform','uppercase');
@@ -241,17 +239,9 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		},
 		onOpen : function() {
-
-			/*var rows = ezuiDetailsDatagrid.datagrid('options');
-			console.log(rows);*/
-			/*if(rows.rows[0]){
-				$('#ezuiBtn_copyDetailGo').linkbutton('enable');
-			}else{
-				$('#ezuiBtn_copyDetailGo').linkbutton('disable');
-			}*/
 		}
 	}).dialog('close');
-	
+
 	//订单明细弹框
 	ezuiDetailsDialog = $('#ezuiDetailsDialog').dialog({
 		modal : true,
@@ -261,17 +251,17 @@ $(function() {
 			ezuiFormClear(ezuiDetailsForm);
 		}
 	}).dialog('close');
-	
+
 	//客户选择弹框
 	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '',
 		onOpen : function() {
-			
+
 		},
 		onClose : function() {
-			
+
 		}
 	}).dialog('close');
 
@@ -309,7 +299,7 @@ $(function() {
 		onClose : function() {
 		}
 	}).dialog('close');
-	
+
 	//导入
 	ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
 		modal : true,
@@ -319,7 +309,7 @@ $(function() {
 			ezuiFormClear(ezuiImportDataForm);
 		}
 	}).dialog('close');
-	
+
 	//批量操作返回结果
 	ezuiOperateResultDataDialog = $('#ezuiOperateResultDataDialog').dialog({
 		modal : true,
@@ -341,6 +331,17 @@ var ezuiToolbarClear = function(){
 	$("#sostatusTo").combobox('clear');
 	$("#ordertype").combobox('clear');
 	$("#releasestatus").combobox('clear');
+
+    $('#soreference2').textbox('clear');
+    $("#cc1").combobox('clear');
+    $("#cc2").combobox('clear');
+    $("#cc3").combobox('clear');
+    $("#cAddress1").textbox('clear');
+    $("#cContact").textbox('clear');
+    $("#cTel1").textbox('clear');
+    $("#cAddress4").textbox('clear');
+    $("#carrierContact").textbox('clear');
+
 	$("#ordertime").datetimebox({
 		value:ordertimeDate(new Date())
 	});
@@ -986,11 +987,18 @@ var doSearch = function(){
 		orderno : $('#orderno').val(),
 		customerid : $('#customerid').val(),
 		soreference1 : $('#soreference1').val(),
-		sostatus : $('#sostatus').combobox('getValue'),
+        soreference2 : $('#soreference2').val(),
+		//收货人
+		 cContact : $('#cContact').val(),
+		//收货电话
+		  cTel1 : $('#cTel1').val(),
+		//订单状态
+        cAddress1 : $('#cAddress1').val(),
+        orderStatusName : $('#sostatus').combobox('getValue'),
 		sostatusTo : $('#sostatusTo').combobox('getValue'),
 		ordertime : $('#ordertime').datetimebox('getValue'),
 		ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
-		ordertype : $('#ordertype').combobox('getValue'),
+		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
 		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "" : "N",
         cProvince : $("#cc1").textbox("getValue"),
@@ -1853,33 +1861,25 @@ $(function () {
 })
 //给明细复用入库编号文本框
 function  copyDetailGo() {
-    var customeridTo =  $("#ezuiDialog  #customerid").textbox('getValue');//获取的货主代码
-    console.log(customeridTo);
-    $("#refInNoGo").combobox({
-        panelHeight: 'auto',
-        editable: false,
-        url:'/docOrderHeaderController.do?copyQueryOrderno&customerid='+customeridTo,
-        valueField: 'id',
-        textField: 'value',
-        width:150
-    })
     reuseDialogGo.dialog("open");
 }
 
 function copyDodetails() {
     var newOrderno =  $("#ezuiDialog  #orderno").textbox('getValue');//新增SO编号
+    var customerid = $("#ezuiDialog  #customerid").textbox('getValue');
     var soreference2 =  $("#ezuiDialog  #soreference2").textbox('getValue');//定向入库单号
     $.ajax({
         url : 'docOrderHeaderController.do?copyDetailGo',
-        data : {orderno : $("#refInNoGo").combobox("getValue"),detailOrderno : newOrderno , soreference2: soreference2},
+        data : {asnno : $("#refInNoGo").val(),detailOrderno : newOrderno , customerid : customerid ,soreference2 : soreference2 },
         type : 'POST',
         dataType : 'JSON',
 		success : function(result){
 			try {
 				if(result.success){
 					$('#ezuiBtn_copyDetailGo').linkbutton('disable');
-					$('#ezuiDetailsDatagrid').datagrid('load',{orderno:newOrderno});
+					$('#ezuiDetailsDatagrid').datagrid('load',{orderno : newOrderno});
 					reuseDialogGo.dialog("close");
+                    $('#refInNoGo').textbox('clear');
 				}
 				showMsg(result.msg)
 			} catch (e) {
@@ -2029,7 +2029,7 @@ function choseOrderTypeAfter(value) {
 																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
 																															valueField: 'id',
 																															textField: 'value'"/></td>
-							
+
 							<th>至</th><td><input type='text' id='sostatusTo' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
 																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
@@ -2111,11 +2111,11 @@ function choseOrderTypeAfter(value) {
 		<div onclick='detailsDel();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.skuDelete'/></div>
 		<div onclick='detailsEdit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.skuEdit'/></div>
 	</div>
-	
+
 	<!-- 导入start -->
 	<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>
-			<table>	
+			<table>
 				<tr>
 					<th>档案</th>
 					<td>
@@ -2135,11 +2135,11 @@ function choseOrderTypeAfter(value) {
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<!-- 导入end -->
-	
+
 	<!-- 批量操作返回start -->
 	<div id='ezuiOperateResultDataDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='ezuiOperateResultDataForm' method='post' enctype='multipart/form-data'>
-			<table>	
+			<table>
 				<tr>
 					<td><input id='operateResult' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
 				</tr>
@@ -2156,7 +2156,7 @@ function choseOrderTypeAfter(value) {
 			<tr>
 				<td>SO编号</td>
 				<td>
-					<input id="refOutNo" type="text"/>
+					<input id="refOutNo" type="text"  />
 				</td>
 			</tr>
 			<tr>
@@ -2171,9 +2171,9 @@ function choseOrderTypeAfter(value) {
 	<div id="reuseDialogGo" style="display: none;text-align: center">
 		<table width="100%">
 			<tr>
-				<td>SO编号</td>
+				<td>ASN编号</td>
 				<td>
-					<input id="refInNoGo" type="text"/>
+					<input id="refInNoGo" type="text" class='easyui-textbox' size='16' data-options="panelHeight: 'auto', width:'150'" />
 				</td>
 			</tr>
 			<tr>
@@ -2187,7 +2187,7 @@ function choseOrderTypeAfter(value) {
 	</div>
 
 	<!-- 批量操作返回end -->
-	
+
 	<c:import url='/WEB-INF/jsp/docOrderHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/custDialog.jsp' />
     <c:import url='/WEB-INF/jsp/docOrderHeader/receDialog.jsp' />
