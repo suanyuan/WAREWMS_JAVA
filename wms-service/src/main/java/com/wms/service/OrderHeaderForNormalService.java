@@ -56,7 +56,7 @@ public class OrderHeaderForNormalService extends BaseService {
     private CommonService commonService;
 
     @Autowired
-    private DocOrderPackingService docOrderPackingService;
+    private  DocOrderPackingService docOrderPackingService;
     @Autowired
     private BasCustomerService basCustomerService;
     @Autowired
@@ -107,8 +107,8 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 
-            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(), Constant.CODE_CUS_TYP_CO);
-            if (customer != null) {
+            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(),Constant.CODE_CUS_TYP_CO);
+            if(customer!=null){
                 orderHeaderForNormalVO.setConsigneename(customer.getDescrC());
             }
             orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
@@ -249,7 +249,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 if (StringUtil.isNotEmpty(result) && result.equals("000")) {
 
-                    if (orderHeaderForNormal.getOrdertype().equals("DX") || orderHeaderForNormal.getOrdertype().equals("YY")) {
+                    if (orderHeaderForNormal.getOrdertype().equals("DX")) {
 
                         Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
                         if (!fixReuslt.isSuccess()) {
@@ -257,19 +257,19 @@ public class OrderHeaderForNormalService extends BaseService {
                             json.setSuccess(false);
                             json.setMsg(fixReuslt.getMsg());
                             return json;
-                        } else {
+                        }else {
 
                             json.setSuccess(true);
                             json.setMsg("000");
                             return json;
                         }
-                    } else {
+                    }else {
 
                         json.setSuccess(true);
                         json.setMsg("000");
                         return json;
                     }
-                } else {
+                }else {
 
                     json.setSuccess(false);
                     json.setMsg("分配失败");
@@ -855,31 +855,25 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
                     form.setField("sOReference1", orderHeaderForNormal.getOrderCode());
                     //form.setField("notes", orderHeaderForNormal.getNotes());
-                    form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
-                    String note = "";
+                    String note ="";
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
                             BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(), detailsList.get(row * i + j).getSku());
 
                             //获取冷链标志
-                            if (StringUtils.isEmpty(note)) {
-                                if (!StringUtils.isEmpty(basSku.getReservedfield07())) {
-                                    switch (basSku.getReservedfield07()) {
-                                        case "LD":
-                                            note = "冷冻";
-                                            break;
-                                        case "FLL":
-                                            note = "非冷链";
-                                            break;
-                                        case "LC":
-                                            note = "冷藏";
-                                            break;
+                            if(StringUtils.isEmpty(note)){
+                                if(!StringUtils.isEmpty(basSku.getReservedfield07())){
+                                    switch (basSku.getReservedfield07()){
+                                        case "LD" : note = "冷冻";break;
+                                        case "FLL" : note = "非冷链";break;
+                                        case "LC" : note = "冷藏";break;
                                     }
                                 }
                             }
 
-                            form.setField("lineNo." + (j), (j + 1) + "");
+                            form.setField("lineNo." + (j), (j+1)+"");
                             form.setField("location." + (j), detailsList.get(row * i + j).getLocation());
                             form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
                             form.setField("skuN." + (j), detailsList.get(row * i + j).getSkuName());
@@ -901,10 +895,10 @@ public class OrderHeaderForNormalService extends BaseService {
                         }
                     }
 
-                    form.setField("notes", orderHeaderForNormal.getNotes() + "    " + note);
+                    form.setField("notes", orderHeaderForNormal.getNotes()+"    "+note);
 
-                    form.setField("sumqtyPage", "件数合计：" + totalQtyE);
-                    form.setField("sumqty", "数量合计：" + totalQty);
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1288,7 +1282,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("userdefine2", obj.getUserdefine2());
                     form.setField("sOReference1", obj.getSoreference1());
                     form.setField("notes", obj.getNotes());
-                    form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
@@ -1314,8 +1308,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             totalQty += Integer.parseInt(detailsList.get(row * i + j).getQty());
                         }
                     }
-                    form.setField("sumqtyPage", "件数合计：" + totalQtyE);
-                    form.setField("sumqty", "数量合计：" + totalQty);
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(obj.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1508,13 +1502,12 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 获取合格证
-     *
      * @param customerId 客户id
-     * @param sku        产品代码
-     * @param lotatt4    生产批号
+     * @param sku 产品代码
+     * @param lotatt4 生产批号
      * @return
      */
-    public String getCertificate(String customerId, String sku, String lotatt4) {
+    public String getCertificate(String customerId,String sku,String lotatt4) {
         MybatisCriteria criteria = new MybatisCriteria();
         DocAsnCertificateQuery query = new DocAsnCertificateQuery();
         query.setCustomerid(customerId);
@@ -1522,7 +1515,7 @@ public class OrderHeaderForNormalService extends BaseService {
         query.setLotatt04(lotatt4);
         criteria.setCondition(query);
         List<DocAsnCertificate> list = docAsnCertificateMybatisDao.queryByList(criteria);
-        if (list != null && list.size() > 0) {
+        if(list!=null && list.size()>0){
             return list.get(0).getCertificateContext();
         }
         return "";
@@ -1546,10 +1539,10 @@ public class OrderHeaderForNormalService extends BaseService {
 
             if (StringUtils.isNotEmpty(orderCodeList)) {
                 String[] orderNoArr = orderCodeList.split(",");
-                PdfWriter writer = PdfWriter.getInstance(doc, os);
+                PdfWriter writer = PdfWriter.getInstance(doc,os);
                 doc.open();
-                for (String order : orderNoArr) {
-                    // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+                for(String order : orderNoArr){
+                   // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
                     //doc.add(new Paragraph(order).setFont(font).setFixedPosition(1, 200, bottom, width));
 
                     /*PdfContentByte cb = writer.getDirectContent();
@@ -1564,12 +1557,12 @@ public class OrderHeaderForNormalService extends BaseService {
                     query.setOrderno(order);
                     criteria.setCondition(query);
                     List<OrderDetailsForNormal> details = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
-                    for (OrderDetailsForNormal de : details) {
-                        String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());
-                        if (!"".equals(url)) {
+                    for(OrderDetailsForNormal de : details){
+                        String url = getCertificate(de.getCustomerid(),de.getSku(),de.getLotatt04());
+                        if(!"".equals(url)){
                             doc.add(new Paragraph(order));
-                            Image png = Image.getInstance(Constant.uploadUrl + File.separator + url);
-                            png.scaleAbsolute(500.0F, 750F);
+                            Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
+                            png.scaleAbsolute(500.0F,750F);
                             doc.add(png);
                         }
 
@@ -1656,15 +1649,15 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
 
         //备注
-        map.put("remark", "1");
+        map.put("remark","");
         //托寄物
-        map.put("cargo", "1");
+        map.put("cargo","");
         //计费重量
-        map.put("cargoTotalWeight", "1");
+        map.put("cargoTotalWeight","");
         //实际重量
-        map.put("cargoTotalWeight", "1");
+        map.put("cargoTotalWeight","");
         //费用合计
-        map.put("totalFee", "1");
+        map.put("totalFee","");
 
 
         map.put("PALINENO", System.currentTimeMillis());
@@ -1675,6 +1668,7 @@ public class OrderHeaderForNormalService extends BaseService {
         model.addAttribute("jrMainDataSource", jrDataSource);
 
     }
+
 
 
     /**
@@ -1758,7 +1752,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
     }
         return json;
-}
+    }
 
     private String getKey(OrderDetailsForNormal detail) {
         return detail.getSku() + "" + detail.getLotatt01() + detail.getLotatt02() + detail.getLotatt03() + detail.getLotatt04()
@@ -1766,10 +1760,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 + detail.getLotatt10() + detail.getLotatt11() + detail.getLotatt12() + detail.getLotatt13() + detail.getLotatt13();
     }
 
-    private String getYesNo(String obj) {
-        if (obj == null || obj.equals("0")) {
+    private String getYesNo(String obj){
+        if(obj == null || obj.equals("0")){
             return "否";
-        } else {
+        }else{
             return "是";
         }
     }
@@ -1780,6 +1774,8 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return String.valueOf(d);
     }
+
+
 
 
 }

@@ -516,8 +516,10 @@ public class DocAsnHeaderService extends BaseService {
 	/**
 	 * 明细复用
 	 * @author Haki
+	 * @date 2019/8/23
 	*/
-	public  Json addDoDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws  Exception{
+    public  Json addDoDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws  Exception{
+
 	    Json json = new Json();
 	    DocAsnDetail details = new DocAsnDetail();
 	    Integer index = 1 ;
@@ -587,6 +589,33 @@ public class DocAsnHeaderService extends BaseService {
 		return json;
 	}
 
+
+
+	/**
+	 * 根据货主代码查询编号
+	 * @author Haki
+	 * @date 2019/8/23
+	*/
+	public  List<EasyuiCombobox> getDoHeaderAsnno(String customerid) {
+
+		//根据货主代码查询对应的编号
+		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		docAsnHeaderQuery.setCustomerid(customerid);
+
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
+		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryAsnno(mybatisCriteria);
+		List<EasyuiCombobox> comboboxList = new ArrayList<>();
+		if (docAsnHeaderList != null && docAsnHeaderList.size() > 0) {
+			for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+				EasyuiCombobox comb = new EasyuiCombobox();
+				comb.setId(docAsnHeader.getAsnno());
+				comb.setValue(docAsnHeader.getAsnno());
+				comboboxList.add(comb);
+			}
+		}
+		return comboboxList;
+	}
 
 
 	public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo){
