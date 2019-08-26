@@ -128,6 +128,7 @@ public class ImportAsnDataService {
         DocAsnDetailVO importDetailsDataVO = null;
         String quantityData = null;
         Integer count = 1;
+        SimpleDateFormat formatEx1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
@@ -164,7 +165,7 @@ public class ImportAsnDataService {
                 rowResult.append("[预期到货时间]，未输入").append(" ");
             }
             try {
-                format.parse(dataArray.getExpectedarrivetime1());
+                formatEx1.parse(dataArray.getExpectedarrivetime1());
             } catch (ParseException e) {
                 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
                 rowResult.append("[预期到货时间]，格式错误").append(" ");
@@ -274,7 +275,7 @@ public class ImportAsnDataService {
                     importDataVO.setAsnreference2(dataArray.getAsnreference2());
                     importDataVO.setAsntype(dataArray.getAsntype());
                     try {
-                        importDataVO.setExpectedarrivetime1(format.parse(dataArray.getExpectedarrivetime1()));
+                        importDataVO.setExpectedarrivetime1(formatEx1.parse(dataArray.getExpectedarrivetime1()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -327,9 +328,13 @@ public class ImportAsnDataService {
 
                         DocAsnHeaderVO DocAsnHeaderVoSense = null;
                         for (DocAsnHeaderVO docAsnHeaderVO : importData) {
+
+                            System.out.println(formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()));
+                            System.out.println(compareData.getExpectedarrivetime1());
+
                             if (docAsnHeaderVO.getCustomerid().equals(compareData.getCustomerid()) &&
                                     docAsnHeaderVO.getAsnreference1().equals(compareData.getAsnreference1()) &&
-                                    format.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
+                                    formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
                                 DocAsnHeaderVoSense = docAsnHeaderVO;
                             }
                             //遍历明细信息
@@ -337,7 +342,7 @@ public class ImportAsnDataService {
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
                                         docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
-                                        docAsnHeaderVO.getAsnreference1().equalsIgnoreCase(dataArray.getAsnreference1()) &&
+                                        docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
                                 ) {
                                     docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
@@ -381,7 +386,7 @@ public class ImportAsnDataService {
                             importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
                             importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
                             importDetailsDataVO.setNotes(dataArray.getNotes());
-//                            importDetailsDataVOList.add(importDetailsDataVO);
+                            importDetailsDataVO.setNotes(dataArray.getNotes());
                             if (DocAsnHeaderVoSense != null)
                                 DocAsnHeaderVoSense.getDocAsnDetailVOList().add(importDetailsDataVO);
                         }

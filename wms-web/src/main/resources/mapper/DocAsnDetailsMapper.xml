@@ -62,6 +62,7 @@
     <result column="lotatt16" property="lotatt16"/>
     <result column="lotatt17" property="lotatt17"/>
     <result column="lotatt18" property="lotatt18"/>
+	<result column="cusdescr" property="cusdescr"/>
 	<result column="notes" property="notes"/>
 	<result column="operator" property="operator"/>
 	<result column="overrcvpercentage" property="overrcvpercentage"/>
@@ -916,10 +917,13 @@ insert into doc_asn_details
     a.lotatt16,
     a.lotatt17,
     a.lotatt18,
-				   (@rowNum:=@rowNum+1) as row_num
+	bc.descr_c as cusdescr,
+				   	(@rowNum:=@rowNum+1) as row_num
 	          from Doc_Asn_Details a
-                   LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid AND a.sku = b.sku,
-                   Bas_Codes c,(Select (@rowNum :=0)) d
+                   	LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid
+					RIGHT OUTER JOIN bas_customer bc ON a.lotatt08 = bc.customerid
+					AND a.sku = b.sku,
+                   	Bas_Codes c,(Select (@rowNum :=0)) d
 	         where a.linestatus = c.code
 	           and c.codeid = 'ASN_STS'
 	           and a.asnno = #{condition.asnno,jdbcType=VARCHAR}) as t

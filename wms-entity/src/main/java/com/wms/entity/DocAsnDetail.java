@@ -163,6 +163,8 @@ public class DocAsnDetail implements Serializable {
     private String lotatt17 ="";
 
     private String lotatt18 ="";
+	//供应商名称
+	private String cusdescr;
 
 	private String notes;
 
@@ -246,10 +248,19 @@ public class DocAsnDetail implements Serializable {
 
     private BasPackage basPackage;
 
+
+
 	public DocAsnDetail() {
 	}
-	
-	
+
+	public String getCusdescr() {
+		return cusdescr;
+	}
+
+	public void setCusdescr(String cusdescr) {
+		this.cusdescr = cusdescr;
+	}
+
 	public String getSkuName() {
 		return skuName;
 	}
