@@ -5,6 +5,7 @@ import com.wms.dto.DocPaDTO;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
+import com.wms.mybatis.dao.InvLotAttMybatisDao;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
@@ -51,6 +52,9 @@ public class DocPaService {
     private CommonService commonService;
     @Autowired
     private BasSkuService basSkuService;
+
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
 
     /**
      * 编号列表
@@ -292,14 +296,31 @@ public class DocPaService {
 
                         if (docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
 
+
+
                             PdaDocQcDetailForm pdaDocQcDetailForm = new PdaDocQcDetailForm();
                             BeanUtils.copyProperties(docQcDetailsForm, pdaDocQcDetailForm);
                             pdaDocQcDetailForm.setAllqcflag(0);
+                            pdaDocQcDetailForm.setQcno(docQcDetailsForm.getQcno());
+                            pdaDocQcDetailForm.setQclineno(docQcDetailsForm.getQclineno());
                             pdaDocQcDetailForm.setQcqty(docQcDetailsForm.getQcqtyExpected().toString());
+                            pdaDocQcDetailForm.setQcdescr("未见异常，检查验收合格");
                             pdaDocQcDetailForm.setWarehouseid(login.getWarehouse().getId());
                             pdaDocQcDetailForm.setUserid(login.getId());
                             pdaDocQcDetailForm.setLanguage("CN");
-                            pdaDocQcDetailForm.setQcdescr("未见异常，检查验收合格");
+
+                            pdaDocQcDetailForm.setLotatt10("HG");
+
+                            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docPaDTO.getLotnum());
+                            if (invLotAtt != null) {
+                                pdaDocQcDetailForm.setLotatt01(invLotAtt.getLotatt01());
+                                pdaDocQcDetailForm.setLotatt02(invLotAtt.getLotatt02());
+                                pdaDocQcDetailForm.setLotatt04(invLotAtt.getLotatt04());
+                                pdaDocQcDetailForm.setLotatt06(invLotAtt.getLotatt06());
+                                pdaDocQcDetailForm.setLotatt11(invLotAtt.getLotatt11());
+                                pdaDocQcDetailForm.setLotatt15(invLotAtt.getLotatt15());
+                            }
+
                             pdaDocQcDetailFormArrayList.add(pdaDocQcDetailForm);
                         }
                     }

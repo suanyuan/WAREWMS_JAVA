@@ -245,7 +245,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 if (StringUtil.isNotEmpty(result) && result.equals("000")) {
 
-                    if (orderHeaderForNormal.getOrdertype().equals("DX")) {
+                    if (orderHeaderForNormal.getOrdertype().equals("DX") || orderHeaderForNormal.getOrdertype().equals("YY")) {
 
                         Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
                         if (!fixReuslt.isSuccess()) {
