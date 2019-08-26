@@ -316,6 +316,12 @@
 			<if test="condition.cCity != null and condition.cCity != ''" >
 				and c_city =  #{condition.cCity}
 			</if>
+			<if test="condition.orderTypeName != null and condition.orderTypeName != ''" >
+				and sot.code = #{condition.orderTypeName}
+			</if>
+			<if test="condition.orderStatusName != null and condition.orderStatusName != ''" >
+				and sos.code = #{condition.orderStatusName}
+			</if>
 			<if test="condition.cProvince != null and condition.cProvince != ''" >
 				and c_province =  #{condition.cProvince}
 			</if>
@@ -1249,14 +1255,18 @@
 
 	<!-- 出库任务头档 列表总数-->
 	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from doc_order_header
+		select
+			count(1)
+		from doc_order_header a
+		left join (select code ,codename_c as orderStatusName from Bas_Codes where codeid = 'SO_STS' order by show_sequence) sos on a.SOSTATUS = sos.code
+		left join (select code ,codename_c as orderTypeName from Bas_Codes where codeid = 'SO_TYP' order by show_sequence) sot on a.ORDERTYPE = sot.code
 		<include refid="Example_Where_Clause"/>
 	</select>
 
 	<!-- 查询出库任务头档列表 -->
 	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 		select
-		<include refid="Base_Column_List"/>,sos.orderStatusName,sot.orderTypeName
+			<include refid="Base_Column_List"/>,sos.orderStatusName,sot.orderTypeName
 		from doc_order_header a
         left join (select code ,codename_c as orderStatusName from Bas_Codes where codeid = 'SO_STS' order by show_sequence) sos on a.SOSTATUS = sos.code
         left join (select code ,codename_c as orderTypeName from Bas_Codes where codeid = 'SO_TYP' order by show_sequence) sot on a.ORDERTYPE = sot.code

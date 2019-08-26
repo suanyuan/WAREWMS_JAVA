@@ -19,6 +19,7 @@
 	<result column="qtyallocated" property="qtyallocated"/>
 	<result column="qtyallocated_each" property="qtyallocatedEach"/>
 	<result column="qtyavailed" property="qtyavailed"/>
+	<result column="qtyavailed_each" property="qtyavailedEach"/>
 	<result column="qtyholded_each" property="qtyholdedEach"/>
 	<result column="qtyholded" property="qtyholded"/>
 	<result column="skudescrc" property="skudescrc"/>
@@ -48,7 +49,7 @@
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt09,lotatt10,lotatt14,customerid,enterprise_name,`name`
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyavailed_each,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt09,lotatt10,lotatt14,customerid,enterprise_name,`name`
 </sql>
    
 

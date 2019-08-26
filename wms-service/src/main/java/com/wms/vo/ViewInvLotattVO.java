@@ -17,6 +17,7 @@ public class ViewInvLotattVO {
 	private java.lang.String fmlocation;
 	private java.lang.String fmlotnum;
 	private java.math.BigDecimal fmqty;
+	private java.math.BigDecimal fmqtyEach;
 	private java.lang.String fmsku;
 	private java.lang.String fmuomName;
 	private java.math.BigDecimal iMv;
@@ -52,8 +53,11 @@ public class ViewInvLotattVO {
 	private java.math.BigDecimal pkey;
 	private java.math.BigDecimal price;
 	private java.math.BigDecimal qtyallocated;
+	private java.math.BigDecimal qtyallocatedEach;
 	private java.math.BigDecimal qtyavailed;
+	private java.math.BigDecimal qtyavailedEach;
 	private java.math.BigDecimal qtyholded;
+	private java.math.BigDecimal qtyholdedEach;
 	private java.math.BigDecimal qtyrpin;
 	private java.math.BigDecimal qtyrpout;
 	private java.lang.String reservedfield01;
@@ -75,6 +79,38 @@ public class ViewInvLotattVO {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String uom;
 	private java.lang.String warehouseid;
+
+	public BigDecimal getFmqtyEach() {
+		return fmqtyEach;
+	}
+
+	public void setFmqtyEach(BigDecimal fmqtyEach) {
+		this.fmqtyEach = fmqtyEach;
+	}
+
+	public BigDecimal getQtyallocatedEach() {
+		return qtyallocatedEach;
+	}
+
+	public void setQtyallocatedEach(BigDecimal qtyallocatedEach) {
+		this.qtyallocatedEach = qtyallocatedEach;
+	}
+
+	public BigDecimal getQtyavailedEach() {
+		return qtyavailedEach;
+	}
+
+	public void setQtyavailedEach(BigDecimal qtyavailedEach) {
+		this.qtyavailedEach = qtyavailedEach;
+	}
+
+	public BigDecimal getQtyholdedEach() {
+		return qtyholdedEach;
+	}
+
+	public void setQtyholdedEach(BigDecimal qtyholdedEach) {
+		this.qtyholdedEach = qtyholdedEach;
+	}
 
 	public BigDecimal getiMv() {
 		return iMv;

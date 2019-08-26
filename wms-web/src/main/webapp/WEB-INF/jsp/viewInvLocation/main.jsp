@@ -285,13 +285,14 @@
                     {field: 'qtyallocated', title: '分配件数', width: 100},
                     {field: 'qtyallocatedEach', title: '分配数量', width: 100},
                     {field: 'qtyavailed', title: '可用件数', width: 100},
+                    {field: 'qtyavailedEach', title: '可用数量', width: 100},
                     {field: 'qtyholded', title: '冻结件数', width: 100},
                     {field: 'qtyholdedEach', title: '冻结数量', width: 100},
                     {field: 'defaultreceivinguom', title: '单位', width: 100},
                     {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
                     {field: 'skudescre', title: '规格型号', width: 103},
-                    {field: 'lotatt04', title: '生产批号', width: 95},
                     {field: 'lotatt05', title: '序列号', width: 110},
+                    {field: 'lotatt04', title: '生产批号', width: 95},
                     {field: 'lotatt07', title: '灭菌批号', width: 120},
                     {field: 'lotatt03', title: '入库日期', width: 91},
                     {field: 'lotatt01', title: '生产日期', width: 112},
@@ -317,10 +318,10 @@
                     getTotalAllInit=getTotalAll();
                     ezuiDatagrid.datagrid('reloadFooter',[
                         {fmlocation:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
-                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyholded:getTotalInit.qtyholded,
+                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
                             qtyholdedEach:getTotalInit.qtyholdedEach},
                         {fmlocation:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
-                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyholded:getTotalAllInit.qtyholded,
+                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalAllInit.qtyholded,
                             qtyholdedEach:getTotalAllInit.qtyholdedEach}
                     ]);
                 }
@@ -605,6 +606,10 @@
             for (var i = 0; i < rows.length; i++) {
                 sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
             }
+            sums.qtyavailedEach = 0;
+            for (var i = 0; i < rows.length; i++) {
+                sums.qtyavailedEach += rows[i]['qtyavailedEach']; //获取指定列
+            }
             return sums;
         }
 
@@ -641,6 +646,10 @@
             for (var i = 0; i < rows.length; i++) {
                 sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
             }
+            sums.qtyavailedEach = 0;
+            for (var i = 0; i < rows.length; i++) {
+                sums.qtyavailedEach += rows[i]['qtyavailedEach']; //获取指定列
+            }
             return sums;
         }
 
@@ -674,13 +683,14 @@
 																										url:'<c:url value="/productLineController.do?getCombobox"/>',
 																										valueField: 'id',
 																										textField: 'value'"/></td>
-                        <th>批号</th>
-                        <td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>入库单号</th>
+                        <td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+
 
                     </tr>
                     <tr>
-                        <th>入库单号</th>
-                        <td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>序列号</th>
+                        <td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>入库日期</th>
                         <td><input type='text' id='lotatt03Start' class='easyui-datebox' size='16' data-options=''/>
                         </td>
@@ -689,8 +699,8 @@
                         <td><input type='text' id='lotatt03End' class='easyui-datebox' size='16' data-options=''/></td>
                     </tr>
                     <tr>
-                        <th>序列号</th>
-                        <td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>批号</th>
+                        <td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>效期</th>
                         <td><input type='text' id='lotatt02Start' class='easyui-datebox' size='16' data-options=''/>
                         </td>

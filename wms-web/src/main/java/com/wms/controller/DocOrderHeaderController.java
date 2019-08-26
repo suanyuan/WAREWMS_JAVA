@@ -338,18 +338,12 @@ public class DocOrderHeaderController {
 		return "iReportView";
 	}
 
-	@Login
-	@RequestMapping(params = "copyQueryOrderno")
-	@ResponseBody
-	public List<EasyuiCombobox>  copyQueryOrderno(String customerid)throws  Exception{
-		return orderHeaderForNormalService.copyQueryOrderno(customerid);
-	}
 
 	@Login
 	@RequestMapping(params = "copyDetailGo",method = RequestMethod.POST)
 	@ResponseBody
-	public Json copyDetailGo(String orderno ,String detailOrderno,String soreference2) throws  Exception{
-		Json json = orderHeaderForNormalService.copyDetailGo(orderno,detailOrderno,soreference2);
+	public Json copyDetailGo(String asnno ,String detailOrderno,String customerid,String soreference2) throws  Exception{
+		Json json = orderHeaderForNormalService.copyDetailGo(asnno,detailOrderno,customerid,soreference2);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

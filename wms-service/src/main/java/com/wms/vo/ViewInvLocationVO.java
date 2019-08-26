@@ -76,7 +76,9 @@ public class ViewInvLocationVO {
 
 	private BigDecimal qtyallocated;//分配件数
 	private BigDecimal qtyallocatedEach ;//分配数量
-	private BigDecimal qtyavailed; //可用数量
+	private BigDecimal qtyavailed; //可用件数
+	private BigDecimal qtyavailedEach; //可用数量
+
 	private BigDecimal qtyholdedEach;//冻结数量
 
 	private BigDecimal qtyholded;//冻结件数
@@ -87,6 +89,14 @@ public class ViewInvLocationVO {
 	private java.lang.String warehouseid;
 	private String productRegisterNo;
 	private String name;
+
+	public BigDecimal getQtyavailedEach() {
+		return qtyavailedEach;
+	}
+
+	public void setQtyavailedEach(BigDecimal qtyavailedEach) {
+		this.qtyavailedEach = qtyavailedEach;
+	}
 
 	public String getName() {
 		return name;
