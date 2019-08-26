@@ -70,13 +70,12 @@ public class ViewInvLotattService extends BaseService {
 //		BeanUtils.copyProperties(viewInvLotattForm, viewInvLotatt);
 		
 		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());
 		map.put("fmsku",  viewInvLotattForm.getFmsku());
 		map.put("fmlotnum",  viewInvLotattForm.getFmlotnum());
 		map.put("fmlocation",  viewInvLotattForm.getFmlocation());
-		map.put("fmid",  viewInvLotattForm.getFmid());
 		map.put("fmqty",  String.valueOf(viewInvLotattForm.getFmqty()));
+		map.put("fmid",'*');               //跟踪号
 		map.put("lotatt11", viewInvLotattForm.getLotatt11());//目标数量
 		map.put("lotatt12",  viewInvLotattForm.getLotatt12());//调整原因
 		map.put("lotatt12text",  viewInvLotattForm.getLotatt12text());//原因说明
@@ -110,7 +109,7 @@ public class ViewInvLotattService extends BaseService {
 		map.put("fmsku",  viewInvLotattForm.getFmsku());             //产品代码
 		map.put("fmlotnum",  viewInvLotattForm.getFmlotnum());       //批号
 		map.put("fmlocation",  viewInvLotattForm.getFmlocation());   //库位
-		map.put("fmid",  viewInvLotattForm.getFmid());               //跟踪号
+		map.put("fmid",'*');               //跟踪号
 		map.put("fmqty",  String.valueOf(viewInvLotattForm.getFmqty()));//可用件数
 		map.put("lotatt11text", viewInvLotattForm.getLotatt11text());//目标库位
 		map.put("lotatt11", viewInvLotattForm.getLotatt11());//移动数量

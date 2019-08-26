@@ -40,7 +40,8 @@ public class ViewInvLotatt implements Serializable {
 	private String fmlotnum;
 
 	private BigDecimal fmqty;
-	
+	private BigDecimal fmqtyEach;
+
 	@Id
 	private String fmsku;
 
@@ -115,11 +116,11 @@ public class ViewInvLotatt implements Serializable {
 	private BigDecimal price;
 
 	private BigDecimal qtyallocated;
-
+	private BigDecimal qtyallocatedEach ;//分配数量
 	private BigDecimal qtyavailed;
-
+	private BigDecimal qtyavailedEach; //可用数量
 	private BigDecimal qtyholded;
-
+	private BigDecimal qtyholdedEach;//冻结数量
 	private BigDecimal qtyrpin;
 
 	private BigDecimal qtyrpout;
@@ -163,6 +164,38 @@ public class ViewInvLotatt implements Serializable {
 	private String warehouseid;
 
 	public ViewInvLotatt() {
+	}
+
+	public BigDecimal getFmqtyEach() {
+		return fmqtyEach;
+	}
+
+	public void setFmqtyEach(BigDecimal fmqtyEach) {
+		this.fmqtyEach = fmqtyEach;
+	}
+
+	public BigDecimal getQtyallocatedEach() {
+		return qtyallocatedEach;
+	}
+
+	public void setQtyallocatedEach(BigDecimal qtyallocatedEach) {
+		this.qtyallocatedEach = qtyallocatedEach;
+	}
+
+	public BigDecimal getQtyavailedEach() {
+		return qtyavailedEach;
+	}
+
+	public void setQtyavailedEach(BigDecimal qtyavailedEach) {
+		this.qtyavailedEach = qtyavailedEach;
+	}
+
+	public BigDecimal getQtyholdedEach() {
+		return qtyholdedEach;
+	}
+
+	public void setQtyholdedEach(BigDecimal qtyholdedEach) {
+		this.qtyholdedEach = qtyholdedEach;
 	}
 
 	public static long getSerialVersionUID() {

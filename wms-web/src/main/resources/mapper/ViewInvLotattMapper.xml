@@ -18,6 +18,7 @@
 	<result column="fmlocation" property="fmlocation"/>
 	<result column="fmlotnum" property="fmlotnum"/>
 	<result column="fmqty" property="fmqty"/>
+	<result column="fmqty_each" property="fmqtyEach"/>
 	<result column="fmsku" property="fmsku"/>
 	<result column="fmuom_name" property="fmuomName"/>
 	<result column="imageaddress" property="imageaddress"/>
@@ -53,8 +54,11 @@
 	<result column="pkey" property="pkey"/>
 	<result column="price" property="price"/>
 	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyallocated_each" property="qtyallocatedEach"/>
 	<result column="qtyavailed" property="qtyavailed"/>
+	<result column="qtyavailed_each" property="qtyavailedEach"/>
 	<result column="qtyholded" property="qtyholded"/>
+	<result column="qtyholded_each" property="qtyholdedEach"/>
 	<result column="qtyrpin" property="qtyrpin"/>
 	<result column="qtyrpout" property="qtyrpout"/>
 	<result column="reservedfield01" property="reservedfield01"/>
@@ -80,7 +84,7 @@
        
 <!-- View_Inv_Lotatt table all fields -->
 <sql id="Base_Column_List" >
-	 allocationrule,alternatesku1,alternatesku2,alternatesku3,alternatesku4,alternatesku5,configlist01,configlist02,fmcustomerid,fmid,fmlocation,fmlotnum,fmqty,fmsku,fmuom_name,imageaddress,i_mv,i_pa,lotatt01,lotatt01text,lotatt02,lotatt02text,lotatt03,lotatt03text,lotatt04,lotatt04text,lotatt05,lotatt05text,lotatt06,lotatt06text,lotatt07,lotatt07text,lotatt08,lotatt08text,lotatt09,lotatt09text,lotatt10,lotatt10text,lotatt11,lotatt11text,lotatt12,lotatt12text,lpn,netweight,o_mv,pkey,price,qtyallocated,qtyavailed,qtyholded,qtyrpin,qtyrpout,reservedfield01,reservedfield02,reservedfield03,reservedfield04,reservedfield05,rotationid,skudescrc,skudescre,skugroup1,skugroup2,skugroup3,skugroup4,skugroup5,softallocationrule,toadjqty,totalcubic,totalgrossweight,uom,warehouseid
+	 allocationrule,alternatesku1,alternatesku2,alternatesku3,alternatesku4,alternatesku5,configlist01,configlist02,fmcustomerid,fmid,fmlocation,fmlotnum,fmqty,fmqty_each,fmsku,fmuom_name,imageaddress,i_mv,i_pa,lotatt01,lotatt01text,lotatt02,lotatt02text,lotatt03,lotatt03text,lotatt04,lotatt04text,lotatt05,lotatt05text,lotatt06,lotatt06text,lotatt07,lotatt07text,lotatt08,lotatt08text,lotatt09,lotatt09text,lotatt10,lotatt10text,lotatt11,lotatt11text,lotatt12,lotatt12text,lpn,netweight,o_mv,pkey,price,qtyallocated,qtyallocated_each,qtyavailed,qtyavailed_each,qtyholded,qtyholded_each,qtyrpin,qtyrpout,reservedfield01,reservedfield02,reservedfield03,reservedfield04,reservedfield05,rotationid,skudescrc,skudescre,skugroup1,skugroup2,skugroup3,skugroup4,skugroup5,softallocationrule,toadjqty,totalcubic,totalgrossweight,uom,warehouseid
 </sql>
    
    
@@ -358,13 +362,8 @@ where 1=1
 <!--     </if> -->
 </select>
 
-<!-- 库存调整 
-目标数量lotatt11
-调整原因 lotatt12
-原因描述lotatt12text
--->
 <select id="invAdj" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPINV_Adjustment_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},now(),'0.000','0.000','0','0.00000','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+	   {call SPINV_Adjustment_Process('JHCK','*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},'*',#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'now()','0.000','0.000','0','0.00000','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
 

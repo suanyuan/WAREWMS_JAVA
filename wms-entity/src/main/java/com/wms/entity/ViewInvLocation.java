@@ -47,7 +47,8 @@ public class ViewInvLocation implements Serializable {
 
 	private BigDecimal qtyallocated;//分配件数
 	private BigDecimal qtyallocatedEach ;//分配数量
-	private BigDecimal qtyavailed; //可用数量
+	private BigDecimal qtyavailed; //可用件数
+	private BigDecimal qtyavailedEach; //可用数量
 	private BigDecimal qtyholdedEach;//冻结数量
 
 	private BigDecimal qtyholded;//冻结件数
@@ -80,6 +81,14 @@ public class ViewInvLocation implements Serializable {
 	private String productRegisterNo;
 	private String enterpriseName;
 	private String defaultreceivinguom;
+
+	public BigDecimal getQtyavailedEach() {
+		return qtyavailedEach;
+	}
+
+	public void setQtyavailedEach(BigDecimal qtyavailedEach) {
+		this.qtyavailedEach = qtyavailedEach;
+	}
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
