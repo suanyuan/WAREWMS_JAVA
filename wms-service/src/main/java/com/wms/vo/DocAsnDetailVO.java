@@ -64,6 +64,7 @@ public class DocAsnDetailVO {
     private java.lang.String lotatt16;
     private java.lang.String lotatt17;
     private java.lang.String lotatt18;
+	private java.lang.String cusdescr;
 	private java.lang.String notes;
 	private java.lang.String operator;
 	private java.math.BigDecimal overrcvpercentage;
@@ -120,6 +121,13 @@ public class DocAsnDetailVO {
 	public java.lang.String getAsnno() {
 		return asnno;
 	}
+    public String getCusdescr() {
+        return cusdescr;
+    }
+
+    public void setCusdescr(String cusdescr) {
+        this.cusdescr = cusdescr;
+    }
 
 	public void setAsnno(java.lang.String asnno) {
 		this.asnno = asnno;

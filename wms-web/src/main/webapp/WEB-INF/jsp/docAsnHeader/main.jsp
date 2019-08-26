@@ -151,7 +151,7 @@ $(function() {
 			{field: 'lotatt05',		title: '序列号',		width: 70 },
 			{field: 'lotatt06',		title: '产品注册证',		width: 80 },
 			{field: 'lotatt07',	title: '灭菌批号',		width: 80 },
-            {field: 'lotatt08',	title: '供应商',		width: 80 },
+            {field: 'cusdescr',	title: '供应商',		width: 80 },
             {field: 'lotatt09',	title: '样品属性',		width: 80 },
             {field: 'lotatt10',	title: '质量状态',		width: 80 },
             {field: 'lotatt11',	title: '存储条件',		width: 150 },

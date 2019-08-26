@@ -217,6 +217,7 @@ public class ImportOrderDataService {
                     importDataVO.setSeq(dataArray.getSeq());// 序号
                     importDataVO.setCustomerid(dataArray.getCustomerid());//客户编号
                     importDataVO.setSoreference1(dataArray.getSoreference1());
+                    importDataVO.setSoreference2(dataArray.getSoreference2());
 					/*try {
 						importDataVO.setRequiredDeliveryTime(format.parse(dataArray.getRequiredDeliveryTime()));
 					} catch (ParseException e) {
@@ -251,7 +252,7 @@ public class ImportOrderDataService {
                     importDataVO.setSeq(dataArray.getSeq());// 序号
                     importDataVO.setCustomerid(dataArray.getCustomerid());//客户代码
                     importDataVO.setSoreference1(dataArray.getSoreference1());
-
+                    importDataVO.setSoreference2(dataArray.getSoreference2());
 
                     importDataVO.setOrderTypeName(dataArray.getOrderTypeName());
                     importDataVO.setCContact(dataArray.getcContact());

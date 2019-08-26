@@ -128,6 +128,7 @@ public class ImportAsnDataService {
         DocAsnDetailVO importDetailsDataVO = null;
         String quantityData = null;
         Integer count = 1;
+        SimpleDateFormat formatEx1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
@@ -169,7 +170,7 @@ public class ImportAsnDataService {
                 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
                 rowResult.append("[预期到货时间]，格式错误").append(" ");
             }
-            //生产日期、失效日期、入库日期
+            //生产日期、失效日期、入库日期co
             try {
                 if (StringUtils.isNotEmpty(dataArray.getLotatt01())) {
                     formatRQ.parse(dataArray.getLotatt01());
@@ -327,6 +328,10 @@ public class ImportAsnDataService {
 
                         DocAsnHeaderVO DocAsnHeaderVoSense = null;
                         for (DocAsnHeaderVO docAsnHeaderVO : importData) {
+
+//                            System.out.println(formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()));
+//                            System.out.println(compareData.getExpectedarrivetime1());
+
                             if (docAsnHeaderVO.getCustomerid().equals(compareData.getCustomerid()) &&
                                     docAsnHeaderVO.getAsnreference1().equals(compareData.getAsnreference1()) &&
                                     format.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
@@ -337,10 +342,14 @@ public class ImportAsnDataService {
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
                                         docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
-                                        docAsnHeaderVO.getAsnreference1().equalsIgnoreCase(dataArray.getAsnreference1()) &&
+                                        docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
                                 ) {
-                                    docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
+                                    if (StringUtil.isEmpty(dataArray.getExpectedqtyEach())) {
+                                        docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
+                                    }else {
+                                        docAsnDetailVO.setExpectedqtyEach(docAsnDetailVO.getExpectedqtyEach().add(new BigDecimal(dataArray.getExpectedqtyEach())));
+                                    }
                                     isBreak = true;
                                     break;
                                 }
@@ -381,7 +390,7 @@ public class ImportAsnDataService {
                             importDetailsDataVO.setLotatt09(dataArray.getLotatt09());
                             importDetailsDataVO.setLotatt11(dataArray.getLotatt11());
                             importDetailsDataVO.setNotes(dataArray.getNotes());
-//                            importDetailsDataVOList.add(importDetailsDataVO);
+                            importDetailsDataVO.setNotes(dataArray.getNotes());
                             if (DocAsnHeaderVoSense != null)
                                 DocAsnHeaderVoSense.getDocAsnDetailVOList().add(importDetailsDataVO);
                         }
