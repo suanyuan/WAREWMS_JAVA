@@ -275,7 +275,7 @@ public class ImportAsnDataService {
                     importDataVO.setAsnreference2(dataArray.getAsnreference2());
                     importDataVO.setAsntype(dataArray.getAsntype());
                     try {
-                        importDataVO.setExpectedarrivetime1(formatEx1.parse(dataArray.getExpectedarrivetime1()));
+                        importDataVO.setExpectedarrivetime1(format.parse(dataArray.getExpectedarrivetime1()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -329,12 +329,12 @@ public class ImportAsnDataService {
                         DocAsnHeaderVO DocAsnHeaderVoSense = null;
                         for (DocAsnHeaderVO docAsnHeaderVO : importData) {
 
-                            System.out.println(formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()));
-                            System.out.println(compareData.getExpectedarrivetime1());
+//                            System.out.println(formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()));
+//                            System.out.println(compareData.getExpectedarrivetime1());
 
                             if (docAsnHeaderVO.getCustomerid().equals(compareData.getCustomerid()) &&
                                     docAsnHeaderVO.getAsnreference1().equals(compareData.getAsnreference1()) &&
-                                    formatEx1.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
+                                    format.format(docAsnHeaderVO.getExpectedarrivetime1()).equals(compareData.getExpectedarrivetime1())) {
                                 DocAsnHeaderVoSense = docAsnHeaderVO;
                             }
                             //遍历明细信息
