@@ -260,7 +260,7 @@
                 url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
                 method: 'POST',
                 toolbar: '#toolbar',
-                title: '库存余量_按商品/库位',
+                title: '库存余量_按产品/库位',
                 pageSize:50,
                 pageList: [50, 100, 200],
                 fit: true,
@@ -429,7 +429,9 @@
         /* 库位选择弹框查询 */
         var ezuiLocDataSearch = function () {
             ezuiLocDataDialogId.datagrid('load', {
-                locationid: $("#ezuiLocDataDialog #locationid").textbox("getValue")
+                locationid: $("#ezuiLocDataDialog #locationid").textbox("getValue"),
+                locationcategory: $("#ezuiLocDataDialog #locationcategory").combobox("getValue"),
+
             });
         };
         /* 库位选择弹框清空 */
@@ -493,12 +495,12 @@
                 url: '<c:url value="/basSkuController.do?showDatagrid"/>',
                 method: 'POST',
                 toolbar: '#ezuiSkuToolbar',
-                title: '商品档案',
+                title: '产品档案',
                 pageSize: 50,
                 pageList: [50, 100, 200],
                 fit: true,
                 border: false,
-                fitColumns: false,
+                fitColumns: true,
                 nowrap: false,
                 striped: true,
                 collapsible: false,
@@ -512,19 +514,19 @@
                 idField: 'sku',
                 columns: [[
                     {field: 'customerid', title: '客户代码', width: 80},
-                    {field: 'sku', title: '商品编码', width: 120},
-                    {field: 'descrC', title: '中文名称', width: 160},
+                    {field: 'sku', title: '产品代码', width: 160},
+                    {field: 'reservedfield01', title: '产品名称', width: 160},
                     {field: 'descrE', title: '英文名称', width: 160},
                     {
                         field: 'activeFlag', title: '激活', width: 40, formatter: function (value, rowData, rowIndex) {
                             return rowData.activeFlag == '1' ? '是' : '否';
                         }
                     },
-                    {field: 'alternateSku1', title: '商品条码', width: 120},
-                    {field: 'packid', title: '包装代码', width: 80},
-                    {field: 'qty', title: '库存数', width: 60},
-                    {field: 'qtyallocated', title: '分配数', width: 60},
-                    {field: 'qtyonhold', title: '冻结数', width: 60}
+                    // {field: 'alternateSku1', title: '商品条码', width: 120},
+                    // {field: 'packid', title: '包装代码', width: 80},
+                    // {field: 'qty', title: '库存数', width: 60},
+                    // {field: 'qtyallocated', title: '分配数', width: 60},
+                    // {field: 'qtyonhold', title: '冻结数', width: 60}
                 ]],
                 onDblClickCell: function (index, field, value) {
                     selectSku();
@@ -548,6 +550,8 @@
         // 产品名称选择弹框清空
         var ezuiSkuToolbarClear = function () {
             $("#ezuiSkuDataDialog #sku").textbox('clear');
+            $("#ezuiSkuDataDialog #customerid").textbox('clear');
+            $("#ezuiSkuDataDialog #activeFlag").combobox('clear');
         };
         // 产品名称选择-主页
         var selectSku = function () {
@@ -699,7 +703,7 @@
                         <td><input type='text' id='lotatt03End' class='easyui-datebox' size='16' data-options=''/></td>
                     </tr>
                     <tr>
-                        <th>批号</th>
+                        <th>生产批号</th>
                         <td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>效期</th>
                         <td><input type='text' id='lotatt02Start' class='easyui-datebox' size='16' data-options=''/>

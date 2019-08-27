@@ -165,7 +165,7 @@ where 1=1
 		and lotatt03 &lt;= #{condition.lotatt03text}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-	    and lotatt04 =  #{condition.lotatt04}
+	    and lotatt04 like concat('%',#{condition.lotatt04},'%')
 	</if>
 	<if test="condition.lotatt04text != null and condition.lotatt04text != ''" >
 	    and lotatt04text =  #{condition.lotatt04text}
