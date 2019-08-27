@@ -1700,10 +1700,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderDetailsForNormal.setLinestatus("00");
                 orderDetailsForNormal.setSku(docAsnDetail.getSku());
                 orderDetailsForNormal.setSkuName(docAsnDetail.getSkuName());
-                orderDetailsForNormal.setLinestatus(docAsnDetail.getLinestatus());
+                orderDetailsForNormal.setLinestatus(docAsnDetail.getLinestatus());//TODO 行状态应该是新建，而不是取之前的单子的状态
                 orderDetailsForNormal.setUom(docAsnDetail.getUom());
                 orderDetailsForNormal.setPackid(docAsnDetail.getPackid());
-                orderDetailsForNormal.setQtyshipped(docAsnDetail.getExpectedqty().doubleValue());
+                orderDetailsForNormal.setQtyshipped(docAsnDetail.getExpectedqty().doubleValue());// TODO 0
                 orderDetailsForNormal.setQtyorderedEach(docAsnDetail.getExpectedqty().doubleValue());
                 orderDetailsForNormal.setQtyallocated(0.00);
                 orderDetailsForNormal.setQtyallocatedEach(docAsnDetail.getExpectedqtyEach().doubleValue());
@@ -1715,7 +1715,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                 orderDetailsForNormal.setAddtime(new Date());
-                orderDetailsForNormal.setEdittime(new Date());
+                orderDetailsForNormal.setEdittime(new Date());//todo delete
                 //库位
                 orderDetailsForNormal.setLocation(docAsnDetail.getReceivinglocation());
 
@@ -1728,8 +1728,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 //价格
                 orderDetailsForNormal.setPrice(docAsnDetail.getTotalprice().doubleValue());
 
-                orderDetailsForNormal.setLotatt02("");
-                orderDetailsForNormal.setLotatt03("");
+                orderDetailsForNormal.setLotatt02("");//todo 这个为什么不copy
+                orderDetailsForNormal.setLotatt03("");//todo 这个为什么不copy
                 orderDetailsForNormal.setLotatt04(docAsnDetail.getLotatt04());
                 orderDetailsForNormal.setLotatt05(docAsnDetail.getLotatt05());
                 orderDetailsForNormal.setLotatt06(docAsnDetail.getLotatt06());
@@ -1738,8 +1738,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderDetailsForNormal.setLotatt09(docAsnDetail.getLotatt09());
                 orderDetailsForNormal.setLotatt10("HG");
                 orderDetailsForNormal.setLotatt11(docAsnDetail.getLotatt11());
-                orderDetailsForNormal.setLotatt12(docAsnDetail.getLotatt12());
-                //是否有入库单号
+                orderDetailsForNormal.setLotatt12(docAsnDetail.getLotatt12());//todo 批次属性到15
+                //是否有入库单号 todo 定向、引用订单插入库单号(必填)
                 if(soreference2.equals("") && soreference2 == null){
                     orderDetailsForNormal.setLotatt14("");
                 }else{
