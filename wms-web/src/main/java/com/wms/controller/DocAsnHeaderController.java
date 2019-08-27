@@ -204,8 +204,8 @@ public class DocAsnHeaderController {
 	@Login
 	@RequestMapping(params = "addDoDetailReuse",method = RequestMethod.POST)
 	@ResponseBody
-	public Json addAsnDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws Exception {
-		Json json = docAsnHeaderService.addDoDetailReuse(headerOrdern,detailAssno,customerid);
+	public Json addAsnDetailReuse(String generalNo,String detailAssno ,String customerid ,String copyFlag) throws Exception {
+		Json json = docAsnHeaderService.addDoDetailReuse(generalNo,detailAssno,customerid,copyFlag);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

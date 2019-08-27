@@ -22,7 +22,7 @@ public interface BasSkuMybatisDao extends BaseDao {
 	BasSku queryById(Map<String, Object> map);
 
     /**
-     * 通过扫码结果查找，自编码(1~5)、GTIN、效期、批号、序列号
+     * 通过扫码结果查找，自编码(1~5)、GTIN、批号、序列号
      * @param query ~
      * @return ~
      */

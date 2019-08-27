@@ -922,10 +922,12 @@ insert into doc_asn_details
 				   	(@rowNum:=@rowNum+1) as row_num
 	          from Doc_Asn_Details a
                    	LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid
-					RIGHT OUTER JOIN bas_customer bc ON a.lotatt08 = bc.customerid
-					AND a.sku = b.sku,
+					AND a.sku = b.sku
+					LEFT OUTER JOIN bas_customer bc ON a.lotatt08 = bc.customerid
+					LEFT JOIN bas_codes CODE ON code.code = a.linestatus,
                    	Bas_Codes c,(Select (@rowNum :=0)) d
 	         where a.linestatus = c.code
+				AND code.codeid = 'ASN_STS'
 	           and c.codeid = 'ASN_STS'
 	           and a.asnno = #{condition.asnno,jdbcType=VARCHAR}) as t
 	 where 1 = 1

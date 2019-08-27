@@ -13,14 +13,6 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String customerid;
     private String soreference1;
     private String soreference2;
-    //收货人
-    private String cContact;
-    //收货电话
-    private String cTel1;
-    //订单状态
-    private String orderStatusName;
-    //订单类型
-    private String orderTypeName;
     private java.util.Date orderStartTime;
     private java.util.Date orderEndTime;
     private String orderCode;
@@ -36,6 +28,17 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String cAddress2;
     //收货地址
     private String cAddress1;
+    //收货人
+    private String cContact;
+    //收货电话
+    private String cTel1;
+    //订单状态
+    private String orderStatusName;
+    //订单类型
+    private String orderTypeName;
+    private String sostatusTo;
+    //释放状态
+    private String releasestatus;
 
     public String getOrderno() {
         return orderno;
@@ -188,5 +191,21 @@ public class OrderHeaderForNormalQuery implements IQuery {
 
     public void setOrderTypeName(String orderTypeName) {
         this.orderTypeName = orderTypeName;
+    }
+
+    public String getReleasestatus() {
+        return releasestatus;
+    }
+
+    public void setReleasestatus(String releasestatus) {
+        this.releasestatus = releasestatus;
+    }
+
+    public String getSostatusTo() {
+        return sostatusTo;
+    }
+
+    public void setSostatusTo(String sostatusTo) {
+        this.sostatusTo = sostatusTo;
     }
 }
