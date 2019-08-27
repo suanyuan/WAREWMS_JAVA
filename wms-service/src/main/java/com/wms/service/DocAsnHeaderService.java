@@ -537,10 +537,10 @@ public class DocAsnHeaderService extends BaseService {
 				details.setLinestatus("00");
 				details.setSku(orderDetailsForNormal.getSku());
 				details.setSkudescrc(orderDetailsForNormal.getSkuName());
-				details.setQcstatus("DJ");
+				details.setQcstatus("DJ");// todo 用不到 质量状态体现在lotatt10
 				details.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyallocated()));
 				details.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyallocatedEach()));
-				details.setReceivedqty(BigDecimal.ZERO);
+				details.setReceivedqty(BigDecimal.ZERO);//todo 应该还有对应的数量字段,这个是件数
 				details.setReceivinglocation(orderDetailsForNormal.getLocation());
 				details.setLotatt01(orderDetailsForNormal.getLotatt01());
 				//拼接转换日期格式
@@ -558,13 +558,13 @@ public class DocAsnHeaderService extends BaseService {
 				details.setLotatt11(orderDetailsForNormal.getLotatt11());
 				details.setLotatt12(orderDetailsForNormal.getLotatt12());
 				details.setLotatt13(orderDetailsForNormal.getLotatt13());
-				details.setLotatt14(detailAssno);
-				details.setTotalgrossweight(BigDecimal.ZERO);
+				details.setLotatt14(detailAssno);//TODO 批次属性到15
+				details.setTotalgrossweight(BigDecimal.ZERO);//todo 确认是哪一个为正确的（和下面的比）
 				details.setTotalcubic(BigDecimal.ZERO);
 				details.setTotalprice(BigDecimal.ZERO);
 				details.setUom(orderDetailsForNormal.getUom());
 				details.setPackid(orderDetailsForNormal.getPackid());
-				details.setTotalcubic( new BigDecimal(orderDetailsForNormal.getCubic()));
+				details.setTotalcubic( new BigDecimal(orderDetailsForNormal.getCubic()));//
 				details.setTotalgrossweight( new BigDecimal(orderDetailsForNormal.getGrossweight()));
 				details.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));
 				//总价
