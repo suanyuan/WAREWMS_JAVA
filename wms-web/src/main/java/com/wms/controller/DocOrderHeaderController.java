@@ -342,8 +342,8 @@ public class DocOrderHeaderController {
 	@Login
 	@RequestMapping(params = "copyDetailGo",method = RequestMethod.POST)
 	@ResponseBody
-	public Json copyDetailGo(String asnno ,String detailOrderno,String customerid,String soreference2) throws  Exception{
-		Json json = orderHeaderForNormalService.copyDetailGo(asnno,detailOrderno,customerid,soreference2);
+	public Json copyDetailGo(String generalNO ,String detailOrderno,String customerid,String soreference2,String copyFlag) throws  Exception{
+		Json json = orderHeaderForNormalService.copyDetailGo(generalNO,detailOrderno,customerid,soreference2,copyFlag);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

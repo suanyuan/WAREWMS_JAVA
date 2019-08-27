@@ -319,8 +319,8 @@
 			<if test="condition.orderTypeName != null and condition.orderTypeName != ''" >
 				and sot.code = #{condition.orderTypeName}
 			</if>
-			<if test="condition.orderStatusName != null and condition.orderStatusName != ''" >
-				and sos.code = #{condition.orderStatusName}
+			<if test="condition.orderStatusName != null and condition.orderStatusName != '' and condition.sostatusTo != null and condition.sostatusTo !=''" >
+				and sos.code BETWEEN #{condition.orderStatusName} AND #{condition.sostatusTo}
 			</if>
 			<if test="condition.cProvince != null and condition.cProvince != ''" >
 				and c_province =  #{condition.cProvince}

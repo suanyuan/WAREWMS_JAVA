@@ -48,6 +48,9 @@ $(function() {
 		rownumbers:true,
 		singleSelect:false,
 		idField : 'asnno',
+		queryParams: {
+			asnstatusCheck: $('#asnstatusCheck').is(':checked') == true ? "N" : "Y"
+		},
 		rowStyler:asnRowStyle,
 		columns : [[
             {field: 'ck',checkbox:true },
@@ -423,6 +426,7 @@ $(function() {
 
 });
 
+
 /* 查询条件清空按钮 */
 var ezuiToolbarClear = function(){
 	$('#customerid').textbox('clear');
@@ -742,7 +746,7 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
-		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
+		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "N" : "Y"
 	});
 };
 
@@ -1532,13 +1536,13 @@ $(function () {
 var reuseDialog;
 //初始化
 $(function () {
-	$('#ezuiBtn_copyDetail').linkbutton('disable');
+	 $('#ezuiBtn_copyDetail').linkbutton('disable');
 	reuseDialog = $('#reuseDialog').dialog({
 		modal: true,
 		title: '明细复用',
 		buttons: '',
 		width: 250,
-		height: 100,
+		height: 150,
 		onOpen: function () {
 		},
 		onClose: function () {
@@ -1546,18 +1550,39 @@ $(function () {
 		}
 	}).dialog('close');
 
+
+
 })
 //给明细复用入库编号文本框
 function  copyDetail() {
+	$('#copyFlag').combobox({
+		onChange:function(newValue,oldValue){
+
+			$('#refInNoTo').textbox('clear');
+			if(newValue == 1){
+				$('#refInNoTo').textbox({
+					multiline:false,
+					prompt:'请输入SO编号'
+				});
+			}else if(newValue == -1){
+				$('#refInNoTo').textbox({
+					multiline:false,
+					prompt:'请输入ASN编号'
+				});
+			}
+		}
+	});
 	reuseDialog.dialog("open");
+	$('#copyFlag').combobox('clear');
 }
 //明细——复用按钮
 function reuseDetailIn() {
+	var copyFlag = $('#copyFlag').combobox('getValue');
 	var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
 	var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
     $.ajax({
         url : 'docAsnHeaderController.do?addDoDetailReuse',
-        data : {headerOrdern:$("#refInNoTo").val(),detailAssno :asnno1 , customerid :customeridff},
+        data : {generalNo:$("#refInNoTo").val(),detailAssno :asnno1 , customerid :customeridff , copyFlag : copyFlag},
         type : 'POST',
         dataType : 'JSON',
         success : function(result){
@@ -1577,7 +1602,10 @@ function reuseDetailIn() {
 }
 function closeReuse() {
 	reuseDialog.dialog("close");
+	$('#refInNoTo').textbox('clear');
+	$('#copyFlag').combobox('clear');
 }
+
 
 function showRefIn() {
     var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
@@ -1761,8 +1789,25 @@ function asnRowStyle(index,row) {
 	<div id="reuseDialog" style="display: none;text-align: center">
 		<table width="100%">
 			<tr>
-				<td>SO编号</td>
+				<td>订单
+				<input type='text' id='copyFlag' size='16' class="easyui-combobox" data-options="
+																								editable: false,
+																								panelHeight: 'auto',
+																								width:'150',
+																								valueField: 'id',
+																								textField: 'value',
+																								data: [{
+																									id: '1',
+																									value: '复用出库明细'
+																								},{
+																									id: '-1',
+																									value: '复用入库明细'
+																								}]" />
+				</td>
+			</tr>
+			<tr>
 				<td>
+					编号
 					<input id="refInNoTo" type="text" class='easyui-textbox' size='16' data-options="panelHeight: 'auto', width:'150'"/>
 				</td>
 			</tr>

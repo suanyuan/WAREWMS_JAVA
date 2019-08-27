@@ -1845,32 +1845,56 @@ function closeRefOut() {
 var reuseDialogGo;
 //初始化
 $(function () {
-    $('#ezuiBtn_copyDetailGo').linkbutton('disable');
+     $('#ezuiBtn_copyDetailGo').linkbutton('disable');
     reuseDialogGo = $('#reuseDialogGo').dialog({
         modal: true,
         title: '明细复用',
         buttons: '',
-        width: 250,
-        height: 100,
+        width: 350,
+        height: 150,
         onOpen: function () {
         },
         onClose: function () {
 
         }
     }).dialog('close');
+
+
+
 })
 //给明细复用入库编号文本框
 function  copyDetailGo() {
+	$('#copyFlagGo').combobox({
+		onChange:function(newValue,oldValue){
+
+			$('#refInNoGo').textbox('clear');
+			if(newValue == 1){
+				$('#refInNoGo').textbox({
+					multiline:false,
+					prompt:'请输入SO编号'
+				});
+			}else if(newValue == -1){
+				$('#refInNoGo').textbox({
+					multiline:false,
+					prompt:'请输入ASN编号'
+				});
+			}
+		}
+	});
     reuseDialogGo.dialog("open");
+	$('#copyFlagGo').combobox('clear');
 }
 
+
+
 function copyDodetails() {
+	var copyFlagGo = $('#copyFlagGo').combobox('getValue');//标识出入库标识
     var newOrderno =  $("#ezuiDialog  #orderno").textbox('getValue');//新增SO编号
-    var customerid = $("#ezuiDialog  #customerid").textbox('getValue');
+    var customerid = $("#ezuiDialog  #customerid").textbox('getValue');//货主代码
     var soreference2 =  $("#ezuiDialog  #soreference2").textbox('getValue');//定向入库单号
     $.ajax({
         url : 'docOrderHeaderController.do?copyDetailGo',
-        data : {asnno : $("#refInNoGo").val(),detailOrderno : newOrderno , customerid : customerid ,soreference2 : soreference2 },
+        data : {generalNO : $("#refInNoGo").val(),detailOrderno : newOrderno , customerid : customerid ,soreference2 : soreference2,copyFlag : copyFlagGo },
         type : 'POST',
         dataType : 'JSON',
 		success : function(result){
@@ -1890,6 +1914,9 @@ function copyDodetails() {
 }
 function closeReuseGo() {
 	reuseDialogGo.dialog("close");
+	$('#refInNoGo').textbox('clear');
+	$('#copyFlagGo').combobox('clear');
+
 }
 
 
@@ -2171,9 +2198,26 @@ function choseOrderTypeAfter(value) {
 	<div id="reuseDialogGo" style="display: none;text-align: center">
 		<table width="100%">
 			<tr>
-				<td>ASN编号</td>
+				<td>订单
+					<input onChange="locationCut()" type='text' id='copyFlagGo' size='16' class="easyui-combobox" data-options="
+																								editable: false,
+																								panelHeight: 'auto',
+																								width:'150',
+																								valueField: 'id',
+																								textField: 'value',
+																								data: [{
+																									id: '1',
+																									value: '复用出库明细'
+																								},{
+																									id: '-1',
+																									value: '复用入库明细'
+																								}]" />
+				</td>
+			</tr>
+			<tr>
 				<td>
-					<input id="refInNoGo" type="text" class='easyui-textbox' size='16' data-options="panelHeight: 'auto', width:'150'" />
+					编号
+					<input id="refInNoGo" type="text" class='easyui-textbox' size='16' data-options="panelHeight: 'auto', width:'150'"/>
 				</td>
 			</tr>
 			<tr>
