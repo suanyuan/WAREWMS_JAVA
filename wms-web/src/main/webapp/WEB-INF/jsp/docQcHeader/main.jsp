@@ -38,11 +38,11 @@ $(function() {
 		singleSelect:false,
 		columns : [[
 			{field:'ck',checkbox:true},
-			{field: 'pano',		title: '上架单号',	width: 124 },
 			{field: 'qcno',		title: '验收单号',	width: 124 },
+			{field: 'pano',		title: '上架单号',	width: 124 },
             {field: 'qclineno',		title: '验收行号',	width: 124 },
-            {field: 'userdefine3',		title: '生产批号',	width: 134 },
 			{field: 'userdefine4',		title: '序列号',	width: 134 },
+			{field: 'userdefine3',		title: '生产批号',	width: 134 },
 			{field: 'qcqtyExpected',		title: '待验件数',	width: 134 },
 			{field: 'qcqtyCompleted',		title: '已验件数',	width: 134},
 			{field: 'userdefine5',		title: '质量状态',	width: 134,formatter:ZL_TYPstatusFormatter },
@@ -352,7 +352,7 @@ var doSearch = function() {
 	if ($('#qcno').val() == null || $('#qcno').val() == "") {
 		ezuiDatagrid.datagrid('load', {
 			qcno: $('#qcno').val(),                            //验收单号
-			userdefine3: $('#userdefine3').val(),              //批号
+			userdefine3: $('#userdefine3').val(),              //生产批号
 			userdefine4: $('#userdefine4').val(),              //序列号
 			linestatus: $('#linestatus').combobox('getValue')  //验收状态
 		});
@@ -362,7 +362,7 @@ var doSearch = function() {
 	} else {
 		ezuiDatagrid.datagrid('load', {
 			qcno: $('#qcno').val(),                            //验收单号
-			userdefine3: $('#userdefine3').val(),              //批号
+			userdefine3: $('#userdefine3').val(),              //生产批号
 			userdefine4: $('#userdefine4').val(),              //序列号
 			linestatus: $('#linestatus').combobox('getValue')  //验收状态
 		});

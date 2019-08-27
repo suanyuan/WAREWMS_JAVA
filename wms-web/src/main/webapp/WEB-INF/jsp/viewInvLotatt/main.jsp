@@ -70,8 +70,8 @@ $(function() {
 			{field: 'uom',		title: '单位',	width: 71 },
 			{field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
 			{field: 'skudescre', title: '规格型号', width: 103},
-			{field: 'lotatt04', title: '生产批号', width: 95},
 			{field: 'lotatt05', title: '序列号', width: 110},
+			{field: 'lotatt04', title: '生产批号', width: 95},
 			{field: 'lotatt07', title: '灭菌批号', width: 120},
 			{field: 'lotatt03', title: '入库日期', width: 91},
 			{field: 'lotatt01', title: '生产日期', width: 112},
@@ -110,6 +110,17 @@ $(function() {
 				$("#ezuiCustDataDialog #customerid").textbox('clear');
 				ezuiCustDataClick();
 				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
+//主页库位选择
+	$("#toolbar #fmlocation").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiLocDataDialog #locationid").textbox('clear');
+				ezuiLocDataClick('S');
+				ezuiLocDataSearch();
 			}
 		}]
 	});
@@ -224,7 +235,7 @@ var ezuiCustDataClick = function(){
 				{field: 'descrE',		title: '英文名称',	width: 50},
 				{field: 'customerTypeName',	title: '类型',	width: 15},
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
-					return rowData.activeFlag == 'Y' ? '是' : '否';
+					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
 			]],
 	onDblClickCell: function(index,field,value){
@@ -280,6 +291,7 @@ var doExport = function(){
 		param.put("lotatt02text", $('#lotatt02text').datebox("getValue"));
 		param.put("lotatt03", $('#lotatt03').datebox("getValue"));
 		param.put("lotatt03text", $('#lotatt03text').datebox("getValue"));
+		param.put("lotatt04", $('#lotatt04').val());
 		param.put("lotatt10", $('#lotatt10').combobox('getValue'));
 		param.put("lotatt05", $('#lotatt05').val());
 		param.put("lotatt06", $('#lotatt06').val());
@@ -790,6 +802,7 @@ var doSearch = function(){
 		lotatt02text : $('#lotatt02text').datebox("getValue"),
 		lotatt03 : $('#lotatt03').datebox("getValue"),
 		lotatt03text : $('#lotatt03text').datebox("getValue"),
+		lotatt04 : $('#lotatt04').textbox("getValue"),
 		lotatt10 : $('#lotatt10').combobox('getValue'),
 		lotatt05 : $('#lotatt05').val(),
 		lotatt06 : $('#lotatt06').val(),
@@ -799,7 +812,9 @@ var doSearch = function(){
 /* 库位选择弹框查询 */
 var ezuiLocDataSearch = function () {
 	ezuiLocDataDialogId.datagrid('load', {
-		locationid: $("#ezuiLocDataDialog #locationid").textbox("getValue")
+		locationid: $("#ezuiLocDataDialog #locationid").textbox("getValue"),
+		locationcategory: $("#ezuiLocDataDialog #locationcategory").combobox("getValue")
+
 	});
 };
 /* 库位选择弹框清空 */
@@ -851,8 +866,11 @@ var selectLocation = function (type) {
 		if(type=='O'){
 		   $("#ezuiDialogMov #lotatt11text").textbox('setValue', row.locationid);
 		    ezuiLocDataDialog.dialog('close');
-		}else{
+		}else if(type=='M'){
 			$("#ezuiDialogMovAll #lotatt11text").textbox('setValue', row.locationid);
+			ezuiLocDataDialog.dialog('close');
+		}else{
+			$("#toolbar #fmlocation").textbox('setValue', row.locationid);
 			ezuiLocDataDialog.dialog('close');
 		}
 	}
@@ -892,20 +910,26 @@ var ismove=function (location) {
 						<tr>
 							<th>失效日期</th><td><input type='text' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 							<th>至</th><td><input type='text' id='lotatt02text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
-						</tr>
-						<tr>
-							<th>入库日期</th><td><input type='text' id='lotatt03' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
-							<th>至</th><td><input type='text' id='lotatt03text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
-						</tr>
-						<tr>	
 							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/commonController.do?qcState"/>',
 																																	valueField: 'id',
 																																     textField: 'value'"/></td>
-							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
+
+						</tr>
+						<tr>
+							<th>入库日期</th><td><input type='text' id='lotatt03' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
+							<th>至</th><td><input type='text' id='lotatt03text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 							<th>注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
-							<td>
+
+
+						</tr>
+						<tr>
+							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>生产批号</th>
+							<td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
@@ -1040,7 +1064,7 @@ var ismove=function (location) {
 				<tr>
 					<th>冻结件数</th>
 					<td><input type='text' name='qtyholded' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-					<th>移动数量</th>
+					<th>移动件数</th>
 					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
@@ -1083,7 +1107,7 @@ var ismove=function (location) {
 
 					<th>库存件数</th>
 					<td><input type='text' name='fmqty' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-					<th>移动数量</th>
+					<th>移动件数</th>
 					<td><input type='text' name='lotatt11' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 				</tr>
 				<tr>
@@ -1228,7 +1252,7 @@ var ismove=function (location) {
 						<table>
 							<tr>
 								<th>库位：</th><td>
-								<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码"'/></td>
+								<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='12' data-options=''/></td>
 								<th>库位类型：</th><td>
 								<input type='text' id='locationcategory' name="locationcategory" class='easyui-combobox' size='12' data-options="panelHeight:'auto',
 																																		    editable:false,
