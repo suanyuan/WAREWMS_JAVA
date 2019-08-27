@@ -61,7 +61,7 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.locationid != null and condition.locationid != ''" >
-	    and locationid =  #{condition.locationid}
+	    and locationid like concat('%',#{condition.locationid},'%')
 	</if>
 	<if test="condition.length != null and condition.length != ''" >
 	    and length =  #{condition.length}

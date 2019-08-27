@@ -983,15 +983,13 @@ public class DocOrderPackingService extends BaseService {
         orderHeaderQuery.setOrderno(orderno);
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderQuery);
 
-        if (StringUtil.isEmpty(orderHeaderForNormal.getSoreference2())) {
+        if (StringUtil.isEmpty(orderHeaderForNormal.getSoreference2()) &&
+        orderHeaderForNormal.getOrdertype().equals("DX")) {
 
             json.setSuccess(false);
             json.setMsg("出库单号:" + orderno + ";定向出库单未绑定预入库单号！");
             return json;
         }
-        DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-        docAsnHeaderQuery.setAsnno(orderHeaderForNormal.getSoreference2());
-        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
 
         try {
 
@@ -1027,6 +1025,9 @@ public class DocOrderPackingService extends BaseService {
 
                 //批次属性
                 InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
+                DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+                docAsnHeaderQuery.setAsnno(invLotAtt.getLotatt14());
+                DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
 
                 ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
                 ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);

@@ -10,9 +10,9 @@
 					<table>
 						<tr>
 							<th>客户：</th><td>
-							<input type='text' id='customerid' name="customerid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码",editable:false'/></td>
-							<th>商品：</th><td>
-							<input type='text' id='sku' name="sku" class='easyui-textbox'  size='16' data-options='prompt:"请输入商品编码"'/></td>
+							<input type='text' id='customerid' name="customerid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码"'/></td>
+							<th>产品代码：</th><td>
+							<input type='text' id='sku' name="sku" class='easyui-textbox'  size='16' data-options='prompt:"请输入产品代码"'/></td>
 							<th>激活：</th><td>
 							<input type='text' id='activeFlag' name="activeFlag" class='easyui-combobox'  size='8' data-options="panelHeight:'auto',
 																														editable:false,
