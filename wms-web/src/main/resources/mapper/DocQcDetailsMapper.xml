@@ -31,6 +31,13 @@
 	<result column="editwho" property="editwho"/>
 	<result column="packid" property="packid"/>
 	<result column="transactionid" property="transactionid"/>
+<!--inv_lot_att by lotnum-->
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt15" property="lotatt15"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt11" property="lotatt11"/>
 </resultMap>
        
 <!-- doc_qc_details table all fields -->
@@ -91,6 +98,90 @@ where 1=1
 	</if>
 	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
 	    and userdefine4 like concat('%',#{condition.userdefine4},'%')
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<if test="condition.qcdescr != null and condition.qcdescr != ''" >
+	    and qcdescr =  #{condition.qcdescr}
+	</if>
+	<if test="condition.qcresult != null and condition.qcresult != ''" >
+	    and qcresult =  #{condition.qcresult}
+	</if>
+	<if test="condition.filecontent != null and condition.filecontent != ''" >
+	    and filecontent =  #{condition.filecontent}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.packid != null and condition.packid != ''" >
+	    and packid =  #{condition.packid}
+	</if>
+	<if test="condition.transactionid != null and condition.transactionid != ''" >
+	    and transactionid =  #{condition.transactionid}
+	</if>
+</trim>
+</sql>
+<!-- 查询条件 验收作业 -->
+<sql id="Example_Where_Clause1">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.pano != null and condition.pano != ''" >
+		and pano like concat('%',#{condition.pano},'%')
+	</if>
+	<if test="condition.qcno != null and condition.qcno != ''" >
+	    and d.qcno like concat('%',#{condition.qcno},'%')
+	</if>
+	<if test="condition.qclineno != null and condition.qclineno != ''" >
+	    and d.qclineno =  #{condition.qclineno}
+	</if>
+	<if test="condition.linestatus != null and condition.linestatus != ''" >
+	    and d.linestatus =  #{condition.linestatus}
+	</if>
+	<if test="condition.palineno != null and condition.palineno != ''" >
+	    and palineno =  #{condition.palineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and d.customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and d.sku =  #{condition.sku}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and d.lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.paqtyExpected != null and condition.paqtyExpected != ''" >
+	    and paqty_expected =  #{condition.paqtyExpected}
+	</if>
+	<if test="condition.qcqtyExpected != null and condition.qcqtyExpected != ''" >
+	    and qcqty_expected =  #{condition.qcqtyExpected}
+	</if>
+	<if test="condition.qcqtyCompleted != null and condition.qcqtyCompleted != ''" >
+	    and qcqty_completed =  #{condition.qcqtyCompleted}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and d.userdefine3 like concat('%',#{condition.userdefine3},'%')
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and d.userdefine4 like concat('%',#{condition.userdefine4},'%')
 	</if>
 	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
 	    and userdefine5 =  #{condition.userdefine5}
@@ -239,13 +330,11 @@ where 1=1
 </select>
 <!-- 验收明细档 列表总数Pano-->
 <select id="queryByCountPano" resultType="java.lang.Integer"  parameterType="Object">
-		select
-		count(1)
-		from (
-		SELECT  d.*,h.pano FROM doc_qc_details  d
-		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
-		) as a
-		<include refid="Example_Where_Clause"/>
+	SELECT count(1)
+	FROM doc_qc_details  d
+	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	<include refid="Example_Where_Clause1"/>
 </select>
   	
 <!-- 查询验收明细档列表 -->
@@ -263,13 +352,12 @@ where 1=1
 </select>
 <!-- 查询验收明细档列表 pano -->
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
-	select
-	<include refid="Base_Column_List1"/>
-	from (
-	  SELECT  d.*,h.pano FROM doc_qc_details  d
-	  LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
-	) as a
-	<include refid="Example_Where_Clause"/>
+
+	SELECT d.*,h.pano,a.`lotatt12`,a.`lotatt07`,a.`lotatt15`,a.`lotatt01`,a.`lotatt06`,a.`lotatt11`
+	FROM doc_qc_details  d
+	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
     </if>
