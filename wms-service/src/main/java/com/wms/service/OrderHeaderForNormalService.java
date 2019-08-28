@@ -1615,11 +1615,11 @@ public class OrderHeaderForNormalService extends BaseService {
         //打印单号
         //map.put("addedService","A");
         //母单号
-        map.put("mailNoStr", "单号   " + "217276730473");
+        map.put("mailNoStr", "单号   " + "217 276 730 473");
         //map.put("mailNoStr", "签回单号");
         //map.put("childMailNoStr", "217276730473");
         //打印原寄地
-        map.put("destRouteLabel", "021WG——021NA");
+        map.put("destRouteLabel", "021WG-021NA");
         //收件人相关信息
         map.put("consignerName", "郑洁");
         map.put("consignerTel", "021-62091927");
@@ -1666,7 +1666,7 @@ public class OrderHeaderForNormalService extends BaseService {
         model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mm.jasper");
         model.addAttribute("format", "pdf");
         model.addAttribute("jrMainDataSource", jrDataSource);
-
+        }
     }
 
 
@@ -1813,6 +1813,63 @@ public class OrderHeaderForNormalService extends BaseService {
 
         return json;
     }
+
+    /*
+     * 导出序列号记录
+     *
+    */
+    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception{
+        Cookie cookie = new Cookie("exportToken",orderNofrom.getOrderFlag());
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        response.setContentType(ContentTypeEnum.csv.getContentType());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+       String str = null;
+        try{
+            //Excel表头数据
+            LinkedHashMap<String,String> serialMap = getDocSerialNumRecord();
+            String sheetName = "序列号记录";
+            //Excel需要的数据
+            List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryExport(orderNofrom.getOrderno());
+            if(docSerialNumRecordList.size() >0){
+                for (int i = 0; i < docSerialNumRecordList.size(); i++) {
+                    str = format.format(docSerialNumRecordList.get(i).getAddtime());
+                   docSerialNumRecordList.get(i).setAddTimeSetting(str);
+                }
+
+                //将查询出来的数据转化为Excel数据
+                ExcelUtil.listToExcel(docSerialNumRecordList,serialMap,sheetName,response);
+                //修改docOrderHeader中的udfprintflag1信息为1 导出过序列号信息
+                docSerialNumRecordMybatisDao.updateDocOrder(orderNofrom.getOrderno());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 得到导出Excle时题型的英中文map
+     *
+     * @return 返回题型的属性map
+     */
+    public LinkedHashMap<String, String> getDocSerialNumRecord() {
+
+        LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+
+        superClassMap.put("skuName", "客户");
+        superClassMap.put("cartonNo", "出库单号");
+        superClassMap.put("soreference", "客户单号");
+        superClassMap.put("batchNum", "生产批号");
+        superClassMap.put("serialNum", "序列号");
+        superClassMap.put("addTimeSetting", "制单日期");
+        superClassMap.put("addwho", "制单人");
+
+        return superClassMap;
+    }
+
+
 
     private String getKey(OrderDetailsForNormal detail) {
         return detail.getSku() + "" + detail.getLotatt01() + detail.getLotatt02() + detail.getLotatt03() + detail.getLotatt04()
