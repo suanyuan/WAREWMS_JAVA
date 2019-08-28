@@ -239,6 +239,7 @@ var edit = function(){
             reservedfield10 : row.reservedfield10,
             reservedfield11 : row.reservedfield11,
             reservedfield12 : row.reservedfield12,
+			reservedfield13 : row.reservedfield13,
   			grossweight : row.grossweight,
   			cube : row.cube,
   			price : row.price,
@@ -709,42 +710,6 @@ var downloadTemplate = function(){
 			<input type='hidden' id='basSkuId' name='basSkuId'/>
 			<table>
 				<tr>
-				<th>货主</th>
-				<td><input type='text' name='customerid'  id='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				<th>代码</th>
-					<td><input type='text' name='sku' id="sku" class='easyui-textbox' size='16' data-options='required:true'/></td>
-
-				</tr>
-
-
-				<tr>
-				<th>是否激活</th>
-				<td><input type='text' name='activeFlag' id="activeFlag" class='easyui-combobox' size='16' data-options="required:true,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '是'},
-																																{id: '0', value: '否'}
-																															]" readonly/></td>
-				<th>规格名称</th>
-				<td ><input type='text' name='descrC' class='easyui-textbox' size='16' data-options="required:true"/></td>
-				</tr>
-
-				<tr>
-				<th>型号</th>
-				<td ><input type='text' name='descrE' class='easyui-textbox' size='16' data-options="required:true"/></td>
-				<th>包装规格代码</th>
-				<td><input type='text' name='packid'  id='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-
-
-				<tr>
-					<th>商品名称</th>
-				    <td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
-
-
 					<th>首营状态</th>
 					<td><input type='text' name='firstop' id="firstop" class='easyui-combobox' size='16' data-options="required:true,
 																															panelHeight:'auto',
@@ -759,89 +724,126 @@ var downloadTemplate = function(){
 																																{id: '60', value: '已停止'},
 																																{id: '90', value: '已报废'}
 																															]" readonly/></td>
+					<th>是否激活</th>
+					<td><input type='text' name='activeFlag' id="activeFlag" class='easyui-combobox' size='16' data-options="required:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '是'},
+																																{id: '0', value: '否'}
+																															]" readonly/></td>
 				</tr>
 
 
 				<tr>
-				<th>商品描述</th>
-				<td><input type='text' name='reservedfield02' class='easyui-textbox' size='16' /></td>
-				<th>注册证号</th>
-				<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
-				</tr>
+					<th>货主</th>
+					<td><input type='text' name='customerid'  id='customerid' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
-
-
-
-
-
-
-
-				<tr>
-				<th>产品线</th>
-				<td><input type='text' name='skuGroup1' class='easyui-textbox' size='16' /></td>
-				<th>附卡类别</th>
-				<td><input type='text' name='skuGroup2' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-				<tr>
-				<th>自赋码1</th>
-				<td><input type='text' name='alternateSku1' class='easyui-textbox' size='16' /></td>
-				<th>自赋码2</th>
-				<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-				<tr>
-				<th>自赋码3</th>
-				<td><input type='text' name='alternateSku3' class='easyui-textbox' size='16' /></td>
-				<th>自赋码4</th>
-				<td><input type='text' name='alternateSku4' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-				<tr>
-				<th>自赋码5</th>
-				<td><input type='text' name='alternateSku5' class='easyui-textbox' size='16' /></td>
-				<th>单位</th>
-				<td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-				<tr>
-				<th>管理分类</th>
-				<td><input type='text' name='reservedfield04' class='easyui-textbox' size='16' /></td>
-				<th>分类目录</th>
-				<td><input type='text' name='reservedfield05' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-
-				<tr>
-				<th>包装要求</th>
-				<td><input type='text' name='skuGroup3' class='easyui-textbox' size='16' /></td>
-				<th>存储条件</th>
-				<td><input type='text' name='skuGroup4' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-
-
-				<tr>
-				<th>运输条件</th>
-				<td><input type='text' name='skuGroup5' class='easyui-textbox' size='16' /></td>
-				<th>高</th>
-				<td><input type='text' name='skuhigh' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-
-				<tr>
-				<th>长</th>
-				<td><input type='text' name='skulength' class='easyui-textbox' size='16' /></td>
-				<th>宽</th>
-				<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>
-
-				</tr>
-
-				<tr>
 					<th>默认供应商</th>
 					<td><input type='hidden' name='skuGroup6'   />
-					<input type='text' name='skuGroup6Name' class='easyui-textbox' size='16' /></td>
-					<th>是否需要双证</th>
+						<input type='text' name='skuGroup6Name' class='easyui-textbox' size='16' /></td>
+
+
+				</tr>
+
+				<tr>
+					<th>注册证号</th>
+					<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
+					<th>产品线</th>
+					<td><input type='text' name='skuGroup1' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+
+				<tr>
+
+					<th>产品代码</th>
+					<td><input type='text' name='sku' id="sku" class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>产品名称</th>
+				    <td><input type='text' name='reservedfield01' class='easyui-textbox' size='16' data-options='required:true'/></td>
+
+				</tr>
+
+
+				<tr>
+					<th>规格</th>
+					<td ><input type='text' name='descrC' class='easyui-textbox' size='16' data-options="required:true"/></td>
+					<th>产品描述</th>
+					<td><input type='text' name='reservedfield02' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+				<tr>
+
+					<th>型号</th>
+					<td ><input type='text' name='descrE' class='easyui-textbox' size='16' data-options="required:true"/></td>
+					<th>单位</th>
+					<td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+				<tr>
+					<th>包装规格</th>
+					<td><input type='text' name='packid'  id='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>包装单位</th>
+					<td><input type='text' name='reservedfield13'  id='reservedfield13' class='easyui-textbox' size='16' data-options='required:false'/></td>
+
+				</tr>
+
+				<tr>
+					<th>管理分类</th>
+					<td><input type='text' name='reservedfield04' class='easyui-textbox' size='16' /></td>
+					<th>包装要求</th>
+					<td><input type='text' name='skuGroup3' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+				<tr>
+					<th>分类目录</th>
+					<td><input type='text' name='reservedfield05' class='easyui-textbox' size='16' /></td>
+					<th>长</th>
+					<td><input type='text' name='skulength' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+				<tr>
+					<th>运输条件</th>
+					<td><input type='text' name='skuGroup5' class='easyui-textbox' size='16' /></td>
+					<th>宽</th>
+					<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>
+				</tr>
+
+
+				<tr>
+					<th>存储条件</th>
+					<td><input type='text' name='skuGroup4' class='easyui-textbox' size='16' /></td>
+					<th>高</th>
+					<td><input type='text' name='skuhigh' class='easyui-textbox' size='16' /></td>
+				</tr>
+
+
+
+				<tr>
+					<th>生产许可证号/备案号</th>
+					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
+					<th>重量</th>
+					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+
+				<tr>
+					<th>产地</th>
+					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
+					<th>商品条码</th>
+					<td><input type='text' name='reservedfield12' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+
+				<tr>
+					<th>双证</th>
 					<%--<td><input type='text' name='skuGroup7' class='easyui-textbox' size='16' /></td>--%>
 					<td><input type='text' name='skuGroup7' id="skuGroup7" class='easyui-combobox' size='16' data-options="required:true,
 																															panelHeight:'auto',
@@ -852,9 +854,12 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
+					<th>自赋码1</th>
+					<td><input type='text' name='alternateSku1' class='easyui-textbox' size='16' /></td>
+
 				</tr>
 				<tr>
-					<th>是否需要产品合格证</th>
+					<th>产品合格证</th>
 					<td><input type='text' name='skuGroup8' id="skuGroup8" class='easyui-combobox' size='16' data-options="required:true,
 																															panelHeight:'auto',
 																															editable:false,
@@ -864,15 +869,13 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-					<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
-					<th>产地</th>
-					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
+					<th>自赋码2</th>
+					<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
+				<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
 					<%--<th>宽</th>--%>
 					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
 				</tr>
 				<tr>
-					<th>生产许可证号/备案号</th>
-					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
 					<th>冷链标志</th>
 					<td><input type='text' name='reservedfield07' id="reservedfield07" class='easyui-combobox' size='16' data-options="required:false,
 																															panelHeight:'auto',
@@ -884,6 +887,10 @@ var downloadTemplate = function(){
 																																{id: 'LC', value: '冷藏'},
 																																{id: 'FLL', value: '非冷链'}
 																															]" readonly/></td>
+					<th>自赋码3</th>
+					<td><input type='text' name='alternateSku3' class='easyui-textbox' size='16' /></td>
+
+
 
 				</tr>
 				<tr>
@@ -897,6 +904,15 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
+
+
+					<th>自赋码4</th>
+					<td><input type='text' name='alternateSku4' class='easyui-textbox' size='16' /></td>
+
+
+				</tr>
+
+				<tr>
 					<th>医疗器械标志</th>
 					<td><input type='text' name='reservedfield09' id="reservedfield09" class='easyui-combobox' size='16' data-options="required:false,
 																															panelHeight:'auto',
@@ -907,30 +923,31 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
+					<th>自赋码5</th>
+					<td><input type='text' name='alternateSku5' class='easyui-textbox' size='16' /></td>
 				</tr>
 
 				<tr>
 					<th>养护周期(天)</th>
 					<td><input type='text' name='reservedfield10' class='easyui-textbox' size='16' value="tian" /></td>
-					<th>重量</th>
-					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
-				</tr>
-
-				<tr>
-					<th>商品条码</th>
-					<td><input type='text' name='reservedfield12' class='easyui-textbox' size='16' /></td>
-					<th>增加时间</th>
-					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-				</tr>
-				<tr>
 					<th>增加人</th>
 					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
-					<th>编辑时间</th>
-					<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
+
+				</tr>
+				<tr>
+					<th>附卡类别</th>
+					<td><input type='text' name='skuGroup2' class='easyui-textbox' size='16' /></td>
+
+					<th>增加时间</th>
+					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
+
 				</tr>
 				<tr>
 					<th>编辑人</th>
 					<td><input type='text' name='editwho' class='easyui-textbox' size='16' /></td>
+
+					<th>编辑时间</th>
+					<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
 				</tr>
 				<!-- <tr>
 				<th>时间控件</th><td><input type='text' name='edittime' class='easyui-datebox' data-options='required:true,editable:false'/></td>

@@ -18,7 +18,7 @@
             <table>
                 <tr>
                     <th>企业名称</th>
-                    <td><input type='text' value="${gspFirstRecord.enterpriseName}" id="firstRecordEnterprise" name='enterpriseId' data-options='required:true,width:300' class='easyui-textbox'/></td>
+                    <td><input type='text' value="${gspFirstRecord.enterpriseName}" id="enterpriseName" name='enterpriseName' data-options='required:true,width:300' class='easyui-textbox'/></td>
                     <th>备案编号</th>
                     <td><input type='text' value="${gspFirstRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
@@ -93,7 +93,7 @@
 
         //控件初始化
         ezuiFirstRecordDatagridDetail = $("#ezuiFirstRecordDatagridDetail").datagrid({
-            url : sy.bp()+'/gspEnterpriseInfoController.do?recordHistoryDatagridList',
+            url : sy.bp()+'/gspEnterpriseInfoController.do?firstRecordHistoryDatagridList',
             method:'POST',
             toolbar : '',
             title: '',
@@ -110,17 +110,24 @@
             singleSelect:true,
             idField : 'operateId',
             columns : [[
-                {field: 'operateId',title:'主键',hidden:true},
-                {field: 'recordNo',title: '备案编号' ,width: '20%'},
-                {field: 'operateMode',title: '经营方式',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
+                {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
+                {field: 'recordNo',title: '备案号' ,width: '15%'},
+                {field: 'approveDate',title:'备案日期', width: '15%'},
+                {field: '_operate',		title: '备案照片',	width: '20%',
+                    formatter: formatOperAttachmentRecord
+                },
+                {field: 'createId',title: '创建人',width: '10%'},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
                 },
-                {field: '_operate',		title: '许可证照片',	width: '20%',
-                    formatter: formatOperAttachmentRecord
-                }
+                {field: 'operateId',title:'主键',hidden:true},
+                // {field: 'operateMode',title: '经营方式',width: '20%'},
+                // {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
+                //         return dateFormat(value);
+                //     }
+                // },
+
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -167,7 +174,7 @@
                     for(var i=0;i<result.length;i++){
                         arr.push(result[i].operateName);
                     }
-                    $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",arr.join(","))
+                    $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue",arr.join(","))
                 }
             }
         });
@@ -268,6 +275,7 @@
         initChoseText();
 
         if($("#ezuiFormInfo input[id='enterpriseName']")){
+
             $("#firstRecordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
@@ -287,6 +295,7 @@
                 }
             }
         })
+        $("#ezuiFormFirstRecord input[id='bussinessScope']").val("")
         $("#ezuiFormFirstRecord #recordUrl").val("")
         $("#firstRecordFile").filebox("setValue","");
     }

@@ -99,7 +99,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'','socialCreditCode':'${gspBusinessLicense.socialCreditCode}'},
+            queryParams:{'enterpriseId':'${gspBusinessLicense.enterpriseId}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -358,7 +358,7 @@
     //换证清空当前数据
     function businessUpdate() {
         opType = "update";
-        $("#opType").val("update");
+        $("#ezuiFormBusiness #opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -370,7 +370,7 @@
         })
         $("#attachmentUrl").val("")
         $("#file").filebox("setValue","");
-        $("#ezuiDetailsBtn_copy").linkbutton("enable");
+        $("#ezuiFormBusiness #ezuiDetailsBtn_copy").linkbutton("enable");
         $("#ezuiFormBusiness input[id='isLong']").removeAttr("checked");
         $("#ezuiFormBusiness input[id='businessStartDate']").datebox("enable");
         $("#ezuiFormBusiness input[id='businessEndDate']").datebox("enable");

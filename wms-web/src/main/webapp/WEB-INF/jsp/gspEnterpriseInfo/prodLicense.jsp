@@ -115,17 +115,32 @@
             singleSelect:true,
             idField : 'operateId',
             columns : [[
-                {field: 'operateId',title:'主键',hidden:true},
-                {field: 'licenseNo',title: '许可证编号' ,width: '20%'},
-                {field: 'operateMode',title: '经营方式',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
-                {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
+                {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
+                {field: 'licenseNo',title: '许可证编号' ,width: '15%'},
+                {field: 'approveDate',title: '发证日期' ,width: '20%'},
+                {field: 'licenseExpiryDate',title: '有效期限' ,width: '20%'},
+                {field: '_operate',		title: '许可证照片',	width: '10%',
+                    formatter: formatOperAttachmentOperate1
+                },
+                {field: 'createId',title: '创建人',width: '10%'},
+
+                {field: 'createDate',title: '创建时间',width: '15%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
                 },
-                {field: '_operate',		title: '许可证照片',	width: '20%',
-                    formatter: formatOperAttachmentOperate1
-                }
+
+
+
+
+                {field: 'operateId',title:'主键',hidden:true},
+                // {field: 'operateMode',title: '经营方式',width: '20%'},
+                // {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
+                //         return dateFormat(value);
+                //     }
+                // },
+                // {field: '_operate',		title: '许可证照片',	width: '20%',
+                //     formatter: formatOperAttachmentOperate1
+                // }
             ]],
             onDblClickCell: function(index,field,value){
 

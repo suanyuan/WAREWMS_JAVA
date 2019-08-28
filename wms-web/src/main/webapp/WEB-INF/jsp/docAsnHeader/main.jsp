@@ -49,7 +49,7 @@ $(function() {
 		singleSelect:false,
 		idField : 'asnno',
 		queryParams: {
-			asnstatusCheck: $('#asnstatusCheck').is(':checked') == true ? "N" : "Y"
+			asnstatusCheck: $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
 		},
 		rowStyler:asnRowStyle,
 		columns : [[
@@ -422,7 +422,10 @@ $(function() {
         valueField: 'id',
         textField: 'value'
     });
-
+//单选框改变事件
+	$("#asnstatusCheck").change(function() {
+		doSearch();
+	});
 
 });
 
@@ -746,7 +749,7 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
-		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "N" : "Y"
+		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
 	});
 };
 
@@ -1568,6 +1571,11 @@ function  copyDetail() {
 				$('#refInNoTo').textbox({
 					multiline:false,
 					prompt:'请输入ASN编号'
+				});
+			}else{
+				$('#refInNoTo').textbox({
+					multiline:false,
+					prompt:'请选择订单...'
 				});
 			}
 		}

@@ -37,32 +37,32 @@ public class GspMedicalRecordService extends BaseService {
 
 
 
-	//证照历史信息列表
-	public EasyuiDatagrid<GspMedicalRecordVO> getPagedDatagrid(EasyuiDatagridPager pager, GspMedicalRecordQuery query) {
-		EasyuiDatagrid<GspMedicalRecordVO> datagrid = new EasyuiDatagrid<>();
-		List<GspMedicalRecordVO> gspBusinessLicenseVOList = new ArrayList<>();
-		if(!query.getMedicalRegisterNo().equals("")){
-			MybatisCriteria criteria = new MybatisCriteria();
-			criteria.setCondition(query);
-			criteria.setCurrentPage(pager.getPage());
-			criteria.setPageSize(pager.getRows());
-			criteria.setOrderByClause("create_date desc");
-
-			List<GspMedicalRecord> businessLicenseVOS = gspMedicalRecordMybatisDao.queryByList(criteria);
-			for(GspMedicalRecord g : businessLicenseVOS){
-				GspMedicalRecordVO vo = new GspMedicalRecordVO();
-				org.springframework.beans.BeanUtils.copyProperties(g,vo);
-				gspBusinessLicenseVOList.add(vo);
-			}
-			int total = gspMedicalRecordMybatisDao.queryByCount(criteria);
-			datagrid.setTotal(Long.parseLong(total+""));
-			datagrid.setRows(gspBusinessLicenseVOList);
-		}else {
-			datagrid.setTotal(0L);
-			datagrid.setRows(gspBusinessLicenseVOList);
-		}
-		return datagrid;
-	}
+//	//证照历史信息列表
+//	public EasyuiDatagrid<GspMedicalRecordVO> getPagedDatagrid(EasyuiDatagridPager pager, GspMedicalRecordQuery query) {
+//		EasyuiDatagrid<GspMedicalRecordVO> datagrid = new EasyuiDatagrid<>();
+//		List<GspMedicalRecordVO> gspBusinessLicenseVOList = new ArrayList<>();
+//		if(!query.getMedicalRegisterNo().equals("")){
+//			MybatisCriteria criteria = new MybatisCriteria();
+//			criteria.setCondition(query);
+//			criteria.setCurrentPage(pager.getPage());
+//			criteria.setPageSize(pager.getRows());
+//			criteria.setOrderByClause("create_date desc");
+//
+//			List<GspMedicalRecord> businessLicenseVOS = gspMedicalRecordMybatisDao.queryByList(criteria);
+//			for(GspMedicalRecord g : businessLicenseVOS){
+//				GspMedicalRecordVO vo = new GspMedicalRecordVO();
+//				org.springframework.beans.BeanUtils.copyProperties(g,vo);
+//				gspBusinessLicenseVOList.add(vo);
+//			}
+//			int total = gspMedicalRecordMybatisDao.queryByCount(criteria);
+//			datagrid.setTotal(Long.parseLong(total+""));
+//			datagrid.setRows(gspBusinessLicenseVOList);
+//		}else {
+//			datagrid.setTotal(0L);
+//			datagrid.setRows(gspBusinessLicenseVOList);
+//		}
+//		return datagrid;
+//	}
 
 	public Json addGspMedicalRecord(GspMedicalRecordForm gspMedicalRecordForm) throws Exception {
 		Json json = new Json();
@@ -172,7 +172,7 @@ public class GspMedicalRecordService extends BaseService {
 	public EasyuiDatagrid<GspMedicalRecordVO> getGspMedicalRecordHistory(EasyuiDatagridPager pager, GspMedicalRecordQuery query){
 		EasyuiDatagrid<GspMedicalRecordVO> datagrid = new EasyuiDatagrid<>();
 		List<GspMedicalRecordVO> gspMedicalRecordVOList = new ArrayList<>();
-		if(!query.getMedicalRegisterNo().equals("")){
+		if(!query.getEnterpriseId().equals("")){
 			MybatisCriteria criteria = new MybatisCriteria();
 			criteria.setCondition(query);
 			criteria.setCurrentPage(pager.getPage());

@@ -40,6 +40,11 @@ public class DocSerialNumRecord  implements Serializable {
 
     private String userdefine5;
 
+    private String skuName;
+
+    private String addTimeSetting;
+
+
     public DocSerialNumRecord() {
     }
 

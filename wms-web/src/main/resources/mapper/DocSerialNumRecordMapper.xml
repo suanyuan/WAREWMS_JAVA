@@ -19,6 +19,7 @@
     <result column="userdefine3" property="userdefine3"/>
     <result column="userdefine4" property="userdefine4"/>
     <result column="userdefine5" property="userdefine5"/>
+    <result column="skuName" property="skuName"/>
 </resultMap>
        
 <!-- doc_serial_num_record table all fields -->
@@ -169,4 +170,31 @@ values(#{id},#{customerid},#{cartonNo},#{soreference},#{orderNo},#{batchNum},#{s
         delete from doc_serial_num_record
         where order_no = #{orderNo}
     </delete>
+    <!-- 查询导出序列号记录 -->
+    <select id="queryExport" resultMap="BaseResultMap"  parameterType="Object">
+        SELECT
+                 d.id,
+                 d.customerid,
+                 d.carton_no,
+                 d.soreference,
+                 d.order_no,
+                 d.batch_num,
+                 d.serial_num,
+                 d.addtime,
+                 d.addwho,
+                 b.descr_c as skuName
+            FROM
+                doc_serial_num_record d
+            LEFT JOIN bas_customer  b on d.customerid = b.customerid
+            WHERE
+                order_no = #{orderNo}
+            ORDER BY
+                carton_no,
+                batch_num,
+                serial_num
+    </select>
+    <update id="updateDocOrder" parameterType="object">
+        UPDATE   doc_order_header set udfprintflag1 = 1   where orderno = #{orderNo}
+    </update>
+
 </mapper>   

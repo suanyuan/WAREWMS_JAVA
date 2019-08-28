@@ -17,9 +17,9 @@ public class GspOperateLicenseVO {
 	private java.util.Date approveDate;
 	private String registrationAuthority;
 	private String operateType;
-	private Long createId;
+	private String createId;
 	private java.util.Date createDate;
-	private Long editId;
+	private String editId;
 	private java.util.Date editDate;
 	private String isUse;
 	private String businessResidence;
@@ -126,12 +126,21 @@ public class GspOperateLicenseVO {
 		this.operateType = operateType;
 	}
 
-	public Long getCreateId() {
+
+	public String getCreateId() {
 		return createId;
 	}
 
-	public void setCreateId(Long createId) {
+	public void setCreateId(String createId) {
 		this.createId = createId;
+	}
+
+	public String getEditId() {
+		return editId;
+	}
+
+	public void setEditId(String editId) {
+		this.editId = editId;
 	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
@@ -143,13 +152,6 @@ public class GspOperateLicenseVO {
 		this.createDate = createDate;
 	}
 
-	public Long getEditId() {
-		return editId;
-	}
-
-	public void setEditId(Long editId) {
-		this.editId = editId;
-	}
 
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	public java.util.Date getEditDate() {

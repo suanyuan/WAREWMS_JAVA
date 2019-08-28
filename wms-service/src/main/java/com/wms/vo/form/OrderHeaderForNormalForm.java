@@ -41,6 +41,7 @@ public class OrderHeaderForNormalForm {
 	private String docOrderHeaderId;
 	private String sostatus;
 	private String releasestatus;
+	private String orderFlag;
 	//收货人
 	private String cContact;
 	/**
@@ -359,4 +360,12 @@ public class OrderHeaderForNormalForm {
 	public String getcContact() { return cContact; }
 
 	public void setcContact(String cContact) { this.cContact = cContact; }
+
+	public String getOrderFlag() {
+		return orderFlag;
+	}
+
+	public void setOrderFlag(String orderFlag) {
+		this.orderFlag = orderFlag;
+	}
 }

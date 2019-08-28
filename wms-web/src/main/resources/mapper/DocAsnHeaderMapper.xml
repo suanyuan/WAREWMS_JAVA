@@ -267,7 +267,7 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.asnstatusCheck != null and condition.asnstatusCheck != ''" >
-		<if test="condition.asnstatusCheck eq 'Y'.toString() " >
+		<if test="condition.asnstatusCheck eq 'N'.toString() " >
 			and asnstatus not in ('90','99')
 		</if>
 	</if>
