@@ -27,6 +27,13 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	DocQcDetails queryDocQcDetail(PdaDocQcDetailQuery query);
 
     /**
+     * 根据扫码结果查询验收明细
+     * @param query ~
+     * @return 如果只传SKU 可能会有多条，用上面的会报错
+     */
+	List<DocQcDetails> queryDocQcDetailList(PdaDocQcDetailQuery query);
+
+    /**
      * 获取验收任务的明细进度清单
      * @param qcno 验收任务单号
      * @return ~

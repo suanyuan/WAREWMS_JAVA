@@ -1,15 +1,13 @@
 package com.wms.service;
 
-import com.wms.entity.BasSerialNum;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocPaDetails;
-import com.wms.entity.ProductLine;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasSerialNumQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.ProductLineQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
+import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.pda.ScanResultForm;
@@ -39,6 +37,8 @@ public class CommonService extends BaseService{
     private ProductLineMybatisDao productLineMybatisDao;
     @Autowired
     private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
+    @Autowired
+    private DocQcDetailsMybatisDao docQcDetailsMybatisDao;
 
 
     public String generateSeq(String seqType,String warehouseid){
@@ -167,6 +167,51 @@ public class CommonService extends BaseService{
         json.setSuccess(true);
         json.setMsg("可继续操作");
         json.setObj(docPaDetailsList);
+        return json;
+    }
+
+    /**
+     * 判断获取的验收扫码数据是否齐全
+     * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
+     * @param query qcno, customerid, sku, lotatt01, locationid, lotatt04, lotatt05, lotatt10, lotnum
+     * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
+     */
+    public Json judgeQcScanResult(PdaDocQcDetailQuery query, CommonVO commonVO) {
+
+        Json json = new Json();
+
+        //1，查询验收明细
+        List<DocQcDetails> docQcDetails = docQcDetailsMybatisDao.queryDocQcDetailList(query);
+        if (docQcDetails.size() == 0) {
+
+            json.setSuccess(false);
+            json.setMsg("查无此产品的验收明细数据");
+            return json;
+        }
+
+        //2，如果commonVo中有批号/序列号，将查询到的验收明细返回
+        if (StringUtil.isNotEmpty(commonVO.getBatchNum()) || StringUtil.isNotEmpty(commonVO.getSerialNum())) {
+
+            json.setObj(docQcDetails.get(0));
+            json.setSuccess(true);
+            json.setMsg("可继续操作");
+            return json;
+        }
+
+        //3，如果SKU对应的明细中存在批号或者序列号，提示上架不允许扫描SKU进行
+        for (DocQcDetails docQcDetail : docQcDetails) {
+
+            if (StringUtil.isNotEmpty(docQcDetail.getUserdefine3()) || StringUtil.isNotEmpty(docQcDetail.getUserdefine4())) {
+
+                json.setSuccess(false);
+                json.setMsg("请扫描产品GS1条码进行验收操作！");
+                return json;
+            }
+        }
+
+        json.setSuccess(true);
+        json.setMsg("可继续操作");
+        json.setObj(docQcDetails.get(0));
         return json;
     }
 }

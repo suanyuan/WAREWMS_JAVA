@@ -23,6 +23,8 @@ import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQcDetailsForm;
+import com.wms.vo.form.pda.ScanResultForm;
+import com.wms.vo.pda.CommonVO;
 import com.wms.vo.pda.PdaDocQcDetailVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("docQcDetailsService")
@@ -66,10 +70,11 @@ public class DocQcDetailsService extends BaseService {
 	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
 
     @Autowired
-    private BasSerialNumMybatisDao basSerialNumMybatisDao;
+    private ProductLineMybatisDao productLineMybatisDao;
 
     @Autowired
-    private ProductLineMybatisDao productLineMybatisDao;
+    private CommonService commonService;
+
 
     /**
      * 显示细单 分页 pano
@@ -156,66 +161,59 @@ public class DocQcDetailsService extends BaseService {
         Map<String, Object> map = new HashMap<>();
         PdaDocQcDetailVO pdaDocQcDetailVO = new PdaDocQcDetailVO();
 
-        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
-        // 这里处理的有两种情况：
-        //  1.扫描序列号出库
-        //  2.扫描带序列号的条码出库
-        BasSerialNum basSerialNum = null;
-        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
-                StringUtil.isNotEmpty(query.getLotatt05())) {
+        /*
+        111，处理BasSku获取问题
+        并且返回准确的批号、序列号匹配条件
+         */
+        ScanResultForm scanResultForm = new ScanResultForm();
+        //customerid, GTIN, lotatt04, lotatt05, otherCode
+        BeanUtils.copyProperties(query, scanResultForm);
+        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+        if (!commonVO.isSuccess()) {
 
-                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
-                query.setLotatt04(basSerialNum.getBatchNum());
-            }
-        }
-
-        //获取BasSku
-        PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
-        BeanUtils.copyProperties(query, basSkuQuery);
-        if (basSerialNum != null) basSkuQuery.setLotatt05("");
-        BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
-
-        if (basSku == null || basSku.getSku() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案数据"));
             return map;
         }
+
+        //获取BasSku，设置
+        BasSku basSku = commonVO.getBasSku();
+        query.setLotatt04(commonVO.getBatchNum());
+        query.setLotatt05(commonVO.getSerialNum());
+        query.setSku(basSku.getSku());
         pdaDocQcDetailVO.setBasSku(basSku);
 
-        //获取包装规格
+        /*
+        222，判断获取上架扫码数据是否齐全
+         */
+        Json scanJson = commonService.judgeQcScanResult(query, commonVO);
+        if (!scanJson.isSuccess()) {
+
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg()));
+            return map;
+        }
+
+        /*
+        333，验收明细
+         */
+        DocQcDetails docQcDetails = (DocQcDetails) scanJson.getObj();
+        BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
+
+        /*
+        444，获取包装规格
+         */
         BasPackageQuery packageQuery = new BasPackageQuery();
         packageQuery.setPackid(basSku.getPackid());
         BasPackage basPackage = basPackageMybatisDao.queryById(packageQuery);
         if (basPackage == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品的包装规格"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品的包装规格"));
             return map;
         }
         pdaDocQcDetailVO.setBasPackage(basPackage);
 
         /*
-        产品线 为空则默认正常流程
-        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+        555，批次
          */
-        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
-
-        //DocQcDetails
-        query.setSku(basSku.getSku());
-        if (isSerialManagement) query.setLotatt05("");
-        DocQcDetails docQcDetails = docQcDetailsDao.queryDocQcDetail(query);
-
-        if (docQcDetails == null || docQcDetails.getQcno() == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无验收明细"));
-            return map;
-        }
-        BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
-
-
-        //批次
         InvLotAtt lotAtt = invLotAttMybatisDao.queryById(docQcDetails.getLotnum());
         if (lotAtt == null || lotAtt.getLotnum() == null) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无批次信息"));
@@ -223,16 +221,22 @@ public class DocQcDetailsService extends BaseService {
         }
         pdaDocQcDetailVO.setInvLotAtt(lotAtt);
 
-        //已验件数 & 未验件数
+        /*
+        666，此批号产品 已验件数 & 未验件数
+         */
         DocQcDetails qtyQcDetails = docQcDetailsDao.queryAcceptQty(query);
         pdaDocQcDetailVO.setAcceptedQty(qtyQcDetails.getQcqtyCompleted().intValue());
         pdaDocQcDetailVO.setUnacceptedQty((int) (qtyQcDetails.getQcqtyExpected() - qtyQcDetails.getQcqtyCompleted()));
 
-        //历史注册证(+生产企业详情)
+        /*
+        777，历史注册证(+生产企业详情)
+         */
         List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(basSku.getSku(), basSku.getCustomerid());
         pdaDocQcDetailVO.setProductRegisterList(registerList == null ? new ArrayList<PdaGspProductRegister>() : registerList);
 
-        //当前批次-产品注册证对应的 生产厂家
+        /*
+        888,当前批次-产品注册证对应的 生产厂家
+         */
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if (productRegister == null || productRegister.getEnterpriseInfo() == null) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
@@ -299,6 +303,24 @@ public class DocQcDetailsService extends BaseService {
      * @return ~
      */
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
+
+        if (StringUtil.isEmpty(form.getLotatt01())) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
+        }else if (StringUtil.isEmpty(form.getLotatt02())) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择失效日期");
+        }
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date prdDate = format.parse(form.getLotatt01());
+            Date expiryDate = format.parse(form.getLotatt02());
+            if (prdDate.getTime() >= expiryDate.getTime()) {
+                return new PdaResult(PdaResult.CODE_FAILURE, "失效日期不可小于生产日期");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         form.setUserid("Gizmo");
         form.setLanguage("CN");
 //        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

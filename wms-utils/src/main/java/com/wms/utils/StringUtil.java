@@ -1,5 +1,9 @@
 package com.wms.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StringUtil {
 
     public static boolean isEmpty(String input) {
@@ -21,5 +25,19 @@ public class StringUtil {
             return "";
         }
         return param;
+    }
+
+    public static void main(String[] args) {
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date prdDate = format.parse("2019-09-21");
+            Date expiryDate = format.parse("2019-12-01");
+            if (prdDate.getTime() < expiryDate.getTime()) {
+                System.out.println(expiryDate + "prdDate 在expiryDate前");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
