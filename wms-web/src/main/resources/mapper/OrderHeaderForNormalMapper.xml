@@ -268,6 +268,11 @@
 	<sql id="Example_Where_Clause">
 		where 1=1
 		<trim  suffixOverrides="," >
+			<if test="condition.sostatusCheck != null and condition.sostatusCheck != ''" >
+				<if test="condition.sostatusCheck eq 'N'.toString() " >
+					and sostatus not in ('90','99')
+				</if>
+			</if>
 			<if test="condition.orderno != null and condition.orderno != ''" >
 				and orderno =  #{condition.orderno}
 			</if>
@@ -320,7 +325,7 @@
 				and sot.code = #{condition.orderTypeName}
 			</if>
 			<if test="condition.orderStatusName != null and condition.orderStatusName != '' and condition.sostatusTo != null and condition.sostatusTo !=''" >
-				and sos.code BETWEEN #{condition.orderStatusName} AND #{condition.sostatusTo}
+				and sostatus BETWEEN #{condition.orderStatusName} AND #{condition.sostatusTo}
 			</if>
 			<if test="condition.cProvince != null and condition.cProvince != ''" >
 				and c_province =  #{condition.cProvince}

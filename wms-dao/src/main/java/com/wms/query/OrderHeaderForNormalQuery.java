@@ -39,6 +39,17 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String sostatusTo;
     //释放状态
     private String releasestatus;
+    //显示完成-取消订单
+    private String sostatusCheck;
+
+
+    public String getSostatusCheck() {
+        return sostatusCheck;
+    }
+
+    public void setSostatusCheck(String sostatusCheck) {
+        this.sostatusCheck = sostatusCheck;
+    }
 
     public String getOrderno() {
         return orderno;

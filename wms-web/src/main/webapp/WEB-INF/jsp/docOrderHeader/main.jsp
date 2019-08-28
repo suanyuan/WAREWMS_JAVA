@@ -66,7 +66,7 @@ $(function() {
 		queryParams:{
 			ordertime : $('#ordertime').datetimebox('getValue'),
 			ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
-			sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "" : "N"
+			sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N"
 		},
 		columns : [[
 		            {field: 'chk',                  checkbox:true,      width: 6},
@@ -320,6 +320,10 @@ $(function() {
 		}
 	}).dialog('close');
 	/* 控件初始化end */
+	//单选框改变事件
+	$("#sostatusCheck").change(function() {
+		doSearch();
+	});
 });
 
 /* 查询条件清空按钮 */
@@ -1000,7 +1004,7 @@ var doSearch = function(){
 		ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
 		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
-		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "" : "N",
+		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
         cProvince : $("#cc1").textbox("getValue"),
         cCity : $("#cc2").textbox("getValue"),
         cAddress2 : $("#cc3").textbox("getValue")
@@ -2083,7 +2087,7 @@ function choseOrderTypeAfter(value) {
 																																required:true,
 																																showSeconds:false,
 																																value:ordertimeDateTo(new Date())"/></td>
-							<th colspan="2" style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick=""><label for="sostatusCheck">显示关闭/取消订单</label></th>
+							<th colspan="2" style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick="" checked="checked"><label for="sostatusCheck">显示完成/取消订单</label></th>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
