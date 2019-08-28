@@ -1580,6 +1580,8 @@ public class OrderHeaderForNormalService extends BaseService {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
 
+
+
         map.put("logo", "imgFile/sflogo.jpg");
         map.put("sftelLogo", "imgFile/qiao.jpg");
         map.put("proCode", "imgFile/FM/T4.jpg");
@@ -1666,7 +1668,7 @@ public class OrderHeaderForNormalService extends BaseService {
         model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mm.jasper");
         model.addAttribute("format", "pdf");
         model.addAttribute("jrMainDataSource", jrDataSource);
-        }
+
     }
 
 
