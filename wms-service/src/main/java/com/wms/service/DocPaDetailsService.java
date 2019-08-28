@@ -21,6 +21,8 @@ import com.wms.utils.StringUtil;
 import com.wms.vo.DocPaDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocPaDetailsForm;
+import com.wms.vo.form.pda.ScanResultForm;
+import com.wms.vo.pda.CommonVO;
 import com.wms.vo.pda.PdaDocPaDetailVO;
 import com.wms.vo.pda.PdaDocPaHeaderVO;
 import org.apache.camel.language.Bean;
@@ -51,6 +53,9 @@ public class DocPaDetailsService extends BaseService {
 
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
+
+	@Autowired
+	private CommonService commonService;
 
 	public EasyuiDatagrid<DocPaDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaDetailsQuery query) {
         EasyuiDatagrid<DocPaDetailsVO> datagrid = new EasyuiDatagrid<>();
@@ -129,50 +134,39 @@ public class DocPaDetailsService extends BaseService {
 
         PdaDocPaDetailVO docPaDetailVO = new PdaDocPaDetailVO();
 
-        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
-        // 这里处理的有两种情况：
-        //  1.扫描序列号出库
-        //  2.扫描带序列号的条码出库
-        BasSerialNum basSerialNum = null;
-        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
-                StringUtil.isNotEmpty(query.getLotatt05())) {
+        /*
+        11111111，处理BasSku获取问题
+        并且返回准确的批号、序列号匹配条件
+         */
+        ScanResultForm scanResultForm = new ScanResultForm();
+        //customerid, GTIN, lotatt04, lotatt05, otherCode
+        BeanUtils.copyProperties(query, scanResultForm);
+        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
-
-                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
-                query.setLotatt04(basSerialNum.getBatchNum());
-            }
-        }
-
-        //获取BasSku
-        PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
-        BeanUtils.copyProperties(query, basSkuQuery);
-        if (basSerialNum != null) basSkuQuery.setLotatt05("");
-        BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
-
-        if (basSku == null) {
+        if (!commonVO.isSuccess()) {
             docPaDetailVO.setBasSku(null);
             return docPaDetailVO;
         }
 
-        /*
-        产品线 为空则默认正常流程
-        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
-         */
-        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+        //SKU获取成功，设置准确的批属
+        BasSku basSku = commonVO.getBasSku();
+        query.setLotatt04(commonVO.getBatchNum());
+        query.setLotatt05(commonVO.getSerialNum());
 
+        /*
+        22222222，获取上架明细数据
+        如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
         query.setSku(basSku.getSku());
-        if (isSerialManagement) query.setLotatt05("");
         List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(query);
         if (docPaDetailsList.size() > 0) {
 
             DocPaDetails docPaDetails = docPaDetailsList.get(0);
             BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
             docPaDetailVO.setBasSku(basSku);
+        }else {
+
+            return docPaDetailVO;//未查询到相应的上架任务明细
         }
 
         //查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
