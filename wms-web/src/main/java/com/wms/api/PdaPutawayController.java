@@ -7,6 +7,7 @@ import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocPaDetailsService;
 import com.wms.service.DocPaHeaderService;
+import com.wms.vo.Json;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocPaDetailVO;
 import com.wms.vo.pda.PdaDocPaHeaderVO;
@@ -78,28 +79,16 @@ public class PdaPutawayController {
     public Map<String, Object> queryDocPaDetail(PdaDocPaDetailQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        PdaDocPaDetailVO docPaDetailVO = docPaDetailsService.queryDocPaDetail(query);
+        Json resultJson = docPaDetailsService.queryDocPaDetail(query);
 
-        if (docPaDetailVO == null || docPaDetailVO.getPano() == null) {
-            PdaResult result =
-                    new PdaResult(PdaResult.CODE_FAILURE, "无任务详情信息");
+        if (!resultJson.isSuccess()) {
+
+            PdaResult result = new PdaResult(PdaResult.CODE_FAILURE, resultJson.getMsg());
             resultMap.put(Constant.RESULT, result);
             return resultMap;
         }
 
-        if (docPaDetailVO.getBasSku() == null
-                || docPaDetailVO.getInvLotAtt() == null) {
-
-            PdaResult result =
-                    new PdaResult(PdaResult.CODE_FAILURE,
-                            docPaDetailVO.getBasSku() == null ?
-                                    "无产品信息" :
-                                    "无批次信息");
-            resultMap.put(Constant.RESULT, result);
-            return resultMap;
-        }
-
-        resultMap.put(Constant.DATA, docPaDetailVO);
+        resultMap.put(Constant.DATA, resultJson.getObj());
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
     }

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("docPaDetailsService")
+@SuppressWarnings("unchecked")
 public class DocPaDetailsService extends BaseService {
 
 	@Autowired
@@ -130,8 +131,9 @@ public class DocPaDetailsService extends BaseService {
      * @param query ~
      * @return 明细
      */
-    public PdaDocPaDetailVO queryDocPaDetail(PdaDocPaDetailQuery query) {
+    public Json queryDocPaDetail(PdaDocPaDetailQuery query) {
 
+        Json resultJson = new Json();
         PdaDocPaDetailVO docPaDetailVO = new PdaDocPaDetailVO();
 
         /*
@@ -144,32 +146,49 @@ public class DocPaDetailsService extends BaseService {
         CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
         if (!commonVO.isSuccess()) {
-            docPaDetailVO.setBasSku(null);
-            return docPaDetailVO;
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无产品档案数据");
+            return resultJson;
         }
 
         //SKU获取成功，设置准确的批属
         BasSku basSku = commonVO.getBasSku();
         query.setLotatt04(commonVO.getBatchNum());
         query.setLotatt05(commonVO.getSerialNum());
+        query.setSku(basSku.getSku());
 
         /*
-        22222222，获取上架明细数据
-        如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+        22222222，判断获取上架扫码数据是否齐全
          */
-        query.setSku(basSku.getSku());
-        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(query);
-        if (docPaDetailsList.size() > 0) {
+        Json scanJson = commonService.judgePaScanResult(query, commonVO);
+        if (!scanJson.isSuccess()) {
 
-            DocPaDetails docPaDetails = docPaDetailsList.get(0);
-            BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
-            docPaDetailVO.setBasSku(basSku);
-        }else {
-
-            return docPaDetailVO;//未查询到相应的上架任务明细
+            resultJson.setSuccess(false);
+            resultJson.setMsg(scanJson.getMsg());
+            return resultJson;
         }
 
-        //查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
+        /*
+        33333333，获取上架明细数据
+        如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+         */
+        List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();//注解"unchecked"
+        DocPaDetails docPaDetails = docPaDetailsList.get(0);//2222中已经做了为空判断
+
+        if (docPaDetails.getInvLotAtt() == null) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无产品批次属性数据");
+            return resultJson;
+        }
+
+        BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
+        docPaDetailVO.setBasSku(basSku);
+
+        /*
+        44444444444，查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
+         */
         DocPaDetailsQuery similarQuery = new DocPaDetailsQuery();
         similarQuery.setPano(query.getPano());
         similarQuery.setCustomerid(query.getCustomerid());
@@ -183,7 +202,9 @@ public class DocPaDetailsService extends BaseService {
             docPaDetailVO.setUserdefine1(similarDetail.getUserdefine1());
         }
 
-        //已上架件数计算
+        /*
+        5555555555，已上架件数计算
+         */
         Double paCompleted = 0d;
         for (DocPaDetails qtyDetail : similarDetailList) {
 
@@ -191,7 +212,12 @@ public class DocPaDetailsService extends BaseService {
         }
         docPaDetailVO.setPutwayqtyCompleted(paCompleted);//同批号的上架件数
 
-        return docPaDetailVO;
+
+        resultJson.setSuccess(true);
+        resultJson.setMsg(Constant.SUCCESS_MSG);
+        resultJson.setObj(docPaDetailVO);
+
+        return resultJson;
     }
 
     /**
@@ -201,63 +227,54 @@ public class DocPaDetailsService extends BaseService {
      */
     public PdaResult putawayGoods(PdaDocPaDetailForm form) {
 
-        PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
-        PdaDocPaDetailQuery detailQuery = new PdaDocPaDetailQuery();
+        /*
+        111，处理BasSku获取问题，并返回准确的批号、序列号条件
+         */
+        ScanResultForm scanResultForm = new ScanResultForm();
+        BeanUtils.copyProperties(form, scanResultForm);
+        scanResultForm.setLotatt04(form.getUserdefine3());
+        scanResultForm.setLotatt05(form.getUserdefine4());
+        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
-        // 这里处理的有两种情况：
-        //  1.扫描序列号出库
-        //  2.扫描带序列号的条码出库
-        BasSerialNum basSerialNum = null;
-        if (StringUtil.isNotEmpty(form.getOtherCode()) ||
-                StringUtil.isNotEmpty(form.getUserdefine4())) {
+        if (!commonVO.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案数据");
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getUserdefine4());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
-
-                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
-                form.setUserdefine3(basSerialNum.getBatchNum());
-            }
-        }
-
-        skuQuery.setCustomerid(form.getCustomerid());
-        skuQuery.setLotatt04(form.getUserdefine3());
-        if (basSerialNum == null) skuQuery.setLotatt05(form.getUserdefine4());
-        skuQuery.setGTIN(form.getGTIN());
-        //sku
-        BasSku basSku = basSkuMybatisDao.queryForScan(skuQuery);
-
-        if (basSku == null) return new PdaResult(PdaResult.CODE_FAILURE, "产品档案缺失");
+        //SKU获取成功，设置准确的批属
+        BasSku basSku = commonVO.getBasSku();
+        form.setUserdefine3(commonVO.getBatchNum());
+        form.setUserdefine4(commonVO.getSerialNum());
+        form.setSku(basSku.getSku());
 
         /*
-        产品线 为空则默认正常流程
-        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+        222，判断获取上架扫码数据是否齐全
          */
-        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
+        PdaDocPaDetailQuery pdaDocPaDetailQuery = new PdaDocPaDetailQuery();
+        pdaDocPaDetailQuery.setPano(form.getPano());
+        pdaDocPaDetailQuery.setSku(basSku.getSku());
+        pdaDocPaDetailQuery.setCustomerid(form.getCustomerid());
+        pdaDocPaDetailQuery.setLotatt04(form.getUserdefine3());
+        pdaDocPaDetailQuery.setLotatt05(form.getUserdefine4());
+        Json scanJson = commonService.judgePaScanResult(pdaDocPaDetailQuery, commonVO);
+        if (!scanJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg());
 
-        //DocPaDetails
-        BeanUtils.copyProperties(form, detailQuery);
-        detailQuery.setLotatt04(form.getUserdefine3());
-        if (!isSerialManagement) detailQuery.setLotatt05(form.getUserdefine4());
-        detailQuery.setSku(basSku.getSku());
+        /*
+        333，获取上架明细
+         */
         DocPaDetails docPaDetails = null;
         if (StringUtil.isNotEmpty(form.getPalineno())) {
+
             docPaDetails = docPaDetailsMybatisDao.queryByLineNo(form.getPano(), Integer.valueOf(form.getPalineno()));
         }else {
-            List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(detailQuery);
-            if (docPaDetailsList.size() > 0) {
-                docPaDetails = docPaDetailsList.get(0);//默认取第一个进行上架操作
-            }
+
+            List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();
+            docPaDetails = docPaDetailsList.get(0);//默认取第一个进行上架操作,judgePaScanResult判空操作已有
         }
 
-        if (docPaDetails == null) return new PdaResult(PdaResult.CODE_FAILURE, "上架明细数据缺失");
+        InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
+        if (invLotAtt == null) return new PdaResult(PdaResult.CODE_FAILURE, "查无产品批次属性数据");
 
-        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docPaDetails.getLotnum());
-
-        //上架
+        /*
+        上架操作
+         */
         String locationid = form.getUserdefine1();
         String userdefine5 = form.getUserdefine5();
         BeanUtils.copyProperties(docPaDetails, form);
@@ -265,10 +282,8 @@ public class DocPaDetailsService extends BaseService {
         form.setUserdefine5(userdefine5);
 
         if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
-        if (isSerialManagement) form.setUserdefine4("");
 
         form.setAsnlineno(docPaDetails.getAsnlineno());
-
         form.setUserid("Gizmo");
         form.setLanguage("CN");
         form.setReturncode("");

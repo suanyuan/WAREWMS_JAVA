@@ -2,23 +2,23 @@ package com.wms.service;
 
 import com.wms.entity.BasSerialNum;
 import com.wms.entity.BasSku;
+import com.wms.entity.DocPaDetails;
 import com.wms.entity.ProductLine;
-import com.wms.mybatis.dao.BasSerialNumMybatisDao;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
-import com.wms.mybatis.dao.CommonMybatisDao;
-import com.wms.mybatis.dao.ProductLineMybatisDao;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasSerialNumQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.ProductLineQuery;
 import com.wms.query.pda.PdaBasSkuQuery;
+import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.utils.StringUtil;
+import com.wms.vo.Json;
 import com.wms.vo.form.pda.ScanResultForm;
 import com.wms.vo.pda.CommonVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +37,9 @@ public class CommonService extends BaseService{
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
     private ProductLineMybatisDao productLineMybatisDao;
+    @Autowired
+    private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
+
 
     public String generateSeq(String seqType,String warehouseid){
         Map<String,Object> map = new HashMap<>();
@@ -120,5 +123,50 @@ public class CommonService extends BaseService{
         return commonVO;
     }
 
-//    public boolean ()
+    /**
+     * 判断获取的上架扫码数据是否齐全
+     * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
+     * @param query pano, sku
+     * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
+     */
+    public Json judgePaScanResult(PdaDocPaDetailQuery query, CommonVO commonVO) {
+
+        Json json = new Json();
+
+        //1，获取对应的上架明细列表
+        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(query);
+
+        //2，如果查询不到对应的上架明细，返回失败
+        if (docPaDetailsList.size() == 0) {
+
+            json.setSuccess(false);
+            json.setMsg("查无此产品的上架明细数据！");
+            return json;
+        }
+
+        //3，如果有批号||序列号，直接跳过
+        if (StringUtil.isNotEmpty(commonVO.getBatchNum()) || StringUtil.isNotEmpty(commonVO.getSerialNum())) {
+
+            json.setObj(docPaDetailsList);
+            json.setSuccess(true);
+            json.setMsg("可继续操作");
+            return json;
+        }
+
+        for (DocPaDetails docPaDetails : docPaDetailsList) {
+
+            //4，如果SKU对应的明细中存在批号或者序列号，提示上架不允许扫描SKU进行
+            if (StringUtil.isNotEmpty(docPaDetails.getUserdefine3()) || StringUtil.isNotEmpty(docPaDetails.getUserdefine4())) {
+
+                json.setSuccess(false);
+                json.setMsg("请扫描产品GS1条码进行上架操作！");
+                return json;
+            }
+        }
+
+        json.setSuccess(true);
+        json.setMsg("可继续操作");
+        json.setObj(docPaDetailsList);
+        return json;
+    }
 }

@@ -340,7 +340,7 @@ public class ImportAsnDataService {
                             //遍历明细信息
                             for (DocAsnDetailVO docAsnDetailVO : docAsnHeaderVO.getDocAsnDetailVOList()) {
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
-                                        docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
+                                        docAsnDetailVO.getSku().equals(dataArray.getSku().toUpperCase()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
                                         docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
