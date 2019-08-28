@@ -311,5 +311,11 @@ where 1=1
           <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
         order by addtime, edittime desc
     </select>
+
+    <select id="queryUndoneNum4BatchNum" parameterType="java.util.Map" resultType="integer">
+        select count(*) from doc_pa_details pd
+        left join doc_qc_header qh on qh.pano = pd.pano
+        where qh.pano = #{pano} and pd.userdefine3 = #{batchNum}
+    </select>
   	
 </mapper>   

@@ -172,7 +172,7 @@ public class DocQcDetailsService extends BaseService {
 
         if (!commonVO.isSuccess()) {
 
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案数据"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, commonVO.getMessage()));
             return map;
         }
 
@@ -304,6 +304,9 @@ public class DocQcDetailsService extends BaseService {
      */
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
 
+        /**
+         * 日期校验
+         */
         if (StringUtil.isEmpty(form.getLotatt01())) {
             return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
         }else if (StringUtil.isEmpty(form.getLotatt02())) {
@@ -321,14 +324,28 @@ public class DocQcDetailsService extends BaseService {
             e.printStackTrace();
         }
 
+        /**
+         * 批量修改日期校验
+         * 目前批量修改日期可操作，但是同批号、未上架的产品，日期就还是原来的
+         * 所以这边做个限制，批量操作如果上架任务中有此批号的未上架产品，不允许批量验收
+         */
+        DocQcDetails docQcDetails = new DocQcDetails();
+        if (form.getAllqcflag() == 1) {
+
+            docQcDetails = docQcDetailsDao.queryById(form);
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails);
+            int paPiece = docPaDetailsMybatisDao.queryUndoneNum4BatchNum(form.getQcno(), form.getLotatt04());
+            if ((StringUtil.fixNull(invLotAtt.getLotatt01()).equals(form.getLotatt01()) || StringUtil.fixNull(invLotAtt.getLotatt02()).equals(form.getLotatt02())) &&
+                    paPiece > 0) {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, "当前生产批号下还有未上架的产品，不可进行批量修改日期操作");
+            }
+        }
+
         form.setUserid("Gizmo");
         form.setLanguage("CN");
 //        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
-        DocQcDetails docQcDetails = new DocQcDetails();
-        if (form.getAllqcflag() == 1) {
-            docQcDetails = docQcDetailsDao.queryById(form);
-        }
 
         try {
 

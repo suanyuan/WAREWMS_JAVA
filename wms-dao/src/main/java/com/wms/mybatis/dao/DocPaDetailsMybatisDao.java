@@ -58,4 +58,13 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      * 查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号)
      */
     List<DocPaDetails> querySimilarDetail(DocPaDetailsQuery query);
+
+    /**
+     * 通过qcno获取当前验收单对应的上架单中，此批号是否有还未上架的产品
+     * for 批量验收修改日期需求的校验
+     * @param qcno 验收单号
+     * @param batchNum 生产批号
+     * @return ~
+     */
+    int queryUndoneNum4BatchNum(@Param("qcno") String qcno, @Param("batchNum") String batchNum);
 }

@@ -148,7 +148,7 @@ public class DocPaDetailsService extends BaseService {
         if (!commonVO.isSuccess()) {
 
             resultJson.setSuccess(false);
-            resultJson.setMsg("查无产品档案数据");
+            resultJson.setMsg(commonVO.getMessage());
             return resultJson;
         }
 
@@ -236,7 +236,7 @@ public class DocPaDetailsService extends BaseService {
         scanResultForm.setLotatt05(form.getUserdefine4());
         CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-        if (!commonVO.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案数据");
+        if (!commonVO.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, commonVO.getMessage());
 
         //SKU获取成功，设置准确的批属
         BasSku basSku = commonVO.getBasSku();
