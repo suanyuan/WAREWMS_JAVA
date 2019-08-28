@@ -24,7 +24,7 @@
             </td>
 
             <th>产品名称</th>
-            <td><input type='text' data="1" id="productNameMain" name='productName' class='easyui-textbox' size='50' data-options='required:false' readonly/></td>
+            <td><input type='text' data="1" id="productNameMain" name='productName' class='easyui-textbox' size='50' data-options='required:false' /></td>
 
         </tr>
 
@@ -74,7 +74,7 @@
 
         <tr>
             <th>储存条件</th>
-            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true,editable:false'/></td>
+            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <th>宽</th>
             <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
@@ -205,6 +205,12 @@
     var enterpriseDialog;
     var id;
     $(function(){
+        $('#medicalDeviceMark').combobox({
+            onChange: function(){
+                changeRequired();
+            }
+        });
+
         //主页编辑
         var row = ezuiDatagrid.datagrid('getSelected');
         //alert(row.specsId);
@@ -293,7 +299,33 @@
         //     textField:'value'
         // });
     })
+    function changeRequired(){
+        if($('#medicalDeviceMark').combobox('getValue') == '0'){
+            $('#productRegisterNo').textbox({required:false});
+            $('#specsName').textbox({required:false});
+            $('#productModel').textbox({required:false});
+            $('#packingUnit').textbox({required:false});
+            $('#storageCondition').textbox({required:false});
+            $('#isDoublec').textbox({required:false});
+            $('#isCertificate').textbox({required:false});
+            $('#unit').textbox({required:false});
+            $('#maintenanceCycle').textbox({required:false});
 
+
+        }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
+            $('#productRegisterNo').textbox({required:true});
+            $('#productName').textbox({required:true});
+            $('#productModel').textbox({required:true});
+            $('#packingUnit').textbox({required:true});
+            $('#storageCondition').textbox({required:true});
+            $('#isDoublec').textbox({required:true});
+            $('#isCertificate').textbox({required:true});
+            $('#unit').textbox({required:true});
+            $('#maintenanceCycle').textbox({required:true});
+        }
+
+
+    }
     function searchEnterprise() {
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,

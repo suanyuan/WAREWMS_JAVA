@@ -41,4 +41,9 @@ public class GspSecondRecord  implements Serializable {
 
 	private String isUse;
 
+	private String warehouseAddress;
+
+	private String enterpriseName;
+
+	private String  juridicalPerson;
 }

@@ -18,6 +18,15 @@ public class FirstBusinessApplyVO {
 	private String firstState;
 	private String productline;
 	private String specsId;
+	private String customerid;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
 	public String getSpecsId() {
 		return specsId;

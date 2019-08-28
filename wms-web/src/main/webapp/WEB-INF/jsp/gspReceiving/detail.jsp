@@ -696,7 +696,7 @@
                 $(this).datagrid("resize",{height:540});
             }
         });
-//货主弹窗
+        //货主弹窗
         ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',

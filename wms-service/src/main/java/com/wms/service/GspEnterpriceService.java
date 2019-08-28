@@ -6,10 +6,7 @@ import com.wms.dto.GspEnterpriseBusinessDTO;
 import com.wms.dto.GspEnterpriseTypeDTO;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.query.GspBusinessLicenseQuery;
-import com.wms.query.GspEnterpriseInfoQuery;
-import com.wms.query.GspOperateLicenseQuery;
-import com.wms.query.GspSecondRecordQuery;
+import com.wms.query.*;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.RandomUtil;
 import com.wms.vo.GspOperateDetailVO;
@@ -61,6 +58,12 @@ public class GspEnterpriceService extends BaseService {
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
 
+    @Autowired
+    private GspFirstRecordService gspFirstRecordService;
+    @Autowired
+    private GspMedicalRecordService gspMedicalRecordService;
+
+
     /**
      * 新增企业信息
      * @param gspEnterpriceFrom 提交数据
@@ -70,10 +73,23 @@ public class GspEnterpriceService extends BaseService {
         //try{
 
             GspEnterpriseInfoForm gspEnterpriseInfoForm = gspEnterpriceFrom.getGspEnterpriseInfoForm();
+            String  textContent =gspEnterpriseInfoForm.getEnterpriseNo().trim();
+            while (textContent.startsWith("　")) {//这里判断是不是全角空格
+                textContent = textContent.substring(1, textContent.length()).trim();
+            }
+            while (textContent.endsWith("　")) {
+                textContent = textContent.substring(0, textContent.length() - 1).trim();
+            }
+            gspEnterpriseInfoForm.setEnterpriseNo(textContent);
+
             GspBusinessLicenseForm gspBusinessLicenseForm = gspEnterpriceFrom.getGspBusinessLicenseForm();
             GspOperateLicenseForm gspOperateLicenseForm = gspEnterpriceFrom.getGspOperateLicenseForm();
             GspSecondRecordForm gspSecondRecordForm = gspEnterpriceFrom.getGspSecondRecordForm();
             GspOperateLicenseForm gspProdLicenseForm = gspEnterpriceFrom.getGspProdLicenseForm(); //生产
+            GspMedicalRecordForm gspMedicalRecordForm  =  gspEnterpriceFrom.getGspMedicalRecordForm();
+
+            GspFirstRecordForm gspFirstRecordForm = gspEnterpriceFrom.getGspFirstRecordForm();
+
             //是否要创建新版本
             boolean enterpriseIsNewVersion = true;
             if(gspEnterpriceFrom == null || BeanUtils.isEmptyFrom(gspEnterpriseInfoForm)){
@@ -179,6 +195,9 @@ public class GspEnterpriceService extends BaseService {
             if(gspSecondRecordForm.getScopArr()!=null && !"".equals(gspSecondRecordForm.getScopArr())){
                 gspSecondRecordForm.setScopArr(initScope(gspSecondRecordForm.getScopArr()));
             }
+            if(gspFirstRecordForm.getScopArr()!=null && !"".equals(gspFirstRecordForm.getScopArr())){
+                gspFirstRecordForm.setScopArr(initScope(gspFirstRecordForm.getScopArr()));
+            }
 
             if(gspBusinessLicenseForm != null){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
@@ -201,11 +220,28 @@ public class GspEnterpriceService extends BaseService {
                     gspProdLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspProdLicenseForm.setEnterpriseId(enterpriseId);
-//                gspProdLicenseForm.setOpType(Constant.LICENSE_TYPE_PROD);//生产
                 gspProdLicenseForm.setOperateType(Constant.LICENSE_TYPE_PROD);
                 gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspProdLicenseForm,gspProdLicenseForm.getScopArr(),gspProdLicenseForm.getOperateId(),gspProdLicenseForm.getOpType());
             }
-
+            //医疗
+            if(!BeanUtils.isEmptyFrom(gspMedicalRecordForm)){
+                if(enterpriseIsNewVersion == true){
+                    gspMedicalRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                }
+                gspMedicalRecordForm.setEnterpriseId(enterpriseId);
+//                gspMedicalLicenseForm.setOperateType(Constant.LICENSE_TYPE_MEDICAL);
+                gspMedicalRecordService.addGspMedicalRecord(enterpriseId,gspMedicalRecordForm,gspMedicalRecordForm.getScopArr(),gspMedicalRecordForm.getMedicalId(),gspMedicalRecordForm.getOpType());
+            }
+            //一类
+            if(!BeanUtils.isEmptyFrom(gspFirstRecordForm)){
+                if(enterpriseIsNewVersion == true){
+                    gspFirstRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                }
+                System.out.println();
+                gspFirstRecordForm.setEnterpriseId(enterpriseId);
+//                gspFirstRecordForm.setOperateType(Constant.LICENSE_TYPE_FIRSTRECORD);
+                gspFirstRecordService.addGspFirstRecord(enterpriseId,gspFirstRecordForm,gspFirstRecordForm.getScopArr(),gspFirstRecordForm.getRecordId(),gspFirstRecordForm.getOpType());
+            }
 
             if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){
                 if(enterpriseIsNewVersion == true){
@@ -356,7 +392,18 @@ public class GspEnterpriceService extends BaseService {
         GspBusinessLicense gspBusinessLicense = gspBusinessLicenseService.getGspBusinessLicenseBy(query);
         return Json.success("",gspBusinessLicense);
     }
-
+    /**
+     * 获取企业营业执照信息
+     * @param enterpriceId 企业信息流水号
+     * @return
+     */
+    public Json getGspMedicalRecord(String enterpriceId){
+        GspMedicalRecordQuery query = new GspMedicalRecordQuery();
+        query.setEnterpriseId(enterpriceId);
+        query.setIsUse(Constant.IS_USE_YES);
+        GspMedicalRecord gspMedicalRecord = gspMedicalRecordService.getGspMedicalRecordBy(query);
+        return Json.success("",gspMedicalRecord);
+    }
     /**
      * 获取企业经营许可证信息
      * @param enterpriceId 企业信息流水号
@@ -386,8 +433,25 @@ public class GspEnterpriceService extends BaseService {
         GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
         return Json.success("",gspOperateLicense);
     }
+
+
+
+
     /**
-     * 获取备案信息
+     * 获取一类备案信息
+     * @param enterpriceId 企业信息流水号
+     * @return
+     */
+    public Json getGspFirstRecord(String enterpriceId){
+        GspFirstRecordQuery query = new GspFirstRecordQuery();
+        query.setEnterpriseId(enterpriceId);
+        query.setIsUse(Constant.IS_USE_YES);
+        GspFirstRecord gspFirstRecord = gspFirstRecordService.getGspFirstRecordBy(query);
+        return Json.success("",gspFirstRecord);
+    }
+
+    /**
+     * 获取二类备案信息
      * @param enterpriceId 企业信息流水号
      * @return
      */

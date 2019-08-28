@@ -39,7 +39,7 @@ $(function() {
             {field: 'clientName',		title: '委托客户名称',	width: 100 },
 
             {field: 'supplierId',		title: '供应商',	width: 100 },
-            {field: 'supplierName',		title: '供应商客户名称',	width: 100 },
+            {field: 'supplierName',		title: '供应商名称',	width: 100 },
 
             {field: 'productCode',		title: '产品代码',	width: 100 },
             {field: 'productName',		title: '产品名称',	width: 100 },
@@ -105,19 +105,30 @@ var add = function(){
 	ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id=");
     $('#enterpriseProduct').dialog('destroy');
     $('#ezuiDatagridDetail').dialog('destroy');
+    $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
+    $('#ezuiDialogSpec').dialog('destroy');	//ProductAndSupplier产品
+    $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
+
+    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
 };
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id="+row.applyId);
+		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toEdit&id="+row.applyId);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
-    $('#ezuiDatagridDetail').dialog('destroy');
-    $('#enterpriseProduct').dialog('destroy');
+    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    $('#ezuiDialogSupplierDetail1').dialog('destroy');//edit货主
+    $('#ezuiDialogSpec1').dialog('destroy');//edit货主
+
+    // $('#enterpriseProduct').dialog('destroy');
+    // $('#ezuiDatagridDetail').dialog('destroy');
+    $('#clientDatagrid1').dialog('destroy');
+    // $('#ezuiDialogClientDetail1').dialog('destroy');
 };
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
@@ -306,7 +317,7 @@ var reApply = function () {
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>委托客户</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应客户</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应商</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
