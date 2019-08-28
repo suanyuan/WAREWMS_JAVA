@@ -53,6 +53,12 @@ public class DocMtDetailsService extends BaseService {
 	@Autowired
 	private BasSerialNumMybatisDao basSerialNumMybatisDao;
 
+    /**
+     * 养护作业界面分页显示 根据mtno
+     * @param pager
+     * @param query
+     * @return
+     */
 	public EasyuiDatagrid<DocMtDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
 		EasyuiDatagrid<DocMtDetailsVO> datagrid = new EasyuiDatagrid<DocMtDetailsVO>();
 		List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<DocMtDetailsVO>();
@@ -66,7 +72,7 @@ public class DocMtDetailsService extends BaseService {
 			return datagrid;
 		}
 
-		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByList(mybatisCriteria);
+		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
 		DocMtDetailsVO docMtDetailsVO = null;
 		for (DocMtDetails docMtDetails : docMtDetailsList) {
 			docMtDetailsVO = new DocMtDetailsVO();
@@ -75,7 +81,7 @@ public class DocMtDetailsService extends BaseService {
 			BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
 			docMtDetailsVOList.add(docMtDetailsVO);
 		}
-		datagrid.setTotal((long)docMtDetailsMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setTotal((long)docMtDetailsMybatisDao.queryByCountLotatt(mybatisCriteria));
 		datagrid.setRows(docMtDetailsVOList);
 		return datagrid;
 	}
