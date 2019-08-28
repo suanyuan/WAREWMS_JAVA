@@ -1,5 +1,6 @@
 package com.wms.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -55,8 +56,9 @@ public class InvLotLocId  implements Serializable {
 	private String lpn;
 
 	private Double qtypa;
-
+	@JSONField(format = "yyyy-MM-dd")
 	private Date lotatt03; //入库时间
+	@JSONField(format = "yyyy-MM-dd")
 	private Date lotatt03test; //预期养护时间
 	private String reservedfield10; //养护周期
 	private String packuom1; //单位

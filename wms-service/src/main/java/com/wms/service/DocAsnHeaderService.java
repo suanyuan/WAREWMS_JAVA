@@ -515,75 +515,123 @@ public class DocAsnHeaderService extends BaseService {
 
 	/**
 	 * 明细复用
-	 * @author Haki
 	*/
-	public  Json addDoDetailReuse(String headerOrdern,String detailAssno ,String customerid) throws  Exception{
+    public  Json addDoDetailReuse(String generalNo,String detailAssno ,String customerid,String copyFlag) throws  Exception{
 	    Json json = new Json();
-	    DocAsnDetail details = new DocAsnDetail();
-	    Integer index = 1 ;
+	    DocAsnDetail details = new DocAsnDetail();//入库明细
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		Integer index = 1 ;
+	    /*
+	     *  1:复用出库明细 -1 : 复用入库明细
+	    */
+	    if(copyFlag.equals("1")){
+			OrderDetailsForNormalQuery normalQuery = new OrderDetailsForNormalQuery();
+			normalQuery.setOrderno(generalNo);
+			normalQuery.setCustomerid(customerid);
 
-		OrderDetailsForNormalQuery normalQuery = new OrderDetailsForNormalQuery();
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        normalQuery.setOrderno(headerOrdern);
-        normalQuery.setCustomerid(customerid);
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(normalQuery));
+			List<OrderDetailsForNormal> normals = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+			if(normals.size() > 0){
+				for (OrderDetailsForNormal orderDetailsForNormal: normals) {
+					details.setAsnno(detailAssno);
+					details.setAsnlineno(index);
+					details.setCustomerid(orderDetailsForNormal.getCustomerid());
+					details.setLinestatus("00");
+					details.setSku(orderDetailsForNormal.getSku());
+					details.setSkudescrc(orderDetailsForNormal.getSkuName());
 
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(normalQuery));
-        List<OrderDetailsForNormal> normals = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
-        if(normals.size() > 0){
-            for (OrderDetailsForNormal orderDetailsForNormal: normals) {
-				details.setAsnno(detailAssno);
-				details.setAsnlineno(index);
-				details.setCustomerid(orderDetailsForNormal.getCustomerid());
-				details.setLinestatus("00");
-				details.setSku(orderDetailsForNormal.getSku());
-				details.setSkudescrc(orderDetailsForNormal.getSkuName());
-				details.setQcstatus("DJ");// todo 用不到 质量状态体现在lotatt10
-				details.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyallocated()));
-				details.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyallocatedEach()));
-				details.setReceivedqty(BigDecimal.ZERO);//todo 应该还有对应的数量字段,这个是件数
-				details.setReceivinglocation(orderDetailsForNormal.getLocation());
-				details.setLotatt01(orderDetailsForNormal.getLotatt01());
-				//拼接转换日期格式
-				/*String[] dataArr = de.getUBD().split("/");
-				String newDate = dataArr[0]+"-" + (dataArr[1].length()> 1 ? dataArr[1] : "0"+dataArr[1])+"-" + dataArr[2];*/
-				details.setLotatt02(orderDetailsForNormal.getLotatt02());
-				details.setLotatt03(orderDetailsForNormal.getLotatt03());
-				details.setLotatt04(orderDetailsForNormal.getLotatt04());
-				details.setLotatt05(orderDetailsForNormal.getLotatt05());
-				details.setLotatt06(orderDetailsForNormal.getLotatt06());
-				details.setLotatt07(orderDetailsForNormal.getLotatt07());
-				details.setLotatt08(orderDetailsForNormal.getLotatt08());
-				details.setLotatt09("ZC");
-				details.setLotatt10("DJ");
-				details.setLotatt11(orderDetailsForNormal.getLotatt11());
-				details.setLotatt12(orderDetailsForNormal.getLotatt12());
-				details.setLotatt13(orderDetailsForNormal.getLotatt13());
-				details.setLotatt14(detailAssno);//TODO 批次属性到15
-				details.setTotalgrossweight(BigDecimal.ZERO);//todo 确认是哪一个为正确的（和下面的比）
-				details.setTotalcubic(BigDecimal.ZERO);
-				details.setTotalprice(BigDecimal.ZERO);
-				details.setUom(orderDetailsForNormal.getUom());
-				details.setPackid(orderDetailsForNormal.getPackid());
-				details.setTotalcubic( new BigDecimal(orderDetailsForNormal.getCubic()));//
-				details.setTotalgrossweight( new BigDecimal(orderDetailsForNormal.getGrossweight()));
-				details.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));
-				//总价
-				details.setTotalprice(new BigDecimal(orderDetailsForNormal.getPrice()));
-				details.setReserveFlag("N");
-				details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-				details.setAddtime(new Date());
-				details.setEdittime(new Date());
-				details.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+					details.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyordered()));
+					details.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyorderedEach()));
+					//收货数量
+					details.setReceivedqty(BigDecimal.ZERO);//收货件数
+					details.setReceivedqtyEach(BigDecimal.ZERO);
 
-				index += 1 ;
-                docAsnDetailsMybatisDao.add(details);
-            }
-			json.setSuccess(true);
-			json.setMsg("明细复用成功");
-        }else{
-            json.setSuccess(false);
-            json.setMsg("此客户没有明细数据—明细复用失败");
-        }
+					details.setRejectedqty(BigDecimal.ZERO); //拒收件数
+					details.setRejectedqtyEach(BigDecimal.ZERO);
+					details.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
+
+					details.setReceivinglocation(orderDetailsForNormal.getLocation());  //库位
+					details.setUom(orderDetailsForNormal.getUom());//件
+					details.setPackid(orderDetailsForNormal.getPackid());//包装
+
+					details.setTotalcubic( new BigDecimal(orderDetailsForNormal.getCubic()));//总体积
+					details.setTotalgrossweight( new BigDecimal(orderDetailsForNormal.getGrossweight()));//总重量
+					details.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));//总净重
+					details.setTotalprice(new BigDecimal(orderDetailsForNormal.getPrice())); //总价
+					details.setReserveFlag("N");
+					details.setHoldrejectcode("OK");//冻结代码
+					details.setHoldrejectreason("正常");
+
+					details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+					details.setAddtime(new Date());
+
+					details.setLotatt01(orderDetailsForNormal.getLotatt01());
+					details.setLotatt02(orderDetailsForNormal.getLotatt02());
+					details.setLotatt03(orderDetailsForNormal.getLotatt03());
+					details.setLotatt04(orderDetailsForNormal.getLotatt04());
+					details.setLotatt05(orderDetailsForNormal.getLotatt05());
+					details.setLotatt06(orderDetailsForNormal.getLotatt06());
+					details.setLotatt07(orderDetailsForNormal.getLotatt07());
+					details.setLotatt08(orderDetailsForNormal.getLotatt08());
+					details.setLotatt09("ZC");
+					details.setLotatt10("DJ");
+					details.setLotatt11(orderDetailsForNormal.getLotatt11());
+					details.setLotatt12(orderDetailsForNormal.getLotatt12());
+					details.setLotatt13(orderDetailsForNormal.getLotatt13());
+					details.setLotatt14(detailAssno);
+					details.setLotatt15(orderDetailsForNormal.getLotatt15());
+
+					index += 1 ;
+					docAsnDetailsMybatisDao.add(details);
+				}
+				json.setSuccess(true);
+				json.setMsg("明细复用成功");
+			}else{
+				json.setSuccess(false);
+				json.setMsg("没有明细数据—明细复用失败");
+			}
+		}else{
+			DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+			docAsnDetailQuery.setCustomerid(customerid);
+			docAsnDetailQuery.setAsnno(generalNo);
+
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+			List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+			if(docAsnDetailList.size() > 0){
+				for ( DocAsnDetail docAsnDetail: docAsnDetailList) {
+					BeanUtils.copyProperties(docAsnDetail,details);
+
+					details.setAsnno(detailAssno);
+					details.setAsnlineno(index);
+					details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+					details.setAddtime(new Date());
+
+					details.setLinestatus("00");
+					details.setReserveFlag("N");
+					details.setHoldrejectcode("OK");//冻结代码
+					details.setHoldrejectreason("正常");
+					//收货数量
+					details.setReceivedqty(BigDecimal.ZERO);//收货件数
+					details.setReceivedqtyEach(BigDecimal.ZERO);
+
+					details.setRejectedqty(BigDecimal.ZERO); //拒收件数
+					details.setRejectedqtyEach(BigDecimal.ZERO);
+					details.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
+
+					details.setLotatt09("ZC");
+					details.setLotatt10("DJ");
+					details.setLotatt14(detailAssno);
+
+					index += 1 ;
+					docAsnDetailsMybatisDao.add(details);
+				}
+					json.setSuccess(true);
+					json.setMsg("明细复用成功");
+			}else{
+				json.setSuccess(false);
+				json.setMsg("没有明细数据—明细复用失败");
+			}
+		}
 		return json;
 	}
 

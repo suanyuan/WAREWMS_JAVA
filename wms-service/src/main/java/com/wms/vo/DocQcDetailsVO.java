@@ -32,6 +32,63 @@ public class DocQcDetailsVO {
 	private String packid;
 	private String transactionid;
 
+//inv_lot_att by lotnum
+
+	private String lotatt12;  //产品名称
+	private String lotatt07;  //灭菌批号
+	private String lotatt15;  //生产厂家
+	private String lotatt01;  //生产日期
+	private String lotatt06;  //产品注册证
+	private String lotatt11;  //存储条件
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
+	public String getLotatt07() {
+		return lotatt07;
+	}
+
+	public void setLotatt07(String lotatt07) {
+		this.lotatt07 = lotatt07;
+	}
+
+	public String getLotatt15() {
+		return lotatt15;
+	}
+
+	public void setLotatt15(String lotatt15) {
+		this.lotatt15 = lotatt15;
+	}
+
+	public String getLotatt01() {
+		return lotatt01;
+	}
+
+	public void setLotatt01(String lotatt01) {
+		this.lotatt01 = lotatt01;
+	}
+
+	public String getLotatt06() {
+		return lotatt06;
+	}
+
+	public void setLotatt06(String lotatt06) {
+		this.lotatt06 = lotatt06;
+	}
+
+	public String getLotatt11() {
+		return lotatt11;
+	}
+
+	public void setLotatt11(String lotatt11) {
+		this.lotatt11 = lotatt11;
+	}
+
 	public String getPano() {
 		return pano;
 	}

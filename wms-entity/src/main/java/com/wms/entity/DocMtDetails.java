@@ -31,8 +31,15 @@ public class DocMtDetails {
   private String addwho;
   private Date edittime;
   private String editwho;
-
+//养护
   private InvLotAtt invLotAtt;
-
   private Date conversedatetest; //预期养护日期
+
+//inv_lot_att by lotnum
+  private String lotatt12;  //产品名称
+  private String lotatt07;  //灭菌批号
+  private String lotatt15;  //生产厂家
+  private String lotatt01;  //生产日期
+  private String lotatt06;  //产品注册证
+  private String lotatt11;  //存储条件
 }

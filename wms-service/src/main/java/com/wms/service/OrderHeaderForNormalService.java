@@ -56,7 +56,7 @@ public class OrderHeaderForNormalService extends BaseService {
     private CommonService commonService;
 
     @Autowired
-    private DocOrderPackingService docOrderPackingService;
+    private  DocOrderPackingService docOrderPackingService;
     @Autowired
     private BasCustomerService basCustomerService;
     @Autowired
@@ -107,8 +107,8 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 
-            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(), Constant.CODE_CUS_TYP_CO);
-            if (customer != null) {
+            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(),Constant.CODE_CUS_TYP_CO);
+            if(customer!=null){
                 orderHeaderForNormalVO.setConsigneename(customer.getDescrC());
             }
             orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
@@ -249,7 +249,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 if (StringUtil.isNotEmpty(result) && result.equals("000")) {
 
-                    if (orderHeaderForNormal.getOrdertype().equals("DX") || orderHeaderForNormal.getOrdertype().equals("YY")) {
+                    if (orderHeaderForNormal.getOrdertype().equals("DX")) {
 
                         Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
                         if (!fixReuslt.isSuccess()) {
@@ -257,19 +257,19 @@ public class OrderHeaderForNormalService extends BaseService {
                             json.setSuccess(false);
                             json.setMsg(fixReuslt.getMsg());
                             return json;
-                        } else {
+                        }else {
 
                             json.setSuccess(true);
                             json.setMsg("000");
                             return json;
                         }
-                    } else {
+                    }else {
 
                         json.setSuccess(true);
                         json.setMsg("000");
                         return json;
                     }
-                } else {
+                }else {
 
                     json.setSuccess(false);
                     json.setMsg("分配失败");
@@ -855,31 +855,25 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
                     form.setField("sOReference1", orderHeaderForNormal.getOrderCode());
                     //form.setField("notes", orderHeaderForNormal.getNotes());
-                    form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
-                    String note = "";
+                    String note ="";
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
                             BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(), detailsList.get(row * i + j).getSku());
 
                             //获取冷链标志
-                            if (StringUtils.isEmpty(note)) {
-                                if (!StringUtils.isEmpty(basSku.getReservedfield07())) {
-                                    switch (basSku.getReservedfield07()) {
-                                        case "LD":
-                                            note = "冷冻";
-                                            break;
-                                        case "FLL":
-                                            note = "非冷链";
-                                            break;
-                                        case "LC":
-                                            note = "冷藏";
-                                            break;
+                            if(StringUtils.isEmpty(note)){
+                                if(!StringUtils.isEmpty(basSku.getReservedfield07())){
+                                    switch (basSku.getReservedfield07()){
+                                        case "LD" : note = "冷冻";break;
+                                        case "FLL" : note = "非冷链";break;
+                                        case "LC" : note = "冷藏";break;
                                     }
                                 }
                             }
 
-                            form.setField("lineNo." + (j), (j + 1) + "");
+                            form.setField("lineNo." + (j), (j+1)+"");
                             form.setField("location." + (j), detailsList.get(row * i + j).getLocation());
                             form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
                             form.setField("skuN." + (j), detailsList.get(row * i + j).getSkuName());
@@ -901,10 +895,10 @@ public class OrderHeaderForNormalService extends BaseService {
                         }
                     }
 
-                    form.setField("notes", orderHeaderForNormal.getNotes() + "    " + note);
+                    form.setField("notes", orderHeaderForNormal.getNotes()+"    "+note);
 
-                    form.setField("sumqtyPage", "件数合计：" + totalQtyE);
-                    form.setField("sumqty", "数量合计：" + totalQty);
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1288,7 +1282,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     form.setField("userdefine2", obj.getUserdefine2());
                     form.setField("sOReference1", obj.getSoreference1());
                     form.setField("notes", obj.getNotes());
-                    form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
+                    form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
 
                     for (int j = 0; j < row; j++) {
                         if (totalNum > (row * i + j)) {
@@ -1314,8 +1308,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             totalQty += Integer.parseInt(detailsList.get(row * i + j).getQty());
                         }
                     }
-                    form.setField("sumqtyPage", "件数合计：" + totalQtyE);
-                    form.setField("sumqty", "数量合计：" + totalQty);
+                    form.setField("sumqtyPage","件数合计："+totalQtyE);
+                    form.setField("sumqty","数量合计："+totalQty);
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(obj.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1508,13 +1502,12 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 获取合格证
-     *
      * @param customerId 客户id
-     * @param sku        产品代码
-     * @param lotatt4    生产批号
+     * @param sku 产品代码
+     * @param lotatt4 生产批号
      * @return
      */
-    public String getCertificate(String customerId, String sku, String lotatt4) {
+    public String getCertificate(String customerId,String sku,String lotatt4) {
         MybatisCriteria criteria = new MybatisCriteria();
         DocAsnCertificateQuery query = new DocAsnCertificateQuery();
         query.setCustomerid(customerId);
@@ -1522,7 +1515,7 @@ public class OrderHeaderForNormalService extends BaseService {
         query.setLotatt04(lotatt4);
         criteria.setCondition(query);
         List<DocAsnCertificate> list = docAsnCertificateMybatisDao.queryByList(criteria);
-        if (list != null && list.size() > 0) {
+        if(list!=null && list.size()>0){
             return list.get(0).getCertificateContext();
         }
         return "";
@@ -1546,10 +1539,10 @@ public class OrderHeaderForNormalService extends BaseService {
 
             if (StringUtils.isNotEmpty(orderCodeList)) {
                 String[] orderNoArr = orderCodeList.split(",");
-                PdfWriter writer = PdfWriter.getInstance(doc, os);
+                PdfWriter writer = PdfWriter.getInstance(doc,os);
                 doc.open();
-                for (String order : orderNoArr) {
-                    // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+                for(String order : orderNoArr){
+                   // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
                     //doc.add(new Paragraph(order).setFont(font).setFixedPosition(1, 200, bottom, width));
 
                     /*PdfContentByte cb = writer.getDirectContent();
@@ -1564,12 +1557,12 @@ public class OrderHeaderForNormalService extends BaseService {
                     query.setOrderno(order);
                     criteria.setCondition(query);
                     List<OrderDetailsForNormal> details = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
-                    for (OrderDetailsForNormal de : details) {
-                        String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());
-                        if (!"".equals(url)) {
+                    for(OrderDetailsForNormal de : details){
+                        String url = getCertificate(de.getCustomerid(),de.getSku(),de.getLotatt04());
+                        if(!"".equals(url)){
                             doc.add(new Paragraph(order));
-                            Image png = Image.getInstance(Constant.uploadUrl + File.separator + url);
-                            png.scaleAbsolute(500.0F, 750F);
+                            Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
+                            png.scaleAbsolute(500.0F,750F);
                             doc.add(png);
                         }
 
@@ -1656,15 +1649,15 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
 
         //备注
-        map.put("remark", "1");
+        map.put("remark","1");
         //托寄物
-        map.put("cargo", "1");
+        map.put("cargo","2");
         //计费重量
-        map.put("cargoTotalWeight", "1");
+        map.put("cargoTotalWeight","3");
         //实际重量
-        map.put("cargoTotalWeight", "1");
+        map.put("cargoTotalWeight","4");
         //费用合计
-        map.put("totalFee", "1");
+        map.put("totalFee","5");
 
 
         map.put("PALINENO", System.currentTimeMillis());
@@ -1677,88 +1670,149 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
 
+
     /**
      * 复用入库明细信息
      */
-    public Json copyDetailGo(String asnno, String detailOrderno, String customerid ,String soreference2) {
+    public Json copyDetailGo(String generalNO, String detailOrderno, String customerid ,String soreference2 ,String copyFlag) {
         Json json = new Json();
         OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
+        MybatisCriteria criteria = new MybatisCriteria();
+
         Double index = 1.000;
 
-        DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
-        docAsnDetailQuery.setAsnno(asnno);
-        docAsnDetailQuery.setCustomerid(customerid);
-        MybatisCriteria criteria = new MybatisCriteria();
-        criteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
-        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(criteria);
-        if (docAsnDetailList.size() > 0) {
-            for (DocAsnDetail docAsnDetail : docAsnDetailList) {
-                orderDetailsForNormal.setOrderno(detailOrderno);
-                orderDetailsForNormal.setOrderlineno(index);
-                //货主代码
-                orderDetailsForNormal.setCustomerid(docAsnDetail.getCustomerid());
-                orderDetailsForNormal.setLinestatus("00");
-                orderDetailsForNormal.setSku(docAsnDetail.getSku());
-                orderDetailsForNormal.setSkuName(docAsnDetail.getSkuName());
-                orderDetailsForNormal.setLinestatus(docAsnDetail.getLinestatus());//TODO 行状态应该是新建，而不是取之前的单子的状态
-                orderDetailsForNormal.setUom(docAsnDetail.getUom());
-                orderDetailsForNormal.setPackid(docAsnDetail.getPackid());
-                orderDetailsForNormal.setQtyshipped(docAsnDetail.getExpectedqty().doubleValue());// TODO 0
-                orderDetailsForNormal.setQtyorderedEach(docAsnDetail.getExpectedqty().doubleValue());
-                orderDetailsForNormal.setQtyallocated(0.00);
-                orderDetailsForNormal.setQtyallocatedEach(docAsnDetail.getExpectedqtyEach().doubleValue());
-                orderDetailsForNormal.setQtypicked(0.00);
-                orderDetailsForNormal.setQtypickedEach(0.00);
-                orderDetailsForNormal.setQtyshipped(0.00);
-                orderDetailsForNormal.setQtyshippedEach(0.00);
-                //日期
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                orderDetailsForNormal.setAddtime(new Date());
-                orderDetailsForNormal.setEdittime(new Date());//todo delete
-                //库位
-                orderDetailsForNormal.setLocation(docAsnDetail.getReceivinglocation());
+        /*
+         *  1:复用出库明细 -1 : 复用入库明细
+         */
+        if(copyFlag.equals("1")){
+            OrderDetailsForNormalQuery normalQuery = new OrderDetailsForNormalQuery();
+            normalQuery.setCustomerid(customerid);
+            normalQuery.setOrderno(generalNO);
 
-                //净重
-                orderDetailsForNormal.setNetweight(docAsnDetail.getTotalnetweight().doubleValue());
-                //毛重
-                orderDetailsForNormal.setGrossweight(docAsnDetail.getTotalgrossweight().doubleValue());
-                //体积
-                orderDetailsForNormal.setCubic(docAsnDetail.getTotalcubic().doubleValue());
-                //价格
-                orderDetailsForNormal.setPrice(docAsnDetail.getTotalprice().doubleValue());
+            criteria.setCondition(BeanConvertUtil.bean2Map(normalQuery));
+            List<OrderDetailsForNormal> detailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
 
-                orderDetailsForNormal.setLotatt02("");//todo 这个为什么不copy
-                orderDetailsForNormal.setLotatt03("");//todo 这个为什么不copy
-                orderDetailsForNormal.setLotatt04(docAsnDetail.getLotatt04());
-                orderDetailsForNormal.setLotatt05(docAsnDetail.getLotatt05());
-                orderDetailsForNormal.setLotatt06(docAsnDetail.getLotatt06());
-                orderDetailsForNormal.setLotatt07(docAsnDetail.getLotatt07());
-                orderDetailsForNormal.setLotatt08(docAsnDetail.getLotatt08());
-                orderDetailsForNormal.setLotatt09(docAsnDetail.getLotatt09());
-                orderDetailsForNormal.setLotatt10("HG");
-                orderDetailsForNormal.setLotatt11(docAsnDetail.getLotatt11());
-                orderDetailsForNormal.setLotatt12(docAsnDetail.getLotatt12());//todo 批次属性到15
-                //是否有入库单号 todo 定向、引用订单插入库单号(必填)
-                if(soreference2.equals("") && soreference2 == null){
-                    orderDetailsForNormal.setLotatt14("");
-                }else{
-                    orderDetailsForNormal.setLotatt14(soreference2);
+            if(detailsForNormalList.size() > 0){
+                for (OrderDetailsForNormal detailsForNormal: detailsForNormalList) {
+
+                    BeanUtils.copyProperties(detailsForNormal,orderDetailsForNormal);
+
+                    orderDetailsForNormal.setOrderno(detailOrderno);
+                    orderDetailsForNormal.setOrderlineno(index);
+
+                    orderDetailsForNormal.setLinestatus("00");
+                    orderDetailsForNormal.setQtysoftallocated(0.00);
+                    orderDetailsForNormal.setQtysoftallocatedEach(0.00);
+
+                    orderDetailsForNormal.setQtyallocated(0.00);
+                    orderDetailsForNormal.setQtyallocatedEach(0.00);
+
+                    orderDetailsForNormal.setQtypicked(0.00);
+                    orderDetailsForNormal.setQtypickedEach(0.00);
+
+                    orderDetailsForNormal.setQtyshipped(0.00);
+                    orderDetailsForNormal.setQtyshippedEach(0.00);
+
+                    orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());  //日期
+                    orderDetailsForNormal.setAddtime(new Date());
+
+                    orderDetailsForNormal.setLotatt10("HG");
+                    //是否有入库单号 todo 定向、引用订单插入库单号(必填)
+                    if(soreference2.equals("") && soreference2 == null){
+                        orderDetailsForNormal.setLotatt14("");
+                    }else{
+                        orderDetailsForNormal.setLotatt14(soreference2);
+                    }
+                    orderDetailsForNormalMybatisDao.add(orderDetailsForNormal);
+                    index += 1.000;
                 }
-                orderDetailsForNormalMybatisDao.add(orderDetailsForNormal);
-                index += 1.000;
+                json.setSuccess(true);
+                json.setMsg("明细复用成功");
+            }else{
+                json.setSuccess(false);
+                json.setMsg("明细信息不存在");
             }
-        json.setSuccess(true);
-        json.setMsg("明细复用成功");
-    }else
+        }else{
+            DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+            docAsnDetailQuery.setAsnno(generalNO);
+            docAsnDetailQuery.setCustomerid(customerid);
+            criteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+            List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(criteria);
+            if (docAsnDetailList.size() > 0) {
+                for (DocAsnDetail docAsnDetail : docAsnDetailList) {
+                    orderDetailsForNormal.setOrderno(detailOrderno);
+                    orderDetailsForNormal.setOrderlineno(index);
+                    //货主代码
+                    orderDetailsForNormal.setCustomerid(docAsnDetail.getCustomerid());
+                    orderDetailsForNormal.setLinestatus("00");
+                    orderDetailsForNormal.setSku(docAsnDetail.getSku());
+                    orderDetailsForNormal.setSkuName(docAsnDetail.getSkuName());
+                    orderDetailsForNormal.setUom(docAsnDetail.getUom());
+                    orderDetailsForNormal.setPackid(docAsnDetail.getPackid());
 
-    {
-        json.setSuccess(false);
-        json.setMsg("没有明细信息");
+                    orderDetailsForNormal.setQtyordered(docAsnDetail.getExpectedqty().doubleValue());
+                    orderDetailsForNormal.setQtyorderedEach(docAsnDetail.getExpectedqtyEach().doubleValue());
 
-    }
+                    orderDetailsForNormal.setQtysoftallocated(0.00);
+                    orderDetailsForNormal.setQtysoftallocatedEach(0.00);
+
+                    orderDetailsForNormal.setQtyallocated(0.00);
+                    orderDetailsForNormal.setQtyallocatedEach(0.00);
+
+                    orderDetailsForNormal.setQtypicked(0.00);
+                    orderDetailsForNormal.setQtypickedEach(0.00);
+
+                    orderDetailsForNormal.setQtyshipped(0.00);
+                    orderDetailsForNormal.setQtyshippedEach(0.00);
+
+
+                    orderDetailsForNormal.setAddwho(SfcUserLoginUtil.getLoginUser().getId());  //日期
+                    orderDetailsForNormal.setAddtime(new Date());
+
+
+                    orderDetailsForNormal.setLocation(docAsnDetail.getReceivinglocation()); //库位
+                    orderDetailsForNormal.setNetweight(docAsnDetail.getTotalnetweight().doubleValue()); //净重
+                    orderDetailsForNormal.setGrossweight(docAsnDetail.getTotalgrossweight().doubleValue()); //毛重
+                    orderDetailsForNormal.setCubic(docAsnDetail.getTotalcubic().doubleValue());//体积
+                    orderDetailsForNormal.setPrice(docAsnDetail.getTotalprice().doubleValue()); //价格
+
+                    orderDetailsForNormal.setLotatt01(docAsnDetail.getLotatt01());
+                    orderDetailsForNormal.setLotatt02(docAsnDetail.getLotatt02());
+                    orderDetailsForNormal.setLotatt03(docAsnDetail.getLotatt03());
+                    orderDetailsForNormal.setLotatt04(docAsnDetail.getLotatt04());
+                    orderDetailsForNormal.setLotatt05(docAsnDetail.getLotatt05());
+                    orderDetailsForNormal.setLotatt06(docAsnDetail.getLotatt06());
+                    orderDetailsForNormal.setLotatt07(docAsnDetail.getLotatt07());
+                    orderDetailsForNormal.setLotatt08(docAsnDetail.getLotatt08());
+                    orderDetailsForNormal.setLotatt09(docAsnDetail.getLotatt09());
+                    orderDetailsForNormal.setLotatt10("HG");
+                    orderDetailsForNormal.setLotatt11(docAsnDetail.getLotatt11());
+                    orderDetailsForNormal.setLotatt12(docAsnDetail.getLotatt12());
+                    orderDetailsForNormal.setLotatt13(docAsnDetail.getLotatt13());
+                    orderDetailsForNormal.setLotatt15(docAsnDetail.getLotatt15());
+
+                    //是否有入库单号 todo 定向、引用订单插入库单号(必填)
+                    if(soreference2.equals("") && soreference2 == null){
+                        orderDetailsForNormal.setLotatt14("");
+                    }else{
+                        orderDetailsForNormal.setLotatt14(soreference2);
+                    }
+                    orderDetailsForNormalMybatisDao.add(orderDetailsForNormal);
+                    index += 1.000;
+                }
+
+                json.setSuccess(true);
+                json.setMsg("明细复用成功");
+            }else {
+
+                json.setSuccess(false);
+                json.setMsg("明细信息不存在");
+
+            }
+        }
+
         return json;
-}
+    }
 
     private String getKey(OrderDetailsForNormal detail) {
         return detail.getSku() + "" + detail.getLotatt01() + detail.getLotatt02() + detail.getLotatt03() + detail.getLotatt04()
@@ -1766,10 +1820,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 + detail.getLotatt10() + detail.getLotatt11() + detail.getLotatt12() + detail.getLotatt13() + detail.getLotatt13();
     }
 
-    private String getYesNo(String obj) {
-        if (obj == null || obj.equals("0")) {
+    private String getYesNo(String obj){
+        if(obj == null || obj.equals("0")){
             return "否";
-        } else {
+        }else{
             return "是";
         }
     }
@@ -1780,6 +1834,8 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return String.valueOf(d);
     }
+
+
 
 
 }

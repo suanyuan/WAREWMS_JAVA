@@ -98,8 +98,8 @@ $(function() {
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 100},
 			{field: 'qty', title: '养护件数', width: 100},
-			{field: 'lotatt03', title: '入库时间', width: 200},
-			{field: 'lotatt03test', title: '预期养护时间', width: 200},
+			{field: 'lotatt03', title: '入库时间', width: 100},
+			{field: 'lotatt03test', title: '预期养护时间', width: 100},
 			{field: 'reservedfield10', title: '养护周期', width: 100},
 			//	用于回传后台时间
 			{field: 'fromDate', title: '开始时间', width: 100,hidden:true},

@@ -18,6 +18,16 @@ import java.util.List;
 public interface DocMtDetailsMybatisDao extends BaseDao {
 
     /**
+     * 总数 lotatt
+     * @return
+     */
+    int queryByCountLotatt(MybatisCriteria criteria);
+    /**
+     * 分页查询  带出lotatt
+     * @return
+     */
+    <T> List<T> queryByListLotatt(MybatisCriteria criteria);
+    /**
      * 根据时间段查询养护时间 主单状态99 40
      * @return
      */

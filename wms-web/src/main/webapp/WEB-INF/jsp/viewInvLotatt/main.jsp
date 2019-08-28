@@ -55,7 +55,7 @@ $(function() {
 			{field: 'fmcustomerid',		title: '货主',	width: 71 },
 			{field: 'fmsku',		title: '产品代码',	width: 91 },
 			{field: 'lotatt12', title: '产品名称', width: 330},
-			{field: 'fmlotnum',		title: '批次',	width: 81 },
+
 			{field: 'fmqty',		title: '库存件数',	width: 71 },
 			{field: 'fmqtyEach',		title: '库存数量',	width: 71 },
 			{field: 'qtyallocated',		title: '分配件数',	width: 71 },
@@ -68,6 +68,8 @@ $(function() {
 			{field: 'totalcubic',		title: '体积',	width: 71 },
 
 			{field: 'uom',		title: '单位',	width: 71 },
+			{field: 'fmlotnum',		title: '批次',	width: 81 },
+
 			{field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
 			{field: 'skudescre', title: '规格型号', width: 103},
 			{field: 'lotatt05', title: '序列号', width: 110},
@@ -76,14 +78,14 @@ $(function() {
 			{field: 'lotatt03', title: '入库日期', width: 91},
 			{field: 'lotatt01', title: '生产日期', width: 112},
 			{field: 'lotatt02', title: '有效期/失效期', width: 113},
-			{field: 'lotatt08', title: '供应商', width: 200},
+			{field: 'lotatt08', title: '供应商', width: 120},
 			{field: 'lotatt09', title: '样品属性', width: 100,formatter:YP_TYPstatusFormatter},
 			{field: 'lotatt11', title: '存储条件', width: 100},
 			{field: 'lotatt10', title: '质量状态', width: 100, formatter:ZL_TYPstatusFormatter},
 
-			{field: 'fmid',		title: '跟踪号',	width: 71 },
-			{field: 'lpn',		title: 'LPN',	width: 71 },
-			{field: 'price',		title: '价值',	width: 71 },
+			// {field: 'fmid',		title: '跟踪号',	width: 71 },
+			// {field: 'lpn',		title: 'LPN',	width: 71 },
+			// {field: 'price',		title: '价值',	width: 71 },
 			{field: 'warehouseid',		title: '仓库编码',	width: 71 }
 		]],
 		onDblClickCell: function(index,field,value){

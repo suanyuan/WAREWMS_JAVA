@@ -297,7 +297,7 @@
                     {field: 'lotatt03', title: '入库日期', width: 91},
                     {field: 'lotatt01', title: '生产日期', width: 112},
                     {field: 'lotatt02', title: '有效期/失效期', width: 113},
-                    {field: 'lotatt08', title: '供应商', width: 200},
+                    {field: 'lotatt08', title: '供应商', width: 120},
                     {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
                     {field: 'lotatt14', title: '入库单号', width: 91},
 
