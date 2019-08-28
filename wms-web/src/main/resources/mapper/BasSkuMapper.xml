@@ -297,6 +297,9 @@ where 1=1
 	<if test="reservedfield12 != null  ">
 		reservedfield12,
 	</if>
+	<if test="reservedfield13 != null  ">
+		reservedfield13,
+	</if>
 	<if test="packid != null  ">
 		packid,
 	</if>
@@ -440,6 +443,9 @@ where 1=1
 	</if>
 	<if test="reservedfield12 != null  ">
 		#{reservedfield12},
+	</if>
+	<if test="reservedfield13 != null  ">
+		#{reservedfield13},
 	</if>
 	<if test="packid != null  ">
 		#{packid},
