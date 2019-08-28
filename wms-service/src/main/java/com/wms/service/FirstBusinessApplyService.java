@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.wms.constant.Constant;
@@ -54,6 +55,10 @@ public class FirstBusinessApplyService extends BaseService {
 	private GspProductRegisterSpecsService gspProductRegisterSpecsService;
 	@Autowired
 	private BasCustomerService basCustomerService;
+	@Autowired
+	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
+	@Autowired
+	private  FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
@@ -114,17 +119,17 @@ public class FirstBusinessApplyService extends BaseService {
 
 
 
-	public Json getInfo(String supplierId){
-		GspSupplierVO gspSupplierVO = new GspSupplierVO();
-		System.out.println("supplierId==========="+supplierId);
-		GspSupplier gspSupplier = firstBusinessApplyMybatisDao.queryById(supplierId);
-		BeanUtils.copyProperties(gspSupplier, gspSupplierVO);
-		if(gspSupplier == null){
+	public Json getInfo(String applyId){
+        FirstBusinessApplyVO firstBusinessApplyVO = new FirstBusinessApplyVO();
+		System.out.println("supplierId==========="+applyId);
+		FirstBusinessProductApplyResult firstBusinessApply = firstBusinessProductApplyMybatisDao.queryEditByApplyId(applyId);
+//		BeanUtils.copyProperties(firstBusinessApply, firstBusinessApplyVO);
+		if(firstBusinessApply == null){
 			return Json.error("不存在！");
 		}
-
-		return Json.success("",gspSupplierVO);
+		return Json.success("",firstBusinessApply);
 	}
+
 	public Json queryFirstBusinessApply(String id){
 		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(id);
 		if(firstBusinessApply!=null){
@@ -138,6 +143,11 @@ public class FirstBusinessApplyService extends BaseService {
 			if(supplier!=null){
 				vo.setSupplierName(supplier.getDescrC());
 			}
+			GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(firstBusinessApply.getSpecsId());
+			if(gspProductRegisterSpecs.getProductName()!=null){
+				vo.setProductName(gspProductRegisterSpecs.getProductName());
+			}
+
 			return Json.success("",vo);
 		}
 		return Json.error("");
@@ -268,7 +278,7 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("申请失败");
 	}
 
-	public Json editApply(String id,String clientId,String supplierId,String productArr,String productLine){
+	public Json editApply(String id,String clientId,String supplierArr,String productArr,String productLine){
 		if("".equals(clientId)){
 			return Json.error("请选择委托客户");
 		}
@@ -280,36 +290,91 @@ public class FirstBusinessApplyService extends BaseService {
 		if("".equals(productArr)){
 			return Json.error("请选择首营产品");
 		}
+		FirstBusinessApply firstBusinessApplyC =  firstBusinessApplyMybatisDao.queryById(id);
+		if(clientId.equals(firstBusinessApplyC.getClientId()) && supplierArr.equals(firstBusinessApplyC.getSupplierId()) && productArr.equals(firstBusinessApplyC.getSpecsId())){
+
+		}else {
+			boolean flag = true;
+			FirstBusinessApply firstBusinessApply1= new FirstBusinessApply();
+			firstBusinessApply1.setSupplierId(supplierArr);
+			firstBusinessApply1.setSpecsId(productArr);
+			firstBusinessApply1.setClientId(clientId);
+			int num = firstBusinessApplyMybatisDao.selectFirstBusinessBySupplierAndProduct(firstBusinessApply1);
+			if(num>0){
+				flag = false;
+			}
+
+			if(!flag){
+				return 	Json.error("存在同一货主 供应商与产品！  不能重复申请！");
+			}
+		}
+//		String[] arrSup = supplierArr.split(",");
+//		String[] arr = productArr.split(",");
+
+//		if(arrSup.length>1){
+//
+//		}
+
+
 
 		try{
-			FirstBusinessApply oldApply = firstBusinessApplyMybatisDao.queryById(id);
-			if(oldApply!=null){
+			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+			firstBusinessApply.setApplyId(id);
+			firstBusinessApply.setClientId(clientId);
+			firstBusinessApply.setSupplierId(supplierArr);
+			firstBusinessApply.setProductline(productLine);
+			firstBusinessApply.setEditDate(new Date());
+			firstBusinessApply.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 
-				if(!oldApply.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
-					return Json.error("不是新建状态的申请单无法修改");
-				}
 
-				FirstBusinessApply update = new FirstBusinessApply();
-				update.setApplyId(id);
-				update.setIsUse(Constant.IS_USE_NO);
-				firstBusinessApplyMybatisDao.updateBySelective(update);
 
-				MybatisCriteria mybatisCriteria = new MybatisCriteria();
-				FirstBusinessProductApplyQuery query = new FirstBusinessProductApplyQuery();
-				query.setIsUse(Constant.IS_USE_YES);
-				query.setApplyId(id);
-				mybatisCriteria.setCondition(query);
-				List<FirstBusinessProductApplyResult> list = firstBusinessProductApplyMybatisDao.queryPageList(mybatisCriteria);
 
-				for(FirstBusinessProductApplyResult result : list){
-					FirstBusinessProductApply firstUpdate = new FirstBusinessProductApply();
-					firstUpdate.setProductApplyId(result.getProductApplyId());
-					firstUpdate.setIsUse(Constant.IS_USE_NO);
-					firstBusinessProductApplyMybatisDao.updateBySelective(firstUpdate);
-				}
+			FirstBusinessProductApply firstBusinessProductApply = new FirstBusinessProductApply();
+			firstBusinessProductApply.setProductApplyId(id);
+			firstBusinessProductApply.setApplyId(id);
+			firstBusinessProductApply.setSpecsId(productArr);
+			firstBusinessProductApply.setEditDate(new Date());
+			firstBusinessProductApply.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+			firstBusinessProductApplyMybatisDao.updateBySelective(firstBusinessProductApply);
 
-				return addApply(clientId,supplierId,productArr,productLine);
-			}
+
+//			firstBusinessApplyMybatisDao.delete(id);
+//			firstBusinessProductApplyMybatisDao.delete(id);
+//			firstReviewLogMybatisDao.delete(id);   //删除记录？
+
+//			addApply(clientId,supplierArr,productArr,productLine);
+
+//			FirstBusinessApply oldApply = firstBusinessApplyMybatisDao.queryById(id);
+//			if(oldApply!=null){
+//
+//				if(!oldApply.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
+//					return Json.error("不是新建状态的申请单无法修改");
+//				}
+//
+//				FirstBusinessApply update = new FirstBusinessApply();
+//				update.setApplyId(id);
+//				update.setIsUse(Constant.IS_USE_NO);
+//				firstBusinessApplyMybatisDao.updateBySelective(update);
+//
+//				MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//				FirstBusinessProductApplyQuery query = new FirstBusinessProductApplyQuery();
+//				query.setIsUse(Constant.IS_USE_YES);
+//				query.setApplyId(id);
+//				mybatisCriteria.setCondition(query);
+//				List<FirstBusinessProductApplyResult> list = firstBusinessProductApplyMybatisDao.queryPageList(mybatisCriteria);
+//
+//				for(FirstBusinessProductApplyResult result : list){
+//					FirstBusinessProductApply firstUpdate = new FirstBusinessProductApply();
+//					firstUpdate.setProductApplyId(result.getProductApplyId());
+//					firstUpdate.setIsUse(Constant.IS_USE_NO);
+//					firstBusinessProductApplyMybatisDao.updateBySelective(firstUpdate);
+//				}
+//
+//
+				return Json.success("资料更新成功");
+////				return addApply(clientId,supplierArr,productArr,productLine);
+//			}
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

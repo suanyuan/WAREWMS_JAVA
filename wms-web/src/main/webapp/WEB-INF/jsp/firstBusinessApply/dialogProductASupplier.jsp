@@ -47,7 +47,7 @@
 					<th>客户名称：</th><td><input id="kehumingcheng" type='text'   class='easyui-textbox' data-options='width:200'/></td>
                     <td>
                         <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                        <a onclick='choseSupplierSelect();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                     </td>
                 </tr>
 
@@ -76,16 +76,18 @@
 			<table>
 				<tr>
 					<th>产品代码</th>
-					<td><input type='text' id='productCode1'  size='16' data-options=''/></td>
+					<td><input type='text' id='productCode1' class='easyui-textbox'    data-options='width:200'/></td>
 					<th>产品名称</th>
-					<td><input type='text' id='productName1'  size='16' data-options=''/></td>
+					<td><input type='text' id='productName1' class='easyui-textbox'   data-options='width:200'/></td>
 					<th>注册证号</th>
-					<td><input type='text' id='registerNo'  size='16' data-options=''/></td>
+					<td><input type='text' id='registerNo' class='easyui-textbox'   data-options='width:200'/></td>
 					<%--<td>--%>
 						<%--<a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
 						<%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
 					<%--</td>--%>
-					<td>
+				</tr>
+				<tr>
+					<td colspan="6">
 						<a onclick='searchProduct1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
 						<a onclick='choseProductSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
 					</td>
@@ -313,28 +315,25 @@
                 <%--});--%>
             }
         });
-        //产品
 
-        ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
-			modal : true,
-			title : '<spring:message code="common.dialog.title"/>',
-			width:850,
-			height:500,
-			cache: false,
-			onClose : function() {
-			// ezuiFormClear(ezuiForm);
-			// $(this).dialog('destroy');
-
-			}
-        }).dialog('close')
 		//搜索打开产品弹窗
         function searchProduct() {
             // if(ezuiDialogSpec){
-                ezuiDialogSpec.dialog('open');
-                //
+            //     ezuiDialogSpec.dialog('open');
+            //产品
 
+            ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                width:850,
+                height:500,
+                cache: false,
+                onClose : function() {
+                    // ezuiFormClear(ezuiForm);
+                    // $(this).dialog('destroy');
 
-            // }
+                }
+            });
         }
 
 

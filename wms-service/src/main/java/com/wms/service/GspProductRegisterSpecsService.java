@@ -77,12 +77,9 @@ public class GspProductRegisterSpecsService extends BaseService {
 			if(gspProductRegisterSpecs.getEditDate()!=null){
 				gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
 			}
-
-
 			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"=============================================="+gspProductRegisterSpecsVO.getCreateDate());
-
-		basGtnVOList.add(gspProductRegisterSpecsVO);
-	}
+			basGtnVOList.add(gspProductRegisterSpecsVO);
+		}
 
 		int total = gspProductRegisterSpecsMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));

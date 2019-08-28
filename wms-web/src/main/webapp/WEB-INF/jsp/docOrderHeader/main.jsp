@@ -83,7 +83,8 @@ $(function() {
                     {field: 'cAddress2',			title: '区',		width: 100 },
 					{field: 'cAddress1',			title: '收货地址',		width: 250 },
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
-					{field: 'releasestatusName',	title: '释放状态',		width: 100 }
+					{field: 'releasestatusName',	title: '释放状态',		width: 100 },
+					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 , hidden:true }
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
@@ -791,34 +792,42 @@ var unPacking = function(){
 var shipment = function(){
 	var operateResult = '';
 	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
-	$.each(checkedItems, function(index, item){
-		if (item.sostatus <= '40' || item.sostatus >= '90') {
+	$.each(checkedItems, function(index, item) {
+		if (item.udfprintflag1 == '1'){
+			if (item.sostatus <= '40' || item.sostatus >= '90') {
+				operateResult = operateResult + "订单编号：" + item.orderno + ",";
+				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
+			} else {
+				$.ajax({
+					async: false,
+					url: 'docOrderHeaderController.do?shipment',
+					data: {orderno: item.orderno},
+					type: 'POST',
+					dataType: 'JSON',
+					success: function (result) {
+						ezuiDatagrid.datagrid('reload');
+						var msg = '';
+						try {
+							msg = result.msg;
+							if (result.success) {
+								operateResult = operateResult + "订单编号：" + item.orderno + ",";
+								operateResult = operateResult + "处理完毕" + "\n";
+							} else {
+								operateResult = operateResult + "订单编号：" + item.orderno + ",";
+								operateResult = operateResult + "处理时错误：" + msg + "\n";
+							}
+							;
+						} catch (e) {
+							msg = '<spring:message code="common.message.data.delete.failed"/>';
+						}
+						;
+					}
+				});
+			};
+		}else{
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
-			operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
-		} else {
-			$.ajax({
-				async: false,
-				url : 'docOrderHeaderController.do?shipment',
-				data : {orderno : item.orderno},
-				type : 'POST',
-				dataType : 'JSON',
-				success : function(result){
-					var msg = '';
-					try {
-						msg = result.msg;
-						if (result.success) {
-							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理完毕" + "\n";
-						} else {
-							operateResult = operateResult + "订单编号：" + item.orderno + ",";
-							operateResult = operateResult + "处理时错误：" + msg + "\n";
-						};
-					} catch (e) {
-						msg = '<spring:message code="common.message.data.delete.failed"/>';
-					};
-				}
-			});
-		};
+			operateResult = operateResult + "处理时错误：订单未导出序列号记录无法发运" + "\n";
+		}
 	});
 	if (operateResult != '') {
 		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
@@ -1111,6 +1120,34 @@ var downloadTemplate = function(){
 	};
 };
 /* 导入end */
+
+
+/*导出序列号记录 start*/
+var doExportOrderNo = function(){
+	if(navigator.cookieEnabled){
+		var rowp = $('#ezuiDatagrid').datagrid('getSelected');
+		console.log(rowp.orderno);
+		var orderFlag = new Date().getTime();
+		var setting = new HashMap();
+			setting.put("orderFlag",orderFlag);
+			setting.put("orderno", rowp.orderno );
+		//--导出Excel
+		var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
+		downloadCheckTimer = window.setInterval(function () {
+			window.clearInterval(downloadCheckTimer);
+			$('#'+formIdb).remove();
+			$.messager.progress('close');
+			$.messager.show({
+				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+			});
+		}, 1000);
+	}else{
+		$.messager.show({
+			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+		});
+	};
+}
+/*导出序列号记录 end*/
 
 /* 明细新增按钮 */
 var detailsAdd = function(){
@@ -1882,6 +1919,11 @@ function  copyDetailGo() {
 					multiline:false,
 					prompt:'请输入ASN编号'
 				});
+			}else{
+				$('#refInNoGo').textbox({
+					multiline:false,
+					prompt:'请选择订单...'
+				});
 			}
 		}
 	});
@@ -2119,6 +2161,8 @@ function choseOrderTypeAfter(value) {
 					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
 					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
+					<a onclick='doExportOrderNo();' id='ezuiBtn_exportOerderNo' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出序列号记录</a>
+
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

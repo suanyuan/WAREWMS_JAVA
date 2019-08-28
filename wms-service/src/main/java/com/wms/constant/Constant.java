@@ -14,14 +14,17 @@ public class Constant {
     public static final String LICENSE_SUBMIT_ADD = "add";
     public static final String LICENSE_SUBMIT_UPDATE = "update";
 
-    public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";
+    public static final String LICENSE_TYPE_BUSINESS = "BUSINESS";//营业
     public static final String LICENSE_TYPE_OPERATE = "OPERATE"; //经营
-    public static final String LICENSE_TYPE_RECORD = "RECORD";
+    public static final String LICENSE_TYPE_RECORD = "RECORD";   //二类
     public static final String LICENSE_TYPE_REGISTER = "REGISTER";
     public static final String LICENSE_TYPE_PROD = "PROD";      //生产
+    public static final String LICENSE_TYPE_MEDICAL = "MEDICAL";      //医疗
+    public static final String LICENSE_TYPE_FIRSTRECORD = "FIRSTRECORD"; //一类
 
 
-//  codeid
+
+    //  codeid
     public static final String CODE_CATALOG_CLASSIFY = "CATALOG_CLASSIFY"; //器械目录分类
     public static final String CODE_CATALOG_VERSION = "CATALOG_VERSION"; //器械目录版本
     public static final String CODE_CATALOG_FIRSTSTATE = "CATALOG_FIRSTSTATE"; //首营状态

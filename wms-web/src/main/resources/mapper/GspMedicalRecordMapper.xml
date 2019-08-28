@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.GspMedicalRecordMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.GspMedicalRecord" >
+	<result column="medical_id" property="medicalId"/>
+	<result column="medical_register_no" property="medicalRegisterNo"/>
+	<result column="medical_name" property="medicalName"/>
+	<result column="medical_address" property="medicalAddress"/>
+	<result column="juridical_person" property="juridicalPerson"/>
+	<result column="registration_authority" property="registrationAuthority"/>
+	<result column="head_name" property="headName"/>
+	<result column="approve_date" property="approveDate"/>
+	<result column="record_url" property="recordUrl"/>
+	<result column="license_expiry_date_begin" property="licenseExpiryDateBegin"/>
+	<result column="license_expiry_date_end" property="licenseExpiryDateEnd"/>
+	<result column="create_id" property="createId"/>
+	<result column="create_date" property="createDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="is_use" property="isUse"/>
+	<result column="reservedfield1" property="reservedfield1"/>
+	<result column="reservedfield2" property="reservedfield2"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+</resultMap>
+       
+<!-- gsp_medical_record table all fields -->
+<sql id="Base_Column_List" >
+	 medical_id,medical_register_no,medical_name,medical_address,juridical_person,registration_authority,head_name,approve_date,record_url,license_expiry_date_begin,license_expiry_date_end,create_id,create_date,edit_id,edit_date,is_use,reservedfield1,reservedfield2,enterprise_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.medicalId != null and condition.medicalId != ''" >
+	    and medical_id =  #{condition.medicalId}
+	</if>
+	<if test="condition.medicalRegisterNo != null and condition.medicalRegisterNo != ''" >
+	    and medical_register_no =  #{condition.medicalRegisterNo}
+	</if>
+	<if test="condition.medicalName != null and condition.medicalName != ''" >
+	    and medical_name =  #{condition.medicalName}
+	</if>
+	<if test="condition.medicalAddress != null and condition.medicalAddress != ''" >
+	    and medical_address =  #{condition.medicalAddress}
+	</if>
+	<if test="condition.juridicalPerson != null and condition.juridicalPerson != ''" >
+	    and juridical_person =  #{condition.juridicalPerson}
+	</if>
+	<if test="condition.registrationAuthority != null and condition.registrationAuthority != ''" >
+	    and registration_authority =  #{condition.registrationAuthority}
+	</if>
+	<if test="condition.headName != null and condition.headName != ''" >
+	    and head_name =  #{condition.headName}
+	</if>
+	<if test="condition.approveDate != null and condition.approveDate != ''" >
+	    and approve_date =  #{condition.approveDate}
+	</if>
+	<if test="condition.recordUrl != null and condition.recordUrl != ''" >
+	    and record_url =  #{condition.recordUrl}
+	</if>
+	<if test="condition.licenseExpiryDateBegin != null and condition.licenseExpiryDateBegin != ''" >
+	    and license_expiry_date_begin =  #{condition.licenseExpiryDateBegin}
+	</if>
+	<if test="condition.licenseExpiryDateEnd != null and condition.licenseExpiryDateEnd != ''" >
+	    and license_expiry_date_end =  #{condition.licenseExpiryDateEnd}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.isUse != null and condition.isUse != ''" >
+	    and is_use =  #{condition.isUse}
+	</if>
+	<if test="condition.reservedfield1 != null and condition.reservedfield1 != ''" >
+	    and reservedfield1 =  #{condition.reservedfield1}
+	</if>
+	<if test="condition.reservedfield2 != null and condition.reservedfield2 != ''" >
+	    and reservedfield2 =  #{condition.reservedfield2}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+	    and enterprise_id =  #{condition.enterpriseId}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into gsp_medical_record(medical_id,medical_register_no,medical_name,medical_address,juridical_person,registration_authority,head_name,approve_date,record_url,license_expiry_date_begin,license_expiry_date_end,create_id,create_date,edit_id,edit_date,is_use,reservedfield1,reservedfield2,enterprise_id)
+ values(#{medicalId},#{medicalRegisterNo},#{medicalName},#{medicalAddress},#{juridicalPerson},#{registrationAuthority},#{headName},#{approveDate},#{recordUrl},#{licenseExpiryDateBegin},#{licenseExpiryDateEnd},#{createId},#{createDate},#{editId},#{editDate},#{isUse},#{reservedfield1},#{reservedfield2},#{enterpriseId})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update gsp_medical_record set medical_register_no=#{medicalRegisterNo},medical_name=#{medicalName},medical_address=#{medicalAddress},juridical_person=#{juridicalPerson},registration_authority=#{registrationAuthority},head_name=#{headName},approve_date=#{approveDate},record_url=#{recordUrl},license_expiry_date_begin=#{licenseExpiryDateBegin},license_expiry_date_end=#{licenseExpiryDateEnd},create_id=#{createId},create_date=#{createDate},edit_id=#{editId},edit_date=#{editDate},is_use=#{isUse},reservedfield1=#{reservedfield1},reservedfield2=#{reservedfield2},enterprise_id=#{enterpriseId} where medical_id=#{medicalId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update gsp_medical_record set 
+	<trim  suffixOverrides="," >
+	<if test="medicalRegisterNo != null  ">
+		medical_register_no=#{medicalRegisterNo},
+	</if>
+	<if test="medicalName != null  ">
+		medical_name=#{medicalName},
+	</if>
+	<if test="medicalAddress != null  ">
+		medical_address=#{medicalAddress},
+	</if>
+	<if test="juridicalPerson != null  ">
+		juridical_person=#{juridicalPerson},
+	</if>
+	<if test="registrationAuthority != null  ">
+		registration_authority=#{registrationAuthority},
+	</if>
+	<if test="headName != null  ">
+		head_name=#{headName},
+	</if>
+	<if test="approveDate != null  ">
+		approve_date=#{approveDate},
+	</if>
+	<if test="recordUrl != null  ">
+		record_url=#{recordUrl},
+	</if>
+	<if test="licenseExpiryDateBegin != null  ">
+		license_expiry_date_begin=#{licenseExpiryDateBegin},
+	</if>
+	<if test="licenseExpiryDateEnd != null  ">
+		license_expiry_date_end=#{licenseExpiryDateEnd},
+	</if>
+	<if test="createId != null  ">
+		create_id=#{createId},
+	</if>
+	<if test="createDate != null  ">
+		create_date=#{createDate},
+	</if>
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="editDate != null  ">
+		edit_date=#{editDate},
+	</if>
+	<if test="isUse != null  ">
+		is_use=#{isUse},
+	</if>
+	<if test="reservedfield1 != null  ">
+		reservedfield1=#{reservedfield1},
+	</if>
+	<if test="reservedfield2 != null  ">
+		reservedfield2=#{reservedfield2},
+	</if>
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
+	</if>
+	</trim> where medical_id=#{medicalId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from gsp_medical_record where medical_id = #{medicalId}
+</delete>
+ 
+<!-- 根据id查询 医疗机构执业许可证 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from gsp_medical_record where medical_id = #{medicalId}
+</select>
+
+<!-- 医疗机构执业许可证 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from gsp_medical_record 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询医疗机构执业许可证列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from gsp_medical_record 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

@@ -1572,6 +1572,11 @@ function  copyDetail() {
 					multiline:false,
 					prompt:'请输入ASN编号'
 				});
+			}else{
+				$('#refInNoTo').textbox({
+					multiline:false,
+					prompt:'请选择订单...'
+				});
 			}
 		}
 	});

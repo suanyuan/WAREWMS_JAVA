@@ -7,9 +7,7 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.entity.*;
-import com.wms.query.GspBusinessLicenseQuery;
-import com.wms.query.GspOperateLicenseQuery;
-import com.wms.query.GspSecondRecordQuery;
+import com.wms.query.*;
 import com.wms.service.*;
 import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.*;
@@ -26,7 +24,6 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspEnterpriseInfoForm;
-import com.wms.query.GspEnterpriseInfoQuery;
 
 @Controller
 @RequestMapping("gspEnterpriseInfoController")
@@ -46,6 +43,10 @@ public class GspEnterpriseInfoController {
 	private GspSecondRecordService gspSecondRecordService;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private GspMedicalRecordService gspMedicalRecordService;
+	@Autowired
+	private GspFirstRecordService gspFirstRecordService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -188,23 +189,44 @@ public class GspEnterpriseInfoController {
 	}
 
 	@Login
-	@RequestMapping(params = "toBusinessLicense")
-	public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String id) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("enterpriseId", id);
-		if(!"".equals(id)){
-			Json json = gspEnterpriceService.getGspBusinessLicense(id);
-			if(json.isSuccess() && json.getObj()!=null){
-				GspBusinessLicense businessLicense = (GspBusinessLicense)json.getObj();
-				List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(businessLicense.getBusinessId());
-				if(detailVOS!=null){
-					model.put("choseScope",initOperateDetail(detailVOS));
-				}
-				model.put("gspBusinessLicense",businessLicense);
-			}
-		}
-		return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
-	}
+    @RequestMapping(params = "toBusinessLicense")
+    public ModelAndView toBusinessLicense(@RequestParam(defaultValue = "") String id) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", id);
+        if(!"".equals(id)){
+            Json json = gspEnterpriceService.getGspBusinessLicense(id);
+            if(json.isSuccess() && json.getObj()!=null){
+                GspBusinessLicense businessLicense = (GspBusinessLicense)json.getObj();
+                List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(businessLicense.getBusinessId());
+                if(detailVOS!=null){
+                    System.out.println();
+                    model.put("choseScope",initOperateDetail(detailVOS));
+                }
+                model.put("gspBusinessLicense",businessLicense);
+            }
+        }
+        return new ModelAndView("gspEnterpriseInfo/businessLicense", model);
+    }
+
+    @Login
+    @RequestMapping(params = "toMedicalLicense")
+    public ModelAndView toMedicalLicense(@RequestParam(defaultValue = "") String id) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", id);
+        if(!"".equals(id)){
+            Json json = gspEnterpriceService.getGspMedicalRecord(id);
+            if(json.isSuccess() && json.getObj()!=null){
+                GspMedicalRecord medicalLicense = (GspMedicalRecord)json.getObj();
+                List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(medicalLicense.getMedicalId());
+                if(detailVOS!=null){
+                    System.out.println();model.put("choseScope",initOperateDetail(detailVOS));
+                }
+                model.put("gspMedicalLicense",medicalLicense);
+            }
+        }
+        return new ModelAndView("gspEnterpriseInfo/medicalLicense", model);
+    }
+
 
 	@Login
 	@RequestMapping(params = "toOperateLicense")
@@ -245,7 +267,24 @@ public class GspEnterpriseInfoController {
 		return new ModelAndView("gspEnterpriseInfo/prodLicense", model);
 	}
 
-
+    @Login
+    @RequestMapping(params = "toFirstRecord")
+    public ModelAndView toFirstRecord(@RequestParam(defaultValue = "") String id) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("enterpriseId", id);
+        if(!"".equals(id)) {
+            Json json = gspEnterpriceService.getGspFirstRecord(id);
+            if(json.isSuccess() && json.getObj()!=null){
+                GspFirstRecord firstRecord = (GspFirstRecord)json.getObj();
+                List<GspOperateDetailVO> detailVOS = gspOperateDetailService.queryOperateDetailByLicense(firstRecord.getRecordId());
+                if(detailVOS!=null){
+                    model.put("choseScope",initOperateDetail(detailVOS));
+                }
+                model.put("gspFirstRecord", firstRecord);
+            }
+        }
+        return new ModelAndView("gspEnterpriseInfo/firstRecord", model);
+    }
 	@Login
 	@RequestMapping(params = "toSecondRecord")
 	public ModelAndView toSecondRecord(@RequestParam(defaultValue = "") String id) {
@@ -326,7 +365,12 @@ public class GspEnterpriseInfoController {
 	public EasyuiDatagrid<GspBusinessLicenseVO> businessHistoryDatagridList(EasyuiDatagridPager pager, GspBusinessLicenseQuery query){
 		return gspBusinessLicenseService.getGspBusinessLicenseHistory(pager,query);
 	}
-
+	@Login
+	@RequestMapping(params = "medicalHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspMedicalRecordVO> medicalHistoryDatagridList(EasyuiDatagridPager pager, GspMedicalRecordQuery query){
+		return gspMedicalRecordService.getGspMedicalRecordHistory(pager,query);
+	}
 	@Login
 	@RequestMapping(params = "operateHistoryDatagridList")
 	@ResponseBody
@@ -340,7 +384,12 @@ public class GspEnterpriseInfoController {
 	public EasyuiDatagrid<GspSecondRecordVO> recordHistoryDatagridList(EasyuiDatagridPager pager, GspSecondRecordQuery query){
 		return gspSecondRecordService.getGspSecondRecordHistory(pager,query);
 	}
-
+	@Login
+	@RequestMapping(params = "firstRecordHistoryDatagridList")
+	@ResponseBody
+	public EasyuiDatagrid<GspFirstRecordVO> firstRecordHistoryDatagridList(EasyuiDatagridPager pager, GspFirstRecordQuery query){
+		return gspFirstRecordService.getGspFirstRecordHistory(pager,query);
+	}
 	@Login
 	@RequestMapping(params = "getBusinessLicenseOutTime")
 	@ResponseBody

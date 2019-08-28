@@ -96,6 +96,17 @@ public class GspProductRegisterService extends BaseService {
 			gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
 			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+
+//			gspProductRegister.setProductRegisterNo();
+			String  textContent =gspProductRegister.getProductRegisterNo().trim();
+			while (textContent.startsWith("　")) {//这里判断是不是全角空格
+				textContent = textContent.substring(1, textContent.length()).trim();
+			}
+			while (textContent.endsWith("　")) {
+				textContent = textContent.substring(0, textContent.length() - 1).trim();
+			}
+			gspProductRegister.setProductRegisterNo(textContent);
+
 			gspProductRegisterMybatisDao.add(gspProductRegister);
 
 			//保存经营范围
