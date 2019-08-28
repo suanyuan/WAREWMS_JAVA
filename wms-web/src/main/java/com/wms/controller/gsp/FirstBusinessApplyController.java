@@ -51,6 +51,18 @@ public class FirstBusinessApplyController {
 		return new ModelAndView("firstBusinessApply/detail", model);
 	}
 	@Login
+	@RequestMapping(params = "toEdit")
+	public ModelAndView toEdit(String id) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		Json json = firstBusinessApplyService.queryFirstBusinessApply(id);
+
+		if(json.isSuccess()){
+			model.put("firstBusinessApply1",json.getObj());
+		}
+		return new ModelAndView("firstBusinessApply/edit", model);
+	}
+
+	@Login
 	@RequestMapping(params = "toDialogProductAndSupplier")
 	public ModelAndView toDialogAddress(String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -69,12 +81,6 @@ public class FirstBusinessApplyController {
 
 
 
-	@Login
-	@RequestMapping(params = "getInfo")
-	@ResponseBody
-	public Object getInfo(String supplierId) {
-		return firstBusinessApplyService.getInfo(supplierId);
-	}
 
 
 	/**
@@ -133,13 +139,15 @@ public class FirstBusinessApplyController {
 		return firstBusinessApplyService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
 	}
 
-//	@Login
-//	@RequestMapping(params = "getBtn")
-//	@ResponseBody
-//	public Json getBtn(String id) {
-//		return firstBusinessApplyService.getBtn(id);
-//	}
 
+
+
+    @Login
+    @RequestMapping(params = "getInfo")
+    @ResponseBody
+    public Object getInfo(String applyId) {
+        return firstBusinessApplyService.getInfo(applyId);
+    }
 
 	@Login
 	@RequestMapping(params = "apply")

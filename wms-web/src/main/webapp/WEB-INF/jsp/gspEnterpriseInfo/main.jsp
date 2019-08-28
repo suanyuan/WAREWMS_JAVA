@@ -157,12 +157,16 @@ var del = function(){
 
 
 var commit = function(){
-    var gspEnterpriceFrom = new Object();
-    var infoObj = new Object();
+    var gspEnterpriceFrom = new Object();   //all
+    var infoObj = new Object();				//基本信息
     var businessObj = new Object();
+    var medicalObj =new Object();
+
     var operateobj = new Object();
     var secondRecord = new Object();
+    var firstRecord = new Object();
     var prodObj = new Object();
+
 
     var url = '';
     var isVal = true;
@@ -229,15 +233,40 @@ var commit = function(){
 	//第二备案凭证
     isVal = checkFormData("ezuiFormRecord",secondRecord);
     if(checkObjIsEmpty(secondRecord) && isVal == false){
-        showMsg("备案凭证填写不完全！");
+        showMsg("第二备案凭证填写不完全！");
+        return;
+    }
+	//第一备案凭证
+    isVal = checkFormData("ezuiFormFirstRecord",firstRecord);
+    if(checkObjIsEmpty(firstRecord) && isVal == false){
+        showMsg("第一备案凭证填写不完全！");
         return;
     }
 
+    //判断医疗机构执业许可证
+    isVal = checkFormData("ezuiFormMedical",medicalObj);
+    //企业判断
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_YL ){
+        if(!checkObjIsEmpty(medicalObj) || isVal == false){
+            showMsg("医疗类型企业需要填写医疗机构执业许可证！");
+            return;
+        }
+    }else{
+        if(checkObjIsEmpty(medicalObj) && isVal == false){
+            showMsg("医疗机构执业许可证填写不完全！");
+            return;
+        }
+    }
 
     gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
+
+
     gspEnterpriceFrom["gspBusinessLicenseForm"] = businessObj;
     gspEnterpriceFrom["gspOperateLicenseForm"] = operateobj;
     gspEnterpriceFrom["gspProdLicenseForm"] = prodObj;
+
+    gspEnterpriceFrom["gspMedicalRecordForm"] = medicalObj;
+    gspEnterpriceFrom["gspFirstRecordForm"] = firstRecord;
 
     gspEnterpriceFrom["gspSecondRecordForm"] = secondRecord;
 	console.log(gspEnterpriceFrom);

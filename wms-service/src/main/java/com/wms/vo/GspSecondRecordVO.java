@@ -21,6 +21,35 @@ public class GspSecondRecordVO {
 	private Long editId;
 	private java.util.Date editDate;
 	private String isUse;
+	private String warehouseAddress;
+
+	private String enterpriseName;
+
+	private String  juridicalPerson;
+
+	public String getWarehouseAddress() {
+		return warehouseAddress;
+	}
+
+	public void setWarehouseAddress(String warehouseAddress) {
+		this.warehouseAddress = warehouseAddress;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getJuridicalPerson() {
+		return juridicalPerson;
+	}
+
+	public void setJuridicalPerson(String juridicalPerson) {
+		this.juridicalPerson = juridicalPerson;
+	}
 
 	public Long getRecordId() {
 		return recordId;

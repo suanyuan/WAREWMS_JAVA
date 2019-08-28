@@ -16,6 +16,7 @@
 	<result column="first_state" property="firstState"/>
 	<result column="productline" property="productline"/>
 	<result column="supplier_name" property="supplierName"/>
+	<result column="specs_id" property="specsId"/>
 </resultMap>
 
 <!-- Result Map-->
@@ -131,8 +132,10 @@ where 1=1
  
 <!-- 根据id查询 产品首营申请记录 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from first_business_apply where apply_id = #{applyId}
+	select t1.*,t2.specs_id
+	 from first_business_apply t1
+	  left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
+	where t1.apply_id = #{applyId}
 </select>
 
 <!-- 产品首营申请记录 列表总数-->

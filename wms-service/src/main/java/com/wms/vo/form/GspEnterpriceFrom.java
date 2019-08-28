@@ -14,4 +14,6 @@ public class GspEnterpriceFrom {
     private GspOperateLicenseForm gspOperateLicenseForm;
     private GspSecondRecordForm gspSecondRecordForm;
     private GspOperateLicenseForm gspProdLicenseForm;
+    private GspMedicalRecordForm gspMedicalRecordForm;
+    private GspFirstRecordForm gspFirstRecordForm;
 }

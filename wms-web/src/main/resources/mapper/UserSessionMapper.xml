@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.UserSessionMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.UserSession" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="user_session" property="userSession"/>
+	<result column="addtime" property="addtime"/>
+	<result column="state" property="state"/>
+</resultMap>
+       
+<!-- user_session table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_id,user_session,addtime,state
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.userSession != null and condition.userSession != ''" >
+	    and user_session =  #{condition.userSession}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.state != null and condition.state != ''" >
+	    and state =  #{condition.state}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into user_session(id,user_id,user_session,addtime,state)
+ values(#{id},#{userId},#{userSession},#{addtime},#{state})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update user_session set user_id=#{userId},user_session=#{userSession},addtime=#{addtime},state=#{state} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update user_session set 
+	<trim  suffixOverrides="," >
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="userSession != null  ">
+		user_session=#{userSession},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="state != null  ">
+		state=#{state},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from user_session where id = #{id}
+</delete>
+ 
+<!-- 根据id查询 登录记录 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from user_session where id = #{id}
+</select>
+
+<!-- 登录记录 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from user_session 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询登录记录列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from user_session 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

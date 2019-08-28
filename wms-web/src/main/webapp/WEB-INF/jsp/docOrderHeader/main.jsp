@@ -75,6 +75,7 @@ $(function() {
 					{field: 'orderno',				title: 'SO编号',		width: 100 },
 					{field: 'soreference1',			title: '客户单号',	width: 120 },
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
+			        {field: 'notes',			title: '备注',	width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
 					{field: 'cContact',		title: '收货人',		width: 100 },
@@ -113,7 +114,7 @@ $(function() {
 		method : 'POST',
 		toolbar : '#detailToolbar',
 		idField : 'orderlineno',
-		title : '',
+		title : '',docOrderDetailsController
 		border : false,
 		fitColumns : false,
 		nowrap : false,

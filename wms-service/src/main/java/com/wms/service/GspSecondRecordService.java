@@ -92,7 +92,7 @@ public class GspSecondRecordService extends BaseService {
 	/**
 	 * 保存许可证信息方法
 	 * @param enterpriceId 企业信息主键
-	 * @param secondRecordFormStr 许可证提交json
+	 * @param gspSecondRecordForm 许可证提交json
 	 * @param operateDetailStr 经营范围json
 	 * @param gspSecondRecordId 许可证主键
 	 * @param opType 操作类型
@@ -166,7 +166,7 @@ public class GspSecondRecordService extends BaseService {
 	}
 
 	/**
-	 * 查询备案凭证历史记录
+	 * 查询二类备案凭证历史记录
 	 * @param pager
 	 * @param query
 	 * @return

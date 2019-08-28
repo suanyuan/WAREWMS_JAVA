@@ -7,10 +7,10 @@
         text-align: right;
     }
 </style>
-<div id='detailRecordToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
-    <form id='ezuiFormRecord' method='post' style="padding: 0px;">
-        <input type='hidden' data="1" id='recordId' name='recordId' value="${gspSecondRecord.recordId}"/>
-        <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspSecondRecord.enterpriseId}"/>
+<div id='detailFirstRecordToolbar' class='datagrid-toolbar' style='padding: 0px;background-color: #ffffff;'>
+    <form id='ezuiFormFirstRecord' method='post' style="padding: 0px;">
+        <input type='hidden' data="1" id='recordId' name='recordId' value="${gspFirstRecord.recordId}"/>
+        <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspFirstRecord.enterpriseId}"/>
         <input type='hidden' id='choseScope' value="${choseScope}"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
@@ -18,70 +18,49 @@
             <table>
                 <tr>
                     <th>企业名称</th>
-                    <td><input type='text' value="${gspSecondRecord.enterpriseName}" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:300' class='easyui-textbox'/></td>
+                    <td><input type='text' value="${gspFirstRecord.enterpriseName}" id="firstRecordEnterprise" name='enterpriseId' data-options='required:true,width:300' class='easyui-textbox'/></td>
                     <th>备案编号</th>
-                    <td><input type='text' value="${gspSecondRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <td><input type='text' value="${gspFirstRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
-
-
-                    </tr>
+                </tr>
+                <tr>
+                    <th>住所</th>
+                    <td><input type='text' value="${gspFirstRecord.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <th>生产场所</th>
+                    <td><input type='text' value="${gspFirstRecord.reservedfield1}" id="reservedfield1" name='reservedfield1' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <%--<th>经营方式</th>--%>
+                    <%--<td><input type='text' value="${gspFirstRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:200'/></td>--%>
+                </tr>
                 <tr>
                     <th>法定代表人</th>
-                    <td><input type='text' data="1" value="${gspSecondRecord.juridicalPerson}" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:300'/></td>
-                    <th>住所</th>
-                    <td><input type='text' value="${gspSecondRecord.residence}" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:300'/></td>
-
-
-
-                </tr>
-                <tr>
+                    <td><input type='text' data="1" value="${gspFirstRecord.reservedfield2}" id="reservedfield2" name='reservedfield2' class='easyui-textbox' data-options='required:true,width:300'/></td>
                     <th>企业负责人</th>
-                    <td><input type='text' value="${gspSecondRecord.headName}" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:300'/></td>
-                    <th>经营场所</th>
-                    <td><input type='text' value="${gspSecondRecord.operatePlace}" id="operatePlace" name='operatePlace' class='easyui-textbox' data-options='required:true,width:300'/></td>
-
-
-
-
-
+                    <td><input type='text' value="${gspFirstRecord.headName}" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:300'/></td>
                 </tr>
                 <tr>
-                    <th>经营方式</th>
-                    <td><input type='text' value="${gspSecondRecord.operateMode}" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:300'/></td>
-                    <th>库房地址</th>
-                    <td><input type='text' value="${gspSecondRecord.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:300'/></td>
-
-                </tr>
-                <tr>
-
                     <th>备案部门</th>
-                    <td colspan="3"><input type='text' value="${gspSecondRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <td><input type='text' value="${gspFirstRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <th>备案日期</th>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspFirstRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:300'/></td>
                 </tr>
                 <tr>
-                    <th>备案批准日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSecondRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:300'/></td>
+                    <%--<th>经营范围</th>--%>
+                    <%--<td colspan="2">--%>
+                        <%--<input type='text' value="${gspFirstRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350'/>--%>
+                    <%--</td>--%>
+                    <th>生产范围(已选择)</th>
+                    <td colspan="1">
+                        <input type='text' id="bussinessScope" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300,editable:false'/>
+                        <a onclick='selectRecordScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                    </td>
+
                     <th>备案照片</th>
                     <td>
-                        <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspSecondRecord.recordUrl}"/>
-                        <input id="recordFile" name='recordFile' value="${gspSecondRecord.recordUrl}" atth="fileUpload">
+                        <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspFirstRecord.recordUrl}"/>
+                        <input id="firstRecordFile" name='firstRecordFile' value="${gspFirstRecord.recordUrl}" atth="fileUpload" data-options='required:true,width:300' >
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlSecond()">查看</a>
                     </td>
                 </tr>
-                <tr>
-
-                    <th>经营范围</th>
-                    <td colspan="1">
-                        <input type='text' value="${gspSecondRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300'/>
-                    </td>
-                    <th>经营范围(已选择)</th>
-                    <td colspan="1">
-                        <input type='text' id="showChose" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300,editable:false'/>
-                        <a onclick='selectRecordScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
-                    </td>
-                </tr>
-
-
-
             </table>
         </fieldset>
     </form>
@@ -91,29 +70,29 @@
     </div>
     <fieldset>
         <legend>证照历史数据</legend>
-        <table id='ezuiRecordDatagridDetail' ></table>
+        <table id='ezuiFirstRecordDatagridDetail' ></table>
     </fieldset>
 </div>
-<div id="dialogChoseScopeRecord"></div>
+<div id="dialogChoseFirstRecord"></div>
 
 
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
 
-    var ezuiRecordDatagridDetail;
-    var ezuidialogChoseScopeRecord;
+    var ezuiFirstRecordDatagridDetail;
+    var ezuidialogChoseScopeRecord1;
     var opType = "add";
 
     $(function () {
-        // //初始化显示企业信息
-        // if($("#ezuiFormInfo input[id='enterpriseName']")){
-        //     $("#recordEnterprise").textbox({
-        //         value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
-        //     });
-        // }
+        //初始化显示企业信息
+        /*if($("#ezuiFormInfo input[id='enterpriseName']")){
+            $("#recordEnterprise").textbox({
+                value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
+            });
+        }*/
 
         //控件初始化
-        ezuiRecordDatagridDetail = $("#ezuiRecordDatagridDetail").datagrid({
+        ezuiFirstRecordDatagridDetail = $("#ezuiFirstRecordDatagridDetail").datagrid({
             url : sy.bp()+'/gspEnterpriseInfoController.do?recordHistoryDatagridList',
             method:'POST',
             toolbar : '',
@@ -125,7 +104,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'${gspSecondRecord.enterpriseId}'},
+            queryParams:{'enterpriseId':'${gspFirstRecord.enterpriseId}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -159,7 +138,7 @@
             }
         })
 
-        $('#recordFile').filebox({
+        $('#firstRecordFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '300', //文本宽度
             buttonText: '上传',  //按钮说明文字
@@ -179,7 +158,7 @@
         $.ajax({
             url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
             data : {
-                "licenseId":'${gspSecondRecord.recordId}'
+                "licenseId":'${gspFirstRecord.recordId}'
             }
             ,type : 'POST', dataType : 'JSON',async  :true,
             success : function(result){
@@ -188,7 +167,7 @@
                     for(var i=0;i<result.length;i++){
                         arr.push(result[i].operateName);
                     }
-                    $("#ezuiFormRecord input[id='showChose']").textbox("setValue",arr.join(","))
+                    $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",arr.join(","))
                 }
             }
         });
@@ -204,11 +183,11 @@
                 //多文件
                 "file":{
                     //file为name字段 后台可以通过$_FILES["file"]获得
-                    "file":document.getElementsByName("recordFile")[0].files[0]//文件数组
+                    "file":document.getElementsByName("firstRecordFile")[0].files[0]//文件数组
                 }
             },
             onload:function(data){
-                $("#ezuiFormRecord #recordUrl").val(data.comment);
+                $("#ezuiFormFirstRecord #recordUrl").val(data.comment);
             },
             onerror:function(er){
                 console.log(er);
@@ -223,15 +202,15 @@
     /**
      * 经营范围选择
      */
-    function selectRecordScope() {
-        ezuidialogChoseScopeRecord = $('#dialogChoseScopeRecord').dialog({
+    function selectRecordScope1() {
+        ezuidialogChoseScopeRecord1 = $('#dialogChoseFirstRecord').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             width:800,
             height:500,
-            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=secondRecord&id=${gspSecondRecord.recordId}',
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=secondRecord&id=${gspFirstRecord.recordId}',
             onClose : function() {
-                ezuidialogChoseScopeRecord.dialog('clear');
+                ezuidialogChoseScopeRecord1.dialog('clear');
             }
         });
     }
@@ -245,21 +224,21 @@
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",row.instrumentCatalogName);
+            $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue",row.instrumentCatalogName);
         }
-        $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
-        $(ezuidialogChoseScopeRecord).dialog("close");
+        $("#ezuiFormFirstRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
+        $(ezuidialogChoseScopeRecord1).dialog("close");
     }
 
     function viewUrlSecond(url) {
         if(url){
             showUrl(url);
         }else{
-            if($("#ezuiFormRecord #recordUrl").val()!=""){
-                showUrl($("#ezuiFormRecord #recordUrl").val());
+            if($("#ezuiFormFirstRecord #recordUrl").val()!=""){
+                showUrl($("#ezuiFormFirstRecord #recordUrl").val());
             }else {
                 showMsg("请上传许可证附件！");
             }
@@ -267,13 +246,13 @@
     }
 
     function recordCopy() {
-        var row = ezuiRecordDatagridDetail.datagrid("getSelected");
+        var row = ezuiFirstRecordDatagridDetail.datagrid("getSelected");
         initHistoryData(row);
     }
 
     //加载历史证照信息
     function initHistoryData(row) {
-        $("#ezuiFormRecord input[type!=hidden]").each(function (index) {
+        $("#ezuiFormFirstRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue",row[""+$(this).attr("id")+""]);
@@ -289,7 +268,7 @@
         initChoseText();
 
         if($("#ezuiFormInfo input[id='enterpriseName']")){
-            $("#recordEnterprise").textbox({
+            $("#firstRecordEnterprise").textbox({
                 value:$("#ezuiFormInfo input[id='enterpriseName']").textbox("getValue")
             });
         }
@@ -298,8 +277,8 @@
     //换证清空当前数据
     function recordUpdate() {
         opType = "update";
-        $("#ezuiFormRecord #opType").val("update");
-        $("#ezuiFormRecord input[type!=hidden]").each(function (index) {
+        $("#ezuiFormFirstRecord #opType").val("update");
+        $("#ezuiFormFirstRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                     $(this).textbox("setValue","");
@@ -308,8 +287,8 @@
                 }
             }
         })
-        $("#ezuiFormRecord #recordUrl").val("")
-        $("#recordFile").filebox("setValue","");
+        $("#ezuiFormFirstRecord #recordUrl").val("")
+        $("#firstRecordFile").filebox("setValue","");
     }
 
 </script>

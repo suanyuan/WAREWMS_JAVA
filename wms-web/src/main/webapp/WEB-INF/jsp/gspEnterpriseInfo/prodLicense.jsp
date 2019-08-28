@@ -18,45 +18,45 @@
             <table width="100%">
                 <tr>
                     <th>企业名称</th>
-                    <td><input type='text' value="${gspProdLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.enterpriseName}" data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' data-options='required:true,width:300'/></td>
                     <th>生产许可证编号</th>
                     <td>
-                        <input type='text' value="${gspProdLicense.licenseNo}" data="1" id="licenseNo" name='licenseNo' class='easyui-textbox' data-options='required:true,width:250'/>
+                        <input type='text' value="${gspProdLicense.licenseNo}" data="1" id="licenseNo" name='licenseNo' class='easyui-textbox' data-options='required:true,width:300'/>
                     </td>
                 </tr>
                 <tr >
                     <th>法定代表人</th>
-                    <td><input type='text' value="${gspProdLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:300'/></td>
                     <th rowspan="2">生产场所</th>
-                    <td rowspan="2"><input type='text' value="${gspProdLicense.businessResidence}" data="1" id="businessResidence" name='businessResidence' class='easyui-textbox' data-options='required:true,width:250,height:60'/></td>
+                    <td rowspan="2"><input type='text' value="${gspProdLicense.businessResidence}" data="1" id="businessResidence" name='businessResidence' class='easyui-textbox' data-options='required:true,width:300,height:60,multiline:true'/></td>
 
                 </tr>
                 <tr>
                     <th>企业负责人</th>
-                    <td><input type='text' value="${gspProdLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.headName}" data="1" id="headName" name='headName' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
                  </tr>
                 <tr>
                     <th>住所</th>
-                    <td><input type='text' value="${gspProdLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
                     <th rowspan="2">生产范围</th>
                     <td rowspan="2">
-                        <input type='text' data="1" value="${gspProdLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:350,height:60,editable:false'/>
+                        <input type='text' data="1" value="${gspProdLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:300,height:60,editable:false'/>
                         <a onclick='selectOperateScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
 
                 <tr>
                     <th>库房地址</th>
-                    <td><input type='text' value="${gspProdLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.warehouseAddress}" data="1" id="warehouseAddress" name='warehouseAddress' class='easyui-textbox' data-options='required:true,width:300'/></td>
                 </tr>
                 <tr>
                     <th>发证部门</th>
-                    <td><input type='text' value="${gspProdLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="${gspProdLicense.registrationAuthority}" data="1" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
                     <th>发证日期</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.approveDate}"/>" data="1" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:300'/></td>
                 </tr>
                 <tr>
                     <th>许可证照片</th>
@@ -67,7 +67,7 @@
                         <!--<a onclick='businessSubmit()' id='ezuiDetailsBtn_save' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>提交</a>-->
                     </td>
                     <th>有效期限</th>
-                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:250'/></td>
+                    <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProdLicense.licenseExpiryDate}"/>" data="1" id="licenseExpiryDate" name='licenseExpiryDate' class='easyui-datebox' data-options='required:true,width:300'/></td>
 
                     <%--<th>经营方式</th>--%>
                     <%--<td colspan="2"><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:250'/></td>--%>
@@ -145,7 +145,7 @@
         // $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
         $("#ezuiFormProd input[id='licenseUrlFile1']").filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '250', //文本宽度
+            width: '300', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){

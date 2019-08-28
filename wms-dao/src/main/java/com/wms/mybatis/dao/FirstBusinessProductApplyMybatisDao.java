@@ -14,4 +14,7 @@ public interface FirstBusinessProductApplyMybatisDao extends BaseDao {
 	List<FirstBusinessProductApplyResult> queryPageList(MybatisCriteria criteria);
 
     Long queryPageListCount(MybatisCriteria criteria);
+
+
+    public <T> T queryEditByApplyId(Object id);
 }

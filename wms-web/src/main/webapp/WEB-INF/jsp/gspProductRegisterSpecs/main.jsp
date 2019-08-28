@@ -171,7 +171,9 @@ var add = function(){
         onClose : function() {
             ezuiFormClear(ezuiForm);
         }
-    })
+    });
+    $('#enterpriseDialog').dialog('destroy');
+
 	// ezuiDialog.dialog('open');
 };
 var edit = function(){
@@ -289,41 +291,47 @@ var commit = function(){
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-	if(infoObj["productRegisterId"] ==null || infoObj["productRegisterId"] =="" ){
-		$.messager.show({
-			msg : '请添加产品注册证', title : '提示'
-		});
-	}else{
+
+	if(infoObj["medicalDeviceMark"] == "1"){
+        if(infoObj["productRegisterId"] ==null || infoObj["productRegisterId"] =="" ){
+            $.messager.show({
+                msg : '请添加产品注册证', title : '提示'
+            });
+            return;
+        }
+	}
+
+
     console.log(infoObj);
     var url = '';
-    if (processType == 'edit') {
-        var row = ezuiDatagrid.datagrid('getSelected');
-        infoObj["specsId"] = row.specsId;
-        url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
-        addOrEdit(url,infoObj);
-    }else{
-        $.ajax({
-            url : '/gspProductRegisterSpecsController.do?getInfoByProductCode',
-            data : {productCode: infoObj["productCode"] },
-			type : 'POST',
-			dataType : 'JSON',
-			async  :true,
-            success : function(result){
-                //alert(result+"====="+result.obj.isUse);
-                    //alert(111111);
-					$.messager.show({
-						msg : '已有该产品信息并且有效 无法重复添加', title : '提示'
-					});
-            },
-            error : function() {
-                //alert(33333333);
-                url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
-                addOrEdit(url,infoObj);
-            }
-        });
+		if (processType == 'edit') {
+			var row = ezuiDatagrid.datagrid('getSelected');
+			infoObj["specsId"] = row.specsId;
+			url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
+			addOrEdit(url,infoObj);
+		}else{
+			$.ajax({
+				url : '/gspProductRegisterSpecsController.do?getInfoByProductCode',
+				data : {productCode: infoObj["productCode"] },
+				type : 'POST',
+				dataType : 'JSON',
+				async  :true,
+				success : function(result){
+					//alert(result+"====="+result.obj.isUse);
+						//alert(111111);
+						$.messager.show({
+							msg : '已有该产品信息并且有效 无法重复添加', title : '提示'
+						});
+				},
+				error : function() {
+					//alert(33333333);
+					url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
+					addOrEdit(url,infoObj);
+				}
+			});
 
-    }
-    }
+		}
+
 
 	/*var url = '';
 	if (processType == 'edit') {
