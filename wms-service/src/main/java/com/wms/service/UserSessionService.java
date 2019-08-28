@@ -2,6 +2,8 @@ package com.wms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wms.mybatis.dao.UserSessionMybatisDao;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,46 +21,47 @@ import com.wms.query.UserSessionQuery;
 public class UserSessionService extends BaseService {
 
 	@Autowired
-	private UserSessionDao userSessionDao;
+	private UserSessionMybatisDao userSessionMybatisDao;
 
 	public EasyuiDatagrid<UserSessionVO> getPagedDatagrid(EasyuiDatagridPager pager, UserSessionQuery query) {
-		EasyuiDatagrid<UserSessionVO> datagrid = new EasyuiDatagrid<UserSessionVO>();
-		List<UserSession> userSessionList = userSessionDao.getPagedDatagrid(pager, query);
-		UserSessionVO userSessionVO = null;
-		List<UserSessionVO> userSessionVOList = new ArrayList<UserSessionVO>();
-		for (UserSession userSession : userSessionList) {
-			userSessionVO = new UserSessionVO();
-			BeanUtils.copyProperties(userSession, userSessionVO);
-			userSessionVOList.add(userSessionVO);
-		}
-		datagrid.setTotal(userSessionDao.countAll(query));
-		datagrid.setRows(userSessionVOList);
-		return datagrid;
+//		EasyuiDatagrid<UserSessionVO> datagrid = new EasyuiDatagrid<UserSessionVO>();
+//		List<UserSession> userSessionList = userSessionMybatisDao.queryByList(pager, query);
+//		UserSessionVO userSessionVO = null;
+//		List<UserSessionVO> userSessionVOList = new ArrayList<UserSessionVO>();
+//		for (UserSession userSession : userSessionList) {
+//			userSessionVO = new UserSessionVO();
+//			BeanUtils.copyProperties(userSession, userSessionVO);
+//			userSessionVOList.add(userSessionVO);
+//		}
+//		datagrid.setTotal(userSessionDao.countAll(query));
+//		datagrid.setRows(userSessionVOList);
+//		return datagrid;
+		return null;
 	}
 
 	public Json addUserSession(UserSessionForm userSessionForm) throws Exception {
 		Json json = new Json();
 		UserSession userSession = new UserSession();
 		BeanUtils.copyProperties(userSessionForm, userSession);
-		userSessionDao.save(userSession);
+		userSessionMybatisDao.add(userSession);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json editUserSession(UserSessionForm userSessionForm) {
 		Json json = new Json();
-		UserSession userSession = userSessionDao.findById(userSessionForm.getUserSessionId()+"");
+		UserSession userSession = userSessionMybatisDao.queryById(userSessionForm.getUserSessionId()+"");
 		BeanUtils.copyProperties(userSessionForm, userSession);
-		userSessionDao.update(userSession);
+		userSessionMybatisDao.update(userSession);
 		json.setSuccess(true);
 		return json;
 	}
 
 	public Json deleteUserSession(String id) {
 		Json json = new Json();
-		UserSession userSession = userSessionDao.findById(id);
+		UserSession userSession = userSessionMybatisDao.queryById(id);
 		if(userSession != null){
-			userSessionDao.delete(userSession);
+			userSessionMybatisDao.delete(userSession);
 		}
 		json.setSuccess(true);
 		return json;
