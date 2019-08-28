@@ -305,7 +305,9 @@ where 1=1
         where pano = #{pano}
           and customerid = #{customerid}
           and sku = #{sku}
-          and userdefine3 = #{userdefine3}
+        <if test="userdefine3 != null and userdefine3 != ''">
+            and userdefine3 = #{userdefine3}
+        </if>
           <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
         order by addtime, edittime desc
     </select>
