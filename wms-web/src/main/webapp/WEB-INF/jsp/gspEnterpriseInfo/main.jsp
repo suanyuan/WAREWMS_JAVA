@@ -170,7 +170,7 @@ var commit = function(){
 
     var url = '';
     var isVal = true;
-
+	var isVal1 =true;
 
     /*if (processType == 'edit') {
         url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
@@ -200,48 +200,72 @@ var commit = function(){
         return;
     }
 
+
+    //第二备案凭证
+    isVal1 = checkFormData("ezuiFormRecord",secondRecord);
+    // if(checkObjIsEmpty(secondRecord) && isVal == false){
+    //     showMsg("第二备案凭证填写不完全！");
+    //     return;
+    // }
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
     //企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_JY || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
-        if(!checkObjIsEmpty(operateobj) || isVal == false){
-            showMsg("经营类型企业需要填写经营许可证！");
+        if((!checkObjIsEmpty(operateobj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(secondRecord))){
+            showMsg("经营或者生产经营类型企业至少需要填写经营许可证或者第二类经营备案凭证其中一个！");
             return;
         }
-    }else{
         if(checkObjIsEmpty(operateobj) && isVal == false){
             showMsg("经营许可证填写不完全！");
             return;
         }
+        if(checkObjIsEmpty(secondRecord) && isVal1 == false){
+            showMsg("第二类经营备案填写不完全！");
+            return;
+        }
+    }else{
+        // if(checkObjIsEmpty(operateobj) && isVal == false){
+        //     showMsg("经营许可证填写不完全！");
+        //     return;
+        // }
+        // if(checkObjIsEmpty(secondRecord) && isVal == false){
+        //     showMsg("第二类经营备案填写不完全！");
+        //     return;
+        // }
     }
 
+
+    //第一备案凭证
+
+    isVal1=true;
+    isVal=true;
+    isVal1 = checkFormData("ezuiFormFirstRecord",firstRecord);
+    // if(checkObjIsEmpty(firstRecord) && isVal == false){
+    //     showMsg("第一备案凭证填写不完全！");
+    //     return;
+    // }
     //判断生产许可证
     isVal = checkFormData("ezuiFormProd",prodObj);
     //生产企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
-        if(!checkObjIsEmpty(prodObj) || isVal == false){
-            showMsg("生产类型企业需要填写生产许可证！");
+        if((!checkObjIsEmpty(prodObj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(firstRecord))){
+            showMsg("生产或者生产经营类型企业至少需要填写经营生产许可证或者第一类生产备案凭证其中一个！");
             return;
         }
-    }else{
         if(checkObjIsEmpty(prodObj) && isVal == false){
             showMsg("生产许可证填写不完全！");
             return;
         }
+        if(checkObjIsEmpty(firstRecord) && isVal1 == false){
+            showMsg("第一类生产备案凭证证填写不完全！");
+            return;
+        }
+    }else{
+
     }
 
-	//第二备案凭证
-    isVal = checkFormData("ezuiFormRecord",secondRecord);
-    if(checkObjIsEmpty(secondRecord) && isVal == false){
-        showMsg("第二备案凭证填写不完全！");
-        return;
-    }
-	//第一备案凭证
-    isVal = checkFormData("ezuiFormFirstRecord",firstRecord);
-    if(checkObjIsEmpty(firstRecord) && isVal == false){
-        showMsg("第一备案凭证填写不完全！");
-        return;
-    }
+
+
 
     //判断医疗机构执业许可证
     isVal = checkFormData("ezuiFormMedical",medicalObj);

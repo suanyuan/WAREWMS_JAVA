@@ -11,6 +11,8 @@
     <form id='ezuiFormMedical' method='post' style="padding: 0px;">
         <input type='hidden' data="1" id='medicalId' name='medicalId' value="${gspMedicalLicense.medicalId}"/>
         <input type='hidden' id='gspEnterpriseId' name='gspEnterpriseId' value="${gspMedicalLicense.enterpriseId}"/>
+        <input type='hidden' id='enterpriseId' value="add"/>
+
         <input type='hidden' id='choseScope' value="${choseScope}"/>
         <input type='hidden' id='opType' value="add"/>
         <fieldset>
@@ -58,7 +60,7 @@
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspMedicalLicense.licenseExpiryDateBegin}"/>" id="licenseExpiryDateBegin" name='licenseExpiryDateBegin' class='easyui-datebox' data-options='required:true,width:300<c:if test="${gspMedicalLicense.isLong == '1'}">,disabled:true</c:if>'/>
                         &nbsp;&nbsp;至&nbsp;&nbsp;
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspMedicalLicense.licenseExpiryDateEnd}"/>" id="licenseExpiryDateEnd" name='licenseExpiryDateEnd' class='easyui-datebox' data-options='required:true,width:300<c:if test="${gspMedicalLicense.isLong == '1'}">,disabled:true</c:if>'/>
-                        <input id="isLong" <c:if test="${gspMedicalLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期/无固定时间</label>
+                        <%--<input id="isLong" <c:if test="${gspMedicalLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期/无固定时间</label>--%>
                     </td>
                 </tr>
             </table>
@@ -94,7 +96,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'','medicalRegisterNo':'${gspMedicalLicense.medicalRegisterNo}'},
+            queryParams:{'enterpriseId':'${gspMedicalLicense.enterpriseId}'},
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -380,7 +382,7 @@
         })
         $("#ezuiFormMedical input[id='recordUrl']").val("");
         $("#ezuiFormMedical input[id='medicalFile']").filebox("setValue","");
-        $("#ezuiDetailsBtn_copy").linkbutton("enable");
+        $("#ezuiFormMedical #ezuiDetailsBtn_copy").linkbutton("enable");
         $("#ezuiFormMedical input[id='isLong']").removeAttr("checked");
         $("#ezuiFormMedical input[id='businessStartDate']").datebox("enable");
         $("#ezuiFormMedical input[id='businessEndDate']").datebox("enable");

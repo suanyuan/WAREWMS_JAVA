@@ -18,7 +18,7 @@
             <table>
                 <tr>
                     <th>企业名称</th>
-                    <td><input type='text' value="${gspSecondRecord.enterpriseName}" id="recordEnterprise" name='enterpriseId' data-options='required:true,width:300' class='easyui-textbox'/></td>
+                    <td><input type='text' value="${gspSecondRecord.enterpriseName}" id="enterpriseName" name='enterpriseName' data-options='required:true,width:300' class='easyui-textbox'/></td>
                     <th>备案编号</th>
                     <td><input type='text' value="${gspSecondRecord.recordNo}" id="recordNo" name='recordNo' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
@@ -131,17 +131,24 @@
             singleSelect:true,
             idField : 'operateId',
             columns : [[
-                {field: 'operateId',title:'主键',hidden:true},
-                {field: 'recordNo',title: '备案编号' ,width: '20%'},
-                {field: 'operateMode',title: '经营方式',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
+                {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
+                {field: 'recordNo',title: '备案号' ,width: '15%'},
+                {field: 'approveDate',title:'备案日期', width: '15%'},
+                {field: '_operate',		title: '备案照片',	width: '20%',
+                    formatter: formatOperAttachmentRecord
+                },
+                {field: 'createId',title: '创建人',width: '10%'},
                 {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
                 },
-                {field: '_operate',		title: '许可证照片',	width: '20%',
-                    formatter: formatOperAttachmentRecord
-                }
+
+                {field: 'operateId',title:'主键',hidden:true},
+                // {field: 'operateMode',title: '经营方式',width: '20%'},
+                //
+                // {field: '_operate',		title: '许可证照片',	width: '20%',
+                //     formatter: formatOperAttachmentRecord
+                // }
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -307,7 +314,7 @@
                     $(this).datebox("setValue","");
                 }
             }
-        })
+        });
         $("#ezuiFormRecord #recordUrl").val("")
         $("#recordFile").filebox("setValue","");
     }

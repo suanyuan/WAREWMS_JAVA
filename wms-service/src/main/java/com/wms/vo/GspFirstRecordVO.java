@@ -3,6 +3,8 @@ package com.wms.vo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class GspFirstRecordVO {
 
 	private String recordId;
@@ -11,17 +13,42 @@ public class GspFirstRecordVO {
 	private String enterpriseId;
 	private String residence;
 	private String headName;
-	private java.sql.Timestamp approveDate;
+	private java.util.Date approveDate;
 	private String registrationAuthority;
 	private String bussinessScope;
 	private String recordUrl;
 	private String createId;
-	private java.sql.Timestamp createDate;
+	private java.util.Date createDate;
 	private String editId;
-	private java.sql.Timestamp editDate;
+	private java.util.Date editDate;
 	private String isUse;
 	private String reservedfield1;
 	private String reservedfield2;
+
+
+	public Date getApproveDate() {
+		return approveDate;
+	}
+
+	public void setApproveDate(Date approveDate) {
+		this.approveDate = approveDate;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getEditDate() {
+		return editDate;
+	}
+
+	public void setEditDate(Date editDate) {
+		this.editDate = editDate;
+	}
 
 	public String getRecordId() {
 		return recordId;
@@ -71,13 +98,7 @@ public class GspFirstRecordVO {
 		this.headName = headName;
 	}
 
-	public java.sql.Timestamp getApproveDate() {
-		return approveDate;
-	}
 
-	public void setApproveDate(java.sql.Timestamp approveDate) {
-		this.approveDate = approveDate;
-	}
 
 	public String getRegistrationAuthority() {
 		return registrationAuthority;
@@ -111,13 +132,6 @@ public class GspFirstRecordVO {
 		this.createId = createId;
 	}
 
-	public java.sql.Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(java.sql.Timestamp createDate) {
-		this.createDate = createDate;
-	}
 
 	public String getEditId() {
 		return editId;
@@ -127,13 +141,6 @@ public class GspFirstRecordVO {
 		this.editId = editId;
 	}
 
-	public java.sql.Timestamp getEditDate() {
-		return editDate;
-	}
-
-	public void setEditDate(java.sql.Timestamp editDate) {
-		this.editDate = editDate;
-	}
 
 	public String getIsUse() {
 		return isUse;
