@@ -6,14 +6,25 @@
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.DocSerialNumRecord" >
 	<result column="id" property="id"/>
+    <result column="customerid" property="customerid"/>
 	<result column="carton_no" property="cartonNo"/>
+    <result column="soreference" property="soreference"/>
 	<result column="order_no" property="orderNo"/>
+    <result column="batch_num" property="batchNum"/>
 	<result column="serial_num" property="serialNum"/>
+    <result column="addtime" property="addtime"/>
+    <result column="addwho" property="addwho"/>
+    <result column="userdefine1" property="userdefine1"/>
+    <result column="userdefine2" property="userdefine2"/>
+    <result column="userdefine3" property="userdefine3"/>
+    <result column="userdefine4" property="userdefine4"/>
+    <result column="userdefine5" property="userdefine5"/>
 </resultMap>
        
 <!-- doc_serial_num_record table all fields -->
 <sql id="Base_Column_List" >
-	 id,carton_no,order_no,serial_num
+	 id,customerid,carton_no,soreference,order_no,batch_num,serial_num,addtime,addwho,
+	 userdefine1,userdefine2,userdefine3,userdefine4,userdefine5
 </sql>
    
    
@@ -24,44 +35,98 @@ where 1=1
 	<if test="condition.id != null and condition.id != ''" >
 	    and id =  #{condition.id}
 	</if>
+    <if test="condition.customerid != null and condition.customerid != ''" >
+        and customerid =  #{condition.customerid}
+    </if>
 	<if test="condition.cartonNo != null and condition.cartonNo != ''" >
 	    and carton_no =  #{condition.cartonNo}
 	</if>
+    <if test="condition.soreference != null and condition.soreference != ''" >
+        and soreference =  #{condition.soreference}
+    </if>
 	<if test="condition.orderNo != null and condition.orderNo != ''" >
 	    and order_no =  #{condition.orderNo}
 	</if>
+    <if test="condition.batchNum != null and condition.batchNum != ''" >
+        and batch_num =  #{condition.batchNum}
+    </if>
 	<if test="condition.serialNum != null and condition.serialNum != ''" >
 	    and serial_num =  #{condition.serialNum}
 	</if>
+    <if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+        and userdefine1 =  #{condition.userdefine1}
+    </if>
+    <if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+        and userdefine2 =  #{condition.userdefine2}
+    </if>
+    <if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+        and userdefine3 =  #{condition.userdefine3}
+    </if>
+    <if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+        and userdefine4 =  #{condition.userdefine4}
+    </if>
+    <if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+        and userdefine5 =  #{condition.userdefine5}
+    </if>
 </trim>
 </sql>
    
 
 <!-- 插入记录 -->
-<insert id="add" parameterType="Object" >
-  insert into doc_serial_num_record(carton_no,order_no,serial_num)
- values(#{cartonNo},#{orderNo},#{serialNum})
+    <insert id="add" parameterType="Object" >
+insert into doc_serial_num_record(id,customerid,carton_no,soreference,order_no,batch_num,serial_num,addtime,addwho,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5)
+values(#{id},#{customerid},#{cartonNo},#{soreference},#{orderNo},#{batchNum},#{serialNum},now(),#{addwho},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update doc_serial_num_record set carton_no=#{cartonNo},order_no=#{orderNo},serial_num=#{serialNum} where id=#{id}
+  update doc_serial_num_record set customerid=#{customerid},carton_no=#{cartonNo},soreference=#{soreference},order_no=#{orderNo},batch_num=#{batchNum},serial_num=#{serialNum},addtime=#{addtime},addwho=#{addwho},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5} where id=#{id}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
-	update doc_serial_num_record set 
-	<trim  suffixOverrides="," >
-	<if test="cartonNo != null  ">
-		carton_no=#{cartonNo},
-	</if>
-	<if test="orderNo != null  ">
-		order_no=#{orderNo},
-	</if>
-	<if test="serialNum != null  ">
-		serial_num=#{serialNum},
-	</if>
-	</trim> where id=#{id}
+    update doc_serial_num_record set
+    <trim  suffixOverrides="," >
+        <if test="customerid != null  ">
+            customerid=#{customerid},
+        </if>
+        <if test="cartonNo != null  ">
+            carton_no=#{cartonNo},
+        </if>
+        <if test="soreference != null  ">
+            soreference=#{soreference},
+        </if>
+        <if test="orderNo != null  ">
+            order_no=#{orderNo},
+        </if>
+        <if test="batchNum != null  ">
+            batch_num=#{batchNum},
+        </if>
+        <if test="serialNum != null  ">
+            serial_num=#{serialNum},
+        </if>
+        <if test="addtime != null  ">
+            addtime=#{addtime},
+        </if>
+        <if test="addwho != null  ">
+            addwho=#{addwho},
+        </if>
+        <if test="userdefine1 != null  ">
+            userdefine1=#{userdefine1},
+        </if>
+        <if test="userdefine2 != null  ">
+            userdefine2=#{userdefine2},
+        </if>
+        <if test="userdefine3 != null  ">
+            userdefine3=#{userdefine3},
+        </if>
+        <if test="userdefine4 != null  ">
+            userdefine4=#{userdefine4},
+        </if>
+        <if test="userdefine5 != null  ">
+            userdefine5=#{userdefine5},
+        </if>
+    </trim> where id=#{id}
 </update>
 
 <!-- 删除记录 -->

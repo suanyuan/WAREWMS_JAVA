@@ -808,6 +808,9 @@ public class DocOrderPackingService extends BaseService {
             return new PdaResult(PdaResult.CODE_FAILURE, "当前提交数超出分配数");
         }
 
+        //批次获取
+        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
+
         try {
 
             //记录序列号出库
@@ -818,7 +821,11 @@ public class DocOrderPackingService extends BaseService {
 
                     if (StringUtil.isNotEmpty(serialNum)) {
 
-                        DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(Integer.valueOf(form.getTraceid().split("#")[1]), form.getOrderno(), serialNum);
+                        OrderHeaderForNormal orderHeader = orderHeaderForNormalMybatisDao.queryById(form.getOrderno());
+                        DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(
+                                form.getCustomerid(), Integer.valueOf(form.getTraceid().split("#")[1]),
+                                orderHeader.getSoreference1(), form.getOrderno(), invLotAtt.getLotatt04(),
+                                form.getSerialNums(), "Gizmo");
                         docSerialNumRecordMybatisDao.add(docSerialNumRecord);
                     }
                 }
@@ -843,9 +850,6 @@ public class DocOrderPackingService extends BaseService {
 
                 actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
             }
-
-            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
-//            invLotAtt.setLotatt11(form.getLotatt11());//2019-08-15 仓储部不需要储存条件编辑功能
 
             DocOrderPackingCartonInfo packingCartonInfo = docOrderPackingMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
             if (packingCartonInfo == null) {

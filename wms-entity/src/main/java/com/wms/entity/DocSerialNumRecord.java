@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -13,11 +14,31 @@ public class DocSerialNumRecord  implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
+	private String customerid;
+
 	private int cartonNo;
+
+	private String soreference;
 
 	private String orderNo;
 
+	private String batchNum;
+
 	private String serialNum;
+
+	private Date addtime;
+
+	private String addwho;
+
+	private String userdefine1;
+
+    private String userdefine2;
+
+    private String userdefine3;
+
+    private String userdefine4;
+
+    private String userdefine5;
 
     public DocSerialNumRecord() {
     }
@@ -27,9 +48,13 @@ public class DocSerialNumRecord  implements Serializable {
         this.serialNum = serialNum;
     }
 
-    public DocSerialNumRecord(int cartonNo, String orderNo, String serialNum) {
+    public DocSerialNumRecord(String customerid, int cartonNo, String soreference, String orderNo, String batchNum, String serialNum, String addwho) {
+        this.customerid = customerid;
         this.cartonNo = cartonNo;
+        this.soreference = soreference;
         this.orderNo = orderNo;
+        this.batchNum = batchNum;
         this.serialNum = serialNum;
+        this.addwho = addwho;
     }
 }
