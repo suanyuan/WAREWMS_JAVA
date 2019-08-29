@@ -148,6 +148,19 @@ $(function() {
 		}
 	}).dialog('close');
 	/* 控件初始化end */
+
+
+
+    $("#skuGroup1").combobox({
+        panelHeight: 'auto',
+        url:'/productLineController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+        onLoadSuccess:function () {
+            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+        }
+    })
+
 });
 
 /* 自动转大写 */
@@ -599,6 +612,12 @@ var downloadTemplate = function(){
 };
 /* 导入end */
 
+
+
+
+
+
+
 </script>
 </head>
 <body>
@@ -752,7 +771,7 @@ var downloadTemplate = function(){
 					<th>注册证号</th>
 					<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
 					<th>产品线</th>
-					<td><input type='text' name='skuGroup1' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='skuGroup1' id='skuGroup1'  data-options='required:true,width:150,editable:false'  readonly/></td>
 
 				</tr>
 
@@ -1056,4 +1075,7 @@ var downloadTemplate = function(){
 <!-- 导入end -->
 	
 </body>
+
+
+
 </html>
