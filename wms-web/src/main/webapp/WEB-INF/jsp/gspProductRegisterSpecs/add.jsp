@@ -24,7 +24,7 @@
             </td>
 
             <th>产品名称</th>
-            <td><input type='text' data="1" id="productNameMain" name='productName' class='easyui-textbox' size='50' data-options='required:false' /></td>
+            <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:true' /></td>
 
         </tr>
 
@@ -311,7 +311,6 @@
             $('#unit').textbox({required:false});
             $('#maintenanceCycle').textbox({required:false});
 
-
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
             $('#productRegisterNo').textbox({required:true});
             $('#productName').textbox({required:true});
@@ -322,7 +321,6 @@
             $('#isCertificate').textbox({required:true});
             $('#unit').textbox({required:true});
             $('#maintenanceCycle').textbox({required:true});
-            $('#productNameMain').textbox({required:true});
         }
 
 
