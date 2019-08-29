@@ -322,6 +322,7 @@
             $('#isCertificate').textbox({required:true});
             $('#unit').textbox({required:true});
             $('#maintenanceCycle').textbox({required:true});
+            $('#productNameMain').textbox({required:true});
         }
 
 
