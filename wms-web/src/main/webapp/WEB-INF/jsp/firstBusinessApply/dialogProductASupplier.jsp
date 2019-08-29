@@ -116,6 +116,9 @@
 	var  newreceivingId;
     var ezuiDialogSpec;
     var dataGridProduct;
+
+    var rows;
+    var rows1;
     $(function () {
 
         //供应商
@@ -230,11 +233,11 @@
 
 		//双击选中供应商
         function choseSupplierSelect() {
-            var row = supplierDatagrid.datagrid("getSelected");
-            console.log(row);
-            if(row){
-                $("#supplierId").val(row.customerid);
-                $("#supplierName").textbox("setValue",row.descrC)
+            rows1 = supplierDatagrid.datagrid("getSelected");
+            console.log(rows1);
+            if(rows1){
+                $("#supplierId").val(rows1.customerid);
+                $("#supplierName").textbox("setValue",rows1.descrC)
                 // $("#productLine").combobox({
                 //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
                 //     valueField:'id',
@@ -274,7 +277,7 @@
             collapsible:false,
             fit:true,
             pagination:true,
-            singleSelect:true,
+            singleSelect:false,
             queryParams:{
                 isUse : '1',
                 type:'CER',
@@ -382,11 +385,24 @@
 
     //双击选中产品
     function choseProductSelect() {
-        var row = dataGridProduct.datagrid("getSelected");
-        console.log(row);
-        if(row){
-            $("#specsId").val(row.specsId);
-            $("#productNameP").textbox("setValue",row.productName);
+        // var row = dataGridProduct.datagrid("getSelected");
+
+
+
+		rows = dataGridProduct.datagrid('getSelections');
+        var arrP = new Array();
+        var arrPId = new Array();
+        for(var i=0;i<rows.length;i++){
+            arrP.push(rows[i].specsId);
+            arrPId.push(rows[i].productName);
+        }
+        arrP.join(",");
+        arrPId.join(",");
+
+        console.log(rows);
+        if(rows){
+            $("#specsId").val(arrP);
+            $("#productNameP").textbox("setValue",arrPId);
             // $("#productLine").combobox({
             //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
             //     valueField:'id',
@@ -401,8 +417,12 @@
 
     //选择
     function doSubmitAddress() {
-        var rows = dataGridProduct.datagrid("getChecked");
-        var rows1 = supplierDatagrid.datagrid("getChecked");
+        // var rows = dataGridProduct.datagrid("getSelections");
+		// rows1
+		// alert(rows)
+
+        // $("#specsId").val();
+        // $("#productNameP").textbox("getValue");
         if(rows){
             for(var i=0;i<rows.length;i++){
                 if(arr.indexOf(rows[i].specsId)==-1){
@@ -435,14 +455,14 @@
 								"productName":rows[i].productName,
 								"specsName":rows[i].specsName,
 								"productModel":rows[i].productModel,
-								"supplierName" :rows1[i].descrC,
+								"supplierName" :rows1.descrC,
 								"productRegisterNo":rows[i].productRegisterNo,
 
 
 							});
 							arr.push(rows[i].specsId);
 							//arr1 = rows1[i].supplierId;
-							arr1.push(rows1[i].customerid);
+							arr1.push(rows1.customerid);
 						// arr1.push(rows1[i].supplierId);
 
                 }

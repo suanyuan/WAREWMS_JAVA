@@ -305,12 +305,15 @@
                 {field: 'productApplyId',title:'主键',hidden:true},
                 {field: 'specsId',title:'主键',hidden:true},
                 {field: 'customerid',title:'主键',hidden:true},
-                {field: 'productCode',title: '产品代码' ,width: '15%'},
-                {field: 'productName',title: '产品名称',width: '20%'},
-                {field: 'specsName',title: '规格名称' ,width: '15%'},
+                {field: 'productCode',title: '产品代码' ,width: '10%'},
+                {field: 'productName',title: '产品名称',width: '10%'},
+                {field: 'specsName',title: '规格名称' ,width: '10%'},
                 {field: 'productModel',title: '产品型号',width: '15%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
                 {field: 'productRegisterNo',title: '注册证编号',width: '20%'},
+                {field: '_operate',		title: '查看产品',	width: '10%',
+                    formatter: formatOper
+                }
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -744,7 +747,7 @@
 
 
     function operateGrid1(id) {
-        processType = 'edit';
+        processType = 'product';
         $('#enterpriseDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -758,6 +761,7 @@
         })
     }
     function formatOper(value,row,index){
+        // $('#enterpriseDialog').dialog('destroy');
         return "<a onclick=\"operateGrid1('"+row.specsId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
     function searchCustomerEnterprise() {
