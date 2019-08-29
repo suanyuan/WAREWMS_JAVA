@@ -230,6 +230,7 @@
             queryParams:{'applyId':<c:choose><c:when test="${firstBusinessApply.applyId == null}">'empty'</c:when><c:otherwise>'${firstBusinessApply.applyId}'</c:otherwise></c:choose>},
             pagination:true,
             rownumbers:true,
+            singleSelect:false,
             idField : 'productApplyId',
             columns : [[
                 {field: 'productApplyId',title:'主键',hidden:true},
@@ -241,6 +242,9 @@
                 {field: 'productModel',title: '产品型号',width: '15%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
                 {field: 'productRegisterNo',title: '注册证编号',width: '20%'},
+                {field: '_operate',		title: '查看产品',	width: '10%',
+                    formatter: formatOper
+                }
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -556,6 +560,19 @@
                 });
             </c:otherwise>
         </c:choose>
+
+
+
+        <%--dialogEnterprise = $('#enterpriseDialog').dialog({--%>
+            <%--modal : true,--%>
+            <%--title : '<spring:message code="common.dialog.title"/>',--%>
+            <%--fit:true,--%>
+            <%--href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd",--%>
+            <%--cache: false,--%>
+            <%--onClose : function() {--%>
+                <%--ezuiFormClear(ezuiForm);--%>
+            <%--}--%>
+        <%--}).dialog('close');--%>
     });
 
 
@@ -586,7 +603,9 @@
 
 
     function operateGrid1(id) {
-        processType = 'edit';
+        processType = 'product';
+        // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
+        // enterpriseDialog.dialog('close');
         $('#enterpriseDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -595,7 +614,7 @@
             height:550,
             cache:false,
             onClose : function() {
-
+                // $('#enterpriseDialog').dialog('destroy');
             }
         })
     }

@@ -212,7 +212,15 @@
         });
 
         //主页编辑
-        var row = ezuiDatagrid.datagrid('getSelected');
+
+
+        if(processType == 'product'){
+            // $('#enterpriseDialog').dialog('destroy');
+            var row = ezuiDatagridDetail.datagrid('getSelected');
+        }else{
+            var row = ezuiDatagrid.datagrid('getSelected');
+
+        }
         //alert(row.specsId);
         // if(row.specsId=="" || row.specsId==null){
         //    id = $("#specsId").val();
@@ -224,7 +232,7 @@
 //         id = row.specsId;
 
         if(row){
-            if(processType == 'edit'){
+            if(processType == 'edit'  || processType == 'product'){
             $.ajax({
 
                 url : 'gspProductRegisterSpecsController.do?getInfo',
