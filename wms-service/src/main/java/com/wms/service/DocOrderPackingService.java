@@ -19,6 +19,8 @@ import com.wms.utils.*;
 import com.wms.vo.DocOrderPackingVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocOrderPackingForm;
+import com.wms.vo.form.pda.ScanResultForm;
+import com.wms.vo.pda.CommonVO;
 import com.wms.vo.pda.PdaDocPackageVO;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
@@ -72,6 +74,9 @@ public class DocOrderPackingService extends BaseService {
 
 	@Autowired
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+
+	@Autowired
+    private CommonService commonService;
 
 
 	public EasyuiDatagrid<DocOrderPackingVO> getPagedDatagrid(EasyuiDatagridPager pager, DocOrderPackingQuery query) {
@@ -637,7 +642,7 @@ public class DocOrderPackingService extends BaseService {
 
     /**
      * 扫码查询复核任务明细
-     * @param query ~
+     * @param query warehouseid, orderno, customerid, GTIN, lotatt02, lotatt04, lotatt05, otherCode
      * @return ~
      */
 	public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {
@@ -649,56 +654,48 @@ public class DocOrderPackingService extends BaseService {
             return map;
         }
 
-        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
-        // 这里处理的有两种情况：
-        //  1.扫描序列号出库
-        //  2.扫描带序列号的条码出库
-        BasSerialNum basSerialNum = null;
-        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
-        StringUtil.isNotEmpty(query.getLotatt05())) {
+        /*
+        111，处理BasSku获取问题
+        并且返回准确的批号、序列号匹配条件
+         */
+        ScanResultForm scanResultForm = new ScanResultForm();
+        //customerid, GTIN, lotatt04, lotatt05, otherCode
+        BeanUtils.copyProperties(query, scanResultForm);
+        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+        if (!commonVO.isSuccess()) {
 
-                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
-                query.setLotatt04(basSerialNum.getBatchNum());
-            }
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, commonVO.getMessage()));
+            return map;
         }
+
+        //SKU获取成功，设置准确的批属
+        BasSku basSku = commonVO.getBasSku();
+        query.setLotatt04(commonVO.getBatchNum());
 
 	    PdaDocPackageVO pdaDocPackageVO = new PdaDocPackageVO();
 
-	    PdaBasSkuQuery basSkuQuery = new PdaBasSkuQuery();
-	    BeanUtils.copyProperties(query, basSkuQuery);
-	    if (basSerialNum != null) basSkuQuery.setLotatt05("");
-        BasSku basSku = basSkuMybatisDao.queryForScan(basSkuQuery);
-        if (basSku == null) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无产品档案"));
+        //产品档案
+        pdaDocPackageVO.setBasSku(basSku);
+
+        /*
+         222,判断获取的复核扫码数据是否齐全
+         */
+        Json scanJson = commonService.judgePackageScanResult(query, commonVO);
+        if (!scanJson.isSuccess()) {
+
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg()));
             return map;
         }
 
         /*
-         * 产品档案
+        333,如果是强生产品线的，需要将序列号记录下来，在复核提交的时候保存起来
          */
-        pdaDocPackageVO.setBasSku(basSku);
-
-
-        /*
-        产品线 为空则默认正常流程
-        不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
-         */
-        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        boolean isSerialManagement = (productLine != null && productLine.getSerialFlag() == 1);
-
-        /*
-        如果是强生产品线的，需要将序列号记录下来，在复核提交的时候保存起来
-         */
-        if (isSerialManagement) {
+        if (commonVO.isSerialManagement()) {
             //如果想BW这种只扫描序列号的如果是扫描的批号，得提醒他们扫错了
             if (StringUtil.isEmpty(query.getOtherCode()) &&
                     StringUtil.isEmpty(query.getLotatt05())) {
-                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品出库需要记录序列号，请扫描带序列号的条码"));
+                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品出库需要记录序列号回传，请扫描带序列号的条码"));
                 return map;
             }
 
@@ -709,29 +706,22 @@ public class DocOrderPackingService extends BaseService {
             mybatisCriteria.setCondition(docSerialNumRecord);
             List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
             if (docSerialNumRecordList.size() > 0) {
-                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此序列号已记录复核"));
+                map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此产品序列号已记录复核"));
                 return map;
             }
 
             pdaDocPackageVO.setSerialNum(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
         }
 
-        ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
-        actAllocationDetailsQuery.setOrderno(query.getOrderno());
-        actAllocationDetailsQuery.setCustomerid(query.getCustomerid());
-        actAllocationDetailsQuery.setSku(basSku.getSku());
-//        actAllocationDetailsQuery.setLotatt02(DateUtil.lotatt02DateFormat(query.getLotatt02()));//效期不参与查询
-        actAllocationDetailsQuery.setLotatt04(query.getLotatt04());
-        if (!isSerialManagement) actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
-        actAllocationDetailsQuery.setPackflag("0");
-        List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryForScan(actAllocationDetailsQuery);
-        if (actAllocationDetailsList == null || actAllocationDetailsList.size() == 0) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品的分配明细"));
-            return map;
-        }
+        //设置准确的序列号（可能传入有，查询时不参与）记录序列号回传的
+        //不在上面和04一起设置是333中有对传入的序列号进行判断
+        query.setLotatt05(commonVO.getSerialNum());
 
+        /*
+        444，分配明细 +出库明细
+         */
         //list里面任一条都是对应的出库单明细都是相同的，所以根据orderno和orderlineno可以拿到分配数量
-        ActAllocationDetails actAllocationDetails = actAllocationDetailsList.get(0);
+        ActAllocationDetails actAllocationDetails = (ActAllocationDetails) scanJson.getObj();
         OrderDetailsForNormalQuery orderDetailQuery = new OrderDetailsForNormalQuery();
         orderDetailQuery.setOrderno(actAllocationDetails.getOrderno());
         orderDetailQuery.setOrderlineno(actAllocationDetails.getOrderlineno());
@@ -741,7 +731,7 @@ public class DocOrderPackingService extends BaseService {
             return map;
         }
 
-        /**
+        /*
          * 分配明细 + 出库明细
          */
         pdaDocPackageVO.setActAllocationDetails(actAllocationDetails);
@@ -782,6 +772,11 @@ public class DocOrderPackingService extends BaseService {
         map.put(Constant.DATA, pdaDocPackageVO);
         return map;
     }
+
+//    暂缓
+//    public PdaResult singlePackageCommit(DocOrderPackingForm form) {
+//
+//    }
 
     /**
      * 复核/包装复核提交

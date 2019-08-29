@@ -793,7 +793,6 @@ var shipment = function(){
 	var operateResult = '';
 	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
 	$.each(checkedItems, function(index, item) {
-		if (item.udfprintflag1 == '1'){
 			if (item.sostatus <= '40' || item.sostatus >= '90') {
 				operateResult = operateResult + "订单编号：" + item.orderno + ",";
 				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
@@ -824,10 +823,6 @@ var shipment = function(){
 					}
 				});
 			};
-		}else{
-			operateResult = operateResult + "订单编号：" + item.orderno + ",";
-			operateResult = operateResult + "处理时错误：订单未导出序列号记录无法发运" + "\n";
-		}
 	});
 	if (operateResult != '') {
 		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
@@ -947,7 +942,7 @@ var commit = function(){
 		url : url,
 		onSubmit : function(){
 		    if($("#ezuiForm #ordertype").combobox("getValue") == "DX" && $("#ezuiForm #soreference2").textbox("getValue") == ""){
-				showMsg("定下订单需要填写定下入库单号");
+				showMsg("定向订单需要填写定向入库单号");
 				return false;
 			}
 			if(ezuiForm.form('validate')){
@@ -1448,10 +1443,10 @@ var detailsCommit = function(){
 	}else{
 		url = '<c:url value="/docOrderDetailsController.do?add"/>';
 	}
-    if($("#ezuiDetailsForm #lotatt04").combobox("getValue") == "" && $("#ezuiDetailsForm #lotatt05").textbox("getValue") == ""){
-        showMsg("序列号和生产批号必须有一个");
-        return;
-	}
+    // if($("#ezuiDetailsForm #lotatt04").textbox("getValue") == "" && $("#ezuiDetailsForm #lotatt05").textbox("getValue") == ""){
+    //     showMsg("序列号和生产批号必须有一个");
+    //     return;
+	// }
 	ezuiDetailsForm.form('submit', {
 		url : url,
 		onSubmit : function(){

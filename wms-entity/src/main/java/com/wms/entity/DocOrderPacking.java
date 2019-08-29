@@ -61,6 +61,8 @@ public class DocOrderPacking implements Serializable {
 
 	private String batchNum;//批号 add by Gizmo 2019-8-16
 
+    private String serialNum;//序列号 add by Gizmo 2019-08-29
+
     private Integer differentQty;//同批号的包装件数和分配件数的相差数 add by Gizmo 2019-8-16
 
 	public DocOrderPacking() {
