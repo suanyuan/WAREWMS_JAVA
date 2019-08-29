@@ -133,7 +133,9 @@
             columns : [[
                 {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
                 {field: 'recordNo',title: '备案号' ,width: '15%'},
-                {field: 'approveDate',title:'备案日期', width: '15%'},
+                {field: 'approveDate',title:'备案日期', width: '15%',formatter:function (value,row,index) {
+                        return dateFormat2(value);
+                    }},
                 {field: '_operate',		title: '备案照片',	width: '20%',
                     formatter: formatOperAttachmentRecord
                 },

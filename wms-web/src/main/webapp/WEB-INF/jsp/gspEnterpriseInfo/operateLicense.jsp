@@ -26,9 +26,20 @@
 
                 </tr>
                 <tr>
+                    <%--<th>经营方式</th>--%>
+                    <%--<td><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:300'/></td>--%>
                     <th>经营方式</th>
-                    <td><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:300'/></td>
-
+                    <td><input type="text" data="1" id="operateMode" value="${gspOperateLicense.operateMode}" name="operateMode"  class='easyui-combobox'  data-options="panelHeight:'auto',
+                                                                                                                                    required:true,
+                                                                                                                                    width:300,
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '批发', value: '批发'},
+																																	{id: '零售', value: '零售'},
+																																	{id: '批零兼营', value: '批零兼营'},
+																																    ]" /></td>
                     <th>法定代表人</th>
                     <td><input type='text' value="${gspOperateLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
@@ -123,8 +134,12 @@
             columns : [[
                 {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
                 {field: 'licenseNo',title: '许可证编号' ,width: '15%'},
-                {field: 'approveDate',title:'发证日期', width: '15%'},
-                {field: 'licenseExpiryDate',title:'有效期限', width: '15%'},
+                {field: 'approveDate',title:'发证日期', width: '15%',formatter:function (value,row,index) {
+                        return dateFormat2(value);
+                    }},
+                {field: 'licenseExpiryDate',title:'有效期限', width: '15%',formatter:function (value,row,index) {
+                        return dateFormat2(value);
+                    }},
                 {field: '_operate',		title: '许可证照片',	width: '10%',
                     formatter: formatOperAttachmentOperate
                 },
