@@ -506,8 +506,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             //解析响应报文
                             ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);*/
 
-                            //删除序列号出库记录
-                            docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
+                            //删除序列号出库记录 edit by Gizmo 2019-08-29 出库不删除序列号记录
+//                            docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                             json.setSuccess(true);
                             json.setMsg("出库处理成功！");
                             json.setObj(orderHeaderForNormal);
@@ -560,8 +560,8 @@ public class OrderHeaderForNormalService extends BaseService {
                     if (shippmentResult.equals("000")) {
                         orderHeaderForNormalQuery.setCurrentTime(new Date());
                         orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                        //删除序列号出库记录
-                        docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
+                        //删除序列号出库记录 edit by Gizmo 2019-08-29 出库不删除序列号记录
+//                        docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                         json.setSuccess(true);
                         json.setMsg("出库处理成功！");
                         json.setObj(orderHeaderForNormal);
