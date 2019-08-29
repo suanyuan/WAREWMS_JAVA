@@ -311,6 +311,7 @@
             $('#unit').textbox({required:false});
             $('#maintenanceCycle').textbox({required:false});
 
+
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
             $('#productRegisterNo').textbox({required:true});
             $('#productName').textbox({required:true});

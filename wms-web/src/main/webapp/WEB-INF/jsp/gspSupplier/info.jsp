@@ -32,7 +32,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             <th>代码</th><td><input type='text' data="1" id='enterpriseNo' size='20' name="enterpriseNo" class='easyui-textbox' data-options='required:true,width:200' readonly/></td>
         </tr>
         <tr><th>简称</th><td><input type='text' data="1" id='shorthandName' size='20' name="shorthandName" class='easyui-textbox' data-options='required:true,width:200' readonly/></td>
-            <th>企业类型</th><td><input type="text" data="1" id="enterpriseType"  name="enterpriseType"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+            <th>企业类型</th><td><input type="text" data="1" id="enterpriseType1"  name="enterpriseType1"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
                                                                                                                                     required:true,
                                                                                                                                     width:200,
 																																	editable:false,
@@ -208,7 +208,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
 
                         $("#ezuiFormInfo input[id='enterpriseIdQuery1'][data='1']").textbox('setValue',result.obj.enterpriseName);
 
-
+                        $("#enterpriseType1").combobox('setValue',result.obj.enterpriseType);
                         $("#empowerPhoto").val(result.obj.empowerPhoto);
                         $("#contractUrlFile1").val('setValue',result.obj.empowerPhoto);
                         $("#contractUrl").val(result.obj.contractUrl);
@@ -318,7 +318,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                     $("#ezuiFormInfo input[id='shorthandName'][data='1']").textbox('setValue',date.obj.shorthandName);
 
                     //$(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
-                    $("#ezuiFormInfo input[id='enterpriseType'][data='1']").combobox('setValue',date.obj.enterpriseType);
+                    $("#ezuiFormInfo input[id='enterpriseType1'][data='1']").combobox('setValue',date.obj.enterpriseType);
 
                 }
             }

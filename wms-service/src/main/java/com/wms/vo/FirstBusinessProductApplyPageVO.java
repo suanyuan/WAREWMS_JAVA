@@ -29,4 +29,5 @@ public class FirstBusinessProductApplyPageVO implements Serializable {
 
     private String supplierName;
     private String customerid;
+    private String productRegisterNo;
 }

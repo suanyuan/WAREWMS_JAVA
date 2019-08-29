@@ -183,6 +183,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApplyPageVO.setSpecsId(result.getSpecsId());
 				firstBusinessProductApplyPageVO.setSupplierName(result.getSupplierName());
 				firstBusinessProductApplyPageVO.setCustomerid(result.getCustomerid());
+				firstBusinessProductApplyPageVO.setProductRegisterNo(result.getProductRegisterNo());
 				voList.add(firstBusinessProductApplyPageVO);
 			}
 		}
