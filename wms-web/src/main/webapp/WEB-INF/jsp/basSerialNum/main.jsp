@@ -42,7 +42,7 @@ $(function() {
 			{field: 'materialNum',		title: '产品代码',	width: 100 },
 			{field: 'expireDate',		title: '效期',	width: 100 },
 			{field: 'productDate',		title: '生产日期',	width: 100 },
-			{field: 'batchFlag',		title: '不知道是啥',	width: 100 },
+			{field: 'batchFlag',		title: 'batchFlag',	width: 100 },
 			{field: 'uom',		title: '单位',	width: 100 },
 			{field: 'purchaseOrder',		title: '销售单号',	width: 100 },
 			{field: 'packageNum',		title: '包装号',	width: 100 },
