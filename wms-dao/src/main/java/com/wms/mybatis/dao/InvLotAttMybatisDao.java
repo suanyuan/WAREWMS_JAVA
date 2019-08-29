@@ -14,6 +14,18 @@ import java.util.List;
 public interface InvLotAttMybatisDao extends BaseDao {
 	
 	InvLotAtt queryForScan(InvLotAttQuery query);
+	/**
+	 *根据LotAtt05查询 质量状态不为dj
+	 * @param query 如上参数
+	 * @return ~
+	 */
+	InvLotAtt queryByLotatts05(InvLotAttQuery query);
+	/**
+	 *根据LotAtt05查询 质量状态不为dj 修改 lotatt13为1
+	 * @param query 如上参数
+	 * @return ~
+	 */
+	int updatelotatt13Bylotatt05Andlotatt10(InvLotAttQuery query);
 
 	void getIdSequence(IdSequence idSequence);
 
