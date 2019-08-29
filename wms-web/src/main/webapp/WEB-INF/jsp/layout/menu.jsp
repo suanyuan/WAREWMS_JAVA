@@ -11,7 +11,7 @@ $(function(){
 </script>
 <div class="easyui-layout" data-options='fit:true'>
 	<div data-options='region:"north",border:false' style="overflow: hidden;">
-		<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-redo"' 	onclick="menu.tree('expandAll');">展開</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-redo"' 	onclick="menu.tree('expandAll');">展开</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-undo"' 	onclick="menu.tree('collapseAll');">收合</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-reload"' onclick="menu.tree('reload');">重整</a>
 		<hr style="border-color: #fff;" />

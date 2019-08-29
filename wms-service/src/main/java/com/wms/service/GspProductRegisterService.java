@@ -132,6 +132,15 @@ public class GspProductRegisterService extends BaseService {
 	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
 		try{
 			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
+
+			if(gspProductRegister == null){
+				return Json.error("查询不到对应的产品注册证信息");
+			}
+
+			if(!StringUtils.isEmpty(gspProductRegister.getCheckerId())){
+				return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+			}
+
 			BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
 			gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
 			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
@@ -210,6 +219,7 @@ public class GspProductRegisterService extends BaseService {
 		}
 
 	}
+
 	/**
 	 * 查询产品注册证规格
 	 * @param pager
@@ -364,6 +374,28 @@ public class GspProductRegisterService extends BaseService {
 	public GspProductRegister queryByproductNameMain(String productNameMain){
 		return  gspProductRegisterMybatisDao.queryByproductNameMain(productNameMain);
 
+	}
+
+	//查询历史证照信息
+	public EasyuiDatagrid<GspProductRegisterVO> showHistoryDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query){
+		EasyuiDatagrid<GspProductRegisterVO> datagrid = new EasyuiDatagrid<GspProductRegisterVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("create_date desc");
+		List<GspProductRegister> gspProductRegisterList = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+		GspProductRegisterVO gspProductRegisterVO = null;
+		List<GspProductRegisterVO> gspProductRegisterVOList = new ArrayList<GspProductRegisterVO>();
+		for (GspProductRegister gspProductRegister : gspProductRegisterList) {
+			gspProductRegisterVO = new GspProductRegisterVO();
+			BeanUtils.copyProperties(gspProductRegister, gspProductRegisterVO);
+			gspProductRegisterVOList.add(gspProductRegisterVO);
+		}
+		int count = gspProductRegisterMybatisDao.queryByCount(mybatisCriteria);
+		datagrid.setTotal(Long.parseLong(count+""));
+		datagrid.setRows(gspProductRegisterVOList);
+		return datagrid;
 	}
 
 }
