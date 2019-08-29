@@ -69,7 +69,7 @@ $(function() {
            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
                     return rowData.operateType;
                 }},*/
-            {field: 'contractUrl',		title: '合同文件 ',	width: 120 },
+            {field: 'contractUrl',		title: '合同文件 ',	width: 80,formatter:showUrlFile},
             {field: 'clientContent',		title: '委托/合同内容',	width: 120 },
             {field: 'clientStartDate',		title: '委托/合同开始时间 ',	width: 130 },
             {field: 'clientEndDate',		title: '委托/合同结束时间 ',	width: 130 },
@@ -78,7 +78,7 @@ $(function() {
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
             {field: 'remark',		title: '备注 ',	width: 200 },
-            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110},
+            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110,formatter:yesOrNoFormatter},
 
 		]],
 		onDblClickCell: function(index,field,value){
