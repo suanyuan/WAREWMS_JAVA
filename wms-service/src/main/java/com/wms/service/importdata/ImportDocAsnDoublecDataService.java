@@ -1,32 +1,28 @@
 package com.wms.service.importdata;
 
-import com.wms.constant.Constant;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.entity.*;
-import com.wms.entity.order.OrderDetailsForNormal;
-import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.mybatis.dao.*;
-import com.wms.query.*;
-import com.wms.service.BasPackageService;
-import com.wms.service.BasSkuService;
+import com.wms.entity.BasSku;
+import com.wms.entity.DocAsnDoublec;
+import com.wms.entity.ImportDoublecData;
+import com.wms.entity.InvLotAtt;
+import com.wms.mybatis.dao.BasSkuMybatisDao;
+import com.wms.mybatis.dao.DocAsnDoublecMybatisDao;
+import com.wms.mybatis.dao.InvLotAttMybatisDao;
+import com.wms.query.InvLotAttQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
-import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
-import com.wms.vo.*;
+import com.wms.vo.DocAsnDoublecVO;
+import com.wms.vo.Json;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,15 +59,13 @@ public class ImportDocAsnDoublecDataService {
             String sheetName = "双证导入";
             //excel的表头与文字对应，获取excel表头
             LinkedHashMap<String, String> map = getLeadInFiledPublicQuestionBank();
-            //获取组合excel表头数组，防止重复用的
-            String[] uniqueFields = new String[]{"序号"};
             //获取需要导入的具体的表
             Class asn = new ImportDoublecData().getClass();
             //excel转化成的list集合
             List<ImportDoublecData> GPRSList = null;
             try {
                 //调用excle共用类，转化成list
-                GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
+                GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map,null);
             } catch (ExcelException e) {
                 e.printStackTrace();
             }
@@ -112,9 +106,15 @@ public class ImportDocAsnDoublecDataService {
                 if (Integer.parseInt(dataArray.getSeq()) <= 0) {
                     throw new Exception();
                 }
+//判断序号是否重复
+                for (DocAsnDoublecVO v : importData) {
+                    if (v.getSeq().equals(dataArray.getSeq())) {
+                        throw new Exception();
+                    }
+                }
                 importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
             } catch (Exception e) {
-                rowResult.append("[序号]，资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
+                rowResult.append("[序号],资料格式转换失败,请输入大于0的正整数数字格式").append(" ");
             }
 
 
@@ -138,7 +138,7 @@ public class ImportDocAsnDoublecDataService {
 
                 importDataVO.setDoublecno(dataArray.getDoublecno());
             } catch (Exception e) {
-                rowResult.append("[任务号]，未输入或者任务号重复").append(" ");
+                rowResult.append("[任务号],未输入或者任务号重复").append(" ");
             }
 
 //产品型号
@@ -150,7 +150,7 @@ public class ImportDocAsnDoublecDataService {
                 }
                 importDataVO.setContext1(dataArray.getContext1());
             } catch (Exception e) {
-                rowResult.append("[产品型号]，未输入").append(" ");
+                rowResult.append("[产品型号],未输入").append(" ");
             }
 //名称
             try {
@@ -159,7 +159,7 @@ public class ImportDocAsnDoublecDataService {
                 }
                 importDataVO.setContext2(dataArray.getContext2());
             } catch (Exception e) {
-                rowResult.append("[名称]，未输入").append(" ");
+                rowResult.append("[名称],未输入").append(" ");
             }
 //执行标准
             try {
@@ -168,7 +168,7 @@ public class ImportDocAsnDoublecDataService {
                 }
                 importDataVO.setContext3(dataArray.getContext3());
             } catch (Exception e) {
-                rowResult.append("[执行标准]，未输入").append(" ");
+                rowResult.append("[执行标准],未输入").append(" ");
             }
 //备注
             try {
@@ -182,7 +182,7 @@ public class ImportDocAsnDoublecDataService {
             }
 
 
-// 匹配双证
+// 匹配双证 前面没有错误才匹配双证
             if(rowResult.length() <= 0) {
                 Json json = new Json();
                 try {
@@ -201,7 +201,7 @@ public class ImportDocAsnDoublecDataService {
                     rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
                 }
                 System.out.println();
-                resultMsg.append("序号：").append(dataArray.getSeq()).append("资料有错 ").append(rowResult).append(" ");
+                resultMsg.append("序号:").append(dataArray.getSeq()).append("资料有错 ").append(rowResult).append(" ");
                 rowResult.setLength(0);
             } else {
                 importData.add(importDataVO);
@@ -258,7 +258,7 @@ public class ImportDocAsnDoublecDataService {
      */
     public Json reqDouble(DocAsnDoublecVO docAsnDoublecVO) {
         Json json = new Json();
-
+//先根据序列号查出InvLotAtt
             InvLotAttQuery query = new InvLotAttQuery();
             query.setLotatt05(docAsnDoublecVO.getContext2());
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryByLotatts05(query);
@@ -266,6 +266,7 @@ public class ImportDocAsnDoublecDataService {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("customerid", invLotAtt.getCustomerid());
                 map.put("sku", invLotAtt.getSku());
+//再根据customerid和sku查出BasSku
                 BasSku basSku = basSkuMybatisDao.queryById(map);
                 if (basSku != null) {
                     if (basSku.getSkuGroup7().equals("1")) {
