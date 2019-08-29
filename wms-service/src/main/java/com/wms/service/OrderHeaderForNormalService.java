@@ -894,8 +894,11 @@ public class OrderHeaderForNormalService extends BaseService {
                             totalQty += detailsList.get(row * i + j).getQtyallocatedEach();
                         }
                     }
-
-                    form.setField("notes", orderHeaderForNormal.getNotes()+"    "+note);
+                    if(orderHeaderForNormal.getNotes() == null){
+                        form.setField("notes",note);
+                    }else{
+                        form.setField("notes", orderHeaderForNormal.getNotes() +"    "+note);
+                    }
 
                     form.setField("sumqtyPage","件数合计："+totalQtyE);
                     form.setField("sumqty","数量合计："+totalQty);

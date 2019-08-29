@@ -18,11 +18,17 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/swCss.css"/>"/>
 <script>
 	function showUrl(url,fileName) {
-	    if(!fileName){
-	        fileName = "";
+		if(!fileName){
+			fileName="";
 		}
-		window.open(sy.bp()+"/fileUpload/"+url);
+		var newwin=window.open(sy.bp()+"/fileUpload/"+url);
+		newwin.document.title=fileName;
     }
+    //客户档案显示文件链接
+	function showUrlFile(value,row,index){
+		  var supContractNo=row.supContractNo;
+		return "<a onclick=\"showUrl('"+value+"','"+supContractNo+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+	}
 
     var firstStateFormatter = function(value,row,index) {
         if(value == "00"){
