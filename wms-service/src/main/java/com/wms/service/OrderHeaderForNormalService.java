@@ -422,6 +422,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             return json;
                         }
                     }
+                    //删除序列号记录 add by Gizmo 2019-08-29
+                    docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
                     return Json.success("取消拣货成功");
                 } else {
                     return Json.success("取消拣货失败");
