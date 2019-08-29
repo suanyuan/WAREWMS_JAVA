@@ -315,7 +315,7 @@ where 1=1
     <select id="queryUndoneNum4BatchNum" parameterType="java.util.Map" resultType="integer">
         select count(*) from doc_pa_details pd
         left join doc_qc_header qh on qh.pano = pd.pano
-        where qh.pano = #{pano} and pd.userdefine3 = #{batchNum}
+        where qh.qcno = #{qcno} and pd.userdefine3 = #{batchNum} and <![CDATA[pd.linestatus < 40]]>
     </select>
   	
 </mapper>   

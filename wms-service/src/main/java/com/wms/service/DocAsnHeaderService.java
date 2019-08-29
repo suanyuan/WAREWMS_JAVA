@@ -63,6 +63,8 @@ public class DocAsnHeaderService extends BaseService {
     private InvLotAttService invLotAttService;
     @Autowired
     private BasGtnLotattService basGtnLotattService;
+    @Autowired
+    private DocAsnDetailService docAsnDetailService;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -137,6 +139,24 @@ public class DocAsnHeaderService extends BaseService {
 		BeanUtils.copyProperties(docAsnHeaderForm, docAsnHeader);
 		docAsnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnHeaderMybatisDao.update(docAsnHeader);
+
+		//如果是定向 || 引用订单，修改了单据类型之后需要修改明细中的库位数据
+        //add by Gizmo 2019-08-30
+		if (docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
+        docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
+
+		    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		    DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+		    docAsnDetailQuery.setAsnno(docAsnHeader.getAsnno());
+		    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+		    List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+		    for (DocAsnDetail docAsnDetail : docAsnDetailList) {
+
+		        docAsnDetail = docAsnDetailService.configDxLocation(docAsnDetail);
+		        docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		        docAsnDetailsMybatisDao.update(docAsnDetail);
+            }
+        }
 		json.setSuccess(true);
 		json.setMsg("提交成功");
 		return json;
