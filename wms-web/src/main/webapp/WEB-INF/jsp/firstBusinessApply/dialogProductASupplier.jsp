@@ -78,19 +78,25 @@
 					<th>产品代码</th>
 					<td><input type='text' id='productCode1' class='easyui-textbox'    data-options='width:200'/></td>
 					<th>产品名称</th>
-					<td><input type='text' id='productName1' class='easyui-textbox'   data-options='width:200'/></td>
-					<th>注册证号</th>
-					<td><input type='text' id='registerNo' class='easyui-textbox'   data-options='width:200'/></td>
+					<td><input type='text' id='productName1' class='easyui-textbox'   data-options='width:200'/>
+						<a onclick='searchProduct1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+						<a onclick='choseProductSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+					</td>
+
+
+
 					<%--<td>--%>
 						<%--<a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
 						<%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
 					<%--</td>--%>
 				</tr>
 				<tr>
-					<td colspan="6">
-						<a onclick='searchProduct1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-						<a onclick='choseProductSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-					</td>
+					<th>规格</th>
+					<td><input type='text' id='specsName' class='easyui-textbox'  data-options='width:200'/></td>
+
+					<th>注册证号</th>
+					<td><input type='text' id='registerNo' class='easyui-textbox'   data-options='width:200'/></td>
+
 				</tr>
 			</table>
 		</fieldset>
@@ -281,7 +287,7 @@
                 {field: 'specsId',title: '主键' ,hidden:true},
                 {field: 'productCode',title: '产品代码' ,width: '15%'},
                 {field: 'productName',title: '产品名称',width: '40%'},
-                {field: 'specsName',title: '规格名称' ,width: '10%'},
+                {field: 'specsName',title: '规格' ,width: '10%'},
                 {field: 'productRegisterNo',title: '产品注册证',width: '20%'},
                 {field: '_operate',		title: '操作',	width: '10%',
                     formatter: formatOper
@@ -367,6 +373,8 @@
             "productCode":$("#ezuiDialogSpec #productCode1").val(),
             "productName":$("#ezuiDialogSpec #productName1").val(),
             "productRegisterNo":$("#ezuiDialogSpec #registerNo").val(),
+            "specsName":$("#ezuiDialogSpec #specsName").val(),
+
             "isUse":"1",
             // "supplierId" : $('#supplierId').val(),
             "type":"CER"
