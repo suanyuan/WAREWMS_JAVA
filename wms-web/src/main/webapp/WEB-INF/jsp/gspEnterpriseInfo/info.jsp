@@ -7,35 +7,35 @@
         </tr>
         <tr>
             <th>企业代码</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox'  data-options='required:true,width:200'/></td>
             <%--<td><input onkeyup="value=value.replace(/[\d]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))" type='text' data="1" value="${gspEnterpriseInfo.enterpriseNo}" id="enterpriseNo" name='enterpriseNo' class='easyui-textbox' size='50' data-options='required:true'><td>--%>
             <%--<td><input id="enterpriseNo" class="easyui-validatebox" data-options="required:true,validType:'account[5,20]'" /></td>--%>
         </tr>
         <tr>
             <th>简称</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.shorthandName}" id="shorthandName" name='shorthandName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.shorthandName}" id="shorthandName" name='shorthandName' class='easyui-textbox'  data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>企业名称</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox'  data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>企业类型</th>
             <td>
-                <input type='text' data="1" value="" id="enterpriseType" name='enterpriseType' class='easyui-combobox' size='50'   data-options='required:true,editable:false'  />
+                <input type='text' data="1" value="" id="enterpriseType" name='enterpriseType' class='easyui-combobox'    data-options='required:true,editable:false,width:200'  />
             </td>
         </tr>
         <tr>
             <th>联系人</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox'  data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>联系电话</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox" size='50' data-options='required:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox"   data-options='required:true,width:200'/></td>
         </tr>
         <tr>
             <th>备注</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox' size='50' style="height: 100px;" data-options='multiline:true'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.remark}" id="remark" name='remark' class='easyui-textbox'   style="height: 100px;" data-options='multiline:true,width:200'/></td>
         </tr>
     </table>
 </form>
@@ -97,7 +97,7 @@
             textField:'value',
             required:true,
             onLoadSuccess:function(){
-                $("#enterpriseType").combobox("select",enterpriseType);
+                $("#ezuiFormInfo #enterpriseType").combobox("select",enterpriseType);
             },onChange:function (newValue,oldValue) {
                 if(newValue == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || newValue == CODE_ENT_TYP.CODE_ENT_TYP_JY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_SCJY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_GW){
                     $("#ezuiFormInfo input[id='contacts']").textbox({"required":false});

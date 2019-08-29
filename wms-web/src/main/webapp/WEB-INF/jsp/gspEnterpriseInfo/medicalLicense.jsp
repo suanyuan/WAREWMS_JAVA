@@ -56,9 +56,11 @@
                 </tr>
                 <tr>
                     <th>有效期限</th>
-                    <td colspan="3">
+                    <td>
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspMedicalLicense.licenseExpiryDateBegin}"/>" id="licenseExpiryDateBegin" name='licenseExpiryDateBegin' class='easyui-datebox' data-options='required:true,width:300<c:if test="${gspMedicalLicense.isLong == '1'}">,disabled:true</c:if>'/>
-                        &nbsp;&nbsp;至&nbsp;&nbsp;
+                    </td>
+                    <th>至</th>
+                    <td>
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspMedicalLicense.licenseExpiryDateEnd}"/>" id="licenseExpiryDateEnd" name='licenseExpiryDateEnd' class='easyui-datebox' data-options='required:true,width:300<c:if test="${gspMedicalLicense.isLong == '1'}">,disabled:true</c:if>'/>
                         <%--<input id="isLong" <c:if test="${gspMedicalLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期/无固定时间</label>--%>
                     </td>
