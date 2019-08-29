@@ -312,10 +312,10 @@
             $('#maintenanceCycle').textbox({required:false});
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
-            $('#productRegisterNo').textbox({required:true});
-            $('#productName').textbox({required:true});
-            $('#productModel').textbox({required:true});
-            $('#packingUnit').textbox({required:true});
+            $('#ezuiFormInfo #productRegisterNo').textbox({required:true});
+            $('#ezuiFormInfo #productName').textbox({required:true});
+            $('#ezuiFormInfo #productModel').textbox({required:true});
+            $('#ezuiFormInfo #packingUnit').textbox({required:true});
             $('#storageCondition').textbox({required:true});
             $('#isDoublec').textbox({required:true});
             $('#isCertificate').textbox({required:true});
