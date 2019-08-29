@@ -132,6 +132,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 //		gspProductRegisterSpecs.getProductCode();
 		System.out.println(gspProductRegisterSpecs.getIsCertificate()+"==================gspProductRegisterSpecs.getIsCertificate()="+gspProductRegisterSpecs.getIsDoublec());
 //		gspProductRegisterSpecs.setEditDate(new Date());
+		gspProductRegisterSpecs.setProductName(gspProductRegisterSpecs.getProductNameMain());
 		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		json.setMsg("资料添加成功");
@@ -144,6 +145,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsDao.findById(gspProductRegisterSpecsForm.getSpecsId());
 		//BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
+		gspProductRegisterSpecs.setProductName(gspProductRegisterSpecs.getProductNameMain());
 		gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		return json;
@@ -221,14 +223,16 @@ public class GspProductRegisterSpecsService extends BaseService {
 //				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getRecordNo());
 //			}
 		}
+		if(gspProductRegisterSpecs == null){
+			return Json.error("企业信息不存在！");
+		}
+		gspProductRegisterSpecs.setProductNameMain(gspProductRegisterSpecs.getProductName());
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = new GspProductRegisterSpecsVO();
 		BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
 
 		gspProductRegisterSpecsVO.setCreateDate(simpleDateFormat.format(gspProductRegisterSpecs.getCreateDate()));
 		gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(new Date()));
-		if(gspProductRegisterSpecsVO == null){
-			return Json.error("企业信息不存在！");
-		}
+
 		return Json.success("",gspProductRegisterSpecsVO);
 	}
 	public Json getInfoByProductCode(String productCode){

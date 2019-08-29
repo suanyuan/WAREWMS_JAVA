@@ -289,9 +289,7 @@
                 {field: 'productName',title: '产品名称',width: '40%'},
                 {field: 'specsName',title: '规格' ,width: '10%'},
                 {field: 'productRegisterNo',title: '产品注册证',width: '20%'},
-                {field: '_operate',		title: '操作',	width: '10%',
-                    formatter: formatOper
-                }
+
             ]],
             onDblClickCell: function(index,field,value){
                 choseProductSelect();
@@ -408,29 +406,45 @@
         if(rows){
             for(var i=0;i<rows.length;i++){
                 if(arr.indexOf(rows[i].specsId)==-1){
-                    ezuiDatagridDetail.datagrid("appendRow",{
-                        "productApplyId":"",
-                        "applyId":"",
-                        "specsId":rows[i].specsId,
-                        "isCheck":"",
-                        "isOperate":"",
-                        "isCold":"",
-                        "createId":"",
-                        "createDate":"",
-                        "editId":"",
-                        "editDate":"",
-                        "isUse":"",
-                        "productCode":rows[i].productCode,
-                        "productName":rows[i].productName,
-                        "specsName":rows[i].specsName,
-                        "productModel":rows[i].productModel,
-						"supplierName" :rows1[i].descrC
+                    // $.ajax({
+                    //     url : sy.bp()+"/gspProductRegisterSpecsController.do?getInfo",
+                    //     data : {
+                    //         "specsId":rows[i].specsId,
+                    //     },
+                    //     type : 'POST',
+                    //     dataType : 'JSON',
+                    //     async  :true,
+                    //     success : function(result){
+                    //     }
+                    // });
+                    //         console.log(result.obj.productRegisterNo)
 
-                    });
-                    arr.push(rows[i].specsId);
-                    //arr1 = rows1[i].supplierId;
-                    arr1.push(rows1[i].customerid);
-                    // arr1.push(rows1[i].supplierId);
+							ezuiDatagridDetail.datagrid("appendRow",{
+								"productApplyId":"",
+								"applyId":"",
+								"specsId":rows[i].specsId,
+								"isCheck":"",
+								"isOperate":"",
+								"isCold":"",
+								"createId":"",
+								"createDate":"",
+								"editId":"",
+								"editDate":"",
+								"isUse":"",
+								"productCode":rows[i].productCode,
+								"productName":rows[i].productName,
+								"specsName":rows[i].specsName,
+								"productModel":rows[i].productModel,
+								"supplierName" :rows1[i].descrC,
+								"productRegisterNo":rows[i].productRegisterNo,
+
+
+							});
+							arr.push(rows[i].specsId);
+							//arr1 = rows1[i].supplierId;
+							arr1.push(rows1[i].customerid);
+						// arr1.push(rows1[i].supplierId);
+
                 }
 
             }

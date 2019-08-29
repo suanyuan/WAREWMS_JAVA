@@ -942,7 +942,7 @@ var commit = function(){
 		url : url,
 		onSubmit : function(){
 		    if($("#ezuiForm #ordertype").combobox("getValue") == "DX" && $("#ezuiForm #soreference2").textbox("getValue") == ""){
-				showMsg("定下订单需要填写定下入库单号");
+				showMsg("定向订单需要填写定向入库单号");
 				return false;
 			}
 			if(ezuiForm.form('validate')){
@@ -1443,10 +1443,10 @@ var detailsCommit = function(){
 	}else{
 		url = '<c:url value="/docOrderDetailsController.do?add"/>';
 	}
-    if($("#ezuiDetailsForm #lotatt04").combobox("getValue") == "" && $("#ezuiDetailsForm #lotatt05").textbox("getValue") == ""){
-        showMsg("序列号和生产批号必须有一个");
-        return;
-	}
+    // if($("#ezuiDetailsForm #lotatt04").textbox("getValue") == "" && $("#ezuiDetailsForm #lotatt05").textbox("getValue") == ""){
+    //     showMsg("序列号和生产批号必须有一个");
+    //     return;
+	// }
 	ezuiDetailsForm.form('submit', {
 		url : url,
 		onSubmit : function(){
