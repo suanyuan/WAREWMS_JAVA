@@ -237,7 +237,7 @@
                 {field: 'customerid',title:'主键',hidden:true},
                 {field: 'productCode',title: '产品代码' ,width: '20%'},
                 {field: 'productName',title: '产品名称',width: '20%'},
-                {field: 'specsName',title: '规格名称' ,width: '20%'},
+                {field: 'specsName',title: '规格' ,width: '20%'},
                 {field: 'productModel',title: '产品型号',width: '20%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
             ]],
