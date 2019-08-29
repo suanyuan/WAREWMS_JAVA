@@ -793,7 +793,6 @@ var shipment = function(){
 	var operateResult = '';
 	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
 	$.each(checkedItems, function(index, item) {
-		if (item.udfprintflag1 == '1'){
 			if (item.sostatus <= '40' || item.sostatus >= '90') {
 				operateResult = operateResult + "订单编号：" + item.orderno + ",";
 				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
@@ -824,10 +823,6 @@ var shipment = function(){
 					}
 				});
 			};
-		}else{
-			operateResult = operateResult + "订单编号：" + item.orderno + ",";
-			operateResult = operateResult + "处理时错误：订单未导出序列号记录无法发运" + "\n";
-		}
 	});
 	if (operateResult != '') {
 		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
