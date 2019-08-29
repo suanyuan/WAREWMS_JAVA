@@ -204,6 +204,7 @@
 <script>
     var enterpriseDialog;
     var id;
+    var row
     $(function(){
         $('#medicalDeviceMark').combobox({
             onChange: function(){
@@ -212,31 +213,38 @@
         });
 
         //主页编辑
-
-
-        if(processType == 'product'){
-            // $('#enterpriseDialog').dialog('destroy');
-            var row = ezuiDatagridDetail.datagrid('getSelected');
-        }else{
-            var row = ezuiDatagrid.datagrid('getSelected');
-
-        }
-        //alert(row.specsId);
-        // if(row.specsId=="" || row.specsId==null){
-        //    id = $("#specsId").val();
-        // }else{
-        //     id = row.specsId;
+        // debugger
+        //
+        // if(processType == 'product'){
+        //     // $('#enterpriseDialog').dialog('destroy');
+        //     var row = ezuiDatagridDetail.datagrid('getSelected');
         // }
-//alert()
-//             processType == 'edit';
-//         id = row.specsId;
+        //alert(row.specsId);
+        // if(row!=null ){
+        //
+        // }
+        if(processType == 'product'){
+            id = $("#specsId").val();
+        }else if(processType == 'edit'){
+            row = ezuiDatagrid.datagrid('getSelected');
+            id = row.specsId;
+        }
 
-        if(row){
-            if(processType == 'edit'  || processType == 'product'){
+
+        // if(row==null && id==""){
+        //
+        // }else if(row!=null){
+        //
+        // }
+
+
+
+
+        if( id!="" || row !=null){
+            if(processType == 'edit' || processType == 'product' ){
             $.ajax({
-
                 url : 'gspProductRegisterSpecsController.do?getInfo',
-                data : {"specsId" : row.specsId},
+                data : {"specsId" : id},
                 type : 'POST',
                 dataType : 'JSON',
                 success : function(result){
