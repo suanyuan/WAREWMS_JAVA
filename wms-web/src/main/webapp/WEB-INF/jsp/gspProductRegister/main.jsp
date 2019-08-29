@@ -47,8 +47,12 @@ $(function() {
             {field: 'classifyId',		title: '管理分类',	width: 60 },
             //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
 			{field: 'productNameMain',		title: '产品名称',	width: 170 },
-			{field: 'approveDate',		title: '批准日期',	width: 150 },
-			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 },
+			{field: 'approveDate',		title: '批准日期',	width: 150,formatter:function (value,row,index) {
+                    return dateFormat2(value);
+                } },
+			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 ,formatter:function (value,row,index) {
+                    return dateFormat2(value);
+                }},
 			{field: 'productRegisterVersion',		title: '注册证版本',	width: 100 },
 			{field: 'checkerId',		title: '审核人',	width: 100 },
 			{field: 'checkDate',		title: '审核时间',	width: 150 },

@@ -74,6 +74,8 @@
 	<result column="client_start_date" property="clientStartDate"/>
 	<result column="client_end_date" property="clientEndDate"/>
 	<result column="client_term" property="clientTerm"/>
+<!--是否贴中文标签-->
+	<result column="isChineseLabel" property="isChineseLabel"/>
 
 
 </resultMap>
@@ -162,6 +164,7 @@
 	enterprise_id,
 	receiving_address_id,
 	zip
+	isChineseLabel
 </sql>
    
    

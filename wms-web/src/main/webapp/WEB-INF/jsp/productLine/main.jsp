@@ -44,7 +44,7 @@ $(function() {
 			{field: 'descrC',		title: '货主',	width: 88 },
 			//{field: 'name',		title: '货主',	width: 88,hidden:true },
 			{field: 'expression',		title: '说明',	width: 88 },
-			{field: 'serialFlag',		title: '记录序列号',	width: 88 ,formatter:function(value,rowData,rowIndex){
+			{field: 'serialFlag',		title: '记录序列号回传',	width: 88 ,formatter:function(value,rowData,rowIndex){
 		       return rowData.serialFlag == '1' ? '是' : '否';
 	           }},
 			{field: 'createId',		title: '创建人',	width: 88 },

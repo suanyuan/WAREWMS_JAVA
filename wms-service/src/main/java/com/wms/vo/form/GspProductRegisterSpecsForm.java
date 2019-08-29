@@ -12,6 +12,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String specsName;
 	private java.lang.String productCode;
 	private java.lang.String productName;
+	private String productNameMain;
 	private java.lang.String productRemark;
 	private java.lang.String productModel;
 	private java.lang.String productionAddress;
@@ -51,6 +52,14 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	public String getProductNameMain() {
+		return productNameMain;
+	}
+
+	public void setProductNameMain(String productNameMain) {
+		this.productNameMain = productNameMain;
+	}
 
 	public String getLicenseOrRecordNo() {
 		return licenseOrRecordNo;

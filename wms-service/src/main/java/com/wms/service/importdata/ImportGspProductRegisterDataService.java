@@ -37,23 +37,7 @@ import java.util.List;
 public class ImportGspProductRegisterDataService {
 
 	@Autowired
-	private BasSkuMybatisDao basSkuMybatisDao;
-	@Autowired
-	private BasCustomerMybatisDao basCustomerMybatisDao;
-	@Autowired
-	private BasLocationMybatisDao basLocationMybatisDao;
-	@Autowired
-	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
-	@Autowired
-	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
-	@Autowired
 	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
-	@Autowired
-	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
-	@Autowired
-	private DocAsnDoublecMybatisDao docAsnDoublecMybatisDao;
-	@Autowired
-	private BasPackageService basPackageService;
 	@Autowired
 	private BasCodesService basCodesService;
 	@Autowired
@@ -105,21 +89,12 @@ public class ImportGspProductRegisterDataService {
 			}else {
 				List<GspProductRegisterVO> importDataList = this.listToBean(GPRSList, resultMsg);
 				if (true) {
-//				this.validateCustomer(importDataList, resultMsg);// 验证客户是否存在
-//				if (resultMsg.length() == 0) {
-//					this.validateCustomerPermission(importDataList, resultMsg);// 验证客户权限是否存在
-//					if (resultMsg.length() == 0) {
-//						this.validateSku(importDataList, resultMsg);// 验证商品是否存在
-//						if (resultMsg.length() == 0) {
-//							this.validateLocation(importDataList, resultMsg);// 验证库位是否存在
 					if (true) {
 						System.out.println("=============");
 						this.saveProductRegister(importDataList, resultMsg);// 转成订单资料存入资料库
 						isSuccess = true;
 					}
-//						}
-//					}
-//				}
+
 				}
 			}
         } catch (IOException e1) {
@@ -139,21 +114,11 @@ public class ImportGspProductRegisterDataService {
 
 
 
-//	private List<GspProductRegisterSpecsVO> listToBean(List<ImportGPRData> GPRSList, StringBuilder resultMsg) {
-//		List<GspProductRegisterSpecsVO> importData =  new ArrayList<GspProductRegisterSpecsVO>();
-//
-//
-//		return importData;
-//	}
+
 	private List<GspProductRegisterVO> listToBean(List<ImportGPRData> GPRSList, StringBuilder resultMsg) {
 		StringBuilder rowResult = new StringBuilder();
 		List<GspProductRegisterVO> importData = new ArrayList<GspProductRegisterVO>();
 		GspProductRegisterVO importDataVO =  null;
-//		List<DocAsnDetailVO> importDetailsDataVOList = new ArrayList<DocAsnDetailVO>();
-//		DocAsnDetailVO importDetailsDataVO = null;
-		String quantityData = null;
-		Integer count = 1;
-		String customerid = "", asnreference1 = "", asnreference2 = "", expectedarrivetime1 = "";
        //定义时间格式转换
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
@@ -220,7 +185,7 @@ public class ImportGspProductRegisterDataService {
 			}
 
 			GspInstrumentCatalog  gspInstrumentCatalog = new GspInstrumentCatalog();
-			//验证是否是存在的器械目录
+//验证是否是存在的器械目录
 			try {
 				GspInstrumentCatalog gspInstrumentCatalog1 = new GspInstrumentCatalog();
 				gspInstrumentCatalog1.setClassifyId(dataArray.getClassifyId());			   //分类
@@ -236,7 +201,7 @@ public class ImportGspProductRegisterDataService {
 				rowResult.append("[管理分类,注册证版本,分类目录]，匹配器械目录错误").append(" ");
 			}
 
-			//管理分类
+//管理分类
 			try {
 				if(dataArray.getClassifyId()!=null){
 					boolean con=false;
@@ -282,13 +247,13 @@ public class ImportGspProductRegisterDataService {
 //分类目录
 			try{
 				if(dataArray.getClassifyCatalog()==null||dataArray.getClassifyCatalog().equals("")||dataArray.getClassifyCatalog().equals("/xxxxxx")){
-//						throw new Exception();
+					throw new Exception();
 				}else{
 					importDataVO.setClassifyCatalog(dataArray.getClassifyCatalog());
 				}
 
 			}catch (Exception e){
-//      			rowResult.append("[分类目录]，未输入").append(" ");
+        			rowResult.append("[分类目录]，未输入").append(" ");
 
 
 			}
@@ -321,13 +286,13 @@ public class ImportGspProductRegisterDataService {
 //运输条件
 			try{
 				if(dataArray.getTransportConditionMain()==null||dataArray.getTransportConditionMain().equals("")||dataArray.getTransportConditionMain().equals("/xxxxxx")){
-					throw new Exception();
+//					throw new Exception();
 				}else{
 					importDataVO.setTransportConditionMain(dataArray.getTransportConditionMain());
 				}
 
 			}catch (Exception e){
-				rowResult.append("[运输条件]，未输入").append(" ");
+//				rowResult.append("[运输条件]，未输入").append(" ");
 
 
 			}
@@ -545,8 +510,6 @@ public class ImportGspProductRegisterDataService {
 
 
 
-			//importDataList.add(importDataVO);
-			//importDataVO.setGspProductRegisterSpecsVOList(importDataList);
 			if (rowResult.length() > 0) {
 				if(rowResult.lastIndexOf("，") > -1){
 					rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
@@ -560,11 +523,7 @@ public class ImportGspProductRegisterDataService {
 
 				importData.add(importDataVO);
 			}
-			//importData.add(importDataVO);
-//			for (GspProductRegisterSpecsVO aa : importData) {
-//				//System.out.println(aa.getSeq());
-//				//System.out.println(aa.getCustomerid());
-//			}
+
 
 		}
 		return importData;
@@ -603,90 +562,16 @@ public class ImportGspProductRegisterDataService {
 	    return map;
 	}
 	
-	/*private void validateSku(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
-		BasSku sku = null;
-		BasSkuQuery skuQuery = new BasSkuQuery();
-		for (DocAsnHeaderVO importDataVO : importDataList) {
-			for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
-				skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());
-				skuQuery.setSku(importDetailsDataVO.getSku());
-				sku = basSkuMybatisDao.queryById(skuQuery);
-				if(sku == null){
-					resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
-							 .append("，客户代码：").append(importDataVO.getCustomerid())
-							 .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，查无资料").append(" ");
-				}
-			}
-		}
-	}*/
-	
-	/*private void validateLocation(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
-		BasLocation loc = null;
-		BasLocationQuery locQuery = new BasLocationQuery();
-		for (DocAsnHeaderVO importDataVO : importDataList) {
-			for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
-				if (StringUtils.isNotEmpty(importDetailsDataVO.getReceivinglocation())){
-					locQuery.setLocationid(importDetailsDataVO.getReceivinglocation());
-					loc = basLocationMybatisDao.queryById(locQuery);
-					if(loc == null){
-						resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
-								 .append("，库位编码：").append(importDetailsDataVO.getReceivinglocation()).append("，查无资料").append(" ");
-					}
-				}
-			}
-		}
-	}*/
-	
-	/*private void validateCustomer(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
-		BasCustomer customer = null;
-		BasCustomerQuery customerQuery = new BasCustomerQuery();
-		for (DocAsnHeaderVO importDataVO : importDataList) {
-			customerQuery.setCustomerid(importDataVO.getCustomerid());
-			customerQuery.setCustomerType("OW");
-			customer = basCustomerMybatisDao.queryById(customerQuery);
-			if (customer == null) {// 是否有客户资料
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户资料").append(" ");
-			}
-		}
-	}
-
-	private void validateCustomerPermission(List<GspProductRegisterSpecsVO> importDataList, StringBuilder resultMsg) {
-		BasCustomer customer = null;
-		BasCustomerQuery customerQuery = new BasCustomerQuery();
-		for (DocAsnHeaderVO importDataVO : importDataList) {
-			customerQuery.setCustomerid(importDataVO.getCustomerid());
-			customerQuery.setCustomerType("OW");
-			customerQuery.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
-			customer = basCustomerMybatisDao.queryById(customerQuery);
-			if (customer == null) {// 是否有客户权限
-				resultMsg.append("序号：").append(importDataVO.getSeq()).append("，客户代码查无客户权限").append(" ");
-			}
-		}
-	}*/
 
 //保存importDataList
 	private void saveProductRegister(List<GspProductRegisterVO> importDataList, StringBuilder resultMsg) {
 		GspProductRegister gspProductRegister = null;
-//		boolean flag = false;
-//		if(importDataList.size()==0){
-//			flag = true;
-//		}
+
 
 		for(GspProductRegisterVO importDataVO : importDataList){
 			gspProductRegister = new GspProductRegister();
 			BeanUtils.copyProperties(importDataVO, gspProductRegister);
-//			//获取SO编号
-//			Map<String ,Object> map=new HashMap<String, Object>();
-//			map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-//			docAsnHeaderMybatisDao.getIdSequence(map);
-//			String resultCode = map.get("resultCode").toString();
-//			String resultNo = map.get("resultNo").toString();
-//			if (resultCode.substring(0,3).equals("000")) {
-				//赋值
 
-				//gspProductRegisterSpecs.setProductRegisterId("PR");
-				//gspProductRegisterSpecs.setSpecsName(importDataVO.getSpecsName());
-				//gspProductRegisterSpecs.setSpecsId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 				String i = RandomUtil.getUUID();
 			    gspProductRegister.setProductRegisterId(i);
 				gspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
@@ -713,22 +598,12 @@ public class ImportGspProductRegisterDataService {
 				gspOperateDetail.setLicenseType(Constant.LICENSE_TYPE_REGISTER);
 				gspOperateDetailMybatisDao.add(gspOperateDetail);
 
-//				if(flag==true){
-//					resultMsg.delete(0, resultMsg.length());
-//					StringBuilder rowResult = new StringBuilder();
-//					resultMsg = new StringBuilder();
-//					rowResult.append("execel的Sheet表名应为:产品基础信息").append(" ");
-//					resultMsg.append(rowResult);
-//				}else if(!flag){
 					resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
-//
-//				}
+
 			}
-//			else {
-//				resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
-//			}
+
 		}
-//	}
+
 	
 	public static boolean isNumeric(String str){
 		for (int i = 0; i < str.length(); i++){
@@ -739,13 +614,5 @@ public class ImportGspProductRegisterDataService {
 		return true;
 	}
 
-//	public static boolean isNumeric(String str){
-//		for (int i = 0; i < str.length(); i++){
-//			System.out.println(str.charAt(i));
-//			if (!Character.isDigit(str.charAt(i))){
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
+
 }

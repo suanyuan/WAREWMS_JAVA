@@ -24,7 +24,7 @@
             </td>
 
             <th>产品名称</th>
-            <td><input type='text' data="1" id="productNameMain" name='productName' class='easyui-textbox' size='50' data-options='required:false' /></td>
+            <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:true' /></td>
 
         </tr>
 
@@ -212,7 +212,15 @@
         });
 
         //主页编辑
-        var row = ezuiDatagrid.datagrid('getSelected');
+
+
+        if(processType == 'product'){
+            // $('#enterpriseDialog').dialog('destroy');
+            var row = ezuiDatagridDetail.datagrid('getSelected');
+        }else{
+            var row = ezuiDatagrid.datagrid('getSelected');
+
+        }
         //alert(row.specsId);
         // if(row.specsId=="" || row.specsId==null){
         //    id = $("#specsId").val();
@@ -224,7 +232,7 @@
 //         id = row.specsId;
 
         if(row){
-            if(processType == 'edit'){
+            if(processType == 'edit'  || processType == 'product'){
             $.ajax({
 
                 url : 'gspProductRegisterSpecsController.do?getInfo',
@@ -313,10 +321,10 @@
 
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
-            $('#productRegisterNo').textbox({required:true});
-            $('#productName').textbox({required:true});
-            $('#productModel').textbox({required:true});
-            $('#packingUnit').textbox({required:true});
+            $('#ezuiFormInfo #productRegisterNo').textbox({required:true});
+            $('#ezuiFormInfo #productName').textbox({required:true});
+            $('#ezuiFormInfo #productModel').textbox({required:true});
+            $('#ezuiFormInfo #packingUnit').textbox({required:true});
             $('#storageCondition').textbox({required:true});
             $('#isDoublec').textbox({required:true});
             $('#isCertificate').textbox({required:true});

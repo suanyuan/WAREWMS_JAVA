@@ -176,10 +176,10 @@
                     <th>产品代码</th>
                     <td><input type='text' id='productCodeE' class='easyui-textbox'  data-options='width:200'/></td>
                     <th>产品名称</th>
-                    <td><input type='text' id='productNameE'  class='easyui-textbox' data-options='width:200'/></td>
-                    <th>注册证号</th>
-                    <td><input type='text' id='registerNoE'  class='easyui-textbox' data-options='width:200'/></td>
-
+                    <td><input type='text' id='productNameE'  class='easyui-textbox' data-options='width:200'/>
+                        <a onclick='searchProductE();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseProductSelectE()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
                     <%--<td>--%>
                     <%--<a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
                     <%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
@@ -187,11 +187,11 @@
                 </tr>
                 <tr>
                     <th>规格</th>
-                    <td colspan="5"><input type='text' id='specsNameE' class='easyui-textbox'  data-options='width:200'/>
+                    <td><input type='text' id='specsNameE' class='easyui-textbox'  data-options='width:200'/></td>
 
-                        <a onclick='searchProductE();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseProductSelectE()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-                    </td>
+                    <th>注册证号</th>
+                    <td><input type='text' id='registerNoE'  class='easyui-textbox' data-options='width:200'/></td>
+
                 </tr>
             </table>
         </fieldset>
@@ -305,11 +305,12 @@
                 {field: 'productApplyId',title:'主键',hidden:true},
                 {field: 'specsId',title:'主键',hidden:true},
                 {field: 'customerid',title:'主键',hidden:true},
-                {field: 'productCode',title: '产品代码' ,width: '20%'},
+                {field: 'productCode',title: '产品代码' ,width: '15%'},
                 {field: 'productName',title: '产品名称',width: '20%'},
-                {field: 'specsName',title: '规格名称' ,width: '20%'},
-                {field: 'productModel',title: '产品型号',width: '20%'},
+                {field: 'specsName',title: '规格名称' ,width: '15%'},
+                {field: 'productModel',title: '产品型号',width: '15%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
+                {field: 'productRegisterNo',title: '注册证编号',width: '20%'},
             ]],
             onDblClickCell: function(index,field,value){
 

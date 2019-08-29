@@ -57,7 +57,6 @@ public class ImportGspProductRegisterSpecsDataService {
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
 
-
 	/**
 	 * 导入入库单
 	 * @param excelFile
@@ -491,16 +490,15 @@ public class ImportGspProductRegisterSpecsDataService {
 			} catch (Exception e) {
 //				rowResult.append("[包装要求]，未输入").append(" ");
 			}
-
 			try {
-				importDataVO.setStorageCondition(dataArray.getStorageCondition());
+					importDataVO.setStorageCondition(dataArray.getStorageCondition());
 
-				if (StringUtils.isEmpty(dataArray.getStorageCondition())) {//判日期是否为空
-					throw new Exception();
+					if (StringUtils.isEmpty(dataArray.getStorageCondition())) {//判日期是否为空
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					rowResult.append("[储存条件]，未输入").append(" ");
 				}
-			} catch (Exception e) {
-				rowResult.append("[储存条件]，未输入").append(" ");
-			}
 
 //			if(dataArray.getProductRegisterId()){
 //
@@ -543,17 +541,21 @@ public class ImportGspProductRegisterSpecsDataService {
 
 
 
+			//如果为非冷链，运输条件可以为空
+			if("非冷链".equals(dataArray.getColdHainMark())){
+				importDataVO.setStorageCondition(dataArray.getStorageCondition());
 
-			try {
-				importDataVO.setTransportCondition(dataArray.getTransportCondition());
+			}else {
+				try {
+					importDataVO.setTransportCondition(dataArray.getTransportCondition());
 
-				if (StringUtils.isEmpty(dataArray.getTransportCondition())) {//判日期是否为空
-					throw new Exception();
+					if (StringUtils.isEmpty(dataArray.getTransportCondition())) {
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					rowResult.append("[运输条件]，未输入").append(" ");
 				}
-			} catch (Exception e) {
-				rowResult.append("[运输条件]，未输入").append(" ");
 			}
-
 			try {
 				if("0".equals(dataArray.getAlternatName1()) || dataArray.getAlternatName1()==""||dataArray.getAlternatName1()==null){
 
@@ -666,12 +668,12 @@ public class ImportGspProductRegisterSpecsDataService {
 	    map.put("长", "llong");
 	    map.put("宽", "wide");
 	    map.put("高", "hight");
-		map.put("是否需要产品合格证", "isCertificate");
-		map.put("是否需要双证", "isDoublec");
+		map.put("产品合格证", "isCertificate");
+		map.put("双证", "isDoublec");
 		map.put("附卡类别", "attacheCardCategory");
-		map.put("是否冷链标志", "coldHainMark");
-		map.put("是否灭菌标志", "sterilizationMarkers");
-		map.put("是否医疗器械标志", "medicalDeviceMark");
+		map.put("冷链标志", "coldHainMark");
+		map.put("灭菌标志", "sterilizationMarkers");
+		map.put("医疗器械标志", "medicalDeviceMark");
 		map.put("养护周期", "maintenanceCycle");
 		map.put("重量", "wight");
 

@@ -200,4 +200,11 @@ public class GspProductRegisterController {
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterService.importExcelData(mhsr);
 	}
+
+	@Login
+	@RequestMapping(params = "showHistoryDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<GspProductRegisterVO> showHistoryDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
+		return gspProductRegisterService.showHistoryDatagrid(pager, query);
+	}
 }

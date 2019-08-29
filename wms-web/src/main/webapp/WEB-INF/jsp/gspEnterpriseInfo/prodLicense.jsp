@@ -117,8 +117,12 @@
             columns : [[
                 {field: 'isUse',title: '是否有效' ,width: '5%',formatter:isUseFormatter},
                 {field: 'licenseNo',title: '许可证编号' ,width: '15%'},
-                {field: 'approveDate',title: '发证日期' ,width: '20%'},
-                {field: 'licenseExpiryDate',title: '有效期限' ,width: '20%'},
+                {field: 'approveDate',title: '发证日期' ,width: '20%',formatter:function (value,row,index) {
+                        return dateFormat2(value);
+                    }},
+                {field: 'licenseExpiryDate',title: '有效期限' ,width: '20%',formatter:function (value,row,index) {
+                        return dateFormat2(value);
+                    }},
                 {field: '_operate',		title: '许可证照片',	width: '10%',
                     formatter: formatOperAttachmentOperate1
                 },

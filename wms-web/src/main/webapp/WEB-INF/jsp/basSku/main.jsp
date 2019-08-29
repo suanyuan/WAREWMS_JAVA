@@ -148,6 +148,19 @@ $(function() {
 		}
 	}).dialog('close');
 	/* 控件初始化end */
+
+
+
+    $("#skuGroup1").combobox({
+        panelHeight: 'auto',
+        url:'/productLineController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+        onLoadSuccess:function () {
+            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+        }
+    })
+
 });
 
 /* 自动转大写 */
@@ -599,6 +612,12 @@ var downloadTemplate = function(){
 };
 /* 导入end */
 
+
+
+
+
+
+
 </script>
 </head>
 <body>
@@ -752,7 +771,7 @@ var downloadTemplate = function(){
 					<th>注册证号</th>
 					<td><input type='text' name='reservedfield03' class='easyui-textbox' size='16' /></td>
 					<th>产品线</th>
-					<td><input type='text' name='skuGroup1' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='skuGroup1' id='skuGroup1'  data-options='required:true,width:150,editable:false'  readonly/></td>
 
 				</tr>
 
@@ -780,7 +799,24 @@ var downloadTemplate = function(){
 					<th>型号</th>
 					<td ><input type='text' name='descrE' class='easyui-textbox' size='16' data-options="required:true"/></td>
 					<th>单位</th>
-					<td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='16' /></td>
+					<td>
+						<input type='text' name='defaultreceivinguom' id="defaultreceivinguom" class='easyui-combobox' size='16' data-options="required:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: 'BA', value: '包'},
+																																{id: 'CS', value: '箱'},
+																																{id: 'EA', value: '件'},
+																																{id: 'GE', value: '个'},
+																																{id: 'GN', value: '根'},
+																																{id: 'HE', value: '盒'},
+																																{id: 'IP', value: '内箱'},
+																																{id: 'OT', value: '其他'},
+																																{id: 'PL', value: '板'}
+																															]" readonly/>
+					</td>
 
 				</tr>
 
@@ -1039,4 +1075,7 @@ var downloadTemplate = function(){
 <!-- 导入end -->
 	
 </body>
+
+
+
 </html>
