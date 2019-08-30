@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
@@ -262,6 +263,14 @@ public class GspProductRegisterSpecsService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+	public List<GspProductRegisterSpecs> querySpecByRegisterId(String registerId){
+		GspProductRegisterSpecsQuery query = new GspProductRegisterSpecsQuery();
+		query.setProductRegisterId(registerId);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		return gspProductRegisterSpecsMybatisDao.queryByList(criteria);
 	}
 
 }

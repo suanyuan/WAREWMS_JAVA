@@ -4,15 +4,13 @@ import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.query.BasPackageQuery;
 import com.wms.utils.DateUtil;
-import com.wms.utils.PinyinUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.*;
 import com.wms.vo.form.*;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -414,5 +412,42 @@ public class DataPublishService extends BaseService {
             return firstBusinessApplyService.updateFirstState(no,state);
         }
         return Json.error("没有查询到对应的申请单");
+    }
+
+    public Json cancelPubilseDataByRegisterId(String registerId) throws Exception{
+        /*GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
+        if(gspProductRegister == null){
+            return Json.error("产品注册证不存在");
+        }
+        List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
+        if(list!=null && list.size()>0){
+            for(GspProductRegisterSpecs specs : list){
+                GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
+                BeanUtils.copyProperties(specs,form);
+                form.setIsUse(Constant.IS_USE_NO);
+                gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
+            }
+        }*/
+        //TODO 1.失效bas_sku 2.失效产品首营申请 3.更新产品基础信息关联产品注册证
+
+        return Json.success("");
+    }
+
+    public Json pubilseDataByRegisterId(String registerId) throws Exception{
+        /*GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
+        if(gspProductRegister == null){
+            return Json.error("产品注册证不存在");
+        }
+        List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
+        if(list!=null && list.size()>0){
+            for(GspProductRegisterSpecs specs : list){
+                GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
+                BeanUtils.copyProperties(specs,form);
+                form.setProductRegisterId(registerId);
+                form.setIsUse(Constant.IS_USE_YES);
+                gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
+            }
+        }*/
+        return Json.success("");
     }
 }

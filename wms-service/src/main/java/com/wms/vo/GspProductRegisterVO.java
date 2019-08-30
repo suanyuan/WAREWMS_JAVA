@@ -46,6 +46,8 @@ public class GspProductRegisterVO {
 	private String licenseNo;//生产许可证号
 	private String recordNo;//备案号
 
+	private String choseScope;
+
 	public Integer getSeq() {
 		return seq;
 	}
@@ -361,5 +363,13 @@ public class GspProductRegisterVO {
 
 	public void setEnterpriseId(String enterpriseId) {
 		this.enterpriseId = enterpriseId;
+	}
+
+	public String getChoseScope() {
+		return choseScope;
+	}
+
+	public void setChoseScope(String choseScope) {
+		this.choseScope = choseScope;
 	}
 }
