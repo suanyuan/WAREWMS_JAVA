@@ -820,7 +820,7 @@ public class DocOrderPackingService extends BaseService {
                         DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(
                                 form.getCustomerid(), Integer.valueOf(form.getTraceid().split("#")[1]),
                                 orderHeader.getSoreference1(), form.getOrderno(), invLotAtt.getLotatt04(),
-                                form.getSerialNums(), "Gizmo");
+                                serialNum, "Gizmo");
                         docSerialNumRecordMybatisDao.add(docSerialNumRecord);
                     }
                 }
