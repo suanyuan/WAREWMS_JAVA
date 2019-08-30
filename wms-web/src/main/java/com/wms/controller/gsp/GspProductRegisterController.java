@@ -5,13 +5,16 @@ import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.GspEnterpriseInfoService;
+import com.wms.service.GspOperateDetailService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.editor.CustomDateEditor;
+import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class GspProductRegisterController {
 	private GspProductRegisterService gspProductRegisterService;
 	@Autowired
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
+	@Autowired
+	private GspOperateDetailService gspOperateDetailService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -147,6 +152,10 @@ public class GspProductRegisterController {
 			GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(gspProductRegister.getEnterpriseId());
 			if(info!=null){
 				map.put("enterpriseName",info.getEnterpriseName());
+			}
+			List<GspOperateDetailVO> gspOperateDetailList = gspOperateDetailService.queryOperateDetailByLicense(gspProductRegister.getProductRegisterId());
+			if(gspOperateDetailList!=null && gspOperateDetailList.size()>0){
+				map.put("choseScope",gspOperateDetailList.get(0).getOperateId());
 			}
 		}else {
 			gspProductRegister = new GspProductRegister();

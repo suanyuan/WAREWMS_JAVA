@@ -105,9 +105,11 @@ var add = function(){
 	processType = 'add';
 	$('#gspEnterpriseInfoId').val(0);
 	ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+	localStorage.clear();//清楚本地储存器的信息
 };
 
 var edit = function(row){
+	localStorage.clear();
 	processType = 'edit';
 	if(!row){
         var row = ezuiDatagrid.datagrid('getSelected');
@@ -166,8 +168,6 @@ var commit = function(){
     var secondRecord = new Object();
     var firstRecord = new Object();
     var prodObj = new Object();
-
-
     var url = '';
     var isVal = true;
 	var isVal1 =true;

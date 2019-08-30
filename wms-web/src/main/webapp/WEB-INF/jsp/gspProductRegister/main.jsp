@@ -40,6 +40,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
+        queryParams:{
+		    isUse:"1"
+        },
 		idField : 'id',
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
@@ -210,7 +213,10 @@ $(function () {
         panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getIsUseCombobox',
         valueField:'id',
-        textField:'value'
+        textField:'value',
+        onLoadSuccess:function (data) {
+            $(this).combobox("setValue","1");
+        }
     });
 })
 /* 导入提交按钮 */

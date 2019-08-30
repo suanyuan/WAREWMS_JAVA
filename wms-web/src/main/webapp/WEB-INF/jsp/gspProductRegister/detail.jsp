@@ -22,28 +22,28 @@
                 <table width="80%">
                     <tr>
                         <th>注册证编号</th>
-                        <td><input type='text' name='productRegisterNo' class='easyui-textbox' value="${gspProductRegister.productRegisterNo}" data-options='required:true'/></td>
+                        <td><input type='text' id1="productRegisterNo" name='productRegisterNo' class='easyui-textbox' value="${gspProductRegister.productRegisterNo}" data-options='required:true'/></td>
                         <th>审批部门</th>
-                        <td><input type='text' name='approvalDepartment' class='easyui-textbox' value="${gspProductRegister.approvalDepartment}" data-options=''/></td>
+                        <td><input type='text' id1="approvalDepartment" name='approvalDepartment' class='easyui-textbox' value="${gspProductRegister.approvalDepartment}" data-options=''/></td>
                     </tr>
                     <tr>
                         <th>产品名称</th>
-                        <td><input type='text' name='productNameMain' class='easyui-textbox' value="${gspProductRegister.productNameMain}" data-options='required:true'/></td>
+                        <td><input type='text' id1="productNameMain" name='productNameMain' class='easyui-textbox' value="${gspProductRegister.productNameMain}" data-options='required:true'/></td>
                         <th>批准日期</th>
-                        <td><input type='text' id="approveDate" name='approveDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.approveDate}"/>" data-options='required:true,width:185'/></td>
+                        <td><input type='text' id1="approveDate" id="approveDate" name='approveDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.approveDate}"/>" data-options='required:true,width:185'/></td>
                     </tr>
                     <tr>
                         <th>管理分类</th>
-                        <td><input type='text' id="classifyId" name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true,editable:false'/></td>
+                        <td><input type='text' id1="classifyId" id="classifyId" name='classifyId' value="${gspProductRegister.classifyId}" data-options='required:true,editable:false'/></td>
 
                         <%--<th>有效期至</th>--%>
                         <%--<td><input type='text' id="productExpiryDate" name='productExpiryDate' class='easyui-datebox' value="${gspProductRegister.productExpiryDate}" data-options='required:true,editable:false,width:185'/></td>--%>
                         <th>有效期至</th>
-                        <td><input type='text' id="productRegisterExpiryDate" name='productRegisterExpiryDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.productRegisterExpiryDate}"/>" data-options='required:true,width:185'/></td>
+                        <td><input type='text' id1="productRegisterExpiryDate" id="productRegisterExpiryDate" name='productRegisterExpiryDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.productRegisterExpiryDate}"/>" data-options='required:true,width:185'/></td>
                     </tr>
                     <tr>
                         <th>注册证版本</th>
-                        <td><input type='text' name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
+                        <td><input type='text' id1="productRegisterVersion" name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
                         <th>注册证附件</th>
                         <td>
                             <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='' value="${gspProductRegister.attachmentUrl}"/>
@@ -54,30 +54,30 @@
                     <tr>
                         <th>分类目录</th>
                         <td>
-                            <input type='text' id="classifyCatalog" name="classifyCatalog"  value="${gspProductRegister.classifyCatalog}" data-options='required:true'/>
+                            <input type='text' id1="classifyCatalog" id="classifyCatalog" name="classifyCatalog"  value="${gspProductRegister.classifyCatalog}" data-options='required:true'/>
                             <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='required:true,plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                         </td>
                         <th>结构及组成</th>
-                        <td><input type='text' name='structureAndComposition' class='easyui-textbox' value="${gspProductRegister.structureAndComposition}" data-options=''/></td>
+                        <td><input type='text' id1="structureAndComposition" name='structureAndComposition' class='easyui-textbox' value="${gspProductRegister.structureAndComposition}" data-options=''/></td>
                     </tr>
                     <tr>
                         <th>产地</th>
-                        <td><input type='text' name='productionAddress' class='easyui-textbox' value="${gspProductRegister.productionAddress}" data-options=''/></td>
+                        <td><input type='text' id1="productionAddress" name='productionAddress' class='easyui-textbox' value="${gspProductRegister.productionAddress}" data-options=''/></td>
                         <th>适用范围</th>
-                        <td><input type='text' name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" data-options='multiline:true'/></td>
+                        <td><input type='text' id1="applyScope" name='applyScope' class='easyui-textbox' value="${gspProductRegister.applyScope}" data-options='multiline:true'/></td>
                     </tr>
                     <tr>
                         <th>储存条件</th>
-                        <td><input type='text' name='storageConditions' class='easyui-textbox' value="${gspProductRegister.storageConditions}"  data-options='required:true'/></td>
+                        <td><input type='text' id1="storageConditions" name='storageConditions' class='easyui-textbox' value="${gspProductRegister.storageConditions}"  data-options='required:true'/></td>
                         <th>预期用途</th>
-                        <td><input type='text' name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" data-options='multiline:true'/></td>
+                        <td><input type='text' id1="expectUse" name='expectUse' class='easyui-textbox' value="${gspProductRegister.expectUse}" data-options='multiline:true'/></td>
                     </tr>
                     <tr>
 
                         <th>产品运输条件</th>
-                        <td><input type='text' name='transportConditionMain' class='easyui-textbox' value="${gspProductRegister.transportConditionMain}" data-options=''/></td>
+                        <td><input type='text' id1="transportConditionMain" name='transportConditionMain' class='easyui-textbox' value="${gspProductRegister.transportConditionMain}" data-options=''/></td>
                         <th>主要组成部分</th>
-                        <td><input type='text' name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" data-options='multiline:true'/></td>
+                        <td><input type='text' id1="mainPart" name='mainPart' class='easyui-textbox' value="${gspProductRegister.mainPart}" data-options='multiline:true'/></td>
                     </tr>
                     <tr>
                         <th>注册人名称/生产企业</th>
@@ -87,40 +87,40 @@
                         </td>
                         <th>附件</th>
                         <td>
-                            <input type='text'  id="productRegsiterUrl" name="productRegsiterUrl"  class='easyui-textbox' data-options='multiline:true' value="${gspProductRegister.productRegsiterUrl}"/>
+                            <input type='text' id1="productRegsiterUrl" id="productRegsiterUrl" name="productRegsiterUrl"  class='easyui-textbox' data-options='multiline:true' value="${gspProductRegister.productRegsiterUrl}"/>
                         </td>
                     </tr>
                     <tr>
                         <%--<th>注册人名称</th>--%>
                         <input type='hidden' name='productRegisterName'  value="${gspProductRegister.productRegisterName}" data-options='required:true'/>
                         <th>注册人住所</th>
-                        <td><input type='text' name='productRegisterAddress' class='easyui-textbox' value="${gspProductRegister.productRegisterAddress}" data-options=''/></td>
+                        <td><input type='text' id1="productRegisterAddress" name='productRegisterAddress' class='easyui-textbox' value="${gspProductRegister.productRegisterAddress}" data-options=''/></td>
                         <th>其他内容</th>
-                        <td><input type='text' name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options=''/></td>
+                        <td><input type='text' id1="otherContent" name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options=''/></td>
 
                     </tr>
                     <tr>
                         <th>生产地址</th>
-                        <td><input type='text' name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
+                        <td><input type='text' id1="productProductionAddress" name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
                         <th>备注</th>
-                        <td><input type='text' name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
+                        <td><input type='text' id1="remark" name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
 
                     </tr>
                     <tr>
 
                         <th>代理人名称</th>
-                        <td><input type='text' name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options=''/></td>
+                        <td><input type='text' id1="agentName" name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options=''/></td>
                         <th>创建人</th>
-                        <td><input type='text' name='createId' class='easyui-textbox' value="${gspProductRegister.createId}" data-options='editable:false'/></td>
+                        <td><input type='text' id1="createId" name='createId' class='easyui-textbox' value="${gspProductRegister.createId}" data-options='editable:false'/></td>
 
                     </tr>
                     <tr>
 
                         <th>代理人住所</th>
-                        <td><input type='text' name='agentAddress' class='easyui-textbox' value="${gspProductRegister.agentAddress}" data-options=''/></td>
+                        <td><input type='text' id1="agentAddress" name='agentAddress' class='easyui-textbox' value="${gspProductRegister.agentAddress}" data-options=''/></td>
 
                         <th>创建时间</th>
-                        <td><input type='text' name='createDate' class='easyui-textbox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.createDate}"/>" data-options='editable:false'/></td>
+                        <td><input type='text' id1="createDate" name='createDate' class='easyui-textbox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.createDate}"/>" data-options='editable:false'/></td>
                     </tr>
                     <tr>
                         <td colspan="3">
@@ -353,7 +353,7 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                productRegisterNo : '${gspProductRegister.productRegisterNo}'
+                version : '${gspProductRegister.version}'
             },
             collapsible:false,
             pagination:true,
@@ -755,20 +755,25 @@
 
     //加载历史证照信息
     function initHistoryDataRegister(row) {
+        console.log(row);
         $("#ezuiFormDetail input[type!=hidden]").each(function (index) {
-            console.log($(this).attr("class"));
+            console.log($(this).attr("id1"));
             if($(this).attr("class")){
-                if($(this).attr("id")) {
+                if($(this).attr("id1")) {
                     if ($(this).attr("class").indexOf('easyui-textbox') != -1) {
-                        $(this).textbox("setValue", row["" + $(this).attr("id") + ""]);
+                        //console.log($(this).attr("id"));
+                        $(this).textbox("setValue", row["" + $(this).attr("id1") + ""]);
                     }else if ($(this).attr("class").indexOf('easyui-datebox') != -1) {
-                        $(this).datebox("setValue", dateFormat2(row["" + $(this).attr("id") + ""]));
+                        $(this).datebox("setValue", dateFormat2(row["" + $(this).attr("id1") + ""]));
                     }else if ($(this).attr("class").indexOf('easyui-numberbox') != -1) {
-                        $(this).numberbox("setValue", row["" + $(this).attr("id") + ""]);
+                        $(this).numberbox("setValue", row["" + $(this).attr("id1") + ""]);
                     }
                 }
             }
         })
+        $("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
+        $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
+        $("#ezuiFormDetail #choseScope").val(row.choseScope);
     }
 
     //换证清空当前数据

@@ -1,5 +1,6 @@
 package com.wms.mybatis.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.wms.entity.BasGtn;
@@ -20,7 +21,10 @@ public interface BasSkuMybatisDao extends BaseDao {
 	BasSku queryBySkuInfo(BasSkuQuery skuQuery);
 
 	BasSku queryById(Map<String, Object> map);
-
+//商品档案 列表总数ByInvLot
+     int queryByCountByInvLot(MybatisCriteria criteria);
+//	和invlot联接查询带出库存件数
+    <T> List<T> queryByPageListByInvLot(MybatisCriteria criteria);
     /**
      * 通过扫码结果查找，自编码(1~5)、GTIN、批号、序列号
      * @param query ~
