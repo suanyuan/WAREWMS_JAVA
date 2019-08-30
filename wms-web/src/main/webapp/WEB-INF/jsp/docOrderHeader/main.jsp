@@ -1714,7 +1714,7 @@ var ezuiSkuDataClick = function(){
 		columns : [[
 					{field: 'customerid',	title: '客户代码',	width: 80},
 					{field: 'sku',			title: '产品代码',	width: 120},
-					{field: 'descrC',		title: '中文名称',	width: 160},
+					{field: 'reservedfield01',		title: '中文名称',	width: 160},
 					{field: 'descrE',		title: '英文名称',	width: 160},
 					{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
 						return rowData.activeFlag == '1' ? '是' : '否';
@@ -1744,7 +1744,7 @@ var selectSku = function(){
 	var row = ezuiSkuDataDialogId.datagrid('getSelected');
 	if(row){
 		$("#ezuiDetailsForm #sku").textbox('setValue',row.sku);
-		$("#ezuiDetailsForm #skuName").textbox('setValue',row.descrC);
+		$("#ezuiDetailsForm #skuName").textbox('setValue',row.reservedfield01);
 		$("#ezuiDetailsForm #skuNameE").textbox('setValue',row.descrE);
 		$("#ezuiDetailsForm #alternativesku").textbox('setValue',row.alternateSku1);
 		$("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
