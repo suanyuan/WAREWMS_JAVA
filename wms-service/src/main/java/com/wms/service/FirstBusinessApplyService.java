@@ -75,7 +75,7 @@ public class FirstBusinessApplyService extends BaseService {
 		for (FirstBusinessApplyResult firstBusinessApply : firstBusinessApplyList) {
 			firstBusinessApplyVO = new FirstBusinessApplyVO();
 			BeanUtils.copyProperties(firstBusinessApply, firstBusinessApplyVO);
-			firstBusinessApplyVO.setCreateDate(DateUtil.format(firstBusinessApply.getCreateDate(),"yyyy-MM-dd"));
+			firstBusinessApplyVO.setCreateDate(DateUtil.format(firstBusinessApply.getCreateDate(),"yyyy-MM-dd HH:mm:ss"));
 			firstBusinessApplyVOList.add(firstBusinessApplyVO);
 		}
 		Long count = firstBusinessApplyMybatisDao.queryPageListCount(criteria);

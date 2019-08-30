@@ -67,6 +67,9 @@
     }
 
     var dateFormat = function(timestamp){
+        if(!timestamp || timestamp == "" ||timestamp==null ){
+            return "";
+        }
         var time = new Date(timestamp);    //先将时间戳转为Date对象，然后才能使用Date的方法
         var year = time.getFullYear(),
             month = time.getMonth() + 1 ,  //月份是从0开始的
@@ -78,7 +81,7 @@
     }
 
     var dateFormat2 = function(timestamp){
-        if(!timestamp || timestamp == ""){
+        if(!timestamp || timestamp == "" ||timestamp==null ){
             return "";
         }
         var time = new Date(timestamp);    //先将时间戳转为Date对象，然后才能使用Date的方法
@@ -110,6 +113,14 @@
         }else{
             return "失效";
         }
+    }
+
+    var day = function(value,row,index) {
+
+	    if(value!=null && value!=""){
+            return value+"天";
+		}
+
     }
 
     var yesOrNoFormatter = function(value,row,index) {

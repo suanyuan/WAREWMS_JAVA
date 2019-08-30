@@ -36,7 +36,7 @@ public class GspSupplierService extends BaseService {
 	@Autowired
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public EasyuiDatagrid<GspSupplierVO> getPagedDatagrid(EasyuiDatagridPager pager, GspSupplierQuery query) {
 //		EasyuiDatagrid<GspSupplierVO> datagrid = new EasyuiDatagrid<GspSupplierVO>();

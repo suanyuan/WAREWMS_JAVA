@@ -380,34 +380,39 @@ public class ImportGspProductRegisterSpecsDataService {
 			}
 
 			try {
-
+                if(dataArray.getIsCertificate().equals("是") || dataArray.getIsCertificate().equals("否") ){
 				if("是".equals(dataArray.getIsCertificate())){
 					importDataVO.setIsCertificate("1");
 				}else if("否".equals(dataArray.getIsCertificate())){
 					importDataVO.setIsCertificate("0");
 				}
-
-
+                }else{
+                    throw new Exception();
+                }
 				if (StringUtils.isEmpty(dataArray.getIsCertificate())) {//判日期是否为空
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[是否需要产品合格证]，未输入").append(" ");
+				rowResult.append("[产品合格证]，未输入或输入标准有误").append(" ");
 			}
 
 
 			try {
 				//importDataVO.setIsDoublec(dataArray.getIsDoublec());
-				if("是".equals(dataArray.getIsDoublec())){
-					importDataVO.setIsDoublec("1");
-				}else if("否".equals(dataArray.getIsDoublec())){
-					importDataVO.setIsDoublec("0");
-				}
+                if(dataArray.getIsDoublec().equals("是") || dataArray.getIsDoublec().equals("否") ) {
+                    if ("是".equals(dataArray.getIsDoublec())) {
+                        importDataVO.setIsDoublec("1");
+                    } else if ("否".equals(dataArray.getIsDoublec())) {
+                        importDataVO.setIsDoublec("0");
+                    }
+                }else{
+                    throw new Exception();
+                }
 				if (StringUtils.isEmpty(dataArray.getIsDoublec())) {//判日期是否为空
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[是否需要双证]，未输入").append(" ");
+				rowResult.append("[双证]，未输入或输入标准有误").append(" ");
 			}
 
 			try {
@@ -429,17 +434,21 @@ public class ImportGspProductRegisterSpecsDataService {
 
 			try {
 //				importDataVO.setTransportCondition(dataArray.getColdHainMark());
-				if("是".equals(dataArray.getMedicalDeviceMark())){
-					importDataVO.setMedicalDeviceMark("1");
-				}else if("否".equals(dataArray.getMedicalDeviceMark())){
-					importDataVO.setMedicalDeviceMark("0");
-				}
+                if(dataArray.getMedicalDeviceMark().equals("是") || dataArray.getMedicalDeviceMark().equals("否") ) {
+                    if ("是".equals(dataArray.getMedicalDeviceMark())) {
+                        importDataVO.setMedicalDeviceMark("1");
+                    } else if ("否".equals(dataArray.getMedicalDeviceMark())) {
+                        importDataVO.setMedicalDeviceMark("0");
+                    }
+                }else{
+                    throw new Exception();
+                }
 
 				if (StringUtils.isEmpty(dataArray.getMedicalDeviceMark())) {//判日期是否为空
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[医疗器械标志]，未输入").append(" ");
+				rowResult.append("[医疗器械标志]，未输入或输入标准有误").append(" ");
 			}
 
 			try {

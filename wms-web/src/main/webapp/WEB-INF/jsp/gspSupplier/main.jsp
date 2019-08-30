@@ -55,9 +55,9 @@ $(function() {
             {field: 'clientTerm',		title: '合同期限',	width: 200 },
             {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
-            {field: 'createDate',		title: '创建时间',	width: 100 },
+            {field: 'createDate',		title: '创建时间',	width: 160 },
             {field: 'editId',		title: '编辑人',	width: 88 },
-            {field: 'editDate',		title: '编辑时间',	width: 100 },
+            {field: 'editDate',		title: '编辑时间',	width: 160 },
             {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isCheck == '1' ? '是' : '否';
                 }},
