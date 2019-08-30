@@ -34,6 +34,9 @@
     </table>
 <script>
     var ezuiCatalogDatagridDetail_${target};
+    var storage = window.localStorage;
+    var dicList = [];
+    var read;
     $(function () {
         ezuiCatalogDatagridDetail_${target} = $("#catalogDatagrid_${target}").datagrid({
             url : sy.bp()+'/gspInstrumentCatalogController.do?showCatalogEnterpriseDatagrid',
@@ -50,6 +53,7 @@
             queryParams:{'enterpriseId':'${id}'},
             pagination:true,
             rownumbers:true,
+            singleSelect : false,
             idField : 'instrumentCatalogId',
             columns : [[
                 {field: 'ck',checkbox:true },
@@ -61,15 +65,26 @@
             ]],
             onDblClickRow: function(index,row){
                 choseSelect_Catalog_${target}(row);
+
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 
             },
+            onUncheckAll :function(rows){
+                storeAllOff(rows);
+            },
             onSelect: function(rowIndex, rowData) {
-
+                storer(rowIndex, rowData);
+            },
+            onUnselect:function(rowIndex, rowData){
+                storerTo(rowIndex,rowData);
+            },
+            onSelectAll:function(rows){
+                storerAll(rows);
             },
             onLoadSuccess:function(data){
-                $(this).datagrid('unselectAll');
+
+                //$(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:400});
                 //TODO 选中已选择行
                 initChecked($(this));
@@ -107,7 +122,8 @@
         $("#productCode_${target}").textbox("clear")
         $("#productName_${target}").textbox("clear")
     }
-    
+
+
     function initChecked(data) {
         $.ajax({
             url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
@@ -123,6 +139,45 @@
                 }
             }
         });
+
+       var readAll = JSON.parse(storage.getItem('key_${target}'));
+        for (var i = 0; i < readAll.length; i++) {
+          data.datagrid("selectRecord",readAll[i]);
+        }
+        console.log(readAll_${target});
+
+
+    }
+    //局部储存器
+    function storer(rowIndex, rowData) {
+            var fkr  =   rowData.instrumentCatalogId;
+            dicList.push(fkr);
+            storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicList))));
+
+
+    }
+    //勾选取消
+    function storerTo(rowIndex, rowData) {
+      var check =  JSON.parse(storage.getItem('key_${target}'));
+        for (var i = 0; i < check.length; i++) {
+            if(check[i] == rowData.instrumentCatalogId){
+                check.splice(i,1);
+            }
+        }
+        storage.setItem('key_${target}',JSON.stringify(check));
+    }
+    //勾选全部
+    function storerAll(rows) {
+        for (var i = 0; i < rows.length ; i++) {
+            read = rows[i]['instrumentCatalogId'];
+            dicList.push(read);
+            storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicList))));
+            read = JSON.parse(storage.getItem('key_${target}'));
+        }
+    }
+    //取消勾选全部
+    function storeAllOff(rows) {
+        storage.clear();
     }
 
 </script>

@@ -217,14 +217,14 @@
             title : '<spring:message code="common.dialog.title"/>',
             width:800,
             height:500,
-            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=secondRecord&id=${gspFirstRecord.recordId}',
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=firstRecord&id=${gspFirstRecord.recordId}',
             onClose : function() {
                 ezuidialogChoseScopeRecord1.dialog('clear');
             }
         });
     }
 
-    function choseSelect_Catalog_secondRecord(row) {
+    function choseSelect_Catalog_firstRecord(row) {
         var choseRowNameArr = new Array();
         var choseRowArrRecord = new Array();
         //var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
