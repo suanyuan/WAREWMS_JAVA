@@ -366,7 +366,7 @@ public class DocPaHeaderService extends BaseService {
         if(codo.equals("000")){
             return Json.success("收货回写成功");
         }else{
-            return Json.error("收货回写异常");
+            return Json.error(codo);
         }
     }
 
