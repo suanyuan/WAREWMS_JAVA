@@ -125,7 +125,19 @@ var enterpriseDialog;
             }
         }
 
-    })
+
+//查询条件货主字段初始化
+        $("#ezuiFormInfo #customerid").textbox({
+            icons: [{
+                iconCls: 'icon-search',
+                handler: function (e) {
+                    $("#ezuiCustDataDialog #customerid").textbox('clear');
+                    ezuiCustDataClickC();
+                    ezuiCustDataDialogSearchC();
+                }
+            }]
+        });
+    });
 
 
 

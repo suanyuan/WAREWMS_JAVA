@@ -1039,7 +1039,7 @@
     var b =$("#enterpriseId").val();
     if (a =='40'||a == '10'||b == ''){
     $('#enterpriseN').css('display', 'none');
-    $('#enterpriseN').attr("readonly",true);
+    $('#enterpriseN').attr("readonly",false);
     $('#enterpriseNo').css('display', 'none');
     $('#enterpriseNo').attr("readonly",true);
     $('#use').css('display', 'none');

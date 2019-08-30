@@ -57,7 +57,7 @@ $(function() {
 			{field: 'clientContent',		title: '委托内容',	width: 38 ,hidden:true},
 			{field: 'clientStartDate',		title: '委托开始时间',	width: 38 ,hidden:true},
 			{field: 'clientEndDate',		title: '委托结束时间',	width: 38 ,hidden:true},
-			{field: 'clientTerm',		title: '委托期限',	width: 38 },
+			{field: 'clientTerm',		title: '委托期限',	width: 38 ,formatter:day},
 			{field: 'isChineseLabel',		title: '是否长期',	width: 38 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 38 },
 			{field: 'createDate',		title: '创建时间',	width: 45},

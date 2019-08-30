@@ -29,16 +29,8 @@
                 <a href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewEnterpriseUrl()">查看</a>
             </td>
 
-            <th>货主</th>
-            <td><input type='text' value="${customer.costomerid}" id='costomerid' name='costomerid' class='easyui-textbox' data-options='required:false,width:200'/></td>
-
-        </tr>
-
-        <tr>
             <th>简称</th>
             <td><input type='text' value="${customer.clientName}" id='clientName' name='clientName' class='easyui-textbox' data-options='required:true,width:200'/></td>
-            <th>联系人</th>
-            <td><input type='text' value="${customer.contacts}" id='contacts' name='contacts' class='easyui-textbox' data-options='required:false,width:200'/></td>
 
 
         </tr>
@@ -46,14 +38,30 @@
         <tr>
             <th>代码</th>
             <td><input type='text' value="${customer.clientNo}" id="clientNo" name='clientNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+
+
+            <th>货主联系人</th>
+            <td><input type='text' value="${customer.contacts}" id='contacts' name='contacts' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
+
+        </tr>
+
+        <tr>
+            <th>企业类型</th>
+            <td><input type='text' id="operateTypeData" name='operateType' /></td>
+
+
+
             <th>电话</th>
             <td><input type='text' value="${customer.telephone}" id='telephone' name='telephone' class='easyui-textbox' data-options='required:false,width:200'/></td>
 
 
         </tr>
         <tr>
-            <th>企业类型</th>
-            <td><input type='text' id="operateTypeData" name='operateType' /></td>
+            <th>是否贴中文标签</th>
+            <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
+
+
             <th>身份证正面照片</th>
             <td>
                 <input type="hidden" class="textbox-value" name="idCardFront" id="idCardFront"  value="${customer.idCardFront}"/>
@@ -62,8 +70,9 @@
             </td>
         </tr>
         <tr>
-            <th>是否贴中文标签</th>
-            <td><input type='text' id="isChineseLabelData" name='isChineseLabel' /></td>
+            <th>合同编号</th>
+            <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+
             <th>身份证背面照片</th>
             <td>
                 <input type="hidden" class="textbox-value" name="idCardBack" id="idCardBack"  value="${customer.idCardBack}"/>
@@ -72,19 +81,22 @@
             </td>
         </tr>
         <tr>
-            <th>合同编号</th>
-            <td><input type='text' value="${customer.contractNo}" name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
-            <th>身份证编号</th>
-            <td><input type='text' value="${customer.idCardNumber}" name='idCardNumber' class='easyui-textbox' data-options='required:false,width:200'/></td>
-
-        </tr>
-        <tr>
             <th>合同附件</th>
             <td>
                 <input type="hidden" class="textbox-value" name="contractUrl" id="contractUrl"  value="${customer.contractUrl}"/>
                 <input id="contractUrlFile" name='file' value="${customer.contractUrl}">
                 <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
             </td>
+
+            <th>身份证编号</th>
+            <td><input type='text' value="${customer.idCardNumber}" name='idCardNumber' class='easyui-textbox' data-options='required:false,width:200'/></td>
+
+        </tr>
+        <tr>
+
+            <th>委托开始时间</th>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" id="clientStartDateForm" name='clientStartDate' data-options='required:true,width:200'/></td>
+
             <th>授权照片</th>
             <td>
                 <input type="hidden" class="textbox-value" name="empowerPhoto" id="empowerPhoto" value="${customer.empowerPhoto}"/>
@@ -95,30 +107,29 @@
         </tr>
 
         <tr>
-            <th>委托开始时间</th>
-            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientStartDate}"/>" id="clientStartDateForm" name='clientStartDate' data-options='required:true,width:200'/></td>
+            <th>委托结束时间</th>
+            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" id="clientEndDateForm" name='clientEndDate' data-options='required:true,width:200'/></td>
+
             <th>授权开始时间</th>
             <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.empowerStartDate}"/>" id="empowerStartDateForm" name='empowerStartDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
 
         </tr>
         <tr>
-            <th>委托结束时间</th>
-            <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.clientEndDate}"/>" id="clientEndDateForm" name='clientEndDate' data-options='required:true,width:200'/></td>
+            <th>委托期限</th>
+            <td><input type='text' value="${customer.clientTerm}" id="clientTermForm" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
+
             <th>授权结束时间</th>
             <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${customer.empowerEndDate}"/>" id="empowerEndDateForm" name='empowerEndDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
 
         </tr>
-        <tr>
-            <th>委托期限</th>
-            <td><input type='text' value="${customer.clientTerm}" id="clientTermForm" name='clientTerm' class='easyui-numberbox' data-options='required:true,width:200'/></td>
-        </tr>
-
         <tr>
             <th>委托内容</th>
             <td><input type='text' value="${customer.clientContent}" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
 
 
         </tr>
+
+
         <tr>
             <th>备注</th>
             <td><input type='text' value="${customer.remark}" name='remark' class='easyui-textbox' data-options='width:200,height:80,multiline:true'/></td>

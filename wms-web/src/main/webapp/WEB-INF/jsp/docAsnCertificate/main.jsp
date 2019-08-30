@@ -20,6 +20,8 @@ var ezuiDatagrid;
 var dialogUrl = "/docAsnCertificateController.do?toInfo";
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
+var ezuiCustDataDialog;        //货主
+var ezuiCustDataDialogId;      //货主
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
@@ -69,10 +71,11 @@ $(function() {
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
+		width:350,
+		height:330,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
         href:dialogUrl,
-        fit:true,
         cache: false,
 		onClose : function() {
 			ezuiFormClear(ezuiForm);
@@ -89,6 +92,21 @@ $(function() {
         }
     }).dialog('close');
     /* 控件初始化end */
+	//货主查询弹框初始化
+	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
+		modal: true,
+		title: '<spring:message code="common.dialog.title"/>',
+		buttons: '',
+		onOpen: function () {
+
+		},
+		onClose: function () {
+
+		}
+	}).dialog('close');
+
+
+//查询条件货主字段初始化放大镜 在info页面
 });
 
 var add = function(){
@@ -102,16 +120,6 @@ var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
-		// ezuiForm.form('load',{
-		// 	customerid : row.customerid,
-		// 	sku : row.sku,
-		// 	lotatt04 : row.lotatt04,
-		// 	addtime : row.addtime,
-		// 	addwho : row.addwho,
-		// 	edittime : row.edittime,
-		// 	editwho : row.editwho,
-		// 	certificateContext : row.certificateContext
-		// });
 		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
@@ -286,6 +294,75 @@ var downloadTemplate = function(){
 var toImportData = function(){
     ezuiImportDataDialog.dialog('open');
 };
+
+//货主查询弹框弹出start=========================
+var ezuiCustDataClickC = function () {
+	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+		url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+		method: 'POST',
+		toolbar: '#ezuiCustToolbar',
+		title: '客户档案',
+		pageSize: 50,
+		pageList: [50, 100, 200],
+		fit: true,
+		border: false,
+		fitColumns: true,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		pagination: true,
+		rownumbers: true,
+		singleSelect: true,
+		queryParams: {
+			activeFlag: '1',
+			customerType: 'OW'
+		},
+		idField: 'id',
+		columns: [[
+			{field: 'customerid', title: '客户代码', width: 15},
+			{field: 'descrC', title: '中文名称', width: 50},
+			{field: 'descrE', title: '英文名称', width: 50},
+			{field: 'customerTypeName', title: '类型', width: 15},
+			{
+				field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+					return rowData.activeFlag == '1' ? '是' : '否';
+				}
+			}
+		]],
+		onDblClickCell: function (index, field, value) {
+			selectCustC();
+		},
+		onRowContextMenu: function (event, rowIndex, rowData) {
+		}, onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		}
+	});
+	$("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combobox('setText', '货主');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
+	ezuiCustDataDialog.dialog('open');
+};
+
+//货主查询弹框查询按钮
+var ezuiCustDataDialogSearchC = function () {
+	ezuiCustDataDialogId.datagrid('load', {
+		customerid: $("#ezuiCustDataDialog #customerid").textbox("getValue"),
+		customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+		activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+	});
+};
+//货主查询弹框选择按钮
+var selectCustC = function () {
+	var row = ezuiCustDataDialogId.datagrid('getSelected');
+	if (row) {
+		$("#ezuiFormInfo #customerid").textbox('setValue', row.customerid);
+		ezuiCustDataDialog.dialog('close');
+	}
+};
+//货主查询弹框清空按钮
+var ezuiCustToolbarClearC = function () {
+	$("#ezuiCustDataDialog #customerid").textbox('clear');
+};
+//货主查询弹框弹出end==========================
 </script>
 </head>
 <body>
@@ -359,8 +436,66 @@ var toImportData = function(){
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<!-- 导入end -->
-
-
+	<!-- 货主选择弹框 -->
+	<div id='ezuiCustDataDialog' style="width:700px;height:480px;padding:10px 20px">
+		<div class='easyui-layout' data-options='fit:true,border:false'>
+			<div data-options="region:'center'">
+				<div id='ezuiCustToolbar' class='datagrid-toolbar' style="">
+					<fieldset>
+						<legend><spring:message code='common.button.query'/></legend>
+						<table>
+							<tr>
+								<th>客户：</th>
+								<td>
+									<input type='text' id='customerid' name="customerid" class='easyui-textbox' size='12'
+										   data-options='prompt:"请输入客户代码"'/></td>
+								<th>类型：</th>
+								<td>
+									<input type='text' id='customerType' name="customerType" class='easyui-combobox'
+										   size='8' data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
+								</td>
+								<th>激活：</th>
+								<td>
+									<input type='text' id='activeFlag' name="activeFlag" class='easyui-combobox' size='8'
+										   data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: 'Y', value: '是'},
+																																{id: 'N', value: '否'}
+																															]"/>
+								</td>
+								<td>
+									<a onclick='ezuiCustDataDialogSearchC();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+									<a onclick='selectCustC();' id='ezuiBtn_edit' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
+									<a onclick='ezuiCustToolbarClearC();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-remove"'
+									   href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					<div id='ezuiCustDialogBtn'></div>
+				</div>
+				<table id='ezuiCustDataDialogId'></table>
+			</div>
+		</div>
+	</div>
+	<div id='ezuiCustDialogBtn'>
+		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.close'/></a>
+	</div>
 
 <script>
 

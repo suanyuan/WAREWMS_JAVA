@@ -1866,7 +1866,7 @@ public class OrderHeaderForNormalService extends BaseService {
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 
         superClassMap.put("skuName", "客户");
-        superClassMap.put("cartonNo", "出库单号");
+        superClassMap.put("orderNo", "出库单号");
         superClassMap.put("soreference", "客户单号");
         superClassMap.put("batchNum", "生产批号");
         superClassMap.put("serialNum", "序列号");
