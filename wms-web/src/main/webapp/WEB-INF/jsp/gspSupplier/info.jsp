@@ -40,7 +40,10 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
 																																	textField: 'value',
 																																	data: [
 																																	{id: 'JY', value: '经营'},
-																																	{id: 'SC', value: '生产'}
+																																	{id: 'SCJY', value: '生产经营'},
+																																	{id: 'KD', value: '快递'},
+																																	{id: 'YL', value: '医疗机构'},
+																																	{id: 'GNSC', value: '生产'}
 																																]" readonly/></td>
 
         </tr>

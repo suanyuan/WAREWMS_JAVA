@@ -50,7 +50,7 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.clientId != null and condition.clientId != ''" >
-	    and client_id =  #{condition.clientId}
+	    and client_id  like CONCAT('%',#{condition.clientId},'%')
 	</if>
 	<if test="condition.clientNo != null and condition.clientNo != ''" >
 	    and client_no like CONCAT('%',#{condition.clientNo},'%')
