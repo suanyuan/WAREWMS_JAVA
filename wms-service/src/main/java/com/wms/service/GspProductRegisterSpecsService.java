@@ -50,7 +50,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private ImportGspProductRegisterSpecsDataService importGspProductRegisterSpecsDataService;
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
 

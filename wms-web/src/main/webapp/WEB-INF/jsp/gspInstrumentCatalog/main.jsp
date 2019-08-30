@@ -40,9 +40,9 @@ $(function() {
 			{field: 'classifyId',		title: '分类',	width: 72 },
 			{field: 'version',		title: '版本',	width: 72 },
 			{field: 'createId',		title: '创建人',	width: 72 },
-			{field: 'cretaeDate',		title: '创建时间',	width: 72 ,formatter: dateFormat2},
+			{field: 'cretaeDate',		title: '创建时间',	width: 72 ,formatter: dateFormat},
 			{field: 'editId',		title: '修改人',	width: 72 },
-			{field: 'editDate',		title: '修改时间',	width: 72 ,formatter: dateFormat2},
+			{field: 'editDate',		title: '修改时间',	width: 72 ,formatter: dateFormat},
 			{field: 'isUse',		title: '是否有效',	width: 72 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){

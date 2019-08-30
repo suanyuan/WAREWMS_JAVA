@@ -295,7 +295,7 @@
 
             ]],
             onDblClickCell: function(index,field,value){
-                choseProductSelect();
+                // choseProductSelect();
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
 

@@ -71,9 +71,9 @@ $(function() {
                 }},*/
             {field: 'contractUrl',		title: '合同文件 ',	width: 80,formatter:showUrlFile},
             {field: 'clientContent',		title: '委托/合同内容',	width: 120 },
-            {field: 'clientStartDate',		title: '委托/合同开始时间 ',	width: 130 },
-            {field: 'clientEndDate',		title: '委托/合同结束时间 ',	width: 130 },
-			{field: 'clientTerm',		title: '委托/合同期限',	width: 130 },
+            {field: 'clientStartDate',		title: '委托/合同开始时间 ',	width: 130 ,formatter:dateFormat2},
+            {field: 'clientEndDate',		title: '委托/合同结束时间 ',	width: 130 ,formatter:dateFormat2},
+			{field: 'clientTerm',		title: '委托/合同期限',	width: 130 ,formatter:day},
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
