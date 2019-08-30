@@ -206,23 +206,23 @@ public class GspProductRegisterSpecsService extends BaseService {
 	public Json getGspProductRegisterSpecsInfo(String id){
          //	根据specs_id查出单挑getGspProductRegisterSpecs
 		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectById(id);
-		if(gspProductRegisterSpecs.getEnterpriseId()!=null) {
-			GspEnterpriseInfo info = new GspEnterpriseInfo();
-			//通过查到的gspProductRegisterSpecs中的getEnterpriseId创建对象
-			info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
-			//通过getEnterpriseId查出生产企业信息
-			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
-			if(gspEnterpriseInfo.getEnterpriseName() !=null){
-				gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
-
-			}
+//		if(gspProductRegisterSpecs.getEnterpriseId()!=null) {
+//			GspEnterpriseInfo info = new GspEnterpriseInfo();
+//			//通过查到的gspProductRegisterSpecs中的getEnterpriseId创建对象
+//			info.setEnterpriseId(gspProductRegisterSpecs.getEnterpriseId());
+//			//通过getEnterpriseId查出生产企业信息
+//			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(info);
+//			if(gspEnterpriseInfo.getEnterpriseName() !=null){
+//				gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+//
+//			}
 			//产品许可证 备案号
 //			if(gspEnterpriseInfo.getLicenseNo()!=null){
 //				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getLicenseNo());
 //			}else{
 //				gspProductRegisterSpecs.setLicenseNo(gspEnterpriseInfo.getRecordNo());
 //			}
-		}
+//		}
 		if(gspProductRegisterSpecs == null){
 			return Json.error("企业信息不存在！");
 		}

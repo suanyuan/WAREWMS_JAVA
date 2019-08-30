@@ -54,6 +54,7 @@
         <result column="wight" property="wight"/>
         <result column="packaging_unit" property="packagingUnit"/>
         <result column="licenseOrRecordNo" property="licenseOrRecordNo"/>
+        <result column="product_enterprise_name" property="enterpriseName"/>
         <result column="storage_condition" property="storageCondition"/>
 
         <!--<result column="attache_card_category" property="attacheCardCategory"/>-->
@@ -145,8 +146,8 @@
 
     <!-- 插入记录 -->
     <insert id="add" parameterType="Object">
-  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit,LicenseOrRecordNo)
- values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},now(),#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit},#{licenseOrRecordNo})
+  insert into gsp_product_register_specs(specs_id,product_register_id,specs_name,product_code,product_name,product_remark,product_model,production_address,bar_code,unit,packing_unit,conversion_rate,`long`,wide,hight,packing_require,storage_condition,transport_condition,create_id,create_date,edit_id,edit_date,is_use,is_certificate,is_doublec,attache_card_category,cold_hain_mark,sterilization_markers,medical_device_mark,maintenance_cycle,wight,alternat_name1,alternat_name2,alternat_name3,alternat_name4,alternat_name5,packaging_unit,LicenseOrRecordNo,product_enterprise_name)
+ values(#{specsId},#{productRegisterId},#{specsName},#{productCode},#{productName},#{productRemark},#{productModel},#{productionAddress},#{barCode},#{unit},#{packingUnit},#{conversionRate},#{llong},#{wide},#{hight},#{packingRequire},#{storageCondition},#{transportCondition},#{createId},now(),#{editId},#{editDate},#{isUse},#{isCertificate},#{isDoublec},#{attacheCardCategory},#{coldHainMark},#{sterilizationMarkers},#{medicalDeviceMark},#{maintenanceCycle},#{wight},#{alternatName1},#{alternatName2},#{alternatName3},#{alternatName4},#{alternatName5},#{packagingUnit},#{licenseOrRecordNo},#{enterpriseName})
 </insert>
 
     <!-- 根据id，修改记录-->
@@ -283,7 +284,10 @@
                 packaging_unit=#{packagingUnit},
             </if>
             <if test="licenseOrRecordNo!= null  ">
-                LicenseOrRecordNo=#{licenseOrRecordNo}
+                LicenseOrRecordNo=#{licenseOrRecordNo},
+            </if>
+            <if test="enterpriseName!= null  ">
+                product_enterprise_name=#{enterpriseName}
             </if>
         </trim>
         where specs_id=#{specsId}

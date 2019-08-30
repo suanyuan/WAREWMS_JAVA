@@ -44,6 +44,7 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String wight;//重量
 	private java.lang.String packagingUnit;//包装单位
 	private String licenseOrRecordNo;//产品许可证 备案号
+	private String enterpriseName;//生产企业
 
 
 
@@ -52,6 +53,14 @@ public class GspProductRegisterSpecsForm {
 	private java.lang.String alternatName3;
 	private java.lang.String alternatName4;
 	private java.lang.String alternatName5;
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public String getProductNameMain() {
 		return productNameMain;
