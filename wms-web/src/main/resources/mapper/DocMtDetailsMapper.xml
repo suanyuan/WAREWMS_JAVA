@@ -357,11 +357,15 @@ where 1=1
 	select ifnull(max(mtlineno),0) from doc_mt_details where mtno = #{mtno,jdbcType=VARCHAR}
 </select>
 
-    <select id="queryUnfinishedDetails" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <select id="queryUnfinishedDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from doc_mt_details
-        where mtno = #{mtno} and locationid = #{locationid} and linestatus in ('00', '30')
+        a.*
+        from doc_mt_details a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        where a.mtno = #{mtno} and a.locationid = #{locationid} and a.linestatus = '00'
+        and a.sku = #{sku} and a.customerid = #{customerid}
+        and IFNULL(b.lotatt04,'') = IFNULL(rtrim(#{lotatt04}),'')
+        and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
     </select>
 
     <update id="updateDetailQty" parameterType="java.util.Map">
@@ -394,5 +398,14 @@ where 1=1
         left join bas_sku c on a.sku = c.sku and a.customerid = c.customerid
         where a.mtno = #{mtno}
         order by a.locationid asc, a.sku asc, a.customerid asc
+    </select>
+
+    <select id="queryMtGuideList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_mt_details
+        where mtno = #{mtno, jdbcType=VARCHAR}
+        order by linestatus asc, locationid asc, sku asc
+        limit #{start}, #{pageSize}
     </select>
 </mapper>   

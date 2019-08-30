@@ -2,10 +2,7 @@ package com.wms.service;
 
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.query.ActAllocationDetailsQuery;
-import com.wms.query.BasSerialNumQuery;
-import com.wms.query.BasSkuQuery;
-import com.wms.query.ProductLineQuery;
+import com.wms.query.*;
 import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.query.pda.PdaDocPackageQuery;
@@ -45,6 +42,8 @@ public class CommonService extends BaseService{
     private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
+    @Autowired
+    private DocMtDetailsMybatisDao docMtDetailsMybatisDao;
 
     public String generateSeq(String seqType,String warehouseid){
         Map<String,Object> map = new HashMap<>();
@@ -154,7 +153,7 @@ public class CommonService extends BaseService{
 
             json.setObj(docPaDetailsList);
             json.setSuccess(true);
-            json.setMsg("可继续操作");
+            json.setMsg("可继续操作  ");
             return json;
         }
 
@@ -271,6 +270,49 @@ public class CommonService extends BaseService{
         json.setSuccess(true);
         json.setMsg("可继续操作");
         json.setObj(actAllocationDetailsList.get(0));
+        return json;
+    }
+
+    /**
+     * 判断养护扫码条码数据是否齐全
+     * @param invLotAtt 验证通过的养护明细对应的批属
+     * @param query 查询明细 mtno, lotatt04, lotatt05, GTIN, locationid, otherCode
+     * @return 结果
+     */
+    public Json judgeMtScanResult(DocMtDetailsQuery query, CommonVO commonVO) {
+
+        Json json = new Json();
+
+        //1，查询养护明细
+        DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryUnfinishedDetail(query);
+        if (docMtDetails == null) {
+
+            json.setSuccess(false);
+            json.setMsg("查无此产品的待养护明细数据");
+            return json;
+        }
+
+        //2，如果commonVo中有批号/序列号，将查询到的养护明细返回
+        if (StringUtil.isNotEmpty(commonVO.getBatchNum()) || StringUtil.isNotEmpty(commonVO.getSerialNum())) {
+
+            json.setObj(docMtDetails);
+            json.setSuccess(true);
+            json.setMsg("可继续操作 ");
+            return json;
+        }
+
+        //3，如果SKU对应的明细中存在批号或者序列号，提示养护不允许扫描SKU进行
+        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docMtDetails.getLotnum());
+        if (StringUtil.isNotEmpty(invLotAtt.getLotatt04()) || StringUtil.isNotEmpty(invLotAtt.getLotatt05())) {
+
+            json.setSuccess(false);
+            json.setMsg("请扫描产品GS1条码进行养护操作！");
+            return json;
+        }
+
+        json.setSuccess(true);
+        json.setMsg("可继续操作");
+        json.setObj(docMtDetails);
         return json;
     }
 }

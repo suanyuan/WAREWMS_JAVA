@@ -7,6 +7,7 @@ import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocQcDetailsService;
 import com.wms.service.DocQcHeaderService;
+import com.wms.utils.StringUtil;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocQcDetailVO;
 import com.wms.vo.pda.PdaDocQcHeaderVO;
@@ -138,7 +139,7 @@ public class PdaDocQcController {
     public Map<String, Object> queryDocPaList(String qcno,@RequestParam(defaultValue = "1") int pageNum) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        if (qcno == null || qcno.length() == 0) {
+        if (StringUtil.isEmpty(qcno)) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "任务单号缺失"));
             return resultMap;
         }

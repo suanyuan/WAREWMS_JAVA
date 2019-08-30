@@ -9,6 +9,7 @@ import com.wms.service.DocMtHeaderService;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocMtDetailsVO;
 import com.wms.vo.DocMtHeaderVO;
+import com.wms.vo.Json;
 import com.wms.vo.form.DocMtDetailsForm;
 import com.wms.vo.form.DocMtHeaderForm;
 import com.wms.vo.form.pda.PageForm;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -82,15 +84,15 @@ public class PdaDocMtController {
     public Map<String, Object> queryDocMtDetail(DocMtDetailsQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        List<DocMtDetailsVO> docMtDetailsVOList = docMtDetailsService.queryMtDetail(query);
+        Json json = docMtDetailsService.queryMtDetail(query);
 
-        if (docMtDetailsVOList.size() == 0) {
-            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无养护明细信息"));
+        if (!json.isSuccess()) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
             return resultMap;
         }
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
-        resultMap.put(Constant.DATA, docMtDetailsVOList);
+        resultMap.put(Constant.DATA, json.getObj());
         resultMap.put(Constant.RESULT, result);
         return resultMap;
     }
@@ -139,6 +141,26 @@ public class PdaDocMtController {
         }
         List<DocMtProgressDetail> docMtProgressDetails = docMtDetailsService.queryDocMtList(mtno);
         resultMap.put(Constant.DATA, docMtProgressDetails);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
+
+    /**
+     * 获取养护指导明细列表
+     * @param mtno ~
+     * @return ~
+     */
+    @RequestMapping(params = "docMtGuides", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryDocMtGuides(String mtno,@RequestParam(defaultValue = "1") int pageNum) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if (StringUtil.isEmpty(mtno)) {
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "计划单号缺失"));
+            return resultMap;
+        }
+        List<DocMtDetailsVO> docMtDetailsVOList = docMtDetailsService.getGuidanceList(mtno, pageNum);
+        resultMap.put(Constant.DATA, docMtDetailsVOList);
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
     }

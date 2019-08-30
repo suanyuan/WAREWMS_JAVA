@@ -16,6 +16,8 @@ import com.wms.utils.StringUtil;
 import com.wms.vo.DocMtDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocMtDetailsForm;
+import com.wms.vo.form.pda.ScanResultForm;
+import com.wms.vo.pda.CommonVO;
 import org.apache.camel.language.Bean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,9 @@ public class DocMtDetailsService extends BaseService {
 
 	@Autowired
 	private BasSerialNumMybatisDao basSerialNumMybatisDao;
+
+	@Autowired
+    private CommonService commonService;
 
     /**
      * 养护作业界面分页显示 根据mtno
@@ -156,88 +161,104 @@ public class DocMtDetailsService extends BaseService {
 
     /**
      * 根据扫码结果查询养护明细
-     * 可能存在不同货主的相同产品
      * @param query ~
      * @return ~
      */
-	public List<DocMtDetailsVO> queryMtDetail(DocMtDetailsQuery query) {
+	public Json queryMtDetail(DocMtDetailsQuery query) {
 
-        //如果是序列号扫码，验证是否存在对应序列号记录（bas_serial_num）
-        BasSerialNum basSerialNum = null;
-        if (StringUtil.isNotEmpty(query.getOtherCode()) ||
-                StringUtil.isNotEmpty(query.getLotatt05())) {
+	    Json resultJson = new Json();
+        DocMtDetailsVO docMtDetailsVO = new DocMtDetailsVO();
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+        /*
+        111，处理BasSku获取问题
+        并且返回准确的批号、序列号匹配条件
+         */
+        ScanResultForm scanResultForm = new ScanResultForm();
+        //customerid, GTIN, lotatt04, lotatt05, otherCode
+        BeanUtils.copyProperties(query, scanResultForm);
+        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
 
-                //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
-                query.setLotatt04(basSerialNum.getBatchNum());
-            }
+        if (!commonVO.isSuccess()) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg(commonVO.getMessage());
+            return resultJson;
         }
 
-	    List<DocMtDetails> docMtDetailsList= docMtDetailsMybatisDao.queryUnfinishedDetails(query);
-	    List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<>();
-	    DocMtDetailsVO docMtDetailsVO;
-        for (DocMtDetails docMtDetails : docMtDetailsList) {
+        BasSku basSku = commonVO.getBasSku();
+        query.setLotatt04(commonVO.getBatchNum());
+        query.setLotatt05(commonVO.getSerialNum());
+        query.setSku(basSku.getSku());
+        docMtDetailsVO.setBasSku(basSku);
 
-            //产品档案
-            BasSku basSku = basSkuMybatisDao.queryById(docMtDetails);
-            if (basSku == null) continue;
+        /*
+        222，判断获取养护扫码数据是否齐全
+         */
+        Json scanJson = commonService.judgeMtScanResult(query, commonVO);
+        if (!scanJson.isSuccess()) {
 
-            /*
-            产品线 为空则默认正常流程
-            不为空的情况下，如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
-             */
-            ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-            ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-            if (productLine == null) continue;
-            boolean isSerialManagement = (productLine.getSerialFlag() == 1);
-
-            //批次属性
-            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docMtDetails);
-            if (invLotAtt == null) continue;
-
-            if (isSerialManagement) {
-
-                if (!StringUtil.fixNull(invLotAtt.getLotatt04()).equals(StringUtil.fixNull(query.getLotatt04()))) {
-                    continue;
-                }
-            }else {
-
-                if (!StringUtil.fixNull(invLotAtt.getLotatt04()).equals(StringUtil.fixNull(query.getLotatt04())) &&
-                        !StringUtil.fixNull(invLotAtt.getLotatt05()).equals(StringUtil.fixNull(query.getLotatt05()))) {
-                    continue;
-                }
-            }
-
-            //验证通过开始塞数据
-            docMtDetailsVO = new DocMtDetailsVO();
-            BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
-            //产品档案
-            docMtDetailsVO.setBasSku(basSku);
-            //产品线
-            docMtDetailsVO.setProductLine(productLine);
-            //批属
-            docMtDetailsVO.setInvLotAtt(invLotAtt);
-
-
-            //客户档案
-            BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(docMtDetails);
-            if (basCustomer == null) continue;
-            String jsonStr = JSON.toJSONString(basCustomer, SerializerFeature.DisableCircularReferenceDetect);
-            docMtDetailsVO.setBasCustomer(JSONObject.parseObject(jsonStr, BasCustomer.class));
-
-
-
-            //包装规格
-            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
-            if (basPackage == null) continue;
-            docMtDetailsVO.setBasPackage(basPackage);
-
-            docMtDetailsVOList.add(docMtDetailsVO);
+            resultJson.setSuccess(false);
+            resultJson.setMsg(scanJson.getMsg());
+            return resultJson;
         }
- 	    return docMtDetailsVOList;
+
+        /*
+        333,养护明细
+         */
+	    DocMtDetails docMtDetails = (DocMtDetails) scanJson.getObj();
+	    BeanUtils.copyProperties(docMtDetails,docMtDetailsVO);
+
+	    /*
+	    444,批次属性
+	     */
+        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docMtDetails);
+        if (invLotAtt == null) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无此产品的批次数据");
+            return resultJson;
+        }
+        docMtDetailsVO.setInvLotAtt(invLotAtt);
+
+        /*
+        555,产品线
+         */
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        if (productLine == null) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无此产品的产品线数据");
+            return resultJson;
+        }
+        docMtDetailsVO.setProductLine(productLine);
+
+        /*
+        666，客户档案
+         */
+        BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(docMtDetails);
+        if (basCustomer == null) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无此产品的客户档案数据");
+            return resultJson;
+        }
+        docMtDetailsVO.setBasCustomer(basCustomer);
+
+        //包装规格
+        BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+        if (basPackage == null) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg("查无此产品的包装规格数据");
+            return resultJson;
+        }
+        docMtDetailsVO.setBasPackage(basPackage);
+
+        resultJson.setSuccess(true);
+        resultJson.setMsg(Constant.SUCCESS_MSG);
+        resultJson.setObj(docMtDetailsVO);
+ 	    return resultJson;
     }
 
     /**
@@ -346,5 +367,37 @@ public class DocMtDetailsService extends BaseService {
     public List<DocMtProgressDetail> queryDocMtList(String mtno) {
 
         return docMtDetailsMybatisDao.queryDocMtList(mtno);
+    }
+
+    /**
+     * 获取养护指导列表，用户根据指导列表进行养护
+     * @param mtno ~
+     * @return ~
+     */
+    public List<DocMtDetailsVO> getGuidanceList(String mtno, int pageNum) {
+
+        List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<>();
+
+        DocMtDetailsVO docMtDetailsVO;
+
+        List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryMtGuideList(mtno, (pageNum - 1) * Constant.pageSize, Constant.pageSize);
+        for (DocMtDetails docMtDetails : docMtDetailsList) {
+
+            docMtDetailsVO = new DocMtDetailsVO();
+            BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
+
+            //批次属性
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docMtDetails.getLotnum());
+            String jsonStr1 = JSON.toJSONString(invLotAtt, SerializerFeature.DisableCircularReferenceDetect);
+            docMtDetailsVO.setInvLotAtt(JSONObject.parseObject(jsonStr1, InvLotAtt.class));
+
+            //产品档案
+            BasSkuQuery basSkuQuery = new BasSkuQuery(docMtDetails.getCustomerid(), docMtDetails.getSku());
+            BasSku basSku = basSkuMybatisDao.queryById(basSkuQuery);
+            docMtDetailsVO.setBasSku(JSONObject.parseObject(JSON.toJSONString(basSku, SerializerFeature.DisableCircularReferenceDetect), BasSku.class));
+
+            docMtDetailsVOList.add(docMtDetailsVO);
+        }
+        return docMtDetailsVOList;
     }
 }

@@ -47,7 +47,16 @@ public interface DocMtDetailsMybatisDao extends BaseDao {
     /**
      * 养护明细查询
      */
-    List<DocMtDetails> queryUnfinishedDetails(DocMtDetailsQuery docMtDetails);
+    DocMtDetails queryUnfinishedDetail(DocMtDetailsQuery docMtDetails);
+
+    /**
+     * 查询养护指导列表（PDA）
+     * @param mtno 养护单号
+     * @param start 开始
+     * @param pageSize 范围
+     * @return ~
+     */
+    List<DocMtDetails> queryMtGuideList(@Param("mtno") String mtno, @Param("start") int start, @Param("pageSize") int pageSize);
 
     /**
      * 更新养护数
