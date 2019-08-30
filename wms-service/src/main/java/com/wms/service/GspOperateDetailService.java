@@ -114,4 +114,20 @@ public class GspOperateDetailService extends BaseService {
 		return voList;
 	}
 
+	public Json invalidGspOperateDetail(String id,String licenseType) {
+		Json json = new Json();
+		GspOperateDetailQuery query = new GspOperateDetailQuery();
+		query.setLicenseId(id);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		Long result = gspOperateDetailMybatisDao.updateByLicenseId(id,licenseType);
+		if(result>0){
+			json.setSuccess(true);
+		}else{
+			json.setSuccess(false);
+		}
+
+		return json;
+	}
+
 }

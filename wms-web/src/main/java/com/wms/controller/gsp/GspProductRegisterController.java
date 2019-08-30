@@ -98,10 +98,6 @@ public class GspProductRegisterController {
 	@ResponseBody
 	public Json edit(GspProductRegisterForm gspProductRegisterForm) throws Exception {
 		Json json = gspProductRegisterService.editGspProductRegister(gspProductRegisterForm);
-		if(json == null){
-			json = new Json();
-		}
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 
@@ -184,8 +180,8 @@ public class GspProductRegisterController {
 	@Login
 	@RequestMapping(params = "unBind")
 	@ResponseBody
-	public Object unBind(@RequestParam(defaultValue = "") String id){
-		return gspProductRegisterService.unBindProduct(id);
+	public Object unBind(@RequestParam(defaultValue = "") String gspProductRegisterId,@RequestParam(defaultValue = "") String id){
+		return gspProductRegisterService.unBindProduct(gspProductRegisterId,id);
 	}
 //下载导入模板
 	@Login

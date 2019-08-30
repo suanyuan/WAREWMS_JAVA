@@ -15,6 +15,7 @@
         <form id='ezuiFormDetail' method='post'>
             <input type="hidden" id="operateDetail" name="operateDetail" value="${operateDetail}"/>
             <input type='hidden' id='choseScope' value="${choseScope}" name="choseScope" class="textbox-value"/>
+            <input type="hidden" id="opType" name="opType" value="add"/>
             <fieldset>
                 <legend>产品注册证信息</legend>
                 <input type='hidden' class="textbox-value" id='gspProductRegisterId' name='productRegisterId' value="${gspProductRegister.productRegisterId}"/>
@@ -134,23 +135,19 @@
                 </table>
             </fieldset>
         </form>
-        <div class="easyui-tabs" style="width:950px;height:200px">
+        <div class="easyui-tabs" style="width:100%;height:200px">
             <div title="证照历史数据" style="padding:3px">
-                <form>
                     <div>
-                        <a onclick='detailsUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
-                        <a onclick='detailsCopy();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>信息复用</a>
+                        <a onclick='registerUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
+                        <a onclick='detailsCopyRegister();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>信息复用</a>
                     </div>
-                </form>
                 <table id='ezuiDetailsDatagrid'></table>
             </div>
             <div title="绑定产品列表" style="padding:0px">
-                <form>
                     <div>
                         <a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>
                         <a onclick='detailsUnBind();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>解除产品</a>
                     </div>
-                </form>
                 <table id='ezuiDatagridDetail' ></table>
             </div>
         </div>
@@ -214,6 +211,7 @@
     var ezuiDatagridDetail;
     var ezuidialogChoseScope;
     var choseRowArr = new Array();
+    var opType = "add";
 //上传文件初始化
     $(function () {
         $('#attachmentUrlFile').filebox({
@@ -355,7 +353,7 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                version : '${gspProductRegisterId}'
+                productRegisterNo : '${gspProductRegister.productRegisterNo}'
             },
             collapsible:false,
             pagination:true,
@@ -366,10 +364,10 @@
                 {field: 'productRegisterId',		title: '主键',	width: 0 ,hidden:true},
                 {field: 'productRegisterNo',		title: '注册证编号',	width: '20%' },
                 {field: 'productNameMain',		title: '产品名称',	width: '20%' },
-                {field: 'classifyId',		title: '管理分类',	width: '20%' },
-                {field: 'checkerId',		title: '审核人',	width: '20%' },
+                {field: 'isUse',		title: '是否有效',	width: '10%' ,formatter:isUseFormatter},
+                {field: 'checkerId',		title: '审核人',	width: '10%' },
                 {field: 'createDate',		title: '创建时间',	width: '20%' },
-                {field: '_operate',		title: '操作',	width: '20%',
+                {field: '_operate',		title: '注册证附件',	width: '20%',
                     formatter: formatOper
                 }
             ]],
@@ -626,7 +624,7 @@
                 if(confirm){
                     $.ajax({
                         url : 'gspProductRegisterController.do?unBind',
-                        data : {id : arr.join(',')},
+                        data : {"gspProductRegisterId":$("#gspProductRegisterId").val(),id : arr.join(',')},
                         type : 'POST',
                         dataType : 'JSON',
                         success : function(result){
@@ -723,7 +721,7 @@
     }
 
     function formatOper(value,row,index){
-        return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        return "<a onclick=\"viewUrl('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 //查看上传文件
     function viewUrl(url) {
@@ -748,6 +746,56 @@
 
     function productChose() {
         selectEnterprise();
+    }
+    
+    function detailsCopyRegister() {
+        var row = ezuiDetailsDatagrid.datagrid("getSelected");
+        initHistoryDataRegister(row);
+    }
+
+    //加载历史证照信息
+    function initHistoryDataRegister(row) {
+        $("#ezuiFormDetail input[type!=hidden]").each(function (index) {
+            console.log($(this).attr("class"));
+            if($(this).attr("class")){
+                if($(this).attr("id")) {
+                    if ($(this).attr("class").indexOf('easyui-textbox') != -1) {
+                        $(this).textbox("setValue", row["" + $(this).attr("id") + ""]);
+                    }else if ($(this).attr("class").indexOf('easyui-datebox') != -1) {
+                        $(this).datebox("setValue", dateFormat2(row["" + $(this).attr("id") + ""]));
+                    }else if ($(this).attr("class").indexOf('easyui-numberbox') != -1) {
+                        $(this).numberbox("setValue", row["" + $(this).attr("id") + ""]);
+                    }
+                }
+            }
+        })
+    }
+
+    //换证清空当前数据
+    function registerUpdate() {
+        if($("#productRegisterId").val() == ""){
+            return;
+        }
+        opType = "update";
+        $("#ezuiFormDetail input[id='opType']").val("update");
+        $("#ezuiFormDetail input[type!=hidden]").each(function (index) {
+            if($(this).attr("class")){
+                if($(this).attr("class").indexOf('easyui-textbox')!=-1){
+                    $(this).textbox("setValue","");
+                }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
+                    $(this).datebox("setValue","");
+                }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                    $(this).numberbox("setValue","");
+                }
+            }
+        })
+        $("#ezuiFormDetail #classifyCatalog").textbox("setValue","");
+        $("#ezuiFormDetail #enterpriseName").textbox("setValue","");
+        $("#ezuiFormDetail input[id='attachmentUrl']").val("");
+        $("#attachmentUrlFile").filebox("setValue","");
+        $("#ezuiFormDetail #operateDetail").val("");
+        $("#ezuiFormDetail #choseScope").val("");
+
     }
 </script>
 </body>

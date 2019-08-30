@@ -128,5 +128,11 @@ where 1=1
 	delete from gsp_operate_detail where license_id = #{licenseId}
 	and license_type = #{licenseType}
 </update>
+
+<!-- 根据id，修改记录-->
+<update id="updateByLicenseId" parameterType="Object" >
+	update gsp_operate_detail set is_use = 0 where license_id = #{licenseId}
+	and license_type = #{licenseType}
+</update>
   	
 </mapper>   

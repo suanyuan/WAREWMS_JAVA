@@ -603,6 +603,7 @@
 
 
     function operateGrid1(id) {
+        console.log("---------->"+id);
         processType = 'product';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
@@ -614,7 +615,7 @@
             height:550,
             cache:false,
             onClose : function() {
-                // $('#enterpriseDialog').dialog('destroy');
+
             }
         })
     }

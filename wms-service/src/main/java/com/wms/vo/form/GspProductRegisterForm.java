@@ -42,6 +42,8 @@ public class GspProductRegisterForm {
 	private String productRegsiterUrl;//附件路径
 	private String structureAndComposition;//结构及组成
 	private String agentAddress;//代理人住所
+	private String opType;//add新增 update换证
+
 
 	public String getAgentAddress() {
 		return agentAddress;
@@ -329,5 +331,13 @@ public class GspProductRegisterForm {
 
 	public void setChoseScope(String choseScope) {
 		this.choseScope = choseScope;
+	}
+
+	public String getOpType() {
+		return opType;
+	}
+
+	public void setOpType(String opType) {
+		this.opType = opType;
 	}
 }

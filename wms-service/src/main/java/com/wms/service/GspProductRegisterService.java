@@ -5,7 +5,6 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
-import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegisterSpecs;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
@@ -17,6 +16,7 @@ import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import com.wms.vo.form.GspOperateDetailForm;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -137,30 +137,70 @@ public class GspProductRegisterService extends BaseService {
 				return Json.error("查询不到对应的产品注册证信息");
 			}
 
-			if(!StringUtils.isEmpty(gspProductRegister.getCheckerId())){
+			if(gspProductRegister.getCheckerId()!=null && !StringUtils.isEmpty(gspProductRegister.getCheckerId())){
 				return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
 			}
 
-			BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
-			gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
-			gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
-			gspProductRegister.setEditDate(new Date());
-			gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-			gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
+			if(gspProductRegisterForm.getOpType().equals("update")){
+                //失效原数据
+                gspProductRegister.setIsUse(Constant.IS_USE_NO);
+                gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
 
-			//保存经营范围
-			if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())) {
-				String jsonStr = gspOperateDetailService.initScope(gspProductRegisterForm.getChoseScope());
-				List<GspOperateDetailForm> operateDetailForms = JSON.parseArray(jsonStr, GspOperateDetailForm.class);
+                List<GspOperateDetailVO> gspOperateDetailList = gspOperateDetailService.queryOperateDetailByLicense(gspProductRegister.getProductRegisterId());
+                if(gspOperateDetailList!=null && gspOperateDetailList.size()>0){
+                    for(GspOperateDetailVO v : gspOperateDetailList){
+                        gspOperateDetailService.invalidGspOperateDetail(v.getLicenseId(),Constant.LICENSE_TYPE_REGISTER);
+                    }
+                }
 
-				gspOperateDetailService.deleteGspOperateDetail(gspProductRegister.getProductRegisterId(),Constant.LICENSE_TYPE_REGISTER);
-				if(operateDetailForms.size()>0){
-					for(GspOperateDetailForm g : operateDetailForms){
-						g.setEnterpriseId(gspProductRegister.getProductRegisterId());
-						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_REGISTER);
-					}
-				}
-			}
+                //TODO 失效已下发数据
+
+                GspProductRegister newGspProductRegister = new GspProductRegister();
+                BeanUtils.copyProperties(gspProductRegisterForm, newGspProductRegister);
+                newGspProductRegister.setProductRegisterId(RandomUtil.getUUID());
+                newGspProductRegister.setIsUse(Constant.IS_USE_YES);
+                newGspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+                newGspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+                newGspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+                gspProductRegisterMybatisDao.add(newGspProductRegister);
+
+                //保存经营范围
+                if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())){
+                    String jsonStr = gspOperateDetailService.initScope(gspProductRegisterForm.getChoseScope());
+                    List<GspOperateDetailForm> operateDetailForms = JSON.parseArray(jsonStr, GspOperateDetailForm.class);
+                    if(operateDetailForms.size()>0){
+                        for(GspOperateDetailForm g : operateDetailForms){
+                            g.setEnterpriseId(gspProductRegister.getProductRegisterId());
+                            gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_REGISTER);
+                        }
+                    }
+                }
+
+
+            }else{
+                BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
+                gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
+                gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
+                gspProductRegister.setEditDate(new Date());
+                gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+
+                gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
+
+                //保存经营范围
+                if(!StringUtils.isEmpty(gspProductRegisterForm.getChoseScope())) {
+                    String jsonStr = gspOperateDetailService.initScope(gspProductRegisterForm.getChoseScope());
+                    List<GspOperateDetailForm> operateDetailForms = JSON.parseArray(jsonStr, GspOperateDetailForm.class);
+
+                    gspOperateDetailService.deleteGspOperateDetail(gspProductRegister.getProductRegisterId(),Constant.LICENSE_TYPE_REGISTER);
+                    if(operateDetailForms.size()>0){
+                        for(GspOperateDetailForm g : operateDetailForms){
+                            g.setEnterpriseId(gspProductRegister.getProductRegisterId());
+                            gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_REGISTER);
+                        }
+                    }
+                }
+            }
+
 			return Json.success("操作成功",gspProductRegister.getProductRegisterId());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -274,6 +314,14 @@ public class GspProductRegisterService extends BaseService {
 			return Json.error("请选择需要绑定的产品");
 		}
 
+        GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterId);
+        if(gspProductRegister == null){
+            return Json.error("查询不到对应的注册证");
+        }
+        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
+            return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+        }
+
 		try{
 			String[] arr = specId.split(",");
 			for(String str : arr){
@@ -296,10 +344,17 @@ public class GspProductRegisterService extends BaseService {
 	 * @param specId
 	 * @return
 	 */
-	public Json unBindProduct(String specId){
+	public Json unBindProduct(String gspProductRegisterId,String specId){
 		if(specId.equals("")){
 			return Json.error("请选择需要解除绑定的产品");
 		}
+		GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterId);
+		if(gspProductRegister == null){
+            return Json.error("查询不到对应的注册证");
+        }
+        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
+            return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+        }
 		try{
 			String[] arr = specId.split(",");
 			for(String str : arr){
@@ -322,6 +377,7 @@ public class GspProductRegisterService extends BaseService {
 		MybatisCriteria criteria = new MybatisCriteria();
 		GspProductRegisterQuery query = new GspProductRegisterQuery();
 		query.setProductRegisterNo(registerNo);
+		query.setIsUse(Constant.IS_USE_YES);
 		criteria.setCondition(query);
 		List<GspProductRegister> list = gspProductRegisterMybatisDao.queryByList(criteria);
 		if(list!=null && list.size()>0){
