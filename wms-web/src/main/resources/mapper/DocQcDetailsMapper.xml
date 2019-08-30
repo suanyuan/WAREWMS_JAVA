@@ -32,12 +32,16 @@
 	<result column="packid" property="packid"/>
 	<result column="transactionid" property="transactionid"/>
 <!--inv_lot_att by lotnum-->
-	<result column="lotatt12" property="lotatt12"/>
-	<result column="lotatt07" property="lotatt07"/>
-	<result column="lotatt15" property="lotatt15"/>
 	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt15" property="lotatt15"/>
 </resultMap>
        
 <!-- doc_qc_details table all fields -->
@@ -353,7 +357,7 @@ where 1=1
 <!-- 查询验收明细档列表 pano -->
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.`lotatt12`,a.`lotatt07`,a.`lotatt15`,a.`lotatt01`,a.`lotatt06`,a.`lotatt11`
+	SELECT d.*,h.pano,a.*
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum

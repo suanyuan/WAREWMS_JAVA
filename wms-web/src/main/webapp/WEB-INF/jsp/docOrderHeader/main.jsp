@@ -1691,7 +1691,7 @@ var ezuiSkuToolbarClear = function(){
 /* 商品选择弹框 */
 var ezuiSkuDataClick = function(){
 	ezuiSkuDataDialogId = $('#ezuiSkuDataDialogId').datagrid({
-		url:'<c:url value="/basSkuController.do?showDatagrid"/>',
+		url:'<c:url value="/basSkuController.do?showDatagridByInvLot"/>',
 		method:'POST',
 		toolbar:'#ezuiSkuToolbar',
 		title:'商品档案',
@@ -1713,17 +1713,18 @@ var ezuiSkuDataClick = function(){
 		idField : 'sku',
 		columns : [[
 					{field: 'customerid',	title: '客户代码',	width: 80},
-					{field: 'sku',			title: '商品编码',	width: 120},
+					{field: 'sku',			title: '产品代码',	width: 120},
 					{field: 'descrC',		title: '中文名称',	width: 160},
 					{field: 'descrE',		title: '英文名称',	width: 160},
 					{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
 						return rowData.activeFlag == '1' ? '是' : '否';
 		            }},
 					{field: 'alternateSku1',title: '商品条码',	width: 120},
-					{field: 'packid',		title: '包装代码',	width: 80},
-					{field: 'qty',			title: '库存数',	width: 60},
-					{field: 'qtyallocated',	title: '分配数',	width: 60},
-					{field: 'qtyonhold',	title: '冻结数',	width: 60}
+			        {field: 'qty',			title: '库存数',	width: 60},
+			        {field: 'qtyallocated',	title: '分配数',	width: 60},
+		         	{field: 'qtyonhold',	title: '冻结数',	width: 60},
+					{field: 'packid',		title: '包装代码',	width: 80}
+
 				]],
 		onDblClickCell: function(index,field,value){
 			selectSku();

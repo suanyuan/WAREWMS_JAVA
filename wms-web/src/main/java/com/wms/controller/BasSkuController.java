@@ -67,6 +67,13 @@ public class BasSkuController {
 	public EasyuiDatagrid<BasSkuVO> showDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		return basSkuService.getPagedDatagrid(pager, query);
 	}
+//showDatagridByInvLot
+	@Login
+	@RequestMapping(params = "showDatagridByInvLot")
+	@ResponseBody
+	public EasyuiDatagrid<BasSkuVO> showDatagridByInvLot(EasyuiDatagridPager pager, BasSkuQuery query) {
+		return basSkuService.getPagedDatagridByInvLot(pager, query);
+	}
 
 	@Login
 	@RequestMapping(params = "add")

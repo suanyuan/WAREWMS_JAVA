@@ -100,6 +100,30 @@ public class BasSkuService extends BaseService {
 		datagrid.setRows(basSkuVOList);
 		return datagrid;
 	}
+//显示主页datagrid
+	public EasyuiDatagrid<BasSkuVO> getPagedDatagridByInvLot(EasyuiDatagridPager pager, BasSkuQuery query) {
+		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("sku");
+		List<BasSku> basSkuList = basSkuMybatisDao.queryByPageListByInvLot(mybatisCriteria);
+
+		BasSkuVO basSkuVO = null;
+		List<BasSkuVO> basSkuVOList = new ArrayList<BasSkuVO>();
+
+		for (BasSku basSku : basSkuList) {
+			basSkuVO = new BasSkuVO();
+			BeanUtils.copyProperties(basSku, basSkuVO);
+			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));
+			basSkuVO.setEdittime(simpleDateFormat.format(basSku.getEdittime()));
+			basSkuVOList.add(basSkuVO);
+		}
+		datagrid.setTotal((long) basSkuMybatisDao.queryByCountByInvLot(mybatisCriteria));
+		datagrid.setRows(basSkuVOList);
+		return datagrid;
+	}
 
 	public Json addBasSku(BasSkuForm basSkuForm) throws Exception {
 		Json json = new Json();
