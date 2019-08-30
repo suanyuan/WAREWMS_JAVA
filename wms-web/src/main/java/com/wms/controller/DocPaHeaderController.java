@@ -111,6 +111,7 @@ public class DocPaHeaderController {
 	 */
 	@Login
 	@RequestMapping(params = "resetDocPa")
+	@ResponseBody
 	public Json resetDocPa(String orderNo) throws Exception {
 		return docPaHeaderService.resetDocPa(orderNo);
 	}
