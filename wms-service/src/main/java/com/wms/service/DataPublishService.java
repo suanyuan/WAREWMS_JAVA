@@ -204,6 +204,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield11(specObj.getWight());
                 skuForm.setReservedfield12(specObj.getBarCode());
                 skuForm.setReservedfield13(specObj.getPackagingUnit());//包装单位
+                skuForm.setReservedfield14(specObj.getEnterpriseName());
                 skuForm.setSku(specObj.getProductCode());
 
                 skuForm.setSkuGroup1(firstBusinessApply.getProductline());//specObj.getProductLine()产品线

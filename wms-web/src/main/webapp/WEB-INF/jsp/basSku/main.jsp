@@ -253,6 +253,7 @@ var edit = function(){
             reservedfield11 : row.reservedfield11,
             reservedfield12 : row.reservedfield12,
 			reservedfield13 : row.reservedfield13,
+			reservedfield14 : row.reservedfield14,
   			grossweight : row.grossweight,
   			cube : row.cube,
   			price : row.price,
@@ -862,8 +863,9 @@ var downloadTemplate = function(){
 
 
 				<tr>
-					<th>生产许可证号/备案号</th>
-					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
+					<th>生产企业</th>
+					<td><input type='text' name='reservedfield14' class='easyui-textbox' size='16' /></td>
+
 					<th>重量</th>
 					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
 
@@ -871,13 +873,20 @@ var downloadTemplate = function(){
 
 
 				<tr>
-					<th>产地</th>
-					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
+					<th>生产许可证号/备案号</th>
+					<td><input type='text' name='reservedfield06' class='easyui-textbox' size='16' /></td>
 					<th>商品条码</th>
 					<td><input type='text' name='reservedfield12' class='easyui-textbox' size='16' /></td>
 
 				</tr>
 
+				<tr>
+					<th>产地</th>
+					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
+					<th>自赋码1</th>
+					<td><input type='text' name='alternateSku1' class='easyui-textbox' size='16' /></td>
+
+				</tr>
 				<tr>
 					<th>双证</th>
 					<%--<td><input type='text' name='skuGroup7' class='easyui-textbox' size='16' /></td>--%>
@@ -890,9 +899,12 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-					<th>自赋码1</th>
-					<td><input type='text' name='alternateSku1' class='easyui-textbox' size='16' /></td>
 
+					<th>自赋码2</th>
+					<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
+				<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
+					<%--<th>宽</th>--%>
+					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
 				</tr>
 				<tr>
 					<th>产品合格证</th>
@@ -905,11 +917,12 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-					<th>自赋码2</th>
-					<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
-				<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
-					<%--<th>宽</th>--%>
-					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
+
+					<th>自赋码3</th>
+					<td><input type='text' name='alternateSku3' class='easyui-textbox' size='16' /></td>
+
+
+
 				</tr>
 				<tr>
 					<th>冷链标志</th>
@@ -923,12 +936,13 @@ var downloadTemplate = function(){
 																																{id: 'LC', value: '冷藏'},
 																																{id: 'FLL', value: '非冷链'}
 																															]" readonly/></td>
-					<th>自赋码3</th>
-					<td><input type='text' name='alternateSku3' class='easyui-textbox' size='16' /></td>
 
+					<th>自赋码4</th>
+					<td><input type='text' name='alternateSku4' class='easyui-textbox' size='16' /></td>
 
 
 				</tr>
+
 				<tr>
 					<th>灭菌标志</th>
 					<td><input type='text' name='reservedfield08' id="reservedfield08" class='easyui-combobox' size='16' data-options="required:false,
@@ -942,10 +956,9 @@ var downloadTemplate = function(){
 																															]" readonly/></td>
 
 
-					<th>自赋码4</th>
-					<td><input type='text' name='alternateSku4' class='easyui-textbox' size='16' /></td>
 
-
+					<th>自赋码5</th>
+					<td><input type='text' name='alternateSku5' class='easyui-textbox' size='16' /></td>
 				</tr>
 
 				<tr>
@@ -959,29 +972,28 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-					<th>自赋码5</th>
-					<td><input type='text' name='alternateSku5' class='easyui-textbox' size='16' /></td>
-				</tr>
 
+					<th>增加人</th>
+					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
+
+				</tr>
 				<tr>
 					<th>养护周期(天)</th>
 					<td><input type='text' name='reservedfield10' class='easyui-textbox' size='16' value="tian" /></td>
-					<th>增加人</th>
-					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>增加时间</th>
+					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
 				</tr>
 				<tr>
 					<th>附卡类别</th>
 					<td><input type='text' name='skuGroup2' class='easyui-textbox' size='16' /></td>
 
-					<th>增加时间</th>
-					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
-
-				</tr>
-				<tr>
 					<th>编辑人</th>
 					<td><input type='text' name='editwho' class='easyui-textbox' size='16' /></td>
 
+
+				</tr>
+				<tr>
 					<th>编辑时间</th>
 					<td><input type='text' name='edittime' class='easyui-textbox' size='16' /></td>
 				</tr>
