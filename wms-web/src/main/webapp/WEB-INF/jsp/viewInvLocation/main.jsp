@@ -208,52 +208,6 @@
             }
         };
 
-        //货主查询弹框弹出start=========================
-        var ezuiCustDataClick = function () {
-            ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
-                url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
-                method: 'POST',
-                toolbar: '#ezuiCustToolbar',
-                title: '客户档案',
-                pageSize: 50,
-                pageList: [50, 100, 200],
-                fit: true,
-                border: false,
-                fitColumns: true,
-                nowrap: false,
-                striped: true,
-                collapsible: false,
-                pagination: true,
-                rownumbers: true,
-                singleSelect: true,
-                queryParams: {
-                    activeFlag: '1',
-                    customerType: 'OW'
-                },
-                idField: 'id',
-                columns: [[
-                    {field: 'customerid', title: '客户代码', width: 15},
-                    {field: 'descrC', title: '中文名称', width: 50},
-                    {field: 'descrE', title: '英文名称', width: 50},
-                    {field: 'customerTypeName', title: '类型', width: 15},
-                    {
-                        field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
-                            return rowData.activeFlag == '1' ? '是' : '否';
-                        }
-                    }
-                ]],
-                onDblClickCell: function (index, field, value) {
-                    selectCust();
-                },
-                onRowContextMenu: function (event, rowIndex, rowData) {
-                }, onLoadSuccess: function (data) {
-                    $(this).datagrid('unselectAll');
-                }
-            });
-            $("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combobox('setText', '货主');
-            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
-            ezuiCustDataDialog.dialog('open');
-        };
         //主页datagrid 党隐藏datagrid加载完毕之后加载
         var initDateGrid=function(){
             ezuiDatagrid = $('#ezuiDatagrid').datagrid({
@@ -342,6 +296,54 @@
 // 		}
             });
         }
+
+
+        //货主查询弹框弹出start=========================
+        var ezuiCustDataClick = function () {
+            ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+                url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+                method: 'POST',
+                toolbar: '#ezuiCustToolbar',
+                title: '客户档案',
+                pageSize: 50,
+                pageList: [50, 100, 200],
+                fit: true,
+                border: false,
+                fitColumns: true,
+                nowrap: false,
+                striped: true,
+                collapsible: false,
+                pagination: true,
+                rownumbers: true,
+                singleSelect: true,
+                queryParams: {
+                    activeFlag: '1',
+                    customerType: 'OW'
+                },
+                idField: 'id',
+                columns: [[
+                    {field: 'customerid', title: '客户代码', width: 15},
+                    {field: 'descrC', title: '中文名称', width: 50},
+                    {field: 'descrE', title: '英文名称', width: 50},
+                    {field: 'customerTypeName', title: '类型', width: 15},
+                    {
+                        field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+                            return rowData.activeFlag == '1' ? '是' : '否';
+                        }
+                    }
+                ]],
+                onDblClickCell: function (index, field, value) {
+                    selectCust();
+                },
+                onRowContextMenu: function (event, rowIndex, rowData) {
+                }, onLoadSuccess: function (data) {
+                    $(this).datagrid('unselectAll');
+                }
+            });
+            $("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combobox('setText', '货主');
+            $("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
+            ezuiCustDataDialog.dialog('open');
+        };
 
         //货主查询弹框查询按钮
         var ezuiCustDataDialogSearch = function () {
@@ -674,10 +676,11 @@
                     <tr>
                         <th>货主编码</th>
                         <td><input type='text' id='fmcustomerid' class='easyui-textbox' size='16' data-options=''/></td>
-                        <th>产品代码</th>
-                        <td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>库位</th>
                         <td><input type='text' id='fmlocation' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>产品代码</th>
+                        <td><input type='text' id='fmsku' class='easyui-textbox' size='16' data-options=''/></td>
+
                     </tr>
                     <tr>
                         <th>产品名称</th>

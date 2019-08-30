@@ -500,14 +500,14 @@ select a.orderno as orderNo,
  
 <!--按已装箱数据合计生产批号对应的装箱件数-->
 <select id="queryOrderPackingInfoById"  resultMap="PackingDifferenceMap" parameterType="Object">
-    select sub_tb.batchNum, sub_tb.serialNum, sub_tb.differentQty from (
-        SELECT tmpA.batchNum as batchNum, tmpA.serialNum as serialNum, (IFNULL(tmpB.boxQty,0) - IFNULL(tmpA.allocationQty,0)) as differentQty
+    select sub_tb.batchNum, sub_tb.serialNum, sub_tb.sku, sub_tb.differentQty from (
+        SELECT tmpA.batchNum as batchNum, tmpA.serialNum as serialNum, tmpA.sku, (IFNULL(tmpB.boxQty,0) - IFNULL(tmpA.allocationQty,0)) as differentQty
         FROM
             (
-                SELECT b.lotatt04 as batchNum, b.lotatt05 as serialNum, SUM(a.qty) AS allocationQty
+                SELECT b.lotatt04 as batchNum, b.lotatt05 as serialNum, b.sku, SUM(a.qty) AS allocationQty
                 FROM act_allocation_details a
                 LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
-                WHERE a.orderno = #{orderNo} GROUP BY b.lotatt04, b.lotatt05
+                WHERE a.orderno = #{orderNo} GROUP BY b.lotatt04, b.lotatt05, b.sku
             )
             AS tmpA
         LEFT JOIN

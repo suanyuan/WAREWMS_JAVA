@@ -83,9 +83,9 @@ $(function() {
 
 
 			{field: 'createId',		title: '创建人',	width: 71 },
-			{field: 'createDate',		title: '创建时间',	width: 100 },
+			{field: 'createDate',		title: '创建时间',	width: 160 },
 			{field: 'editId',		title: '编辑人',	width: 71 },
-			{field: 'editDate',		title: '编辑时间',	width: 100 },
+			{field: 'editDate',		title: '编辑时间',	width: 160 },
 
 			// {field: 'alternatName1',		title: '自赋码1',	width: 25 },
 			// {field: 'alternatName2',		title: '自赋码2',	width: 25 },
