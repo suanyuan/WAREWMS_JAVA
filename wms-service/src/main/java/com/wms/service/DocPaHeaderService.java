@@ -190,7 +190,7 @@ public class DocPaHeaderService extends BaseService {
      */
     public PdaResult endTask(PdaDocPaEndForm form) {
 
-        form.setEditwho("Gizmo");
+        form.setEditwho(form.getEditwho());
         int result = docPaHeaderDao.endTask(form);
 
         if (result == 0) {

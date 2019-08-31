@@ -289,7 +289,7 @@ public class DocQcDetailsService extends BaseService {
      */
     public PdaResult editQcDesc(DocQcDetailsQuery query) {
 
-        query.setEditwho("Gizmo");
+        query.setEditwho(query.getEditwho());
         int result = docQcDetailsDao.updateQcDesc(query);
         if (result == 0) {
             return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 任务单不存在");
@@ -342,7 +342,6 @@ public class DocQcDetailsService extends BaseService {
             }
         }
 
-        form.setUserid("Gizmo");
         form.setLanguage("CN");
 //        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
@@ -437,7 +436,7 @@ public class DocQcDetailsService extends BaseService {
                     lotatt_hg.setLotatt10("HG");
                     lotatt_hg.setLotatt11(form.getLotatt11());
                     lotatt_hg.setLotatt15(form.getLotatt15());
-                    lotatt_hg.setAddwho("Gizmo");
+                    lotatt_hg.setAddwho(form.getEditwho());
                     lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
                     invLotAttMybatisDao.add(lotatt_hg);
                 }else {
@@ -475,13 +474,13 @@ public class DocQcDetailsService extends BaseService {
 
                     //有 更新
                     invLotLocId_tmp.setQty(invLotLocId_tmp.getQty() + qcDetails.getQcqtyExpected());
-                    invLotLocId_tmp.setEditwho("Gizmo");
+                    invLotLocId_tmp.setEditwho(form.getEditwho());
                     invLotLocIdMybatisDao.updateQty(invLotLocId_tmp);
                 }
 
                 //根据历史批次+验收库位 更新历史批次库存件数-本明细中的预期验收数
                 invLotLocId_history.setQty(invLotLocId_history.getQty() - qcDetails.getQcqtyExpected());
-                invLotLocId_history.setEditwho("Gizmo");
+                invLotLocId_history.setEditwho(form.getEditwho());
                 invLotLocIdMybatisDao.updateQty(invLotLocId_history);
 
 
@@ -504,7 +503,7 @@ public class DocQcDetailsService extends BaseService {
                 InvLot invLot_hg = new InvLot();
                 BeanUtils.copyProperties(invLot_history, invLot_hg);
                 invLot_history.setQty(invLot_history.getQty() - qcDetails.getQcqtyExpected());
-                invLot_history.setEditwho("Gizmo");
+                invLot_history.setEditwho(form.getEditwho());
                 invLotMybatisDao.update(invLot_history);//库存里面减去此明细中的预期验收数
 
                 //库存里面插入或更新加上预期验收数
@@ -513,7 +512,7 @@ public class DocQcDetailsService extends BaseService {
                 List<InvLot> invLotList_hg = invLotMybatisDao.queryByList(mybatisCriteria);
                 invLot_hg.setLotnum(lotatt_hg.getLotnum());//修改为真正的合格批次号
                 invLot_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
-                invLot_hg.setAddwho("Gizmo");
+                invLot_hg.setAddwho(form.getEditwho());
                 if (invLotList_hg == null || invLotList_hg.size() == 0) {
 
                     //插入
@@ -570,7 +569,7 @@ public class DocQcDetailsService extends BaseService {
                     normalDocQcDetails.setPaqtyExpected(normalDocQcDetails.getPaqtyExpected() + qcDetails.getPaqtyExpected());
                     normalDocQcDetails.setQcqtyExpected(normalDocQcDetails.getQcqtyExpected() + qcDetails.getQcqtyExpected());
                     normalDocQcDetails.setQcqtyCompleted(normalDocQcDetails.getQcqtyCompleted() + qcDetails.getQcqtyExpected());
-                    normalDocQcDetails.setEditwho("Gizmo");
+                    normalDocQcDetails.setEditwho(form.getEditwho());
                     docQcDetailsDao.updateQcCompletedQty(normalDocQcDetails);
 
                     //删除qcdetails
@@ -582,7 +581,7 @@ public class DocQcDetailsService extends BaseService {
                     qcDetails.setQcdescr(form.getQcdescr());
                     qcDetails.setLinestatus("40");
                     qcDetails.setUserdefine5("HG");
-                    qcDetails.setEditwho("Gizmo");
+                    qcDetails.setEditwho(form.getEditwho());
                     docQcDetailsDao.updateQcDetail(qcDetails);
                 }
             }
@@ -597,6 +596,7 @@ public class DocQcDetailsService extends BaseService {
             docPaDetails.setSku(currentQcDetail.getSku());
             docPaDetails.setUserdefine3(currentQcDetail.getUserdefine3());
             docPaDetails.setUserdefine5("DJ");
+            docPaDetails.setEditwho(form.getEditwho());
             docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
 
             /* ********************************doc_qc_header******************************** */
@@ -611,7 +611,7 @@ public class DocQcDetailsService extends BaseService {
             docQcHeaderMybatisDao.updateTaskStatus(statusForm);
 
             /* ********************************清除0库存******************************** */
-            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", "Gizmo");
+            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", form.getEditwho());
             docQcDetailsDao.cleanInventory(cleanInventory);
 
         } catch (Exception e) {

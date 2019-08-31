@@ -277,14 +277,15 @@ public class DocPaDetailsService extends BaseService {
          */
         String locationid = form.getUserdefine1();
         String userdefine5 = form.getUserdefine5();
+        String editwho = form.getEditwho();
         BeanUtils.copyProperties(docPaDetails, form);
         form.setUserdefine1(locationid);
         form.setUserdefine5(userdefine5);
 
-        if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
+//        if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
 
         form.setAsnlineno(docPaDetails.getAsnlineno());
-        form.setUserid("Gizmo");
+        form.setUserid(editwho);
         form.setLanguage("CN");
         form.setReturncode("");
         try {

@@ -67,8 +67,9 @@ public class PdaDocMtController {
         PdaResult result;
         if (StringUtil.isEmpty(docMtHeaderVO.getMtno())) {
             result = new PdaResult(PdaResult.CODE_FAILURE, "查无养护任务单数据");
+        }else {
+            result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         }
-        result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, docMtHeaderVO);
         resultMap.put(Constant.RESULT, result);
         return resultMap;

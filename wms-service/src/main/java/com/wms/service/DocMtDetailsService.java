@@ -282,7 +282,7 @@ public class DocMtDetailsService extends BaseService {
             BeanUtils.copyProperties(docMtDetails, executionDetail);
             executionDetail.setMtqtyExpected(executionDetail.getMtqtyExpected() - form.getMtqtyCompleted());
             executionDetail.setMtqtyEachExpected(executionDetail.getMtqtyEachExpected() - (form.getMtqtyCompleted() * basPackage.getQty1().doubleValue()));
-            executionDetail.setEditwho("Gizmo");
+            executionDetail.setEditwho(form.getEditwho());
             docMtDetailsMybatisDao.updateDetailQty(executionDetail);
 
             //养护结果明细是否存在，存在合并，不存在新增
@@ -297,7 +297,7 @@ public class DocMtDetailsService extends BaseService {
             existQuery.setCheckFlag(String.valueOf(form.getCheckFlag()));
             existQuery.setConclusion(form.getConclusion());
             existQuery.setRemark(form.getRemark());
-            existQuery.setConversewho("Gizmo");
+            existQuery.setConversewho(form.getEditwho());
 
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(existQuery));
@@ -309,7 +309,7 @@ public class DocMtDetailsService extends BaseService {
                 changeDetail.setMtqtyEachExpected(changeDetail.getMtqtyEachExpected() + (form.getMtqtyCompleted() * basPackage.getQty1().doubleValue()));
                 changeDetail.setMtqtyCompleted(changeDetail.getMtqtyCompleted() + form.getMtqtyCompleted());
                 changeDetail.setMtqtyEachCompleted(changeDetail.getMtqtyEachCompleted() + (form.getMtqtyCompleted() * basPackage.getQty1().doubleValue()));
-                changeDetail.setEditwho("Gizmo");
+                changeDetail.setEditwho(form.getEditwho());
                 docMtDetailsMybatisDao.updateDetailQty(changeDetail);
             }else {
 
@@ -324,9 +324,9 @@ public class DocMtDetailsService extends BaseService {
                 docMtDetails.setCheckFlag(form.getCheckFlag());
                 docMtDetails.setConclusion(form.getConclusion());
                 docMtDetails.setConversedate(new Date());
-                docMtDetails.setConversewho("Gizmo");
+                docMtDetails.setConversewho(form.getEditwho());
                 docMtDetails.setRemark(form.getRemark());
-                docMtDetails.setAddwho("Gizmo");
+                docMtDetails.setAddwho(form.getEditwho());
                 docMtDetailsMybatisDao.add(docMtDetails);
             }
 
@@ -344,6 +344,7 @@ public class DocMtDetailsService extends BaseService {
             //更新养护单状态
             DocMtHeader docMtHeader = new DocMtHeader();
             docMtHeader.setMtno(form.getMtno());
+            docMtHeader.setEditwho(form.getEditwho());
             if (unfinishedDetailList.size() > 0) {
                 docMtHeader.setMtstatus("30");
             }else {

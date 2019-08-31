@@ -387,6 +387,8 @@ public class DocAsnDetailService extends BaseService {
      */
     public PdaResult receiveGoods(PdaDocAsnDetailForm form) {
 
+        String editwho = form.getEditwho();
+        String warehouseid = form.getWarehouseid();
         PdaBasSkuQuery skuQuery = new PdaBasSkuQuery();
         PdaDocAsnDetailQuery detailQuery = new PdaDocAsnDetailQuery();
 
@@ -423,7 +425,8 @@ public class DocAsnDetailService extends BaseService {
         if (docAsnDetail == null) return new PdaResult(PdaResult.CODE_FAILURE, "收货明细数据缺失");
 
         BeanUtils.copyProperties(docAsnDetail, form);
-        form.setEditwho("Gizmo");
+        form.setEditwho(editwho);
+        form.setWarehouseid(warehouseid);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         form.setReceivingtime(dateFormat.format(new Date()));
         form.setReceivinglocation("STAGE01");

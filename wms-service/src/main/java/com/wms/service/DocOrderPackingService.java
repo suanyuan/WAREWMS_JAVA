@@ -318,7 +318,11 @@ public class DocOrderPackingService extends BaseService {
 	}
 
 	public Json orderCommit(String orderNo, String cartonNo, String cartontype) {
-		PdaResult pdaResult = endPacking(orderNo);
+
+	    DocOrderPackingForm form = new DocOrderPackingForm();
+	    form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+	    form.setOrderno(orderNo);
+		PdaResult pdaResult = endPacking(form);
 		if(pdaResult == null || pdaResult.getErrorCode() == PdaResult.CODE_FAILURE){
 			return Json.error(pdaResult.getMsg());
 		}else{
@@ -820,7 +824,7 @@ public class DocOrderPackingService extends BaseService {
                         DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(
                                 form.getCustomerid(), Integer.valueOf(form.getTraceid().split("#")[1]),
                                 orderHeader.getSoreference1(), form.getOrderno(), invLotAtt.getLotatt04(),
-                                serialNum, "Gizmo");
+                                serialNum, form.getEditwho());
                         docSerialNumRecordMybatisDao.add(docSerialNumRecord);
                     }
                 }
@@ -843,6 +847,7 @@ public class DocOrderPackingService extends BaseService {
 
             if (matchDetails.getQty() == (form.getQty() + (matchQty - batchPackNum))) {
 
+                allocationQuery.setEditwho(form.getEditwho());
                 actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
             }
 
@@ -852,7 +857,7 @@ public class DocOrderPackingService extends BaseService {
                 DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();
                 BeanUtils.copyProperties(form, docOrderPackingCartonInfo);
                 docOrderPackingCartonInfo.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
-                docOrderPackingCartonInfo.setAddwho("Gizmo");
+                docOrderPackingCartonInfo.setAddwho(form.getEditwho());
                 docOrderPackingMybatisDao.packingCartonInfoInsert(docOrderPackingCartonInfo);
             }
 
@@ -871,7 +876,7 @@ public class DocOrderPackingService extends BaseService {
                 packingCartonInsert.setAllocationdetailsid(form.getAllocationdetailsid());
                 packingCartonInsert.setDescription(form.getDescription());
                 packingCartonInsert.setConclusion(form.getConclusion());
-                packingCartonInsert.setAddwho("Gizmo");
+                packingCartonInsert.setAddwho(form.getEditwho());
                 packingCartonInsert.setEdittime(null);
                 packingCartonInsert.setEditwho(null);
                 docOrderPackingMybatisDao.packingCartonInsert(packingCartonInsert);
@@ -879,7 +884,7 @@ public class DocOrderPackingService extends BaseService {
 
                 //这边的packingCartonInfo的pickflag肯定是0，在上yigefangfa获取的时候已经作了处理
                 packingCarton.setQty(packingCarton.getQty() + form.getQty());
-                packingCarton.setEditwho("Gizmo");
+                packingCarton.setEditwho(form.getEditwho());
                 docOrderPackingMybatisDao.updatePackingCarton(packingCarton);
             }
 
@@ -922,12 +927,12 @@ public class DocOrderPackingService extends BaseService {
 
     /**
      * 结束复核
-     * @param orderno 单号
+     * @param form 单号
      * @return ~
      */
-    public PdaResult endPacking(String orderno) {
+    public PdaResult endPacking(DocOrderPackingForm form) {
 
-	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+	    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(form.getOrderno());
         Json statusJson = orderObjCheck(orderHeaderForNormal);
 	    if (!statusJson.isSuccess()) {
             return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
@@ -936,7 +941,7 @@ public class DocOrderPackingService extends BaseService {
 
             //查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
             Map<String, Object> condition = new HashMap<>();
-            condition.put("orderno", orderno);
+            condition.put("orderno", form.getOrderno());
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             mybatisCriteria.setCondition(condition);
             List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
@@ -953,7 +958,7 @@ public class DocOrderPackingService extends BaseService {
                         orderHeaderForNormal.getWarehouseid(),
                         PdaOrderPackingForm.ACTION_RV,
                         allocationDetails.getAllocationdetailsid(),
-                        "Gizmo");
+                        form.getEditwho());
                 actAllocationDetailsMybatisDao.callPickingProcedure(packingForm);
                 if (!packingForm.getResult().equals("000")) {
                     throw new Exception(packingForm.getResult());
@@ -1044,6 +1049,7 @@ public class DocOrderPackingService extends BaseService {
                 packingForm.setDescription(DocOrderPackingForm.DESCRIPTION_HG);
                 packingForm.setConclusion(DocOrderPackingForm.CONCLUSION_HG);
                 packingForm.setSkudesce(basSku.getDescrE());
+                packingForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
                 if (isSerialManagement) {
 
                     BasSerialNumQuery numQuery = new BasSerialNumQuery();
@@ -1069,7 +1075,10 @@ public class DocOrderPackingService extends BaseService {
             }
 
             //结束复核，件数回写
-            PdaResult endResult = endPacking(orderno);
+            DocOrderPackingForm form = new DocOrderPackingForm();
+            form.setOrderno(orderno);
+            form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+            PdaResult endResult = endPacking(form);
             if (endResult.getErrorCode() != 200) {
                 throw new Exception(endResult.getMsg());
             }

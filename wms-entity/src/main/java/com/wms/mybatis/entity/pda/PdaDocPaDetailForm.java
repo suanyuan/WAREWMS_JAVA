@@ -51,6 +51,8 @@ public class PdaDocPaDetailForm {
 
     private String lotatt01;//pda传参 生产日期
 
+    private String editwho;
+
     //和procedure没关系，单纯为了传参
     private String GTIN;
     private String otherCode;

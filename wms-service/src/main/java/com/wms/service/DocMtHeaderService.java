@@ -304,7 +304,7 @@ public class DocMtHeaderService extends BaseService {
                 docMtHeader.setFenceFlag(form.getFenceFlag());
                 docMtHeader.setSanitationFlag(form.getSanitationFlag());
                 docMtHeader.setRemark(form.getRemark());
-                docMtHeader.setRemark(form.getEditwho());
+                docMtHeader.setEditwho(form.getEditwho());
                 docMtHeader.setMtstatus("99");
                 docMtHeaderMybatisDao.updateStatus(docMtHeader);
                 return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");

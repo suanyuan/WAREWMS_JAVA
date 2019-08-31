@@ -461,7 +461,7 @@ public class DocAsnHeaderService extends BaseService {
      */
     public PdaResult endTask(PdaDocAsnEndForm form) {
 
-        form.setEditwho("Gizmo");
+        form.setEditwho(form.getEditwho());
         int result = docAsnHeaderMybatisDao.endTask(form);
 
         if (result == 0) {

@@ -147,12 +147,12 @@ public class PdaPackageController {
      */
     @RequestMapping(params = "endPacking", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> endPacking(String orderno) {
+    public Map<String, Object> endPacking(DocOrderPackingForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = docOrderPackingService.getOrderPackingInfo(orderno);
+        Json json = docOrderPackingService.getOrderPackingInfo(form.getOrderno());
         if (json.isSuccess()) {
-            resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(orderno));
+            resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(form));
             return resultMap;
         }
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
