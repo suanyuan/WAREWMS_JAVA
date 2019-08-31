@@ -256,5 +256,13 @@
 			case "SC" : return "计划养护";
 		}
 	}
+//双证匹配类型
+	var Asn_DoublecstatusFormatter = function (value,row,index) {
+		value+="";
+    	switch (value) {
+			case "1" : return "已匹配";
+			case "" : return "";
+		}
+	}
 
 </script>
