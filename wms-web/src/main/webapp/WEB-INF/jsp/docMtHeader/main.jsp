@@ -244,7 +244,7 @@ var commitClosegenerationPlan = function(){
 				data:data,
 				dataType: 'json',
 				error: function (a, b, c) {
-					alert(a + b + c);
+					//alert(a + b + c);
 				},
 				success: function (result) {
 					try {
@@ -293,7 +293,7 @@ var generationPlanT = function(){
 		data:data,
 		dataType: 'json',
 		error: function (a,b,c) {
-			alert(a+b+c);
+			//alert(a+b+c);
 		},
 		success: function (result) {
 			try{

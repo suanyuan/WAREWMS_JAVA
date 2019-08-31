@@ -243,27 +243,8 @@
                 $("#supplierName").textbox("setValue",rows1.descrC);
                 $("#sup_enterpriseId").val(rows1.enterpriseId);
 
-                // $("#productLine").combobox({
-                //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
-                //     valueField:'id',
-                //     textField:'value',
-                //     onLoadSuccess:function () {
-                //
-                //     }
-                // })
-
                 ezuiDialogSupplierDetail.dialog('close');
                 console.log($("#supplierId").val());
-                //供应商弹窗搜索功能
-
-                // dataGridProduct.datagrid('load', {
-                //     type:'CER',
-                //     supplierId : $('#supplierId').val(),
-                //     isUse : '1',
-                //     // customerType:'VE'
-                // });
-
-                // dataGridProduct.datagrid('reload');
             }
         }
         // debugger
@@ -442,13 +423,13 @@
 
         //var row = ezuiDatagrid.datagrid('getSelected');
         console.log($("#dialogAddAddressForm input[id='sup_enterpriseId']").val());
-        var enterpriseId = $("#ezuiForm input[id='enterpriseId']").val();
+        var enterpriseId = $("#dialogAddAddressForm input[id='sup_enterpriseId']").val();
         if(enterpriseId==null || enterpriseId==""){
-            enterpriseId = $("#enterpriseId").val();
+            // enterpriseId = $("#enterpriseId").val();
         }
 
         if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialogSupplierEnterprise.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
+            ezuiDialogSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
             enterpriseId = "";
         }else{
             $.messager.show({

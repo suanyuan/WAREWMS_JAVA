@@ -207,7 +207,8 @@
 <script>
     var enterpriseDialog;
     var id;
-    var row
+    var row;
+    var type;
     $(function(){
         $('#medicalDeviceMark').combobox({
             onChange: function(){
@@ -229,8 +230,10 @@
 // alert(processType);
 //         debugger
 //         alert($("#ezuiFormInfo #specsId").val());
-        if(type!=null){
-            processType = $("#ezuiFormInfo #type").val();
+
+        type = $("#ezuiFormInfo #type").val();
+        if(""!=type){
+            processType =type;
         }
         if(processType == 'product'){
             id = $("#ezuiFormInfo #specsId").val();

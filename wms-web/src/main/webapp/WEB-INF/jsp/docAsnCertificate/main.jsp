@@ -527,7 +527,7 @@ var ezuiCustToolbarClearC = function () {
                     }
                 },
                 onload:function(data){
-                    alert(data.comment);
+                    //alert(data.comment);
                     $("#certificateContext").val(data.comment);
                 },
                 onerror:function(er){
