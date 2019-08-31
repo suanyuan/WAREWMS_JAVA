@@ -718,9 +718,9 @@
         }
     }
 
-    function operateGrid(id) {
-        //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
-    }
+    // function operateGrid(id) {
+    //     //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
+    // }
 
     function formatOper(value,row,index){
         return "<a onclick=\"viewUrl('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";

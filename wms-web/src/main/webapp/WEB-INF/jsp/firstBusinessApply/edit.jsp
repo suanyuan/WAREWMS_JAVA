@@ -52,7 +52,7 @@
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>清空选择</a>-->
 </div>
-<table id='ezuiDatagridDetail1' ></table>
+<table id='ezuiDatagridDetail2' ></table>
 
 <%--<div id='enterpriseCustomerDialog' style='padding: 10px;'>--%>
 
@@ -244,11 +244,16 @@
 
     <%--</table>--%>
 <%--</div>--%>
-<div id="enterpriseDialog">
+<div id="enterpriseDialog1">
 
 </div>
+<div id="productRegisterDialog1">
+
+</div>
+
+
 <script>
-    var ezuiDatagridDetail1; //主页
+    var ezuiDatagridDetail2; //主页
     var enterpriseCustomerDialog;
     var enterpriseSupplierDialog;
     var productDialog;
@@ -285,7 +290,7 @@
 
 
         //主页面
-        ezuiDatagridDetail1 = $("#ezuiDatagridDetail1").datagrid({
+        ezuiDatagridDetail2 = $("#ezuiDatagridDetail2").datagrid({
             url : sy.bp()+'/firstBusinessApplyController.do?showSpecsDatagrid',
             method:'POST',
             toolbar : '#detailToolbar',
@@ -311,9 +316,15 @@
                 {field: 'productModel',title: '产品型号',width: '15%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
                 {field: 'productRegisterNo',title: '注册证编号',width: '20%'},
-                {field: '_operate',		title: '查看产品',	width: '10%',
+                {field: 'productRegisterId',title: '注册证主键',hidden:true},
+                {field: '_operate22',		title: '查看注册证',	width: '10%',
+                    formatter: formatOper2
+                },
+                {field: '_operate2',		title: '查看产品',	width: '10%',
                     formatter: formatOper
                 }
+
+
             ]],
             onDblClickCell: function(index,field,value){
 
@@ -635,9 +646,12 @@
                 {field: 'productName',title: '产品名称',width: '40%'},
                 {field: 'specsName',title: '规格' ,width: '10%'},
                 {field: 'productRegisterNo',title: '产品注册证',width: '20%'},
-                {field: '_operate',		title: '操作',	width: '10%',
+                {field: '_operate',		title: '查看产品',	width: '10%',
                     formatter: formatOper
                 }
+
+
+
             ]],
             onDblClickCell: function(index,field,value){
                 choseProductSelectE();
@@ -748,7 +762,7 @@
 
     function operateGrid1(id) {
         processType = 'product';
-        $('#enterpriseDialog').dialog({
+        $('#enterpriseDialog1').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id,
@@ -764,6 +778,31 @@
         // $('#enterpriseDialog').dialog('destroy');
         return "<a onclick=\"operateGrid1('"+row.specsId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
+    function formatOper2(value,row,index){
+        // $('#enterpriseDialog').dialog('destroy');
+        return "<a onclick=\"operateGridProductRegister2('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    }
+    function operateGridProductRegister2(id) {
+        console.log("---------->"+id);
+        $('#productRegisterDialog1').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            href:sy.bp()+"/gspProductRegisterController.do?toDetail&id="+id,
+            fit:true,
+            cache: false,
+
+            onClose : function() {
+                // ezuiFormClear(ezuiForm);
+            },
+            onLoad:function () {
+
+            }
+        });
+
+    }
+
+
+
     function searchCustomerEnterprise() {
         enterpriseCustomerDialog = $('#enterpriseCustomerDialog').dialog({
             modal : true,
@@ -949,7 +988,7 @@
         $("#supplierName").textbox("setValue","");
         $("#supplierId").val("");
 
-        ezuiDatagridDetail.datagrid("reload",{"applyId":"empty"});
+        ezuiDatagridDetail2.datagrid("reload",{"applyId":"empty"});
         arr.splice(0,arr.length);
         arr1.splice(0,arr.length);
     }

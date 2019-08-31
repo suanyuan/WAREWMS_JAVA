@@ -54,6 +54,7 @@ public class GspProductRegisterSpecsController {
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("specsId", specsId);
+
 		model.put("isUse", 1);
 		return new ModelAndView("gspProductRegisterSpecs/add", model);
 	}

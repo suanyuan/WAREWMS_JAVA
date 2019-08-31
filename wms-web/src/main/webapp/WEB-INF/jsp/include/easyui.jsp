@@ -126,8 +126,10 @@
     var yesOrNoFormatter = function(value,row,index) {
         if(value == "1"){
             return "是";
-        }else{
+        }else if(value == "0"){
             return "否";
+        }else{
+            return "";
         }
     }
     var QualifiedOrFailed = function(value,row,index) {
