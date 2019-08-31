@@ -388,7 +388,7 @@
 
         console.log(rows);
         if(rows){
-            $("#specsId").val(arrP);
+            $("#dialogAddAddressForm #specsId").val(arrP);
             $("#productNameP").textbox("setValue",arrPId);
             // $("#productLine").combobox({
             //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
