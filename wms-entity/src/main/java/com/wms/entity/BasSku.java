@@ -177,6 +177,7 @@ public class BasSku implements Serializable {
 
 	private BigDecimal qtyonhold;
 	private String productLineName;
+	private String orderbysql;
 
 	public String getProductLineName() {
 		return productLineName;
@@ -848,5 +849,13 @@ public class BasSku implements Serializable {
 
 	public void setReservedfield18(String reservedfield18) {
 		this.reservedfield18 = reservedfield18;
+	}
+
+	public String getOrderbysql() {
+		return orderbysql;
+	}
+
+	public void setOrderbysql(String orderbysql) {
+		this.orderbysql = orderbysql;
 	}
 }

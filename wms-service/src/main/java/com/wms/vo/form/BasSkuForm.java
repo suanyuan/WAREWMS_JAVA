@@ -77,6 +77,7 @@ public class BasSkuForm {
 	private java.math.BigDecimal qtyallocated;
 	private java.math.BigDecimal qtyonhold;
 	private String firstop;
+	private String orderbysql;
 
 	public java.lang.String getCustomerid() {
 		return customerid;
@@ -655,5 +656,13 @@ public class BasSkuForm {
 
 	public void setFirstop(String firstop) {
 		this.firstop = firstop;
+	}
+
+	public String getOrderbysql() {
+		return orderbysql;
+	}
+
+	public void setOrderbysql(String orderbysql) {
+		this.orderbysql = orderbysql;
 	}
 }

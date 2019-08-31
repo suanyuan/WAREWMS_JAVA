@@ -368,4 +368,17 @@ public class BasSkuService extends BaseService {
 		return basSku;
 	}
 
+	/**
+	 * 根据sku查询
+	 * @return
+	 */
+	public List<BasSku> queryBasSkuBySku(String registerNo){
+		BasSku skuQuery = new BasSku();
+		skuQuery.setReservedfield03(registerNo);
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(skuQuery);
+		List<BasSku> basSkuList = basSkuMybatisDao.queryByList(mybatisCriteria);
+		return basSkuList;
+	}
+
 }

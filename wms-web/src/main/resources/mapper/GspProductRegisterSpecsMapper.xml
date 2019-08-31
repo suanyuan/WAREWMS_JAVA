@@ -87,7 +87,7 @@
             </if>
 
             <if test="condition.productRegisterId != null and condition.productRegisterId != ''">
-                and t1.product_register_id = ${condition.productRegisterId,jdbcType=VARCHAR}
+                and t1.product_register_id = #{condition.productRegisterId}
             </if>
 
 
