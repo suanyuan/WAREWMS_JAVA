@@ -85,7 +85,7 @@
 	<result column="qtyallocated" property="qtyallocated"/>
 	<result column="qtyonhold" property="qtyonhold"/>
 	<result column="productLineName" property="productLineName"/>
-
+	<result column="orderbysql" property="orderbysql"/>
 
 </resultMap>
 
@@ -169,7 +169,8 @@
 	sku_group8,
 	sku_group9,
 	softallocationrule,
-	tare
+	tare,
+	orderbysql
 </sql>
    
    
@@ -234,6 +235,9 @@ where 1=1
     <if test="condition.sku_group2 != null and condition.sku_group2 != ''" >
         and sku_group2  like  '%${condition.sku_group2}%'
     </if>
+	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
+		and orderbysql  like  '%${condition.orderbysql}%'
+	</if>
 </trim>
 </sql>
 <!-- 查询条件 和inv_lot联接查询带出库存件数 -->
@@ -297,6 +301,9 @@ where 1=1
     <if test="condition.sku_group2 != null and condition.sku_group2 != ''" >
         and a.sku_group2  like  '%${condition.sku_group2}%'
     </if>
+	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
+		and orderbysql = '${condition.orderbysql}'
+	</if>
 </trim>
 </sql>
 
@@ -451,6 +458,9 @@ where 1=1
 	qtymin,
 	reservecode,
 	shelflifetype,
+	<if test="orderbysql != null  ">
+		orderbysql,
+	</if>
 	sku_group1
 	)
 	values(
@@ -602,6 +612,9 @@ where 1=1
 	0,
 	'IN',
 	'N',
+	<if test="orderbysql != null  ">
+		#{orderbysql},
+	</if>
 	#{skuGroup1}
 	)
 </insert>
@@ -839,6 +852,9 @@ where 1=1
 		</if>
 		<if test="qtyonhold != null  ">
 			qtyonhold=#{qtyonhold},
+		</if>
+		<if test="orderbysql != null  ">
+			orderbysql = #{orderbysql},
 		</if>
 
 

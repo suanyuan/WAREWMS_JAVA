@@ -109,10 +109,15 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public Json deleteFirstBusinessApply(String id) {
 		Json json = new Json();
-		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(id);
-		if(firstBusinessApply != null){
-			firstBusinessApplyMybatisDao.delete(firstBusinessApply);
-		}
+        String[] arrId = id.split(",");
+
+        for(String DelId : arrId){
+            FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(DelId);
+            if(firstBusinessApply != null){
+                firstBusinessApplyMybatisDao.delete(firstBusinessApply);
+            }
+        }
+
 		json.setSuccess(true);
 		return json;
 	}
@@ -184,6 +189,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessProductApplyPageVO.setSupplierName(result.getSupplierName());
 				firstBusinessProductApplyPageVO.setCustomerid(result.getCustomerid());
 				firstBusinessProductApplyPageVO.setProductRegisterNo(result.getProductRegisterNo());
+				firstBusinessProductApplyPageVO.setProductRegisterId(result.getProductRegisterId());
 				voList.add(firstBusinessProductApplyPageVO);
 			}
 		}
@@ -384,14 +390,33 @@ public class FirstBusinessApplyService extends BaseService {
 	}
 
 	public Json addConfirmApply(String id){
-		try{
-			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
-			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING);
-			firstBusinessApply.setApplyId(id);
-			firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 
-			//更新申请记录
-			firstReviewLogService.updateFirstReviewByNo(id,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+        Json json = new Json();
+        String[] arrId = id.split(",");
+
+
+
+
+		try{
+
+            for(String DelId : arrId){
+//                FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(DelId);
+//                if(firstBusinessApply != null){
+//                    firstBusinessApplyMybatisDao.delete(firstBusinessApply);
+//                }
+                FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+                firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING);
+                firstBusinessApply.setApplyId(DelId);
+                firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
+
+                //更新申请记录
+                firstReviewLogService.updateFirstReviewByNo(DelId,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+
+
+
+
+            }
+
 
 			return Json.error("操作成功");
 

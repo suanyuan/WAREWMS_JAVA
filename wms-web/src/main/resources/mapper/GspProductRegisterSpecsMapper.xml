@@ -54,7 +54,6 @@
         <result column="wight" property="wight"/>
         <result column="packaging_unit" property="packagingUnit"/>
         <result column="licenseOrRecordNo" property="licenseOrRecordNo"/>
-        <result column="product_enterprise_name" property="enterpriseName"/>
         <result column="storage_condition" property="storageCondition"/>
 
         <!--<result column="attache_card_category" property="attacheCardCategory"/>-->
@@ -87,7 +86,7 @@
             </if>
 
             <if test="condition.productRegisterId != null and condition.productRegisterId != ''">
-                and t1.product_register_id = ${condition.productRegisterId,jdbcType=VARCHAR}
+                and t1.product_register_id = #{condition.productRegisterId}
             </if>
 
 

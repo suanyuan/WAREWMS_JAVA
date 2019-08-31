@@ -47,7 +47,7 @@
 					<th>客户名称：</th><td><input id="kehumingcheng" type='text'   class='easyui-textbox' data-options='width:200'/></td>
                     <td>
                         <a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-                        <a onclick='choseSupplierSelect();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                        <%--<a onclick='choseSupplierSelect();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
                     </td>
                 </tr>
 
@@ -101,7 +101,7 @@
 			</table>
 		</fieldset>
 	</div>
-	<table id="dataGridProduct">
+	<table id="dataGridProduct2">
 
 	</table>
 </div>
@@ -115,7 +115,7 @@
     var ezuiDialogSupplierDetail;
 	var  newreceivingId;
     var ezuiDialogSpec;
-    var dataGridProduct;
+    var dataGridProduct2;
 
     var rows;
     var rows1;
@@ -261,9 +261,10 @@
                 // dataGridProduct.datagrid('reload');
             }
         }
-
+        // debugger
         //产品
-        dataGridProduct = $("#dataGridProduct").datagrid({
+        dataGridProduct2 = $("#dataGridProduct2").datagrid({
+
             url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',
             method:'POST',
             toolbar : '#productToolbar',
@@ -369,7 +370,7 @@
     }
     //查询产品
     function searchProduct1() {
-        dataGridProduct.datagrid("reload", {
+        dataGridProduct2.datagrid("reload", {
 
             "productCode":$("#ezuiDialogSpec #productCode1").val(),
             "productName":$("#ezuiDialogSpec #productName1").val(),
@@ -385,11 +386,11 @@
 
     //双击选中产品
     function choseProductSelect() {
-        // var row = dataGridProduct.datagrid("getSelected");
+        // var row = dataGridProduct2.datagrid("getSelected");
 
 
 
-		rows = dataGridProduct.datagrid('getSelections');
+		rows = dataGridProduct2.datagrid('getSelections');
         var arrP = new Array();
         var arrPId = new Array();
         for(var i=0;i<rows.length;i++){
@@ -425,6 +426,8 @@
         // $("#productNameP").textbox("getValue");
         if(rows){
             for(var i=0;i<rows.length;i++){
+
+                // alert(rows[i].productRegisterId)
                 if(arr.indexOf(rows[i].specsId)==-1){
                     // $.ajax({
                     //     url : sy.bp()+"/gspProductRegisterSpecsController.do?getInfo",
@@ -439,7 +442,7 @@
                     // });
                     //         console.log(result.obj.productRegisterNo)
 
-							ezuiDatagridDetail.datagrid("appendRow",{
+							ezuiDatagridDetail1.datagrid("appendRow",{
 								"productApplyId":"",
 								"applyId":"",
 								"specsId":rows[i].specsId,
@@ -457,6 +460,8 @@
 								"productModel":rows[i].productModel,
 								"supplierName" :rows1.descrC,
 								"productRegisterNo":rows[i].productRegisterNo,
+                                "productRegisterId":rows[i].productRegisterId,
+
 
 
 							});

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <html>
 <head>
 </head>
@@ -138,8 +139,8 @@
         <div class="easyui-tabs" style="width:100%;height:200px">
             <div title="证照历史数据" style="padding:3px">
                     <div>
-                        <a onclick='registerUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
-                        <a onclick='detailsCopyRegister();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>信息复用</a>
+                        <a onclick='registerUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>开始换证</a>
+                        <a onclick='detailsCopyRegister();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>信息复用</a>
                     </div>
                 <table id='ezuiDetailsDatagrid'></table>
             </div>
@@ -532,6 +533,7 @@
     };
 
     function detailsBind(){
+
         if($("#gspProductRegisterId").val()==""){
             $.messager.show({
                 msg : "请先添加注册证再绑定产品", title : '<spring:message code="common.message.prompt"/>'
@@ -716,9 +718,9 @@
         }
     }
 
-    function operateGrid(id) {
-        //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
-    }
+    // function operateGrid(id) {
+    //     //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
+    // }
 
     function formatOper(value,row,index){
         return "<a onclick=\"viewUrl('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
