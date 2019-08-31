@@ -19,11 +19,17 @@
                     <td>
                         <input type='text' value="${firstBusinessApply1.clientName}" id='clientName1' class='easyui-textbox' data-options='required:true,width:200'/>
                         <input type="hidden" name="clientId1" id="clientId1" value="${firstBusinessApply1.clientId}"/>
+                        <input type="hidden" name="cliedit_enterpriseId" id="cliedit_enterpriseId"  value="${firstBusinessApply1.clientEnterpeiseId}" />
+                        <a href="javascript:void(0);" class="easyui-linkbutton"  data-options="" onclick="viewEditClientEnterpriseUrl()">查看</a>
+
                     </td>
                     <th>供应商</th>
                     <td>
                         <input type='text' value="${firstBusinessApply1.supplierName}" id='supplierName1' class='easyui-textbox' data-options='required:true,width:200'/>
                         <input type="hidden" name="supplierId1" id="supplierId1" value="${firstBusinessApply1.supplierId}"/>
+                        <input type="hidden" name="supedit_enterpriseId" id="supedit_enterpriseId" value="${firstBusinessApply1.supplierEnterpeiseId}"/>
+                        <a href="javascript:void(0);" class="easyui-linkbutton"  data-options="" onclick="viewEditSupplierEnterpriseUrl()">查看</a>
+
                     </td>
                     <th>产品线</th>
                     <td>
@@ -54,73 +60,11 @@
 </div>
 <table id='ezuiDatagridDetail2' ></table>
 
-<%--<div id='enterpriseCustomerDialog' style='padding: 10px;'>--%>
-
-<%--</div>--%>
-
-<%--<div id='enterpriseSupplierDialog' style='padding: 10px;'>--%>
-
-<%--</div>--%>
-
-<%--&lt;%&ndash;选择供应商和产品&ndash;%&gt;--%>
-<%--<div id='enterpriseProduct' style='padding: 10px;'>--%>
-
-<%--</div>--%>
 <div id='ezuiBtn' style="display: none">
     <a onclick='doSubmitAddress();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
     <a onclick='clearDialog();' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
-<%--选择供应商和产品--%>
-<%--<div id='enterpriseProduct' style='padding: 10px;'>--%>
-    <%--<form>--%>
-    <%--<table>--%>
-        <%--<tr>--%>
-            <%--<th>产品基础信息</th>--%>
-            <%--<td>--%>
-                <%--<input type='text'  id='product' class='easyui-textbox' data-options='required:true,width:200'/>--%>
-                <%--<input type="hidden" name="specId" id="specId1" />--%>
-            <%--</td>--%>
-            <%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
 
-        <%--</tr>--%>
-
-        <%--<tr>--%>
-            <%--<th>供应商</th>--%>
-            <%--<td>--%>
-                <%--<input type='text'  id='supplierName1' class='easyui-textbox' data-options='required:true,width:200'/>--%>
-                <%--<input type="hidden" name="supplierId1" id="supplierId1" />--%>
-            <%--</td>--%>
-
-        <%--</tr>--%>
-    <%--</table>--%>
-    <%--</form>--%>
-<%--</div>--%>
-<!--产品查询列表dialog -->
-<%--<div id='ezuiDialogSpec' style='padding: 10px;'>--%>
-    <%--<div id='productToolbar' class='datagrid-toolbar' style=''>--%>
-        <%--<fieldset>--%>
-            <%--<legend>产品注册证信息</legend>--%>
-            <%--<table>--%>
-                <%--<tr>--%>
-                    <%--<th>产品代码</th>--%>
-                    <%--<td><input type='text' id='productCode'  size='16' data-options=''/></td>--%>
-                    <%--<th>产品名称</th>--%>
-                    <%--<td><input type='text' id='productName'  size='16' data-options=''/></td>--%>
-                    <%--<th>注册证号</th>--%>
-                    <%--<td><input type='text' id='registerNo'  size='16' data-options=''/></td>--%>
-                    <%--<td>--%>
-                        <%--<a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                        <%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</fieldset>--%>
-    <%--</div>--%>
-    <%--<table id="dataGridProduct">--%>
-
-    <%--</table>--%>
-<%--</div>--%>
-<%--货主--%>
 <div id='ezuiDialogClientDetail1' style='padding: 10px;display: none'>
     <div id='client1TB' class='datagrid-toolbar' style=''>
         <fieldset>
@@ -151,6 +95,7 @@
                 <tr>
                     <th>客户代码：</th><td><input id="kehudaimaS" type='text'   class='easyui-textbox' data-options='width:200'/></td>
                     <th>客户名称：</th><td><input id="kehumingchengS" type='text'   class='easyui-textbox' data-options='width:200'/></td>
+
                     <td>
                         <a onclick='doSearchSupplier1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                         <a onclick='choseSupplierSelect1()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
@@ -200,50 +145,7 @@
 
     </table>
 </div>
-<%--<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>--%>
-    <%--<div id='TB' class='datagrid-toolbar' style=''>--%>
-        <%--<fieldset>--%>
-            <%--<legend>货主信息</legend>--%>
-            <%--<table>--%>
-                <%--<tr>--%>
-                    <%--<th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                    <%--<th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash;<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                    <%--<th>企业名称：</th><td><input id="qiyemingcheng1" type='text'  class='easyui-textbox' data-options=''/></td>&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;<td>--%>
-                        <%--<input type='text' style="width: 170px;"/>--%>
-                        <%--<input type="hidden" class="easyui-textvalue" name="enterpriseId">--%>
-                        <%--<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->--%>
-                    <%--</td>&ndash;%&gt;--%>
-                    <%--<td>--%>
-                        <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                        <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</fieldset>--%>
-        <%--&lt;%&ndash; <fieldset>--%>
-             <%--<legend>供应商信息</legend>--%>
-             <%--<table>--%>
-                 <%--<tr>--%>
-                     <%--<th>供应商</th>--%>
-                     <%--<td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>--%>
-                     <%--<th>类型</th>--%>
-                     <%--<td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>--%>
-                     <%--<td>--%>
-                         <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                         <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                     <%--</td>--%>
-                 <%--</tr>--%>
-             <%--</table>--%>
-         <%--</fieldset>&ndash;%&gt;--%>
-    <%--</div>--%>
-    <%--<table id="dataGridSupplierDetail">--%>
 
-    <%--</table>--%>
-<%--</div>--%>
 <div id="enterpriseDialog1">
 
 </div>
@@ -252,6 +154,12 @@
 </div>
 
 
+<div id="ezuiDialogEditClientEnterprise">
+
+</div>
+<div id="ezuiDialogEditSupplierEnterprise">
+
+</div>
 <script>
     var ezuiDatagridDetail2; //主页
     var enterpriseCustomerDialog;
@@ -270,6 +178,8 @@
     var arr1;
     // var enterpriseProduct;
 
+    var ezuiDialogEditSupplierEnterprise;
+    var ezuiDialogEditClientEnterprise;
 
     // Array.prototype.indexOf = function(val) { //prototype 给数组添加属性
     //     for (var i = 0; i < this.length; i++) { //this是指向数组，this.length指的数组类元素的数量
@@ -342,106 +252,6 @@
         });
 
 
-
-        <%--//产品--%>
-        <%--dataGridProduct = $("#dataGridProduct").datagrid({--%>
-            <%--url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',--%>
-            <%--method:'POST',--%>
-            <%--toolbar : '#productToolbar',--%>
-            <%--title: '',--%>
-            <%--pageSize : 50,--%>
-            <%--pageList : [50, 100, 200],--%>
-            <%--border: false,--%>
-            <%--fitColumns : false,--%>
-            <%--nowrap: true,--%>
-            <%--striped: true,--%>
-            <%--collapsible:false,--%>
-            <%--fit:true,--%>
-            <%--pagination:true,--%>
-            <%--queryParams:{--%>
-                <%--isUse : '1',--%>
-                <%--type:'CER'--%>
-            <%--},--%>
-            <%--rownumbers:true,--%>
-            <%--idField : 'specsId',--%>
-            <%--columns : [[--%>
-                <%--{field: 'ck',checkbox:true },--%>
-                <%--{field: 'specsId',title: '主键' ,hidden:true},--%>
-                <%--{field: 'productCode',title: '产品代码' ,width: '15%'},--%>
-                <%--{field: 'productName',title: '产品名称',width: '40%'},--%>
-                <%--{field: 'specsName',title: '规格名称' ,width: '10%'},--%>
-                <%--{field: 'productRegisterNo',title: '产品注册证',width: '20%'},--%>
-                <%--{field: '_operate',		title: '操作',	width: '10%',--%>
-                    <%--formatter: formatOper--%>
-                <%--}--%>
-            <%--]],--%>
-            <%--onDblClickCell: function(index,field,value){--%>
-
-            <%--},--%>
-            <%--onRowContextMenu : function(event, rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onSelect: function(rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onLoadSuccess:function(data){--%>
-                <%--$(this).datagrid("resize",{height:540});--%>
-                <%--$.ajax({--%>
-                    <%--url : '/firstBusinessApplyController.do?showSpecsDatagrid',--%>
-                    <%--data : {'applyId':"<c:choose><c:when test="${firstBusinessApply.applyId == null}">'empty'</c:when><c:otherwise>'${firstBusinessApply.applyId}'</c:otherwise></c:choose>"},--%>
-                    <%--type : 'POST',--%>
-                    <%--dataType : 'JSON',--%>
-                    <%--success : function(result){--%>
-                        <%--//console.log(result);--%>
-                        <%--if(result){--%>
-                            <%--for(var i=0;i<result.rows.length;i++){--%>
-                                <%--//console.log(result.rows[i]);--%>
-                                <%--dataGridProduct.datagrid("selectRecord",result.rows[i].specsId);--%>
-                            <%--}--%>
-                        <%--}--%>
-                    <%--}--%>
-                <%--});--%>
-            <%--}--%>
-        <%--});--%>
-        <%--//注册证--%>
-        <%--ezuiDialogSpec = $('#ezuiDialogSpec').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-
-            <%--}--%>
-        <%--}).dialog('close');--%>
-
-        <%--dialogEnterprise = $('#dialogEnterprise').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--fit:true,--%>
-            <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--//  ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
-        <%--enterpriseProduct = $('#enterpriseProduct').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
-
-
-
-
-
-
-
         //货主弹窗列表
         clientDatagrid1 = $("#dataGridClientDetail1").datagrid({
             url : sy.bp()+'/basCustomerController.do?showDatagrid',
@@ -509,9 +319,6 @@
                 $(this).datagrid("resize",{height:540});
             }
         });
-
-
-
 
 
         //供应商
@@ -699,16 +506,6 @@
             });
         }
 
-        // console.log(customerid);
-        // $("#productLine").combobox({
-        //     panelHeight: 'auto',
-        //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
-        //     valueField:'id',
-        //     textField:'value',
-        //     onLoadSuccess:function () {
-        //
-        //     }
-        // });
 
 
         //产品线1
@@ -734,29 +531,77 @@
     });
 
 
-    // function delProduct(){
-    //     console.log(1111111111111111);
-    //
-    //     var row =  ezuiDatagridDetail.datagrid('getSelected');
-    //
-    //
-    //     arr.remove(row.specsId);
-    //     arr1.remove(row.customerid);
-    //     var rowIndex = ezuiDatagridDetail.datagrid('getRowIndex', row);
-    //     ezuiDatagridDetail.datagrid('deleteRow', rowIndex);
-    //
-    //
-    //         // row.specsId = '';
-    //         // row.productCode ='';
-    //         // row.productName ='';
-    //         // row.specsName ='';
-    //         // row.productModel ='';
-    //         // row.descrC ='';
-    //         // row.supplierId ='';
-    //
-    // }
 
 
+    //查看委托方企业详情
+    function viewEditClientEnterpriseUrl() {
+        $(function() {
+            ezuiDialogEditClientEnterprise = $('#ezuiDialogEditClientEnterprise').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialogEditClientEnterprise);
+                }
+            }).dialog('close');
+        })
+        console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
+        var enterpriseId = $("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            // enterpriseId = $("#enterpriseId").val();
+        }
+
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialogEditClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+    }
+
+
+    //查看供应商企业详情
+    function viewEditSupplierEnterpriseUrl() {
+        $(function() {
+            ezuiDialogEditSupplierEnterprise = $('#ezuiDialogEditSupplierEnterprise').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialogEditSupplierEnterprise);
+                }
+            }).dialog('close');
+        })
+        //processType = 'edit';
+
+        //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
+        var enterpriseId = $("#ezuiFormDetail1 input[id='supedit_enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            // enterpriseId = $("#enterpriseId").val();
+        }
+
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialogEditSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+    }
 
 
 
@@ -821,8 +666,10 @@
         //$("input[name='enterpriseId']").val(id);
         //$("#enterpriseIdQuery").textbox("setValue",name);
         console.log(id)
-        $("#clientName").textbox("setValue",name);
-        $("#clientId").val(id);
+        $("#clientName").textbox("setValue",name);          //
+        $("#clientId").val(id);//是enterpriseId不是customerId
+        $("#cliedit_enterpriseId").val(id);
+
         enterpriseCustomerDialog.dialog("close");
 
     }
@@ -1000,7 +847,9 @@
         var row = clientDatagrid1.datagrid("getSelected");
         if(row){
             $("#clientId1").val(row.customerid);
-            $("#clientName1").textbox("setValue",row.descrC)
+            $("#clientName1").textbox("setValue",row.descrC);
+            $("#cliedit_enterpriseId").val(row.enterpriseId);
+
             console.log(row.customerid);
             $("#productLine1").combobox({
                 panelHeight: 'auto',
@@ -1022,7 +871,8 @@
         console.log(row);
         if(row){
             $("#supplierId1").val(row.customerid);
-            $("#supplierName1").textbox("setValue",row.descrC)
+            $("#supplierName1").textbox("setValue",row.descrC);
+            $("#ezuiFormDetail1 input[id='supedit_enterpriseId']").val(row.enterpriseId);
             // $("#productLine").combobox({
             //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
             //     valueField:'id',

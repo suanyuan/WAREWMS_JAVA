@@ -33,6 +33,7 @@ $(function() {
 		singleSelect:false,
 		idField : 'applyId',
 		columns : [[
+            {field: 'ck',checkbox:true },
 			{field: 'applyId',		title: '申请单号',	width: 100},
             {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
 			{field: 'clientId',		title: '委托客户',	width: 100 },
@@ -110,8 +111,14 @@ var add = function(){
     $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
     $('#ezuiDatagridDetail1').dialog('destroy');    //detail主页
     // $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
-    $('#ezuiDialogSpec1').dialog('destroy');	//ProductAndSupplier产品
+    $('#ezuiDialogSpec1').dialog('destroy');	//edit 查看产品
+    $('#ProductDialog').dialog('destroy');//detail查看产品
+    $('#productRegisterDialog').dialog('destroy');//detail查看注册证
+    $('#enterpriseDialog1').dialog('destroy');//edit查看产品
 
+
+    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    $('#productRegisterDialog1').dialog('destroy');	//edit 查看注册证
     // $('#ProductDialog').dialog('destroy');//detail查看产品
     // $('#productRegisterDialog').dialog('destroy');//detail查看注册证
     // $('#enterpriseDialog1').dialog('destroy');//edit查看产品
@@ -139,7 +146,11 @@ var edit = function(){
     $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
     $('#ezuiDialogSpec1').dialog('destroy');	//edit 查看产品
     $('#productRegisterDialog1').dialog('destroy');	//edit 查看注册证
+    $('#enterpriseProduct').dialog('destroy');//ProductAndSupplier主页
+    $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
 
+
+    // $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
     // $('#ezuiDialogSupplierDetail1').dialog('destroy');//edit货主
     // $('#ezuiDialogSpec1').dialog('destroy');//edit货主
     // $('#enterpriseDialog1').dialog('destroy');//edit查看产品

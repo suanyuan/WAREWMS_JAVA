@@ -755,7 +755,7 @@
             }
         })
 
-        $('#ezuiDialogSpec').dialog('destroy');	//ProductAndSupplier产品
+        $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
         $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
     }
 

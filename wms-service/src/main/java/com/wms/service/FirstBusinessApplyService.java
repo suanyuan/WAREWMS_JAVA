@@ -143,10 +143,12 @@ public class FirstBusinessApplyService extends BaseService {
 			BasCustomer client = basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
 			if(client!=null){
 				vo.setClientName(client.getDescrC());
+				vo.setClientEnterpeiseId(client.getEnterpriseId());
 			}
 			BasCustomer supplier = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);
 			if(supplier!=null){
 				vo.setSupplierName(supplier.getDescrC());
+				vo.setSupplierEnterpeiseId(supplier.getEnterpriseId());
 			}
 			GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(firstBusinessApply.getSpecsId());
 			if(gspProductRegisterSpecs.getProductName()!=null){

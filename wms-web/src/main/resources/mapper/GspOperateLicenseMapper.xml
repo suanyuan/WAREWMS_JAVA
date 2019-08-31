@@ -26,8 +26,14 @@
 	<result column="juridical_person" property="juridicalPerson"/>
 	<result column="residence" property="residence"/>
 	<result column="business_residence" property="businessResidence"/>
-
 </resultMap>
+
+	<resultMap id="GspLicenseTimeResultMap" type="com.wms.entity.GspOperteLicenseTime">
+		<result column="papersid" property="papersId"/>
+		<result column="gotime" property="goTime"/>
+		<result column="endtime" property="endTime"/>
+		<result column="licenseType" property="lincenseType"/>
+	</resultMap>
        
 <!-- gsp_operate_license table all fields -->
 <sql id="Base_Column_List" >
@@ -210,5 +216,40 @@ where 1=1
        ${limitClause}
     </if>
 </select>
-  	
+    <select id="queryByListLicenseTime" resultMap="GspLicenseTimeResultMap" parameterType="object">
+		<!-- 经营和生产 -->
+SELECT *  FROM (
+SELECT operate_id AS papersid, approve_date AS gotime , license_expiry_date AS endtime , operate_type  AS licenseType
+FROM GSP_operate_license  WHERE 1=1 AND is_use = '1'
+UNION ALL
+		<!-- 营业执照 -->
+SELECT  business_id AS papersid,business_start_date AS gotime ,business_end_date AS endtime ,NULL  AS licenseType
+ FROM GSP_Business_license   WHERE 1=1 AND is_use = '1' and  <![CDATA[ is_long <> '1']]>
+UNION ALL
+		<!-- 第一类凭证 -->
+SELECT record_id AS papersid , approve_date AS gotime ,NULL AS endtime ,NULL AS licenseType FROM gsp_first_record  WHERE 1=1 AND is_use = '1'
+UNION ALL
+		<!-- 第二类凭证 -->
+SELECT record_id AS papersid , approve_date AS gotime , NULL AS endtime ,NULL AS licenseType FROM gsp_second_record WHERE 1=1 AND is_use = '1'
+UNION ALL
+		<!-- 医疗 -->
+SELECT medical_id AS papersid, license_expiry_date_begin AS gotime , license_expiry_date_end AS endtime,NULL AS licenseType  FROM gsp_medical_record  WHERE 1=1 AND is_use = '1'
+		<!-- 产品注册证 -->
+UNION ALL
+SELECT product_register_id AS papersid,r.approve_date AS gotime ,product_register_expiry_date AS endtime,NULL AS licenseType
+		FROM gsp_product_register r LEFT JOIN bas_codes vc ON r.version = vc.code
+		LEFT JOIN bas_codes vcs ON r.classify_id = vcs.code
+		LEFT JOIN bas_codes vcc ON r.classify_catalog = vcc.code
+		LEFT JOIN `gsp_enterprise_info` g ON r.enterprise_id=g.enterprise_id
+		LEFT JOIN (SELECT * FROM gsp_operate_license WHERE is_use = '1' AND operate_type = 'OPERATE') gl ON g.enterprise_id=gl.enterprise_id
+		LEFT JOIN (SELECT * FROM gsp_operate_license WHERE is_use = '1' AND operate_type = 'PROD') pl ON g.enterprise_id=pl.enterprise_id
+		LEFT JOIN gsp_second_record  gr ON g.enterprise_id=gr.enterprise_id
+		) ops where  1=1
+		<if test="licenseId != null and licenseId != ''">
+			and papersid = #{licenseId}
+		</if>
+		<if test="licenseType != null and licenseType != ''">
+			and licenseType = #{licenseType}
+		</if>
+    </select>
 </mapper>   

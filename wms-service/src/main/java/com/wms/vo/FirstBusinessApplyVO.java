@@ -6,8 +6,11 @@ public class FirstBusinessApplyVO {
 	private String applyId;
 	private String clientId;
 	private String clientName;
+	private String clientEnterpeiseId;
 	private String supplierId;
 	private String supplierName;
+	private String supplierEnterpeiseId;
+
 	private String productCode;
 	private String productName;
 	private String createId;
@@ -19,6 +22,23 @@ public class FirstBusinessApplyVO {
 	private String productline;
 	private String specsId;
 	private String customerid;
+
+
+	public String getClientEnterpeiseId() {
+		return clientEnterpeiseId;
+	}
+
+	public void setClientEnterpeiseId(String clientEnterpeiseId) {
+		this.clientEnterpeiseId = clientEnterpeiseId;
+	}
+
+	public String getSupplierEnterpeiseId() {
+		return supplierEnterpeiseId;
+	}
+
+	public void setSupplierEnterpeiseId(String supplierEnterpeiseId) {
+		this.supplierEnterpeiseId = supplierEnterpeiseId;
+	}
 
 	public String getCustomerid() {
 		return customerid;
