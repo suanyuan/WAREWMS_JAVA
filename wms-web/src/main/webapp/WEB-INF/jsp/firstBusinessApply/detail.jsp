@@ -611,13 +611,13 @@
 
     function operateGridProductAdd(id) {
         console.log("---------->"+id);
-        processType = 'product';
+        // var type = 'product';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
         $('#ProductDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id,
+            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id+"&type=product",
             width:1050,
             height:550,
             cache:false,
@@ -714,7 +714,7 @@
             title : '<spring:message code="common.dialog.title"/>',
             left:400,
             top:200,
-            width:500,
+            width:550,
             height:170,
             href: sy.bp()+"/firstBusinessApplyController.do?toDialogProductAndSupplier",
             cache: false,

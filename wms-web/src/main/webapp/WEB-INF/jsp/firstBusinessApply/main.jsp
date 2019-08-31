@@ -106,10 +106,11 @@ var add = function(){
 
 
     $('#enterpriseProduct').dialog('destroy');//ProductAndSupplier主页
-    $('#ezuiDialogSpec').dialog('destroy');	//ProductAndSupplier产品
+    $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
     $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
     $('#ezuiDatagridDetail1').dialog('destroy');    //detail主页
     // $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
+    $('#ezuiDialogSpec1').dialog('destroy');	//ProductAndSupplier产品
 
     // $('#ProductDialog').dialog('destroy');//detail查看产品
     // $('#productRegisterDialog').dialog('destroy');//detail查看注册证
@@ -130,7 +131,15 @@ var edit = function(){
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
-    // $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    $('#ezuiDatagridDetail1').dialog('destroy');    //detail主页
+    $('#ProductDialog').dialog('destroy');//detail查看产品
+    $('#productRegisterDialog').dialog('destroy');//detail查看注册证
+    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    $('#enterpriseDialog1').dialog('destroy');//edit查看产品
+    $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
+    $('#ezuiDialogSpec1').dialog('destroy');	//edit 查看产品
+    $('#productRegisterDialog1').dialog('destroy');	//edit 查看注册证
+
     // $('#ezuiDialogSupplierDetail1').dialog('destroy');//edit货主
     // $('#ezuiDialogSpec1').dialog('destroy');//edit货主
     // $('#enterpriseDialog1').dialog('destroy');//edit查看产品

@@ -4,6 +4,9 @@
     <table>
         <tr style="display: none">
             <td><input type="hidden"  name='specsId'  id="specsId" value="${specsId}" /></td>
+            <td><input type="hidden"  name='type'  id="type" value="${type}" /></td>
+
+
         </tr>
         <tr style="display: none">
             <th>产品注册证表主键</th>
@@ -225,9 +228,12 @@
         // }
 // alert(processType);
 //         debugger
-        alert(id);
+//         alert($("#ezuiFormInfo #specsId").val());
+        if(type!=null){
+            processType = $("#ezuiFormInfo #type").val();
+        }
         if(processType == 'product'){
-            id = $("#specsId").val();
+            id = $("#ezuiFormInfo #specsId").val();
         }else if(processType == 'edit'){
             row = ezuiDatagrid.datagrid('getSelected');
             id = row.specsId;
