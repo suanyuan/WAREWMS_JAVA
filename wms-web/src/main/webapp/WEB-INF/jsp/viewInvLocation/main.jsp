@@ -208,7 +208,7 @@
             }
         };
 
-        //主页datagrid 党隐藏datagrid加载完毕之后加载
+        //主页datagrid 等隐藏datagrid加载完毕之后加载
         var initDateGrid=function(){
             ezuiDatagrid = $('#ezuiDatagrid').datagrid({
                 url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
@@ -229,13 +229,22 @@
                 showFooter:true,
                 idField: 'customerid',
                 columns: [[
-                    {field: 'fmlocation', title: '库位', width: 100},
                     {field: 'customerid', title: '货主', width: 71},
+                    {field: 'lotatt14', title: '入库单号', width: 91},
+                    {field: 'fmlocation', title: '库位', width: 100},
+                    {field: 'lotatt03', title: '入库日期', width: 91},
                     {field: 'fmsku', title: '产品代码', width: 100},
-                    {field: 'lotatt12', title: '产品名称', width: 330},
+                    {field: 'lotatt12', title: '产品名称', width: 250},
+
+                    {field: 'skudescre', title: '规格型号', width: 103},
+                    {field: 'name', title: '产品线', width: 100},
+                    {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
+                    {field: 'lotatt04', title: '生产批号', width: 95},
+                    {field: 'lotatt01', title: '生产日期', width: 112},
+                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
+                    {field: 'lotatt05', title: '序列号', width: 110},
                     {field: 'fmqty', title: '库存件数', width: 100},
                     {field: 'fmqtyEach', title: '库存数量', width: 100},
-
                     {field: 'qtyallocated', title: '分配件数', width: 100},
                     {field: 'qtyallocatedEach', title: '分配数量', width: 100},
                     {field: 'qtyavailed', title: '可用件数', width: 100},
@@ -243,25 +252,17 @@
                     {field: 'qtyholded', title: '冻结件数', width: 100},
                     {field: 'qtyholdedEach', title: '冻结数量', width: 100},
                     {field: 'defaultreceivinguom', title: '单位', width: 100},
-                    {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
-                    {field: 'skudescre', title: '规格型号', width: 103},
-                    {field: 'lotatt05', title: '序列号', width: 110},
-                    {field: 'lotatt04', title: '生产批号', width: 95},
-                    {field: 'lotatt07', title: '灭菌批号', width: 120},
-                    {field: 'lotatt03', title: '入库日期', width: 91},
-                    {field: 'lotatt01', title: '生产日期', width: 112},
-                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
-                    {field: 'lotatt08', title: '供应商', width: 120},
-                    {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
-                    {field: 'lotatt14', title: '入库单号', width: 91},
-
-
-                    {field: 'lotatt11', title: '存储条件', width: 150},
-                    {field: 'enterpriseName', title: '生产厂家', width: 100},
-
                     {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
-
-                    {field: 'name', title: '产品线', width: 100},
+                    {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
+                    // {field: 'lotatt07', title: '灭菌批号', width: 120},
+                    //
+                    //
+                    // {field: 'lotatt08', title: '供应商', width: 120},
+                    // {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
+                    //
+                    // {field: 'lotatt11', title: '存储条件', width: 150},
+                    //
+                    // {field: 'enterpriseName', title: '生产厂家', width: 100},
                     // {field: 'lotatt10',		title: '备注',	width: 71 },
                 ]]
                 ,onDblClickCell: function(index,field,value){
@@ -271,10 +272,10 @@
                     getTotalInit=getTotal();
                     getTotalAllInit=getTotalAll();
                     ezuiDatagrid.datagrid('reloadFooter',[
-                        {fmlocation:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
+                        {lotatt05:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
                             qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
                             qtyholdedEach:getTotalInit.qtyholdedEach},
-                        {fmlocation:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
+                        {lotatt05:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
                             qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalAllInit.qtyholded,
                             qtyholdedEach:getTotalAllInit.qtyholdedEach}
                     ]);

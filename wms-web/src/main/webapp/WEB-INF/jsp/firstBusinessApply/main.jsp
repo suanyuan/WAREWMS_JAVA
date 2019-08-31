@@ -30,7 +30,7 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:true,
+		singleSelect:false,
 		idField : 'applyId',
 		columns : [[
 			{field: 'applyId',		title: '申请单号',	width: 100},
@@ -48,7 +48,7 @@ $(function() {
 			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();// TODO 不能修改需要提示
+			// edit();// TODO 不能修改需要提示
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			// event.preventDefault();
@@ -103,13 +103,22 @@ var add = function(){
 	processType = 'add';
 	$('#applyId').val(0);
 	ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toDetail&id=");
-    $('#enterpriseProduct').dialog('destroy');
-    $('#ezuiDatagridDetail').dialog('destroy');
-    $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
+
+
+    $('#enterpriseProduct').dialog('destroy');//ProductAndSupplier主页
     $('#ezuiDialogSpec').dialog('destroy');	//ProductAndSupplier产品
     $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商
-    $('#enterpriseDialog').dialog('destroy');
-    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    $('#ezuiDatagridDetail1').dialog('destroy');    //detail主页
+    // $('#ezuiDialogClientDetail').dialog('destroy'); //detail货主
+
+    // $('#ProductDialog').dialog('destroy');//detail查看产品
+    // $('#productRegisterDialog').dialog('destroy');//detail查看注册证
+    // $('#enterpriseDialog1').dialog('destroy');//edit查看产品
+    // $('#productRegisterDialog1').dialog('destroy');//edit查看注册证
+    //
+    //
+    //
+    // $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
 };
 var edit = function(){
 	processType = 'edit';
@@ -121,22 +130,37 @@ var edit = function(){
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
-    $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
-    $('#ezuiDialogSupplierDetail1').dialog('destroy');//edit货主
-    $('#ezuiDialogSpec1').dialog('destroy');//edit货主
-
-    // $('#enterpriseProduct').dialog('destroy');
-    // $('#ezuiDatagridDetail').dialog('destroy');
-    $('#clientDatagrid1').dialog('destroy');
-    $('#enterpriseDialog').dialog('destroy');
+    // $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    // $('#ezuiDialogSupplierDetail1').dialog('destroy');//edit货主
+    // $('#ezuiDialogSpec1').dialog('destroy');//edit货主
+    // $('#enterpriseDialog1').dialog('destroy');//edit查看产品
+    // $('#productRegisterDialog1').dialog('destroy');//edit查看注册证
+    // $('#ProductDialog').dialog('destroy');//detail查看产品
+    // $('#productRegisterDialog').dialog('destroy');//detail查看注册证
+    // $('#productRegisterDialog1').dialog('destroy');
+    // $('#clientDatagrid1').dialog('destroy');
+    // $('#enterpriseDialog').dialog('destroy');
     // $('#ezuiDialogClientDetail1').dialog('destroy');
 };
 var del = function(){
-	var row = ezuiDatagrid1.datagrid('getSelected');
+	// var row = ezuiDatagrid1.datagrid('getSelected');
 
-	if(row.firstState == '10' || row.firstState =='40'){
+    var row = ezuiDatagrid1.datagrid('getSelections');
+    var arrDel = new Array();
+    var arrFirstState =  new Array();
+    var flag = true;
+    for(var i=0;i<row.length;i++){
+        arrDel.push(row[i].applyId);
+        if(row[i].firstState=='10' || row[i].firstState =='40' ){
+            flag =false;
+		}
+    }
+    // rows = dataGridProduct.datagrid('getSelections');
+
+
+    if(!flag){
         $.messager.show({
-            msg : '审核中与审核通过的申请无法删除', title : '提示'
+            msg : '选中的申请中存在审核中与审核通过的申请无法删除', title : '提示'
         });
 	}else{
 
@@ -145,7 +169,7 @@ var del = function(){
 				if(confirm){
 					$.ajax({
 						url : 'firstBusinessApplyController.do?delete',
-						data : {id : row.applyId},
+						data : {id : arrDel.join(",")},
 						type : 'POST',
 						dataType : 'JSON',
 						success : function(result){
@@ -233,15 +257,33 @@ var doSearch = function(){
 		isUse : $('#isUse').combobox('getValue')
 	});
 };
-
+//提交审核
 var doConfirm = function () {
-    var row = ezuiDatagrid1.datagrid('getSelected');
+    // var row = ezuiDatagrid1.datagrid('getSelected');
+
+
+    var row = ezuiDatagrid1.datagrid('getSelections');
+    var arrDel = new Array();
+    var arrFirstState =  new Array();
+    var flag = true;
+    for(var i=0;i<row.length;i++){
+        arrDel.push(row[i].applyId);
+        if(row[i].firstState=='10' || row[i].firstState =='40' ){
+            flag =false;
+        }
+    }
+	if(!flag){
+        $.messager.show({
+            msg : '审核中与审核通过的申请无法提交', title : '提示'
+        });
+        return;
+	}
     if(row){
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
             if(confirm){
                 $.ajax({
                     url : 'firstBusinessApplyController.do?confirmApply',
-                    data : {id : row.applyId},
+                    data : {id : arrDel.join(",")},
                     type : 'POST',
                     dataType : 'JSON',
                     success : function(result){
@@ -266,11 +308,27 @@ var doConfirm = function () {
         });
     }
 }
-
+//发起新申请
 var reApply = function () {
+    var row = ezuiDatagrid1.datagrid('getSelections');
+    var arrDel = new Array();
+    var arrFirstState =  new Array();
+    var flag = true;
+    for(var i=0;i<row.length;i++){
+        arrDel.push(row[i].applyId);
+        if(row[i].firstState=='00' || row[i].firstState=='10'){
+            flag =false;
+        }
+    }
+    if(!flag){
+        $.messager.show({
+            msg : '审核中与新建的申请无法发起新申请', title : '提示'
+        });
+        return;
+    }
     var row = ezuiDatagrid1.datagrid('getSelected');
     if(row){
-        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认重新审核吗', function(confirm) {
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认发起新申请吗', function(confirm) {
             if(confirm){
                 $.ajax({
                     url : 'firstBusinessApplyController.do?reApply',

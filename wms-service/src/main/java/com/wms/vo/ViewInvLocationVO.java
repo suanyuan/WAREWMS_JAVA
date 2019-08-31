@@ -48,6 +48,8 @@ public class ViewInvLocationVO {
 	private String lotatt14;
 
 	private String lotatt12;
+	private String lotatt13;
+
 
 	private java.sql.Date addtime;
 
@@ -89,6 +91,14 @@ public class ViewInvLocationVO {
 	private java.lang.String warehouseid;
 	private String productRegisterNo;
 	private String name;
+
+	public String getLotatt13() {
+		return lotatt13;
+	}
+
+	public void setLotatt13(String lotatt13) {
+		this.lotatt13 = lotatt13;
+	}
 
 	public BigDecimal getQtyavailedEach() {
 		return qtyavailedEach;

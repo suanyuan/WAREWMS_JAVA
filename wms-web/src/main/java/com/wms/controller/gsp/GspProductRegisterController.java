@@ -16,6 +16,7 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -211,5 +212,15 @@ public class GspProductRegisterController {
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterVO> showHistoryDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
 		return gspProductRegisterService.showHistoryDatagrid(pager, query);
+	}
+
+	@Login
+	@RequestMapping(params = "queryGspProductRegister")
+	@ResponseBody
+	public GspProductRegisterVO queryGspProductRegister(String registerId) throws Exception{
+		GspProductRegisterVO vo = new GspProductRegisterVO();
+		GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
+		BeanUtils.copyProperties(gspProductRegister,vo);
+		return vo;
 	}
 }

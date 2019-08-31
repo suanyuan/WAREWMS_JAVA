@@ -46,7 +46,7 @@
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
     <a onclick='clearApply();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>清空选择</a>-->
 </div>
-<table id='ezuiDatagridDetail' ></table>
+<table id='ezuiDatagridDetail1' ></table>
 
 <div id='enterpriseCustomerDialog' style='padding: 10px;'>
 
@@ -180,11 +180,14 @@
 
     <%--</table>--%>
 <%--</div>--%>
-<div id="enterpriseDialog">
+<div id="ProductDialog">
+
+</div>
+<div id="productRegisterDialog">
 
 </div>
 <script>
-    var ezuiDatagridDetail;
+    var ezuiDatagridDetail1;
     var enterpriseCustomerDialog;
     var enterpriseSupplierDialog;
     // var ezuiDialogSpec;
@@ -215,7 +218,7 @@
 
 
         //主页面
-        ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
+        ezuiDatagridDetail1 = $("#ezuiDatagridDetail1").datagrid({
             url : sy.bp()+'/firstBusinessApplyController.do?showSpecsDatagrid',
             method:'POST',
             toolbar : '#detailToolbar',
@@ -242,8 +245,12 @@
                 {field: 'productModel',title: '产品型号',width: '15%'},
                 {field: 'supplierName',title: '供应商',width: '20%'},
                 {field: 'productRegisterNo',title: '注册证编号',width: '20%'},
+                {field: 'productRegisterId',title: '注册证主键',hidden:true},
+                {field: '_operate1',		title: '查看注册证',	width: '10%',
+                    formatter: formatOperProductRegeister
+                },
                 {field: '_operate',		title: '查看产品',	width: '10%',
-                    formatter: formatOper
+                    formatter: formatOperProductAdd
                 }
             ]],
             onDblClickCell: function(index,field,value){
@@ -342,16 +349,16 @@
                 <%--//  ezuiFormClear(ezuiForm);--%>
             <%--}--%>
         <%--}).dialog('close');--%>
-        enterpriseProduct = $('#enterpriseProduct').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            width:850,
-            height:500,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiForm);
-            }
-        }).dialog('close');
+        <%--enterpriseProduct = $('#enterpriseProduct').dialog({--%>
+            <%--modal : true,--%>
+            <%--title : '<spring:message code="common.dialog.title"/>',--%>
+            <%--width:850,--%>
+            <%--height:500,--%>
+            <%--cache: false,--%>
+            <%--onClose : function() {--%>
+                <%--ezuiFormClear(ezuiForm);--%>
+            <%--}--%>
+        <%--}).dialog('close');--%>
 
 
 
@@ -579,13 +586,13 @@
     function delProduct(){
         console.log(1111111111111111);
 
-        var row =  ezuiDatagridDetail.datagrid('getSelected');
+        var row =  ezuiDatagridDetail1.datagrid('getSelected');
 
 
         arr.remove(row.specsId);
         arr1.remove(row.customerid);
-        var rowIndex = ezuiDatagridDetail.datagrid('getRowIndex', row);
-        ezuiDatagridDetail.datagrid('deleteRow', rowIndex);
+        var rowIndex = ezuiDatagridDetail1.datagrid('getRowIndex', row);
+        ezuiDatagridDetail1.datagrid('deleteRow', rowIndex);
 
 
             // row.specsId = '';
@@ -602,12 +609,12 @@
 
 
 
-    function operateGrid1(id) {
+    function operateGridProductAdd(id) {
         console.log("---------->"+id);
         processType = 'product';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
-        $('#enterpriseDialog').dialog({
+        $('#ProductDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id,
@@ -619,9 +626,40 @@
             }
         })
     }
-    function formatOper(value,row,index){
-        return "<a onclick=\"operateGrid1('"+row.specsId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    function formatOperProductAdd(value,row,index){
+        // for(var i=0;i<rows.length;i++){
+        //     var s=rows[i].specsId;
+        // }
+        return "<a onclick=\"operateGridProductAdd('"+row.specsId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
+
+
+    function formatOperProductRegeister(value,row,index){
+        return "<a onclick=\"operateGridProductRegeister('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    }
+    function operateGridProductRegeister(id) {
+        console.log("---------->"+id);
+        // processType = 'product';
+        // processType = 'edit';
+        // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
+        // enterpriseDialog.dialog('close');
+        $('#productRegisterDialog').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            href:sy.bp()+"/gspProductRegisterController.do?toDetail&id="+id,
+            fit:true,
+            cache: false,
+
+            onClose : function() {
+                // ezuiFormClear(ezuiForm);
+            },
+            onLoad:function () {
+
+            }
+        });
+
+    }
+
     function searchCustomerEnterprise() {
         enterpriseCustomerDialog = $('#enterpriseCustomerDialog').dialog({
             modal : true,

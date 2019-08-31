@@ -126,14 +126,18 @@
     var yesOrNoFormatter = function(value,row,index) {
         if(value == "1"){
             return "是";
-        }else{
+        }else if(value == "0"){
             return "否";
+        }else{
+            return "";
         }
     }
     var QualifiedOrFailed = function(value,row,index) {
+		value+="";
 		switch (value) {
 			case "1" : return "合格";
 			case "0" : return "不合格";
+			case "2" : return "未检查";
 			case "" : return "";
 		}
     }
@@ -252,6 +256,14 @@
 		switch (value) {
 			case "PC" : return "指定养护";
 			case "SC" : return "计划养护";
+		}
+	}
+//双证匹配类型
+	var Asn_DoublecstatusFormatter = function (value,row,index) {
+		value+="";
+    	switch (value) {
+			case "1" : return "已匹配";
+			case "" : return "";
 		}
 	}
 

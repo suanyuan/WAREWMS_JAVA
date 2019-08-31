@@ -66,6 +66,7 @@ public class ViewInvLocation implements Serializable {
 	private String customerid;
 	private String lotatt03;
 	private String lotatt12;
+	private String lotatt13;
 	private String lotatt04;
 	private String lotatt05;
 	private String lotatt06;
@@ -81,6 +82,15 @@ public class ViewInvLocation implements Serializable {
 	private String productRegisterNo;
 	private String enterpriseName;
 	private String defaultreceivinguom;
+
+
+	public String getLotatt13() {
+		return lotatt13;
+	}
+
+	public void setLotatt13(String lotatt13) {
+		this.lotatt13 = lotatt13;
+	}
 
 	public BigDecimal getQtyavailedEach() {
 		return qtyavailedEach;

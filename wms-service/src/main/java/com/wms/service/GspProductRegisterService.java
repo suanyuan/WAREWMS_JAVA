@@ -152,10 +152,6 @@ public class GspProductRegisterService extends BaseService {
                     }
                 }
 
-                //TODO 失效已下发数据
-				//dataPublishService.publishData(gspProductRegister.getProductRegisterId());
-                dataPublishService.cancelPubilseDataByRegisterId(gspProductRegister.getProductRegisterId());
-
                 GspProductRegister newGspProductRegister = new GspProductRegister();
                 BeanUtils.copyProperties(gspProductRegisterForm, newGspProductRegister);
                 newGspProductRegister.setProductRegisterId(RandomUtil.getUUID());
@@ -163,7 +159,7 @@ public class GspProductRegisterService extends BaseService {
                 newGspProductRegister.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
                 newGspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
                 newGspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
-                newGspProductRegister.setVersion(gspProductRegister.getProductRegisterId());
+                newGspProductRegister.setVersion(gspProductRegister.getVersion());
                 gspProductRegisterMybatisDao.add(newGspProductRegister);
 
                 //保存经营范围
@@ -177,7 +173,12 @@ public class GspProductRegisterService extends BaseService {
                         }
                     }
                 }
-            }else{
+
+				//TODO 失效已下发数据
+				//dataPublishService.publishData(gspProductRegister.getProductRegisterId());
+				dataPublishService.cancelPubilseDataByRegisterId(gspProductRegister.getProductRegisterId(),newGspProductRegister.getProductRegisterId());
+
+			}else{
 				if(gspProductRegister.getCheckerId()!=null && !StringUtils.isEmpty(gspProductRegister.getCheckerId())){
 					return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
 				}

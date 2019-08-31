@@ -71,15 +71,9 @@ $(function() {
             {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
 
 
-            {field: 'isUse',		title: '是否有效',	width: 71, formatter:function(value,rowData,rowIndex){
-                    return rowData.isUse == '1' ? '是' : '否';
-                }},
-            {field: 'isDoublec',		title: '双证',	width: 90, formatter:function(value,rowData,rowIndex){
-                    return rowData.isDoublec == '1' ? '是' : '否';
-                }},
-            {field: 'isCertificate',		title: '产品合格证',	width: 90, formatter:function(value,rowData,rowIndex){
-                    return rowData.isCertificate == '1' ? '是' : '否';
-                }},
+            {field: 'isUse',		title: '是否有效',	width: 71, formatter:isUseFormatter},
+            {field: 'isDoublec',		title: '双证',	width: 90, formatter:yesOrNoFormatter},
+            {field: 'isCertificate',		title: '产品合格证',	width: 90, formatter:yesOrNoFormatter},
 
 
 			{field: 'createId',		title: '创建人',	width: 71 },

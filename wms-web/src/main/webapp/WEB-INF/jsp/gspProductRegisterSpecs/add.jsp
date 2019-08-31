@@ -223,6 +223,9 @@
         // if(row!=null ){
         //
         // }
+// alert(processType);
+//         debugger
+        alert(id);
         if(processType == 'product'){
             id = $("#specsId").val();
         }else if(processType == 'edit'){

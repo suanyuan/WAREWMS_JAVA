@@ -3,11 +3,11 @@ package com.wms.service;
 import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.query.BasPackageQuery;
+import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.*;
 import com.wms.vo.form.*;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,8 @@ public class DataPublishService extends BaseService {
     private CommonService commonService;
     @Autowired
     private FirstBusinessApplyService firstBusinessApplyService;
+    @Autowired
+    private FirstReviewLogService firstReviewLogService;
     @Autowired
     private FirstBusinessProductApplyService firstBusinessProductApplyService;
     @Autowired
@@ -218,7 +220,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setFirstop(form.getFirstState());
                 skuForm.setPutawayrule(no);//申请单号
                 skuForm.setCustomerid(customerId.getCustomerid());
-
+                skuForm.setOrderbysql(register.getProductRegisterId());
                 //skuForm
                 basSkuService.addBasSku(skuForm);
             }
@@ -414,26 +416,46 @@ public class DataPublishService extends BaseService {
         return Json.error("没有查询到对应的申请单");
     }
 
-    public Json cancelPubilseDataByRegisterId(String registerId) throws Exception{
-        /*GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
+    public Json cancelPubilseDataByRegisterId(String registerId,String newRegisterId) throws Exception{
+        GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
         if(gspProductRegister == null){
             return Json.error("产品注册证不存在");
         }
+
+        //1.失效bas_sku
+        List<BasSku> basSkuList = basSkuService.queryBasSkuBySku(gspProductRegister.getProductRegisterNo());
+        for(BasSku b : basSkuList){
+            BasSkuForm form = new BasSkuForm();
+            BeanUtils.copyProperties(b,form);
+            form.setActiveFlag(Constant.IS_USE_NO);
+            form.setOrderbysql(gspProductRegister.getProductRegisterId());
+            basSkuService.editBasSku(form);
+            firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+
+            /*//2.失效产品首营申请
+            Json json = firstBusinessProductApplyService.getListByApplyId(b.getPutawayrule());
+            List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)json.getObj();
+            if(list!=null && list.size()>0){
+                FirstBusinessProductApply productApply = (FirstBusinessProductApply)list.get(0);
+                firstBusinessApplyService.updateFirstState(productApply.getApplyId(),)
+                firstReviewLogService
+            }*/
+        }
+
+        //3.更新产品基础信息关联产品注册证
         List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
         if(list!=null && list.size()>0){
             for(GspProductRegisterSpecs specs : list){
                 GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
                 BeanUtils.copyProperties(specs,form);
-                form.setIsUse(Constant.IS_USE_NO);
+                form.setProductRegisterId(newRegisterId);
                 gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
             }
-        }*/
-        //TODO 1.失效bas_sku 2.失效产品首营申请 3.更新产品基础信息关联产品注册证
-
+        }
         return Json.success("");
     }
 
-    public Json pubilseDataByRegisterId(String registerId) throws Exception{
+    public Json pubilseDataByRegisterId(String registerId,String newRegister) throws Exception{
         /*GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
         if(gspProductRegister == null){
             return Json.error("产品注册证不存在");

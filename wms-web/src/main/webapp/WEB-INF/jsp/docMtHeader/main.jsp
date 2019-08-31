@@ -13,10 +13,14 @@ var ezuiForm;        //二级dialog form
 var ezuiDialog;      //二级dialog
 var ezuiDetailsDatagrid;//二级datagrid
 var ezuiDatagrid;    //主页datagird
+var closegenerationPlanForm;       //关闭计划dialog form
+var closegenerationPlanDialog;     //关闭计划dialog
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();   //右键菜单
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
 //主页datagird
+	closegenerationPlanForm = $('#closegenerationPlanForm').form();   //关闭计划dialog form
+
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/docMtHeaderController.do?showDatagrid"/>',
 		method:'POST',
@@ -39,11 +43,11 @@ $(function() {
 			{field: 'mttype',		title: '养护类型',	width: 150,formatter:MT_TYPstatusFormatter },
 			{field: 'fromdate',		title: '开始时间',	width: 150 },
 			{field: 'todate',		title: '结束时间',	width: 150 },
-			// {field: 'userdefine1',		title: '待输入栏位5',	width: 50 },
-			// {field: 'userdefine2',		title: '待输入栏位6',	width: 50 },
-			// {field: 'userdefine3',		title: '待输入栏位7',	width: 50 },
-			// {field: 'userdefine4',		title: '待输入栏位8',	width: 50 },
-			// {field: 'userdefine5',		title: '待输入栏位9',	width: 50 },
+			{field: 'storageFlag',		title: '贮存条件',	width: 100,formatter:QualifiedOrFailed},
+			{field: 'flowFlag',		title: '作业流程',	width: 100,formatter:QualifiedOrFailed },
+			{field: 'signFlag',		title: '标志清晰',	width: 100,formatter:QualifiedOrFailed },
+			{field: 'fenceFlag',		title: '防护措施',	width: 100,formatter:QualifiedOrFailed },
+			{field: 'sanitationFlag',		title: '卫生环境',	width: 100,formatter:QualifiedOrFailed },
 			{field: 'remark',		title: '备注',	width: 150 },
 			{field: 'addtime',		title: '创建时间',	width: 150 },
 			{field: 'addwho',		title: '创建人',	width: 150 },
@@ -114,6 +118,17 @@ $(function() {
 		},onClose:function(){
 		}
 	});
+//关闭计划dialog
+	closegenerationPlanDialog = $('#closegenerationPlanDialog').dialog({
+		modal : true,
+		width:270,
+		height:250,
+		title : '关闭计划',
+		buttons : '#closegenerationPlanDialogBtn',
+		onClose : function() {
+			ezuiFormClear(closegenerationPlanForm);
+		}
+	}).dialog('close');
 });
 //增加
 var add = function(){
@@ -196,54 +211,66 @@ var generationPlan = function(){
 	ezuiDialog.dialog('open');
 };
 //关闭计划单
-var closegenerationPlan = function(){
+var closegenerationPlan = function() {
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if (row) {
+		closegenerationPlanDialog.dialog('open');
+	}else{
+		$.messager.show({
+			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
+
+}
+//提交关闭计划单
+var commitClosegenerationPlan = function(){
 	url = '<c:url value="/docMtHeaderController.do?closegenerationPlan"/>';
 	var row = ezuiDatagrid.datagrid('getSelected');
 	var msg='';
-    if(row) {
-		var mtno=row.mtno;
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '您要关闭所选项目?', function(confirm) {
-			if(confirm){
+	if(closegenerationPlanForm.form('validate')){
+		var data=new Object();
+		data.mtno=row.mtno;
+		data.storageFlag=$("#closegenerationPlanForm #storageFlag").combobox('getValue');
+		data.flowFlag=$("#closegenerationPlanForm #flowFlag").combobox('getValue');
+		data.signFlag=$("#closegenerationPlanForm #signFlag").combobox('getValue');
+		data.fenceFlag=$("#closegenerationPlanForm #fenceFlag").combobox('getValue');
+		data.sanitationFlag=$("#closegenerationPlanForm #sanitationFlag").textbox('getValue');
+
 			$.messager.progress({
 				text: '<spring:message code="common.message.data.processing"/>', interval: 100
 			});
 			$.ajax({
 				url: url,
-				data:{mtno:mtno},
+				data:data,
 				dataType: 'json',
 				error: function (a, b, c) {
 					alert(a + b + c);
 				},
 				success: function (result) {
 					try {
-						if (result.errorCode == "200") {
+						if (result.success) {
 							msg = result.msg;
-							ezuiDatagrid.datagrid('reload');
-							$.messager.show({
-								msg: msg, title: '<spring:message code="common.message.prompt"/>'
-							});
-							$.messager.progress('close');
 						} else {
 							msg = result.msg;
-							ezuiDatagrid.datagrid('reload');
-							$.messager.show({
-								msg: msg, title: '<spring:message code="common.message.prompt"/>'
-							});
-							$.messager.progress('close');
+
 						}
 					} catch (e) {
+
+							msg: '数据错误!';
+
+					}finally {
 						$.messager.show({
-							msg: '数据错误!', title: '<spring:message code="common.message.prompt"/>'
+							msg:msg, title: '<spring:message code="common.message.prompt"/>'
 						});
 						$.messager.progress('close');
+						closegenerationPlanDialog.dialog('close');
+						ezuiDatagrid.datagrid('reload');
 					}
 				}
 			});
-			}
-		});
 	}else{
 		$.messager.show({
-			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+			msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
 		});
 	}
 };
@@ -408,6 +435,61 @@ var ezuiDialogzToolbarClear= function(){
 			</div>
 			<table id='ezuiDatagrid'></table> 
 		</div>
+	</div>
+<%--关闭计划单点击弹窗--%>
+	<div id='closegenerationPlanDialog' style='padding: 10px;'>
+		<form id='closegenerationPlanForm' method='post'>
+			<table>
+
+				<tr>
+					<th>贮存条件</th><td><input type='text' id='storageFlag' name="storageFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	valueField: 'id',
+																																    textField: 'value'"/></td>
+
+				</tr>
+				<tr>
+					<th>作业流程</th><td><input type='text' id='flowFlag' name="flowFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	valueField: 'id',
+																																    textField: 'value'"/></td>
+
+				</tr>
+				<tr>
+					<th>标志清晰</th>
+					<td><input type='text' id='signFlag' name="signFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	valueField: 'id',
+																																    textField: 'value'"/></td>
+				</tr>
+				<tr>
+					<th>防护措施</th>
+					<td><input type='text' id='fenceFlag' name="fenceFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	valueField: 'id',
+																																    textField: 'value'"/></td>
+				</tr>
+				<tr>
+					<th>卫生环境</th>
+					<td><input type='text' id='sanitationFlag' name="sanitationFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	valueField: 'id',
+																																    textField: 'value'"/></td>
+				</tr>
+				<tr>
+					<th>备注</th>
+					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options=""/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id='closegenerationPlanDialogBtn'>
+		<a onclick='commitClosegenerationPlan();' class='easyui-linkbutton' href='javascript:void(0);'>确认</a>
 	</div>
 <%--右键菜单--%>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>
