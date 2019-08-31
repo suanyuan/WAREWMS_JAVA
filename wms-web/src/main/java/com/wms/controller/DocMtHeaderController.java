@@ -62,8 +62,8 @@ public class DocMtHeaderController {
 	@Login
 	@RequestMapping(params = "closegenerationPlan")
 	@ResponseBody
-	public PdaResult closegenerationPlan(String mtno) {
-		return docMtHeaderService.endDocMt(mtno);
+	public PdaResult closegenerationPlan(DocMtHeaderForm form) {
+		return docMtHeaderService.endDocMt(form);
 	}
 //增加
 	@Login

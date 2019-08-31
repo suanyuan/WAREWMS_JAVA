@@ -1,6 +1,5 @@
 package com.wms.service;
 
-import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -11,7 +10,6 @@ import com.wms.mybatis.dao.DocMtDetailsMybatisDao;
 import com.wms.mybatis.dao.DocMtHeaderMybatisDao;
 import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.query.DocMtDetailsQuery;
 import com.wms.query.DocMtHeaderQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
@@ -276,28 +274,34 @@ public class DocMtHeaderService extends BaseService {
     /**
      * 关单
      * 目前行状态只有 00 && 40
-     * @param mtno ~
+     * @param form ~
      * @return ~
      */
-    public PdaResult endDocMt(String mtno) {
+    public PdaResult endDocMt(DocMtHeaderForm form) {
 
         DocMtHeader mtHeader=new DocMtHeader();
-        mtHeader.setMtno(mtno);
+        mtHeader.setMtno(form.getMtno());
         DocMtHeader docMtHeader = docMtHeaderMybatisDao.queryById(mtHeader);
         switch (docMtHeader.getMtstatus()) {
             case "00":
             case "30":
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + mtno + "] 有未完成的养护任务，不可结束!");
+                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + form.getMtno() + "] 有未完成的养护任务，不可结束!");
             case "40":
 
-                docMtHeader.setMtno(mtno);
+                //storageFlag, flowFlag, signFlag, fenceFlag, sanitationFlag, remark
+                docMtHeader.setStorageFlag(form.getStorageFlag());
+                docMtHeader.setFlowFlag(form.getFlowFlag());
+                docMtHeader.setSignFlag(form.getSignFlag());
+                docMtHeader.setFenceFlag(form.getFenceFlag());
+                docMtHeader.setSanitationFlag(form.getSanitationFlag());
+                docMtHeader.setRemark(form.getRemark());
                 docMtHeader.setMtstatus("99");
                 docMtHeaderMybatisDao.updateStatus(docMtHeader);
                 return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
             default:
 
-                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + mtno + "] 当前状态不可操作!");
+                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + form.getMtno() + "] 当前状态不可操作!");
         }
     }
 }

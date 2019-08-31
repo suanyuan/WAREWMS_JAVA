@@ -121,7 +121,7 @@ public class PdaDocMtController {
     public Map<String, Object> endTask(DocMtHeaderForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put(Constant.RESULT, docMtHeaderService.endDocMt(form.getMtno()));
+        resultMap.put(Constant.RESULT, docMtHeaderService.endDocMt(form));
         return resultMap;
     }
 
