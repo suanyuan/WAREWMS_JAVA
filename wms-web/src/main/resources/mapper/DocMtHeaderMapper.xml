@@ -204,14 +204,24 @@ where 1=1
 </select>
 
     <update id="updateStatus" parameterType="java.util.Map">
-        update doc_mt_header set mtstatus = #{mtstatus} where mtno = #{mtno}
+        update doc_mt_header
+        set mtstatus = #{mtstatus},
+        storage_flag = #{storageFlag},
+        flow_flag = #{flowFlag},
+        sign_flag = #{signFlag},
+        fence_flag = #{fenceFlag},
+        sanitation_flag = #{sanitationFlag},
+        remark = #{remark},
+        edittime = now(),
+        editwho = #{editwho}
+        where mtno = #{mtno}
     </update>
 
     <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List"/>
         from doc_mt_header
-        where mtstatus = '00' or mtstatus = '30'
+        where mtstatus = '00' or mtstatus = '30' or mtstatus = '40'
         order by addtime desc
         limit #{start}, #{pageSize}
     </select>

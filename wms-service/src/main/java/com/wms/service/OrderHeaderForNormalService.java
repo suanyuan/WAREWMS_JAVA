@@ -99,7 +99,7 @@ public class OrderHeaderForNormalService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        mybatisCriteria.setOrderByClause("edittime desc, addtime desc, orderno desc");
+        mybatisCriteria.setOrderByClause("orderno desc");
         List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
         OrderHeaderForNormalVO orderHeaderForNormalVO = null;
         List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();

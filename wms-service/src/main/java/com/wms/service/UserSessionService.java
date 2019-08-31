@@ -87,40 +87,45 @@ public class UserSessionService extends BaseService {
     public Map<String,Object> login(LoginForm form) {
         Map<String,Object> result = new HashMap<>();
         SfcUserLoginQuery query = new SfcUserLoginQuery();
-        query.setWarehouseId(form.getWereHouseId());
+        query.setWarehouseId(form.getWareHouseId());
         query.setId(form.getUserId());
-        SfcUserLogin sfcUserLogin = new SfcUserLogin();
-        sfcUserLogin = sfcUserLoginMybatisDao.queryById(query);
+        SfcUserLogin sfcUserLogin = sfcUserLoginMybatisDao.queryById(query);
+        if (sfcUserLogin == null) {
+            result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "用户不存在"));
+            return result;
+        }
         if(sfcUserLogin.getPwd().equals(EncryptUtil.md5AndSha(form.getPwd()))){
             Map<String,Object> userInfo = new HashMap<>();
             userInfo.put("token", RandomUtil.getUUID());
             userInfo.put("userInfo", sfcUserLogin);
             result.put(Constant.DATA, userInfo);
-            result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, Constant.SUCCESS_MSG));
+            result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         }else{
-            result.put(Constant.DATA, null);
             result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "密码不正确"));
         }
         return result;
     }
 
-    public List<EasyuiCombobox> queryWereHouseByUser(WereHouseForm wereHouseForm) {
-        List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+    /**
+     * 查询用户可用仓库列表
+     * @param wereHouseForm id(userid)
+     * @return ~
+     */
+    public Json queryWereHouseByUser(WereHouseForm wereHouseForm) {
+
+        Json json = new Json();
+
         List<SfcWarehouse> warehouseList = sfcUserLoginMybatisDao.queryWarehouseByUser(wereHouseForm);
-        if (warehouseList != null && warehouseList.size() > 0) {
-            EasyuiCombobox combobox = null;
-            for(SfcWarehouse warehouseId : warehouseList){
-                combobox = new EasyuiCombobox();
-                combobox.setId(warehouseId.getId());
-                combobox.setValue(warehouseId.getWarehouseName());
-                if (warehouseId.getDefaultFlag().equals("Y")) {
-                    combobox.setSelected(true);
-                } else {
-                    combobox.setSelected(false);
-                }
-                comboboxList.add(combobox);
-            }
+        if (warehouseList == null || warehouseList.size() == 0) {
+
+            json.setSuccess(false);
+            json.setMsg("查无当前用户的仓库数据");
+            return json;
         }
-        return comboboxList;
+
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        json.setObj(warehouseList);
+        return json;
     }
 }

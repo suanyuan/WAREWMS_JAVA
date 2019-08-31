@@ -13,5 +13,5 @@ import lombok.Setter;
 public class LoginForm {
     private String userId;
     private String pwd;
-    private String wereHouseId;
+    private String wareHouseId;
 }
