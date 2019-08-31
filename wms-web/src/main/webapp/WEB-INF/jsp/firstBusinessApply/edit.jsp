@@ -761,11 +761,11 @@
 
 
     function operateGrid1(id) {
-        processType = 'product';
+        // processType = 'product';
         $('#enterpriseDialog1').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id,
+            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id+"&type=product",
             width:1050,
             height:550,
             cache:false,

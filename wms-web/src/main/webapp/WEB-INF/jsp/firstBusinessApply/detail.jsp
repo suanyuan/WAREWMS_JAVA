@@ -19,6 +19,9 @@
                     <td>
                         <input type='text'  id='clientName' class='easyui-textbox' data-options='required:true,width:200'/>
                         <input type="hidden" name="clientId" id="clientId" />
+                        <input type="hidden" name="cli_enterpriseId" id="cli_enterpriseId" />
+                        <a href="javascript:void(0);" class="easyui-linkbutton"  data-options="" onclick="viewClientEnterpriseUrl()">查看</a>
+
                     </td>
                     <%--<th>供应商</th>--%>
                     <%--<td>--%>
@@ -186,6 +189,10 @@
 <div id="productRegisterDialog">
 
 </div>
+<div id="ezuiDialogClientEnterprise">
+
+</div>
+
 <script>
     var ezuiDatagridDetail1;
     var enterpriseCustomerDialog;
@@ -197,7 +204,7 @@
     var arr;
     var arr1;
     var enterpriseProduct;
-
+    var ezuiDialogClientEnterprise;
 
     Array.prototype.indexOf = function(val) { //prototype 给数组添加属性
         for (var i = 0; i < this.length; i++) { //this是指向数组，this.length指的数组类元素的数量
@@ -594,30 +601,54 @@
         var rowIndex = ezuiDatagridDetail1.datagrid('getRowIndex', row);
         ezuiDatagridDetail1.datagrid('deleteRow', rowIndex);
 
-
-            // row.specsId = '';
-            // row.productCode ='';
-            // row.productName ='';
-            // row.specsName ='';
-            // row.productModel ='';
-            // row.descrC ='';
-            // row.supplierId ='';
-
     }
 
+    //委托方企业信息详情
+    function viewClientEnterpriseUrl(){
+        $(function() {
+            ezuiDialogClientEnterprise = $('#ezuiDialogClientEnterprise').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialogClientEnterprise);
+                }
+            }).dialog('close');
+        })
+        //processType = 'edit';
 
+        //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#ezuiFormDetail input[id='cli_enterpriseId']").val());
+        var enterpriseId = $("#ezuiFormDetail input[id='cli_enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            // enterpriseId = $("#enterpriseId").val();
+        }
 
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialogClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+    }
 
 
     function operateGridProductAdd(id) {
         console.log("---------->"+id);
-        processType = 'product';
+        // var type = 'product';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
         $('#ProductDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id,
+            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id+"&type=product",
             width:1050,
             height:550,
             cache:false,
@@ -714,7 +745,7 @@
             title : '<spring:message code="common.dialog.title"/>',
             left:400,
             top:200,
-            width:500,
+            width:550,
             height:170,
             href: sy.bp()+"/firstBusinessApplyController.do?toDialogProductAndSupplier",
             cache: false,
@@ -759,7 +790,7 @@
                 dataType : 'JSON',
                 async  :true,
                 success : function(result){
-                    alert(result.obj.specsId+"====="+result.obj.customerid)
+                    // alert(result.obj.specsId+"====="+result.obj.customerid)
                     specsId = result.obj.specsId;
                     customerid = result.obj.customerid;
                     arr1.push(customerid);
@@ -917,7 +948,10 @@
         if(row){
 
             $("#clientId").val(row.customerid);
-            $("#clientName").textbox("setValue",row.descrC)
+            $("#clientName").textbox("setValue",row.descrC);
+            $("#cli_enterpriseId").val(row.enterpriseId);
+
+
             console.log(row.customerid);
             $("#productLine").combobox({
                 panelHeight: 'auto',

@@ -15,6 +15,9 @@
 					<td>
 						<input type='text'  id='supplierName' class='easyui-textbox' data-options='required:true,width:200'/>
 						<input type="hidden" name="supplierId" id="supplierId" />
+						<input type="hidden" name="sup_enterpriseId" id="sup_enterpriseId" />
+						<a href="javascript:void(0);" class="easyui-linkbutton"  data-options="" onclick="viewSupplierEnterpriseUrl()">查看</a>
+
 					</td>
 				</tr>
 				<tr>
@@ -69,7 +72,7 @@
 </div>
 
 <!--产品查询列表dialog -->
-<div id='ezuiDialogSpec' style='padding: 10px;display: none' >
+<div id='ezuiDialogSpec_PAS' style='padding: 10px;display: none' >
 	<div id='productToolbar' class='datagrid-toolbar' style=''>
 		<fieldset>
 			<legend>产品注册证信息</legend>
@@ -107,16 +110,16 @@
 </div>
 
 
-<%--<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>--%>
+<div id='ezuiDialogSupplierEnterprise' style='padding: 10px;'>
 <script>
 	var ezuiDialogReceivingDetail;
 	var dataGridReceivingDetail;
 	var dialogReceiving;
     var ezuiDialogSupplierDetail;
 	var  newreceivingId;
-    var ezuiDialogSpec;
+    var ezuiDialogSpec_PAS;
     var dataGridProduct2;
-
+    var ezuiDialogSupplierEnterprise;
     var rows;
     var rows1;
     $(function () {
@@ -237,28 +240,11 @@
             console.log(rows1);
             if(rows1){
                 $("#supplierId").val(rows1.customerid);
-                $("#supplierName").textbox("setValue",rows1.descrC)
-                // $("#productLine").combobox({
-                //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+row.customerid,
-                //     valueField:'id',
-                //     textField:'value',
-                //     onLoadSuccess:function () {
-                //
-                //     }
-                // })
+                $("#supplierName").textbox("setValue",rows1.descrC);
+                $("#sup_enterpriseId").val(rows1.enterpriseId);
 
                 ezuiDialogSupplierDetail.dialog('close');
                 console.log($("#supplierId").val());
-                //供应商弹窗搜索功能
-
-                // dataGridProduct.datagrid('load', {
-                //     type:'CER',
-                //     supplierId : $('#supplierId').val(),
-                //     isUse : '1',
-                //     // customerType:'VE'
-                // });
-
-                // dataGridProduct.datagrid('reload');
             }
         }
         // debugger
@@ -326,11 +312,11 @@
 
 		//搜索打开产品弹窗
         function searchProduct() {
-            // if(ezuiDialogSpec){
+            // if(ezuiDialogSpec_PAS){
             //     ezuiDialogSpec.dialog('open');
             //产品
 
-            ezuiDialogSpec = $('#ezuiDialogSpec').dialog({
+            ezuiDialogSpec_PAS = $('#ezuiDialogSpec_PAS').dialog({
                 modal : true,
                 title : '<spring:message code="common.dialog.title"/>',
                 width:850,
@@ -372,10 +358,10 @@
     function searchProduct1() {
         dataGridProduct2.datagrid("reload", {
 
-            "productCode":$("#ezuiDialogSpec #productCode1").val(),
-            "productName":$("#ezuiDialogSpec #productName1").val(),
-            "productRegisterNo":$("#ezuiDialogSpec #registerNo").val(),
-            "specsName":$("#ezuiDialogSpec #specsName").val(),
+            "productCode":$("#ezuiDialogSpec_PAS #productCode1").val(),
+            "productName":$("#ezuiDialogSpec_PAS #productName1").val(),
+            "productRegisterNo":$("#ezuiDialogSpec_PAS #registerNo").val(),
+            "specsName":$("#ezuiDialogSpec_PAS #specsName").val(),
 
             "isUse":"1",
             // "supplierId" : $('#supplierId').val(),
@@ -412,9 +398,46 @@
             //
             //     }
             // })
-            ezuiDialogSpec.dialog('close');
+            ezuiDialogSpec_PAS.dialog('close');
         }
     }
+
+    //查看供应商企业详情
+    function viewSupplierEnterpriseUrl() {
+        $(function() {
+            ezuiDialogSupplierEnterprise = $('#ezuiDialogSupplierEnterprise').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialogSupplierEnterprise);
+                }
+            }).dialog('close');
+        })
+        //processType = 'edit';
+
+        //var row = ezuiDatagrid.datagrid('getSelected');
+        console.log($("#dialogAddAddressForm input[id='sup_enterpriseId']").val());
+        var enterpriseId = $("#dialogAddAddressForm input[id='sup_enterpriseId']").val();
+        if(enterpriseId==null || enterpriseId==""){
+            // enterpriseId = $("#enterpriseId").val();
+        }
+
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialogSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+	}
+
 
     //选择
     function doSubmitAddress() {

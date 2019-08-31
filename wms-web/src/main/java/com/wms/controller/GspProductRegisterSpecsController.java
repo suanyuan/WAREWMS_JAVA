@@ -46,7 +46,8 @@ public class GspProductRegisterSpecsController {
 
 	@Login
 	@RequestMapping(params = "toAdd")
-	public ModelAndView toAdd(String specsId) {
+	public ModelAndView toAdd(@RequestParam(defaultValue = "") String specsId,
+							  @RequestParam(defaultValue = "") String type) {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
@@ -54,7 +55,7 @@ public class GspProductRegisterSpecsController {
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("specsId", specsId);
-
+		model.put("type", type);
 		model.put("isUse", 1);
 		return new ModelAndView("gspProductRegisterSpecs/add", model);
 	}

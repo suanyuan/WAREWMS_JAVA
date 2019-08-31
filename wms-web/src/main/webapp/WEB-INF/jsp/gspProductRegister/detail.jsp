@@ -678,7 +678,7 @@
         }
     }
 
-    $("#enterpriseName").textbox({
+    $("#ezuiFormDetail #enterpriseName").textbox({
         width:185,
         required:true,
         editable:false,
