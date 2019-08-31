@@ -329,7 +329,7 @@
 	</select>
 
 	<!-- 查询产品注册证列表 -->
-	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	<select id="queryByList" resultMap="ExtendResultMap"  parameterType="Object">
 		SELECT
 		product_register_id,product_register_no,product_name_main,product_register_name,product_register_address,
 		product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
@@ -357,6 +357,14 @@
         <include refid="Base_Column_List"/>
         from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
     </select>
+
+    <select id="queryUsingItemByNo" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gsp_product_register
+        where product_register_no = #{registerNo, jdbcType=VARCHAR} and is_use = 1
+    </select>
+
 <!--根据RegisterNo查单条-->
 	<select id="queryByRegisterNo" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
@@ -371,10 +379,10 @@
     </select>
 
 <!--查询所有历史产品档案中使用过的注册证号-->
-    <select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">
-        select reg.* from gsp_product_register reg
-        left join bas_sku_history sku on sku.reservedfield03 = reg.product_register_no
-        where sku.sku = #{sku, jdbcType=VARCHAR} and sku.customerid = #{customerid, jdbcType=VARCHAR}
-    </select>
+    <!--<select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">-->
+        <!--select reg.* from gsp_product_register reg-->
+        <!--left join bas_sku_history sku on sku.reservedfield03 = reg.product_register_no-->
+        <!--where sku.sku = #{sku, jdbcType=VARCHAR} and sku.customerid = #{customerid, jdbcType=VARCHAR}-->
+    <!--</select>-->
 
 </mapper>   

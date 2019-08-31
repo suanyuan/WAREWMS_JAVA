@@ -231,18 +231,29 @@ public class DocQcDetailsService extends BaseService {
         /*
         777，历史注册证(+生产企业详情)
          */
-        List<PdaGspProductRegister> registerList = productRegisterMybatisDao.queryHistoryRegister(basSku.getSku(), basSku.getCustomerid());
-        pdaDocQcDetailVO.setProductRegisterList(registerList == null ? new ArrayList<PdaGspProductRegister>() : registerList);
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+        historyQuery.setProductRegisterNo(lotAtt.getLotatt06());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+        List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
+        pdaDocQcDetailVO.setProductRegisterList(gspProductRegisterList.size() == 0 ? new ArrayList<PdaGspProductRegister>() : gspProductRegisterList);
 
         /*
         888,当前批次-产品注册证对应的 生产厂家
          */
-        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
-        if (productRegister == null || productRegister.getEnterpriseInfo() == null) {
+        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryUsingItemByNo(lotAtt.getLotatt06());
+        if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
+        StringUtil.isEmpty(basSku.getReservedfield14())) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
             return map;
         }
-        pdaDocQcDetailVO.setEnterpriseInfo(productRegister.getEnterpriseInfo());
+        pdaDocQcDetailVO.setEnterpriseName(
+                (productRegister == null || productRegister.getEnterpriseInfo() == null)
+                        ?
+                        basSku.getReservedfield14()
+                        :
+                        productRegister.getEnterpriseInfo().getEnterpriseName()
+        );
 
         map.put(Constant.DATA, pdaDocQcDetailVO);
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
@@ -341,6 +352,10 @@ public class DocQcDetailsService extends BaseService {
                 return new PdaResult(PdaResult.CODE_FAILURE, "当前生产批号下还有未上架的产品，不可进行批量修改日期操作");
             }
         }
+
+        /**
+         * 验证
+         */
 
         form.setLanguage("CN");
 //        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

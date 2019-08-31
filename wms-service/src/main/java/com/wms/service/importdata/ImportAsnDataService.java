@@ -670,7 +670,7 @@ public class ImportAsnDataService {
                     asnDetails.setLotatt14(resultNo);
                     //生产厂家
                     if (StringUtil.isNotEmpty(asnDetails.getLotatt06())) {
-                        PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(asnDetails.getLotatt06());
+                        PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryUsingItemByNo(asnDetails.getLotatt06());
                         //生产厂家
                         if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
 

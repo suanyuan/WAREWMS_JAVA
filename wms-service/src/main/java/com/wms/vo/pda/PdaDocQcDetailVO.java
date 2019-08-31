@@ -15,7 +15,9 @@ public class PdaDocQcDetailVO extends DocQcDetails {
 
     private List<PdaGspProductRegister> productRegisterList;//产品注册证list,每个注册证携带生产厂家信息
 
-    private GspEnterpriseInfo enterpriseInfo;//当前批次-产品注册证对应的生产厂家信息
+//    private GspEnterpriseInfo enterpriseInfo;//当前批次-产品注册证对应的生产厂家信息
+
+    private String enterpriseName;//生产企业名称
 
     private int acceptedQty;//已验件数
 

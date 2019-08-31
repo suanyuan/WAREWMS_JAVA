@@ -13,13 +13,21 @@ import java.util.List;
  */
 public interface GspProductRegisterMybatisDao extends BaseDao {
 
-    /**
+    /** TODO 会查出来多条 因为is_use = 1 || 0
      * 通过注册证号查询
      * @param registerNo 注册证编号
      * @return ~
      */
     PdaGspProductRegister queryByNo(@Param("registerNo") String registerNo);
+
     /**
+     * 通过注册证号查询当前正在使用的注册证
+     * @param registerNo ~
+     * @return ~
+     */
+    PdaGspProductRegister queryUsingItemByNo(@Param("registerNo") String registerNo);
+
+    /** TODO 会查出来多条 因为is_use = 1 || 0
      * 通过注册证号查询
      * @param registerNo 注册证编号
      * @return ~
@@ -32,11 +40,5 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      */
     GspProductRegister queryByproductNameMain(@Param("productNameMain") String productNameMain);
 
-    /**
-     * 通过bas_sku_history.reservedfiled03 匹配使用过的注册证
-     * @param sku ~
-     * @param customerid ~
-     * @return ~
-     */
-    List<PdaGspProductRegister> queryHistoryRegister(@Param("sku") String sku, @Param("customerid") String customerid);
+
 }

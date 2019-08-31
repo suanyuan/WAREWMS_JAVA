@@ -237,6 +237,7 @@ public class DocOrderPackingService extends BaseService {
 			form.setLotnum(packageVO.getActAllocationDetails().getLotnum());
 			form.setLotatt11(packageVO.getInvLotAtt().getLotatt11());
 			form.setSerialNums(packageVO.getSerialNum());
+			form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			packageCommit(form);
 			return Json.success(result.getMsg(),map.get(Constant.DATA));
 		}else{
