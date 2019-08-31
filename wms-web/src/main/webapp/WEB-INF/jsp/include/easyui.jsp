@@ -131,9 +131,11 @@
         }
     }
     var QualifiedOrFailed = function(value,row,index) {
+		value+="";
 		switch (value) {
 			case "1" : return "合格";
 			case "0" : return "不合格";
+			case "2" : return "未检查";
 			case "" : return "";
 		}
     }
