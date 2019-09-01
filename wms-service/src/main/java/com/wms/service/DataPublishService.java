@@ -11,6 +11,7 @@ import com.wms.vo.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -189,6 +190,28 @@ public class DataPublishService extends BaseService {
                 query.setDescr(specObj.getPackingUnit());
                 BasPackage basPackage = basPackageService.queryBasPackBy(query);
                 skuForm.setPackid(basPackage == null ? "6" : basPackage.getPackid());
+
+                skuForm.setAlternateSku1(specObj.getAlternatName1());
+                skuForm.setAlternateSku2(specObj.getAlternatName2());
+                skuForm.setAlternateSku3(specObj.getAlternatName3());
+                skuForm.setAlternateSku4(specObj.getAlternatName4());
+                skuForm.setAlternateSku5(specObj.getAlternatName5());
+
+                if (!specObj.getHight().equals("") && specObj.getHight() != null){
+                    skuForm.setSkuhigh(new BigDecimal(specObj.getHight()));
+                }else{
+                    skuForm.setSkuhigh(new BigDecimal(0));
+                }
+                if (!specObj.getLlong().equals("") && specObj.getLlong() != null){
+                    skuForm.setSkulength(new BigDecimal(specObj.getLlong()));
+                }else{
+                    skuForm.setSkulength(new BigDecimal(0));
+                }
+                if (!specObj.getWide().equals("") && specObj.getWide() != null){
+                    skuForm.setSkuwidth(new BigDecimal(specObj.getWide()));
+                }else{
+                    skuForm.setSkuwidth(new BigDecimal(0));
+                }
 
                 skuForm.setReservedfield01(specObj.getProductName());
                 skuForm.setReservedfield02(specObj.getProductRemark());
