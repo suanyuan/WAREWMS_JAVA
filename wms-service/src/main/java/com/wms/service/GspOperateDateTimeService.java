@@ -37,6 +37,7 @@ public class GspOperateDateTimeService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d3 = sdf.parse(sdf.format(new Date()));//获得当前时间
         GspOperteLicenseTime gspOperteLicenseTime = new GspOperteLicenseTime();
+        List<GspOperteLicenseTime> gspOperteLicenseTimes = new ArrayList<GspOperteLicenseTime>();
         //查询
         List<GspOperteLicenseTime> gspOperateDateTimeList = gspOperateLicenseMybatisDao.queryByListLicenseTime(licenseId, licenseType);
         if (gspOperateDateTimeList.size() > 0) {
@@ -56,9 +57,9 @@ public class GspOperateDateTimeService {
 
                 }
             }
-            gspOperateDateTimeList.add(gspOperteLicenseTime);
+            gspOperteLicenseTimes.add(gspOperteLicenseTime);
         }
-        return gspOperateDateTimeList;
+        return gspOperteLicenseTimes;
     }
 
     /**
