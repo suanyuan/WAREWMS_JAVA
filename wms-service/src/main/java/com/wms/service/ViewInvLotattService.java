@@ -237,16 +237,4 @@ public class ViewInvLotattService extends BaseService {
         return comboboxList;
     }
 
-    /**
-     * 获取扫码库位产品的库存数据
-     * @param query 详见Controller描述
-     * @return ~
-     */
-    public Json queryInventory(PdaInventoryQuery query) {
-
-        Json json = new Json();
-
-        return json;
-    }
-
 }

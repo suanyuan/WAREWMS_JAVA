@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,6 +77,8 @@ public class ViewInvLotattController {
 	@RequestMapping(params = "mov")
 	@ResponseBody
 	public Json mov(ViewInvLotattForm viewInvLotattForm) throws Exception {
+	    viewInvLotattForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getId());
+	    viewInvLotattForm.setEditwho(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		Json json = viewInvLotattService.movViewInvLotatt(viewInvLotattForm);
 		if(json == null){
 			json = new Json();

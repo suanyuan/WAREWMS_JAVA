@@ -34,6 +34,10 @@
 	<result column="packuom1" property="packuom1"/>
 	<result column="qty1" property="qty1"/>
 </resultMap>
+
+    <resultMap id="ExtendResultMap" type="com.wms.entity.InvLotLocId" extends="BaseResultMap" >
+        <association property="invLotAtt" column="lotnum" javaType="com.wms.entity.InvLotAtt" select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
+    </resultMap>
        
 <!-- inv_lot_loc_id table all fields -->
 <sql id="Base_Column_List" >
@@ -248,4 +252,15 @@ where 1=1
         INNER JOIN `doc_asn_header` h ON a.lotatt14=h.asnno
        WHERE h.asntype='PR' AND i.locationid NOT IN('STAGE01','SORTATION01','YY-01-01-01','DX-01-01-01') AND s.reservedfield10 IS NOT NULL
 </select>
+    
+    <select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select
+        a.*
+        from inv_lot_loc_id a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        where a.locationid = #{locationid}
+          and IFNULL(b.lotatt04,'') = IFNULL(rtrim(#{lotatt04}),'')
+          and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
+    </select>
+    
 </mapper>   
