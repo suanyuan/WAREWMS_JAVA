@@ -183,6 +183,26 @@ public class GspReceivingController {
 		return new ModelAndView("gspReceiving/detail", model);
 	}
 
+	@Login
+	@RequestMapping(params = "toreceivingDetail")
+	public ModelAndView toreceivingDetail( @RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		//enterpriseId = "5e833e49b9ec4296805c125943e0b316";
+		if (StringUtils.isNotEmpty(receivingId)){
+			//GspReceivingAddress gspReceivingAddress =gspReceivingAddressMybatisDao.queryById(receivingId);
+			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+			if (gspReceiving != null) {
+				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
+				model.put("gspEnterpriseInfo",gspEnterpriseInfo);
+			}
+
+			model.put("gspReceiving",gspReceiving);
+			//	model.put("gspReceivingAddress",gspReceivingAddress);
+		}
+		//model.put("enterpriseId", enterpriseId);
+		model.put("receivingId", receivingId);
+		return new ModelAndView("gspReceiving/receivingDetail", model);
+	}
 
 
 	/*@Login
