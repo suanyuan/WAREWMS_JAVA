@@ -625,7 +625,14 @@
     }
     function formatOper2(value,row,index){
         // $('#enterpriseDialog').dialog('destroy');
-        return "<a onclick=\"operateGridProductRegister2('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+
+
+        if(row.productRegisterId!=null && row.productRegisterId!=""){
+            return "<a onclick=\"operateGridProductRegister2('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }else{
+            return "<a>无</a>";
+
+        }
     }
     function operateGridProductRegister2(id) {
         console.log("---------->"+id);

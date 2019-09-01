@@ -251,7 +251,7 @@
 
 
 
-
+        // changeRequired();
         if( id!="" || row !=null){
             if(processType == 'edit' || processType == 'product' ){
             $.ajax({
@@ -275,6 +275,7 @@
 
 
                         })
+                        changeRequired();
                     }
                 }
             });
@@ -326,7 +327,8 @@
         //     valueField:'value',
         //     textField:'value'
         // });
-    })
+        // changeRequired();
+    });
     function changeRequired(){
         if($('#medicalDeviceMark').combobox('getValue') == '0'){
             $('#productRegisterNo').textbox({required:false});
