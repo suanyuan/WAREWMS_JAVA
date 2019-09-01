@@ -329,7 +329,7 @@ where 1=1
 <select id="queryBusinessLicenseOutTime" resultMap="GspEnterpriseBusinessResultMap"  parameterType="Object">
 	select b.business_start_date,g.enterprise_id,g.enterprise_name,g.enterprise_no,g.shorthand_name,IFNULL(DATEDIFF(now(),b.business_end_date),0) outTime
 	from gsp_enterprise_info g left join gsp_business_license b on g.enterprise_id = b.enterprise_id
-	where 1=1 and b.is_use = '1'
+	where 1=1 and b.is_use = '1' and b.is_long = 0
 	<trim  suffixOverrides="," >
 		<if test="enterpriseId != null and enterpriseId != ''" >
 			and g.enterprise_id =  #{enterpriseId}

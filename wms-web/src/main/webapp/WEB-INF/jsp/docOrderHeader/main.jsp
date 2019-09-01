@@ -884,6 +884,10 @@ var printPacking = function(){
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
+		if(item.orderStatusName == "创建订单"){
+            showMsg("创建状态订单无法打印拣货单");
+			return;
+		}
 		if (orderList == null) {
 			orderList = item.orderno;
 		} else {
@@ -893,7 +897,6 @@ var printPacking = function(){
 	if (orderList == null) {
 		return;
 	}
-	console.log(orderList);
 	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
 var printAccompanying = function () {

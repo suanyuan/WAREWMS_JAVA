@@ -356,5 +356,5 @@ public class DocOrderHeaderController {
  	@RequestMapping(params = "exportOrderNoToExcel")
  	public void exportOrderDataToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom) throws Exception {
 		orderHeaderForNormalService.exportOrderNoToExcel(response, orderNofrom);
-	 	}
+	}
 }

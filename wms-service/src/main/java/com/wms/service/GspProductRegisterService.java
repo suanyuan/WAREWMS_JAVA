@@ -427,7 +427,7 @@ public class GspProductRegisterService extends BaseService {
 	}
 //根据ProductRegisterNo查询
 	public GspProductRegister queryByRegisterNo(String registerNo){
-		return  gspProductRegisterMybatisDao.queryByRegisterNo(registerNo);
+		return  gspProductRegisterMybatisDao.queryByNo(registerNo);
 
 	}
 //根据productNameMain查询
@@ -442,6 +442,9 @@ public class GspProductRegisterService extends BaseService {
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCurrentPage(pager.getPage());
+		if(StringUtils.isEmpty(query.getVersion())){
+			query.setVersion("empty");
+		}
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setOrderByClause("create_date desc");
 		List<GspProductRegister> gspProductRegisterList = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);

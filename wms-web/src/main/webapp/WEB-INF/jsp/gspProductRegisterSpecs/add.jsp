@@ -118,7 +118,7 @@
 																																	{id: '0', value: '否'}
 																																]"/></td>
             <th>自赋码1</th>
-            <td><input type='text' data="1" id="alternatName5" name='alternatName1' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="alternatName1" name='alternatName1' class='easyui-textbox' size='50' data-options=''/></td>
             <%--<th>分类目录</th>--%>
             <%--<td><input type='text' data="1" id="categories" name='categories' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
@@ -136,21 +136,21 @@
 																																	{id: '0', value: '否'}
 																																]"/></td>
             <th>自赋码2</th>
-            <td><input type='text' data="1" id="alternatName1" name='alternatName2' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="alternatName2" name='alternatName2' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>
             <th>附卡类别</th>
             <td><input type='text' data="1"  id="attacheCardCategory" name='attacheCardCategory' class='easyui-textbox' size='50' data-options='' /></td>
             <th>自赋码3</th>
-            <td><input type='text' data="1" id="alternatName2" name='alternatName3' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="alternatName3" name='alternatName3' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>
             <th>冷链标志</th>
             <td><input type='text' data="1"  id="coldHainMark" name='coldHainMark' class='easyui-textbox' size='50' data-options='required:false' /></td>
             <th>自赋码4</th>
-            <td><input type='text' data="1" id="alternatName3" name='alternatName4' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="alternatName4" name='alternatName4' class='easyui-textbox' size='50' data-options=''/></td>
             <%--<th>管理分类</th>--%>
             <%--<td><input type='text' data="1" id="manageCategories" name='manageCategories' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
@@ -159,7 +159,7 @@
             <th>灭菌标志</th>
             <td><input type='text' data="1"  id="sterilizationMarkers" name='sterilizationMarkers' class='easyui-textbox' size='50' data-options='' /></td>
             <th>自赋码5</th>
-            <td><input type='text' data="1" id="alternatName4" name='alternatName5' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="alternatName5" name='alternatName5' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>

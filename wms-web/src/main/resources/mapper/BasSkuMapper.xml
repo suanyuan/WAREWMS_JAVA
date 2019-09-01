@@ -433,9 +433,15 @@ where 1=1
 
 	netweight,
 	tare,
-	skuhigh,
-	skulength,
-	skuwidth,
+	<if test="skuhigh != null  ">
+		skuhigh,
+	</if>
+	<if test="skulength != null  ">
+		skulength,
+	</if>
+	<if test="skuwidth != null  ">
+		skuwidth,
+	</if>
 	addtime,
 	addwho,
 	edittime,
@@ -587,9 +593,15 @@ where 1=1
 
 	0,
 	0,
-	0,
-	0,
-	0,
+	<if test="skuhigh != null  ">
+		#{skuhigh},
+	</if>
+	<if test="skulength != null  ">
+		#{skulength},
+	</if>
+	<if test="skuwidth != null  ">
+		#{skuwidth},
+	</if>
 	now(),
 	#{addwho},
 	now(),
