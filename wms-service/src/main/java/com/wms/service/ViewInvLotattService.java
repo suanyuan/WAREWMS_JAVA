@@ -1,32 +1,29 @@
 package com.wms.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
-import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasZonegroup;
+import com.wms.entity.InvLotLocIdSkuInvLotAtt;
+import com.wms.entity.ViewInvLotatt;
+import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
+import com.wms.query.ViewInvLotattQuery;
 import com.wms.query.pda.PdaInventoryQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.Json;
+import com.wms.vo.ViewInvLotattVO;
+import com.wms.vo.form.ViewInvLotattForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wms.dao.ViewInvLotattDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
-import com.wms.entity.BasZonegroup;
-import com.wms.entity.ViewInvLotatt;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.ViewInvLotattVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.ViewInvLotattForm;
-import com.wms.query.ViewInvLotattQuery;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("viewInvLotattService")
 public class ViewInvLotattService extends BaseService {
@@ -248,5 +245,16 @@ public class ViewInvLotattService extends BaseService {
 
         return json;
     }
+
+    /**
+     * 产品库存查询接口
+     */
+  public List<InvLotLocIdSkuInvLotAtt> getInvLotLocIdSkuInvLotAttList(String sku,String lotatt04,String lotatt05){
+
+      List<InvLotLocIdSkuInvLotAtt> invLotLocIdSkuInvLotAttList=new ArrayList<InvLotLocIdSkuInvLotAtt>();
+      invLotLocIdSkuInvLotAttList=viewInvLotattMybatisDao.getInvLotLocIdSkuInvLotAttList(sku,lotatt04,lotatt05);
+
+      return invLotLocIdSkuInvLotAttList;
+  };
 
 }
