@@ -61,6 +61,21 @@ public class GspSupplierController {
 		model.put("isUse", 1);
 		return new ModelAndView("gspSupplier/info", model);
 	}
+
+	@Login
+	@RequestMapping(params = "showSupplierDetail")
+	public ModelAndView showSupplierDetail(String id) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		Map<String, Object> model = new HashMap<String, Object>();
+		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
+		model.put("gspSupplier", gspSupplier);
+		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
+		model.put("createDate",df.format(new Date()));
+		model.put("isCheck",1);
+		model.put("isUse", 1);
+		return new ModelAndView("gspSupplier/detail", model);
+	}
+
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

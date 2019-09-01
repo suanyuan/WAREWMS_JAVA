@@ -143,6 +143,14 @@ public class BasSkuService extends BaseService {
 			basSku.setEdittime(today);
 			//
 			basSkuMybatisDao.add(basSku);
+		}else{
+			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			basSku.setAddtime(today);
+			basSku.setEdittime(today);
+			basSku.setActiveFlag(Constant.IS_USE_YES);
+			basSku.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+			basSkuMybatisDao.updateBySelective(basSku);
 		}
 //		else {
 //			json.setSuccess(false);

@@ -111,4 +111,13 @@ public class BasPackageService extends BaseService {
 		return null;
 	}
 
+	public BasPackage queryBasBydescr(BasPackageQuery query){
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		BasPackage  basPackage = basPackageMybatisDao.queryBydescr(criteria);
+
+		return basPackage;
+	}
+
+
 }

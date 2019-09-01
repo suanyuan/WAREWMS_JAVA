@@ -336,13 +336,13 @@ var reApply = function () {
     var flag = true;
     for(var i=0;i<row.length;i++){
         arrDel.push(row[i].applyId);
-        if(row[i].firstState=='00' || row[i].firstState=='10'){
+        if(row[i].firstState!='40'){
             flag =false;
         }
     }
     if(!flag){
         $.messager.show({
-            msg : '审核中与新建的申请无法发起新申请', title : '提示'
+            msg : '只有审核通过的申请才能发起新申请', title : '提示'
         });
         return;
     }
@@ -352,7 +352,7 @@ var reApply = function () {
             if(confirm){
                 $.ajax({
                     url : 'firstBusinessApplyController.do?reApply',
-                    data : {id : row.applyId},
+                    data : {id : arrDel.join(",")},
                     type : 'POST',
                     dataType : 'JSON',
                     success : function(result){

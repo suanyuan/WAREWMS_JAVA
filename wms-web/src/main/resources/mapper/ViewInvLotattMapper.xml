@@ -81,12 +81,153 @@
 	<result column="uom" property="uom"/>
 	<result column="warehouseid" property="warehouseid"/>
 </resultMap>
-       
+<resultMap id="InvLotLocIdSkuInvLotMap" type="com.wms.entity.InvLotLocIdSkuInvLotAtt">
+	<id column="lotnum" property="lotnum"/>
+	<id column="locationid" property="locationid"/>
+	<id column="customerid" property="customerid"/>
+	<id column="sku" property="sku"/>
+	<result column="traceid" property="traceid"/>
+	<result column="qty" property="qty"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyrpin" property="qtyrpin"/>
+	<result column="qtyrpout" property="qtyrpout"/>
+	<result column="qtymvin" property="qtymvin"/>
+	<result column="qtymvout" property="qtymvout"/>
+	<result column="qtyonhold" property="qtyonhold"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="netweight" property="netweight"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="cubic" property="cubic"/>
+	<result column="price" property="price"/>
+	<result column="onholdlocker" property="onholdlocker"/>
+	<result column="lpn" property="lpn"/>
+	<!--养护计划需要加的字段-->
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt03test" property="lotatt03test"/>
+	<result column="reservedfield10" property="reservedfield10"/>
+	<result column="packuom1" property="packuom1"/>
+	<result column="qty1" property="qty1"/>
+<association property="basSku" javaType="com.wms.entity.BasSku">
+	<id column="customerid" property="customerid"/>
+	<id column="sku" property="sku"/>
+	<result column="active_flag" property="activeFlag"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="allocationrule" property="allocationrule"/>
+	<result column="alternate_sku1" property="alternateSku1"/>
+	<result column="alternate_sku2" property="alternateSku2"/>
+	<result column="alternate_sku3" property="alternateSku3"/>
+	<result column="alternate_sku4" property="alternateSku4"/>
+	<result column="alternate_sku5" property="alternateSku5"/>
+	<result column="cube" property="cube"/>
+	<result column="defaulthold" property="defaulthold"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="defaultshipmentuom" property="defaultshipmentuom"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="firstinbounddate" property="firstinbounddate"/>
+	<result column="grossweight" property="grossweight"/>
+	<result column="inboundlifedays" property="inboundlifedays"/>
+	<result column="lotid" property="lotid"/>
+	<result column="netweight" property="netweight"/>
+	<result column="onestepallocation" property="onestepallocation"/>
+	<result column="outboundlifedays" property="outboundlifedays"/>
+	<result column="overrcvpercentage" property="overrcvpercentage"/>
+	<result column="overreceiving" property="overreceiving"/>
+	<result column="packid" property="packid"/>
+
+	<result column="descr" property="descr"/>
+
+	<result column="price" property="price"/>
+	<result column="putawayrule" property="putawayrule"/>
+	<result column="qtymax" property="qtymax"/>
+	<result column="qtymin" property="qtymin"/>
+	<result column="replenishrule" property="replenishrule"/>
+	<result column="reservecode" property="reservecode"/>
+
+	<result column="shelflifetype" property="shelflifetype"/>
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="reservedfield02" property="reservedfield02"/>
+	<result column="reservedfield03" property="reservedfield03"/>
+	<result column="reservedfield04" property="reservedfield04"/>
+	<result column="reservedfield05" property="reservedfield05"/>
+	<result column="reservedfield06" property="reservedfield06"/>
+	<result column="reservedfield07" property="reservedfield07"/>
+	<result column="reservedfield08" property="reservedfield08"/>
+	<result column="reservedfield09" property="reservedfield09"/>
+	<result column="reservedfield10" property="reservedfield10"/>
+	<result column="reservedfield11" property="reservedfield11"/>
+	<result column="reservedfield12" property="reservedfield12"/>
+	<result column="reservedfield13" property="reservedfield13"/>
+	<result column="reservedfield14" property="reservedfield14"/>
+	<result column="reservedfield15" property="reservedfield15"/>
+	<result column="reservedfield16" property="reservedfield16"/>
+	<result column="reservedfield17" property="reservedfield17"/>
+	<result column="reservedfield18" property="reservedfield18"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="skuhigh" property="skuhigh"/>
+	<result column="skulength" property="skulength"/>
+	<result column="skuwidth" property="skuwidth"/>
+	<result column="sku_group1" property="skuGroup1"/>
+	<result column="sku_group2" property="skuGroup2"/>
+	<result column="sku_group3" property="skuGroup3"/>
+	<result column="sku_group4" property="skuGroup4"/>
+	<result column="sku_group5" property="skuGroup5"/>
+	<result column="sku_group6" property="skuGroup6"/>
+	<!--附加供应商名称-->
+	<result column="skuGroup6Name" property="skuGroup6Name"/>
+	<result column="sku_group7" property="skuGroup7"/>
+	<result column="sku_group8" property="skuGroup8"/>
+	<result column="sku_group9" property="skuGroup9"/>
+	<result column="firstop" property="firstop"/>
+	<result column="softallocationrule" property="softallocationrule"/>
+	<result column="tare" property="tare"/>
+	<result column="qty" property="qty"/>
+	<result column="qtyallocated" property="qtyallocated"/>
+	<result column="qtyonhold" property="qtyonhold"/>
+	<result column="productLineName" property="productLineName"/>
+	<result column="orderbysql" property="orderbysql"/>
+</association>
+<association property="invLotAtt" javaType="com.wms.entity.InvLotAtt">
+	<id column="lotnum" property="lotnum"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt13" property="lotatt13"/>
+	<result column="lotatt14" property="lotatt14"/>
+	<result column="lotatt15" property="lotatt15"/>
+	<result column="lotatt16" property="lotatt16"/>
+	<result column="lotatt17" property="lotatt17"/>
+	<result column="lotatt18" property="lotatt18"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="receivingtime" property="receivingtime"/>
+	<result column="qcreportfilename" property="qcreportfilename"/>
+</association>
+</resultMap>
 <!-- View_Inv_Lotatt table all fields -->
 <sql id="Base_Column_List" >
 	 allocationrule,alternatesku1,alternatesku2,alternatesku3,alternatesku4,alternatesku5,configlist01,configlist02,fmcustomerid,fmid,fmlocation,fmlotnum,fmqty,fmqty_each,fmsku,fmuom_name,imageaddress,i_mv,i_pa,lotatt01,lotatt01text,lotatt02,lotatt02text,lotatt03,lotatt03text,lotatt04,lotatt04text,lotatt05,lotatt05text,lotatt06,lotatt06text,lotatt07,lotatt07text,lotatt08,lotatt08text,lotatt09,lotatt09text,lotatt10,lotatt10text,lotatt11,lotatt11text,lotatt12,lotatt12text,lpn,netweight,o_mv,pkey,price,qtyallocated,qtyallocated_each,qtyavailed,qtyavailed_each,qtyholded,qtyholded_each,qtyrpin,qtyrpout,reservedfield01,reservedfield02,reservedfield03,reservedfield04,reservedfield05,rotationid,skudescrc,skudescre,skugroup1,skugroup2,skugroup3,skugroup4,skugroup5,softallocationrule,toadjqty,totalcubic,totalgrossweight,uom,warehouseid
 </sql>
-   
+
    
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
@@ -375,5 +516,26 @@ where 1=1
 <select id="invHold" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call SPINV_Hold_Release(#{warehouseid,mode=IN,jdbcType=VARCHAR},'HOLD','5','',#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
-   
+
+<!--产品库存查询接口-->
+<select id="getInvLotLocIdSkuInvLotAttList"  resultMap="InvLotLocIdSkuInvLotMap">
+	SELECT * FROM  `inv_lot_loc_id` i
+		LEFT JOIN `inv_lot_att` a ON i.lotnum=a.lotnum
+		LEFT JOIN `bas_sku` s ON  i.sku=s.sku AND i.customerid=s.customerid
+	where 1=1
+	<trim  suffixOverrides="," >
+	<if test="sku != null and sku != ''" >
+		and i.sku=#{sku}
+	</if>
+	<if test="lotatt04!= null and lotatt04 != ''" >
+		and a.lotatt04=#{lotatt04}
+	</if>
+	<if test="lotatt05 != null and lotatt05 != ''" >
+		and a.lotatt05=#{lotatt05}
+	</if>
+
+	</trim>
+
+
+</select>
 </mapper>   

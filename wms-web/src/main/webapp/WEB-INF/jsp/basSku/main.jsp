@@ -161,6 +161,16 @@ $(function() {
         }
     })
 
+
+    $("#packid").combobox({
+        panelHeight: 'auto',
+        url:'/basPackageController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+        onLoadSuccess:function () {
+            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+        }
+    })
 });
 
 /* 自动转大写 */
@@ -359,7 +369,7 @@ var commit = function(){
 var doSearch = function(){
     //alert( $("#addTimeStart").datebox("getValue")+"===========");
 	ezuiDatagrid.datagrid('load', {
-		activeFlag : $('#activeFlag').combobox('getValue'),
+		activeFlag : $('#activeFlagQ').combobox('getValue'),
 		customerid : $("#customerid").val(),
 		sku : $("#sku").val(),
         addTimeEnd : $("#addTimeEnd").datebox("getValue"),
@@ -372,7 +382,7 @@ var doSearch = function(){
         //edittime : $("#edittime").val(),
         editwho : $("#editwho").val(),
         firstop : $("#firstop").combobox('getValue'),
-        packid : $("#packid").val(),
+        packid : $("#packidQ").val(),
         reservedfield01 : $("#reservedfield01").val(),
         reservedfield02 : $("#reservedfield02").val(),
         reservedfield03 : $("#reservedfield03").val(),
@@ -674,7 +684,7 @@ var downloadTemplate = function(){
 																																{id: '90', value: '已报废'}
 																															]"/></td>
 							<th>包装规格代码</th>
-							<td><input type='text' id='packid'  name="packid" class='easyui-textbox' size='16' /></td>
+							<td><input type='text' id='packidQ'  name="packid" class='easyui-textbox' size='16' /></td>
 							<th>产品名称</th>
 							<td><input type='text' id='reservedfield01'  name="reservedfield01" class='easyui-textbox' size='16' /></td>
 							<th>产品描述</th>
@@ -691,7 +701,7 @@ var downloadTemplate = function(){
 							<th>附卡类别</th>
 							<td><input type='text' id='sku_group2'  name="sku_group2" class='easyui-textbox' size='16' /></td>
 							<th>是否激活</th><td>
-							<input type="text" id="activeFlag"  name="activeFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+							<input type="text" id="activeFlagQ"  name="activeFlag"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -823,7 +833,7 @@ var downloadTemplate = function(){
 
 				<tr>
 					<th>包装规格</th>
-					<td><input type='text' name='packid'  id='packid' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='packid'  id='packid' class='easyui-textbox' size='16' data-options='required:true,width:150'/></td>
 					<th>包装单位</th>
 					<td><input type='text' name='reservedfield13'  id='reservedfield13' class='easyui-textbox' size='16' data-options='required:false'/></td>
 
