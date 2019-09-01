@@ -65,7 +65,8 @@ public class InvLotLocId  implements Serializable {
 	private Double qty1; //转换率
 	private Date fromDate;//回传到页面的时间
 	private Date toDate;
-
+	//距离天数
+	public String remainDay;
 
 
 
