@@ -448,8 +448,16 @@ public class DataPublishService extends BaseService {
             for(GspProductRegisterSpecs specs : list){
                 GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
                 BeanUtils.copyProperties(specs,form);
-                form.setProductRegisterId(newRegisterId);
+                form.setIsUse(Constant.IS_USE_NO);
+                //form.setProductRegisterId(newRegisterId);
                 gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
+
+                //保存新基础信息
+                GspProductRegisterSpecsForm formNew = new GspProductRegisterSpecsForm();
+                BeanUtils.copyProperties(specs,formNew);
+                formNew.setIsUse(Constant.IS_USE_YES);
+                formNew.setProductRegisterId(newRegisterId);
+                gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }
         }
         return Json.success("");

@@ -246,7 +246,7 @@ public class DocPaHeaderService extends BaseService {
                  //分割orderCodeList中的主单号pano
                 String[] orderCodeArray = orderCodeList.split(",");
 
-                for (String orderCode : orderCodeArray) {
+                for (String orderCode : orderCodeArray){
 
                     //根据主单pano查询对象DocPaHeader
                     DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
@@ -281,6 +281,8 @@ public class DocPaHeaderService extends BaseService {
                             form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
                             //form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
                             String note ="";
+                            double totalEachPage = 0;
+                            double totalPage = 0;
                             for(int j=0;j<row;j++){//主单产品明细
                                 if(totalNum > (row*i+j)){
                                     DocPaDetails docPaDetails = detailsList.get(row * i + j);
@@ -316,9 +318,16 @@ public class DocPaHeaderService extends BaseService {
                                     form.setField("uom."+j, basSku.getDefaultreceivinguom());
                                     form.setField("qty."+j, doubleTrans(docPaDetails.getPutwayqtyExpected()));
                                     form.setField("qtyA."+j, doubleTrans(docPaDetails.getPutwayqtyCompleted()));
+
+                                    totalEachPage += docPaDetails.getAsnqtyExpected().doubleValue();
+                                    totalPage += docPaDetails.getPutwayqtyExpected().doubleValue();
                                 }
                             }
                             form.setField("notes",note);
+                            form.setField("sumqtyPage","合计(数量:"+doubleTrans(totalEachPage)+"  件数:"+doubleTrans(totalPage)+")");
+                            form.setField("sumqty","");
+
+
                             stamper.setFormFlattening(true);
                             stamper.close();
                             page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
