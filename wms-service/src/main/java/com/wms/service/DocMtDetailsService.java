@@ -9,16 +9,18 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.query.*;
+import com.wms.query.BasSkuQuery;
+import com.wms.query.DocMtDetailsQuery;
+import com.wms.query.DocMtHeaderQuery;
+import com.wms.query.ProductLineQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.StringUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.DocMtDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocMtDetailsForm;
 import com.wms.vo.form.pda.ScanResultForm;
 import com.wms.vo.pda.CommonVO;
-import org.apache.camel.language.Bean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -143,6 +145,8 @@ public class DocMtDetailsService extends BaseService {
 		List<DocMtDetailsForm> list=JSON.parseArray(forms,DocMtDetailsForm.class);
 		Boolean con=true;
 		for (DocMtDetailsForm detailForm : list) {
+            detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            detailForm.setUserid(SfcUserLoginUtil.getLoginUser().getId());
 			PdaResult pdaResult = mtSubmit(detailForm);//调用养护作业方法 单个验收
 			if(pdaResult.getErrorCode()==400){
 				result.append("养护单号:"+detailForm.getMtno()+",行号:"+detailForm.getMtlineno()).append(","+pdaResult.getMsg()).append("<br/>");

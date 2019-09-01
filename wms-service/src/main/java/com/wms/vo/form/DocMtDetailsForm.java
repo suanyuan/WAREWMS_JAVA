@@ -27,6 +27,8 @@ public class DocMtDetailsForm {
 	private String addwho;
 	private java.util.Date edittime;
 	private String editwho;
+	private String warehouseid;
+	private String userid;
 
 	public String getMtno() {
 		return mtno;
@@ -208,4 +210,19 @@ public class DocMtDetailsForm {
 		this.editwho = editwho;
 	}
 
+	public String getWarehouseid() {
+		return warehouseid;
+	}
+
+	public void setWarehouseid(String warehouseid) {
+		this.warehouseid = warehouseid;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
 }
