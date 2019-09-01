@@ -82,14 +82,17 @@ public class GspVerifyService {
         businessLicenseQuery.setIsUse(Constant.IS_USE_YES);
         GspBusinessLicense gspBusinessLicense = gspBusinessLicenseService.getGspBusinessLicenseBy(businessLicenseQuery);
         //判断证照期限
-        List<GspOperteLicenseTime> businessOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspBusinessLicense.getBusinessId(),"");
-        if(businessOperateTime == null){
-            return Json.error("没有查询到营业执照信息:"+customerId);
-        }else {
-            if(businessOperateTime.get(0).getRemainDay()!=null && Integer.parseInt(businessOperateTime.get(0).getRemainDay()) <0 ){
-                return Json.error("营业执照过期:"+customerId);
+        if(gspBusinessLicense != null){
+            List<GspOperteLicenseTime> businessOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspBusinessLicense.getBusinessId(),"");
+            if(businessOperateTime == null){
+                return Json.error("没有查询到营业执照信息:"+customerId);
+            }else {
+                if(businessOperateTime.get(0).getRemainDay()!=null && Integer.parseInt(businessOperateTime.get(0).getRemainDay()) <0 ){
+                    return Json.error("营业执照过期:"+customerId);
+                }
             }
         }
+
 
         //生产
         GspOperateLicenseQuery prodQuery = new GspOperateLicenseQuery();
@@ -97,19 +100,22 @@ public class GspVerifyService {
         prodQuery.setIsUse(Constant.IS_USE_YES);
         prodQuery.setOperateType(Constant.LICENSE_TYPE_PROD);
         GspOperateLicense gspProdLicense = gspOperateLicenseService.getGspOperateLicenseBy(prodQuery);
-        //判断证照期限
-        List<GspOperteLicenseTime> prodOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspProdLicense.getOperateId(),"");
-        if(prodOperateTime != null){
-            if(Integer.parseInt(prodOperateTime.get(0).getRemainDay()) <0 ){
-                return Json.error("生产许可证过期:"+customerId);
-            }else {
-                if(!StringUtils.isEmpty(lotatt2)){
-                    if(checkDate(lotatt2,gspProdLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspProdLicense.getApproveDate())>0){
-                        return Json.error("生产日期超过生产许可证有效期");
+        if( gspProdLicense != null){
+            //判断证照期限
+            List<GspOperteLicenseTime> prodOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspProdLicense.getOperateId(),"");
+            if(prodOperateTime != null){
+                if(Integer.parseInt(prodOperateTime.get(0).getRemainDay()) <0 ){
+                    return Json.error("生产许可证过期:"+customerId);
+                }else {
+                    if(!StringUtils.isEmpty(lotatt2)){
+                        if(checkDate(lotatt2,gspProdLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspProdLicense.getApproveDate())>0){
+                            return Json.error("生产日期超过生产许可证有效期");
+                        }
                     }
                 }
             }
         }
+
 
         //经营
         GspOperateLicenseQuery operateLicenseQuery = new GspOperateLicenseQuery();
@@ -117,19 +123,22 @@ public class GspVerifyService {
         operateLicenseQuery.setIsUse(Constant.IS_USE_YES);
         operateLicenseQuery.setOperateType(Constant.LICENSE_TYPE_OPERATE);
         GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(operateLicenseQuery);
-        //判断证照期限
-        List<GspOperteLicenseTime> operOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspOperateLicense.getOperateId(),"");
-        if(operOperateTime != null){
-            if(Integer.parseInt(operOperateTime.get(0).getRemainDay()) <0 ){
-                return Json.error("经营可证过期:"+customerId);
-            }else {
-                if(!StringUtils.isEmpty(lotatt2)){
-                    if(checkDate(lotatt2,gspOperateLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspOperateLicense.getApproveDate())>0){
-                        return Json.error("生产日期超过经营许可证有效期");
+        if(gspOperateLicense != null){
+            //判断证照期限
+            List<GspOperteLicenseTime> operOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspOperateLicense.getOperateId(),"");
+            if(operOperateTime != null){
+                if(Integer.parseInt(operOperateTime.get(0).getRemainDay()) <0 ){
+                    return Json.error("经营可证过期:"+customerId);
+                }else {
+                    if(!StringUtils.isEmpty(lotatt2)){
+                        if(checkDate(lotatt2,gspOperateLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspOperateLicense.getApproveDate())>0){
+                            return Json.error("生产日期超过经营许可证有效期");
+                        }
                     }
                 }
             }
         }
+
 
         //一类
         GspFirstRecordQuery firstRecordQuery = new GspFirstRecordQuery();
