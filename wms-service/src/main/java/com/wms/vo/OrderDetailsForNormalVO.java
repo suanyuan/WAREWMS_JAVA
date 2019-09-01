@@ -67,7 +67,8 @@ public class OrderDetailsForNormalVO {
 
     private String traceid;//跟踪id
 
-    private Double qtyordered;//订货数量
+    private Double qtyordered;//订货件数
+    private Double qtyorderedEach;//订货数量
 
     private Double qtysoftallocated;//预分配数量 Deprecated
 
@@ -97,7 +98,6 @@ public class OrderDetailsForNormalVO {
 
     private String notes;
 
-    private Double qtyorderedEach;//订货件数
 
     private Double qtysoftallocatedEach;//软分配件数 Deprecated
 

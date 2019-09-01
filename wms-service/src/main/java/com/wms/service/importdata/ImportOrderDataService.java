@@ -124,7 +124,7 @@ public class ImportOrderDataService {
         List<OrderDetailsForNormalVO> importDetailsDataVOList = new ArrayList<OrderDetailsForNormalVO>();
         OrderDetailsForNormalVO importDetailsDataVO = null;
         String quantityData = null;
-        Integer count = 1;
+        Integer  count = 1;
         String customerId = "", soreference1 = "", requiredDeliveryTime = "", cContact = "", address = "", tel = "";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
@@ -190,17 +190,20 @@ public class ImportOrderDataService {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[商品编码]，未输入").append(" ");
+                rowResult.append("[产品代码]，未输入").append(" ");
             }
             try {
-                quantityData = dataArray.getQtyordered();
-                if (StringUtils.isNotEmpty(quantityData)) {
-                    if (Integer.valueOf(quantityData) <= 0) {
-                        throw new Exception();
-                    }
+                if((dataArray.getQtyordered() == null||dataArray.getQtyordered().equals(""))&& (dataArray.getQtyorderedEach() == null||dataArray.getQtyorderedEach().equals(""))){
+                    throw new Exception();
+                }
+                if (ExcelUtil.isNotNumeric(dataArray.getQtyordered())&&!dataArray.getQtyordered().equals("")) {
+                    rowResult.append("[件数]，必须为数字").append(" ");
+                }
+                if (ExcelUtil.isNotNumeric(dataArray.getQtyorderedEach())&&!dataArray.getQtyorderedEach().equals("")) {
+                    rowResult.append("[数量]，必须为数字").append(" ");
                 }
             } catch (Exception e) {
-                rowResult.append("[数量]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
+                rowResult.append("[件数、数量]，必须填入一个").append(" ");
             }
 
             if (rowResult.length() > 0) {
@@ -267,15 +270,16 @@ public class ImportOrderDataService {
                     importDataVO.setOrderDetailsForNormalVOList(importDetailsDataVOList);
                     importData.add(importDataVO);
                 }
+                customerId = importDataVO.getCustomerid();
+                soreference1 = importDataVO.getSoreference1();
+                //requiredDeliveryTime = dataArray.getRequiredDeliveryTime();
+                cContact = importDataVO.getCContact();
+                address = importDataVO.getCAddress1();
+                tel = importDataVO.getCTel1();
+                count = count + 1;
             }
 
-            customerId = importDataVO.getCustomerid();
-            soreference1 = importDataVO.getSoreference1();
-            //requiredDeliveryTime = dataArray.getRequiredDeliveryTime();
-            cContact = importDataVO.getCContact();
-            address = importDataVO.getCAddress1();
-            tel = importDataVO.getCTel1();
-            count = count + 1;
+
         }
         for (OrderHeaderForNormalVO aa : importData) {
             System.out.println(aa.getSeq());
@@ -295,11 +299,12 @@ public class ImportOrderDataService {
         map.put("收货人", "cContact");
         map.put("收货地址", "cAddress1");
         map.put("收货人电话", "cTel1");
-        map.put("产品", "sku");
+        map.put("产品代码", "sku");
         map.put("快递公司", "carrierid");
         map.put("发运方式", "userdefine1");
         map.put("快递结算方式", "userdefine2");
-        map.put("订单数量", "qtyordered");
+        map.put("订单件数", "qtyordered");
+        map.put("订单数量", "qtyorderedEach");
         map.put("生产日期", "lotatt01");
         map.put("效期", "lotatt02");
         map.put("入库日期", "lotatt03");
@@ -414,7 +419,28 @@ public class ImportOrderDataService {
                         query.setPackid(basSku.getPackid());
                         BasPackage basPackage = basPackageService.queryBasPackBy(query);
                         orderDetails.setUom(basPackage.getPackuom1());
-                        orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyordered() * basPackage.getQty1().doubleValue());
+                        if(importDetailsDataVO.getQtyordered()>0&&importDetailsDataVO.getQtyorderedEach()>0){
+                            orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
+                            orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
+                        }else{
+                            //有件数计算
+                            if(importDetailsDataVO.getQtyordered()>0){
+                                orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue()*(importDetailsDataVO.getQtyordered()));
+                                orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
+                            }else if(importDetailsDataVO.getQtyorderedEach()>0){
+                                //有数量计算件数
+                                //orderDetails.setQtyorderedEach(basPackage.getQty1().multiply(importDetailsDataVO.getQtyordered()));
+                                if(importDetailsDataVO.getQtyorderedEach()%basPackage.getQty1().doubleValue()==0){
+                                    double qty = importDetailsDataVO.getQtyorderedEach()/ basPackage.getQty1().doubleValue();
+                                    orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
+                                    orderDetails.setQtyordered(qty);
+                                }else {
+                                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
+                                    continue;
+                                }
+                            }
+
+                        }
                     }
                     orderDetails.setPackid(basSku.getPackid());
                     orderDetails.setOrderlineno((double) (orderlineno + 1));
@@ -447,7 +473,16 @@ public class ImportOrderDataService {
         importDetailsDataVO.setSku(dataArray.getSku());
         importDetailsDataVO.setSoreference1(dataArray.getSoreference1());
         importDetailsDataVO.setSoreference2(dataArray.getSoreference2());
-        importDetailsDataVO.setQtyordered(Double.parseDouble(dataArray.getQtyordered()));
+        if(!StringUtils.isEmpty(dataArray.getQtyorderedEach())||!dataArray.getQtyorderedEach().equals("")) {
+            importDetailsDataVO.setQtyorderedEach(Double.parseDouble(dataArray.getQtyorderedEach()));
+        }else{
+            importDetailsDataVO.setQtyorderedEach(0.0);
+        }
+        if(!StringUtils.isEmpty(dataArray.getQtyordered())||!dataArray.getQtyordered().equals("")) {
+            importDetailsDataVO.setQtyordered(Double.parseDouble(dataArray.getQtyordered()));
+        }else{
+            importDetailsDataVO.setQtyordered(0.0);
+        }
         importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
         importDetailsDataVO.setLotatt02(dataArray.getLotatt02());
         importDetailsDataVO.setLotatt03(dataArray.getLotatt03());

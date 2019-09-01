@@ -54,6 +54,7 @@
         <result column="wight" property="wight"/>
         <result column="packaging_unit" property="packagingUnit"/>
         <result column="licenseOrRecordNo" property="licenseOrRecordNo"/>
+        <result column="product_enterprise_name" property="enterpriseName"/>
         <result column="storage_condition" property="storageCondition"/>
 
         <!--<result column="attache_card_category" property="attacheCardCategory"/>-->

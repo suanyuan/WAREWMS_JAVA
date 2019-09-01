@@ -43,6 +43,7 @@ public class ImportOrderData implements Serializable {
 	private String userdefine2;
 
 	private String qtyordered;
+	private String qtyorderedEach;
 
 	private String lotatt01;
 	private String lotatt02;
@@ -70,6 +71,18 @@ public class ImportOrderData implements Serializable {
 
 	public void setSeq(String seq) {
 		this.seq = seq;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getQtyorderedEach() {
+		return qtyorderedEach;
+	}
+
+	public void setQtyorderedEach(String qtyorderedEach) {
+		this.qtyorderedEach = qtyorderedEach;
 	}
 
 	public String getOrderno() {
