@@ -6,6 +6,6 @@ package com.wms.mybatis.dao;
  * <b>功能：</b>BasPackageDao<br>
  */
 public interface BasPackageMybatisDao extends BaseDao {
-	
-	
+
+    public <T> T queryBydescr(Object id);
 }

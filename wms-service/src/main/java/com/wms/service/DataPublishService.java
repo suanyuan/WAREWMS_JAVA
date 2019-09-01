@@ -186,10 +186,21 @@ public class DataPublishService extends BaseService {
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());
 
-                BasPackageQuery query = new BasPackageQuery();
-                query.setDescr(specObj.getPackingUnit());
-                BasPackage basPackage = basPackageService.queryBasPackBy(query);
-                skuForm.setPackid(basPackage == null ? "6" : basPackage.getPackid());
+
+
+                if("".equals(specObj.getPackingUnit()) || specObj.getPackingUnit()==null ){
+                    skuForm.setPackid("STANDARD");
+                }else{
+                    BasPackageQuery query = new BasPackageQuery();
+                    query.setDescr(specObj.getPackingUnit());
+                    BasPackage basPackage = basPackageService.queryBasBydescr(query);
+                    skuForm.setPackid(basPackage.getPackid());
+                }
+
+
+
+
+
 
                 skuForm.setAlternateSku1(specObj.getAlternatName1());
                 skuForm.setAlternateSku2(specObj.getAlternatName2());
