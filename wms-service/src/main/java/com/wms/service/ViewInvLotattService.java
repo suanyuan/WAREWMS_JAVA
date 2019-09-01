@@ -10,7 +10,6 @@ import com.wms.entity.ViewInvLotatt;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
 import com.wms.query.ViewInvLotattQuery;
-import com.wms.query.pda.PdaInventoryQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.Json;
@@ -134,11 +133,11 @@ public class ViewInvLotattService extends BaseService {
                 json.setSuccess(false);
                 String loc = map.get("fmlocation") + "";
                 String sku = map.get("fmsku") + "";
-                String loattt05=viewInvLotatt.getLotatt05() + "";
-                String loattt04 =viewInvLotatt.getLotatt04() + "";
-                json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:"+loattt05+"生产批号:" + loattt04 + ",移动失败！" + result);
+                String loattt05 = viewInvLotatt.getLotatt05() + "";
+                String loattt04 = viewInvLotatt.getLotatt04() + "";
+                json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
             }
-        }else {
+        } else {
             json.setSuccess(false);
             json.setMsg("查无此库存数据");
         }
@@ -235,26 +234,16 @@ public class ViewInvLotattService extends BaseService {
     }
 
     /**
-     * 获取扫码库位产品的库存数据
-     * @param query 详见Controller描述
-     * @return ~
-     */
-    public Json queryInventory(PdaInventoryQuery query) {
-
-        Json json = new Json();
-
-        return json;
-    }
-
-    /**
      * 产品库存查询接口
      */
-  public List<InvLotLocIdSkuInvLotAtt> getInvLotLocIdSkuInvLotAttList(String sku,String lotatt04,String lotatt05){
+    public List<InvLotLocIdSkuInvLotAtt> getInvLotLocIdSkuInvLotAttList(String sku, String lotatt04, String lotatt05) {
 
-      List<InvLotLocIdSkuInvLotAtt> invLotLocIdSkuInvLotAttList=new ArrayList<InvLotLocIdSkuInvLotAtt>();
-      invLotLocIdSkuInvLotAttList=viewInvLotattMybatisDao.getInvLotLocIdSkuInvLotAttList(sku,lotatt04,lotatt05);
+        List<InvLotLocIdSkuInvLotAtt> invLotLocIdSkuInvLotAttList = new ArrayList<InvLotLocIdSkuInvLotAtt>();
+        invLotLocIdSkuInvLotAttList = viewInvLotattMybatisDao.getInvLotLocIdSkuInvLotAttList(sku, lotatt04, lotatt05);
 
-      return invLotLocIdSkuInvLotAttList;
-  };
+        return invLotLocIdSkuInvLotAttList;
+    }
+
+    ;
 
 }

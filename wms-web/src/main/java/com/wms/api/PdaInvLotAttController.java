@@ -1,7 +1,6 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
-import com.wms.entity.ViewInvLotatt;
 import com.wms.query.pda.PdaInventoryQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.InvLotLocIdService;
@@ -9,7 +8,6 @@ import com.wms.service.ViewInvLotattService;
 import com.wms.vo.Json;
 import com.wms.vo.form.ViewInvLotattForm;
 import com.wms.vo.form.pda.PdaInventoryMoveForm;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
