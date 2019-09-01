@@ -73,7 +73,7 @@ public class GspSupplierController {
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);
 		model.put("isUse", 1);
-		return new ModelAndView("gspSupplier/info", model);
+		return new ModelAndView("gspSupplier/detail", model);
 	}
 
 	@Login
