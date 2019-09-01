@@ -117,7 +117,7 @@ public class ViewInvLotattService extends BaseService {
         map.put("warehouseid", viewInvLotattForm.getWarehouseid());//仓库
         map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());//货主
         map.put("fmsku", viewInvLotattForm.getFmsku());             //产品代码
-        map.put("fmlotnum", viewInvLotattForm.getFmlotnum());       //批号
+        map.put("fmlotnum", viewInvLotattForm.getFmlotnum());       //批次
         map.put("fmlocation", viewInvLotattForm.getFmlocation());   //库位
         map.put("fmid", '*');               //跟踪号
         map.put("fmqty", String.valueOf(viewInvLotattForm.getFmqty()));//可用件数
@@ -137,8 +137,9 @@ public class ViewInvLotattService extends BaseService {
                 json.setSuccess(false);
                 String loc = map.get("fmlocation") + "";
                 String sku = map.get("fmsku") + "";
-                String lotnum = map.get("fmlotnum") + "";
-                json.setMsg("库位:" + loc + ",产品代码:" + sku + ",批号:" + lotnum + "移动失败！" + result);
+                String loattt05=viewInvLotatt.getLotatt05() + "";
+                String loattt04 =viewInvLotatt.getLotatt04() + "";
+                json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:"+loattt05+"生产批号:" + loattt04 + ",移动失败！" + result);
             }
         }else {
             json.setSuccess(false);
