@@ -427,7 +427,7 @@ public class GspProductRegisterService extends BaseService {
 	}
 //根据ProductRegisterNo查询
 	public GspProductRegister queryByRegisterNo(String registerNo){
-		return  gspProductRegisterMybatisDao.queryByRegisterNo(registerNo);
+		return  gspProductRegisterMybatisDao.queryByNo(registerNo);
 
 	}
 //根据productNameMain查询

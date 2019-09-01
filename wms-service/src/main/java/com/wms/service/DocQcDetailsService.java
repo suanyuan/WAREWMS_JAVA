@@ -229,19 +229,9 @@ public class DocQcDetailsService extends BaseService {
         pdaDocQcDetailVO.setUnacceptedQty((int) (qtyQcDetails.getQcqtyExpected() - qtyQcDetails.getQcqtyCompleted()));
 
         /*
-        777，历史注册证(+生产企业详情)
+        777,当前批次-产品注册证对应的 生产厂家
          */
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-        historyQuery.setProductRegisterNo(lotAtt.getLotatt06());
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-        List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
-        pdaDocQcDetailVO.setProductRegisterList(gspProductRegisterList.size() == 0 ? new ArrayList<PdaGspProductRegister>() : gspProductRegisterList);
-
-        /*
-        888,当前批次-产品注册证对应的 生产厂家
-         */
-        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryUsingItemByNo(lotAtt.getLotatt06());
+        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
         StringUtil.isEmpty(basSku.getReservedfield14())) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
@@ -254,6 +244,19 @@ public class DocQcDetailsService extends BaseService {
                         :
                         productRegister.getEnterpriseInfo().getEnterpriseName()
         );
+
+        /*
+        888，最新+历史注册证(+生产企业详情)
+         */
+        if (productRegister != null && StringUtil.isNotEmpty(productRegister.getVersion())) {
+
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+            historyQuery.setVersion(productRegister.getVersion());
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+            List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
+            pdaDocQcDetailVO.setProductRegisterList(gspProductRegisterList.size() == 0 ? new ArrayList<PdaGspProductRegister>() : gspProductRegisterList);
+        }
 
         map.put(Constant.DATA, pdaDocQcDetailVO);
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
