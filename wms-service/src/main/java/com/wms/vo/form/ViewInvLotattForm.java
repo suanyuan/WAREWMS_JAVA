@@ -76,7 +76,17 @@ public class ViewInvLotattForm {
 	private java.lang.String uom;
 	private java.lang.String warehouseid;
 
-	public BigDecimal getiMv() {
+	private String editwho;
+
+    public String getEditwho() {
+        return editwho;
+    }
+
+    public void setEditwho(String editwho) {
+        this.editwho = editwho;
+    }
+
+    public BigDecimal getiMv() {
 		return iMv;
 	}
 

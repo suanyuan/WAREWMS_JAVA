@@ -67,56 +67,7 @@
     <a onclick='doSubmitAddress();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
     <a onclick='clearDialog();' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
-<%--选择供应商和产品--%>
-<%--<div id='enterpriseProduct' style='padding: 10px;'>--%>
-    <%--<form>--%>
-    <%--<table>--%>
-        <%--<tr>--%>
-            <%--<th>产品基础信息</th>--%>
-            <%--<td>--%>
-                <%--<input type='text'  id='product' class='easyui-textbox' data-options='required:true,width:200'/>--%>
-                <%--<input type="hidden" name="specId" id="specId1" />--%>
-            <%--</td>--%>
-            <%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
 
-        <%--</tr>--%>
-
-        <%--<tr>--%>
-            <%--<th>供应商</th>--%>
-            <%--<td>--%>
-                <%--<input type='text'  id='supplierName1' class='easyui-textbox' data-options='required:true,width:200'/>--%>
-                <%--<input type="hidden" name="supplierId1" id="supplierId1" />--%>
-            <%--</td>--%>
-
-        <%--</tr>--%>
-    <%--</table>--%>
-    <%--</form>--%>
-<%--</div>--%>
-<!--产品查询列表dialog -->
-<%--<div id='ezuiDialogSpec' style='padding: 10px;'>--%>
-    <%--<div id='productToolbar' class='datagrid-toolbar' style=''>--%>
-        <%--<fieldset>--%>
-            <%--<legend>产品注册证信息</legend>--%>
-            <%--<table>--%>
-                <%--<tr>--%>
-                    <%--<th>产品代码</th>--%>
-                    <%--<td><input type='text' id='productCode'  size='16' data-options=''/></td>--%>
-                    <%--<th>产品名称</th>--%>
-                    <%--<td><input type='text' id='productName'  size='16' data-options=''/></td>--%>
-                    <%--<th>注册证号</th>--%>
-                    <%--<td><input type='text' id='registerNo'  size='16' data-options=''/></td>--%>
-                    <%--<td>--%>
-                        <%--<a onclick='searchProduct();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                        <%--<a onclick='choseSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</fieldset>--%>
-    <%--</div>--%>
-    <%--<table id="dataGridProduct">--%>
-
-    <%--</table>--%>
-<%--</div>--%>
 
 <div id='ezuiDialogClientDetail' style='padding: 10px;display: none'>
     <div id='clientTB' class='datagrid-toolbar' style=''>
@@ -139,50 +90,7 @@
     </table>
 </div>
 
-<%--<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>--%>
-    <%--<div id='TB' class='datagrid-toolbar' style=''>--%>
-        <%--<fieldset>--%>
-            <%--<legend>货主信息</legend>--%>
-            <%--<table>--%>
-                <%--<tr>--%>
-                    <%--<th>客户代码：</th><td><input id="kehudaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                    <%--<th>客户名称：</th><td><input id="kehumingcheng" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash;<th>企业信息代码：</th><td><input id="qiyexinxidaima" type='text'  class='easyui-textbox' data-options=''/></td>--%>
-                    <%--<th>企业名称：</th><td><input id="qiyemingcheng1" type='text'  class='easyui-textbox' data-options=''/></td>&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;<td>--%>
-                        <%--<input type='text' style="width: 170px;"/>--%>
-                        <%--<input type="hidden" class="easyui-textvalue" name="enterpriseId">--%>
-                        <%--<!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->--%>
-                    <%--</td>&ndash;%&gt;--%>
-                    <%--<td>--%>
-                        <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                        <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</fieldset>--%>
-        <%--&lt;%&ndash; <fieldset>--%>
-             <%--<legend>供应商信息</legend>--%>
-             <%--<table>--%>
-                 <%--<tr>--%>
-                     <%--<th>供应商</th>--%>
-                     <%--<td><input type='text' id='supplierId' class='easyui-textbox' data-options='width:200'/></td>--%>
-                     <%--<th>类型</th>--%>
-                     <%--<td><input type='text' id='operationType' class='easyui-textbox' data-options='width:200'/></td>--%>
-                     <%--<td>--%>
-                         <%--<a onclick='doSearchSupplier();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                         <%--<a onclick='choseSupplierSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                     <%--</td>--%>
-                 <%--</tr>--%>
-             <%--</table>--%>
-         <%--</fieldset>&ndash;%&gt;--%>
-    <%--</div>--%>
-    <%--<table id="dataGridSupplierDetail">--%>
 
-    <%--</table>--%>
-<%--</div>--%>
 <div id="ProductDialog">
 
 </div>
@@ -666,7 +574,12 @@
 
 
     function formatOperProductRegeister(value,row,index){
-        return "<a onclick=\"operateGridProductRegeister('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        if(row.productRegisterId!=null && row.productRegisterId!=""){
+            return "<a onclick=\"operateGridProductRegeister('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }else{
+            return "<a>无</a>";
+
+        }
     }
     function operateGridProductRegeister(id) {
         console.log("---------->"+id);

@@ -175,8 +175,8 @@ public class DataPublishService extends BaseService {
                 GspProductRegisterSpecsVO specObj = (GspProductRegisterSpecsVO)spec.getObj();
                 GspProductRegister register = gspProductRegisterService.queryById(specObj.getProductRegisterId());
 
-                if(register == null){
-                    return Json.error("产品没有绑定产品注册证");
+                if(register == null  && specObj.getMedicalDeviceMark()=="1"){
+                    return Json.error("该医疗器械产品没有绑定产品注册证");
                 }
 
                 BasCustomer basCustomer = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);//basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
@@ -216,8 +216,13 @@ public class DataPublishService extends BaseService {
                 skuForm.setReservedfield01(specObj.getProductName());
                 skuForm.setReservedfield02(specObj.getProductRemark());
                 skuForm.setReservedfield03(specObj.getProductRegisterNo());
-                skuForm.setReservedfield04(register.getClassifyId());
-                skuForm.setReservedfield05(register.getClassifyCatalog());
+                if(register!=null){
+                    skuForm.setReservedfield04(register.getClassifyId());
+                    skuForm.setReservedfield05(register.getClassifyCatalog());
+                    skuForm.setOrderbysql(register.getProductRegisterId());
+
+                }
+
 
                 skuForm.setReservedfield06(specObj.getLicenseOrRecordNo());
                 skuForm.setReservedfield07(specObj.getColdHainMark());
@@ -243,7 +248,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setFirstop(form.getFirstState());
                 skuForm.setPutawayrule(no);//申请单号
                 skuForm.setCustomerid(customerId.getCustomerid());
-                skuForm.setOrderbysql(register.getProductRegisterId());
+
                 //skuForm
                 basSkuService.addBasSku(skuForm);
             }
