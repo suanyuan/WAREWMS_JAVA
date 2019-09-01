@@ -65,6 +65,8 @@ public class DocAsnDetailService extends BaseService {
 
 	@Autowired
 	private BasSkuService basSkuService;
+	@Autowired
+	private GspVerifyService gspVerifyService;
 
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
@@ -157,6 +159,11 @@ public class DocAsnDetailService extends BaseService {
 	    if (!statusJson.isSuccess()) {
 	        return statusJson;
         }
+
+		Json verJson = gspVerifyService.verifyOperate(docAsnDetailForm.getCustomerid(),docAsnDetailForm.getSku(),docAsnDetailForm.getLotatt02());
+		if(!verJson.isSuccess()){
+			return verJson;
+		}
 
 	    DocAsnDetail docAsnDetail = new DocAsnDetail();
 	    BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
