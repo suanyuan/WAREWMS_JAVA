@@ -431,42 +431,48 @@ public class FirstBusinessApplyService extends BaseService {
 
 	public Json addReApply(String id){
 		try{
+            String[] arrId = id.split(",");
+            for(String DelId : arrId){
+                Json json = queryFirstBusinessApply(DelId);
+                if(!json.isSuccess() || json.getObj() == null){
+                    return Json.error("没有查询到对应的申请单号");
+                }
+            }
 			//重新申请
-			Json json = queryFirstBusinessApply(id);
-			if(!json.isSuccess() || json.getObj() == null){
-				return Json.error("没有查询到对应的申请单号");
-			}
 
 
+//            for(true){
+//
+//            }
+            for(String DelId : arrId) {
+                //TODO 失效已下发的数据
+                dataPublishService.cancelData(DelId);
 
-			//TODO 失效已下发的数据
-			dataPublishService.cancelData(id);
-
-			//修改原数据为失效
-			FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
-			firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
-			firstBusinessApply.setApplyId(id);
-			firstBusinessApply.setIsUse(Constant.IS_USE_NO);
-			firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
-			//更新申请记录
-			firstReviewLogService.updateFirstReviewByNo(id,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+                //修改原数据为失效
+                FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+                firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+                firstBusinessApply.setApplyId(DelId);
+                firstBusinessApply.setIsUse(Constant.IS_USE_NO);
+                firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
+                //更新申请记录
+                firstReviewLogService.updateFirstReviewByNo(DelId, Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
 
-            //重新插入单据
-            FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(id);
-            Json result = firstBusinessProductApplyService.getListByApplyIdNoUse(id);
+                //重新插入单据
+                FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(DelId);
+                Json result = firstBusinessProductApplyService.getListByApplyIdNoUse(DelId);
 
-            if(result.isSuccess()){
-                List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)result.getObj();
-                if(list!=null && list.size()>0){
+                if (result.isSuccess()) {
+                    List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>) result.getObj();
+                    if (list != null && list.size() > 0) {
 //					List<String> arrlist = new ArrayList<>();
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                    addApply(newApply.getClientId(),newApply.getSupplierId(),newApply.getSpecsId(),"");
+                        addApply(newApply.getClientId(), newApply.getSupplierId(), newApply.getSpecsId(), "");
+                    }
                 }
             }
-
 
 
 			return Json.success("操作成功");

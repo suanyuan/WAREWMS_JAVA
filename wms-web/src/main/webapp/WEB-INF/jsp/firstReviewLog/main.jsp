@@ -93,7 +93,7 @@ $(function() {
 });
 
 var edit = function(row){
-    return;
+    //return;
     var dialogUrl = "";
     var title = "";
 	if(row){
@@ -102,14 +102,14 @@ var edit = function(row){
             dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail"+"&id="+row.reviewTypeId;
         }else if(row.reviewTypeId.indexOf("SUP")!=-1){
             title = "供应商首营申请单";
-            //dialogUrl = sy.bp()+
-            return "供应商";
+            dialogUrl = sy.bp()+"/gspSupplierController.do?showSupplierDetail"+"&id="+row.reviewTypeId;
+           // return "供应商";
         }else if(row.reviewTypeId.indexOf("PRO")!=-1){
             title = "产品首营申请单";
-            return "产品";
-        }else if(row.reviewTypeId.indexOf("REC")!=-1){
+			dialogUrl = sy.bp()+"/firstBusinessApplyController.do?showBusinessDetail"+"&id="+row.reviewTypeId;
+		}else if(row.reviewTypeId.indexOf("REC")!=-1){
             title = "收货单位首营申请单";
-            return "收货单位";
+            dialogUrl = sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+row.reviewTypeId;
         }
 
         if(dialogUrl!=""){

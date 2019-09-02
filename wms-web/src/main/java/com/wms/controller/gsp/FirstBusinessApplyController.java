@@ -63,6 +63,19 @@ public class FirstBusinessApplyController {
 	}
 
 	@Login
+	@RequestMapping(params = "showBusinessDetail")
+	public ModelAndView showBusinessDetail(String id) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		Json json = firstBusinessApplyService.queryFirstBusinessApply(id);
+
+		if(json.isSuccess()){
+			model.put("firstBusinessApply1",json.getObj());
+		}
+		return new ModelAndView("firstBusinessApply/skuDetail", model);
+	}
+
+
+	@Login
 	@RequestMapping(params = "toDialogProductAndSupplier")
 	public ModelAndView toDialogAddress(String id) {
 		Map<String, Object> model = new HashMap<String, Object>();

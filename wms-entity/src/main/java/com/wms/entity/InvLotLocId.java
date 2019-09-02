@@ -69,5 +69,5 @@ public class InvLotLocId  implements Serializable {
 	private String remainDay;
 
 
-
+	private InvLotAtt invLotAtt;
 }
