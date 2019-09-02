@@ -73,7 +73,7 @@ public class GspVerifyService {
 
         //效期超过当前时间
         if(checkDate(lotatt2,new Date()) == -1){
-            return Json.error("改产品已超过效期");
+            return Json.error("该产品已超过效期");
         }
 
         //营业执照
@@ -132,13 +132,12 @@ public class GspVerifyService {
                 }else {
                     if(!StringUtils.isEmpty(lotatt2)){
                         if(checkDate(lotatt2,gspOperateLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspOperateLicense.getApproveDate())>0){
-                            return Json.error("生产日期超过经营许可证有效期");
+                            return Json.error("经营许可证已过期");
                         }
                     }
                 }
             }
         }
-
 
         //一类
         GspFirstRecordQuery firstRecordQuery = new GspFirstRecordQuery();

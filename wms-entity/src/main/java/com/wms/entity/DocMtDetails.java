@@ -46,4 +46,7 @@ private String lotatt01;  //生产日期
   private String lotatt11;  //存储条件
   private String lotatt12;  //产品名称
   private String lotatt15;  //生产企业
+// bas_sku
+  private String descrc;//规格
+  private String descre;//型号
 }

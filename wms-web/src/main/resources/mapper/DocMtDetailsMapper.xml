@@ -38,6 +38,9 @@
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
 	<result column="lotatt15" property="lotatt15"/>
+<!--bas_sku  -->
+	<result column="descr_c" property="descrc"/>
+	<result column="descr_e" property="descre"/>
 </resultMap>
 
     <resultMap id="MtProgressMap" type="com.wms.entity.DocMtProgressDetail">
@@ -325,9 +328,10 @@ where 1=1
 <!-- 查询养护计划管理列表Lotatt -->
 <select id="queryByListLotatt" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	  d.*,a.*
+	  d.*,a.*,s.descr_c,s.descr_e
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
 	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}

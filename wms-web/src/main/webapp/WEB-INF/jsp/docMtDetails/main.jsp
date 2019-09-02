@@ -45,6 +45,8 @@ $(function() {
 			{field: 'inventoryage',		title: '库龄',	width: 80 },
 			{field: 'customerid',		title: '货主',	width: 100 },
 			{field: 'sku',		title: '产品代码',	width: 140 },
+			{field: 'descrc',		title: '规格',	width: 140 },
+			{field: 'descre',		title: '型号',	width: 140 },
 			{field: 'lotatt12',		title: '产品名称',	width: 200 },
 			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
 			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },
@@ -379,25 +381,24 @@ var doSearch = function() {
 	}
 }
 
-/* 库位选择弹框查询 */
+/* 单号选择弹框查询 */
 var ezuiCVDataDialogSearch = function () {
 	ezuiCVDataDialogId.datagrid('load', {
 		mtno: $("#ezuiCVDataDialog #mtno").textbox("getValue"),
 		mtstatus: $("#ezuiCVDataDialog #mtstatus").combobox("getValue")
 	});
 };
-/* 库位选择弹框清空 */
+/* 单号选择弹框清空 */
 var ezuiCVToolbarClear = function () {
 	$("#ezuiCVDataDialog #mtno").textbox('clear');
 	$("#ezuiCVDataDialog #mtstatus").combobox('clear');
 };
-/* 库位选择弹框 */
+/* 单号选择弹框 */
 var ezuiCVDataClick = function () {
 	ezuiCVDataDialogId = $('#ezuiCVDataDialogId').datagrid({
 		url: '<c:url value="/docMtHeaderController.do?showDatagrid"/>',
 		method: 'POST',
 		toolbar: '#ezuiCVToolbar',
-		title: '库位选择',
 		pageSize: 50,
 		pageList: [50, 100, 200],
 		fit: true,
@@ -426,7 +427,7 @@ var ezuiCVDataClick = function () {
 	});
 	ezuiCVDataDialog.dialog('open');
 };
-/* 库位选择 */
+/* 单号选择 */
 var selectConservation = function () {
 	var row = ezuiCVDataDialogId.datagrid('getSelected');
 	if (row) {

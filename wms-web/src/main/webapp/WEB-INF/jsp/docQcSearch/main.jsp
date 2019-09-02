@@ -21,7 +21,7 @@ $(function() {
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
 	ezuiAcceptanceForm = $('#ezuiAcceptanceForm').form();   //验收作业dialog form
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/docQcDetailsController.do?showDatagrid"/>',
+		url : '<c:url value="/docQcSearchController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '待输入标题',
@@ -98,7 +98,7 @@ $(function() {
 		modal : true,
 		width:260,
 		height:180,
-		title : '验收作业',
+		title : '资料',
 		buttons : '#ezuiAcceptanceDialogBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiAcceptanceForm);
@@ -377,24 +377,25 @@ var doSearch = function() {
 	}
 }
 
-/* 单号选择弹框查询 */
+/* 库位选择弹框查询 */
 var ezuiAccDataDialogSearch = function () {
 	ezuiAccDataDialogId.datagrid('load', {
 		pano: $("#ezuiAccDataDialog #pano").textbox("getValue"),
 		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue")
 	});
 };
-/* 单号选择弹框清空 */
+/* 库位选择弹框清空 */
 var ezuiAccToolbarClear = function () {
 	$("#ezuiAccDataDialog #pano").textbox('clear');
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
 };
-/* 单号选择弹框 */
+/* 库位选择弹框 */
 var ezuiAccDataClick = function () {
 	ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
 		url: '<c:url value="/docQcHeaderController.do?showDatagrid"/>',
 		method: 'POST',
 		toolbar: '#ezuiAccToolbar',
+		title: '库位选择',
 		pageSize: 50,
 		pageList: [50, 100, 200],
 		fit: true,
@@ -421,7 +422,7 @@ var ezuiAccDataClick = function () {
 	});
 	ezuiAccDataDialog.dialog('open');
 };
-/* 单号选择 */
+/* 库位选择 */
 var selectAcceptance = function () {
 	var row = ezuiAccDataDialogId.datagrid('getSelected');
 	if (row) {
@@ -469,7 +470,7 @@ var selectAcceptance = function () {
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='acceptanceWork()' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>验收作业</a>
+					<a onclick='acceptanceWork()' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
 <%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
 <%--					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>

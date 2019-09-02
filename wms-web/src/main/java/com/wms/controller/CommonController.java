@@ -3,8 +3,11 @@ package com.wms.controller;
 import com.google.common.io.Files;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.entity.InvLotLocId;
 import com.wms.result.UploadResult;
 import com.wms.service.BasCodesService;
+import com.wms.service.GspOperateDateTimeService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PropertyUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -34,6 +37,8 @@ public class CommonController {
 
     @Autowired
     private BasCodesService basCodesService;
+    @Autowired
+    private GspOperateDateTimeService gspOperateDateTimeService;
 
     /**
      * 上传文件
@@ -179,7 +184,8 @@ public class CommonController {
         easyuiComboboxUnUse.setValue("否");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
-    }/**
+    }
+    /**
      * 合格不合格
      * @return
      */
@@ -200,6 +206,47 @@ public class CommonController {
         easyuiComboboxUnUse.setValue("不合格");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
+    }
+    /**
+     * 符合不符合
+     * @return
+     */
+    @RequestMapping(params = "getAccordOrNoAccordCombobox")
+    @ResponseBody
+    public List<EasyuiCombobox> getAccordOrNoAccordCombobox() {
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        easyuiCombobox.setId("");
+        easyuiCombobox.setValue("");
+        easyuiComboboxList.add(easyuiCombobox);
+        EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
+        easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);
+        easyuiComboboxUse.setValue("符合");
+        easyuiComboboxList.add(easyuiComboboxUse);
+        EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
+        easyuiComboboxUnUse.setId(Constant.CODE_YES_OR_NO);
+        easyuiComboboxUnUse.setValue("不符合");
+        easyuiComboboxList.add(easyuiComboboxUnUse);
+        return easyuiComboboxList;
+    }
+
+    /**
+     * 查询养护计划
+     * @return
+     */
+    @RequestMapping(params = "queryMtList")
+    @ResponseBody
+    public EasyuiDatagrid<InvLotLocId> queryMtList() throws Exception{
+        EasyuiDatagrid<InvLotLocId> invlots = new EasyuiDatagrid<>();
+        List<InvLotLocId> list = gspOperateDateTimeService.getSkuDisDay(DateUtil.format(new Date(),"yyyy-MM-dd"));
+        if(list!=null){
+            invlots.setTotal((long)list.size());
+            invlots.setRows(list);
+        }else{
+            invlots.setTotal(0l);
+            invlots.setRows(null);
+        }
+        return invlots;
     }
 
     /**

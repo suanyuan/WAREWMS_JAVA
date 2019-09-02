@@ -141,6 +141,15 @@
 			case "" : return "";
 		}
     }
+   var AccordOrNoAccord = function(value,row,index) {
+		value+="";
+		switch (value) {
+			case "1" : return "符合";
+			case "0" : return "不符合";
+			case "2" : return "未检查";
+			case "" : return "";
+		}
+    }
 
     var entTypeFormatter = function(value,row,index) {
         switch (value) {

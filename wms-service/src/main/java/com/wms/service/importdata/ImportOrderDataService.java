@@ -336,6 +336,11 @@ public class ImportOrderDataService {
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品代码查无商品资料").append(" ");
                 }
+                if(!sku.getActiveFlag().equals(Constant.IS_USE_YES)){
+                    resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
+                            .append("，货主代码：").append(importDataVO.getCustomerid())
+                            .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
+                }
             }
         }
     }
