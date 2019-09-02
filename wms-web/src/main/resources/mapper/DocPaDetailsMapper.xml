@@ -309,7 +309,7 @@ where 1=1
             and userdefine3 = #{userdefine3}
         </if>
           <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
-        order by addtime, edittime desc
+        order by edittime desc
     </select>
 
     <select id="queryUndoneNum4BatchNum" parameterType="java.util.Map" resultType="integer">
@@ -317,5 +317,4 @@ where 1=1
         left join doc_qc_header qh on qh.pano = pd.pano
         where qh.qcno = #{qcno} and pd.userdefine3 = #{batchNum} and <![CDATA[pd.linestatus < 40]]>
     </select>
-  	
 </mapper>   

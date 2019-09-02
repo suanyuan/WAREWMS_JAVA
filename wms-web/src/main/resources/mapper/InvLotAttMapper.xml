@@ -137,7 +137,7 @@ where 1=1
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-	update inv_lot_att set customerid=#{customerid},sku=#{sku},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},lotatt13=#{lotatt13},lotatt14=#{lotatt14},lotatt15=#{lotatt15},lotatt16=#{lotatt16},lotatt17=#{lotatt17},lotatt18=#{lotatt18},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},receivingtime=#{receivingtime},qcreportfilename=#{qcreportfilename} where lotnum=#{lotnum}
+	update inv_lot_att set customerid=#{customerid},sku=#{sku},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},lotatt13=#{lotatt13},lotatt14=#{lotatt14},lotatt15=#{lotatt15},lotatt16=#{lotatt16},lotatt17=#{lotatt17},lotatt18=#{lotatt18},addtime=now(),addwho=#{addwho},edittime=now(),editwho=#{editwho},receivingtime=#{receivingtime},qcreportfilename=#{qcreportfilename} where lotnum=#{lotnum}
 </update>
 <!-- 根据LotAtt05查询 质量状态不为dj 修改 lotatt13为1-->
  <update id="updatelotatt13Bylotatt05Andlotatt10"   parameterType="Object" >

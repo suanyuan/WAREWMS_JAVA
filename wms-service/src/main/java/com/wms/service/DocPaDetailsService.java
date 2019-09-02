@@ -31,10 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("docPaDetailsService")
 @SuppressWarnings("unchecked")
@@ -272,14 +271,44 @@ public class DocPaDetailsService extends BaseService {
         InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
         if (invLotAtt == null) return new PdaResult(PdaResult.CODE_FAILURE, "查无产品批次属性数据");
 
+
+        /*
+         ********************************* 日期校验 *********************************
+         */
+        if (StringUtil.isEmpty(form.getLotatt01())) {
+            form.setLotatt01(invLotAtt.getLotatt01());
+        }
+        if (StringUtil.isEmpty(form.getUserdefine2())) {
+            form.setUserdefine2(invLotAtt.getLotatt02());
+        }
+        if (StringUtil.isEmpty(form.getLotatt01())) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
+        }else if (StringUtil.isEmpty(form.getUserdefine2())) {
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择失效日期");
+        }
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date prdDate = format.parse(form.getLotatt01());
+            Date expiryDate = format.parse(form.getUserdefine2());
+            if (prdDate.getTime() >= expiryDate.getTime()) {
+                return new PdaResult(PdaResult.CODE_FAILURE, "失效日期不可小于生产日期");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         /*
         上架操作
          */
         String locationid = form.getUserdefine1();
+        String userdefine2 = form.getUserdefine2();
         String userdefine5 = form.getUserdefine5();
         String editwho = form.getEditwho();
         BeanUtils.copyProperties(docPaDetails, form);
         form.setUserdefine1(locationid);
+        form.setUserdefine2(userdefine2);
         form.setUserdefine5(userdefine5);
 
 //        if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());

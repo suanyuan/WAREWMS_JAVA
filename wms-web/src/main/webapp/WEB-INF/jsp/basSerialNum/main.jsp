@@ -23,7 +23,7 @@ $(function() {
 		url : '<c:url value="/basSerialNumController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '序列号管理',
+		title: '入库序列号管理',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,

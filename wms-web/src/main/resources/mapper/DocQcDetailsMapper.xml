@@ -407,6 +407,9 @@ where 1=1
         <if test="lotatt01 != null and lotatt01 != ''">
             and lotatt.lotatt01 = #{lotatt01, jdbcType=VARCHAR}
         </if>
+        <if test="lotatt02 != null and lotatt02 != ''">
+            and lotatt.lotatt02 = #{lotatt02, jdbcType=VARCHAR}
+        </if>
         <if test="locationid != null and locationid != ''">
             and detail.userdefine1 = #{locationid, jdbcType=VARCHAR}
         </if>

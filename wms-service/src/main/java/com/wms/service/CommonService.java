@@ -177,7 +177,7 @@ public class CommonService extends BaseService{
     /**
      * 判断获取的验收扫码数据是否齐全
      * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
-     * @param query qcno, customerid, sku, lotatt01, locationid, lotatt04, lotatt05, lotatt10, lotnum
+     * @param query qcno, customerid, sku, lotatt01, lotatt02, locationid, lotatt04, lotatt05, lotatt10, lotnum
      * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
      */
     public Json judgeQcScanResult(PdaDocQcDetailQuery query, CommonVO commonVO) {
