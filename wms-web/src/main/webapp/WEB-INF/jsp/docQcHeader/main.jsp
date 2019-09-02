@@ -377,25 +377,24 @@ var doSearch = function() {
 	}
 }
 
-/* 库位选择弹框查询 */
+/* 单号选择弹框查询 */
 var ezuiAccDataDialogSearch = function () {
 	ezuiAccDataDialogId.datagrid('load', {
 		pano: $("#ezuiAccDataDialog #pano").textbox("getValue"),
 		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue")
 	});
 };
-/* 库位选择弹框清空 */
+/* 单号选择弹框清空 */
 var ezuiAccToolbarClear = function () {
 	$("#ezuiAccDataDialog #pano").textbox('clear');
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
 };
-/* 库位选择弹框 */
+/* 单号选择弹框 */
 var ezuiAccDataClick = function () {
 	ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
 		url: '<c:url value="/docQcHeaderController.do?showDatagrid"/>',
 		method: 'POST',
 		toolbar: '#ezuiAccToolbar',
-		title: '库位选择',
 		pageSize: 50,
 		pageList: [50, 100, 200],
 		fit: true,
@@ -422,7 +421,7 @@ var ezuiAccDataClick = function () {
 	});
 	ezuiAccDataDialog.dialog('open');
 };
-/* 库位选择 */
+/* 单号选择 */
 var selectAcceptance = function () {
 	var row = ezuiAccDataDialogId.datagrid('getSelected');
 	if (row) {
