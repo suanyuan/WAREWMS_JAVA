@@ -98,7 +98,7 @@ $(function() {
 		modal : true,
 		width:260,
 		height:180,
-		title : '资料',
+		title : '验收作业',
 		buttons : '#ezuiAcceptanceDialogBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiAcceptanceForm);
