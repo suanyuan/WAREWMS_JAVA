@@ -45,6 +45,7 @@ $(function() {
 			{field: 'inventoryage',		title: '库龄',	width: 80 },
 			{field: 'customerid',		title: '货主',	width: 100 },
 			{field: 'sku',		title: '产品代码',	width: 140 },
+			{field: 'descrc',		title: '包装规格',	width: 140 },
 			{field: 'lotatt12',		title: '产品名称',	width: 200 },
 			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
 			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },

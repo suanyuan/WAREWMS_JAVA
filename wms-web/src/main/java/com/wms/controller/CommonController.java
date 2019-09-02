@@ -184,7 +184,8 @@ public class CommonController {
         easyuiComboboxUnUse.setValue("否");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
-    }/**
+    }
+    /**
      * 合格不合格
      * @return
      */
@@ -203,6 +204,28 @@ public class CommonController {
         EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
         easyuiComboboxUnUse.setId(Constant.CODE_YES_OR_NO);
         easyuiComboboxUnUse.setValue("不合格");
+        easyuiComboboxList.add(easyuiComboboxUnUse);
+        return easyuiComboboxList;
+    }
+    /**
+     * 符合不符合
+     * @return
+     */
+    @RequestMapping(params = "getAccordOrNoAccordCombobox")
+    @ResponseBody
+    public List<EasyuiCombobox> getAccordOrNoAccordCombobox() {
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+        easyuiCombobox.setId("");
+        easyuiCombobox.setValue("");
+        easyuiComboboxList.add(easyuiCombobox);
+        EasyuiCombobox easyuiComboboxUse = new EasyuiCombobox();
+        easyuiComboboxUse.setId(Constant.CODE_YES_OR_YES);
+        easyuiComboboxUse.setValue("符合");
+        easyuiComboboxList.add(easyuiComboboxUse);
+        EasyuiCombobox easyuiComboboxUnUse = new EasyuiCombobox();
+        easyuiComboboxUnUse.setId(Constant.CODE_YES_OR_NO);
+        easyuiComboboxUnUse.setValue("不符合");
         easyuiComboboxList.add(easyuiComboboxUnUse);
         return easyuiComboboxList;
     }

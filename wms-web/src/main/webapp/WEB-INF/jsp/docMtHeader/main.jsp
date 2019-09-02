@@ -43,11 +43,11 @@ $(function() {
 			{field: 'mttype',		title: '养护类型',	width: 150,formatter:MT_TYPstatusFormatter },
 			{field: 'fromdate',		title: '开始时间',	width: 150 },
 			{field: 'todate',		title: '结束时间',	width: 150 },
-			{field: 'storageFlag',		title: '贮存条件',	width: 100,formatter:QualifiedOrFailed},
-			{field: 'flowFlag',		title: '作业流程',	width: 100,formatter:QualifiedOrFailed },
-			{field: 'signFlag',		title: '标志清晰',	width: 100,formatter:QualifiedOrFailed },
-			{field: 'fenceFlag',		title: '防护措施',	width: 100,formatter:QualifiedOrFailed },
-			{field: 'sanitationFlag',		title: '卫生环境',	width: 100,formatter:QualifiedOrFailed },
+			{field: 'storageFlag',		title: '贮存条件',	width: 100,formatter:AccordOrNoAccord},
+			{field: 'flowFlag',		title: '作业流程',	width: 100,formatter:AccordOrNoAccord },
+			{field: 'signFlag',		title: '标志清晰',	width: 100,formatter:AccordOrNoAccord },
+			{field: 'fenceFlag',		title: '防护措施',	width: 100,formatter:AccordOrNoAccord },
+			{field: 'sanitationFlag',		title: '卫生环境',	width: 100,formatter:AccordOrNoAccord },
 			{field: 'remark',		title: '备注',	width: 150 },
 			{field: 'addtime',		title: '创建时间',	width: 150 },
 			{field: 'addwho',		title: '创建人',	width: 150 },
@@ -444,7 +444,7 @@ var ezuiDialogzToolbarClear= function(){
 				<tr>
 					<th>贮存条件</th><td><input type='text' id='storageFlag' name="storageFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	url:'<c:url value="/commonController.do?getAccordOrNoAccordCombobox"/>',
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 
@@ -452,7 +452,7 @@ var ezuiDialogzToolbarClear= function(){
 				<tr>
 					<th>作业流程</th><td><input type='text' id='flowFlag' name="flowFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	url:'<c:url value="/commonController.do?getAccordOrNoAccordCombobox"/>',
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 
@@ -461,7 +461,7 @@ var ezuiDialogzToolbarClear= function(){
 					<th>标志清晰</th>
 					<td><input type='text' id='signFlag' name="signFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	url:'<c:url value="/commonController.do?getAccordOrNoAccordCombobox"/>',
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 				</tr>
@@ -469,7 +469,7 @@ var ezuiDialogzToolbarClear= function(){
 					<th>防护措施</th>
 					<td><input type='text' id='fenceFlag' name="fenceFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	url:'<c:url value="/commonController.do?getAccordOrNoAccordCombobox"/>',
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 				</tr>
@@ -477,7 +477,7 @@ var ezuiDialogzToolbarClear= function(){
 					<th>卫生环境</th>
 					<td><input type='text' id='sanitationFlag' name="sanitationFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
+																																	url:'<c:url value="/commonController.do?getAccordOrNoAccordCombobox"/>',
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 				</tr>
