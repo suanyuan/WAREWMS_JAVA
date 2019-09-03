@@ -31,8 +31,12 @@ public class DocMtDetailsQuery implements IQuery {
 //	查询
     private String fromdate;
 	private String todate;
+	private String lotatt12;
+	private String descrc;   //规格
+	private String productLineName;   //产品线
 
-	// Pda 扫码获取库存养护明细 mtno + lotatt04 + lotatt05 + gtin
+
+// Pda 扫码获取库存养护明细 mtno + lotatt04 + lotatt05 + gtin
     private String lotatt04;//生产批号
     private String lotatt05;//序列号
     private String GTIN;//gtin

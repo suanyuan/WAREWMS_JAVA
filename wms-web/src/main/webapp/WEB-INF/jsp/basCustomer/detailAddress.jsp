@@ -7,16 +7,28 @@
 <head>
     <c:import url='/WEB-INF/jsp/include/meta.jsp' />
     <c:import url='/WEB-INF/jsp/include/easyui.jsp' />
-    <script type='text/javascript'>
-        $(function () {
-            $('#tap').tabs({
-                fit:true
-            });
-        })
-    </script>
+
 </head>
 <body>
-
+<script type='text/javascript'>
+    $(function () {
+        $('#tap').tabs({
+            fit:true
+        });
+        // $('#divMain').css("visibility", "hidden");
+        // alert($('#customerType').val());
+        // //
+        // select();
+    })
+    // function select(){
+    //     if($('#customerType').val()=="收货单位"){
+    //         $('#divMain').css("visibility", "visible");
+    //     }else {
+    //
+    //     }
+    // }
+</script>
+<%--<input type="hidden" id="customerType" value="${customerType}" >--%>
 <div id="tap" class="easyui-tabs">
     <div title="基本信息" style="display:none;overflow:auto;padding:10px;" data-options="href:'gspEnterpriseInfoController.do?toInfo&id=${enterpriseId}'">
     </div>
@@ -33,7 +45,9 @@
     <div title="医疗机构执业许可证信息" data-options="href:'gspEnterpriseInfoController.do?toMedicalLicense&id=${enterpriseId}'" style="overflow:auto;padding:10px;display:none;">
     </div>
 
+    <div title="收货地址信息" data-options="href:'/basCustomerController.do?toReceivingAddress&enterpriseId=${enterpriseId}'"   style="overflow:auto;padding:10px;display:none;">
 
+    </div>
 
 
 </div>

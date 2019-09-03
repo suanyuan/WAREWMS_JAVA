@@ -202,6 +202,23 @@ where 1=1
 	<if test="condition.editwho != null and condition.editwho != ''" >
 	    and d.editwho =  #{condition.editwho}
 	</if>
+
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and a.lotatt12 like concat('%',#{condition.lotatt12},'%')
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and a.lotatt05 like concat('%',#{condition.lotatt05},'%')
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and a.lotatt04 like concat('%',#{condition.lotatt04},'%')
+	</if>
+	<if test="condition.descrc != null and condition.descrc != ''" >
+	    and s.descr_c like concat('%',#{condition.descrc},'%')
+	</if>
+	<if test="condition.productLineName != null and condition.productLineName != ''" >
+	    and p.name like concat('%',#{condition.productLineName},'%')
+	</if>
+
 </trim>
 </sql>
    
@@ -309,6 +326,8 @@ where 1=1
 	count(1)
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.lotnum=a.lotnum
+	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
+	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 	<include refid="Example_Where_Clause1"/>
 </select>
   	
@@ -328,10 +347,11 @@ where 1=1
 <!-- 查询养护计划管理列表Lotatt -->
 <select id="queryByListLotatt" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	  d.*,a.*,s.descr_c,s.descr_e
+	  d.*,a.*,s.descr_c,s.descr_e,p.name
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
+	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}

@@ -250,7 +250,6 @@
         // }
 
 
-
         // changeRequired();
         if( id!="" || row !=null){
             if(processType == 'edit' || processType == 'product' ){
@@ -261,6 +260,7 @@
                 dataType : 'JSON',
                 success : function(result){
                     if(result.success){
+                        changeRequired();
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -275,10 +275,13 @@
 
 
                         })
-                        changeRequired();
+
                     }
+
                 }
+
             });
+
             }
         }
 
@@ -314,13 +317,14 @@
 //             textField:'value'
 //         });
 //医疗器械标志下拉框
-          $('#medicalDeviceMark').combobox({
-              editable:false,
+        $('#medicalDeviceMark').combobox({
+            editable:false,
             panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
         });
+
 
         // $('#productionAddress').combobox({
         //     url:sy.bp()+'/basPackageController.do?getCombobox',
@@ -334,11 +338,11 @@
             $('#productRegisterNo').textbox({required:false});
             $('#specsName').textbox({required:false});
             $('#productModel').textbox({required:false});
-            $('#packingUnit').textbox({required:false});
+            $('#packingUnit').combobox({required:false});
             $('#storageCondition').textbox({required:false});
-            $('#isDoublec').textbox({required:false});
-            $('#isCertificate').textbox({required:false});
-            $('#unit').textbox({required:false});
+            $('#isDoublec').combobox({required:false});
+            $('#isCertificate').combobox({required:false});
+            $('#unit').combobox({required:false});
             $('#maintenanceCycle').textbox({required:false});
 
 
@@ -346,11 +350,11 @@
             $('#ezuiFormInfo #productRegisterNo').textbox({required:true});
             $('#ezuiFormInfo #productName').textbox({required:true});
             $('#ezuiFormInfo #productModel').textbox({required:true});
-            $('#ezuiFormInfo #packingUnit').textbox({required:true});
+            $('#ezuiFormInfo #packingUnit').combobox({required:true});
             $('#storageCondition').textbox({required:true});
-            $('#isDoublec').textbox({required:true});
-            $('#isCertificate').textbox({required:true});
-            $('#unit').textbox({required:true});
+            $('#isDoublec').combobox({required:true});
+            $('#isCertificate').combobox({required:true});
+            $('#unit').combobox({required:true});
             $('#maintenanceCycle').textbox({required:true});
         }
 

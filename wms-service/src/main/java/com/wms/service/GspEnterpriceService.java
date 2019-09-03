@@ -487,6 +487,7 @@ public class GspEnterpriceService extends BaseService {
         query.setEnterpriseNo(enterpriseNo);
         query.setIsUse(Constant.IS_USE_YES);
         MybatisCriteria criteria = new MybatisCriteria();
+        query.setSelect("enterprise");
         criteria.setCondition(query);
         List<GspEnterpriseInfo> enterpriseInfos = gspEnterpriseInfoMybatisDao.queryByList(criteria);
         if(enterpriseInfos!=null && enterpriseInfos.size()>0){

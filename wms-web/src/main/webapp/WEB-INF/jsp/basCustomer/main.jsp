@@ -12,7 +12,9 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
-
+var ezuiDialogClientEnterprise;
+var customerType;
+var ezuiDialogClientEnterpriseAddress;
 /* 初始化 */
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -135,63 +137,137 @@ var add = function(){
 
 /* 编辑 */
 var edit = function(){
-	processType = 'edit';
-	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
-		$("#ezuiForm #customerid").textbox({
-			editable:false
-		});
-		$("#ezuiForm #customerType").combo('readonly', true);
-		$("#ezuiForm #operateType").combo('readonly', true);
-		ezuiForm.form('load',{
-			customerid : row.customerid,
-			customerType : row.customerType,
-			descrC : row.descrC,
-            enterpriseNo:row.enterpriseNo,
-            shorthandName:row.shorthandName,
-            enterpriseName:row.enterpriseName,
-            enterpriseType:row.enterpriseType,
-            contacts:row.contacts,
-            contactsPhone:row.contactsPhone,
-            remark:row.remark,
-            operateType:row.operateType,
-            supContractNo:row.supContractNo,
-            contractUrl:row.contractUrl,
-            clientContent:row.clientContent,
-            clientStartDate:row.clientStartDate,
-            clientEndDate:row.clientEndDate,
-            clientTerm:row.clientTerm,
-            isChineseLabel:row.isChineseLabel,
-			activeFlag : row.activeFlag,
-			receivingAddressId: row.receivingAddressId,
-            enterpriseId: row.enterpriseId
 
-			/*address1 : row.address1,
-			contact1 : row.contact1,
-			contact1Tel1 : row.contact1Tel1,
-			overreceiving : row.overreceiving,
-			overrcvpercentage : row.overrcvpercentage*/
-		});
-        $('#ezuiDialog').dialog({
+
+    var row = ezuiDatagrid.datagrid('getSelected');
+	var enterpriseId = row.enterpriseId;
+    customerType = row.customerType;
+    // alert(row.customerType)
+    // if(row.customerType == "收货单位"){
+    //     detailAddress(enterpriseId);
+	//
+    // }else{
+	//
+    //     detail(enterpriseId);
+	// }
+
+
+    detail(enterpriseId);
+
+};
+
+function detail(enterpriseId){
+    var row = ezuiDatagrid.datagrid('getSelected');
+    $(function() {
+        ezuiDialogClientEnterprise = $('#ezuiDialogClientEnterprise').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            buttons : '#ezuiDialogBtn',
-           /* href: '/basCustomerController.do?toDetail',*/
-            top:0,
-            left:0,
+            buttons : '',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
             width:1200,
-            height:500,
-            cache:false,
+            height:530,
+            closable:true,
+            cache: false,
             onClose : function() {
-                ezuiFormClear(ezuiForm);
+                // ezuiFormClear(ezuiDialogClientEnterprise);
             }
-        }).dialog('refresh','/basCustomerController.do?toDetail&enterpriseId='+row.enterpriseId);
-	}else{
-		$.messager.show({
-			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-		});
-	}
-};
+        }).dialog('close');
+    })
+    if(enterpriseId!=null && enterpriseId!="" ){
+        ezuiDialogClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        enterpriseId = "";
+    }else{
+        $.messager.show({
+            msg : '请先选择一条数据', title : '提示'
+        });
+    }
+}
+function detailAddress(enterpriseId){
+    // row = ezuiDatagrid.datagrid('getSelected');
+    $(function() {
+        ezuiDialogClientEnterpriseAddress = $('#ezuiDialogClientEnterpriseAddress').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '',
+            href:sy.bp()+"/basCustomerController.do?toDetailAddress",
+            width:1200,
+            height:530,
+            closable:true,
+            cache: false,
+            onClose : function() {
+                // ezuiFormClear(ezuiDialogClientEnterpriseAddress);
+            }
+        }).dialog('close');
+    })
+    if(enterpriseId!=null && enterpriseId!="" ){
+        ezuiDialogClientEnterpriseAddress.dialog('refresh', "/basCustomerController.do?toDetailAddress"+"&id="+enterpriseId).dialog('open');
+        enterpriseId = "";
+    }else{
+        $.messager.show({
+            msg : '请先选择一条数据', title : '提示'
+        });
+    }
+}
+
+<%--var edit = function(){--%>
+	<%--processType = 'edit';--%>
+	<%--var row = ezuiDatagrid.datagrid('getSelected');--%>
+	<%--row.enterpriseId--%>
+	<%--if(row){--%>
+		<%--$("#ezuiForm #customerid").textbox({--%>
+			<%--editable:false--%>
+		<%--});--%>
+		<%--$("#ezuiForm #customerType").combo('readonly', true);--%>
+		<%--$("#ezuiForm #operateType").combo('readonly', true);--%>
+		<%--ezuiForm.form('load',{--%>
+			<%--customerid : row.customerid,--%>
+			<%--customerType : row.customerType,--%>
+			<%--descrC : row.descrC,--%>
+            <%--enterpriseNo:row.enterpriseNo,--%>
+            <%--shorthandName:row.shorthandName,--%>
+            <%--enterpriseName:row.enterpriseName,--%>
+            <%--enterpriseType:row.enterpriseType,--%>
+            <%--contacts:row.contacts,--%>
+            <%--contactsPhone:row.contactsPhone,--%>
+            <%--remark:row.remark,--%>
+            <%--operateType:row.operateType,--%>
+            <%--supContractNo:row.supContractNo,--%>
+            <%--contractUrl:row.contractUrl,--%>
+            <%--clientContent:row.clientContent,--%>
+            <%--clientStartDate:row.clientStartDate,--%>
+            <%--clientEndDate:row.clientEndDate,--%>
+            <%--clientTerm:row.clientTerm,--%>
+            <%--isChineseLabel:row.isChineseLabel,--%>
+			<%--activeFlag : row.activeFlag,--%>
+			<%--receivingAddressId: row.receivingAddressId,--%>
+            <%--enterpriseId: row.enterpriseId--%>
+
+			<%--/*address1 : row.address1,--%>
+			<%--contact1 : row.contact1,--%>
+			<%--contact1Tel1 : row.contact1Tel1,--%>
+			<%--overreceiving : row.overreceiving,--%>
+			<%--overrcvpercentage : row.overrcvpercentage*/--%>
+		<%--});--%>
+        <%--$('#ezuiDialog').dialog({--%>
+            <%--modal : true,--%>
+            <%--title : '<spring:message code="common.dialog.title"/>',--%>
+            <%--buttons : '#ezuiDialogBtn',--%>
+           <%--/* href: '/basCustomerController.do?toDetail',*/--%>
+            <%--top:0,--%>
+            <%--left:0,--%>
+            <%--width:1200,--%>
+            <%--height:500,--%>
+            <%--cache:false,--%>
+            <%--onClose : function() {--%>
+                <%--ezuiFormClear(ezuiForm);--%>
+            <%--}--%>
+        <%--}).dialog('refresh','/basCustomerController.do?toDetail&enterpriseId='+row.enterpriseId);--%>
+	<%--}else{--%>
+		<%--$.messager.show({--%>
+			<%--msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'--%>
+		<%--});--%>
+	<%--}--%>
+<%--};--%>
 var exchange=function (type) {
 	if (type == "收货单位") {
 	    return type='CO';
@@ -426,6 +502,8 @@ var doExport = function(){
 </script>
 </head>
 <body>
+
+
 	<input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
 	<div class='easyui-layout' data-options='fit:true,border:false'>
 		<div data-options='region:"center",border:false' style='overflow: scroll;'>
@@ -633,5 +711,12 @@ var doExport = function(){
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 	</div>--%>
+
+	<div id="ezuiDialogClientEnterprise">
+
+	</div>
+	<div id="ezuiDialogClientEnterpriseAddress">
+
+	</div>
 </body>
 </html>
