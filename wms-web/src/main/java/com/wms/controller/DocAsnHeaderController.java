@@ -213,6 +213,17 @@ public class DocAsnHeaderController {
 		return json;
 	}
 
+	@Login
+	@RequestMapping(params = "qlDetails",method = RequestMethod.POST)
+	@ResponseBody
+	public Json qlDetails(String generalNo) {
+		Json json = docAsnHeaderService.qlDetails(generalNo);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
 
 
 

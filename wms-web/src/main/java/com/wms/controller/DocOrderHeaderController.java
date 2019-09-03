@@ -351,6 +351,18 @@ public class DocOrderHeaderController {
 		return json;
 	}
 
+	@Login
+	@RequestMapping(params = "qlOrderDetails",method = RequestMethod.POST)
+	@ResponseBody
+	public Json qlOrderDetails(String orderno){
+		Json json = orderHeaderForNormalService.qlOrderDetails(orderno);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+
 
 	@Login
  	@RequestMapping(params = "exportOrderNoToExcel")
