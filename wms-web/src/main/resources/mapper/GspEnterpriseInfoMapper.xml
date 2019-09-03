@@ -58,6 +58,10 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
+	<if test="condition.select == 'enterprise' " >
+		and enterprise_no =  #{condition.enterpriseNo}
+	</if>
+
 	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
 	    and enterprise_id =  #{condition.enterpriseId}
 	</if>
