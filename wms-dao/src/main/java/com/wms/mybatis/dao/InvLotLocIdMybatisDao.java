@@ -2,6 +2,7 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.InvLotLocId;
+import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.DocMtHeaderQuery;
 import com.wms.query.pda.PdaInventoryQuery;
 
@@ -33,4 +34,12 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @return ~
      */
     List<InvLotLocId> getLotLocIdistListByMaintenanceTime();
+    /**
+     * 查出in_lot_att_id的list 盘点任务
+     * @return ~
+     */
+    List<InvLotLocId> queryByListByCouRequest(CouRequestDetailsQuery query);
+
+
+
 }

@@ -253,7 +253,7 @@ where 1=1
        WHERE h.asntype='PR' AND i.locationid NOT IN('STAGE01','SORTATION01','YY-01-01-01','DX-01-01-01') AND s.reservedfield10 IS NOT NULL
 </select>
     
-    <select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">
+<select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         a.*
         from inv_lot_loc_id a
@@ -262,5 +262,26 @@ where 1=1
           and IFNULL(b.lotatt04,'') = IFNULL(rtrim(#{lotatt04}),'')
           and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
     </select>
-    
+<!--获得盘点任务-->
+<select id="queryByListByCouRequest" resultMap="BaseResultMap" >
+    SELECT i.*,a.lotatt04,a.lotatt05 FROM `inv_lot_loc_id` i
+       LEFT JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
+       LEFT JOIN `bas_sku` s ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+       where 1=1
+	<trim  suffixOverrides="," >
+	<if test="lotatt04 != null and lotatt04 != ''" >
+		and a.lotatt04 like concat('%',#{lotatt04},'%')
+	</if>
+	<if test="lotatt05 != null and lotatt05 != ''" >
+		and a.lotatt05 like concat('%',#{lotatt05},'%')
+	</if>
+	<if test="customerid != null and customerid != ''" >
+		and i.customerid like concat('%',#{customerid},'%')
+	</if>
+	<if test="sku != null and sku != ''" >
+		and i.sku  like concat('%',#{sku},'%')
+	</if>
+	</trim>
+
+</select>
 </mapper>   

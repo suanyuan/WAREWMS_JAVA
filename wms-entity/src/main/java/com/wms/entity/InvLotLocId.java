@@ -35,11 +35,11 @@ public class InvLotLocId  implements Serializable {
 
 	private Double qtyonhold;
 
-	private java.sql.Date addtime;
+	private Date addtime;
 
 	private String addwho;
 
-	private java.sql.Date edittime;
+	private Date edittime;
 
 	private String editwho;
 
@@ -56,6 +56,7 @@ public class InvLotLocId  implements Serializable {
 	private String lpn;
 
 	private Double qtypa;
+	//养护计划
 	@JSONField(format = "yyyy-MM-dd")
 	private Date lotatt03; //入库时间
 	@JSONField(format = "yyyy-MM-dd")
@@ -70,4 +71,9 @@ public class InvLotLocId  implements Serializable {
 
 
 	private InvLotAtt invLotAtt;
+
+	//盘点任务
+	private String lotatt05;
+	private String lotatt04;
+
 }

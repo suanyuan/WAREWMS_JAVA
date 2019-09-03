@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.CouRequestDetailsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.CouRequestDetails" >
+	<result column="cycle_countno" property="cycleCountno"/>
+	<result column="cycle_countlineno" property="cycleCountlineno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="locationid" property="locationid"/>
+	<result column="qty_inv" property="qtyInv"/>
+	<result column="qty_act" property="qtyAct"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="userdefined1" property="userdefined1"/>
+	<result column="userdefined2" property="userdefined2"/>
+	<result column="userdefined3" property="userdefined3"/>
+</resultMap>
+       
+<!-- cou_request_details table all fields -->
+<sql id="Base_Column_List" >
+	 cycle_countno,cycle_countlineno,customerid,sku,locationid,qty_inv,qty_act,lotatt04,lotatt05,addtime,addwho,edittime,editwho,userdefined1,userdefined2,userdefined3
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.cycleCountno != null and condition.cycleCountno != ''" >
+	    and cycle_countno =  #{condition.cycleCountno}
+	</if>
+	<if test="condition.cycleCountlineno != null and condition.cycleCountlineno != ''" >
+	    and cycle_countlineno =  #{condition.cycleCountlineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.qtyInv != null and condition.qtyInv != ''" >
+	    and qty_inv =  #{condition.qtyInv}
+	</if>
+	<if test="condition.qtyAct != null and condition.qtyAct != ''" >
+	    and qty_act =  #{condition.qtyAct}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.userdefined1 != null and condition.userdefined1 != ''" >
+	    and userdefined1 =  #{condition.userdefined1}
+	</if>
+	<if test="condition.userdefined2 != null and condition.userdefined2 != ''" >
+	    and userdefined2 =  #{condition.userdefined2}
+	</if>
+	<if test="condition.userdefined3 != null and condition.userdefined3 != ''" >
+	    and userdefined3 =  #{condition.userdefined3}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into cou_request_details(cycle_countno,cycle_countlineno,customerid,sku,locationid,qty_inv,qty_act,lotatt04,lotatt05,addtime,addwho,edittime,editwho,userdefined1,userdefined2,userdefined3)
+ values(#{cycleCountno},#{cycleCountlineno},#{customerid},#{sku},#{locationid},#{qtyInv},#{qtyAct},#{lotatt04},#{lotatt05},#{addtime},#{addwho},#{edittime},#{editwho},#{userdefined1},#{userdefined2},#{userdefined3})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update cou_request_details set cycle_countlineno=#{cycleCountlineno},customerid=#{customerid},sku=#{sku},locationid=#{locationid},qty_inv=#{qtyInv},qty_act=#{qtyAct},lotatt04=#{lotatt04},lotatt05=#{lotatt05},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},userdefined1=#{userdefined1},userdefined2=#{userdefined2},userdefined3=#{userdefined3} where cycle_countno=#{cycleCountno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update cou_request_details set 
+	<trim  suffixOverrides="," >
+	<if test="cycleCountlineno != null  ">
+		cycle_countlineno=#{cycleCountlineno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="locationid != null  ">
+		locationid=#{locationid},
+	</if>
+	<if test="qtyInv != null  ">
+		qty_inv=#{qtyInv},
+	</if>
+	<if test="qtyAct != null  ">
+		qty_act=#{qtyAct},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="lotatt05 != null  ">
+		lotatt05=#{lotatt05},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="userdefined1 != null  ">
+		userdefined1=#{userdefined1},
+	</if>
+	<if test="userdefined2 != null  ">
+		userdefined2=#{userdefined2},
+	</if>
+	<if test="userdefined3 != null  ">
+		userdefined3=#{userdefined3},
+	</if>
+	</trim> where cycle_countno=#{cycleCountno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from cou_request_details where cycle_countno = #{cycleCountno}
+</delete>
+ 
+<!-- 根据id查询 盘点明细单 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from cou_request_details where cycle_countno = #{cycleCountno}
+</select>
+
+<!-- 盘点明细单 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from cou_request_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询盘点明细单列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from cou_request_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<!--盘点细单行号-->
+<select id="getCycleCountlineno" resultType="java.lang.Long"  parameterType="Object">
+	select ifnull(max(cycle_countlineno),0) from cou_request_details where cycle_countno = #{id,jdbcType=VARCHAR}
+</select>
+  	
+</mapper>   

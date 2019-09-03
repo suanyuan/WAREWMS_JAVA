@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.CouRequestHeaderMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.CouRequestHeader" >
+	<result column="cycle_countno" property="cycleCountno"/>
+	<result column="status" property="status"/>
+	<result column="fuzzyc" property="fuzzyc"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="starttime" property="starttime"/>
+	<result column="endtime" property="endtime"/>
+	<result column="notes" property="notes"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+</resultMap>
+       
+<!-- cou_request_header table all fields -->
+<sql id="Base_Column_List" >
+	 cycle_countno,status,fuzzyc,addtime,addwho,starttime,endtime,notes,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.cycleCountno != null and condition.cycleCountno != ''" >
+	    and cycle_countno like concat('%',#{condition.cycleCountno},'%')
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.fuzzyc != null and condition.fuzzyc != ''" >
+	    and fuzzyc =  #{condition.fuzzyc}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.starttime != null and condition.starttime != ''" >
+	    and starttime =  #{condition.starttime}
+	</if>
+	<if test="condition.endtime != null and condition.endtime != ''" >
+	    and endtime =  #{condition.endtime}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into cou_request_header(cycle_countno,status,fuzzyc,addtime,addwho,starttime,endtime,notes,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5)
+ values(#{cycleCountno},#{status},#{fuzzyc},#{addtime},#{addwho},#{starttime},#{endtime},#{notes},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update cou_request_header set status=#{status},fuzzyc=#{fuzzyc},addtime=#{addtime},addwho=#{addwho},starttime=#{starttime},endtime=#{endtime},notes=#{notes},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5} where cycle_countno=#{cycleCountno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update cou_request_header set 
+	<trim  suffixOverrides="," >
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="fuzzyc != null  ">
+		fuzzyc=#{fuzzyc},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="starttime != null  ">
+		starttime=#{starttime},
+	</if>
+	<if test="endtime != null  ">
+		endtime=#{endtime},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	</trim> where cycle_countno=#{cycleCountno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from cou_request_header where cycle_countno = #{cycleCountno}
+</delete>
+ 
+<!-- 根据id查询 盘点单头 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from cou_request_header where cycle_countno = #{cycleCountno}
+</select>
+
+<!-- 盘点单头 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from cou_request_header 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询盘点单头列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from cou_request_header 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+	<!--新增单号 -->
+<select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','CONO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
+</select>
+</mapper>   
