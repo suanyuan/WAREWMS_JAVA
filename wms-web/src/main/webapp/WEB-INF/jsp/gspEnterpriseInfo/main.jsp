@@ -42,6 +42,7 @@ $(function() {
         rowStyler: isUseRowStyler,
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
+            {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter },
 			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
@@ -50,7 +51,7 @@ $(function() {
             {field: 'createDate',		title: '创建时间',	width: 61 },
             {field: 'editId',		title: '修改人',	width: 61 },
             {field: 'editDate',		title: '修改时间',	width: 61 },
-            {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter }
+
 		]],
         onDblClickRow: function(index,row){
 			edit(row);
@@ -191,7 +192,7 @@ var commit = function(){
     console.log(infoObj.enterpriseType+"============="+CODE_ENT_TYP.CODE_ENT_TYP_GW);
 	//判断营业执照信息
 	isVal = checkFormData("ezuiFormBusiness",businessObj);
-	if(infoObj.enterpriseType  != CODE_ENT_TYP.CODE_ENT_TYP_GW && !checkObjIsEmpty(businessObj)){
+	if(infoObj.enterpriseType  != CODE_ENT_TYP.CODE_ENT_TYP_GW&& infoObj.enterpriseType  != CODE_ENT_TYP.CODE_ENT_TYP_YL && !checkObjIsEmpty(businessObj)){
         showMsg("必须填写营业执照信息！");
         return;
 	}

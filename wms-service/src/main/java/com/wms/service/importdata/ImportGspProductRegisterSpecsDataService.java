@@ -513,35 +513,33 @@ public class ImportGspProductRegisterSpecsDataService {
 //
 //			}
 
-			//生产许可证号/备案号
+			//生产许可证号/备案号    //放到产品注册证去   后面做
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByProductRegisterId(dataArray.getProductRegisterId());
 			try {
 //				GspEnterpriseInfo gspEnterpriseInfo =  new GspEnterpriseInfo();
-					if(gspEnterpriseInfo==null){
-						throw new Exception();
-					}
-					if(!"GW".equals(gspEnterpriseInfo.getEnterpriseType())) {
-						GspOperateLicense gspOperateLicense = gspOperateLicenseMybatisDao.queryByProductRegisterId(dataArray.getProductRegisterId());
-						GspSecondRecord gspSecondRecord = gspSecondRecordMybatisDao.queryByProductRegisterId(dataArray.getProductRegisterId());
-						if(dataArray.getLicenseOrRecordNo()!=null && dataArray.getLicenseOrRecordNo()!="无" && dataArray.getLicenseOrRecordNo()!="" ){
-							importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
-						}else if(!"".equals(gspOperateLicense.getLicenseNo()) && gspOperateLicense.getLicenseNo()!=null){
-							importDataVO.setLicenseOrRecordNo(gspOperateLicense.getLicenseNo());
-						}else if(!"".equals(gspSecondRecord.getRecordNo()) && gspSecondRecord.getRecordNo()!=null){
-							importDataVO.setLicenseOrRecordNo(gspSecondRecord.getRecordNo());
-						}else{
-							throw new Exception();
-						}
-
-						if (StringUtils.isEmpty(dataArray.getStorageCondition())) {//判日期是否为空
-							throw new Exception();
-						}
-					}else{
+//					if(gspEnterpriseInfo==null){
+//						throw new Exception();
+//					}
+//					if(!"GW".equals(gspEnterpriseInfo.getEnterpriseType())) {
+//						GspOperateLicense gspOperateLicense = gspOperateLicenseMybatisDao.queryByProductRegisterId(dataArray.getProductRegisterId());
+//						GspSecondRecord gspSecondRecord = gspSecondRecordMybatisDao.queryByProductRegisterId(dataArray.getProductRegisterId());
+//						if(dataArray.getLicenseOrRecordNo()!=null && dataArray.getLicenseOrRecordNo()!="无" && dataArray.getLicenseOrRecordNo()!="" ){
+//							importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
+//						}else if(!"".equals(gspOperateLicense.getLicenseNo()) && gspOperateLicense.getLicenseNo()!=null){
+//							importDataVO.setLicenseOrRecordNo(gspOperateLicense.getLicenseNo());
+//						}else if(!"".equals(gspSecondRecord.getRecordNo()) && gspSecondRecord.getRecordNo()!=null){
+//							importDataVO.setLicenseOrRecordNo(gspSecondRecord.getRecordNo());
+//						}else{
+//							throw new Exception();
+//						}
+//
+//						if (StringUtils.isEmpty(dataArray.getStorageCondition())) {//判日期是否为空
+//							throw new Exception();
+//						}
+//					}else{
+//						importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
+//					}
 						importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
-					}
-
-
-
 
 
 			} catch (Exception e) {

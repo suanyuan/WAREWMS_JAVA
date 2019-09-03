@@ -41,29 +41,32 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
+            {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isUse == '1' ? '是' : '否';
+                }},
+            {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isCheck == '1' ? '是' : '否';
+                }},
+            {field: 'firstState',		title: '首营状态',	width: 88 ,formatter:firstStateFormatter},
 
-			{field: 'supplierId',		title: '申请单号',	width: 130},
+
+
+            {field: 'supplierId',		title: '申请单号',	width: 130},
 			{field: 'enterpriseId',		title: '企业流水号',	width: 88 ,hidden:true},
 
 			{field: 'operateType',		title: '企业类型',	width: 88 ,hidden:true},
 
-            {field: 'firstState',		title: '首营状态',	width: 88 ,formatter:firstStateFormatter
-				},
             {field: 'enterpriseNo',		title: '企业信息代码',	width: 100	 },
             {field: 'shorthandName',		title: '简称',	width: 100 },
             {field: 'enterpriseName',		title: '企业名称',	width: 150 },
             {field: 'clientTerm',		title: '合同期限',	width: 200 },
             {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
-            {field: 'createDate',		title: '创建时间',	width: 160 },
+            {field: 'createDate',		title: '创建时间',	width: 200 },
             {field: 'editId',		title: '编辑人',	width: 88 },
             {field: 'editDate',		title: '编辑时间',	width: 160 },
-            {field: 'isCheck',		title: '是否审查',	width: 88 ,formatter:function(value,rowData,rowIndex){
-                    return rowData.isCheck == '1' ? '是' : '否';
-                }},
-            {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
-                    return rowData.isUse == '1' ? '是' : '否';
-                }}
+
+
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

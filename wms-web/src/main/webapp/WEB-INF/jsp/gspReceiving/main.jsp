@@ -42,11 +42,17 @@
                     singleSelect:true,
                     idField : 'receivingId',
                     columns : [[
+                        {field: 'isUse',		title: '是否有效',	width: 62 ,formatter:function(value,rowData,rowIndex){
+                                return rowData.isUse == '1' ? '是' : '否';
+                            }},
+                        {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
+                                return rowData.isCheck == '1' ? '是' : '否';
+                            }},
+                        {field: 'firstState',		title: '首营状态',	width: 92 ,formatter:firstStateFormatter},
 
                         {field: 'enterpriseId',	hidden:true,width: 92 },
                         {field: 'receivingId',	title: '申请单号',width: 122 },
                        /* {field: 'receivingId',			width: 102 },*/
-                        {field: 'firstState',		title: '首营状态',	width: 92 ,formatter:firstStateFormatter},
                         {field: 'enterpriseName',		title: '收货单位',	width: 200 },
                         {field: 'enterpriseNo',		title: '收货单位代码',	width: 101 },
                         {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
@@ -57,15 +63,11 @@
                         {field: 'contacts',		title: '联系人',	width: 82 },
                         {field: 'phone',		title: '联系人电话',	width: 100 },
 
-                        {field: 'isCheck',		title: '是否需要审核',	width: 82 ,formatter:function(value,rowData,rowIndex){
-                                return rowData.isCheck == '1' ? '是' : '否';
-                            }},
+
                         {field: 'isReturn',		title: '是否医废',	width: 62 ,formatter:function(value,rowData,rowIndex){
                                 return rowData.isReturn == '1' ? '是' : '否';
                             }},
-                        {field: 'isUse',		title: '是否有效',	width: 62 ,formatter:function(value,rowData,rowIndex){
-                                return rowData.isUse == '1' ? '是' : '否';
-                            }},
+
                         {field: 'createId',		title: '创建人',	width: 82 },
                         {field: 'createDate',		title: '创建日期',	width: 132 },
                         {field: 'editId',		title: '修改人',	width: 82 },

@@ -122,8 +122,9 @@ public class GspCustomerService extends BaseService {
 		if(gspCustomer ==null){
 			return Json.error("没有查询到对应的申请单号");
 		}
+		//换证应允许报废企业的委托方客户
+		if(!Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(gspCustomer.getFirstState()) && !Constant.CODE_CATALOG_FIRSTSTATE_PASS.equals(gspCustomer.getFirstState())){
 
-		if(!Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(gspCustomer.getFirstState())){
 			return Json.error("审核中的单据无法修改");
 		}
 

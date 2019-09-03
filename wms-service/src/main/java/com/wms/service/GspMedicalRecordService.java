@@ -94,7 +94,7 @@ public class GspMedicalRecordService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspMedicalRecord(String enterpriceId,GspMedicalRecordForm gspMedicalRecordForm,String operateDetailStr,String gspMedicalRecordId,String opType)throws Exception{
+	public Json addGspMedicalRecord(String enterpriceId,String oldEnterpriseId,GspMedicalRecordForm gspMedicalRecordForm,String operateDetailStr,String gspMedicalRecordId,String opType)throws Exception{
 		//try{
 		//GspOperateLicenseForm gspOperateLicenseForm = JSON.parseObject(operateLicenseFormStr,GspOperateLicenseForm.class);
 		List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>(); //JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -140,6 +140,32 @@ public class GspMedicalRecordService extends BaseService {
 		}else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
 			//把旧证数据作废
 			updateGspMedicalRecordTagById(gspMedicalRecordId,Constant.IS_USE_NO);
+
+
+			//查询换证后报废企业的所有历史营业执照
+			GspMedicalRecordQuery query = new GspMedicalRecordQuery();
+			EasyuiDatagridPager pager = new EasyuiDatagridPager();
+			MybatisCriteria criteria = new MybatisCriteria();
+			query.setEnterpriseId(oldEnterpriseId);
+			criteria.setCondition(query);
+			criteria.setCurrentPage(pager.getPage());
+			criteria.setPageSize(9999);
+			List<GspMedicalRecord> gM = gspMedicalRecordMybatisDao.queryByList(criteria);
+			//循环插入新建的企业版本中
+			for(GspMedicalRecord  gspMedicalRecord:gM){
+				gspMedicalRecord.setMedicalId(RandomUtil.getUUID());
+				gspMedicalRecord.setEnterpriseId(enterpriceId);
+//				gspMedicalRecord.setCreateDate(new Date());
+				gspMedicalRecord.setCreateId(getLoginUserId());
+				gspMedicalRecordMybatisDao.add(gspMedicalRecord);
+			}
+
+
+
+
+
+
+
 			//保存新证数据
 			String newOperateLicenseId = RandomUtil.getUUID();
 			gspMedicalRecordForm.setEnterpriseId(enterpriceId);

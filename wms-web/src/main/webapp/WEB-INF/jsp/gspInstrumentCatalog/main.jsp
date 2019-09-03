@@ -34,6 +34,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'instrumentCatalogId',		title: '主键',	width: 50,hidden:true },
+            {field: 'isUse',		title: '是否有效',	width: 72 ,formatter:isUseFormatter},
 			{field: 'instrumentCatalogNo',		title: '编号',	width: 72 },
 			{field: 'instrumentCatalogName',		title: '名称',	width: 72 },
 			{field: 'instrumentCatalogRemark',		title: '描述',	width: 72 },
@@ -43,7 +44,7 @@ $(function() {
 			{field: 'cretaeDate',		title: '创建时间',	width: 72 ,formatter: dateFormat},
 			{field: 'editId',		title: '修改人',	width: 72 },
 			{field: 'editDate',		title: '修改时间',	width: 72 ,formatter: dateFormat},
-			{field: 'isUse',		title: '是否有效',	width: 72 ,formatter:isUseFormatter}
+
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

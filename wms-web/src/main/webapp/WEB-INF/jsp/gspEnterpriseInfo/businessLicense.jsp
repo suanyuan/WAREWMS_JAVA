@@ -71,7 +71,7 @@
     </form>
     <div>
         <a onclick='businessUpdate()' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>开始换证</a>
-        <a onclick='businessCopy()' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-back",disabled:true' href='javascript:void(0);'>信息复用</a>
+        <a onclick='businessCopy()' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-back"' href='javascript:void(0);'>信息复用</a>
     </div>
     <fieldset>
         <legend>证照历史数据</legend>
