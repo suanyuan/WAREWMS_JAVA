@@ -92,6 +92,7 @@ $(function() {
 		},
         onDblClickRow(index,row){
             edit(row);
+			qlOrderDetails(row);
         },
 		/* 鼠标右键 */
 		onRowContextMenu : function(event, rowIndex, rowData) {
@@ -410,6 +411,31 @@ var add = function(){
 	ezuiDetailsDatagrid.datagrid('load',{orderno:'-1'});
 	ezuiDialog.dialog('open');
 };
+
+
+/*  查询是否有明细 */
+var qlOrderDetails = function(row){
+	$.ajax({
+		url : 'docOrderHeaderController.do?qlOrderDetails',
+		data : {orderno: row.orderno},
+		type : 'POST',
+		dataType : 'JSON',
+		success : function(result){
+			console.log(result)
+			try {
+				if(result.success){
+					$('#ezuiBtn_copyDetailGo').linkbutton('disable');
+				}else{
+					$('#ezuiBtn_copyDetailGo').linkbutton('enable');
+				}
+			} catch (e) {
+				return;
+			};
+		}
+	});
+}
+
+
 
 /* 编辑按钮 */
 var edit = function(srow){

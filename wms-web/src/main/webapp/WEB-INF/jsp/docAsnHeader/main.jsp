@@ -79,6 +79,7 @@ $(function() {
 		},
         onDblClickRow: function(index,row){
             edit(row);
+			qlDetails(row);
         },
 		onRowContextMenu : function(event, rowIndex, rowData) {
 // 			event.preventDefault();
@@ -497,6 +498,29 @@ var add = function(){
 	$('#ezuiBtn_recommit').linkbutton('enable');
 	ezuiDialog.dialog('open');
 };
+
+/*  查询是否有明细 */
+var qlDetails = function(row){
+	$.ajax({
+		url : 'docAsnHeaderController.do?qlDetails',
+		data : {generalNo: row.asnno},
+		type : 'POST',
+		dataType : 'JSON',
+		success : function(result){
+			console.log(result)
+			try {
+				if(result.success){
+					$('#ezuiBtn_copyDetail').linkbutton('disable');
+				}else{
+					$('#ezuiBtn_copyDetail').linkbutton('enable');
+				}
+			} catch (e) {
+				return;
+			};
+		}
+	});
+}
+
 
 /* 编辑按钮 */
 var edit = function(row){

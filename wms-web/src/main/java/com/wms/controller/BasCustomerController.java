@@ -212,7 +212,13 @@ public class BasCustomerController {
 		model.put("enterpriseId", enterpriseId);
 		return new ModelAndView("basCustomer/detail", model);
 	}
-
+	@Login
+	@RequestMapping(params = "toDetailAddress")
+	public ModelAndView toDetailAddress(String enterpriseId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("enterpriseId", enterpriseId);
+		return new ModelAndView("basCustomer/detailAddress", model);
+	}
 	@Login
 	@RequestMapping(params = "toInfo")
 	public ModelAndView toInfo(String enterpriseId) {

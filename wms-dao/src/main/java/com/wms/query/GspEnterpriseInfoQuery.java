@@ -17,4 +17,7 @@ public class GspEnterpriseInfoQuery implements IQuery {
 	private String createDateEnd;
 	private String isUse;
 	private String type;
+
+
+	private String select;
 }
