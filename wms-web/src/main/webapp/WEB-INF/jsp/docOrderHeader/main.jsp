@@ -2129,7 +2129,6 @@ function choseOrderTypeAfter(value) {
 --%>
 							<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
-                            <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 
                         </tr>
 						<tr>
@@ -2150,6 +2149,7 @@ function choseOrderTypeAfter(value) {
 																																valueField: 'id',
 																																textField: 'value'
 																																"/></td>
+                            <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',
 																																	valueField: 'id',
