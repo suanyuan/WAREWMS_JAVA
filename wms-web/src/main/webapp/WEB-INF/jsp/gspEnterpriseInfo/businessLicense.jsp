@@ -45,7 +45,7 @@
                     <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.issueDate}"/>" id="issueDate" name='issueDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
                     <th>营业期限时间</th>
                     <td colspan="3">
-                        <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessStartDate}"/>" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
+                        <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessStartDate}"/>" id="businessStartDate" name='businessStartDate' class='easyui-datebox' data-options='required:true,width:200'/>
                         &nbsp;&nbsp;至&nbsp;&nbsp;
                         <input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspBusinessLicense.businessEndDate}"/>" id="businessEndDate" name='businessEndDate' class='easyui-datebox' data-options='required:true,width:180<c:if test="${gspBusinessLicense.isLong == '1'}">,disabled:true</c:if>'/>
                         <input id="isLong" <c:if test="${gspBusinessLicense.isLong == '1'}">checked</c:if> type="checkbox" class="checkbox"><label for="isLong">长期/无固定时间</label>
@@ -147,9 +147,9 @@
         
         $("#isLong").click(function () {
             if($(this).is(':checked')){
-                $("#businessStartDate").textbox("clear")
+                //$("#businessStartDate").textbox("clear")
                 $("#businessEndDate").textbox("clear")
-                $("#businessStartDate").textbox("disable")
+                //$("#businessStartDate").textbox("disable")
                 $("#businessEndDate").textbox("disable")
             }else{
                 $("#businessStartDate").textbox("enable")
@@ -358,6 +358,7 @@
     //换证清空当前数据
     function businessUpdate() {
         opType = "update";
+        console.log($("#ezuiFormBusiness #ezuiDetailsBtn_copy"));
         $("#ezuiFormBusiness #opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
@@ -370,7 +371,7 @@
         })
         $("#attachmentUrl").val("")
         $("#file").filebox("setValue","");
-        $("#ezuiFormBusiness #ezuiDetailsBtn_copy").linkbutton("enable");
+        //$("#ezuiFormBusiness #ezuiDetailsBtn_copy").linkbutton("enable");
         $("#ezuiFormBusiness input[id='isLong']").removeAttr("checked");
         $("#ezuiFormBusiness input[id='businessStartDate']").datebox("enable");
         $("#ezuiFormBusiness input[id='businessEndDate']").datebox("enable");

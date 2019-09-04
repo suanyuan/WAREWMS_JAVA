@@ -246,6 +246,8 @@ public class CommonController {
             invlots.setTotal(0l);
             invlots.setRows(null);
         }
+        //invlots.setTotal(0l);
+        //invlots.setRows(null);
         return invlots;
     }
 

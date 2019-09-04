@@ -63,7 +63,13 @@
     }
 
     var judgeDate = function (dateStr) {
-        return new Date().getTime()-new Date(dateStr).getTime();
+	    console.log(new Date());
+	    console.log(new Date(dateStr));
+        if(new Date()>new Date(dateStr)){
+            return false;
+		}else{
+            return true;
+		}
     }
 
     var dateFormat = function(timestamp){
@@ -157,7 +163,7 @@
             case CODE_ENT_TYP.CODE_ENT_TYP_GNSC : return "生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_GWSC : return "国外生产";
             case CODE_ENT_TYP.CODE_ENT_TYP_KD : return "快递";
-            case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗单位";
+            case CODE_ENT_TYP.CODE_ENT_TYP_YL : return "医疗机构";
 			case CODE_ENT_TYP.CODE_ENT_TYP_ZT : return "主体";
 			case CODE_ENT_TYP.CODE_ENT_TYP_SCJY : return "生产经营";
             case CODE_ENT_TYP.CODE_ENT_TYP_GW : return "国外企业";

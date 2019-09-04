@@ -18,10 +18,10 @@
 		</div>
 		<!--<img style='position:absolute;top:65%;margin-left:-8%'src='<c:url value="/images/menuImg/logo.png"/>'/>-->
 	</div>
-	<div id="show">
+	<div id="show" style="display: none">
 		<table id="tb"></table>
 	</div>
-	<div id="showMt">
+	<div id="showMt" style="display: none">
 		<table id="tbMt"></table>
 	</div>
 
@@ -73,10 +73,10 @@
                 rownumbers:true,
                 singleSelect:false,
                 columns : [[
-                    {field: 'sku',		title: '客户编码',	width: 71 },
-                    {field: 'locationid',		title: '入库单编号',	width: 101 },
-                    {field: 'customerid',		title: '入库类型',	width: 71 },
-                    {field: 'qty',		title: '入库状态',	width: 71 }
+                    {field: 'sku',		title: '产品代码',	width: 100 },
+                    {field: 'locationid',		title: '库位',	width: 120 },
+                    {field: 'customerid',		title: '客户代码',	width: 120 },
+                    {field: 'qty',		title: '库存',	width: 71 }
                 ]],
                 onLoadSuccess:function(data){
                     if(data.total>0){

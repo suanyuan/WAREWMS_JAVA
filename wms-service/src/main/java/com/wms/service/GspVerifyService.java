@@ -53,7 +53,8 @@ public class GspVerifyService {
      * @return
      */
     public Json verifyOperate(String customerId,String sku,String lotatt2) throws Exception{
-        BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
+        return Json.success("");
+        /*BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
         if(customer == null){
             return Json.error("查询不到对应的货主："+customerId);
         }
@@ -162,6 +163,7 @@ public class GspVerifyService {
         GspProductRegister register = gspProductRegisterService.queryByRegisterNo(basSku.getReservedfield03());
         if(register!=null){
             if(!StringUtils.isEmpty(lotatt2)){
+                //TODO 取最早的注册证批准日期
                 if(checkDate(lotatt2,register.getProductRegisterExpiryDate())<0 || checkDate(lotatt2,register.getApproveDate())>0){
                     return Json.error("生产日期超过注册证有效期");
                 }
@@ -206,7 +208,7 @@ public class GspVerifyService {
             }
         }
 
-        return Json.success("");
+        return Json.success("");*/
     }
 
 

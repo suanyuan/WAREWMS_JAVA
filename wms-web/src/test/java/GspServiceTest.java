@@ -6,6 +6,7 @@ import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
 import com.wms.service.CommonService;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.service.GspOperateDetailService;
+import com.wms.service.GspVerifyService;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.RedisUtil;
@@ -37,7 +38,8 @@ import java.util.Map;
         "classpath*:/conf/spring-datasource.xml",
         "classpath*:/conf/spring-mybatis.xml",
         "classpath*:/conf/spring-redis.xml",
-        "classpath*:/conf/spring-mvc.xml"
+        "classpath*:/conf/spring-mvc.xml",
+        "classpath*:/applicationContext.xml"
 
 })
 public class GspServiceTest {
@@ -54,6 +56,8 @@ public class GspServiceTest {
     private CommonService commonService;
     @Autowired
     private GspOperateDetailService gspOperateDetailService;
+    @Autowired
+    private GspVerifyService gspVerifyService;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -117,6 +121,15 @@ public class GspServiceTest {
         System.out.println(true);*/
         redisUtil.get("aa");
 
+    }
+
+    @Test
+    public void testRight(){
+        try{
+            gspVerifyService.verifyOperate("JSJY","PASSEO-18 2.5/120/130","2022-08-16");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
