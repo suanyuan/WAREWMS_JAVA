@@ -58,6 +58,9 @@ public class BasCustomerService extends BaseService {
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
+
+
+
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
 
@@ -238,14 +241,21 @@ public class BasCustomerService extends BaseService {
 		return json;
 	}
 
-	public Json clientAddCustomer(BasCustomerForm basCustomerForm) {
+	public Json clientAddCustomer(BasCustomerForm basCustomerForm,String flag) {
 		//try{
 			Json json = new Json();
 			BasCustomer basCustomerQuery = new BasCustomer();
 			basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
 			basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
-			basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
-			BasCustomer basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
+//			basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
+			BasCustomer basCustomerHistory = new BasCustomer();
+			if("Supplier".equals(flag)){
+				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
+				basCustomerQuery.setDescrC(g.getEnterpriseName());
+				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
+			}else{
+				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
+			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 
 			if(basCustomerHistory!=null){
@@ -280,6 +290,9 @@ public class BasCustomerService extends BaseService {
 			return Json.error("操作失败");
 		}*/
 	}
+
+
+
 
 	public Json editBasCustomer(BasCustomerForm basCustomerForm) {
 		Json json = new Json();

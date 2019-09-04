@@ -79,6 +79,8 @@ public class GspBusinessLicenseService extends BaseService {
 	public GspBusinessLicense getGspBusinessLicenseBy(GspBusinessLicenseQuery gspBusinessLicenseQuery){
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCondition(gspBusinessLicenseQuery);
+		mybatisCriteria.setOrderByClause("create_date desc");
+
 		List<GspBusinessLicense> licenses = gspBusinessLicenseMybatisDao.queryByList(mybatisCriteria);
 		if(licenses!=null && licenses.size()>0){
 			return licenses.get(0);

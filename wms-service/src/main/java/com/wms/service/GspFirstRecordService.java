@@ -209,6 +209,8 @@ public class GspFirstRecordService extends BaseService {
 	public GspFirstRecord getGspFirstRecordBy(GspFirstRecordQuery gspFirstRecordQuery){
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCondition(gspFirstRecordQuery);
+		mybatisCriteria.setOrderByClause("create_date desc");
+
 		List<GspFirstRecord> list = gspFirstRecordMybatisDao.queryByList(mybatisCriteria);
 		if(list!=null && list.size()>0){
 			return list.get(0);

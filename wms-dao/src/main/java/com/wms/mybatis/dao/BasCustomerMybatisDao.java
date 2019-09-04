@@ -40,6 +40,8 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	BasCustomer selectByIdType(Object id);
 
 	BasCustomer selectByIdTypeActiveFlag(Object id);
+	BasCustomer selectSupplierByIdTypeActiveFlag(Object id);
+
 
 	BasCustomer queryByIdType(@Param("customerId") String customerId,@Param("customerType") String customerType);
 }

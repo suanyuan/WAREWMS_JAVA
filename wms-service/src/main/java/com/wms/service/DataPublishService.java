@@ -10,6 +10,7 @@ import com.wms.vo.*;
 import com.wms.vo.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Client;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -94,7 +95,10 @@ public class DataPublishService extends BaseService {
             form.setActiveFlag(Constant.IS_USE_YES);
             form.setBankaccount(no);
             form.setBillclass(gspCustomerForm.getFirstState());
-            return basCustomerService.clientAddCustomer(form);
+
+            String flag = "Client";
+
+            return basCustomerService.clientAddCustomer(form,flag);
         }else if(no.indexOf(Constant.APLSUPNO)!=-1){
             Json json = gspSupplierService.getGspSupplierInfo(no);
             if(!json.isSuccess()){
@@ -134,7 +138,9 @@ public class DataPublishService extends BaseService {
             form.setBankaccount(no);
             form.setBillclass(supplier.getFirstState());
 
-            return basCustomerService.clientAddCustomer(form);
+            String flag = "Supplier";
+
+            return basCustomerService.clientAddCustomer(form,flag);
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 			GspReceiving gspReceiving = gspReceivingService.getGspReceiving(no);
 
@@ -151,7 +157,9 @@ public class DataPublishService extends BaseService {
 
             form.setActiveFlag(Constant.IS_USE_YES);
 
-            return basCustomerService.clientAddCustomer(form);
+
+            String flag = "Receving";
+            return basCustomerService.clientAddCustomer(form,flag);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){
@@ -414,8 +422,8 @@ public class DataPublishService extends BaseService {
         form.setActiveFlag(Constant.IS_USE_YES);
         form.setBankaccount("");
         form.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
-
-        return basCustomerService.clientAddCustomer(form);
+        String flag = "";
+        return basCustomerService.clientAddCustomer(form,flag);
     }
     /**
      * 直接下发主体信息
@@ -434,7 +442,8 @@ public class DataPublishService extends BaseService {
         form.setBankaccount("");
         form.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
 
-        return basCustomerService.clientAddCustomer(form);
+        String flag = "";
+        return basCustomerService.clientAddCustomer(form,flag);
     }
 
     /**

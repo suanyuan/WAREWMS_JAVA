@@ -779,7 +779,12 @@ where 1=1
 
 <select id="selectByIdTypeActiveFlag" resultMap="BaseResultMap"  parameterType="Object">
 	select  * from Bas_Customer
-	where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	where customerid=#{customerid,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 </select>
+	<select id="selectSupplierByIdTypeActiveFlag" resultMap="BaseResultMap"  parameterType="Object">
+	select  * from Bas_Customer
+	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	</select>
 
-</mapper>   
+
+</mapper>

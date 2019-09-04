@@ -79,6 +79,8 @@ public class GspMedicalRecordService extends BaseService {
 	public GspMedicalRecord getGspMedicalRecordBy(GspMedicalRecordQuery gspMedicalRecordQuery){
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCondition(gspMedicalRecordQuery);
+		mybatisCriteria.setOrderByClause("create_date desc");
+
 		List<GspMedicalRecord> licenses = gspMedicalRecordMybatisDao.queryByList(mybatisCriteria);
 		if(licenses!=null && licenses.size()>0){
 			return licenses.get(0);

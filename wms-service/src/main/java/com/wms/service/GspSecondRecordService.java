@@ -70,6 +70,8 @@ public class GspSecondRecordService extends BaseService {
 	public GspSecondRecord getGspSecondRecordBy(GspSecondRecordQuery gspSecondRecordQuery){
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCondition(gspSecondRecordQuery);
+		mybatisCriteria.setOrderByClause("create_date desc");
+
 		List<GspSecondRecord> list = gspSecondRecordMybatisDao.queryByList(mybatisCriteria);
 		if(list!=null && list.size()>0){
 			return list.get(0);
