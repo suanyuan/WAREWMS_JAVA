@@ -42,6 +42,14 @@ public class CouRequestDetailsController {
 		return couRequestDetailsService.getPagedDatagrid(pager, query);
 	}
 
+//通过查询条件和盘点单号获取细单
+	@RequestMapping(params = "getcouRequestInfoBycycleCountno")
+	@ResponseBody
+	public List<CouRequestDetailsVO> getcouRequestInfoBycycleCountno(CouRequestDetailsQuery query) {
+		return couRequestDetailsService.getcouRequestInfoBycycleCountno(query);
+	}
+
+
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody

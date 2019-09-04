@@ -39,21 +39,23 @@ $(function() {
             if(row.isUse == "0"){  return 'color:red;';}
         },
 		columns : [[
+            {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.isUse == '1' ? '是' : '否';
+                }},
+            {field: 'serialFlag',		title: '出库记录序列号',	width: 88 ,formatter:function(value,rowData,rowIndex){
+                    return rowData.serialFlag == '1' ? '是' : '否';
+                }},
 			{field: 'productLineId',		title: '产品线名称',	width: 88,hidden:true },
 			{field: 'name',		title: '产品线名称',	width: 88 },
 			{field: 'descrC',		title: '货主',	width: 88 },
 			//{field: 'name',		title: '货主',	width: 88,hidden:true },
 			{field: 'expression',		title: '说明',	width: 88 },
-			{field: 'serialFlag',		title: '出库记录序列号',	width: 88 ,formatter:function(value,rowData,rowIndex){
-		       return rowData.serialFlag == '1' ? '是' : '否';
-	           }},
+
 			{field: 'createId',		title: '创建人',	width: 88 },
 			{field: 'createDate',		title: '创建日期',	width: 88 },
 			{field: 'editId',		title: '修改人',	width: 88 },
 			{field: 'editDate',		title: '修改日期',	width: 88 },
-			{field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
-                    return rowData.isUse == '1' ? '是' : '否';
-                }}
+
 
 		]],
 		onDblClickCell: function(index,field,value){

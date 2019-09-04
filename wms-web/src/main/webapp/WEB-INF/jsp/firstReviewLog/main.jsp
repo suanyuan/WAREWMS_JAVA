@@ -40,12 +40,13 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
+            {field: 'applyState',		title: '状态',	width: 100 ,
+                formatter:checkStateTypeFormatter
+            },
             {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
 			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
 			{field: 'applyContent',		title: '内容',	width: 71 },
-			{field: 'applyState',		title: '状态',	width: 100 ,
-				formatter:checkStateTypeFormatter
-			},
+
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
 			{field: 'checkDateQc',		title: '审核时间',	width: 150 },
 			{field: 'checkRemarkQc',		title: '备注',	width: 250 },

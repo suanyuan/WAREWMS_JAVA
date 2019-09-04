@@ -46,6 +46,7 @@ $(function() {
 		idField : 'id',
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
+            {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
 			{field: 'productRegisterNo',		title: '注册证编号',	width: 150 },
             {field: 'classifyId',		title: '管理分类',	width: 60 },
             //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
@@ -61,7 +62,7 @@ $(function() {
 			{field: 'checkDate',		title: '审核时间',	width: 150 },
 			{field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 150 },
-			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
+
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -288,7 +289,7 @@ var toImportData = function(){
 function doConfirm(){
     var row = ezuiDatagrid.datagrid('getSelected');
 	//alert(row.productRegisterNo);
-    $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
+    $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认审核通过吗', function(confirm) {
         if (confirm) {
 
             $.ajax({

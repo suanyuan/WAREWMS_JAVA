@@ -96,6 +96,9 @@ public class GspEnterpriceService extends BaseService {
                 return Json.error("企业基础信息不能为空");
             }
             String enterpriseId = gspEnterpriceFrom.getGspEnterpriseInfoForm().getEnterpriseId();
+
+            String oldEnterpriseId = enterpriseId;
+
             if(StringUtils.isEmpty(enterpriseId)) {
                 //新增判断企业编号是否重复
                 if(!checkGspEnterpriceByEnterpriseNo(gspEnterpriseInfoForm.getEnterpriseNo())){
@@ -152,7 +155,6 @@ public class GspEnterpriceService extends BaseService {
                     //创建新版本
                     if(enterpriseIsNewVersion){
                         gspEnterpriseInfoService.updateGspEnterpriseInfoActiveTag(enterpriseId,Constant.IS_USE_NO);
-
                         enterpriseId = RandomUtil.getUUID();
                         gspEnterpriseInfoForm.setState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
                         gspEnterpriseInfoForm.setEnterpriseId(enterpriseId);
@@ -199,29 +201,29 @@ public class GspEnterpriceService extends BaseService {
                 gspFirstRecordForm.setScopArr(initScope(gspFirstRecordForm.getScopArr()));
             }
 
-            if(gspBusinessLicenseForm != null){
+            if(!BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
                 if(enterpriseIsNewVersion == true){
                     gspBusinessLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
-                gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
+                gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,oldEnterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
-            if(!BeanUtils.isEmptyFrom(gspOperateLicenseForm)){
+            if(!BeanUtils.isEmptyFrom(gspOperateLicenseForm)){      //经营
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
                 if(enterpriseIsNewVersion == true){
                     gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
 //                gspProdLicenseForm.setOpType(Constant.LICENSE_TYPE_OPERATE);
                 gspOperateLicenseForm.setOperateType(Constant.LICENSE_TYPE_OPERATE);
-                gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
+                gspOperateLicenseService.addGspOperateLicense(enterpriseId,oldEnterpriseId,gspOperateLicenseForm,gspOperateLicenseForm.getScopArr(),gspOperateLicenseForm.getOperateId(),gspOperateLicenseForm.getOpType());
             }
-            if(!BeanUtils.isEmptyFrom(gspProdLicenseForm)){
+            if(!BeanUtils.isEmptyFrom(gspProdLicenseForm)){         //生产
                 if(enterpriseIsNewVersion == true){
                     gspProdLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspProdLicenseForm.setEnterpriseId(enterpriseId);
                 gspProdLicenseForm.setOperateType(Constant.LICENSE_TYPE_PROD);
-                gspOperateLicenseService.addGspOperateLicense(enterpriseId,gspProdLicenseForm,gspProdLicenseForm.getScopArr(),gspProdLicenseForm.getOperateId(),gspProdLicenseForm.getOpType());
+                gspOperateLicenseService.addGspOperateLicense(enterpriseId,oldEnterpriseId,gspProdLicenseForm,gspProdLicenseForm.getScopArr(),gspProdLicenseForm.getOperateId(),gspProdLicenseForm.getOpType());
             }
             //医疗
             if(!BeanUtils.isEmptyFrom(gspMedicalRecordForm)){
@@ -230,25 +232,25 @@ public class GspEnterpriceService extends BaseService {
                 }
                 gspMedicalRecordForm.setEnterpriseId(enterpriseId);
 //                gspMedicalLicenseForm.setOperateType(Constant.LICENSE_TYPE_MEDICAL);
-                gspMedicalRecordService.addGspMedicalRecord(enterpriseId,gspMedicalRecordForm,gspMedicalRecordForm.getScopArr(),gspMedicalRecordForm.getMedicalId(),gspMedicalRecordForm.getOpType());
+                gspMedicalRecordService.addGspMedicalRecord(enterpriseId,oldEnterpriseId,gspMedicalRecordForm,gspMedicalRecordForm.getScopArr(),gspMedicalRecordForm.getMedicalId(),gspMedicalRecordForm.getOpType());
             }
             //一类
-            if(!BeanUtils.isEmptyFrom(gspFirstRecordForm)){
+            if(!BeanUtils.isEmptyFrom(gspFirstRecordForm)){         //一类生产
                 if(enterpriseIsNewVersion == true){
                     gspFirstRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 System.out.println();
                 gspFirstRecordForm.setEnterpriseId(enterpriseId);
 //                gspFirstRecordForm.setOperateType(Constant.LICENSE_TYPE_FIRSTRECORD);
-                gspFirstRecordService.addGspFirstRecord(enterpriseId,gspFirstRecordForm,gspFirstRecordForm.getScopArr(),gspFirstRecordForm.getRecordId(),gspFirstRecordForm.getOpType());
+                gspFirstRecordService.addGspFirstRecord(enterpriseId,oldEnterpriseId,gspFirstRecordForm,gspFirstRecordForm.getScopArr(),gspFirstRecordForm.getRecordId(),gspFirstRecordForm.getOpType());
             }
 
-            if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){
+            if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){        //二类经营
                 if(enterpriseIsNewVersion == true){
                     gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
-                gspSecondRecordService.addGspSecondRecord(enterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
+                gspSecondRecordService.addGspSecondRecord(enterpriseId,oldEnterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
 
             return Json.success("保存成功");
@@ -388,7 +390,15 @@ public class GspEnterpriceService extends BaseService {
     public Json getGspBusinessLicense(String enterpriceId){
         GspBusinessLicenseQuery query = new GspBusinessLicenseQuery();
         query.setEnterpriseId(enterpriceId);
-        query.setIsUse(Constant.IS_USE_YES);
+
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
+
         GspBusinessLicense gspBusinessLicense = gspBusinessLicenseService.getGspBusinessLicenseBy(query);
         return Json.success("",gspBusinessLicense);
     }
@@ -401,6 +411,13 @@ public class GspEnterpriceService extends BaseService {
         GspMedicalRecordQuery query = new GspMedicalRecordQuery();
         query.setEnterpriseId(enterpriceId);
         query.setIsUse(Constant.IS_USE_YES);
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
         GspMedicalRecord gspMedicalRecord = gspMedicalRecordService.getGspMedicalRecordBy(query);
         return Json.success("",gspMedicalRecord);
     }
@@ -413,6 +430,13 @@ public class GspEnterpriceService extends BaseService {
         GspOperateLicenseQuery query = new GspOperateLicenseQuery();
         query.setEnterpriseId(enterpriceId);
         query.setIsUse(Constant.IS_USE_YES);
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
         query.setOperateType(Constant.LICENSE_TYPE_OPERATE);
         GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
         return Json.success("",gspOperateLicense);
@@ -429,6 +453,15 @@ public class GspEnterpriceService extends BaseService {
         GspOperateLicenseQuery query = new GspOperateLicenseQuery();
         query.setEnterpriseId(enterpriceId);
         query.setIsUse(Constant.IS_USE_YES);
+
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
+
         query.setOperateType(Constant.LICENSE_TYPE_PROD);
         GspOperateLicense gspOperateLicense = gspOperateLicenseService.getGspOperateLicenseBy(query);
         return Json.success("",gspOperateLicense);
@@ -446,6 +479,13 @@ public class GspEnterpriceService extends BaseService {
         GspFirstRecordQuery query = new GspFirstRecordQuery();
         query.setEnterpriseId(enterpriceId);
         query.setIsUse(Constant.IS_USE_YES);
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
         GspFirstRecord gspFirstRecord = gspFirstRecordService.getGspFirstRecordBy(query);
         return Json.success("",gspFirstRecord);
     }
@@ -459,6 +499,13 @@ public class GspEnterpriceService extends BaseService {
         GspSecondRecordQuery query = new GspSecondRecordQuery();
         query.setEnterpriseId(enterpriceId);
         query.setIsUse(Constant.IS_USE_YES);
+        GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryById(query.getEnterpriseId());
+        if("1".equals(gspEnterpriseInfo.getIsUse())){
+            query.setIsUse(Constant.IS_USE_YES);
+        }else{
+            query.setIsUse(Constant.IS_USE_NO);
+//            criteria.setTotalCount(1);
+        }
         GspSecondRecord gspSecondRecord = gspSecondRecordService.getGspSecondRecordBy(query);
         return Json.success("",gspSecondRecord);
     }

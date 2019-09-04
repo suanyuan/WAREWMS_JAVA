@@ -106,7 +106,7 @@ public class CouRequestHeaderService extends BaseService {
             for (InvLotLocId invLotLocId : listAdd) {
                 CouRequestDetails couRequestDetails = new CouRequestDetails();
                 couRequestDetails.setCycleCountno(resultNo);
-                couRequestDetails.setCycleCountlineno(couRequestDetailsMybatisDao.getCycleCountlineno(resultNo) + 1+"");
+                couRequestDetails.setCycleCountlineno(couRequestDetailsMybatisDao.getCycleCountlineno(resultNo) + 1);
                 couRequestDetails.setCustomerid(invLotLocId.getCustomerid());
                 couRequestDetails.setSku(invLotLocId.getSku());
                 couRequestDetails.setLocationid(invLotLocId.getLocationid());
@@ -149,22 +149,22 @@ public class CouRequestHeaderService extends BaseService {
 //        return json;
 //    }
 //
-//    //删除养护计划单
-//    public Json deleteDocMtHeader(String id) {
-//        Json json = new Json();
-//        DocMtHeader docMtHeader = couRequestHeaderMybatisDao.queryById(id);
-//        if (docMtHeader != null && docMtHeader.getMtstatus().equals("00")) {
-//            couRequestHeaderMybatisDao.delete(docMtHeader);
-//            docMtDetailsMybatisDao.delete(docMtHeader);
-//            json.setSuccess(true);
-//            json.setMsg("订单删除成功!");
-//        } else {
-//            json.setSuccess(false);
-//            json.setMsg("订单不可删除或者不存在!");
-//        }
-//
-//        return json;
-//    }
+    //删除养护计划单
+    public Json deleteCouRequstHeader(String id) {
+        Json json = new Json();
+        CouRequestHeader couRequestHeader = couRequestHeaderMybatisDao.queryById(id);
+        if (couRequestHeader != null) {
+            couRequestHeaderMybatisDao.delete(couRequestHeader);
+            couRequestDetailsMybatisDao.delete(couRequestHeader);
+            json.setSuccess(true);
+            json.setMsg("删除成功!");
+        } else {
+            json.setSuccess(false);
+            json.setMsg("单号不存在!");
+        }
+
+        return json;
+    }
 //
 //    public List<EasyuiCombobox> getDocMtHeaderCombobox() {
 //        List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();

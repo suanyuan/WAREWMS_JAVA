@@ -19,8 +19,15 @@
                                 <input type='text' id='sku' class='easyui-textbox' size='16'
                                        data-options=''/>
                             </td>
-                            <tr>
+                            <th>产品线</th>
+                            <td>
+                                <input type='text' id='productLineName' class='easyui-combobox' size='16'
+                                       data-options="url:'<c:url value="/productLineController.do?getCombobox"/>',
+													valueField: 'id',
+													textField: 'value'"/>
+                            </td>
                             </tr>
+                            <tr>
                             <th>生产批号</th>
                             <td>
                                 <input type='text' id='lotatt04' class='easyui-textbox' size='16'
@@ -31,7 +38,7 @@
                                 <input type='text' id='lotatt05' class='easyui-textbox' size='16'
                                        data-options=''/>
                             </td>
-                            <td>
+                            <td colspan="2">
                                 <a onclick='doxDialogSearch();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
                                 <a onclick='ezuiDialogxToolbarClear();' class='easyui-linkbutton'

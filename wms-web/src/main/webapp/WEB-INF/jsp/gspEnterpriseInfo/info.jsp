@@ -1,4 +1,5 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <form id='ezuiFormInfo' method='post'>
     <input type='hidden' id='gspEnterpriseInfoId' name='gspEnterpriseInfoId'/>
     <table>
@@ -17,7 +18,7 @@
         </tr>
         <tr>
             <th>企业名称</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox'  data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.enterpriseName}" id="enterpriseName" name='enterpriseName' class='easyui-textbox'  data-options='required:true,width:200<c:if test="${not empty enterpriseId}">,editable:false</c:if>'/></td>
         </tr>
         <tr>
             <th>企业类型</th>
@@ -99,7 +100,7 @@
             onLoadSuccess:function(){
                 $("#ezuiFormInfo #enterpriseType").combobox("select",enterpriseType);
             },onChange:function (newValue,oldValue) {
-                if(newValue == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || newValue == CODE_ENT_TYP.CODE_ENT_TYP_JY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_SCJY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_GW){
+                if(newValue == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || newValue == CODE_ENT_TYP.CODE_ENT_TYP_JY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_SCJY || newValue == CODE_ENT_TYP.CODE_ENT_TYP_GW ||newValue == CODE_ENT_TYP.CODE_ENT_TYP_YL){
                     $("#ezuiFormInfo input[id='contacts']").textbox({"required":false});
                     $("#ezuiFormInfo input[id='contactsPhone']").textbox({"required":false})
                 }else{
@@ -108,6 +109,8 @@
                 }
             }
         });
+
+
 
     })
 

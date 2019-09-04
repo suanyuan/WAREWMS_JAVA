@@ -50,14 +50,14 @@ public class GspSupplierController {
 	public ModelAndView toAdd(String id) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		Map<String, Object> model = new HashMap<String, Object>();
-//		model.put("id", id);
+		model.put("id", id);
 		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
 		model.put("gspSupplier", gspSupplier);
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);
 
-		//model.put("specsId", specsId);
+//		model.put("specsId", specsId);
 		model.put("isUse", 1);
 		return new ModelAndView("gspSupplier/info", model);
 	}

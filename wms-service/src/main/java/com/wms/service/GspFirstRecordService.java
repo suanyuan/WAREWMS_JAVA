@@ -90,7 +90,7 @@ public class GspFirstRecordService extends BaseService {
 	 * @param gspFirstRecordId 营业执照id
 	 * @return
 	 */
-	public Json addGspFirstRecord(String enterpriceId,GspFirstRecordForm gspFirstRecordForm,String operateDetailStr,String gspFirstRecordId,String opType) throws Exception{
+	public Json addGspFirstRecord(String enterpriceId,String oldEnterpriseId,GspFirstRecordForm gspFirstRecordForm,String operateDetailStr,String gspFirstRecordId,String opType) throws Exception{
 		//try{
 		//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
 		List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -133,6 +133,28 @@ public class GspFirstRecordService extends BaseService {
 		}else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
 			//把旧证数据作废
 			updateGspBusinessLicenseTagById(gspFirstRecordId,Constant.IS_USE_NO);
+
+
+			//查询换证后报废企业的所有历史营业执照
+			GspFirstRecordQuery query = new GspFirstRecordQuery();
+			EasyuiDatagridPager pager = new EasyuiDatagridPager();
+			MybatisCriteria criteria = new MybatisCriteria();
+			if(oldEnterpriseId!=null) {
+				query.setEnterpriseId(oldEnterpriseId);
+				criteria.setCondition(query);
+				criteria.setCurrentPage(pager.getPage());
+				criteria.setPageSize(9999);
+				List<GspFirstRecord> gF = gspFirstRecordMybatisDao.queryByList(criteria);
+				//循环插入新建的企业版本中
+				for (GspFirstRecord gspOperateOrProdLicense : gF) {
+					gspOperateOrProdLicense.setRecordId(RandomUtil.getUUID());
+					gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
+					gspOperateOrProdLicense.setCreateId(getLoginUserId());
+					gspFirstRecordMybatisDao.add(gspOperateOrProdLicense);
+				}
+			}
+
+
 			//保存新证数据
 			String newBusinessLicenseId = RandomUtil.getUUID();
 			gspFirstRecordForm.setEnterpriseId(enterpriceId);

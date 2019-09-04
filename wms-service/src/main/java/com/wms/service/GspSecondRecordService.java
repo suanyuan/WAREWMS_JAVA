@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -36,6 +37,7 @@ public class GspSecondRecordService extends BaseService {
 		BeanUtils.copyProperties(gspSecondRecordForm, gspSecondRecord);
 		gspSecondRecord.setCreateId(getLoginUserId());
 		gspSecondRecord.setIsUse(Constant.IS_USE_YES);
+        gspSecondRecord.setCreateDate(new Date());
 		gspSecondRecordMybatisDao.add(gspSecondRecord);
 		json.setSuccess(true);
 		return json;
@@ -98,7 +100,7 @@ public class GspSecondRecordService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspSecondRecord(String enterpriceId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType)throws Exception{
+	public Json addGspSecondRecord(String enterpriceId,String oldEnterpriseId,GspSecondRecordForm gspSecondRecordForm,String operateDetailStr,String gspSecondRecordId,String opType)throws Exception{
 		//try{
 			//GspSecondRecordForm gspSecondRecordForm = JSON.parseObject(secondRecordFormStr,GspSecondRecordForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -142,6 +144,28 @@ public class GspSecondRecordService extends BaseService {
 			}else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
 				//把旧证数据作废
 				updateGspSecondRecordTagById(gspSecondRecordId,Constant.IS_USE_NO);
+
+				//查询换证后报废企业的所有历史营业执照
+				GspSecondRecordQuery query = new GspSecondRecordQuery();
+				EasyuiDatagridPager pager = new EasyuiDatagridPager();
+				MybatisCriteria criteria = new MybatisCriteria();
+				if(oldEnterpriseId!=null) {
+					query.setEnterpriseId(oldEnterpriseId);
+					criteria.setCondition(query);
+					criteria.setCurrentPage(pager.getPage());
+					criteria.setPageSize(9999);
+					List<GspSecondRecord> gS = gspSecondRecordMybatisDao.queryByList(criteria);
+					//循环插入新建的企业版本中
+					for (GspSecondRecord gspSecondRecord : gS) {
+						gspSecondRecord.setRecordId(RandomUtil.getUUID());
+						gspSecondRecord.setEnterpriseId(enterpriceId);
+//					gspSecondRecord.setCreateDate(new Date());
+						gspSecondRecord.setCreateId(getLoginUserId());
+						gspSecondRecordMybatisDao.add(gspSecondRecord);
+					}
+				}
+
+
 				//保存新证数据
 				String newOperateLicenseId = RandomUtil.getUUID();
 				gspSecondRecordForm.setEnterpriseId(enterpriceId);

@@ -50,12 +50,15 @@ $(function() {
 			/* {field: 'instockDetail',		title: '打印操作',	width: 7,formatter:function(value,rowData,rowIndex){
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
 			}}, */
+            {field: 'activeFlag',		title: '激活',	width: 50, formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }},
+            {field: 'firstop',		title: '首营状态',	width: 100 ,formatter:firstStateTypeFormatter},
 
-			{field: 'customerid',		title: '货主',	width: 100},
+            {field: 'customerid',		title: '货主',	width: 100},
 			{field: 'descrC',		title: '规格',	width: 150 },
 			{field: 'descrE',		title: '型号',	width: 150 },
             {field: 'sku',		title: '产品代码',	width: 150 },
-			{field: 'firstop',		title: '首营状态',	width: 100 ,formatter:firstStateTypeFormatter},
 			{field: 'packid',		title: '包装规格代码',	width: 100,hidden:true },
             {field: 'descr',		title: '包装描述',	width: 100},
 			{field: 'reservedfield01',		title: '产品名称',	width: 200 },
@@ -67,9 +70,7 @@ $(function() {
 
             {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
             {field: 'supplierNum',		title: '产品供应商数量',	width: 250 },
-            {field: 'activeFlag',		title: '激活',	width: 50, formatter:function(value,rowData,rowIndex){
-                    return rowData.activeFlag == '1' ? '是' : '否';
-                }},
+
             {field: 'addtime',		title: '创建时间',	width: 100},
             {field: 'addwho',		title: '创建人',	width: 100},
             {field: 'edittime',		title: '编辑时间',	width: 100 },

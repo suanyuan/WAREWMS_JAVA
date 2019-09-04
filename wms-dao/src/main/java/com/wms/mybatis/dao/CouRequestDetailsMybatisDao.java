@@ -1,6 +1,8 @@
 package com.wms.mybatis.dao;
 
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -8,6 +10,8 @@ package com.wms.mybatis.dao;
  */
 public interface CouRequestDetailsMybatisDao extends BaseDao {
 
-    long getCycleCountlineno(String id);
+    int getCycleCountlineno(String id);
+    //根据单号和查询条件获得细单
+    <T> List<T> queryListById(Object id);
 
 }

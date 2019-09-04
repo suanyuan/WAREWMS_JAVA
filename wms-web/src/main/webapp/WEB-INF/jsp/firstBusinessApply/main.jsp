@@ -24,7 +24,7 @@ $(function() {
 		pageList : [100, 50, 200],
 		fit: true,
 		border: false,
-		fitColumns : true,
+		fitColumns : false,
 		nowrap: true,
 		striped: true,
 		collapsible:false,
@@ -34,19 +34,20 @@ $(function() {
 		idField : 'applyId',
 		columns : [[
             {field: 'ck',checkbox:true },
-			{field: 'applyId',		title: '申请单号',	width: 180},
+            {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
             {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
-			{field: 'clientId',		title: '委托客户',	width: 100 },
+
+            {field: 'applyId',		title: '申请单号',	width: 180},
+			// {field: 'clientId',		title: '委托客户',	width: 100 },
             {field: 'clientName',		title: '委托客户名称',	width: 180 },
 
-            {field: 'supplierId',		title: '供应商',	width: 150 },
+            // {field: 'supplierId',		title: '供应商',	width: 150 },
             {field: 'supplierName',		title: '供应商名称',	width: 250 },
 
             {field: 'productCode',		title: '产品代码',	width: 180 },
             {field: 'productName',		title: '产品名称',	width: 200 },
 			{field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 100 },
-			{field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter}
 		]],
 		onDblClickCell: function(index,field,value){
 			// edit();// TODO 不能修改需要提示

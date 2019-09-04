@@ -49,4 +49,6 @@ private String lotatt01;  //生产日期
 // bas_sku
   private String descrc;//规格
   private String descre;//型号
+  //用于打印的单位
+  private String uomName;
 }

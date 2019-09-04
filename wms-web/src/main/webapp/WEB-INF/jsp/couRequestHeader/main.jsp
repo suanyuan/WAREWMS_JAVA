@@ -9,10 +9,16 @@
 <script type='text/javascript'>
 var processType;
 var ezuiMenu;        //右键菜单
-var ezuiForm;        //二级dialog form
-var ezuiDialog;      //二级dialog
-var ezuiDetailsDatagrid;//二级datagrid
+
+var ezuiForm;        //生成盘点任务dialog form
+var ezuiDialog;      //生成盘点任务dialog
+var ezuiDetailsDatagrid;//生成盘点任务datagrid
+
+var ShowEzuiDialog;//双击查看盘点任务datagrid
+var ShowEzuiDetailsDatagrid;//双击查看盘点任务datagrid
+
 var ezuiDatagrid;    //主页datagird
+
 var closeGenerateInventoryPlanForm;       //关闭计划dialog form
 var closeGenerateInventoryPlanDialog;     //关闭计划dialog
 $(function() {
@@ -20,7 +26,7 @@ $(function() {
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
 //主页datagird
 	closeGenerateInventoryPlanForm = $('#closeGenerateInventoryPlanForm').form();   //关闭计划dialog form
-
+//主页Datagrid
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/couRequestHeaderController.do?showDatagrid"/>',
 		method:'POST',
@@ -54,7 +60,7 @@ $(function() {
 			// {field: 'userdefine5',		title: '待输入栏位12',	width: 61 }
 		]],
 		onDblClickCell: function(index,field,value){
-			edit();
+			ShowGenerateInventory();
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -68,7 +74,7 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-//一级dialog初始化
+//生成盘点任务dialog初始化
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
 		top:0,
@@ -79,7 +85,7 @@ $(function() {
 			ezuiFormClear(ezuiToolbar);
 		}
 	}).dialog('close');
-//二级datagird初始化
+//生成盘点任务datagrid初始化
 	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
 		url: '<c:url value="/couRequestHeaderController.do?getcouRequestInfo"/>',
 		method: 'POST',
@@ -101,6 +107,7 @@ $(function() {
 			{field: 'qty', title: '系统数量', width: 100},
 			{field: 'lotatt04', title: '生产批号', width: 100},
 			{field: 'lotatt05', title: '序列号', width: 100},
+			{field: 'productLineName', title: '产品线', width: 100},
 		]],
 		onDblClickCell: function (index, field, value) {
 
@@ -111,6 +118,50 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
+//双击查看盘点任务datagrid初始化
+	ShowEzuiDetailsDatagrid = $('#ShowEzuiDetailsDatagrid').datagrid({
+		url: '<c:url value="/couRequestDetailsController.do?getcouRequestInfoBycycleCountno"/>',
+		method: 'POST',
+		toolbar: '#ShowEzuiToolbar',
+		fit: true,
+		border: false,
+		fitColumns: false,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		rownumbers: true,
+		singleSelect:true,
+		columns: [[
+			{field: 'cycleCountlineno', title: '行号', width: 71},
+			{field: 'customerid', title: '货主', width: 71},
+			{field: 'sku', title: '产品代码', width: 150},
+			{field: 'locationid', title: '库位', width: 100},
+			{field: 'qtyInv', title: 'qtyInv', width: 70},
+			{field: 'qtyAct', title: 'qtyAct', width: 70},
+			{field: 'lotatt04', title: '生产批号', width: 100},
+			{field: 'lotatt05', title: '序列号', width: 100},
+			{field: 'addtime', title: '创建时间', width: 150},
+			{field: 'addwho', title: '创建人', width: 70},
+			{field: 'edittime', title: '编辑时间', width: 150},
+			{field: 'editwho', title: '编辑人', width: 70},
+		]],
+		onDblClickCell: function (index, field, value) {
+
+		},
+		onLoadSuccess: function (data) {
+		},
+		onClose:function(){
+		}
+	});
+//双击查看盘点任务dialog初始化
+	ShowEzuiDialog = $('#ShowEzuiDialog').dialog({
+		modal : true,
+		top:0,
+		left:200,
+		buttons : '#ShowEzuiDialogBtn',
+		onClose : function() {
+		}
+	}).dialog('close');
 //关闭计划dialog
 	closeGenerateInventoryPlanDialog = $('#closeGenerateInventoryPlanDialog').dialog({
 		modal : true,
@@ -162,18 +213,19 @@ var edit = function(){
 //删除
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row.mtstatus!="00"){
-		$.messager.show({
-			msg : "只有养护状态为任务创建的状态才能删除!", title : '<spring:message code="common.message.prompt"/>'
-		});
-		return;
-	}
+	<%--if(row.mtstatus!="00"){--%>
+	<%--	$.messager.show({--%>
+	<%--		msg : "只有养护状态为任务创建的状态才能删除!", title : '<spring:message code="common.message.prompt"/>'--%>
+	<%--	});--%>
+	<%--	return;--%>
+	<%--}--%>
 	if(row){
+		var cycleCountno=row.cycleCountno;
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
 				$.ajax({
 					url : 'couRequestHeaderController.do?delete',
-					data : {id : row.mtno},
+					data : {cycleCountno : cycleCountno},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
@@ -202,70 +254,6 @@ var del = function(){
 var GenerateInventoryPlan = function(){
 	doxDialogSearch();//清空datagrid
 	ezuiDialog.dialog('open');
-};
-//关闭任务单
-var closeGenerateInventoryPlan = function() {
-	var row = ezuiDatagrid.datagrid('getSelected');
-	if (row) {
-		closeGenerateInventoryPlanDialog.dialog('open');
-	}else{
-		$.messager.show({
-			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
-		});
-	}
-
-}
-//提交关闭任务单
-var commitCloseGenerateInventoryPlan = function(){
-	url = '<c:url value="/couRequestHeaderController.do?closegenerationPlan"/>';
-	var row = ezuiDatagrid.datagrid('getSelected');
-	var msg='';
-	if(closeGenerateInventoryPlanForm.form('validate')){
-		var data=new Object();
-		data.mtno=row.mtno;
-		data.storageFlag=$("#closeGenerateInventoryPlanForm #storageFlag").combobox('getValue');
-		data.flowFlag=$("#closeGenerateInventoryPlanForm #flowFlag").combobox('getValue');
-		data.signFlag=$("#closeGenerateInventoryPlanForm #signFlag").combobox('getValue');
-		data.fenceFlag=$("#closeGenerateInventoryPlanForm #fenceFlag").combobox('getValue');
-		data.sanitationFlag=$("#closeGenerateInventoryPlanForm #sanitationFlag").textbox('getValue');
-
-			$.messager.progress({
-				text: '<spring:message code="common.message.data.processing"/>', interval: 100
-			});
-			$.ajax({
-				url: url,
-				data:data,
-				dataType: 'json',
-				error: function (a, b, c) {
-					//alert(a + b + c);
-				},
-				success: function (result) {
-					try {
-						if (result.success) {
-							msg = result.msg;
-						} else {
-							msg = result.msg;
-
-						}
-					} catch (e) {
-
-							msg: '数据错误!';
-
-					}finally {
-						$.messager.show({
-							msg:msg, title: '<spring:message code="common.message.prompt"/>'
-						});
-						$.messager.progress('close');
-						closeGenerateInventoryPlanDialog.dialog('close');
-						ezuiDatagrid.datagrid('reload');
-					}
-				}
-			});
-	}else{
-		$.messager.show({
-			msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
-		});
-	}
 };
 //生成任务 选择条数之后
 var GenerateInventoryPlanT = function(){
@@ -332,6 +320,87 @@ var GenerateInventoryPlanT = function(){
 
 	}
 };
+//查看盘点信息
+var ShowGenerateInventory = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row){
+		 var cycleCountno=row.cycleCountno;
+		 $("#ShowEzuiToolbar #cycleCountno").val(cycleCountno);
+		ShowEzuiDetailsDatagrid.datagrid('load',{
+			cycleCountno:cycleCountno
+		});
+		ShowEzuiDialog.dialog('setTitle',"盘点单号:"+cycleCountno);
+		ShowEzuiDialog.dialog('open');
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
+//关闭任务单
+var closeGenerateInventoryPlan = function() {
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if (row) {
+		closeGenerateInventoryPlanDialog.dialog('open');
+	}else{
+		$.messager.show({
+			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
+
+}
+//提交关闭任务单
+var commitCloseGenerateInventoryPlan = function(){
+	url = '<c:url value="/couRequestHeaderController.do?closegenerationPlan"/>';
+	var row = ezuiDatagrid.datagrid('getSelected');
+	var msg='';
+	if(closeGenerateInventoryPlanForm.form('validate')){
+		var data=new Object();
+		data.mtno=row.mtno;
+		data.storageFlag=$("#closeGenerateInventoryPlanForm #storageFlag").combobox('getValue');
+		data.flowFlag=$("#closeGenerateInventoryPlanForm #flowFlag").combobox('getValue');
+		data.signFlag=$("#closeGenerateInventoryPlanForm #signFlag").combobox('getValue');
+		data.fenceFlag=$("#closeGenerateInventoryPlanForm #fenceFlag").combobox('getValue');
+		data.sanitationFlag=$("#closeGenerateInventoryPlanForm #sanitationFlag").textbox('getValue');
+
+		$.messager.progress({
+			text: '<spring:message code="common.message.data.processing"/>', interval: 100
+		});
+		$.ajax({
+			url: url,
+			data:data,
+			dataType: 'json',
+			error: function (a, b, c) {
+				//alert(a + b + c);
+			},
+			success: function (result) {
+				try {
+					if (result.success) {
+						msg = result.msg;
+					} else {
+						msg = result.msg;
+
+					}
+				} catch (e) {
+
+					msg: '数据错误!';
+
+				}finally {
+					$.messager.show({
+						msg:msg, title: '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+					closeGenerateInventoryPlanDialog.dialog('close');
+					ezuiDatagrid.datagrid('reload');
+				}
+			}
+		});
+	}else{
+		$.messager.show({
+			msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
 //一级dialog提交
 var commit = function(){
 	var url = '';
@@ -393,20 +462,46 @@ var doSearch = function(){
 		userdefine5 : $('#userdefine5').val()
 	});
 };
-//二级datagrid查询
+//生成盘点任务datagrid查询
 var doxDialogSearch = function(){
 	ezuiDetailsDatagrid.datagrid('load', {
-		customerid : $('#customerid').textbox('getValue'),
-		sku : $('#sku').textbox('getValue'),
-		lotatt04 : $('#lotatt04').textbox('getValue'),
-		lotatt05 : $('#lotatt05').textbox('getValue'),
+		customerid : $('#ezuiToolbar #customerid').textbox('getValue'),
+		sku : $('#ezuiToolbar #sku').textbox('getValue'),
+		lotatt04 : $('#ezuiToolbar #lotatt04').textbox('getValue'),
+		lotatt05 : $('#ezuiToolbar #lotatt05').textbox('getValue'),
+		productLineName : $('#ezuiToolbar #productLineName').combobox('getText'),
 	});
 };
+//双击盘点任务datagrid查询
+var dosDialogSearch = function(){
+	ShowEzuiDetailsDatagrid.datagrid('load', {
+		cycleCountno : $("#ShowEzuiToolbar #cycleCountno").val(),
+		customerid : $('#ShowEzuiToolbar #customerid').textbox('getValue'),
+		sku : $('#ShowEzuiToolbar #sku').textbox('getValue'),
+		lotatt04 : $('#ShowEzuiToolbar #lotatt04').textbox('getValue'),
+		lotatt05 : $('#ShowEzuiToolbar #lotatt05').textbox('getValue'),
+		productLineName : $('#ShowEzuiToolbar #productLineName').combobox('getText'),
+		lotatt12 : $('#ShowEzuiToolbar #lotatt12').textbox('getText'),
+		locationid : $('#ShowEzuiToolbar #locationid').textbox('getText'),
+	});
+};
+//生成盘点任务datagrid清除
 var ezuiDialogxToolbarClear= function(){
 	$("#ezuiToolbar #customerid").textbox('clear');
 	$("#ezuiToolbar #sku").textbox('clear');
 	$("#ezuiToolbar #lotatt04").textbox('clear');
 	$("#ezuiToolbar #lotatt05").textbox('clear');
+	$("#ezuiToolbar #productLineName").combobox('clear');
+};
+//双击盘点任务datagrid清除
+var ezuiDialogsToolbarClear= function(){
+	$("#ShowEzuiToolbar #customerid").textbox('clear');
+	$("#ShowEzuiToolbar #sku").textbox('clear');
+	$("#ShowEzuiToolbar #lotatt04").textbox('clear');
+	$("#ShowEzuiToolbar #lotatt05").textbox('clear');
+	$("#ShowEzuiToolbar #productLineName").combobox('clear');
+	$("#ShowEzuiToolbar #lotatt12").textbox('clear');
+	$("#ShowEzuiToolbar #locationid").textbox('clear');
 };
 </script>
 </head>
@@ -509,5 +604,6 @@ var ezuiDialogxToolbarClear= function(){
 	</div>
 
 	<c:import url='/WEB-INF/jsp/couRequestHeader/dialog.jsp'/>
+	<c:import url='/WEB-INF/jsp/couRequestHeader/ShowDialog.jsp'/>
 </body>
 </html>

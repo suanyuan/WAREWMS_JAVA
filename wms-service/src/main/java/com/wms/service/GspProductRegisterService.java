@@ -273,7 +273,9 @@ public class GspProductRegisterService extends BaseService {
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> queryProductPageListByRegisterId(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query){
 		EasyuiDatagrid<GspProductRegisterSpecsVO> datagrid = new EasyuiDatagrid<>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		query.setIsUse(Constant.IS_USE_YES);
+		if(!StringUtils.isEmpty(query.getIsUse())){
+			query.setIsUse(Constant.IS_USE_YES);
+		}
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setCondition(query);

@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,5 +32,19 @@ public class DocMtHeader implements Serializable {
   private Date edittime;
   private String editwho;
   private String warehouseid;
+  private List<DocMtDetails> detls;
+
+
+  //用于打印
+  private String storageFlagName;           //贮存条件 1||0
+  private String flowFlagName;              //作业流程 1||0
+  private String signFlagName;              //标志清晰 1||0
+  private String fenceFlagName;             //防护措施 1||0
+  private String sanitationFlagName;        //卫生环境 1||0
+
+  public DocMtHeader() {
+  }
+
+
 
 }

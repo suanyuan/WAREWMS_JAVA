@@ -330,6 +330,36 @@ var commitConservation = function(){
 	}
 
 };
+
+
+/* 打印养护检查记录 */
+var  printMtDetails = function () {
+	var mtNoList;
+	var mtlineNoList;
+	var rows = $('#ezuiDatagrid').datagrid('getSelections');
+	$.each(rows, function(index, item){
+		if (mtlineNoList == null && mtNoList == null ) {
+			mtNoList = item.mtno;
+			mtlineNoList = item.mtlineno;
+		} else {
+			mtNoList = mtNoList + ','+ item.mtno;
+			mtlineNoList = mtlineNoList + ','+ item.mtlineno;
+		}
+	});
+	if(mtlineNoList == null ){
+		return;
+	}
+	if(mtNoList == null){
+		return;
+	}
+
+	window.open(sy.bp()+"/docMtDetailsController.do?printMtDetails&mtNo="+mtNoList+"&mtlineNo="+mtlineNoList);
+}
+
+
+
+
+
 //养护作业
 var ConservationWork = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
@@ -479,6 +509,7 @@ var selectConservation = function () {
 <%--					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+					<a onclick='printMtDetails()' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印养护检查记录</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

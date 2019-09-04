@@ -49,13 +49,13 @@ public class GspBusinessLicense  implements Serializable {
 
 	private String createId;
 
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date createDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private java.util.Date createDate;
 
 	private String editId;
 
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date editDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private java.util.Date editDate;
 
 	private String isUse;
 

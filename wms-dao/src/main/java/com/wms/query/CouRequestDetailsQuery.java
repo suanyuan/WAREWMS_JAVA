@@ -19,6 +19,12 @@ public class CouRequestDetailsQuery{
 	private String userdefined2;
 	private String userdefined3;
 
+//盘点任务查询
+	private String productLineName;//产品线
+	private String lotatt12;//产品名称
+
+
+
 	public String getCycleCountno() {
 		return cycleCountno;
 	}
@@ -145,5 +151,21 @@ public class CouRequestDetailsQuery{
 
 	public void setUserdefined3(String userdefined3) {
 		this.userdefined3 = userdefined3;
+	}
+
+	public String getProductLineName() {
+		return productLineName;
+	}
+
+	public void setProductLineName(String productLineName) {
+		this.productLineName = productLineName;
+	}
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
 	}
 }

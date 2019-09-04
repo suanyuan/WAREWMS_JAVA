@@ -1,10 +1,16 @@
 package com.wms.controller;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.wms.entity.DocMtHeader;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -102,5 +108,22 @@ public class DocMtDetailsController {
 	public List<EasyuiCombobox> getCombobox() {
 		return docMtDetailsService.getDocMtDetailsCombobox();
 	}
+
+	/**
+	 *  打印养护检查记录
+     *
+	*/
+    @Login
+	@RequestMapping(params = "printMtDetails")
+	public String printMtDetails(String mtNo, String  mtlineNo ,Model model){
+
+        List<DocMtHeader> docMtHeaderList = docMtDetailsService.printMtDetails(mtNo,mtlineNo);
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(docMtHeaderList);
+        model.addAttribute("url", "WEB-INF/jasper/report1MAX.jasper");
+        model.addAttribute("format", "pdf");
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView";
+
+    }
 
 }

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("gspEnterpriseInfoService")
@@ -115,8 +116,11 @@ public class GspEnterpriseInfoService extends BaseService {
 
 	public Json editGspEnterpriseInfo(GspEnterpriseInfoForm gspEnterpriseInfoForm) {
 		Json json = new Json();
+		SfcUserLogin userLogin =  SfcUserLoginUtil.getLoginUser();
 		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspEnterpriseInfoForm.getEnterpriseId());
 		BeanUtils.copyProperties(gspEnterpriseInfoForm, gspEnterpriseInfo);
+		gspEnterpriseInfo.setEditId(userLogin.getId());
+//		gspEnterpriseInfo.setEditDate(new Date());
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
 		json.setSuccess(true);
 		return json;
@@ -160,6 +164,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		GspEnterpriseInfoForm form = new GspEnterpriseInfoForm();
 		form.setEnterpriseId(id);
 		form.setIsUse(tag);
+		form.setEditId(getLoginUserId());
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
 		BeanUtils.copyProperties(form,gspEnterpriseInfo);
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);
