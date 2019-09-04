@@ -146,27 +146,6 @@ public class GspOperateLicenseService extends BaseService {
 				//把旧证数据作废
 				updateGspBusinessLicenseTagById(gspOperateLicenseId,Constant.IS_USE_NO);
 
-				//查询换证后报废企业的所有历史营业执照
-				GspOperateLicenseQuery query = new GspOperateLicenseQuery();
-				EasyuiDatagridPager pager = new EasyuiDatagridPager();
-				MybatisCriteria criteria = new MybatisCriteria();
-				query.setEnterpriseId(oldEnterpriseId);
-				query.setOperateType(gspOperateLicenseForm.getOperateType());
-				criteria.setCondition(query);
-				criteria.setCurrentPage(pager.getPage());
-				criteria.setPageSize(9999);
-				List<GspOperateLicense> gO = gspOperateLicenseMybatisDao.queryByList(criteria);
-				//循环插入新建的企业版本中
-				for(GspOperateLicense  gspOperateOrProdLicense:gO){
-					gspOperateOrProdLicense.setOperateId(RandomUtil.getUUID());
-					gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
-					gspOperateOrProdLicense.setOperateType(LicenseType);
-//					gspOperateOrProdLicense.setCreateDate(new Date());
-					gspOperateOrProdLicense.setCreateId(getLoginUserId());
-					gspOperateLicenseMybatisDao.add(gspOperateOrProdLicense);
-				}
-
-
 				//保存新证数据
 				String newOperateLicenseId = RandomUtil.getUUID();
 				gspOperateLicenseForm.setEnterpriseId(enterpriceId);
@@ -182,6 +161,30 @@ public class GspOperateLicenseService extends BaseService {
 						gspOperateDetailService.addGspOperateDetail(g,LicenseType);
 					}
 				}
+
+				//查询换证后报废企业的所有历史营业执照
+				GspOperateLicenseQuery query = new GspOperateLicenseQuery();
+				EasyuiDatagridPager pager = new EasyuiDatagridPager();
+				MybatisCriteria criteria = new MybatisCriteria();
+				if(oldEnterpriseId!=null) {
+					query.setEnterpriseId(oldEnterpriseId);
+					query.setOperateType(gspOperateLicenseForm.getOperateType());
+					criteria.setCondition(query);
+					criteria.setCurrentPage(pager.getPage());
+					criteria.setPageSize(9999);
+					List<GspOperateLicense> gO = gspOperateLicenseMybatisDao.queryByList(criteria);
+					//循环插入新建的企业版本中
+					for (GspOperateLicense gspOperateOrProdLicense : gO) {
+						gspOperateOrProdLicense.setOperateId(RandomUtil.getUUID());
+						gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
+						gspOperateOrProdLicense.setOperateType(LicenseType);
+
+						gspOperateOrProdLicense.setCreateId(getLoginUserId());
+						gspOperateLicenseMybatisDao.add(gspOperateOrProdLicense);
+					}
+				}
+
+
 			}
 
 			return Json.error("保存许可证信息失败");

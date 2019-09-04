@@ -146,20 +146,21 @@ public class GspMedicalRecordService extends BaseService {
 			GspMedicalRecordQuery query = new GspMedicalRecordQuery();
 			EasyuiDatagridPager pager = new EasyuiDatagridPager();
 			MybatisCriteria criteria = new MybatisCriteria();
-			query.setEnterpriseId(oldEnterpriseId);
-			criteria.setCondition(query);
-			criteria.setCurrentPage(pager.getPage());
-			criteria.setPageSize(9999);
-			List<GspMedicalRecord> gM = gspMedicalRecordMybatisDao.queryByList(criteria);
-			//循环插入新建的企业版本中
-			for(GspMedicalRecord  gspMedicalRecord:gM){
-				gspMedicalRecord.setMedicalId(RandomUtil.getUUID());
-				gspMedicalRecord.setEnterpriseId(enterpriceId);
+			if(oldEnterpriseId!=null) {
+				query.setEnterpriseId(oldEnterpriseId);
+				criteria.setCondition(query);
+				criteria.setCurrentPage(pager.getPage());
+				criteria.setPageSize(9999);
+				List<GspMedicalRecord> gM = gspMedicalRecordMybatisDao.queryByList(criteria);
+				//循环插入新建的企业版本中
+				for (GspMedicalRecord gspMedicalRecord : gM) {
+					gspMedicalRecord.setMedicalId(RandomUtil.getUUID());
+					gspMedicalRecord.setEnterpriseId(enterpriceId);
 //				gspMedicalRecord.setCreateDate(new Date());
-				gspMedicalRecord.setCreateId(getLoginUserId());
-				gspMedicalRecordMybatisDao.add(gspMedicalRecord);
+					gspMedicalRecord.setCreateId(getLoginUserId());
+					gspMedicalRecordMybatisDao.add(gspMedicalRecord);
+				}
 			}
-
 
 
 

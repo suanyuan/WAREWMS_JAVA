@@ -314,12 +314,12 @@ public class DataPublishService extends BaseService {
             form.setOperateType(supplier.getOperateType());
             form.setActiveFlag(Constant.IS_USE_NO);
             form.setBillclass(updateSupplierForm.getFirstState());
-            form.setCustomerid(supplier.getSupplierId());
+//            form.setCustomerid(supplier.getSupplierId());
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
-            //换证customerId 给错 不是APSUP0000000087应是GYS000000072
+            //换证报废 customerId 给错 不是APSUP0000000087申请单号  应是GYS000000072
 
 
-            return basCustomerService.editBasCustomer(form);
+            return basCustomerService.editBasCustomerByEnterpriseId(form);
 
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 

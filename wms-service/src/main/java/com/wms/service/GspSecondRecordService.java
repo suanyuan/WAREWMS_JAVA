@@ -149,20 +149,21 @@ public class GspSecondRecordService extends BaseService {
 				GspSecondRecordQuery query = new GspSecondRecordQuery();
 				EasyuiDatagridPager pager = new EasyuiDatagridPager();
 				MybatisCriteria criteria = new MybatisCriteria();
-				query.setEnterpriseId(oldEnterpriseId);
-				criteria.setCondition(query);
-				criteria.setCurrentPage(pager.getPage());
-				criteria.setPageSize(9999);
-				List<GspSecondRecord> gS = gspSecondRecordMybatisDao.queryByList(criteria);
-				//循环插入新建的企业版本中
-				for(GspSecondRecord  gspSecondRecord:gS){
-					gspSecondRecord.setRecordId(RandomUtil.getUUID());
-					gspSecondRecord.setEnterpriseId(enterpriceId);
+				if(oldEnterpriseId!=null) {
+					query.setEnterpriseId(oldEnterpriseId);
+					criteria.setCondition(query);
+					criteria.setCurrentPage(pager.getPage());
+					criteria.setPageSize(9999);
+					List<GspSecondRecord> gS = gspSecondRecordMybatisDao.queryByList(criteria);
+					//循环插入新建的企业版本中
+					for (GspSecondRecord gspSecondRecord : gS) {
+						gspSecondRecord.setRecordId(RandomUtil.getUUID());
+						gspSecondRecord.setEnterpriseId(enterpriceId);
 //					gspSecondRecord.setCreateDate(new Date());
-					gspSecondRecord.setCreateId(getLoginUserId());
-					gspSecondRecordMybatisDao.add(gspSecondRecord);
+						gspSecondRecord.setCreateId(getLoginUserId());
+						gspSecondRecordMybatisDao.add(gspSecondRecord);
+					}
 				}
-
 
 
 				//保存新证数据
