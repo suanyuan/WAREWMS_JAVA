@@ -3,15 +3,14 @@ package com.wms.service;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasSku;
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
 import com.wms.entity.InvLotAtt;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
-import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
+import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.DocAsnDetailQuery;
@@ -26,14 +25,17 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
+import com.wms.vo.form.DocAsnDetailForm;
 import com.wms.vo.form.DocAsnHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.hibernate.Transaction;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
@@ -56,15 +58,17 @@ public class DocAsnHeaderService extends BaseService {
 	@Autowired
 	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
 	@Autowired
-	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
-	@Autowired
 	private DocPaService docPaService;
     @Autowired
     private InvLotAttService invLotAttService;
     @Autowired
-    private BasGtnLotattService basGtnLotattService;
+    private BasSkuService basSkuService;
     @Autowired
     private DocAsnDetailService docAsnDetailService;
+    @Autowired
+    private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
+    @Autowired
+    private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -123,10 +127,11 @@ public class DocAsnHeaderService extends BaseService {
 			docAsnHeaderMybatisDao.add(docAsnHeader);
             json.setSuccess(true);
 			json.setMsg(resultNo);
+			json.setObj(resultNo);
 			return json;
 		} else {
 			json.setSuccess(false);
-			json.setMsg("客户单号重复！");
+			json.setMsg("新增头档失败!");
 			return json;
 		}
 	}
@@ -538,9 +543,9 @@ public class DocAsnHeaderService extends BaseService {
 	*/
     public  Json addDoDetailReuse(String generalNo,String detailAssno ,String customerid,String copyFlag) throws  Exception{
 	    Json json = new Json();
-	    DocAsnDetail details = new DocAsnDetail();//入库明细
+	    DocAsnDetailForm details = new DocAsnDetailForm();//入库明细
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		Integer index = 1 ;
+        Integer index = 1 ;
 	    /*
 	     *  1:复用出库明细 -1 : 复用入库明细
 	    */
@@ -555,11 +560,12 @@ public class DocAsnHeaderService extends BaseService {
 				if (normals.size() > 0) {
 					for (OrderDetailsForNormal orderDetailsForNormal : normals) {
 						details.setAsnno(detailAssno);
-						details.setAsnlineno(index);
 						details.setCustomerid(orderDetailsForNormal.getCustomerid());
 						details.setLinestatus("00");
 						details.setSku(orderDetailsForNormal.getSku());
-						details.setSkudescrc(orderDetailsForNormal.getSkuName());
+
+                        BasSku basSku = basSkuService.getSkuInfo(orderDetailsForNormal.getCustomerid(), orderDetailsForNormal.getSku());
+						details.setSkudescrc(basSku.getDescrC());
 
 						details.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyordered()));
 						details.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyorderedEach()));
@@ -571,7 +577,7 @@ public class DocAsnHeaderService extends BaseService {
 						details.setRejectedqtyEach(BigDecimal.ZERO);
 						details.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
 
-						details.setReceivinglocation(orderDetailsForNormal.getLocation());  //库位
+						details.setReceivinglocation("");  //库位
 						details.setUom(orderDetailsForNormal.getUom());//件
 						details.setPackid(orderDetailsForNormal.getPackid());//包装
 
@@ -583,17 +589,14 @@ public class DocAsnHeaderService extends BaseService {
 						details.setHoldrejectcode("OK");//冻结代码
 						details.setHoldrejectreason("正常");
 
-						details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-						details.setAddtime(new Date());
-
 						details.setLotatt01(orderDetailsForNormal.getLotatt01());
 						details.setLotatt02(orderDetailsForNormal.getLotatt02());
-						details.setLotatt03(orderDetailsForNormal.getLotatt03());
+						details.setLotatt03(orderDetailsForNormal.getLotatt03());//取当天的
 						details.setLotatt04(orderDetailsForNormal.getLotatt04());
 						details.setLotatt05(orderDetailsForNormal.getLotatt05());
-						details.setLotatt06(orderDetailsForNormal.getLotatt06());
+						details.setLotatt06(orderDetailsForNormal.getLotatt06());//出库单上可能没有
 						details.setLotatt07(orderDetailsForNormal.getLotatt07());
-						details.setLotatt08(orderDetailsForNormal.getLotatt08());
+						details.setLotatt08(orderDetailsForNormal.getLotatt08());//默认
 						details.setLotatt09("ZC");
 						details.setLotatt10("DJ");
 						details.setLotatt11(orderDetailsForNormal.getLotatt11());
@@ -602,8 +605,8 @@ public class DocAsnHeaderService extends BaseService {
 						details.setLotatt14(detailAssno);
 						details.setLotatt15(orderDetailsForNormal.getLotatt15());
 
-						index += 1;
-						docAsnDetailsMybatisDao.add(details);
+						docAsnDetailService.addDocAsnDetail(details);
+//						docAsnDetailsMybatisDao.add(details);
 					}
 					json.setSuccess(true);
 					json.setMsg("明细复用成功");
@@ -620,31 +623,31 @@ public class DocAsnHeaderService extends BaseService {
 				List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
 				if (docAsnDetailList.size() > 0) {
 					for (DocAsnDetail docAsnDetail : docAsnDetailList) {
-						BeanUtils.copyProperties(docAsnDetail, details);
+                        BeanUtils.copyProperties(docAsnDetail, details);
 
-						details.setAsnno(detailAssno);
-						details.setAsnlineno(index);
-						details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-						details.setAddtime(new Date());
+                        details.setAsnno(detailAssno);
+                        details.setAsnlineno(index);
+                        details.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                        details.setAddtime(new Date());
 
-						details.setLinestatus("00");
-						details.setReserveFlag("1");
-						details.setHoldrejectcode("OK");//冻结代码
-						details.setHoldrejectreason("正常");
-						//收货数量
-						details.setReceivedqty(BigDecimal.ZERO);//收货件数
-						details.setReceivedqtyEach(BigDecimal.ZERO);
+                        details.setLinestatus("00");
+                        details.setReserveFlag("1");
+                        details.setHoldrejectcode("OK");//冻结代码
+                        details.setHoldrejectreason("正常");
+                        //收货数量
+                        details.setReceivedqty(BigDecimal.ZERO);//收货件数
+                        details.setReceivedqtyEach(BigDecimal.ZERO);
 
-						details.setRejectedqty(BigDecimal.ZERO); //拒收件数
-						details.setRejectedqtyEach(BigDecimal.ZERO);
-						details.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
+                        details.setRejectedqty(BigDecimal.ZERO); //拒收件数
+                        details.setRejectedqtyEach(BigDecimal.ZERO);
+                        details.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
 
-						details.setLotatt09("ZC");
-						details.setLotatt10("DJ");
-						details.setLotatt14(detailAssno);
+                        details.setLotatt09("ZC");
+                        details.setLotatt10("DJ");
+                        details.setLotatt14(detailAssno);
 
-						index += 1;
-						docAsnDetailsMybatisDao.add(details);
+                        index += 1;
+                        docAsnDetailsMybatisDao.add(details);
 					}
 					json.setSuccess(true);
 					json.setMsg("明细复用成功");
@@ -676,6 +679,125 @@ public class DocAsnHeaderService extends BaseService {
 
     	return json;
 	}
+
+    /**
+     * 引用新增
+     * @param orderno 出库单号
+     * @return ~
+     */
+	public Json quoteDocOrder(String orderno) {
+
+        Json json = new Json();
+
+        try {
+
+            OrderHeaderForNormal docOrderHeader = orderHeaderForNormalMybatisDao.queryById(orderno);
+            if (docOrderHeader == null) {
+
+                json.setSuccess(false);
+                json.setMsg("查无引用的出库单头档数据");
+                return json;
+            }
+
+            MybatisCriteria orderDetailsCriteria = new MybatisCriteria();
+            OrderDetailsForNormalQuery orderDetailQuery = new OrderDetailsForNormalQuery();
+            orderDetailQuery.setOrderno(orderno);
+            orderDetailsCriteria.setCondition(BeanConvertUtil.bean2Map(orderDetailQuery));
+            List<OrderDetailsForNormal> docOrderDetailList = orderDetailsForNormalMybatisDao.queryByPageList(orderDetailsCriteria);
+            if (docOrderDetailList.size() == 0) {
+
+                json.setSuccess(false);
+                json.setMsg("查无引用的出库单明细数据");
+                return json;
+            }
+
+            //生成预入库头档
+            DocAsnHeaderForm asnHeaderForm = new DocAsnHeaderForm();
+            asnHeaderForm.setCustomerid(docOrderHeader.getCustomerid());
+            asnHeaderForm.setAsnreference1(docOrderHeader.getSoreference1());
+//        asnHeaderForm.setAsnreference2(docOrderHeader.getSoreference2()); 采购单号需用户手填
+            asnHeaderForm.setExpectedarrivetime1(new Date());
+            asnHeaderForm.setAsnstatus("00");
+            asnHeaderForm.setAsntype("PR");
+            asnHeaderForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+            asnHeaderForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            json =  addDocAsnHeader(asnHeaderForm);
+            if (!json.isSuccess()) {
+                return json;
+            }
+            String asnno = (String) json.getObj();//
+
+            //
+            int asnlineno = 1;
+            for (OrderDetailsForNormal docOrderDetail : docOrderDetailList) {
+
+                DocAsnDetailForm asnDetailForm = new DocAsnDetailForm();
+                asnDetailForm.setAsnno(asnno);
+                asnDetailForm.setAsnlineno(asnlineno);
+                asnDetailForm.setCustomerid(docOrderDetail.getCustomerid());
+                asnDetailForm.setLinestatus("00");
+                asnDetailForm.setSku(docOrderDetail.getSku());
+                asnDetailForm.setSkudescrc(docOrderDetail.getSkuName());
+
+//                asnDetailForm.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyordered()));
+//                asnDetailForm.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyorderedEach()));
+                //收货数量
+                asnDetailForm.setReceivedqty(BigDecimal.ZERO);//收货件数
+                asnDetailForm.setReceivedqtyEach(BigDecimal.ZERO);
+
+                asnDetailForm.setRejectedqty(BigDecimal.ZERO); //拒收件数
+                asnDetailForm.setRejectedqtyEach(BigDecimal.ZERO);
+                asnDetailForm.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
+
+//                asnDetailForm.setReceivinglocation(orderDetailsForNormal.getLocation());  //库位
+//                asnDetailForm.setUom(orderDetailsForNormal.getUom());//件
+//                asnDetailForm.setPackid(orderDetailsForNormal.getPackid());//包装
+//
+//                asnDetailForm.setTotalcubic(new BigDecimal(orderDetailsForNormal.getCubic()));//总体积
+//                asnDetailForm.setTotalgrossweight(new BigDecimal(orderDetailsForNormal.getGrossweight()));//总重量
+//                asnDetailForm.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));//总净重
+//                asnDetailForm.setTotalprice(new BigDecimal(orderDetailsForNormal.getPrice())); //总价
+//                asnDetailForm.setReserveFlag("1");
+//                asnDetailForm.setHoldrejectcode("OK");//冻结代码
+//                asnDetailForm.setHoldrejectreason("正常");
+//
+//                asnDetailForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+//                asnDetailForm.setAddtime(new Date());
+//
+//                asnDetailForm.setLotatt01(orderDetailsForNormal.getLotatt01());
+//                asnDetailForm.setLotatt02(orderDetailsForNormal.getLotatt02());
+//                asnDetailForm.setLotatt03(orderDetailsForNormal.getLotatt03());
+//                asnDetailForm.setLotatt04(orderDetailsForNormal.getLotatt04());
+//                asnDetailForm.setLotatt05(orderDetailsForNormal.getLotatt05());
+//                asnDetailForm.setLotatt06(orderDetailsForNormal.getLotatt06());
+//                asnDetailForm.setLotatt07(orderDetailsForNormal.getLotatt07());
+//                asnDetailForm.setLotatt08(orderDetailsForNormal.getLotatt08());
+//                asnDetailForm.setLotatt09("ZC");
+//                asnDetailForm.setLotatt10("DJ");
+//                asnDetailForm.setLotatt11(orderDetailsForNormal.getLotatt11());
+//                asnDetailForm.setLotatt12(orderDetailsForNormal.getLotatt12());
+//                asnDetailForm.setLotatt13(orderDetailsForNormal.getLotatt13());
+//                asnDetailForm.setLotatt14(detailAssno);
+//                asnDetailForm.setLotatt15(orderDetailsForNormal.getLotatt15());
+                json = docAsnDetailService.addDocAsnDetail(asnDetailForm);
+                if (!json.isSuccess()) {
+                    throw new Exception(json.getMsg());
+                }
+                asnlineno ++;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+            json.setSuccess(false);
+            json.setMsg(e.getMessage());
+            return json;
+        }
+        json.setSuccess(true);
+        json.setMsg("引用出库单成功");
+        return json;
+    }
 
 
 

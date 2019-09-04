@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import sun.misc.Request;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -225,6 +226,21 @@ public class DocAsnHeaderController {
 		return json;
 	}
 
+    /**
+     * 引用新增
+     * @param orderno 出库单号
+     * @return ~
+     */
+	@Login
+    @RequestMapping(params = "quoteDocOrder", method = RequestMethod.POST)
+    @ResponseBody
+	public Json quoteDocOrder(String orderno) {
 
-
+	    Json json = docAsnHeaderService.quoteDocOrder(orderno);
+        if(json == null){
+            json = new Json();
+            json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        }
+        return json;
+    }
 }
