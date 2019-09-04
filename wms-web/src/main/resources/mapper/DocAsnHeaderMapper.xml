@@ -284,7 +284,7 @@ where 1=1
 	    and asncreationtime =  #{condition.asncreationtime}
 	</if>
 	<if test="condition.asnno != null and condition.asnno != ''" >
-	    and asnno =  #{condition.asnno}
+	    and asnno like CONCAT('%',#{condition.asnno},'%')
 	</if>
 	<if test="condition.asnreference1 != null and condition.asnreference1 != ''" >
 	    and asnreference1 =  #{condition.asnreference1}

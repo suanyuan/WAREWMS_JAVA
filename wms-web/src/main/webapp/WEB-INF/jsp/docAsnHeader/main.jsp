@@ -1679,6 +1679,84 @@ function asnRowStyle(index,row) {
         return 'color:green;';
     }
 }
+
+var refAddDialog;
+//初始化
+$(function () {
+    //$('#ezuiBtn_copyDetail').linkbutton('disable');
+    refAddDialog = $('#refAddDialog').dialog({
+        modal: true,
+        title: '引用新增',
+        buttons: '',
+        width: 250,
+        height: 150,
+        onOpen: function () {
+        },
+        onClose: function () {
+
+        }
+    }).dialog('close');
+
+
+
+})
+//给明细复用入库编号文本框
+function refAdd() {
+    $('#addRefFlag').combobox({
+        onChange:function(newValue,oldValue){
+
+            $('#addrefInNoTo').textbox('clear');
+            if(newValue == 1){
+                $('#addrefInNoTo').textbox({
+                    multiline:false,
+                    prompt:'请输入SO编号'
+                });
+            }else if(newValue == -1){
+                $('#addrefInNoTo').textbox({
+                    multiline:false,
+                    prompt:'请输入ASN编号'
+                });
+            }else{
+                $('#addrefInNoTo').textbox({
+                    multiline:false,
+                    prompt:'请选择订单...'
+                });
+            }
+        }
+    });
+    refAddDialog.dialog("open");
+    $('#addRefFlag').combobox('setValue','1');
+}
+//引用新增
+function refAddDetailIn() {
+    var addRefFlag = $('#addRefFlag').combobox('getValue');
+    var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
+    var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
+    $.ajax({
+        url : 'docAsnHeaderController.do?quoteDocOrder',
+        data : {orderno:$('#addrefInNoTo').textbox("getValue")},
+        type : 'POST',
+        dataType : 'JSON',
+        success : function(result){
+            try {
+                if(result.success){
+                    $('#ezuiBtn_copyDetail').linkbutton('disable');
+                    $('#ezuiDetailsDatagrid').datagrid('load',{asnno:asnno1});
+                    refAddDialog.dialog("close");
+                    $('#addrefInNoTo').textbox('clear')
+                }
+                showMsg(result.msg)
+            } catch (e) {
+                return;
+            };
+        }
+    });
+}
+function closerefAdd() {
+    refAddDialog.dialog("close");
+    $('#addrefInNoTo').textbox('clear');
+    $('#addRefFlag').combobox('clear');
+}
 </script>
 </head>
 <body>
@@ -1691,7 +1769,7 @@ function asnRowStyle(index,row) {
 					<table>
 						<tr>
 							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>预入通知单号</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库单编号</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
@@ -1746,6 +1824,7 @@ function asnRowStyle(index,row) {
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
+					<a onclick='refAdd();' id='ezuiBtn_refAdd' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用新增</a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
@@ -1852,12 +1931,15 @@ function asnRowStyle(index,row) {
 			</tr>
 		</table>
 	</div>
+
 	<!-- 导入end -->
 	<c:import url='/WEB-INF/jsp/docAsnHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/custDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/detailsDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/skuDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docAsnHeader/locDialog.jsp' />
+	<c:import url='/WEB-INF/jsp/docAsnHeader/refAdd.jsp' />
+
 
 	<!--产品查询 -->
 	<div id="ezuiProductSearchDialog">
