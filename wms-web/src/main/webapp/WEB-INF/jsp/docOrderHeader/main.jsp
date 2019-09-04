@@ -1150,7 +1150,9 @@ var downloadTemplate = function(){
 var doExportOrderNo = function(){
 	if(navigator.cookieEnabled){
 		var rowp = $('#ezuiDatagrid').datagrid('getSelected');
-		console.log(rowp.orderno);
+		var rowlength = $('#ezuiDatagrid').datagrid('getChecked');
+		console.log(rowlength.length);
+		if(rowlength.length < 2){
 		var orderFlag = new Date().getTime();
 		var setting = new HashMap();
 			setting.put("orderFlag",orderFlag);
@@ -1165,6 +1167,11 @@ var doExportOrderNo = function(){
 				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
 			});
 		}, 1000);
+		}else{
+			$.messager.show({
+				msg : "<spring:message code='common.message.selectRecord'/>", title : "<spring:message code='common.message.prompt'/>"
+			});
+		}
 	}else{
 		$.messager.show({
 			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"

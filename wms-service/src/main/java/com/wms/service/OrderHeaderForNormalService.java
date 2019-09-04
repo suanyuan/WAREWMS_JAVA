@@ -1859,6 +1859,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 ExcelUtil.listToExcel(docSerialNumRecordList,serialMap,sheetName,response);
                 //修改docOrderHeader中的udfprintflag1信息为1 导出过序列号信息
                 docSerialNumRecordMybatisDao.updateDocOrder(orderNofrom.getOrderno());
+            }else{
+                ExcelUtil.listToExcel(null,serialMap,sheetName,response);
             }
         }catch (Exception e){
             e.printStackTrace();
