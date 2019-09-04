@@ -77,7 +77,7 @@ $(function() {
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
-					{field: 'cContact',		title: '收货人',		width: 100 },
+					{field: 'cContact',		title: '收货方',		width: 100 },
                     {field: 'cProvince',			title: '省',		width: 100 },
                     {field: 'cCity',			title: '市',		width: 100 },
                     {field: 'cAddress2',			title: '区',		width: 100 },
@@ -2082,7 +2082,7 @@ function choseOrderTypeAfter(value) {
 							<th>客户单号</th><td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
                             <th>定向入库单号</th><td><input type='text' id='soreference2' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
-						<tr>
+						<%--<tr>
 							<th>省</th>
 							<td>
 								<!--<input type='text' id='cProvince' class='easyui-textbox' size='16' data-options=''/>-->
@@ -2121,13 +2121,17 @@ function choseOrderTypeAfter(value) {
 								textField:'name'">
 							</td>
 							<th>地址</th><td><input type='text' id='cAddress1' class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>
+						</tr>--%>
 						<tr>
-							<th>收货人</th><td><input type='text' id='cContact' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>收货方</th><td><input type='text' id='cContact' class='easyui-textbox' size='16' data-options=''/></td>
+<%--
 							<th>收货电话</th><td><input type='text' id='cTel1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>承运人</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
+--%>
+							<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>
+                            <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+
+                        </tr>
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
@@ -2146,7 +2150,6 @@ function choseOrderTypeAfter(value) {
 																																valueField: 'id',
 																																textField: 'value'
 																																"/></td>
-                            <th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',
 																																	valueField: 'id',
