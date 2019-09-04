@@ -140,11 +140,16 @@ public class GspEnterpriceService extends BaseService {
 
                 List<GspEnterpriseTypeDTO> enterpriseTypeDTOS = queryEnterpriseType(info.getEnterpriseId());
                 if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0){ //判断是否有首营申请
+                    int n=0;
                     for(GspEnterpriseTypeDTO ent : enterpriseTypeDTOS){
+
                         if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING)){//首营申请审核中的数据不能修改
                             return Json.error("首营申请中的企业信息不能修改");
                         }else if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
-                            enterpriseIsNewVersion = false;
+                            n++;
+                            if(n==enterpriseTypeDTOS.size()){
+                                enterpriseIsNewVersion = false;
+                            }
                         }else if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_PASS)){
                             //TODO 重新下发新申请
                             //TODO 修改首营状态为已报废

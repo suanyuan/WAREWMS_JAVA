@@ -70,6 +70,7 @@ public class GspOperateLicenseService extends BaseService {
 	public GspOperateLicense getGspOperateLicenseBy(GspOperateLicenseQuery gspOperateLicenseQuery){
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCondition(gspOperateLicenseQuery);
+		mybatisCriteria.setOrderByClause("create_date desc");
 		List<GspOperateLicense> list = gspOperateLicenseMybatisDao.queryByList(mybatisCriteria);
 		if(list!=null && list.size()>0){
 			return list.get(0);
@@ -146,21 +147,7 @@ public class GspOperateLicenseService extends BaseService {
 				//把旧证数据作废
 				updateGspBusinessLicenseTagById(gspOperateLicenseId,Constant.IS_USE_NO);
 
-				//保存新证数据
-				String newOperateLicenseId = RandomUtil.getUUID();
-				gspOperateLicenseForm.setEnterpriseId(enterpriceId);
-				gspOperateLicenseForm.setOperateType(LicenseType);
 
-				gspOperateLicenseForm.setOperateId(newOperateLicenseId);
-				gspOperateLicenseForm.setIsUse(Constant.IS_USE_YES);
-				addGspOperateLicense(gspOperateLicenseForm);
-
-				if(gspOperateDetailForm.size()>0){
-					for(GspOperateDetailForm g : gspOperateDetailForm){
-						g.setEnterpriseId(newOperateLicenseId);
-						gspOperateDetailService.addGspOperateDetail(g,LicenseType);
-					}
-				}
 
 				//查询换证后报废企业的所有历史营业执照
 				GspOperateLicenseQuery query = new GspOperateLicenseQuery();
@@ -184,7 +171,21 @@ public class GspOperateLicenseService extends BaseService {
 					}
 				}
 
+				//保存新证数据
+				String newOperateLicenseId = RandomUtil.getUUID();
+				gspOperateLicenseForm.setEnterpriseId(enterpriceId);
+				gspOperateLicenseForm.setOperateType(LicenseType);
 
+				gspOperateLicenseForm.setOperateId(newOperateLicenseId);
+				gspOperateLicenseForm.setIsUse(Constant.IS_USE_YES);
+				addGspOperateLicense(gspOperateLicenseForm);
+
+				if(gspOperateDetailForm.size()>0){
+					for(GspOperateDetailForm g : gspOperateDetailForm){
+						g.setEnterpriseId(newOperateLicenseId);
+						gspOperateDetailService.addGspOperateDetail(g,LicenseType);
+					}
+				}
 			}
 
 			return Json.error("保存许可证信息失败");
