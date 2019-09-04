@@ -3,6 +3,7 @@ package com.wms.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -21,6 +22,7 @@ import com.wms.vo.Json;
 import com.wms.vo.form.DocMtDetailsForm;
 import com.wms.vo.form.pda.ScanResultForm;
 import com.wms.vo.pda.CommonVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -404,5 +406,129 @@ public class DocMtDetailsService extends BaseService {
             docMtDetailsVOList.add(docMtDetailsVO);
         }
         return docMtDetailsVOList;
+    }
+
+    /**
+     *
+     * 打印养护检查记录
+    */
+    public List<DocMtHeader> printMtDetails(String mtNo, String  mtlineNo ){
+
+        DocMtDetailsQuery detailsQuery = new DocMtDetailsQuery();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        List<DocMtDetails> MtDetailsList = new ArrayList<DocMtDetails>();
+        DocMtHeader docMtHeader = new DocMtHeader();//头档信息
+
+        if(StringUtils.isNotEmpty(mtlineNo) && StringUtils.isNotEmpty(mtNo)){
+            String [] mtlineNoArr = mtlineNo.split(",");
+            String [] mtNoArr = mtNo.split(",");
+            Boolean ibjFlag = false;
+            for (String mtNoArrObj:mtNoArr) {
+                for (String mtlineNoObj:mtlineNoArr) {
+                    detailsQuery.setMtno(mtNoArrObj);//养护行号
+                    detailsQuery.setMtlineno(mtlineNoObj);//养护单号
+                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(detailsQuery));
+                    List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
+                    for (DocMtDetails docMtDetails1:docMtDetailsList) {
+                        MtDetailsList.add(docMtDetails1);
+                        ibjFlag = true;
+                    }
+                }
+                if (ibjFlag) break;;
+            }
+            Boolean headerFlag = false;
+            for (String mtHeader:mtNoArr) {
+                MybatisCriteria mybatisCriteria1 = new MybatisCriteria();
+                DocMtHeaderQuery docMtHeaderQuery = new DocMtHeaderQuery();
+                docMtHeaderQuery.setMtno(mtHeader);
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docMtHeaderQuery));
+                List<DocMtHeader> docMtHeaderList =  docMtHeaderMybatisDao.queryByList(mybatisCriteria1);
+                for (DocMtHeader docMtHeader1: docMtHeaderList) {
+                    BeanUtils.copyProperties(docMtHeader1,docMtHeader);
+                    if(docMtHeader.getFenceFlag() == 1){
+                        docMtHeader.setFenceFlagName("符合");
+                    }else if (docMtHeader.getFenceFlag() == 0){
+                        docMtHeader.setFenceFlagName("不符合");
+                    }else{
+                        docMtHeader.setFenceFlagName("未检查");
+                    }
+                    if(docMtHeader.getFlowFlag() == 1){
+                        docMtHeader.setFlowFlagName("符合");
+                    }else if (docMtHeader.getFlowFlag() == 0){
+                        docMtHeader.setFlowFlagName("不符合");
+                    }else{
+                        docMtHeader.setFlowFlagName("未检查");
+                    }
+                    if(docMtHeader.getSignFlag() == 1){
+                        docMtHeader.setSignFlagName("符合");
+                    }else if (docMtHeader.getSignFlag() == 0){
+                        docMtHeader.setSignFlagName("不符合");
+                    }else{
+                        docMtHeader.setSignFlagName("未检查");
+                    }
+                    if(docMtHeader.getSanitationFlag() == 1){
+                        docMtHeader.setSanitationFlagName("符合");
+                    }else if (docMtHeader.getSanitationFlag() == 0){
+                        docMtHeader.setSanitationFlagName("不符合");
+                    }else{
+                        docMtHeader.setSanitationFlagName("未检查");
+                    }
+                    if(docMtHeader.getStorageFlag() == 1){
+                        docMtHeader.setStorageFlagName("符合");
+                    }else if (docMtHeader.getStorageFlag() == 0){
+                        docMtHeader.setStorageFlagName("不符合");
+                    }else{
+                        docMtHeader.setStorageFlagName("未检查");
+                    }
+                    headerFlag = true;
+                }
+                if(headerFlag) break;
+            }
+        }
+        List<DocMtHeader> dataHeader = new ArrayList<DocMtHeader>(); // 头档
+        docMtHeader.setDetls(new ArrayList<DocMtDetails>());
+        if(MtDetailsList.size() > 0){
+            for ( DocMtDetails docMtDetails1:
+                    MtDetailsList) {
+                if(docMtDetails1.getUom().equals("EA")){
+                    docMtDetails1.setUomName("件");
+                }else if(docMtDetails1.getUom().equals("BA")){
+                    docMtDetails1.setUomName("包");
+                }else if(docMtDetails1.getUom().equals("CS")){
+                    docMtDetails1.setUomName("箱");
+                }else if(docMtDetails1.getUom().equals("GE")){
+                    docMtDetails1.setUomName("个");
+                }else if(docMtDetails1.getUom().equals("GN")){
+                    docMtDetails1.setUomName("根");
+                }else if(docMtDetails1.getUom().equals("HE")){
+                    docMtDetails1.setUomName("盒");
+                }else if(docMtDetails1.getUom().equals("IP")){
+                    docMtDetails1.setUomName("内箱");
+                }else if(docMtDetails1.getUom().equals("OT")){
+                    docMtDetails1.setUomName("其他");
+                }else if(docMtDetails1.getUom().equals("PL")){
+                    docMtDetails1.setUomName("板");
+                }
+                //养护结论
+                if(docMtDetails1.getConclusion().equals("1")){
+                    docMtDetails1.setConclusion("合格");
+                }else if(docMtDetails1.getConclusion().equals("0")){
+                    docMtDetails1.setConclusion("不合格");
+                }else {
+                    docMtDetails1.setConclusion("未检查");
+                }
+                //检查内容
+                if(docMtDetails1.getCheckFlag().equals("1")){
+                    docMtDetails1.setCheckFlag("合格");
+                }else if(docMtDetails1.getCheckFlag().equals("0")){
+                    docMtDetails1.setCheckFlag("不合格");
+                }else{
+                    docMtDetails1.setCheckFlag("未检查");
+                }
+                docMtHeader.getDetls().add(docMtDetails1);
+            }
+            dataHeader.add(docMtHeader);
+        }
+        return dataHeader;
     }
 }
