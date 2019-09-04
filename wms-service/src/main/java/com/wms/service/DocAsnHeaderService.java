@@ -739,8 +739,8 @@ public class DocAsnHeaderService extends BaseService {
                 asnDetailForm.setSku(docOrderDetail.getSku());
                 asnDetailForm.setSkudescrc(docOrderDetail.getSkuName());
 
-//                asnDetailForm.setExpectedqty(new BigDecimal(orderDetailsForNormal.getQtyordered()));
-//                asnDetailForm.setExpectedqtyEach(new BigDecimal(orderDetailsForNormal.getQtyorderedEach()));
+                asnDetailForm.setExpectedqty(new BigDecimal(docOrderDetail.getQtyordered()));
+                asnDetailForm.setExpectedqtyEach(new BigDecimal(docOrderDetail.getQtyorderedEach()));
                 //收货数量
                 asnDetailForm.setReceivedqty(BigDecimal.ZERO);//收货件数
                 asnDetailForm.setReceivedqtyEach(BigDecimal.ZERO);
@@ -749,37 +749,37 @@ public class DocAsnHeaderService extends BaseService {
                 asnDetailForm.setRejectedqtyEach(BigDecimal.ZERO);
                 asnDetailForm.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
 
-//                asnDetailForm.setReceivinglocation(orderDetailsForNormal.getLocation());  //库位
-//                asnDetailForm.setUom(orderDetailsForNormal.getUom());//件
-//                asnDetailForm.setPackid(orderDetailsForNormal.getPackid());//包装
-//
-//                asnDetailForm.setTotalcubic(new BigDecimal(orderDetailsForNormal.getCubic()));//总体积
-//                asnDetailForm.setTotalgrossweight(new BigDecimal(orderDetailsForNormal.getGrossweight()));//总重量
-//                asnDetailForm.setTotalnetweight(new BigDecimal(orderDetailsForNormal.getNetweight()));//总净重
-//                asnDetailForm.setTotalprice(new BigDecimal(orderDetailsForNormal.getPrice())); //总价
-//                asnDetailForm.setReserveFlag("1");
-//                asnDetailForm.setHoldrejectcode("OK");//冻结代码
-//                asnDetailForm.setHoldrejectreason("正常");
-//
-//                asnDetailForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-//                asnDetailForm.setAddtime(new Date());
-//
-//                asnDetailForm.setLotatt01(orderDetailsForNormal.getLotatt01());
-//                asnDetailForm.setLotatt02(orderDetailsForNormal.getLotatt02());
-//                asnDetailForm.setLotatt03(orderDetailsForNormal.getLotatt03());
-//                asnDetailForm.setLotatt04(orderDetailsForNormal.getLotatt04());
-//                asnDetailForm.setLotatt05(orderDetailsForNormal.getLotatt05());
-//                asnDetailForm.setLotatt06(orderDetailsForNormal.getLotatt06());
-//                asnDetailForm.setLotatt07(orderDetailsForNormal.getLotatt07());
-//                asnDetailForm.setLotatt08(orderDetailsForNormal.getLotatt08());
-//                asnDetailForm.setLotatt09("ZC");
-//                asnDetailForm.setLotatt10("DJ");
-//                asnDetailForm.setLotatt11(orderDetailsForNormal.getLotatt11());
-//                asnDetailForm.setLotatt12(orderDetailsForNormal.getLotatt12());
-//                asnDetailForm.setLotatt13(orderDetailsForNormal.getLotatt13());
-//                asnDetailForm.setLotatt14(detailAssno);
-//                asnDetailForm.setLotatt15(orderDetailsForNormal.getLotatt15());
-                json = docAsnDetailService.addDocAsnDetail(asnDetailForm);
+                asnDetailForm.setReceivinglocation(docOrderDetail.getLocation());  //库位
+                asnDetailForm.setUom(docOrderDetail.getUom());//件
+                asnDetailForm.setPackid(docOrderDetail.getPackid());//包装
+
+                asnDetailForm.setTotalcubic(new BigDecimal(docOrderDetail.getCubic()));//总体积
+                asnDetailForm.setTotalgrossweight(new BigDecimal(docOrderDetail.getGrossweight()));//总重量
+                asnDetailForm.setTotalnetweight(new BigDecimal(docOrderDetail.getNetweight()));//总净重
+                asnDetailForm.setTotalprice(new BigDecimal(docOrderDetail.getPrice())); //总价
+                asnDetailForm.setReserveFlag("1");
+                asnDetailForm.setHoldrejectcode("OK");//冻结代码
+                asnDetailForm.setHoldrejectreason("正常");
+
+                asnDetailForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                asnDetailForm.setAddtime(new Date());
+
+                asnDetailForm.setLotatt01(docOrderDetail.getLotatt01());
+                asnDetailForm.setLotatt02(docOrderDetail.getLotatt02());
+                asnDetailForm.setLotatt03(docOrderDetail.getLotatt03());
+                asnDetailForm.setLotatt04(docOrderDetail.getLotatt04());
+                asnDetailForm.setLotatt05(docOrderDetail.getLotatt05());
+                asnDetailForm.setLotatt06(docOrderDetail.getLotatt06());
+                asnDetailForm.setLotatt07(docOrderDetail.getLotatt07());
+                asnDetailForm.setLotatt08(docOrderDetail.getLotatt08());
+                asnDetailForm.setLotatt09("ZC");
+                asnDetailForm.setLotatt10("DJ");
+                asnDetailForm.setLotatt11(docOrderDetail.getLotatt11());
+                asnDetailForm.setLotatt12(docOrderDetail.getLotatt12());
+                asnDetailForm.setLotatt13(docOrderDetail.getLotatt13());
+                asnDetailForm.setLotatt14(asnno);
+                asnDetailForm.setLotatt15(docOrderDetail.getLotatt15());
+                json = docAsnDetailService.addDocAsnDetail(asnDetailForm);//这里面还有逻辑
                 if (!json.isSuccess()) {
                     throw new Exception(json.getMsg());
                 }
