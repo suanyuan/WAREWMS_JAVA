@@ -243,7 +243,7 @@ where 1=1
 <!-- 根据LotAtt05查询 质量状态不为dj -->
 <select id="queryByLotatts05"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" />
-	 from inv_lot_att where lotatt05 = #{lotatt05} AND LotAtt10!='DJ'
+	 from inv_lot_att where lotatt05 = #{lotatt05}
 </select>
 
 <!-- 批次属性 列表总数-->

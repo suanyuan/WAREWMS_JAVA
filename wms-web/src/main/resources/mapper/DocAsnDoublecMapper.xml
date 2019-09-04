@@ -159,6 +159,11 @@ where 1=1
 	select <include refid="Base_Column_List" /> 
 	 from doc_asn_doublec where doublecno = #{doublecno}
 </select>
+<!-- 根据序列号查询 双证导入 -->
+<select id="queryByContext2"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	 from doc_asn_doublec where context2 = #{doublecno}
+</select>
 
 <!-- 双证导入 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

@@ -124,21 +124,21 @@ public class ImportDocAsnDoublecDataService {
                 if (StringUtils.isEmpty(dataArray.getDoublecno())) {
                     throw new Exception();
                 }
-                for (DocAsnDoublecVO v : importData) {
-                    if (v.getDoublecno().equals(dataArray.getDoublecno())) {
-                        throw new Exception();
-                    }
-                }
-                DocAsnDoublec doublecQ = new DocAsnDoublec();
-                doublecQ.setDoublecno(dataArray.getDoublecno());
-                DocAsnDoublec docAsnDoublec = docAsnDoublecMybatisDao.queryById(doublecQ);
-                if (docAsnDoublec != null) {
-                    throw new Exception();
-                }
+//                for (DocAsnDoublecVO v : importData) {
+//                    if (v.getDoublecno().equals(dataArray.getDoublecno())) {
+//                        throw new Exception();
+//                    }
+//                }
+//                DocAsnDoublec doublecQ = new DocAsnDoublec();
+//                doublecQ.setDoublecno(dataArray.getDoublecno());
+//                DocAsnDoublec docAsnDoublec = docAsnDoublecMybatisDao.queryById(doublecQ);
+//                if (docAsnDoublec != null) {
+//                    throw new Exception();
+//                }
 
                 importDataVO.setDoublecno(dataArray.getDoublecno());
             } catch (Exception e) {
-                rowResult.append("[任务号],未输入或者任务号重复").append(" ");
+                rowResult.append("[任务号],未输入").append(" ");
             }
 
 //产品型号
@@ -157,9 +157,18 @@ public class ImportDocAsnDoublecDataService {
                 if (StringUtils.isEmpty(dataArray.getContext2())) {
                     throw new Exception();
                 }
+                DocAsnDoublec docAsnDoublec=docAsnDoublecMybatisDao.queryByContext2(dataArray.getContext2());
+                if(docAsnDoublec!=null){
+                    throw new Exception();
+                }
+                for (DocAsnDoublecVO v : importData) {
+                    if (v.getContext2().equals(dataArray.getContext2())) {
+                        throw new Exception();
+                    }
+                }
                 importDataVO.setContext2(dataArray.getContext2());
             } catch (Exception e) {
-                rowResult.append("[名称],未输入").append(" ");
+                rowResult.append("[名称],未输入或者已存在此双证名称").append(" ");
             }
 //执行标准
             try {
@@ -261,34 +270,47 @@ public class ImportDocAsnDoublecDataService {
 //先根据序列号查出InvLotAtt
             InvLotAttQuery query = new InvLotAttQuery();
             query.setLotatt05(docAsnDoublecVO.getContext2());
-            InvLotAtt invLotAtt = invLotAttMybatisDao.queryByLotatts05(query);
-            if (invLotAtt != null) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("customerid", invLotAtt.getCustomerid());
-                map.put("sku", invLotAtt.getSku());
+           List<InvLotAtt>  invLotAttList = invLotAttMybatisDao.queryByLotatts05(query);
+            if (invLotAttList != null) {
+                boolean con=false;
+                for (InvLotAtt invLotAtt : invLotAttList) {
+                    if(!invLotAtt.getLotatt10().equals("DJ")){
+                        Map<String, Object> map = new HashMap<String, Object>();
+                        map.put("customerid", invLotAtt.getCustomerid());
+                        map.put("sku", invLotAtt.getSku());
+
+
 //再根据customerid和sku查出BasSku
-                BasSku basSku = basSkuMybatisDao.queryById(map);
-                if (basSku != null) {
-                    if (basSku.getSkuGroup7().equals("1")) {
-                        if (basSku.getDescrE().equals(docAsnDoublecVO.getContext1())) {
-                            json.setSuccess(true);
-                            docAsnDoublecVO.setCustomerid(invLotAtt.getCustomerid());
+                    BasSku basSku = basSkuMybatisDao.queryById(map);
+                    if (basSku != null) {
+                        if (basSku.getSkuGroup7().equals("1")) {
+                            if (basSku.getDescrE().toUpperCase().equals(docAsnDoublecVO.getContext1().toUpperCase())) {
+                                json.setSuccess(true);
+                                docAsnDoublecVO.setCustomerid(invLotAtt.getCustomerid());
+                            } else {
+                                json.setSuccess(false);
+                                json.setMsg("产品的型号不匹配");
+                            }
                         } else {
                             json.setSuccess(false);
-                            json.setMsg("产品的型号不匹配");
+                            json.setMsg("没有需要匹配双证的产品");
                         }
                     } else {
                         json.setSuccess(false);
                         json.setMsg("没有需要匹配双证的产品");
                     }
-                } else {
+                        con=true;
+                         break;
+                    }
+                }
+                if(!con){
                     json.setSuccess(false);
-                    json.setMsg("没有需要匹配双证的产品");
+                    json.setMsg("库存质量状态为待检");
                 }
 
             } else {
                 json.setSuccess(false);
-                json.setMsg("查询不到出库单明细或者明细质量状态为待检");
+                json.setMsg("没有此序列号库存");
             }
 
        return json;
