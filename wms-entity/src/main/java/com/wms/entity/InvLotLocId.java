@@ -75,5 +75,6 @@ public class InvLotLocId  implements Serializable {
 	//盘点任务
 	private String lotatt05;
 	private String lotatt04;
+	private String productLineName;//产品线
 
 }

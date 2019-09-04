@@ -11,7 +11,7 @@ import java.util.Date;
 public class CouRequestDetails implements Serializable {
 
   private String cycleCountno;
-  private String cycleCountlineno;
+  private int cycleCountlineno;
   private String customerid;
   private String sku;
   private String locationid;

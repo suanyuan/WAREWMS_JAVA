@@ -8,7 +8,7 @@ import java.util.Date;
 public class CouRequestDetailsVO {
 
 	private String cycleCountno;
-	private String cycleCountlineno;
+	private int cycleCountlineno;
 	private String customerid;
 	private String sku;
 	private String locationid;
@@ -32,11 +32,11 @@ public class CouRequestDetailsVO {
 		this.cycleCountno = cycleCountno;
 	}
 
-	public String getCycleCountlineno() {
+	public int getCycleCountlineno() {
 		return cycleCountlineno;
 	}
 
-	public void setCycleCountlineno(String cycleCountlineno) {
+	public void setCycleCountlineno(int cycleCountlineno) {
 		this.cycleCountlineno = cycleCountlineno;
 	}
 
@@ -151,5 +151,4 @@ public class CouRequestDetailsVO {
 	public void setUserdefined3(String userdefined3) {
 		this.userdefined3 = userdefined3;
 	}
-
 }

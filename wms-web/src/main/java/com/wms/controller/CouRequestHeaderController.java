@@ -85,18 +85,14 @@ public class CouRequestHeaderController {
 //			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 //		return json;
 //	}
-////删除
-//	@Login
-//	@RequestMapping(params = "delete")
-//	@ResponseBody
-//	public Json delete(String id) {
-//		Json json = couRequestHeaderService.deleteDocMtHeader(id);
-//		if(json == null){
-//			json = new Json();
-//			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
-//		}
-//		return json;
-//	}
+//删除
+	@Login
+	@RequestMapping(params = "delete")
+	@ResponseBody
+	public Json delete(String cycleCountno) {
+		Json json = couRequestHeaderService.deleteCouRequstHeader(cycleCountno);
+		return json;
+	}
 //
 //	@Login
 //	@RequestMapping(params = "getBtn")

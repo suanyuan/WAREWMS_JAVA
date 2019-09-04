@@ -33,6 +33,11 @@
 	<result column="reservedfield10" property="reservedfield10"/>
 	<result column="packuom1" property="packuom1"/>
 	<result column="qty1" property="qty1"/>
+<!--盘点任务-->
+	<result column="name" property="productLineName"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+
 </resultMap>
 
     <resultMap id="ExtendResultMap" type="com.wms.entity.InvLotLocId" extends="BaseResultMap" >
@@ -264,9 +269,10 @@ where 1=1
     </select>
 <!--获得盘点任务-->
 <select id="queryByListByCouRequest" resultMap="BaseResultMap" >
-    SELECT i.*,a.lotatt04,a.lotatt05 FROM `inv_lot_loc_id` i
+    SELECT i.*,a.lotatt04,a.lotatt05,p.name FROM `inv_lot_loc_id` i
        LEFT JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
        LEFT JOIN `bas_sku` s ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+	   LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
        where 1=1
 	<trim  suffixOverrides="," >
 	<if test="lotatt04 != null and lotatt04 != ''" >
@@ -280,6 +286,9 @@ where 1=1
 	</if>
 	<if test="sku != null and sku != ''" >
 		and i.sku  like concat('%',#{sku},'%')
+	</if>
+		<if test="productLineName != null and productLineName != ''" >
+		and p.name  like concat('%',#{productLineName},'%')
 	</if>
 	</trim>
 

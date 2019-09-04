@@ -20,7 +20,7 @@ public class CouRequestDetailsService extends BaseService {
 
 	@Autowired
 	private CouRequestDetailsMybatisDao couRequestDetailsMybatisDao;
-
+//分页查询
 	public EasyuiDatagrid<CouRequestDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, CouRequestDetailsQuery query) {
 		EasyuiDatagrid<CouRequestDetailsVO> datagrid = new EasyuiDatagrid<CouRequestDetailsVO>();
 		List<CouRequestDetails> couRequestDetailsList = couRequestDetailsMybatisDao.queryByList(null);
@@ -34,6 +34,12 @@ public class CouRequestDetailsService extends BaseService {
 		datagrid.setTotal(couRequestDetailsMybatisDao.queryTotalCount());
 		datagrid.setRows(couRequestDetailsVOList);
 		return datagrid;
+	}
+//通过查询条件和盘点单号获取细单
+	public List<CouRequestDetailsVO> getcouRequestInfoBycycleCountno(CouRequestDetailsQuery query) {
+
+		List<CouRequestDetailsVO> couRequestDetailsVOList=couRequestDetailsMybatisDao.queryListById(query);
+		return couRequestDetailsVOList;
 	}
 
 	public Json addCouRequestDetails(CouRequestDetailsForm couRequestDetailsForm) throws Exception {
