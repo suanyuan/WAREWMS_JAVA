@@ -37,6 +37,7 @@ public class GspOperateLicenseService extends BaseService {
 		BeanUtils.copyProperties(gspOperateLicenseForm, gspOperateLicense);
 		gspOperateLicense.setCreateId(getLoginUserId());
 		gspOperateLicense.setIsUse(Constant.IS_USE_YES);
+		gspOperateLicense.setCreateDate(new Date());
 		gspOperateLicenseMybatisDao.add(gspOperateLicense);
 		json.setSuccess(true);
 		return json;

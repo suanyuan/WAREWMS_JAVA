@@ -37,6 +37,7 @@ public class GspSecondRecordService extends BaseService {
 		BeanUtils.copyProperties(gspSecondRecordForm, gspSecondRecord);
 		gspSecondRecord.setCreateId(getLoginUserId());
 		gspSecondRecord.setIsUse(Constant.IS_USE_YES);
+        gspSecondRecord.setCreateDate(new Date());
 		gspSecondRecordMybatisDao.add(gspSecondRecord);
 		json.setSuccess(true);
 		return json;

@@ -44,6 +44,7 @@ public class GspBusinessLicenseService extends BaseService {
 		BeanUtils.copyProperties(gspBusinessLicenseForm, gspBusinessLicense);
 		gspBusinessLicense.setCreateId(getLoginUserId());
 		gspBusinessLicense.setIsUse(Constant.IS_USE_YES);
+        gspBusinessLicense.setCreateDate(new Date());
 		gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
 		json.setSuccess(true);
 		return json;
@@ -163,6 +164,7 @@ public class GspBusinessLicenseService extends BaseService {
 				for(GspBusinessLicense  gspBusinessLicense:gB){
 					gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
 					gspBusinessLicense.setEnterpriseId(enterpriceId);
+//                    gspBusinessLicense.setCreateDate();
 //					gspBusinessLicense.setCreateDate(new Date());
 					gspBusinessLicense.setCreateId(getLoginUserId());
 					gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
@@ -175,7 +177,7 @@ public class GspBusinessLicenseService extends BaseService {
 				gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
 				addGspBusinessLicense(gspBusinessLicenseForm);
 
-				//TODO 证照详情表(GspOperateDetail)没加
+				//
 				if(gspOperateDetailForm.size()>0){
 					for(GspOperateDetailForm g : gspOperateDetailForm){
 						g.setEnterpriseId(newBusinessLicenseId);

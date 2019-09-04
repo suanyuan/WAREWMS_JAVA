@@ -164,6 +164,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		GspEnterpriseInfoForm form = new GspEnterpriseInfoForm();
 		form.setEnterpriseId(id);
 		form.setIsUse(tag);
+		form.setEditId(getLoginUserId());
 		GspEnterpriseInfo gspEnterpriseInfo = new GspEnterpriseInfo();
 		BeanUtils.copyProperties(form,gspEnterpriseInfo);
 		gspEnterpriseInfoMybatisDao.updateBySelective(gspEnterpriseInfo);

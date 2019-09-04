@@ -316,6 +316,8 @@ public class DataPublishService extends BaseService {
             form.setBillclass(updateSupplierForm.getFirstState());
             form.setCustomerid(supplier.getSupplierId());
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
+            //换证customerId 给错 不是APSUP0000000087应是GYS000000072
+
 
             return basCustomerService.editBasCustomer(form);
 

@@ -148,7 +148,6 @@ public class GspFirstRecordService extends BaseService {
 			for(GspFirstRecord  gspOperateOrProdLicense:gF){
 				gspOperateOrProdLicense.setRecordId(RandomUtil.getUUID());
 				gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
-//				gspOperateOrProdLicense.setCreateDate(new Date());
 				gspOperateOrProdLicense.setCreateId(getLoginUserId());
 				gspFirstRecordMybatisDao.add(gspOperateOrProdLicense);
 			}
