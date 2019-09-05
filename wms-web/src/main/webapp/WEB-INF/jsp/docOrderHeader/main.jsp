@@ -379,7 +379,7 @@ var ezuiToolbarClear = function(){
 	$("#ordertimeTo").datetimebox({
 		value:ordertimeDateTo(new Date())
 	});
-	$("#toolbar #productLineOrder").combobox('clear');
+	$("#toolbar #productLineOrder").combobox('loadData', {});  //清空option选项
 	$("#sostatusCheck").attr("checked",false);
 };
 
