@@ -2159,7 +2159,7 @@ function choseOrderTypeAfter(value) {
 							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品线</th>
 							<td>
-								<input id="productLineOrder" name="productLineOrder" size='16' data-options='required:false' type="text"/>
+								<input id="productLineOrder" name="productLineOrder" size='16' data-options='required:false' type="text" class='easyui-combobox' />
 							</td>
 
 						</tr>
