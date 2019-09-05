@@ -418,6 +418,7 @@ public class DocMtDetailsService extends BaseService {
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         List<DocMtDetails> MtDetailsList = new ArrayList<DocMtDetails>();
         DocMtHeader docMtHeader = new DocMtHeader();//头档信息
+        Double numberSum = 0.00;//初始化总数量
 
         if(StringUtils.isNotEmpty(mtlineNo) && StringUtils.isNotEmpty(mtNo)){
             String [] mtlineNoArr = mtlineNo.split(",");
@@ -525,6 +526,8 @@ public class DocMtDetailsService extends BaseService {
                 }else{
                     docMtDetails1.setCheckFlag("未检查");
                 }
+                numberSum += docMtDetails1.getMtqtyEachExpected();//加上数量
+                docMtDetails1.setMtqtyEachCompletedSum(numberSum);
                 docMtHeader.getDetls().add(docMtDetails1);
             }
             dataHeader.add(docMtHeader);

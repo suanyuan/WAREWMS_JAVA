@@ -51,4 +51,8 @@ private String lotatt01;  //生产日期
   private String descre;//型号
   //用于打印的单位
   private String uomName;
+  //总数量
+  private double mtqtyEachCompletedSum;
+  //总件数
+  private double mtqtyCompletedSum;
 }
