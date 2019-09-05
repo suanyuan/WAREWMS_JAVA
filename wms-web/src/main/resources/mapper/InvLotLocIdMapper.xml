@@ -269,28 +269,30 @@ where 1=1
     </select>
 <!--获得盘点任务-->
 <select id="queryByListByCouRequest" resultMap="BaseResultMap" >
-    SELECT i.*,a.lotatt04,a.lotatt05,p.name FROM `inv_lot_loc_id` i
-       LEFT JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
-       LEFT JOIN `bas_sku` s ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
-	   LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+	SELECT aa.*,p.name  FROM
+	(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty FROM `inv_lot_loc_id` i
+	INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
+	GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
+	LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
+	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
        where 1=1
 	<trim  suffixOverrides="," >
 	<if test="lotatt04 != null and lotatt04 != ''" >
-		and a.lotatt04 like concat('%',#{lotatt04},'%')
+		and aa.lotatt04 like concat('%',#{lotatt04},'%')
 	</if>
 	<if test="lotatt05 != null and lotatt05 != ''" >
-		and a.lotatt05 like concat('%',#{lotatt05},'%')
+		and aa.lotatt05 like concat('%',#{lotatt05},'%')
 	</if>
 	<if test="customerid != null and customerid != ''" >
-		and i.customerid like concat('%',#{customerid},'%')
+		and aa.customerid like concat('%',#{customerid},'%')
 	</if>
 	<if test="sku != null and sku != ''" >
-		and i.sku  like concat('%',#{sku},'%')
+		and aa.sku  like concat('%',#{sku},'%')
 	</if>
 		<if test="productLineName != null and productLineName != ''" >
 		and p.name  like concat('%',#{productLineName},'%')
 	</if>
 	</trim>
-
+	ORDER BY aa.locationid DESC
 </select>
 </mapper>   

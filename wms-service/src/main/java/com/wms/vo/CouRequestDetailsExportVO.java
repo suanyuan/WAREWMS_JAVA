@@ -1,11 +1,8 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
-
 import java.util.Date;
 
-public class CouRequestDetailsVO {
+public class CouRequestDetailsExportVO {
 
 	private String cycleCountno;
 	private int cycleCountlineno;
@@ -25,9 +22,15 @@ public class CouRequestDetailsVO {
 	private String userdefined3;
 //	双击查看明细
     private String reservedfield01;
-	private String descre;
-	private String descrc;
-	private String productLineName;
+	private String descre;//型号
+	private String descrc;//规格
+//导出导入附加字段
+    private String difference;  //差异
+    private String remarks;     //备注
+    private String countdate;   //盘点日期
+    private String countwho;    //盘点人
+    private String reviewerwho; //复核人
+    private String productLineName; //产品线
 
 	public String getCycleCountno() {
 		return cycleCountno;
@@ -179,6 +182,46 @@ public class CouRequestDetailsVO {
 
 	public void setDescrc(String descrc) {
 		this.descrc = descrc;
+	}
+
+	public String getDifference() {
+		return difference;
+	}
+
+	public void setDifference(String difference) {
+		this.difference = difference;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getCountdate() {
+		return countdate;
+	}
+
+	public void setCountdate(String countdate) {
+		this.countdate = countdate;
+	}
+
+	public String getCountwho() {
+		return countwho;
+	}
+
+	public void setCountwho(String countwho) {
+		this.countwho = countwho;
+	}
+
+	public String getReviewerwho() {
+		return reviewerwho;
+	}
+
+	public void setReviewerwho(String reviewerwho) {
+		this.reviewerwho = reviewerwho;
 	}
 
 	public String getProductLineName() {

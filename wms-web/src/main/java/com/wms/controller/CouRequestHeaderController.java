@@ -5,16 +5,19 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.InvLotLocId;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
+import com.wms.service.CouRequestExportService;
 import com.wms.service.CouRequestHeaderService;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.CouRequestHeaderVO;
 import com.wms.vo.Json;
+import com.wms.vo.form.CouRequestExportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,8 @@ public class CouRequestHeaderController {
 
 	@Autowired
 	private CouRequestHeaderService couRequestHeaderService;
+	@Autowired
+	private CouRequestExportService couRequestExportService;
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -53,6 +58,12 @@ public class CouRequestHeaderController {
 	@ResponseBody
 	public Json ToGenerationInfo(String forms) {
 		return couRequestHeaderService.ToGenerateInventoryPlan(forms);
+	}
+//导出
+	@Login
+	@RequestMapping(params = "exportCouRequestDataToExcel")
+public void exportViewInvLotattDataToExcel(HttpServletResponse response, CouRequestExportForm form) throws Exception {
+		couRequestExportService.exportCouRequestDataToExcel(response, form);
 	}
 ////关闭计划单
 //	@Login

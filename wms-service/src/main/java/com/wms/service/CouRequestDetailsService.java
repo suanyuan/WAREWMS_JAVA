@@ -38,7 +38,14 @@ public class CouRequestDetailsService extends BaseService {
 //通过查询条件和盘点单号获取细单
 	public List<CouRequestDetailsVO> getcouRequestInfoBycycleCountno(CouRequestDetailsQuery query) {
 
-		List<CouRequestDetailsVO> couRequestDetailsVOList=couRequestDetailsMybatisDao.queryListById(query);
+		List<CouRequestDetails> couRequestDetailsList=couRequestDetailsMybatisDao.queryListById(query);
+		CouRequestDetailsVO couRequestDetailsVO = null;
+		List<CouRequestDetailsVO> couRequestDetailsVOList = new ArrayList<CouRequestDetailsVO>();
+		for (CouRequestDetails couRequestDetails : couRequestDetailsList) {
+			couRequestDetailsVO = new CouRequestDetailsVO();
+			BeanUtils.copyProperties(couRequestDetails, couRequestDetailsVO);
+			couRequestDetailsVOList.add(couRequestDetailsVO);
+		}
 		return couRequestDetailsVOList;
 	}
 

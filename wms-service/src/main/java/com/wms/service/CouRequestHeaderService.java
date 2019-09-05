@@ -68,8 +68,11 @@ public class CouRequestHeaderService extends BaseService {
         List<InvLotLocId> listAdd=new ArrayList<>();
          for(InvLotLocId locId:list){
              for(InvLotLocId locIdAll:listAll){
-                 if(locId.getCustomerid().equals(locIdAll.getCustomerid())&&locId.getSku().equals(locIdAll.getSku())&&
-                    locId.getLotnum().equals(locIdAll.getLotnum())&&locId.getLocationid().equals(locIdAll.getLocationid())){
+                 if(locId.getCustomerid().equals(locIdAll.getCustomerid())
+                    &&locId.getSku().equals(locIdAll.getSku())
+                    &&locId.getLocationid().equals(locIdAll.getLocationid())
+                    &&locId.getLotatt04().equals(locIdAll.getLotatt04())
+                    &&locId.getLotatt05().equals(locIdAll.getLotatt05())){
                      listAdd.add(locIdAll);
                      break;
                  }
@@ -111,7 +114,7 @@ public class CouRequestHeaderService extends BaseService {
                 couRequestDetails.setSku(invLotLocId.getSku());
                 couRequestDetails.setLocationid(invLotLocId.getLocationid());
                 couRequestDetails.setQtyInv(invLotLocId.getQty()==null?0:invLotLocId.getQty());
-                couRequestDetails.setQtyAct(invLotLocId.getQty()==null?0:invLotLocId.getQty());
+                couRequestDetails.setQtyAct(0);
                 couRequestDetails.setLotatt04(invLotLocId.getLotatt04());
                 couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
                 couRequestDetails.setAddtime(new Date());

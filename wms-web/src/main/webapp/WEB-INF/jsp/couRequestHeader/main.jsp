@@ -42,9 +42,9 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:true,
-		idField : 'id',
+		singleSelect:false,
 		columns : [[
+			{field:'ck',checkbox:true},
 			{field: 'cycleCountno',		title: '盘点单号',	width: 61 },
 			{field: 'status',		title: '状态',	width: 61 },
 			{field: 'fuzzyc',		title: '条件',	width: 61 },
@@ -60,7 +60,7 @@ $(function() {
 			// {field: 'userdefine5',		title: '待输入栏位12',	width: 61 }
 		]],
 		onDblClickCell: function(index,field,value){
-			ShowGenerateInventory();
+
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -100,11 +100,10 @@ $(function() {
 		singleSelect: false,
 		columns: [[
 			{field:'ck',checkbox:true},
-			{field: 'lotnum', title: '批次', width: 100},
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 150},
 			{field: 'locationid', title: '库位', width: 100},
-			{field: 'qty', title: '系统数量', width: 100},
+			{field: 'qty', title: '盘点件数', width: 100},
 			{field: 'lotatt04', title: '生产批号', width: 100},
 			{field: 'lotatt05', title: '序列号', width: 100},
 			{field: 'productLineName', title: '产品线', width: 100},
@@ -132,12 +131,13 @@ $(function() {
 		rownumbers: true,
 		singleSelect:true,
 		columns: [[
-			{field: 'cycleCountlineno', title: '行号', width: 71},
+			// {field: 'cycleCountlineno', title: '行号', width: 71},
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 150},
+			{field: 'reservedfield01', title: '产品名称', width: 170},
 			{field: 'locationid', title: '库位', width: 100},
-			{field: 'qtyInv', title: 'qtyInv', width: 70},
-			{field: 'qtyAct', title: 'qtyAct', width: 70},
+			{field: 'qtyInv', title: '库存件数', width: 70},
+			{field: 'qtyAct', title: '实际盘点件数', width: 80},
 			{field: 'lotatt04', title: '生产批号', width: 100},
 			{field: 'lotatt05', title: '序列号', width: 100},
 			{field: 'addtime', title: '创建时间', width: 150},
@@ -210,7 +210,7 @@ var edit = function(){
 		});
 	}
 };
-//删除
+//删除任务单
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	<%--if(row.mtstatus!="00"){--%>
@@ -267,8 +267,9 @@ var GenerateInventoryPlanT = function(){
 		data=new Object();
 		data.customerid=rows[i].customerid;
 		data.sku=rows[i].sku;
-		data.lotnum=rows[i].lotnum;
 		data.locationid=rows[i].locationid;
+		data.lotatt04=rows[i].lotatt04;
+		data.lotatt05=rows[i].lotatt05;
 		forms.push(data);
 
 	}
@@ -481,7 +482,7 @@ var dosDialogSearch = function(){
 		lotatt04 : $('#ShowEzuiToolbar #lotatt04').textbox('getValue'),
 		lotatt05 : $('#ShowEzuiToolbar #lotatt05').textbox('getValue'),
 		productLineName : $('#ShowEzuiToolbar #productLineName').combobox('getText'),
-		lotatt12 : $('#ShowEzuiToolbar #lotatt12').textbox('getText'),
+		reservedfield01 : $('#ShowEzuiToolbar #reservedfield01').textbox('getText'),
 		locationid : $('#ShowEzuiToolbar #locationid').textbox('getText'),
 	});
 };
@@ -500,9 +501,56 @@ var ezuiDialogsToolbarClear= function(){
 	$("#ShowEzuiToolbar #lotatt04").textbox('clear');
 	$("#ShowEzuiToolbar #lotatt05").textbox('clear');
 	$("#ShowEzuiToolbar #productLineName").combobox('clear');
-	$("#ShowEzuiToolbar #lotatt12").textbox('clear');
+	$("#ShowEzuiToolbar #reservedfield01").textbox('clear');
 	$("#ShowEzuiToolbar #locationid").textbox('clear');
 };
+var con=true;
+/* 导出start */
+var doExport = function(cycleCountno){
+	if (navigator.cookieEnabled) {
+		        con=false;
+				$('#ezuiBtn_export').linkbutton('disable');
+				var token = new Date().getTime();
+				var param = new HashMap();
+				param.put("token", token);
+				param.put("cycleCountno",cycleCountno);
+
+				//--导出Excel
+				var formId = ajaxDownloadFile(sy.bp() + "/couRequestHeaderController.do?exportCouRequestDataToExcel", param);
+				downloadCheckTimer = window.setTimeout(function () {
+					$('#' + formId).remove();
+					$('#ezuiBtn_export').linkbutton('enable');
+					$.messager.progress('close');
+					$.messager.show({
+						msg: "<spring:message code='common.message.export.success'/>",
+						title: "<spring:message code='common.message.prompt'/>"
+					});
+				}, 1000);
+		} else {
+			$.messager.show({
+				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
+				title: "<spring:message code='common.message.prompt'/>"
+			});
+		}
+
+};
+//多条导出
+var doExportM=function () {
+	var rows = ezuiDatagrid.datagrid('getChecked');
+	if(rows.length>0) {
+	//循环导出excel
+	for (let i = 0; i < rows.length;i++) {
+		var cycleCountno = rows[i].cycleCountno;
+		alert('导出单号:'+cycleCountno);
+		doExport(cycleCountno);
+	}
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+}
+/* 导出end */
 </script>
 </head>
 <body>
@@ -522,18 +570,22 @@ var ezuiDialogsToolbarClear= function(){
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doExportM();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
+
 							</td>
 						</tr>
 					</table>
 				</fieldset>
 				<div>
+					<a onclick='ShowGenerateInventory();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
+
 					<a onclick='GenerateInventoryPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成盘点任务</a>
-					<a onclick='closeGenerateInventoryPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭任务单</a>
+<%--					<a onclick='closeGenerateInventoryPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭任务单</a>--%>
 
 				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除任务单</a>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>

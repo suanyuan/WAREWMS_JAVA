@@ -21,6 +21,11 @@
 	<result column="userdefined1" property="userdefined1"/>
 	<result column="userdefined2" property="userdefined2"/>
 	<result column="userdefined3" property="userdefined3"/>
+<!--双击查看明细带出产品名称-->
+	<result column="reservedfield01" property="reservedfield01"/>
+	<result column="descr_e" property="descre"/>
+	<result column="descr_c" property="descrc"/>
+	<result column="name" property="productLineName"/>
 </resultMap>
        
 <!-- cou_request_details table all fields -->
@@ -160,35 +165,35 @@ where 1=1
 </select>
 <!-- 根据cycleCountno查询 盘点明细单List -->
 <select id="queryListById"  resultMap="BaseResultMap" parameterType="Object">
-	SELECT r.*,p.name FROM
-	cou_request_details r
-	LEFT JOIN `bas_sku` s ON s.`sku`=r.`sku` AND s.`customerid`=r.`customerid`
+	SELECT d.*, s.reservedfield01,s.`descr_e`,s.`descr_c` ,p.name
+	FROM  `cou_request_details` d
+	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
 	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
         where cycle_countno = #{cycleCountno}
 	 <trim  suffixOverrides="," >
 		<if test="lotatt04 != null and lotatt04 != ''" >
-			and r.lotatt04 like concat('%',#{lotatt04},'%')
+			and d.lotatt04 like concat('%',#{lotatt04},'%')
 		</if>
 		<if test="lotatt05 != null and lotatt05 != ''" >
-			and r.lotatt05 like concat('%',#{lotatt05},'%')
+			and d.lotatt05 like concat('%',#{lotatt05},'%')
 		</if>
-		 <if test="lotatt12!= null and lotatt12 != ''" >
-			and r.lotatt12 like concat('%',#{lotatt12},'%')
+		 <if test="reservedfield01!= null and reservedfield01 != ''" >
+			and s.reservedfield01 like concat('%',#{reservedfield01},'%')
 		</if>
 		<if test="customerid != null and customerid != ''" >
-			and r.customerid like concat('%',#{customerid},'%')
+			and d.customerid like concat('%',#{customerid},'%')
 		</if>
 		<if test="sku != null and sku != ''" >
-			and r.sku  like concat('%',#{sku},'%')
+			and d.sku  like concat('%',#{sku},'%')
 		</if>
 		 <if test="locationid != null and locationid != ''" >
-			and r.locationid  like concat('%',#{locationid},'%')
+			and d.locationid  like concat('%',#{locationid},'%')
 		</if>
 		<if test="productLineName != null and productLineName != ''" >
 			and p.name  like concat('%',#{productLineName},'%')
 		</if>
 	</trim>
-	   order by cycle_countlineno
+	ORDER BY d.locationid DESC
 </select>
 
 <!-- 盘点明细单 列表总数-->

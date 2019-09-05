@@ -26,6 +26,13 @@ public class CouRequestDetails implements Serializable {
   private String userdefined1;
   private String userdefined2;
   private String userdefined3;
+  //双击查看明细
+  private String reservedfield01;
+  private String descre;
+  private String descrc;
+  private String productLineName;
+
+
 
 
 
