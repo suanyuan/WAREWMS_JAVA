@@ -326,6 +326,31 @@ $(function() {
 	$("#sostatusCheck").change(function() {
 		doSearch();
 	});
+
+
+	var customerid1;
+	//产品线1
+	$("#toolbar #customerid").textbox({
+		onChange:function(){
+			customerid1 = $("#toolbar #customerid").textbox('getValue');
+			console.log(customerid1);
+			if(customerid1 !=null && ($.trim(customerid1).length>0)){
+				$("#toolbar #productLineOrder").combobox({
+					panelHeight: 'auto',
+					url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid1,
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
+			}else{
+				$("#toolbar #productLineOrder").combobox('clear')
+				console.log("货主为空");
+			}
+		}
+	});
+
+
 });
 
 /* 查询条件清空按钮 */
@@ -354,6 +379,7 @@ var ezuiToolbarClear = function(){
 	$("#ordertimeTo").datetimebox({
 		value:ordertimeDateTo(new Date())
 	});
+	$("#toolbar #productLineOrder").combobox('clear');
 	$("#sostatusCheck").attr("checked",false);
 };
 
@@ -1027,6 +1053,7 @@ var doSearch = function(){
         soreference2 : $('#soreference2').val(),
 		//收货人
 		 cContact : $('#cContact').val(),
+		psName :$("#toolbar #productLineOrder").combobox('getValue'),
 		//收货电话
 		//  cTel1 : $('#cTel1').val(),
 		//订单状态
@@ -1038,6 +1065,7 @@ var doSearch = function(){
 		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
 		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
+
         /*cProvince : $("#cc1").textbox("getValue"),
         cCity : $("#cc2").textbox("getValue"),
         cAddress2 : $("#cc3").textbox("getValue")*/
@@ -2129,8 +2157,12 @@ function choseOrderTypeAfter(value) {
 --%>
 							<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th>
+							<td>
+								<input id="productLineOrder" name="productLineOrder" size='16' data-options='required:false' type="text"/>
+							</td>
 
-                        </tr>
+						</tr>
 						<tr>
 							<th>订单状态</th><td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
