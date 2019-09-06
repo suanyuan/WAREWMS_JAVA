@@ -168,7 +168,11 @@ public class GspReceivingAddressService extends BaseService {
 
 			}
 		}
+
+		//getReceivingAddressId为空
 		GspReceivingAddress gspReceivingAddress = gspReceivingAddressMybatisDao.queryByAddressId(gspReceivingAddressForm.getReceivingAddressId());
+		//		????
+
 		BeanUtils.copyProperties(gspReceivingAddressForm, gspReceivingAddress);
 		gspReceivingAddressMybatisDao.updateBySelective(gspReceivingAddress);
 		json.setSuccess(true);

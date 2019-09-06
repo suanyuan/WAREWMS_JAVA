@@ -255,6 +255,7 @@ public class GspReceivingService extends BaseService {
 	public Json editGspReceiving(GspReceivingForm gspReceivingForm) {
 		Json json = new Json();
 		GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(gspReceivingForm.getReceivingId());
+		//java.lang.IllegalArgumentException: Target must not be null
 		BeanUtils.copyProperties(gspReceivingForm, gspReceiving);
 		gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
         gspReceivingMybatisDao.updateBySelective(gspReceiving);
