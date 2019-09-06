@@ -333,4 +333,10 @@ where 1=1
         ORDER BY a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
         limit #{start}, #{pageSize}
     </select>
+
+    <select id="sumSameBatchInventory" parameterType="java.util.Map" resultType="double">
+        select sum(a.qty) from inv_lot_loc_id a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        where b.lotatt04 = #{lotatt04} and b.customerid = #{customerid}
+    </select>
 </mapper>   

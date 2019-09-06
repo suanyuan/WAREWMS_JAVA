@@ -47,4 +47,12 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @return ~
      */
     List<InvLotLocId> queryInventoryForScan(PdaInventoryQuery query);
+
+    /**
+     * 查询货主下同批的产品件数总和，不区分库位
+     * @param customerid ~
+     * @param lotatt04 ~
+     * @return ~
+     */
+    double sumSameBatchInventory(@Param("customerid") String customerid, @Param("lotatt04") String lotatt04);
 }

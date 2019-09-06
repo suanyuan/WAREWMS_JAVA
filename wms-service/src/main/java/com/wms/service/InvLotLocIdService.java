@@ -13,6 +13,7 @@ import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.InvLotAttQuery;
 import com.wms.query.pda.PdaInventoryQuery;
+import com.wms.utils.StringUtil;
 import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.pda.PageForm;
@@ -142,6 +143,16 @@ public class InvLotLocIdService extends BaseService {
             BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
             if (basCodes != null) {
                 pdaInvLotLocId.getBasSku().setDefaultreceivinguom(basCodes.getCodenameC());
+            }
+
+            //同批件数
+            if (invLotLocId.getInvLotAtt() != null && StringUtil.isNotEmpty(invLotLocId.getInvLotAtt().getLotatt04())) {
+
+                double sameBatchNum = invLotLocIdMybatisDao.sumSameBatchInventory(invLotLocId.getCustomerid(), invLotLocId.getInvLotAtt().getLotatt04());
+                pdaInvLotLocId.setSameBatchNum(sameBatchNum);
+            }else {
+
+                pdaInvLotLocId.setSameBatchNum(1);
             }
 
             pdaInvLotLocIdList.add(pdaInvLotLocId);

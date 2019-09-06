@@ -11,4 +11,6 @@ public class PdaInvLotLocId extends InvLotLocId {
     private BasSku basSku;
 
     private BasPackage basPackage;
+
+    private double sameBatchNum;//同批件数
 }
