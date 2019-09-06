@@ -26,6 +26,9 @@ public class BasPackageService extends BaseService {
 
 	@Autowired
 	private BasPackageMybatisDao basPackageMybatisDao;
+//	@Autowired
+//	private BasPackageService basPackageService;
+
 
 	public EasyuiDatagrid<BasPackageVO> getPagedDatagrid(EasyuiDatagridPager pager, BasPackageQuery query) {
 		EasyuiDatagrid<BasPackageVO> datagrid = new EasyuiDatagrid<BasPackageVO>();
@@ -53,6 +56,13 @@ public class BasPackageService extends BaseService {
 		Json json = new Json();
 		BasPackage basPackage = new BasPackage();
 		//System.out.println(basPackageForm.getPackid()+"=====================================");
+//		basPackageMybatisDao.queryById()
+		BasPackageQuery query =new BasPackageQuery();
+		query.setDescr(basPackageForm.getDescr());
+		BasPackage basPackage1 = queryBasBydescr(query);
+		if(basPackage1!=null){
+			return Json.error("包装描述重复");
+		}
 		BeanUtils.copyProperties(basPackageForm, basPackage);
 		basPackageForm.setPackid(RandomUtil.getUUID());
 		basPackageMybatisDao.add(basPackageForm);
