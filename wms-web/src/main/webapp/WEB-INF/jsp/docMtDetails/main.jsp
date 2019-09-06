@@ -51,8 +51,8 @@ $(function() {
 			{field: 'inventoryage',		title: '库龄',	width: 80 },
 			{field: 'customerid',		title: '货主',	width: 100 },
 			{field: 'sku',		title: '产品代码',	width: 140 },
-			{field: 'descrc',		title: '规格',	width: 140 },
-			{field: 'descre',		title: '型号',	width: 140 },
+			{field: 'descrc',		title: '规格/型号',	width: 140 },
+			// {field: 'descre',		title: '型号',	width: 140 },
 			{field: 'lotatt12',		title: '产品名称',	width: 200 },
 			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
 			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },
@@ -137,6 +137,32 @@ $(function() {
 				ezuiCustDataDialogSearch();
 			}
 		}]
+	});
+//货主带出产品线
+	$("#toolbar #customerid").textbox({
+		onChange:function(){
+			var customerid = $("#toolbar #customerid").textbox('getValue');
+			console.log(customerid);
+			if(customerid !=null && ($.trim(customerid).length>0)){
+				$("#toolbar #productLineName").combobox({
+					panelHeight: 'auto',
+					url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
+			}else{
+				$("#toolbar #productLineName").combobox({
+					panelHeight: 'auto',
+					url:"/productLineController.do?getCombobox",
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
+			}
+		}
 	});
 //一级dialog初始化
 	ezuiDialog = $('#ezuiDialog').dialog({
@@ -681,6 +707,7 @@ function choseSelect_product_docMtDetails(row) {
 	}
 	productDialog_docMtDetails.dialog("close");
 }
+
 </script>
 </head>
 <body>
@@ -705,10 +732,7 @@ function choseSelect_product_docMtDetails(row) {
 																																         value: '已养护'},
 																																       {label: '',
 																																         value: '全部'}]"/></td>
-	                        <th>产品线</th><td><input type='text' id='productLineName' class='easyui-combobox' size='16' data-options="
-																										url:'<c:url value="/productLineController.do?getCombobox"/>',
-																										valueField: 'id',
-																										textField: 'value'"/></td>
+	                        <th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 	                        <th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
@@ -717,7 +741,11 @@ function choseSelect_product_docMtDetails(row) {
 
 						</tr>
 						<tr>
-							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
+
+							<th>产品线</th><td><input type='text' id='productLineName' class='easyui-combobox' size='16' data-options="
+																										url:'<c:url value="/productLineController.do?getCombobox"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
 							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
