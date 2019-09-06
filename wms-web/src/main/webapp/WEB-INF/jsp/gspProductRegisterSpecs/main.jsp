@@ -53,7 +53,7 @@ $(function() {
 			{field: 'productModel',		title: '型号',	width: 100 },
 			{field: 'productionAddress',		title: '产地',	width: 150 },
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
-			{field: 'unit',		title: '单位',	width: 50 },
+			{field: 'unit',		title: '单位',	width: 50 ,formatter : unitFormatter },
 			{field: 'packingUnit',		title: '包装规格',	width: 80 },
             {field: 'attacheCardCategory',		title: '附卡类别',	width: 100 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },

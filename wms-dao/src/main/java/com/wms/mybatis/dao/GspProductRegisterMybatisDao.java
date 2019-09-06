@@ -26,4 +26,11 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      * @return ~
      */
     GspProductRegister queryByproductNameMain(@Param("productNameMain") String productNameMain);
+
+    /**
+     * 通过注册证号查询所有
+     * @param registerNo 注册证编号
+     * @return ~
+     */
+    List<PdaGspProductRegister> queryAllByNo(@Param("registerNo") String registerNo);
 }

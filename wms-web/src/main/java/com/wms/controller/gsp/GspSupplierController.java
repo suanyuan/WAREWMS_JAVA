@@ -73,6 +73,37 @@ public class GspSupplierController {
 	}
 
 	@Login
+	@RequestMapping(params = "basCustomerToAdd")
+	public ModelAndView basCustomerToAdd(String id) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("id", id);
+		GspSupplier gspSupplier1 = gspSupplierMybatisDao.queryByEnterpriseId(id);
+		if(gspSupplier1!=null){
+			id = gspSupplier1.getSupplierId();
+		}else{
+			return new ModelAndView("gspSupplier/info", model);
+		}
+		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
+		if(gspSupplier!=null){
+			BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(gspSupplier.getCostomerid(),"OW");
+			if(basCustomer!=null){
+				model.put("clientEnterpriseId", basCustomer.getEnterpriseId());
+			}
+		}
+		model.put("gspSupplier", gspSupplier);
+
+		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
+		model.put("createDate",df.format(new Date()));
+		model.put("isCheck",1);
+
+//		model.put("specsId", specsId);
+		model.put("isUse", 1);
+		return new ModelAndView("gspSupplier/info", model);
+	}
+
+
+	@Login
 	@RequestMapping(params = "showSupplierDetail")
 	public ModelAndView showSupplierDetail(String id) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式

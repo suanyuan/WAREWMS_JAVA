@@ -153,6 +153,10 @@ var openLoginDialog = function(){
 };
 
 var login = function(){
+    if($("#loginForm #warehouseId").combobox("getValue") == ""){
+        showMsg("请选择仓库");
+    	return;
+    }
 	loginForm.form('submit',{
 		url : '<c:url value="/loginController.do?login"/>',
 		success : function(data) {

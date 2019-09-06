@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <th>快递经营许可证编号</th>
-            <td><input type='text' data="1" id="carrierNo" value="${basCarrierLicense.carrierNo}" name='carrierNo' class='easyui-textbox'  data-options='required:true'/></td>
+            <td><input type='text' data="1" id="carrierNo" value="${basCarrierLicense.carrierNo}" name='carrierNo' class='easyui-textbox'  data-options=''/></td>
         </tr>
         <tr>
             <th>经营许可证照片</th>

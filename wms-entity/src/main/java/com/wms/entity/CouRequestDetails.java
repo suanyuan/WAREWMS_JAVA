@@ -21,11 +21,11 @@ public class CouRequestDetails implements Serializable {
   private String lotatt05;
   private Date addtime;
   private String addwho;
-  private Date edittime;
-  private String editwho;
-  private String userdefined1;
-  private String userdefined2;
-  private String userdefined3;
+  private Date edittime;       //盘点时间
+  private String editwho;      //盘点人
+  private String userdefined1; //差异
+  private String userdefined2; //备注
+  private String userdefined3; //复核人
   //双击查看明细
   private String reservedfield01;
   private String descre;

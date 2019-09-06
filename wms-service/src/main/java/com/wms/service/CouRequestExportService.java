@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,6 +53,13 @@ public class CouRequestExportService {
 			for (CouRequestDetails couRequestDetails : vList) {
 				vo = new CouRequestDetailsExportVO();
 				BeanUtils.copyProperties(couRequestDetails, vo);
+				//editime转换成string  setCountdate
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+				if (vo.getEdittime()!=null) {
+					vo.setCountdate(sdf.format(vo.getEdittime()));
+				}else{
+					vo.setCountdate("yyyy-MM-dd");
+				}
 				exportVOS.add(vo);
 			}
 	        // 导出  
@@ -81,19 +89,18 @@ public class CouRequestExportService {
 		superClassMap.put("customerid", "货主");
 		superClassMap.put("sku", "产品代码");
 		superClassMap.put("reservedfield01", "产品名称");
-		superClassMap.put("descrc", "规格");
-		superClassMap.put("descre", "型号");
+		superClassMap.put("descrc", "规格/型号");
 		superClassMap.put("lotatt04", "生产批号");
 		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("qtyInv", "库存件数");
 		superClassMap.put("locationid", "库位");
 		superClassMap.put("qtyAct", "实际盘点件数");
-		superClassMap.put("difference", "差异");
+		superClassMap.put("userdefined1", "盘点差异");
 		superClassMap.put("productLineName", "产品线");
-		superClassMap.put("remarks", "备注");
-		superClassMap.put("countdate", "盘点日期");
-		superClassMap.put("countwho", "盘点人");
-		superClassMap.put("reviewerwho", "复核人");
+		superClassMap.put("userdefined2", "备注");
+		superClassMap.put("countdate", "盘点日期");//editime转换成string
+		superClassMap.put("editwho", "盘点人");
+		superClassMap.put("userdefined3", "复核人");
 
 		return superClassMap;
 	}

@@ -10,7 +10,7 @@
                     <table>
                         <tr>
                             <input type='hidden' id='cycleCountno' size='16' data-options=''/>
-                            <th>货主</th>
+                            <th>货主代码</th>
                             <td>
                                 <input type='text' id='customerid' class='easyui-textbox' size='16'
                                        data-options=''/>
@@ -27,22 +27,23 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>生产批号</th>
-                            <td>
-                                <input type='text' id='lotatt04' class='easyui-textbox' size='16'
-                                       data-options=''/>
-                            </td>
-                            <th>序列号</th>
-                            <td>
-                                <input type='text' id='lotatt05' class='easyui-textbox' size='16'
-                                       data-options=''/>
-                            </td>
                             <th>产品线</th>
                             <td>
                                 <input type='text' id='productLineName' class='easyui-combobox' size='16'
                                        data-options="url:'<c:url value="/productLineController.do?getCombobox"/>',
 													valueField: 'id',
 													textField: 'value'"/>
+                            </td>
+
+                            <th>序列号</th>
+                            <td>
+                                <input type='text' id='lotatt05' class='easyui-textbox' size='16'
+                                       data-options=''/>
+                            </td>
+                            <th>生产批号</th>
+                            <td>
+                                <input type='text' id='lotatt04' class='easyui-textbox' size='16'
+                                       data-options=''/>
                             </td>
                         </tr>
                         <tr>

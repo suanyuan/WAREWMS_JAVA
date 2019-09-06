@@ -4,9 +4,11 @@ import com.google.common.io.Files;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
+import com.wms.entity.BasCustomer;
 import com.wms.entity.InvLotLocId;
 import com.wms.result.UploadResult;
 import com.wms.service.BasCodesService;
+import com.wms.service.BasCustomerService;
 import com.wms.service.GspOperateDateTimeService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PropertyUtils;
@@ -39,6 +41,8 @@ public class CommonController {
     private BasCodesService basCodesService;
     @Autowired
     private GspOperateDateTimeService gspOperateDateTimeService;
+    @Autowired
+    private BasCustomerService basCustomerService;
 
     /**
      * 上传文件
@@ -104,7 +108,6 @@ public class CommonController {
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
                 bos.write(buff, 0, bytesRead);
             }
-
         }
         return null;
     }
@@ -358,6 +361,35 @@ public class CommonController {
     @ResponseBody
     public List<EasyuiCombobox> getMtStatus(){
         return basCodesService.getBy(Constant.CODE_CATALOG_MT_STS);
+    }
+    /**
+     * 盘点状态
+     * @return
+     * */
+    @RequestMapping(params = "getCouRequestStatus")
+    @ResponseBody
+    public List<EasyuiCombobox> getCouRequestStatus(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_COU_REQUEST);
+    }
+
+    /**
+     * 获取委托方获取供应商
+     * @return
+     */
+    @RequestMapping(params = "getSupplier")
+    @ResponseBody
+    public List<EasyuiCombobox> getSupplier(String customerId){
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        List<BasCustomer> basCustomers = basCustomerService.querySupplierByCustomer(customerId);
+        if(basCustomers!=null && basCustomers.size()>0){
+            for(BasCustomer b : basCustomers){
+                EasyuiCombobox box = new EasyuiCombobox();
+                box.setId(b.getCustomerid());
+                box.setValue(b.getDescrC());
+                easyuiComboboxList.add(box);
+            }
+        }
+        return easyuiComboboxList;
     }
 
 }

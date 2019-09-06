@@ -181,100 +181,7 @@
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:500});
             }
-        })
-        <%--//产品--%>
-        <%--dataGridProduct = $("#dataGridProduct").datagrid({--%>
-            <%--url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',--%>
-            <%--method:'POST',--%>
-            <%--toolbar : '#productToolbar',--%>
-            <%--title: '',--%>
-            <%--pageSize : 50,--%>
-            <%--pageList : [50, 100, 200],--%>
-            <%--border: false,--%>
-            <%--fitColumns : false,--%>
-            <%--nowrap: true,--%>
-            <%--striped: true,--%>
-            <%--collapsible:false,--%>
-            <%--fit:true,--%>
-            <%--pagination:true,--%>
-            <%--queryParams:{--%>
-                <%--isUse : '1',--%>
-                <%--type:'CER'--%>
-            <%--},--%>
-            <%--rownumbers:true,--%>
-            <%--idField : 'specsId',--%>
-            <%--columns : [[--%>
-                <%--{field: 'ck',checkbox:true },--%>
-                <%--{field: 'specsId',title: '主键' ,hidden:true},--%>
-                <%--{field: 'productCode',title: '产品代码' ,width: '15%'},--%>
-                <%--{field: 'productName',title: '产品名称',width: '40%'},--%>
-                <%--{field: 'specsName',title: '规格名称' ,width: '10%'},--%>
-                <%--{field: 'productRegisterNo',title: '产品注册证',width: '20%'},--%>
-                <%--{field: '_operate',		title: '操作',	width: '10%',--%>
-                    <%--formatter: formatOper--%>
-                <%--}--%>
-            <%--]],--%>
-            <%--onDblClickCell: function(index,field,value){--%>
-
-            <%--},--%>
-            <%--onRowContextMenu : function(event, rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onSelect: function(rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onLoadSuccess:function(data){--%>
-                <%--$(this).datagrid("resize",{height:540});--%>
-                <%--$.ajax({--%>
-                    <%--url : '/firstBusinessApplyController.do?showSpecsDatagrid',--%>
-                    <%--data : {'applyId':"<c:choose><c:when test="${firstBusinessApply.applyId == null}">'empty'</c:when><c:otherwise>'${firstBusinessApply.applyId}'</c:otherwise></c:choose>"},--%>
-                    <%--type : 'POST',--%>
-                    <%--dataType : 'JSON',--%>
-                    <%--success : function(result){--%>
-                        <%--//console.log(result);--%>
-                        <%--if(result){--%>
-                            <%--for(var i=0;i<result.rows.length;i++){--%>
-                                <%--//console.log(result.rows[i]);--%>
-                                <%--dataGridProduct.datagrid("selectRecord",result.rows[i].specsId);--%>
-                            <%--}--%>
-                        <%--}--%>
-                    <%--}--%>
-                <%--});--%>
-            <%--}--%>
-        <%--});--%>
-        <%--//注册证--%>
-        <%--ezuiDialogSpec = $('#ezuiDialogSpec').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-
-            <%--}--%>
-        <%--}).dialog('close');--%>
-
-        <%--dialogEnterprise = $('#dialogEnterprise').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--fit:true,--%>
-            <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--//  ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
-        <%--enterpriseProduct = $('#enterpriseProduct').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
-
+        });
 
 
 
@@ -353,83 +260,6 @@
 
 
 
-        <%--//供应商--%>
-        <%--supplierDatagrid = $("#dataGridSupplierDetail").datagrid({--%>
-            <%--url : sy.bp()+'/basCustomerController.do?showDatagrid',--%>
-            <%--method:'POST',--%>
-            <%--toolbar : '#TB',--%>
-            <%--title: '',--%>
-            <%--pageSize : 50,--%>
-            <%--pageList : [50, 100, 200],--%>
-            <%--border: false,--%>
-            <%--fitColumns : false,--%>
-            <%--nowrap: true,--%>
-            <%--striped: true,--%>
-            <%--queryParams:{--%>
-                <%--isUse : '1',--%>
-                <%--customerType:'VE'--%>
-            <%--},--%>
-            <%--fit:true,--%>
-            <%--collapsible:false,--%>
-            <%--pagination:true,--%>
-            <%--rownumbers:true,--%>
-            <%--singleSelect:true,--%>
-            <%--idField : 'clientId',--%>
-            <%--columns : [[--%>
-                <%--{field: 'customerType',	title: '客户类型 ',	width: 100,formatter:function(value,rowData,rowIndex){--%>
-                        <%--if (rowData.customerType=='CO') {--%>
-                            <%--return rowData.customerType='收货单位';--%>
-                        <%--}else if (rowData.customerType=='VE'){--%>
-                            <%--return rowData.customerType='供应商';--%>
-                        <%--}else if (rowData.customerType=='CA'){--%>
-                            <%--return rowData.customerType='承运商';--%>
-                        <%--}else if (rowData.customerType=='OT'){--%>
-                            <%--return rowData.customerType='其他';--%>
-                        <%--}else if (rowData.customerType=='OW'){--%>
-                            <%--return rowData.customerType='货主';--%>
-                        <%--}else if (rowData.customerType=='PR'){--%>
-                            <%--return rowData.customerType='生产企业';--%>
-                        <%--}else if (rowData.customerType=='WH'){--%>
-                            <%--return rowData.customerType='主体';--%>
-                        <%--}--%>
-                    <%--} },--%>
-                <%--{field: 'activeFlag',		title: '是否合作 ',	width: 100,formatter:function(value,rowData,rowIndex){--%>
-                        <%--return rowData.activeFlag == '1' ? '是' : '否';--%>
-                    <%--}},--%>
-                <%--{field: 'customerid',		title: '客户代码',	width: 150 },--%>
-                <%--{field: 'descrC',		title: '客户名称',	width: 150 },--%>
-                <%--{field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },--%>
-                <%--{field: 'shorthandName',		title: '简称 ',	width: 85 },--%>
-                <%--{field: 'enterpriseName',		title: '企业名称 ',	width: 80 }--%>
-            <%--]],--%>
-            <%--onDblClickCell: function(index,field,value){--%>
-                <%--choseSupplierSelect();--%>
-            <%--},--%>
-            <%--onRowContextMenu : function(event, rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onSelect: function(rowIndex, rowData) {--%>
-
-            <%--},--%>
-            <%--onLoadSuccess:function(data){--%>
-                <%--$(this).datagrid('unselectAll');--%>
-                <%--$(this).datagrid("resize",{height:540});--%>
-            <%--}--%>
-        <%--});--%>
-        <%--//供应商弹窗--%>
-        <%--ezuiDialogSupplierDetail = $('#ezuiDialogSupplierDetail').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--width:850,--%>
-            <%--height:500,--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
-
-
-
         $("#clientName").textbox({
             icons:[{
                 value:'${firstBusinessApply.clientName}',
@@ -441,28 +271,7 @@
             }]
         })
 
-        <%--$("#supplierName").textbox({--%>
-            <%--value:"${firstBusinessApply.supplierName}",--%>
-            <%--width:150,--%>
-            <%--icons:[{--%>
-                <%--iconCls:'icon-search',--%>
-                <%--handler: function(e){--%>
-                    <%--searchSupplier();--%>
-                <%--}--%>
-            <%--}]--%>
-        <%--});--%>
 
-
-        // console.log(customerid);
-        // $("#productLine").combobox({
-        //     panelHeight: 'auto',
-        //     url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
-        //     valueField:'id',
-        //     textField:'value',
-        //     onLoadSuccess:function () {
-        //
-        //     }
-        // });
         var customerid = $("#clientId").val();
         <c:choose>
             <c:when test="${firstBusinessApply.productline != null}">
@@ -485,25 +294,12 @@
 
 
 
-        <%--dialogEnterprise = $('#enterpriseDialog').dialog({--%>
-            <%--modal : true,--%>
-            <%--title : '<spring:message code="common.dialog.title"/>',--%>
-            <%--fit:true,--%>
-            <%--href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd",--%>
-            <%--cache: false,--%>
-            <%--onClose : function() {--%>
-                <%--ezuiFormClear(ezuiForm);--%>
-            <%--}--%>
-        <%--}).dialog('close');--%>
     });
 
 
     function delProduct(){
         console.log(1111111111111111);
-
         var row =  ezuiDatagridDetail1.datagrid('getSelected');
-
-
         arr.remove(row.specsId);
         arr1.remove(row.customerid);
         var rowIndex = ezuiDatagridDetail1.datagrid('getRowIndex', row);
@@ -527,7 +323,7 @@
                     ezuiFormClear(ezuiDialogClientEnterprise);
                 }
             }).dialog('close');
-        })
+        });
         //processType = 'edit';
 
         //var row = ezuiDatagrid.datagrid('getSelected');
@@ -652,6 +448,13 @@
 
     //选择产品
     function choseProduct() {
+        // alert($('#clientName').val());
+        if($('#ezuiFormDetail #clientName').val()==""){
+            $.messager.show({
+                msg : '请先选择货主', title : '提示'
+            });
+            return;
+        }
         //ezuiDialogSpec.dialog('open');
         enterpriseProduct = $('#enterpriseProduct').dialog({
             modal : true,
@@ -666,7 +469,9 @@
             onClose : function() {
                 ezuiFormClear(ezuiForm);
             }
-        })
+        });
+
+        ;
 
         $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
         $('#ezuiDialogSupplierDetail').dialog('destroy');//ProductAndSupplier供应商

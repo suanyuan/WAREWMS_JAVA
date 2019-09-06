@@ -126,7 +126,7 @@ public class GspServiceTest {
     @Test
     public void testRight(){
         try{
-            gspVerifyService.verifyOperate("JSJY","PASSEO-18 2.5/120/130","2022-08-16");
+            //gspVerifyService.verifyOperate("JSJY","PASSEO-18 2.5/120/130","2022-08-16");
         }catch (Exception e){
             e.printStackTrace();
         }

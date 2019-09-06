@@ -305,12 +305,12 @@
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArr.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push(row[i].instrumentCatalogName);
+                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
             $("#businessScope").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-           $("#businessScope").textbox("setValue",row.instrumentCatalogName);
+           $("#businessScope").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormBusiness input[id='choseScope']").val(choseRowArr.join(","));
         $(ezuidialogChoseScope).dialog("close");

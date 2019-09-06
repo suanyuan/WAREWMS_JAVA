@@ -138,6 +138,22 @@
             return "";
         }
     }
+
+	var unitFormatter = function(value,row,index) {
+		value+="";
+		switch (value) {
+			case "BA" : return "包";
+			case "CS" : return "箱";
+			case "EA" : return "件";
+			case "GE" : return "个";
+			case "GN" : return "根";
+			case "HE" : return "盒";
+			case "HE" : return "内箱";
+			case "HE" : return "其它";
+			case "PL" : return "板";
+		}
+	}
+
     var QualifiedOrFailed = function(value,row,index) {
 		value+="";
 		switch (value) {
@@ -279,6 +295,17 @@
     	switch (value) {
 			case "1" : return "已匹配";
 			case "" : return "";
+		}
+	}
+//盘点状态
+	var Cou_RequeststatusFormatter = function (value,row,index) {
+		value+="";
+    	switch (value) {
+			case "00" : return "任务创建";
+			case "30" : return "部分盘点";
+			case "40" : return "完全盘点";
+			case "90" : return "盘点取消";
+			case "99" : return "盘点关闭";
 		}
 	}
 

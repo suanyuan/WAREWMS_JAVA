@@ -76,7 +76,8 @@
 	<result column="client_term" property="clientTerm"/>
 <!--是否贴中文标签-->
 	<result column="isChineseLabel" property="isChineseLabel"/>
-
+<!--申请单号-->
+	<result column="bankaccount" property="bankaccount"/>
 
 </resultMap>
 	<resultMap id="ResultMap" type="com.wms.entity.GspReceivingAddress" >
@@ -108,6 +109,7 @@
 	active_flag,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,
 	address1,
 	address2,
+	bankaccount,
 	address3,
 	address4,
 	addtime,
@@ -302,7 +304,8 @@ where 1=1
 	idx_load_supplier,<!-- N -->
 	billwithasntype,<!-- N -->
 	billwithsotype,<!-- N -->
-	copypricetolotatt09<!-- N -->
+	copypricetolotatt09,<!-- N -->
+	bankaccount
 	)
 	values(
 	#{customerid},
@@ -380,7 +383,8 @@ where 1=1
 	'N',
 	'N',
 	'N',
-	'N'
+	'N',
+	#{bankaccount}
 	)
 </insert>
 
@@ -786,5 +790,9 @@ where 1=1
 	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 	</select>
 
+	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
+	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id
+	where s.costomerid = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
+	</select>
 
 </mapper>

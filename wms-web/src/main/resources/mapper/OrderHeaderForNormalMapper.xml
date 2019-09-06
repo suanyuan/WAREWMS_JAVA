@@ -285,7 +285,7 @@
 				and a.soreference1 =  #{condition.soreference1}
 			</if>
 			<if test="condition.psName != null and condition.psName != ''" >
-				and ps.product_line_id =  #{condition.psName}
+				and ps.name =  #{condition.psName}
 			</if>
 			<if test="condition.ordertime != null and condition.ordertime != ''" >
 				and ordertime =  #{condition.ordertime}

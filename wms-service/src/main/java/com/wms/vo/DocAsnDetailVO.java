@@ -4,6 +4,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.math.BigDecimal;
+
 public class DocAsnDetailVO {
 	
 	private Integer seq;
@@ -101,6 +103,7 @@ public class DocAsnDetailVO {
 	private java.lang.String userdefine4;
 	private java.lang.String userdefine5;
 	private java.lang.String userdefine6;
+	private String coldName;
 	
 	public Integer getSeq() {
 		return seq;
@@ -862,5 +865,173 @@ public class DocAsnDetailVO {
 
 	public void setLotatt14(String lotatt14) {
 		this.lotatt14 = lotatt14;
+	}
+
+	public String getdEdi01() {
+		return dEdi01;
+	}
+
+	public void setdEdi01(String dEdi01) {
+		this.dEdi01 = dEdi01;
+	}
+
+	public String getdEdi02() {
+		return dEdi02;
+	}
+
+	public void setdEdi02(String dEdi02) {
+		this.dEdi02 = dEdi02;
+	}
+
+	public String getdEdi03() {
+		return dEdi03;
+	}
+
+	public void setdEdi03(String dEdi03) {
+		this.dEdi03 = dEdi03;
+	}
+
+	public String getdEdi04() {
+		return dEdi04;
+	}
+
+	public void setdEdi04(String dEdi04) {
+		this.dEdi04 = dEdi04;
+	}
+
+	public String getdEdi05() {
+		return dEdi05;
+	}
+
+	public void setdEdi05(String dEdi05) {
+		this.dEdi05 = dEdi05;
+	}
+
+	public String getdEdi06() {
+		return dEdi06;
+	}
+
+	public void setdEdi06(String dEdi06) {
+		this.dEdi06 = dEdi06;
+	}
+
+	public String getdEdi07() {
+		return dEdi07;
+	}
+
+	public void setdEdi07(String dEdi07) {
+		this.dEdi07 = dEdi07;
+	}
+
+	public String getdEdi08() {
+		return dEdi08;
+	}
+
+	public void setdEdi08(String dEdi08) {
+		this.dEdi08 = dEdi08;
+	}
+
+	public BigDecimal getdEdi09() {
+		return dEdi09;
+	}
+
+	public void setdEdi09(BigDecimal dEdi09) {
+		this.dEdi09 = dEdi09;
+	}
+
+	public BigDecimal getdEdi10() {
+		return dEdi10;
+	}
+
+	public void setdEdi10(BigDecimal dEdi10) {
+		this.dEdi10 = dEdi10;
+	}
+
+	public String getdEdi11() {
+		return dEdi11;
+	}
+
+	public void setdEdi11(String dEdi11) {
+		this.dEdi11 = dEdi11;
+	}
+
+	public String getdEdi12() {
+		return dEdi12;
+	}
+
+	public void setdEdi12(String dEdi12) {
+		this.dEdi12 = dEdi12;
+	}
+
+	public String getdEdi13() {
+		return dEdi13;
+	}
+
+	public void setdEdi13(String dEdi13) {
+		this.dEdi13 = dEdi13;
+	}
+
+	public String getdEdi14() {
+		return dEdi14;
+	}
+
+	public void setdEdi14(String dEdi14) {
+		this.dEdi14 = dEdi14;
+	}
+
+	public String getdEdi15() {
+		return dEdi15;
+	}
+
+	public void setdEdi15(String dEdi15) {
+		this.dEdi15 = dEdi15;
+	}
+
+	public String getdEdi16() {
+		return dEdi16;
+	}
+
+	public void setdEdi16(String dEdi16) {
+		this.dEdi16 = dEdi16;
+	}
+
+	public String getdEdi17() {
+		return dEdi17;
+	}
+
+	public void setdEdi17(String dEdi17) {
+		this.dEdi17 = dEdi17;
+	}
+
+	public String getdEdi18() {
+		return dEdi18;
+	}
+
+	public void setdEdi18(String dEdi18) {
+		this.dEdi18 = dEdi18;
+	}
+
+	public String getdEdi19() {
+		return dEdi19;
+	}
+
+	public void setdEdi19(String dEdi19) {
+		this.dEdi19 = dEdi19;
+	}
+
+	public String getdEdi20() {
+		return dEdi20;
+	}
+
+	public void setdEdi20(String dEdi20) {
+		this.dEdi20 = dEdi20;
+	}
+
+	public String getColdName() {
+		return coldName;
+	}
+
+	public void setColdName(String coldName) {
+		this.coldName = coldName;
 	}
 }
