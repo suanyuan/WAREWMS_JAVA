@@ -215,7 +215,11 @@
                 changeRequired();
             }
         });
-
+        $('#coldHainMark').combobox({
+                onChange: function(){
+                changeColdHainMark();
+            }
+        });
         //主页编辑
         // debugger
         //
@@ -261,6 +265,7 @@
                 success : function(result){
                     if(result.success){
                         changeRequired();
+                        changeColdHainMark();
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -357,9 +362,20 @@
             $('#unit').combobox({required:true});
             $('#maintenanceCycle').textbox({required:true});
         }
-
-
     }
+    function changeColdHainMark(){
+        //非冷链： FLL  冷藏： LC  冷冻：LD
+        console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
+        if($('#ezuiFormInfo #coldHainMark').combobox('getValue') == 'FLL'){
+            $('#transportCondition').textbox({required:false});
+        }else {
+            $('#transportCondition').textbox({required:true});
+
+        }
+    }
+
+
+
     function searchEnterprise() {
         enterpriseDialog = $('#enterpriseDialog').dialog({
             modal: true,
