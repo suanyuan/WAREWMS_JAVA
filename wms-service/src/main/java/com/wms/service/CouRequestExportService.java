@@ -43,8 +43,9 @@ public class CouRequestExportService {
 	        // excel表格的表头，map  
 	        LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
 	        // excel的sheetName  
-	        String sheetName =form.getCycleCountno();
-	        // excel要导出的数据  
+	        String fileName =form.getCycleCountno();
+	        String sheetName ="couRequest_template";
+	        // excel要导出的数据
 	        List<CouRequestDetails> vList = couRequestDetailsMybatisDao.queryListById(query); //要权限！
 			List<CouRequestDetailsExportVO> exportVOS =new ArrayList<>();
 			CouRequestDetailsExportVO vo = null;
@@ -58,7 +59,7 @@ public class CouRequestExportService {
 	        	System.out.println("题库为空");  
 	        }else {  
 	            //将list集合转化为excle  
-	            ExcelUtil.listToExcel(exportVOS, fieldMap, sheetName, response);
+	            ExcelUtil.listToExcel(exportVOS, fieldMap, sheetName,65535, response,fileName);
 	        	System.out.println("导出成功~~~~");  
 	        }  
 	    } catch (ExcelException e) {  

@@ -119,8 +119,8 @@ public class CouRequestHeaderService extends BaseService {
                 couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
                 couRequestDetails.setAddtime(new Date());
                 couRequestDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                couRequestDetails.setEdittime(new Date());
-                couRequestDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+//                couRequestDetails.setEdittime(null);
+//                couRequestDetails.setEditwho(null);
                 couRequestDetailsMybatisDao.add(couRequestDetails);
             }
             json.setSuccess(true);

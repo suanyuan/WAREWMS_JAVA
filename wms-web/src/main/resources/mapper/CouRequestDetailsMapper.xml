@@ -93,7 +93,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into cou_request_details(cycle_countno,cycle_countlineno,customerid,sku,locationid,qty_inv,qty_act,lotatt04,lotatt05,addtime,addwho,edittime,editwho,userdefined1,userdefined2,userdefined3)
- values(#{cycleCountno},#{cycleCountlineno},#{customerid},#{sku},#{locationid},#{qtyInv},#{qtyAct},#{lotatt04},#{lotatt05},#{addtime},#{addwho},#{edittime},#{editwho},#{userdefined1},#{userdefined2},#{userdefined3})
+ values(#{cycleCountno},#{cycleCountlineno},#{customerid},#{sku},#{locationid},#{qtyInv},#{qtyAct},#{lotatt04},#{lotatt05},#{addtime},#{addwho},null,null,#{userdefined1},#{userdefined2},#{userdefined3})
 </insert>
 
 <!-- 根据id，修改记录-->  
