@@ -1740,8 +1740,8 @@ function refAddDetailIn() {
         success : function(result){
             try {
                 if(result.success){
-                    $('#ezuiBtn_copyDetail').linkbutton('disable');
-                    $('#ezuiDetailsDatagrid').datagrid('load',{asnno:asnno1});
+                    // $('#ezuiBtn_copyDetail').linkbutton('disable');
+                    $('#ezuiDetailsDatagrid').ezuiDatagrid('load');
                     refAddDialog.dialog("close");
                     $('#addrefInNoTo').textbox('clear')
                 }

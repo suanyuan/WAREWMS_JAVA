@@ -97,7 +97,7 @@ public class DocAsnHeaderService extends BaseService {
 	 * @param customerNo
 	 * @return
 	 */
-	public boolean checkIsRept(String customerNo){
+	/* boolean checkIsRept(String customerNo){
 		DocAsnHeaderQuery query = new DocAsnHeaderQuery();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCondition(query);
@@ -106,19 +106,26 @@ public class DocAsnHeaderService extends BaseService {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	public Json addDocAsnHeader(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
+
 		Json json = new Json();
-		/*获取新的订单号*/
-		Map<String ,Object> map=new HashMap<String, Object>();
-		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-		docAsnHeaderMybatisDao.getIdSequence(map);
-		String resultCode = map.get("resultCode").toString();
-		String resultNo = map.get("resultNo").toString();
-        DocAsnHeader docAsnHeader = new DocAsnHeader();
         int flag =  docAsnHeaderMybatisDao.showAsnreference1(docAsnHeaderForm.getAsnreference1());
-		if (resultCode.substring(0,3).equals("000") && flag == 0) {
+        if (flag != 0) {
+            json.setSuccess(false);
+            json.setMsg("此客户单号已存在！");
+            return json;
+        }
+
+        /*获取新的订单号*/
+        Map<String ,Object> map=new HashMap<String, Object>();
+        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+        docAsnHeaderMybatisDao.getIdSequence(map);
+        String resultCode = map.get("resultCode").toString();
+        String resultNo = map.get("resultNo").toString();
+        DocAsnHeader docAsnHeader = new DocAsnHeader();
+		if (resultCode.substring(0,3).equals("000")) {
 			BeanUtils.copyProperties(docAsnHeaderForm, docAsnHeader);
 			docAsnHeader.setAsnno(resultNo);
 			docAsnHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
