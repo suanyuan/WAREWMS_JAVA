@@ -14,7 +14,7 @@
 																								textField: 'value',
 																								data: [{
 																									id: '1',
-																									value: '复用出库明细'
+																									value: '引用出库明细'
 																								}]" />
             </td>
         </tr>
