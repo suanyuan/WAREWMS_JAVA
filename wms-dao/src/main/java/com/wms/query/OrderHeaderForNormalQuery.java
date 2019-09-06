@@ -41,7 +41,16 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String releasestatus;
     //显示完成-取消订单
     private String sostatusCheck;
+    //产品线
+    private String psName;
 
+    public String getPsName() {
+        return psName;
+    }
+
+    public void setPsName(String psName) {
+        this.psName = psName;
+    }
 
     public String getSostatusCheck() {
         return sostatusCheck;

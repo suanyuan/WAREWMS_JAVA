@@ -22,7 +22,7 @@
                             </td>
                             <th>产品名称</th>
                             <td>
-                                <input type='text' id='lotatt12' class='easyui-textbox' size='16'
+                                <input type='text' id='reservedfield01' class='easyui-textbox' size='16'
                                        data-options=''/>
                             </td>
                         </tr>

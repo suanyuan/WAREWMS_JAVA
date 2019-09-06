@@ -21,7 +21,7 @@ public class CouRequestDetailsQuery{
 
 //盘点任务查询
 	private String productLineName;//产品线
-	private String lotatt12;//产品名称
+	private String reservedfield01;//产品名称
 
 
 
@@ -161,11 +161,11 @@ public class CouRequestDetailsQuery{
 		this.productLineName = productLineName;
 	}
 
-	public String getLotatt12() {
-		return lotatt12;
+	public String getReservedfield01() {
+		return reservedfield01;
 	}
 
-	public void setLotatt12(String lotatt12) {
-		this.lotatt12 = lotatt12;
+	public void setReservedfield01(String reservedfield01) {
+		this.reservedfield01 = reservedfield01;
 	}
 }
