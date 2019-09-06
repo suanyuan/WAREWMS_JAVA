@@ -41,6 +41,7 @@
 <!--bas_sku  -->
 	<result column="descr_c" property="descrc"/>
 	<result column="descr_e" property="descre"/>
+	<result column="name" property="productLineName"/>
 </resultMap>
 
     <resultMap id="MtProgressMap" type="com.wms.entity.DocMtProgressDetail">

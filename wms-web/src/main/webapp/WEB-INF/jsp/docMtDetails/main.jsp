@@ -70,6 +70,7 @@ $(function() {
 			{field: 'lotatt02',		title: '有效期/失效期',	width: 134 },
 			{field: 'lotatt06',		title: '注册证号',	width: 200 },
 			{field: 'lotatt11',		title: '存储条件',	width: 100 },
+			{field: 'productLineName',		title: '产品线',	width: 120 },
 			{field: 'lotatt15',		title: '生产企业',	width: 250 },
 			{field: 'lotnum',		title: '批次号',	width: 100 },
 			{field: 'remark',		title: '备注',	width: 150 },
