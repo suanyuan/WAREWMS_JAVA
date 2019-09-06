@@ -7,7 +7,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.entity.BasCustomer;
 import com.wms.entity.GspSupplier;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.GspSupplierMybatisDao;
 import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,8 @@ public class GspSupplierController {
 	private GspSupplierService gspSupplierService;
 	@Autowired
 	private GspSupplierMybatisDao gspSupplierMybatisDao;
-
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -52,7 +55,14 @@ public class GspSupplierController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("id", id);
 		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
+		if(gspSupplier!=null){
+			BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(gspSupplier.getCostomerid(),"OW");
+			if(basCustomer!=null){
+				model.put("clientEnterpriseId", basCustomer.getEnterpriseId());
+			}
+		}
 		model.put("gspSupplier", gspSupplier);
+
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);

@@ -52,6 +52,7 @@
                     {field: 'potypeName', title: '采购类型', width: 14},
                     {field: 'postatusName', title: '采购状态', width: 20},
                     {field: 'customerid', title: '货主代码', width: 20},
+                    {field: 'poreference1', title: '客户单号', width: 20},
                     // {field: 'expectedarrivetime2',		title: '预期到货时间TO',	width: 14 },
                     {field: 'supplierName', title: '供应商名称', width: 30},
                     {field: 'supplierid', title: '供应商',hidden:true, width: 30},
@@ -886,7 +887,7 @@
                 },
                 idField: 'customerid',
                 columns: [[
-                    {field: 'customerid', title: '客户代码', width: 15},
+                    {field: 'customerid', title: '客户代码', width: 50},
                     {field: 'descrC', title: '中文名称', width: 50},
                     {field: 'descrE', title: '英文名称', width: 50},
                     {field: 'customerTypeName', title: '类型', width: 15},
@@ -932,7 +933,7 @@
                 },
                 idField: 'customerid',
                 columns: [[
-                    {field: 'customerid', title: '客户代码', width: 15},
+                    {field: 'customerid', title: '客户代码', width: 50},
                     {field: 'descrC', title: '中文名称', width: 50},
                     {field: 'descrE', title: '英文名称', width: 50},
                     {field: 'customerTypeName', title: '类型', width: 15},
@@ -978,7 +979,7 @@
                 },
                 idField: 'customerid',
                 columns: [[
-                    {field: 'customerid', title: '客户代码', width: 15},
+                    {field: 'customerid', title: '客户代码', width: 50},
                     {field: 'descrC', title: '中文名称', width: 50},
                     {field: 'descrE', title: '英文名称', width: 50},
                     {field: 'customerTypeName', title: '类型', width: 15},
@@ -1068,7 +1069,7 @@
                 idField : 'sku',
                 columns : [[
                     {field: 'customerid',	title: '客户代码',	width: 80},
-                    {field: 'sku',			title: '商品编码',	width: 120},
+                    {field: 'sku',			title: '产品代码',	width: 120},
                     {field: 'descrC',		title: '中文名称',	width: 160},
                     {field: 'descrE',		title: '英文名称',	width: 160},
                     {field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
@@ -1231,6 +1232,8 @@
                         </td>
                         <th>产品代码</th>
                         <td><input type='text' id='sku'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th>客户单号</th>
+                        <td><input type='text' id='poreference1'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>
                             <%--一级datagrid查询--%>
                             <a onclick='doSearch();' class='easyui-linkbutton'

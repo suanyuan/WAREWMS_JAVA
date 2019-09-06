@@ -344,8 +344,14 @@ $(function() {
 					}
 				});
 			}else{
-				$("#toolbar #productLineOrder").combobox('clear')
-				console.log("货主为空");
+				$("#toolbar #productLineOrder").combobox({
+					panelHeight: 'auto',
+					url:"/productLineController.do?getCombobox",
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
 			}
 		}
 	});
@@ -379,8 +385,8 @@ var ezuiToolbarClear = function(){
 	$("#ordertimeTo").datetimebox({
 		value:ordertimeDateTo(new Date())
 	});
-	$("#toolbar #productLineOrder").combobox('loadData', {});  //清空option选项
-	$("#sostatusCheck").attr("checked",false);
+	$("#toolbar #productLineOrder").combobox('clear');  //清空option选项
+	// $("#sostatusCheck").attr("checked",false);
 };
 
 /* 获取起始日期 */
@@ -1053,7 +1059,7 @@ var doSearch = function(){
         soreference2 : $('#soreference2').val(),
 		//收货人
 		 cContact : $('#cContact').val(),
-		psName :$("#toolbar #productLineOrder").combobox('getValue'),
+		psName :$("#toolbar #productLineOrder").combobox('getText'),
 		//收货电话
 		//  cTel1 : $('#cTel1').val(),
 		//订单状态
@@ -2159,7 +2165,10 @@ function choseOrderTypeAfter(value) {
 							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品线</th>
 							<td>
-								<input id="productLineOrder" name="productLineOrder" size='16' data-options='required:false' type="text" class='easyui-combobox' />
+								<input id="productLineOrder" name="productLineOrder" size='16'  type="text" class='easyui-combobox' data-options="
+																										url:'<c:url value="/productLineController.do?getCombobox"/>',
+																										valueField: 'id',
+																										textField: 'value'" />
 							</td>
 
 						</tr>

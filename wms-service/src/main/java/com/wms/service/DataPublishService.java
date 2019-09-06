@@ -216,17 +216,17 @@ public class DataPublishService extends BaseService {
                 skuForm.setAlternateSku4(specObj.getAlternatName4());
                 skuForm.setAlternateSku5(specObj.getAlternatName5());
 
-                if (!specObj.getHight().equals("") && specObj.getHight() != null){
+                if (!"".equals(specObj.getHight()) && specObj.getHight() != null){
                     skuForm.setSkuhigh(new BigDecimal(specObj.getHight()));
                 }else{
                     skuForm.setSkuhigh(new BigDecimal(0));
                 }
-                if (!specObj.getLlong().equals("") && specObj.getLlong() != null){
+                if (!"".equals(specObj.getLlong()) && specObj.getLlong() != null){
                     skuForm.setSkulength(new BigDecimal(specObj.getLlong()));
                 }else{
                     skuForm.setSkulength(new BigDecimal(0));
                 }
-                if (!specObj.getWide().equals("") && specObj.getWide() != null){
+                if (!"".equals(specObj.getWide()) && specObj.getWide() != null){
                     skuForm.setSkuwidth(new BigDecimal(specObj.getWide()));
                 }else{
                     skuForm.setSkuwidth(new BigDecimal(0));
@@ -333,10 +333,11 @@ public class DataPublishService extends BaseService {
 
             GspReceiving gspReceiving = gspReceivingService.getGspReceiving(no);
             if(gspReceiving == null){
-                return Json.error("查询不到对应的委托客户申请");
+                return Json.error("查询不到对应的收货单位申请");
             }
-
+            String enterpriseId = gspReceiving.getEnterpriseId();
             GspReceivingForm gspReceivingForm = new GspReceivingForm();
+            gspReceivingForm.setReceivingId(gspReceiving.getReceivingId());
             gspReceivingForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
             gspReceivingForm.setIsUse(Constant.IS_USE_NO);
             gspReceivingForm.setClientId(no);
@@ -345,13 +346,13 @@ public class DataPublishService extends BaseService {
 
             BasCustomerForm form = new BasCustomerForm();
             form.setCustomerid(gspReceiving.getReceivingId());
-            form.setEnterpriseId(gspReceiving.getEnterpriseId());
+            form.setEnterpriseId(enterpriseId);
             form.setOperateType(gspReceiving.getEnterpriseType());
             form.setActiveFlag(Constant.IS_USE_NO);
             form.setBillclass(gspReceivingForm.getFirstState());
             form.setCustomerid(gspReceiving.getReceivingId());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
-            return basCustomerService.editBasCustomer(form);
+            return basCustomerService.editBasCustomerByEnterpriseId(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){

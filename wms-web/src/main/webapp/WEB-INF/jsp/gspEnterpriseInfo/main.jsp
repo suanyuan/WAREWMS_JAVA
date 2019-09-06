@@ -223,21 +223,28 @@ var commit = function(){
         }
 	}
 
-    //第二备案凭证
-    isVal1 = checkFormData("ezuiFormRecord",secondRecord);
-    if(isVal1 == true){
-        if(judgeDate($("#ezuiFormRecord #approveDate").datebox("getValue"))){
-            checkResult = false;
-            showMsg("第二备案凭证备案日期不能超过当前时间");
-            return;
-        }
-    }
+
     // if(checkObjIsEmpty(secondRecord) && isVal == false){
     //     showMsg("第二备案凭证填写不完全！");
     //     return;
     // }
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_ZT ){
+        if(!checkObjIsEmpty(operateobj) ||  isVal == false){
+            showMsg("主体企业需要填写经营许可证！");
+            return;
+        }
+        if(checkObjIsEmpty(operateobj) && isVal == false){
+            showMsg("经营许可证填写不完全！");
+            return;
+        }
+        if(judgeDate($("#ezuiFormOperate #approveDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("经营许可证发证日期不能超过当前时间");
+            return;
+        }
+    }
     //企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_JY || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if((!checkObjIsEmpty(operateobj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(secondRecord))){
@@ -258,6 +265,15 @@ var commit = function(){
             showMsg("经营许可证发证日期不能超过当前时间");
             return;
         }
+        //第二备案凭证
+        isVal1 = checkFormData("ezuiFormRecord",secondRecord);
+        if(isVal1 == true){
+            if(judgeDate($("#ezuiFormRecord #approveDate").datebox("getValue"))){
+                checkResult = false;
+                showMsg("第二备案凭证备案日期不能超过当前时间");
+                return;
+            }
+        }
     }else{
         // if(checkObjIsEmpty(operateobj) && isVal == false){
         //     showMsg("经营许可证填写不完全！");
@@ -270,17 +286,7 @@ var commit = function(){
     }
 
 
-    //第一备案凭证
 
-    isVal1=true;
-    isVal1 = checkFormData("ezuiFormFirstRecord",firstRecord);
-    if(isVal1 == true){
-        if(judgeDate($("#ezuiFormFirstRecord #approveDate").datebox("getValue"))){
-            checkResult = false;
-            showMsg("第一备案凭证备案日期不能超过当前时间");
-            return;
-        }
-	}
 
     // if(checkObjIsEmpty(firstRecord) && isVal == false){
     //     showMsg("第一备案凭证填写不完全！");
@@ -288,6 +294,7 @@ var commit = function(){
     // }
     //判断生产许可证
     isVal = checkFormData("ezuiFormProd",prodObj);
+
     //生产企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if((!checkObjIsEmpty(prodObj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(firstRecord))){
@@ -307,6 +314,17 @@ var commit = function(){
             checkResult = false;
             showMsg("生产许可证发证日期不能超过当前时间");
             return;
+        }
+        //第一备案凭证
+
+        isVal1=true;
+        isVal1 = checkFormData("ezuiFormFirstRecord",firstRecord);
+        if(isVal1 == true){
+            if(judgeDate($("#ezuiFormFirstRecord #approveDate").datebox("getValue"))){
+                checkResult = false;
+                showMsg("第一备案凭证备案日期不能超过当前时间");
+                return;
+            }
         }
     }else{
 

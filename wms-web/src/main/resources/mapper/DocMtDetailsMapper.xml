@@ -216,7 +216,7 @@ where 1=1
 	    and s.descr_c like concat('%',#{condition.descrc},'%')
 	</if>
 	<if test="condition.productLineName != null and condition.productLineName != ''" >
-	    and p.name like concat('%',#{condition.productLineName},'%')
+	    and p.name =#{condition.productLineName}
 	</if>
 
 </trim>
