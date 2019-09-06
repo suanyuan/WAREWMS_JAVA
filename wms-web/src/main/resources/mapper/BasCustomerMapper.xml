@@ -302,7 +302,8 @@ where 1=1
 	idx_load_supplier,<!-- N -->
 	billwithasntype,<!-- N -->
 	billwithsotype,<!-- N -->
-	copypricetolotatt09<!-- N -->
+	copypricetolotatt09,<!-- N -->
+	bankaccount
 	)
 	values(
 	#{customerid},
@@ -380,7 +381,8 @@ where 1=1
 	'N',
 	'N',
 	'N',
-	'N'
+	'N',
+	#{bankaccount}
 	)
 </insert>
 
@@ -786,5 +788,9 @@ where 1=1
 	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 	</select>
 
+	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
+	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id
+	where s.costomerid = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
+	</select>
 
 </mapper>

@@ -138,6 +138,22 @@
             return "";
         }
     }
+
+	var unitFormatter = function(value,row,index) {
+		value+="";
+		switch (value) {
+			case "BA" : return "包";
+			case "CS" : return "箱";
+			case "EA" : return "件";
+			case "GE" : return "个";
+			case "GN" : return "根";
+			case "HE" : return "盒";
+			case "HE" : return "内箱";
+			case "HE" : return "其它";
+			case "PL" : return "板";
+		}
+	}
+
     var QualifiedOrFailed = function(value,row,index) {
 		value+="";
 		switch (value) {

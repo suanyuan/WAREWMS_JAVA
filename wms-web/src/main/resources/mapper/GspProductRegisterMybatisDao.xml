@@ -365,6 +365,12 @@
         from gsp_product_register where product_name_main = #{productNameMain, jdbcType=VARCHAR}
     </select>
 
+	<select id="queryAllByNo" parameterType="java.util.Map" resultMap="ExtendResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR} order by create_date asc
+	</select>
+
 <!--查询所有历史产品档案中使用过的注册证号-->
     <!--<select id="queryHistoryRegister" parameterType="java.util.Map" resultMap="ExtendResultMap">-->
         <!--select reg.* from gsp_product_register reg-->

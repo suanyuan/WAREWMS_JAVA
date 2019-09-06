@@ -63,7 +63,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
 
         <tr>
             <th>合同编号</th>
-            <td><input type='text'  data="1" id="contractNo" value="${gspSupplier.contractNo}"  name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
+            <td><input type='text'  data="1" id="contractNo" value="${gspSupplier.contractNo}"  name='contractNo' class='easyui-textbox' data-options='required:false,width:200'/></td>
 
             <th>货主</th>
             <td><input type='text' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}" class='easyui-textbox' data-options='required:false,width:200'/>
@@ -75,7 +75,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         <tr>
             <th>合同附件</th>
             <td>
-                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value="${gspSupplier.contractUrl}" value="" />
+                <input type="hidden" class="textbox-value" data="1" name="contractUrl" id="contractUrl" value="${gspSupplier.contractUrl}"  />
                 <%--<input class="textbox-value" data="1" name="contractUrl" id="contractUrl" value=" value="${customer.contractUrl}"/>--%>
                 <input id="contractUrlFile" name='file'  value="${gspSupplier.contractUrl}"  />
                 <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl()">查看</a>
@@ -89,21 +89,21 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         </tr>
         <tr>
             <th>合同内容</th>
-            <td><input type='text'  data="1" value="${gspSupplier.clientContent}" id="clientContent" name='clientContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+            <td><input type='text'  data="1" value="${gspSupplier.clientContent}" id="clientContent" name='clientContent' class='easyui-textbox' data-options='required:false,width:200,height:80,multiline:true'/></td>
             <th>授权内容</th>
-            <td><input type='text'  data="1" value="${gspSupplier.empowerContent}" id="empowerContent" name='empowerContent' class='easyui-textbox' data-options='required:true,width:200,height:80,multiline:true'/></td>
+            <td><input type='text'  data="1" value="${gspSupplier.empowerContent}" id="empowerContent" name='empowerContent' class='easyui-textbox' data-options='required:false,width:200,height:80,multiline:true'/></td>
 
         </tr>
         <tr>
             <th>合同开始时间</th>
-            <td><input type='text' data="1"  id="clientStartDate"  value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientStartDate}"/>" name='clientStartDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1"  id="clientStartDate"  value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientStartDate}"/>" name='clientStartDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
             <th>授权开始时间</th>
             <td><input type='text' data="1" id="empowerStartdate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.empowerStartdate}"/>" name='empowerStartdate' class='easyui-datebox' data-options='required:false,width:200'/></td>
 
         </tr>
         <tr>
             <th>合同结束时间</th>
-            <td><input type='text' data="1" id="clientEndDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientEndDate}"/>"  name='clientEndDate' class='easyui-datebox' data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1" id="clientEndDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientEndDate}"/>"  name='clientEndDate' class='easyui-datebox' data-options='required:false,width:200'/></td>
             <th>授权结束时间</th>
             <td><input type='text' data="1" id="empowerEnddate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.empowerEnddate}"/>" name='empowerEnddate' class='easyui-datebox' data-options='required:false,width:200'/></td>
 
@@ -543,7 +543,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
-            required: true,
+            required: false,
             onChange:function(data){
 
                 if(data){

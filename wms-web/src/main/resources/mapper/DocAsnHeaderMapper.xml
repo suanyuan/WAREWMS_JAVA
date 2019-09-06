@@ -733,7 +733,8 @@ insert into doc_asn_header
 		<if test="userdefine5 != null  ">
 		userdefine5,
 		</if>
-		releasestatus<!--释放状态 -->
+		releasestatus,<!--释放状态 -->
+		supplierid
 		)
       values(#{asnno},
              now(),
@@ -782,7 +783,8 @@ insert into doc_asn_header
 			<if test="userdefine5 != null  ">
 				#{userdefine5},
 			</if>
-             'Y'
+             'Y',
+			#{supplierid}
 			)
 </insert>
 

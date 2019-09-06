@@ -28,11 +28,11 @@
         </tr>
         <tr>
             <th>联系人</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox'  data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.contacts}" id="contacts" name='contacts' class='easyui-textbox'  data-options='width:200'/></td>
         </tr>
         <tr>
             <th>联系电话</th>
-            <td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox"   data-options='required:true,width:200'/></td>
+            <td><input type='text' data="1" value="${gspEnterpriseInfo.contactsPhone}" id="contactsPhone" name='contactsPhone' class="easyui-numberbox"   data-options='width:200'/></td>
         </tr>
         <tr>
             <th>备注</th>

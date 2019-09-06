@@ -186,7 +186,7 @@ var edit = function(){
 			editDate : row.editDate,
 			activeFlag : row.activeFlag
 		});
-        $('#file').filebox({prompt:row.calCardUrl});
+        $('#file').filebox({prompt:row.calCardUrl,required: false});
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
