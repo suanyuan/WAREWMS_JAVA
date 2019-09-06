@@ -230,6 +230,21 @@ var commit = function(){
     // }
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_ZT ){
+        if(!checkObjIsEmpty(operateobj) ||  isVal == false){
+            showMsg("主体企业需要填写经营许可证！");
+            return;
+        }
+        if(checkObjIsEmpty(operateobj) && isVal == false){
+            showMsg("经营许可证填写不完全！");
+            return;
+        }
+        if(judgeDate($("#ezuiFormOperate #approveDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("经营许可证发证日期不能超过当前时间");
+            return;
+        }
+    }
     //企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_JY || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if((!checkObjIsEmpty(operateobj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(secondRecord))){
@@ -279,21 +294,7 @@ var commit = function(){
     // }
     //判断生产许可证
     isVal = checkFormData("ezuiFormProd",prodObj);
-    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_ZT ){
-        if(!checkObjIsEmpty(prodObj) ||  isVal == false){
-            showMsg("主体企业需要填写生产许可证！");
-            return;
-        }
-        if(checkObjIsEmpty(prodObj) && isVal == false){
-            showMsg("生产许可证填写不完全！");
-            return;
-        }
-        if(judgeDate($("#ezuiFormProd #approveDate").datebox("getValue"))){
-            checkResult = false;
-            showMsg("生产许可证发证日期不能超过当前时间");
-            return;
-        }
-	}
+
     //生产企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_GNSC || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if((!checkObjIsEmpty(prodObj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(firstRecord))){
