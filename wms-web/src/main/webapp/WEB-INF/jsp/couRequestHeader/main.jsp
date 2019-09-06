@@ -156,6 +156,7 @@ $(function() {
 			{field: 'userdefined1', title: '盘点差异', width: 80},
 			{field: 'lotatt04', title: '生产批号', width: 100},
 			{field: 'lotatt05', title: '序列号', width: 100},
+			{field: 'productLineName', title: '产品线', width: 100},
 			{field: 'userdefined2', title: '备注', width: 100},
 			{field: 'addtime', title: '创建时间', width: 150},
 			{field: 'addwho', title: '创建人', width: 70},

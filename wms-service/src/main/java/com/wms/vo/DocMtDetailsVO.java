@@ -56,4 +56,6 @@ public class DocMtDetailsVO {
 // bas_sku
 	private String descrc;//规格
 	private String descre;//型号
+	private String productLineName;//产品线
+
 }
