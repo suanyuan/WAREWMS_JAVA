@@ -494,7 +494,7 @@ var add = function(){
 		editable:false
 	});
 	$("#ezuiForm #asnstatus").combobox('setValue','00').combo('readonly', true);
-
+    $("#ezuiForm #releasestatus").combobox('setValue','Y');
 	$('#ezuiBtn_renew').linkbutton('disable');
 	$('#ezuiBtn_recommit').linkbutton('enable');
 	ezuiDialog.dialog('open');
@@ -556,6 +556,17 @@ var edit = function(row){
 	$("#ezuiForm #asnstatus").combo('readonly', true);
 	var row = row;//ezuiDatagrid.datagrid('getSelected');
 	if(row){
+        //初始化根据货主初始化供应商
+        $('#ezuiForm #supplierid').combobox({
+            url:'commonController.do?getSupplier',
+            valueField:'id',
+            textField:'value',
+            queryParams:{customerId:row.customerid},
+			onLoadSuccess:function () {
+				$(this).combobox("setValue",row.supplierid)
+            }
+		});
+
 		$('#ezuiForm').form({
 		    url: '<c:url value="/docAsnHeaderController.do?showAsnHeader"/>',
 		    queryParams: {asnno : row.asnno},
@@ -1333,6 +1344,19 @@ var selectDialogCust = function(){
 	var row = ezuiCustDataDialogId.datagrid('getSelected');
 	if(row){
 		$("#ezuiDialog #customerid").textbox('setValue',row.customerid);
+        //初始化供应商
+        $('#ezuiForm #supplierid').combobox({
+            url:'commonController.do?getSupplier',
+            valueField:'id',
+            textField:'value',
+			width:106,
+            required:true,
+            editable:false,
+            queryParams:{customerId:row.customerid},
+            onLoadSuccess:function () {
+                $(this).combobox("setValue",row.supplierid)
+            }
+        });
 		ezuiCustDataDialog.dialog('close');
 	}
 };

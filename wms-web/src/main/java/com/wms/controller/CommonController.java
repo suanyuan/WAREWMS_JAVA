@@ -371,7 +371,17 @@ public class CommonController {
     @RequestMapping(params = "getSupplier")
     @ResponseBody
     public List<EasyuiCombobox> getSupplier(String customerId){
-        return null;
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        List<BasCustomer> basCustomers = basCustomerService.querySupplierByCustomer(customerId);
+        if(basCustomers!=null && basCustomers.size()>0){
+            for(BasCustomer b : basCustomers){
+                EasyuiCombobox box = new EasyuiCombobox();
+                box.setId(b.getCustomerid());
+                box.setValue(b.getDescrC());
+                easyuiComboboxList.add(box);
+            }
+        }
+        return easyuiComboboxList;
     }
 
 }

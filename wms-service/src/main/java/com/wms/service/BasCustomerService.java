@@ -553,4 +553,13 @@ public class BasCustomerService extends BaseService {
 	    return null;
     }
 
+	/**
+	 * 根据customerid 查询所有供应商
+	 * @param customerId
+	 * @return
+	 */
+	public List<BasCustomer> querySupplierByCustomer(String customerId){
+		return basCustomerMybatisDao.querySupplierByCustomer(customerId);
+	}
+
 }

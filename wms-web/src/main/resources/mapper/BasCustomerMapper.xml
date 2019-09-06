@@ -789,8 +789,8 @@ where 1=1
 	</select>
 
 	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
-	select b.* from bas_customer b left join gsp_supplier s on b.CUSTOMERID = s.supplier_id
-	where s.supplier_id = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
+	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id
+	where s.costomerid = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
 	</select>
 
 </mapper>
