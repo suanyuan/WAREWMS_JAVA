@@ -444,6 +444,37 @@
         // var rows = dataGridProduct.datagrid("getSelections");
 		// rows1
 		// alert(rows)
+        var supId = $("#supplierId").val();
+		console.log($("#ezuiFormDetail #clientId").val());
+        var cusId = $("#ezuiFormDetail #clientId").val();
+        console.log(supId);
+        var a = 0;
+        if(cusId!=null){
+			$.ajax({
+				url : sy.bp()+"/commonController.do?getSupplier",
+				data : {"customerId":cusId},
+				type : 'POST',
+				dataType : 'JSON',
+				async  :true,
+				success : function(result){
+
+                    for(var i=0;result.length>i;i++){
+                        console.log(result);
+                        console.log(result[i]);
+						if(result[i].id == supId){
+							a++;
+						}
+					}
+
+				}
+			});
+		}
+		if(a==0){
+            $.messager.show({
+                msg : '该供应商未与该委托客户关联', title : '提示'
+            });
+            return;
+		}
 
         // $("#specsId").val();
         // $("#productNameP").textbox("getValue");

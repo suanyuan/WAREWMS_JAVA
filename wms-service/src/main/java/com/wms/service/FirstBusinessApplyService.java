@@ -204,6 +204,8 @@ public class FirstBusinessApplyService extends BaseService {
 	public Json addApply(String clientId,String supplierArr,String productArr,String productLine){
 		try{
 
+//			commonService.getSupplier
+
 			if("".equals(clientId)){
 				return Json.error("请选择委托客户");
 			}
