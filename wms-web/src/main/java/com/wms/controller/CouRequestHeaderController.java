@@ -2,6 +2,7 @@ package com.wms.controller;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.CouRequestHeader;
 import com.wms.entity.InvLotLocId;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
@@ -73,13 +74,20 @@ public void exportViewInvLotattDataToExcel(HttpServletResponse response, CouRequ
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return couRequestHeaderService.importExcelData(mhsr);
 	}
-////关闭计划单
-//	@Login
-//	@RequestMapping(params = "closegenerationPlan")
-//	@ResponseBody
-//	public Json closegenerationPlan(DocMtHeaderForm form) {
-//		return couRequestHeaderService.endDocMtJson(form);
-//	}
+//关闭计划单
+	@Login
+	@RequestMapping(params = "close")
+	@ResponseBody
+	public Json close(CouRequestHeader form) {
+		return couRequestHeaderService.endCouRequest(form);
+	}
+//取消计划单
+	@Login
+	@RequestMapping(params = "cancel")
+	@ResponseBody
+	public Json cancel(CouRequestHeader form) {
+		return couRequestHeaderService.cancelCouRequest(form);
+	}
 ////增加
 //	@Login
 //	@RequestMapping(params = "add")

@@ -169,12 +169,6 @@ var edit = function(){
 //删除
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row.mtstatus!="00"){
-		$.messager.show({
-			msg : "只有养护状态为任务创建的状态才能删除!", title : '<spring:message code="common.message.prompt"/>'
-		});
-		return;
-	}
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.delete"/>', function(confirm) {
 			if(confirm){
@@ -222,6 +216,40 @@ var closegenerationPlan = function() {
 	}
 
 }
+//取消任务单
+var cancel = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row){
+		var mtno=row.mtno;
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确定取消当前计划单!', function(confirm) {
+			if(confirm){
+				$.ajax({
+					url : 'docMtHeaderController.do?cancel',
+					data : {mtno : mtno},
+					type : 'POST',
+					dataType : 'JSON',
+					success : function(result){
+						var msg = '';
+						try {
+							msg = result.msg;
+						} catch (e) {
+							msg = '<spring:message code="common.message.data.delete.failed"/>';
+						} finally {
+							$.messager.show({
+								msg : msg, title : '<spring:message code="common.message.prompt"/>'
+							});
+							ezuiDatagrid.datagrid('reload');
+						}
+					}
+				});
+			}
+		});
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
 //提交关闭计划单
 var commitClosegenerationPlan = function(){
 	url = '<c:url value="/docMtHeaderController.do?closegenerationPlan"/>';
@@ -426,6 +454,7 @@ var ezuiDialogzToolbarClear= function(){
 				<div>
 					<a onclick='generationPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成计划</a>
 					<a onclick='closegenerationPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭计划单</a>
+					<a onclick='cancel();' id='ezuiBtn_cancelplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>取消计划单</a>
 
 				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>

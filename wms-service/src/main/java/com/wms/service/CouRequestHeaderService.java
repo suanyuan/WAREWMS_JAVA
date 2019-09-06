@@ -152,163 +152,84 @@ public class CouRequestHeaderService extends BaseService {
         return json;
     }
 
-//
-//    //增加
-//    public Json addDocMtHeader(DocMtHeaderForm docMtHeaderForm) throws Exception {
-//        Json json = new Json();
-//        DocMtHeader docMtHeader = new DocMtHeader();
-//        BeanUtils.copyProperties(docMtHeaderForm, docMtHeader);
-//        couRequestHeaderMybatisDao.add(docMtHeader);
-//        json.setSuccess(true);
-//        return json;
-//    }
-//
-//    //编辑
-//    public Json editDocMtHeader(DocMtHeaderForm docMtHeaderForm) {
-//        Json json = new Json();
-//        DocMtHeader docMtHeader = couRequestHeaderMybatisDao.queryById(docMtHeaderForm.getMtno());
-//        BeanUtils.copyProperties(docMtHeaderForm, docMtHeader);
-//        couRequestHeaderMybatisDao.updateBySelective(docMtHeader);
-//        json.setSuccess(true);
-//        return json;
-//    }
-//
-    //删除养护计划单
+
+    //删除盘点计划单
     public Json deleteCouRequstHeader(String id) {
         Json json = new Json();
         CouRequestHeader couRequestHeader = couRequestHeaderMybatisDao.queryById(id);
-        if (couRequestHeader != null) {
+        if (couRequestHeader != null&& couRequestHeader.getStatus().equals("00")) {
             couRequestHeaderMybatisDao.delete(couRequestHeader);
             couRequestDetailsMybatisDao.delete(couRequestHeader);
             json.setSuccess(true);
             json.setMsg("删除成功!");
         } else {
             json.setSuccess(false);
-            json.setMsg("单号不存在!");
+            json.setMsg("单号状态不可删除!");
         }
 
         return json;
     }
-//
-//    public List<EasyuiCombobox> getDocMtHeaderCombobox() {
-//        List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-//        EasyuiCombobox combobox = null;
-//        List<DocMtHeader> couRequestList = couRequestHeaderMybatisDao.queryListByAll();
-//        if (couRequestList != null && couRequestList.size() > 0) {
-//            for (DocMtHeader docMtHeader : couRequestList) {
-//                combobox = new EasyuiCombobox();
-//                combobox.setId(docMtHeader.getMtno());
-//                combobox.setValue(docMtHeader.getUserdefine1());
-//                comboboxList.add(combobox);
-//            }
-//        }
-//        return comboboxList;
-//    }
-//
-//    //string转date
-//    public Date StringtoDate(String time) {
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date = null;
-//        try {
-//            date = format.parse(time);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return date;
-//    }
-//
-//    /**
-//     * 查询未完成的预入库通知单
-//     *
-//     * @param form 分页
-//     * @return ~
-//     */
-//    public List<DocMtHeaderVO> queryUndoneList(PageForm form) {
-//
-//        List<DocMtHeader> couRequestList = couRequestHeaderMybatisDao.queryUndoneList(form.getStart(), form.getPageSize());
-//        List<DocMtHeaderVO> docMtHeaderVOList = new ArrayList<>();
-//        DocMtHeaderVO docMtHeaderVO;
-//        for (DocMtHeader docMtHeader : couRequestList) {
-//
-//            docMtHeaderVO = new DocMtHeaderVO();
-//            BeanUtils.copyProperties(docMtHeader, docMtHeaderVO);
-//            docMtHeaderVOList.add(docMtHeaderVO);
-//        }
-//        return docMtHeaderVOList;
-//    }
-//
-//    /**
-//     * 通过mtno查询header
-//     *
-//     * @param mtno ~
-//     * @return ~
-//     */
-//    public DocMtHeaderVO queryByMtno(String mtno) {
-//
-//        DocMtHeader docMtHeader = couRequestHeaderMybatisDao.queryById(mtno);
-//        DocMtHeaderVO docMtHeaderVO = new DocMtHeaderVO();
-//        if (docMtHeader != null) {
-//
-//            BeanUtils.copyProperties(docMtHeader, docMtHeaderVO);
-//        }
-//        return docMtHeaderVO;
-//    }
-//
-//    /**
-//     * 关单
-//     * 目前行状态只有 00 && 40
-//     *
-//     * @param form ~
-//     * @return ~
-//     */
-//    public PdaResult endDocMt(DocMtHeaderForm form) {
-//
-//        DocMtHeader mtHeader = new DocMtHeader();
-//        mtHeader.setMtno(form.getMtno());
-//        DocMtHeader docMtHeader = couRequestHeaderMybatisDao.queryById(mtHeader);
-//        switch (docMtHeader.getMtstatus()) {
-//            case "00":
-//            case "30":
-//
-//                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + form.getMtno() + "] 有未完成的养护任务，不可结束!");
-//            case "40":
-//
-//                //storageFlag, flowFlag, signFlag, fenceFlag, sanitationFlag, remark
-//                docMtHeader.setStorageFlag(form.getStorageFlag());
-//                docMtHeader.setFlowFlag(form.getFlowFlag());
-//                docMtHeader.setSignFlag(form.getSignFlag());
-//                docMtHeader.setFenceFlag(form.getFenceFlag());
-//                docMtHeader.setSanitationFlag(form.getSanitationFlag());
-//                docMtHeader.setRemark(form.getRemark());
-//                docMtHeader.setEditwho(form.getEditwho());
-//                docMtHeader.setMtstatus("99");
-//                couRequestHeaderMybatisDao.updateStatus(docMtHeader);
-//                return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
-//            default:
-//
-//                return new PdaResult(PdaResult.CODE_FAILURE, "养护单[" + form.getMtno() + "] 当前状态不可操作!");
-//        }
-//    }
-//
-//    /**
-//     * 关单
-//     * 目前行状态只有 00 && 40
-//     *
-//     * @param form ~
-//     * @return ~
-//     */
-//    public Json endDocMtJson(DocMtHeaderForm form) {
-//        Json json=new Json();
-//        form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-//        PdaResult pdaResult=endDocMt(form);
-//        if(pdaResult.getErrorCode()==200){
-//            json.setSuccess(true);
-//            json.setMsg(pdaResult.getMsg());
-//        }else{
-//            json.setSuccess(false);
-//            json.setMsg(pdaResult.getMsg());
-//        }
-//        return json;
-//    }
+
+    /**
+     * 关单
+     * 目前行状态只有 00 && 40
+     *
+     * @param form ~
+     * @return ~
+     */
+    public Json endCouRequest(CouRequestHeader form) {
+          Json json=new Json();
+        CouRequestHeader couRequestHeader = new CouRequestHeader();
+        couRequestHeader.setCycleCountno(form.getCycleCountno());
+        CouRequestHeader requestHeader = couRequestHeaderMybatisDao.queryById(couRequestHeader);
+        switch (requestHeader.getStatus()) {
+            case "00":
+            case "30":
+                json.setSuccess(false);
+                json.setMsg("盘点单[" + form.getCycleCountno() + "]有未完成的盘点任务，不可结束!");
+                break;
+            case "40":
+                couRequestHeader.setStatus("99");
+                couRequestHeader.setNotes(form.getNotes());
+                couRequestHeaderMybatisDao.updateBySelective(couRequestHeader);
+                json.setSuccess(true);
+                json.setMsg("盘点单[" + form.getCycleCountno() + "]操作成功!");
+                break;
+            default:
+                json.setSuccess(false);
+                json.setMsg("盘点单[" + form.getCycleCountno() + "]当前状态不可操作!");
+                break;
+        }
+
+        return json;
+    }
+    /**
+     * 取消单
+     * 目前行状态只有 00 && 40
+     *
+     * @param form ~
+     * @return ~
+     */
+    public Json cancelCouRequest(CouRequestHeader form) {
+          Json json=new Json();
+        CouRequestHeader couRequestHeader = new CouRequestHeader();
+        couRequestHeader.setCycleCountno(form.getCycleCountno());
+        CouRequestHeader requestHeader = couRequestHeaderMybatisDao.queryById(couRequestHeader);
+        switch (requestHeader.getStatus()) {
+            case "00":
+                couRequestHeader.setStatus("90");
+                couRequestHeaderMybatisDao.updateBySelective(couRequestHeader);
+                json.setSuccess(true);
+                json.setMsg("盘点单[" + form.getCycleCountno() + "]操作成功!");
+                break;
+            default:
+                json.setSuccess(false);
+                json.setMsg("盘点单[" + form.getCycleCountno() + "]当前状态不可操作!");
+                break;
+        }
+
+        return json;
+    }
+
+
 }
