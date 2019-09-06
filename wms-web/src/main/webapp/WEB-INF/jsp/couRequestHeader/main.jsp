@@ -19,8 +19,8 @@ var ShowEzuiDetailsDatagrid;//按钮查看盘点任务datagrid
 
 var ezuiDatagrid;    //主页datagird
 
-var closeGenerateInventoryPlanForm;       //关闭计划dialog form
-var closeGenerateInventoryPlanDialog;     //关闭计划dialog
+var closeDialog;       //关闭计划dialog form
+var closeDialogForm;     //关闭计划dialog
 
 var ezuiImportDataDialog; //导入
 var ezuiImportDataForm;   //导入form
@@ -40,7 +40,7 @@ $(function() {
 	ezuiImportDataForm=$('#ezuiImportDataForm').form();  //导入form
 
 //主页datagird
-	closeGenerateInventoryPlanForm = $('#closeGenerateInventoryPlanForm').form();   //关闭计划dialog form
+	closeDialogForm = $('#closeDialogForm').form();   //关闭计划dialog form
 //主页Datagrid
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/couRequestHeaderController.do?showDatagrid"/>',
@@ -181,14 +181,14 @@ $(function() {
 		}
 	}).dialog('close');
 //关闭计划dialog
-	closeGenerateInventoryPlanDialog = $('#closeGenerateInventoryPlanDialog').dialog({
+	closeDialog = $('#closeDialog').dialog({
 		modal : true,
-		width:270,
-		height:250,
+		width:300,
+		height:200,
 		title : '关闭计划',
-		buttons : '#closeGenerateInventoryPlanDialogBtn',
+		buttons : '#closeDialogBtn',
 		onClose : function() {
-			ezuiFormClear(closeGenerateInventoryPlanForm);
+			ezuiFormClear(closeDialogForm);
 		}
 	}).dialog('close');
 //导入
@@ -449,6 +449,40 @@ var del = function(){
 		});
 	}
 };
+//取消任务单
+var cancel = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row){
+		var cycleCountno=row.cycleCountno;
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确定取消当前任务单!', function(confirm) {
+			if(confirm){
+				$.ajax({
+					url : 'couRequestHeaderController.do?cancel',
+					data : {cycleCountno : cycleCountno},
+					type : 'POST',
+					dataType : 'JSON',
+					success : function(result){
+						var msg = '';
+						try {
+							msg = result.msg;
+						} catch (e) {
+							msg = '<spring:message code="common.message.data.delete.failed"/>';
+						} finally {
+							$.messager.show({
+								msg : msg, title : '<spring:message code="common.message.prompt"/>'
+							});
+							ezuiDatagrid.datagrid('reload');
+						}
+					}
+				});
+			}
+		});
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
 //生成任务
 var GenerateInventoryPlan = function(){
 	doxDialogSearch();//清空datagrid
@@ -538,68 +572,51 @@ var ShowGenerateInventory = function(){
 	}
 };
 //关闭任务单
-var closeGenerateInventoryPlan = function() {
+var closeC = function() {
+
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if (row) {
-		closeGenerateInventoryPlanDialog.dialog('open');
+		closeDialog.dialog('open');
 	}else{
 		$.messager.show({
 			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
 		});
 	}
 
-}
+
+};
 //提交关闭任务单
-var commitCloseGenerateInventoryPlan = function(){
-	url = '<c:url value="/couRequestHeaderController.do?closegenerationPlan"/>';
+var commitCloseDialog = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	var msg='';
-	if(closeGenerateInventoryPlanForm.form('validate')){
-		var data=new Object();
-		data.mtno=row.mtno;
-		data.storageFlag=$("#closeGenerateInventoryPlanForm #storageFlag").combobox('getValue');
-		data.flowFlag=$("#closeGenerateInventoryPlanForm #flowFlag").combobox('getValue');
-		data.signFlag=$("#closeGenerateInventoryPlanForm #signFlag").combobox('getValue');
-		data.fenceFlag=$("#closeGenerateInventoryPlanForm #fenceFlag").combobox('getValue');
-		data.sanitationFlag=$("#closeGenerateInventoryPlanForm #sanitationFlag").textbox('getValue');
-
-		$.messager.progress({
-			text: '<spring:message code="common.message.data.processing"/>', interval: 100
-		});
+	if (row) {
+    var data=new Object();
+		data.cycleCountno=row.cycleCountno;
+		data.notes=$("#closeDialogForm #notes").val();
 		$.ajax({
-			url: url,
-			data:data,
-			dataType: 'json',
-			error: function (a, b, c) {
-				//alert(a + b + c);
-			},
-			success: function (result) {
+			url : 'couRequestHeaderController.do?close',
+			data :data,
+			type : 'POST',
+			dataType : 'JSON',
+			success : function(result){
+				var msg = '';
 				try {
-					if (result.success) {
-						msg = result.msg;
-					} else {
-						msg = result.msg;
-
-					}
+					msg = result.msg;
 				} catch (e) {
-
-					msg: '数据错误!';
-
-				}finally {
+					msg = '<spring:message code="common.message.data.delete.failed"/>';
+				} finally {
 					$.messager.show({
-						msg:msg, title: '<spring:message code="common.message.prompt"/>'
+						msg : msg, title : '<spring:message code="common.message.prompt"/>'
 					});
-					$.messager.progress('close');
-					closeGenerateInventoryPlanDialog.dialog('close');
+					closeDialog.dialog('close');
 					ezuiDatagrid.datagrid('reload');
 				}
 			}
 		});
-	}else{
-		$.messager.show({
-			msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
-		});
-	}
+	} else{
+			$.messager.show({
+				msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+			});
+		}
 };
 //一级dialog提交
 var commit = function(){
@@ -1055,9 +1072,8 @@ function choseSelect_product_couRequestHeaderS(row) {
 					<a onclick='ShowGenerateInventory();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
 
 					<a onclick='GenerateInventoryPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成盘点任务</a>
-<%--					<a onclick='closeGenerateInventoryPlan();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭任务单</a>--%>
-
-				<%--					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
+					<a onclick='closeC();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭任务单</a>
+					<a onclick='cancel();' id='ezuiBtn_cancelplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>取消任务单</a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除任务单</a>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
@@ -1067,59 +1083,19 @@ function choseSelect_product_couRequestHeaderS(row) {
 		</div>
 	</div>
 <%--关闭计划单点击弹窗--%>
-	<div id='closeGenerateInventoryPlanDialog' style='padding: 10px;'>
-		<form id='closeGenerateInventoryPlanForm' method='post'>
+	<div id='closeDialog' style='padding: 10px;'>
+		<form id='closeDialogForm' method='post'>
 			<table>
 
 				<tr>
-					<th>贮存条件</th><td><input type='text' id='storageFlag' name="storageFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
-																																	valueField: 'id',
-																																    textField: 'value'"/></td>
+					<th>备注</th><td><input type='text' id='notes' name="notes" class='easyui-textbox' size='20' data-options="multiline:true,width:200,height:80"/></td>
 
-				</tr>
-				<tr>
-					<th>作业流程</th><td><input type='text' id='flowFlag' name="flowFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
-																																	valueField: 'id',
-																																    textField: 'value'"/></td>
-
-				</tr>
-				<tr>
-					<th>标志清晰</th>
-					<td><input type='text' id='signFlag' name="signFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
-																																	valueField: 'id',
-																																    textField: 'value'"/></td>
-				</tr>
-				<tr>
-					<th>防护措施</th>
-					<td><input type='text' id='fenceFlag' name="fenceFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
-																																	valueField: 'id',
-																																    textField: 'value'"/></td>
-				</tr>
-				<tr>
-					<th>卫生环境</th>
-					<td><input type='text' id='sanitationFlag' name="sanitationFlag" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/commonController.do?getQualifiedOrFailedCombobox"/>',
-																																	valueField: 'id',
-																																    textField: 'value'"/></td>
-				</tr>
-				<tr>
-					<th>备注</th>
-					<td><input type='text' id='remark' name="remark" class='easyui-textbox' size='20' data-options=""/></td>
 				</tr>
 			</table>
 		</form>
 	</div>
-	<div id='closeGenerateInventoryPlanDialogBtn'>
-		<a onclick='commitCloseGenerateInventoryPlan();' class='easyui-linkbutton' href='javascript:void(0);'>确认</a>
+	<div id='closeDialogBtn'>
+		<a onclick='commitCloseDialog();' class='easyui-linkbutton' href='javascript:void(0);'>确认</a>
 	</div>
 <%--右键菜单--%>
 	<div id='ezuiMenu' class='easyui-menu' style='width:120px;display: none;'>

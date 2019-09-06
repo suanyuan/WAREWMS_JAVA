@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.DocMtHeader;
 import com.wms.entity.InvLotLocId;
 import com.wms.result.PdaResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,13 @@ public class DocMtHeaderController {
 	@ResponseBody
 	public Json closegenerationPlan(DocMtHeaderForm form) {
 		return docMtHeaderService.endDocMtJson(form);
+	}
+//取消计划单
+	@Login
+	@RequestMapping(params = "cancel")
+	@ResponseBody
+	public Json cancel(DocMtHeader form) {
+		return docMtHeaderService.cancel(form);
 	}
 //增加
 	@Login

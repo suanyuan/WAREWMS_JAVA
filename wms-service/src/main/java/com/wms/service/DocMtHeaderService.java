@@ -207,7 +207,7 @@ public class DocMtHeaderService extends BaseService {
             json.setMsg("订单删除成功!");
         } else {
             json.setSuccess(false);
-            json.setMsg("订单不可删除或者不存在!");
+            json.setMsg("单号状态不可删除!");
         }
 
         return json;
@@ -332,6 +332,34 @@ public class DocMtHeaderService extends BaseService {
             json.setSuccess(false);
             json.setMsg(pdaResult.getMsg());
         }
+        return json;
+    }
+
+    /**
+     * 取消单
+     * 目前行状态只有 00 && 40
+     *
+     * @param form ~
+     * @return ~
+     */
+    public Json cancel(DocMtHeader form) {
+        Json json=new Json();
+        DocMtHeader couRequestHeader = new DocMtHeader();
+        couRequestHeader.setMtno(form.getMtno());
+        DocMtHeader mtHeader = docMtHeaderMybatisDao.queryById(couRequestHeader);
+        switch (mtHeader.getMtstatus()) {
+            case "00":
+                couRequestHeader.setMtstatus("90");
+                docMtHeaderMybatisDao.updateBySelective(couRequestHeader);
+                json.setSuccess(true);
+                json.setMsg("养护单[" + form.getMtno() + "]操作成功!");
+                break;
+            default:
+                json.setSuccess(false);
+                json.setMsg("养护单[" + form.getMtno() + "]当前状态不可操作!");
+                break;
+        }
+
         return json;
     }
 }
