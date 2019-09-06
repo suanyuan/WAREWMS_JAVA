@@ -17,7 +17,7 @@ public class BasCustomerVO {
 	private String enterpriseType;
 
 	private String contacts;
-
+	private String bankaccount;  //申请单号
 	private String contactsPhone;
 	private String enterpriseId;
 	private String receivingAddressId;
@@ -95,6 +95,15 @@ public class BasCustomerVO {
 	private String clientTerm;
 
 	private Long isChineseLabel;
+
+
+	public String getBankaccount() {
+		return bankaccount;
+	}
+
+	public void setBankaccount(String bankaccount) {
+		this.bankaccount = bankaccount;
+	}
 
 	public String getSupContractNo() {
 		return supContractNo;

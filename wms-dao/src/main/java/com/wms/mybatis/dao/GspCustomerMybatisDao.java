@@ -15,4 +15,6 @@ public interface GspCustomerMybatisDao extends BaseDao {
 
     public void deleteF(Object id);
 
+    public <T> T queryByEnterpriseId(Object id);
+
 }

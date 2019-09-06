@@ -15,6 +15,12 @@ var ezuiDatagrid;
 var ezuiDialogClientEnterprise;
 var customerType;
 var ezuiDialogClientEnterpriseAddress;
+
+var dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail"; //委托客户  企业信息查看
+
+var clientInfo;
+var supplier1;
+var receivingInfo;
 /* 初始化 */
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -141,20 +147,78 @@ var edit = function(){
 
     var row = ezuiDatagrid.datagrid('getSelected');
 	var enterpriseId = row.enterpriseId;
-    customerType = row.customerType;
-    // alert(row.customerType)
-    // if(row.customerType == "收货单位"){
-    //     detailAddress(enterpriseId);
-	//
-    // }else{
-	//
-    //     detail(enterpriseId);
-	// }
+    var receivingId = row.bankaccount;    //收货单位申请号
+    // customerType = row.customerType;
+    // customerId = row.customerId;
 
+    console.log(row.customerType);
+	if(row.customerType == "收货单位"){
 
-    detail(enterpriseId);
+	    receivingInfo1(receivingId);
+	}else if(row.customerType == "供应商"){
+
+        supplierInfo(enterpriseId);
+
+	}else if(row.customerType == "货主"){
+
+		ClientInfo(enterpriseId);
+	}else if(row.customerType == "主体"){
+        detail(enterpriseId);
+	}else{
+        detail(enterpriseId);
+	}
 
 };
+
+function receivingInfo1(receivingId){
+    console.log(receivingId);
+    // title = "收货单位首营申请单";
+    // dialogUrl = sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+row.reviewTypeId;
+    receivingInfo = $('#receivingInfo').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        href:sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+receivingId,
+        fit:true,
+        cache:false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    })
+}
+
+function ClientInfo(enterpriseId){
+    // $('#supplier').dialog('destroy');
+    clientInfo = $('#clientInfo').dialog({
+        modal : true,
+        width:900,
+        height:550,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:"/gspCustomerController.do?basCustomerToDetail&id="+enterpriseId,
+        cache:false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    })
+
+}
+function supplierInfo(enterpriseId){
+    // $('#clientInfo').dialog('destroy');
+
+    supplier1 = $('#supplier1').dialog({
+        modal : true,
+        width:900,
+        height:550,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '#ezuiDialogBtn',
+        href:"/gspSupplierController.do?basCustomerToAdd&id="+enterpriseId,
+        cache:false,
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    })
+}
+
 
 function detail(enterpriseId){
     var row = ezuiDatagrid.datagrid('getSelected');
@@ -182,32 +246,32 @@ function detail(enterpriseId){
         });
     }
 }
-function detailAddress(enterpriseId){
-    // row = ezuiDatagrid.datagrid('getSelected');
-    $(function() {
-        ezuiDialogClientEnterpriseAddress = $('#ezuiDialogClientEnterpriseAddress').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            buttons : '',
-            href:sy.bp()+"/basCustomerController.do?toDetailAddress",
-            width:1200,
-            height:530,
-            closable:true,
-            cache: false,
-            onClose : function() {
-                // ezuiFormClear(ezuiDialogClientEnterpriseAddress);
-            }
-        }).dialog('close');
-    })
-    if(enterpriseId!=null && enterpriseId!="" ){
-        ezuiDialogClientEnterpriseAddress.dialog('refresh', "/basCustomerController.do?toDetailAddress"+"&id="+enterpriseId).dialog('open');
-        enterpriseId = "";
-    }else{
-        $.messager.show({
-            msg : '请先选择一条数据', title : '提示'
-        });
-    }
-}
+<%--function detailAddress(enterpriseId){--%>
+    <%--// row = ezuiDatagrid.datagrid('getSelected');--%>
+    <%--$(function() {--%>
+        <%--ezuiDialogClientEnterpriseAddress = $('#ezuiDialogClientEnterpriseAddress').dialog({--%>
+            <%--modal : true,--%>
+            <%--title : '<spring:message code="common.dialog.title"/>',--%>
+            <%--buttons : '',--%>
+            <%--href:sy.bp()+"/basCustomerController.do?toDetailAddress",--%>
+            <%--width:1200,--%>
+            <%--height:530,--%>
+            <%--closable:true,--%>
+            <%--cache: false,--%>
+            <%--onClose : function() {--%>
+                <%--// ezuiFormClear(ezuiDialogClientEnterpriseAddress);--%>
+            <%--}--%>
+        <%--}).dialog('close');--%>
+    <%--})--%>
+    <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
+        <%--ezuiDialogClientEnterpriseAddress.dialog('refresh', "/basCustomerController.do?toDetailAddress"+"&id="+enterpriseId).dialog('open');--%>
+        <%--enterpriseId = "";--%>
+    <%--}else{--%>
+        <%--$.messager.show({--%>
+            <%--msg : '请先选择一条数据', title : '提示'--%>
+        <%--});--%>
+    <%--}--%>
+<%--}--%>
 
 <%--var edit = function(){--%>
 	<%--processType = 'edit';--%>
@@ -451,19 +515,18 @@ var commit = function(){
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		customerid : $('#customerid').val(),
-        enterpriseNo : $('#enterpriseNo').val(),
-        shorthandName : $('#shorthandName').val(),
-        enterpriseName : $('#enterpriseName').val(),
-        clientStartDate : $('#clientStartDate').val(),
-        clientEndDate : $('#clientEndDate').val(),
-        supContractNo : $('#supContractNo').val(),
-
-		customerType : $('#customerType').combobox('getValue'),
+		customerid : $('#customeridQ').val(),
+        // enterpriseNo : $('#enterpriseNo').val(),
+        // shorthandName : $('#shorthandName').val(),
+        // enterpriseName : $('#enterpriseName').val(),
+        // clientStartDate : $('#clientStartDate').val(),
+        // clientEndDate : $('#clientEndDate').val(),
+        // supContractNo : $('#supContractNo').val(),
+		customerType : $('#customerTypeQ').combobox('getValue'),
         /*operateType : $('#operateType').combobox('getValue'),*/
-		activeFlag : $('#activeFlag').combobox('getValue'),
+		activeFlag : $('#activeFlagQ').combobox('getValue'),
 
-        descrC : $('#descrC').val()
+        descrC : $('#descrCQ').val()
 
 	});
 };
@@ -512,17 +575,17 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-							<th>客户代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options='' align="left"/></td>
+							<th>客户代码</th><td><input type='text' id='customeridQ' class='easyui-textbox' size='16' data-options='' align="left"/></td>
 							<%--<th>企业信息代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
 						<%--<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<th >客户类型</th><td><input type='text' id='customerType' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+							<th >客户类型</th><td><input type='text' id='customerTypeQ' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
 																																	valueField: 'id',
 																																	textField: 'value'"/></td>
 							<th >是否合作</th>
 							<td>
-								<select id="activeFlag" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
+								<select id="activeFlagQ" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
 									<option value=""></option>
 									<option value="1">是</option>
 									<option value="0">否</option>
@@ -541,7 +604,7 @@ var doExport = function(){
 
 						<%--<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<%--<th>合同编号</th><td><input type='text' id='supContractNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<th>客户名称</th><td><input type='text' id='descrC' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户名称</th><td><input type='text' id='descrCQ' class='easyui-textbox' size='16' data-options=''/></td>
 
 							<%--<th>委托开始时间</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
 							<%--<th>委托结束时间</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
@@ -716,6 +779,15 @@ var doExport = function(){
 
 	</div>
 	<div id="ezuiDialogClientEnterpriseAddress">
+
+	</div>
+    <div id="clientInfo">
+
+    </div>
+    <div id="supplier1">
+
+    </div>
+	<div id="receivingInfo">
 
 	</div>
 </body>

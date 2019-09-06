@@ -237,11 +237,17 @@ where 1=1
 	update gsp_customer set is_use='0' where client_id = #{clientId}
 </delete>
 
-<!-- 根据id查询 产品注册证 -->
+<!-- 根据id查询 委托客户 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
 	 from gsp_customer where client_id = #{clientId}
 </select>
+
+	<!-- 根据企业id查询 委托客户 -->
+	<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_customer where enterprise_id = #{enterpriseId}
+	</select>
 
 <!-- 产品注册证 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

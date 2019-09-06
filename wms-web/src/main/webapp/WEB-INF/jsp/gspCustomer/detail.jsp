@@ -18,7 +18,7 @@
 
 </script>
 <%--增加修改弹出二级dialog--%>
-<form id='ezuiForm' method='post'>
+<form id='ezuiFormCustomer' method='post'>
     <input type='hidden' id='clientId' name='clientId' value="${customer.clientId}" class="textbox-value"/>
     <input type="hidden" id="enterpriseId" name='enterpriseId'  value="${customer.enterpriseId}"  class="textbox-value"/>
     <table>
@@ -180,19 +180,19 @@
     var dataGridDetail;//企业信息弹窗datagrid
     var dialogEnterprise;
     $(function () {
-        $('#clientStartDateForm').datebox({
+        $('#ezuiFormCustomer #clientStartDateForm').datebox({
             onChange: function(date){
                 onChangeDate();
             }
         });
 
-        $('#clientEndDateForm').datebox({
+        $('#ezuiFormCustomer #clientEndDateForm').datebox({
             onChange: function(date){
                 onChangeDate();
             }
         });
         //企业加放大镜
-        $("#enterpriseName").textbox({
+        $("#ezuiFormCustomer #enterpriseName").textbox({
             value:"${customer.clientName}",
             width:200,
             icons:[{
@@ -203,7 +203,7 @@
             }]
         })
 
-        $('#contractUrlFile').filebox({
+        $('#ezuiFormCustomer #contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
@@ -214,7 +214,7 @@
                 }
             }
         });
-        $('#contractUrlFile1').filebox({
+        $('#ezuiFormCustomer #contractUrlFile1').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
@@ -225,7 +225,7 @@
                 }
             }
         });
-        $('#contractUrlFile2').filebox({
+        $('#ezuiFormCustomer #contractUrlFile2').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
@@ -236,7 +236,7 @@
                 }
             }
         });
-        $('#contractUrlFile3').filebox({
+        $('#ezuiFormCustomer #contractUrlFile3').filebox({
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
@@ -262,7 +262,7 @@
                     }
                 },
                 onload:function(data){
-                    $("#contractUrl").val(data.comment);
+                    $("#ezuiFormCustomer #contractUrl").val(data.comment);
                 },
                 onerror:function(er){
                     console.log(er);
@@ -283,7 +283,7 @@
                     }
                 },
                 onload:function(data1){
-                    $("#empowerPhoto").val(data1.comment);
+                    $("#ezuiFormCustomer #empowerPhoto").val(data1.comment);
                 },
                 onerror:function(er){
                     console.log(er);
@@ -304,7 +304,7 @@
                     }
                 },
                 onload:function(data2){
-                    $("#idCardFront").val(data2.comment);
+                    $("#ezuiFormCustomer #idCardFront").val(data2.comment);
                 },
                 onerror:function(er){
                     console.log(er);
@@ -326,7 +326,7 @@
                 },
                 onload:function(data3){
 
-                        $("#idCardBack").val(data3.comment);
+                        $("#ezuiFormCustomer #idCardBack").val(data3.comment);
 
 
                 },
@@ -337,7 +337,7 @@
         }
 
 
-        $('input[name="firstState"]').combobox({
+        $('#ezuiFormCustomer input[name="firstState"]').combobox({
             url:sy.bp()+'/commonController.do?getCatalogFirstState',
             valueField:'id',
             textField:'value'
@@ -363,7 +363,7 @@
             }
         });*/
 
-        $("#isChineseLabelData").combobox({
+        $("#ezuiFormCustomer #isChineseLabelData").combobox({
             panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
@@ -371,18 +371,18 @@
             width:200,
             required:true,
             onLoadSuccess:function () {
-                $('#isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
+                $('#ezuiFormCustomer #isChineseLabelData').combobox("setValue",'${customer.isChineseLabel}')
             }
         });
 
-        $('#operateTypeData').combobox({
+        $('#ezuiFormCustomer #operateTypeData').combobox({
             panelHeight: 'auto',
             url:sy.bp()+'/commonController.do?getEntType',
             valueField:'id',
             textField:'value',
             width:200,
             onLoadSuccess:function () {
-                $('#operateTypeData').combobox("setValue",'${customer.operateType}')
+                $('#ezuiFormCustomer #operateTypeData').combobox("setValue",'${customer.operateType}')
             }
         })
         //企业信息弹窗datagrid
@@ -481,11 +481,11 @@
             console.log(row.enterpriseId);
             //$("#enterpriseId").attr("value",row.enterpriseId);
             console.log($("#enterpriseId").val());
-            $("#ezuiForm input[id='enterpriseId']").val(row.enterpriseId);
-            $("#enterpriseName").textbox("setValue",row.enterpriseName);
-            $("#clientNo").textbox("setValue",row.enterpriseNo);
-            $("#clientName").textbox("setValue",row.shorthandName);
-            $("#operateTypeData").combobox("setValue",row.enterpriseType);
+            $("#ezuiFormCustomer  input[id='enterpriseId']").val(row.enterpriseId);
+            $("#ezuiFormCustomer #enterpriseName").textbox("setValue",row.enterpriseName);
+            $("#ezuiFormCustomer #clientNo").textbox("setValue",row.enterpriseNo);
+            $("#ezuiFormCustomer #clientName").textbox("setValue",row.shorthandName);
+            $("#ezuiFormCustomer #operateTypeData").combobox("setValue",row.enterpriseType);
             dataGridDetail.dialog('close');
         }
     }
@@ -505,7 +505,7 @@
         }else{
             url = '<c:url value="/gspCustomerController.do?add"/>';
         }
-        $("#ezuiForm").form('submit', {
+        $("#ezuiFormCustomer").form('submit', {
             url : url,
             onSubmit : function(){
                 console.log("1");
@@ -555,8 +555,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#contractUrl").val()!=""){
-                showUrl($("#contractUrl").val());
+            if($("#ezuiFormCustomer #contractUrl").val()!=""){
+                showUrl($("#ezuiFormCustomer #contractUrl").val());
             }else {
                 showMsg("请上传合同附件！");
             }
@@ -566,8 +566,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#empowerPhoto").val()!=""){
-                showUrl($("#empowerPhoto").val());
+            if($("#ezuiFormCustomer #empowerPhoto").val()!=""){
+                showUrl($("#ezuiFormCustomer #empowerPhoto").val());
             }else {
                 showMsg("请上传授权照片！");
             }
@@ -577,8 +577,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#idCardFront").val()!=""){
-                showUrl($("#idCardFront").val());
+            if($("#ezuiFormCustomer #idCardFront").val()!=""){
+                showUrl($("#ezuiFormCustomer #idCardFront").val());
             }else {
                 showMsg("请上传身份证正面照！");
             }
@@ -588,8 +588,8 @@
         if(url){
             showUrl(url);
         }else{
-            if($("#idCardBack").val()!=""){
-                showUrl($("#idCardBack").val());
+            if($("#ezuiFormCustomer #idCardBack").val()!=""){
+                showUrl($("#ezuiFormCustomer #idCardBack").val());
             }else {
                 showMsg("请上传身份证背面照！");
             }
@@ -615,10 +615,10 @@
         //processType = 'edit';
 
         //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#ezuiForm input[id='enterpriseId']").val());
-        var enterpriseId = $("#ezuiForm input[id='enterpriseId']").val();
+        console.log($("#ezuiFormCustomer  input[id='enterpriseId']").val());
+        var enterpriseId = $("#ezuiFormCustomer  input[id='enterpriseId']").val();
         if(enterpriseId==null || enterpriseId==""){
-            enterpriseId = $("#enterpriseId").val();
+            enterpriseId = $("#ezuiFormCustomer #enterpriseId").val();
         }
 
         if(enterpriseId!=null && enterpriseId!="" ){
@@ -634,15 +634,15 @@
 
 
     function onChangeDate() {
-        var startTime = $('#clientStartDateForm').eq(0).datebox('getValue');
-        var endTime = $('#clientEndDateForm').eq(0).datebox('getValue') ;
+        var startTime = $('#ezuiFormCustomer #clientStartDateForm').eq(0).datebox('getValue');
+        var endTime = $('#ezuiFormCustomer #clientEndDateForm').eq(0).datebox('getValue') ;
 
         if(startTime!=null && endTime!=null&& endTime!=""&& startTime !=""  ) {
             var endTime = new Date(endTime);
             var startTime = new Date(startTime);
             var days = endTime.getTime() - startTime.getTime();
             var day = parseInt(days / (1000 * 60 * 60 * 24));
-            $('#clientTermForm').eq(0).numberbox('setValue',day);
+            $('#ezuiFormCustomer #clientTermForm').eq(0).numberbox('setValue',day);
         }
     }
 
