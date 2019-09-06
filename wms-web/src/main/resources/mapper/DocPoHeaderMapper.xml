@@ -270,7 +270,7 @@
 				and e.expectedarrivetime1 &lt;= #{condition.expectedarrivetime2}
 			</if>
 			<if test="condition.poreference1 != null and condition.poreference1 != ''" >
-				and e.poreference1 =  #{condition.poreference1}
+				and e.poreference1 like CONCAT('%',#{condition.poreference1},'%')
 			</if>
 			<if test="condition.poreference2 != null and condition.poreference2 != ''" >
 				and e.poreference2 =  #{condition.poreference2}
