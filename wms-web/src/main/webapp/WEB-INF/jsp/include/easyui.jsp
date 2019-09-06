@@ -281,5 +281,16 @@
 			case "" : return "";
 		}
 	}
+//盘点状态
+	var Cou_RequeststatusFormatter = function (value,row,index) {
+		value+="";
+    	switch (value) {
+			case "00" : return "任务创建";
+			case "30" : return "部分盘点";
+			case "40" : return "完全盘点";
+			case "90" : return "盘点取消";
+			case "99" : return "盘点关闭";
+		}
+	}
 
 </script>

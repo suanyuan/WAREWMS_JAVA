@@ -359,5 +359,14 @@ public class CommonController {
     public List<EasyuiCombobox> getMtStatus(){
         return basCodesService.getBy(Constant.CODE_CATALOG_MT_STS);
     }
+    /**
+     * 盘点状态
+     * @return
+     * */
+    @RequestMapping(params = "getCouRequestStatus")
+    @ResponseBody
+    public List<EasyuiCombobox> getCouRequestStatus(){
+        return basCodesService.getBy(Constant.CODE_CATALOG_COU_REQUEST);
+    }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +65,13 @@ public class CouRequestHeaderController {
 	@RequestMapping(params = "exportCouRequestDataToExcel")
 public void exportViewInvLotattDataToExcel(HttpServletResponse response, CouRequestExportForm form) throws Exception {
 		couRequestExportService.exportCouRequestDataToExcel(response, form);
+	}
+//导入
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return couRequestHeaderService.importExcelData(mhsr);
 	}
 ////关闭计划单
 //	@Login

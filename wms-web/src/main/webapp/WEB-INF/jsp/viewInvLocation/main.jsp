@@ -118,6 +118,32 @@
                 }]
             });
 
+            //货主带出产品线
+            $("#toolbar #fmcustomerid").textbox({
+                onChange:function(){
+                    var customerid = $("#toolbar #fmcustomerid").textbox('getValue');
+                    if(customerid !=null && ($.trim(customerid).length>0)){
+                        $("#toolbar #name").combobox({
+                            panelHeight: 'auto',
+                            url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
+                            valueField:'id',
+                            textField:'value',
+                            onLoadSuccess:function () {
+                            }
+                        });
+                    }else{
+                        $("#toolbar #name").combobox({
+                            panelHeight: 'auto',
+                            url:"/productLineController.do?getCombobox",
+                            valueField:'id',
+                            textField:'value',
+                            onLoadSuccess:function () {
+                            }
+                        });
+                    }
+                }
+            });
+
 
             //库位选择弹框
             ezuiLocDataDialog = $('#ezuiLocDataDialog').dialog({
@@ -684,13 +710,14 @@
 
                     </tr>
                     <tr>
-                        <th>产品名称</th>
-                        <td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>产品线</th>
                         <td><input type='text' id='name' class='easyui-combobox' size='16' data-options="
 																										url:'<c:url value="/productLineController.do?getCombobox"/>',
 																										valueField: 'id',
 																										textField: 'value'"/></td>
+                        <th>产品名称</th>
+                        <td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
+
                         <th>入库单号</th>
                         <td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 

@@ -9,7 +9,7 @@
                 <fieldset>
                     <table>
                         <tr>
-                            <th>货主</th>
+                            <th>货主代码</th>
                             <td>
                                 <input type='text' id='customerid' class='easyui-textbox' size='16'
                                        data-options=''/>

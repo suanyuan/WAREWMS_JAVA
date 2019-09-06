@@ -15,14 +15,14 @@ public class CouRequestDetailsExportVO {
 	private String lotatt05;
 	private Date addtime;
 	private String addwho;
-	private Date edittime;
-	private String editwho;
-	private String userdefined1;
-	private String userdefined2;
-	private String userdefined3;
+	private Date edittime;//盘点日期
+	private String editwho;//盘点人
+	private String userdefined1;//差异
+	private String userdefined2;//备注
+	private String userdefined3; //复核人
 //	双击查看明细
     private String reservedfield01;
-	private String descre;//型号
+//	private String descre;//型号
 	private String descrc;//规格
 //导出导入附加字段
     private String difference;  //差异
@@ -167,14 +167,14 @@ public class CouRequestDetailsExportVO {
 	public void setReservedfield01(String reservedfield01) {
 		this.reservedfield01 = reservedfield01;
 	}
-
-	public String getDescre() {
-		return descre;
-	}
-
-	public void setDescre(String descre) {
-		this.descre = descre;
-	}
+//
+//	public String getDescre() {
+//		return descre;
+//	}
+//
+//	public void setDescre(String descre) {
+//		this.descre = descre;
+//	}
 
 	public String getDescrc() {
 		return descrc;

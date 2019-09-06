@@ -1,7 +1,6 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
@@ -18,6 +17,7 @@ public class CouRequestDetailsVO {
 	private String lotatt05;
 	private Date addtime;
 	private String addwho;
+	@JSONField(format="yyyy-MM-dd")
 	private Date edittime;
 	private String editwho;
 	private String userdefined1;

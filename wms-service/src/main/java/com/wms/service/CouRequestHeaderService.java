@@ -12,14 +12,22 @@ import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
+import com.wms.service.importdata.ImportCouRequestDataService;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.CouRequestHeaderVO;
 import com.wms.vo.Json;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service("couRequestHeaderService")
@@ -31,6 +39,8 @@ public class CouRequestHeaderService extends BaseService {
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
   @Autowired
     private CouRequestDetailsMybatisDao couRequestDetailsMybatisDao;
+  @Autowired
+    private ImportCouRequestDataService importCouRequestDataService;
 
     //分页查询
     public EasyuiDatagrid<CouRequestHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, CouRequestHeaderQuery query) {
@@ -131,6 +141,17 @@ public class CouRequestHeaderService extends BaseService {
         }
         return json;
     }
+    //导入
+    public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+        Json json = null;
+        MultipartFile excelFile = mhsr.getFile("uploadData");
+        //System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
+        if(excelFile != null && excelFile.getSize() > 0){
+           json = importCouRequestDataService.importExcelData(excelFile);
+        }
+        return json;
+    }
+
 //
 //    //增加
 //    public Json addDocMtHeader(DocMtHeaderForm docMtHeaderForm) throws Exception {

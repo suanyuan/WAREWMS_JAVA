@@ -1,28 +1,36 @@
-package com.wms.vo.form;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+package com.wms.entity;
 
 import java.util.Date;
 
-public class CouRequestDetailsForm {
+public class ImportCouRequestData {
 
 	private String cycleCountno;
-	private int cycleCountlineno;
+	private String cycleCountlineno;
 	private String customerid;
 	private String sku;
 	private String locationid;
-	private double qtyInv;
-	private double qtyAct;
+	private String qtyInv;
+	private String qtyAct;
 	private String lotatt04;
 	private String lotatt05;
 	private Date addtime;
 	private String addwho;
-	private Date edittime;       //盘点时间
-	private String editwho;      //盘点人
-	private String userdefined1; //差异
-	private String userdefined2; //备注
+	private Date edittime;      //盘点日期
+	private String editwho;     //盘点人
+	private String userdefined1;//差异
+	private String userdefined2;//备注
 	private String userdefined3; //复核人
+//	双击查看明细
+    private String reservedfield01;
+//	private String descre;//型号
+	private String descrc;//规格
+//导出导入附加字段 用于导出
+    private String difference;  //差异
+    private String remarks;     //备注
+    private String countdate;   //盘点日期
+    private String countwho;    //盘点人
+    private String reviewerwho; //复核人
+    private String productLineName; //产品线
 
 	public String getCycleCountno() {
 		return cycleCountno;
@@ -32,11 +40,11 @@ public class CouRequestDetailsForm {
 		this.cycleCountno = cycleCountno;
 	}
 
-	public int getCycleCountlineno() {
+	public String getCycleCountlineno() {
 		return cycleCountlineno;
 	}
 
-	public void setCycleCountlineno(int cycleCountlineno) {
+	public void setCycleCountlineno(String cycleCountlineno) {
 		this.cycleCountlineno = cycleCountlineno;
 	}
 
@@ -64,19 +72,19 @@ public class CouRequestDetailsForm {
 		this.locationid = locationid;
 	}
 
-	public double getQtyInv() {
+	public String getQtyInv() {
 		return qtyInv;
 	}
 
-	public void setQtyInv(double qtyInv) {
+	public void setQtyInv(String qtyInv) {
 		this.qtyInv = qtyInv;
 	}
 
-	public double getQtyAct() {
+	public String getQtyAct() {
 		return qtyAct;
 	}
 
-	public void setQtyAct(double qtyAct) {
+	public void setQtyAct(String qtyAct) {
 		this.qtyAct = qtyAct;
 	}
 
@@ -150,5 +158,69 @@ public class CouRequestDetailsForm {
 
 	public void setUserdefined3(String userdefined3) {
 		this.userdefined3 = userdefined3;
+	}
+
+	public String getReservedfield01() {
+		return reservedfield01;
+	}
+
+	public void setReservedfield01(String reservedfield01) {
+		this.reservedfield01 = reservedfield01;
+	}
+
+	public String getDescrc() {
+		return descrc;
+	}
+
+	public void setDescrc(String descrc) {
+		this.descrc = descrc;
+	}
+
+	public String getDifference() {
+		return difference;
+	}
+
+	public void setDifference(String difference) {
+		this.difference = difference;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getCountdate() {
+		return countdate;
+	}
+
+	public void setCountdate(String countdate) {
+		this.countdate = countdate;
+	}
+
+	public String getCountwho() {
+		return countwho;
+	}
+
+	public void setCountwho(String countwho) {
+		this.countwho = countwho;
+	}
+
+	public String getReviewerwho() {
+		return reviewerwho;
+	}
+
+	public void setReviewerwho(String reviewerwho) {
+		this.reviewerwho = reviewerwho;
+	}
+
+	public String getProductLineName() {
+		return productLineName;
+	}
+
+	public void setProductLineName(String productLineName) {
+		this.productLineName = productLineName;
 	}
 }

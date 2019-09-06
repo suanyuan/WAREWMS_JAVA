@@ -150,7 +150,8 @@ where 1=1
 	<if test="userdefined3 != null  ">
 		userdefined3=#{userdefined3},
 	</if>
-	</trim> where cycle_countno=#{cycleCountno}
+	</trim>
+		 where cycle_countno=#{cycleCountno} and cycle_countlineno=#{cycleCountlineno}
 </update>
 
 <!-- 删除记录 -->
