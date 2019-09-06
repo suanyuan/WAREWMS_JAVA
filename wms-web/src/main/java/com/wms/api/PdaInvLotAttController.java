@@ -7,6 +7,7 @@ import com.wms.service.InvLotLocIdService;
 import com.wms.service.ViewInvLotattService;
 import com.wms.vo.Json;
 import com.wms.vo.form.ViewInvLotattForm;
+import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.form.pda.PdaInventoryMoveForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,6 +79,29 @@ public class PdaInvLotAttController {
         }
 
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
+        return map;
+    }
+
+    /**
+     * PDA扫描产品条码获取库存数据（GS1条码、SKU、自赋码、GTIN码）
+     * @param query ~
+     * @return ~
+     */
+    @RequestMapping(params = "queryInventoryForScan", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryInventoryForScan(PdaInventoryQuery query, PageForm pageForm) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Json json = invLotLocIdService.queryInventoryForScan(query, pageForm);
+        if (!json.isSuccess()) {
+
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
+            return map;
+        }
+
+        map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
+        map.put(Constant.DATA, json.getObj());
         return map;
     }
 }

@@ -647,7 +647,7 @@ public class DocOrderPackingService extends BaseService {
 
     /**
      * 扫码查询复核任务明细
-     * @param query warehouseid, orderno, customerid, GTIN, lotatt02, lotatt04, lotatt05, otherCode
+     * @param query warehouseid, orderno, customerid, GTIN, lotatt02, lotatt04, lotatt05, otherCode, cartonNum
      * @return ~
      */
 	public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {

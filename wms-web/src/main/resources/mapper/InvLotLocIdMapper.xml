@@ -41,7 +41,14 @@
 </resultMap>
 
     <resultMap id="ExtendResultMap" type="com.wms.entity.InvLotLocId" extends="BaseResultMap" >
-        <association property="invLotAtt" column="lotnum" javaType="com.wms.entity.InvLotAtt" select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
+        <association property="invLotAtt"
+                     column="lotnum"
+                     javaType="com.wms.entity.InvLotAtt"
+                     select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
+        <association property="basSku"
+                     column="{customerid=customerid, sku=sku}"
+                     javaType="com.wms.entity.BasSku"
+                     select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
     </resultMap>
        
 <!-- inv_lot_loc_id table all fields -->
@@ -295,4 +302,35 @@ where 1=1
 	</trim>
 	ORDER BY aa.locationid DESC
 </select>
+
+    <select id="queryInventoryForScan" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        SELECT a.*
+        FROM inv_lot_loc_id a
+        LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
+        LEFT JOIN bas_sku c ON a.sku = c.sku AND a.customerid = c.customerid
+        <if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
+            LEFT JOIN bas_gtn d ON a.sku = d.sku
+        </if>
+        WHERE 1 = 0
+        <if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
+            OR d.gtncode = #{GTIN}
+        </if>
+        <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
+            OR (
+                ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
+                AND
+                ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
+                )
+        </if>
+        <if test="otherCode != null and otherCode != ''">
+            OR c.alternate_sku1 = #{otherCode, jdbcType=VARCHAR}
+            OR c.alternate_sku2 = #{otherCode, jdbcType=VARCHAR}
+            OR c.alternate_sku3 = #{otherCode, jdbcType=VARCHAR}
+            OR c.alternate_sku4 = #{otherCode, jdbcType=VARCHAR}
+            OR c.alternate_sku5 = #{otherCode, jdbcType=VARCHAR}
+            OR c.sku = #{otherCode, jdbcType=VARCHAR}
+        </if>
+        ORDER BY a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
+        limit #{start}, #{pageSize}
+    </select>
 </mapper>   

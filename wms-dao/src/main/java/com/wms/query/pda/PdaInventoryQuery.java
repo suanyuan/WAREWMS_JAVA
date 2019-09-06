@@ -22,4 +22,9 @@ public class PdaInventoryQuery {
     private String customerid;
 
     private String sku;
+
+    //分页
+    private int start;
+
+    private int pageSize;
 }
