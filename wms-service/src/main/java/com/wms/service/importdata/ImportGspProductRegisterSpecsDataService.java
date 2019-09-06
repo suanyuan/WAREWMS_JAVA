@@ -1,5 +1,6 @@
 package com.wms.service.importdata;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
@@ -7,6 +8,7 @@ import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasLocationQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
+import com.wms.service.BasCodesService;
 import com.wms.service.BasPackageService;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
@@ -55,6 +57,8 @@ public class ImportGspProductRegisterSpecsDataService {
 	private GspSecondRecordMybatisDao gspSecondRecordMybatisDao;
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	@Autowired
+	private BasCodesService basCodesService;
 
 
 	/**
@@ -299,15 +303,19 @@ public class ImportGspProductRegisterSpecsDataService {
 			}
 
 			try {
-				importDataVO.setUnit(dataArray.getUnit());
-
-				if (StringUtils.isEmpty(dataArray.getUnit())) {//判日期是否为空
+				List<EasyuiCombobox>  easyuiComboboxList = 	basCodesService.getBy(Constant.CODE_CATALOG_UOM);
+					for (EasyuiCombobox easyuiCombobox:easyuiComboboxList) {
+						//判断单位是否存在
+						if(easyuiCombobox.getValue().equals(dataArray.getUnit())){
+							importDataVO.setUnit(easyuiCombobox.getId());
+						}
+					}
+				if (StringUtils.isEmpty(importDataVO.getUnit())) {//如果单位不存在那么就没有赋值
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[单位]，未输入").append(" ");
+				rowResult.append("[单位]，未输入或查无此单位信息").append(" ");
 			}
-
 			try {
 				importDataVO.setPackingUnit(dataArray.getPackingUnit());
 				List<EasyuiCombobox> s =basPackageService.getBasPackageCombobox();
