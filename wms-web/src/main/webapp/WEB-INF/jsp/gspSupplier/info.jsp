@@ -66,7 +66,10 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             <td><input type='text'  data="1" id="contractNo" value="${gspSupplier.contractNo}"  name='contractNo' class='easyui-textbox' data-options='required:true,width:200'/></td>
 
             <th>货主</th>
-            <td><input type='text' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}" class='easyui-textbox' data-options='required:false,width:200'/></td>
+            <td><input type='text' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}" class='easyui-textbox' data-options='required:false,width:200'/>
+            <input type="hidden" name="cli_enterpriseId" id="cli_enterpriseId" value="${clientEnterpriseId}" />
+            <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewClientEnterpriseUrl()">查看</a>
+            </td>
 
         </tr>
         <tr>
@@ -171,10 +174,44 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
 <div id='enterpriseDialog' style='padding: 10px;'>
 
 </div>
+<div id='ezuiDialogClientDetail' style='padding: 10px;'>
+    <div id='clientTB' class='datagrid-toolbar' style=''>
+        <fieldset>
+            <legend>货主信息</legend>
+            <table>
+                <tr>
+                    <th>客户代码：</th><td><input type='text' id='kehudaima1' class='easyui-textbox' data-options=''/></td>
+                    <th>客户名称：</th><td><input type='text' id='kehumingcehng1' class='easyui-textbox' data-options=''/></td>
+                </tr>
+                <tr>
+                    <%-- <th>企业信息代码：</th><td><input type='text' id='qiyexinxidaima1' class='easyui-textbox' data-options=''/></td>
+                     <th>企业名称：</th><td><input type='text' id='qiyemingcheng2' class='easyui-textbox' data-options=''/></td>--%>
+                    <%-- <td>
+                         <input type='text' id='enterpriseIdQuery' style="width: 170px;"/>
+                         <input type="hidden" class="easyui-textvalue" name="enterpriseId">
+                         <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
+                     </td>
+                     <th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>--%>
+                    <td>
+                        <a onclick='doSearchClient();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                        <a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <table id="dataGridClientDetail">
+
+    </table>
+</div>
+<div id="ezuiDialogClientEnterpriseInfo">
+
+</div>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
     var enterpriseDialog_gspSupplierInfo;
-
+    var ezuiDialogClientDetail;
+    var ezuiDialogClientEnterpriseInfo;
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
         // alert(row.supplierId);
@@ -247,7 +284,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         //     textField:'value'
         // });
 
-    })
+    });
     $(function () {
         $("#enterpriseIdQuery1").textbox({
             width:200,
@@ -257,9 +294,160 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                     searchEnterprise();
                 }
             }]
-        })
-    })
+        });
 
+        $("#costomerid").textbox({
+            width: 200,
+            icons: [{
+                iconCls: 'icon-search',
+                handler: function (e) {
+                    searchclient(); //货主
+                }
+            }]
+        });
+
+        clientDatagrid = $("#dataGridClientDetail").datagrid({
+            url : sy.bp()+'/basCustomerController.do?showDatagrid',
+            method:'POST',
+            toolbar : '#clientTB',
+            title: '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border: false,
+            fitColumns : false,
+            nowrap: true,
+            striped: true,
+            queryParams:{
+                activeFlag : '1',
+                customerType:'OW'
+            },
+            fit:true,
+            collapsible:false,
+            pagination:true,
+            rownumbers:true,
+            singleSelect:true,
+            idField : 'clientId',
+            columns : [[
+                {field: 'customerType',	title: '客户类型 ',	width: '10%',formatter:function(value,rowData,rowIndex){
+                        if (rowData.customerType=='CO') {
+                            return rowData.customerType='收货单位';
+                        }else if (rowData.customerType=='VE'){
+                            return rowData.customerType='供应商';
+                        }else if (rowData.customerType=='CA'){
+                            return rowData.customerType='承运商';
+                        }else if (rowData.customerType=='OT'){
+                            return rowData.customerType='其他';
+                        }else if (rowData.customerType=='OW'){
+                            return rowData.customerType='货主';
+                        }else if (rowData.customerType=='PR'){
+                            return rowData.customerType='生产企业';
+                        }else if (rowData.customerType=='WH'){
+                            return rowData.customerType='主体';
+                        }
+                    } },
+                // {field: 'activeFlag',		title: '是否合作 ',	width: '10%',formatter:function(value,rowData,rowIndex){
+                //         return rowData.activeFlag == '1' ? '是' : '否';
+                //     }},
+                {field: 'enterpriseId',		title: '主键',	width: '10%' ,hidden:true},
+                {field: 'customerid',		title: '客户代码',	width: '10%' },
+                {field: 'descrC',		title: '客户名称',	width: '30%' },
+                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: '10%' },
+                {field: 'shorthandName',		title: '简称 ',	width:'10%' },
+                {field: 'enterpriseName',		title: '企业名称 ',	width: '10%' },
+                // {field: '_operate',		title: '操作',	width: '10%',
+                //     formatter: formatOper
+                // }
+            ]],
+            onDblClickCell: function(index,field,value){
+                choseClientSelect();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+
+            },
+            onSelect: function(rowIndex, rowData) {
+
+            },
+            onLoadSuccess:function(data){
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:540});
+            }
+        });
+
+    });
+    //货主弹窗
+    ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        width:850,
+        height:500,
+        cache: false,
+
+        onClose : function() {
+            ezuiFormClear(ezuiForm);
+        }
+    }).dialog('close');
+
+    function searchclient() {
+        if(ezuiDialogClientDetail){
+            ezuiDialogClientDetail.dialog('open');
+        }
+    }
+    //查询货主信息条件
+    function doSearchClient() {
+        clientDatagrid.datagrid('load', {
+            // enterpriseName : $('#qiyemingcheng2').val(),
+            // enterpriseNo : $('#qiyexinxidaima1').val(),
+            descrC : $('#kehumingcehng1').val(),
+            customerid : $('#kehudaima1').val(),
+            isUse : '1',
+            customerType:'OW',
+            activeFlag : '1',
+
+        });
+    }
+    //选择货主
+    function choseClientSelect() {
+        var row = clientDatagrid.datagrid("getSelected");
+        // alert(row.enterpriseId);
+        if(row){
+            $("#costomerid").textbox("setValue",row.customerid);
+            $("#cli_enterpriseId").val(row.enterpriseId);
+            ezuiDialogClientDetail.dialog('close');
+        }
+    }
+    //委托方企业信息详情
+    function viewClientEnterpriseUrl(){
+        $(function() {
+            ezuiDialogClientEnterpriseInfo = $('#ezuiDialogClientEnterpriseInfo').dialog({
+                modal : true,
+                title : '<spring:message code="common.dialog.title"/>',
+                buttons : '',
+                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+                width:1200,
+                height:530,
+                closable:true,
+                cache: false,
+                onClose : function() {
+                    ezuiFormClear(ezuiDialogClientEnterpriseInfo);
+                }
+            }).dialog('close');
+        });
+
+        console.log($("#cli_enterpriseId").val());
+        var enterpriseId = $("#cli_enterpriseId").val();
+        if(enterpriseId==null || enterpriseId==""){
+            // enterpriseId = $("#enterpriseId").val();
+        }
+
+        if(enterpriseId!=null && enterpriseId!="" ){
+            ezuiDialogClientEnterpriseInfo.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+            enterpriseId = "";
+        }else{
+            $.messager.show({
+                msg : '请先选择企业', title : '提示'
+            });
+        }
+    }
     enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
         modal: true,
         title: '<spring:message code="common.dialog.title"/>',
