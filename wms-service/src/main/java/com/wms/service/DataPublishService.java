@@ -268,6 +268,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setPutawayrule(no);//申请单号
                 skuForm.setCustomerid(customerId.getCustomerid());
 
+
                 //skuForm
                 basSkuService.addBasSku(skuForm);
             }

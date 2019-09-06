@@ -141,6 +141,7 @@ $(function() {
 			{field: 'sku',				title: '产品代码',		width: 100 },
 			{field: 'skudescrc',			title: '产品名称',		width: 200 },
 			{field: 'alternativesku',	title: '产品条码',		width: 70 },
+            {field: 'coldName',	title: '冷链标记',		width: 70 },
 			{field: 'linestatusName',	title: '行状态',		width: 70 },
 			{field: 'expectedqty',		title: '预期到货数',		width: 70 },
 			{field: 'receivedqty',		title: '实际到货数',		width: 70 },

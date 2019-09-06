@@ -252,12 +252,12 @@
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push(row[i].instrumentCatalogName);
+                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
             $("#ezuiFormRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",row.instrumentCatalogName);
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");

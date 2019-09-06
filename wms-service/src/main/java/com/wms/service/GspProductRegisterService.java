@@ -11,6 +11,7 @@ import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.importdata.ImportGspProductRegisterDataService;
 import com.wms.utils.DateUtil;
@@ -468,4 +469,8 @@ public class GspProductRegisterService extends BaseService {
 		return datagrid;
 	}
 
+	//根据ProductRegisterNo查询所有
+	public List<PdaGspProductRegister> queryAllByRegisterNo(String registerNo){
+		return gspProductRegisterMybatisDao.queryAllByNo(registerNo);
+	}
 }

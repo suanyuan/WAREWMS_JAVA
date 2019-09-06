@@ -160,7 +160,7 @@ public class DocAsnDetailService extends BaseService {
 	        return statusJson;
         }
 
-		Json verJson = gspVerifyService.verifyOperate(docAsnDetailForm.getCustomerid(),docAsnDetailForm.getSku(),docAsnDetailForm.getLotatt02());
+		Json verJson = gspVerifyService.verifyOperate(docAsnDetailForm.getCustomerid(),docAsnDetailForm.getSku(),docAsnDetailForm.getLotatt02(),docAsnDetailForm.getLotatt01());
 		if(!verJson.isSuccess()){
 			return verJson;
 		}

@@ -27,6 +27,15 @@
                                data-options='required:false'/></td>
                 </tr>
                 <tr>
+                    <!----><th>供应商</th>
+                    <td><input type='text' id='supplierid' name='supplierid' class='easyui-combobox' size='16'
+                               data-options="panelHeight: 'auto',
+																														editable: false,
+																														url:'<c:url value="commonController.do?getSupplier"/>',
+																														valueField: 'id',
+																														textField: 'value'"/>
+                    </td>
+
                     <th>入库单状态</th>
                     <td><input type='text' id='asnstatus' name='asnstatus' class='easyui-combobox' size='16'
                                data-options="panelHeight: 'auto',

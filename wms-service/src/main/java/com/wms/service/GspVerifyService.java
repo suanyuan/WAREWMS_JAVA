@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.utils.DateUtil;
 import com.wms.vo.GspOperateDetailVO;
@@ -52,7 +53,7 @@ public class GspVerifyService {
      * @param sku
      * @return
      */
-    public Json verifyOperate(String customerId,String sku,String lotatt2) throws Exception{
+    public Json verifyOperate(String customerId,String sku,String lotatt2,String lotatt1) throws Exception{
         return Json.success("");
         /*BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
         if(customer == null){
@@ -63,6 +64,7 @@ public class GspVerifyService {
             return Json.error("查询不到对应的产品："+sku);
         }
 
+        //TODO 根据产品获取生产企业
         GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
         if(gspEnterpriseInfo == null){
             return Json.error("查询不到对应的企业信息："+customerId);
@@ -88,7 +90,7 @@ public class GspVerifyService {
             if(businessOperateTime == null){
                 return Json.error("没有查询到营业执照信息:"+customerId);
             }else {
-                if(businessOperateTime.get(0).getRemainDay()!=null && Integer.parseInt(businessOperateTime.get(0).getRemainDay()) <0 ){
+                if(businessOperateTime.get(0).getRemainDay()!=null && Integer.parseInt(businessOperateTime.get(0).getRemainDay()) >0 ){
                     return Json.error("营业执照过期:"+customerId);
                 }
             }
@@ -105,11 +107,11 @@ public class GspVerifyService {
             //判断证照期限
             List<GspOperteLicenseTime> prodOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspProdLicense.getOperateId(),"");
             if(prodOperateTime != null){
-                if(Integer.parseInt(prodOperateTime.get(0).getRemainDay()) <0 ){
+                if(Integer.parseInt(prodOperateTime.get(0).getRemainDay()) >0 ){
                     return Json.error("生产许可证过期:"+customerId);
                 }else {
-                    if(!StringUtils.isEmpty(lotatt2)){
-                        if(checkDate(lotatt2,gspProdLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspProdLicense.getApproveDate())>0){
+                    if(!StringUtils.isEmpty(lotatt1)){
+                        if(checkDate(lotatt1,gspProdLicense.getLicenseExpiryDate())<0 || checkDate(lotatt2,gspProdLicense.getApproveDate())>0){
                             return Json.error("生产日期超过生产许可证有效期");
                         }
                     }
@@ -128,7 +130,7 @@ public class GspVerifyService {
             //判断证照期限
             List<GspOperteLicenseTime> operOperateTime = gspOperateDateTimeService.queryGspOperateDateTime(gspOperateLicense.getOperateId(),"");
             if(operOperateTime != null){
-                if(Integer.parseInt(operOperateTime.get(0).getRemainDay()) <0 ){
+                if(Integer.parseInt(operOperateTime.get(0).getRemainDay()) >0 ){
                     return Json.error("经营可证过期:"+customerId);
                 }else {
                     if(!StringUtils.isEmpty(lotatt2)){
@@ -162,11 +164,19 @@ public class GspVerifyService {
         //判断生产日期和产品注册证日期
         GspProductRegister register = gspProductRegisterService.queryByRegisterNo(basSku.getReservedfield03());
         if(register!=null){
-            if(!StringUtils.isEmpty(lotatt2)){
+            if(!StringUtils.isEmpty(lotatt1)){
                 //TODO 取最早的注册证批准日期
-                if(checkDate(lotatt2,register.getProductRegisterExpiryDate())<0 || checkDate(lotatt2,register.getApproveDate())>0){
-                    return Json.error("生产日期超过注册证有效期");
+                List<PdaGspProductRegister> pdaGspProductRegisters = gspProductRegisterService.queryAllByRegisterNo(basSku.getReservedfield03());
+                if(pdaGspProductRegisters!=null && pdaGspProductRegisters.size()>0){
+                    if(checkDate(lotatt1,pdaGspProductRegisters.get(0).getProductRegisterExpiryDate())<0 || checkDate(lotatt1,register.getApproveDate())>0){
+                        return Json.error("生产日期超过注册证有效期");
+                    }
+                }else{
+                    if(checkDate(lotatt1,register.getProductRegisterExpiryDate())<0 || checkDate(lotatt1,register.getApproveDate())>0){
+                        return Json.error("生产日期超过注册证有效期");
+                    }
                 }
+
             }
             //判断证照经营范围和sku器械目录
             List<GspOperateDetailVO> listAllDetails = new ArrayList<>();
@@ -210,7 +220,6 @@ public class GspVerifyService {
 
         return Json.success("");*/
     }
-
 
     private static int checkDate(String lotatt2,Date endDate) throws Exception{
         Date dateLotatt2 = DateUtil.parse(lotatt2,"yyyy-MM-dd");
