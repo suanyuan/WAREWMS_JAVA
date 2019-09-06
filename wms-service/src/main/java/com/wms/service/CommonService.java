@@ -60,7 +60,7 @@ public class CommonService extends BaseService{
      * 1，扫描GS1条码，无操作；
      * 2，扫描序列号条码，匹配之前导入的bas_serial_num数据表，自动赋上生产批号（一般到序列号记录的都是批号入，序列号出的） -> otherCode传参；
      * 3，扫描产品代码条码，做完了上验证再检查SKU是否存在 -> otherCode传参；
-     * 4，扫描自赋码条码，todo 暂时还没做
+     * 4，扫描自赋码条码，todo 待测
      * @param form 详见form内的字段描述
      * @return ~
      */

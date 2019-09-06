@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.GspCustomer;
+import com.wms.mybatis.dao.GspCustomerMybatisDao;
 import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class GspCustomerController {
 
 	@Autowired
 	private GspCustomerService gspCustomerService;
+	@Autowired
+	private GspCustomerMybatisDao gspCustomerMybatisDao;
 //返回主页面
 	@Login
 	@RequestMapping(params = "toMain")
@@ -43,6 +47,23 @@ public class GspCustomerController {
 	@RequestMapping(params = "toDetail")
 	public ModelAndView toDetail(String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
+		Json json = gspCustomerService.getGspCustomerById(id);
+		if(json.isSuccess()){
+			model.put("customer", json.getObj());
+		}
+		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
+		model.put("createDate", DateUtil.format(new Date()));
+		return new ModelAndView("gspCustomer/detail", model);
+	}
+
+	//客户档案查询 委托客户详情返回增加或者修改界面
+	@Login
+	@RequestMapping(params = "basCustomerToDetail")
+	public ModelAndView basCustomerToDetail(String id) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		GspCustomer gspCustomer=gspCustomerMybatisDao.queryByEnterpriseId(id);
+		id = gspCustomer.getClientId();
+
 		Json json = gspCustomerService.getGspCustomerById(id);
 		if(json.isSuccess()){
 			model.put("customer", json.getObj());

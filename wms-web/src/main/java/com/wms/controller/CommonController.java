@@ -108,7 +108,6 @@ public class CommonController {
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
                 bos.write(buff, 0, bytesRead);
             }
-
         }
         return null;
     }

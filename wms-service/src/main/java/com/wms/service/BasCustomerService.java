@@ -89,6 +89,7 @@ public class BasCustomerService extends BaseService {
 				basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
 				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
 				basCustomerVO.setRemark(gspEnterpriseInfo.getRemark());
+//
 			}
 
 
@@ -249,13 +250,12 @@ public class BasCustomerService extends BaseService {
 			basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
 //			basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
 			BasCustomer basCustomerHistory = new BasCustomer();
-			if("Supplier".equals(flag) || "Receving".equals(flag)){
+			if("Supplier".equals(flag) ){
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
-			}else{
+			}else if("Client".equals(flag)){
 				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
-
 			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 

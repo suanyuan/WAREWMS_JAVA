@@ -171,10 +171,11 @@ public class GspReceivingController {
 			//GspReceivingAddress gspReceivingAddress =gspReceivingAddressMybatisDao.queryById(receivingId);
 			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
 			if (gspReceiving != null) {
+
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
 				model.put("gspEnterpriseInfo",gspEnterpriseInfo);
 			}
-
+			System.out.println();
 			model.put("gspReceiving",gspReceiving);
 		//	model.put("gspReceivingAddress",gspReceivingAddress);
 		}
@@ -183,6 +184,29 @@ public class GspReceivingController {
 		return new ModelAndView("gspReceiving/detail", model);
 	}
 
+	@Login
+	@RequestMapping(params = "customerToDetail")
+	public ModelAndView customerToDetail(String receivingId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+//		GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+
+
+		if (StringUtils.isNotEmpty(receivingId)){
+			//GspReceivingAddress gspReceivingAddress =gspReceivingAddressMybatisDao.queryById(receivingId);
+			GspReceiving gspReceiving = gspReceivingMybatisDao.queryById(receivingId);
+			if (gspReceiving != null) {
+
+				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspReceiving.getEnterpriseId());
+				System.out.println();
+				model.put("gspEnterpriseInfo",gspEnterpriseInfo);
+			}
+			model.put("enterpriseId", gspReceiving.getEnterpriseId());
+			model.put("gspReceiving",gspReceiving);
+			//	model.put("gspReceivingAddress",gspReceivingAddress);
+		}
+		model.put("receivingId", receivingId);
+		return new ModelAndView("gspReceiving/detail", model);
+	}
 	@Login
 	@RequestMapping(params = "toreceivingDetail")
 	public ModelAndView toreceivingDetail( @RequestParam(value = "receivingId",required = false,defaultValue = "") String receivingId) {

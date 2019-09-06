@@ -1,29 +1,28 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.BasCodesMybatisDao;
 import com.wms.mybatis.dao.BasPackageMybatisDao;
-import com.wms.mybatis.dao.InvLotAttMybatisDao;
 import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.entity.IdSequence;
-import com.wms.query.BasSkuQuery;
-import com.wms.query.DocMtHeaderQuery;
 import com.wms.query.InvLotAttQuery;
 import com.wms.query.pda.PdaInventoryQuery;
-import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
-import com.wms.vo.form.InvLotAttForm;
+import com.wms.vo.form.pda.PageForm;
+import com.wms.vo.pda.PdaInvLotLocId;
 import com.wms.vo.pda.PdaInventoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service("invLotLocIdService")
@@ -37,6 +36,9 @@ public class InvLotLocIdService extends BaseService {
 
 	@Autowired
     private BasPackageMybatisDao basPackageMybatisDao;
+
+	@Autowired
+	private BasCodesMybatisDao basCodesMybatisDao;
 
 	public EasyuiDatagrid<InvLotAttVO> getPagedDatagrid(EasyuiDatagridPager pager, InvLotAttQuery query) {
         EasyuiDatagrid<InvLotAttVO> datagrid = new EasyuiDatagrid<>();
@@ -102,7 +104,53 @@ public class InvLotLocIdService extends BaseService {
 
         json.setSuccess(true);
         json.setMsg(Constant.SUCCESS_MSG);
-        json.setObj(inventoryVOList);
+        String jsonStr = JSON.toJSONString(inventoryVOList, SerializerFeature.DisableCircularReferenceDetect);
+        json.setObj(JSONObject.parseArray(jsonStr, PdaInventoryVO.class));
+        return json;
+    }
+
+    /**
+     * 获取在库的产品记录，多库位, 多货主
+     * @param query lotatt04, lotatt05, GTIN, SKU, otherCode（自赋码、序列号）
+     * @return ~
+     */
+    public Json queryInventoryForScan(PdaInventoryQuery query, PageForm pageForm) {
+
+        Json json = new Json();
+
+        query.setStart(pageForm.getStart());
+        query.setPageSize(pageForm.getPageSize());
+        List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryInventoryForScan(query);
+
+        PdaInvLotLocId pdaInvLotLocId;
+        List<PdaInvLotLocId> pdaInvLotLocIdList = new ArrayList<>();
+        for (InvLotLocId invLotLocId : invLotLocIdList) {
+
+            pdaInvLotLocId = new PdaInvLotLocId();
+            BeanUtils.copyProperties(invLotLocId, pdaInvLotLocId);
+
+            //包装规格
+            BasSku basSku = invLotLocId.getBasSku();
+            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+            String jsonStr = JSON.toJSONString(basPackage, SerializerFeature.DisableCircularReferenceDetect);
+            pdaInvLotLocId.setBasPackage(JSONObject.parseObject(jsonStr, BasPackage.class));
+
+            //单位
+            BasCodes basCodesQuery = new BasCodes();
+            basCodesQuery.setCodeid("UOM");
+            basCodesQuery.setCode(basSku.getDefaultreceivinguom());
+            BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+            if (basCodes != null) {
+                pdaInvLotLocId.getBasSku().setDefaultreceivinguom(basCodes.getCodenameC());
+            }
+
+            pdaInvLotLocIdList.add(pdaInvLotLocId);
+        }
+
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        String jsonStr = JSON.toJSONString(pdaInvLotLocIdList, SerializerFeature.DisableCircularReferenceDetect);
+        json.setObj(JSONObject.parseArray(jsonStr, PdaInvLotLocId.class));
         return json;
     }
 }

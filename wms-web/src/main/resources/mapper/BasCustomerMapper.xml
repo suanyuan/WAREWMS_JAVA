@@ -76,7 +76,8 @@
 	<result column="client_term" property="clientTerm"/>
 <!--是否贴中文标签-->
 	<result column="isChineseLabel" property="isChineseLabel"/>
-
+<!--申请单号-->
+	<result column="bankaccount" property="bankaccount"/>
 
 </resultMap>
 	<resultMap id="ResultMap" type="com.wms.entity.GspReceivingAddress" >
@@ -108,6 +109,7 @@
 	active_flag,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,
 	address1,
 	address2,
+	bankaccount,
 	address3,
 	address4,
 	addtime,

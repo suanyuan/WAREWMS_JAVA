@@ -5,6 +5,7 @@ import com.wms.entity.InvLotLocId;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.DocMtHeaderQuery;
 import com.wms.query.pda.PdaInventoryQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -40,6 +41,10 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      */
     List<InvLotLocId> queryByListByCouRequest(CouRequestDetailsQuery query);
 
-
-
+    /**
+     * 获取在库的产品记录，多库位, 多货主
+     * @param query lotatt04, lotatt05, GTIN, SKU
+     * @return ~
+     */
+    List<InvLotLocId> queryInventoryForScan(PdaInventoryQuery query);
 }

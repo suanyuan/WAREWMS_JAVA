@@ -56,6 +56,8 @@ public class InvLotLocId  implements Serializable {
 	private String lpn;
 
 	private Double qtypa;
+
+
 	//养护计划
 	@JSONField(format = "yyyy-MM-dd")
 	private Date lotatt03; //入库时间
@@ -71,6 +73,7 @@ public class InvLotLocId  implements Serializable {
 
 
 	private InvLotAtt invLotAtt;
+	private BasSku basSku;
 
 	//盘点任务
 	private String lotatt05;
