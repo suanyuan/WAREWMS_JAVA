@@ -182,6 +182,9 @@ where 1=1
 	<if test="userType != null  ">
 		user_type,
 	</if>
+	<if test="userGrade != null  ">
+		user_grade,
+	</if>
 	create_time
 	  )
   values (
@@ -226,6 +229,9 @@ where 1=1
 	</if>
 	<if test="userType != null  ">
 		#{userType},
+	</if>
+	<if test="userGrade != null  ">
+		#{userGrade},
 	</if>
 	now()
   	)
@@ -305,6 +311,9 @@ where 1=1
 	</if>
 	<if test="userType != null  ">
 		user_type=#{userType},
+	</if>
+	<if test="userGrade != null  ">
+		user_grade=#{userGrade},
 	</if>
 	</trim> where user_id=#{id,jdbcType=VARCHAR}
 </update>
@@ -434,7 +443,8 @@ where 1=1
 	       h.descr_c as warehouse_name,
 	       g.defaultflag,
 	       i.customer_id,
-	       j.descr_c as customer_name
+	       j.descr_c as customer_name,
+	       a.user_grade
 	  from sfc_user a
 	  left outer join sfc_user_role b on a.user_id = b.user_id
 	  left outer join sfc_role c on b.role_id = c.role_id

@@ -43,6 +43,8 @@ public class GspSupplierService extends BaseService {
 	private FirstReviewLogService firstReviewLogService;
 	@Autowired
 	private DataPublishService dataPublishService;
+    @Autowired
+    private GspVerifyService gspVerifyService;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -97,6 +99,13 @@ public class GspSupplierService extends BaseService {
     @Transactional
 	public Json addGspSupplier(GspSupplierForm gspSupplierForm) throws Exception {
 
+
+        Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplierForm.getCostomerid(),gspSupplierForm.getEnterpriseId(),"");
+		if(!checkScopeResult.isSuccess()){
+			return checkScopeResult;
+		}
+
+
 	    System.out.println("gspSupplierForm.getContractUrl()===="+gspSupplierForm.getContractUrl());
 		Json json = new Json();
 		GspSupplier gspSupplier = new GspSupplier();
@@ -127,16 +136,23 @@ public class GspSupplierService extends BaseService {
 
 		gspSupplierMybatisDao.add(gspSupplier);
 		json.setSuccess(true);
-		return json;
+		return Json.success("添加成功");
+//		return json;
 	}
 
 	public Json editGspSupplier(GspSupplierForm gspSupplierForm) {
+        Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplierForm.getCostomerid(),gspSupplierForm.getEnterpriseId(),"");
+        if(!checkScopeResult.isSuccess()){
+            return checkScopeResult;
+        }
+
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
 		//BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
 		gspSupplierMybatisDao.updateBySelective(gspSupplierForm);
-		json.setSuccess(true);
-		return json;
+		return Json.success("修改成功");
+//		json.setSuccess(true);
+//		return json;
 	}
 	public Json getGspSupplierInfo(String supplierId){
 		GspSupplierVO gspSupplierVO = new GspSupplierVO();

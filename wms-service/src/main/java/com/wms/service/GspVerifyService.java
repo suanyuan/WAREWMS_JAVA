@@ -77,7 +77,7 @@ public class GspVerifyService {
         if(StringUtils.isEmpty(supplierId)){
             return Json.error("缺少供应商信息，首营审核不通过");
         }
-        
+
         GspEnterpriseInfo gspEnterpriseInfoCustomer;
         GspEnterpriseInfo gspEnterpriseInfoSupplier;
         BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
@@ -105,7 +105,7 @@ public class GspVerifyService {
         }
 
         //如果是医疗机构不判断
-        if(gspEnterpriseInfoCustomer.getEnterpriseType().equals(Constant.CODE_ENT_TYP_YL)){
+        if(Constant.CODE_ENT_TYP_YL.equals(gspEnterpriseInfoCustomer.getEnterpriseType())){
             return Json.success("医疗机构不判断经营范围");
         }
 
@@ -308,10 +308,10 @@ public class GspVerifyService {
         }
         for(String s : arrregister){
             if(arroperate.toString().indexOf(s)==-1){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private List<GspOperateDetailVO> getOperateDetail(String operateId){
