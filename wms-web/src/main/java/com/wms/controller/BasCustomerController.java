@@ -62,6 +62,14 @@ public class BasCustomerController {
 	public EasyuiDatagrid<BasCustomerVO> showDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		return basCustomerService.getPagedDatagrid(pager, query);
 	}
+
+
+	@Login
+	@RequestMapping(params = "showDatagridByCustomer")
+	@ResponseBody
+	public EasyuiDatagrid<BasCustomerVO> showDatagridByCustomer(EasyuiDatagridPager pager, BasCustomerQuery query) {
+		return basCustomerService.getPagedDatagridByCustomer(pager, query);
+	}
 	/*@Login
 	@RequestMapping(params = "add")
 	@ResponseBody

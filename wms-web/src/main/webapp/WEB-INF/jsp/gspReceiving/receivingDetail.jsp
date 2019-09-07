@@ -102,7 +102,7 @@
     </div>
 
 
-    <div id='ezuiDialogDetail' style='padding: 10px;'>
+    <div id='ezuiDialogDetail' style='padding: 10px;display: none'>
 
         <div id='detailToolbar' class='datagrid-toolbar' style=''>
             <fieldset>
@@ -128,7 +128,7 @@
 </div>
 
 
-<div id='ezuiDialogSupplierDetail' style='padding: 10px;'>
+<div id='ezuiDialogSupplierDetail' style='padding: 10px;display: none'>
     <div id='TB' class='datagrid-toolbar' style=''>
         <fieldset>
             <legend>货主信息</legend>

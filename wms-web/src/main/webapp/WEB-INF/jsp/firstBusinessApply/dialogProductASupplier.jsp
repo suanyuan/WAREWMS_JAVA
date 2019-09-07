@@ -122,11 +122,13 @@
     var ezuiDialogSupplierEnterprise;
     var rows;
     var rows1;
+    var cusId = $("#ezuiFormDetail #clientId").val();
+
     $(function () {
 
         //供应商
         supplierDatagrid = $("#dataGridSupplierDetail").datagrid({
-            url : sy.bp()+'/basCustomerController.do?showDatagrid',
+            url : sy.bp()+'/basCustomerController.do?showDatagridByCustomer',
             method:'POST',
             toolbar : '#TB',
             title: '',
@@ -139,7 +141,8 @@
             queryParams:{
                 isUse : '1',
                 activeFlag :'1',
-                customerType:'VE'
+                customerType:'VE',
+                customer: cusId,
             },
             fit:true,
             collapsible:false,
@@ -349,6 +352,7 @@
             // enterpriseNo : $('#qiyexinxidaima').val(),
             descrC : $('#kehumingcheng').val(),
             customerid : $('#kehudaima').val(),
+            customer: cusId,
             activeFlag : '1',
             isUse : '1',
             customerType:'VE'
@@ -446,7 +450,7 @@
 		// alert(rows)
         var supId = $("#supplierId").val();
 		console.log($("#ezuiFormDetail #clientId").val());
-        var cusId = $("#ezuiFormDetail #clientId").val();
+        // var cusId = $("#ezuiFormDetail #clientId").val();
         console.log(supId);
         var a = 0;
         if(cusId!=null){
