@@ -49,6 +49,11 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
     List<InvLotLocId> queryInventoryForScan(PdaInventoryQuery query);
 
     /**
+     * PDA扫描库位获取库位上产品的库存数据
+     */
+    List<InvLotLocId> queryInventoryForLocation(PdaInventoryQuery query);
+
+    /**
      * 查询货主下同批的产品件数总和，不区分库位
      * @param customerid ~
      * @param lotatt04 ~

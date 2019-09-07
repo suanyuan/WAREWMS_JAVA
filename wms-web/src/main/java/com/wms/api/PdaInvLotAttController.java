@@ -104,4 +104,28 @@ public class PdaInvLotAttController {
         map.put(Constant.DATA, json.getObj());
         return map;
     }
+
+    /**
+     * PDA扫描库位获取库位上产品的库存数据
+     * @param query locationid
+     * @param pageForm ~
+     * @return ~
+     */
+    @RequestMapping(params = "queryInventoryForLocation", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> queryInventoryForLocation(PdaInventoryQuery query, PageForm pageForm) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Json json = invLotLocIdService.queryInventoryForLocation(query, pageForm);
+        if (!json.isSuccess()) {
+
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
+            return map;
+        }
+
+        map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
+        map.put(Constant.DATA, json.getObj());
+        return map;
+    }
 }

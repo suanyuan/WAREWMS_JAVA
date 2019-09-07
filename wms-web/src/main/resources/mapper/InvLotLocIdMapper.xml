@@ -334,6 +334,16 @@ where 1=1
         limit #{start}, #{pageSize}
     </select>
 
+    <select id="queryInventoryForLocation" parameterType="java.util.Map" resultMap="ExtendResultMap">
+        select
+        a.*
+        from inv_lot_loc_id a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        where locationid = #{locationid}
+        order by a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
+        limit #{start}, #{pageSize}
+    </select>
+
     <select id="sumSameBatchInventory" parameterType="java.util.Map" resultType="double">
         select sum(a.qty) from inv_lot_loc_id a
         left join inv_lot_att b on a.lotnum = b.lotnum

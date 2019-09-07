@@ -7,10 +7,7 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
-import com.wms.mybatis.dao.BasCodesMybatisDao;
-import com.wms.mybatis.dao.BasPackageMybatisDao;
-import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.*;
 import com.wms.query.InvLotAttQuery;
 import com.wms.query.pda.PdaInventoryQuery;
 import com.wms.utils.StringUtil;
@@ -40,6 +37,9 @@ public class InvLotLocIdService extends BaseService {
 
 	@Autowired
 	private BasCodesMybatisDao basCodesMybatisDao;
+
+	@Autowired
+	private BasLocationMybatisDao basLocationMybatisDao;
 
 	public EasyuiDatagrid<InvLotAttVO> getPagedDatagrid(EasyuiDatagridPager pager, InvLotAttQuery query) {
         EasyuiDatagrid<InvLotAttVO> datagrid = new EasyuiDatagrid<>();
@@ -123,6 +123,51 @@ public class InvLotLocIdService extends BaseService {
         query.setPageSize(pageForm.getPageSize());
         List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryInventoryForScan(query);
 
+        List<PdaInvLotLocId> pdaInvLotLocIdList = fixPdaData(invLotLocIdList);
+
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        String jsonStr = JSON.toJSONString(pdaInvLotLocIdList, SerializerFeature.DisableCircularReferenceDetect);
+        json.setObj(JSONObject.parseArray(jsonStr, PdaInvLotLocId.class));
+        return json;
+    }
+
+    /**
+     * PDA扫描库位获取库位上产品的库存数据
+     * @param query locationid
+     */
+    public Json queryInventoryForLocation(PdaInventoryQuery query, PageForm pageForm) {
+
+        Json json = new Json();
+
+        BasLocation basLocation = basLocationMybatisDao.queryById(query.getLocationid());
+        if (basLocation == null) {
+
+            json.setMsg("未发现扫描库位");
+            json.setSuccess(false);
+            return json;
+        }
+
+        query.setStart(pageForm.getStart());
+        query.setPageSize(pageForm.getPageSize());
+        List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryInventoryForLocation(query);
+
+        List<PdaInvLotLocId> pdaInvLotLocIdList = fixPdaData(invLotLocIdList);
+
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        String jsonStr = JSON.toJSONString(pdaInvLotLocIdList, SerializerFeature.DisableCircularReferenceDetect);
+        json.setObj(JSONObject.parseArray(jsonStr, PdaInvLotLocId.class));
+        return json;
+    }
+
+    /**
+     * 处理库存查询返回的数据 for pda
+     * @param invLotLocIdList ~
+     * @return ~
+     */
+    private List<PdaInvLotLocId> fixPdaData(List<InvLotLocId> invLotLocIdList) {
+
         PdaInvLotLocId pdaInvLotLocId;
         List<PdaInvLotLocId> pdaInvLotLocIdList = new ArrayList<>();
         for (InvLotLocId invLotLocId : invLotLocIdList) {
@@ -157,11 +202,6 @@ public class InvLotLocIdService extends BaseService {
 
             pdaInvLotLocIdList.add(pdaInvLotLocId);
         }
-
-        json.setSuccess(true);
-        json.setMsg(Constant.SUCCESS_MSG);
-        String jsonStr = JSON.toJSONString(pdaInvLotLocIdList, SerializerFeature.DisableCircularReferenceDetect);
-        json.setObj(JSONObject.parseArray(jsonStr, PdaInvLotLocId.class));
-        return json;
+        return pdaInvLotLocIdList;
     }
 }
