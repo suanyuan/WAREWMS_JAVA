@@ -42,6 +42,7 @@
 	<result column="descr_c" property="descrc"/>
 	<result column="descr_e" property="descre"/>
 	<result column="name" property="productLineName"/>
+	<result column="reservedfield06" property="reservedfield06"/>
 </resultMap>
 
     <resultMap id="MtProgressMap" type="com.wms.entity.DocMtProgressDetail">
@@ -348,7 +349,7 @@ where 1=1
 <!-- 查询养护计划管理列表Lotatt -->
 <select id="queryByListLotatt" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	  d.*,a.*,s.descr_c,s.descr_e,p.name
+	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`

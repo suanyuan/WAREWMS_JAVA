@@ -262,9 +262,9 @@
                     {field: 'fmsku', title: '产品代码', width: 100},
                     {field: 'lotatt12', title: '产品名称', width: 250},
 
-                    {field: 'skudescre', title: '规格型号', width: 103},
+                    {field: 'skudescre', title: '规格型号', width: 150},
                     {field: 'name', title: '产品线', width: 100},
-                    {field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
+                    {field: 'lotatt06', title: '注册证号', width: 170},//加个字段
                     {field: 'lotatt04', title: '生产批号', width: 95},
                     {field: 'lotatt01', title: '生产日期', width: 112},
                     {field: 'lotatt02', title: '有效期/失效期', width: 113},

@@ -73,7 +73,7 @@ $(function() {
 			{field: 'uom',		title: '单位',	width: 71 },
 			{field: 'fmlotnum',		title: '批次',	width: 81 },
 
-			{field: 'lotatt06', title: '注册证号/备案凭证号', width: 150},//加个字段
+			{field: 'lotatt06', title: '注册证号', width: 150},//加个字段
 			{field: 'skudescre', title: '规格型号', width: 103},
 			{field: 'lotatt05', title: '序列号', width: 110},
 			{field: 'lotatt04', title: '生产批号', width: 95},
@@ -1046,7 +1046,7 @@ var ismove=function (location) {
 
 						</tr>
 						<tr>
-							<th>失效日期</th><td><input type='text' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
+							<th>效期</th><td><input type='text' id='lotatt02' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 							<th>至</th><td><input type='text' id='lotatt02text' class='easyui-datebox' size='16' data-options='required:false,editable:true'/></td>
 							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
