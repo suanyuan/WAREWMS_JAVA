@@ -105,7 +105,7 @@ public class GspVerifyService {
         }
 
         //如果是医疗机构不判断
-        if(gspEnterpriseInfoCustomer.getEnterpriseType().equals(Constant.CODE_ENT_TYP_YL)){
+        if(Constant.CODE_ENT_TYP_YL.equals(gspEnterpriseInfoCustomer.getEnterpriseType())){
             return Json.success("医疗机构不判断经营范围");
         }
 

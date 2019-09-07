@@ -78,7 +78,10 @@ public class GspSupplierController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("id", id);
-		GspSupplier gspSupplier1 = gspSupplierMybatisDao.queryByEnterpriseId(id);
+		GspSupplier gspSupplierQ = new GspSupplier();
+		gspSupplierQ.setEnterpriseId(id);
+//		gspSupplierQ.setEnterpriseType();
+		GspSupplier gspSupplier1 = gspSupplierMybatisDao.queryByEnterpriseId(gspSupplierQ);
 		if(gspSupplier1!=null){
 			id = gspSupplier1.getSupplierId();
 		}else{
@@ -134,8 +137,9 @@ public class GspSupplierController {
 		Json json = gspSupplierService.addGspSupplier(gspSupplierForm);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		}
 		return json;
 	}
 
@@ -150,8 +154,9 @@ public class GspSupplierController {
 		Json json = gspSupplierService.editGspSupplier(gspProductRegisterSpecsForm);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		}
 		return json;
 	}
 
