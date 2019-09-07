@@ -2,9 +2,11 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.query.BasPackageQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
+import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.*;
 import com.wms.vo.form.*;
@@ -48,6 +50,8 @@ public class DataPublishService extends BaseService {
     private GspReceivingService gspReceivingService;
     @Autowired
     private BasPackageService basPackageService;
+    @Autowired
+    private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 
     /**
      * 下发数据
@@ -499,17 +503,23 @@ public class DataPublishService extends BaseService {
         if(list!=null && list.size()>0){
             for(GspProductRegisterSpecs specs : list){
                 GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
-                BeanUtils.copyProperties(specs,form);
+                //BeanUtils.copyProperties(specs,form);
+                form.setSpecsId(specs.getSpecsId());
                 form.setIsUse(Constant.IS_USE_NO);
                 //form.setProductRegisterId(newRegisterId);
                 gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
 
+
+
                 //保存新基础信息
-                GspProductRegisterSpecsForm formNew = new GspProductRegisterSpecsForm();
+                GspProductRegisterSpecs formNew = new GspProductRegisterSpecs();
                 BeanUtils.copyProperties(specs,formNew);
                 formNew.setIsUse(Constant.IS_USE_YES);
                 formNew.setProductRegisterId(newRegisterId);
-                gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
+                formNew.setSpecsId(RandomUtil.getUUID());
+                formNew.setProductName(specs.getProductNameMain());
+                gspProductRegisterSpecsMybatisDao.add(formNew);
+                //gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }
         }
         return Json.success("");

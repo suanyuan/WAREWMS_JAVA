@@ -63,13 +63,19 @@
     }
 
     var judgeDate = function (dateStr) {
-	    console.log(new Date());
-	    console.log(new Date(dateStr));
         if(new Date()>new Date(dateStr)){
             return false;
 		}else{
             return true;
 		}
+    }
+
+    var judgeDate2 = function (dateStrBeg,dateStrEnd) {
+        if(new Date(dateStrBeg)>new Date(dateStrEnd)){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     var dateFormat = function(timestamp){
