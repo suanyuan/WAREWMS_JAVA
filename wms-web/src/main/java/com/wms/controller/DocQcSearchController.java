@@ -2,17 +2,23 @@ package com.wms.controller;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocQcHeader;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.service.DocQcSearchService;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.DocQcDetailsVO;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -42,5 +48,21 @@ public class DocQcSearchController {
 		return docQcSearchService.getPagedDatagrid(pager, query);
 	}
 
+	/**
+	 * 打印验收报告
+	 *
+	 */
+	@Login
+	@RequestMapping(params = "printQcSearch")
+	public String printQcSearch(String linestatus , String userdefine4, String userdefine3 , Model model){
+
+		List<DocQcHeader> docQcHeaderList = docQcSearchService.printQcSearch(linestatus,userdefine4,userdefine3);
+
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/report1Query.jasper");
+		model.addAttribute("format", "pdf");
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
 
 }

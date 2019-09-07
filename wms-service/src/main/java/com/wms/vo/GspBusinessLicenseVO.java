@@ -25,7 +25,7 @@ public class GspBusinessLicenseVO implements Serializable {
 	private java.util.Date issueDate;
 	private String registrationAuthority;
 	private String attachmentUrl;
-	private Long createId;
+	private String createId;
 	private java.util.Date createDate;
 	private Long editId;
 	private java.util.Date editDate;
@@ -171,11 +171,11 @@ public class GspBusinessLicenseVO implements Serializable {
 		this.attachmentUrl = attachmentUrl;
 	}
 
-	public Long getCreateId() {
+	public String getCreateId() {
 		return createId;
 	}
 
-	public void setCreateId(Long createId) {
+	public void setCreateId(String createId) {
 		this.createId = createId;
 	}
 

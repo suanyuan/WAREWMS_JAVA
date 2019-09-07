@@ -354,6 +354,20 @@ var acceptanceWork = function(){
 		});
 	}
 };
+
+//打印验收报告
+var printQcSearch = function(){
+	//需要qcno  和 qclineno 作为查询条件。
+	//验收状态
+	var linestatusQ= $('#linestatus').combobox("getValue");
+	//序列号v
+	var userdefine4Q = $('#userdefine4').val();
+	//生产批号
+	var userdefine3Q = $('#userdefine3').val();
+	//必须点击查询按钮。
+	window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&linestatus="+linestatusQ+"&userdefine4="+userdefine4Q+"&userdefine3="+userdefine4Q);
+
+}
 //主页查询
 var doSearch = function() {
 	if ($('#qcno').val() == null || $('#qcno').val() == "") {
@@ -475,6 +489,7 @@ var selectAcceptance = function () {
 <%--					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+					<a onclick='printQcSearch()' id='ezuiBtn_printQcSeacrch' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印验收报告</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 
