@@ -52,6 +52,8 @@ public class GspProductRegisterSpecsService extends BaseService {
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	@Autowired
+	private DataPublishService dataPublishService;
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
 
@@ -142,11 +144,23 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 	public Json editGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) {
 		Json json = new Json();
+
+		GspProductRegisterSpecs oldSpecs = gspProductRegisterSpecsMybatisDao.queryById(gspProductRegisterSpecsForm.getSpecsId());
+		if(oldSpecs == null){
+			return Json.error("查询不到对应的产品基础信息");
+		}
+
+		//判断如果产品注册证号变更需要出发换证
+		if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
+			dataPublishService.cancelDataBySpecsId(oldSpecs);
+		}
+
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsDao.findById(gspProductRegisterSpecsForm.getSpecsId());
 		//BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecs.setProductName(gspProductRegisterSpecs.getProductNameMain());
+
 		gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
 		json.setSuccess(true);
 		return json;
