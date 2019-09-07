@@ -57,7 +57,7 @@ public class FirstBusinessProductApplyService extends BaseService {
 		Json json = new Json();
 		FirstBusinessProductApply firstBusinessProductApply = firstBusinessProductApplyMybatisDao.queryById(firstBusinessProductApplyForm.getProductApplyId());
 		BeanUtils.copyProperties(firstBusinessProductApplyForm, firstBusinessProductApply);
-		firstBusinessProductApplyMybatisDao.update(firstBusinessProductApply);
+		firstBusinessProductApplyMybatisDao.updateBySelective(firstBusinessProductApply);
 		json.setSuccess(true);
 		return json;
 	}

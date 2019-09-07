@@ -2,6 +2,7 @@ package com.wms.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.wms.constant.Constant;
@@ -132,6 +133,7 @@ public class BasCarrierLicenseService extends BaseService {
 			gspBusinessLicense.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 			gspBusinessLicense.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 			gspBusinessLicense.setIsUse("1");
+			gspBusinessLicense.setCreateDate(new Date());
 			gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
 			gspBusinessLicense.setEnterpriseId(basCarrierLicenseForm.getBasCarrierLicenseForm().getEnterpriseId());
 			BasCarrierLicense basCarrierLicense1 = basCarrierLicenseMybatisDao.queryUseByEnterId(basCarrierLicenseForm.getBasCarrierLicenseForm().getEnterpriseId());

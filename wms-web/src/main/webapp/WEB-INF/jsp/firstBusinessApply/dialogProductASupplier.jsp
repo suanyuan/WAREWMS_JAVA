@@ -455,7 +455,7 @@
 				data : {"customerId":cusId},
 				type : 'POST',
 				dataType : 'JSON',
-				async  :true,
+				async  :false,
 				success : function(result){
 
                     for(var i=0;result.length>i;i++){

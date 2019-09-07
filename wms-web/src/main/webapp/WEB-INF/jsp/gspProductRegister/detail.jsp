@@ -479,6 +479,20 @@
                 if($("#enterpriseId").val() == ""){
                     return false;
                 }
+
+                if(judgeDate($("#ezuiFormDetail #approveDate").datebox("getValue"))){
+                    checkResult = false;
+                    showMsg("批准日期不能超过当前时间");
+                    return false;
+                }
+
+                if(!judgeDate($("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))){
+                    checkResult = false;
+                    showMsg("有效期不能小于当前时间");
+                    return false;
+                }
+
+
                 if(ezuiFormDetail.form('validate')){
                     $.messager.progress({
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100

@@ -2,9 +2,11 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.query.BasPackageQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
+import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.*;
 import com.wms.vo.form.*;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Client;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +51,8 @@ public class DataPublishService extends BaseService {
     private GspReceivingService gspReceivingService;
     @Autowired
     private BasPackageService basPackageService;
+    @Autowired
+    private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 
     /**
      * 下发数据
@@ -468,6 +473,13 @@ public class DataPublishService extends BaseService {
         return Json.error("没有查询到对应的申请单");
     }
 
+    /**
+     * 产品注册证换证
+     * @param registerId 老证号
+     * @param newRegisterId 新证号
+     * @return
+     * @throws Exception
+     */
     public Json cancelPubilseDataByRegisterId(String registerId,String newRegisterId) throws Exception{
         GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
         if(gspProductRegister == null){
@@ -484,14 +496,31 @@ public class DataPublishService extends BaseService {
             basSkuService.editBasSku(form);
             firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 
-            /*//2.失效产品首营申请
+            //2.失效产品首营申请
             Json json = firstBusinessProductApplyService.getListByApplyId(b.getPutawayrule());
             List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)json.getObj();
             if(list!=null && list.size()>0){
+                //失效产品首营申请明细
                 FirstBusinessProductApply productApply = (FirstBusinessProductApply)list.get(0);
-                firstBusinessApplyService.updateFirstState(productApply.getApplyId(),)
-                firstReviewLogService
-            }*/
+                FirstBusinessProductApplyForm fbpaForm = new FirstBusinessProductApplyForm();
+                fbpaForm.setApplyId(productApply.getApplyId());
+                fbpaForm.setProductApplyId(productApply.getProductApplyId());
+                fbpaForm.setSpecsId(productApply.getSpecsId());
+                fbpaForm.setIsUse(Constant.IS_USE_NO);
+                firstBusinessProductApplyService.editFirstBusinessProductApply(fbpaForm);
+                //失效产品首营申请表头
+                FirstBusinessApplyForm fbaHeadForm = new FirstBusinessApplyForm();
+                fbaHeadForm.setIsUse(Constant.IS_USE_NO);
+                fbaHeadForm.setApplyId(productApply.getApplyId());
+                firstBusinessApplyService.editFirstBusinessApply(fbaHeadForm);
+
+                /*FirstReviewLogForm reviewLogForm = new FirstReviewLogForm();
+                reviewLogForm.setReviewId(productApply.getApplyId());
+                reviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+                reviewLogForm.setEditId("System");
+                reviewLogForm.setEditDate(new Date());
+                firstReviewLogService.updateByReviewTypeId(reviewLogForm);*/
+            }
         }
 
         //3.更新产品基础信息关联产品注册证
@@ -499,37 +528,59 @@ public class DataPublishService extends BaseService {
         if(list!=null && list.size()>0){
             for(GspProductRegisterSpecs specs : list){
                 GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
-                BeanUtils.copyProperties(specs,form);
+                //BeanUtils.copyProperties(specs,form);
+                form.setSpecsId(specs.getSpecsId());
                 form.setIsUse(Constant.IS_USE_NO);
                 //form.setProductRegisterId(newRegisterId);
                 gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
 
+
+
                 //保存新基础信息
-                GspProductRegisterSpecsForm formNew = new GspProductRegisterSpecsForm();
+                GspProductRegisterSpecs formNew = new GspProductRegisterSpecs();
                 BeanUtils.copyProperties(specs,formNew);
                 formNew.setIsUse(Constant.IS_USE_YES);
                 formNew.setProductRegisterId(newRegisterId);
-                gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
+                formNew.setSpecsId(RandomUtil.getUUID());
+                formNew.setProductName(specs.getProductNameMain());
+                gspProductRegisterSpecsMybatisDao.add(formNew);
+                //gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }
         }
+
         return Json.success("");
     }
 
-    public Json pubilseDataByRegisterId(String registerId,String newRegister) throws Exception{
-        /*GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
-        if(gspProductRegister == null){
-            return Json.error("产品注册证不存在");
-        }
-        List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
-        if(list!=null && list.size()>0){
-            for(GspProductRegisterSpecs specs : list){
-                GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
-                BeanUtils.copyProperties(specs,form);
-                form.setProductRegisterId(registerId);
-                form.setIsUse(Constant.IS_USE_YES);
-                gspProductRegisterSpecsService.editGspProductRegisterSpecs(form);
+    public Json cancelDataBySpecsId(GspProductRegisterSpecs oldSpecs){
+        //1.失效bas_sku
+        List<BasSku> basSkuList = basSkuService.getSkuListBySku(oldSpecs.getProductCode());
+        for(BasSku b : basSkuList){
+            BasSkuForm form = new BasSkuForm();
+            BeanUtils.copyProperties(b,form);
+            form.setActiveFlag(Constant.IS_USE_NO);
+            basSkuService.editBasSku(form);
+
+            firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+
+            //2.失效产品首营申请
+            Json json = firstBusinessProductApplyService.getListByApplyId(b.getPutawayrule());
+            List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)json.getObj();
+            if(list!=null && list.size()>0){
+                //失效产品首营申请明细
+                FirstBusinessProductApply productApply = (FirstBusinessProductApply)list.get(0);
+                FirstBusinessProductApplyForm fbpaForm = new FirstBusinessProductApplyForm();
+                fbpaForm.setApplyId(productApply.getApplyId());
+                fbpaForm.setProductApplyId(productApply.getProductApplyId());
+                fbpaForm.setSpecsId(productApply.getSpecsId());
+                fbpaForm.setIsUse(Constant.IS_USE_NO);
+                firstBusinessProductApplyService.editFirstBusinessProductApply(fbpaForm);
+                //失效产品首营申请表头
+                FirstBusinessApplyForm fbaHeadForm = new FirstBusinessApplyForm();
+                fbaHeadForm.setIsUse(Constant.IS_USE_NO);
+                fbaHeadForm.setApplyId(productApply.getApplyId());
+                firstBusinessApplyService.editFirstBusinessApply(fbaHeadForm);
             }
-        }*/
+        }
         return Json.success("");
     }
 }

@@ -46,12 +46,65 @@ public class GspVerifyService {
     @Autowired
     private GspMedicalRecordService gspMedicalRecordService;
 
+    /**
+     * gsp申请经营范围校验
+     * @param customerId 客户id
+     * @param supplierId 供应商id
+     * @return
+     */
+    public Json verifyOperate(String customerId,String supplierId){
+        BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
+        if(customer == null){
+            return Json.error("查询不到对应的货主："+customerId);
+        }
+
+        BasCustomer supplier = basCustomerService.selectCustomerById(supplierId, Constant.CODE_CUS_TYP_VE);
+        if(supplier == null){
+            return Json.error("查询不到对应的供应商："+supplierId);
+        }
+        GspEnterpriseInfo gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
+        if(gspEnterpriseInfoCustomer == null){
+            return Json.error("查询不到货主对应的企业信息："+customerId);
+        }
+
+        GspEnterpriseInfo gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
+        if(gspEnterpriseInfoSupplier == null){
+            return Json.error("查询不到供应商对应的企业信息："+supplierId);
+        }
+
+        //如果是医疗机构不判断
+        if(gspEnterpriseInfoCustomer.getEnterpriseType().equals(Constant.CODE_ENT_TYP_YL)){
+            return Json.success("医疗机构不判断经营范围");
+        }
+
+        if(gspEnterpriseInfoCustomer.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GW)
+                || gspEnterpriseInfoCustomer.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GWSC)
+                || gspEnterpriseInfoSupplier.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GW)
+                || gspEnterpriseInfoSupplier.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GWSC)
+
+        ){
+            return Json.success("国外企业没有营业执照信息");
+        }
+
+        //营业执照
+
+        //生产
+        //经营
+        //一类
+        //二类
+
+        return Json.success("");
+    }
+
 
     /**
      * gsp入库校验
-     * @param customerId
-     * @param sku
+     * @param customerId 客户id
+     * @param sku 产品
+     * @param lotatt2 效期
+     * @param lotatt1 生产日期
      * @return
+     * @throws Exception
      */
     public Json verifyOperate(String customerId,String sku,String lotatt2,String lotatt1) throws Exception{
         return Json.success("");
