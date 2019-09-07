@@ -63,6 +63,9 @@
     }
 
     var judgeDate = function (dateStr) {
+	    if(dateStr=="" || dateStr==null){
+            return false;
+		}
         if(new Date()>new Date(dateStr)){
             return false;
 		}else{

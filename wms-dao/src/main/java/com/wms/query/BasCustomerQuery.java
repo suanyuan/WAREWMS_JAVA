@@ -42,9 +42,17 @@ public class BasCustomerQuery implements IQuery {
 
 	private String clientName;
 
-
+	private String customer;
 
 	private String remark;
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
 
 	public String getReceivingAddressId() {
 		return receivingAddressId;
