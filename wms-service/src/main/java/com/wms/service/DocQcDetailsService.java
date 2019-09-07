@@ -356,12 +356,7 @@ public class DocQcDetailsService extends BaseService {
             }
         }
 
-        /**
-         * 验证
-         */
-
         form.setLanguage("CN");
-//        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
 
         try {
@@ -379,6 +374,7 @@ public class DocQcDetailsService extends BaseService {
             if (form.getAllqcflag() == 1) {
 
                 //处理批量验收合格操作
+                docQcDetails = docQcDetailsDao.queryById(docQcDetails);//更新批次号，存在批属修改的情况
                 return configAllQc(form, docQcDetails);
             }else {
 

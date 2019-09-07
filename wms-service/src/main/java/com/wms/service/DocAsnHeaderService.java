@@ -436,11 +436,9 @@ public class DocAsnHeaderService extends BaseService {
      */
 	public List<PdaDocAsnHeaderVO> queryUndoneList(PageForm form) {
 
-//	    int pagesize = form.getPageSize();
-//	    int start = form.getStart();
 	    List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryUndoneList(form.getStart(), form.getPageSize());
 	    List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = new ArrayList<>();
-	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();
+	    PdaDocAsnHeaderVO pdaDocAsnHeaderVO;
 	    for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 
 	        pdaDocAsnHeaderVO = new PdaDocAsnHeaderVO();

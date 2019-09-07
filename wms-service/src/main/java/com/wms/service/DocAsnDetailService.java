@@ -212,7 +212,7 @@ public class DocAsnDetailService extends BaseService {
 		//预入库单号
         docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
 
-		//生产厂家
+		//生产企业
 		if (docAsnDetail.getLotatt06() != null && !docAsnDetail.getLotatt06().equals("")) {
 
             PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(docAsnDetail.getLotatt06());
