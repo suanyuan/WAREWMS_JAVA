@@ -2091,9 +2091,9 @@ function rDouble(){
 
 function choseOrderTypeAfter(value) {
 	if(value && value.id == "YF"){
-	    $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG");
+	    $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG").combobox("readonly",true);
 	}else{
-        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG");
+        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG").combobox("readonly",true);
 	}
 }
 

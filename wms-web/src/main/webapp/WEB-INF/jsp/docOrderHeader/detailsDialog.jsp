@@ -127,7 +127,7 @@
             width:110
         });
 
-        $("#lotatt10").combobox("setValue","HG");
+        $("#lotatt10").combobox("setValue","HG").combobox("readonly",true);
 
         /*$("#lotatt10").combobox({
             panelHeight: 'auto',

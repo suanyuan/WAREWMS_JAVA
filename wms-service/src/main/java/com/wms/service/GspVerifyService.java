@@ -77,24 +77,29 @@ public class GspVerifyService {
         if(StringUtils.isEmpty(supplierId)){
             return Json.error("缺少供应商信息，首营审核不通过");
         }
-
+        String customerEnterpriseId = "";
+        GspEnterpriseInfo gspEnterpriseInfoCustomer = null;
+        GspEnterpriseInfo gspEnterpriseInfoSupplier = null;
         BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
         if(customer == null){
-            return Json.error("查询不到对应的货主："+customerId);
+            //如果没有下发查询是否企业id
+            gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customerId);
+            if(gspEnterpriseInfoCustomer == null){
+                //return Json.error("查询不到货主对应的企业信息："+customerId);
+                return Json.error("查询不到对应的货主："+customerId);
+            }
+
         }
 
         BasCustomer supplier = basCustomerService.selectCustomerById(supplierId, Constant.CODE_CUS_TYP_VE);
         if(supplier == null){
-            return Json.error("查询不到对应的供应商："+supplierId);
-        }
-        GspEnterpriseInfo gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
-        if(gspEnterpriseInfoCustomer == null){
-            return Json.error("查询不到货主对应的企业信息："+customerId);
-        }
+            //如果没有下发查询是否企业id
+            gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplierId);
+            if(gspEnterpriseInfoSupplier == null){
+                //return Json.error("查询不到供应商对应的企业信息："+supplierId);
+                return Json.error("查询不到对应的供应商："+supplierId);
+            }
 
-        GspEnterpriseInfo gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
-        if(gspEnterpriseInfoSupplier == null){
-            return Json.error("查询不到供应商对应的企业信息："+supplierId);
         }
 
         //如果是医疗机构不判断
@@ -216,7 +221,6 @@ public class GspVerifyService {
 
         //如果有产品需要判断注册证
         if(!StringUtils.isEmpty(sku)){
-
             String registerNo = "";
             BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
             if(basSku == null){
