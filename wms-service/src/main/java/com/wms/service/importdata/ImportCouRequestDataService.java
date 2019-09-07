@@ -145,7 +145,7 @@ public class ImportCouRequestDataService {
             }
 //计算差异
             if(rowResult.length()==0){
-                importDataForm.setUserdefined1((importDataForm.getQtyInv()-importDataForm.getQtyAct())+"");
+                importDataForm.setUserdefined1((importDataForm.getQtyAct()-importDataForm.getQtyInv())+"");
             }
 //备注
             try {
