@@ -83,4 +83,16 @@ public class DocQcDetails  implements Serializable {
 //bas_customer
 	private String shippershortname;  //货主简称
 
+
+
+	/**
+	 * y用于打印
+	 */
+	private String qcUnit;//单位
+	private String lotatt03;
+	private String lotatt14;
+	private Double paqtyExpectedSum;//合计到货件数
+	private Double qcqtyExpectedSum;//合计待验件数
+	private Double qcqtyCompletedSum;//合计合格/不合格数量
+
 }

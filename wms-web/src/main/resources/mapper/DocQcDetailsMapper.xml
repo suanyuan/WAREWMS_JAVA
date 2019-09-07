@@ -34,6 +34,7 @@
 <!--inv_lot_att by lotnum-->
 	<result column="lotatt01" property="lotatt01"/>
 	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
 	<result column="lotatt04" property="lotatt04"/>
 	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
@@ -42,6 +43,7 @@
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt14" property="lotatt14"/>
 	<result column="lotatt15" property="lotatt15"/>
 <!--bas_sku-->
 	<result column="descr_c" property="descrc"/>
