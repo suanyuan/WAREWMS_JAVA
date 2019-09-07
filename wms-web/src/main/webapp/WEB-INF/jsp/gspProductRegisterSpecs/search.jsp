@@ -98,9 +98,9 @@
         console.log($('#productRegisterNo1').val());
         console.log($('#productRegisterNo1').textbox('getValue'));
         enterpriseSearchGrid.datagrid('load', {
-
             productRegisterNo : $('#productRegisterNo1').textbox('getValue'),
-            productNameMain :$('#productNameMain1').textbox('getValue')
+            productNameMain :$('#productNameMain1').textbox('getValue'),
+            isUse:'1'
         });
     };
 

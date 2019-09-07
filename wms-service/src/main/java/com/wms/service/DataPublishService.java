@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Client;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -488,14 +489,19 @@ public class DataPublishService extends BaseService {
             basSkuService.editBasSku(form);
             firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 
-            /*//2.失效产品首营申请
+            //2.失效产品首营申请
             Json json = firstBusinessProductApplyService.getListByApplyId(b.getPutawayrule());
             List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)json.getObj();
             if(list!=null && list.size()>0){
                 FirstBusinessProductApply productApply = (FirstBusinessProductApply)list.get(0);
-                firstBusinessApplyService.updateFirstState(productApply.getApplyId(),)
-                firstReviewLogService
-            }*/
+                firstBusinessApplyService.updateFirstState(productApply.getApplyId(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+                FirstReviewLogForm reviewLogForm = new FirstReviewLogForm();
+                reviewLogForm.setReviewId(productApply.getApplyId());
+                reviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+                reviewLogForm.setEditId("System");
+                reviewLogForm.setEditDate(new Date());
+                firstReviewLogService.updateByReviewTypeId(reviewLogForm);
+            }
         }
 
         //3.更新产品基础信息关联产品注册证
@@ -522,6 +528,7 @@ public class DataPublishService extends BaseService {
                 //gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }
         }
+
         return Json.success("");
     }
 
