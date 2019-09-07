@@ -77,6 +77,11 @@ public class ViewInvLotattExportService {
 			List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
 			for (ViewInvLotatt viewInvLotatt : vList
 			) {
+				viewInvLotatt.setFmqty(viewInvLotatt.getFmqty().setScale(1));
+				viewInvLotatt.setFmqtyEach(viewInvLotatt.getFmqtyEach().setScale(1));
+				viewInvLotatt.setQtyallocated(viewInvLotatt.getQtyallocated().setScale(1));
+				viewInvLotatt.setQtyholded(viewInvLotatt.getQtyholded().setScale(1));
+				viewInvLotatt.setQtyavailed(viewInvLotatt.getQtyavailed().setScale(1));
 				for (EasyuiCombobox easyuiCombobox : Lotatt10List
 				) {
 					//质量状态id对比

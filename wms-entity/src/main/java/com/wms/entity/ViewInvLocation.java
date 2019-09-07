@@ -21,7 +21,7 @@ public class ViewInvLocation implements Serializable {
 
 	private String fmlocation;
 
-	private BigDecimal fmqty;
+
 	
 	@Id
 	private String fmsku;
@@ -43,6 +43,7 @@ public class ViewInvLocation implements Serializable {
 
 	@Column(name="O_RP")
 	private BigDecimal oRp;
+	private BigDecimal fmqty;
 	private BigDecimal fmqtyEach; //数量
 
 	private BigDecimal qtyallocated;//分配件数
@@ -82,6 +83,10 @@ public class ViewInvLocation implements Serializable {
 	private String productRegisterNo;
 	private String enterpriseName;
 	private String defaultreceivinguom;
+
+//	bas_package
+
+	private BigDecimal qty1;//转换率
 
 
 	public String getLotatt13() {
@@ -459,4 +464,11 @@ public class ViewInvLocation implements Serializable {
 		this.warehouseid = warehouseid;
 	}
 
+	public BigDecimal getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(BigDecimal qty1) {
+		this.qty1 = qty1;
+	}
 }

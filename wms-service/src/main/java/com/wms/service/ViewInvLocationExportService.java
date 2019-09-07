@@ -1,17 +1,7 @@
 package com.wms.service;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.wms.entity.ViewInvLocation;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.MybatisCriteria;
@@ -19,11 +9,19 @@ import com.wms.mybatis.dao.ViewInvLocationMybatisDao;
 import com.wms.query.ViewInvLocationQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
-import com.wms.utils.ExcelUtil;
 import com.wms.vo.form.ViewInvLocationExportForm;
 import com.wms.vo.form.ViewInvLocationForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 /**
@@ -77,13 +75,19 @@ public class ViewInvLocationExportService {
             // excel的sheetName
             String sheetName = "库存查询结果";
             // excel要导出的数据
-            List<ViewInvLocation> vList = viewInvLocationMybatisDao.queryByList(mybatisCriteria); //要权限！james
+            List<ViewInvLocation> vList = viewInvLocationMybatisDao.queryByListExport(mybatisCriteria); //要权限！james
             //质量状态
             List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
-            for (ViewInvLocation viewInvLocation : vList
-            ) {
-                for (EasyuiCombobox easyuiCombobox : Lotatt10List
-                ) {
+            for (ViewInvLocation viewInvLocation : vList)
+            {
+                viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
+                viewInvLocation.setFmqtyEach(viewInvLocation.getFmqtyEach().setScale(1));
+                viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
+                if(viewInvLocation.getLotatt13().equals("1")){
+                    viewInvLocation.setLotatt13("已匹配");
+                }
+                for (EasyuiCombobox easyuiCombobox : Lotatt10List)
+                {
                      //质量状态id对比
                     if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
 						viewInvLocation.setLotatt10(easyuiCombobox.getValue());
@@ -126,18 +130,24 @@ public class ViewInvLocationExportService {
         superClassMap.put("lotatt07", "灭菌批号");
         superClassMap.put("lotatt01", "生产日期");
         superClassMap.put("lotatt02", "有效期/失效期");
+        superClassMap.put("fmqty", "库存件数");
         superClassMap.put("fmqtyEach", "库存数量");
+        superClassMap.put("qty1", "转换率");
         superClassMap.put("defaultreceivinguom", "单位");
         superClassMap.put("lotatt11", "存储条件");
         superClassMap.put("enterpriseName", "生产厂家");
         superClassMap.put("lotatt10", "质量状态");
         superClassMap.put("fmlocation", "库位");
         superClassMap.put("name", "产品线");
+        superClassMap.put("lotatt13", "双证");
         //id重复无法赋值
         //superClassMap.put("","备注");
 
 
         return superClassMap;
     }
+
+
+
 
 }

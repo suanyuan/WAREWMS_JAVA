@@ -45,6 +45,8 @@
 	<result column="name" property="name"/>
 	<result column="enterprise_name" property="enterpriseName"/>
 	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+<!--	bas_package-->
+	<result column="qty1" property="qty1"/>
 
 </resultMap>
        
@@ -177,6 +179,129 @@ where 1=1
 	</if>
 </trim>
 </sql>
+<!-- 导出查询条件 -->
+<sql id="Example_Where_Clause1">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+	    and i.fmcustomerid like  concat('%',#{condition.fmcustomerid},'%')
+	</if>
+	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
+	    and i.fmlocation like  concat('%',#{condition.fmlocation},'%')
+	</if>
+	<if test="condition.fmqty != null and condition.fmqty != ''" >
+	    and i.fmqty =  #{condition.fmqty}
+	</if>
+	<if test="condition.fmsku != null and condition.fmsku != ''" >
+	    and i.fmsku like concat('%',#{condition.fmsku},'%')
+	</if>
+	<if test="condition.fmuomName != null and condition.fmuomName != ''" >
+	    and i.fmuom_name =  #{condition.fmuomName}
+	</if>
+	<if test="condition.iMv != null and condition.iMv != ''" >
+	    and i.i_mv =  #{condition.iMv}
+	</if>
+	<if test="condition.iPa != null and condition.iPa != ''" >
+	    and i.i_pa =  #{condition.iPa}
+	</if>
+	<if test="condition.iRp != null and condition.iRp != ''" >
+	    and i.i_rp =  #{condition.iRp}
+	</if>
+	<if test="condition.oMv != null and condition.oMv != ''" >
+	    and i.o_mv =  #{condition.oMv}
+	</if>
+	<if test="condition.oRp != null and condition.oRp != ''" >
+	    and i.o_rp =  #{condition.oRp}
+	</if>
+	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+	    and i.qtyallocated =  #{condition.qtyallocated}
+	</if>
+	<if test="condition.qtyavailed != null and condition.qtyavailed != ''" >
+	    and i.qtyavailed =  #{condition.qtyavailed}
+	</if>
+	<if test="condition.qtyholded != null and condition.qtyholded != ''" >
+	    and i.qtyholded =  #{condition.qtyholded}
+	</if>
+	<if test="condition.skudescrc != null and condition.skudescrc != ''" >
+	    and i.skudescrc =  #{condition.skudescrc}
+	</if>
+	<if test="condition.skudescre != null and condition.skudescre != ''" >
+	    and i.skudescre =  #{condition.skudescre}
+	</if>
+	<if test="condition.totalcubic != null and condition.totalcubic != ''" >
+	    and i.totalcubic =  #{condition.totalcubic}
+	</if>
+	<if test="condition.totalgrossweight != null and condition.totalgrossweight != ''" >
+	    and i.totalgrossweight =  #{condition.totalgrossweight}
+	</if>
+	<!--<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+	    and warehouseid =  #{condition.warehouseid}
+	</if>-->
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and i.customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and i.lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and i.lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and i.lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and i.lotatt04 like concat('%',#{condition.lotatt04},'%')
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and i.lotatt05 like concat('%',#{condition.lotatt05},'%')
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and i.lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and i.lotatt08 =  #{condition.lotatt08}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and i.lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and i.lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and i.lotatt12  like concat('%',#{condition.lotatt12},'%')
+	</if>
+	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+	    and i.lotatt14 like concat('%',#{condition.lotatt14},'%')
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and i.`name` like concat('%',#{condition.name},'%')
+	</if>
+	<if test="condition.lotatt02Start != null" >
+		and i.lotatt02 &gt;= #{condition.lotatt02Start}
+	</if>
+	<if test="condition.lotatt02End != null" >
+		and i.lotatt02 &lt;= #{condition.lotatt02End}
+	</if>
+	<if test="condition.lotatt03Start != null" >
+		and i.lotatt03 &gt;= #{condition.lotatt03Start}
+	</if>
+	<if test="condition.lotatt03End != null" >
+		and i.lotatt03 &lt;= #{condition.lotatt03End}
+	</if>
+	<if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+	    and i.enterprise_name =  #{condition.enterpriseName}
+	</if>
+	<if test="condition.customerSet != null" >
+		<if test="condition.customerSet.isEmpty() == false" >
+			and fmcustomerid in (
+			<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+				#{customerSet.id,jdbcType=VARCHAR}
+			</foreach>
+			)
+		</if>
+	</if>
+</trim>
+</sql>
    
 <!-- 库存余量按库位 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
@@ -207,8 +332,18 @@ where 1=1
 	<include refid="Base_Column_List"/>
 	from view_inv_location
 	<include refid="Example_Where_Clause"/>
+    order by fmcustomerid,fmsku,fmlocation
 
-       order by fmcustomerid,fmsku,fmlocation
+</select>
+<!-- 导出查询 -->
+<select id="queryByListExport" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT
+	i.*,p.qty1
+	FROM view_inv_location i
+	INNER JOIN `bas_sku` s ON i.fmsku=s.sku AND i.fmcustomerid=s.customerid
+	INNER JOIN `bas_package` p ON s.packid=p.packid
+	<include refid="Example_Where_Clause1"/>
+    order by fmcustomerid,fmsku,fmlocation
 
 </select>
 <!-- 查询库所有列表 不分页 -->
