@@ -18,6 +18,7 @@ public class UserForm {
 	private String cosPassword;
 	private Integer userType;
 	private String merchantId;
+	private String userGrade;
 	
 	public String getUserId() {
 		return userId;
@@ -108,5 +109,13 @@ public class UserForm {
 	}
 	public void setMerchantId(String merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getUserGrade() {
+		return userGrade;
+	}
+
+	public void setUserGrade(String userGrade) {
+		this.userGrade = userGrade;
 	}
 }
