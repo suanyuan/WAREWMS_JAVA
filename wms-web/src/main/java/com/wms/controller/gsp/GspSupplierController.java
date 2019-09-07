@@ -166,6 +166,13 @@ public class GspSupplierController {
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
+	//发起新申请
+	@Login
+	@RequestMapping(params = "reApply")
+	@ResponseBody
+	public Json reApply(String id){
+		return gspSupplierService.reApply(id);
+	}
 
 	@Login
 	@RequestMapping(params = "getInfo")

@@ -542,7 +542,9 @@ public class DataPublishService extends BaseService {
                 formNew.setIsUse(Constant.IS_USE_YES);
                 formNew.setProductRegisterId(newRegisterId);
                 formNew.setSpecsId(RandomUtil.getUUID());
-                formNew.setProductName(specs.getProductNameMain());
+                if(specs.getProductName() ==null || specs.getProductName().equals("")){
+                    formNew.setProductName(specs.getProductNameMain());
+                }
                 gspProductRegisterSpecsMybatisDao.add(formNew);
                 //gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }

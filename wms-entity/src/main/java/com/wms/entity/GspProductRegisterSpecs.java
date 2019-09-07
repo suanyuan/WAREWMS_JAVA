@@ -89,6 +89,8 @@ public class GspProductRegisterSpecs implements Serializable {
   private String wight;//重量
   private String packagingUnit;//包装单位
   private String licenseOrRecordNo;//产品许可证 备案号
+  private String productEnterpriseName;
+
   //产品许可证 备案号
   private String licenseNo;
   private String recordNo;
@@ -105,6 +107,8 @@ public class GspProductRegisterSpecs implements Serializable {
   private String alternatName5;
 
   private String type;
+
+
 
   public String getLicenseOrRecordNo() {
     return licenseOrRecordNo;
@@ -526,5 +530,11 @@ public class GspProductRegisterSpecs implements Serializable {
     this.enterpriseName = enterpriseName;
   }
 
+  public String getProductEnterpriseName() {
+    return productEnterpriseName;
+  }
 
+  public void setProductEnterpriseName(String productEnterpriseName) {
+    this.productEnterpriseName = productEnterpriseName;
+  }
 }

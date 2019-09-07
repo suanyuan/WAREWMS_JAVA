@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 
+import com.wms.entity.GspSupplier;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -15,4 +16,8 @@ public interface GspSupplierMybatisDao extends BaseDao {
 
 
     public <T> T queryByEnterpriseId(Object id);
+
+    Integer queryGspSupplierByEnterpriseId(GspSupplier gspSupplier);
+
+
 }

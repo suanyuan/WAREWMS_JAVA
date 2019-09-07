@@ -10,6 +10,9 @@ import com.wms.mybatis.dao.GspSupplierMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
+import com.wms.vo.form.FirstReviewLogForm;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.GspSupplierForm;
 import com.wms.query.GspSupplierQuery;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service("gspSupplierService")
 public class GspSupplierService extends BaseService {
@@ -35,6 +39,10 @@ public class GspSupplierService extends BaseService {
 	private CommonService commonService;
 	@Autowired
 	private FirstReviewLogMybatisDao firstReviewLogMybatisDao;
+	@Autowired
+	private FirstReviewLogService firstReviewLogService;
+	@Autowired
+	private DataPublishService dataPublishService;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -168,6 +176,68 @@ public class GspSupplierService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+
+
+
+	public Json reApply(String id){
+		try{
+
+			if(StringUtils.isEmpty(id)){
+				return Json.error("请选择要重新申请的数据");
+			}
+
+			String[] arr = id.split(",");
+			for(String s : arr){
+				String no = commonService.generateSeq(Constant.APLSUPNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+
+				//更新旧数据状态
+				GspSupplier gspSupplier = gspSupplierMybatisDao.queryById(s);
+
+//				Integer result = gspSupplierMybatisDao.queryGspSupplierByEnterpriseId(gspSupplier);
+//				if(result>0){
+//					return Json.error("存在同一个供应商和货主且有效,不能重复申请");
+//				}
+
+				String oldNo = gspSupplier.getSupplierId();
+				gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+				gspSupplier.setIsUse(Constant.IS_USE_NO);
+				gspSupplierMybatisDao.updateBySelective(gspSupplier);
+				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+
+				//新增审核状态为未通过数据
+				gspSupplier.setSupplierId(no);
+				gspSupplier.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				gspSupplier.setCreateDate(new Date());
+				gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+				gspSupplier.setIsCheck(Constant.CODE_YES_OR_YES);
+//				gspSupplier.setIsCooperation(Constant.CODE_YES_OR_YES);
+				gspSupplier.setIsUse(Constant.IS_USE_YES);
+				gspSupplierMybatisDao.add(gspSupplier);
+
+				//插入新的日志
+				FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
+				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				firstReviewLogForm.setReviewTypeId(no);
+				firstReviewLogForm.setReviewId(RandomUtil.getUUID());
+
+				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_NEW);
+				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
+
+				//TODO 审核通过的数据需要更新为失败(待测试)
+				dataPublishService.cancelData(oldNo);
+
+			}
+			return Json.success("重新申请成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Json.error("操作失败");
+		}
+
+	}
+
+
+
 
 	public List<EasyuiCombobox> getGspSupplierCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();

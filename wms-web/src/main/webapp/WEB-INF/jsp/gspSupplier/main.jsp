@@ -59,6 +59,9 @@ $(function() {
             {field: 'enterpriseNo',		title: '企业信息代码',	width: 100	 },
             {field: 'shorthandName',		title: '简称',	width: 100 },
             {field: 'enterpriseName',		title: '企业名称',	width: 150 },
+            // {field: 'customerid',		title: '货主',	width: 150 },
+            {field: 'customerName',		title: '货主名称',	width: 150 },
+
             {field: 'clientTerm',		title: '合同期限',	width: 200 },
             {field: 'enterpriseType',		title: '企业类型',	width: 88,formatter:entTypeFormatter },
             {field: 'createId',		title: '创建人',	width: 88 },
@@ -370,41 +373,40 @@ var commit = function(){
 	}
 
 
-	<%--ezuiForm.form('submit', {--%>
-		<%--url : url,--%>
-		<%--onSubmit : function(){--%>
-			<%--if(ezuiForm.form('validate')){--%>
-				<%--$.messager.progress({--%>
-					<%--text : '<spring:message code="common.message.data.processing"/>', interval : 100--%>
-				<%--});--%>
-				<%--return true;--%>
-			<%--}else{--%>
-				<%--return false;--%>
-			<%--}--%>
-		<%--},--%>
-		<%--success : function(data) {--%>
-			<%--var msg='';--%>
-			<%--try {--%>
-				<%--var result = $.parseJSON(data);--%>
-				<%--if(result.success){--%>
-					<%--msg = result.msg;--%>
-					<%--ezuiDatagrid.datagrid('reload');--%>
-					<%--ezuiDialog.dialog('close');--%>
-				<%--}else{--%>
-					<%--msg = '<font color="red">' + result.msg + '</font>';--%>
-				<%--}--%>
-			<%--} catch (e) {--%>
-				<%--msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';--%>
-				<%--msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;--%>
-			<%--} finally {--%>
-				<%--$.messager.show({--%>
-					<%--msg : msg, title : '<spring:message code="common.message.prompt"/>'--%>
-				<%--});--%>
-				<%--$.messager.progress('close');--%>
-			<%--}--%>
-		<%--}--%>
-	<%--});--%>
+
 };
+
+function reApply(){
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row.firstState!="40") {
+        $.messager.show({
+            msg: '只有审核通过的能发起新申请', title: '提示'
+        });
+        return;
+    }
+    var rows = ezuiDatagrid.datagrid("getSelections");
+    if(rows && rows.length>0){
+        $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要发起新申请吗', function(confirm) {
+            if (confirm) {
+                var arr = new Array();
+                for(var i=0;i<rows.length;i++){
+                    arr.push(rows[i].supplierId);
+                }
+                $.ajax({
+                    url : sy.bp()+"/gspSupplierController.do?reApply",
+                    data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
+                    success : function(result){
+                        var msg = result.msg;
+                        showMsg(msg);
+                        ezuiDatagrid.datagrid("reload");
+                    }
+                });
+
+            }
+        })
+    }
+}
+
 var doSearch = function(){
    //alert( $('#operateType').combobox("getValue"));
     //alert( $('#enterpriseIdQuery').val());
@@ -505,8 +507,11 @@ var doSearch = function(){
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
-                    <a onclick='check();' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交审核</a>
-                    <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+
+					<a onclick='check();' id='ezuiBtn_check' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>提交审核</a>
+					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
+
+					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

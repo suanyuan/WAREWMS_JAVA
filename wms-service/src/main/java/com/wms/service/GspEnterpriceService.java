@@ -142,7 +142,6 @@ public class GspEnterpriceService extends BaseService {
                 if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0){ //判断是否有首营申请
                     int n=0;
                     for(GspEnterpriseTypeDTO ent : enterpriseTypeDTOS){
-
                         if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING)){//首营申请审核中的数据不能修改
                             return Json.error("首营申请中的企业信息不能修改");
                         }else if(ent.getFirstState().equals(Constant.CODE_CATALOG_FIRSTSTATE_NEW)){
@@ -172,7 +171,14 @@ public class GspEnterpriceService extends BaseService {
                     }
 
                 }else{
-                    enterpriseIsNewVersion = false;   //新建状态   没有首营申请过的企业
+                    enterpriseIsNewVersion = false;   //新建状态   没有首营申请过或首营状态为新建的企业
+//                    gspBusinessLicenseForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+//                    gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+//                    gspProdLicenseForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+//                    gspMedicalRecordForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+//                    gspFirstRecordForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+//                    gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_ADD);
+
                 }
                 if(enterpriseIsNewVersion == false){
                     //1.新建状态，更新原数据
@@ -209,14 +215,14 @@ public class GspEnterpriceService extends BaseService {
             if(!BeanUtils.isEmptyFrom(gspBusinessLicenseForm)){
                 gspBusinessLicenseForm.setEnterpriseId(enterpriseId);
                 if(enterpriseIsNewVersion == true){
-//                    gspBusinessLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspBusinessLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspBusinessLicenseService.addGspBusinessLicense(enterpriseId,oldEnterpriseId,gspBusinessLicenseForm,gspBusinessLicenseForm.getScopArr(),gspBusinessLicenseForm.getBusinessId(),gspBusinessLicenseForm.getOpType());
             }
             if(!BeanUtils.isEmptyFrom(gspOperateLicenseForm)){      //经营
                 gspOperateLicenseForm.setEnterpriseId(enterpriseId);
                 if(enterpriseIsNewVersion == true){
-//                    gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspOperateLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
 //                gspProdLicenseForm.setOpType(Constant.LICENSE_TYPE_OPERATE);
                 gspOperateLicenseForm.setOperateType(Constant.LICENSE_TYPE_OPERATE);
@@ -224,7 +230,7 @@ public class GspEnterpriceService extends BaseService {
             }
             if(!BeanUtils.isEmptyFrom(gspProdLicenseForm)){         //生产
                 if(enterpriseIsNewVersion == true){
-//                    gspProdLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspProdLicenseForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspProdLicenseForm.setEnterpriseId(enterpriseId);
                 gspProdLicenseForm.setOperateType(Constant.LICENSE_TYPE_PROD);
@@ -233,7 +239,7 @@ public class GspEnterpriceService extends BaseService {
             //医疗
             if(!BeanUtils.isEmptyFrom(gspMedicalRecordForm)){
                 if(enterpriseIsNewVersion == true){
-//                    gspMedicalRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspMedicalRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspMedicalRecordForm.setEnterpriseId(enterpriseId);
 //                gspMedicalLicenseForm.setOperateType(Constant.LICENSE_TYPE_MEDICAL);
@@ -242,7 +248,7 @@ public class GspEnterpriceService extends BaseService {
             //一类
             if(!BeanUtils.isEmptyFrom(gspFirstRecordForm)){         //一类生产
                 if(enterpriseIsNewVersion == true){
-//                    gspFirstRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspFirstRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 System.out.println();
                 gspFirstRecordForm.setEnterpriseId(enterpriseId);
@@ -252,7 +258,7 @@ public class GspEnterpriceService extends BaseService {
 
             if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){        //二类经营
                 if(enterpriseIsNewVersion == true){
-//                    gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
+                    gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
                 gspSecondRecordService.addGspSecondRecord(enterpriseId,oldEnterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());

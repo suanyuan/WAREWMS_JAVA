@@ -151,8 +151,10 @@ public class GspProductRegisterSpecsService extends BaseService {
 		}
 
 		//判断如果产品注册证号变更需要出发换证
-		if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
-			dataPublishService.cancelDataBySpecsId(oldSpecs);
+		if(gspProductRegisterSpecsForm.getProductRegisterId()!=null && oldSpecs.getProductRegisterId()!=null){
+			if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
+				dataPublishService.cancelDataBySpecsId(oldSpecs);
+			}
 		}
 
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();

@@ -286,8 +286,8 @@
 
     //换证清空当前数据
     function recordUpdate() {
-        opType = "update";
-        $("#ezuiFormFirstRecord #opType").val("update");
+        // opType = "update";
+        // $("#ezuiFormFirstRecord #opType").val("update");
         $("#ezuiFormFirstRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
