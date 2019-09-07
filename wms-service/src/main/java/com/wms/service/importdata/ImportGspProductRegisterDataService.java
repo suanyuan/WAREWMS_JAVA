@@ -304,7 +304,9 @@ public class ImportGspProductRegisterDataService {
 					boolean con=false;
 					EasyuiDatagridPager e = new EasyuiDatagridPager();
 					e.setRows(100000000);
-					EasyuiDatagrid<GspEnterpriseInfoVO>  pagedDatagrid=gspEnterpriseInfoService.getPagedDatagrid(e,new GspEnterpriseInfoQuery());
+					GspEnterpriseInfoQuery enQuery = new GspEnterpriseInfoQuery();
+					enQuery.setEnterpriseName(dataArray.getEnterpriseName());
+					EasyuiDatagrid<GspEnterpriseInfoVO>  pagedDatagrid=gspEnterpriseInfoService.getPagedDatagrid(e,enQuery);
 					List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList=pagedDatagrid.getRows();
 					for(GspEnterpriseInfoVO info :gspEnterpriseInfoVOList){
 						if(info.getEnterpriseName().equals(dataArray.getEnterpriseName())){

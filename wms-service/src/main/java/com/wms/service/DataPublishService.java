@@ -493,14 +493,26 @@ public class DataPublishService extends BaseService {
             Json json = firstBusinessProductApplyService.getListByApplyId(b.getPutawayrule());
             List<FirstBusinessProductApply> list = (List<FirstBusinessProductApply>)json.getObj();
             if(list!=null && list.size()>0){
+                //失效产品首营申请明细
                 FirstBusinessProductApply productApply = (FirstBusinessProductApply)list.get(0);
-                firstBusinessApplyService.updateFirstState(productApply.getApplyId(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
-                FirstReviewLogForm reviewLogForm = new FirstReviewLogForm();
+                FirstBusinessProductApplyForm fbpaForm = new FirstBusinessProductApplyForm();
+                fbpaForm.setApplyId(productApply.getApplyId());
+                fbpaForm.setProductApplyId(productApply.getProductApplyId());
+                fbpaForm.setSpecsId(productApply.getSpecsId());
+                fbpaForm.setIsUse(Constant.IS_USE_NO);
+                firstBusinessProductApplyService.editFirstBusinessProductApply(fbpaForm);
+                //失效产品首营申请表头
+                FirstBusinessApplyForm fbaHeadForm = new FirstBusinessApplyForm();
+                fbaHeadForm.setIsUse(Constant.IS_USE_NO);
+                fbaHeadForm.setApplyId(productApply.getApplyId());
+                firstBusinessApplyService.editFirstBusinessApply(fbaHeadForm);
+
+                /*FirstReviewLogForm reviewLogForm = new FirstReviewLogForm();
                 reviewLogForm.setReviewId(productApply.getApplyId());
                 reviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
                 reviewLogForm.setEditId("System");
                 reviewLogForm.setEditDate(new Date());
-                firstReviewLogService.updateByReviewTypeId(reviewLogForm);
+                firstReviewLogService.updateByReviewTypeId(reviewLogForm);*/
             }
         }
 
