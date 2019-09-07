@@ -357,9 +357,11 @@
 
     //换证清空当前数据
     function businessUpdate() {
-        opType = "update";
+
+
+        // opType = "update";
         console.log($("#ezuiFormBusiness #ezuiDetailsBtn_copy"));
-        $("#ezuiFormBusiness #opType").val("update");
+        // $("#ezuiFormBusiness #opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

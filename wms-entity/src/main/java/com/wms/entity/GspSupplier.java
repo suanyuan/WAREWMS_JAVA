@@ -49,7 +49,15 @@ public class GspSupplier implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date empowerEnddate;
   private String empowerContent;
+  private String customerName;
 
+  public String getCustomerName() {
+    return customerName;
+  }
+
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
+  }
 
   public String getCostomerid() {
     return costomerid;
