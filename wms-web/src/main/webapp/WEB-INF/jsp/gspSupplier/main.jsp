@@ -292,13 +292,12 @@ var addOrEdit = function(url,infoObj) {
 
 
 var commit = function(){
-
     var row = ezuiDatagrid.datagrid('getSelected');
     var infoObj = new Object();
-    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+    $("#ezuiFormSupInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-    infoObj["enterpriseId"] = $("#ezuiFormInfo input[id='enterpriseId'][data='1']").val();
+    infoObj["enterpriseId"] = $("#ezuiFormSupInfo input[id='enterpriseId'][data='1']").val();
 	//alert(infoObj["enterpriseId"]);
     //alert(infoObj["enterpriseName"]);
 	//console.log(infoObj+"infoObj====="+infoObj.isCheck);

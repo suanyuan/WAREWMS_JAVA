@@ -127,9 +127,9 @@ var edit = function(){
 			instrumentCatalogId : row.instrumentCatalogId,
 			instrumentCatalogNo : row.instrumentCatalogNo,
 			instrumentCatalogName : row.instrumentCatalogName,
-			instrumentCatalogRemark : row.instrumentCatalogRemark,
-            classifyId:row.classifyId,
-            version:row.version
+			instrumentCatalogRemark : row.instrumentCatalogRemark
+            //classifyId:row.classifyId,
+            //version:row.version
 		});
 
         $('#fromClassify').combobox("setValue",row.classifyId);

@@ -77,7 +77,7 @@
 
             <th>货主</th>
             <td><input type='text' data="1" value="${gspSupplier.costomerid}" id='costomerid' name='costomerid' class='easyui-textbox'
-                       data-options='required:false,width:200'/></td>
+                       data-options='required:true,width:200'/></td>
 
         </tr>
         <tr>

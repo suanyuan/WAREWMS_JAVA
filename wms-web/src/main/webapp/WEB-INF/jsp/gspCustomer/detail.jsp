@@ -597,12 +597,11 @@
     }
 
     function viewEnterpriseUrl() {
-        $(function() {
             ezuiDialog1 = $('#ezuiDialog1').dialog({
                 modal : true,
                 title : '<spring:message code="common.dialog.title"/>',
                 buttons : '',
-                href:sy.bp()+dialogUrl,
+                href:sy.bp()+dialogUrl1,
                 width:1200,
                 height:530,
                 closable:true,
@@ -610,8 +609,7 @@
                 onClose : function() {
                     ezuiFormClear(ezuiDialog1);
                 }
-            }).dialog('close');
-        })
+            })
         //processType = 'edit';
 
         //var row = ezuiDatagrid.datagrid('getSelected');
