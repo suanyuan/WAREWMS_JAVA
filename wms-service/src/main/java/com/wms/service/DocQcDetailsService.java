@@ -238,7 +238,7 @@ public class DocQcDetailsService extends BaseService {
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
         StringUtil.isEmpty(basSku.getReservedfield14())) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产企业信息"));
             return map;
         }
         pdaDocQcDetailVO.setEnterpriseName(
