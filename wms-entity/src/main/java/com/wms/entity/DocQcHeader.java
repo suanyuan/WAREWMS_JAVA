@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -54,5 +55,12 @@ public class DocQcHeader  implements Serializable {
 	private String qcPrintFlag;
 
 	private String warehouseid;
+
+	//打印明细
+	private List<DocQcDetails> detls;
+	private String lotatt03;//入库日期
+	private String lotatt14;//入库单号
+	private String descrC;//供应商名称
+	private String userdefine1Temp;
 
 }

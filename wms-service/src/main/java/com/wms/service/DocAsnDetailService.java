@@ -155,12 +155,18 @@ public class DocAsnDetailService extends BaseService {
 
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
 
-	    Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
+	    //Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
+
+		DocAsnHeaderQuery query = new DocAsnHeaderQuery();
+		query.setAsnno(docAsnDetailForm.getAsnno());
+		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(query);
+		Json statusJson =  asnObjCheck(docAsnHeader);
+
 	    if (!statusJson.isSuccess()) {
 	        return statusJson;
         }
 
-		Json verJson = gspVerifyService.verifyOperate(docAsnDetailForm.getCustomerid(),docAsnDetailForm.getSku(),docAsnDetailForm.getLotatt02(),docAsnDetailForm.getLotatt01());
+		Json verJson = gspVerifyService.verifyOperate(docAsnHeader.getCustomerid(),docAsnHeader.getSupplierid(),docAsnDetailForm.getSku(),docAsnDetailForm.getLotatt01(),docAsnDetailForm.getLotatt02());
 		if(!verJson.isSuccess()){
 			return verJson;
 		}

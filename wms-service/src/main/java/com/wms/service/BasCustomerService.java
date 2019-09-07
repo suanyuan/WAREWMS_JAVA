@@ -71,6 +71,7 @@ public class BasCustomerService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+
 		mybatisCriteria.setOrderByClause("addtime desc");
 		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByPageList(mybatisCriteria);
 		BasCustomerVO basCustomerVO = null;
@@ -100,7 +101,44 @@ public class BasCustomerService extends BaseService {
 		return datagrid;
 	}
 
+    public EasyuiDatagrid<BasCustomerVO> getPagedDatagridByCustomer(EasyuiDatagridPager pager, BasCustomerQuery query) {
+        EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
 
+        query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+        query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(query);
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+
+        mybatisCriteria.setOrderByClause("addtime desc");
+        List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByPageListByCustomer(mybatisCriteria);
+        BasCustomerVO basCustomerVO = null;
+        List<BasCustomerVO> basCustomerVOList = new ArrayList<BasCustomerVO>();
+        for (BasCustomer basCustomer : basCustomerList) {
+            basCustomerVO = new BasCustomerVO();
+            BeanUtils.copyProperties(basCustomer, basCustomerVO);
+            GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(basCustomer.getEnterpriseId());
+            if (gspEnterpriseInfo != null) {
+                System.out.println();
+                basCustomerVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+                basCustomerVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
+                basCustomerVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+                basCustomerVO.setContacts(gspEnterpriseInfo.getContacts());
+                basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
+                basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
+                basCustomerVO.setRemark(gspEnterpriseInfo.getRemark());
+//
+            }
+
+
+            basCustomerVOList.add(basCustomerVO);
+        }
+        datagrid.setTotal((long) basCustomerMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setRows(basCustomerVOList);
+        return datagrid;
+    }
 
 
 

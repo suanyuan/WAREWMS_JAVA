@@ -47,7 +47,7 @@ where 1=1
 	    and pano like concat('%',#{condition.pano},'%')
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
+	    and customerid like concat('%',#{condition.customerid},'%')
 	</if>
 	<if test="condition.qcreference1 != null and condition.qcreference1 != ''" >
 	    and qcreference1 =  #{condition.qcreference1}

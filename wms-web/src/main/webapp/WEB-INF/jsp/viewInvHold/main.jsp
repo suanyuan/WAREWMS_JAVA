@@ -47,7 +47,7 @@ $(function() {
 			{field: 'holdcodeName',		title: '冻结原因',	width: 71 },
 			{field: 'reason',		title: '原因描述',	width: 101 },
 			{field: 'lotatt01',		title: '生产日期',	width: 71 },
-			{field: 'lotatt02',		title: '失效日期',	width: 71 },
+			{field: 'lotatt02',		title: '有效期/失效期',	width: 71 },
 			{field: 'lotatt03',		title: '入库日期',	width: 71 },
 			{field: 'lotatt04',		title: '库存状态',	width: 71 },
 			{field: 'lotatt05',		title: '批属5',	width: 71 },

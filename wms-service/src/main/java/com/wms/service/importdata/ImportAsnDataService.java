@@ -19,6 +19,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.service.BasGtnLotattService;
+import com.wms.service.GspVerifyService;
 import com.wms.service.InvLotAttService;
 import com.wms.utils.*;
 import com.wms.vo.BasSkuVO;
@@ -56,6 +57,8 @@ public class ImportAsnDataService {
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+    @Autowired
+    private GspVerifyService gspVerifyService;
 
     /**
      * 导入入库单
@@ -229,6 +232,11 @@ public class ImportAsnDataService {
                 }
             } catch (Exception e) {
                 rowResult.append("[单价]，须为数字").append(" ");
+            }
+            //gsp校验 //TODO 待测试
+            Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(),dataArray.getLotatt08(),dataArray.getSku(),dataArray.getLotatt01(),dataArray.getLotatt02());
+            if(!verifyJson.isSuccess()){
+                rowResult.append(verifyJson.getMsg()).append(" ");
             }
             //库存状态
 			/*try {

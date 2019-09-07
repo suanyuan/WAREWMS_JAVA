@@ -28,7 +28,8 @@ public class DocQcDetailsQuery implements IQuery {
 	private String editwho;
 	private String packid;
 	private String transactionid;
-
+//inv_lot_att by lotnum
+	private String lotatt10;  //质量状态
 	public String getQcno() {
 		return qcno;
 	}
@@ -237,4 +238,11 @@ public class DocQcDetailsQuery implements IQuery {
 		this.transactionid = transactionid;
 	}
 
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
+	}
 }

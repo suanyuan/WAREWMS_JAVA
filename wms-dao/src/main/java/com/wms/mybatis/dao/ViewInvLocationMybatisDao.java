@@ -13,5 +13,7 @@ import java.util.List;
 public interface ViewInvLocationMybatisDao extends BaseDao {
 // 查询库所有列表 不分页
     public <T> List<T> queryByListAll(MybatisCriteria criteria);
+//导出查询
+    public <T> List<T> queryByListExport(MybatisCriteria criteria);
 	
 }

@@ -106,17 +106,18 @@
             idField : 'businessId',
             columns : [[
                 {field: 'businessId',title:'主键',hidden:true},
-                {field: 'licenseNumber',title: '统一社会信用代码' ,width: '20%'},
-                {field: 'socialCreditCode',title: '证照编号',width: '20%'},
-                {field: 'isUse',title: '是否有效' ,width: '20%',formatter:isUseFormatter},
-                {field: 'createDate',title: '创建时间',width: '20%',formatter:function (value,row,index) {
+                {field: 'isUse',title: '是否有效' ,width: '14%',formatter:isUseFormatter},
+                {field: 'licenseNumber',title: '统一社会信用代码' ,width: '14%'},
+                {field: 'socialCreditCode',title: '证照编号',width: '14%'},
+                {field: 'issueDate',title: '发证日期',width: '14%'},
+                {field: '_operate',		title: '营业执照照片',	width: '14%',
+                    formatter: formatOperAttachment
+                },
+                {field: 'createId',title: '创建人',width: '14%'},
+                {field: 'createDate',title: '创建时间',width: '15%',formatter:function (value,row,index) {
                         return dateFormat(value);
                     }
-                },
-                {field: '_operate',		title: '营业执照照片',	width: '20%',
-                    formatter: formatOperAttachment
-                }
-            ]],
+                }]],
             onDblClickCell: function(index,field,value){
 
             },
@@ -357,9 +358,11 @@
 
     //换证清空当前数据
     function businessUpdate() {
-        opType = "update";
+
+
+        // opType = "update";
         console.log($("#ezuiFormBusiness #ezuiDetailsBtn_copy"));
-        $("#ezuiFormBusiness #opType").val("update");
+        // $("#ezuiFormBusiness #opType").val("update");
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

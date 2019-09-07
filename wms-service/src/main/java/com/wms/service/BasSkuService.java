@@ -389,4 +389,19 @@ public class BasSkuService extends BaseService {
 		return basSkuList;
 	}
 
+	/**
+	 * 查询sku列表
+	 * @param sku
+	 * @return
+	 */
+	public List<BasSku> getSkuListBySku(String sku) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("sku",sku);
+		param.put("activeFlag","1");
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(param);
+		List<BasSku> basSku = basSkuMybatisDao.queryByList(mybatisCriteria);
+		return basSku;
+	}
+
 }

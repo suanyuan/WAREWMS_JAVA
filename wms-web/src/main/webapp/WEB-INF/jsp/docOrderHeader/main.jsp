@@ -2091,9 +2091,9 @@ function rDouble(){
 
 function choseOrderTypeAfter(value) {
 	if(value && value.id == "YF"){
-	    $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG");
+	    $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG").combobox("readonly",true);
 	}else{
-        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG");
+        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG").combobox("readonly",true);
 	}
 }
 
@@ -2211,6 +2211,8 @@ function choseOrderTypeAfter(value) {
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+								<a onclick='doExportOrderNo();' id='ezuiBtn_exportOerderNo' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出序列号记录</a>
+
 							</td>
 						</tr>
 					</table>
@@ -2239,7 +2241,6 @@ function choseOrderTypeAfter(value) {
 					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
 					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印合格证</a>
-					<a onclick='doExportOrderNo();' id='ezuiBtn_exportOerderNo' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出序列号记录</a>
 
 				</div>
 			</div>

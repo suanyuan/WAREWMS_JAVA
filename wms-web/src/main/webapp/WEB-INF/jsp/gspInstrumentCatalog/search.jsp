@@ -65,6 +65,9 @@
             ]],
             onDblClickRow: function(index,row){
                 choseSelect_Catalog_${target}(row);
+                storeAllOff();
+                storeOnDblClickRow(index,row);
+
 
             },
             onRowContextMenu : function(event, rowIndex, rowData) {
@@ -104,7 +107,7 @@
         })
 
     })
-    
+
     function searchCataLog_${target}() {
         ezuiCatalogDatagridDetail_${target}.datagrid("reload",
             {"version":$("#version_${target}").combobox("getValue"),
@@ -115,7 +118,7 @@
             }
             )
     }
-    
+
     function removeCataLog_${target}() {
         $("#version_${target}").combobox("clear")
         $("#classify_${target}").combobox("clear")
@@ -125,6 +128,11 @@
 
 
     function initChecked(data) {
+        //如果局部存储器为空就执行ajax 反之就读取剧本存储器里面的值
+        var readAll = JSON.parse(storage.getItem('key_${target}'));
+        if(readAll == null){
+
+
         $.ajax({
             url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
             data : {
@@ -139,22 +147,20 @@
                 }
             }
         });
+        }else {
 
-       var readAll = JSON.parse(storage.getItem('key_${target}'));
-        for (var i = 0; i < readAll.length; i++) {
-          data.datagrid("selectRecord",readAll[i]);
+            console.log(readAll)
+            for (var i = 0; i < readAll.length; i++) {
+                data.datagrid("selectRecord", readAll[i]);
+            }
+
         }
-        console.log(readAll_${target});
-
-
     }
     //局部储存器
     function storer(rowIndex, rowData) {
             var fkr  =   rowData.instrumentCatalogId;
             dicList.push(fkr);
             storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicList))));
-
-
     }
     //勾选取消
     function storerTo(rowIndex, rowData) {
@@ -179,6 +185,19 @@
     function storeAllOff(rows) {
         storage.clear();
     }
+    //双击保存到局部
+   function storeOnDblClickRow(index,row){
+        console.log(row) ;
+        storage.clear();
+     var   dicLists = new Array();
+       var fkr  =   row.instrumentCatalogId;
+       dicLists.push(fkr);
+       storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicLists))));
+       console.log(storage.getItem('key_${target}'));
+
+   }
+
+
 
 </script>
 </body>

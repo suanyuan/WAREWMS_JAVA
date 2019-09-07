@@ -41,7 +41,15 @@ public class GspSupplierVO {
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
 	private java.lang.String empowerEnddate;
 	private java.lang.String empowerContent;
+	private String customerName;
 
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
 
 	public String getCostomerid() {
 		return costomerid;

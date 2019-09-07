@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasLocation;
 import com.wms.entity.BasZonegroup;
 import com.wms.entity.InvLotLocIdSkuInvLotAtt;
 import com.wms.entity.ViewInvLotatt;
+import com.wms.mybatis.dao.BasLocationMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
 import com.wms.query.ViewInvLotattQuery;
@@ -33,6 +35,8 @@ public class ViewInvLotattService extends BaseService {
 
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private BasLocationMybatisDao basLocationMybatisDao;
 
     /**
      * 根据分页显示
@@ -124,18 +128,24 @@ public class ViewInvLotattService extends BaseService {
         map.put("userid", viewInvLotattForm.getEditwho());
         ViewInvLotatt viewInvLotatt = viewInvLotattMybatisDao.queryById(map);
         if (viewInvLotatt != null) {
-            viewInvLotattMybatisDao.invMov(map);
-            String result = map.get("result").toString();
-            if (result.substring(0, 3).equals("000")) {
-                json.setSuccess(true);
-                json.setMsg("库存移动成功！");
-            } else {
+            if(islocationid(viewInvLotattForm.getLotatt11text())) {
+                viewInvLotattMybatisDao.invMov(map);
+                String result = map.get("result").toString();
+                if (result.substring(0, 3).equals("000")) {
+                    json.setSuccess(true);
+                    json.setMsg("库存移动成功！");
+                } else {
+                    json.setSuccess(false);
+                    String loc = map.get("fmlocation") + "";
+                    String sku = map.get("fmsku") + "";
+                    String loattt05 = viewInvLotatt.getLotatt05() + "";
+                    String loattt04 = viewInvLotatt.getLotatt04() + "";
+                    json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
+                }
+
+            }else{
                 json.setSuccess(false);
-                String loc = map.get("fmlocation") + "";
-                String sku = map.get("fmsku") + "";
-                String loattt05 = viewInvLotatt.getLotatt05() + "";
-                String loattt04 = viewInvLotatt.getLotatt04() + "";
-                json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
+                json.setMsg("目标库位不存在");
             }
         } else {
             json.setSuccess(false);
@@ -156,6 +166,13 @@ public class ViewInvLotattService extends BaseService {
         StringBuffer results = new StringBuffer();
 //        json转集合
         List<ViewInvLotattForm> list = JSON.parseArray(forms, ViewInvLotattForm.class);
+        //判断目标库位是否存在
+        if(!islocationid(list.get(0).getLotatt11text())) {
+
+            json.setSuccess(false);
+            json.setMsg("目标库位不存在");
+            return json;
+        }
         Boolean con = true;
         for (ViewInvLotattForm form : list) {
 
@@ -172,7 +189,7 @@ public class ViewInvLotattService extends BaseService {
         }
         if (con) {
             json.setSuccess(true);
-            json.setMsg("库存移动成功！!");
+            json.setMsg("库存移动成功!");
         } else {
             json.setSuccess(false);
             json.setMsg("部分库存移动失败!<br/>" + results.toString());
@@ -244,6 +261,16 @@ public class ViewInvLotattService extends BaseService {
         return invLotLocIdSkuInvLotAttList;
     }
 
-    ;
+    //判断库位是否存在
+
+    private Boolean islocationid(String locationid){
+          Boolean con=true;
+          BasLocation basLocation =basLocationMybatisDao.queryById(locationid);
+          if(basLocation==null){
+              con=false;
+          }
+
+        return con;
+    }
 
 }

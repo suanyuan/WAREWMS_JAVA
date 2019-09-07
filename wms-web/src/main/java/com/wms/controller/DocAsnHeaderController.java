@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import sun.misc.Request;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -97,6 +96,19 @@ public class DocAsnHeaderController {
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
 		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "delete", method = RequestMethod.POST)
+	@ResponseBody
+	public Json delete(String asnnos) throws Exception {
+		/*Json json = docAsnHeaderService.editDocAsnHeader(docAsnHeaderForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;*/
+		return null;
 	}
 
 	@Login

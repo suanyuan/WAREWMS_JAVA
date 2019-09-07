@@ -371,8 +371,8 @@
 
     //换证清空当前数据
     function medecalUpdate() {
-        opType = "update";
-        $("#ezuiFormMedical #opType").val("update");
+        // opType = "update";
+        // $("#ezuiFormMedical #opType").val("update");
         $("#ezuiFormMedical input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

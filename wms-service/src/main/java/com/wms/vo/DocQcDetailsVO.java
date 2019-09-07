@@ -15,7 +15,10 @@ public class DocQcDetailsVO {
 	private String lotnum;
 	private Double paqtyExpected;
 	private Double qcqtyExpected;
+	private Double qcqtyExpectedEach;
+
 	private Double qcqtyCompleted;
+	private Double qcqtyCompletedEach;
 	private String userdefine1;
 	private String userdefine2;
 	private String userdefine3;
@@ -40,10 +43,18 @@ public class DocQcDetailsVO {
 	private String lotatt05;  //序列号
 	private String lotatt06;  //产品注册证
 	private String lotatt07;  //灭菌批号
+	private String lotatt08;  //供应商
 	private String lotatt10;  //质量状态
 	private String lotatt11;  //存储条件
 	private String lotatt12;  //产品名称
 	private String lotatt15;  //生产企业
+//bas_sku
+	private String descrc;  //规格型号
+	private String reservedfield06;  //生产许可证号/备案号
+//bas_package
+	private Double qty1;  //转换率
+//bas_customer
+	private String shippershortname;  //货主简称
 
 	public String getLotatt02() {
 		return lotatt02;
@@ -335,4 +346,59 @@ public class DocQcDetailsVO {
 		this.transactionid = transactionid;
 	}
 
+	public String getLotatt08() {
+		return lotatt08;
+	}
+
+	public void setLotatt08(String lotatt08) {
+		this.lotatt08 = lotatt08;
+	}
+
+	public String getDescrc() {
+		return descrc;
+	}
+
+	public void setDescrc(String descrc) {
+		this.descrc = descrc;
+	}
+
+	public String getReservedfield06() {
+		return reservedfield06;
+	}
+
+	public void setReservedfield06(String reservedfield06) {
+		this.reservedfield06 = reservedfield06;
+	}
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
+	}
+
+	public String getShippershortname() {
+		return shippershortname;
+	}
+
+	public void setShippershortname(String shippershortname) {
+		this.shippershortname = shippershortname;
+	}
+
+	public Double getQcqtyExpectedEach() {
+		return qcqtyExpectedEach;
+	}
+
+	public void setQcqtyExpectedEach(Double qcqtyExpectedEach) {
+		this.qcqtyExpectedEach = qcqtyExpectedEach;
+	}
+
+	public Double getQcqtyCompletedEach() {
+		return qcqtyCompletedEach;
+	}
+
+	public void setQcqtyCompletedEach(Double qcqtyCompletedEach) {
+		this.qcqtyCompletedEach = qcqtyCompletedEach;
+	}
 }

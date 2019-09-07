@@ -174,6 +174,12 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
+
+	<!--<if test="condition.customer != null and condition.customer != ''" >-->
+		<!--and s.costomerid = #{condition.customer} and s.is_use='1'-->
+	<!--</if>-->
+
+
 	<if test="condition.customerid != null and condition.customerid != ''" >
 	    and (customerid like CONCAT('%',#{condition.customerid,jdbcType=VARCHAR},'%') or descr_c like CONCAT('%',#{condition.customerid,jdbcType=VARCHAR},'%'))
 	</if>
@@ -694,7 +700,7 @@ where 1=1
 	select * from (
 	select a.*,b.codename_c as customerTypeName
 	from (select <include refid="Base_Column_List"/>
-	from Bas_Customer 
+	from Bas_Customer
 	<include refid="Example_Where_Clause"/>
     ) a, Bas_Codes b
     where a.customer_type = b.code
@@ -705,6 +711,20 @@ where 1=1
 	order by ADDTIME desc
 </select>
 
+	<!--查询客户档案分页列表-->
+	<select id="queryByPageListByCustomer" resultMap="BaseResultMap"  parameterType="Object">
+		select * from (
+		select a.*,b.codename_c as customerTypeName
+		from (select *
+		from Bas_Customer
+		<include refid="Example_Where_Clause"/>
+		) a LEFT JOIN gsp_supplier s on a.bankaccount = s.supplier_id , Bas_Codes b
+		where a.customer_type = b.code and  s.costomerid = #{condition.customer,jdbcType=VARCHAR}  and s.is_use='1'
+		and b.codeid = 'CUS_TYP'
+		) c
+		where 1 = 1
+		order by ADDTIME desc
+	</select>
 	<!--<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 		select * from  (SELECT a.CUSTOMERID,
 		a.EDITTIME,

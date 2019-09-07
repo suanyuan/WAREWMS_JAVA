@@ -16,6 +16,9 @@ var ezuiAcceptanceDialog;     //验收作业dialog
 var ezuiDatagrid;              //主页datagrid
 var ezuiAccDataDialog;         //验收单号选择框
 var ezuiAccDataDialogId;       //验收单号选择框
+
+var ezuiCustDataDialog;        //货主
+var ezuiCustDataDialogId;      //货主
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();   //右键菜单
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
@@ -40,29 +43,36 @@ $(function() {
 			{field:'ck',checkbox:true},
 			// {field: 'qcno',		title: '验收单号',	width: 124 },
 			// {field: 'pano',		title: '上架单号',	width: 124 },
-            {field: 'qclineno',		title: '验收行号',	width: 80 },
+            // {field: 'qclineno',		title: '验收行号',	width: 80 },
 			{field: 'linestatus',		title: '行状态',	width: 80,formatter:AcceptancestatusFormatter},
-			{field: 'qcdescr',		title: '验收说明',	width: 160},
+			{field: 'lotatt10',		title: '质量状态',	width: 80,formatter:ZL_TYPstatusFormatter },
 			{field: 'userdefine1',		title: '库位',	width: 110 },
 			{field: 'customerid',		title: '货主代码',	width: 134 },
+			{field: 'shippershortname',		title: '货主简称',	width: 134 },
+			{field: 'lotatt08',		title: '供应商',	width: 134 },
 			{field: 'sku',		title: '产品代码',	width: 150 },
 			{field: 'lotatt12',		title: '产品名称',	width: 200 },
-			{field: 'qcqtyExpected',		title: '待验件数',	width: 100 },
-			{field: 'qcqtyCompleted',		title: '已验件数',	width: 100},
-			{field: 'lotatt10',		title: '质量状态',	width: 80,formatter:ZL_TYPstatusFormatter },
+			{field: 'lotatt06',		title: '注册证号',	width: 200 },
+			{field: 'descrc',		title: '规格/型号',	width: 100 },
 			{field: 'lotatt04',		title: '生产批号',	width: 110 },
-			{field: 'lotatt05',		title: '序列号',	width: 110 },
 			{field: 'lotatt07',		title: '灭菌批号',	width: 110 },
-			{field: 'lotatt15',		title: '生产企业',	width: 250 },
+			{field: 'lotatt05',		title: '序列号',	width: 110 },
 			{field: 'lotatt01',		title: '生产日期',	width: 100 },
 			{field: 'lotatt02',		title: '有效期/失效期',	width: 100 },
-			{field: 'lotatt06',		title: '注册证号',	width: 200 },
 			{field: 'lotatt11',		title: '存储条件',	width: 100 },
-			{field: 'lotnum',		title: '批次号',	width: 134 },
+			{field: 'lotatt15',		title: '生产企业',	width: 200 },
+			{field: 'reservedfield06',		title: '生产许可证号/备案号',	width: 150 },
+			{field: 'qcqtyExpected',		title: '待验收件数',	width: 100 },
+			{field: 'qcqtyCompleted',		title: '已验收件数',	width: 100},
+			{field: 'qcqtyExpectedEach',		title: '待验收数量',	width: 100 },
+			{field: 'qcqtyCompletedEach',		title: '已验收数量',	width: 100},
+			{field: 'qcdescr',		title: '验收说明',	width: 160},
+			{field: 'editwho',		title: '验收人',	width: 100 },
+			{field: 'edittime',		title: '验收时间',	width: 134 },
+			// {field: 'lotnum',		title: '批次号',	width: 134 },
 			{field: 'addtime',		title: '创建时间',	width: 134 },
 			{field: 'addwho',		title: '创建人',	width: 100 },
-			{field: 'edittime',		title: '编辑时间',	width: 134 },
-			{field: 'editwho',		title: '编辑人',	width: 100 }
+			{field: 'qty1',		title: '转换率',	width: 100}
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -84,6 +94,28 @@ $(function() {
 			}
 		}]
 	});
+//查询条件货主字段初始化
+	$("#toolbar #customerid").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiCustDataDialog #customerid").textbox('clear');
+				ezuiCustDataClick();
+				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
+//查询条件货主字段初始化
+	$("#ezuiAccToolbar #customerid").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiCustDataDialog #customerid").textbox('clear');
+				ezuiCustDataClick("S");
+				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
 //一级dialog初始化
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
@@ -97,7 +129,7 @@ $(function() {
 	ezuiAcceptanceDialog = $('#ezuiAcceptanceDialog').dialog({
 		modal : true,
 		width:260,
-		height:180,
+		height:240,
 		title : '验收作业',
 		buttons : '#ezuiAcceptanceDialogBtn',
 		onClose : function() {
@@ -116,6 +148,25 @@ $(function() {
 
 		}
 	}).dialog('close');
+//货主查询弹框初始化
+	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
+		modal: true,
+		title: '<spring:message code="common.dialog.title"/>',
+		buttons: '',
+		onOpen: function () {
+
+		},
+		onClose: function () {
+
+		}
+	}).dialog('close');
+//单条验收的时候 通过件数算数量
+	$("input",$("#qcqty").next("span")).keyup(function(event){
+		var v = $('#qcqty').next().children().val();
+		var qty1=$("#qty1").val();
+		$("#qcqtyEach").textbox('setValue',v*qty1);
+	});
+
 });
 //增加
 var add = function(){
@@ -334,18 +385,37 @@ var acceptanceWork = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	var num=rows.length;
     if(num==1){
-		 $("#ezuiAcceptanceForm #qcqtyExpected").textbox('enable');
-		 $("#ezuiAcceptanceForm #qcqty").textbox('enable');
+		$("#ezuiAcceptanceForm #qcqtyExpected").textbox('enable');
+		$("#ezuiAcceptanceForm #qcqty").textbox('enable');
+		$("#ezuiAcceptanceForm #qcqtyExpectedEach").textbox('enable');
+		$("#ezuiAcceptanceForm #qcqtyEach").textbox('enable');
 		ezuiAcceptanceForm.form('load',{
-			qcqtyExpected:rows[0].qcqtyExpected
+			qcqtyExpected:rows[0].qcqtyExpected,
+			qcqtyExpectedEach:rows[0].qcqtyExpectedEach,
+			qty1:rows[0].qty1
 
 		});
 		ezuiAcceptanceDialog.dialog('open');
 	}else if(num>1){
-		 $("#ezuiAcceptanceForm #qcqtyExpected").textbox('disable');
-           $("#ezuiAcceptanceForm #qcqty").textbox('disable');
-		$("#ezuiAcceptanceForm #qcqtyExpected").textbox('setValue','所有');
-		$("#ezuiAcceptanceForm #qcqty").textbox('setValue','所有');
+
+         var sums=new Object();
+		sums.qcqtyExpected =0;
+		sums.qcqtyCompleted =0;
+		sums.qcqtyExpectedEach =0;
+		sums.qcqtyCompletedEach =0;
+		for (var i = 0; i < rows.length; i++) {
+			sums.qcqtyExpected  += rows[i]['qcqtyExpected'];
+			sums.qcqtyExpectedEach  += rows[i]['qcqtyExpectedEach'];
+		}
+		$("#ezuiAcceptanceForm #qcqtyExpected").textbox('setValue',sums.qcqtyExpected );
+		$("#ezuiAcceptanceForm #qcqty").textbox('setValue',sums.qcqtyExpected );
+		$("#ezuiAcceptanceForm #qcqtyExpectedEach").textbox('setValue',sums.qcqtyExpectedEach);
+		$("#ezuiAcceptanceForm #qcqtyEach").textbox('setValue',sums.qcqtyExpectedEach);
+
+		$("#ezuiAcceptanceForm #qcqtyExpected").textbox('disable');
+		$("#ezuiAcceptanceForm #qcqty").textbox('disable');
+		$("#ezuiAcceptanceForm #qcqtyExpectedEach").textbox('disable');
+		$("#ezuiAcceptanceForm #qcqtyEach").textbox('disable');
 		ezuiAcceptanceDialog.dialog('open');
 	}
     else{
@@ -359,9 +429,11 @@ var doSearch = function() {
 	if ($('#qcno').val() == null || $('#qcno').val() == "") {
 		ezuiDatagrid.datagrid('load', {
 			qcno: $('#qcno').val(),                            //验收单号
-			userdefine3: $('#userdefine3').val(),              //生产批号
-			userdefine4: $('#userdefine4').val(),              //序列号
-			linestatus: $('#linestatus').combobox('getValue')  //验收状态
+			linestatus: $('#linestatus').combobox('getValue'), //验收状态
+			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
+			// customerid: $('#customerid').val(),              //货主代码
+			// shippershortname: $('#shippershortname').val(),   //货主简称
+
 		});
 		$.messager.show({
 			msg: '请先选择验收单号!', title: '<spring:message code="common.message.prompt"/>'
@@ -369,25 +441,32 @@ var doSearch = function() {
 	} else {
 		ezuiDatagrid.datagrid('load', {
 			qcno: $('#qcno').val(),                            //验收单号
-			userdefine3: $('#userdefine3').val(),              //生产批号
-			userdefine4: $('#userdefine4').val(),              //序列号
-			linestatus: $('#linestatus').combobox('getValue')  //验收状态
+			linestatus: $('#linestatus').combobox('getValue'), //验收状态
+			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
+			// customerid: $('#customerid').val(),              //货主代码
+			// shippershortname: $('#shippershortname').val(),   //货主简称
 		});
 
 	}
+}
+//主页清空查询
+var ezuiToolbarClear=function () {
+	ezuiComboboxClear("#toolbar");
 }
 
 /* 单号选择弹框查询 */
 var ezuiAccDataDialogSearch = function () {
 	ezuiAccDataDialogId.datagrid('load', {
 		pano: $("#ezuiAccDataDialog #pano").textbox("getValue"),
-		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue")
+		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue"),
+		customerid: $("#ezuiAccDataDialog #customerid").textbox("getValue")
 	});
 };
 /* 单号选择弹框清空 */
 var ezuiAccToolbarClear = function () {
 	$("#ezuiAccDataDialog #pano").textbox('clear');
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
+    $("#ezuiAccDataDialog #customerid").textbox('clear');
 };
 /* 单号选择弹框 */
 var ezuiAccDataClick = function () {
@@ -409,7 +488,8 @@ var ezuiAccDataClick = function () {
 		columns: [[
 			{field: 'pano', title: '上架单号', width: 80},
 			{field: 'qcno', title: '验收单号', width: 100},
-			{field: 'qcstatus', title: '验收状态', width: 100,formatter:AcceptancestatusFormatter}
+			{field: 'qcstatus', title: '验收状态', width: 100,formatter:AcceptancestatusFormatter},
+			{field: 'customerid', title: '货主代码', width: 100}
 		]],
 		onDblClickCell: function (index, field, value) {
 			selectAcceptance();
@@ -432,6 +512,82 @@ var selectAcceptance = function () {
 	}
 	;
 };
+
+//货主查询弹框弹出start=========================
+var ezuiCustDataClick = function (type) {
+	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+		url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+		method: 'POST',
+		toolbar: '#ezuiCustToolbar',
+		title: '客户档案',
+		pageSize: 50,
+		pageList: [50, 100, 200],
+		fit: true,
+		border: false,
+		fitColumns: true,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		pagination: true,
+		rownumbers: true,
+		singleSelect: true,
+		queryParams: {
+			activeFlag: '1',
+			customerType: 'OW'
+		},
+		idField: 'id',
+		columns: [[
+			{field: 'customerid', title: '客户代码', width: 15},
+			{field: 'descrC', title: '中文名称', width: 50},
+			{field: 'descrE', title: '英文名称', width: 50},
+			{field: 'customerTypeName', title: '类型', width: 15},
+			{
+				field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+					return rowData.activeFlag == '1' ? '是' : '否';
+				}
+			}
+		]],
+		onDblClickCell: function (index, field, value) {
+			selectCust(type);
+		},
+		onRowContextMenu: function (event, rowIndex, rowData) {
+		}, onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		}
+	});
+	$("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combobox('setText', '货主');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
+	ezuiCustDataDialog.dialog('open');
+};
+
+//货主查询弹框查询按钮
+var ezuiCustDataDialogSearch = function () {
+	ezuiCustDataDialogId.datagrid('load', {
+		customerid: $("#ezuiCustDataDialog #customerid").textbox("getValue"),
+		customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+		activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+	});
+};
+//货主查询弹框选择按钮
+var selectCust = function (type) {
+	var row = ezuiCustDataDialogId.datagrid('getSelected');
+	var type=type;
+	if (row) {
+		if(type=="S"){
+			$("#ezuiAccToolbar #customerid").textbox('setValue', row.customerid);
+
+		}else {
+			$("#toolbar #customerid").textbox('setValue', row.customerid);
+		}
+		ezuiCustDataDialog.dialog('close');
+	}
+};
+//货主查询弹框清空按钮
+var ezuiCustToolbarClear = function () {
+	$("#ezuiCustDataDialog #customerid").textbox('clear');
+};
+//货主查询弹框弹出end==========================
+
 </script>
 </head>
 <body>
@@ -456,14 +612,16 @@ var selectAcceptance = function () {
 																																         value: '已验收'},
 																																       {label: '',
 																																         value: '全部'}]"/></td>
-
-						</tr>
-						<tr>
-							<th>序列号</th><td><input type='text' id='userdefine4' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>生产批号</th><td><input type='text' id='userdefine3' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
+<%--							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<th>货主简称</th><td><input type='text' id='shippershortname' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='ezuiToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 					</table>
@@ -569,6 +727,8 @@ var selectAcceptance = function () {
 							<tr>
 								<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
+								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+
 								<td>
 									<a onclick='ezuiAccDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 									<a onclick='selectAcceptance();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
@@ -591,13 +751,21 @@ var selectAcceptance = function () {
 	<div id='ezuiAcceptanceDialog' style='padding: 10px;'>
 		<form id='ezuiAcceptanceForm' method='post'>
 			<table>
-
+				<input type='hidden' id='qty1' name="qty1" />
 				<tr>
 					<th>待验件数</th><td><input type='text' id='qcqtyExpected' name="qcqtyExpected" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
 
 				</tr>
 				<tr>
-					<th>验收件数</th><td><input type='text' id='qcqty' name="qcqty" class='easyui-textbox' size='20' data-options="required:true"/></td>
+					<th>验收件数</th><td><input type='text' id='qcqty' name="qcqty" class='easyui-textbox' size='20' data-options="required:true" /></td>
+
+				</tr>
+				<tr>
+					<th>待验数量</th><td><input type='text' id='qcqtyExpectedEach' name="qcqtyExpectedEach" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+
+				</tr>
+				<tr>
+					<th>验收数量</th><td><input type='text' id='qcqtyEach' name="qcqtyEach" class='easyui-textbox' size='20' data-options="required:true"/></td>
 
 				</tr>
 				<tr>
@@ -631,6 +799,67 @@ var selectAcceptance = function () {
 	<div id='ezuiAcceptanceDialogBtn'>
 		<a onclick='commitAcceptance("HG");' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
 		<a onclick='commitAcceptance("BHG");' class='easyui-linkbutton' href='javascript:void(0);'>不合格</a>
+	</div>
+
+<!-- 货主选择弹框 -->
+	<div id='ezuiCustDataDialog' style="width:700px;height:480px;padding:10px 20px">
+		<div class='easyui-layout' data-options='fit:true,border:false'>
+			<div data-options="region:'center'">
+				<div id='ezuiCustToolbar' class='datagrid-toolbar' style="">
+					<fieldset>
+						<legend><spring:message code='common.button.query'/></legend>
+						<table>
+							<tr>
+								<th>客户：</th>
+								<td>
+									<input type='text' id='customerid' name="customerid" class='easyui-textbox' size='12'
+										   data-options='prompt:"请输入客户代码"'/></td>
+								<th>类型：</th>
+								<td>
+									<input type='text' id='customerType' name="customerType" class='easyui-combobox'
+										   size='8' data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
+								</td>
+								<th>激活：</th>
+								<td>
+									<input type='text' id='activeFlag' name="activeFlag" class='easyui-combobox' size='8'
+										   data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: 'Y', value: '是'},
+																																{id: 'N', value: '否'}
+																															]"/>
+								</td>
+								<td>
+									<a onclick='ezuiCustDataDialogSearch();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+									<a onclick='selectCust();' id='ezuiBtn_edit' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
+									<a onclick='ezuiCustToolbarClear();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-remove"'
+									   href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					<div id='ezuiCustDialogBtn'></div>
+				</div>
+				<table id='ezuiCustDataDialogId'></table>
+			</div>
+		</div>
+	</div>
+	<div id='ezuiCustDialogBtn'>
+		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.close'/></a>
 	</div>
 </body>
 </html>

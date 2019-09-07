@@ -39,6 +39,7 @@
 																																	{id: '批发', value: '批发'},
 																																	{id: '零售', value: '零售'},
 																																	{id: '批零兼营', value: '批零兼营'},
+																																	{id: '/', value: '/'},
 																																    ]" /></td>
                     <th>法定代表人</th>
                     <td><input type='text' value="${gspOperateLicense.juridicalPerson}" data="1" id="juridicalPerson" name='juridicalPerson' class='easyui-textbox' data-options='required:true,width:300'/></td>
@@ -402,8 +403,8 @@
 
     //换证清空当前数据
     function operateUpdate() {
-        opType = "update";
-        $("#ezuiFormOperate input[id='opType']").val("update");
+        // opType = "update";
+        // $("#ezuiFormOperate input[id='opType']").val("update");
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

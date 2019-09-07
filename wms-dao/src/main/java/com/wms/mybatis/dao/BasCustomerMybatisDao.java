@@ -46,4 +46,8 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	BasCustomer queryByIdType(@Param("customerId") String customerId,@Param("customerType") String customerType);
 
 	List<BasCustomer> querySupplierByCustomer(@Param("customerId") String customerId);
+
+	public <T> List<T> queryByPageListByCustomer(MybatisCriteria criteria);//总查询分页  通过委托方查供应商
+
+
 }

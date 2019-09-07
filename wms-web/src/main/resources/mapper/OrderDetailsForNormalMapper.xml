@@ -785,6 +785,11 @@ where 1=1
 	delete from doc_order_details where orderno = #{orderno, jdbcType=VARCHAR} and orderlineno = #{orderlineno, jdbcType=VARCHAR}
 </delete>
 
+    <!-- 联合头档删除记录 -->
+    <delete id="orderHeaderdelete" parameterType="Object">
+	delete from doc_order_details where orderno = #{orderno, jdbcType=VARCHAR}
+    </delete>
+
 <!-- 根据id查询 订单明细 -->
     <select id="queryById"  resultMap="OrderDetailsForNormalMap" parameterType="Object">
         select <include refid="Base_Column_List" />
