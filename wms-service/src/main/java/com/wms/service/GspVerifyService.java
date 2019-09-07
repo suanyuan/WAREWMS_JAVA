@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.utils.DateUtil;
@@ -35,8 +36,6 @@ public class GspVerifyService {
     @Autowired
     private GspSecondRecordService gspSecondRecordService;
     @Autowired
-    private GspOperateDateTimeService gspOperateDateTimeService;
-    @Autowired
     private BasCustomerService basCustomerService;
     @Autowired
     private BasSkuService basSkuService;
@@ -46,6 +45,9 @@ public class GspVerifyService {
     private GspOperateDetailService gspOperateDetailService;
     @Autowired
     private GspMedicalRecordService gspMedicalRecordService;
+    @Autowired
+    private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
+
 
     /**
      * gsp申请经营范围校验
@@ -214,11 +216,26 @@ public class GspVerifyService {
 
         //如果有产品需要判断注册证
         if(!StringUtils.isEmpty(sku)){
+
+            String registerNo = "";
             BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
             if(basSku == null){
-                return Json.error("查询不到对应的产品："+sku);
+                //如果为空查询是否是未下发产品
+                GspProductRegisterSpecs specs = gspProductRegisterSpecsMybatisDao.queryById(sku);
+                if(specs!=null){
+                    if(!StringUtil.isEmpty(specs.getProductRegisterNo())){
+                        GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterNo());
+                        if(register != null){
+                            registerNo = register.getProductRegisterNo();
+                        }
+                    }
+                }else {
+                    return Json.error("查询不到对应的产品："+sku);
+                }
+            }else {
+                registerNo = basSku.getReservedfield03();
             }
-            GspProductRegister gspProductRegister = getGspProductRegister(basSku.getReservedfield03());
+            GspProductRegister gspProductRegister = getGspProductRegister(registerNo);
             if(gspProductRegister != null){
                 if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
                     return Json.error("关联产品注册证已过期："+sku);
@@ -226,7 +243,7 @@ public class GspVerifyService {
 
                 if(!StringUtil.isEmpty(lotatt01)){
                     //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
-                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(basSku.getReservedfield03());
+                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
                     Date beginDate = null;
                     Date endDate = null;
                     if(allRegister!=null && allRegister.size()>1){
