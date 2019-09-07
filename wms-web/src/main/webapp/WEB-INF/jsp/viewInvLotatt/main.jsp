@@ -161,7 +161,6 @@ $(function() {
 	});
 //库位移动多条页放大镜
 	$("#ezuiDialogMovAll #lotatt11text").textbox({
-		editable: false,
 		icons: [{
 			iconCls: 'icon-search',
 			handler: function (e) {
@@ -173,7 +172,6 @@ $(function() {
 	});
 //库位移动单条页面放大镜
 	$("#ezuiDialogMov #lotatt11text").textbox({
-		editable: false,
 		icons: [{
 			iconCls: 'icon-search',
 			handler: function (e) {
@@ -1153,7 +1151,7 @@ var ismove=function (location) {
 																											{id: 'CS', value: '残损'}
 																										]"/></td>
 					<th>原因描述</th>
-					<td><input type='text' name='lotatt12text' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='lotatt12text' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 			</table>
 		</form>
@@ -1223,7 +1221,7 @@ var ismove=function (location) {
 																											{id: 'CS', value: '残损'}
 																										]"/></td>
 					<th>原因描述</th>
-					<td><input type='text' name='lotatt12text' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text' name='lotatt12text' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 			</table>
 		</form>
@@ -1266,7 +1264,7 @@ var ismove=function (location) {
 																											{id: 'CS', value: '残损'}
 																										]"/></td>
 					<th>原因描述</th>
-					<td><input type='text'  id="lotatt12text" name='lotatt12text' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<td><input type='text'  id="lotatt12text" name='lotatt12text' class='easyui-textbox' size='16' data-options=''/></td>
 				</tr>
 			</table>
 		</form>
