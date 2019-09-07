@@ -77,7 +77,7 @@ public class GspVerifyService {
         if(StringUtils.isEmpty(supplierId)){
             return Json.error("缺少供应商信息，首营审核不通过");
         }
-        
+
         GspEnterpriseInfo gspEnterpriseInfoCustomer;
         GspEnterpriseInfo gspEnterpriseInfoSupplier;
         BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
@@ -308,10 +308,10 @@ public class GspVerifyService {
         }
         for(String s : arrregister){
             if(arroperate.toString().indexOf(s)==-1){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private List<GspOperateDetailVO> getOperateDetail(String operateId){

@@ -353,7 +353,7 @@ var clearParentName = function(){
 		<form id="ezuiForm" method="post">
 			<table>
 				<tr>
-					<th>類型</th>
+					<th>类型</th>
 					<td>
 						<input type="text" id="userTypeCombobox" name="userType" class="easyui-combobox" size='16' data-options="	panelHeight:'auto',
 																																	editable:false,
