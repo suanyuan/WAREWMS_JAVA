@@ -148,7 +148,7 @@ public class DocMtDetailsService extends BaseService {
 		Boolean con=true;
 		for (DocMtDetailsForm detailForm : list) {
             detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-            detailForm.setUserid(SfcUserLoginUtil.getLoginUser().getId());
+            detailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			PdaResult pdaResult = mtSubmit(detailForm);//调用养护作业方法 单个验收
 			if(pdaResult.getErrorCode()==400){
 				result.append("养护单号:"+detailForm.getMtno()+",行号:"+detailForm.getMtlineno()).append(","+pdaResult.getMsg()).append("<br/>");

@@ -84,26 +84,30 @@ public class DocQcDetailsService extends BaseService {
      */
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
-        List<DocQcDetailsVO> docQcHeaderVOList = new ArrayList<>();
+        List<DocQcDetailsVO> docQcDetailsVOList = new ArrayList<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         if(query.getQcno()==null||query.getQcno()==""){
-            datagrid.setRows(docQcHeaderVOList);
+            datagrid.setRows(docQcDetailsVOList);
             datagrid.setTotal((long)0);
             return datagrid;
         }
-        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByListPano(mybatisCriteria);
-        DocQcDetailsVO docQcHeaderVO = null;
-        for (DocQcDetails docPaDetails : docQcHeaderList) {
-            docQcHeaderVO = new DocQcDetailsVO();
-            docPaDetails.setQcqtyExpected(docPaDetails.getQcqtyExpected()-docPaDetails.getQcqtyCompleted());
-            BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
-            docQcHeaderVOList.add(docQcHeaderVO);
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListPano(mybatisCriteria);
+        DocQcDetailsVO docQcDetailsVO = null;
+        for (DocQcDetails docQcDetails : docQcDetailsList) {
+            docQcDetailsVO = new DocQcDetailsVO();
+            //计算件数
+            docQcDetails.setQcqtyExpected(docQcDetails.getQcqtyExpected()-docQcDetails.getQcqtyCompleted());
+            //计算数量
+            docQcDetails.setQcqtyExpectedEach(docQcDetails.getQcqtyExpected()*docQcDetails.getQty1());
+            docQcDetails.setQcqtyCompletedEach(docQcDetails.getQcqtyCompleted()*docQcDetails.getQty1());
+            BeanUtils.copyProperties(docQcDetails, docQcDetailsVO);
+            docQcDetailsVOList.add(docQcDetailsVO);
         }
         datagrid.setTotal((long) docQcDetailsDao.queryByCountPano(mybatisCriteria));
-        datagrid.setRows(docQcHeaderVOList);
+        datagrid.setRows(docQcDetailsVOList);
         return datagrid;
 	}
 
@@ -668,7 +672,7 @@ public class DocQcDetailsService extends BaseService {
         for (PdaDocQcDetailForm detailForm : list) {
             InitPdaDocQcDetailForm(detailForm);//完善form值
             detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-            detailForm.setUserid(SfcUserLoginUtil.getLoginUser().getId());
+            detailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
             PdaResult pdaResult = submitDocQc(detailForm);//调用验收作业方法 单个验收
             if(pdaResult.getErrorCode()==400){
                 result.append("验收单号:"+detailForm.getQcno()+",行号:"+detailForm.getQclineno()).append(","+pdaResult.getMsg()).append("<br/>");

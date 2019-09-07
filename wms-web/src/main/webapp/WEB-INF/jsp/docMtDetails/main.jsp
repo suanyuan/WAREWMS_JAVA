@@ -74,10 +74,10 @@ $(function() {
 			{field: 'lotatt15',		title: '生产企业',	width: 250 },
 			{field: 'lotnum',		title: '批次号',	width: 100 },
 			{field: 'remark',		title: '备注',	width: 150 },
+			{field: 'editwho',		title: '养护人',	width: 100 },
+			{field: 'edittime',		title: '养护时间',	width: 134 },
 			{field: 'addtime',		title: '创建时间',	width: 134 },
-			{field: 'addwho',		title: '创建人',	width: 100 },
-			{field: 'edittime',		title: '编辑时间',	width: 134 },
-			{field: 'editwho',		title: '编辑人',	width: 100 }
+			{field: 'addwho',		title: '创建人',	width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -489,6 +489,17 @@ var doSearch = function() {
 
 	}
 }
+//主页清空查询
+var ezuiToolbarClear = function() {
+	ezuiComboboxClear("#toolbar");
+	$("#toolbar").find('.easyui-textbox').each(function(){
+		 if($(this).attr("id")!="mtno"){
+			$(this).textbox('clear');
+		}
+
+
+	});
+}
 
 /* 单号选择弹框查询 */
 var ezuiCVDataDialogSearch = function () {
@@ -751,7 +762,7 @@ function choseSelect_product_docMtDetails(row) {
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='ezuiToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 					</table>

@@ -38,10 +38,18 @@
 	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
 	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08" property="lotatt08"/>
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
 	<result column="lotatt15" property="lotatt15"/>
+<!--bas_sku-->
+	<result column="descr_c" property="descrc"/>
+	<result column="reservedfield06" property="reservedfield06"/>
+<!--bas_package-->
+	<result column="qty1" property="qty1"/>
+<!--bas_customer-->
+	<result column="descrcM" property="shippershortname"/>
 </resultMap>
        
 <!-- doc_qc_details table all fields -->
@@ -220,6 +228,11 @@ where 1=1
 	<if test="condition.transactionid != null and condition.transactionid != ''" >
 	    and transactionid =  #{condition.transactionid}
 	</if>
+	<!--inv_lot_att by lotnum-->
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+		and a.lotatt10 =  #{condition.lotatt10}
+	</if>
+
 </trim>
 </sql>
    
@@ -338,6 +351,9 @@ where 1=1
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
 	<include refid="Example_Where_Clause1"/>
 </select>
   	
@@ -357,10 +373,13 @@ where 1=1
 <!-- 查询验收明细档列表 pano -->
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.*
+	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
 	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
