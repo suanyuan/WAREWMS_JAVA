@@ -77,9 +77,9 @@ public class GspVerifyService {
         if(StringUtils.isEmpty(supplierId)){
             return Json.error("缺少供应商信息，首营审核不通过");
         }
-        String customerEnterpriseId = "";
-        GspEnterpriseInfo gspEnterpriseInfoCustomer = null;
-        GspEnterpriseInfo gspEnterpriseInfoSupplier = null;
+        
+        GspEnterpriseInfo gspEnterpriseInfoCustomer;
+        GspEnterpriseInfo gspEnterpriseInfoSupplier;
         BasCustomer customer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
         if(customer == null){
             //如果没有下发查询是否企业id
@@ -88,7 +88,8 @@ public class GspVerifyService {
                 //return Json.error("查询不到货主对应的企业信息："+customerId);
                 return Json.error("查询不到对应的货主："+customerId);
             }
-
+        }else {
+            gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
         }
 
         BasCustomer supplier = basCustomerService.selectCustomerById(supplierId, Constant.CODE_CUS_TYP_VE);
@@ -99,7 +100,8 @@ public class GspVerifyService {
                 //return Json.error("查询不到供应商对应的企业信息："+supplierId);
                 return Json.error("查询不到对应的供应商："+supplierId);
             }
-
+        }else {
+            gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
         }
 
         //如果是医疗机构不判断
