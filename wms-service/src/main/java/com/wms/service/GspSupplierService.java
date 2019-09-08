@@ -259,23 +259,23 @@ public class GspSupplierService extends BaseService {
 				//更新旧数据状态
 				GspSupplier gspSupplier = gspSupplierMybatisDao.queryById(s);
 				// 通过enterpriseId 查询该公司的最新的enterpriseId
-				GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
-				if(g!=null){
-					gspSupplier.setEnterpriseId(g.getEnterpriseId());
-				}else{
-					return  Json.error("企业信息已失效");
-				}
-				BasCustomer CustomerQ = new BasCustomer();
-				CustomerQ.setCustomerType(Constant.CODE_CUS_TYP_OW);
-				CustomerQ.setCustomerid(gspSupplier.getCostomerid());
-				BasCustomer customer = basCustomerMybatisDao.queryById(CustomerQ);
-				if(customer!=null){
-					if("0".equals(customer.getActiveFlag())){
-						return Json.error("对应的货主已失效");
-					}
-				}else{
-					return Json.error("货主不存在");
-				}
+//				GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
+//				if(g!=null){
+//					gspSupplier.setEnterpriseId(g.getEnterpriseId());
+//				}else{
+//					return  Json.error("企业信息已失效");
+//				}
+//				BasCustomer CustomerQ = new BasCustomer();
+//				CustomerQ.setCustomerType(Constant.CODE_CUS_TYP_OW);
+//				CustomerQ.setCustomerid(gspSupplier.getCostomerid());
+//				BasCustomer customer = basCustomerMybatisDao.queryById(CustomerQ);
+//				if(customer!=null){
+//					if("0".equals(customer.getActiveFlag())){
+//						return Json.error("对应的货主已失效");
+//					}
+//				}else{
+//					return Json.error("货主不存在");
+//				}
 
 
 				Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplier.getCostomerid(),gspSupplier.getEnterpriseId(),"");
