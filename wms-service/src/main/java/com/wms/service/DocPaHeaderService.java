@@ -304,7 +304,7 @@ public class DocPaHeaderService extends BaseService {
                                     queryDetail.setAsnno(docPaDetails.getAsnno());
                                     queryDetail.setAsnlineno(docPaDetails.getAsnlineno());
                                     DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
-
+                                    form.setField("line."+j, (j+1)+"");
                                     form.setField("sku."+j, docPaDetails.getSku());
                                     form.setField("skuN."+j, basSku.getReservedfield01());
                                     form.setField("regNo."+j, basSku.getReservedfield03());
