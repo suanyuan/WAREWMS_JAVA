@@ -47,6 +47,8 @@ public class GspVerifyService {
     private GspMedicalRecordService gspMedicalRecordService;
     @Autowired
     private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
+    @Autowired
+    private GspInstrumentCatalogService gspInstrumentCatalogService;
 
 
     /**
@@ -229,8 +231,8 @@ public class GspVerifyService {
                 //如果为空查询是否是未下发产品
                 GspProductRegisterSpecs specs = gspProductRegisterSpecsMybatisDao.queryById(sku);
                 if(specs!=null){
-                    if(!StringUtil.isEmpty(specs.getProductRegisterNo())){
-                        GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterNo());
+                    if(!StringUtil.isEmpty(specs.getProductRegisterId())){
+                        GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterId());
                         if(register != null){
                             registerNo = register.getProductRegisterNo();
                         }
@@ -245,6 +247,30 @@ public class GspVerifyService {
             if(gspProductRegister != null){
                 if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
                     return Json.error("关联产品注册证已过期："+sku);
+                }
+
+                //获取注册证器械目录
+                List<GspOperateDetailVO> operateDetailList = getOperateDetail(gspProductRegister.getProductRegisterId());
+                if(operateDetailList!=null && operateDetailList.size()>0){
+                    GspInstrumentCatalog catalog = gspInstrumentCatalogService.getGspInstrumentCatalog(operateDetailList.get(0).getOperateId());
+                    if(catalog!=null){
+                        if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
+                            return Json.success("一类不需要匹配经营范围");
+                        }
+                    }else{
+                        //产品与货主供应商匹配
+                        List<GspOperateDetailVO> productVo = new ArrayList<>();
+                        productVo.add(operateDetailList.get(0));
+
+                        boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
+                        if(customerFlag == false){
+                            return Json.error("货主与供应商经营范围没有交集");
+                        }
+                        boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
+                        if(skuFlag == false){
+                            return Json.error("货主供应商与产品经营范围不匹配");
+                        }
+                    }
                 }
 
                 if(!StringUtil.isEmpty(lotatt01)){
@@ -279,6 +305,9 @@ public class GspVerifyService {
                     }
 
                 }
+                return Json.success("");
+            }else {
+                return Json.success("产品没有注册证号");
             }
         }else{
              if(checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier)){
@@ -287,7 +316,6 @@ public class GspVerifyService {
                  return Json.error("货主与供应商经营范围没有交集");
              }
         }
-        return Json.success("");
     }
 
     /**

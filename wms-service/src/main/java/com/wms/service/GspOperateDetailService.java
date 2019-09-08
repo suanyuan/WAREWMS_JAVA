@@ -130,4 +130,16 @@ public class GspOperateDetailService extends BaseService {
 		return json;
 	}
 
+	public GspOperateDetail queryOperateById(String id){
+		GspOperateDetailQuery query = new GspOperateDetailQuery();
+		query.setLicenseId(id);
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(query);
+		List<GspOperateDetail> operateDetails = gspOperateDetailMybatisDao.queryByList(criteria);
+		if(operateDetails!=null && operateDetails.size()>0){
+			return operateDetails.get(0);
+		}
+		return null;
+	}
+
 }

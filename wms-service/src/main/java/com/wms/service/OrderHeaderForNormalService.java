@@ -905,8 +905,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             form.setField("notes", orderHeaderForNormal.getNotes() +"    "+note);
                         }
                     }
-                    form.setField("sumqtyPage","件数合计："+totalQtyE);
-                    form.setField("sumqty","数量合计："+totalQty);
+                    form.setField("sumqtyPage",totalQtyE+"");
+                    form.setField("sumqty",totalQty+"");
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();

@@ -230,9 +230,9 @@ var edit = function(){
 			    if(row.userGrade == "11"){
 			        $("#userGrade").combobox("setValues","1,2");
 				}else if(row.userGrade == "10"){
-                    $("#userGrade").combobox("setValues","1,");
+                    $("#userGrade").combobox("setValues","1");
 				}else if(row.userGrade == "01"){
-                    $("#userGrade").combobox("setValues","2,");
+                    $("#userGrade").combobox("setValues","2");
 				}
 			}
             //alert(11111111);
