@@ -73,5 +73,15 @@ public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
 
 	private double qty1; //换算率
 
+	/**
+	 * 打印用
+	 */
+	private String uom;
+	private double AllqtyEach;
+	private double AllqtyEachsum;
+	private double qtyEachsum;
+
+
+
 
 }

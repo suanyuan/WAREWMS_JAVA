@@ -159,15 +159,26 @@ $(function() {
 
 //打印验收报告
 var printQcSearch = function(){
-	//需要qcno  和 qclineno 作为查询条件。
-	//验收状态
-	var linestatusQ= $('#linestatus').combobox("getValue");
-	//序列号v
-	var userdefine4Q = $('#userdefine4').val();
-	//生产批号
-	var userdefine3Q = $('#userdefine3').val();
+	var orderno =$('#orderno').val();                //出库单号
+	var traceid= $('#traceid').val();                   //箱号
+	var lotatt10= $('#lotatt10').combobox('getValue');  //z质量状态
+	var skudesce=$('#skudesce').val();                     //规格
+	var customerid= $('#customerid').val();              //货主代码
+	var shippershortname= $('#shippershortname').val();   //货主简称
+	var sku= $('#sku').val();                              //产品代码
+	var lotatt12= $('#lotatt12').val();                    //产品名称
+	var lotatt08 =$('#lotatt08').val();                     //供应商
+	var lotatt15= $('#lotatt15').val();                    //生产企业
+	var lotatt03Start= $('#lotatt03Start').datebox('getValue');  //入库日期
+	var lotatt03End= $('#lotatt03End').datebox('getValue');      //入库日期
+	var lotatt14= $('#lotatt14').textbox('getValue');      //入库单号
+	var packingflag= $('#packingflag').combobox('getValue');      //是否装箱完成
+
 	//必须点击查询按钮。
-	window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&linestatus="+linestatusQ+"&userdefine4="+userdefine4Q+"&userdefine3="+userdefine4Q);
+	window.open(sy.bp()+"/docOrderPackingCartonSearchController.do?printQcSearch&orderno="+orderno+
+			"&traceid="+traceid+"&lotatt10="+lotatt10+"&skudesce="+skudesce+"&customerid="+customerid+"&shippershortname="
+			+shippershortname+"&sku="+sku+ "&lotatt12="+lotatt12+"&lotatt08="+lotatt08+"&lotatt15="
+			+lotatt15+"&lotatt03Start="+lotatt03Start+"&lotatt03End="+lotatt03End+"&lotatt14="+lotatt14+"&packingflag="+packingflag);
 
 }
 //主页查询
@@ -452,7 +463,7 @@ var doExport = function () {
 				</fieldset>
 				<div>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
-					<a onclick='printQcSearch()' id='ezuiBtn_printQcSeacrch' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印验收报告</a>
+					<a onclick='printQcSearch()' id='ezuiBtn_printQcSeacrch' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印复核报告</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

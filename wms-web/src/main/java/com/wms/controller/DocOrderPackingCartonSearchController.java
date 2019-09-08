@@ -3,6 +3,7 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocOrderPackingCarton;
+import com.wms.entity.DocOrderPackingCartonInfo;
 import com.wms.entity.DocQcHeader;
 import com.wms.entity.DocQcSearchExportForm;
 import com.wms.service.DocOrderPackingCartonSearchExportService;
@@ -26,52 +27,53 @@ import java.util.Map;
 @RequestMapping("docOrderPackingCartonSearchController")
 public class DocOrderPackingCartonSearchController {
 
-	@Autowired
-	private DocOrderPackingCartonSearchService docOrderPackingCartonSearchService;
-	@Autowired
-	private DocOrderPackingCartonSearchExportService docOrderPackingCartonSearchExportService;
+    @Autowired
+    private DocOrderPackingCartonSearchService docOrderPackingCartonSearchService;
+    @Autowired
+    private DocOrderPackingCartonSearchExportService docOrderPackingCartonSearchExportService;
 
-	@Login
-	@RequestMapping(params = "toMain")
-	public ModelAndView toMain(String menuId) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("menuId", menuId);
-		return new ModelAndView("docOrderPackingCartonSearch/main", model);
-	}
-	/**
-	 * 显示细单 分页
-	 * @param pager
-	 * @param query
-	 * @return
-	 */
-	@Login
-	@RequestMapping(params = "showDatagrid")
-	@ResponseBody
-	public EasyuiDatagrid<DocOrderPackingCarton> showDatagrid(EasyuiDatagridPager pager, DocOrderPackingCarton query) {
-		return docOrderPackingCartonSearchService.getPagedDatagrid(pager,query);
-	}
-//	导出
-	@Login
-	@RequestMapping(params = "exportDocOrderPackingCartonSearchDataToExcel")
-	public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocQcSearchExportForm form) throws Exception {
-		docOrderPackingCartonSearchExportService.exportDocQcSearchDataToExcel(response, form);
-	}
+    @Login
+    @RequestMapping(params = "toMain")
+    public ModelAndView toMain(String menuId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("menuId", menuId);
+        return new ModelAndView("docOrderPackingCartonSearch/main", model);
+    }
 
-	/**
-	 * 打印验收报告
-	 *
-	 */
-	@Login
-	@RequestMapping(params = "printQcSearch")
-	public String printQcSearch(String linestatus , String userdefine4, String userdefine3 , Model model){
+    /**
+     * 显示细单 分页
+     *
+     * @param pager
+     * @param query
+     * @return
+     */
+    @Login
+    @RequestMapping(params = "showDatagrid")
+    @ResponseBody
+    public EasyuiDatagrid<DocOrderPackingCarton> showDatagrid(EasyuiDatagridPager pager, DocOrderPackingCarton query) {
+        return docOrderPackingCartonSearchService.getPagedDatagrid(pager, query);
+    }
 
-		List<DocQcHeader> docQcHeaderList = docOrderPackingCartonSearchService.printQcSearch(linestatus,userdefine4,userdefine3);
+    //	导出
+    @Login
+    @RequestMapping(params = "exportDocOrderPackingCartonSearchDataToExcel")
+    public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocQcSearchExportForm form) throws Exception {
+        docOrderPackingCartonSearchExportService.exportDocQcSearchDataToExcel(response, form);
+    }
 
-		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
-		model.addAttribute("url", "WEB-INF/jasper/report1Query.jasper");
-		model.addAttribute("format", "pdf");
-		model.addAttribute("jrMainDataSource", jrDataSource);
-		return "iReportView";
-	}
+    /**
+     * 打印验收报告
+     */
+
+    @Login
+    @RequestMapping(params = "printQcSearch")
+    public String printQcSearch(Model model, String orderno, String traceid, String lotatt10, String skudesce, String customerid, String shippershortname, String sku, String lotatt12, String lotatt08, String lotatt15, String lotatt03Start, String lotatt03End, String lotatt14, String packingflag) {
+        List<DocOrderPackingCartonInfo> docQcHeaderList = docOrderPackingCartonSearchService.printQcSearch(orderno, traceid, lotatt10, skudesce, customerid, shippershortname, sku, lotatt12, lotatt08, lotatt15, lotatt03Start, lotatt03End, lotatt14, packingflag);
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
+        model.addAttribute("url", "WEB-INF/jasper/docOrderPackingCartonSearchPdf.jasper");
+        model.addAttribute("format", "pdf");
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView";
+    }
 
 }

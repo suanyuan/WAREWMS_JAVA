@@ -32,6 +32,9 @@ public class DocOrderPackingCartonSearchService extends BaseService {
     private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
     @Autowired
     private DocOrderPackingCartonMybatisDao docOrderPackingCartonMybatisDao;
+    @Autowired
+    private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
+
 
 
     /**
@@ -58,127 +61,88 @@ public class DocOrderPackingCartonSearchService extends BaseService {
 	}
 
     /**
-     * 打印验收记录
+     * 打印复核记录
      *
      * @return
      */
-    public List<DocQcHeader> printQcSearch(String linestatus , String userdefine4, String userdefine3 ) {
+    public List<DocOrderPackingCartonInfo> printQcSearch(String orderno,String traceid,String lotatt10,String skudesce,String customerid,
+                                           String shippershortname,String sku,String lotatt12,String lotatt08,String lotatt15,
+                                           String lotatt03Start,String lotatt03End,String lotatt14,String packingflag ) {
         //验收记录
-        List<DocQcHeader> docQcHeaderList = new ArrayList<DocQcHeader>();
-        MybatisCriteria mybatisCriteria1 = new MybatisCriteria();
-        BasSkuQuery skuQuery = new BasSkuQuery();
-        List<BasSku> basSkuList;
-        DocQcHeader docQcHeader = new DocQcHeader();
-        List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
-        List<EasyuiCombobox> easyuiComboboxListZl = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);//查询质量状态
-        Double paQtySum = 0.00;//到货数量
-        Double qcQtySum = 0.00;
-        Double qcQtyComSum = 0.00;
-        //ASN编号
-        String asnNo;
-
-        docQcHeader.setDetls(new ArrayList<DocQcDetails>());
-        DocQcDetailsQuery docQcDetailsQuery = new DocQcDetailsQuery();
+        List<DocOrderPackingCartonInfo> docOrderPackingCartonInfoList = new ArrayList<DocOrderPackingCartonInfo>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        docQcDetailsQuery.setLinestatus(linestatus);//验收状态
-        docQcDetailsQuery.setUserdefine3(userdefine3);//生产批号
-        docQcDetailsQuery.setUserdefine4(userdefine4);//序列号
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docQcDetailsQuery));
-        List<DocQcDetails> docQcDetailsList = docOrderPackingCartonMybatisDao.queryByList(mybatisCriteria);//获取需要打印的数据
-        for (DocQcDetails docQcDetails1 : docQcDetailsList) { //规格  数量 不合格数量
-            //到货数量
-            skuQuery.setCustomerid(docQcDetails1.getCustomerid());
-            skuQuery.setSku(docQcDetails1.getSku());
-            BasSku basSku = basSkuMybatisDao.queryById(skuQuery);//得到sku的packid
-            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
-            //规格
-            BasSkuQuery basSkuQuery = new BasSkuQuery();
-            basSkuQuery.setSku(docQcDetails1.getSku());
-            basSkuQuery.setCustomerid(docQcDetails1.getCustomerid());
-            mybatisCriteria1.setCondition(BeanConvertUtil.bean2Map(basSkuQuery));
-            basSkuList = basSkuMybatisDao.queryByList(mybatisCriteria1);
-            for (BasSku basSku1 : basSkuList) {
-                docQcDetails1.setDescrc(basSku1.getDescrC());
-                //单位
-                for (EasyuiCombobox easyuiComboboxUom : easyuiComboboxListUom) {
-                    if (basSku1.getDefaultreceivinguom().equals(easyuiComboboxUom.getId())) {//单位类型
-                        docQcDetails1.setQcUnit(easyuiComboboxUom.getValue());
-                    }
+       /* BasSkuQuery skuQuery = new BasSkuQuery();
+        List<BasSku> basSkuList;*/
+        DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();//头档
+        docOrderPackingCartonInfo.setDetls(new ArrayList<DocOrderPackingCarton>());
+        List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
+//        List<EasyuiCombobox> easyuiComboboxListZl = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);//查询质量状态
+        Double qtySum = 0.00;//到货数量
+        Double qtyEachSum = 0.00; //合计核算
+
+        //查询
+        DocOrderPackingCarton docOrderPackingCarton = new DocOrderPackingCarton();
+        docOrderPackingCarton.setOrderno(orderno);
+        docOrderPackingCarton.setTraceid(traceid);
+        docOrderPackingCarton.setLotatt10(lotatt10);
+        docOrderPackingCarton.setSkudesce(skudesce);
+        docOrderPackingCarton.setCustomerid(customerid);
+        docOrderPackingCarton.setShippershortname(shippershortname);
+        docOrderPackingCarton.setSku(sku);
+        docOrderPackingCarton.setLotatt12(lotatt12);
+        docOrderPackingCarton.setLotatt08(lotatt08);
+        docOrderPackingCarton.setLotatt15(lotatt15);
+        docOrderPackingCarton.setLotatt03Start(lotatt03Start);
+        docOrderPackingCarton.setLotatt03End(lotatt03End);
+        docOrderPackingCarton.setLotatt14(lotatt14);
+        docOrderPackingCarton.setPackingflag(packingflag);
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docOrderPackingCarton));
+        List<DocOrderPackingCarton> docOrderPackingCartonList = docOrderPackingCartonMybatisDao.queryByListPrinth(mybatisCriteria);
+        for (DocOrderPackingCarton docOrderPackingCarton1:docOrderPackingCartonList ) {
+
+            //出库数量
+            ActAllocationDetails actAllocationDetails = actAllocationDetailsMybatisDao.queryById(docOrderPackingCarton1.getAllocationdetailsid());
+            docOrderPackingCarton1.setAllqtyEach(actAllocationDetails.getQtyEach() * docOrderPackingCarton1.getQty1()); // 获得出货数量*换算率
+            for (EasyuiCombobox easyuiComboboxUom : easyuiComboboxListUom) {//包装单位
+                if (docOrderPackingCarton1.getUom().equals(easyuiComboboxUom.getId())) {
+                    docOrderPackingCarton1.setUom(easyuiComboboxUom.getValue());
                 }
             }
-            docQcDetails1.setQcqtyExpected(basPackage.getQty1().doubleValue() * docQcDetails1.getQcqtyExpected());
-            docQcDetails1.setQcqtyCompleted( basPackage.getQty1().doubleValue() * docQcDetails1.getQcqtyCompleted());
+            docOrderPackingCarton1.setQtyEach(docOrderPackingCarton1.getQty() * docOrderPackingCarton1.getQty1());//计算复核数量
+            //合计的出库数量
+            qtySum += docOrderPackingCarton1.getQtyEach();
+            docOrderPackingCarton1.setQtyEachsum(qtySum);
+            // 合计复核数量
+            qtyEachSum += docOrderPackingCarton1.getAllqtyEach();
+            docOrderPackingCarton1.setAllqtyEachsum(qtyEachSum);
+            docOrderPackingCartonInfo.getDetls().add(docOrderPackingCarton1);
+        }
+        //获取头档 需要到出库头档寻找
+        List<String> stringList = new ArrayList<>();
+        for (DocOrderPackingCarton docOrderPackingCarton1 : docOrderPackingCartonInfo.getDetls()) {//这里判断不行 先去list中去重如果size大于1就正面不是同一个ASN编号
+            stringList.add(docOrderPackingCarton1.getOrderno());
+        }
+        //去重后的size大于1就说明多个so编号
+        if(removeDuplicate(stringList).size() == 1){
 
-            if (docQcDetails1.getUserdefine5().equals("BHG")) {//应该只会进来一次
-                docQcDetails1.setQcqtyCompleted( docQcDetails1.getQcqtyExpected() - docQcDetails1.getQcqtyCompleted());//不合格数量
-                qcQtyComSum += docQcDetails1.getQcqtyExpected();
-            }
-            if (docQcDetails1.getUserdefine5().equals("HG")) {//应该只会进来一次
-                docQcDetails1.setQcqtyExpected( docQcDetails1.getQcqtyCompleted() - docQcDetails1.getQcqtyExpected());//合格数量
-                qcQtySum += docQcDetails1.getQcqtyCompleted();
-
-            }
-            if (docQcDetails1.getUserdefine5().equals("DJ")) {//应该只会进来一次
-                docQcDetails1.setQcqtyCompleted(basPackage.getQty1().doubleValue() * (docQcDetails1.getQcqtyExpected() - docQcDetails1.getQcqtyCompleted()));
-                qcQtyComSum += docQcDetails1.getQcqtyExpected();
-            }
-
-            //质量状态为不合格、 合格 、 待检 、 分别插入不同的数值
-            for (EasyuiCombobox easyuiComboboxQc : easyuiComboboxListZl) {//循环多次
-                //验收结论显示中文
-                if (docQcDetails1.getUserdefine5().equals(easyuiComboboxQc.getId())) {
-                    docQcDetails1.setUserdefine5(easyuiComboboxQc.getValue());
-                }
-            }
-
-
-            docQcDetails1.setPaqtyExpected(basPackage.getQty1().doubleValue() * (docQcDetails1.getPaqtyExpected()));//到货件数（这里是拆开的后面需要合计下）
-            //合计数量
-            paQtySum += docQcDetails1.getPaqtyExpected();
-            docQcDetails1.setPaqtyExpectedSum(paQtySum);
-            docQcDetails1.setQcqtyCompletedSum(qcQtySum);
-            docQcDetails1.setQcqtyExpectedSum(qcQtyComSum);
-
-            docQcHeader.getDetls().add(docQcDetails1);
-
-            //如果lotatt14存在不同的就全部为空
-            for ( DocQcDetails docqcDetailsLotatt14: docQcHeader.getDetls()) {//这里判断不行 先去list中去重如果size大于1就正面不是同一个ASN编号
-                if(docQcDetails1.getLotatt14().equals(docqcDetailsLotatt14.getLotatt14())){
-                    //这里还有查询。
-                    DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docQcDetails1.getLotatt14());//根据ASN编号查询预期入库头档
-                    docQcHeader.setCustomerid(docAsnHeader.getCustomerid());
-                    //供应商
-                    BasCustomer basCustomer =basCustomerMybatisDao.queryByIdType(docQcDetails1.getLotatt08(),Constant.CODE_CUS_TYP_VE);
-                    docQcHeader.setDescrC(basCustomer.getDescrC());
-                    //入库日期
-                    docQcHeader.setLotatt03(docQcDetails1.getLotatt03());
-                    //入库单号
-                    docQcHeader.setLotatt14(docAsnHeader.getAsnno());
-                    //冷链随货温度
-                    docQcHeader.setUserdefine1Temp(docAsnHeader.getUserdefine1());
-
-                }else{
-                    //货主
-                    docQcHeader.setCustomerid("");
-                    //供应商
-                    docQcHeader.setDescrC("");
-                    //入库日期
-                    docQcHeader.setLotatt03("");
-                    //入库单号
-                    docQcHeader.setLotatt14("");
-                    //冷链随货温度
-                    docQcHeader.setUserdefine1Temp("");
-                }
-            }
+        }else{
 
         }
+        docOrderPackingCartonInfoList.add(docOrderPackingCartonInfo);
 
-
-        docQcHeaderList.add(docQcHeader);
-        return docQcHeaderList;
+        return docOrderPackingCartonInfoList;
     }
 
-
+    public   static   List  removeDuplicate(List list)  {
+        for  ( int  i  =   0 ; i  <  list.size()  -   1 ; i ++ )  {
+            for  ( int  j  =  list.size()  -   1 ; j  >  i; j -- )  {
+                if  (list.get(j).equals(list.get(i)))  {
+                    list.remove(j);
+                }
+            }
+        }
+        return list;
+    }
 //	public Json addDocQcDetails(DocQcDetailsForm docQcDetailsForm) throws Exception {
 //		Json json = new Json();
 //		DocQcDetails docQcDetails = new DocQcDetails();

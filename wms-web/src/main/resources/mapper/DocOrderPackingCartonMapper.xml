@@ -39,6 +39,7 @@
 	<result column="addtime" property="addtime"/>
 	<result column="editwho" property="editwho"/>
 	<result column="edittime" property="edittime"/>
+	<result column="uom" property="uom"/>
 <!--bas_package-->
 	<result column="qty1" property="qty1"/>
 <!--bas_sku-->
@@ -336,5 +337,23 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+	<!-- 打印复核记录查询列表 -->
+	<select id="queryByListPrinth" resultMap="BaseResultMap"  parameterType="Object">
+		SELECT
+		c.*,info.*,b.`DESCR_C` shippershortname,s.`reservedfield06`,p.`qty1`,p.packuom1 uom,bb.`DESCR_C` lotatt08Name
+		FROM doc_order_packing_carton c
+		INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+		INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+		INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+		INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+		INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+		<include refid="Example_Where_Clause"/>
+		<if test="orderByClause != null and orderByClause != ''" >
+			order by  ${orderByClause}
+		</if>
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
   	
 </mapper>   
