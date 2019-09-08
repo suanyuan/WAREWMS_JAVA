@@ -170,27 +170,7 @@ var printQcSearch = function(){
 	window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&linestatus="+linestatusQ+"&userdefine4="+userdefine4Q+"&userdefine3="+userdefine4Q);
 
 }
-//主页查询
-var doSearch = function() {
 
-		ezuiDatagrid.datagrid('load', {
-			orderno: $('#orderno').val(),                   //出库单号
-			traceid: $('#traceid').val(),                   //箱号
-			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
-			skudesce: $('#skudesce').val(),                     //规格
-			customerid: $('#customerid').val(),              //货主代码
-			shippershortname: $('#shippershortname').val(),   //货主简称
-			sku: $('#sku').val(),                              //产品代码
-            lotatt12: $('#lotatt12').val(),                     //产品名称
-            lotatt08: $('#lotatt08').val(),                     //供应商
-            lotatt15: $('#lotatt15').val(),                     //生产企业
-            lotatt03Start: $('#lotatt03Start').datebox('getValue'),  //入库日期
-            lotatt03End: $('#lotatt03End').datebox('getValue'),      //入库日期
-            lotatt14: $('#lotatt14').textbox('getValue'),      //入库单号
-			packingflag: $('#packingflag').combobox('getValue'),      //是否装箱完成
-
-		});
-}
 
 //货主查询弹框弹出start=========================
 var ezuiCustDataClick = function () {
@@ -362,22 +342,23 @@ var doExport = function () {
         var param = new HashMap();
         param.put("token", token);
 
-        param.put("qcno", $('#qcno').val());//验收单号
-        param.put("linestatus", $('#linestatus').combobox('getValue'));//验收状态
-        param.put("lotatt10", $('#lotatt10').combobox('getValue'));  //z质量状态
-        param.put("descrc", $('#descrc').val());                     //规格
-        param.put("customerid",$('#customerid').val());              //货主代码
-        param.put("shippershortname",$('#shippershortname').val());   //货主简称
+        param.put("orderno", $('#orderno').val());         //复核单号
+        param.put("traceid", $('#traceid').val());          //箱号
+		param.put("lotatt10", $('#lotatt10').combobox('getValue'));  //z质量状态
+		param.put("skudesce", $('#skudesce').val());                     //规格
+		param.put("customerid",$('#customerid').val());              //货主代码
+		param.put("shippershortname",$('#shippershortname').val());   //货主简称
         param.put("sku",$('#sku').val()),                              //产品代码
         param.put("lotatt12",$('#lotatt12').val()),                     //产品名称
         param.put("lotatt08",$('#lotatt08').val()),                     //供应商
         param.put("lotatt15",$('#lotatt15').val()),                     //生产企业
         param.put("lotatt03Start", $('#lotatt03Start').datebox('getValue'));  //入库日期
-        param.put("lotatt03End",$('#lotatt03End').datebox('getValue'));      //入库日期
-        param.put("lotatt14",$('#lotatt14').textbox('getValue'));      //入库单号
+		param.put("lotatt03End",$('#lotatt03End').datebox('getValue'));      //入库日期
+		param.put("lotatt14",$('#lotatt14').textbox('getValue'));      //入库单号
+		param.put("packingflag", $('#packingflag').combobox('getValue'));//验收状态
 
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp() + "/docQcSearchController.do?exportDocQcSearchDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp() + "/docOrderPackingCartonSearchController.do?exportDocOrderPackingCartonSearchDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#' + formId).remove();
@@ -396,6 +377,27 @@ var doExport = function () {
     }
 };
 /* 导出end */
+//主页查询
+var doSearch = function() {
+
+	ezuiDatagrid.datagrid('load', {
+		orderno: $('#orderno').val(),                   //出库单号
+		traceid: $('#traceid').val(),                   //箱号
+		lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
+		skudesce: $('#skudesce').val(),                     //规格
+		customerid: $('#customerid').val(),              //货主代码
+		shippershortname: $('#shippershortname').val(),   //货主简称
+		sku: $('#sku').val(),                              //产品代码
+		lotatt12: $('#lotatt12').val(),                     //产品名称
+		lotatt08: $('#lotatt08').val(),                     //供应商
+		lotatt15: $('#lotatt15').val(),                     //生产企业
+		lotatt03Start: $('#lotatt03Start').datebox('getValue'),  //入库日期
+		lotatt03End: $('#lotatt03End').datebox('getValue'),      //入库日期
+		lotatt14: $('#lotatt14').textbox('getValue'),      //入库单号
+		packingflag: $('#packingflag').combobox('getValue'),      //是否装箱完成
+
+	});
+}
 </script>
 </head>
 <body>

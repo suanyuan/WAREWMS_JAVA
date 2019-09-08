@@ -4,7 +4,6 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocOrderPackingCarton;
 import com.wms.entity.DocQcHeader;
-import com.wms.entity.DocQcSearchExportForm;
 import com.wms.service.DocOrderPackingCartonSearchExportService;
 import com.wms.service.DocOrderPackingCartonSearchService;
 import com.wms.utils.annotation.Login;
@@ -53,7 +52,7 @@ public class DocOrderPackingCartonSearchController {
 //	导出
 	@Login
 	@RequestMapping(params = "exportDocOrderPackingCartonSearchDataToExcel")
-	public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocQcSearchExportForm form) throws Exception {
+	public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocOrderPackingCarton form) throws Exception {
 		docOrderPackingCartonSearchExportService.exportDocQcSearchDataToExcel(response, form);
 	}
 

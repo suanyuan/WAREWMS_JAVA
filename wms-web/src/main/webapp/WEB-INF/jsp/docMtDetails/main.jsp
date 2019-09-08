@@ -75,9 +75,9 @@ $(function() {
 			{field: 'reservedfield06',		title: '生产许可证号/备案号',	width: 150 },
 			{field: 'lotnum',		title: '批次号',	width: 100 },
 			{field: 'remark',		title: '备注',	width: 150 },
-			{field: 'editwho',		title: '养护人',	width: 100 },
+			// {field: 'editwho',		title: '养护人',	width: 100 },
 			// {field: 'edittime',		title: '养护时间',	width: 134 },
-			// {field: 'addtime',		title: '创建时间',	width: 134 },
+			{field: 'addtime',		title: '创建时间',	width: 134 },
 			{field: 'addwho',		title: '创建人',	width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
