@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocOrderPackingCartonMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocOrderPackingCarton" >
+	<result column="orderno" property="orderno"/>
+	<result column="packlineno" property="packlineno"/>
+	<result column="traceid" property="traceid"/>
+	<result column="cartonno" property="cartonno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="skudesce" property="skudesce"/>
+	<result column="qty" property="qty"/>
+	<result column="allocationdetailsid" property="allocationdetailsid"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt08Name" property="lotatt08"/>
+	<result column="lotatt09" property="lotatt09"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="lotatt11" property="lotatt11"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt13" property="lotatt13"/>
+	<result column="lotatt14" property="lotatt14"/>
+	<result column="lotatt15" property="lotatt15"/>
+	<result column="lotatt16" property="lotatt16"/>
+	<result column="lotatt17" property="lotatt17"/>
+	<result column="lotatt18" property="lotatt18"/>
+	<result column="description" property="description"/>
+	<result column="conclusion" property="conclusion"/>
+	<result column="addwho" property="addwho"/>
+	<result column="addtime" property="addtime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edittime" property="edittime"/>
+<!--bas_package-->
+	<result column="qty1" property="qty1"/>
+<!--bas_sku-->
+	<result column="shippershortname" property="shippershortname"/>
+	<result column="reservedfield06" property="reservedfield06"/>
+<!--头档字段-->
+	<result column="packingflag" property="packingflag"/>
+
+</resultMap>
+       
+<!-- doc_order_packing_carton table all fields -->
+<sql id="Base_Column_List" >
+	 orderno,packlineno,traceid,cartonno,customerid,sku,skudesce,qty,allocationdetailsid,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,description,conclusion,addwho,addtime,editwho,edittime
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and c.orderno like concat('%',#{condition.orderno},'%')
+	</if>
+	<if test="condition.packlineno != null and condition.packlineno != ''" >
+	    and c.packlineno =  #{condition.packlineno}
+	</if>
+	<if test="condition.traceid != null and condition.traceid != ''" >
+	    and c.traceid like concat('%',#{condition.traceid},'%')
+	</if>
+	<if test="condition.cartonno != null and condition.cartonno != ''" >
+	    and c.cartonno =  #{condition.cartonno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and c.customerid like concat('%',#{condition.customerid},'%')
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and c.sku like concat('%',#{condition.sku},'%')
+	</if>
+	<if test="condition.skudesce != null and condition.skudesce != ''" >
+	    and c.skudesce like concat('%',#{condition.skudesce},'%')
+	</if>
+	<if test="condition.qty != null and condition.qty != ''" >
+	    and c.qty =  #{condition.qty}
+	</if>
+	<if test="condition.allocationdetailsid != null and condition.allocationdetailsid != ''" >
+	    and c.allocationdetailsid =  #{condition.allocationdetailsid}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and c.lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
+	    and c.lotatt01 =  #{condition.lotatt01}
+	</if>
+	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
+	    and c.lotatt02 =  #{condition.lotatt02}
+	</if>
+	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
+	    and c.lotatt03 =  #{condition.lotatt03}
+	</if>
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+	    and c.lotatt04 =  #{condition.lotatt04}
+	</if>
+	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+	    and c.lotatt05 =  #{condition.lotatt05}
+	</if>
+	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+	    and c.lotatt06 =  #{condition.lotatt06}
+	</if>
+	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
+	    and c.lotatt07 =  #{condition.lotatt07}
+	</if>
+	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+	    and bb.`DESCR_C` like concat('%',#{condition.lotatt08},'%')
+	</if>
+	<if test="condition.lotatt09 != null and condition.lotatt09 != ''" >
+	    and c.lotatt09 =  #{condition.lotatt09}
+	</if>
+	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+	    and c.lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+	    and c.lotatt11 =  #{condition.lotatt11}
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+	    and c.lotatt12 like concat('%',#{condition.lotatt12},'%')
+	</if>
+	<if test="condition.lotatt13 != null and condition.lotatt13 != ''" >
+	    and lotatt13 =  #{condition.lotatt13}
+	</if>
+	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+	    and c.lotatt14 like concat('%',#{condition.lotatt14},'%')
+	</if>
+	<if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+	    and c.lotatt15 like concat('%',#{condition.lotatt15},'%')
+	</if>
+	<if test="condition.lotatt16 != null and condition.lotatt16 != ''" >
+	    and c.lotatt16 =  #{condition.lotatt16}
+	</if>
+	<if test="condition.lotatt17 != null and condition.lotatt17 != ''" >
+	    and c.lotatt17 =  #{condition.lotatt17}
+	</if>
+	<if test="condition.lotatt18 != null and condition.lotatt18 != ''" >
+	    and c.lotatt18 =  #{condition.lotatt18}
+	</if>
+	<if test="condition.description != null and condition.description != ''" >
+	    and c.description =  #{condition.description}
+	</if>
+	<if test="condition.conclusion != null and condition.conclusion != ''" >
+	    and c.conclusion =  #{condition.conclusion}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and c.addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and c.addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and c.editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and c.edittime =  #{condition.edittime}
+	</if>
+<!--其他表查询条件-->
+	<if test="condition.shippershortname != null and condition.shippershortname != ''" >
+	    and b.`DESCR_C` like concat('%',#{condition.shippershortname},'%')
+	</if>
+	<if test="condition.packingflag != null and condition.packingflag != ''" >
+	    and info.packingflag =#{condition.packingflag}
+	</if>
+	<if test="condition.lotatt03Start != null and condition.lotatt03Start != ''" >
+		and c.lotatt03  &gt;= #{condition.lotatt03Start}
+	</if>
+	<if test="condition.lotatt03End != null and condition.lotatt03End != ''" >
+		and c.lotatt03  &lt;=  #{condition.lotatt03End}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_order_packing_carton(orderno,packlineno,traceid,cartonno,customerid,sku,skudesce,qty,allocationdetailsid,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,description,conclusion,addwho,addtime,editwho,edittime)
+ values(#{orderno},#{packlineno},#{traceid},#{cartonno},#{customerid},#{sku},#{skudesce},#{qty},#{allocationdetailsid},#{lotnum},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},#{lotatt10},#{lotatt11},#{lotatt12},#{lotatt13},#{lotatt14},#{lotatt15},#{lotatt16},#{lotatt17},#{lotatt18},#{description},#{conclusion},#{addwho},#{addtime},#{editwho},#{edittime})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_order_packing_carton set packlineno=#{packlineno},traceid=#{traceid},cartonno=#{cartonno},customerid=#{customerid},sku=#{sku},skudesce=#{skudesce},qty=#{qty},allocationdetailsid=#{allocationdetailsid},lotnum=#{lotnum},lotatt01=#{lotatt01},lotatt02=#{lotatt02},lotatt03=#{lotatt03},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt06=#{lotatt06},lotatt07=#{lotatt07},lotatt08=#{lotatt08},lotatt09=#{lotatt09},lotatt10=#{lotatt10},lotatt11=#{lotatt11},lotatt12=#{lotatt12},lotatt13=#{lotatt13},lotatt14=#{lotatt14},lotatt15=#{lotatt15},lotatt16=#{lotatt16},lotatt17=#{lotatt17},lotatt18=#{lotatt18},description=#{description},conclusion=#{conclusion},addwho=#{addwho},addtime=#{addtime},editwho=#{editwho},edittime=#{edittime} where orderno=#{orderno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_order_packing_carton set 
+	<trim  suffixOverrides="," >
+	<if test="packlineno != null  ">
+		packlineno=#{packlineno},
+	</if>
+	<if test="traceid != null  ">
+		traceid=#{traceid},
+	</if>
+	<if test="cartonno != null  ">
+		cartonno=#{cartonno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="skudesce != null  ">
+		skudesce=#{skudesce},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="allocationdetailsid != null  ">
+		allocationdetailsid=#{allocationdetailsid},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="lotatt01 != null  ">
+		lotatt01=#{lotatt01},
+	</if>
+	<if test="lotatt02 != null  ">
+		lotatt02=#{lotatt02},
+	</if>
+	<if test="lotatt03 != null  ">
+		lotatt03=#{lotatt03},
+	</if>
+	<if test="lotatt04 != null  ">
+		lotatt04=#{lotatt04},
+	</if>
+	<if test="lotatt05 != null  ">
+		lotatt05=#{lotatt05},
+	</if>
+	<if test="lotatt06 != null  ">
+		lotatt06=#{lotatt06},
+	</if>
+	<if test="lotatt07 != null  ">
+		lotatt07=#{lotatt07},
+	</if>
+	<if test="lotatt08 != null  ">
+		lotatt08=#{lotatt08},
+	</if>
+	<if test="lotatt09 != null  ">
+		lotatt09=#{lotatt09},
+	</if>
+	<if test="lotatt10 != null  ">
+		lotatt10=#{lotatt10},
+	</if>
+	<if test="lotatt11 != null  ">
+		lotatt11=#{lotatt11},
+	</if>
+	<if test="lotatt12 != null  ">
+		lotatt12=#{lotatt12},
+	</if>
+	<if test="lotatt13 != null  ">
+		lotatt13=#{lotatt13},
+	</if>
+	<if test="lotatt14 != null  ">
+		lotatt14=#{lotatt14},
+	</if>
+	<if test="lotatt15 != null  ">
+		lotatt15=#{lotatt15},
+	</if>
+	<if test="lotatt16 != null  ">
+		lotatt16=#{lotatt16},
+	</if>
+	<if test="lotatt17 != null  ">
+		lotatt17=#{lotatt17},
+	</if>
+	<if test="lotatt18 != null  ">
+		lotatt18=#{lotatt18},
+	</if>
+	<if test="description != null  ">
+		description=#{description},
+	</if>
+	<if test="conclusion != null  ">
+		conclusion=#{conclusion},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	</trim> where orderno=#{orderno}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_order_packing_carton where orderno = #{orderno}
+</delete>
+ 
+<!-- 根据id查询 复核记录查询 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_order_packing_carton where orderno = #{orderno}
+</select>
+
+<!-- 复核记录查询 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1)
+	FROM doc_order_packing_carton c
+	INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+	INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+	INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+	INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+	INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询复核记录查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT
+	c.*,info.*,b.`DESCR_C` shippershortname,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name
+	FROM doc_order_packing_carton c
+	INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+	INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+	INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+	INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+	INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

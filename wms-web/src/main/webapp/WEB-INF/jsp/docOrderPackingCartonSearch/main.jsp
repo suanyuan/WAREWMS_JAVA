@@ -22,10 +22,10 @@ $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();   //右键菜单
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid(	{
-		url: '<c:url value="/docQcSearchController.do?showDatagrid"/>',
+		url: '<c:url value="/docOrderPackingCartonSearchController.do?showDatagrid"/>',
 		method: 'POST',
 		toolbar: '#toolbar',
-		title: '验收记录查询',
+		title: '复核记录查询',
 		pageSize: 50,
 		pageList: [50, 100, 200],
 		fit: true,
@@ -38,19 +38,17 @@ $(function() {
 		rownumbers: true,
 		singleSelect: false,
 		columns: [[
-			{field: 'qcno', title: '验收单号', width: 124},
-			// {field: 'pano',		title: '上架单号',	width: 124 },
-			// {field: 'qclineno',		title: '验收行号',	width: 80 },
-			{field: 'linestatus', title: '行状态', width: 80, formatter: AcceptancestatusFormatter},
+			{field: 'orderno', title: '出库单号', width: 124},
+			{field: 'traceid',		title: '箱号',	width: 124 },
+			{field: 'packingflag', title: '是否装箱完成', width: 90,formatter:yesOrNoFormatter},
 			{field: 'lotatt10', title: '质量状态', width: 80, formatter: ZL_TYPstatusFormatter},
-			{field: 'userdefine1', title: '库位', width: 110},
 			{field: 'customerid', title: '货主代码', width: 134},
 			{field: 'shippershortname', title: '货主简称', width: 134},
 			{field: 'lotatt08', title: '供应商', width: 134},
 			{field: 'sku', title: '产品代码', width: 150},
 			{field: 'lotatt12', title: '产品名称', width: 200},
 			{field: 'lotatt06', title: '注册证号', width: 200},
-			{field: 'descrc', title: '规格/型号', width: 100},
+			{field: 'skudesce', title: '规格/型号', width: 100},
 			{field: 'lotatt04', title: '生产批号', width: 110},
             {field: 'lotatt07',title: '灭菌批号',	width: 110 },
 			{field: 'lotatt05', title: '序列号', width: 110},
@@ -60,24 +58,23 @@ $(function() {
 			{field: 'lotatt11', title: '存储条件', width: 100},
 			{field: 'lotatt15', title: '生产企业', width: 200},
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
-			{field: 'qcqtyExpected', title: '待验收件数', width: 100},
-			{field: 'qcqtyCompleted', title: '已验收件数', width: 100},
-			{field: 'qcqtyExpectedEach', title: '待验收数量', width: 100},
-			{field: 'qcqtyCompletedEach', title: '已验收数量', width: 100},
-			{field: 'qcdescr', title: '验收说明', width: 160},
-			{field: 'editwho', title: '验收人', width: 100},
-			{field: 'edittime', title: '验收时间', width: 134},
-			// {field: 'lotnum',		title: '批次号',	width: 134 },
+			{field: 'qty', title: '装箱件数', width: 100},
+			{field: 'qtyEach', title: '装箱数量', width: 100},
+			{field: 'description', title: '复核说明', width: 160},
+			{field: 'conclusion', title: '复核结论', width: 160},
+			{field: 'editwho', title: '复核人', width: 100},
+			{field: 'edittime', title: '复核时间', width: 134},
 			{field: 'addtime', title: '创建时间', width: 134},
 			{field: 'addwho', title: '创建人', width: 100},
 			{field: 'lotatt14', title: '入库单号', width: 100},
-			{field: 'qty1', title: '转换率', width: 100}
+			{field: 'lotatt09', title: '产品属性', width: 100,formatter:YP_TYPstatusFormatter},
+			{field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
+			{field: 'qty1', title: '换算率', width: 100}
 		]],
 		onDblClickCell: function (index, field, value) {
 
 		},
 		onLoadSuccess: function (data) {
-			<%--ajaxBtn($('#menuId').val(), '<c:url value="/docQcHeaderController.do?getBtn"/>', ezuiMenu);--%>
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -177,10 +174,10 @@ var printQcSearch = function(){
 var doSearch = function() {
 
 		ezuiDatagrid.datagrid('load', {
-			qcno: $('#qcno').val(),                            //验收单号
-			linestatus: $('#linestatus').combobox('getValue'),  //验收状态
+			orderno: $('#orderno').val(),                   //出库单号
+			traceid: $('#traceid').val(),                   //箱号
 			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
-            descrc: $('#descrc').val(),                     //规格
+			skudesce: $('#skudesce').val(),                     //规格
 			customerid: $('#customerid').val(),              //货主代码
 			shippershortname: $('#shippershortname').val(),   //货主简称
 			sku: $('#sku').val(),                              //产品代码
@@ -190,6 +187,7 @@ var doSearch = function() {
             lotatt03Start: $('#lotatt03Start').datebox('getValue'),  //入库日期
             lotatt03End: $('#lotatt03End').datebox('getValue'),      //入库日期
             lotatt14: $('#lotatt14').textbox('getValue'),      //入库单号
+			packingflag: $('#packingflag').combobox('getValue'),      //是否装箱完成
 
 		});
 }
@@ -410,24 +408,14 @@ var doExport = function () {
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-<%--							<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>--%>
-							<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>验收状态</th><td><input type='text' id='linestatus' class='easyui-combobox' size='16' data-options=" panelHeight: 'auto',
-							                                                                                                        editable: false,
-							                                                                                                        valueField: 'label',
-																																	textField: 'value',
-																																data: [{label: '00',
-																																        value: '未验收'},
-																																       {label: '40',
-																																         value: '已验收'},
-																																       {label: '',
-																																         value: '全部'}]"/></td>
+							<th>出库单号</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>箱号</th><td><input type='text' id='traceid' class='easyui-textbox' size='16' data-options=''/></td>
 	                         <th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,
 																																	url:'<c:url value="/commonController.do?qcState"/>',
 																																	valueField: 'id',
 																																     textField: 'value'"/></td>
-	                      <th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
+	                      <th>规格</th><td><input type='text' id='skudesce' class='easyui-textbox' size='16' data-options=''/></td>
 
 
 						</tr>
@@ -447,6 +435,11 @@ var doExport = function () {
 						</tr>
 						<tr>
                             <th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>是否装箱完成</th><td><input type='text' id='packingflag' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
 
                             <td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -609,6 +602,6 @@ var doExport = function () {
 
     </div>
 <%--导入页面--%>
-    <c:import url='/WEB-INF/jsp/docQcSearch/skuDialog.jsp'/>
+    <c:import url='/WEB-INF/jsp/docOrderPackingCartonSearch/skuDialog.jsp'/>
 </body>
 </html>
