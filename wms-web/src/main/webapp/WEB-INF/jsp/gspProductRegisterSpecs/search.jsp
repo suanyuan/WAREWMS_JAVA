@@ -31,7 +31,7 @@
     var enterpriseSearchGrid;
     $(function () {
         enterpriseSearchGrid = $("#enterpriseSearchGrid").datagrid({
-            url : '/gspProductRegisterController.do?showDatagrid',
+            url : '/gspProductRegisterController.do?showDatagridSearch',
             method:'POST',
             toolbar : '#enterpriseSearchGridToolbar',
             title: '',

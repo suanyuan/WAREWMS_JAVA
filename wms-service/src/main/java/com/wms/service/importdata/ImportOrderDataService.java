@@ -13,6 +13,7 @@ import com.wms.entity.BasPackage;
 import com.wms.query.BasPackageQuery;
 import com.wms.service.BasPackageService;
 import com.wms.service.CommonService;
+import com.wms.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -124,7 +125,7 @@ public class ImportOrderDataService {
         List<OrderDetailsForNormalVO> importDetailsDataVOList = new ArrayList<OrderDetailsForNormalVO>();
         OrderDetailsForNormalVO importDetailsDataVO = null;
         String quantityData = null;
-        Integer  count = 1;
+        Integer count = 1;
         String customerId = "", soreference1 = "", requiredDeliveryTime = "", cContact = "", address = "", tel = "";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
@@ -193,13 +194,35 @@ public class ImportOrderDataService {
                 rowResult.append("[产品代码]，未输入").append(" ");
             }
             try {
-                if((dataArray.getQtyordered() == null||dataArray.getQtyordered().equals(""))&& (dataArray.getQtyorderedEach() == null||dataArray.getQtyorderedEach().equals(""))){
+                if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {
+                    BasCustomer customer = null;
+                    BasCustomerQuery customerQuery = new BasCustomerQuery();
+                    customerQuery.setCustomerid(dataArray.getLotatt08());
+                    customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
+                    customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
+                    if (customer == null) {// 是否有供应商资料
+                       throw new Exception();
+                    }
+                    try {
+                        if (customer.getActiveFlag().equals(Constant.IS_USE_NO)){
+                            throw new Exception();
+                        }
+                    }catch (Exception e){
+                        rowResult.append("[供应商代码],合作状态为未合作").append(" ");
+                    }
+                }
+            } catch (Exception e) {
+                rowResult.append("[供应商代码],查无供应商资料").append(" ");
+            }
+
+            try {
+                if ((dataArray.getQtyordered() == null || dataArray.getQtyordered().equals("")) && (dataArray.getQtyorderedEach() == null || dataArray.getQtyorderedEach().equals(""))) {
                     throw new Exception();
                 }
-                if (ExcelUtil.isNotNumeric(dataArray.getQtyordered())&&!dataArray.getQtyordered().equals("")) {
+                if (ExcelUtil.isNotNumeric(dataArray.getQtyordered()) && !dataArray.getQtyordered().equals("")) {
                     rowResult.append("[件数]，必须为数字").append(" ");
                 }
-                if (ExcelUtil.isNotNumeric(dataArray.getQtyorderedEach())&&!dataArray.getQtyorderedEach().equals("")) {
+                if (ExcelUtil.isNotNumeric(dataArray.getQtyorderedEach()) && !dataArray.getQtyorderedEach().equals("")) {
                     rowResult.append("[数量]，必须为数字").append(" ");
                 }
             } catch (Exception e) {
@@ -226,10 +249,10 @@ public class ImportOrderDataService {
 					} catch (ParseException e) {
 						 rowResult.append("[预计送达时间]，格式错误").append(" ");
 					}*/
-					importDataVO.setOrderTypeName(dataArray.getOrderTypeName());
-					importDataVO.setCContact(dataArray.getcContact());
-					importDataVO.setCAddress1(dataArray.getcAddress1());
-					importDataVO.setCTel1(dataArray.getcTel1());
+                    importDataVO.setOrderTypeName(dataArray.getOrderTypeName());
+                    importDataVO.setCContact(dataArray.getcContact());
+                    importDataVO.setCAddress1(dataArray.getcAddress1());
+                    importDataVO.setCTel1(dataArray.getcTel1());
                     importDataVO.setCarrierid(dataArray.getCarrierid());
                     importDataVO.setUserdefine1(dataArray.getUserdefine1());
                     importDataVO.setUserdefine2(dataArray.getUserdefine2());
@@ -237,9 +260,9 @@ public class ImportOrderDataService {
                     importDetailsDataVO = initOrderDetails(dataArray);
                     importDetailsDataVOList.add(importDetailsDataVO);
                 } else if (dataArray.getCustomerid().equals(customerId) &&
-                        dataArray.getSoreference1().equals(soreference1)&&
+                        dataArray.getSoreference1().equals(soreference1) &&
                         //dataArray.getRequiredDeliveryTime().equals(requiredDeliveryTime) &&
-                        dataArray.getcContact().equals(cContact)&&
+                        dataArray.getcContact().equals(cContact) &&
                         dataArray.getcAddress1().equals(address) &&
                         dataArray.getcTel1().equals(tel)) {
                     //表头信息一致则只增加明细信息
@@ -336,7 +359,7 @@ public class ImportOrderDataService {
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品代码查无商品资料").append(" ");
                 }
-                if(!sku.getActiveFlag().equals(Constant.IS_USE_YES)){
+                if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
@@ -344,6 +367,8 @@ public class ImportOrderDataService {
             }
         }
     }
+
+
 
     private void validateCustomer(List<OrderHeaderForNormalVO> importDataList, StringBuilder resultMsg) {
         BasCustomer customer = null;
@@ -354,6 +379,10 @@ public class ImportOrderDataService {
             customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
             if (customer == null) {// 是否有客户资料
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
+            }
+            if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
+                resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码合作状态为未合作状态").append(" ");
+
             }
         }
     }
@@ -424,22 +453,22 @@ public class ImportOrderDataService {
                         query.setPackid(basSku.getPackid());
                         BasPackage basPackage = basPackageService.queryBasPackBy(query);
                         orderDetails.setUom(basPackage.getPackuom1());
-                        if(importDetailsDataVO.getQtyordered()>0&&importDetailsDataVO.getQtyorderedEach()>0){
+                        if (importDetailsDataVO.getQtyordered() > 0 && importDetailsDataVO.getQtyorderedEach() > 0) {
                             orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
                             orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
-                        }else{
+                        } else {
                             //有件数计算
-                            if(importDetailsDataVO.getQtyordered()>0){
-                                orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue()*(importDetailsDataVO.getQtyordered()));
+                            if (importDetailsDataVO.getQtyordered() > 0) {
+                                orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue() * (importDetailsDataVO.getQtyordered()));
                                 orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
-                            }else if(importDetailsDataVO.getQtyorderedEach()>0){
+                            } else if (importDetailsDataVO.getQtyorderedEach() > 0) {
                                 //有数量计算件数
                                 //orderDetails.setQtyorderedEach(basPackage.getQty1().multiply(importDetailsDataVO.getQtyordered()));
-                                if(importDetailsDataVO.getQtyorderedEach()%basPackage.getQty1().doubleValue()==0){
-                                    double qty = importDetailsDataVO.getQtyorderedEach()/ basPackage.getQty1().doubleValue();
+                                if (importDetailsDataVO.getQtyorderedEach() % basPackage.getQty1().doubleValue() == 0) {
+                                    double qty = importDetailsDataVO.getQtyorderedEach() / basPackage.getQty1().doubleValue();
                                     orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
                                     orderDetails.setQtyordered(qty);
-                                }else {
+                                } else {
                                     resultMsg.append("序号：").append(importDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
                                     continue;
                                 }
@@ -478,14 +507,14 @@ public class ImportOrderDataService {
         importDetailsDataVO.setSku(dataArray.getSku());
         importDetailsDataVO.setSoreference1(dataArray.getSoreference1());
         importDetailsDataVO.setSoreference2(dataArray.getSoreference2());
-        if(!StringUtils.isEmpty(dataArray.getQtyorderedEach())||!dataArray.getQtyorderedEach().equals("")) {
+        if (!StringUtils.isEmpty(dataArray.getQtyorderedEach()) || !dataArray.getQtyorderedEach().equals("")) {
             importDetailsDataVO.setQtyorderedEach(Double.parseDouble(dataArray.getQtyorderedEach()));
-        }else{
+        } else {
             importDetailsDataVO.setQtyorderedEach(0.0);
         }
-        if(!StringUtils.isEmpty(dataArray.getQtyordered())||!dataArray.getQtyordered().equals("")) {
+        if (!StringUtils.isEmpty(dataArray.getQtyordered()) || !dataArray.getQtyordered().equals("")) {
             importDetailsDataVO.setQtyordered(Double.parseDouble(dataArray.getQtyordered()));
-        }else{
+        } else {
             importDetailsDataVO.setQtyordered(0.0);
         }
         importDetailsDataVO.setLotatt01(dataArray.getLotatt01());
