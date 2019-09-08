@@ -39,7 +39,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'supplierId',
 		columns : [[
             {field: 'isUse',		title: '是否有效',	width: 88 ,formatter:function(value,rowData,rowIndex){
                     return rowData.isUse == '1' ? '是' : '否';
@@ -178,7 +178,7 @@ var check = function () {
                 if (confirm) {
                     //修改首营状态为 审核中 10
                     $.ajax({
-                        url: 'gspSupplierController.do?edit',
+                        url: 'gspSupplierController.do?commit',
                         data: {"gspSupplierForm": JSON.stringify(infoObj)},//审核中 10
                         type: 'POST',
                         dataType: 'JSON',

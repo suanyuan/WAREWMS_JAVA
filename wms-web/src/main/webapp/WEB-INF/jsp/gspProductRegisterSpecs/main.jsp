@@ -41,7 +41,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'specsId',
 		columns : [[
 
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},

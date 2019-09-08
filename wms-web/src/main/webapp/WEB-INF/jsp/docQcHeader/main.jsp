@@ -27,7 +27,7 @@ $(function() {
 		url : '<c:url value="/docQcDetailsController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
-		title: '待输入标题',
+		title: '验收作业',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,

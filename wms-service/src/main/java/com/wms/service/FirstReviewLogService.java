@@ -102,43 +102,47 @@ public class FirstReviewLogService extends BaseService {
 	 */
 	public Json checkFirstReview(String id,String remark){
 		try{
-			SfcUserLogin userLogin = SfcUserLoginUtil.getLoginUser();
+			String[] arr = id.split(",");
 			Json json = new Json();
-			FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(id);
-			if(firstReviewLog == null){
-				return Json.error("查询不到对应的申请");
-			}
-			FirstReviewLog updateLog = new FirstReviewLog();
-			//未审核
-			if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
-				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_QC) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
-					return Json.error("没有审核权限");
+			for(String reviewId : arr) {
+				SfcUserLogin userLogin = SfcUserLoginUtil.getLoginUser();
+
+				FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(reviewId);
+				if(firstReviewLog == null){
+					return Json.error("查询不到对应的申请");
 				}
-				updateLog.setCheckIdQc(userLogin.getId());
-				updateLog.setCheckDateQc(new Date());
-				updateLog.setCheckRemarkQc(remark);
-				updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
-				//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
+				FirstReviewLog updateLog = new FirstReviewLog();
+				//未审核
+				if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
+					if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_QC) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
+						return Json.error("没有审核权限");
+					}
+					updateLog.setCheckIdQc(userLogin.getId());
+					updateLog.setCheckDateQc(new Date());
+					updateLog.setCheckRemarkQc(remark);
+					updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
+					//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE);
 
-			}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
-				if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
-					return Json.error("没有审核权限");
+				}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
+					if(!userLogin.getUserGrade().equals(Constant.USER_GRADE_HEAD) && !userLogin.getUserGrade().equals(Constant.USER_GRADE_QCHEAD)){
+						return Json.error("没有审核权限");
+					}
+					updateLog.setCheckIdHead(userLogin.getId());
+					updateLog.setCheckDateHead(new Date());
+					updateLog.setCheckRemarkHead(remark);
+					updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);
+					//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_PASS);
+
+					//更新首营状态
+					dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+
+					//下发数据
+					dataPublishService.publishData(firstReviewLog.getReviewTypeId());
+
 				}
-				updateLog.setCheckIdHead(userLogin.getId());
-				updateLog.setCheckDateHead(new Date());
-				updateLog.setCheckRemarkHead(remark);
-				updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_PASS);
-				//updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_PASS);
-
-				//更新首营状态
-				dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_PASS);
-
-				//下发数据
-				dataPublishService.publishData(firstReviewLog.getReviewTypeId());
-
+				updateLog.setReviewId(reviewId);
+				firstReviewLogMybatisDao.updateBySelective(updateLog);
 			}
-			updateLog.setReviewId(id);
-			firstReviewLogMybatisDao.updateBySelective(updateLog);
 			json.setMsg("操作成功");
 			return json;
 		}catch (Exception e){

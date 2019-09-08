@@ -1,39 +1,21 @@
 package com.wms.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.mybatis.entity.CleanInventory;
-import com.wms.mybatis.entity.IdSequence;
-import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
-import com.wms.mybatis.entity.pda.PdaGspProductRegister;
-import com.wms.query.*;
-import com.wms.query.pda.PdaDocQcDetailQuery;
-import com.wms.result.PdaResult;
+import com.wms.query.BasSkuQuery;
+import com.wms.query.DocQcDetailsQuery;
 import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
-import com.wms.vo.Json;
-import com.wms.vo.form.DocQcDetailsForm;
-import com.wms.vo.form.pda.ScanResultForm;
-import com.wms.vo.pda.CommonVO;
-import com.wms.vo.pda.PdaDocQcDetailVO;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("docQcSearchService")
 public class DocQcSearchService extends BaseService {
@@ -55,35 +37,33 @@ public class DocQcSearchService extends BaseService {
 
     /**
      * 显示细单 分页 pano
-     *
      * @param pager
      * @param query
      * @return
      */
-    public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
+	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
-        List<DocQcDetailsVO> docQcHeaderVOList = new ArrayList<>();
+        List<DocQcDetailsVO> docQcDetailsVOList = new ArrayList<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        if (query.getQcno() == null || query.getQcno() == "") {
-            datagrid.setRows(docQcHeaderVOList);
-            datagrid.setTotal((long) 0);
-            return datagrid;
-        }
-        List<DocQcDetails> docQcHeaderList = docQcDetailsDao.queryByListPano(mybatisCriteria);
-        DocQcDetailsVO docQcHeaderVO = null;
-        for (DocQcDetails docPaDetails : docQcHeaderList) {
-            docQcHeaderVO = new DocQcDetailsVO();
-            docPaDetails.setQcqtyExpected(docPaDetails.getQcqtyExpected() - docPaDetails.getQcqtyCompleted());
-            BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
-            docQcHeaderVOList.add(docQcHeaderVO);
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListPano(mybatisCriteria);
+        DocQcDetailsVO docQcDetailsVO = null;
+        for (DocQcDetails docQcDetails : docQcDetailsList) {
+            docQcDetailsVO = new DocQcDetailsVO();
+            //计算件数
+            docQcDetails.setQcqtyExpected(docQcDetails.getQcqtyExpected()-docQcDetails.getQcqtyCompleted());
+            //计算数量
+            docQcDetails.setQcqtyExpectedEach(docQcDetails.getQcqtyExpected()*docQcDetails.getQty1());
+            docQcDetails.setQcqtyCompletedEach(docQcDetails.getQcqtyCompleted()*docQcDetails.getQty1());
+            BeanUtils.copyProperties(docQcDetails, docQcDetailsVO);
+            docQcDetailsVOList.add(docQcDetailsVO);
         }
         datagrid.setTotal((long) docQcDetailsDao.queryByCountPano(mybatisCriteria));
-        datagrid.setRows(docQcHeaderVOList);
+        datagrid.setRows(docQcDetailsVOList);
         return datagrid;
-    }
+	}
 
     /**
      * 打印验收记录

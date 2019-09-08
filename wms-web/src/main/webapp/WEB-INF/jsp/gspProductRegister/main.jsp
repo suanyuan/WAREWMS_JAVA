@@ -43,7 +43,7 @@ $(function() {
         queryParams:{
 		    isUse:"1"
         },
-		idField : 'id',
+		idField : 'productRegisterId',
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
             {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},

@@ -149,9 +149,22 @@ public class GspSupplierController {
 	public Json edit(@RequestParam(value="gspSupplierForm",required=true) String gspSupplierFormStr) throws Exception {
 
 		GspSupplierForm gspProductRegisterSpecsForm = JSON.parseObject(gspSupplierFormStr,GspSupplierForm.class);
-
-
 		Json json = gspSupplierService.editGspSupplier(gspProductRegisterSpecsForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		}
+		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "commit")
+	@ResponseBody
+	public Json commit(@RequestParam(value="gspSupplierForm",required=true) String gspSupplierFormStr) throws Exception {
+
+		GspSupplierForm gspProductRegisterSpecsForm = JSON.parseObject(gspSupplierFormStr,GspSupplierForm.class);
+		Json json = gspSupplierService.commitGspSupplier(gspProductRegisterSpecsForm);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

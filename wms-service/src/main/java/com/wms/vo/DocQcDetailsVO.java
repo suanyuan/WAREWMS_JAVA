@@ -39,6 +39,7 @@ public class DocQcDetailsVO {
 
 	private String lotatt01;  //生产日期
 	private String lotatt02;  //效期
+	private String lotatt03;  //入库日期
 	private String lotatt04;  //生产批号
 	private String lotatt05;  //序列号
 	private String lotatt06;  //产品注册证
@@ -47,6 +48,7 @@ public class DocQcDetailsVO {
 	private String lotatt10;  //质量状态
 	private String lotatt11;  //存储条件
 	private String lotatt12;  //产品名称
+	private String lotatt14;  //入库单号
 	private String lotatt15;  //生产企业
 //bas_sku
 	private String descrc;  //规格型号
@@ -400,5 +402,21 @@ public class DocQcDetailsVO {
 
 	public void setQcqtyCompletedEach(Double qcqtyCompletedEach) {
 		this.qcqtyCompletedEach = qcqtyCompletedEach;
+	}
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
+	}
+
+	public String getLotatt03() {
+		return lotatt03;
+	}
+
+	public void setLotatt03(String lotatt03) {
+		this.lotatt03 = lotatt03;
 	}
 }

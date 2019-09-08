@@ -31,7 +31,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'instrumentCatalogId',
 		columns : [[
 			{field: 'instrumentCatalogId',		title: '主键',	width: 50,hidden:true },
             {field: 'isUse',		title: '是否有效',	width: 72 ,formatter:isUseFormatter},
