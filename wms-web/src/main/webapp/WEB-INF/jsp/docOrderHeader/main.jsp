@@ -1288,6 +1288,8 @@ var detailsAdd = function(){
 					};
 				};
 			});
+
+            choseOrderTypeAdd($("#ezuiForm #ordertype").combobox("getValue"));
 			ezuiDetailsDialog.dialog('open');
 		};
 	};
@@ -2095,6 +2097,14 @@ function choseOrderTypeAfter(value) {
 	}else{
         $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG").combobox("readonly",true);
 	}
+}
+
+function choseOrderTypeAdd(value) {
+    if(value && value == "YF"){
+        $("#ezuiDetailsForm #lotatt10").combobox("setValue","BHG").combobox("readonly",true);
+    }else{
+        $("#ezuiDetailsForm #lotatt10").combobox("setValue","HG").combobox("readonly",true);
+    }
 }
 
 

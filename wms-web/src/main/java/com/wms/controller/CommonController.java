@@ -5,6 +5,7 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.entity.BasCustomer;
+import com.wms.entity.InvLotAtt;
 import com.wms.entity.InvLotLocId;
 import com.wms.result.UploadResult;
 import com.wms.service.BasCodesService;
@@ -12,6 +13,7 @@ import com.wms.service.BasCustomerService;
 import com.wms.service.GspOperateDateTimeService;
 import com.wms.utils.DateUtil;
 import com.wms.utils.PropertyUtils;
+import com.wms.vo.InvLotLocIdVO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,12 +241,21 @@ public class CommonController {
      */
     @RequestMapping(params = "queryMtList")
     @ResponseBody
-    public EasyuiDatagrid<InvLotLocId> queryMtList() throws Exception{
-        EasyuiDatagrid<InvLotLocId> invlots = new EasyuiDatagrid<>();
+    public EasyuiDatagrid<InvLotLocIdVO> queryMtList() throws Exception{
+        EasyuiDatagrid<InvLotLocIdVO> invlots = new EasyuiDatagrid<>();
         List<InvLotLocId> list = gspOperateDateTimeService.getSkuDisDay(DateUtil.format(new Date(),"yyyy-MM-dd"));
+        List<InvLotLocIdVO> result = new ArrayList<>();
         if(list!=null){
-            invlots.setTotal((long)list.size());
-            invlots.setRows(list);
+            for(InvLotLocId id : list){
+                InvLotLocIdVO vo =new InvLotLocIdVO();
+                vo.setSku(id.getSku());
+                vo.setCustomerid(id.getCustomerid());
+                vo.setLocationid(id.getLocationid());
+                vo.setQty(id.getQty().intValue()+"");
+                result.add(vo);
+            }
+            invlots.setTotal((long)result.size());
+            invlots.setRows(result);
         }else{
             invlots.setTotal(0l);
             invlots.setRows(null);
