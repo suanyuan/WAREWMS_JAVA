@@ -73,7 +73,7 @@ $(function() {
 			{field: 'productLineName',		title: '产品线',	width: 120 },
 			{field: 'lotatt15',		title: '生产企业',	width: 250 },
 			{field: 'reservedfield06',		title: '生产许可证号/备案号',	width: 150 },
-			{field: 'lotnum',		title: '批次号',	width: 100 },
+			// {field: 'lotnum',		title: '批次号',	width: 100 },
 			{field: 'remark',		title: '备注',	width: 150 },
 			// {field: 'editwho',		title: '养护人',	width: 100 },
 			// {field: 'edittime',		title: '养护时间',	width: 134 },

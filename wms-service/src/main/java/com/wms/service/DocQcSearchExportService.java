@@ -78,6 +78,9 @@ public class DocQcSearchExportService {
                 List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
                 for (EasyuiCombobox easyuiCombobox : Lotatt10List)
                 {
+                    if(form1.getLotatt10()==null){
+                        break;
+                    }
                     //质量状态id对比
                     if (form1.getLotatt10().equals(easyuiCombobox.getId())) {
                         form1.setLotatt10(easyuiCombobox.getValue());

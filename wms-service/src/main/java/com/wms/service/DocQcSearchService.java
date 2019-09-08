@@ -48,7 +48,7 @@ public class DocQcSearchService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListPano(mybatisCriteria);
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListSearch(mybatisCriteria);
         DocQcDetailsVO docQcDetailsVO = null;
         for (DocQcDetails docQcDetails : docQcDetailsList) {
             docQcDetailsVO = new DocQcDetailsVO();

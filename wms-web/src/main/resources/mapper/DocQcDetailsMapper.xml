@@ -414,6 +414,22 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+<!-- 查询验收记录查询 -->
+<select id="queryByListSearch" resultMap="BaseResultMap"  parameterType="Object">
+
+	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM
+	FROM doc_qc_details  d
+	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	<include refid="Example_Where_Clause1"/>
+       order by  d.qcno desc
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
 <!-- 用于导出 -->
 <select id="queryByListExport" resultType="com.wms.entity.DocQcSearchExportForm"  parameterType="Object">
 
@@ -425,9 +441,7 @@ where 1=1
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
 	<include refid="Example_Where_Clause1"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
+	order by  d.qcno desc
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
