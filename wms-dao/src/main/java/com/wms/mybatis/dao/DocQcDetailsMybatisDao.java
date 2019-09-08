@@ -102,5 +102,7 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	 * @return
 	 */
 	public <T> List<T> queryByListPano(MybatisCriteria criteria);
+//用于导出
+	public <T> List<T> queryByListExport(MybatisCriteria criteria);
 	public int queryByCountPano(MybatisCriteria criteria);
 }

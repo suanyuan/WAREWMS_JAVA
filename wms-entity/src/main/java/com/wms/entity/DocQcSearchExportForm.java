@@ -2,13 +2,16 @@ package com.wms.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
+
 
 @Data
 @Entity
-public class DocQcDetails  implements Serializable {
+public class DocQcSearchExportForm implements Serializable {
 
+
+	private String token;
 	private String pano;     //上架单号
 	private String qcno;
 
@@ -24,13 +27,13 @@ public class DocQcDetails  implements Serializable {
 
 	private String lotnum;
 
-	private Double paqtyExpected;
+	private Double paqty_Expected;
 
-	private Double qcqtyExpected;
-	private Double qcqtyExpectedEach;
+	private Double qcqty_Expected;
+	private Double qcqty_ExpectedEach;
 
-	private Double qcqtyCompleted;
-	private Double qcqtyCompletedEach;
+	private Double qcqty_Completed;
+	private Double qcqty_CompletedEach;
 
 	private String userdefine1;
 
@@ -50,11 +53,11 @@ public class DocQcDetails  implements Serializable {
 
 	private String notes;
 
-	private java.util.Date addtime;
+	private String addtime;
 
 	private String addwho;
 
-	private java.util.Date edittime;
+	private String edittime;
 
 	private String editwho;
 
@@ -84,15 +87,11 @@ public class DocQcDetails  implements Serializable {
 	private Double qty1;  //转换率
 //bas_customer
 	private String shippershortname;  //货主简称
+//导出查询时间
+	private String lotatt03Start; //入库日期
+	private String lotatt03End;     //入库日期
 
 
 
-	/**
-	 * y用于打印
-	 */
-	private String qcUnit;//单位
-	private Double paqtyExpectedSum;//合计到货件数
-	private Double qcqtyExpectedSum;//合计待验件数
-	private Double qcqtyCompletedSum;//合计合格/不合格数量
 
 }

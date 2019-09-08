@@ -168,10 +168,10 @@ where 1=1
 	    and palineno =  #{condition.palineno}
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and d.customerid =  #{condition.customerid}
+	    and d.customerid like concat('%',#{condition.customerid},'%')
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and d.sku =  #{condition.sku}
+	    and d.sku like concat('%',#{condition.sku},'%')
 	</if>
 	<if test="condition.lotnum != null and condition.lotnum != ''" >
 	    and d.lotnum =  #{condition.lotnum}
@@ -233,6 +233,30 @@ where 1=1
 	<!--inv_lot_att by lotnum-->
 	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
 		and a.lotatt10 =  #{condition.lotatt10}
+	</if>
+	<if test="condition.descrc != null and condition.descrc != ''" >
+		and s.descr_c like concat('%',#{condition.descrc},'%')
+	</if>
+	<if test="condition.shippershortname != null and condition.shippershortname != ''" >
+		and c.`descr_c`  like concat('%',#{condition.shippershortname},'%')
+	</if>
+   <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+		and a.lotatt12  like concat('%',#{condition.lotatt12},'%')
+	</if>
+    <if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+		and a.lotatt08  like concat('%',#{condition.lotatt08},'%')
+	</if>
+	<if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+		and a.lotatt15  like concat('%',#{condition.lotatt15},'%')
+	</if>
+    <if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+		and a.lotatt14  like concat('%',#{condition.lotatt14},'%')
+	</if>
+	<if test="condition.lotatt03Start != null and condition.lotatt03Start != ''" >
+		and a.lotatt03  &gt;= #{condition.lotatt03Start}
+	</if>
+	<if test="condition.lotatt03End != null and condition.lotatt03End != ''" >
+		and a.lotatt03  &lt;=  #{condition.lotatt03End}
 	</if>
 
 </trim>
@@ -376,6 +400,24 @@ where 1=1
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
 
 	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM
+	FROM doc_qc_details  d
+	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	<include refid="Example_Where_Clause1"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+<!-- 用于导出 -->
+<select id="queryByListExport" resultType="com.wms.entity.DocQcSearchExportForm"  parameterType="Object">
+
+	SELECT d.*,h.pano,a.*,s.descr_c descrc,s.reservedfield06,p.`qty1`,c.`descr_c`  shippershortname
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum

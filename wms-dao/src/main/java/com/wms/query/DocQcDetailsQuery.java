@@ -28,8 +28,17 @@ public class DocQcDetailsQuery implements IQuery {
 	private String editwho;
 	private String packid;
 	private String transactionid;
-//inv_lot_att by lotnum
+//查询条件
 	private String lotatt10;  //质量状态
+	private String descrc;  //规格型号
+	private String shippershortname;  //货主简称
+	private String lotatt12;                  //产品名称
+	private String lotatt08;                   //供应商
+	private String lotatt15;                   //生产企业
+	private String lotatt03Start; //入库日期
+	private String lotatt03End;     //入库日期
+	private String lotatt14;    //入库单号
+
 	public String getQcno() {
 		return qcno;
 	}
@@ -244,5 +253,69 @@ public class DocQcDetailsQuery implements IQuery {
 
 	public void setLotatt10(String lotatt10) {
 		this.lotatt10 = lotatt10;
+	}
+
+	public String getDescrc() {
+		return descrc;
+	}
+
+	public void setDescrc(String descrc) {
+		this.descrc = descrc;
+	}
+
+	public String getShippershortname() {
+		return shippershortname;
+	}
+
+	public void setShippershortname(String shippershortname) {
+		this.shippershortname = shippershortname;
+	}
+
+	public String getLotatt12() {
+		return lotatt12;
+	}
+
+	public void setLotatt12(String lotatt12) {
+		this.lotatt12 = lotatt12;
+	}
+
+	public String getLotatt08() {
+		return lotatt08;
+	}
+
+	public void setLotatt08(String lotatt08) {
+		this.lotatt08 = lotatt08;
+	}
+
+	public String getLotatt15() {
+		return lotatt15;
+	}
+
+	public void setLotatt15(String lotatt15) {
+		this.lotatt15 = lotatt15;
+	}
+
+	public String getLotatt03Start() {
+		return lotatt03Start;
+	}
+
+	public void setLotatt03Start(String lotatt03Start) {
+		this.lotatt03Start = lotatt03Start;
+	}
+
+	public String getLotatt03End() {
+		return lotatt03End;
+	}
+
+	public void setLotatt03End(String lotatt03End) {
+		this.lotatt03End = lotatt03End;
+	}
+
+	public String getLotatt14() {
+		return lotatt14;
+	}
+
+	public void setLotatt14(String lotatt14) {
+		this.lotatt14 = lotatt14;
 	}
 }
