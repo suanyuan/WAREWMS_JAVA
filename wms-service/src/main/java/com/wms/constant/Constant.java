@@ -40,6 +40,9 @@ public class Constant {
     public static final String CODE_CATALOG_PASTS= "PA_STS";//上架状态
     public static final String CODE_CATALOG_MT_STS= "MT_STS";//养护状态
     public static final String CODE_CATALOG_COU_REQUEST= "CO_STS";//盘点状态
+    public static final String CODE_CATALOG_CLASSIFY_ONE = "CLASSIFY_ONE";//分类一
+    public static final String CODE_CATALOG_CLASSIFY_TWO = "CLASSIFY_TWO";//分类二
+    public static final String CODE_CATALOG_CLASSIFY_THREE = "CLASSIFY_THREE";//分类三
 
 
 

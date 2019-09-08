@@ -1018,11 +1018,11 @@ where 1=1
         )
     </select>
 
-    <!--<select id="queryForScan" resultMap="BaseResultMap" parameterType="java.util.Map">-->
+    <!--<select id="queryListForScan" resultMap="BaseResultMap" parameterType="java.util.Map">-->
         <!--select-->
         <!--<include refid="Base_Column_List"/>-->
         <!--from bas_sku-->
-        <!--where customerid = #{customerid} and sku in (-->
+        <!--where sku in (-->
         <!--select-->
         <!--DISTINCT a.sku-->
         <!--from bas_sku a-->
@@ -1033,8 +1033,11 @@ where 1=1
         <!--<if test="GTIN != null and GTIN != ''">-->
             <!--or c.GTNCODE = #{GTIN, jdbcType=VARCHAR}-->
         <!--</if>-->
-        <!--<if test="lotatt04 != null and lotatt04 != ''">-->
-            <!--or ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')-->
+        <!--<if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">-->
+            <!--or (ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')-->
+            <!--AND-->
+            <!--ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')-->
+            <!--)-->
         <!--</if>-->
         <!--<if test="alternate_sku1 != null and alternate_sku1 != ''">-->
             <!--or a.alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}-->

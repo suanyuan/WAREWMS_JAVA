@@ -404,4 +404,52 @@ public class BasSkuService extends BaseService {
 		return basSku;
 	}
 
+	/**
+	 * 查询产品的激活状态
+	 * @param customerid 货主
+	 * @param sku 产品代码
+	 * @return
+	 */
+	public  BasSku selectBasSku(String customerid, String sku){
+		BasSkuQuery basSkuQuery = new BasSkuQuery();
+		basSkuQuery.setCustomerid(customerid);
+		basSkuQuery.setSku(sku);
+		BasSku basSku = basSkuMybatisDao.queryById(basSkuQuery);
+		return basSku;
+	}
+
+
+	/**
+	 * 修改激活状态
+	 * @return
+	 */
+	public Json editActiveFlag(String customerid, String sku,String activeFlag){
+		Json json = new Json();
+		//根据activeflag 标记来判断是否激活状态
+		if(activeFlag == "1" || activeFlag.equals("1")){//修改为未激活状态
+			Date today = new Date();
+			BasSku basSku = new BasSku();
+			basSku.setCustomerid(customerid);
+			basSku.setSku(sku);
+			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			basSku.setEdittime(today);
+			basSku.setActiveFlag(Constant.IS_USE_NO);
+			basSkuMybatisDao.updateBySelective(basSku);
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		}else{//修改为激活状态
+			Date today = new Date();
+			BasSku basSku = new BasSku();
+			basSku.setCustomerid(customerid);
+			basSku.setSku(sku);
+			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+			basSku.setEdittime(today);
+			basSku.setActiveFlag("1");
+			basSkuMybatisDao.updateBySelective(basSku);
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+		}
+		return json;
+	}
+
 }

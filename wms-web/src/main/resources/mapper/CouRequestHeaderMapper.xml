@@ -159,4 +159,13 @@ where 1=1
 <select id="getIdSequence" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call SPCOM_GetIDSequence(#{warehouseid,mode=IN,jdbcType=VARCHAR},'CN','CONO',#{resultNo,mode=OUT,jdbcType=VARCHAR},#{resultCode,mode=OUT,jdbcType=VARCHAR})}
 </select>
+
+    <select id="queryUndoneList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cou_request_header
+        where status = '00' or status = '30'
+        order by addtime desc
+        limit #{start}, #{pageSize}
+    </select>
 </mapper>   

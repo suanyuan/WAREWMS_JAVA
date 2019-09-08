@@ -854,7 +854,7 @@
                 <td><input type='text' name='lotatt11' class='easyui-textbox' size='50' data-options='required:true'/></td>
             </tr>
             <tr>
-                <th>生产厂家</th>
+                <th>生产企业</th>
                 <td><input type='text' name='enterpriseName' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>质量状态</th>
                 <td><input type='text' name='lotatt10' class='easyui-combobox' size='50' data-options="panelHeight: 'auto',

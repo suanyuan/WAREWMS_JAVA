@@ -1,6 +1,10 @@
 package com.wms.mybatis.dao;
 
 
+import com.wms.entity.CouRequestHeader;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,5 +14,7 @@ import java.util.Map;
  */
 public interface CouRequestHeaderMybatisDao extends BaseDao {
 //新增单号
-    String getIdSequence(Map<String, Object> map);
+    void getIdSequence(Map<String, Object> map);
+
+    List<CouRequestHeader> queryUndoneList(@Param("start") int start, @Param("pageSize") int pageSize);
 }

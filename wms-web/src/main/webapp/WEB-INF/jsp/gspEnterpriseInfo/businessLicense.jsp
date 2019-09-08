@@ -150,7 +150,7 @@
             if($(this).is(':checked')){
                 //$("#businessStartDate").textbox("clear")
                 $("#businessEndDate").textbox("clear")
-                //$("#businessStartDate").textbox("disable")
+                $("#businessStartDate").textbox("enable")
                 $("#businessEndDate").textbox("disable")
             }else{
                 $("#businessStartDate").textbox("enable")
@@ -351,7 +351,7 @@
         })
         if(row.isLong == "1"){//长期营业执照
             $("#ezuiFormBusiness input[id='isLong']").attr("checked","checked");
-            $("#ezuiFormBusiness input[id='businessStartDate']").datebox("disable");
+            //$("#ezuiFormBusiness input[id='businessStartDate']").datebox("disable");
             $("#ezuiFormBusiness input[id='businessEndDate']").datebox("disable");
         }
     }

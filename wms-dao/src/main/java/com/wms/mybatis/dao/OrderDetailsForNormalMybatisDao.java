@@ -13,4 +13,10 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
 	void allocationByOrderLine(Map<String, Object> map);
 
 	void deAllocationByOrderLine(Map<String, Object> map);
+
+    /**
+     * 用户删除发运订单头档 关联明细删除
+     * @param orderno 出口so编号
+     */
+	void orderHeaderdelete (String orderno);
 }

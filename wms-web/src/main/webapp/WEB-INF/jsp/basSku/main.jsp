@@ -45,7 +45,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'customerid',
 		columns : [[
 			/* {field: 'instockDetail',		title: '打印操作',	width: 7,formatter:function(value,rowData,rowIndex){
 				return "<a id='ezuiBtn_instockDetailTable'"+rowIndex+" onclick=\"instockDetail('"+rowData.basSkuPK.customerid+"','"+rowData.basSkuPK.sku+"')\" href='javascript:void(0);'>打印</a>";
@@ -365,6 +365,121 @@ var commit = function(){
 		}
 	});
 };
+
+/* 停止激活 */
+var editActiveFlag = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row){
+		//处于激活状态无法继续激活 反之处于停止激活 无法停止激活   报废的产品无法参与激活
+		if(row.firstop == '90'){
+			$.messager.show({
+				msg : '该产品已是报废状态，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+			});
+		}else {
+			$.ajax({
+				url : 'basSkuController.do?selectBasSku',
+				data : {customerid : row.customerid, sku : row.sku},
+				type : 'POST',
+				dataType : 'JSON',
+				success : function(result){
+					 if(result.activeFlag=="1"){
+						$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.updateSkuActiveFlag"/>', function(confirm) {
+							if(confirm){
+								$.ajax({
+									url : 'basSkuController.do?editActiveFlag',
+									data : {customerid : row.customerid, sku : row.sku,activeFlag: row.activeFlag},
+									type : 'POST',
+									dataType : 'JSON',
+									success : function(result){
+										var msg = '';
+										try {
+											if(result.success){
+												msg = result.msg;
+											}else{
+												$.messager.alert('操作提示', result.msg);
+												msg = '<font color="red">' + result.msg + '</font>';
+											}
+										} catch (e) {
+											msg = '<spring:message code="common.message.data.delete.failed"/>';
+										} finally {
+											$.messager.show({
+												msg : msg, title : '<spring:message code="common.message.prompt"/>'
+											});
+											ezuiDatagrid.datagrid('reload');
+										}
+									}
+								});
+							}
+						});
+
+					}else{
+						$.messager.show({
+							msg : '该产品状态为未激活，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+						});
+					}
+				}
+			});
+
+		}
+	}
+}
+
+/* 继续激活 */
+var editYesActiveFlag = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row){
+		//处于激活状态无法继续激活 反之处于停止激活 无法停止激活   报废的产品无法参与激活
+		if(row.firstop == '90'){
+			$.messager.show({
+				msg : '该产品已是报废状态，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+			});
+		}else {
+			$.ajax({
+				url : 'basSkuController.do?selectBasSku',
+				data : {customerid : row.customerid, sku : row.sku},
+				type : 'POST',
+				dataType : 'JSON',
+				success : function(result){
+					if(result.activeFlag!="1"){
+						$.messager.confirm('<spring:message code="common.message.confirm"/>', '<spring:message code="common.message.confirm.SkuActiveFlag"/>', function(confirm) {
+							if(confirm){
+								$.ajax({
+									url : 'basSkuController.do?editActiveFlag',
+									data : {customerid : row.customerid, sku : row.sku,activeFlag: row.activeFlag},
+									type : 'POST',
+									dataType : 'JSON',
+									success : function(result){
+										var msg = '';
+										try {
+											if(result.success){
+												msg = result.msg;
+											}else{
+												$.messager.alert('操作提示', result.msg);
+												msg = '<font color="red">' + result.msg + '</font>';
+											}
+										} catch (e) {
+											msg = '<spring:message code="common.message.data.delete.failed"/>';
+										} finally {
+											$.messager.show({
+												msg : msg, title : '<spring:message code="common.message.prompt"/>'
+											});
+											ezuiDatagrid.datagrid('reload');
+										}
+									}
+								});
+							}
+						});
+
+					}else{
+						$.messager.show({
+							msg : '该产品状态为已激活，请重新选择。', title : '<spring:message code="common.message.prompt"/>'
+						});
+					}
+				}
+			});
+		}
+	}
+}
 
 /* 查询 */
 var doSearch = function(){
@@ -727,6 +842,9 @@ var downloadTemplate = function(){
 					</table>
 				</fieldset>
 				<div>
+					<a onclick='editActiveFlag();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>停止激活</a>
+					<a onclick='editYesActiveFlag();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>继续激活</a>
+
 					<a onclick='edit();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>详情</a>
 					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>

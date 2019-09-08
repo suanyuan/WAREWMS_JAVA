@@ -38,7 +38,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'enterpriseId',
         rowStyler: isUseRowStyler,
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},

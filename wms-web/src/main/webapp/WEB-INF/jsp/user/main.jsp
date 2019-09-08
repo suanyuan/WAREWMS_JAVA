@@ -206,6 +206,7 @@ var edit = function(){
 				birthday : row.birthday,
 				countryId : row.country.id,
 				email : row.email
+                //userGrade:row.userGrade
 			});
             //alert(3333333);
 			var role = row.roleSet;
@@ -223,6 +224,16 @@ var edit = function(){
 					warehouseArray[i] = warehouse[i].id;
 			    }
 				$('#warehouseCombobox').combobox('setValues',warehouseArray);
+			}
+			//console.log(row.userGrade);
+			if(row.userGrade){
+			    if(row.userGrade == "11"){
+			        $("#userGrade").combobox("setValues","1,2");
+				}else if(row.userGrade == "10"){
+                    $("#userGrade").combobox("setValues","1");
+				}else if(row.userGrade == "01"){
+                    $("#userGrade").combobox("setValues","2");
+				}
 			}
             //alert(11111111);
 			var customer = row.customerSet;
@@ -448,6 +459,21 @@ var clearParentName = function(){
 						<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"' onclick="clearParentName();">
 							<spring:message code="common.button.clear"/>
 						</a>
+					</td>
+				</tr>
+				<tr>
+					<th>GSP审核权限</th>
+					<td colspan="7">
+						<input type="text" id="userGrade" name="userGrade" class="easyui-combobox" size='96' data-options="	required:true,
+																															panelHeight:'auto',
+																															multiple:'multiple',
+																															editable:false,
+																															valueField:'id',
+																															data: [
+																																	{id: '1', value: '质量部审核'},
+																																	{id: '2', value: '负责人审核'}
+																																],
+																															textField:'value'" />
 					</td>
 				</tr>
 				<tr>

@@ -31,14 +31,15 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
-		singleSelect:true,
+		singleSelect:false,
         rowStyler:function(index,row){
 		    if(row.applyState == CHECKSTATE.CHECKSTATE_50){
                 return 'color:red;';
 			}
 		},
-		idField : 'id',
+		idField : 'reviewId',
 		columns : [[
+            {field: 'ck',checkbox:true },
 			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
             {field: 'applyState',		title: '状态',	width: 100 ,
                 formatter:checkStateTypeFormatter
@@ -159,13 +160,24 @@ function showCheck() {
 
 //审核
 function doCheck() {
+
+	var a = 0;
     $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核操作吗', function(confirm) {
         if (confirm) {
             var row = ezuiDatagrid.datagrid("getSelections");
             var arr = new Array();
             for(var i=0;i<row.length;i++){
                 arr.push(row[i].reviewId);
+                if(row[i].applyState !="20" && row[i].applyState!="30"){
+					a++;
+				}
             }
+            if(a!=0){
+                $.messager.show({
+                    msg : '新建和通过的未通过的不能审核', title : '<spring:message code="common.message.prompt"/>'
+                });
+				return;
+			}
             if(row){
                 $.ajax({
                     url : sy.bp()+"/firstReviewLogController.do?check",

@@ -333,6 +333,7 @@ public class DocMtDetailsService extends BaseService {
                 docMtDetails.setConversewho(form.getEditwho());
                 docMtDetails.setRemark(form.getRemark());
                 docMtDetails.setAddwho(form.getEditwho());
+                docMtDetails.setEditwho(form.getEditwho());
                 docMtDetailsMybatisDao.add(docMtDetails);
             }
 

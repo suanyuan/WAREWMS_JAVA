@@ -98,7 +98,7 @@ where 1=1
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update cou_request_details set cycle_countlineno=#{cycleCountlineno},customerid=#{customerid},sku=#{sku},locationid=#{locationid},qty_inv=#{qtyInv},qty_act=#{qtyAct},lotatt04=#{lotatt04},lotatt05=#{lotatt05},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},userdefined1=#{userdefined1},userdefined2=#{userdefined2},userdefined3=#{userdefined3} where cycle_countno=#{cycleCountno}
+  update cou_request_details set cycle_countlineno=#{cycleCountlineno},customerid=#{customerid},sku=#{sku},locationid=#{locationid},qty_inv=#{qtyInv},qty_act=#{qtyAct},lotatt04=#{lotatt04},lotatt05=#{lotatt05},addtime=now(),addwho=#{addwho},edittime=now(),editwho=#{editwho},userdefined1=#{userdefined1},userdefined2=#{userdefined2},userdefined3=#{userdefined3} where cycle_countno=#{cycleCountno} and cycle_countlineno=#{cycleCountlineno}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -162,7 +162,7 @@ where 1=1
 <!-- 根据id查询 盘点明细单 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select *
-	 from cou_request_details where cycle_countno = #{cycleCountno}
+	 from cou_request_details where cycle_countno = #{cycleCountno} and cycle_countlineno = #{cycleCountlineno}
 </select>
 <!-- 根据cycleCountno查询 盘点明细单List -->
 <select id="queryListById"  resultMap="BaseResultMap" parameterType="Object">
@@ -221,5 +221,35 @@ where 1=1
 <select id="getCycleCountlineno" resultType="int"  parameterType="Object">
 	select ifnull(max(cycle_countlineno),0) from cou_request_details where cycle_countno = #{id,jdbcType=VARCHAR}
 </select>
+
+    <select id="queryCouRequestDetails" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        a.*
+        from cou_request_details a
+        <if test="otherCode != null and otherCode != ''">
+            left join bas_sku b on a.customerid = b.customerid and a.sku = b.sku
+        </if>
+        where a.cycle_countno = #{cycleCountno} and a.locationid = #{locationid}
+        <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
+            and (ifnull(a.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
+                  AND
+                  ifnull(a.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
+                )
+        </if>
+        <if test="otherCode != null and otherCode != ''">
+            and (
+                  (b.alternate_sku1 = #{otherCode, jdbcType=VARCHAR} or
+                    b.alternate_sku2 = #{otherCode, jdbcType=VARCHAR} or
+                    b.alternate_sku3 = #{otherCode, jdbcType=VARCHAR} or
+                    b.alternate_sku4 = #{otherCode, jdbcType=VARCHAR} or
+                    b.alternate_sku5 = #{otherCode, jdbcType=VARCHAR}
+                  )
+              or
+                  (
+                    b.sku = #{otherCode}
+                  )
+            )
+        </if>
+    </select>
   	
 </mapper>   

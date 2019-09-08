@@ -59,7 +59,8 @@ public class FirstBusinessApplyService extends BaseService {
 	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 	@Autowired
 	private  FirstReviewLogMybatisDao firstReviewLogMybatisDao;
-
+	@Autowired
+	private GspVerifyService gspVerifyService;
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
@@ -221,11 +222,20 @@ public class FirstBusinessApplyService extends BaseService {
             String[] arr = productArr.split(",");
             for(String supplierId : arrSup){
 				//检查经营范围
-				Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
-				if(!checkScopeResult.isSuccess()){
-					return checkScopeResult;
+				for(String specsId :arr){
+					Json checkScopeResult =gspVerifyService.verifyOperate(clientId,supplierId,specsId);
+					if(!checkScopeResult.isSuccess()){
+						return checkScopeResult;
+					}
 				}
+//				Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
+//				if(!checkScopeResult.isSuccess()){
+//					return checkScopeResult;
+//				}
 			}
+
+
+
 
 //			for(int a =0;arr.length>0;a++){
 			boolean flag = true;
@@ -290,6 +300,9 @@ public class FirstBusinessApplyService extends BaseService {
 	}
 
 	public Json editApply(String id,String clientId,String supplierArr,String productArr,String productLine){
+
+
+
 		if("".equals(clientId)){
 			return Json.error("请选择委托客户");
 		}
@@ -301,6 +314,13 @@ public class FirstBusinessApplyService extends BaseService {
 		if("".equals(productArr)){
 			return Json.error("请选择首营产品");
 		}
+
+		Json checkScopeResult =gspVerifyService.verifyOperate(clientId,supplierArr,productArr);
+		if(!checkScopeResult.isSuccess()){
+			return checkScopeResult;
+		}
+
+
 		FirstBusinessApply firstBusinessApplyC =  firstBusinessApplyMybatisDao.queryById(id);
 		if(clientId.equals(firstBusinessApplyC.getClientId()) && supplierArr.equals(firstBusinessApplyC.getSupplierId()) && productArr.equals(firstBusinessApplyC.getSpecsId())){
 

@@ -22,7 +22,7 @@
             <th>企业</th>
             <td>
                 <input type='text' data="1" value="${gspSupplier.enterpriseName}" id='enterpriseIdQuery1' name="enterpriseName" data='1'
-                       class='easyui-textbox' data-options='required:true,width:200,editable:false'
+                       class='easyui-textbox' data-options='required:false,width:200,editable:false'
                        style="width: 100px;"/>
                 <input type="hidden" value="${gspSupplier.enterpriseId}" id="enterpriseId" name="enterpriseId" data='1'/>
                 <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
@@ -32,16 +32,16 @@
             </td>
             <th>代码</th>
             <td><input type='text' data="1" value="${gspSupplier.enterpriseNo}" id='enterpriseNo' size='20' name="enterpriseNo" class='easyui-textbox'
-                       data-options='required:true,width:200' readonly/></td>
+                       data-options='required:false,width:200' readonly/></td>
         </tr>
         <tr>
             <th>简称</th>
             <td><input type='text' data="1" value="${gspSupplier.shorthandName}" id='shorthandName' size='20' name="shorthandName" class='easyui-textbox'
-                       data-options='required:true,width:200' readonly/></td>
+                       data-options='required:false,width:200' readonly/></td>
             <th>企业类型</th>
             <td><input type="text" data="1" value="${gspSupplier.enterpriseType}" id="enterpriseType1" name="enterpriseType1" class="easyui-combobox"
                        size='16' data-options="panelHeight:'auto',
-                                                                                                                                    required:true,
+                                                                                                                                    required:false,
                                                                                                                                     width:200,
 																																	editable:false,
 																																	valueField: 'id',
@@ -73,11 +73,11 @@
         <tr>
             <th>合同编号</th>
             <td><input type='text'  data="1" value="${gspSupplier.contractNo}" id="contractNo" name='contractNo' class='easyui-textbox'
-                       data-options='required:true,width:200'/></td>
+                       data-options='required:false,width:200'/></td>
 
             <th>货主</th>
             <td><input type='text' data="1" value="${gspSupplier.costomerid}" id='costomerid' name='costomerid' class='easyui-textbox'
-                       data-options='required:true,width:200'/></td>
+                       data-options='required:false,width:200'/></td>
 
         </tr>
         <tr>
@@ -98,16 +98,16 @@
         <tr>
             <th>合同内容</th>
             <td><input type='text'  data="1" value="${gspSupplier.clientContent}" id="clientContent" name='clientContent' class='easyui-textbox'
-                       data-options='required:true,width:200,height:80,multiline:true'/></td>
+                       data-options='required:false,width:200,height:80,multiline:true'/></td>
             <th>授权内容</th>
             <td><input type='text'   data="1" value="${gspSupplier.empowerContent}" id="empowerContent" name='empowerContent' class='easyui-textbox'
-                       data-options='required:true,width:200,height:80,multiline:true'/></td>
+                       data-options='required:false,width:200,height:80,multiline:true'/></td>
 
         </tr>
         <tr>
             <th>合同开始时间</th>
             <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientStartDate}"/>"   id="clientStartDate"  name='clientStartDate' class='easyui-datebox'
-                       data-options='required:true,width:200'/></td>
+                       data-options='required:false,width:200'/></td>
             <th>授权开始时间</th>
             <td><input type='text' data="1"   value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.empowerStartdate}"/>"  id="empowerStartdate" name='empowerStartdate' class='easyui-datebox'
                        data-options='required:false,width:200'/></td>
@@ -116,7 +116,7 @@
         <tr>
             <th>合同结束时间</th>
             <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.clientEndDate}"/>" id="clientEndDate" name='clientEndDate' class='easyui-datebox'
-                       data-options='required:true,width:200'/></td>
+                       data-options='required:false,width:200'/></td>
             <th>授权结束时间</th>
             <td><input type='text' data="1" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspSupplier.empowerEnddate}"/>" id="empowerEnddate" name='empowerEnddate' class='easyui-datebox'
                        data-options='required:false,width:200'/></td>
@@ -137,7 +137,7 @@
             <th>是否审查</th>
             <td><input type="text" data="1" id="isCheck" name="isCheck" value="${isCheck}" class="easyui-combobox"
                        size='16' data-options="panelHeight:'auto',
-                                                                                                                                    required:true,
+                                                                                                                                    required:false,
                                                                                                                                     width:200,
 																																	editable:false,
 																																	valueField: 'id',
@@ -153,22 +153,22 @@
         <tr>
             <th>创建人</th>
             <td><input type='text' data="1" id="createId" name='createId' value="${createId}" class='easyui-textbox'
-                       size='16' data-options='required:true,width:200'/></td>
+                       size='16' data-options='required:false,width:200'/></td>
         </tr>
         <tr>
             <th>创建时间</th>
             <td><input type='text' data="1" id="createDate" name='createDate' value="${createDate}"
-                       class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+                       class='easyui-textbox' size='16' data-options='required:false,width:200'/></td>
         </tr>
         <tr>
             <th>编辑人</th>
             <td><input type='text' data="1" id="editId" name='editId' value="${createId}" class='easyui-textbox'
-                       size='16' data-options='required:true,width:200'/></td>
+                       size='16' data-options='required:false,width:200'/></td>
         </tr>
         <tr>
             <th>编辑时间</th>
             <td><input type='text' data="1" id="editDate" name='editDate' value="${createDate}" class='easyui-textbox'
-                       size='16' data-options='required:true,width:200'/></td>
+                       size='16' data-options='required:false,width:200'/></td>
         </tr>
         <tr>
             <%--<th>是否有效</th>--%>
@@ -272,7 +272,7 @@
             prompt: '选择一个文件',//文本说明文件
             width: '200', //文本宽度
             buttonText: '浏览',  //按钮说明文字
-            required: true,
+            required: false,
             onChange: function (data) {
 
                 if (data) {

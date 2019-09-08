@@ -238,7 +238,7 @@ public class DocQcDetailsService extends BaseService {
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
         StringUtil.isEmpty(basSku.getReservedfield14())) {
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产厂家信息"));
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产企业信息"));
             return map;
         }
         pdaDocQcDetailVO.setEnterpriseName(
@@ -328,7 +328,7 @@ public class DocQcDetailsService extends BaseService {
         if (StringUtil.isEmpty(form.getLotatt01())) {
             return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
         }else if (StringUtil.isEmpty(form.getLotatt02())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择失效日期");
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择有效期/失效期");
         }
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -336,7 +336,7 @@ public class DocQcDetailsService extends BaseService {
             Date prdDate = format.parse(form.getLotatt01());
             Date expiryDate = format.parse(form.getLotatt02());
             if (prdDate.getTime() >= expiryDate.getTime()) {
-                return new PdaResult(PdaResult.CODE_FAILURE, "失效日期不可小于生产日期");
+                return new PdaResult(PdaResult.CODE_FAILURE, "有效期/失效期不可小于生产日期");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -360,12 +360,7 @@ public class DocQcDetailsService extends BaseService {
             }
         }
 
-        /**
-         * 验证
-         */
-
         form.setLanguage("CN");
-//        form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         form.setReturncode("");
 
         try {
@@ -383,6 +378,7 @@ public class DocQcDetailsService extends BaseService {
             if (form.getAllqcflag() == 1) {
 
                 //处理批量验收合格操作
+                docQcDetails = docQcDetailsDao.queryById(docQcDetails);//更新批次号，存在批属修改的情况
                 return configAllQc(form, docQcDetails);
             }else {
 

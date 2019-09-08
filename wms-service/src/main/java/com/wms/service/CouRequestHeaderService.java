@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import com.alibaba.fastjson.JSON;
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.CouRequestDetails;
@@ -17,6 +18,7 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.CouRequestHeaderVO;
 import com.wms.vo.Json;
+import com.wms.vo.form.pda.PageForm;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -184,10 +186,10 @@ public class CouRequestHeaderService extends BaseService {
         CouRequestHeader requestHeader = couRequestHeaderMybatisDao.queryById(couRequestHeader);
         switch (requestHeader.getStatus()) {
             case "00":
-            case "30":
                 json.setSuccess(false);
                 json.setMsg("盘点单[" + form.getCycleCountno() + "]有未完成的盘点任务，不可结束!");
                 break;
+            case "30":
             case "40":
                 couRequestHeader.setStatus("99");
                 couRequestHeader.setNotes(form.getNotes());
@@ -231,5 +233,55 @@ public class CouRequestHeaderService extends BaseService {
         return json;
     }
 
+    /**
+     * 未完成盘点任务
+     * @param pageForm ~
+     * @return ~
+     */
+    public Json queryUndoneList(PageForm pageForm) {
 
+        Json json = new Json();
+
+        List<CouRequestHeader> couRequestHeaderList = couRequestHeaderMybatisDao.queryUndoneList(pageForm.getStart(), pageForm.getPageSize());
+        List<CouRequestHeaderVO> couRequestHeaderVOList = new ArrayList<>();
+        CouRequestHeaderVO couRequestHeaderVO;
+        for (CouRequestHeader couRequestHeader : couRequestHeaderList) {
+
+            couRequestHeaderVO = new CouRequestHeaderVO();
+            BeanUtils.copyProperties(couRequestHeader, couRequestHeaderVO);
+            couRequestHeaderVOList.add(couRequestHeaderVO);
+        }
+
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        json.setObj(couRequestHeaderVOList);
+        return json;
+    }
+
+    /**
+     * 查询盘点任务头档
+     * @param cycleCountno 盘点单号
+     * @return  ~
+     */
+    public Json queryCouRequestHeader(String cycleCountno) {
+
+        Json json = new Json();
+
+        CouRequestHeader couRequestHeader = couRequestHeaderMybatisDao.queryById(cycleCountno);
+        CouRequestHeaderVO couRequestHeaderVO = new CouRequestHeaderVO();
+        if (couRequestHeader != null) {
+
+            BeanUtils.copyProperties(couRequestHeader, couRequestHeaderVO);
+        }else {
+
+            json.setSuccess(false);
+            json.setMsg("查无此盘点单数据");
+            return json;
+        }
+
+        json.setObj(couRequestHeaderVO);
+        json.setSuccess(true);
+        json.setMsg(Constant.SUCCESS_MSG);
+        return json;
+    }
 }

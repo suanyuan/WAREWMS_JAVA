@@ -494,6 +494,9 @@
     function submitApply() {
 
 
+
+
+
         if(processType == 'edit'){
              var applyId = $("#applyId").val();
              var specsId;
