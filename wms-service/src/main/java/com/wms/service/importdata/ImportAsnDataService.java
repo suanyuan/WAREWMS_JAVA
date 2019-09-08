@@ -187,26 +187,11 @@ public class ImportAsnDataService {
                 rowResult.append("[失效日期]，格式错误").append(" ");
             }
             if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
-                BasCustomer customer = null;
-                BasCustomerQuery customerQuery = new BasCustomerQuery();
-                customerQuery.setCustomerid(dataArray.getLotatt08());
-                customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
-                customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
-                try {
-                    if (" ".equals(customer) || null == customer) {
-                        throw new Exception();
-                    } else {
-                        try {
-                            if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
-                                throw new Exception();
-                            }
-                        } catch (Exception e) {
-                            rowResult.append("[供应商代码]，合作状态为未合作状态").append(" ");
-                        }
+                    //gsp校验
+                    Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(), dataArray.getLotatt08(), dataArray.getSku(), dataArray.getLotatt01(), dataArray.getLotatt02());
+                    if (!verifyJson.isSuccess()) {
+                        rowResult.append(verifyJson.getMsg()).append(" ");
                     }
-                } catch (Exception e) {
-                    rowResult.append("[供应商代码]，查无资料").append(" ");
-                }
             }
 
 			/*try {
@@ -236,11 +221,7 @@ public class ImportAsnDataService {
             } catch (Exception e) {
                 rowResult.append("[单价]，须为数字").append(" ");
             }
-          /*  //gsp校验 //TODO 待测试
-            Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(), dataArray.getLotatt08(), dataArray.getSku(), dataArray.getLotatt01(), dataArray.getLotatt02());
-            if (!verifyJson.isSuccess()) {
-                rowResult.append(verifyJson.getMsg()).append(" ");
-            }*/
+
             //库存状态
 			/*try {
 				if (StringUtils.isNotEmpty(dataArray.getLotatt04())){
@@ -659,16 +640,10 @@ public class ImportAsnDataService {
                     }
 
                     if (asnDetails.getLotatt08().equals("") || asnDetails.getLotatt08() == null) {
-                        BasCustomerQuery customerQuery = new BasCustomerQuery();
-                        customerQuery.setCustomerid(basSku.getSkuGroup6());
-                        customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
-                        BasCustomer  customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
-                        if(customer.getActiveFlag().equals(Constant.IS_USE_YES)){
-                            //供应商
-                            asnDetails.setLotatt08(basSku.getSkuGroup6());
-                        }else{
-                            resultMsg.append("序号：").append(importDataVO.getSeq()).append("该默认供应商，是未合作状态").append(" ");
+                        Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02());
+                        if (!verifyJson.isSuccess()) {
                             addfalg = false;
+                            resultMsg.append(verifyJson.getMsg()).append(" ");
                             continue;
                         }
                     }
