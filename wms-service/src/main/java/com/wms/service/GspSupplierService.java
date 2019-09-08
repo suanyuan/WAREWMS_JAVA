@@ -258,7 +258,30 @@ public class GspSupplierService extends BaseService {
 
 				//更新旧数据状态
 				GspSupplier gspSupplier = gspSupplierMybatisDao.queryById(s);
+				// 通过enterpriseId 查询该公司的最新的enterpriseId
+				GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
+				if(g!=null){
+					gspSupplier.setEnterpriseId(g.getEnterpriseId());
+				}else{
+					return  Json.error("企业信息已失效");
+				}
+				BasCustomer CustomerQ = new BasCustomer();
+				CustomerQ.setCustomerType(Constant.CODE_CUS_TYP_OW);
+				CustomerQ.setCustomerid(gspSupplier.getCostomerid());
+				BasCustomer customer = basCustomerMybatisDao.queryById(CustomerQ);
+				if(customer!=null){
+					if("0".equals(customer.getActiveFlag())){
+						return Json.error("对应的货主已失效");
+					}
+				}else{
+					return Json.error("货主不存在");
+				}
 
+
+				Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplier.getCostomerid(),gspSupplier.getEnterpriseId(),"");
+				if(!checkScopeResult.isSuccess()){
+					return checkScopeResult;
+				}
 //				Integer result = gspSupplierMybatisDao.queryGspSupplierByEnterpriseId(gspSupplier);
 //				if(result>0){
 //					return Json.error("存在同一个供应商和货主且有效,不能重复申请");
@@ -287,6 +310,21 @@ public class GspSupplierService extends BaseService {
 				firstReviewLogForm.setReviewId(RandomUtil.getUUID());
 
 				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_NEW);
+
+				BasCustomer b = new BasCustomer();
+				b.setCustomerid(gspSupplier.getCostomerid());
+				b.setCustomerType(Constant.CODE_CUS_TYP_OW);
+				BasCustomer C =basCustomerMybatisDao.selectByIdTypeActiveFlag(b);
+				GspEnterpriseInfo HZ =gspEnterpriseInfoMybatisDao.queryById(C.getEnterpriseId());
+				GspEnterpriseInfo GYS = gspEnterpriseInfoMybatisDao.queryById(gspSupplier.getEnterpriseId());
+
+				String content =
+					"供应商企业名称:"+GYS.getEnterpriseName()+" "+"供应商企业代码:"+GYS.getEnterpriseNo()+" "+
+					"供应商企业类型:"+regred(GYS.getEnterpriseType())+";"+"对应货主企业名称:"+HZ.getEnterpriseName()+" "+
+					"对应货主企业代码:"+HZ.getEnterpriseNo()+" "+"对应货主企业类型:"+regred(HZ.getEnterpriseType());
+				firstReviewLogForm.setApplyContent(content);
+
+
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
 				//TODO 审核通过的数据需要更新为失败(待测试)

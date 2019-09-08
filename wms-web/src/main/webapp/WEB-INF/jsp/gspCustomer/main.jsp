@@ -114,6 +114,7 @@ var add = function(){
         }
     })
     $('#ezuiDialogDetail').dialog('destroy');
+    $('#ezuiDialog1').dialog('destroy');
 };
 var edit = function(){
 	processType = 'edit';
@@ -133,6 +134,8 @@ var edit = function(){
             }
         })
         $('#ezuiDialogDetail').dialog('destroy');
+        $('#ezuiDialog1').dialog('destroy');
+
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

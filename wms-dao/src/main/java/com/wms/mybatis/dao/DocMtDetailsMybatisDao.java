@@ -2,7 +2,6 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.DocMtDetails;
-import com.wms.entity.DocMtHeader;
 import com.wms.entity.DocMtProgressDetail;
 import com.wms.query.DocMtDetailsQuery;
 import com.wms.query.DocMtHeaderQuery;
@@ -27,6 +26,16 @@ public interface DocMtDetailsMybatisDao extends BaseDao {
      * @return
      */
     <T> List<T> queryByListLotatt(MybatisCriteria criteria);
+    /**
+     * 分页查询 养护记录查询
+     * @return
+     */
+    <T> List<T> queryByListSearch(MybatisCriteria criteria);
+    /**
+     * 分页查询 养护记录导出
+     * @return
+     */
+    <T> List<T> queryByListExport(MybatisCriteria criteria);
     /**
      * 根据时间段查询养护时间 主单状态99 40
      * @return

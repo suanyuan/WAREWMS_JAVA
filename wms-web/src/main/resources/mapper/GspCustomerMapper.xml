@@ -246,7 +246,7 @@ where 1=1
 	<!-- 根据企业id查询 委托客户 -->
 	<select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
-		from gsp_customer where enterprise_id = #{enterpriseId}
+		from gsp_customer where enterprise_id = #{enterpriseId} and is_use= '1'
 	</select>
 
 <!-- 产品注册证 列表总数-->

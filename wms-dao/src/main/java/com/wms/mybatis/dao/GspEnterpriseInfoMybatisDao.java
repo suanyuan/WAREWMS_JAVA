@@ -36,4 +36,10 @@ public interface GspEnterpriseInfoMybatisDao extends BaseDao {
 	 * @return
 	 */
 	 List<GspEnterpriseTypeDTO> queryEnterpriseApplyListById(@Param("enterpriseId")String enterpriseId);
+
+	/**
+	 * 根据企业信息id查询最新的该企业
+	 */
+	public <T> T queryNewByEnterpriseId(Object id);
+
 }

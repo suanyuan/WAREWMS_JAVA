@@ -7,8 +7,10 @@ import java.util.Date;
 
 @Data
 @Entity
-public class DocMtDetails {
+public class DocMtSearchExportForm {
 
+
+  private String token;
   private String mtno;
   private long mtlineno;
   private String linestatus;
@@ -17,19 +19,19 @@ public class DocMtDetails {
   private String inventoryage;     //库龄
   private String locationid;       //库位
   private String lotnum;           //批号
-  private double mtqtyExpected;    //预期养护件数
-  private double mtqtyEachExpected;//预期养护数量
-  private double mtqtyCompleted;
-  private double mtqtyEachCompleted;
+  private double mtqty_Expected;    //预期养护件数
+  private double mtqty_Each_Expected;//预期养护数量
+  private double mtqty_Completed;
+  private double mtqty_Each_Completed;
   private String uom;                  //单位
-  private String checkFlag="2";              //检查内容（外观、包装等）2默认未检查
-  private String conclusion="2";          //养护结论2默认未检查
-  private Date conversedate; //养护日期
+  private String check_Flag;              //检查内容（外观、包装等）
+  private String conclusion;          //养护结论
+  private String conversedate; //养护日期
   private String conversewho;         //养护人
   private String remark;              //备注
-  private Date addtime;
+  private String addtime;
   private String addwho;
-  private Date edittime;
+  private String edittime;
   private String editwho;
 //养护
   private InvLotAtt invLotAtt;
@@ -55,10 +57,5 @@ private String lotatt01;  //生产日期
 //bas_customer
   private String reservedfield06;//生产许可证号/备案号
 
-  //用于打印的单位
-  private String uomName;
-  //总数量
-  private double mtqtyEachCompletedSum;
-  //总件数
-  private double mtqtyCompletedSum;
+
 }
