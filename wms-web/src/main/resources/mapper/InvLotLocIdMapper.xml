@@ -262,7 +262,7 @@ where 1=1
         INNER JOIN`inv_lot_att`   a ON  a.lotnum=i.lotnum
         INNER JOIN bas_package p ON p.packid=s.packid
         INNER JOIN `doc_asn_header` h ON a.lotatt14=h.asnno
-       WHERE h.asntype='PR' AND i.locationid NOT IN('STAGE01','SORTATION01','YY-01-01-01','DX-01-01-01') AND s.reservedfield10 IS NOT NULL
+       WHERE h.asntype='PR' AND i.locationid NOT IN('STAGE01','SORTATION01','YY-01-01-01','DX-01-01-01') AND s.reservedfield10 IS NOT NULL AND s.reservedfield10 <![CDATA[  <>  ]]> ''
 </select>
     
 <select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">

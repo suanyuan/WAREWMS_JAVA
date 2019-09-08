@@ -228,7 +228,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho,editwho,edittime)
- values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},now(),#{editwho})
+ values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},#{editwho},now())
 </insert>
 
 <!-- 根据id，修改记录-->  
