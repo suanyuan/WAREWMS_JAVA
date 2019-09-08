@@ -288,7 +288,7 @@ public class DocMtDetailsService extends BaseService {
             BeanUtils.copyProperties(docMtDetails, executionDetail);
             executionDetail.setMtqtyExpected(executionDetail.getMtqtyExpected() - form.getMtqtyCompleted());
             executionDetail.setMtqtyEachExpected(executionDetail.getMtqtyEachExpected() - (form.getMtqtyCompleted() * basPackage.getQty1().doubleValue()));
-            executionDetail.setEditwho(form.getEditwho());
+//            executionDetail.setEditwho(form.getEditwho());
             docMtDetailsMybatisDao.updateDetailQty(executionDetail);
 
             //养护结果明细是否存在，存在合并，不存在新增

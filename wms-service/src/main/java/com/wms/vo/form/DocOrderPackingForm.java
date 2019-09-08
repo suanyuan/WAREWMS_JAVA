@@ -11,6 +11,8 @@ public class DocOrderPackingForm {
 
 	private String orderno;
 
+	private int packlineno;
+
     private String traceid;//PDA cartonNum
 
     private String cartonno;

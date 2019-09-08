@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.crypto.Mac;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -182,6 +183,9 @@ public class DocOrderPackingService extends BaseService {
 		return json;
 	}
 
+    /**
+     * 装箱提交（单个）
+     */
 	public Json skuScanCheck(String orderNo, String skuCode) {
 		/*Json json = new Json();
 		DocOrderPackingQuery docOrderPackingQuery = new DocOrderPackingQuery();
@@ -307,6 +311,9 @@ public class DocOrderPackingService extends BaseService {
 		return json;
 	}
 
+	/**
+     * 箱型提交
+	 */
 	public Json packingCommit(String orderNo) {
 		DocOrderPackingForm form = new DocOrderPackingForm();
 		form.setOrderno(orderNo);
@@ -318,6 +325,9 @@ public class DocOrderPackingService extends BaseService {
 		}
 	}
 
+    /**
+     * 结束装箱/结束复核
+     */
 	public Json orderCommit(String orderNo, String cartonNo, String cartontype) {
 
 	    DocOrderPackingForm form = new DocOrderPackingForm();
@@ -752,30 +762,49 @@ public class DocOrderPackingService extends BaseService {
         pdaDocPackageVO.setInvLotAtt(invLotAtt);
 
         //箱号
-        //查询这个出库单下面的这个sku有没有装过箱，packflag是否为0（装箱还没结束）,可能存在多个箱号，所以是个list
-        //如果没有packflag为0的，就在未被使用的箱号中生成一个，暂时不写入，有包装复核提交动作的时候再插数据到doc_order_packing_carton表中
-        String cartonNum;
-
-        DocOrderPackingCarton cartonQuery = new DocOrderPackingCarton();
-        cartonQuery.setOrderno(actAllocationDetails.getOrderno());
-        cartonQuery.setSku(actAllocationDetails.getSku());
-        cartonQuery.setCustomerid(actAllocationDetails.getCustomerid());
-        cartonQuery.setLotnum(actAllocationDetails.getLotnum());
-        DocOrderPackingCarton docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
-        if (docOrderPackingCarton == null) {
-            DocOrderPackingQuery packingQuery = new DocOrderPackingQuery();
-            packingQuery.setOrderNo(actAllocationDetails.getOrderno());
-            DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryCartonNoById(packingQuery);
-            cartonNum = String.format("%s#%03d", actAllocationDetails.getOrderno(), docOrderPacking.getCartonNo());
-        }else {
-
-            cartonNum = docOrderPackingCarton.getTraceid();
-        }
-        pdaDocPackageVO.setCartonNum(cartonNum);
+        pdaDocPackageVO.setCartonNum(fixCartonNum(actAllocationDetails, basSku, invLotAtt));
 
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         map.put(Constant.DATA, pdaDocPackageVO);
         return map;
+    }
+
+    /**
+     * 处理箱号返回的问题
+     * 区分 冷链 || 非冷链
+     * 非冷链或没有冷链标志的：只要不装箱结束，就一直是一箱
+     * 冷链（冷冻||冷藏）：不同批号的会生成一个新的箱号，相同批号则可装一箱
+     * @return 箱号
+     */
+    private String fixCartonNum(ActAllocationDetails actAllocationDetails, BasSku basSku, InvLotAtt invLotAtt) {
+
+
+        DocOrderPackingCarton cartonQuery = new DocOrderPackingCarton();
+        DocOrderPackingCarton docOrderPackingCarton;
+
+        cartonQuery.setOrderno(actAllocationDetails.getOrderno());
+        cartonQuery.setCustomerid(actAllocationDetails.getCustomerid());
+
+        //冷链（冷冻 || 冷藏）
+        if (StringUtil.isNotEmpty(basSku.getReservedfield07()) && (basSku.getReservedfield07().equals("LD") || basSku.getReservedfield07().equals("LC"))) {
+
+            cartonQuery.setSku(actAllocationDetails.getSku());
+            cartonQuery.setLotatt04(invLotAtt.getLotatt04());
+            docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
+        }else { //非冷链
+
+            docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
+        }
+        if (docOrderPackingCarton == null) {
+
+            DocOrderPackingQuery packingQuery = new DocOrderPackingQuery();
+            packingQuery.setOrderNo(actAllocationDetails.getOrderno());
+            DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryCartonNoById(packingQuery);
+            return String.format("%s#%03d", actAllocationDetails.getOrderno(), docOrderPacking.getCartonNo());
+        }else {
+
+            return docOrderPackingCarton.getTraceid();
+        }
     }
 
 //    暂缓
@@ -831,22 +860,8 @@ public class DocOrderPackingService extends BaseService {
                 }
             }
 
-            //如果包装数和分配数相同要将分配明细的packflag set 1
-            packingCartonQuery.setTraceid(form.getTraceid());
-            packingCartonQuery.setSku(form.getSku());
-            packingCartonQuery.setLotnum(form.getLotnum());
-            DocOrderPackingCarton packingCarton = docOrderPackingMybatisDao.queryAvailablePackedDetail(packingCartonQuery);
-            int matchQty = packingCarton == null ? 0 : packingCarton.getQty();
-
-            //装箱完成同批号的产品
-            ActAllocationDetailsQuery allocationDetailsQuery = new ActAllocationDetailsQuery();
-            allocationDetailsQuery.setOrderno(form.getOrderno());
-            allocationDetailsQuery.setCustomerid(form.getCustomerid());
-            allocationDetailsQuery.setSku(form.getSku());
-            allocationDetailsQuery.setLotnum(form.getLotnum());
-            int batchPackNum = actAllocationDetailsMybatisDao.queryPackedNum(allocationDetailsQuery);
-
-            if (matchDetails.getQty() == (form.getQty() + (matchQty - batchPackNum))) {
+            //本次装箱件数+分配明细对应的已装箱件数 == 分配明细件数
+            if (matchDetails.getQty() == (form.getQty() + packedNum)) {
 
                 allocationQuery.setEditwho(form.getEditwho());
                 actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
@@ -862,11 +877,16 @@ public class DocOrderPackingService extends BaseService {
                 docOrderPackingMybatisDao.packingCartonInfoInsert(docOrderPackingCartonInfo);
             }
 
+            packingCartonQuery.setTraceid(form.getTraceid());
+            packingCartonQuery.setSku(form.getSku());
+            packingCartonQuery.setLotnum(form.getLotnum());
+            DocOrderPackingCarton packingCarton = docOrderPackingMybatisDao.queryAvailablePackedDetail(packingCartonQuery);
             if (packingCarton == null) {
 
                 DocOrderPackingCarton packingCartonInsert = new DocOrderPackingCarton();
                 BeanUtils.copyProperties(invLotAtt, packingCartonInsert);
-//                packingCartonInsert.setLotnum(null);
+                int maxlineno = docOrderPackingMybatisDao.getMaxPacklineno(form.getOrderno());
+                packingCartonInsert.setPacklineno(maxlineno + 1);
                 packingCartonInsert.setOrderno(form.getOrderno());
                 packingCartonInsert.setTraceid(form.getTraceid());
                 packingCartonInsert.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
@@ -878,8 +898,7 @@ public class DocOrderPackingService extends BaseService {
                 packingCartonInsert.setDescription(form.getDescription());
                 packingCartonInsert.setConclusion(form.getConclusion());
                 packingCartonInsert.setAddwho(form.getEditwho());
-                packingCartonInsert.setEdittime(null);
-                packingCartonInsert.setEditwho(null);
+                packingCartonInsert.setEditwho(form.getEditwho());
                 docOrderPackingMybatisDao.packingCartonInsert(packingCartonInsert);
             }else {
 
@@ -948,13 +967,6 @@ public class DocOrderPackingService extends BaseService {
             List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
             for (ActAllocationDetails allocationDetails : actAllocationDetailsList) {
 
-//                DocOrderPackingCarton packedQuery = new DocOrderPackingCarton();
-//                packedQuery.setAllocationdetailsid(allocationDetails.getAllocationdetailsid());
-//                packedQuery.setOrderno(orderno);
-//                int packedNum = docOrderPackingMybatisDao.queryPackedNum(packedQuery);
-//                allocationDetails.setPrice(packedNum + 0.0);
-//                actAllocationDetailsMybatisDao.update(allocationDetails);//分配明细
-
                 PdaOrderPackingForm packingForm = new PdaOrderPackingForm(
                         orderHeaderForNormal.getWarehouseid(),
                         PdaOrderPackingForm.ACTION_RV,
@@ -1009,27 +1021,12 @@ public class DocOrderPackingService extends BaseService {
                 BasSkuQuery skuQuery = new BasSkuQuery(actAllocationDetails.getCustomerid(), actAllocationDetails.getSku());
                 BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
 
-                //箱号
-                String cartonNum;
-
-                DocOrderPackingCarton cartonQuery = new DocOrderPackingCarton();
-                cartonQuery.setOrderno(actAllocationDetails.getOrderno());
-                cartonQuery.setSku(actAllocationDetails.getSku());
-                cartonQuery.setCustomerid(actAllocationDetails.getCustomerid());
-                cartonQuery.setLotnum(actAllocationDetails.getLotnum());
-                DocOrderPackingCarton docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
-                if (docOrderPackingCarton == null) {
-                    DocOrderPackingQuery packingQuery = new DocOrderPackingQuery();
-                    packingQuery.setOrderNo(actAllocationDetails.getOrderno());
-                    DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryCartonNoById(packingQuery);
-                    cartonNum = String.format("%s#%03d", actAllocationDetails.getOrderno(), docOrderPacking.getCartonNo());
-                }else {
-
-                    cartonNum = docOrderPackingCarton.getTraceid();
-                }
-
                 //批次属性
                 InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
+
+                //箱号
+                String cartonNum = fixCartonNum(actAllocationDetails, basSku, invLotAtt);
+
                 DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
                 docAsnHeaderQuery.setAsnno(invLotAtt.getLotatt14());
                 DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
@@ -1075,7 +1072,7 @@ public class DocOrderPackingService extends BaseService {
                 }
             }
 
-            //结束复核，件数回写
+            //结束复核
             DocOrderPackingForm form = new DocOrderPackingForm();
             form.setOrderno(orderno);
             form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

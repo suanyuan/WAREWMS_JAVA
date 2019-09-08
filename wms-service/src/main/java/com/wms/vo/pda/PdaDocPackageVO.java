@@ -16,6 +16,11 @@ public class PdaDocPackageVO {
     String cartonNum;
 
     /**
+     * 行号
+     */
+    int packlineno;
+
+    /**
      * 记录本次扫码是否是序列号扫码出库类型，是的话就返回给前端、移动端，用作包装复核提交中进行序列号记录
      */
     String serialNum;

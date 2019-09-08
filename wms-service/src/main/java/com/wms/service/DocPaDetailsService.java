@@ -266,6 +266,7 @@ public class DocPaDetailsService extends BaseService {
 
             List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();
             docPaDetails = docPaDetailsList.get(0);//默认取第一个进行上架操作,judgePaScanResult判空操作已有
+            form.setUserdefine5(docPaDetails.getUserdefine5());//连续上架都是DJ过来的，需要考虑HG的
         }
 
         InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
@@ -310,8 +311,6 @@ public class DocPaDetailsService extends BaseService {
         form.setUserdefine1(locationid);
         form.setUserdefine2(userdefine2);
         form.setUserdefine5(userdefine5);
-
-//        if (form.getLotatt01().equals("")) form.setLotatt01(invLotAtt.getLotatt01());
 
         form.setAsnlineno(docPaDetails.getAsnlineno());
         form.setUserid(editwho);

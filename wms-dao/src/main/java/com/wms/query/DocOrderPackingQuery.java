@@ -18,4 +18,6 @@ public class DocOrderPackingQuery implements IQuery {
 	private Integer qty;
 	
 	private String allocationDetailsId;
+
+	private int packlineno;
 }

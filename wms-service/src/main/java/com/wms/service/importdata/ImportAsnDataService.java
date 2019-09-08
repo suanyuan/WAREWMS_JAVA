@@ -592,7 +592,6 @@ public class ImportAsnDataService {
             String resultNo = map.get("resultNo").toString();
             if (resultCode.substring(0, 3).equals("000")) {
                 //赋值
-                //asnHeader.setAsntype("PR");
                 asnHeader.setAsntype(importDataVO.getAsntype());
                 asnHeader.setReleasestatus("Y");
                 asnHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());

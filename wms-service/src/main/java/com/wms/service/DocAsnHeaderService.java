@@ -148,6 +148,32 @@ public class DocAsnHeaderService extends BaseService {
 		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
 		docAsnHeaderQuery.setAsnno(docAsnHeaderForm.getAsnno());
 		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+
+		if (!docAsnHeader.getAsnstatus().equals("00") &&
+        !docAsnHeader.getSupplierid().equals(docAsnHeaderForm.getSupplierid())) {
+
+		    json.setSuccess(false);
+		    json.setMsg("只有订单创建状态下才可修改供应商");
+		    return json;
+        }
+
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
+        docAsnDetailQuery.setAsnno(docAsnHeader.getAsnno());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+        //批量修改明细中的供应商
+        //add by Gizmo 2019-09-08
+        if (!docAsnHeader.getSupplierid().equals(docAsnHeaderForm.getSupplierid())) {
+
+            for (DocAsnDetail docAsnDetail : docAsnDetailList) {
+
+                docAsnDetail.setLotatt08(docAsnHeader.getSupplierid());
+                docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                docAsnDetailsMybatisDao.update(docAsnDetail);
+            }
+        }
+
 		BeanUtils.copyProperties(docAsnHeaderForm, docAsnHeader);
 		docAsnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnHeaderMybatisDao.update(docAsnHeader);
@@ -157,11 +183,6 @@ public class DocAsnHeaderService extends BaseService {
 		if (docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
         docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
 
-		    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		    DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
-		    docAsnDetailQuery.setAsnno(docAsnHeader.getAsnno());
-		    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
-		    List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
 		    for (DocAsnDetail docAsnDetail : docAsnDetailList) {
 
 		        docAsnDetail = docAsnDetailService.configDxLocation(docAsnDetail);

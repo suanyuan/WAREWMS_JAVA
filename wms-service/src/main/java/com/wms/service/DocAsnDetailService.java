@@ -204,7 +204,8 @@ public class DocAsnDetailService extends BaseService {
         //产品注册证
         docAsnDetail.setLotatt06(basSku.getReservedfield03());
 
-        docAsnDetail.setLotatt08(basSku.getSkuGroup6());
+        //供应商取表头的
+        docAsnDetail.setLotatt08(docAsnHeader.getSupplierid());
 
         //质量状态
         docAsnDetail.setLotatt10("DJ");

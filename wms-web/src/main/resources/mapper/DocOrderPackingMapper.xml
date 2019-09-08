@@ -57,6 +57,7 @@
 
     <resultMap id="PackingCartonMap" type="com.wms.entity.DocOrderPackingCarton">
         <result column="orderno" property="orderno"/>
+        <result column="packlineno" property="packlineno"/>
         <result column="traceid" property="traceid"/>
         <result column="cartonno" property="cartonno"/>
         <result column="customerid" property="customerid"/>
@@ -81,7 +82,7 @@
 
     <!-- doc_order_packing_carton table all fields -->
     <sql id="Carton_Column_List" >
-	 orderno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,skudesce,description,conclusion,addwho,addtime,editwho,edittime
+	 orderno,packlineno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,skudesce,description,conclusion,addwho,addtime,editwho,edittime
 </sql>
     <sql id="Carton_Info_Column_List" >
 	 orderno,traceid,cartonno,cartontype,grossweight,cube,packingflag,addwho,addtime
@@ -112,15 +113,15 @@
 <!--插入装箱明细-->
 <insert id="packingCartonInsert" parameterType="Object" >
 	 insert into doc_order_packing_carton(
-	 orderno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,
+	 orderno,packlineno,traceid,cartonno,customerid,sku,qty,allocationdetailsid,
 	 lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,
 	 lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,
 	 skudesce,description,conclusion,addwho,addtime,editwho,edittime)
       values(
-      #{orderno},#{traceid},#{cartonno},#{customerid},#{sku},#{qty},#{allocationdetailsid},
+      #{orderno},#{packlineno},#{traceid},#{cartonno},#{customerid},#{sku},#{qty},#{allocationdetailsid},
       #{lotnum},#{lotatt01},#{lotatt02},#{lotatt03},#{lotatt04},#{lotatt05},#{lotatt06},#{lotatt07},#{lotatt08},#{lotatt09},
       #{lotatt10},#{lotatt11},#{lotatt12},#{lotatt13},#{lotatt14},#{lotatt15},#{lotatt16},#{lotatt17},#{lotatt18},
-      #{skudesce},#{description},#{conclusion},#{addwho},now(),null,null)
+      #{skudesce},#{description},#{conclusion},#{addwho},now(),#{editwho},now())
 </insert>
 
 <!--记录单箱装箱重量、体积-->
@@ -621,13 +622,20 @@ select a.orderno as orderNo,
 	order by b.cartonno, b.sku
 </select>
 
-    <!--查询orderno + sku + customerid 对应的装箱明细-->
+    <!--查询orderno + sku + customerid 对应的装箱明细 获取箱号-->
     <select id="queryGoodsPackage" parameterType="java.util.Map" resultMap="PackingCartonMap">
         select a.* from doc_order_packing_carton a
         left join doc_order_packing_carton_info b on a.orderno = b.orderno and a.traceid = b.traceid
-        where a.orderno = #{orderno, jdbcType=VARCHAR} and a.sku = #{sku, jdbcType=VARCHAR}
-          and a.customerid = #{customerid, jdbcType=VARCHAR} and a.lotnum = #{lotnum, jdbcType=VARCHAR}
+        where a.orderno = #{orderno, jdbcType=VARCHAR}
+          and a.customerid = #{customerid, jdbcType=VARCHAR}
           and b.packingflag = 0
+        <if test="lotatt04 != null and lotatt04 != ''">
+            and a.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+        </if>
+        <if test="lotatt04 != null and lotatt04 != ''">
+            and a.sku = #{sku, jdbcType=VARCHAR}
+        </if>
+        limit 1
     </select>
 
     <!--获取扫码产品的复核记录-->
@@ -677,4 +685,8 @@ select a.orderno as orderNo,
         <include refid="Carton_Info_Column_List"/>
         from doc_order_packing_carton_info where orderno = #{orderno}
     </select>
+
+    <select id="getMaxPacklineno" resultType="int"  parameterType="Object">
+	select ifnull(max(packlineno),0) from doc_order_packing_carton where orderno = #{orderno,jdbcType=VARCHAR}
+</select>
 </mapper>   

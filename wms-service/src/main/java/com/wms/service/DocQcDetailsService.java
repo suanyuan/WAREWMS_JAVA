@@ -259,7 +259,19 @@ public class DocQcDetailsService extends BaseService {
             historyQuery.setVersion(productRegister.getVersion());
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
             List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
-            pdaDocQcDetailVO.setProductRegisterList(gspProductRegisterList.size() == 0 ? new ArrayList<PdaGspProductRegister>() : gspProductRegisterList);
+            List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
+            List<String> numberList = new ArrayList<>();
+            for (PdaGspProductRegister pdaGspProductRegister : gspProductRegisterList) {
+
+                if (StringUtil.isEmpty(pdaGspProductRegister.getProductRegisterNo())) continue;
+
+                if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
+
+                    numberList.add(pdaGspProductRegister.getProductRegisterNo());
+                    returnRgisterList.add(pdaGspProductRegister);
+                }
+            }
+            pdaDocQcDetailVO.setProductRegisterList(returnRgisterList);
         }
 
         map.put(Constant.DATA, pdaDocQcDetailVO);
@@ -347,18 +359,18 @@ public class DocQcDetailsService extends BaseService {
          * 目前批量修改日期可操作，但是同批号、未上架的产品，日期就还是原来的
          * 所以这边做个限制，批量操作如果上架任务中有此批号的未上架产品，不允许批量验收
          */
-        DocQcDetails docQcDetails = new DocQcDetails();
-        if (form.getAllqcflag() == 1) {
-
-            docQcDetails = docQcDetailsDao.queryById(form);
-            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails);
-            int paPiece = docPaDetailsMybatisDao.queryUndoneNum4BatchNum(form.getQcno(), form.getLotatt04());
-            if ((StringUtil.fixNull(invLotAtt.getLotatt01()).equals(form.getLotatt01()) || StringUtil.fixNull(invLotAtt.getLotatt02()).equals(form.getLotatt02())) &&
-                    paPiece > 0) {
-
-                return new PdaResult(PdaResult.CODE_FAILURE, "当前生产批号下还有未上架的产品，不可进行批量修改日期操作");
-            }
-        }
+//        DocQcDetails docQcDetails = new DocQcDetails();
+//        if (form.getAllqcflag() == 1) {
+//
+//            docQcDetails = docQcDetailsDao.queryById(form);
+//            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails);
+//            int paPiece = docPaDetailsMybatisDao.queryUndoneNum4BatchNum(form.getQcno(), form.getLotatt04());
+//            if ((StringUtil.fixNull(invLotAtt.getLotatt01()).equals(form.getLotatt01()) || StringUtil.fixNull(invLotAtt.getLotatt02()).equals(form.getLotatt02())) &&
+//                    paPiece > 0) {
+//
+//                return new PdaResult(PdaResult.CODE_FAILURE, "当前生产批号下还有未上架的产品，不可进行批量修改日期操作");
+//            }
+//        }
 
         form.setLanguage("CN");
         form.setReturncode("");
@@ -378,7 +390,7 @@ public class DocQcDetailsService extends BaseService {
             if (form.getAllqcflag() == 1) {
 
                 //处理批量验收合格操作
-                docQcDetails = docQcDetailsDao.queryById(docQcDetails);//更新批次号，存在批属修改的情况
+                DocQcDetails docQcDetails = docQcDetailsDao.queryById(form);//更新批次号，存在批属修改的情况
                 return configAllQc(form, docQcDetails);
             }else {
 

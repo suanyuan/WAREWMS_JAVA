@@ -88,7 +88,7 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
      */
 	int queryPackedNum(DocOrderPackingCarton docOrderPackingCarton);
 
-	//根据orderno traceid查询
+	//根据orderno packlineno查询
 	DocOrderPackingCartonInfo queryPackingCartonInfo(@Param("orderno") String orderno, @Param("traceid") String traceid);
 
 	int updatePackingCarton(DocOrderPackingCarton docOrderPackingCarton);
@@ -101,4 +101,11 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
      * @return ~
      */
     List<DocOrderPacking> queryPackageExist(@Param("orderno") String orderno);
+
+    /**
+     * 获取包装明细中最大的行号
+     * @param orderno ~
+     * @return ~
+     */
+    int getMaxPacklineno(@Param("orderno") String orderno);
 }
