@@ -17,6 +17,15 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String productName;//附加
 	private String createDateStart;//附加
 	private String createDateEnd;//附加
+	private String productRegisterNo;
+
+	public String getProductRegisterNo() {
+		return productRegisterNo;
+	}
+
+	public void setProductRegisterNo(String productRegisterNo) {
+		this.productRegisterNo = productRegisterNo;
+	}
 
 	public String getCreateDateStart() {
 		return createDateStart;

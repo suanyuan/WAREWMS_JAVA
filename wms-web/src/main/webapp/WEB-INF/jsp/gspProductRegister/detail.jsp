@@ -200,12 +200,18 @@
         </table>
     </div>
     <div id="dialogChoseScope" style='padding: 10px;'></div>
+
+        <div id="dialogEnterprise">
+
+        </div>
+
 </div>
 <script charset="UTF-8" type="text/javascript" src="/js/jquery/ajaxfileupload.js"></script>
 <script>
     var ezuiFormDetail = $("#ezuiFormDetail");
     var ezuiDialogSpec;
     var dataGridProduct;
+
     var ezuiDialogEnterprise;
     var enterpriseDatagrid;
     var dialogEnterprise; //TODO 替换成企业信息查询通用
@@ -296,7 +302,7 @@
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
                 {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
                 {field: '_operate',		title: '操作',	width: '20%',
-                    formatter: formatOper
+                    formatter: formatOperEnterprise
                 }
             ]],
             onDblClickCell: function(index,field,value){
@@ -314,7 +320,17 @@
                 //sy.bp()+'/gspProductRegisterController.do?showSpecsList'
             }
         })
-
+        //企业信息详情
+        dialogEnterprise = $('#dialogEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            fit:true,
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            cache: false,
+            onClose : function() {
+                //  ezuiFormClear(ezuiForm);
+            }
+        }).dialog('close');
 
         $("#ezuiFormDetail input[name='classifyId']").combobox({
             panelHeight: 'auto',
@@ -735,6 +751,13 @@
     // function operateGrid(id) {
     //     //dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
     // }
+    function operateGrid(id) {
+        dialogEnterprise.dialog("refresh","/gspEnterpriseInfoController.do?toDetail&id="+id).dialog('open');
+    }
+
+    function formatOperEnterprise(value,row,index){
+        return "<a onclick=\"operateGrid('"+row.enterpriseId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+    }
 
     function formatOper(value,row,index){
         return "<a onclick=\"viewUrl('"+row.attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";

@@ -22,7 +22,15 @@ public class FirstBusinessApplyVO {
 	private String productline;
 	private String specsId;
 	private String customerid;
+	private String productRegisterNo;
 
+	public String getProductRegisterNo() {
+		return productRegisterNo;
+	}
+
+	public void setProductRegisterNo(String productRegisterNo) {
+		this.productRegisterNo = productRegisterNo;
+	}
 
 	public String getClientEnterpeiseId() {
 		return clientEnterpeiseId;
