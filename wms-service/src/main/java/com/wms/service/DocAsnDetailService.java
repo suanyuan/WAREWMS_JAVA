@@ -232,10 +232,14 @@ public class DocAsnDetailService extends BaseService {
 		docAsnDetail.setPackid(basSku.getPackid());
 		docAsnDetail.setAlternativesku(basSku.getAlternateSku1());
 
-		//判断预入库明细里面的sku和客户id下的18个批属是否存在
-		InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
 		//判断是否要插入扫码批次匹配表
-		basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
+        BasGtnLotattQuery basGtnLotattQuery = new BasGtnLotattQuery();
+        basGtnLotattQuery.setCustomerid(docAsnDetail.getCustomerid());
+        basGtnLotattQuery.setSku(docAsnDetail.getSku());
+        basGtnLotattQuery.setLotatt02(docAsnDetail.getLotatt02());
+        basGtnLotattQuery.setLotatt04(docAsnDetail.getLotatt04());
+        basGtnLotattQuery.setLotatt05(docAsnDetail.getLotatt05());
+		basGtnLotattService.queryInsertGtnLotatt(basGtnLotattQuery);
 
         //定向订单库位
         docAsnDetail = configDxLocation(docAsnDetail);
@@ -268,10 +272,14 @@ public class DocAsnDetailService extends BaseService {
             docAsnDetail.setExpectedqtyEach(docAsnDetail.getExpectedqty().multiply(basPackage.getQty1()));
         }
 
-        //判断预入库明细里面的sku和客户id下的18个批属是否存在
-        InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
         //判断是否要插入扫码批次匹配表
-        basGtnLotattService.queryInsertGtnLotatt(invLotAtt, docAsnDetailForm.getAsnno());
+        BasGtnLotattQuery basGtnLotattQuery = new BasGtnLotattQuery();
+        basGtnLotattQuery.setCustomerid(docAsnDetail.getCustomerid());
+        basGtnLotattQuery.setSku(docAsnDetail.getSku());
+        basGtnLotattQuery.setLotatt02(docAsnDetail.getLotatt02());
+        basGtnLotattQuery.setLotatt04(docAsnDetail.getLotatt04());
+        basGtnLotattQuery.setLotatt05(docAsnDetail.getLotatt05());
+        basGtnLotattService.queryInsertGtnLotatt(basGtnLotattQuery);
 
 		//定向订单库位
 		docAsnDetail = configDxLocation(docAsnDetail);

@@ -720,10 +720,15 @@ public class ImportAsnDataService {
                                     importDetailsDataVO.getReceivinglocation().length() == 0)) {
                         asnDetails.setReceivinglocation(DocAsnDetail.DX_RECEIVING_LOCATION);//定向订单库位
                     }
-                    //判断预入库明细里面的sku和客户id下的18个批属是否存在
-                    InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(asnDetails);
+
                     //判断是否要插入扫码批次匹配表
-                    basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());
+                    BasGtnLotattQuery basGtnLotattQuery = new BasGtnLotattQuery();
+                    basGtnLotattQuery.setCustomerid(asnDetails.getCustomerid());
+                    basGtnLotattQuery.setSku(asnDetails.getSku());
+                    basGtnLotattQuery.setLotatt02(asnDetails.getLotatt02());
+                    basGtnLotattQuery.setLotatt04(asnDetails.getLotatt04());
+                    basGtnLotattQuery.setLotatt05(asnDetails.getLotatt05());
+                    basGtnLotattService.queryInsertGtnLotatt(basGtnLotattQuery);
                     //保存订单明细信息
                     docAsnDetailsMybatisDao.add(asnDetails);
                 }

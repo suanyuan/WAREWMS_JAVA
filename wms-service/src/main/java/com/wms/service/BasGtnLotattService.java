@@ -3,11 +3,14 @@ package com.wms.service;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasGtnLotatt;
-import com.wms.entity.InvLotAtt;
 import com.wms.mybatis.dao.BasGtnLotattMybatisDao;
+import com.wms.mybatis.dao.InvLotAttMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.entity.IdSequence;
 import com.wms.query.BasGtnLotattQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.BasGtnLotattVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasGtnLotattForm;
@@ -15,8 +18,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("basGtnLotattService")
@@ -24,6 +27,9 @@ public class BasGtnLotattService extends BaseService {
 
 	@Autowired
 	private BasGtnLotattMybatisDao basGtnLotattMybatisDao;
+
+	@Autowired
+	private InvLotAttMybatisDao invLotAttMybatisDao;
 
 	public EasyuiDatagrid<BasGtnLotattVO> getPagedDatagrid(EasyuiDatagridPager pager, BasGtnLotattQuery query) {
         EasyuiDatagrid<BasGtnLotattVO> datagrid = new EasyuiDatagrid<>();
@@ -55,27 +61,25 @@ public class BasGtnLotattService extends BaseService {
 
     /**
      * 根据批次属性明细插入扫码对照表，先查再插(导入预入库通知单的时候)
+     * @param query customerid, sku, lotatt02, lotatt04, lotatt05
      */
-	public void queryInsertGtnLotatt(InvLotAtt invLotAtt, String asnno) {
+	public void queryInsertGtnLotatt(BasGtnLotattQuery query) {
 
-	    BasGtnLotattQuery query = new BasGtnLotattQuery();
-	    query.setLotnum(invLotAtt.getLotnum());
-	    query.setCustomerid(invLotAtt.getCustomerid());
-	    query.setSku(invLotAtt.getSku());
-	    query.setLotatt02(invLotAtt.getLotatt02());
-	    query.setLotatt04(invLotAtt.getLotatt04());
-	    query.setLotatt05(invLotAtt.getLotatt05());
-//	    query.setAddasnno(asnno);
+	    if (StringUtil.isNotEmpty(query.getLotatt04()) || StringUtil.isNotEmpty(query.getLotatt05())) {
 
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<BasGtnLotatt> basGtnLotattList = basGtnLotattMybatisDao.queryByList(mybatisCriteria);
-        BasGtnLotatt basGtnLotatt = new BasGtnLotatt();
-        if (basGtnLotattList == null || basGtnLotattList.size() == 0) {
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+            List<BasGtnLotatt> basGtnLotattList = basGtnLotattMybatisDao.queryByList(mybatisCriteria);
+            BasGtnLotatt basGtnLotatt = new BasGtnLotatt();
+            if (basGtnLotattList == null || basGtnLotattList.size() == 0) {
 
-            BeanUtils.copyProperties(query, basGtnLotatt);
-            basGtnLotatt.setAddtime(new java.sql.Date((new Date()).getTime()));
-            basGtnLotattMybatisDao.add(basGtnLotatt);
+                IdSequence idSequence = new IdSequence(SfcUserLoginUtil.getLoginUser().getWarehouse().getId(), "CN", IdSequence.SEQUENCE_TYPE_LOT_NUM);
+                invLotAttMybatisDao.getIdSequence(idSequence);
+                BeanUtils.copyProperties(query, basGtnLotatt);
+                basGtnLotatt.setLotnum(idSequence.getResultNo());
+                basGtnLotatt.setAddtime(new java.sql.Date((new Date()).getTime()));
+                basGtnLotattMybatisDao.add(basGtnLotatt);
+            }
         }
     }
 

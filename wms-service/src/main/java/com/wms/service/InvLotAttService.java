@@ -79,6 +79,7 @@ public class InvLotAttService extends BaseService {
      * @param docAsnDetail customerid, sku, lotatt01~18
      * @return ~
      */
+    @Deprecated
 	public InvLotAtt queryInsertLotatts(DocAsnDetail docAsnDetail) {
 
         InvLotAttQuery query = new InvLotAttQuery();
