@@ -159,29 +159,36 @@ public class FirstReviewLogService extends BaseService {
 	 * @return
 	 */
 	public Json returnCheck(String id,String remark){
+
+
+
 		try{
-			Json json = new Json();
-			FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(id);
-			FirstReviewLog updateLog = new FirstReviewLog();
-			//质量部审核
-			if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
-				updateLog.setCheckIdQc(SfcUserLoginUtil.getLoginUser().getId());
-				updateLog.setCheckDateQc(new Date());
-				updateLog.setCheckRemarkQc(remark);
-			}else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
-				updateLog.setCheckIdHead(SfcUserLoginUtil.getLoginUser().getId());
-				updateLog.setCheckDateHead(new Date());
-				updateLog.setCheckRemarkHead(remark);
-			}
-			//更新审核状态
-			updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
-			updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
-			updateLog.setReviewId(id);
-			firstReviewLogMybatisDao.updateBySelective(updateLog);
 
-			//更新首营申请单状态
-			dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+            String[] arr = id.split(",");
+            Json json = new Json();
+            for(String reviewId : arr) {
 
+                FirstReviewLog firstReviewLog = firstReviewLogMybatisDao.queryById(reviewId);
+                FirstReviewLog updateLog = new FirstReviewLog();
+                //质量部审核
+                if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING)){
+                    updateLog.setCheckIdQc(SfcUserLoginUtil.getLoginUser().getId());
+                    updateLog.setCheckDateQc(new Date());
+                    updateLog.setCheckRemarkQc(remark);
+                }else if(firstReviewLog.getApplyState().equals(Constant.CODE_CATALOG_CHECKSTATE_RESPONSIBLE)){
+                    updateLog.setCheckIdHead(SfcUserLoginUtil.getLoginUser().getId());
+                    updateLog.setCheckDateHead(new Date());
+                    updateLog.setCheckRemarkHead(remark);
+                }
+                //更新审核状态
+                updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+                updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+                updateLog.setReviewId(reviewId);
+                firstReviewLogMybatisDao.updateBySelective(updateLog);
+
+                //更新首营申请单状态
+                dataPublishService.updateFirstState(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_FIRSTSTATE_NEW);
+            }
 			json.setMsg("操作成功");
 			json.setSuccess(true);
 			return json;

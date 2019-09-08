@@ -26,7 +26,7 @@ $(function() {
 		fit: true,
 		border: false,
 		fitColumns : false,
-		nowrap: true,
+		nowrap: false,
 		striped: true,
 		collapsible:false,
 		pagination:true,
@@ -46,7 +46,7 @@ $(function() {
             },
             {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
 			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
-			{field: 'applyContent',		title: '内容',	width: 71 },
+			{field: 'applyContent',		title: '内容',	width: 200 },
 
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
 			{field: 'checkDateQc',		title: '审核时间',	width: 150 },
@@ -206,13 +206,24 @@ function doCheck() {
 }
 
 function returnCheck() {
+    var a = 0;
     $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行驳回操作吗', function(confirm) {
         if (confirm) {
             var row = ezuiDatagrid.datagrid("getSelections");
             var arr = new Array();
             for(var i=0;i<row.length;i++){
                 arr.push(row[i].reviewId);
+                if(row[i].applyState !="20" && row[i].applyState!="30"){
+                    a++;
+                }
             }
+            if(a!=0){
+                $.messager.show({
+                    msg : '新建和通过的未通过的不能审核', title : '<spring:message code="common.message.prompt"/>'
+                });
+                return;
+            }
+
             if(row){
                 $.ajax({
                     url : sy.bp()+"/firstReviewLogController.do?returnCheck",

@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.wms.constant.Constant;
+import com.wms.entity.BasCustomer;
 import com.wms.entity.FirstReviewLog;
-import com.wms.mybatis.dao.FirstReviewLogMybatisDao;
-import com.wms.mybatis.dao.GspSupplierMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.GspEnterpriseInfo;
+import com.wms.mybatis.dao.*;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
@@ -45,6 +45,11 @@ public class GspSupplierService extends BaseService {
 	private DataPublishService dataPublishService;
     @Autowired
     private GspVerifyService gspVerifyService;
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
+
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -132,12 +137,47 @@ public class GspSupplierService extends BaseService {
 			return Json.error("同一个企业不能重复申请");
 		}
 
+
+		BasCustomer b = new BasCustomer();
+		b.setCustomerid(gspSupplierForm.getCostomerid());
+		b.setCustomerType(Constant.CODE_CUS_TYP_OW);
+		BasCustomer C =basCustomerMybatisDao.selectByIdTypeActiveFlag(b);
+		GspEnterpriseInfo HZ =gspEnterpriseInfoMybatisDao.queryById(C.getEnterpriseId());
+		GspEnterpriseInfo GYS = gspEnterpriseInfoMybatisDao.queryById(gspSupplierForm.getEnterpriseId());
+
+
+
+
+		String content =
+		"供应商企业名称:"+GYS.getEnterpriseName()+" "+"供应商企业代码:"+GYS.getEnterpriseNo()+" "+
+		"供应商企业类型:"+regred(GYS.getEnterpriseType())+";"+"对应货主企业名称:"+HZ.getEnterpriseName()+" "+
+		"对应货主企业代码:"+HZ.getEnterpriseNo()+" "+"对应货主企业类型:"+regred(HZ.getEnterpriseType());
+		firstReviewLog.setApplyContent(content);
 		firstReviewLogMybatisDao.add(firstReviewLog);
 
 		gspSupplierMybatisDao.add(gspSupplier);
 		json.setSuccess(true);
 		return Json.success("添加成功");
 //		return json;
+	}
+
+	//企业类型翻译
+	public  String  regred(String entertype){
+		switch(entertype){
+			case "GNSC": entertype = "生产";
+				break;
+			case "JY": entertype = "经营";
+				break;
+			case "YL": entertype = "医疗机构";
+				break;
+			case "ZT": entertype = "主体";
+				break;
+			case "GW": entertype = "国外企业";
+				break;
+			case "SCJY": entertype = "生产和经营";
+
+		}
+		return entertype;
 	}
 
 	public Json editGspSupplier(GspSupplierForm gspSupplierForm) {
