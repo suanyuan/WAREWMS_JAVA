@@ -645,6 +645,8 @@ public class ImportAsnDataService {
                             addfalg = false;
                             resultMsg.append(verifyJson.getMsg()).append(" ");
                             continue;
+                        }else {
+                            asnDetails.setLotatt08(basSku.getSkuGroup6());
                         }
                     }
 

@@ -256,14 +256,15 @@ public class GspCustomerService extends BaseService {
 
 				//更新旧数据状态
 				GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(s);
-                // 通过enterpriseId 查询该公司的最新的enterpriseId
-                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspCustomer.getEnterpriseId());
-                if(g!=null){
-                    gspCustomer.setEnterpriseId(g.getEnterpriseId());
-
-                }else{
-                    return  Json.error("企业信息已失效");
-                }
+//				String oldEnterpriseId = gspCustomer.getEnterpriseId();
+//                // 通过enterpriseId 查询该公司的最新的enterpriseId
+//                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspCustomer.getEnterpriseId());
+//                if(g!=null){
+//                    gspCustomer.setEnterpriseId(g.getEnterpriseId());
+//
+//                }else{
+//                    return  Json.error("企业信息已失效");
+//                }
 
 
 
