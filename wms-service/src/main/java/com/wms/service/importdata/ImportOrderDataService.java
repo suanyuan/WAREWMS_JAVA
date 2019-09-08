@@ -358,8 +358,7 @@ public class ImportOrderDataService {
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品代码查无商品资料").append(" ");
-                }
-                if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
+                }else if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
@@ -379,7 +378,7 @@ public class ImportOrderDataService {
             customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
             if (customer == null) {// 是否有客户资料
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
-            }
+            }else
             if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码合作状态为未合作状态").append(" ");
 

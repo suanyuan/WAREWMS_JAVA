@@ -53,9 +53,9 @@ public class GspVerifyService {
 
     /**
      * gsp申请经营范围校验
-     * @param customerId 客户id
-     * @param supplierId 供应商id
-     * @param sku 产品(为""不校验产品)
+     * @param customerId 客户id（未申请的传enterpriseId）
+     * @param supplierId 供应商id（未申请的传enterpriseId）
+     * @param sku 产品(为""不校验产品)（未申请的传specsId）
      */
     public Json verifyOperate(String customerId,String supplierId,String sku){
         return this.verifyOperate(customerId,supplierId,sku,"","");
@@ -257,20 +257,25 @@ public class GspVerifyService {
                         if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
                             return Json.success("一类不需要匹配经营范围");
                         }
-                    }else{
-                        //产品与货主供应商匹配
-                        List<GspOperateDetailVO> productVo = new ArrayList<>();
-                        productVo.add(operateDetailList.get(0));
-
-                        boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
-                        if(customerFlag == false){
-                            return Json.error("货主与供应商经营范围没有交集");
-                        }
-                        boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
-                        if(skuFlag == false){
-                            return Json.error("货主供应商与产品经营范围不匹配");
-                        }
                     }
+
+                    //产品与货主供应商匹配
+                    List<GspOperateDetailVO> productVo = new ArrayList<>();
+                    productVo.add(operateDetailList.get(0));
+
+                    boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
+                    if(customerFlag == false){
+                        return Json.error("货主与供应商经营范围没有交集");
+                    }
+                    boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
+                    if(skuFlag == false){
+                        return Json.error("货主与产品经营范围不匹配");
+                    }
+                    if(!checkOperateIsRight(operateDetailVOSSupplier,productVo)){
+                        return Json.error("供应商与产品经营范围不匹配");
+                    }
+                }else {
+                    return Json.error("产品注册证没有关联器械目录");
                 }
 
                 if(!StringUtil.isEmpty(lotatt01)){
@@ -334,11 +339,11 @@ public class GspVerifyService {
             arroperate.add(v.getOperateId());
         }
         for(String s : arrregister){
-            if(arroperate.toString().indexOf(s)==-1){
-                return false;
+            if(arroperate.toString().indexOf(s)!=-1){
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private List<GspOperateDetailVO> getOperateDetail(String operateId){

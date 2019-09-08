@@ -91,7 +91,7 @@ $(function() {
 			//edit();
 
 		},
-        onDblClickRow(index,row){
+		onDblClickRow(index,row){
             edit(row);
 			qlOrderDetails(row);
         },
