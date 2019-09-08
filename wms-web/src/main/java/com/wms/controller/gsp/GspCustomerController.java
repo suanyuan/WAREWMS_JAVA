@@ -61,7 +61,11 @@ public class GspCustomerController {
 	@RequestMapping(params = "basCustomerToDetail")
 	public ModelAndView basCustomerToDetail(String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
+
 		GspCustomer gspCustomer=gspCustomerMybatisDao.queryByEnterpriseId(id);
+		if(gspCustomer==null){
+			return new ModelAndView("gspCustomer/detail", model);
+		}
 		id = gspCustomer.getClientId();
 
 		Json json = gspCustomerService.getGspCustomerById(id);

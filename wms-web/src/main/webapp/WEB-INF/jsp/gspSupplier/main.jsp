@@ -153,7 +153,8 @@ var edit = function(){
             }
         });
         // ezuiDialog.dialog('open').dialog('refresh', dialogUrl+"&id="+row.supplierId);
-        $('#enterpriseDialog').dialog('destroy');
+        $('#ezuiDialogClientDetail').dialog('destroy');
+        $('#ezuiDialogSupplier').dialog('destroy');
     }else{
         $.messager.show({
             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
