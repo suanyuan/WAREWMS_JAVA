@@ -154,6 +154,16 @@ public class GspSupplierService extends BaseService {
 //		json.setSuccess(true);
 //		return json;
 	}
+
+    public Json commitGspSupplier(GspSupplierForm gspSupplierForm) {
+        Json json = new Json();
+        //GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
+        //BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
+        gspSupplierMybatisDao.updateBySelective(gspSupplierForm);
+        return Json.success("修改成功");
+//		json.setSuccess(true);
+//		return json;
+    }
 	public Json getGspSupplierInfo(String supplierId){
 		GspSupplierVO gspSupplierVO = new GspSupplierVO();
 		System.out.println("supplierId==========="+supplierId);
