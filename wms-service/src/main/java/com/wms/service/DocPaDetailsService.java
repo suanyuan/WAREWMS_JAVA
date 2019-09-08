@@ -284,7 +284,7 @@ public class DocPaDetailsService extends BaseService {
         if (StringUtil.isEmpty(form.getLotatt01())) {
             return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
         }else if (StringUtil.isEmpty(form.getUserdefine2())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择失效日期");
+            return new PdaResult(PdaResult.CODE_FAILURE, "请选择有效期/失效期");
         }
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -292,7 +292,7 @@ public class DocPaDetailsService extends BaseService {
             Date prdDate = format.parse(form.getLotatt01());
             Date expiryDate = format.parse(form.getUserdefine2());
             if (prdDate.getTime() >= expiryDate.getTime()) {
-                return new PdaResult(PdaResult.CODE_FAILURE, "失效日期不可小于生产日期");
+                return new PdaResult(PdaResult.CODE_FAILURE, "有效期/失效期不可小于生产日期");
             }
         } catch (Exception e) {
             e.printStackTrace();
