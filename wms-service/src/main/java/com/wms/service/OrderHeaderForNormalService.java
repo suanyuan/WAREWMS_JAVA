@@ -1644,7 +1644,7 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("consignerCounty", "浦东新区");
         map.put("consignerAddress", "施湾八路1026号2号楼");
         //支付方式
-        map.put("monthAccount", "7550385912");//月结卡号
+        map.put("monthAccount", "0213071013");//月结卡号
         map.put("payMethod", "1");
         //金额
         // map.put("codValue","9999.9");
@@ -1664,7 +1664,7 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
 
         //备注
-        map.put("remark","1");
+        map.put("remark","采购单号："+orderCodeList);
         //托寄物
         map.put("cargo","2");
         //计费重量
@@ -1678,7 +1678,7 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("PALINENO", System.currentTimeMillis());
         list.add(map);
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
-        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mm.jasper");
+        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTese.jasper");
         model.addAttribute("format", "pdf");
         model.addAttribute("jrMainDataSource", jrDataSource);
 

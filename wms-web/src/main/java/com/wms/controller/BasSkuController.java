@@ -192,4 +192,23 @@ public class BasSkuController {
 		return basSkuService.getPagedDatagridSearch(pager,query);
 	}
 
+	@Login
+	@RequestMapping(params = "selectBasSku")
+	@ResponseBody
+	public BasSku selectBasSku(String customerid, String sku) {
+		return basSkuService.selectBasSku(customerid,sku);
+	}
+
+	@Login
+	@RequestMapping(params = "editActiveFlag")
+	@ResponseBody
+	public Json editActiveFlag(String customerid, String sku,String activeFlag) {
+		Json json = basSkuService.editActiveFlag(customerid,sku,activeFlag);
+		if(json == null){
+			json = new Json();
+		}
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		return json;
+	}
+
 }
