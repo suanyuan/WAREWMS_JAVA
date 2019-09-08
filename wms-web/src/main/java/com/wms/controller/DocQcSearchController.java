@@ -65,9 +65,11 @@ public class DocQcSearchController {
 	 */
 	@Login
 	@RequestMapping(params = "printQcSearch")
-	public String printQcSearch(String linestatus , String userdefine4, String userdefine3 , Model model){
+	public String printQcSearch(Model model,String qcno, String linestatus,String lotatt10,String descrc,String customerid,
+								String shippershortname,String sku,String lotatt12,String lotatt08,String lotatt15,String lotatt03Start,
+								String lotatt03End,String lotatt14){
 
-		List<DocQcHeader> docQcHeaderList = docQcSearchService.printQcSearch(linestatus,userdefine4,userdefine3);
+		List<DocQcHeader> docQcHeaderList = docQcSearchService.printQcSearch(qcno, linestatus,lotatt10,descrc,customerid,shippershortname,sku,lotatt12,lotatt08,lotatt15,lotatt03Start,lotatt03End,lotatt14);
 
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
 		model.addAttribute("url", "WEB-INF/jasper/report1Query.jasper");
