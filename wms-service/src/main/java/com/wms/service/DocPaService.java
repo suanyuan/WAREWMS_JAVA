@@ -56,6 +56,9 @@ public class DocPaService {
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
 
+    @Autowired
+    private InvLotAttService invLotAttService;
+
     /**
      * 编号列表
      */
@@ -222,6 +225,10 @@ public class DocPaService {
 
                             paNo = docPaHeader.getPano();
                         }
+
+                        //处理无批次属性的情况
+                        InvLotAtt invLotAttLeak = invLotAttService.queryInsertLotatts(docAsnDetail);
+                        docPaDTO.setLotnum(invLotAttLeak.getLotnum());
 
                         DocPaDetailsForm docPaDetailsForm = new DocPaDetailsForm();
                         docPaDetailsForm.setPano(paNo);
