@@ -1,14 +1,11 @@
 package com.wms.mybatis.dao;
 
-import com.wms.entity.DocOrderPacking;
 import com.wms.entity.DocQcDetails;
 import com.wms.mybatis.entity.CleanInventory;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
-import com.wms.query.DocOrderPackingQuery;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import org.apache.ibatis.annotations.Param;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
 
@@ -102,6 +99,12 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	 * @return
 	 */
 	public <T> List<T> queryByListPano(MybatisCriteria criteria);
+	/**
+	 * 验收记录查询
+	 * @param criteria
+	 * @return
+	 */
+	public <T> List<T> queryByListSearch(MybatisCriteria criteria);
 //用于导出
 	public <T> List<T> queryByListExport(MybatisCriteria criteria);
 	public int queryByCountPano(MybatisCriteria criteria);

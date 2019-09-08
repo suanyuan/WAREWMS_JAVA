@@ -30,6 +30,7 @@
 	<!--inv_lot_att by lotnum-->
 	<result column="lotatt01" property="lotatt01"/>
 	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt03" property="lotatt03"/>
 	<result column="lotatt04" property="lotatt04"/>
 	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
@@ -37,6 +38,7 @@
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt14" property="lotatt14"/>
 	<result column="lotatt15" property="lotatt15"/>
 <!--bas_sku  -->
 	<result column="descr_c" property="descrc"/>
@@ -139,7 +141,7 @@ where 1=1
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.mtno != null and condition.mtno != ''" >
-	    and d.mtno =  #{condition.mtno}
+	    and d.mtno like concat('%',#{condition.mtno},'%')
 	</if>
 	<if test="condition.mtlineno != null and condition.mtlineno != ''" >
 	    and d.mtlineno =  #{condition.mtlineno}
@@ -228,7 +230,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into doc_mt_details(mtno,mtlineno,linestatus,customerid,sku,inventoryage,locationid,lotnum,mtqty_expected,mtqty_each_expected,mtqty_completed,mtqty_each_completed,uom,check_flag,conclusion,conversedate,conversewho,remark,addtime,addwho,editwho,edittime)
- values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},now(),#{editwho})
+ values(#{mtno},#{mtlineno},#{linestatus},#{customerid},#{sku},#{inventoryage},#{locationid},#{lotnum},#{mtqtyExpected},#{mtqtyEachExpected},#{mtqtyCompleted},#{mtqtyEachCompleted},#{uom},#{checkFlag},#{conclusion},#{conversedate},#{conversewho},#{remark},now(),#{addwho},#{editwho},#{edittime})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -358,6 +360,34 @@ where 1=1
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
     </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+	<!-- 查询养护记录 -->
+<select id="queryByListSearch" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT
+	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name
+	FROM doc_mt_details  d
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
+	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+	<include refid="Example_Where_Clause1"/>
+     order by  d.mtno desc
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+	<!-- 查询养护计划管理列表Lotatt -->
+<select id="queryByListExport" resultType="com.wms.entity.DocMtSearchExportForm"  parameterType="Object">
+	SELECT
+	  d.*,a.*,s.descr_c descrc,s.reservedfield06,p.name productLineName
+	FROM doc_mt_details  d
+	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
+	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+	<include refid="Example_Where_Clause1"/>
+     order by  d.mtno desc
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>

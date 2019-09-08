@@ -2,9 +2,9 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
-import com.wms.entity.DocQcSearchExportForm;
+import com.wms.entity.DocOrderPackingCarton;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.DocQcDetailsMybatisDao;
+import com.wms.mybatis.dao.DocOrderPackingCartonMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
@@ -30,14 +30,15 @@ import java.util.List;
 @Service("docOrderPackingCartonSearchExportService")
 public class DocOrderPackingCartonSearchExportService {
 
+
     @Autowired
-    private DocQcDetailsMybatisDao docQcDetailsMybatisDao;
+    private DocOrderPackingCartonMybatisDao docOrderPackingCartonMybatisDao;
 
     @Autowired
     private BasCodesService basCodesService;
 
 
-    public void exportDocQcSearchDataToExcel(HttpServletResponse response, DocQcSearchExportForm form) throws IOException {
+    public void exportDocQcSearchDataToExcel(HttpServletResponse response, DocOrderPackingCarton form) throws IOException {
         Cookie cookie = new Cookie("exportToken", form.getToken());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
@@ -51,29 +52,12 @@ public class DocOrderPackingCartonSearchExportService {
             // excel表格的表头，map
             LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
             // excel的sheetName
-            String sheetName = "验收记录查询";
+            String sheetName = "复核记录查询";
             // excel要导出的数据
-            List<DocQcSearchExportForm> vList = docQcDetailsMybatisDao.queryByListExport(mybatisCriteria);
-            for (DocQcSearchExportForm form1 : vList) {
+            List<DocOrderPackingCarton> vList = docOrderPackingCartonMybatisDao.queryByList(mybatisCriteria);
+            for (DocOrderPackingCarton form1 : vList) {
                 //计算件数
-                form1.setQcqty_Expected(form1.getQcqty_Expected()-form1.getQcqty_Completed());
-                //计算数量
-                form1.setQcqty_ExpectedEach(form1.getQcqty_Expected()*form1.getQty1());
-                form1.setQcqty_CompletedEach(form1.getQcqty_Completed()*form1.getQty1());
-                //时间转换
-                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-                //行状态
-                String s=form1.getLinestatus();
-                if(s.equals("00")){
-                    form1.setLinestatus("未验收");
-                }else if(s.equals("30")){
-                    form1.setLinestatus("部分验收");
-                }else if(s.equals("40")){
-                    form1.setLinestatus("已验收");
-                }else{
-                    form1.setLinestatus("");
-
-                }
+                form1.setQtyEach(form1.getQty()*form1.getQty1());
                 //质量状态
                 List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
                 for (EasyuiCombobox easyuiCombobox : Lotatt10List)
@@ -84,6 +68,37 @@ public class DocOrderPackingCartonSearchExportService {
                         break;
                     }
                 }
+                //是否装箱
+                if(form1.getPackingflag()!=null){
+                    if(form1.getPackingflag().equals("1")){
+                        form1.setPackingflag("是");
+                    }else{
+                        form1.setPackingflag("否");
+                    }
+                }
+                //双证
+                if(form1.getLotatt13()!=null){
+                    if(form1.getLotatt13().equals("1")){
+                        form1.setLotatt13("已匹配");
+                    }else{
+                        form1.setLotatt13("");
+                    }
+                }
+                //产品属性
+                List<EasyuiCombobox> Lotatt09List = basCodesService.getBy(Constant.CODE_CATALOG_SAMPLEATTR);
+                for (EasyuiCombobox easyuiCombobox : Lotatt09List)
+                {
+                    //状态id对比
+                    if (form1.getLotatt09().equals(easyuiCombobox.getId())) {
+                        form1.setLotatt09(easyuiCombobox.getValue());
+                        break;
+                    }
+                }
+                //时间格式转换
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                form1.setEdittimeShow(formatter.format(form1.getEdittime()));
+                form1.setAddtimeShow(formatter.format(form1.getAddtime()));
+
             }
 
             // 导出
@@ -109,17 +124,17 @@ public class DocOrderPackingCartonSearchExportService {
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 
 
-        superClassMap.put("qcno", "验收单号");
-        superClassMap.put("linestatus", "行状态");
+        superClassMap.put("orderno", "出库单号");
+        superClassMap.put("traceid", "箱号");
+        superClassMap.put("packingflag", "是否装箱完成");
         superClassMap.put("lotatt10", "质量状态");
-        superClassMap.put("userdefine1", "库位");
         superClassMap.put("customerid", "货主代码");
         superClassMap.put("shippershortname", "货主简称");
         superClassMap.put("lotatt08", "供应商");
         superClassMap.put("sku", "产品代码");
         superClassMap.put("lotatt12", "产品名称");
         superClassMap.put("lotatt06", "注册证号");
-        superClassMap.put("descrc", "规格/型号");
+        superClassMap.put("skudesce", "规格/型号");
         superClassMap.put("lotatt04", "生产批号");
         superClassMap.put("lotatt07", "灭菌批号");
         superClassMap.put("lotatt05", "序列号");
@@ -129,16 +144,17 @@ public class DocOrderPackingCartonSearchExportService {
         superClassMap.put("lotatt11", "存储条件");
         superClassMap.put("lotatt15", "生产企业");
         superClassMap.put("reservedfield06", "生产许可证号/备案号");
-        superClassMap.put("qcqty_Expected", "待验收件数");
-        superClassMap.put("qcqty_Completed", "已验收件数");
-        superClassMap.put("qcqty_ExpectedEach", "待验收数量");
-        superClassMap.put("qcqty_CompletedEach", "已验收数量");
-        superClassMap.put("qcdescr", "验收说明");
-        superClassMap.put("editwho", "验收人");
-        superClassMap.put("edittime", "验收时间");
-        superClassMap.put("addtime", "创建时间");
+        superClassMap.put("qty", "装箱件数");
+        superClassMap.put("qtyEach", "装箱数量");
+        superClassMap.put("description", "复核说明");
+        superClassMap.put("conclusion", "复核结论");
+        superClassMap.put("editwho", "复核人");
+        superClassMap.put("edittimeShow", "复核时间");
+        superClassMap.put("addtimeShow", "创建时间");
         superClassMap.put("addwho", "创建人");
         superClassMap.put("lotatt14", "入库单号");
+        superClassMap.put("lotatt09", "产品属性");
+        superClassMap.put("lotatt13", "双证");
         superClassMap.put("qty1", "转换率");
 
 

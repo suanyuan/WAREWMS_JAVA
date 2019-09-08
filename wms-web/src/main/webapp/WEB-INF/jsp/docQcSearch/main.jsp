@@ -390,10 +390,10 @@ var doExport = function () {
         param.put("descrc", $('#descrc').val());                     //规格
         param.put("customerid",$('#customerid').val());              //货主代码
         param.put("shippershortname",$('#shippershortname').val());   //货主简称
-        param.put("sku",$('#sku').val()),                              //产品代码
-        param.put("lotatt12",$('#lotatt12').val()),                     //产品名称
-        param.put("lotatt08",$('#lotatt08').val()),                     //供应商
-        param.put("lotatt15",$('#lotatt15').val()),                     //生产企业
+        param.put("sku",$('#sku').val());                              //产品代码
+        param.put("lotatt12",$('#lotatt12').val());                     //产品名称
+        param.put("lotatt08",$('#lotatt08').val());                    //供应商
+        param.put("lotatt15",$('#lotatt15').val());                     //生产企业
         param.put("lotatt03Start", $('#lotatt03Start').datebox('getValue'));  //入库日期
         param.put("lotatt03End",$('#lotatt03End').datebox('getValue'));      //入库日期
         param.put("lotatt14",$('#lotatt14').textbox('getValue'));      //入库单号

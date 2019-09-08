@@ -102,12 +102,7 @@ public class DocAsnHeaderController {
 	@RequestMapping(params = "delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Json delete(String asnnos) throws Exception {
-		/*Json json = docAsnHeaderService.editDocAsnHeader(docAsnHeaderForm);
-		if(json == null){
-			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
-		}
-		return json;*/
+
 		return null;
 	}
 

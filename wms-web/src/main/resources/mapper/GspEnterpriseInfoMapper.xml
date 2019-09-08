@@ -193,6 +193,16 @@ where 1=1
 		from gsp_enterprise_info
 		where enterprise_id = #{enterpriseId} and is_use = '1'
 	</select>
+
+	<select id="queryNewByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select * from gsp_enterprise_info where enterprise_no =
+		(select enterprise_no from gsp_enterprise_info where enterprise_id = #{enterpriseId})
+		and is_use = '1'
+  		ORDER BY create_date DESC LIMIT 1;
+	</select>
+
+
+
 	<!-- 根据productRegisteNo查询 生产企业信息 -->
 
 	<select id="queryByProductRegisterId"  resultMap="BaseResultMap" parameterType="Object">

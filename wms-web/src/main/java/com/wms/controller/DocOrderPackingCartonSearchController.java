@@ -5,7 +5,6 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocOrderPackingCarton;
 import com.wms.entity.DocOrderPackingCartonInfo;
 import com.wms.entity.DocQcHeader;
-import com.wms.entity.DocQcSearchExportForm;
 import com.wms.service.DocOrderPackingCartonSearchExportService;
 import com.wms.service.DocOrderPackingCartonSearchService;
 import com.wms.utils.annotation.Login;
@@ -32,34 +31,31 @@ public class DocOrderPackingCartonSearchController {
     @Autowired
     private DocOrderPackingCartonSearchExportService docOrderPackingCartonSearchExportService;
 
-    @Login
-    @RequestMapping(params = "toMain")
-    public ModelAndView toMain(String menuId) {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("menuId", menuId);
-        return new ModelAndView("docOrderPackingCartonSearch/main", model);
-    }
-
-    /**
-     * 显示细单 分页
-     *
-     * @param pager
-     * @param query
-     * @return
-     */
-    @Login
-    @RequestMapping(params = "showDatagrid")
-    @ResponseBody
-    public EasyuiDatagrid<DocOrderPackingCarton> showDatagrid(EasyuiDatagridPager pager, DocOrderPackingCarton query) {
-        return docOrderPackingCartonSearchService.getPagedDatagrid(pager, query);
-    }
-
-    //	导出
-    @Login
-    @RequestMapping(params = "exportDocOrderPackingCartonSearchDataToExcel")
-    public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocQcSearchExportForm form) throws Exception {
-        docOrderPackingCartonSearchExportService.exportDocQcSearchDataToExcel(response, form);
-    }
+	@Login
+	@RequestMapping(params = "toMain")
+	public ModelAndView toMain(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("docOrderPackingCartonSearch/main", model);
+	}
+	/**
+	 * 显示细单 分页
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<DocOrderPackingCarton> showDatagrid(EasyuiDatagridPager pager, DocOrderPackingCarton query) {
+		return docOrderPackingCartonSearchService.getPagedDatagrid(pager,query);
+	}
+//	导出
+	@Login
+	@RequestMapping(params = "exportDocOrderPackingCartonSearchDataToExcel")
+	public void exportDocOrderPackingCartonSearchDataToExcel(HttpServletResponse response, DocOrderPackingCarton form) throws Exception {
+		docOrderPackingCartonSearchExportService.exportDocQcSearchDataToExcel(response, form);
+	}
 
     /**
      * 打印验收报告

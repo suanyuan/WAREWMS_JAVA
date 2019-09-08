@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
 
+	private String token;
 	private String orderno;
 
 	private int packlineno;
@@ -38,10 +39,12 @@ public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
     private String editwho;
 
     private Date edittime;
+    private String edittimeShow;
 
 	private String addwho;
 
 	private Date addtime;
+	private String addtimeShow;
 
 	private String lotatt01;
 	private String lotatt02;
@@ -65,7 +68,7 @@ public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
 //查询条件
 	private String lotatt03Start;
 	private String lotatt03End;
-	private String packingflag;  //是否装箱
+	private String  packingflag;  //是否装箱
 
 //bas表
    private String shippershortname;//货主简称

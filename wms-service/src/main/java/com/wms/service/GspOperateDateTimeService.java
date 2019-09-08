@@ -75,11 +75,12 @@ public class GspOperateDateTimeService {
         DocMtHeaderQuery query = new DocMtHeaderQuery();
         query.setFromdate(remoteDate);
         query.setTodate(dateFormat.format(newDate));
-        InvLotLocId invLotLocIdDay = new InvLotLocId();
+        InvLotLocId invLotLocIdDay;
         List<InvLotLocId> invLotLocIdListDay = new ArrayList<InvLotLocId>();
         List<InvLotLocId> invLotLocIdList = docMtHeaderService.getGenerationInfo(query);
         if (invLotLocIdList.size() > 0) {
             for (InvLotLocId invLotLocId : invLotLocIdList) {
+                invLotLocIdDay = new InvLotLocId();
                 BeanUtils.copyProperties(invLotLocId, invLotLocIdDay);
                 cal.setTime(dateFormat.parse(systemTime));
                 long time1 = cal.getTimeInMillis();//当前时间

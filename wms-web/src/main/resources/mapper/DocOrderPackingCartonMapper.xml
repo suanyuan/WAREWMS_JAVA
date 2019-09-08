@@ -330,9 +330,8 @@ where 1=1
 	INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
 	INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
 	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
+       order by  c.orderno desc,c.traceid
+
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>

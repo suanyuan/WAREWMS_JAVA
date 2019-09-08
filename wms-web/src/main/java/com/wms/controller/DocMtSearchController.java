@@ -1,26 +1,21 @@
 package com.wms.controller;
 
-import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.entity.DocMtSearchExportForm;
 import com.wms.query.DocMtDetailsQuery;
-import com.wms.service.DocMtDetailsService;
+import com.wms.service.DocMtSearchExportService;
 import com.wms.service.DocMtSearchService;
-import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.DocMtDetailsVO;
-import com.wms.vo.Json;
-import com.wms.vo.form.DocMtDetailsForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -29,6 +24,8 @@ public class DocMtSearchController {
 
 	@Autowired
 	private DocMtSearchService docMtSearchService;
+	@Autowired
+	private DocMtSearchExportService docMtSearchExportService;
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -43,6 +40,12 @@ public class DocMtSearchController {
 	@ResponseBody
 	public EasyuiDatagrid<DocMtDetailsVO> showDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
 		return docMtSearchService.getPagedDatagrid(pager, query);
+	}
+	//	导出
+	@Login
+	@RequestMapping(params = "exportDocMtSearchDataToExcel")
+	public void exportDocMtSearchDataToExcel(HttpServletResponse response, DocMtSearchExportForm form) throws Exception {
+		docMtSearchExportService.exportDocMtSearchDataToExcel(response,form);
 	}
 //	/**
 //	 * 批量养护 传json集合
