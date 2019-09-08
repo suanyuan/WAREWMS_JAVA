@@ -75,6 +75,15 @@ public class GspProductRegisterController {
 	}
 
 	@Login
+	@RequestMapping(params = "showDatagridSearch")
+	@ResponseBody
+	public EasyuiDatagrid<GspProductRegisterVO> showDatagridSearch(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
+		query.setIsUse(Constant.IS_USE_YES);
+		query.setCheckerId("all");
+		return gspProductRegisterService.getPagedDatagrid(pager, query);
+	}
+
+	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
 	public Json add(GspProductRegisterForm gspProductRegisterForm) throws Exception {

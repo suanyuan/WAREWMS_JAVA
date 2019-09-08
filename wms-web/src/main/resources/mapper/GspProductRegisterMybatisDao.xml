@@ -119,9 +119,14 @@
 			<if test="condition.version != null and condition.version != ''" >
 				and r.version =  #{condition.version}
 			</if>
-			<if test="condition.checkerId != null and condition.checkerId != ''" >
-				and r.checker_id =  #{condition.checkerId}
-			</if>
+			<choose>
+				<when test="condition.checkerId != null and condition.checkerId == 'all'">
+					and r.checker_id is not null
+				</when>
+				<when test="condition.checkerId != null and condition.checkerId != '' and condition.checkerId != 'all'">
+					and r.checker_id =  #{condition.checkerId}
+				</when>
+			</choose>
 			<if test="condition.checkDate != null and condition.checkDate != ''" >
 				and r.check_date =  #{condition.checkDate}
 			</if>

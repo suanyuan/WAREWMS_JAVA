@@ -215,6 +215,11 @@ var commit = function(){
             showMsg("营业执照营业起始时间不能超过当前时间");
             return;
         }
+        if(judgeDate($("#ezuiFormBusiness #establishmentDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("营业执照中成立日期不能超过当前时间");
+            return;
+        }
         if(!($("#ezuiFormBusiness #isLong").is(':checked')) && $("#ezuiFormBusiness #businessStartDate").datebox("getValue")>$("#ezuiFormBusiness #businessEndDate").datebox("getValue"))
         {
             $("#businessStartDate").focus();
@@ -257,6 +262,11 @@ var commit = function(){
             if(judgeDate($("#ezuiFormOperate #approveDate").datebox("getValue"))){
                 checkResult = false;
                 showMsg("经营许可证发证日期不能超过当前时间");
+                return;
+            }
+            if(!judgeDate($("#ezuiFormOperate #licenseExpiryDate").datebox("getValue"))){
+                checkResult = false;
+                showMsg("经营许可证有效期不能小于当前时间");
                 return;
             }
         }
@@ -311,6 +321,11 @@ var commit = function(){
             if(judgeDate($("#ezuiFormProd #approveDate").datebox("getValue"))){
                 checkResult = false;
                 showMsg("生产许可证发证日期不能超过当前时间");
+                return;
+            }
+            if(!judgeDate($("#ezuiFormProd #licenseExpiryDate").datebox("getValue"))){
+                checkResult = false;
+                showMsg("生产许可证有效期不能小于当前时间");
                 return;
             }
         }

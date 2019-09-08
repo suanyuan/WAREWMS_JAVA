@@ -171,7 +171,7 @@
         </tr>
         <tr>
             <th>养护周期(天)</th>
-            <td><input type='text' data="1"  id="maintenanceCycle" name='maintenanceCycle' class='easyui-textbox' size='50' data-options='required:true' /></td>
+            <td><input type='text' data="1"  id="maintenanceCycle" name='maintenanceCycle' class='easyui-numberbox' size='50' data-options='required:true' /></td>
             <th>创建时间</th>
             <td><input type='text' data="1" value="${createDate}" id="createDate" name='createDate' class='easyui-textbox' size='50' data-options='' readonly/></td>
 
@@ -275,6 +275,8 @@
                                     $(this).combobox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                                     $(this).datebox("setValue",result.obj[""+$(this).attr("id")+""]);
+                                }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
+                                    $(this).numberbox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }
                             }
 
@@ -348,7 +350,7 @@
             $('#isDoublec').combobox({required:false});
             $('#isCertificate').combobox({required:false});
             $('#unit').combobox({required:false});
-            $('#maintenanceCycle').textbox({required:false});
+            $('#maintenanceCycle').numberbox({required:false});
 
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
@@ -360,7 +362,7 @@
             $('#isDoublec').combobox({required:true});
             $('#isCertificate').combobox({required:true});
             $('#unit').combobox({required:true});
-            $('#maintenanceCycle').textbox({required:true});
+            $('#maintenanceCycle').numberbox({required:true});
         }
     }
     function changeColdHainMark(){
