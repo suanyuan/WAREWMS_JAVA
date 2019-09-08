@@ -313,6 +313,16 @@ public class UserService extends BaseService {
 //					SendSMSUtil.sendMesPost(userForm.getUserId(), String.format(ResourceUtil.getMobilePwdTemplate(), userForm.getUserId(), pwd));
 				}*/
 			}
+			if(!StringUtils.isEmpty(sfcUser.getUserGrade())){
+				if(sfcUser.getUserGrade().equals("1,2") || sfcUser.getUserGrade().equals("2,1")){
+					sfcUser.setUserGrade("11");
+				}else if(sfcUser.getUserGrade().equals("1")){
+					sfcUser.setUserGrade("10");
+				}else if(sfcUser.getUserGrade().equals("2")){
+					sfcUser.setUserGrade("01");
+				}
+			}
+
 			sfcUserMybatisDao.add(sfcUser);
 			if(userForm.getUserType() > 0){
 				if(StringUtils.isNotEmpty(userForm.getRole())){
@@ -390,6 +400,17 @@ public class UserService extends BaseService {
 				sfcUser.setCustomerSet(sfcCustomerSet);
 			}
 		}
+
+		if(!StringUtils.isEmpty(sfcUser.getUserGrade())){
+			if(sfcUser.getUserGrade().equals("1,2") || sfcUser.getUserGrade().equals("2,1")){
+				sfcUser.setUserGrade("11");
+			}else if(sfcUser.getUserGrade().equals("1")){
+				sfcUser.setUserGrade("10");
+			}else if(sfcUser.getUserGrade().equals("2")){
+				sfcUser.setUserGrade("01");
+			}
+		}
+
 		sfcUserMybatisDao.updateBySelective(sfcUser);
 		if(userForm.getUserType() > 0){
 			if(StringUtils.isNotEmpty(userForm.getRole())){

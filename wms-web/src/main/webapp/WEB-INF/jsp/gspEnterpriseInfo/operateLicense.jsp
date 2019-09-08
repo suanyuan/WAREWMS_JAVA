@@ -186,18 +186,6 @@
             }
         });
 
-        $("#isLong").click(function () {
-            if($(this).is(':checked')){
-                $("#businessStartDate").textbox("clear")
-                $("#businessEndDate").textbox("clear")
-                $("#businessStartDate").textbox("disable")
-                $("#businessEndDate").textbox("disable")
-            }else{
-                $("#businessStartDate").textbox("enable")
-                $("#businessEndDate").textbox("enable")
-            }
-        })
-
     })
 
     /**
@@ -343,6 +331,7 @@
     }
 
     function choseSelect_Catalog_operateLicense(row) {
+        console.log(row);
         var choseRowNameArr = new Array();
         var choseRowArrOperate = new Array();
         //var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
@@ -354,7 +343,7 @@
             $("#ezuiFormOperate input[id='businessScope']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
-            $("#ezuiFormOperate input[id='businessScope']").textbox("["+row.classifyId+"]"+row.instrumentCatalogName);
+            $("#ezuiFormOperate input[id='businessScope']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormOperate input[id='choseScope']").val(choseRowArrOperate.join(","));
         $(ezuidialogChoseScopeOperate).dialog("close");

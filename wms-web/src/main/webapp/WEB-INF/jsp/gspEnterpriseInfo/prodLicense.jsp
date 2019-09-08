@@ -174,17 +174,6 @@
             }
         });
 
-        $("#isLong").click(function () {
-            if($(this).is(':checked')){
-                $("#businessStartDate").textbox("clear")
-                $("#businessEndDate").textbox("clear")
-                $("#businessStartDate").textbox("disable")
-                $("#businessEndDate").textbox("disable")
-            }else{
-                $("#businessStartDate").textbox("enable")
-                $("#businessEndDate").textbox("enable")
-            }
-        })
     })
 
     /**
