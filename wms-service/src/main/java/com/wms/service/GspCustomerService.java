@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 
 import com.wms.utils.DateUtil;
@@ -40,6 +41,10 @@ public class GspCustomerService extends BaseService {
 	private CommonService commonService;
 	@Autowired
 	private DataPublishService dataPublishService;
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
+
 
 	public EasyuiDatagrid<GspCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, GspCustomerQuery query) {
 		EasyuiDatagrid<GspCustomerVO> datagrid = new EasyuiDatagrid<GspCustomerVO>();
@@ -103,6 +108,11 @@ public class GspCustomerService extends BaseService {
 			firstReviewLogForm.setReviewTypeId(no);
 			firstReviewLogForm.setReviewId(RandomUtil.getUUID());
 			firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_NEW);
+			GspEnterpriseInfo HZ =gspEnterpriseInfoMybatisDao.queryById(gspCustomerForm.getEnterpriseId());
+			String content = "货主企业名称:"+HZ.getEnterpriseName()+" "+
+							 "货主企业代码:"+HZ.getEnterpriseNo()+" "+
+					 		 "货主企业类型:"+regred(HZ.getEnterpriseType());
+			firstReviewLogForm.setApplyContent(content);
 			firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
 			json.setSuccess(true);
@@ -114,6 +124,27 @@ public class GspCustomerService extends BaseService {
 			return Json.error("保存失败");
 		}
 
+	}
+
+
+
+	//企业类型翻译
+	public  String  regred(String entertype){
+		switch(entertype){
+			case "GNSC": entertype = "生产";
+				break;
+			case "JY": entertype = "经营";
+				break;
+			case "YL": entertype = "医疗机构";
+				break;
+			case "ZT": entertype = "主体";
+				break;
+			case "GW": entertype = "国外企业";
+				break;
+			case "SCJY": entertype = "生产和经营";
+
+		}
+		return entertype;
 	}
 //修改
 	public Json editGspCustomer(GspCustomerForm gspCustomerForm) throws Exception {

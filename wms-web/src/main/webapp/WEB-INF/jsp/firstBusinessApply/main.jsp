@@ -46,7 +46,9 @@ $(function() {
 
             {field: 'productCode',		title: '产品代码',	width: 180 },
             {field: 'productName',		title: '产品名称',	width: 200 },
-			{field: 'createId',		title: '创建人',	width: 100 },
+            {field: 'productRegisterNo',		title: '注册证号',	width: 180 },
+
+            {field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 100 },
 		]],
 		onDblClickCell: function(index,field,value){
@@ -275,7 +277,8 @@ var doSearch = function(){
 		supplierId : $('#supplierIdQuery').val(),
         createDateStart : $('#createDateStart').datebox('getValue'),
         createDateEnd : $('#createDateEnd').datebox('getValue'),
-		isUse : $('#isUse').combobox('getValue')
+		isUse : $('#isUse').combobox('getValue'),
+        productRegisterNo :  $('#productRegisterNoQ').val()
 	});
 };
 //提交审核
@@ -398,15 +401,18 @@ var reApply = function () {
 							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>委托客户</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<td colspan="1">
+								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+							</td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>是否启用</th><td><input type='text' id='isUse' class='easyui-textbox' size='16' data-options=''/></td>
-							<td colspan="2">
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-							</td>
+							<th>注册证号</th><td><input type='text' id='productRegisterNoQ' class='easyui-textbox' size='16' data-options=''/></td>
+
+
 						</tr>
 					</table>
 				</fieldset>

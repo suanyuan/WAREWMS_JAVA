@@ -84,7 +84,7 @@
                     <th>温度记录表</th>
                     <td colspan="2">
 						<input type='text' id='coldTag' name="coldTag" size='16' data-options=''/>
-						<input type="hidden" name="userdefine4"/>
+						<input type="hidden" id="coldTagUrl" name="userdefine4"/>
 						<a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlColdTag()">查看</a>
 					</td>
                     <th>用户自定义5</th>
@@ -172,9 +172,9 @@
         });
     }
 
-    function viewUrlColdTag(url) {
-        if(url){
-            showUrl(url);
+    function viewUrlColdTag() {
+        if($("#coldTagUrl").val()!=""){
+            showUrl($("#coldTagUrl").val());
         }
     }
 </script>

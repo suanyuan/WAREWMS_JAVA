@@ -270,7 +270,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessApply.setProductline(productLine);
 				firstBusinessApplyMybatisDao.add(firstBusinessApply);
 
-//			String[] arr = productArr.split(",");
+//			    String[] arr = productArr.split(",");
 
 				FirstBusinessProductApply firstBusinessProductApply = new FirstBusinessProductApply();
 				firstBusinessProductApply.setProductApplyId(no);
@@ -287,6 +287,18 @@ public class FirstBusinessApplyService extends BaseService {
 				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				firstReviewLogForm.setReviewTypeId(no);
 				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				GspProductRegisterSpecs g  = gspProductRegisterSpecsMybatisDao.queryById(specsId);
+                String ProductName = "无";
+                String ProductRemark = "无";
+				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
+				    ProductName = g.getProductName();
+                }
+                if(g.getProductRemark()!=null && !"".equals(g.getProductRemark()) ){
+                    ProductRemark = g.getProductRemark();
+                }
+				String content = "产品名称:"+ProductName+" "+"产品代码:"+g.getProductCode()+" "+
+                        "产品描述:"+ProductRemark;
+                firstReviewLogForm.setApplyContent(content);
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
 				np++;

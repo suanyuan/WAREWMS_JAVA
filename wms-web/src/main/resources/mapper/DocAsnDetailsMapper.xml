@@ -927,7 +927,7 @@ insert into doc_asn_details
 					AND a.sku = b.sku
 					LEFT OUTER JOIN bas_customer bc ON a.lotatt08 = bc.customerid
 					LEFT JOIN bas_codes CODE ON code.code = a.linestatus
-					LEFT JOIN bas_codes cold on cold.code = b.reservedfield07,
+					LEFT JOIN bas_codes cold on cold.code = b.reservedfield07 and cold.codeid='LL_TYP',
 					Bas_Codes c,(Select (@rowNum :=0)) d
 	         where a.linestatus = c.code
 				AND code.codeid = 'ASN_STS'

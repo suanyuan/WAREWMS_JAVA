@@ -3,14 +3,17 @@ package com.wms.controller;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.DocMtDetailsMybatisDao;
+import com.wms.mybatis.dao.DocQcDetailsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.DocMtDetailsQuery;
+import com.wms.query.DocQcDetailsQuery;
 import com.wms.utils.BeanConvertUtil;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,8 @@ public class TestReport {
     BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
     DocMtDetailsMybatisDao docMtDetailsMybatisDao;
+    @Autowired
+    DocQcDetailsMybatisDao docQcDetailsMybatisDao;
 
     @RequestMapping(params = "testReport")
     public String toMain(Model model) {
@@ -70,18 +75,52 @@ public class TestReport {
             dataw.add(docMtHeader);
 
         }
+*/
+       //验收记录
+        List<DocQcHeader> docQcHeaderList = new ArrayList<DocQcHeader>();
+        DocQcHeader docQcHeader = new DocQcHeader();
+        docQcHeader.setDetls(new ArrayList<DocQcDetails>());
+        DocQcDetailsQuery docQcDetailsQuery = new DocQcDetailsQuery();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        docQcDetailsQuery.setQcno("QC00000497");
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docQcDetailsQuery));
+        List<DocQcDetails> docQcDetailsList = docQcDetailsMybatisDao.queryByListPano(mybatisCriteria);
+        for (DocQcDetails docQcDetails1: docQcDetailsList) {
+            docQcHeader.getDetls().add(docQcDetails1);
+    }
+        docQcHeaderList.add(docQcHeader);
+       /* try {
 
-*//*
-        HashMap<String, Object> paramsMap = new HashMap<String, Object>();
-        // 第二种配置数据源的方式 InputStream
-        paramsMap.put("dtls", data);
+            HashMap<String, Object> paramsMap = new HashMap<String, Object>();
+            // 第二种配置数据源的方式 InputStream
+            paramsMap.put("dtls", docQcHeaderList);
+            // 注意更改路径
+            File exe_rpt = new File(("F:/exploit/iReportTest/report1Query.jasper"));
 
-         *//*
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(dataw);
-        model.addAttribute("url", "WEB-INF/jasper/report1MAX.jasper");
+            JRDataSource dataSource = new JRBeanCollectionDataSource(docQcHeaderList);
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(exe_rpt.getPath(), paramsMap,dataSource);
+
+
+            // 加载模板
+            //  JasperReport report = JasperCompileManager.compileReport(design);
+            // 填充数据
+            //   JasperPrint print = JasperFillManager.fillReport(jasperPrint, paramsMap);
+            // 预览显示
+            JasperViewer.viewReport(jasperPrint);
+
+        } catch (Exception e) { 生产许可证
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+*/
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
+        model.addAttribute("url", "WEB-INF/jasper/report1Query.jasper");
         model.addAttribute("format", "pdf");
         model.addAttribute("jrMainDataSource", jrDataSource);
-        //JasperPrint print = JasperFillManager.fillReport(report, paramsMap);*/
+        //JasperPrint print = JasperFillManager.fillReport(report, paramsMap);
+
         return "iReportView";
     }
 }

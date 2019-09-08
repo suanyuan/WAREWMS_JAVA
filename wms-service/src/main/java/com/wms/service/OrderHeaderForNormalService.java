@@ -1,8 +1,6 @@
 package com.wms.service;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
@@ -42,6 +40,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1552,31 +1551,27 @@ public class OrderHeaderForNormalService extends BaseService {
 
             if (StringUtils.isNotEmpty(orderCodeList)) {
                 String[] orderNoArr = orderCodeList.split(",");
-                PdfWriter writer = PdfWriter.getInstance(doc,os);
+                //PdfWriter writer = PdfWriter.getInstance(doc,os);
+                PdfCopy copy = new PdfCopy(doc,os);
                 doc.open();
                 for(String order : orderNoArr){
-                   // PdfFont font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-                    //doc.add(new Paragraph(order).setFont(font).setFixedPosition(1, 200, bottom, width));
-
-                    /*PdfContentByte cb = writer.getDirectContent();
-                    BaseFont bf= BaseFont.createFont("STSong-Light", "UniGB-UCS2-H",BaseFont.EMBEDDED);
-                    cb.beginText();
-                    cb.setFontAndSize(bf, 20);
-                    cb.showTextAligned(PdfContentByte.ALIGN_LEFT, order , 0, 850, 0);
-                    cb.endText();*/
-                    doc.newPage();
                     MybatisCriteria criteria = new MybatisCriteria();
                     OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
                     query.setOrderno(order);
                     criteria.setCondition(query);
                     List<OrderDetailsForNormal> details = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
                     for(OrderDetailsForNormal de : details){
+                        doc.newPage();
                         String url = getCertificate(de.getCustomerid(),de.getSku(),de.getLotatt04());
                         if(!"".equals(url)){
-                            doc.add(new Paragraph(order));
-                            Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
+                            PdfReader reader = new PdfReader(Constant.uploadUrl+File.separator+url);
+
+                            PdfImportedPage newPage = copy.getImportedPage(reader,1);
+
+                            copy.addPage(newPage);
+                            /*Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
                             png.scaleAbsolute(500.0F,750F);
-                            doc.add(png);
+                            doc.add(png);*/
                         }
 
                     }
