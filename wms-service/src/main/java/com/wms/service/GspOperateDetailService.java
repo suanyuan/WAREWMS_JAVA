@@ -104,10 +104,10 @@ public class GspOperateDetailService extends BaseService {
 		List<GspOperateDetail> list = gspOperateDetailMybatisDao.queryByList(criteria);
 		for(GspOperateDetail g : list){
 			GspOperateDetailVO v = new GspOperateDetailVO();
-			v.setOperateId(g.getOperateId());
+			v.setOperateId(g.getOperateId().trim());
 			GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogService.getGspInstrumentCatalog(g.getOperateId());
 			if(gspInstrumentCatalog!=null){
-				v.setOperateName(gspInstrumentCatalog.getInstrumentCatalogName());
+				v.setOperateName(gspInstrumentCatalog.getInstrumentCatalogName().trim());
 			}
 			voList.add(v);
 		}

@@ -53,9 +53,9 @@ public class GspVerifyService {
 
     /**
      * gsp申请经营范围校验
-     * @param customerId 客户id
-     * @param supplierId 供应商id
-     * @param sku 产品(为""不校验产品)
+     * @param customerId 客户id（未申请的传enterpriseId）
+     * @param supplierId 供应商id（未申请的传enterpriseId）
+     * @param sku 产品(为""不校验产品)（未申请的传specsId）
      */
     public Json verifyOperate(String customerId,String supplierId,String sku){
         return this.verifyOperate(customerId,supplierId,sku,"","");
@@ -334,11 +334,11 @@ public class GspVerifyService {
             arroperate.add(v.getOperateId());
         }
         for(String s : arrregister){
-            if(arroperate.toString().indexOf(s)==-1){
-                return false;
+            if(arroperate.toString().indexOf(s)!=-1){
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private List<GspOperateDetailVO> getOperateDetail(String operateId){
