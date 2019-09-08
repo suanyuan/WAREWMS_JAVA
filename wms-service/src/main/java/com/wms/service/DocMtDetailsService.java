@@ -57,10 +57,10 @@ public class DocMtDetailsService extends BaseService {
 	private ProductLineMybatisDao productLineMybatisDao;
 
 	@Autowired
-	private BasSerialNumMybatisDao basSerialNumMybatisDao;
+    private CommonService commonService;
 
 	@Autowired
-    private CommonService commonService;
+    private BasCodesService basCodesService;
 
     /**
      * 养护作业界面分页显示 根据mtno
@@ -420,6 +420,7 @@ public class DocMtDetailsService extends BaseService {
         List<DocMtDetails> MtDetailsList = new ArrayList<DocMtDetails>();
         DocMtHeader docMtHeader = new DocMtHeader();//头档信息
         Double numberSum = 0.00;//初始化总数量
+        List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
 
         if(StringUtils.isNotEmpty(mtlineNo) && StringUtils.isNotEmpty(mtNo)){
             String [] mtlineNoArr = mtlineNo.split(",");
@@ -490,26 +491,11 @@ public class DocMtDetailsService extends BaseService {
         List<DocMtHeader> dataHeader = new ArrayList<DocMtHeader>(); // 头档
         docMtHeader.setDetls(new ArrayList<DocMtDetails>());
         if(MtDetailsList.size() > 0){
-            for ( DocMtDetails docMtDetails1:
-                    MtDetailsList) {
-                if(docMtDetails1.getUom().equals("EA")){
-                    docMtDetails1.setUomName("件");
-                }else if(docMtDetails1.getUom().equals("BA")){
-                    docMtDetails1.setUomName("包");
-                }else if(docMtDetails1.getUom().equals("CS")){
-                    docMtDetails1.setUomName("箱");
-                }else if(docMtDetails1.getUom().equals("GE")){
-                    docMtDetails1.setUomName("个");
-                }else if(docMtDetails1.getUom().equals("GN")){
-                    docMtDetails1.setUomName("根");
-                }else if(docMtDetails1.getUom().equals("HE")){
-                    docMtDetails1.setUomName("盒");
-                }else if(docMtDetails1.getUom().equals("IP")){
-                    docMtDetails1.setUomName("内箱");
-                }else if(docMtDetails1.getUom().equals("OT")){
-                    docMtDetails1.setUomName("其他");
-                }else if(docMtDetails1.getUom().equals("PL")){
-                    docMtDetails1.setUomName("板");
+            for ( DocMtDetails docMtDetails1: MtDetailsList) {
+                for (EasyuiCombobox easyuiComboboxUom: easyuiComboboxListUom) {//包装单位
+                    if(docMtDetails1.getUom().equals(easyuiComboboxUom.getId())){
+                        docMtDetails1.setUomName(easyuiComboboxUom.getValue());
+                    }
                 }
                 //养护结论
                 if(docMtDetails1.getConclusion().equals("1")){

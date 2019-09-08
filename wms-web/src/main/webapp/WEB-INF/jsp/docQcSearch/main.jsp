@@ -163,15 +163,35 @@ $(function() {
 
 //打印验收报告
 var printQcSearch = function(){
-	//需要qcno  和 qclineno 作为查询条件。
-	//验收状态
-	var linestatusQ= $('#linestatus').combobox("getValue");
-	//序列号v
-	var userdefine4Q = $('#userdefine4').val();
-	//生产批号
-	var userdefine3Q = $('#userdefine3').val();
-	//必须点击查询按钮。
-	window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&linestatus="+linestatusQ+"&userdefine4="+userdefine4Q+"&userdefine3="+userdefine4Q);
+
+	var qcno = $('#qcno').val();//验收单号
+	var linestatus = $('#linestatus').combobox('getValue');//验收状态
+	var lotatt10 = $('#lotatt10').combobox('getValue');  //z质量状态
+	var descrc=$('#descrc').val();                     //规格
+	var customerid = $('#customerid').val();              //货主代码
+	var shippershortname=$('#shippershortname').val();   //货主简称
+	var sku = $('#sku').val();                            //产品代码
+	var lotatt12 = $('#lotatt12').val();                    //产品名称
+	var lotatt08 = $('#lotatt08').val();                    //供应商
+	var lotatt15 = $('#lotatt15').val();                   //生产企业
+	var lotatt03Start = $('#lotatt03Start').datebox('getValue');  //入库日期
+	var lotatt03End = $('#lotatt03End').datebox('getValue');      //入库日期
+	var lotatt14 = $('#lotatt14').textbox('getValue');      //入库单号
+	//如果当前页面没有行数那么就不给它做
+	console.log($('#ezuiDatagrid').datagrid('getRows'));
+	var rowsSize = $('#ezuiDatagrid').datagrid('getRows');
+	if(rowsSize.length > 1){
+		window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&qcno="+qcno+
+				"&linestatus="+linestatus+"&lotatt10="+lotatt10+"&descrc="+descrc+"&customerid="+customerid+"&shippershortname="+shippershortname+"&sku="+sku+
+				"&lotatt12="+lotatt12+"&lotatt08="+lotatt08+"&lotatt15="+lotatt15+"&lotatt03Start="+lotatt03Start+"&lotatt03End="+lotatt03End+"&lotatt14="+lotatt14);
+	}else {
+		$.messager.show({
+			msg: "<spring:message code='common.message.export.failed'/>",
+			title: "<spring:message code='common.message.prompt'/>"
+		});
+	}
+
+
 
 }
 //主页查询
