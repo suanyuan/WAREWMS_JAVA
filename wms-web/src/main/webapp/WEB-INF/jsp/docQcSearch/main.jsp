@@ -179,7 +179,7 @@ var printQcSearch = function(){
 	//如果当前页面没有行数那么就不给它做
 	console.log($('#ezuiDatagrid').datagrid('getRows'));
 	var rowsSize = $('#ezuiDatagrid').datagrid('getRows');
-	if(rowsSize.length > 1){
+	if(rowsSize.length > 0){
 		window.open(sy.bp()+"/docQcSearchController.do?printQcSearch&qcno="+qcno+
 				"&linestatus="+linestatus+"&lotatt10="+lotatt10+"&descrc="+descrc+"&customerid="+customerid+"&shippershortname="+shippershortname+"&sku="+sku+
 				"&lotatt12="+lotatt12+"&lotatt08="+lotatt08+"&lotatt15="+lotatt15+"&lotatt03Start="+lotatt03Start+"&lotatt03End="+lotatt03End+"&lotatt14="+lotatt14);
