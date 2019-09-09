@@ -45,7 +45,7 @@ $(function() {
 		columns : [[
 			{field:'ck',checkbox:true},
 			// {field: 'mtno',		title: '养护单号',	width: 100 },
-			{field: 'mtlineno',		title: '养护行号',	width: 75 },
+			// {field: 'mtlineno',		title: '养护行号',	width: 75 },
 			{field: 'linestatus',		title: '行状态',	width: 100,formatter:MT_STSstatusFormatter },
 			{field: 'locationid',		title: '库位',	width: 100 },
 			{field: 'inventoryage',		title: '库龄',	width: 80 },

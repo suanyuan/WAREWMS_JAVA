@@ -39,7 +39,7 @@
 	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
 	<result column="lotatt07" property="lotatt07"/>
-	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt08Name" property="lotatt08"/>
 	<result column="lotatt10" property="lotatt10"/>
 	<result column="lotatt11" property="lotatt11"/>
 	<result column="lotatt12" property="lotatt12"/>
@@ -244,7 +244,7 @@ where 1=1
 		and a.lotatt12  like concat('%',#{condition.lotatt12},'%')
 	</if>
     <if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
-		and a.lotatt08  like concat('%',#{condition.lotatt08},'%')
+		and cc.descr_c  like concat('%',#{condition.lotatt08},'%')
 	</if>
 	<if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
 		and a.lotatt15  like concat('%',#{condition.lotatt15},'%')
@@ -380,6 +380,7 @@ where 1=1
 	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	left join  `bas_customer` cc on a.lotatt08=cc.customerid
 	<include refid="Example_Where_Clause1"/>
 </select>
   	
@@ -399,13 +400,14 @@ where 1=1
 <!-- 查询验收明细档列表 pano -->
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM
+	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM,cc.descr_c lotatt08Name
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	left join  `bas_customer` cc on a.lotatt08=cc.customerid
 	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
@@ -417,13 +419,14 @@ where 1=1
 <!-- 查询验收记录查询 -->
 <select id="queryByListSearch" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM
+	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM,cc.descr_c lotatt08Name
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	left join  `bas_customer` cc on a.lotatt08=cc.customerid
 	<include refid="Example_Where_Clause1"/>
        order by  d.qcno desc
     <if test="limitClause != null and limitClause != ''" >
@@ -433,13 +436,14 @@ where 1=1
 <!-- 用于导出 -->
 <select id="queryByListExport" resultType="com.wms.entity.DocQcSearchExportForm"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.*,s.descr_c descrc,s.reservedfield06,p.`qty1`,c.`descr_c`  shippershortname
+	SELECT d.*,h.pano,a.*,s.descr_c descrc,s.reservedfield06,p.`qty1`,c.`descr_c`  shippershortname,cc.descr_c lotatt08Name
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+	left join  `bas_customer` cc on a.lotatt08=cc.customerid
 	<include refid="Example_Where_Clause1"/>
 	order by  d.qcno desc
     <if test="limitClause != null and limitClause != ''" >

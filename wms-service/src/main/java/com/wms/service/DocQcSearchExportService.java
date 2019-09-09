@@ -118,7 +118,7 @@ public class DocQcSearchExportService {
         superClassMap.put("userdefine1", "库位");
         superClassMap.put("customerid", "货主代码");
         superClassMap.put("shippershortname", "货主简称");
-        superClassMap.put("lotatt08", "供应商");
+        superClassMap.put("lotatt08Name", "供应商");
         superClassMap.put("sku", "产品代码");
         superClassMap.put("lotatt12", "产品名称");
         superClassMap.put("lotatt06", "注册证号");

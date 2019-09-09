@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasLocation;
-import com.wms.entity.BasZonegroup;
-import com.wms.entity.InvLotLocIdSkuInvLotAtt;
-import com.wms.entity.ViewInvLotatt;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.BasLocationMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
@@ -34,7 +32,7 @@ public class ViewInvLotattService extends BaseService {
     private ViewInvLotattMybatisDao viewInvLotattMybatisDao;
 
     @Autowired
-    private CommonService commonService;
+    private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private BasLocationMybatisDao basLocationMybatisDao;
 
@@ -58,6 +56,14 @@ public class ViewInvLotattService extends BaseService {
         for (ViewInvLotatt viewInvLotatt : viewInvLotattList) {//james
             viewInvLotattVO = new ViewInvLotattVO();
             BeanUtils.copyProperties(viewInvLotatt, viewInvLotattVO);
+            //供应商名称
+            if(viewInvLotattVO.getLotatt08()!=null) {
+                String loatt08=viewInvLotattVO.getLotatt08();
+                BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
+                if(basCustomer!=null) {
+                    viewInvLotattVO.setLotatt08(basCustomer.getDescrC());
+                }
+            }
             viewInvLotattVOList.add(viewInvLotattVO);
         }
         datagrid.setTotal((long) viewInvLotattMybatisDao.queryByCount(mybatisCriteria));

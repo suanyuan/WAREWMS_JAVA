@@ -75,6 +75,7 @@ public class DocQcSearchExportForm implements Serializable {
 	private String lotatt06;  //产品注册证
 	private String lotatt07;  //灭菌批号
 	private String lotatt08;  //供应商
+	private String lotatt08Name;  //供应商名称
 	private String lotatt10;  //质量状态
 	private String lotatt11;  //存储条件
 	private String lotatt12;  //产品名称
