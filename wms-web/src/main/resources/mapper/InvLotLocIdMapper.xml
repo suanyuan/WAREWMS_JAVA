@@ -277,7 +277,8 @@ where 1=1
 <!--获得盘点任务-->
 <select id="queryByListByCouRequest" resultMap="BaseResultMap" >
 	SELECT aa.*,p.name  FROM
-	(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty FROM `inv_lot_loc_id` i
+	(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
+	FROM `inv_lot_loc_id` i
 	INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
 	GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
 	LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
@@ -296,8 +297,11 @@ where 1=1
 	<if test="sku != null and sku != ''" >
 		and aa.sku  like concat('%',#{sku},'%')
 	</if>
-		<if test="productLineName != null and productLineName != ''" >
+	<if test="productLineName != null and productLineName != ''" >
 		and p.name  like concat('%',#{productLineName},'%')
+	</if>
+	<if test="locationid != null and locationid != ''" >
+		and aa.locationid like concat('%',#{locationid},'%')
 	</if>
 	</trim>
 	ORDER BY aa.locationid DESC

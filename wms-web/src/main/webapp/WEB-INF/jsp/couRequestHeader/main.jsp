@@ -268,7 +268,17 @@ $(function() {
 			}
 		}]
 	});
-
+//生成盘点任务库位弹窗
+    $("#ezuiToolbar #locationid").textbox({
+        icons: [{
+            iconCls: 'icon-search',
+            handler: function (e) {
+                $("#ezuiLocDataDialog #locationid").textbox('clear');
+                ezuiLocDataClick();
+                ezuiLocDataSearch();
+            }
+        }]
+    });
 
 //show产品代码控件初始化 载入公用弹窗页面
 	$("#ShowEzuiToolbar #sku").textbox({
@@ -306,7 +316,7 @@ $(function() {
 			iconCls: 'icon-search',
 			handler: function (e) {
 				$("#ezuiLocDataDialog #locationid").textbox('clear');
-				ezuiLocDataClick();
+				ezuiLocDataClick("S");
 				ezuiLocDataSearch();
 			}
 		}]
@@ -678,6 +688,7 @@ var doxDialogSearch = function(){
 		lotatt04 : $('#ezuiToolbar #lotatt04').textbox('getValue'),
 		lotatt05 : $('#ezuiToolbar #lotatt05').textbox('getValue'),
 		productLineName : $('#ezuiToolbar #productLineName').combobox('getText'),
+        locationid : $('#ezuiToolbar #locationid').textbox('getValue'),
 	});
 };
 //按钮盘点任务datagrid查询
@@ -700,6 +711,7 @@ var ezuiDialogxToolbarClear= function(){
 	$("#ezuiToolbar #lotatt04").textbox('clear');
 	$("#ezuiToolbar #lotatt05").textbox('clear');
 	$("#ezuiToolbar #productLineName").combobox('clear');
+	$("#ezuiToolbar #locationid").textbox('clear');
 };
 //按钮盘点任务datagrid清除
 var ezuiDialogsToolbarClear= function(){
@@ -739,7 +751,6 @@ var doExport = function(cycleCountno){
 		}
 
 };
-var num
 //多条导出
 var doExportM=function () {
 	var rows = ezuiDatagrid.datagrid('getChecked');
@@ -968,7 +979,7 @@ var ezuiLocToolbarClear = function () {
 	$("#ezuiLocDataDialog #locationcategory").combobox('clear');
 };
 /* 库位选择弹框 */
-var ezuiLocDataClick = function () {
+var ezuiLocDataClick = function (type) {
 	ezuiLocDataDialogId = $('#ezuiLocDataDialogId').datagrid({
 		url: '<c:url value="/basLocationController.do?showDatagrid"/>',
 		method: 'POST',
@@ -995,7 +1006,7 @@ var ezuiLocDataClick = function () {
 			{field: 'pickzoneName', title: '拣货区', width: 100}
 		]],
 		onDblClickCell: function (index, field, value) {
-			selectLocation();
+			selectLocation(type);
 		},
 		onRowContextMenu: function (event, rowIndex, rowData) {
 		}, onLoadSuccess: function (data) {
@@ -1005,10 +1016,15 @@ var ezuiLocDataClick = function () {
 	ezuiLocDataDialog.dialog('open');
 };
 /* 库位选择 */
-var selectLocation = function () {
+var selectLocation = function (type) {
 	var row = ezuiLocDataDialogId.datagrid('getSelected');
 	if (row) {
-		$("#ShowEzuiToolbar #locationid").textbox('setValue', row.locationid);
+        if(type=="S"){
+            $("#ShowEzuiToolbar #locationid").textbox('setValue', row.locationid);
+
+        }else {
+            $("#ezuiToolbar #locationid").textbox('setValue', row.locationid);
+        }
 		ezuiLocDataDialog.dialog('close');
 	}
 	;
