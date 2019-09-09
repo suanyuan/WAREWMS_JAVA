@@ -42,11 +42,11 @@ public class DocOrderPackingCartonInfo  implements Serializable {
 	//客户单号
 	private String orderCode;
 	//发货日期
-	private Date edittime;
+	private String edittime;
 	//联系人
-	private String cContact;
+	private String ccontact;
 	//联系电话
-	private String bTel1;
+	private String btel1;
 	//备注
 	private String notes;
 	//快递公司
