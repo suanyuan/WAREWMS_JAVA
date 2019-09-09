@@ -122,7 +122,7 @@ public class ImportDocAsnDoublecDataService {
             try {
 
                 if (StringUtils.isEmpty(dataArray.getDoublecno())) {
-                    throw new Exception();
+//                    throw new Exception();
                 }
 //                for (DocAsnDoublecVO v : importData) {
 //                    if (v.getDoublecno().equals(dataArray.getDoublecno())) {
@@ -138,7 +138,7 @@ public class ImportDocAsnDoublecDataService {
 
                 importDataVO.setDoublecno(dataArray.getDoublecno());
             } catch (Exception e) {
-                rowResult.append("[任务号],未输入").append(" ");
+//                rowResult.append("[任务号],未输入").append(" ");
             }
 
 //产品型号
@@ -146,11 +146,11 @@ public class ImportDocAsnDoublecDataService {
             try {
 
                 if (StringUtils.isEmpty(dataArray.getContext1())) {
-                    throw new Exception();
+//                    throw new Exception();
                 }
                 importDataVO.setContext1(dataArray.getContext1());
             } catch (Exception e) {
-                rowResult.append("[产品型号],未输入").append(" ");
+//                rowResult.append("[产品型号],未输入").append(" ");
             }
 //名称
             try {
@@ -173,11 +173,11 @@ public class ImportDocAsnDoublecDataService {
 //执行标准
             try {
                 if (StringUtils.isEmpty(dataArray.getContext3())) {
-                    throw new Exception();
+//                    throw new Exception();
                 }
                 importDataVO.setContext3(dataArray.getContext3());
             } catch (Exception e) {
-                rowResult.append("[执行标准],未输入").append(" ");
+//                rowResult.append("[执行标准],未输入").append(" ");
             }
 //备注
             try {
