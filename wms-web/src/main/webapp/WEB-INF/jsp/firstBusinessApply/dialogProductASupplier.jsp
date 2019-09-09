@@ -406,41 +406,49 @@
         }
     }
 
-    //查看供应商企业详情
+
+
+    //供应商企业信息详情
     function viewSupplierEnterpriseUrl() {
-        $(function() {
-            ezuiDialogSupplierEnterprise = $('#ezuiDialogSupplierEnterprise').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                buttons : '',
-                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-                width:1200,
-                height:530,
-                closable:true,
-                cache: false,
-                onClose : function() {
-                    ezuiFormClear(ezuiDialogSupplierEnterprise);
-                }
-            }).dialog('close');
-        })
-        //processType = 'edit';
-
-        //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#dialogAddAddressForm input[id='sup_enterpriseId']").val());
         var enterpriseId = $("#dialogAddAddressForm input[id='sup_enterpriseId']").val();
-        if(enterpriseId==null || enterpriseId==""){
-            // enterpriseId = $("#enterpriseId").val();
-        }
+        // var enterpriseId = $("#ezuiFormSupInfo #enterpriseId").val();
+        enterpriseInfo(enterpriseId);
+    }
+    //查看供应商企业详情
+    <%--function viewSupplierEnterpriseUrl() {--%>
+        <%--$(function() {--%>
+            <%--ezuiDialogSupplierEnterprise = $('#ezuiDialogSupplierEnterprise').dialog({--%>
+                <%--modal : true,--%>
+                <%--title : '<spring:message code="common.dialog.title"/>',--%>
+                <%--buttons : '',--%>
+                <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",--%>
+                <%--width:1200,--%>
+                <%--height:530,--%>
+                <%--closable:true,--%>
+                <%--cache: false,--%>
+                <%--onClose : function() {--%>
+                    <%--ezuiFormClear(ezuiDialogSupplierEnterprise);--%>
+                <%--}--%>
+            <%--}).dialog('close');--%>
+        <%--})--%>
+        <%--//processType = 'edit';--%>
 
-        if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialogSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
-            enterpriseId = "";
-        }else{
-            $.messager.show({
-                msg : '请先选择企业', title : '提示'
-            });
-        }
-	}
+        <%--//var row = ezuiDatagrid.datagrid('getSelected');--%>
+        <%--console.log($("#dialogAddAddressForm input[id='sup_enterpriseId']").val());--%>
+        <%--var enterpriseId = $("#dialogAddAddressForm input[id='sup_enterpriseId']").val();--%>
+        <%--if(enterpriseId==null || enterpriseId==""){--%>
+            <%--// enterpriseId = $("#enterpriseId").val();--%>
+        <%--}--%>
+
+        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
+            <%--ezuiDialogSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');--%>
+            <%--enterpriseId = "";--%>
+        <%--}else{--%>
+            <%--$.messager.show({--%>
+                <%--msg : '请先选择企业', title : '提示'--%>
+            <%--});--%>
+        <%--}--%>
+	<%--}--%>
 
 
     //选择

@@ -8,6 +8,7 @@ import com.wms.entity.BasCustomer;
 import com.wms.entity.FirstReviewLog;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.*;
+import com.wms.query.BasCustomerQuery;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
@@ -181,10 +182,10 @@ public class GspSupplierService extends BaseService {
 	}
 
 	public Json editGspSupplier(GspSupplierForm gspSupplierForm) {
-        Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplierForm.getCostomerid(),gspSupplierForm.getEnterpriseId(),"");
-        if(!checkScopeResult.isSuccess()){
-            return checkScopeResult;
-        }
+//        Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplierForm.getCostomerid(),gspSupplierForm.getEnterpriseId(),"");
+//        if(!checkScopeResult.isSuccess()){
+//            return checkScopeResult;
+//        }
 
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
@@ -194,6 +195,21 @@ public class GspSupplierService extends BaseService {
 //		json.setSuccess(true);
 //		return json;
 	}
+
+    public Json editGspSupplierVerify(GspSupplierForm gspSupplierForm) {
+        Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplierForm.getCostomerid(),gspSupplierForm.getEnterpriseId(),"");
+        if(!checkScopeResult.isSuccess()){
+            return checkScopeResult;
+        }
+
+        Json json = new Json();
+        //GspSupplier gspSupplier = gspSupplierDao.findById(gspSupplierForm.getSupplierId());
+        //BeanUtils.copyProperties(gspSupplierForm, gspSupplier);
+        gspSupplierMybatisDao.updateBySelective(gspSupplierForm);
+        return Json.success("修改成功");
+//		json.setSuccess(true);
+//		return json;
+    }
 
     public Json commitGspSupplier(GspSupplierForm gspSupplierForm) {
         Json json = new Json();
@@ -244,7 +260,7 @@ public class GspSupplierService extends BaseService {
 	}
 
 
-
+	@Transactional
 	public Json reApply(String id){
 		try{
 
@@ -258,30 +274,24 @@ public class GspSupplierService extends BaseService {
 
 				//更新旧数据状态
 				GspSupplier gspSupplier = gspSupplierMybatisDao.queryById(s);
-				// 通过enterpriseId 查询该公司的最新的enterpriseId
-//				GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
-//				if(g!=null){
-//					gspSupplier.setEnterpriseId(g.getEnterpriseId());
-//				}else{
-//					return  Json.error("企业信息已失效");
-//				}
-//				BasCustomer CustomerQ = new BasCustomer();
-//				CustomerQ.setCustomerType(Constant.CODE_CUS_TYP_OW);
-//				CustomerQ.setCustomerid(gspSupplier.getCostomerid());
-//				BasCustomer customer = basCustomerMybatisDao.queryById(CustomerQ);
-//				if(customer!=null){
-//					if("0".equals(customer.getActiveFlag())){
-//						return Json.error("对应的货主已失效");
-//					}
-//				}else{
-//					return Json.error("货主不存在");
-//				}
+
+                BasCustomerQuery CustomerQ = new BasCustomerQuery();
+                CustomerQ.setCustomerType(Constant.CODE_CUS_TYP_OW);
+                CustomerQ.setCustomerid(gspSupplier.getCostomerid());
+                BasCustomer customer = basCustomerMybatisDao.selectByIdTypeActiveFlag(CustomerQ);
+                if(customer!=null){
+                    if("0".equals(customer.getActiveFlag())){
+                        return Json.error("对应的货主已不合作");
+                    }
+                }else{
+                    return Json.error("货主不存在");
+                }
 
 
-				Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplier.getCostomerid(),gspSupplier.getEnterpriseId(),"");
-				if(!checkScopeResult.isSuccess()){
-					return checkScopeResult;
-				}
+//				Json checkScopeResult =gspVerifyService.verifyOperate(gspSupplier.getCostomerid(),gspSupplier.getEnterpriseId(),"");
+//				if(!checkScopeResult.isSuccess()){
+//					return checkScopeResult;
+//				}
 //				Integer result = gspSupplierMybatisDao.queryGspSupplierByEnterpriseId(gspSupplier);
 //				if(result>0){
 //					return Json.error("存在同一个供应商和货主且有效,不能重复申请");
@@ -292,6 +302,16 @@ public class GspSupplierService extends BaseService {
 				gspSupplier.setIsUse(Constant.IS_USE_NO);
 				gspSupplierMybatisDao.updateBySelective(gspSupplier);
 				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+
+
+                // 通过enterpriseId 查询该公司的最新的enterpriseId
+                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
+                if(g!=null){
+                    gspSupplier.setEnterpriseId(g.getEnterpriseId());
+                }else{
+                    return  Json.error("企业信息已失效");
+                }
+
 
 				//新增审核状态为未通过数据
 				gspSupplier.setSupplierId(no);
