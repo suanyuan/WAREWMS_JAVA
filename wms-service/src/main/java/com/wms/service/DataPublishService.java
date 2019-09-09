@@ -73,7 +73,6 @@ public class DataPublishService extends BaseService {
             gspCustomerForm.setClientId(no);
             gspCustomerForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
             gspCustomerService.editGspCustomer(gspCustomerForm);
-
             GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
 
             BasCustomerForm form = new BasCustomerForm();
@@ -88,7 +87,8 @@ public class DataPublishService extends BaseService {
             form.setClientStartDate(customer.getClientStartDate());
             form.setClientEndDate(customer.getClientEndDate());
             form.setClientTerm(customer.getClientTerm());
-            form.setIsChineseLabel(Long.parseLong(customer.getIsChineseLabel()));
+            form.setIsChineseLabel(customer.getIsChineseLabel());
+            form.setNotes(customer.getRemark());//备注
             //form.setContractNo();
             form.setSupContractNo(customer.getContractNo());
             form.setContractUrl(customer.getContractUrl());
@@ -246,8 +246,6 @@ public class DataPublishService extends BaseService {
                     skuForm.setOrderbysql(register.getProductRegisterId());
 
                 }
-
-
                 skuForm.setReservedfield06(specObj.getLicenseOrRecordNo());
                 skuForm.setReservedfield07(specObj.getColdHainMark());
                 skuForm.setReservedfield08(specObj.getSterilizationMarkers());

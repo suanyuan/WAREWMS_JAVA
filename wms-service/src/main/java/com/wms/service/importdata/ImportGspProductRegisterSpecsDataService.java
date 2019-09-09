@@ -783,8 +783,13 @@ public class ImportGspProductRegisterSpecsDataService {
 //			String resultCode = map.get("resultCode").toString();
 //			String resultNo = map.get("resultNo").toString();
 //			if (resultCode.substring(0,3).equals("000")) {
+				//如果注册号有生产企业就带入
+				GspProductRegister gspProductRegister =	gspProductRegisterMybatisDao.queryById(importDataVO.getProductRegisterId());
+				if(gspProductRegister != null){
+				GspEnterpriseInfo gspEnterpriseInfo =gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gspProductRegister.getEnterpriseId());
+					gspProductRegisterSpecs.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
+				}
 				//赋值
-
 				gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
 				//gspProductRegisterSpecs.setProductRegisterId("PR");
 				//gspProductRegisterSpecs.setSpecsName(importDataVO.getSpecsName());
@@ -795,7 +800,7 @@ public class ImportGspProductRegisterSpecsDataService {
 				gspProductRegisterSpecs.setEditDate(new Date());
 				gspProductRegisterSpecs.setIsUse("1");
 				//保存订单主信息
-			gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
+				gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
 //				if(flag==true){
 //					resultMsg.delete(0, resultMsg.length());
 //					StringBuilder rowResult = new StringBuilder();
