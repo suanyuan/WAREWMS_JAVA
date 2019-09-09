@@ -739,15 +739,21 @@ var doExport = function(cycleCountno){
 		}
 
 };
+var num
 //多条导出
 var doExportM=function () {
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	if(rows.length>0) {
 	//循环导出excel
 	for (let i = 0; i < rows.length;i++) {
-		var cycleCountno = rows[i].cycleCountno;
-		alert('导出单号:'+cycleCountno);
-		doExport(cycleCountno);
+		var cycleCountno=rows[i].cycleCountno;
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否导出盘点单:'+cycleCountno, function(confirm) {
+			if(confirm) {
+				cycleCountno=rows[i].cycleCountno;
+				doExport(cycleCountno);
+
+			}
+		});
 	}
 	}else{
 		$.messager.show({
