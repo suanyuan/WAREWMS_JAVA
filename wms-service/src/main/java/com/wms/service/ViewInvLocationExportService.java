@@ -80,18 +80,29 @@ public class ViewInvLocationExportService {
             List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
             for (ViewInvLocation viewInvLocation : vList)
             {
-                viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
-                viewInvLocation.setFmqtyEach(viewInvLocation.getFmqtyEach().setScale(1));
-                viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
-                if(viewInvLocation.getLotatt13().equals("1")){
-                    viewInvLocation.setLotatt13("已匹配");
+                if(viewInvLocation.getFmqty()!=null) {
+                    viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
+                }
+                if(viewInvLocation.getFmqtyEach()!=null) {
+                    viewInvLocation.setFmqtyEach(viewInvLocation.getFmqtyEach().setScale(1));
+                }
+                if(viewInvLocation.getQty1()!=null) {
+                    viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
+                }
+
+                if(viewInvLocation.getLotatt13()!=null) {
+                    if (viewInvLocation.getLotatt13().equals("1")) {
+                        viewInvLocation.setLotatt13("已匹配");
+                    }
                 }
                 for (EasyuiCombobox easyuiCombobox : Lotatt10List)
                 {
-                     //质量状态id对比
-                    if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
-						viewInvLocation.setLotatt10(easyuiCombobox.getValue());
-						break;
+                    if(viewInvLocation.getLotatt10()!=null) {
+                        //质量状态id对比
+                        if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
+                            viewInvLocation.setLotatt10(easyuiCombobox.getValue());
+                            break;
+                        }
                     }
                 }
             }
