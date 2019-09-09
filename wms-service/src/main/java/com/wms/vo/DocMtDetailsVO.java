@@ -60,4 +60,6 @@ public class DocMtDetailsVO {
 	private String descre;//型号
 	private String productLineName;//产品线
 	private String reservedfield06;//生产许可证号/备案号
+	private double qty1;//换算率
+
 }

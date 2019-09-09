@@ -54,7 +54,8 @@ private String lotatt01;  //生产日期
   private String descrc;//规格
   private String descre;//型号
   private String productLineName;//产品线
-//bas_customer
+  private double qty1;//换算率
+  //bas_customer
   private String reservedfield06;//生产许可证号/备案号
 
 

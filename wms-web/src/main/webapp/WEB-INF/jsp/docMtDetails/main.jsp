@@ -55,9 +55,9 @@ $(function() {
 			// {field: 'descre',		title: '型号',	width: 140 },
 			{field: 'lotatt12',		title: '产品名称',	width: 200 },
 			{field: 'mtqtyExpected',		title: '待养护件数',	width: 100 },
+			{field: 'mtqtyCompleted',		title: '已养护件数',	width: 100 },
 			{field: 'mtqtyEachExpected',		title: '待养护数量',	width: 100 },
-			{field: 'mtqtyCompleted',		title: '完成养护件数',	width: 100 },
-			{field: 'mtqtyEachCompleted',		title: '完成养护数量',	width: 100 },
+			{field: 'mtqtyEachCompleted',		title: '已养护数量',	width: 100 },
 			{field: 'uom',		title: '单位',	width: 100 },
 			{field: 'checkFlag',		title: '检查结论',	width: 100,formatter:QualifiedOrFailed },
 			{field: 'conclusion',		title: '养护结论',	width: 100,formatter:QualifiedOrFailed },
@@ -78,7 +78,8 @@ $(function() {
 			// {field: 'editwho',		title: '养护人',	width: 100 },
 			// {field: 'edittime',		title: '养护时间',	width: 134 },
 			{field: 'addtime',		title: '创建时间',	width: 134 },
-			{field: 'addwho',		title: '创建人',	width: 100 }
+			{field: 'addwho',		title: '创建人',	width: 100 },
+			{field: 'qty1',		title: '换算率',	width: 100 }
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -178,8 +179,8 @@ $(function() {
 //养护作业dialog
 	ezuiConservationDialog = $('#ezuiConservationDialog').dialog({
 		modal : true,
-		width:270,
-		height:230,
+		width:290,
+		height:270,
 		title : '资料',
 		buttons : '#ezuiConservationDialogBtn',
 		onClose : function() {
@@ -222,6 +223,18 @@ $(function() {
 
 		}
 	}).dialog('close');
+//单条养护的时候 通过件数算数量
+	$("input",$("#ezuiConservationForm #mtqtyExpectedC").next("span")).keyup(function(event){
+		var v = $('#ezuiConservationForm #mtqtyExpectedC').next().children().val();
+		var qty1=$("#ezuiConservationForm #qty1").val();
+		$("#ezuiConservationForm #mtqtyExpectedCEach").textbox('setValue',v*qty1);
+	});
+//单条养护的时候 通过数量算件数
+	$("input",$("#ezuiConservationForm #mtqtyExpectedCEach").next("span")).keyup(function(event){
+		var v = $('#ezuiConservationForm #mtqtyExpectedCEach').next().children().val();
+		var qty1=$("#ezuiConservationForm #qty1").val();
+		$("#ezuiConservationForm #mtqtyExpectedC").textbox('setValue',v/qty1);
+	});
 });
 //增加
 var add = function(){
@@ -354,7 +367,7 @@ var commitConservation = function(){
 		 var linestatus=rows[i].linestatus;
 		 //判断细单养护状态
 		 if(linestatus!='00'){
-		 	msg="养护行号:"+rows[i].mtlineno+" ,已养护不可重复养护!"
+		 	msg="列表存在已养护产品!"
 			isCan=false;
 		 	break;
 		 }
@@ -438,17 +451,31 @@ var ConservationWork = function(){
     if(num==1){
 		 $("#ezuiConservationForm #mtqtyExpected").textbox('enable');
 		 $("#ezuiConservationForm #mtqtyExpectedC").textbox('enable');
-		 var mtqtyExpected =rows[0].mtqtyExpected
+		 $("#ezuiConservationForm #mtqtyExpectedEach").textbox('enable');
+		 $("#ezuiConservationForm #mtqtyExpectedCEach").textbox('enable');
 		ezuiConservationForm.form('load',{
-			mtqtyExpected:mtqtyExpected
-
+			mtqtyExpected:rows[0].mtqtyExpected,
+			mtqtyExpectedEach:rows[0].mtqtyEachExpected,
+			qty1:rows[0].qty1
 		});
 		ezuiConservationDialog.dialog('open');
 	}else if(num>1){
-		 $("#ezuiConservationForm #mtqtyExpected").textbox('disable');
-           $("#ezuiConservationForm #mtqtyExpectedC").textbox('disable');
-		$("#ezuiConservationForm #mtqtyExpected").textbox('setValue','所有');
-		$("#ezuiConservationForm #mtqtyExpectedC").textbox('setValue','所有');
+		var sums=new Object();
+		sums.mtqtyExpected =0;
+		sums.mtqtyExpectedEach =0;
+		for (var i = 0; i < rows.length; i++) {
+			sums.mtqtyExpected  += rows[i]['mtqtyExpected'];
+			sums.mtqtyExpectedEach  += rows[i]['mtqtyEachExpected'];
+		}
+		$("#ezuiConservationForm #mtqtyExpected").textbox('setValue',sums.mtqtyExpected);
+		$("#ezuiConservationForm #mtqtyExpectedC").textbox('setValue',sums.mtqtyExpected);
+		$("#ezuiConservationForm #mtqtyExpectedEach").textbox('setValue',sums.mtqtyExpectedEach);
+		$("#ezuiConservationForm #mtqtyExpectedCEach").textbox('setValue',sums.mtqtyExpectedEach);
+
+		$("#ezuiConservationForm #mtqtyExpected").textbox('disable');
+		$("#ezuiConservationForm #mtqtyExpectedC").textbox('disable');
+		$("#ezuiConservationForm #mtqtyExpectedEach").textbox('disable');
+		$("#ezuiConservationForm #mtqtyExpectedCEach").textbox('disable');
 		ezuiConservationDialog.dialog('open');
 	}
     else{
@@ -895,13 +922,21 @@ function choseSelect_product_docMtDetails(row) {
 	<div id='ezuiConservationDialog' style='padding: 10px;'>
 		<form id='ezuiConservationForm' method='post'>
 			<table>
-
+				<input type='hidden' id='qty1' name="qty1" />
 				<tr>
 					<th>待养护件数</th><td><input type='text' id='mtqtyExpected' name="mtqtyExpected" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
 
 				</tr>
 				<tr>
 					<th>养护件数</th><td><input type='text' id='mtqtyExpectedC' name="mtqtyExpectedC" class='easyui-textbox' size='20' data-options="required:true"/></td>
+
+				</tr>
+				<tr>
+					<th>待养护数量</th><td><input type='text' id='mtqtyExpectedEach' name="mtqtyExpectedEach" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+
+				</tr>
+				<tr>
+					<th>养护数量</th><td><input type='text' id='mtqtyExpectedCEach' name="mtqtyExpectedCEach" class='easyui-textbox' size='20' data-options="required:true"/></td>
 
 				</tr>
 				<tr>
