@@ -43,7 +43,7 @@ $(function() {
 		columns : [[
 			{field: 'enterpriseId',		title: '主键',	width: 61 ,hidden:true},
             {field: 'isUse',		title: '是否有效',	width: 61,formatter:isUseFormatter },
-			{field: 'enterpriseNo',		title: '企业信息代码',	width: 61 },
+			{field: 'enterpriseNo',		title: '企业代码',	width: 61 },
 			{field: 'shorthandName',		title: '简称',	width: 61 },
 			{field: 'enterpriseName',		title: '企业名称',	width: 61 },
 			{field: 'enterpriseType',		title: '企业类型',	width: 61 ,formatter: entTypeFormatter},
@@ -200,7 +200,7 @@ var commit = function(){
         showMsg("营业执照信息填写不完全！");
         return;
     }
-    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GW && isVal == true){
+    if(infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_GW && infoObj.enterpriseType != CODE_ENT_TYP.CODE_ENT_TYP_YL && isVal == true){
         //判断证照时间合法性
         //营业执照
         if($("#ezuiFormBusiness #issueDate").datebox("getValue")!=""){
@@ -233,6 +233,32 @@ var commit = function(){
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
+
+    // isVal = checkFormData("ezuiFormMedical",medicalObj);
+    //判断主体经营许可证
+    if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_ZT ){
+        if(!checkObjIsEmpty(operateobj) || isVal == false){
+            showMsg("主体企业需要填写经营机构执业许可证！");
+            return;
+        }
+        if(checkObjIsEmpty(operateobj) && isVal == false){
+            showMsg("经营许可证填写不完全！");
+            return;
+        }
+        if(judgeDate($("#ezuiFormOperate #approveDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("经营许可证发证日期不能超过当前时间");
+            return;
+        }
+        if(!judgeDate($("#ezuiFormOperate #licenseExpiryDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("经营许可证有效期不能小于当前时间");
+            return;
+        }
+    }else{
+
+    }
+
     //企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_JY || infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_SCJY){
         if((!checkObjIsEmpty(operateobj) ||  isVal == false) &&( isVal1==false   || !checkObjIsEmpty(secondRecord))){
@@ -247,6 +273,9 @@ var commit = function(){
             showMsg("第二类经营备案填写不完全！");
             return;
         }
+
+
+
 
         if(isVal1==false   || !checkObjIsEmpty(secondRecord)){
         }else{
@@ -511,7 +540,7 @@ var doSearch = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>企业信用代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>企业代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>企业类型</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' size='16' data-options=''/></td>

@@ -15,7 +15,7 @@ var ezuiDatagrid;
 var ezuiDialogClientEnterprise;
 var customerType;
 var ezuiDialogClientEnterpriseAddress;
-
+var ezuiDialogEditZONGEnterprise;
 var dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail"; //委托客户  企业信息查看
 
 var clientInfo;
@@ -152,6 +152,10 @@ var edit = function(){
     // customerId = row.customerId;
 
     console.log(row.customerType);
+
+
+
+
 	if(row.customerType == "收货单位"){
 
 	    receivingInfo1(receivingId);
@@ -163,15 +167,17 @@ var edit = function(){
 
 		ClientInfo(enterpriseId);
 	}else if(row.customerType == "主体"){
-        detail(enterpriseId);
+        enterpriseInfo(enterpriseId);
 	}else{
-        detail(enterpriseId);
+        enterpriseInfo(enterpriseId);
 	}
 
 };
 
 function receivingInfo1(receivingId){
     console.log(receivingId);
+    // $('#ezuiDialog1').dialog('destroy');
+    // $('#ezuiDialogSupplier').dialog('destroy');
     // title = "收货单位首营申请单";
     // dialogUrl = sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+row.reviewTypeId;
     receivingInfo = $('#receivingInfo').dialog({
@@ -184,10 +190,13 @@ function receivingInfo1(receivingId){
             ezuiFormClear(ezuiForm);
         }
     })
+    // $('#ezuiDialog1').dialog('destroy');
+    // $('#ezuiDialogSupplier').dialog('destroy');
 }
 
 function ClientInfo(enterpriseId){
     // $('#supplier').dialog('destroy');
+
     clientInfo = $('#clientInfo').dialog({
         modal : true,
         width:900,
@@ -200,6 +209,8 @@ function ClientInfo(enterpriseId){
             ezuiFormClear(ezuiForm);
         }
     })
+    // $('#ezuiDialog1').dialog('destroy');
+    // $('#ezuiDialogSupplier').dialog('destroy');
 
 }
 function supplierInfo(enterpriseId){
@@ -217,35 +228,15 @@ function supplierInfo(enterpriseId){
             ezuiFormClear(ezuiForm);
         }
     })
+    // $('#ezuiDialog1').dialog('destroy');
+    // $('#ezuiDialogSupplier').dialog('destroy');
+    // $('#ezuiDialogClientEnterpriseInfo').dialog('destroy');
+
+
 }
 
 
-function detail(enterpriseId){
-    var row = ezuiDatagrid.datagrid('getSelected');
-    $(function() {
-        ezuiDialogClientEnterprise = $('#ezuiDialogClientEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            buttons : '',
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-            width:1200,
-            height:530,
-            closable:true,
-            cache: false,
-            onClose : function() {
-                // ezuiFormClear(ezuiDialogClientEnterprise);
-            }
-        }).dialog('close');
-    })
-    if(enterpriseId!=null && enterpriseId!="" ){
-        ezuiDialogClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
-        enterpriseId = "";
-    }else{
-        $.messager.show({
-            msg : '请先选择一条数据', title : '提示'
-        });
-    }
-}
+
 <%--function detailAddress(enterpriseId){--%>
     <%--// row = ezuiDatagrid.datagrid('getSelected');--%>
     <%--$(function() {--%>
@@ -562,6 +553,35 @@ var doExport = function(){
     }
 };
 /* 导出end */
+
+//企业信息详情（所有页面都用这个打开企业信息）
+function enterpriseInfo(enterpriseId){
+    $(function() {
+        ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            width:1200,
+            height:530,
+            closable:true,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiDialogEditZONGEnterprise);
+            }
+        }).dialog('close');
+    })
+    if(enterpriseId!=null && enterpriseId!="" ){
+        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        enterpriseId = "";
+    }else{
+        $.messager.show({
+            msg : '请先选择企业', title : '提示'
+        });
+    }
+}
+
+
 </script>
 </head>
 <body>
@@ -790,5 +810,6 @@ var doExport = function(){
 	<div id="receivingInfo">
 
 	</div>
+	<div id='ezuiDialogEditZONGEnterprise' style='padding: 10px;'></div>
 </body>
 </html>

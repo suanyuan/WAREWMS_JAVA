@@ -531,76 +531,17 @@
     });
 
 
-
-
     //查看委托方企业详情
     function viewEditClientEnterpriseUrl() {
-        $(function() {
-            ezuiDialogEditClientEnterprise = $('#ezuiDialogEditClientEnterprise').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                buttons : '',
-                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-                width:1200,
-                height:530,
-                closable:true,
-                cache: false,
-                onClose : function() {
-                    ezuiFormClear(ezuiDialogEditClientEnterprise);
-                }
-            }).dialog('close');
-        })
-        console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
+        // $('#ezuiDialogEditSupplierEnterprise').dialog('destroy');//edit供应商企业信息详
         var enterpriseId = $("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val();
-        if(enterpriseId==null || enterpriseId==""){
-            // enterpriseId = $("#enterpriseId").val();
-        }
-
-        if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialogEditClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
-            enterpriseId = "";
-        }else{
-            $.messager.show({
-                msg : '请先选择企业', title : '提示'
-            });
-        }
+        enterpriseInfo(enterpriseId);
     }
-
-
     //查看供应商企业详情
     function viewEditSupplierEnterpriseUrl() {
-        $(function() {
-            ezuiDialogEditSupplierEnterprise = $('#ezuiDialogEditSupplierEnterprise').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                buttons : '',
-                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-                width:1200,
-                height:530,
-                closable:true,
-                cache: false,
-                onClose : function() {
-                    ezuiFormClear(ezuiDialogEditSupplierEnterprise);
-                }
-            }).dialog('close');
-        })
-        //processType = 'edit';
-
-        //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
+        // $('#ezuiDialogEditClientEnterprise').dialog('destroy');//edit货主企业信息详情
         var enterpriseId = $("#ezuiFormDetail1 input[id='supedit_enterpriseId']").val();
-        if(enterpriseId==null || enterpriseId==""){
-            // enterpriseId = $("#enterpriseId").val();
-        }
-
-        if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialogEditSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
-            enterpriseId = "";
-        }else{
-            $.messager.show({
-                msg : '请先选择企业', title : '提示'
-            });
-        }
+        enterpriseInfo(enterpriseId);
     }
 
 

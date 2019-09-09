@@ -45,6 +45,16 @@ public class BasCustomerQuery implements IQuery {
 	private String customer;
 
 	private String remark;
+	private String costomerid;
+
+
+	public String getCostomerid() {
+		return costomerid;
+	}
+
+	public void setCostomerid(String costomerid) {
+		this.costomerid = costomerid;
+	}
 
 	public String getCustomer() {
 		return customer;

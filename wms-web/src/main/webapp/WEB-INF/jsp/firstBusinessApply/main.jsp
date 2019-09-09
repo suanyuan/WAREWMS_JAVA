@@ -12,6 +12,7 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid1;
+var ezuiDialogEditZONGEnterprise;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
@@ -119,7 +120,7 @@ var add = function(){
     $('#productRegisterDialog').dialog('destroy');//detail查看注册证
     $('#enterpriseDialog1').dialog('destroy');//edit查看产品
 
-
+    // $('#ezuiDialogEditSupplierEnterprise').dialog('destroy');//edit供应商企业信息详情
     $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
     $('#productRegisterDialog1').dialog('destroy');	//edit 查看注册证
     // $('#ProductDialog').dialog('destroy');//detail查看产品
@@ -145,6 +146,10 @@ var edit = function(){
     $('#ProductDialog').dialog('destroy');//detail查看产品
     $('#productRegisterDialog').dialog('destroy');//detail查看注册证
     $('#ezuiDialogClientDetail1').dialog('destroy');//edit货主
+    // $('#ezuiDialogEditClientEnterprise').dialog('destroy');//edit货主企业信息详情
+    // $('#ezuiDialogEditSupplierEnterprise').dialog('destroy');//edit供应商企业信息详情
+
+
     $('#enterpriseDialog1').dialog('destroy');//edit查看产品
     $('#ezuiDialogSpec_PAS').dialog('destroy');	//ProductAndSupplier产品
     $('#ezuiDialogSpec1').dialog('destroy');	//edit 查看产品
@@ -281,6 +286,10 @@ var doSearch = function(){
         productRegisterNo :  $('#productRegisterNoQ').val()
 	});
 };
+
+
+
+
 //提交审核
 var doConfirm = function () {
     // var row = ezuiDatagrid1.datagrid('getSelected');
@@ -381,6 +390,36 @@ var reApply = function () {
         });
     }
 }
+
+
+
+
+//企业信息详情（所有页面都用这个打开企业信息）
+function enterpriseInfo(enterpriseId){
+    $(function() {
+        ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            width:1200,
+            height:530,
+            closable:true,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiDialogEditZONGEnterprise);
+            }
+        }).dialog('close');
+    })
+    if(enterpriseId!=null && enterpriseId!="" ){
+        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        enterpriseId = "";
+    }else{
+        $.messager.show({
+            msg : '请先选择企业', title : '提示'
+        });
+    }
+}
 </script>
 <style>
 	table th{
@@ -436,5 +475,10 @@ var reApply = function () {
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 	</div>
+
+	<div id='ezuiDialogEditZONGEnterprise' style='padding: 10px;'>
+
+	</div>
+
 </body>
 </html>
