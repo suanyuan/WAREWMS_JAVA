@@ -110,12 +110,31 @@ public class BasCustomerForm {
 
 	private String clientTerm;
 
-	private Long isChineseLabel;
+	private String isChineseLabel;
 
 	private String bankaccount;
 
 	private String billclass;
 
+	private String notes;
+
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+
+	public String getIsChineseLabel() {
+		return isChineseLabel;
+	}
+
+	public void setIsChineseLabel(String isChineseLabel) {
+		this.isChineseLabel = isChineseLabel;
+	}
 
 	public String getClientTerm() {
 		return clientTerm;
@@ -383,13 +402,6 @@ public class BasCustomerForm {
 
 
 
-	public Long getIsChineseLabel() {
-		return isChineseLabel;
-	}
-
-	public void setIsChineseLabel(Long isChineseLabel) {
-		this.isChineseLabel = isChineseLabel;
-	}
 
 	public java.lang.String getCustomerid() {
 		return customerid;

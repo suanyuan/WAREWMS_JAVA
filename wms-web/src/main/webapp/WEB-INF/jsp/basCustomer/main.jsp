@@ -85,7 +85,7 @@ $(function() {
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'remark',		title: '备注 ',	width: 200 },
+            {field: 'notes',		title: '备注 ',	width: 200 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110,formatter:yesOrNoFormatter},
 
 		]],

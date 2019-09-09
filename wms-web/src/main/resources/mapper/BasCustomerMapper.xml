@@ -74,6 +74,7 @@
 	<result column="client_start_date" property="clientStartDate"/>
 	<result column="client_end_date" property="clientEndDate"/>
 	<result column="client_term" property="clientTerm"/>
+ 	<result column="notes" property="notes"/>
 <!--是否贴中文标签-->
 	<result column="isChineseLabel" property="isChineseLabel"/>
 <!--申请单号-->
@@ -165,7 +166,8 @@
 	udf5,
 	enterprise_id,
 	receiving_address_id,
-	zip
+	notes,
+	is_chinese_label
 	isChineseLabel
 </sql>
    
@@ -282,6 +284,12 @@ where 1=1
 	<if test="clientTerm != null  ">
 		client_term,
 	</if>
+	<if test="isChineseLabel != null  ">
+		is_chinese_label,
+	</if>
+    <if test="notes != null  ">
+        notes,
+    </if>
 	easycode,
 	addtime,
 	addwho,
@@ -361,6 +369,12 @@ where 1=1
 	<if test="clientTerm != null  ">
 		#{clientTerm},
 	</if>
+	<if test="isChineseLabel != null  ">
+		#{isChineseLabel},
+	</if>
+    <if test="notes != null  ">
+        #{notes},
+    </if>
 	'',
 	now(),
 	#{addwho},

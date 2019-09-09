@@ -94,8 +94,18 @@ public class BasCustomerVO {
 
 	private String clientTerm;
 
-	private Long isChineseLabel;
+	private String isChineseLabel;
 
+	private String notes;
+
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
 
 	public String getBankaccount() {
 		return bankaccount;
@@ -161,11 +171,11 @@ public class BasCustomerVO {
 		this.clientTerm = clientTerm;
 	}
 
-	public Long getIsChineseLabel() {
+	public String getIsChineseLabel() {
 		return isChineseLabel;
 	}
 
-	public void setIsChineseLabel(Long isChineseLabel) {
+	public void setIsChineseLabel(String isChineseLabel) {
 		this.isChineseLabel = isChineseLabel;
 	}
 

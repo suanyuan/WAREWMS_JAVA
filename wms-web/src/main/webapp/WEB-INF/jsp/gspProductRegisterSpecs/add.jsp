@@ -351,6 +351,7 @@
             $('#isCertificate').combobox({required:false});
             $('#unit').combobox({required:false});
             $('#maintenanceCycle').numberbox({required:false});
+            $('#licenseOrRecordNo').combobox({editable:true});
 
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
@@ -363,6 +364,7 @@
             $('#isCertificate').combobox({required:true});
             $('#unit').combobox({required:true});
             $('#maintenanceCycle').numberbox({required:true});
+            $('#licenseOrRecordNo').combobox({editable:false});
         }
     }
     function changeColdHainMark(){
