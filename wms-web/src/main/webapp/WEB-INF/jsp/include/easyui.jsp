@@ -66,15 +66,26 @@
 	    if(dateStr=="" || dateStr==null){
             return false;
 		}
-        if(new Date()>new Date(dateStr)){
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        str += (mydate.getMonth()+1) + "-";
+        str += mydate.getDate();
+        var tady=new Date(str.replace("-", "/").replace("-", "/"));
+        var t2 = new Date(dateStr.replace("-", "/").replace("-", "/"));
+		if(t2<=tady){
+		    return false;
+		}else{
+		    return true;
+		}
+		/*if(new Date()>=new Date(dateStr)){
             return false;
 		}else{
             return true;
-		}
+		}*/
     }
 
     var judgeDate2 = function (dateStrBeg,dateStrEnd) {
-        if(new Date(dateStrBeg)>new Date(dateStrEnd)){
+        if(new Date(dateStrBeg)>=new Date(dateStrEnd)){
             return false;
         }else{
             return true;

@@ -61,6 +61,7 @@ $(function() {
 			{field: 'asnreference1',		title: '客户订单号',	width: 131 },
 			{field: 'expectedarrivetime1',		title: '预期到货时间',	width: 137 ,formatter:dateFormat2},
 			{field: 'asnreference2',		title: '客户采购单号',	width: 101 },
+            {field: 'coldTag',		title: '冷链标记',	width: 71 },
 			//{field: 'asnreference3',		title: '参考编号3',	width: 50 },
 			//{field: 'asnreference4',		title: '参考编号4',	width: 50 },
 		   //{field: 'asnreference5',		title: '参考编号5',	width: 50 },

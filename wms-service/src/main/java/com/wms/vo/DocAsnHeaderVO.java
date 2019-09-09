@@ -150,6 +150,7 @@ public class DocAsnHeaderVO {
 	private java.lang.String zonegroup;
 	private java.util.Set<DocAsnDetail> docAsnDetailSet;
 	private List<DocAsnDetailVO> docAsnDetailVOList;
+	private String coldTag;
 
 	public List<DocAsnDetailVO> getDocAsnDetailVOList() {
 		return docAsnDetailVOList;
@@ -1292,4 +1293,11 @@ public class DocAsnHeaderVO {
 		this.zonegroup = zonegroup;
 	}
 
+	public String getColdTag() {
+		return coldTag;
+	}
+
+	public void setColdTag(String coldTag) {
+		this.coldTag = coldTag;
+	}
 }

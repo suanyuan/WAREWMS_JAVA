@@ -23,6 +23,7 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
+import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnDetailForm;
@@ -85,6 +86,22 @@ public class DocAsnHeaderService extends BaseService {
 		for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 			docAsnHeaderVO = new DocAsnHeaderVO();
 			BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
+			//判断冷链标记
+			DocAsnDetailQuery query1 = new DocAsnDetailQuery();
+			query1.setAsnno(docAsnHeader.getAsnno());
+			query1.setAsnlineno(1);
+			DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(query1);
+			if(detailVO!=null){
+				BasSku sku = basSkuService.getSkuInfo(detailVO.getCustomerid(),detailVO.getSku());
+				if(sku!=null){
+					switch (sku.getReservedfield07()){
+						case "FLL":docAsnHeaderVO.setColdTag("非冷链");break;
+						case "LD":docAsnHeaderVO.setColdTag("冷冻");break;
+						case "LC":docAsnHeaderVO.setColdTag("冷藏");break;
+					}
+
+				}
+			}
 			docAsnHeaderVOList.add(docAsnHeaderVO);
 		}
 		datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));

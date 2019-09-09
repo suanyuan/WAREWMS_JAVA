@@ -44,47 +44,6 @@
 
 </table>-->
 <script>
-    /*var catalogDatagrid;
-    $(function () {
-        catalogDatagrid = $("#catalogDatagrid").datagrid({
-            url : sy.bp()+'/gspInstrumentCatalogController.do?showCatalogEnterpriseDatagrid',
-            method:'POST',
-            toolbar : '#detailToolbar',
-            title: '',
-            pageSize : 50,
-            pageList : [50, 100, 200],
-            border: false,
-            fitColumns : false,
-            nowrap: true,
-            striped: true,
-            collapsible:false,
-            queryParams:{'enterpriseId':'${enterpriseId}'},
-            pagination:true,
-            rownumbers:true,
-            width:400,
-            idField : 'instrumentCatalogId',
-            columns : [[
-                {field: 'instrumentCatalogId',title:'主键',hidden:true},
-                {field: 'instrumentCatalogNo',title: '编号',width: '20%'},
-                {field: 'instrumentCatalogName',title: '名称',width: '20%'},
-                {field: 'classifyId',title: '分类',width: '20%'},
-                {field: 'version',title: '版本',width: '20%'},
-                {field: 'createDate',title: '创建时间',width: '20%'}
-            ]],
-            onDblClickCell: function(index,field,value){
-
-            },
-            onRowContextMenu : function(event, rowIndex, rowData) {
-
-            },
-            onSelect: function(rowIndex, rowData) {
-
-            },
-            onLoadSuccess:function(data){
-                $(this).datagrid('unselectAll');
-            }
-        })
-    })*/
 
     //控件初始化data-options="required:true,valueField:'id',textField:'value',url:'commonController.do?getEntType'"
     /**/

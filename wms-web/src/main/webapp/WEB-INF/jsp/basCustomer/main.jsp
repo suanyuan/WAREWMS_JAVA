@@ -157,7 +157,7 @@ var edit = function(){
 	    receivingInfo1(receivingId);
 	}else if(row.customerType == "供应商"){
 
-        supplierInfo(enterpriseId);
+        supplierInfo(receivingId);
 
 	}else if(row.customerType == "货主"){
 
