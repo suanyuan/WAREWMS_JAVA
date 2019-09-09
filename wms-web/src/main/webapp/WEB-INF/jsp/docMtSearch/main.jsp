@@ -50,9 +50,9 @@
                     // {field: 'descre',		title: '型号',	width: 140 },
                     {field: 'lotatt12', title: '产品名称', width: 200},
                     {field: 'mtqtyExpected', title: '待养护件数', width: 100},
+                    {field: 'mtqtyCompleted', title: '已养护件数', width: 100},
                     {field: 'mtqtyEachExpected', title: '待养护数量', width: 100},
-                    {field: 'mtqtyCompleted', title: '完成养护件数', width: 100},
-                    {field: 'mtqtyEachCompleted', title: '完成养护数量', width: 100},
+                    {field: 'mtqtyEachCompleted', title: '已养护数量', width: 100},
                     {field: 'uom', title: '单位', width: 100},
                     {field: 'checkFlag', title: '检查结论', width: 100, formatter: QualifiedOrFailed},
                     {field: 'conclusion', title: '养护结论', width: 100, formatter: QualifiedOrFailed},
@@ -75,7 +75,9 @@
                     // {field: 'edittime', title: '养护时间', width: 134},
                     {field: 'addtime', title: '创建时间', width: 134},
                     {field: 'addwho', title: '创建人', width: 100},
-                    {field: 'lotatt14', title: '入库单号', width: 100}
+                    {field: 'lotatt14', title: '入库单号', width: 100},
+                    {field: 'qty1',		title: '换算率',	width: 100 }
+
                 ]],
                 onDblClickCell: function (index, field, value) {
 

@@ -122,9 +122,9 @@ public class DocMtSearchExportService {
         superClassMap.put("descrc", "规格/型号");
         superClassMap.put("lotatt12", "产品名称");
         superClassMap.put("mtqty_Expected", "待养护件数");
+        superClassMap.put("mtqty_Completed", "已养护件数");
         superClassMap.put("mtqty_Each_Expected", "待养护数量");
-        superClassMap.put("mtqty_Completed", "完成养护件数");
-        superClassMap.put("mtqty_Each_Completed", "完成养护数量");
+        superClassMap.put("mtqty_Each_Completed", "已养护数量");
         superClassMap.put("uom", "单位");
         superClassMap.put("check_Flag", "检查结论");
         superClassMap.put("conclusion", "养护结论");
@@ -148,6 +148,7 @@ public class DocMtSearchExportService {
         superClassMap.put("addtime", "创建时间");
         superClassMap.put("addwho", "创建人");
         superClassMap.put("lotatt14", "入库单号");
+        superClassMap.put("qty1", "换算率");
 
 
         return superClassMap;

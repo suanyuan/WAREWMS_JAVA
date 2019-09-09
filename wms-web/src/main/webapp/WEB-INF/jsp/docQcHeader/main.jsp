@@ -72,7 +72,7 @@ $(function() {
 			// {field: 'lotnum',		title: '批次号',	width: 134 },
 			{field: 'addtime',		title: '创建时间',	width: 134 },
 			{field: 'addwho',		title: '创建人',	width: 100 },
-			{field: 'qty1',		title: '转换率',	width: 100}
+			{field: 'qty1',		title: '换算率',	width: 100}
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -161,10 +161,16 @@ $(function() {
 		}
 	}).dialog('close');
 //单条验收的时候 通过件数算数量
-	$("input",$("#qcqty").next("span")).keyup(function(event){
-		var v = $('#qcqty').next().children().val();
-		var qty1=$("#qty1").val();
-		$("#qcqtyEach").textbox('setValue',v*qty1);
+	$("input",$("#ezuiAcceptanceForm #qcqty").next("span")).keyup(function(event){
+		var v = $('#ezuiAcceptanceForm #qcqty').next().children().val();
+		var qty1=$("#ezuiAcceptanceForm #qty1").val();
+		$("#ezuiAcceptanceForm #qcqtyEach").textbox('setValue',v*qty1);
+	});
+//单条验收的时候 通过件数算件数
+	$("input",$("#ezuiAcceptanceForm #qcqtyEach").next("span")).keyup(function(event){
+		var v = $('#ezuiAcceptanceForm #qcqtyEach').next().children().val();
+		var qty1=$("#ezuiAcceptanceForm #qty1").val();
+		$("#ezuiAcceptanceForm #qcqty").textbox('setValue',v/qty1);
 	});
 
 });
@@ -300,7 +306,7 @@ var commitAcceptance = function(type){
 		 var linestatus=rows[i].linestatus;
 		 //判断细单验收状态
 		 if(linestatus!='00'){
-			 msg="验收行号:"+rows[i].qclineno+" ,已验收不可重复验收!"
+			 msg="列表存在已验收产品!"
 			isCan=false;
 		 	break;
 		 }

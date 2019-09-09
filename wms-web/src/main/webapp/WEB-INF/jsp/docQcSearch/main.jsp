@@ -71,7 +71,7 @@ $(function() {
 			{field: 'addtime', title: '创建时间', width: 134},
 			{field: 'addwho', title: '创建人', width: 100},
 			{field: 'lotatt14', title: '入库单号', width: 100},
-			{field: 'qty1', title: '转换率', width: 100}
+			{field: 'qty1', title: '换算率', width: 100}
 		]],
 		onDblClickCell: function (index, field, value) {
 
