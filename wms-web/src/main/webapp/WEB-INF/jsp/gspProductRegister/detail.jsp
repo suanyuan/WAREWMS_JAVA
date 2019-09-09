@@ -502,11 +502,18 @@
                     return false;
                 }
 
-                if(!judgeDate($("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))){
+                if($("#ezuiFormDetail #approveDate").datebox("getValue")>$("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))
+                {
+                    $("#productRegisterExpiryDate").focus();
+                    showMsg("有效时间时间不能小于批准时间！");
+                    return;
+                }
+
+                /*if(!judgeDate($("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))){
                     checkResult = false;
                     showMsg("有效期不能小于当前时间");
                     return false;
-                }
+                }*/
 
 
                 if(ezuiFormDetail.form('validate')){

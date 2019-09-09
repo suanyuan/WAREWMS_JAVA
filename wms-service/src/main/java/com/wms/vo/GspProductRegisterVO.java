@@ -45,6 +45,7 @@ public class GspProductRegisterVO {
 	private String agentAddress;//代理人住所
 	private String licenseNo;//生产许可证号
 	private String recordNo;//备案号
+	private String productRegisterVersionName;
 
 	private String choseScope;
 
@@ -371,5 +372,13 @@ public class GspProductRegisterVO {
 
 	public void setChoseScope(String choseScope) {
 		this.choseScope = choseScope;
+	}
+
+	public String getProductRegisterVersionName() {
+		return productRegisterVersionName;
+	}
+
+	public void setProductRegisterVersionName(String productRegisterVersionName) {
+		this.productRegisterVersionName = productRegisterVersionName;
 	}
 }

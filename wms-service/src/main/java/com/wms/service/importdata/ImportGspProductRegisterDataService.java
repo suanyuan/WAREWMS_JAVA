@@ -581,6 +581,7 @@ public class ImportGspProductRegisterDataService {
 				gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 				gspProductRegister.setEditDate(new Date());
 				gspProductRegister.setIsUse(Constant.IS_USE_YES);
+				gspProductRegister.setVersion(i);
 				//保存订单主信息
 			    gspProductRegisterMybatisDao.add(gspProductRegister);
 
