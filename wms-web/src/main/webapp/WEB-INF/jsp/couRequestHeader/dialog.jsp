@@ -38,6 +38,13 @@
                                 <input type='text' id='lotatt05' class='easyui-textbox' size='16'
                                        data-options=''/>
                             </td>
+                            <th>库位</th>
+                            <td>
+                                <input type='text' id='locationid' class='easyui-textbox' size='16'
+                                       data-options=''/>
+                            </td>
+                            </tr>
+                          <tr>
                             <td colspan="2">
                                 <a onclick='doxDialogSearch();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>

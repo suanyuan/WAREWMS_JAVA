@@ -70,7 +70,7 @@ public class DocOrderPackingCartonSearchService extends BaseService {
      */
     public List<DocOrderPackingCartonInfo> printQcSearch(String orderno, String traceid, String lotatt10, String skudesce, String customerid,
                                                          String shippershortname, String sku, String lotatt12, String lotatt08, String lotatt15,
-                                                         String lotatt03Start, String lotatt03End, String lotatt14, String packingflag) {
+                                                         String edittimeStart, String edittimeEnd, String lotatt14, String packingflag) {
         //验收记录
         List<DocOrderPackingCartonInfo> docOrderPackingCartonInfoList = new ArrayList<DocOrderPackingCartonInfo>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -96,8 +96,8 @@ public class DocOrderPackingCartonSearchService extends BaseService {
         docOrderPackingCarton.setLotatt12(lotatt12);
         docOrderPackingCarton.setLotatt08(lotatt08);
         docOrderPackingCarton.setLotatt15(lotatt15);
-        docOrderPackingCarton.setLotatt03Start(lotatt03Start);
-        docOrderPackingCarton.setLotatt03End(lotatt03End);
+        docOrderPackingCarton.setEdittimeStart(edittimeStart);
+        docOrderPackingCarton.setEdittimeEnd(edittimeEnd);
         docOrderPackingCarton.setLotatt14(lotatt14);
         docOrderPackingCarton.setPackingflag(packingflag);
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docOrderPackingCarton));

@@ -66,8 +66,8 @@ public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
 	private String lotatt18;
 
 //查询条件
-	private String lotatt03Start;
-	private String lotatt03End;
+	private String edittimeStart; //复核日期
+	private String edittimeEnd;
 	private String  packingflag;  //是否装箱
 
 //bas表

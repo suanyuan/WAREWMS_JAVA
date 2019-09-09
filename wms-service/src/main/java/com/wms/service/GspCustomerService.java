@@ -256,15 +256,8 @@ public class GspCustomerService extends BaseService {
 
 				//更新旧数据状态
 				GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(s);
-//				String oldEnterpriseId = gspCustomer.getEnterpriseId();
-//                // 通过enterpriseId 查询该公司的最新的enterpriseId
-//                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspCustomer.getEnterpriseId());
-//                if(g!=null){
-//                    gspCustomer.setEnterpriseId(g.getEnterpriseId());
-//
-//                }else{
-//                    return  Json.error("企业信息已失效");
-//                }
+				String oldEnterpriseId = gspCustomer.getEnterpriseId();
+
 
 
 
@@ -278,6 +271,15 @@ public class GspCustomerService extends BaseService {
 				gspCustomer.setIsUse(Constant.IS_USE_NO);
 				gspCustomerMybatisDao.updateBySelective(gspCustomer);
 				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+
+
+                // 通过enterpriseId 查询该公司的最新的enterpriseId
+                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspCustomer.getEnterpriseId());
+                if(g!=null){
+                    gspCustomer.setEnterpriseId(g.getEnterpriseId());
+                }else{
+                    return  Json.error("企业信息已失效");
+                }
 
 				//新增审核状态为未通过数据
 				gspCustomer.setClientId(no);

@@ -42,7 +42,7 @@ $(function() {
 			{field: 'packid',		title: '包装代码',	width: 160 ,hidden:true},
 			{field: 'descr',		title: '包装描述',	width: 160 },
 			{field: 'packuom1',		title: '主单位',	width: 160 },
-			{field: 'qty1',		title: '数量',	width: 160 },
+			{field: 'qty1',		title: '换算率',	width: 160 },
 			{field: 'descr1',		title: '单位描述',	width: 160 }
 		]],
 		onDblClickCell: function(index,field,value){
@@ -63,6 +63,8 @@ $(function() {
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
+		width:240,
+		height:210,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
 		onClose : function() {
@@ -228,8 +230,8 @@ var doSearch = function(){
 					<td><input type='text' name='packuom1' class='easyui-textbox' size='16' data-options='required:true'/></td>
 				</tr>
 				<tr>
-					<th>数量</th>
-					<td><input type='number' name='qty1' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>换算率</th>
+					<td><input type='number' name='qty1' class='easyui-textbox' size='16'  data-options='width:135,required:true'/></td>
 				</tr>
 				<tr>
 					<th>单位描述</th>

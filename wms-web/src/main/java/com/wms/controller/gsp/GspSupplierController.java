@@ -1,4 +1,6 @@
 package com.wms.controller.gsp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import com.wms.entity.GspSupplier;
 import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.GspSupplierMybatisDao;
 import com.wms.utils.SfcUserLoginUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +43,9 @@ public class GspSupplierController {
 	private GspSupplierMybatisDao gspSupplierMybatisDao;
 	@Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
+
+
+	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -108,7 +114,26 @@ public class GspSupplierController {
 		model.put("id", id);
 		Json result = gspSupplierService.getGspSupplierInfo(id);
 		GspSupplierVO supplier = (GspSupplierVO) result.getObj();
-		model.put("gspSupplier", supplier);
+		GspSupplier g =new GspSupplier();
+		BeanUtils.copyProperties(supplier, g);
+		try {
+			if(supplier.getClientEndDate()!=null){
+				g.setClientEndDate(format1.parse(supplier.getClientEndDate()));
+			}
+			if(supplier.getClientStartDate()!=null){
+				g.setClientStartDate(format1.parse(supplier.getClientStartDate()));
+			}
+			if(supplier.getEmpowerEnddate()!=null){
+				g.setEmpowerEnddate(format1.parse(supplier.getEmpowerEnddate()));
+			}
+			if(supplier.getEmpowerStartdate()!=null){
+				g.setEmpowerStartdate(format1.parse(supplier.getEmpowerStartdate()));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		model.put("gspSupplier", g);
 
 		if(supplier!=null){
 			BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(supplier.getCostomerid(),"OW");
@@ -170,7 +195,7 @@ public class GspSupplierController {
 	public Json edit(@RequestParam(value="gspSupplierForm",required=true) String gspSupplierFormStr) throws Exception {
 
 		GspSupplierForm gspProductRegisterSpecsForm = JSON.parseObject(gspSupplierFormStr,GspSupplierForm.class);
-		Json json = gspSupplierService.editGspSupplier(gspProductRegisterSpecsForm);
+		Json json = gspSupplierService.editGspSupplierVerify(gspProductRegisterSpecsForm);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

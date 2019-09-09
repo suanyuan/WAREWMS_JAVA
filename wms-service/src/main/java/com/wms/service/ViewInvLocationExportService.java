@@ -80,18 +80,29 @@ public class ViewInvLocationExportService {
             List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
             for (ViewInvLocation viewInvLocation : vList)
             {
-                viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
-                viewInvLocation.setFmqtyEach(viewInvLocation.getFmqtyEach().setScale(1));
-                viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
-                if(viewInvLocation.getLotatt13().equals("1")){
-                    viewInvLocation.setLotatt13("已匹配");
+                if(viewInvLocation.getFmqty()!=null) {
+                    viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
+                }
+                if(viewInvLocation.getFmqtyEach()!=null) {
+                    viewInvLocation.setFmqtyEach(viewInvLocation.getFmqtyEach().setScale(1));
+                }
+                if(viewInvLocation.getQty1()!=null) {
+                    viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
+                }
+
+                if(viewInvLocation.getLotatt13()!=null) {
+                    if (viewInvLocation.getLotatt13().equals("1")) {
+                        viewInvLocation.setLotatt13("已匹配");
+                    }
                 }
                 for (EasyuiCombobox easyuiCombobox : Lotatt10List)
                 {
-                     //质量状态id对比
-                    if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
-						viewInvLocation.setLotatt10(easyuiCombobox.getValue());
-						break;
+                    if(viewInvLocation.getLotatt10()!=null) {
+                        //质量状态id对比
+                        if (viewInvLocation.getLotatt10().equals(easyuiCombobox.getId())) {
+                            viewInvLocation.setLotatt10(easyuiCombobox.getValue());
+                            break;
+                        }
                     }
                 }
             }
@@ -132,7 +143,7 @@ public class ViewInvLocationExportService {
         superClassMap.put("lotatt02", "有效期/失效期");
         superClassMap.put("fmqty", "库存件数");
         superClassMap.put("fmqtyEach", "库存数量");
-        superClassMap.put("qty1", "转换率");
+        superClassMap.put("qty1", "换算率");
         superClassMap.put("defaultreceivinguom", "单位");
         superClassMap.put("lotatt11", "存储条件");
         superClassMap.put("enterpriseName", "生产企业");

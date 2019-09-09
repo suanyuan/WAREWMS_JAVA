@@ -21,6 +21,7 @@ var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
 var enterpriseDialog;
+var ezuiDialogEditZONGEnterprise;
 var dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail";
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -206,6 +207,34 @@ var doSearch = function(){
 
 	});
 };
+
+//企业信息详情（所有页面都用这个打开企业信息）
+function enterpriseInfo(enterpriseId){
+    $(function() {
+        ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '',
+            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
+            width:1200,
+            height:530,
+            closable:true,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiDialogEditZONGEnterprise);
+            }
+        }).dialog('close');
+    })
+    if(enterpriseId!=null && enterpriseId!="" ){
+        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        enterpriseId = "";
+    }else{
+        $.messager.show({
+            msg : '请先选择企业', title : '提示'
+        });
+    }
+}
+
 </script>
 </head>
 <body>
@@ -311,8 +340,13 @@ var doSearch = function(){
     </div>
 
     <div id='enterpriseDialog_gspCustomer' style='padding: 10px;'></div>
+    <div id='ezuiDialogEditZONGEnterprise' style='padding: 10px;'></div>
+
+
+
 
     <script>
+
     var enterpriseDialog_gspCustomer;
     var enterpriseSearchGrid_gspCustomer;
     var ezuiDialogDetail1;

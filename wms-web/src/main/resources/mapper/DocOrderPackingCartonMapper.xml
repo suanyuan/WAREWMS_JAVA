@@ -169,11 +169,11 @@ where 1=1
 	<if test="condition.packingflag != null and condition.packingflag != ''" >
 	    and info.packingflag =#{condition.packingflag}
 	</if>
-	<if test="condition.lotatt03Start != null and condition.lotatt03Start != ''" >
-		and c.lotatt03  &gt;= #{condition.lotatt03Start}
+	<if test="condition.edittimeStart != null and condition.edittimeStart != ''" >
+		and c.edittime  &gt;= #{condition.edittimeStart}
 	</if>
-	<if test="condition.lotatt03End != null and condition.lotatt03End != ''" >
-		and c.lotatt03  &lt;=  #{condition.lotatt03End}
+	<if test="condition.edittimeEnd != null and condition.edittimeEnd != ''" >
+		and c.edittime  &lt;=  #{condition.edittimeEnd}
 	</if>
 </trim>
 </sql>

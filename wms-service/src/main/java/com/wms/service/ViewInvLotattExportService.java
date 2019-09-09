@@ -75,19 +75,31 @@ public class ViewInvLotattExportService {
 	        List<ViewInvLotatt> vList = viewInvLotattMybatisDao.queryByList(mybatisCriteria); //要权限！james
 			//质量状态
 			List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
-			for (ViewInvLotatt viewInvLotatt : vList
-			) {
-				viewInvLotatt.setFmqty(viewInvLotatt.getFmqty().setScale(1));
-				viewInvLotatt.setFmqtyEach(viewInvLotatt.getFmqtyEach().setScale(1));
-				viewInvLotatt.setQtyallocated(viewInvLotatt.getQtyallocated().setScale(1));
-				viewInvLotatt.setQtyholded(viewInvLotatt.getQtyholded().setScale(1));
-				viewInvLotatt.setQtyavailed(viewInvLotatt.getQtyavailed().setScale(1));
-				for (EasyuiCombobox easyuiCombobox : Lotatt10List
-				) {
-					//质量状态id对比
-					if (viewInvLotatt.getLotatt10().equals(easyuiCombobox.getId())) {
-						viewInvLotatt.setLotatt10(easyuiCombobox.getValue());
-						break;
+			for (ViewInvLotatt viewInvLotatt : vList) {
+
+				if(viewInvLotatt.getFmqty()!=null) {
+					viewInvLotatt.setFmqty(viewInvLotatt.getFmqty().setScale(1));
+				}
+				if(viewInvLotatt.getFmqtyEach()!=null) {
+					viewInvLotatt.setFmqtyEach(viewInvLotatt.getFmqtyEach().setScale(1));
+				}
+				if(viewInvLotatt.getQtyallocated()!=null) {
+					viewInvLotatt.setQtyallocated(viewInvLotatt.getQtyallocated().setScale(1));
+				}
+				if(viewInvLotatt.getQtyholded()!=null) {
+					viewInvLotatt.setQtyholded(viewInvLotatt.getQtyholded().setScale(1));
+				}
+				if(viewInvLotatt.getQtyavailed()!=null) {
+					viewInvLotatt.setQtyavailed(viewInvLotatt.getQtyavailed().setScale(1));
+				}
+				for (EasyuiCombobox easyuiCombobox : Lotatt10List) {
+
+					if(viewInvLotatt.getLotatt10()!=null) {
+					   //质量状态id对比
+					    if (viewInvLotatt.getLotatt10().equals(easyuiCombobox.getId())) {
+						    viewInvLotatt.setLotatt10(easyuiCombobox.getValue());
+						    break;
+					}
 					}
 				}
 			}

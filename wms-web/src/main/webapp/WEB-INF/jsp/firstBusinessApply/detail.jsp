@@ -307,41 +307,47 @@
 
     }
 
-    //委托方企业信息详情
-    function viewClientEnterpriseUrl(){
-        $(function() {
-            ezuiDialogClientEnterprise = $('#ezuiDialogClientEnterprise').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                buttons : '',
-                href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-                width:1200,
-                height:530,
-                closable:true,
-                cache: false,
-                onClose : function() {
-                    ezuiFormClear(ezuiDialogClientEnterprise);
-                }
-            }).dialog('close');
-        });
-        //processType = 'edit';
-
-        //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#ezuiFormDetail input[id='cli_enterpriseId']").val());
+    //供应商企业信息详情
+    function viewClientEnterpriseUrl() {
         var enterpriseId = $("#ezuiFormDetail input[id='cli_enterpriseId']").val();
-        if(enterpriseId==null || enterpriseId==""){
-            // enterpriseId = $("#enterpriseId").val();
-        }
-
-        if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialogClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
-            enterpriseId = "";
-        }else{
-            $.messager.show({
-                msg : '请先选择企业', title : '提示'
-            });
-        }
+        // var enterpriseId = $("#ezuiFormSupInfo #enterpriseId").val();
+        enterpriseInfo(enterpriseId);
     }
+
+    //委托方企业信息详情
+    <%--function viewClientEnterpriseUrl(){--%>
+        <%--$(function() {--%>
+            <%--ezuiDialogClientEnterprise = $('#ezuiDialogClientEnterprise').dialog({--%>
+                <%--modal : true,--%>
+                <%--title : '<spring:message code="common.dialog.title"/>',--%>
+                <%--buttons : '',--%>
+                <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",--%>
+                <%--width:1200,--%>
+                <%--height:530,--%>
+                <%--closable:true,--%>
+                <%--cache: false,--%>
+                <%--onClose : function() {--%>
+                    <%--ezuiFormClear(ezuiDialogClientEnterprise);--%>
+                <%--}--%>
+            <%--}).dialog('close');--%>
+        <%--});--%>
+        <%--//processType = 'edit';--%>
+
+        <%--//var row = ezuiDatagrid.datagrid('getSelected');--%>
+        <%--console.log($("#ezuiFormDetail input[id='cli_enterpriseId']").val());--%>
+        <%--if(enterpriseId==null || enterpriseId==""){--%>
+            <%--// enterpriseId = $("#enterpriseId").val();--%>
+        <%--}--%>
+
+        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
+            <%--ezuiDialogClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');--%>
+            <%--enterpriseId = "";--%>
+        <%--}else{--%>
+            <%--$.messager.show({--%>
+                <%--msg : '请先选择企业', title : '提示'--%>
+            <%--});--%>
+        <%--}--%>
+    <%--}--%>
 
 
     function operateGridProductAdd(id) {
