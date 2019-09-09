@@ -93,7 +93,7 @@ public class DocAsnHeaderService extends BaseService {
 			DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(query1);
 			if(detailVO!=null){
 				BasSku sku = basSkuService.getSkuInfo(detailVO.getCustomerid(),detailVO.getSku());
-				if(sku!=null){
+				if(sku!=null && sku.getReservedfield07()!=null){
 					switch (sku.getReservedfield07()){
 						case "FLL":docAsnHeaderVO.setColdTag("非冷链");break;
 						case "LD":docAsnHeaderVO.setColdTag("冷冻");break;

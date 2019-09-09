@@ -42,6 +42,7 @@ public class GspProductRegister  implements Serializable {
 	private java.util.Date productRegisterExpiryDate;
 
 	private String productRegisterVersion;
+	private String productRegisterVersionName;
 
 	private String version;
 

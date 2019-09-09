@@ -249,35 +249,6 @@ public class GspVerifyService {
                     return Json.error("关联产品注册证已过期："+sku);
                 }
 
-                //获取注册证器械目录
-                List<GspOperateDetailVO> operateDetailList = getOperateDetail(gspProductRegister.getProductRegisterId());
-                if(operateDetailList!=null && operateDetailList.size()>0){
-                    GspInstrumentCatalog catalog = gspInstrumentCatalogService.getGspInstrumentCatalog(operateDetailList.get(0).getOperateId());
-                    if(catalog!=null){
-                        if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
-                            return Json.success("一类不需要匹配经营范围");
-                        }
-                    }
-
-                    //产品与货主供应商匹配
-                    List<GspOperateDetailVO> productVo = new ArrayList<>();
-                    productVo.add(operateDetailList.get(0));
-
-                    boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
-                    if(customerFlag == false){
-                        return Json.error("货主与供应商经营范围没有交集");
-                    }
-                    boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
-                    if(skuFlag == false){
-                        return Json.error("货主与产品经营范围不匹配");
-                    }
-                    if(!checkOperateIsRight(operateDetailVOSSupplier,productVo)){
-                        return Json.error("供应商与产品经营范围不匹配");
-                    }
-                }else {
-                    return Json.error("产品注册证没有关联器械目录");
-                }
-
                 if(!StringUtil.isEmpty(lotatt01)){
                     //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
                     List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
@@ -309,6 +280,38 @@ public class GspVerifyService {
                         return Json.error("效期校验出错："+sku);
                     }
                 }
+
+                //获取注册证器械目录
+                List<GspOperateDetailVO> operateDetailList = getOperateDetail(gspProductRegister.getProductRegisterId());
+                if(operateDetailList!=null && operateDetailList.size()>0){
+                    GspInstrumentCatalog catalog = gspInstrumentCatalogService.getGspInstrumentCatalog(operateDetailList.get(0).getOperateId());
+
+                    //产品与货主供应商匹配
+                    List<GspOperateDetailVO> productVo = new ArrayList<>();
+                    productVo.add(operateDetailList.get(0));
+
+                    boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
+                    if(customerFlag == false){
+                        return Json.error("货主与供应商经营范围没有交集");
+                    }
+
+                    if(catalog!=null){
+                        if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
+                            return Json.success("一类不需要匹配经营范围");
+                        }
+                    }
+
+                    boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
+                    if(skuFlag == false){
+                        return Json.error("货主与产品经营范围不匹配");
+                    }
+                    if(!checkOperateIsRight(operateDetailVOSSupplier,productVo)){
+                        return Json.error("供应商与产品经营范围不匹配");
+                    }
+                }else {
+                    return Json.error("产品注册证没有关联器械目录");
+                }
+
                 return Json.success("");
             }else {
                 return Json.success("产品没有注册证号");

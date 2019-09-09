@@ -57,7 +57,7 @@ $(function() {
 			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 ,formatter:function (value,row,index) {
                     return dateFormat2(value);
                 }},
-			{field: 'productRegisterVersion',		title: '注册证版本',	width: 100 },
+			{field: 'productRegisterVersionName',		title: '注册证版本',	width: 100 },
 			{field: 'checkerId',		title: '审核人',	width: 100 },
 			{field: 'checkDate',		title: '审核时间',	width: 150 },
 			{field: 'createId',		title: '创建人',	width: 100 },
