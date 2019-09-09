@@ -655,7 +655,7 @@ public class DocAsnHeaderService extends BaseService {
 					json.setMsg("明细复用成功");
 				} else {
 					json.setSuccess(false);
-					json.setMsg("没有明细数据—明细复用失败");
+					json.setMsg("明细复用失败-(该明细不存在或该货主下没有此明细)");
 				}
 			} else {
 				DocAsnDetailQuery docAsnDetailQuery = new DocAsnDetailQuery();
