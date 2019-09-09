@@ -231,11 +231,13 @@ public class ImportCouRequestDataService {
             resultMsg.append("行号：").append(importDataForm.getCycleCountlineno()).append("资料导入成功").append(" ");
         }
 //盘点完成  主单状态改为完全盘点
-        CouRequestHeaderForm form=new CouRequestHeaderForm();
-        form.setCycleCountno(importDataList.get(0).getCycleCountno());
-        form.setEndtime(new Date());
-        form.setStatus("40");
-        couRequestHeaderMybatisDao.updateBySelective(form);
+        if(importDataList.size()>0) {
+            CouRequestHeaderForm form = new CouRequestHeaderForm();
+            form.setCycleCountno(importDataList.get(0).getCycleCountno());
+            form.setEndtime(new Date());
+            form.setStatus("40");
+            couRequestHeaderMybatisDao.updateBySelective(form);
+        }
     }
 
 

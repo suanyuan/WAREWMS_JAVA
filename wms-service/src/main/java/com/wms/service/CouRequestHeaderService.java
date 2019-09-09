@@ -80,6 +80,19 @@ public class CouRequestHeaderService extends BaseService {
         List<InvLotLocId> listAdd=new ArrayList<>();
          for(InvLotLocId locId:list){
              for(InvLotLocId locIdAll:listAll){
+                 //判断空值
+                  if(locId.getLotatt04()==null){
+                      locId.setLotatt04("");
+                  }
+                  if(locId.getLotatt05()==null){
+                      locId.setLotatt05("");
+                  }
+                  if(locIdAll.getLotatt04()==null){
+                      locIdAll.setLotatt04("");
+                  }
+                  if(locIdAll.getLotatt05()==null){
+                      locIdAll.setLotatt05("");
+                  }
                  if(locId.getCustomerid().equals(locIdAll.getCustomerid())
                     &&locId.getSku().equals(locIdAll.getSku())
                     &&locId.getLocationid().equals(locIdAll.getLocationid())
@@ -99,8 +112,14 @@ public class CouRequestHeaderService extends BaseService {
         Map<String, Object> map = new HashMap<>();
         map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         couRequestHeaderMybatisDao.getIdSequence(map);
-        String resultCode = map.get("resultCode").toString();
-        String resultNo = map.get("resultNo").toString();
+        String resultCode="";
+        String resultNo="";
+        if(map.get("resultCode")!=null) {
+            resultCode = map.get("resultCode").toString();
+        }
+        if(map.get("resultNo")!=null) {
+            resultNo = map.get("resultNo").toString();
+        }
         if (resultCode.substring(0, 3).equals("000")) {
             CouRequestHeader couRequestHeader = new CouRequestHeader();
             couRequestHeader.setCycleCountno(resultNo);
@@ -139,7 +158,7 @@ public class CouRequestHeaderService extends BaseService {
             json.setMsg("生成任务成功!");
         } else {
             json.setSuccess(true);
-            json.setMsg("生成任务失败!");
+            json.setMsg("生成任务失败!未获取到主单号!");
         }
         return json;
     }
