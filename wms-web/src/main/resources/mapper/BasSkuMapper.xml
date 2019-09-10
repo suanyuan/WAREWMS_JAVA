@@ -48,7 +48,8 @@
 	<result column="reservedfield01" property="reservedfield01"/>
 	<result column="reservedfield02" property="reservedfield02"/>
 	<result column="reservedfield03" property="reservedfield03"/>
-	<result column="reservedfield04" property="reservedfield04"/>
+	<!--<result column="reservedfield04" property="reservedfield04"/>-->
+	<result column="codename_c" property="reservedfield04"/>
 	<result column="reservedfield05" property="reservedfield05"/>
 	<result column="reservedfield06" property="reservedfield06"/>
 	<result column="reservedfield07" property="reservedfield07"/>
@@ -914,7 +915,7 @@ where 1=1
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT a.*,b.descr_c AS skuGroup6Name,c.descr,d.name productLineName  from
+	SELECT a.*,b.descr_c AS skuGroup6Name,c.descr,d.name productLineName,iv.codename_c  from
 	(select
 	<include refid="Base_Column_List"/>
 	from Bas_Sku
@@ -922,6 +923,7 @@ where 1=1
 	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 	LEFT JOIN bas_package c ON a.packid=c.packid
 	left join product_line d on a.sku_group1 =  d.product_line_id
+	left join bas_codes iv on a.reservedfield04 = iv.code
 
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}

@@ -25,7 +25,7 @@ public  interface  DocAsnHeaderMybatisDao extends BaseDao {
 
 	List<DocAsnDetail> queryByPageDetailList(MybatisCriteria criteria);
 
-	public int queryByDetailCount(MybatisCriteria criteria);
+	int queryByDetailCount(MybatisCriteria criteria);
 	
 	void getIdSequence(Map<String, Object> map);
 	
@@ -57,13 +57,12 @@ public  interface  DocAsnHeaderMybatisDao extends BaseDao {
 	 * @param asnreference1
 	 * @return
 	 */
-	public int showAsnreference1(@Param("asnreference1") String asnreference1);
+	int showAsnreference1(@Param("asnreference1") String asnreference1);
 
 	List<AsnDetailResult> queryAsnDetailResult(@Param("asnNo")String asnNo);
 
 	/**
 	 *  明细复用查询orderno
 	*/
-	public <T> List<T> queryAsnno(MybatisCriteria criteria);
-
+	<T> List<T> queryAsnno(MybatisCriteria criteria);
 }

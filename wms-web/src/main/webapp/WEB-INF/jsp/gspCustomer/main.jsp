@@ -44,7 +44,6 @@ $(function() {
 		singleSelect:true,
 		idField : 'clientId',
 		columns : [[
-
             {field: 'isUse',		title: '是否有效',	width: 138 ,formatter: yesOrNoFormatter},
             {field: 'isCheck',		title: '是否审查',	width: 138 ,formatter: yesOrNoFormatter},
             {field: 'firstState',		title: '首营状态',	width: 138 ,formatter:firstStateTypeFormatter},
@@ -53,7 +52,7 @@ $(function() {
 			{field: 'clientName',		title: '企业简称',	width: 138 },
 			{field: 'enterpriseId',		title: '企业id',	width: 138 ,hidden:true},
 			{field: 'remark',		title: '备注',	width: 138 ,hidden:true},
-			{field: 'isCooperation',		title: '是否合作',	width: 70 ,formatter: yesOrNoFormatter},
+			// {field: 'isCooperation',		title: '是否合作',	width: 70 ,formatter: yesOrNoFormatter},
 			{field: 'operateType',		title: '类型',	width: 138 ,formatter: entTypeFormatter},
 			{field: 'contractNo',		title: '合同编号',	width: 138 ,hidden:true},
 			{field: 'contractUrl',		title: '合同文件',	width: 138 ,hidden:true},
@@ -61,7 +60,7 @@ $(function() {
 			{field: 'clientStartDate',		title: '委托开始时间',	width: 138 ,hidden:true},
 			{field: 'clientEndDate',		title: '委托结束时间',	width: 138 ,hidden:true},
 			{field: 'clientTerm',		title: '委托期限',	width: 138 ,formatter:day},
-			{field: 'isChineseLabel',		title: '是否长期',	width: 138 ,formatter: yesOrNoFormatter},
+			{field: 'isChineseLabel',		title: '是否中文标签',	width: 138 ,formatter: yesOrNoFormatter},
 			{field: 'createId',		title: '创建人',	width: 138 },
 			{field: 'createDate',		title: '创建时间',	width: 145},
 

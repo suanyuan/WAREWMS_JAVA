@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <th>生产许可证号/备案号</th>
-                        <td><input type='text' data="1" id="licenseOrRecordNol" value="${gspProductRegister.licenseOrRecordNol}"  name='licenseOrRecordNol' class='easyui-combobox'  size="22" data-options="editable:false,panelHeight: 'auto'"/></td>
+                        <td><input type='text' data="1" id="licenseOrRecordNol" value="${gspProductRegister.licenseOrRecordNol}"  name='licenseOrRecordNol' class='easyui-combobox' data-options="editable:false,panelHeight: 'auto',width:185"/></td>
 
                         <th>其他内容</th>
                         <td><input type='text' id1="otherContent" name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options=''/></td>

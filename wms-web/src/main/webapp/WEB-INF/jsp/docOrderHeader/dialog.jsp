@@ -13,7 +13,7 @@
 					<th>SO编号</th>
 					<td><input type='text' id='orderno' name='orderno' class='easyui-textbox' size='16' data-options='editable: false'/></td>
 					<th>客户单号</th>
-					<td><input type='text' id='soreference1' name='soreference1' class='easyui-textbox' size='16' data-options='required:false'/></td>
+					<td><input type='text' id='soreference1' name='soreference1' class='easyui-textbox' size='16' data-options='required:true'/></td>
 					<th>定向入库单号</th>
 					<td><input type='text' id='soreference2' name='soreference2' class='easyui-textbox' size='16' data-options='required:false'/></td>
 					<th>订单状态</th>

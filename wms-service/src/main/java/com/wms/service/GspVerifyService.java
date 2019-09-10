@@ -88,7 +88,7 @@ public class GspVerifyService {
             gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customerId);
             if(gspEnterpriseInfoCustomer == null){
                 //return Json.error("查询不到货主对应的企业信息："+customerId);
-                return Json.error("查询不到对应的货主："+customerId);
+                return Json.error("查询不到有效的货主："+customerId);
             }
         }else {
             gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
@@ -100,7 +100,7 @@ public class GspVerifyService {
             gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplierId);
             if(gspEnterpriseInfoSupplier == null){
                 //return Json.error("查询不到供应商对应的企业信息："+supplierId);
-                return Json.error("查询不到对应的供应商："+supplierId);
+                return Json.error("查询不到有效的供应商："+supplierId);
             }
         }else {
             gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
@@ -427,7 +427,12 @@ public class GspVerifyService {
     public static void main(String[] args){
         try {
             //Date date = DateUtil.parse("20190907","yyyy-MM-dd");
-            System.out.println(checkDate("2019-09-08",new Date()));
+            //System.out.println(checkDate("2019-09-08",new Date()));
+            List<String> arr = new ArrayList<>();
+            arr.add("1");
+            arr.add("2");
+
+
         }catch (Exception e){
             e.printStackTrace();
         }

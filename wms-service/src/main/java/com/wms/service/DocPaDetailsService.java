@@ -187,30 +187,57 @@ public class DocPaDetailsService extends BaseService {
 
         /*
         44444444444，查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
+        新增一个逻辑：此处还需要判断同批已上架的和目前扫描匹配的明细，是否日期数据匹配
          */
         DocPaDetailsQuery similarQuery = new DocPaDetailsQuery();
         similarQuery.setPano(query.getPano());
         similarQuery.setCustomerid(query.getCustomerid());
         similarQuery.setSku(basSku.getSku());
         similarQuery.setUserdefine3(query.getLotatt04());
+        similarQuery.setSumflag(0);//看下SQL就知道了
         List<DocPaDetails> similarDetailList = docPaDetailsMybatisDao.querySimilarDetail(similarQuery);
+
+        InvLotAtt invLotAtt = docPaDetailVO.getInvLotAtt();
+        String lotatt01 = invLotAtt == null ? "" : invLotAtt.getLotatt01();
+        String lotatt02 = docPaDetailVO.getUserdefine2();
+
+        docPaDetailVO.setAlertflag(0);//默认不提醒
         if (similarDetailList.size() == 0) {
+
             docPaDetailVO.setUserdefine1("");
         }else {
+
             DocPaDetails similarDetail = similarDetailList.get(0);
             docPaDetailVO.setUserdefine1(similarDetail.getUserdefine1());
+            for (DocPaDetails compareDetail : similarDetailList) {
+
+                InvLotAtt compareLotatt = compareDetail.getInvLotAtt();
+                String lotatt01Com = compareLotatt == null ? "" : compareLotatt.getLotatt01();
+                String lotatt02Com = compareDetail.getUserdefine2();
+
+                if (!StringUtil.fixNull(lotatt01Com).equals(StringUtil.fixNull(lotatt01)) ||
+                        !StringUtil.fixNull(lotatt02Com).equals(StringUtil.fixNull(lotatt02))) {
+
+                    docPaDetailVO.setAlertflag(1);//匹配到同批已上架和本次扫描上架的产品日期数据不同，返回前端提示
+                    break;
+                }
+            }
         }
 
         /*
         5555555555，已上架件数计算
          */
         Double paCompleted = 0d;
-        for (DocPaDetails qtyDetail : similarDetailList) {
+        Double asnExpected = 0d;
+        similarQuery.setSumflag(1);
+        List<DocPaDetails> sameBatchDetailList = docPaDetailsMybatisDao.querySimilarDetail(similarQuery);
+        for (DocPaDetails qtyDetail : sameBatchDetailList) {
 
             paCompleted += qtyDetail.getPutwayqtyCompleted();
+            asnExpected += qtyDetail.getAsnqtyExpected();
         }
-        docPaDetailVO.setPutwayqtyCompleted(paCompleted);//同批号的上架件数
-
+        docPaDetailVO.setPutwayqtyCompleted(paCompleted);//同批号的上架件数（跨单合计）
+        docPaDetailVO.setAsnqtyExpected(asnExpected);//同批号收货件数（跨单合计）
 
         resultJson.setSuccess(true);
         resultJson.setMsg(Constant.SUCCESS_MSG);

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -59,4 +60,6 @@ public class DocPaDetails  implements Serializable {
      * 批次属性
      */
 	private InvLotAtt invLotAtt;
+
+	List<String> lotnumList;
 }

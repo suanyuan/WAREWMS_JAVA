@@ -1,12 +1,10 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocAsnDetail;
-import com.wms.entity.DocAsnHeader;
-import com.wms.entity.InvLotAtt;
+import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
@@ -70,6 +68,8 @@ public class DocAsnHeaderService extends BaseService {
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
     @Autowired
     private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+    @Autowired
+    private BasCustomerService basCustomerService;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -87,7 +87,15 @@ public class DocAsnHeaderService extends BaseService {
 			docAsnHeaderVO = new DocAsnHeaderVO();
 			BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
 			//判断冷链标记
-			DocAsnDetailQuery query1 = new DocAsnDetailQuery();
+			if(docAsnHeader.getReservedfield07()!=null){
+				switch (docAsnHeader.getReservedfield07()){
+					case "FLL":docAsnHeaderVO.setColdTag("非冷链");break;
+					case "LD":docAsnHeaderVO.setColdTag("冷冻");break;
+					case "LC":docAsnHeaderVO.setColdTag("冷藏");break;
+					default:docAsnHeaderVO.setColdTag("非冷链");break;
+				}
+			}
+			/*DocAsnDetailQuery query1 = new DocAsnDetailQuery();
 			query1.setAsnno(docAsnHeader.getAsnno());
 			query1.setAsnlineno(1);
 			DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(query1);
@@ -98,10 +106,11 @@ public class DocAsnHeaderService extends BaseService {
 						case "FLL":docAsnHeaderVO.setColdTag("非冷链");break;
 						case "LD":docAsnHeaderVO.setColdTag("冷冻");break;
 						case "LC":docAsnHeaderVO.setColdTag("冷藏");break;
+						default:docAsnHeaderVO.setColdTag("非冷链");break;
 					}
 
 				}
-			}
+			}*/
 			docAsnHeaderVOList.add(docAsnHeaderVO);
 		}
 		datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));
@@ -211,6 +220,49 @@ public class DocAsnHeaderService extends BaseService {
 		json.setMsg("提交成功");
 		return json;
 	}
+
+    /**
+     * 在关闭订单之前，判断订单是否部分收货
+     * @param asnnos
+     * @return
+     */
+	public Json checkCloseAsn(String asnnos) {
+
+	    Json json = new Json();
+        StringBuilder message = new StringBuilder();
+        if (StringUtil.isNotEmpty(asnnos)) {
+
+            String[] asnnoList = asnnos.split(",");
+            List<String> partReceivedAsns = new ArrayList<>();//部分收货入库的预入库单号
+            for (String asnno : asnnoList) {
+
+                DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+                List<DocAsnDetail> unfinishedDetailList = docAsnDetailsMybatisDao.queryPartReceivedAsn(asnno);
+                if (unfinishedDetailList.size() > 0 && docAsnHeader.getAsnstatus().equals("70")) {//表示有部分收货入库的预期到货通知明细,前提是完全验收的单子
+                    partReceivedAsns.add(asnno);
+                }
+            }
+            if (partReceivedAsns.size() > 1 || (partReceivedAsns.size() == 1 && asnnoList.length > 1)) {//asnnos中有多个部分收货的需要单条操作
+
+                message.append("请单条关闭部分收货入库的通知单;").append(partReceivedAsns.toString());
+                json.setSuccess(false);
+            }else if (partReceivedAsns.size() == 1) {
+
+                String partAsnno = partReceivedAsns.get(0);
+                message.append("[").append(partAsnno).append("] 此单部分收货入库，");
+                json.setSuccess(true);
+            }else {
+
+                json.setSuccess(true);
+            }
+            json.setMsg(message.toString());
+        } else {
+
+            json.setSuccess(false);
+            json.setMsg("关单失败！(无预入库单号传入)");
+        }
+	    return json;
+    }
 	
 	public Json closeDocAsnHeader(String asnnos) {
 		Json json = new Json();
@@ -728,11 +780,21 @@ public class DocAsnHeaderService extends BaseService {
      * @param orderno 出库单号
      * @return ~
      */
-	public Json quoteDocOrder(String orderno) {
+	public Json quoteDocOrder(String orderno,String customerId,String supplierId) {
 
         Json json = new Json();
 
         try {
+
+			BasCustomer basCustomer = basCustomerService.selectCustomerById(customerId, Constant.CODE_CUS_TYP_OW);
+			if(basCustomer == null){
+				return Json.error("查询不到有效的货主");
+			}
+
+        	BasCustomer basSuppler = basCustomerService.selectCustomerById(supplierId, Constant.CODE_CUS_TYP_VE);
+        	if(basSuppler == null){
+        		return Json.error("查询不到有效的供应商");
+			}
 
             OrderHeaderForNormal docOrderHeader = orderHeaderForNormalMybatisDao.queryById(orderno);
             if (docOrderHeader == null) {
@@ -756,7 +818,7 @@ public class DocAsnHeaderService extends BaseService {
 
             //生成预入库头档
             DocAsnHeaderForm asnHeaderForm = new DocAsnHeaderForm();
-            asnHeaderForm.setCustomerid(docOrderHeader.getCustomerid());
+            asnHeaderForm.setCustomerid(customerId);
             asnHeaderForm.setAsnreference1(docOrderHeader.getSoreference1());
 //        asnHeaderForm.setAsnreference2(docOrderHeader.getSoreference2()); 采购单号需用户手填
             asnHeaderForm.setExpectedarrivetime1(new Date());
@@ -764,6 +826,7 @@ public class DocAsnHeaderService extends BaseService {
             asnHeaderForm.setAsntype("PR");
             asnHeaderForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
             asnHeaderForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			asnHeaderForm.setSupplierid(supplierId);
             json =  addDocAsnHeader(asnHeaderForm);
             if (!json.isSuccess()) {
                 return json;
@@ -777,7 +840,7 @@ public class DocAsnHeaderService extends BaseService {
                 DocAsnDetailForm asnDetailForm = new DocAsnDetailForm();
                 asnDetailForm.setAsnno(asnno);
                 asnDetailForm.setAsnlineno(asnlineno);
-                asnDetailForm.setCustomerid(docOrderDetail.getCustomerid());
+                asnDetailForm.setCustomerid(customerId);
                 asnDetailForm.setLinestatus("00");
                 asnDetailForm.setSku(docOrderDetail.getSku());
                 asnDetailForm.setSkudescrc(docOrderDetail.getSkuName());
@@ -850,6 +913,42 @@ public class DocAsnHeaderService extends BaseService {
 		datagrid.setTotal((long) asnDetailResultList.size());
 		datagrid.setRows(asnDetailResultList);
 		return datagrid;
+	}
+
+	public Json deleteDocAsn(String asnnos){
+		Json json = new Json();
+
+		if(StringUtil.isEmpty(asnnos)){
+			return Json.error("请选择要删除的预入库通知单");
+		}
+
+		String[] noarr = asnnos.split(",");
+		for(String s: noarr){
+			DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
+			docAsnHeaderQuery.setAsnno(s);
+			DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+			if (docAsnHeader != null) {
+				if (docAsnHeader.getAsnstatus().equals("00") || docAsnHeader.getAsnstatus().equals("90")) {
+					if (docAsnHeader.getAddwho().equals("EDI")) {
+						json.setSuccess(false);
+						json.setMsg("EDI订单,不能删除!");
+						return json;
+					} else {
+						docAsnHeaderMybatisDao.delete(docAsnHeader);
+						docAsnDetailsMybatisDao.deleteByHead(docAsnHeader.getAsnno());
+						return Json.success("删除成功");
+					}
+				} else {
+					json.setSuccess(false);
+					json.setMsg("当前状态订单,不能删除!");
+					return json;
+				}
+			}
+			json.setSuccess(true);
+			json.setMsg("资料处理成功！");
+			return json;
+		}
+		return Json.error("请选择要删除的预入库通知单");
 	}
 
 	private String getKey(OrderDetailsForNormal detail){

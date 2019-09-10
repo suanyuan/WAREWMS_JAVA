@@ -309,7 +309,7 @@ public class ImportGspProductRegisterDataService {
 					EasyuiDatagrid<GspEnterpriseInfoVO>  pagedDatagrid=gspEnterpriseInfoService.getPagedDatagrid(e,enQuery);
 					List<GspEnterpriseInfoVO> gspEnterpriseInfoVOList=pagedDatagrid.getRows();
 					for(GspEnterpriseInfoVO info :gspEnterpriseInfoVOList){
-						if(info.getEnterpriseName().equals(dataArray.getEnterpriseName())){
+						if(info.getEnterpriseName().replace(" ","").equals(dataArray.getEnterpriseName().replace(" ",""))){
 							importDataVO.setEnterpriseId(info.getEnterpriseId());
 							con=true;
 							break;

@@ -733,37 +733,80 @@ var mergeReceiving = function () {
 }
 
 /* 关闭按钮 */
+
+var closeCheck = function(){
+    var row = ezuiDatagrid.datagrid('getSelections');
+    if(row){
+        var asnnos = new Array();
+        for(var i=0;i<row.length;i++){
+            asnnos.push(row[i].asnno);
+        }
+        $.ajax({
+            url : 'docAsnHeaderController.do?closeCheck',
+            data : {'asnnos' : asnnos.join(",")},
+            type : 'GET',
+            dataType : 'JSON',
+            success : function(result){
+                var msg = '';
+                try {
+                    msg = result.msg;
+                } catch (e) {
+                    msg = '订单状态检查异常';
+                    result.success = false;
+                } finally {
+
+                    if (result.success) {
+
+                        var showMsg = msg + '是否确认关单？';
+                        $.messager.confirm('<spring:message code="common.message.confirm"/>', showMsg, function(confirm) {
+                            if (confirm) {
+
+                                close1();
+                            }
+                        });
+                    } else {
+
+                        $.messager.show({
+                            msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                        });
+                    }
+                }
+            }
+        });
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+};
+
 var close1 = function(){
 	var row = ezuiDatagrid.datagrid('getSelections');
 	if(row){
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认关单？', function(confirm) {
-			if(confirm){
-                var arr = new Array();
-                for(var i=0;i<row.length;i++){
-                    arr.push(row[i].asnno);
+        var arr = new Array();
+        for(var i=0;i<row.length;i++){
+            arr.push(row[i].asnno);
+        }
+        $.ajax({
+            url : 'docAsnHeaderController.do?close',
+            data : {'asnnos' : arr.join(",")},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+                var msg = '';
+                try {
+                    msg = result.msg;
+                } catch (e) {
+                    msg = '关单异常';
+                } finally {
+                    $.messager.show({
+                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                    });
+                    ezuiDatagrid.datagrid('reload');
                 }
-				$.ajax({
-					url : 'docAsnHeaderController.do?close',
-                    data : {'asnnos' : arr.join(",")},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							msg = result.msg;
-						} catch (e) {
-							msg = '关单异常';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
-	}else{
+            }
+        });
+    }else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
@@ -1706,51 +1749,123 @@ function asnRowStyle(index,row) {
     }
 }
 
+var ezuiCustDataDialogRefAdd;
+/* 客户选择弹框-主界面 */
+var ezuiCustDataClickRefAdd = function(){
+    $("#ezuiCustDataDialog #customerType").combobox('setValue',"OW").combo('readonly', true);
+    $("#ezuiCustDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
+    ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+        url : '<c:url value="/basCustomerController.do?showDatagrid"/>',
+        method:'POST',
+        toolbar : '#ezuiCustToolbar',
+        title: '客户档案',
+        pageSize : 50,
+        pageList : [50, 100, 200],
+        fit: true,
+        border: false,
+        fitColumns : true,
+        nowrap: false,
+        striped: true,
+        collapsible:false,
+        pagination:true,
+        rownumbers:true,
+        singleSelect:true,
+        queryParams:{
+            customerType : $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+            activeFlag : $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+        },
+        idField : 'customerid',
+        columns : [[
+            {field: 'customerid',	title: '客户代码',	width: 50},
+            {field: 'descrC',		title: '中文名称',	width: 50},
+            {field: 'descrE',		title: '英文名称',	width: 25},
+            {field: 'customerTypeName',	title: '类型',	width: 15},
+            {field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }}
+        ]],
+        onDblClickRow: function(index,row){
+            //TODO 选择供应商
+			choseCustomerRefAdd(row);
+        },
+        onRowContextMenu : function(event, rowIndex, rowData) {
+        },onLoadSuccess:function(data){
+            $(this).datagrid('unselectAll');
+        }
+    });
+
+    ezuiCustDataDialog.dialog('open');
+};
+
+function choseCustomerRefAdd(row) {
+	//console.log(row);
+    $("#customerIdRef").textbox("setValue",row.customerid);
+    //初始化供应商
+    $('#supplierIdRef').combobox({
+        url:'commonController.do?getSupplier',
+        valueField:'id',
+        textField:'value',
+        width:125,
+        required:true,
+        editable:false,
+        queryParams:{customerId:row.customerid},
+        onLoadSuccess:function () {
+
+        }
+    });
+    ezuiCustDataDialog.dialog('close');
+}
+
 var refAddDialog;
-//初始化
-$(function () {
-    //$('#ezuiBtn_copyDetail').linkbutton('disable');
+
+//给明细复用入库编号文本框
+function refAdd() {
     refAddDialog = $('#refAddDialog').dialog({
         modal: true,
         title: '引用新增',
         buttons: '',
         width: 250,
-        height: 150,
+        height: 250,
         onOpen: function () {
+            $('#addRefFlag').combobox({
+                onChange:function(newValue,oldValue){
+
+                    $('#addrefInNoTo').textbox('clear');
+                    if(newValue == 1){
+                        $('#addrefInNoTo').textbox({
+                            multiline:false,
+                            prompt:'请输入SO编号'
+                        });
+                    }else if(newValue == -1){
+                        $('#addrefInNoTo').textbox({
+                            multiline:false,
+                            prompt:'请输入ASN编号'
+                        });
+                    }else{
+                        $('#addrefInNoTo').textbox({
+                            multiline:false,
+                            prompt:'请选择订单...'
+                        });
+                    }
+                }
+            });
+            $("#customerIdRef").textbox({
+                width:145,
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        //$("#ezuiCustDataDialog #customerid").textbox('clear');
+                        //ezuiCustDataClick('OW');
+                        ezuiCustDataClickRefAdd();
+                        //ezuiCustDataDialogSearch();
+                    }
+                }]
+            });
         },
         onClose: function () {
 
         }
-    }).dialog('close');
-
-
-
-})
-//给明细复用入库编号文本框
-function refAdd() {
-    $('#addRefFlag').combobox({
-        onChange:function(newValue,oldValue){
-
-            $('#addrefInNoTo').textbox('clear');
-            if(newValue == 1){
-                $('#addrefInNoTo').textbox({
-                    multiline:false,
-                    prompt:'请输入SO编号'
-                });
-            }else if(newValue == -1){
-                $('#addrefInNoTo').textbox({
-                    multiline:false,
-                    prompt:'请输入ASN编号'
-                });
-            }else{
-                $('#addrefInNoTo').textbox({
-                    multiline:false,
-                    prompt:'请选择订单...'
-                });
-            }
-        }
-    });
-    refAddDialog.dialog("open");
+    })
     $('#addRefFlag').combobox('setValue','1');
 }
 //引用新增
@@ -1760,16 +1875,19 @@ function refAddDetailIn() {
     var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
     $.ajax({
         url : 'docAsnHeaderController.do?quoteDocOrder',
-        data : {orderno:$('#addrefInNoTo').textbox("getValue")},
+        data : {orderno:$('#addrefInNoTo').textbox("getValue"),
+			customerId:$("#customerIdRef").textbox("getValue"),
+            supplierId:$("#supplierIdRef").textbox("getValue")
+		},
         type : 'POST',
         dataType : 'JSON',
         success : function(result){
             try {
+                console.log(result);
                 if(result.success){
                     // $('#ezuiBtn_copyDetail').linkbutton('disable');
-                    $('#ezuiDetailsDatagrid').ezuiDatagrid('load');
-                    refAddDialog.dialog("close");
-                    $('#addrefInNoTo').textbox('clear')
+                    $('#ezuiDetailsDatagrid').datagrid('reload');
+                    closerefAdd();
                 }
                 showMsg(result.msg)
             } catch (e) {
@@ -1779,9 +1897,10 @@ function refAddDetailIn() {
     });
 }
 function closerefAdd() {
-    refAddDialog.dialog("close");
+    $('#refAddDialog').dialog("close");
     $('#addrefInNoTo').textbox('clear');
     $('#addRefFlag').combobox('clear');
+    $("#customerIdRef").textbox("clear");
 }
 
 function deleteMain() {
@@ -1817,6 +1936,7 @@ function deleteMain() {
         })
 	}
 }
+
 </script>
 </head>
 <body>
@@ -1885,14 +2005,14 @@ function deleteMain() {
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
 					<a onclick='refAdd();' id='ezuiBtn_refAdd' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用新增</a>
-					<%--<a onclick='deleteMain();' id='ezuiBtn_delete' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除订单</a>--%>
+					<a onclick='deleteMain();' id='ezuiBtn_delete' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除订单</a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
-                    <a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
+                    <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

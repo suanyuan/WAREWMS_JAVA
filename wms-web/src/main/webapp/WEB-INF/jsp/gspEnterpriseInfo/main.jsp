@@ -238,7 +238,7 @@ var commit = function(){
     //判断主体经营许可证
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_ZT ){
         if(!checkObjIsEmpty(operateobj) || isVal == false){
-            showMsg("主体企业需要填写经营机构执业许可证！");
+            showMsg("主体企业需要填写经营许可证信息！");
             return;
         }
         if(checkObjIsEmpty(operateobj) && isVal == false){
