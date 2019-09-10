@@ -57,8 +57,9 @@ public class CouRequestExportService {
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 				if (vo.getEdittime()!=null) {
 					vo.setCountdate(sdf.format(vo.getEdittime()));
-				}else{
 				}
+				//换算率
+					vo.setQtyInvEach(vo.getQtyInv() * vo.getQty1());
 				exportVOS.add(vo);
 			}
 	        // 导出  
@@ -92,6 +93,7 @@ public class CouRequestExportService {
 		superClassMap.put("lotatt04", "生产批号");
 		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("qtyInv", "库存件数");
+		superClassMap.put("qtyInvEach", "库存数量");
 		superClassMap.put("locationid", "库位");
 		superClassMap.put("qtyAct", "实际盘点件数");
 		superClassMap.put("userdefined1", "盘点差异");

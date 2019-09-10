@@ -60,6 +60,7 @@ public class CouRequestDetailsService extends BaseService {
         for (CouRequestDetails couRequestDetails : couRequestDetailsList) {
             couRequestDetailsVO = new CouRequestDetailsVO();
             BeanUtils.copyProperties(couRequestDetails, couRequestDetailsVO);
+            couRequestDetailsVO.setQtyInvEach(couRequestDetailsVO.getQtyInv() * couRequestDetailsVO.getQty1());
             couRequestDetailsVOList.add(couRequestDetailsVO);
         }
         return couRequestDetailsVOList;

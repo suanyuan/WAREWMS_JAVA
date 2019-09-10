@@ -152,6 +152,7 @@ $(function() {
 			{field: 'reservedfield01', title: '产品名称', width: 170},
 			{field: 'locationid', title: '库位', width: 100},
 			{field: 'qtyInv', title: '库存件数', width: 70},
+			{field: 'qtyInvEach', title: '库存数量', width: 70},
 			{field: 'qtyAct', title: '实际盘点件数', width: 80},
 			{field: 'userdefined1', title: '盘点差异', width: 80},
 			{field: 'lotatt04', title: '生产批号', width: 100},
