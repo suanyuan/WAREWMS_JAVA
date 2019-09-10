@@ -620,13 +620,16 @@ public class DocQcDetailsService extends BaseService {
             /*
                 因为上架明细中的质量只有DJ 和 HG，所以需要匹配pano、sku、userdefine3、userdefine5（DJ）
             */
+            InvLotAtt currentLotatt = invLotAttMybatisDao.queryById(currentQcDetail.getLotnum());
             DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryByQcno(currentQcDetail.getQcno());
+            List<String> lotnumList = docPaDetailsMybatisDao.queryMatchLotnum(docPaHeader.getPano(), currentLotatt.getLotatt14());
             DocPaDetails docPaDetails = new DocPaDetails();
             docPaDetails.setPano(docPaHeader.getPano());
             docPaDetails.setSku(currentQcDetail.getSku());
             docPaDetails.setUserdefine3(currentQcDetail.getUserdefine3());
             docPaDetails.setUserdefine5("DJ");
             docPaDetails.setEditwho(form.getEditwho());
+            docPaDetails.setLotnumList(lotnumList);
             docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
 
             /* ********************************doc_qc_header******************************** */

@@ -41,10 +41,18 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
 
     /**
      * 批量更新同生产批号的上架产品为合格状态
-     * @param docPaDetails pano、sku、userdefine3、userdefine5(DJ)
+     * @param docPaDetails pano、sku、userdefine3、userdefine5(DJ)、 lotnumList
      * @return ~
      */
 	int updateBatchQc(DocPaDetails docPaDetails);
+
+    /**
+     * 批量合格修改上架单的质量状态 for updateBatchQc
+     * @param pano 上架单号
+     * @param assno 入库单号
+     * @return lotnum list
+     */
+	List<String> queryMatchLotnum(@Param("pano") String pano, @Param("asnno") String assno);
 
     int queryMaxLineNo(@Param("pano")String pano);
 
@@ -67,4 +75,15 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      * @return ~
      */
     int queryUndoneNum4BatchNum(@Param("qcno") String qcno, @Param("batchNum") String batchNum);
+
+
+
+//    /**
+//     * 获取同一个上架任务单中，同货主、SKU、批号的 件数总计
+//     * @param pano 上架任务单号
+//     * @param batchNum 生产批号
+//     * @return ~
+//     */
+//    DocPaDetails querySumQty4SameBatch(@Param("pano") String pano, @Param("customreid") String customerid,
+//                                       @Param("sku") String sku, @Param("lotatt04") String lotatt04);
 }

@@ -1015,4 +1015,14 @@ insert into doc_asn_details
 		FROM doc_asn_details
 		<include refid="Example_Where_Clause"/>
 	</select>
+
+    <!--获取预入库单中哪几条是部分收货的-->
+    <select id="queryPartReceivedAsn" parameterType="Object" resultMap="DocAsnDetailMap">
+        SELECT b.* FROM (
+            SELECT asnno, asnlineno, IFNULL(SUM(putwayqty_completed),0) as completedQty FROM doc_pa_details
+            WHERE asnno = #{asnno} GROUP BY asnno, asnlineno
+        ) AS a
+        LEFT JOIN  doc_asn_details b on a.asnno = b.asnno AND a.asnlineno = b.asnlineno AND IFNULL(b.expectedqty, 0) > IFNULL(a.completedQty, 0)
+        WHERE b.asnno = #{asnno} ;
+    </select>
 </mapper>

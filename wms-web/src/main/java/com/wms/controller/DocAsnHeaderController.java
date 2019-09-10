@@ -117,6 +117,18 @@ public class DocAsnHeaderController {
 		}
 		return json;
 	}
+
+    @Login
+    @RequestMapping(params = "closeCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public Json closeCheck(String asnnos) {
+        Json json = docAsnHeaderService.checkCloseAsn(asnnos);
+        if(json == null){
+            json = new Json();
+            json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        }
+        return json;
+    }
 	
 	@Login
 	@RequestMapping(params = "close", method = RequestMethod.POST)

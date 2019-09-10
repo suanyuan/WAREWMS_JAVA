@@ -211,6 +211,49 @@ public class DocAsnHeaderService extends BaseService {
 		json.setMsg("提交成功");
 		return json;
 	}
+
+    /**
+     * 在关闭订单之前，判断订单是否部分收货
+     * @param asnnos
+     * @return
+     */
+	public Json checkCloseAsn(String asnnos) {
+
+	    Json json = new Json();
+        StringBuilder message = new StringBuilder();
+        if (StringUtil.isNotEmpty(asnnos)) {
+
+            String[] asnnoList = asnnos.split(",");
+            List<String> partReceivedAsns = new ArrayList<>();//部分收货入库的预入库单号
+            for (String asnno : asnnoList) {
+
+                DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+                List<DocAsnDetail> unfinishedDetailList = docAsnDetailsMybatisDao.queryPartReceivedAsn(asnno);
+                if (unfinishedDetailList.size() > 0 && docAsnHeader.getAsnstatus().equals("70")) {//表示有部分收货入库的预期到货通知明细,前提是完全验收的单子
+                    partReceivedAsns.add(asnno);
+                }
+            }
+            if (partReceivedAsns.size() > 1 || (partReceivedAsns.size() == 1 && asnnoList.length > 1)) {//asnnos中有多个部分收货的需要单条操作
+
+                message.append("请单条关闭部分收货入库的通知单;").append(partReceivedAsns.toString());
+                json.setSuccess(false);
+            }else if (partReceivedAsns.size() == 1) {
+
+                String partAsnno = partReceivedAsns.get(0);
+                message.append("[").append(partAsnno).append("] 此单部分收货入库，");
+                json.setSuccess(true);
+            }else {
+
+                json.setSuccess(true);
+            }
+            json.setMsg(message.toString());
+        } else {
+
+            json.setSuccess(false);
+            json.setMsg("关单失败！(无预入库单号传入)");
+        }
+	    return json;
+    }
 	
 	public Json closeDocAsnHeader(String asnnos) {
 		Json json = new Json();

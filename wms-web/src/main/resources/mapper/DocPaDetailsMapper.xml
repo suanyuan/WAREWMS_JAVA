@@ -288,7 +288,17 @@ where 1=1
         update doc_pa_details set userdefine5 = 'HG', editwho = #{editwho, jdbcType=VARCHAR}, edittime = NOW()
         where pano = #{pano, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
           and userdefine3 = #{userdefine3, jdbcType=VARCHAR} and userdefine5 = #{userdefine5, jdbcType=VARCHAR}
+          and lotnum in
+        <foreach collection="lotnumList" item="lotnum" index="index" open="(" close=")" separator=",">
+            #{lotnum}
+        </foreach>
     </update>
+
+    <select id="queryMatchLotnum" resultType="string" parameterType="java.util.Map">
+        select distinct a.lotnum from doc_pa_details a
+            left join inv_lot_att b on a.lotnum = b.lotnum
+            where a.pano = #{pano} and b.lotatt14 = #{asnno}
+    </select>
 
     <select id="queryMaxLineNo" parameterType="Object" resultType="int">
        SELECT ifnull(MAX(palineno + 0),0) FROM doc_pa_details WHERE pano = #{pano};
@@ -298,7 +308,7 @@ where 1=1
         delete from doc_pa_details where pano = #{pano}
     </delete>
 
-    <select id="querySimilarDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <select id="querySimilarDetail" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         <include refid="Base_Column_List"/>
         from doc_pa_details
@@ -308,8 +318,10 @@ where 1=1
         <if test="userdefine3 != null and userdefine3 != ''">
             and userdefine3 = #{userdefine3}
         </if>
-          <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
-        order by edittime desc
+        <if test="sumflag == 0">
+            <![CDATA[ and userdefine1 <> 'STAGE01' ]]>
+            order by edittime desc
+        </if>
     </select>
 
     <select id="queryUndoneNum4BatchNum" parameterType="java.util.Map" resultType="integer">
@@ -317,4 +329,11 @@ where 1=1
         left join doc_qc_header qh on qh.pano = pd.pano
         where qh.qcno = #{qcno} and pd.userdefine3 = #{batchNum} and <![CDATA[pd.linestatus < 40]]>
     </select>
+
+    <!--<select id="querySumQty4SameBatch" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+        <!--select ifnull(sum(asnqty_expected), 0) as asnqty_expected, ifnull(sum(putwayqty_completed), 0) as putwayqty_completed-->
+        <!--from  doc_pa_details-->
+        <!--where pano = #{pano} and customerid = #{customreid} and sku = #{sku}-->
+        <!--and userdefine3 = #{lotatt04}-->
+    <!--</select>-->
 </mapper>   

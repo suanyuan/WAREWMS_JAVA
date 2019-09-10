@@ -6,11 +6,9 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.mybatis.dao.DocPaDetailsMybatisDao;
-import com.wms.mybatis.dao.DocPaHeaderMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
+import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.DocPaHeaderQuery;
@@ -54,7 +52,7 @@ public class DocPaHeaderService extends BaseService {
 	@Autowired
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 	@Autowired
-	private GspProductRegisterService gspProductRegisterService;
+    private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
 
     @Autowired
     private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
@@ -192,9 +190,16 @@ public class DocPaHeaderService extends BaseService {
 
         form.setEditwho(form.getEditwho());
         int result = docPaHeaderDao.endTask(form);
-
         if (result == 0) {
             return new PdaResult(PdaResult.CODE_FAILURE, "操作失败, 订单号不存在");
+        }
+
+        DocQcHeader docQcHeader = docQcHeaderMybatisDao.queryByPano(form.getPano());
+        if (docQcHeader != null) {
+
+            PdaDocQcDetailForm pdaDocQcDetailForm = new PdaDocQcDetailForm();
+            pdaDocQcDetailForm.setQcno(docQcHeader.getQcno());
+            docQcHeaderMybatisDao.updateTaskStatus(pdaDocQcDetailForm);
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "操作成功");
     }

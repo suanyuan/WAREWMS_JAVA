@@ -733,37 +733,80 @@ var mergeReceiving = function () {
 }
 
 /* 关闭按钮 */
+
+var closeCheck = function(){
+    var row = ezuiDatagrid.datagrid('getSelections');
+    if(row){
+        var asnnos = new Array();
+        for(var i=0;i<row.length;i++){
+            asnnos.push(row[i].asnno);
+        }
+        $.ajax({
+            url : 'docAsnHeaderController.do?closeCheck',
+            data : {'asnnos' : asnnos.join(",")},
+            type : 'GET',
+            dataType : 'JSON',
+            success : function(result){
+                var msg = '';
+                try {
+                    msg = result.msg;
+                } catch (e) {
+                    msg = '订单状态检查异常';
+                    result.success = false;
+                } finally {
+
+                    if (result.success) {
+
+                        var showMsg = msg + '是否确认关单？';
+                        $.messager.confirm('<spring:message code="common.message.confirm"/>', showMsg, function(confirm) {
+                            if (confirm) {
+
+                                close1();
+                            }
+                        });
+                    } else {
+
+                        $.messager.show({
+                            msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                        });
+                    }
+                }
+            }
+        });
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+};
+
 var close1 = function(){
 	var row = ezuiDatagrid.datagrid('getSelections');
 	if(row){
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认关单？', function(confirm) {
-			if(confirm){
-                var arr = new Array();
-                for(var i=0;i<row.length;i++){
-                    arr.push(row[i].asnno);
+        var arr = new Array();
+        for(var i=0;i<row.length;i++){
+            arr.push(row[i].asnno);
+        }
+        $.ajax({
+            url : 'docAsnHeaderController.do?close',
+            data : {'asnnos' : arr.join(",")},
+            type : 'POST',
+            dataType : 'JSON',
+            success : function(result){
+                var msg = '';
+                try {
+                    msg = result.msg;
+                } catch (e) {
+                    msg = '关单异常';
+                } finally {
+                    $.messager.show({
+                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                    });
+                    ezuiDatagrid.datagrid('reload');
                 }
-				$.ajax({
-					url : 'docAsnHeaderController.do?close',
-                    data : {'asnnos' : arr.join(",")},
-					type : 'POST',
-					dataType : 'JSON',
-					success : function(result){
-						var msg = '';
-						try {
-							msg = result.msg;
-						} catch (e) {
-							msg = '关单异常';
-						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
-						}
-					}
-				});
-			}
-		});
-	}else{
+            }
+        });
+    }else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
@@ -1892,7 +1935,7 @@ function deleteMain() {
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
-                    <a onclick='close1();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
+                    <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 
