@@ -336,6 +336,13 @@ public class ImportGspProductRegisterSpecsDataService {
 			}
 
 			try {
+				if (StringUtils.isNotEmpty(dataArray.getPackagingUnit())) {//包装单位
+					importDataVO.setPackagingUnit(dataArray.getPackagingUnit());
+				}
+			} catch (Exception e) {
+			}
+
+			try {
 
 				if("0".equals(dataArray.getLlong()) || dataArray.getLlong()==""||dataArray.getLlong()==null){
 
@@ -708,6 +715,7 @@ public class ImportGspProductRegisterSpecsDataService {
 		map.put("医疗器械标志(是/否)", "medicalDeviceMark");
 		map.put("养护周期(天)", "maintenanceCycle");
 
+		map.put("包装单位","packagingUnit");
 		map.put("包装要求", "packingRequire");
 
 	    map.put("长(m)", "llong");

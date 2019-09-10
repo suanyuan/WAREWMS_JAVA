@@ -72,7 +72,7 @@
                 and shorthand_name like CONCAT('%',#{condition.shorthandName},'%')
             </if>
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''">
-                and enterprise_name like CONCAT('%',#{condition.enterpriseName},'%')
+                and replace(enterprise_name,' ','') like CONCAT('%',replace(#{condition.enterpriseName},' ',''),'%')
             </if>
             <if test="condition.enterpriseType != null and condition.enterpriseType != ''">
                 and enterprise_type = #{condition.enterpriseType}

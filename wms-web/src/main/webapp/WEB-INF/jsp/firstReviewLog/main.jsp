@@ -105,7 +105,7 @@ var edit = function(row){
         }else if(row.reviewTypeId.indexOf("SUP")!=-1){
             title = "供应商首营申请单";
             dialogUrl = sy.bp()+"/gspSupplierController.do?showSupplierDetail"+"&id="+row.reviewTypeId;
-           // return "供应商";
+           // return "供应商";gspCustomerController
         }else if(row.reviewTypeId.indexOf("PRO")!=-1){
             title = "产品首营申请单";
 			dialogUrl = sy.bp()+"/firstBusinessApplyController.do?showBusinessDetail"+"&id="+row.reviewTypeId;

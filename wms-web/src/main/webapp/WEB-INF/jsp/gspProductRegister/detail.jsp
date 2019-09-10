@@ -511,7 +511,7 @@
                 {
                     $("#productRegisterExpiryDate").focus();
                     showMsg("有效时间时间不能小于批准时间！");
-                    return;
+                    return false;
                 }
 
                 /*if(!judgeDate($("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))){
