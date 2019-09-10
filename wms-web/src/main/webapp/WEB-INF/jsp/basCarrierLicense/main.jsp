@@ -175,17 +175,69 @@ var del = function(){
 };
 
 var commit = function(){
+    var a =0;
+    var b=0;
     var gspEnterpriceFrom = new Object();
     var infoObj = new Object();
     var businessObj = new Object();
    // var clientObj = new Object();ezuiDatagrid.datagrid('getSelected');
 	// var row = ezuiBussinessDatagridDetail.datagrid('getSelected');
     $("#ezuiFormInfo input[class='textbox-value'][type='hidden']").each(function (index) {
+
         infoObj[""+$(this).attr("name")+""] = $(this).val();
+
     });
     $("#ezuiFormBusiness input[class='textbox-value'][type!='file']").each(function (index) {
         businessObj[""+$(this).attr("name")+""] = $(this).val();
+        // var a =0;
+        // var b=0;
+        if($(this).val()!=""){
+			a++;
+		}
+		b++;
     });
+	if(a==0){
+		//全都没填
+		// alert("全都没填");
+		// return;
+	}else if(a==b){
+		//全填了  没看营业页面
+        // alert("全填了");
+        // return;
+        if(judgeDate($("#ezuiFormBusiness #establishmentDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("营业许可证成立日期不能超过当前时间");
+            return;
+        }
+        if(judgeDate($("#ezuiFormBusiness #issueDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("营业许可证发证日期不能超过当前时间");
+            return;
+        }
+        if(judgeDate($("#ezuiFormBusiness #businessStartDate").datebox("getValue"))){
+            checkResult = false;
+            showMsg("营业执照营业起始时间不能超过当前时间");
+            return;
+        }
+        // if(!($("#ezuiFormBusiness #isLong").is(':checked')) && $("#ezuiFormBusiness #businessStartDate").datebox("getValue")>$("#ezuiFormBusiness #businessEndDate").datebox("getValue"))
+        // {
+        //     $("#businessStartDate").focus();
+        //     showMsg("营业执照营业期限起始时间不能大于结束时间！");
+        //     return;
+        // }
+
+	}else if(b>a){
+		//部分填了
+
+        $.messager.show({
+            msg : "营业执照填写不完全", title : '<spring:message code="common.message.prompt"/>'
+        });
+        // alert("部分填了");
+        return;
+	}
+
+
+
     businessObj["businessId"] =$("#ezuiFormBusiness input[id='businessId']").val();
    /* $("#ezuiFormClient input[class='textbox-value'][type!='file']").each(function (index) {
         clientObj[""+$(this).attr("name")+""] = $(this).val();

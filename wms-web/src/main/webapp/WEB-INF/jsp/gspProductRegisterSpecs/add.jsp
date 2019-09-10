@@ -86,7 +86,7 @@
 
         <tr>
             <th>运输条件</th>
-            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options=''/></td>
+            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options='required:false'/></td>
 
 
             <th>宽</th>
@@ -394,7 +394,7 @@
     function changeColdHainMark(){
         //非冷链： FLL  冷藏： LC  冷冻：LD
         console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
-        if($('#ezuiFormInfo #coldHainMark').combobox('getValue') == 'FLL'){
+        if($('#ezuiFormInfo #coldHainMark').combobox('getValue') == 'FLL' || $('#ezuiFormInfo #coldHainMark').combobox('getValue') == ''){
             $('#transportCondition').textbox({required:false});
         }else {
             $('#transportCondition').textbox({required:true});
