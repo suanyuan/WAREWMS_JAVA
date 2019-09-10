@@ -1,12 +1,8 @@
 package com.wms.service.sfExpress.sfXmlParse;
 
-
-import com.wms.utils.StringUtil;
-
 /**
  * 顺丰响应实体
  *
- * @date 2019/2/14 17:49
  */
 public class ShunFengResponse {
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.constant.Constant;
 import com.wms.entity.DocMtHeader;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -115,12 +116,13 @@ public class DocMtDetailsController {
 	*/
     @Login
 	@RequestMapping(params = "printMtDetails")
-	public String printMtDetails(String mtNo, String  mtlineNo ,Model model){
+	public String printMtDetails( String mtno,String linestatus,String descrc,String customerid,String sku,String lotatt12,
+								  String lotatt04,String lotatt05,String productLineName,Model model){
 
-        List<DocMtHeader> docMtHeaderList = docMtDetailsService.printMtDetails(mtNo,mtlineNo);
+        List<DocMtHeader> docMtHeaderList = docMtDetailsService.printMtDetails(mtno,linestatus,descrc,customerid,sku,lotatt12,lotatt04,lotatt05,productLineName);
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(docMtHeaderList);
         model.addAttribute("url", "WEB-INF/jasper/report1MAX.jasper");
-        model.addAttribute("format", "pdf");
+        model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
 

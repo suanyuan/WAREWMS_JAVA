@@ -35,144 +35,147 @@ import java.util.List;
 @Service("docMtDetailsService")
 public class DocMtDetailsService extends BaseService {
 
-	@Autowired
-	private DocMtDetailsMybatisDao docMtDetailsMybatisDao;
+    @Autowired
+    private DocMtDetailsMybatisDao docMtDetailsMybatisDao;
 
-	@Autowired
-	private DocMtHeaderMybatisDao docMtHeaderMybatisDao;
+    @Autowired
+    private DocMtHeaderMybatisDao docMtHeaderMybatisDao;
 
-	@Autowired
-	private BasSkuMybatisDao basSkuMybatisDao;
+    @Autowired
+    private BasSkuMybatisDao basSkuMybatisDao;
 
-	@Autowired
-	private BasCustomerMybatisDao basCustomerMybatisDao;
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
 
-	@Autowired
-	private InvLotAttMybatisDao invLotAttMybatisDao;
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
 
-	@Autowired
-	private BasPackageMybatisDao basPackageMybatisDao;
+    @Autowired
+    private BasPackageMybatisDao basPackageMybatisDao;
 
-	@Autowired
-	private ProductLineMybatisDao productLineMybatisDao;
+    @Autowired
+    private ProductLineMybatisDao productLineMybatisDao;
 
-	@Autowired
+    @Autowired
     private CommonService commonService;
 
-	@Autowired
+    @Autowired
     private BasCodesService basCodesService;
 
     /**
      * 养护作业界面分页显示 根据mtno
+     *
      * @param pager
      * @param query
      * @return
      */
-	public EasyuiDatagrid<DocMtDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
-		EasyuiDatagrid<DocMtDetailsVO> datagrid = new EasyuiDatagrid<DocMtDetailsVO>();
-		List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<DocMtDetailsVO>();
-		MybatisCriteria mybatisCriteria = new MybatisCriteria();
-		mybatisCriteria.setCurrentPage(pager.getPage());
-		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		if(query.getMtno()==null||query.getMtno()==""){
-			datagrid.setRows(docMtDetailsVOList);
-			datagrid.setTotal((long)0);
-			return datagrid;
-		}
+    public EasyuiDatagrid<DocMtDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocMtDetailsQuery query) {
+        EasyuiDatagrid<DocMtDetailsVO> datagrid = new EasyuiDatagrid<DocMtDetailsVO>();
+        List<DocMtDetailsVO> docMtDetailsVOList = new ArrayList<DocMtDetailsVO>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        if (query.getMtno() == null || query.getMtno() == "") {
+            datagrid.setRows(docMtDetailsVOList);
+            datagrid.setTotal((long) 0);
+            return datagrid;
+        }
 
-		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
-		DocMtDetailsVO docMtDetailsVO = null;
-		for (DocMtDetails docMtDetails : docMtDetailsList) {
-			docMtDetailsVO = new DocMtDetailsVO();
-			docMtDetails.setMtqtyExpected(docMtDetails.getMtqtyExpected()-docMtDetails.getMtqtyCompleted());
-			docMtDetails.setMtqtyEachExpected(docMtDetails.getMtqtyEachExpected()-docMtDetails.getMtqtyEachCompleted());
-			BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
-			docMtDetailsVOList.add(docMtDetailsVO);
-		}
-		datagrid.setTotal((long)docMtDetailsMybatisDao.queryByCountLotatt(mybatisCriteria));
-		datagrid.setRows(docMtDetailsVOList);
-		return datagrid;
-	}
+        List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
+        DocMtDetailsVO docMtDetailsVO = null;
+        for (DocMtDetails docMtDetails : docMtDetailsList) {
+            docMtDetailsVO = new DocMtDetailsVO();
+            docMtDetails.setMtqtyExpected(docMtDetails.getMtqtyExpected() - docMtDetails.getMtqtyCompleted());
+            docMtDetails.setMtqtyEachExpected(docMtDetails.getMtqtyEachExpected() - docMtDetails.getMtqtyEachCompleted());
+            BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
+            docMtDetailsVOList.add(docMtDetailsVO);
+        }
+        datagrid.setTotal((long) docMtDetailsMybatisDao.queryByCountLotatt(mybatisCriteria));
+        datagrid.setRows(docMtDetailsVOList);
+        return datagrid;
+    }
 
-	public Json addDocMtDetails(DocMtDetailsForm docMtDetailsForm) throws Exception {
-		Json json = new Json();
-		DocMtDetails docMtDetails = new DocMtDetails();
-		BeanUtils.copyProperties(docMtDetailsForm, docMtDetails);
-		docMtDetailsMybatisDao.add(docMtDetails);
-		json.setSuccess(true);
-		return json;
-	}
+    public Json addDocMtDetails(DocMtDetailsForm docMtDetailsForm) throws Exception {
+        Json json = new Json();
+        DocMtDetails docMtDetails = new DocMtDetails();
+        BeanUtils.copyProperties(docMtDetailsForm, docMtDetails);
+        docMtDetailsMybatisDao.add(docMtDetails);
+        json.setSuccess(true);
+        return json;
+    }
 
-	public Json editDocMtDetails(DocMtDetailsForm docMtDetailsForm) {
-		Json json = new Json();
-		DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(docMtDetailsForm.getMtno());
-		BeanUtils.copyProperties(docMtDetailsForm, docMtDetails);
-		docMtDetailsMybatisDao.update(docMtDetails);
-		json.setSuccess(true);
-		return json;
-	}
+    public Json editDocMtDetails(DocMtDetailsForm docMtDetailsForm) {
+        Json json = new Json();
+        DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(docMtDetailsForm.getMtno());
+        BeanUtils.copyProperties(docMtDetailsForm, docMtDetails);
+        docMtDetailsMybatisDao.update(docMtDetails);
+        json.setSuccess(true);
+        return json;
+    }
 
-	public Json deleteDocMtDetails(String id) {
-		Json json = new Json();
-		DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(id);
-		if(docMtDetails != null){
-			docMtDetailsMybatisDao.delete(docMtDetails);
-		}
-		json.setSuccess(true);
-		return json;
-	}
+    public Json deleteDocMtDetails(String id) {
+        Json json = new Json();
+        DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(id);
+        if (docMtDetails != null) {
+            docMtDetailsMybatisDao.delete(docMtDetails);
+        }
+        json.setSuccess(true);
+        return json;
+    }
 
-	public List<EasyuiCombobox> getDocMtDetailsCombobox() {
-		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-		EasyuiCombobox combobox = null;
-		List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByAll();
-		if(docMtDetailsList != null && docMtDetailsList.size() > 0){
-			for(DocMtDetails docMtDetails : docMtDetailsList){
-				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(docMtDetails.getMtno()));
-				combobox.setValue(docMtDetails.getLotnum());
-				comboboxList.add(combobox);
-			}
-		}
-		return comboboxList;
-	}
-	/**
-	 * 批量养护
-	 */
-	public Json submitDocMtList(String forms){
-		Json json=new Json();
-		StringBuffer result=new StringBuffer();
+    public List<EasyuiCombobox> getDocMtDetailsCombobox() {
+        List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+        EasyuiCombobox combobox = null;
+        List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByAll();
+        if (docMtDetailsList != null && docMtDetailsList.size() > 0) {
+            for (DocMtDetails docMtDetails : docMtDetailsList) {
+                combobox = new EasyuiCombobox();
+                combobox.setId(String.valueOf(docMtDetails.getMtno()));
+                combobox.setValue(docMtDetails.getLotnum());
+                comboboxList.add(combobox);
+            }
+        }
+        return comboboxList;
+    }
+
+    /**
+     * 批量养护
+     */
+    public Json submitDocMtList(String forms) {
+        Json json = new Json();
+        StringBuffer result = new StringBuffer();
 //        json转集合
-		List<DocMtDetailsForm> list=JSON.parseArray(forms,DocMtDetailsForm.class);
-		Boolean con=true;
-		for (DocMtDetailsForm detailForm : list) {
+        List<DocMtDetailsForm> list = JSON.parseArray(forms, DocMtDetailsForm.class);
+        Boolean con = true;
+        for (DocMtDetailsForm detailForm : list) {
             detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
             detailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-			PdaResult pdaResult = mtSubmit(detailForm);//调用养护作业方法 单个验收
-			if(pdaResult.getErrorCode()==400){
-				result.append("养护单号:"+detailForm.getMtno()).append(","+pdaResult.getMsg()).append("<br/>");
-				con=false;
-			}
-		}
-		if(con){
-			json.setSuccess(true);
-			json.setMsg("养护成功!");
-		}else{
-			json.setSuccess(false);
-			json.setMsg("部分养护未成功!<br/>"+result.toString());
-		}
-		return json;
-	}
+            PdaResult pdaResult = mtSubmit(detailForm);//调用养护作业方法 单个验收
+            if (pdaResult.getErrorCode() == 400) {
+                result.append("养护单号:" + detailForm.getMtno()).append("," + pdaResult.getMsg()).append("<br/>");
+                con = false;
+            }
+        }
+        if (con) {
+            json.setSuccess(true);
+            json.setMsg("养护成功!");
+        } else {
+            json.setSuccess(false);
+            json.setMsg("部分养护未成功!<br/>" + result.toString());
+        }
+        return json;
+    }
 
     /**
      * 根据扫码结果查询养护明细
+     *
      * @param query ~
      * @return ~
      */
-	public Json queryMtDetail(DocMtDetailsQuery query) {
+    public Json queryMtDetail(DocMtDetailsQuery query) {
 
-	    Json resultJson = new Json();
+        Json resultJson = new Json();
         DocMtDetailsVO docMtDetailsVO = new DocMtDetailsVO();
 
         /*
@@ -211,8 +214,8 @@ public class DocMtDetailsService extends BaseService {
         /*
         333,养护明细
          */
-	    DocMtDetails docMtDetails = (DocMtDetails) scanJson.getObj();
-	    BeanUtils.copyProperties(docMtDetails,docMtDetailsVO);
+        DocMtDetails docMtDetails = (DocMtDetails) scanJson.getObj();
+        BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
 
 	    /*
 	    444,批次属性
@@ -264,7 +267,7 @@ public class DocMtDetailsService extends BaseService {
         resultJson.setSuccess(true);
         resultJson.setMsg(Constant.SUCCESS_MSG);
         resultJson.setObj(docMtDetailsVO);
- 	    return resultJson;
+        return resultJson;
     }
 
     /**
@@ -272,7 +275,7 @@ public class DocMtDetailsService extends BaseService {
      */
     public PdaResult mtSubmit(DocMtDetailsForm form) {
 
-	    DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(form);//mtno + mtlineno
+        DocMtDetails docMtDetails = docMtDetailsMybatisDao.queryById(form);//mtno + mtlineno
 
         if (docMtDetails == null) return new PdaResult(PdaResult.CODE_FAILURE, "查无此养护明细");
 
@@ -317,7 +320,7 @@ public class DocMtDetailsService extends BaseService {
                 changeDetail.setMtqtyEachCompleted(changeDetail.getMtqtyEachCompleted() + (form.getMtqtyCompleted() * basPackage.getQty1().doubleValue()));
                 changeDetail.setEditwho(form.getEditwho());
                 docMtDetailsMybatisDao.updateDetailQty(changeDetail);
-            }else {
+            } else {
 
                 DocMtHeaderQuery docMtHeaderQuery = new DocMtHeaderQuery();
                 docMtHeaderQuery.setMtno(docMtDetails.getMtno());
@@ -354,7 +357,7 @@ public class DocMtDetailsService extends BaseService {
             docMtHeader.setEditwho(form.getEditwho());
             if (unfinishedDetailList.size() > 0) {
                 docMtHeader.setMtstatus("30");
-            }else {
+            } else {
                 docMtHeader.setMtstatus("40");
             }
             docMtHeaderMybatisDao.updateStatus(docMtHeader);
@@ -364,11 +367,12 @@ public class DocMtDetailsService extends BaseService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
-	    return new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUBMIT_SUCCESS_MSG);
+        return new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUBMIT_SUCCESS_MSG);
     }
 
     /**
      * 获取养护单进度明细
+     *
      * @param mtno ~
      * @return `
      */
@@ -379,6 +383,7 @@ public class DocMtDetailsService extends BaseService {
 
     /**
      * 获取养护指导列表，用户根据指导列表进行养护
+     *
      * @param mtno ~
      * @return ~
      */
@@ -410,111 +415,117 @@ public class DocMtDetailsService extends BaseService {
     }
 
     /**
-     *
      * 打印养护检查记录
-    */
-    public List<DocMtHeader> printMtDetails(String mtNo, String  mtlineNo ){
+     */
+    public List<DocMtHeader> printMtDetails(String mtno, String linestatus, String descrc, String customerid, String sku, String lotatt12,
+                                            String lotatt04, String lotatt05, String productLineName) {
 
         DocMtDetailsQuery detailsQuery = new DocMtDetailsQuery();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         List<DocMtDetails> MtDetailsList = new ArrayList<DocMtDetails>();
         DocMtHeader docMtHeader = new DocMtHeader();//头档信息
-        Double numberSum = 0.00;//初始化总数量
+        Double numberSum = 0.0;//初始化总数量
         List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
+        //查询条件
+        detailsQuery.setMtno(mtno);
+        detailsQuery.setLinestatus(linestatus);
+        detailsQuery.setDescrc(descrc);
+        detailsQuery.setCustomerid(customerid);
+        detailsQuery.setSku(sku);
+        detailsQuery.setLotatt12(lotatt12);
+        detailsQuery.setLotatt04(lotatt04);
+        detailsQuery.setLotatt05(lotatt05);
+        detailsQuery.setProductLineName(productLineName);
 
-        if(StringUtils.isNotEmpty(mtlineNo) && StringUtils.isNotEmpty(mtNo)){
-            String [] mtlineNoArr = mtlineNo.split(",");
-            String [] mtNoArr = mtNo.split(",");
-            Boolean ibjFlag = false;
-            for (String mtNoArrObj:mtNoArr) {
-                for (String mtlineNoObj:mtlineNoArr) {
-                    detailsQuery.setMtno(mtNoArrObj);//养护行号
-                    detailsQuery.setMtlineno(mtlineNoObj);//养护单号
-                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(detailsQuery));
-                    List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
-                    for (DocMtDetails docMtDetails1:docMtDetailsList) {
-                        MtDetailsList.add(docMtDetails1);
-                        ibjFlag = true;
-                    }
-                }
-                if (ibjFlag) break;;
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(detailsQuery));
+        List<DocMtDetails> docMtDetailsList = docMtDetailsMybatisDao.queryByListLotatt(mybatisCriteria);
+        for (DocMtDetails docMtDetails1 : docMtDetailsList) {
+            MtDetailsList.add(docMtDetails1);
+
+        }
+
+
+        MybatisCriteria mybatisCriteria1 = new MybatisCriteria();
+        DocMtHeaderQuery docMtHeaderQuery = new DocMtHeaderQuery();
+        docMtHeaderQuery.setMtno(mtno);
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docMtHeaderQuery));
+        List<DocMtHeader> docMtHeaderList = docMtHeaderMybatisDao.queryByList(mybatisCriteria1);
+        for (DocMtHeader docMtHeader1 : docMtHeaderList) {
+            BeanUtils.copyProperties(docMtHeader1, docMtHeader);
+            if (docMtHeader.getFenceFlag() == 1) {
+                docMtHeader.setFenceFlagName("符合");
+            } else if (docMtHeader.getFenceFlag() == 0) {
+                docMtHeader.setFenceFlagName("不符合");
+            } else {
+                docMtHeader.setFenceFlagName("未检查");
             }
-            Boolean headerFlag = false;
-            for (String mtHeader:mtNoArr) {
-                MybatisCriteria mybatisCriteria1 = new MybatisCriteria();
-                DocMtHeaderQuery docMtHeaderQuery = new DocMtHeaderQuery();
-                docMtHeaderQuery.setMtno(mtHeader);
-                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docMtHeaderQuery));
-                List<DocMtHeader> docMtHeaderList =  docMtHeaderMybatisDao.queryByList(mybatisCriteria1);
-                for (DocMtHeader docMtHeader1: docMtHeaderList) {
-                    BeanUtils.copyProperties(docMtHeader1,docMtHeader);
-                    if(docMtHeader.getFenceFlag() == 1){
-                        docMtHeader.setFenceFlagName("符合");
-                    }else if (docMtHeader.getFenceFlag() == 0){
-                        docMtHeader.setFenceFlagName("不符合");
-                    }else{
-                        docMtHeader.setFenceFlagName("未检查");
-                    }
-                    if(docMtHeader.getFlowFlag() == 1){
-                        docMtHeader.setFlowFlagName("符合");
-                    }else if (docMtHeader.getFlowFlag() == 0){
-                        docMtHeader.setFlowFlagName("不符合");
-                    }else{
-                        docMtHeader.setFlowFlagName("未检查");
-                    }
-                    if(docMtHeader.getSignFlag() == 1){
-                        docMtHeader.setSignFlagName("符合");
-                    }else if (docMtHeader.getSignFlag() == 0){
-                        docMtHeader.setSignFlagName("不符合");
-                    }else{
-                        docMtHeader.setSignFlagName("未检查");
-                    }
-                    if(docMtHeader.getSanitationFlag() == 1){
-                        docMtHeader.setSanitationFlagName("符合");
-                    }else if (docMtHeader.getSanitationFlag() == 0){
-                        docMtHeader.setSanitationFlagName("不符合");
-                    }else{
-                        docMtHeader.setSanitationFlagName("未检查");
-                    }
-                    if(docMtHeader.getStorageFlag() == 1){
-                        docMtHeader.setStorageFlagName("符合");
-                    }else if (docMtHeader.getStorageFlag() == 0){
-                        docMtHeader.setStorageFlagName("不符合");
-                    }else{
-                        docMtHeader.setStorageFlagName("未检查");
-                    }
-                    headerFlag = true;
-                }
-                if(headerFlag) break;
+            if (docMtHeader.getFlowFlag() == 1) {
+                docMtHeader.setFlowFlagName("符合");
+            } else if (docMtHeader.getFlowFlag() == 0) {
+                docMtHeader.setFlowFlagName("不符合");
+            } else {
+                docMtHeader.setFlowFlagName("未检查");
+            }
+            if (docMtHeader.getSignFlag() == 1) {
+                docMtHeader.setSignFlagName("符合");
+            } else if (docMtHeader.getSignFlag() == 0) {
+                docMtHeader.setSignFlagName("不符合");
+            } else {
+                docMtHeader.setSignFlagName("未检查");
+            }
+            if (docMtHeader.getSanitationFlag() == 1) {
+                docMtHeader.setSanitationFlagName("符合");
+            } else if (docMtHeader.getSanitationFlag() == 0) {
+                docMtHeader.setSanitationFlagName("不符合");
+            } else {
+                docMtHeader.setSanitationFlagName("未检查");
+            }
+            if (docMtHeader.getStorageFlag() == 1) {
+                docMtHeader.setStorageFlagName("符合");
+            } else if (docMtHeader.getStorageFlag() == 0) {
+                docMtHeader.setStorageFlagName("不符合");
+            } else {
+                docMtHeader.setStorageFlagName("未检查");
             }
         }
+
         List<DocMtHeader> dataHeader = new ArrayList<DocMtHeader>(); // 头档
         docMtHeader.setDetls(new ArrayList<DocMtDetails>());
-        if(MtDetailsList.size() > 0){
-            for ( DocMtDetails docMtDetails1: MtDetailsList) {
-                for (EasyuiCombobox easyuiComboboxUom: easyuiComboboxListUom) {//包装单位
-                    if(docMtDetails1.getUom().equals(easyuiComboboxUom.getId())){
+        if (MtDetailsList.size() > 0) {
+            for (DocMtDetails docMtDetails1 : MtDetailsList) {
+                for (EasyuiCombobox easyuiComboboxUom : easyuiComboboxListUom) {//包装单位
+                    if (docMtDetails1.getUom().equals(easyuiComboboxUom.getId())) {
                         docMtDetails1.setUomName(easyuiComboboxUom.getValue());
                     }
                 }
                 //养护结论
-                if(docMtDetails1.getConclusion().equals("1")){
+                if (docMtDetails1.getConclusion().equals("1")) {
                     docMtDetails1.setConclusion("合格");
-                }else if(docMtDetails1.getConclusion().equals("0")){
+                } else if (docMtDetails1.getConclusion().equals("0")) {
                     docMtDetails1.setConclusion("不合格");
-                }else {
+                } else {
                     docMtDetails1.setConclusion("未检查");
                 }
                 //检查内容
-                if(docMtDetails1.getCheckFlag().equals("1")){
+                if (docMtDetails1.getCheckFlag().equals("1")) {
                     docMtDetails1.setCheckFlag("合格");
-                }else if(docMtDetails1.getCheckFlag().equals("0")){
+                } else if (docMtDetails1.getCheckFlag().equals("0")) {
                     docMtDetails1.setCheckFlag("不合格");
-                }else{
+                } else {
                     docMtDetails1.setCheckFlag("未检查");
                 }
-                numberSum += docMtDetails1.getMtqtyEachExpected();//加上数量
-                docMtDetails1.setMtqtyEachCompletedSum(numberSum);
+
+                if (docMtDetails1.getMtqtyEachCompleted() == 0.0) {
+                    docMtDetails1.setMtqtyEachCompleted(null);
+                }else {
+                    numberSum += docMtDetails1.getMtqtyEachCompleted();//加上数量
+                }
+
+                if (numberSum == 0.0) {
+                    docMtDetails1.setMtqtyEachCompletedSum(null);
+                } else {
+                    docMtDetails1.setMtqtyEachCompletedSum(numberSum);
+                }
                 docMtHeader.getDetls().add(docMtDetails1);
             }
             dataHeader.add(docMtHeader);

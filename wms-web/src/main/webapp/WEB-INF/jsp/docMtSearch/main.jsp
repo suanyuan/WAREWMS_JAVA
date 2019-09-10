@@ -475,26 +475,17 @@
 
         /* 打印养护检查记录 */
         var printMtDetails = function () {
-            var mtNoList;
-            var mtlineNoList;
-            var rows = $('#ezuiDatagrid').datagrid('getSelections');
-            $.each(rows, function (index, item) {
-                if (mtlineNoList == null && mtNoList == null) {
-                    mtNoList = item.mtno;
-                    mtlineNoList = item.mtlineno;
-                } else {
-                    mtNoList = mtNoList + ',' + item.mtno;
-                    mtlineNoList = mtlineNoList + ',' + item.mtlineno;
-                }
-            });
-            if (mtlineNoList == null) {
-                return;
-            }
-            if (mtNoList == null) {
-                return;
-            }
-
-            window.open(sy.bp() + "/docMtDetailsController.do?printMtDetails&mtNo=" + mtNoList + "&mtlineNo=" + mtlineNoList);
+            var mtno = $('#mtno').val();//养护单号
+            var linestatus = $('#linestatus').combobox('getValue');//养护状态
+            var descrc =  $('#descrc').val();                     //规格
+            var customerid = $('#customerid').val();              //货主代码
+            var sku =  $('#sku').val();                             //产品代码
+            var lotatt12 =  $('#lotatt12').val();                    //产品名称
+            var lotatt04 =  $('#lotatt04').val();                    //生产批号
+            var lotatt05 = $('#lotatt05').val();                    //序列号
+            var productLineName = $('#productLineName').combobox('getText'); //产品线
+            window.open(sy.bp() + "/docMtDetailsController.do?printMtDetails&mtno=" + mtno + "&linestatus=" + linestatus+"&descrc="+descrc+
+            "&customerid="+customerid+"&sku="+sku+"&lotatt12="+lotatt12+"&lotatt04="+lotatt04+"&lotatt05="+lotatt05+"&productLineName="+productLineName);
         }
 
         /* 导出start */

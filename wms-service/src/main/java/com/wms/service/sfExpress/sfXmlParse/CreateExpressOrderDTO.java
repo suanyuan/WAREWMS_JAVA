@@ -7,11 +7,13 @@ import java.util.List;
  * 顺丰下单成功返回的信息封装的实体
  * @author 李宇
  */
-//这套扭曲的机制Cloneable
+//扭曲的机制Cloneable
 public class CreateExpressOrderDTO implements Cloneable{
 
     /** 运单号 */
     private String mailNo;
+    /** 顺丰签回单服务运单号*/
+    private String returnTrackingNo;
     /** 原寄递地代码 */
     private String zipCode;
     /** 目的地的代码 */
@@ -52,6 +54,7 @@ public class CreateExpressOrderDTO implements Cloneable{
     private String expressType;
     /** 包裹数量 大于1则会生成子单号*/
     private Integer parcelQuantity;
+
     /** 丰密运单相关设置 */
     private List<RlsInfoDto> rlsInfoDtoList;
 
@@ -227,6 +230,14 @@ public class CreateExpressOrderDTO implements Cloneable{
         return limitTypeCode;
     }
 
+    public String getReturnTrackingNo() {
+        return returnTrackingNo;
+    }
+
+    public void setReturnTrackingNo(String returnTrackingNo) {
+        this.returnTrackingNo = returnTrackingNo;
+    }
+
     public void setLimitTypeCode(String limitTypeCode) {
         this.limitTypeCode = limitTypeCode;
     }
@@ -251,14 +262,15 @@ public class CreateExpressOrderDTO implements Cloneable{
     public String toString() {
         return "CreateExpressOrderDTO{" +
                 "mailNo='" + mailNo + '\'' +
+                ", returnTrackingNo='" + returnTrackingNo + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", destCode='" + destCode + '\'' +
+                ", limitTypeCode='" + limitTypeCode + '\'' +
                 ", mainRemark='" + mainRemark + '\'' +
                 ", deliverName='" + deliverName + '\'' +
                 ", deliverMobile='" + deliverMobile + '\'' +
                 ", deliverProvince='" + deliverProvince + '\'' +
                 ", deliverCity='" + deliverCity + '\'' +
-                ", limitTypeCode='" + limitTypeCode + '\'' +
                 ", deliverCounty='" + deliverCounty + '\'' +
                 ", deliverAddress='" + deliverAddress + '\'' +
                 ", deliverCompany='" + deliverCompany + '\'' +
@@ -270,7 +282,7 @@ public class CreateExpressOrderDTO implements Cloneable{
                 ", consignerAddress='" + consignerAddress + '\'' +
                 ", custId='" + custId + '\'' +
                 ", expressType='" + expressType + '\'' +
-                ", parcelQuantity='" + parcelQuantity + '\'' +
+                ", parcelQuantity=" + parcelQuantity +
                 ", rlsInfoDtoList=" + rlsInfoDtoList +
                 '}';
     }

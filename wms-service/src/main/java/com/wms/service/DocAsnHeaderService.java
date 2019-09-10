@@ -120,7 +120,6 @@ public class DocAsnHeaderService extends BaseService {
 
 	/**
 	 * 判断客户单号是否重复
-	 * @param customerNo
 	 * @return
 	 */
 	/* boolean checkIsRept(String customerNo){
@@ -700,11 +699,18 @@ public class DocAsnHeaderService extends BaseService {
 						details.setLotatt14(detailAssno);
 						details.setLotatt15(orderDetailsForNormal.getLotatt15());
 
-						docAsnDetailService.addDocAsnDetail(details);
+
+					Json verJson = docAsnDetailService.addDocAsnDetail(details);
+					if(!verJson.isSuccess()){
+						json.setSuccess(false);
+						json.setMsg(verJson.getMsg());
+					}else{
+						json.setSuccess(true);
+						json.setMsg("明细复用成功");
+					}
 //						docAsnDetailsMybatisDao.add(details);
 					}
-					json.setSuccess(true);
-					json.setMsg("明细复用成功");
+
 				} else {
 					json.setSuccess(false);
 					json.setMsg("明细复用失败-(该明细不存在或该货主下没有此明细)");

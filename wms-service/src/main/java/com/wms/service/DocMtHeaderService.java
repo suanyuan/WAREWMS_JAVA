@@ -162,7 +162,7 @@ public class DocMtHeaderService extends BaseService {
                 docMtDetails.setMtqtyExpected(invLotLocId.getQty());  //养护件数
                 docMtDetails.setMtqtyEachExpected(invLotLocId.getQty() * invLotLocId.getQty1());//养护数量
                 docMtDetails.setMtqtyCompleted(0);
-                docMtDetails.setMtqtyEachCompleted(0);
+                docMtDetails.setMtqtyEachCompleted(0.0);
                 docMtDetails.setUom(invLotLocId.getPackuom1());//单位
                 docMtDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                 docMtDetailsMybatisDao.add(docMtDetails);

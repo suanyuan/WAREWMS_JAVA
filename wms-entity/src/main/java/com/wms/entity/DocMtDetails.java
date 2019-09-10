@@ -20,7 +20,7 @@ public class DocMtDetails {
   private double mtqtyExpected;    //预期养护件数
   private double mtqtyEachExpected;//预期养护数量
   private double mtqtyCompleted;
-  private double mtqtyEachCompleted;
+  private Double mtqtyEachCompleted;
   private String uom;                  //单位
   private String checkFlag="2";              //检查内容（外观、包装等）2默认未检查
   private String conclusion="2";          //养护结论2默认未检查
@@ -58,8 +58,9 @@ private String lotatt01;  //生产日期
 
   //用于打印的单位
   private String uomName;
+
   //总数量
-  private double mtqtyEachCompletedSum;
+  private Double mtqtyEachCompletedSum;
   //总件数
-  private double mtqtyCompletedSum;
+  private Double mtqtyCompletedSum;
 }

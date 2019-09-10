@@ -15,6 +15,10 @@ import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.result.ReceiptResult;
 import com.wms.service.importdata.ImportOrderDataService;
+import com.wms.service.sfExpress.CallExpressServiceTools;
+import com.wms.service.sfExpress.RequestXmlUtil;
+import com.wms.service.sfExpress.sfXmlParse.ShunFengResponse;
+import com.wms.service.sfExpress.sfXmlParse.XmlHelper;
 import com.wms.utils.*;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
@@ -55,7 +59,7 @@ public class OrderHeaderForNormalService extends BaseService {
     private CommonService commonService;
 
     @Autowired
-    private  DocOrderPackingService docOrderPackingService;
+    private DocOrderPackingService docOrderPackingService;
     @Autowired
     private BasCustomerService basCustomerService;
     @Autowired
@@ -106,8 +110,8 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 
-            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(),Constant.CODE_CUS_TYP_CO);
-            if(customer!=null){
+            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(), Constant.CODE_CUS_TYP_CO);
+            if (customer != null) {
                 orderHeaderForNormalVO.setConsigneename(customer.getDescrC());
             }
             orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
@@ -501,12 +505,31 @@ public class OrderHeaderForNormalService extends BaseService {
                         if (shippmentResult.equals("000")) {
                             orderHeaderForNormalQuery.setCurrentTime(new Date());
                             orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                            /*//如果订单发运成功那么就进行顺丰下单  下单报文
+
+                           /* //如果订单发运成功那么就进行顺丰下单  下单报文
                             String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormalForm);
+                            System.err.println(requestXml);
                             //响应报文
-                            String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
+                            String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(RequestXmlUtil.getOrderCancelServiceRequestXml(so));
+                            System.err.println("响应报文" + callRequestXml);
+
+                            // String callXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>OK</Head><Body><OrderResponse filter_result=\"2\" destcode=\"755\" mailno=\"SF1011547784874\" return_tracking_no=\"SF1060174366080\" origincode=\"755\" orderid=\"SFKD-20160219000029\"><rls_info rls_errormsg=\"SF1011547784874:\" invoke_result=\"OK\" rls_code=\"1000\"><rls_detail waybillNo=\"SF1011547784874\" sourceTransferCode=\"755W\" sourceCityCode=\"755\" sourceDeptCode=\"755AP\" sourceTeamCode=\"028\" destCityCode=\"755\" destDeptCode=\"755FG\" destDeptCodeMapping=\"755W\" destTeamCode=\"016\" destTransferCode=\"755W\" destRouteLabel=\"755W-755FG\" proName=\"顺丰标快\" cargoTypeCode=\"C201\" limitTypeCode=\"T4\" expressTypeCode=\"B1\" codingMapping=\"C2\" xbFlag=\"0\" printFlag=\"000000000\" twoDimensionCode=\"MMM={'k1':'755W','k2':'755FG','k3':'016','k4':'T4','k5':'SF1011547784874','k6':'','k7':'613f0c59'}\" proCode=\"T4\" printIcon=\"00000000\" checkCode=\"613f0c59\"/></rls_info></OrderResponse></Body></Response>";
+                            //System.err.println("响应报文"+callXml);
                             //解析响应报文
-                            ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);*/
+                            //  ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callXml);
+                            System.err.println("//解析响应报文" + shunFengResponse.toString());
+                            //解析后修改到表中
+                            OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
+                            orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                            orderHeaderForNormalSf.setEdittime(new Date());
+                            orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
+                            //运单号
+                            orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
+                            //签回单号
+                            orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
+
+                            orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);*/
+
 
                             //删除序列号出库记录 edit by Gizmo 2019-08-29 出库不删除序列号记录
 //                            docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
@@ -816,7 +839,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 String[] orderNos = orderNo.split(",");
 
-                for(String s : orderNos){
+                for (String s : orderNos) {
                     int totalNum = 0;
                     List<OrderDetailsForNormal> detailsList = null;
                     int row = 7;
@@ -859,25 +882,31 @@ public class OrderHeaderForNormalService extends BaseService {
                         form.setField("userdefine2", orderHeaderForNormal.getUserdefine2());
                         form.setField("sOReference1", orderHeaderForNormal.getOrderCode());
                         //form.setField("notes", orderHeaderForNormal.getNotes());
-                        form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
+                        form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
 
-                        String note ="";
+                        String note = "";
                         for (int j = 0; j < row; j++) {
                             if (totalNum > (row * i + j)) {
                                 BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(), detailsList.get(row * i + j).getSku());
 
                                 //获取冷链标志
-                                if(StringUtils.isEmpty(note)){
-                                    if(!StringUtils.isEmpty(basSku.getReservedfield07())){
-                                        switch (basSku.getReservedfield07()){
-                                            case "LD" : note = "冷冻";break;
-                                            case "FLL" : note = "非冷链";break;
-                                            case "LC" : note = "冷藏";break;
+                                if (StringUtils.isEmpty(note)) {
+                                    if (!StringUtils.isEmpty(basSku.getReservedfield07())) {
+                                        switch (basSku.getReservedfield07()) {
+                                            case "LD":
+                                                note = "冷冻";
+                                                break;
+                                            case "FLL":
+                                                note = "非冷链";
+                                                break;
+                                            case "LC":
+                                                note = "冷藏";
+                                                break;
                                         }
                                     }
                                 }
 
-                                form.setField("lineNo." + (j), (j+1)+"");
+                                form.setField("lineNo." + (j), (j + 1) + "");
                                 form.setField("location." + (j), detailsList.get(row * i + j).getLocation());
                                 form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
                                 form.setField("skuN." + (j), detailsList.get(row * i + j).getSkuName());
@@ -898,14 +927,14 @@ public class OrderHeaderForNormalService extends BaseService {
                                 totalQty += detailsList.get(row * i + j).getQtyallocatedEach();
                             }
                         }
-                        if(orderHeaderForNormal.getNotes() == null){
-                            form.setField("notes",note);
-                        }else{
-                            form.setField("notes", orderHeaderForNormal.getNotes() +"    "+note);
+                        if (orderHeaderForNormal.getNotes() == null) {
+                            form.setField("notes", note);
+                        } else {
+                            form.setField("notes", orderHeaderForNormal.getNotes() + "    " + note);
                         }
                     }
-                    form.setField("sumqtyPage","合计(数量:"+totalQtyE+"");
-                    form.setField("sumqty","件数:"+totalQty+")");
+                    form.setField("sumqtyPage", "合计(数量:" + totalQtyE + "");
+                    form.setField("sumqty", "件数:" + totalQty + ")");
                     form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeaderForNormal.getOrderno(), 800)));
                     stamper.setFormFlattening(true);
                     stamper.close();
@@ -1253,7 +1282,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 String[] orderNos = orderNo.split(",");
 
-                for(String s : orderNos){
+                for (String s : orderNos) {
 
                     int totalNum = 0;
                     List<ReceiptResult> detailsList = null;
@@ -1293,7 +1322,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         form.setField("userdefine2", obj.getUserdefine2());
                         form.setField("sOReference1", obj.getSoreference1());
                         form.setField("notes", obj.getNotes());
-                        form.setField("page","第"+(i+1)+"页,共"+pageSize+"页");
+                        form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
 
                         for (int j = 0; j < row; j++) {
                             if (totalNum > (row * i + j)) {
@@ -1319,8 +1348,8 @@ public class OrderHeaderForNormalService extends BaseService {
                                 totalQty += Integer.parseInt(detailsList.get(row * i + j).getQty());
                             }
                         }
-                        form.setField("sumqtyPage","件数合计："+totalQtyE);
-                        form.setField("sumqty","数量合计："+totalQty);
+                        form.setField("sumqtyPage", "件数合计：" + totalQtyE);
+                        form.setField("sumqty", "数量合计：" + totalQty);
                         form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(obj.getOrderno(), 800)));
                         stamper.setFormFlattening(true);
                         stamper.close();
@@ -1514,12 +1543,13 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 获取合格证
+     *
      * @param customerId 客户id
-     * @param sku 产品代码
-     * @param lotatt4 生产批号
+     * @param sku        产品代码
+     * @param lotatt4    生产批号
      * @return
      */
-    public String getCertificate(String customerId,String sku,String lotatt4) {
+    public String getCertificate(String customerId, String sku, String lotatt4) {
         MybatisCriteria criteria = new MybatisCriteria();
         DocAsnCertificateQuery query = new DocAsnCertificateQuery();
         query.setCustomerid(customerId);
@@ -1527,7 +1557,7 @@ public class OrderHeaderForNormalService extends BaseService {
         query.setLotatt04(lotatt4);
         criteria.setCondition(query);
         List<DocAsnCertificate> list = docAsnCertificateMybatisDao.queryByList(criteria);
-        if(list!=null && list.size()>0){
+        if (list != null && list.size() > 0) {
             return list.get(0).getCertificateContext();
         }
         return "";
@@ -1552,21 +1582,21 @@ public class OrderHeaderForNormalService extends BaseService {
             if (StringUtils.isNotEmpty(orderCodeList)) {
                 String[] orderNoArr = orderCodeList.split(",");
                 //PdfWriter writer = PdfWriter.getInstance(doc,os);
-                PdfCopy copy = new PdfCopy(doc,os);
+                PdfCopy copy = new PdfCopy(doc, os);
                 doc.open();
-                for(String order : orderNoArr){
+                for (String order : orderNoArr) {
                     MybatisCriteria criteria = new MybatisCriteria();
                     OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
                     query.setOrderno(order);
                     criteria.setCondition(query);
                     List<OrderDetailsForNormal> details = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
-                    for(OrderDetailsForNormal de : details){
+                    for (OrderDetailsForNormal de : details) {
                         doc.newPage();
-                        String url = getCertificate(de.getCustomerid(),de.getSku(),de.getLotatt04());
-                        if(!"".equals(url)){
-                            PdfReader reader = new PdfReader(Constant.uploadUrl+File.separator+url);
+                        String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());
+                        if (!"".equals(url)) {
+                            PdfReader reader = new PdfReader(Constant.uploadUrl + File.separator + url);
 
-                            PdfImportedPage newPage = copy.getImportedPage(reader,1);
+                            PdfImportedPage newPage = copy.getImportedPage(reader, 1);
 
                             copy.addPage(newPage);
                             /*Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
@@ -1587,7 +1617,6 @@ public class OrderHeaderForNormalService extends BaseService {
     public void printExpress(HttpServletResponse response, String orderCodeList, Model model) {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-
 
 
         map.put("logo", "imgFile/sflogo.jpg");
@@ -1659,15 +1688,15 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
 
         //备注
-        map.put("remark","采购单号："+orderCodeList);
+        map.put("remark", "采购单号：" + orderCodeList);
         //托寄物
-        map.put("cargo","2");
+        map.put("cargo", "2");
         //计费重量
-        map.put("cargoTotalWeight","3");
+        map.put("cargoTotalWeight", "3");
         //实际重量
-        map.put("cargoTotalWeight","4");
+        map.put("cargoTotalWeight", "4");
         //费用合计
-        map.put("totalFee","5");
+        map.put("totalFee", "5");
 
 
         map.put("PALINENO", System.currentTimeMillis());
@@ -1680,11 +1709,10 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
 
-
     /**
      * 复用入库明细信息
      */
-    public Json copyDetailGo(String generalNO, String detailOrderno, String customerid ,String soreference2 ,String copyFlag) {
+    public Json copyDetailGo(String generalNO, String detailOrderno, String customerid, String soreference2, String copyFlag) {
         Json json = new Json();
         OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
         MybatisCriteria criteria = new MybatisCriteria();
@@ -1694,7 +1722,7 @@ public class OrderHeaderForNormalService extends BaseService {
         /*
          *  1:复用出库明细 -1 : 复用入库明细
          */
-        if(!generalNO.equals("") && generalNO != null) {
+        if (!generalNO.equals("") && generalNO != null) {
             if (copyFlag.equals("1")) {
                 OrderDetailsForNormalQuery normalQuery = new OrderDetailsForNormalQuery();
                 normalQuery.setCustomerid(customerid);
@@ -1821,7 +1849,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 }
             }
-        }else {
+        } else {
             json.setSuccess(false);
             json.setMsg("请填写编号");
         }
@@ -1831,34 +1859,34 @@ public class OrderHeaderForNormalService extends BaseService {
     /*
      * 导出序列号记录
      *
-    */
-    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception{
-        Cookie cookie = new Cookie("exportToken",orderNofrom.getOrderFlag());
+     */
+    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom) throws Exception {
+        Cookie cookie = new Cookie("exportToken", orderNofrom.getOrderFlag());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
         response.setContentType(ContentTypeEnum.csv.getContentType());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setLenient(false);
-       String str = null;
-        try{
+        String str = null;
+        try {
             //Excel表头数据
-            LinkedHashMap<String,String> serialMap = getDocSerialNumRecord();
+            LinkedHashMap<String, String> serialMap = getDocSerialNumRecord();
             String sheetName = "序列号记录";
             //Excel需要的数据
             List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryExport(orderNofrom.getOrderno());
-            if(docSerialNumRecordList.size() >0){
+            if (docSerialNumRecordList.size() > 0) {
                 for (int i = 0; i < docSerialNumRecordList.size(); i++) {
                     str = format.format(docSerialNumRecordList.get(i).getAddtime());
-                   docSerialNumRecordList.get(i).setAddTimeSetting(str);
+                    docSerialNumRecordList.get(i).setAddTimeSetting(str);
                 }
                 //将查询出来的数据转化为Excel数据
-                ExcelUtil.listToExcel(docSerialNumRecordList,serialMap,sheetName,response);
+                ExcelUtil.listToExcel(docSerialNumRecordList, serialMap, sheetName, response);
                 //修改docOrderHeader中的udfprintflag1信息为1 导出过序列号信息
                 docSerialNumRecordMybatisDao.updateDocOrder(orderNofrom.getOrderno());
-            }else{
-                ExcelUtil.listToExcel(null,serialMap,sheetName,response);
+            } else {
+                ExcelUtil.listToExcel(null, serialMap, sheetName, response);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1883,17 +1911,17 @@ public class OrderHeaderForNormalService extends BaseService {
         return superClassMap;
     }
 
-    public Json qlOrderDetails(String orderno){
+    public Json qlOrderDetails(String orderno) {
         Json json = new Json();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
 
         OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
         orderDetailsForNormalQuery.setOrderno(orderno);
         mybatisCriteria.setCondition(orderDetailsForNormalQuery);
-        long numberFlag =  orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria);
-        if(numberFlag > 0){
+        long numberFlag = orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria);
+        if (numberFlag > 0) {
             json.setSuccess(true);
-        }else{
+        } else {
             json.setSuccess(false);
         }
 
@@ -1907,10 +1935,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 + detail.getLotatt10() + detail.getLotatt11() + detail.getLotatt12() + detail.getLotatt13() + detail.getLotatt13();
     }
 
-    private String getYesNo(String obj){
-        if(obj == null || obj.equals("0")){
+    private String getYesNo(String obj) {
+        if (obj == null || obj.equals("0")) {
             return "否";
-        }else{
+        } else {
             return "是";
         }
     }
@@ -1921,8 +1949,6 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return String.valueOf(d);
     }
-
-
 
 
 }

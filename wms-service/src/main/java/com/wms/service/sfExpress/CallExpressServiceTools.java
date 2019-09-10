@@ -16,7 +16,7 @@ public class CallExpressServiceTools {
     //效验码
     public static final String CHECKWORD = "Ixi8k5Icv21UucHiZy7a627vO4NATqSm";
     //月卡号
-    public static final String CUST_ID = "7551234567";
+    public static final String CUST_ID = "0213071013";
 
     public static final String COMPANY = "shunfeng";
 

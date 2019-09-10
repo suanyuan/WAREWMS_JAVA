@@ -40,12 +40,17 @@ public class XmlHelper {
                     Element rlsDetail = orderResponse.element("rls_info").element("rls_detail");
                     //顺丰运单号
                     String mailno = orderResponse.attributeValue("mailno");
+                    String returnTrackingNo = orderResponse.attributeValue("return_tracking_no");
+
                     response.setMailNo(mailno);
 
                     /* 下单成功返回结果，参数具体含义看实体bean注释 */
                     CreateExpressOrderDTO expressOrderResponse = new CreateExpressOrderDTO();
                     //顺丰运单号
                     expressOrderResponse.setMailNo(mailno);
+                    /** 签回单号 */
+                    expressOrderResponse.setReturnTrackingNo(returnTrackingNo);
+
                     //目的地区域代码,可用于顺丰电子面单标签打印
                     expressOrderResponse.setDestCode(orderResponse.attributeValue("destcode"));
                     //原寄地区域代码,可用于顺丰电子面单标签打印。
