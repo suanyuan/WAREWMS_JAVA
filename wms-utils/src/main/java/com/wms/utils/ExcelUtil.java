@@ -78,7 +78,8 @@ public class ExcelUtil {
 				if (1 == sheetNum) {
 					WritableSheet sheet = wwb.createSheet(sheetName, i);
 					fillSheet(sheet, list, fieldMap, 0, list.size() - 1);
-
+                 //加一个说明的sheet
+					addSheet(sheetName,wwb);
 					// 有多个工作表的情况
 				} else {
 					WritableSheet sheet = wwb.createSheet(sheetName + (i + 1),
@@ -1065,4 +1066,38 @@ public class ExcelUtil {
         String regex = "^-?\\d+(\\.\\d+)?$";
         return !str.matches(regex);
     }
+
+//用于导出说明
+	String notes;
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public  static void addSheet(String sheetName, WritableWorkbook wwb){
+
+
+		if(sheetName.equals("couRequest_template")){
+			LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
+			fieldMap.put("notes","说明");
+			List<ExcelUtil> list=new ArrayList<>();
+			ExcelUtil util=new ExcelUtil();
+			util.setNotes("盘点日期格式须为:yyyy-MM-dd");
+			ExcelUtil util1=new ExcelUtil();
+			util1.setNotes("盘点人不可为空");
+			list.add(util);
+			list.add(util1);
+			WritableSheet sheet = wwb.createSheet("导入说明", 1);
+			try {
+				fillSheet(sheet, list, fieldMap, 0, list.size()-1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 }

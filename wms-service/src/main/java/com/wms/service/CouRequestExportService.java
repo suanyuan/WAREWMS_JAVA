@@ -58,7 +58,6 @@ public class CouRequestExportService {
 				if (vo.getEdittime()!=null) {
 					vo.setCountdate(sdf.format(vo.getEdittime()));
 				}else{
-					vo.setCountdate("yyyy-MM-dd");
 				}
 				exportVOS.add(vo);
 			}
