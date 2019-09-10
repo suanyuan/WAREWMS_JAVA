@@ -75,6 +75,7 @@ $(function() {
 					{field: 'orderno',				title: 'SO编号',		width: 100 },
 					{field: 'soreference1',			title: '客户单号',	width: 120 },
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
+            		{field: 'cAddress4',			title: '快递单号',	width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
 					{field: 'cContact',		title: '收货方',		width: 100 },

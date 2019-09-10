@@ -21,7 +21,7 @@
                                data-options='required:false'/></td>
                     <th>客户单号</th>
                     <td><input type='text' id='asnreference1' name='asnreference1' class='easyui-textbox' size='16'
-                               data-options='required:false'/></td>
+                               data-options='required:true'/></td>
                     <th>参考编号2</th>
                     <td><input type='text' id='asnreference2' name='asnreference2' class='easyui-textbox' size='16'
                                data-options='required:false'/></td>

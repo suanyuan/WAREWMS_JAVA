@@ -38,6 +38,7 @@ public class ImportGPRData implements Serializable {
 	private String productRegsiterUrl;       //附件
 	private String otherContent;             //其他内容
     private String remark;                   //备注
+	private String licenseOrRecordNol;       //生产许可证号备案号
 
 
 
@@ -246,5 +247,13 @@ public class ImportGPRData implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getLicenseOrRecordNol() {
+		return licenseOrRecordNol;
+	}
+
+	public void setLicenseOrRecordNol(String licenseOrRecordNol) {
+		this.licenseOrRecordNol = licenseOrRecordNol;
 	}
 }
