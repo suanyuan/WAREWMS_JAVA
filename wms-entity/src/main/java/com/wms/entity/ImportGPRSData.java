@@ -65,6 +65,25 @@ public class ImportGPRSData implements Serializable {
 	private String alternatName4;
 	private String alternatName5;
 
+	private String productEnterpriseName;//生产企业
+	private String packagingUnit;//包装单位
+
+	public String getPackagingUnit() {
+		return packagingUnit;
+	}
+
+	public void setPackagingUnit(String packagingUnit) {
+		this.packagingUnit = packagingUnit;
+	}
+
+	public String getProductEnterpriseName() {
+		return productEnterpriseName;
+	}
+
+	public void setProductEnterpriseName(String productEnterpriseName) {
+		this.productEnterpriseName = productEnterpriseName;
+	}
+
 	public String getLicenseOrRecordNo() {
 		return licenseOrRecordNo;
 	}

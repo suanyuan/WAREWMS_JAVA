@@ -92,11 +92,11 @@
         </tr>
         <tr>
             <th>合同开始时间</th>
-            <td><input type='text' name='clientStartDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientStartDate}"/>" class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' id="clientStartDate" name='clientStartDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientStartDate}"/>" class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>合同结束时间</th>
-            <td><input type='text' name='clientEndDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientEndDate}"/>"  class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' id="clientEndDate" name='clientEndDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientEndDate}"/>"  class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>合同期限</th>
@@ -105,7 +105,7 @@
         <tr>
             <th>是否启用</th>
             <td>
-                <input type='text' data="1" id="isUse" value="${basCarrierLicense.activeFlag}" name='activeFlag' class='easyui-textbox'   data-options='required:true,editable:false'/>
+                <input type='text' data="1" id="isUse" value="${basCarrierLicense.activeFlag}" name='activeFlag'/>
             </td>
         </tr>
     </table>
@@ -147,7 +147,7 @@
 
         $("#enterpriseId").textbox({
             value:"${enterpriseInFo.enterpriseName}",
-            width:170,
+            width:135,
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){
@@ -159,7 +159,7 @@
 
         $('#licenseUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '170', //文本宽度
+            width: '135', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: false,
             onChange:function(data){
@@ -171,7 +171,7 @@
 
         $('#contractUrlFile').filebox({
             prompt: '选择一个文件',//文本说明文件
-            width: '170', //文本宽度
+            width: '135', //文本宽度
             buttonText: '上传',  //按钮说明文字
             required: true,
             onChange:function(data){
@@ -184,7 +184,7 @@
 
             $('#roadNumberUrlFile').filebox({
                 prompt: '选择一个文件',//文本说明文件
-                width: '170', //文本宽度
+                width: '135', //文本宽度
                 buttonText: '上传',  //按钮说明文字
                 required: true,
                 onChange:function(data){
@@ -309,7 +309,11 @@
         $('input[name="activeFlag"]').combobox({
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
-            textField:'value'
+            textField:'value',
+            required:true,
+            onLoadSuccess(){
+                $(this).combobox("setValue","1");
+            }
         });
 
 
