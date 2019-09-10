@@ -63,8 +63,8 @@ public class DocOrderPackingCartonSearchController {
 
     @Login
     @RequestMapping(params = "printQcSearch")
-    public String printQcSearch(Model model, String orderno, String traceid, String lotatt10, String skudesce, String customerid, String shippershortname, String sku, String lotatt12, String lotatt08, String lotatt15, String lotatt03Start, String lotatt03End, String lotatt14, String packingflag) {
-        List<DocOrderPackingCartonInfo> docQcHeaderList = docOrderPackingCartonSearchService.printQcSearch(orderno, traceid, lotatt10, skudesce, customerid, shippershortname, sku, lotatt12, lotatt08, lotatt15, lotatt03Start, lotatt03End, lotatt14, packingflag);
+    public String printQcSearch(Model model, String orderno, String traceid, String lotatt10, String skudesce, String customerid, String shippershortname, String sku, String lotatt12, String lotatt08, String lotatt15, String edittimeStart, String edittimeEnd, String lotatt14, String packingflag) {
+        List<DocOrderPackingCartonInfo> docQcHeaderList = docOrderPackingCartonSearchService.printQcSearch(orderno, traceid, lotatt10, skudesce, customerid, shippershortname, sku, lotatt12, lotatt08, lotatt15, edittimeStart, edittimeEnd, lotatt14, packingflag);
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
         model.addAttribute("url", "WEB-INF/jasper/docOrderPackingCartonSearchPdf.jasper");
         model.addAttribute("format", "pdf");

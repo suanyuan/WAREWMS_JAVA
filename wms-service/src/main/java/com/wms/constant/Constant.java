@@ -101,6 +101,12 @@ public class Constant {
     public static final String CODE_CATALOG_CHECKSTATE_PASS = "40"; //(已通过)
     public static final String CODE_CATALOG_CHECKSTATE_FAIL = "50"; //(未通过)
 
+    //jasper导出格式
+    public static final String JASPER_CSV = "csv";
+    public static final String JASPER_HTML = "html";
+    public static final String JASPER_PDF = "pdf";
+    public static final String JASPER_XLS = "xls";
+
 //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 

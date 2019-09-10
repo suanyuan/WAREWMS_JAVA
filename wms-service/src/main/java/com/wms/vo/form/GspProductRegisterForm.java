@@ -44,6 +44,16 @@ public class GspProductRegisterForm {
 	private String agentAddress;//代理人住所
 	private String opType;//add新增 update换证
 
+	private String licenseOrRecordNol;
+
+
+	public String getLicenseOrRecordNol() {
+		return licenseOrRecordNol;
+	}
+
+	public void setLicenseOrRecordNol(String licenseOrRecordNol) {
+		this.licenseOrRecordNol = licenseOrRecordNol;
+	}
 
 	public String getAgentAddress() {
 		return agentAddress;

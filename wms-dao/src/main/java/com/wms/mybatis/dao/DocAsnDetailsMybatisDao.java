@@ -37,4 +37,6 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
      * @return ~
      */
     List<DocAsnDetail> queryPartReceivedAsn(@Param("asnno") String asnno);
+
+    void deleteByHead(String orderNo);
 }

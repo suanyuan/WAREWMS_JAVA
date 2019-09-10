@@ -94,7 +94,7 @@
           </tr>
        <tr>
            <th>生产许可证号/备案号</th>
-           <td><input type='text' data="1" id="licenseOrRecordNo"  name='licenseOrRecordNo' class='easyui-combobox' size='50' data-options="editable:false,panelHeight: 'auto'"/></td>
+           <td><input type='text' data="1" id="licenseOrRecordNo"  name='licenseOrRecordNo' class='easyui-textbox' size='50' data-options="editable:false,panelHeight: 'auto'"/></td>
            <th>重量</th>
            <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='47' data-options=''/>(kg)</td>
        </tr>
@@ -351,7 +351,7 @@
             $('#isCertificate').combobox({required:false});
             $('#unit').combobox({required:false});
             $('#maintenanceCycle').numberbox({required:false});
-            $('#licenseOrRecordNo').combobox({editable:true});
+            $('#licenseOrRecordNo').textbox({editable:true});
 
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
@@ -364,7 +364,7 @@
             $('#isCertificate').combobox({required:true});
             $('#unit').combobox({required:true});
             $('#maintenanceCycle').numberbox({required:true});
-            $('#licenseOrRecordNo').combobox({editable:false});
+            $('#licenseOrRecordNo').textbox({editable:false});
         }
     }
     function changeColdHainMark(){
@@ -426,25 +426,10 @@
         //储存条件
         $("#storageCondition").textbox("setValue",storageConditions);
         $("#enterpriseId").val(enterpriseId);
-        $("#ezuiFormInfo #licenseOrRecordNo").textbox("setValue",recordNo);
+        $("#ezuiFormInfo #licenseOrRecordNo").textbox("setValue",licenseNo);
 
 
 
-        //生产许可证号 备案号
-
-            $("#ezuiFormInfo #licenseOrRecordNo").combobox({
-                panelHeight: 'auto',
-                valueField: 'label',
-                textField: 'value',
-                data: [{
-                    label: licenseNo,
-                    value: licenseNo
-                }, {
-                    label: recordNo,
-                    value: recordNo
-                }]
-
-            })
 
 
 

@@ -92,39 +92,44 @@
                         </td>
                     </tr>
                     <tr>
-                        <%--<th>注册人名称</th>--%>
-                        <input type='hidden' name='productRegisterName'  value="${gspProductRegister.productRegisterName}" data-options='required:true'/>
-                        <th>注册人住所</th>
-                        <td><input type='text' id1="productRegisterAddress" name='productRegisterAddress' class='easyui-textbox' value="${gspProductRegister.productRegisterAddress}" data-options=''/></td>
+                        <th>生产许可证号/备案号</th>
+                        <td><input type='text' data="1" id="licenseOrRecordNol" value="${gspProductRegister.licenseOrRecordNol}"  name='licenseOrRecordNol' class='easyui-combobox'  size="22" data-options="editable:false,panelHeight: 'auto'"/></td>
+
                         <th>其他内容</th>
                         <td><input type='text' id1="otherContent" name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options=''/></td>
 
                     </tr>
                     <tr>
-                        <th>生产地址</th>
-                        <td><input type='text' id1="productProductionAddress" name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
+                        <%--<th>注册人名称</th>--%>
+                        <input type='hidden' name='productRegisterName'  value="${gspProductRegister.productRegisterName}" data-options='required:true'/>
+                        <th>注册人住所</th>
+                        <td><input type='text' id1="productRegisterAddress" name='productRegisterAddress' class='easyui-textbox' value="${gspProductRegister.productRegisterAddress}" data-options=''/></td>
+
                         <th>备注</th>
                         <td><input type='text' id1="remark" name='remark' class='easyui-textbox' value="${gspProductRegister.remark}" data-options='multiline:true'/></td>
 
                     </tr>
                     <tr>
+                        <th>生产地址</th>
+                        <td><input type='text' id1="productProductionAddress" name='productProductionAddress' class='easyui-textbox' value="${gspProductRegister.productProductionAddress}" data-options=''/></td>
 
-                        <th>代理人名称</th>
-                        <td><input type='text' id1="agentName" name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options=''/></td>
                         <th>创建人</th>
                         <td><input type='text' id1="createId" name='createId' class='easyui-textbox' value="${gspProductRegister.createId}" data-options='editable:false'/></td>
 
                     </tr>
                     <tr>
+                        <th>代理人名称</th>
+                        <td><input type='text' id1="agentName" name='agentName' class='easyui-textbox' value="${gspProductRegister.agentName}" data-options=''/></td>
 
-                        <th>代理人住所</th>
-                        <td><input type='text' id1="agentAddress" name='agentAddress' class='easyui-textbox' value="${gspProductRegister.agentAddress}" data-options=''/></td>
 
                         <th>创建时间</th>
                         <td><input type='text' id1="createDate" name='createDate' class='easyui-textbox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.createDate}"/>" data-options='editable:false'/></td>
                     </tr>
                     <tr>
-                        <td colspan="3">
+                        <th>代理人住所</th>
+                        <td><input type='text' id1="agentAddress" name='agentAddress' class='easyui-textbox' value="${gspProductRegister.agentAddress}" data-options=''/></td>
+
+                        <td colspan="1">
 
                         </td>
                         <td>
@@ -749,9 +754,27 @@
         var rows = enterpriseDatagrid.datagrid("getSelected") || enterpriseDatagrid.datagrid("getChecked");
         console.log(rows);
         if(rows){
+            $("#licenseOrRecordNol").combobox('clear');
+            var licenseNo  = rows.licenseNo;
+            var recordNo = rows.recordNo;
             $("#enterpriseId").val(rows.enterpriseId);
             $("#enterpriseName").textbox("setValue",rows.enterpriseName);
+            //$("#licenseOrRecordNol").textbox("setValue",licenseNo);
             ezuiDialogEnterprise.dialog("close");
+            //生产许可证号 备案号
+            $("#licenseOrRecordNol").combobox({
+                panelHeight: 'auto',
+                valueField: 'label',
+                textField: 'value',
+                data: [{
+                    label: licenseNo,
+                    value: licenseNo
+                }, {
+                    label: recordNo,
+                    value: recordNo
+                }]
+
+            })
         }
     }
 
@@ -819,6 +842,7 @@
         })
         $("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
         $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
+        $("#licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);
         $("#ezuiFormDetail #choseScope").val(row.choseScope);
     }
 
@@ -846,6 +870,7 @@
         $("#attachmentUrlFile").filebox("setValue","");
         $("#ezuiFormDetail #operateDetail").val("");
         $("#ezuiFormDetail #choseScope").val("");
+        $("#licenseOrRecordNol").textbox("setValue","");
 
     }
 </script>

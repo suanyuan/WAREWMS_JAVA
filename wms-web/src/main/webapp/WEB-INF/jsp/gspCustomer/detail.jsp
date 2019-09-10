@@ -195,6 +195,7 @@
         $("#ezuiFormCustomer #enterpriseName").textbox({
             value:"${customer.clientName}",
             width:200,
+            required: true,
             icons:[{
                 iconCls:'icon-search',
                 handler: function(e){
@@ -596,39 +597,48 @@
         }
     }
 
-    function viewEnterpriseUrl() {
-            ezuiDialog1 = $('#ezuiDialog1').dialog({
-                modal : true,
-                title : '<spring:message code="common.dialog.title"/>',
-                buttons : '',
-                href:sy.bp()+dialogUrl1,
-                width:1200,
-                height:530,
-                closable:true,
-                cache: false,
-                onClose : function() {
-                    ezuiFormClear(ezuiDialog1);
-                }
-            })
-        //processType = 'edit';
 
-        //var row = ezuiDatagrid.datagrid('getSelected');
-        console.log($("#ezuiFormCustomer  input[id='enterpriseId']").val());
+
+    //委托方企业信息详情
+    function viewEnterpriseUrl(){
+        // var enterpriseId = $("#ezuiFormSupInfo #cli_enterpriseId").val();
         var enterpriseId = $("#ezuiFormCustomer  input[id='enterpriseId']").val();
-        if(enterpriseId==null || enterpriseId==""){
-            enterpriseId = $("#ezuiFormCustomer #enterpriseId").val();
-        }
-
-        if(enterpriseId!=null && enterpriseId!="" ){
-            ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');
-            enterpriseId = "";
-        }else{
-            $.messager.show({
-                msg : '请先选择企业', title : '提示'
-            });
-        }
-
+        enterpriseInfo(enterpriseId);
     }
+
+    <%--function viewEnterpriseUrl() {--%>
+            <%--ezuiDialog1 = $('#ezuiDialog1').dialog({--%>
+                <%--modal : true,--%>
+                <%--title : '<spring:message code="common.dialog.title"/>',--%>
+                <%--buttons : '',--%>
+                <%--href:sy.bp()+dialogUrl1,--%>
+                <%--width:1200,--%>
+                <%--height:530,--%>
+                <%--closable:true,--%>
+                <%--cache: false,--%>
+                <%--onClose : function() {--%>
+                    <%--ezuiFormClear(ezuiDialog1);--%>
+                <%--}--%>
+            <%--})--%>
+        <%--//processType = 'edit';--%>
+
+        <%--//var row = ezuiDatagrid.datagrid('getSelected');--%>
+        <%--console.log($("#ezuiFormCustomer  input[id='enterpriseId']").val());--%>
+        <%--var enterpriseId = $("#ezuiFormCustomer  input[id='enterpriseId']").val();--%>
+        <%--if(enterpriseId==null || enterpriseId==""){--%>
+            <%--enterpriseId = $("#ezuiFormCustomer #enterpriseId").val();--%>
+        <%--}--%>
+
+        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
+            <%--ezuiDialog1.dialog('refresh', dialogUrl1+"&id="+enterpriseId).dialog('open');--%>
+            <%--enterpriseId = "";--%>
+        <%--}else{--%>
+            <%--$.messager.show({--%>
+                <%--msg : '请先选择企业', title : '提示'--%>
+            <%--});--%>
+        <%--}--%>
+
+    <%--}--%>
 
 
     function onChangeDate() {

@@ -1025,4 +1025,9 @@ insert into doc_asn_details
         LEFT JOIN  doc_asn_details b on a.asnno = b.asnno AND a.asnlineno = b.asnlineno AND IFNULL(b.expectedqty, 0) > IFNULL(a.completedQty, 0)
         WHERE b.asnno = #{asnno} ;
     </select>
+
+    <!-- 联合头档删除记录 -->
+    <delete id="deleteByHead" parameterType="Object">
+	delete from doc_asn_details where asnno = #{asnno, jdbcType=VARCHAR}
+    </delete>
 </mapper>

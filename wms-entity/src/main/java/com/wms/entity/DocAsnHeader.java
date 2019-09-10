@@ -372,6 +372,8 @@ public class DocAsnHeader implements Serializable {
 	private String warehouseid;
 
 	private String zonegroup;
+
+	private String reservedfield07;
 	
 	private Set<DocAsnDetail> docAsnDetailSet;
 
@@ -1490,4 +1492,11 @@ public class DocAsnHeader implements Serializable {
 		this.zonegroup = zonegroup;
 	}
 
+	public String getReservedfield07() {
+		return reservedfield07;
+	}
+
+	public void setReservedfield07(String reservedfield07) {
+		this.reservedfield07 = reservedfield07;
+	}
 }
