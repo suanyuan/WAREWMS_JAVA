@@ -26,6 +26,7 @@
 	<result column="descr_e" property="descre"/>
 	<result column="descr_c" property="descrc"/>
 	<result column="name" property="productLineName"/>
+	<result column="qty1" property="qty1"/>
 </resultMap>
        
 <!-- cou_request_details table all fields -->
@@ -166,9 +167,10 @@ where 1=1
 </select>
 <!-- 根据cycleCountno查询 盘点明细单List -->
 <select id="queryListById"  resultMap="BaseResultMap" parameterType="Object">
-	SELECT d.*, s.reservedfield01,s.`descr_e`,s.`descr_c` ,p.name
+	SELECT d.*, s.reservedfield01,s.`descr_e`,s.`descr_c` ,p.name,b.qty1
 	FROM  `cou_request_details` d
 	LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+	left join bas_package b on b.packid=s.packid
 	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
         where cycle_countno = #{cycleCountno}
 	 <trim  suffixOverrides="," >

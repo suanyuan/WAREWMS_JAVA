@@ -80,10 +80,20 @@ public class BasSkuVO {
 	private java.lang.String skuGroup5;
 	private java.lang.String skuGroup6;
 	private String skuGroup6Name;//附加供应商名称
+	private String clientName;	 //货主名称
 
 	private java.lang.String skuGroup7;
 	private java.lang.String skuGroup8;
 	private java.lang.String productLineName;
+
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
 
 	public String getSupplierNames() {
 		return supplierNames;

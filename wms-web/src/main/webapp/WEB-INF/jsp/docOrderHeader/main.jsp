@@ -75,6 +75,7 @@ $(function() {
 					{field: 'orderno',				title: 'SO编号',		width: 100 },
 					{field: 'soreference1',			title: '客户单号',	width: 120 },
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
+            		{field: 'cAddress4',			title: '快递单号',	width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
 					{field: 'cContact',		title: '收货方',		width: 100 },
@@ -1190,22 +1191,47 @@ var doExportOrderNo = function(){
 	if(navigator.cookieEnabled){
 		var rowp = $('#ezuiDatagrid').datagrid('getSelected');
 		var rowlength = $('#ezuiDatagrid').datagrid('getChecked');
-		console.log(rowlength.length);
-		if(rowlength.length < 2){
+		if(rowlength.length ==1){
 		var orderFlag = new Date().getTime();
 		var setting = new HashMap();
 			setting.put("orderFlag",orderFlag);
 			setting.put("orderno", rowp.orderno );
-		//--导出Excel
-		var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
-		downloadCheckTimer = window.setInterval(function () {
-			window.clearInterval(downloadCheckTimer);
-			$('#'+formIdb).remove();
-			$.messager.progress('close');
-			$.messager.show({
-				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+		//判断orderno有无
+			$.ajax({
+				url : 'docOrderHeaderController.do?isexportOrderNo',
+				data :{orderno:rowp.orderno},
+				type : 'POST',
+				dataType : 'JSON',
+				success : function(result){
+					var msg = '';
+					try {
+						if(!result.success) {
+							msg = result.msg;
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+
+						}else{
+							//--导出Excel
+							var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
+							downloadCheckTimer = window.setInterval(function () {
+								window.clearInterval(downloadCheckTimer);
+								$('#'+formIdb).remove();
+								$.messager.progress('close');
+								$.messager.show({
+									msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+								});
+							}, 1000);
+
+						}
+					} catch (e) {
+						$.messager.show({
+							msg : "数据出错!", title : "<spring:message code='common.message.prompt'/>"
+						});
+					}
+				}
 			});
-		}, 1000);
+
 		}else{
 			$.messager.show({
 				msg : "<spring:message code='common.message.selectRecord'/>", title : "<spring:message code='common.message.prompt'/>"

@@ -174,6 +174,9 @@
 <div id="dialogEnterprise">
 
 </div>
+<div id='ezuiDialogCustomer' style='padding: 10px;'>
+
+</div>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/ajaxfileupload.js"/>"></script>
 <script>
     var enterpriseDatagrid;
@@ -598,12 +601,44 @@
     }
 
 
-
+    var ezuiDialogCustomer;
     //委托方企业信息详情
     function viewEnterpriseUrl(){
+        var enterpriseIdCustomer = $("#ezuiFormCustomer input[id='enterpriseId']").val();
+        if (enterpriseIdCustomer == null || enterpriseIdCustomer == "") {
+            enterpriseIdCustomer = $("#ezuiFormCustomer #enterpriseId").val();
+        }
         // var enterpriseId = $("#ezuiFormSupInfo #cli_enterpriseId").val();
-        var enterpriseId = $("#ezuiFormCustomer  input[id='enterpriseId']").val();
-        enterpriseInfo(enterpriseId);
+        //var enterpriseId = $("#ezuiFormCustomer input[id='enterpriseId']").val();
+        //enterpriseInfo(enterpriseId);
+        ezuiDialogCustomer = $('#ezuiDialogCustomer').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            buttons: '',
+            href: "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseIdCustomer,
+            width: 1200,
+            height: 530,
+            closable: true,
+            cache: false,
+            onClose: function () {
+               // ezuiFormClear(ezuiDialogCustomer);
+                $(this).dialog("clear");
+            },
+
+
+        })
+        //processType = 'add';
+
+        //var row = ezuiDatagrid.datagrid('getSelected');
+
+
+        if (enterpriseIdCustomer != null && enterpriseIdCustomer != "") {
+            ezuiDialogCustomer.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseIdCustomer).dialog('open');
+        } else {
+            $.messager.show({
+                msg: '请先选择企业', title: '提示'
+            });
+        }
     }
 
     <%--function viewEnterpriseUrl() {--%>

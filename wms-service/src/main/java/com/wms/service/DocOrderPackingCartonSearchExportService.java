@@ -146,6 +146,7 @@ public class DocOrderPackingCartonSearchExportService {
         superClassMap.put("reservedfield06", "生产许可证号/备案号");
         superClassMap.put("qty", "装箱件数");
         superClassMap.put("qtyEach", "装箱数量");
+        superClassMap.put("uom", "单位");
         superClassMap.put("description", "复核说明");
         superClassMap.put("conclusion", "复核结论");
         superClassMap.put("editwho", "复核人");

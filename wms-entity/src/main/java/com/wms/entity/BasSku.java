@@ -179,6 +179,16 @@ public class BasSku implements Serializable {
 	private String productLineName;
 	private String orderbysql;
 
+	private String clientName;
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
 	public String getProductLineName() {
 		return productLineName;
 	}

@@ -60,6 +60,7 @@ $(function() {
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
 			{field: 'qty', title: '装箱件数', width: 100},
 			{field: 'qtyEach', title: '装箱数量', width: 100},
+			{field: 'uom', title: '单位', width: 70},
 			{field: 'description', title: '复核说明', width: 160},
 			{field: 'conclusion', title: '复核结论', width: 160},
 			{field: 'editwho', title: '复核人', width: 100},

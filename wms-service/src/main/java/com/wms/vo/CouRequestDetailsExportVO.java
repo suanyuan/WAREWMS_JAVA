@@ -10,6 +10,7 @@ public class CouRequestDetailsExportVO {
 	private String sku;
 	private String locationid;
 	private double qtyInv;
+	private double qtyInvEach;
 	private double qtyAct;
 	private String lotatt04;
 	private String lotatt05;
@@ -24,6 +25,7 @@ public class CouRequestDetailsExportVO {
     private String reservedfield01;
 //	private String descre;//型号
 	private String descrc;//规格
+	private double qty1;//换算率
 //导出导入附加字段
     private String difference;  //差异
     private String remarks;     //备注
@@ -230,5 +232,21 @@ public class CouRequestDetailsExportVO {
 
 	public void setProductLineName(String productLineName) {
 		this.productLineName = productLineName;
+	}
+
+	public double getQtyInvEach() {
+		return qtyInvEach;
+	}
+
+	public void setQtyInvEach(double qtyInvEach) {
+		this.qtyInvEach = qtyInvEach;
+	}
+
+	public double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(double qty1) {
+		this.qty1 = qty1;
 	}
 }

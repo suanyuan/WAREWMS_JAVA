@@ -8,7 +8,7 @@
 
     var ezuiDialog1;
     var enterpriseDialog;
-    var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
+   // var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
 
 
 </script>
@@ -364,34 +364,35 @@
 
 
     function viewEnterpriseUrl() {
-        $(function () {
-            ezuiDialog1 = $('#ezuiDialog1').dialog({
-                modal: true,
-                title: '<spring:message code="common.dialog.title"/>',
-                buttons: '',
-                href: dialogUrl1,
-                width: 1200,
-                height: 530,
-                closable: true,
-                cache: false,
-                onClose: function () {
-                    ezuiFormClear(ezuiDialog1);
-                },
+
+        var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId']").val();
+        if (enterpriseId == null || enterpriseId == "") {
+            enterpriseId = $("#enterpriseId").val();
+        }
+        ezuiDialog1 = $('#ezuiDialog1').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            buttons: '',
+            href: "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId,
+            width: 1200,
+            height: 530,
+            closable: true,
+            cache: false,
+            onClose: function () {
+                ezuiFormClear(ezuiDialog1);
+                $(this).dialog("clear");
+            },
 
 
-            }).dialog('close');
         })
         //processType = 'add';
 
         //var row = ezuiDatagrid.datagrid('getSelected');
         console.log($("#ezuiFormInfo input[id='enterpriseId']").val());
-        var enterpriseId = $("#ezuiFormInfo input[id='enterpriseId']").val();
-        if (enterpriseId == null || enterpriseId == "") {
-            enterpriseId = $("#enterpriseId").val();
-        }
+
 
         if (enterpriseId != null && enterpriseId != "") {
-            ezuiDialog1.dialog('refresh', dialogUrl1 + "&id=" + enterpriseId).dialog('open');
+            ezuiDialog1.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseId).dialog('open');
         } else {
             $.messager.show({
                 msg: '请先选择企业', title: '提示'

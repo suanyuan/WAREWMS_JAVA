@@ -46,6 +46,7 @@ public class GspProductRegisterVO {
 	private String licenseNo;//生产许可证号
 	private String recordNo;//备案号
 	private String productRegisterVersionName;
+	private String licenseOrRecordNol;
 
 	private String choseScope;
 
@@ -380,5 +381,13 @@ public class GspProductRegisterVO {
 
 	public void setProductRegisterVersionName(String productRegisterVersionName) {
 		this.productRegisterVersionName = productRegisterVersionName;
+	}
+
+	public String getLicenseOrRecordNol() {
+		return licenseOrRecordNol;
+	}
+
+	public void setLicenseOrRecordNol(String licenseOrRecordNol) {
+		this.licenseOrRecordNol = licenseOrRecordNol;
 	}
 }

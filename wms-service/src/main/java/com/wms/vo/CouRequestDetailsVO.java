@@ -15,6 +15,7 @@ public class CouRequestDetailsVO {
 	private String sku;
 	private String locationid;
 	private double qtyInv;
+	private double qtyInvEach;
 	private double qtyAct;
 	private String lotatt04;
 	private String lotatt05;
@@ -31,6 +32,7 @@ public class CouRequestDetailsVO {
 	private String descre;
 	private String descrc;
 	private String productLineName;
+	private double qty1; //换算率
 
 	//PDA 盘点
     private String goodsName;

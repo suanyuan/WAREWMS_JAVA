@@ -510,6 +510,8 @@ public class ImportGspProductRegisterDataService {
 
 			}
 
+			importDataVO.setLicenseOrRecordNol(dataArray.getLicenseOrRecordNol());
+
 
 
 			if (rowResult.length() > 0) {
@@ -546,6 +548,7 @@ public class ImportGspProductRegisterDataService {
 
 	    map.put("运输条件", "transportConditionMain");
 	    map.put("注册人名称/生产企业", "enterpriseName");
+		map.put("生产许可证号/备案号", "licenseOrRecordNol");
 	    map.put("注册人住所", "productRegisterAddress");
 	    map.put("生产地址", "productProductionAddress");
 	    map.put("代理人名称", "agentName");
