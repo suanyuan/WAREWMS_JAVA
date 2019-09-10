@@ -58,9 +58,8 @@
 	 product_production_address,agent_name,apply_scope,main_part,expect_use,storage_conditions,product_expiry_date,
 	 other_content,remark,approve_date,product_register_expiry_date,product_register_version,version,checker_id,
 	 check_date,create_id,create_date,edit_id,edit_date,is_use,attachment_url,classify_id,classify_catalog,enterprise_id,
-	 production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,agent_address,r.license_or_record_no
+	 production_address,transport_condition_main,approval_department,product_regsiter_url,structure_and_composition,agent_address
 </sql>
-
 
 	<!-- 查询条件 -->
 	<sql id="Example_Where_Clause">
@@ -319,7 +318,7 @@
 
 	<!-- 根据id查询 产品注册证 -->
 	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-		select <include refid="Base_Column_List" />
+		select <include refid="Base_Column_List" />,r.license_or_record_no
 		from gsp_product_register r where r.product_register_id = #{productRegisterId}
 	</select>
 
