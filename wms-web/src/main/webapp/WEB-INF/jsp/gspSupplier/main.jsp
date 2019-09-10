@@ -60,7 +60,7 @@ $(function() {
             {field: 'enterpriseNo',		title: '企业代码',	width: 100	 },
             {field: 'shorthandName',		title: '简称',	width: 100 },
             {field: 'enterpriseName',		title: '企业名称',	width: 150 },
-            // {field: 'customerid',		title: '货主',	width: 150 },
+            {field: 'costomerid',		title: '货主代码',	width: 150 },
             {field: 'customerName',		title: '货主名称',	width: 150 },
 
             {field: 'clientTerm',		title: '合同期限',	width: 200 },
