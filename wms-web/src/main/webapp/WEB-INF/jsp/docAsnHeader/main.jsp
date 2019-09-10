@@ -1213,13 +1213,13 @@ var detailsReceive = function(){
 var detailsCommit = function(){
     console.log("------------");
 	var asnstatus = $("#ezuiDetailsDialog #linestatus").combobox('getValue');
-	if (asnstatus == '00' || asnstatus == '30' || asnstatus == '40'){
-		var url = '';
-		if (processType == 'edit') {
-			url = '<c:url value="/docAsnDetailController.do?edit"/>';
-		}else{
-			url = '<c:url value="/docAsnDetailController.do?add"/>';
-		}
+	if (asnstatus == '00' || asnstatus == '30' || asnstatus == '40') {
+        var url = '';
+        if (processType == 'edit') {
+            url = '<c:url value="/docAsnDetailController.do?edit"/>';
+        } else {
+            url = '<c:url value="/docAsnDetailController.do?add"/>';
+        }
 		ezuiDetailsForm.form('submit', {
 			url : url,
 			onSubmit : function(){

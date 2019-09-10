@@ -23,7 +23,15 @@ public class GspSupplierQuery implements IQuery {
 	private String enterpriseNo;
 	private String enterpriseName;
 	private String shorthandName;
+	private String customerid;
 
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
 	public String getEnterpriseNo() {
 		return enterpriseNo;
