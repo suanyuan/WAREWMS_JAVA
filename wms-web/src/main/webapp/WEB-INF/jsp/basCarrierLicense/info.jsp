@@ -92,11 +92,11 @@
         </tr>
         <tr>
             <th>合同开始时间</th>
-            <td><input type='text' name='clientStartDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientStartDate}"/>" class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' id="clientStartDate" name='clientStartDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientStartDate}"/>" class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>合同结束时间</th>
-            <td><input type='text' name='clientEndDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientEndDate}"/>"  class='easyui-datebox' data-options='required:true'/></td>
+            <td><input type='text' id="clientEndDate" name='clientEndDate' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.clientEndDate}"/>"  class='easyui-datebox' data-options='required:true'/></td>
         </tr>
         <tr>
             <th>合同期限</th>
