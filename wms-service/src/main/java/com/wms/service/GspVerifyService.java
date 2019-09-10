@@ -427,7 +427,12 @@ public class GspVerifyService {
     public static void main(String[] args){
         try {
             //Date date = DateUtil.parse("20190907","yyyy-MM-dd");
-            System.out.println(checkDate("2019-09-08",new Date()));
+            //System.out.println(checkDate("2019-09-08",new Date()));
+            List<String> arr = new ArrayList<>();
+            arr.add("1");
+            arr.add("2");
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
