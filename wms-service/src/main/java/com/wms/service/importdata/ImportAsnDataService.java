@@ -144,34 +144,34 @@ public class ImportAsnDataService {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[序号]，资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append(" 资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
             }
             try {
                 if (StringUtils.isEmpty(dataArray.getCustomerid().toUpperCase())) {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[货主代码]，未输入").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[货主代码]，未输入").append(" ");
             }
             try {
                 if (StringUtils.isEmpty(dataArray.getAsnreference1())) {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[客户单号1]，未输入").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[客户单号1]，未输入").append(" ");
             }
             try {
                 if (StringUtils.isEmpty(dataArray.getExpectedarrivetime1())) {//判日期是否为空
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[预期到货时间]，未输入").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[预期到货时间]，未输入").append(" ");
             }
             try {
                 format.parse(dataArray.getExpectedarrivetime1());
             } catch (ParseException e) {
                 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
-                rowResult.append("[预期到货时间]，格式错误").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[预期到货时间]，格式错误").append(" ");
             }
             //生产日期、失效日期、入库日期co
             try {
@@ -179,18 +179,18 @@ public class ImportAsnDataService {
                     formatRQ.parse(dataArray.getLotatt01());
                 }
             } catch (ParseException e) {
-                rowResult.append("[生产日期]，格式错误").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[生产日期]，格式错误").append(" ");
             }
             try {
                 formatRQ.parse(dataArray.getLotatt02());
             } catch (ParseException e) {
-                rowResult.append("[失效日期]，格式错误").append(" ");
+                rowResult.append("序号：").append(dataArray.getSeq()).append("[失效日期]，格式错误").append(" ");
             }
             if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
                     //gsp校验
                     Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(), dataArray.getLotatt08(), dataArray.getSku(), dataArray.getLotatt01(), dataArray.getLotatt02());
                     if (!verifyJson.isSuccess()) {
-                        rowResult.append(verifyJson.getMsg()).append(" ");
+                        rowResult.append("序号：").append(dataArray.getSeq()).append(verifyJson.getMsg()).append(" ");
                     }
             }
 

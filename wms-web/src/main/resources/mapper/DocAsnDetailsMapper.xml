@@ -1015,4 +1015,9 @@ insert into doc_asn_details
 		FROM doc_asn_details
 		<include refid="Example_Where_Clause"/>
 	</select>
+
+	<!-- 联合头档删除记录 -->
+	<delete id="deleteByHead" parameterType="Object">
+	delete from doc_asn_details where asnno = #{asnno, jdbcType=VARCHAR}
+    </delete>
 </mapper>

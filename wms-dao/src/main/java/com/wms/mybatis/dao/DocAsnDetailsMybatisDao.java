@@ -29,4 +29,6 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
 	String getIdSequence(Map<String, Object> map);
 
 	DocAsnDetail queryForScan(PdaDocAsnDetailQuery query);
+
+	void deleteByHead(String orderNo);
 }

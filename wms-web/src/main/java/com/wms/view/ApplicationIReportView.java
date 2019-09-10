@@ -20,7 +20,7 @@ public class ApplicationIReportView extends JasperReportsMultiFormatView {
 
     protected JasperPrint fillReport(Map<String,Object> model) throws Exception{
        if(model.containsKey("url")){
-           System.out.println("-----------"+String.valueOf(model.get("url")));
+           //System.out.println("-----------"+String.valueOf(model.get("url")));
            setUrl(String.valueOf(model.get("url")));
            this.jasperReport = loadReport();
        }

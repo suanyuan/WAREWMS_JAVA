@@ -102,8 +102,8 @@ public class DocAsnHeaderController {
 	@RequestMapping(params = "delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Json delete(String asnnos) throws Exception {
-
-		return null;
+		Json json = docAsnHeaderService.deleteDocAsn(asnnos);
+		return json;
 	}
 
 	@Login
@@ -241,9 +241,9 @@ public class DocAsnHeaderController {
 	@Login
     @RequestMapping(params = "quoteDocOrder", method = RequestMethod.POST)
     @ResponseBody
-	public Json quoteDocOrder(String orderno) {
+	public Json quoteDocOrder(String orderno,String customerId,String supplierId) {
 
-	    Json json = docAsnHeaderService.quoteDocOrder(orderno);
+	    Json json = docAsnHeaderService.quoteDocOrder(orderno,customerId,supplierId);
         if(json == null){
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
