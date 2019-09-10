@@ -604,33 +604,33 @@
     var ezuiDialogCustomer;
     //委托方企业信息详情
     function viewEnterpriseUrl(){
-        // var enterpriseId = $("#ezuiFormSupInfo #cli_enterpriseId").val();
-        //var enterpriseId = $("#ezuiFormCustomer input[id='enterpriseId']").val();
-        //enterpriseInfo(enterpriseId);
-        $(function () {
-            ezuiDialogCustomer = $('#ezuiDialogCustomer').dialog({
-                modal: true,
-                title: '<spring:message code="common.dialog.title"/>',
-                buttons: '',
-                href: "/gspEnterpriseInfoController.do?toDetail",
-                width: 1200,
-                height: 530,
-                closable: true,
-                cache: false,
-                onClose: function () {
-                    ezuiFormClear(ezuiDialogCustomer);
-                },
-
-
-            }).dialog('close');
-        })
-        //processType = 'add';
-
-        //var row = ezuiDatagrid.datagrid('getSelected');
         var enterpriseIdCustomer = $("#ezuiFormCustomer input[id='enterpriseId']").val();
         if (enterpriseIdCustomer == null || enterpriseIdCustomer == "") {
             enterpriseIdCustomer = $("#ezuiFormCustomer #enterpriseId").val();
         }
+        // var enterpriseId = $("#ezuiFormSupInfo #cli_enterpriseId").val();
+        //var enterpriseId = $("#ezuiFormCustomer input[id='enterpriseId']").val();
+        //enterpriseInfo(enterpriseId);
+        ezuiDialogCustomer = $('#ezuiDialogCustomer').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            buttons: '',
+            href: "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseIdCustomer,
+            width: 1200,
+            height: 530,
+            closable: true,
+            cache: false,
+            onClose: function () {
+               // ezuiFormClear(ezuiDialogCustomer);
+                $(this).dialog("clear");
+            },
+
+
+        })
+        //processType = 'add';
+
+        //var row = ezuiDatagrid.datagrid('getSelected');
+
 
         if (enterpriseIdCustomer != null && enterpriseIdCustomer != "") {
             ezuiDialogCustomer.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseIdCustomer).dialog('open');

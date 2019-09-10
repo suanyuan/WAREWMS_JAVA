@@ -534,26 +534,27 @@
 
     //查看委托方企业详情
     function viewEditClientEnterpriseUrl() {
-        $(function () {
-            ezuiDialogEditClientEnterprise = $('#ezuiDialogEditClientEnterprise').dialog({
-                modal: true,
-                title: '<spring:message code="common.dialog.title"/>',
-                buttons: '',
-                href: sy.bp() + "/gspEnterpriseInfoController.do?toDetail",
-                width: 1200,
-                height: 530,
-                closable: true,
-                cache: false,
-                onClose: function () {
-                    ezuiFormClear(ezuiDialogEditClientEnterprise);
-                }
-            }).dialog('close');
-        })
         console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
         var enterpriseId = $("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val();
         if (enterpriseId == null || enterpriseId == "") {
-            // enterpriseId = $("#enterpriseId").val();
+             //enterpriseId = $("#enterpriseId").val();
         }
+
+        ezuiDialogEditClientEnterprise = $('#ezuiDialogEditClientEnterprise').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            buttons: '',
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId,
+            width: 1200,
+            height: 530,
+            closable: true,
+            cache: false,
+            onClose: function () {
+                ezuiFormClear(ezuiDialogEditClientEnterprise);
+                $(this).dialog("clear");
+            }
+        })
+
 
         if (enterpriseId != null && enterpriseId != "") {
             ezuiDialogEditClientEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseId).dialog('open');
@@ -568,30 +569,29 @@
 
     //查看供应商企业详情
     function viewEditSupplierEnterpriseUrl() {
-        $(function () {
-            ezuiDialogEditSupplierEnterprise = $('#ezuiDialogEditSupplierEnterprise').dialog({
-                modal: true,
-                title: '<spring:message code="common.dialog.title"/>',
-                buttons: '',
-                href: sy.bp() + "/gspEnterpriseInfoController.do?toDetail",
-                width: 1200,
-                height: 530,
-                closable: true,
-                cache: false,
-                onClose: function () {
-                    ezuiFormClear(ezuiDialogEditSupplierEnterprise);
-                }
-            }).dialog('close');
+
+        var enterpriseId = $("#ezuiFormDetail1 input[id='supedit_enterpriseId']").val();
+        if (enterpriseId == null || enterpriseId == "") {
+            // enterpriseId = $("#enterpriseId").val();
+        }
+        ezuiDialogEditSupplierEnterprise = $('#ezuiDialogEditSupplierEnterprise').dialog({
+            modal: true,
+            title: '<spring:message code="common.dialog.title"/>',
+            buttons: '',
+            href: sy.bp() + "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId,
+            width: 1200,
+            height: 530,
+            closable: true,
+            cache: false,
+            onClose: function () {
+                ezuiFormClear(ezuiDialogEditSupplierEnterprise);
+                $(this).dialog("clear");
+            }
         })
         //processType = 'edit';
 
         //var row = ezuiDatagrid.datagrid('getSelected');
         console.log($("#ezuiFormDetail1 input[id='cliedit_enterpriseId']").val());
-        var enterpriseId = $("#ezuiFormDetail1 input[id='supedit_enterpriseId']").val();
-        if (enterpriseId == null || enterpriseId == "") {
-            // enterpriseId = $("#enterpriseId").val();
-        }
-
         if (enterpriseId != null && enterpriseId != "") {
             ezuiDialogEditSupplierEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseId).dialog('open');
             enterpriseId = "";
