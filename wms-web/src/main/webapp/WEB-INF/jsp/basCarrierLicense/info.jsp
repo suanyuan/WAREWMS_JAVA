@@ -51,19 +51,19 @@
         </tr>
         <tr>
             <th>许可证发证日期</th>
-            <td><input type='text'  <%--value="${basCarrierLicense.carrierDate}"--%>value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.carrierDate}"/>" class="easyui-datebox"  data="1" id="carrierDate" name='carrierDate'   data-options='required:true'/></td>
+            <td><input type='text'  <%--value="${basCarrierLicense.carrierDate}"--%>value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.carrierDate}"/>" class="easyui-datebox"  data="1" id="carrierDate" name='carrierDate'   data-options='required:false'/></td>
         </tr>
         <tr>
             <th>有效期至</th>
-            <td><input type='text' data="1" id="carrierEndDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.carrierEndDate}"/>" name='carrierEndDate' class="easyui-datebox" data-options='required:true'/></td>
+            <td><input type='text' data="1" id="carrierEndDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${basCarrierLicense.carrierEndDate}"/>" name='carrierEndDate' class="easyui-datebox" data-options='required:false'/></td>
         </tr>
         <tr>
             <th>经营范围</th>
-            <td><input type='text' data="1" id="carrierBusinessScope" value="${basCarrierLicense.carrierBusinessScope}"  name='carrierBusinessScope' class="easyui-textbox" data-options='required:true'/></td>
+            <td><input type='text' data="1" id="carrierBusinessScope" value="${basCarrierLicense.carrierBusinessScope}"  name='carrierBusinessScope' class="easyui-textbox" data-options='required:false'/></td>
         </tr>
         <tr>
             <th>签发机关</th>
-            <td><input type='text' data="1" id="carrierAuthorityPermit" value="${basCarrierLicense.carrierAuthorityPermit}" name='carrierAuthorityPermit' class='easyui-textbox'   data-options='required:true'/></td>
+            <td><input type='text' data="1" id="carrierAuthorityPermit" value="${basCarrierLicense.carrierAuthorityPermit}" name='carrierAuthorityPermit' class='easyui-textbox'   data-options='required:false'/></td>
         </tr>
         <tr>
             <th>合同编号</th>
@@ -161,7 +161,7 @@
             prompt: '选择一个文件',//文本说明文件
             width: '170', //文本宽度
             buttonText: '上传',  //按钮说明文字
-            required: true,
+            required: false,
             onChange:function(data){
                 if(data){
                     doUploadCarrier(data);

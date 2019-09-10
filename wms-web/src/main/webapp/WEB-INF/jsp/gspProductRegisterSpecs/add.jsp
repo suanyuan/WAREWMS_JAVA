@@ -20,11 +20,11 @@
                 <%--<input type="hidden"  id="enterpriseId" name="enterpriseId" data='1'  />--%>
                 <%--&lt;%&ndash;<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>&ndash;%&gt;--%>
             <%--</td>--%>
-            <th>注册证编号</th>
-            <td>
-                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' size='50'  data-options='required:true,editable:false'/>
-                <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
-            </td>
+                <th>医疗器械标志</th>
+                <td><input type='text' data="1"  id="medicalDeviceMark" name='medicalDeviceMark' class='easyui-textbox' size='50' data-options='required:true' /></td>
+
+
+
 
             <th>产品名称</th>
             <td><input type='text' data="1" id="productNameMain" name='productNameMain' class='easyui-textbox' size='50' data-options='required:true' /></td>
@@ -32,16 +32,21 @@
         </tr>
 
         <tr>
-            <th>产品代码</th>
-            <td><input type='text' data="1" id="productCode" name='productCode' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>注册证编号</th>
+            <td>
+                <input type='text' data="1" id='productRegisterNo'  name="productRegisterNo" class='easyui-textbox' size='50'  data-options='required:true,editable:false'/>
+                <%--<a href="javascript:void(0)" onclick="searchEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>--%>
+            </td>
             <th>产品描述</th>
             <td><input type='text' data="1" id="productRemark" name='productRemark' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>
 
-            <th>规格</th>
-            <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>产品代码</th>
+            <td><input type='text' data="1" id="productCode" name='productCode' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
+
             <th>单位</th>
             <td><input type='text' data="1" id="unit" name='unit' class='easyui-textbox' size='50' data-options='required:true'/></td>
             <%--<th>商品名称</th>--%>
@@ -49,10 +54,10 @@
 
         </tr>
         <tr>
+            <th>规格</th>
+            <td><input type='text' data="1" id="specsName" name='specsName' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>型号</th>
-            <td><input type='text' data="1" id="productModel" name='productModel' class='easyui-textbox' size='50' data-options='required:true'/></td>
-           <th>包装单位</th>
+            <th>包装单位</th>
             <td><input type='text' data="1" id="packagingUnit" name='packagingUnit' class='easyui-textbox' size='50' data-options=''/></td>
 
             <%--<td><select data="1" id="productionAddress" name="productionAddress" class="easyui-combobox"  style="width:385px;">--%>
@@ -63,50 +68,73 @@
             <%--<td><input type='text' data="1" id="productionAddress" name='productionAddress' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
         </tr>
         <tr>
-            <th>包装规格</th>
-            <td><input type='text' data="1" id="packingUnit" name='packingUnit' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>型号</th>
+            <td><input type='text' data="1" id="productModel" name='productModel' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
+
             <th>包装要求</th>
             <td><input type='text' data="1" id="packingRequire" name='packingRequire' class='easyui-textbox' size='50' data-options=''/></td>
         </tr>
         <tr>
-            <th>运输条件</th>
-            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options=''/></td>
+
+            <th>包装规格</th>
+            <td><input type='text' data="1" id="packingUnit" name='packingUnit' class='easyui-textbox' size='50' data-options='required:true'/></td>
+
             <th>长</th>
             <td><input type='text' data="1" id="llong" name='llong' class='easyui-textbox' size='47' data-options=''/>(m)</td>
         </tr>
 
         <tr>
-            <th>储存条件</th>
-            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
+            <th>运输条件</th>
+            <td><input type='text' data="1" id="transportCondition" name='transportCondition' class='easyui-textbox' size='50' data-options=''/></td>
+
+
             <th>宽</th>
             <td><input type='text' data="1" id="wide" name='wide' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
         </tr>
 
         <tr>
+            <th>储存条件</th>
+            <td><input type='text' data="1" id="storageCondition" name='storageCondition' class='easyui-textbox' size='50' data-options='required:true'/></td>
 
-            <th>生产企业</th>
-            <td><input type='hidden' data="1" id="enterpriseId" name='enterpriseId'  size='50' data-options=''/>
-                <input type='text' data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options=''/></td>
             <th>高</th>
             <td><input type='text' data="1" id="hight"  name='hight' class='easyui-textbox' size='47' data-options=''/>(m)</td>
 
           </tr>
        <tr>
-           <th>生产许可证号/备案号</th>
-           <td><input type='text' data="1" id="licenseOrRecordNo"  name='licenseOrRecordNo' class='easyui-textbox' size='50' data-options="editable:false,panelHeight: 'auto'"/></td>
+           <th>生产企业</th>
+           <td><input type='hidden' data="1" id="enterpriseId" name='enterpriseId'  size='50' data-options=''/>
+               <input type='text' data="1" id="enterpriseName" name='enterpriseName' class='easyui-textbox' size='50' data-options=''/></td>
+
+
            <th>重量</th>
            <td><input type='text' data="1" id="wight"  name='wight' class='easyui-textbox' size='47' data-options=''/>(kg)</td>
        </tr>
         <tr>
-            <th>产地</th>
-            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='editable:false' /></td>
+            <th>生产许可证号/备案号</th>
+            <td><input type='text' data="1" id="licenseOrRecordNo"  name='licenseOrRecordNo' class='easyui-textbox' size='50' data-options="editable:false,panelHeight: 'auto'"/></td>
+
+
 
             <th>商品条码</th>
             <td><input type='text' data="1" id="barCode" name='barCode' class='easyui-textbox' size='50' data-options=''/></td>
 
 
         </tr>
+        <tr>
+            <th>产地</th>
+            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='editable:false' /></td>
+
+
+            <th>自赋码1</th>
+            <td><input type='text' data="1" id="alternatName1" name='alternatName1' class='easyui-textbox' size='50' data-options=''/></td>
+            <%--<th>分类目录</th>--%>
+            <%--<td><input type='text' data="1" id="categories" name='categories' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
+
+
+        </tr>
+
         <tr>
             <th>双证</th><td><input type="text" data="1" id="isDoublec"    name="isDoublec"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
                                                                                                                                     required:true,
@@ -117,14 +145,11 @@
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
-            <th>自赋码1</th>
-            <td><input type='text' data="1" id="alternatName1" name='alternatName1' class='easyui-textbox' size='50' data-options=''/></td>
-            <%--<th>分类目录</th>--%>
-            <%--<td><input type='text' data="1" id="categories" name='categories' class='easyui-textbox' size='50' data-options='required:true'/></td>--%>
 
+            <th>自赋码2</th>
+            <td><input type='text' data="1" id="alternatName2" name='alternatName2' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
-
         <tr>
             <th>产品合格证</th><td><input type="text" data="1" id="isCertificate"   name="isCertificate"  class="easyui-combobox" size='50' data-options="panelHeight:'auto',
                                                                                                                                     required:true,
@@ -135,20 +160,15 @@
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
-            <th>自赋码2</th>
-            <td><input type='text' data="1" id="alternatName2" name='alternatName2' class='easyui-textbox' size='50' data-options=''/></td>
-
-        </tr>
-        <tr>
-            <th>附卡类别</th>
-            <td><input type='text' data="1"  id="attacheCardCategory" name='attacheCardCategory' class='easyui-textbox' size='50' data-options='' /></td>
             <th>自赋码3</th>
             <td><input type='text' data="1" id="alternatName3" name='alternatName3' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>
-            <th>冷链标志</th>
-            <td><input type='text' data="1"  id="coldHainMark" name='coldHainMark' class='easyui-textbox' size='50' data-options='required:false' /></td>
+            <th>附卡类别</th>
+            <td><input type='text' data="1"  id="attacheCardCategory" name='attacheCardCategory' class='easyui-textbox' size='50' data-options='' /></td>
+
+
             <th>自赋码4</th>
             <td><input type='text' data="1" id="alternatName4" name='alternatName4' class='easyui-textbox' size='50' data-options=''/></td>
             <%--<th>管理分类</th>--%>
@@ -156,15 +176,19 @@
 
         </tr>
         <tr>
-            <th>灭菌标志</th>
-            <td><input type='text' data="1"  id="sterilizationMarkers" name='sterilizationMarkers' class='easyui-textbox' size='50' data-options='' /></td>
+            <th>冷链标志</th>
+            <td><input type='text' data="1"  id="coldHainMark" name='coldHainMark' class='easyui-textbox' size='50' data-options='required:false' /></td>
+
             <th>自赋码5</th>
             <td><input type='text' data="1" id="alternatName5" name='alternatName5' class='easyui-textbox' size='50' data-options=''/></td>
 
         </tr>
         <tr>
-            <th>医疗器械标志</th>
-            <td><input type='text' data="1"  id="medicalDeviceMark" name='medicalDeviceMark' class='easyui-textbox' size='50' data-options='required:true' /></td>
+            <th>灭菌标志</th>
+            <td><input type='text' data="1"  id="sterilizationMarkers" name='sterilizationMarkers' class='easyui-textbox' size='50' data-options='' /></td>
+
+
+
             <th>创建人</th>
             <td contenteditable="false"><input type='text' data="1" value="${createId}" id="createId" name='createId' class='easyui-textbox' size='50' data-options='' readonly/></td>
 
