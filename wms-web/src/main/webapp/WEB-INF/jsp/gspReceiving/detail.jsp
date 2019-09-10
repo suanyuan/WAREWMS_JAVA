@@ -50,7 +50,7 @@
        <tr>
          <th>供应商</th>
            <td colspan="">
-              <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox'  data-options='required:true'/>
+              <input type='text' name='supplierId' id="supplier"  size="16" class='easyui-textbox'  data-options=''/>
               <%--<a href="javascript:void(0)" onclick="searchSupplier()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"/>--%>
               <%--<input type='hidden'  name='enterpriseId1' id="enterpriseId1"  size="16" class='easyui-textbox'  data-options='required:true'/>--%>
               <%--<input type="hidden"  id="enterpriseId1" name="enterpriseId1" data='1'  />--%>

@@ -58,7 +58,7 @@
                         {field: 'shorthandName',		title: '收货单位简称',	width: 91 },
                         // {field: 'customerid',		title: '货主ID',	width: 122 },
                         {field: 'clientId',		title: '货主ID',	width: 250	 },
-                        {field: 'supplierId',		title: '供应商',	width: 200  },
+                        //{field: 'supplierId',		title: '供应商',	width: 200  },
                         {field: 'deliveryAddress',		title: '地址',	width: 200 },
                         {field: 'contacts',		title: '联系人',	width: 82 },
                         {field: 'phone',		title: '联系人电话',	width: 100 },
@@ -501,12 +501,13 @@ function xiafa() {
 
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<th>货主ID</th><td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierId' name="supplierId" class='easyui-textbox' size='16' data-options=''/></td>
 
-						</tr>
+						</tr>-->
 						<tr>
+							<th>货主ID</th><td><input type='text' id='customerid' name="customerid" class='easyui-textbox' size='16' data-options=''/></td>
 							<th>是否需要审核</th><td><input type='text' id='isCh' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>是否医废</th><td><input type='text' id='isR' name="isReturn" class='easyui-textbox' size='16' data-options=''/></td>
 
