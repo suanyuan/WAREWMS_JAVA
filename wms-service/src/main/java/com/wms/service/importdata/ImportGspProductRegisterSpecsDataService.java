@@ -708,9 +708,7 @@ public class ImportGspProductRegisterSpecsDataService {
 		map.put("医疗器械标志(是/否)", "medicalDeviceMark");
 		map.put("养护周期(天)", "maintenanceCycle");
 
-		map.put("包装单位", "packagingUnit");
 		map.put("包装要求", "packingRequire");
-
 
 	    map.put("长(m)", "llong");
 	    map.put("宽(m)", "wide");
