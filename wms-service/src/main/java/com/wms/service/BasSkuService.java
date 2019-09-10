@@ -22,7 +22,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wms.constant.Constant;
+import com.wms.entity.BasCustomer;
 import com.wms.entity.FirstBusinessApply;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
@@ -67,6 +69,9 @@ public class BasSkuService extends BaseService {
 
 	@Autowired
 	private ImportSkuDataService importSkuDataService;
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
+
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //显示主页datagrid
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
@@ -95,7 +100,6 @@ public class BasSkuService extends BaseService {
 			bs.setCustomerid(basSkuVO.getCustomerid());
 			List<String> sup =  firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
 			int a =1;
-
 			for(String supNanme : sup){
 				if(a ==1){
 					content = supNanme;
@@ -105,9 +109,9 @@ public class BasSkuService extends BaseService {
 				}
 				a++;
 			}
-
-//			String content = "";
 			basSkuVO.setSupplierNames(content);
+            basSkuVO.setClientName(basSku.getClientName());
+
 			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
 			basSkuVO.setSupplierNum(num);
 			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));
@@ -244,7 +248,13 @@ public class BasSkuService extends BaseService {
 		skuQuery.setCustomerid(customerid);
 		skuQuery.setSku(sku);
 		skuQuery.setQty(qty);
+
 		BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+        BasCustomer b = new BasCustomer();
+        b.setCustomerid(basSku.getCustomerid());
+        b.setCustomerType("OW");
+        BasSku f =  basCustomerMybatisDao.queryById(b);
+        basSku.setClientName(f.getDescrC());
 		return basSku;
 	}
 
