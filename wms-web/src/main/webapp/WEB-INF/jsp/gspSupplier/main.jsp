@@ -428,7 +428,10 @@ var doSearch = function(){
         shorthandName : $('#shorthandNameQuery').val(),
 		// editId : $('#editId').val(),
 		//editDate : $('#editDate').val(),
-        enterpriseNo: $('#enterpriseNoQuery').val()
+        enterpriseNo: $('#enterpriseNoQuery').val(),
+        customerid: $('#clientQuery').val(),
+
+
 
 	});
 };
@@ -498,7 +501,10 @@ function enterpriseInfo(enterpriseId){
 																																	{id: 'JY', value: '经营'},
 																																	{id: 'SC', value: '生产'}
 																																]"/></td>
-							<th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>货主代码</th><td><input type='text' id='clientQuery' class='easyui-textbox' size='16' data-options=''/></td>
+
+
+                            <th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
 																																	<%--editable:false,--%>
 																																	<%--valueField: 'id',--%>

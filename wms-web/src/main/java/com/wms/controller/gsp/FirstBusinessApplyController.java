@@ -117,8 +117,9 @@ public class FirstBusinessApplyController {
 		Json json = firstBusinessApplyService.addFirstBusinessApply(firstBusinessApplyForm);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		}
 		return json;
 	}
 

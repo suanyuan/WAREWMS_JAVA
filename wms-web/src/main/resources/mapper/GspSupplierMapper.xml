@@ -48,6 +48,11 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
+
+	<if test="condition.customerid != null and condition.customerid != ''" >
+		and t1.costomerid like '%${condition.customerid}%'
+	</if>
+
 	<if test="condition.supplierId != null and condition.supplierId != ''" >
 	    and supplier_id like '%${condition.supplierId}%'
 	</if>

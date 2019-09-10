@@ -184,14 +184,6 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                     <th>客户名称：</th><td><input type='text' id='kehumingcehng1' class='easyui-textbox' data-options=''/></td>
                 </tr>
                 <tr>
-                    <%-- <th>企业信息代码：</th><td><input type='text' id='qiyexinxidaima1' class='easyui-textbox' data-options=''/></td>
-                     <th>企业名称：</th><td><input type='text' id='qiyemingcheng2' class='easyui-textbox' data-options=''/></td>--%>
-                    <%-- <td>
-                         <input type='text' id='enterpriseIdQuery' style="width: 170px;"/>
-                         <input type="hidden" class="easyui-textvalue" name="enterpriseId">
-                         <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
-                     </td>
-                     <th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>--%>
                     <td>
                         <a onclick='doSearchClient();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                         <a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
@@ -306,6 +298,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             }]
         });
 
+        //货主列表
         clientDatagrid = $("#dataGridClientDetail").datagrid({
             url : sy.bp()+'/basCustomerController.do?showDatagrid',
             method:'POST',
@@ -394,11 +387,15 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
     }
     //查询货主信息条件
     function doSearchClient() {
+        console.log($('#kehumingcehng1').val());
+        console.log($('#kehudaimaC').val());
+
         clientDatagrid.datagrid('load', {
             // enterpriseName : $('#qiyemingcheng2').val(),
             // enterpriseNo : $('#qiyexinxidaima1').val(),
-            descrC : $('#ezuiDialogClientDetail #kehumingcehng1').val(),
-            customerid : $('#ezuiDialogClientDetail #kehudaima1').val(),
+
+            descrC : $('#kehumingcehng1').val(),
+            customerid : $('#ezuiDialogClientDetail #kehudaimaC').val(),
             isUse : '1',
             customerType:'OW',
             activeFlag : '1',
@@ -425,33 +422,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         var enterpriseId = $("#ezuiFormSupInfo #enterpriseId").val();
         enterpriseInfo(enterpriseId);
     }
-    <%--//企业信息详情--%>
-    <%--function enterpriseInfo(enterpriseId){--%>
-        <%--$(function() {--%>
-            <%--ezuiDialogClientEnterpriseInfo = $('#ezuiDialogClientEnterpriseInfo').dialog({--%>
-                <%--modal : true,--%>
-                <%--title : '<spring:message code="common.dialog.title"/>',--%>
-                <%--buttons : '',--%>
-                <%--href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",--%>
-                <%--width:1200,--%>
-                <%--height:530,--%>
-                <%--closable:true,--%>
-                <%--cache: false,--%>
-                <%--onClose : function() {--%>
-                    <%--ezuiFormClear(ezuiDialogClientEnterpriseInfo);--%>
-                <%--}--%>
-            <%--}).dialog('close');--%>
-        <%--})--%>
-        <%--if(enterpriseId!=null && enterpriseId!="" ){--%>
-            <%--ezuiDialogClientEnterpriseInfo.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');--%>
-            <%--enterpriseId = "";--%>
-        <%--}else{--%>
-            <%--$.messager.show({--%>
-                <%--msg : '请先选择企业', title : '提示'--%>
-            <%--});--%>
-        <%--}--%>
-    <%--}--%>
 
+    //供应商列表
     enterpriseDialog_gspSupplierInfo = $('#enterpriseDialog').dialog({
         modal: true,
         title: '<spring:message code="common.dialog.title"/>',
