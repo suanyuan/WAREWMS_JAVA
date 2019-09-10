@@ -3,9 +3,6 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.ActAllocationDetails;
-import com.wms.entity.order.OrderDetailsForNormal;
-import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
@@ -16,7 +13,6 @@ import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
-import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -368,5 +364,12 @@ public class DocOrderHeaderController {
  	@RequestMapping(params = "exportOrderNoToExcel")
  	public void exportOrderDataToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom) throws Exception {
 		orderHeaderForNormalService.exportOrderNoToExcel(response, orderNofrom);
+	}
+	//检查orderno是否存在
+	@Login
+ 	@RequestMapping(params = "isexportOrderNo")
+	@ResponseBody
+ 	public Json isexportOrderNo(String orderno)throws Exception{
+		return  orderHeaderForNormalService.isexportOrderNo(orderno);
 	}
 }

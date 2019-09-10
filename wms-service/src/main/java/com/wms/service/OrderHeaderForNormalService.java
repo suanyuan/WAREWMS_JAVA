@@ -1,6 +1,6 @@
 package com.wms.service;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
@@ -36,11 +36,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1828,39 +1826,49 @@ public class OrderHeaderForNormalService extends BaseService {
         return json;
     }
 
-    /*
-     * 导出序列号记录
-     *
-    */
-    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception{
-        Cookie cookie = new Cookie("exportToken",orderNofrom.getOrderFlag());
+//导出序列号记录
+    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception {
+        Cookie cookie = new Cookie("exportToken", orderNofrom.getOrderFlag());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
         response.setContentType(ContentTypeEnum.csv.getContentType());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setLenient(false);
-       String str = null;
-        try{
+        String str = null;
+        try {
             //Excel表头数据
-            LinkedHashMap<String,String> serialMap = getDocSerialNumRecord();
+            LinkedHashMap<String, String> serialMap = getDocSerialNumRecord();
             String sheetName = "序列号记录";
             //Excel需要的数据
             List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryExport(orderNofrom.getOrderno());
-            if(docSerialNumRecordList.size() >0){
+            if (docSerialNumRecordList.size() > 0) {
                 for (int i = 0; i < docSerialNumRecordList.size(); i++) {
                     str = format.format(docSerialNumRecordList.get(i).getAddtime());
-                   docSerialNumRecordList.get(i).setAddTimeSetting(str);
+                    docSerialNumRecordList.get(i).setAddTimeSetting(str);
                 }
                 //将查询出来的数据转化为Excel数据
-                ExcelUtil.listToExcel(docSerialNumRecordList,serialMap,sheetName,response);
+                ExcelUtil.listToExcel(docSerialNumRecordList, serialMap, sheetName, response);
                 //修改docOrderHeader中的udfprintflag1信息为1 导出过序列号信息
                 docSerialNumRecordMybatisDao.updateDocOrder(orderNofrom.getOrderno());
-            }else{
-                ExcelUtil.listToExcel(null,serialMap,sheetName,response);
+            } else {
+
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+//检查orderno是否存在
+    public Json isexportOrderNo(String orderno){
+            Json json=new Json();
+            List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryExport(orderno);
+            if(docSerialNumRecordList.size() >0){
+               json.setSuccess(true);
+            }else{
+               json.setSuccess(false);
+               json.setMsg("当前出库单号没有序列号记录,不可导出");
+            }
+
+            return json;
     }
 
     /**

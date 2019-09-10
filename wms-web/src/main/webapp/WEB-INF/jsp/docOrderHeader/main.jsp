@@ -1190,22 +1190,47 @@ var doExportOrderNo = function(){
 	if(navigator.cookieEnabled){
 		var rowp = $('#ezuiDatagrid').datagrid('getSelected');
 		var rowlength = $('#ezuiDatagrid').datagrid('getChecked');
-		console.log(rowlength.length);
-		if(rowlength.length < 2){
+		if(rowlength.length ==1){
 		var orderFlag = new Date().getTime();
 		var setting = new HashMap();
 			setting.put("orderFlag",orderFlag);
 			setting.put("orderno", rowp.orderno );
-		//--导出Excel
-		var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
-		downloadCheckTimer = window.setInterval(function () {
-			window.clearInterval(downloadCheckTimer);
-			$('#'+formIdb).remove();
-			$.messager.progress('close');
-			$.messager.show({
-				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+		//判断orderno有无
+			$.ajax({
+				url : 'docOrderHeaderController.do?isexportOrderNo',
+				data :{orderno:rowp.orderno},
+				type : 'POST',
+				dataType : 'JSON',
+				success : function(result){
+					var msg = '';
+					try {
+						if(!result.success) {
+							msg = result.msg;
+							$.messager.show({
+								msg: msg, title: '<spring:message code="common.message.prompt"/>'
+							});
+
+						}else{
+							//--导出Excel
+							var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
+							downloadCheckTimer = window.setInterval(function () {
+								window.clearInterval(downloadCheckTimer);
+								$('#'+formIdb).remove();
+								$.messager.progress('close');
+								$.messager.show({
+									msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+								});
+							}, 1000);
+
+						}
+					} catch (e) {
+						$.messager.show({
+							msg : "数据出错!", title : "<spring:message code='common.message.prompt'/>"
+						});
+					}
+				}
 			});
-		}, 1000);
+
 		}else{
 			$.messager.show({
 				msg : "<spring:message code='common.message.selectRecord'/>", title : "<spring:message code='common.message.prompt'/>"
