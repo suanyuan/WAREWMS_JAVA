@@ -253,7 +253,8 @@ public class GspSupplierService extends BaseService {
 		Json json = new Json();
 		//GspSupplier gspSupplier = gspSupplierDao.findById(id);
 		if(id != null){
-			gspSupplierMybatisDao.deleteNotUse(id);
+//			gspSupplierMybatisDao.deleteNotUse(id);
+			gspSupplierMybatisDao.delete(id);
 		}
 		json.setSuccess(true);
 		return json;

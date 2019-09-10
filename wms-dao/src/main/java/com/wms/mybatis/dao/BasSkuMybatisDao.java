@@ -31,4 +31,6 @@ public interface BasSkuMybatisDao extends BaseDao {
      * @return ~
      */
     BasSku queryForScan(PdaBasSkuQuery query);
+
+
 }

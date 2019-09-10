@@ -88,8 +88,26 @@ public class BasSkuService extends BaseService {
 			basSkuVO = new BasSkuVO();
 			BeanUtils.copyProperties(basSku, basSkuVO);
 
+			String content = "";
 
+			BasSku bs = new BasSku();
+			bs.setSku(basSkuVO.getSku());
+			bs.setCustomerid(basSkuVO.getCustomerid());
+			List<String> sup =  firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
+			int a =1;
 
+			for(String supNanme : sup){
+				if(a ==1){
+					content = supNanme;
+				}
+				if(supNanme!=null && a!=1 ){
+					content =content+","+ supNanme;
+				}
+				a++;
+			}
+
+//			String content = "";
+			basSkuVO.setSupplierNames(content);
 			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
 			basSkuVO.setSupplierNum(num);
 			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));

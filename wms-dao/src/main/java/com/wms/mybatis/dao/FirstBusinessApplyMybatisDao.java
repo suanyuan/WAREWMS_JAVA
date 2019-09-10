@@ -1,5 +1,6 @@
 package com.wms.mybatis.dao;
 
+import com.wms.entity.BasSku;
 import com.wms.result.FirstBusinessApplyResult;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,8 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	public int  selectFirstBusinessBySupplierAndProduct(Object id);
 
 	public int   selectSupplierNumByProductAndState(Object id);
+
+
+	public List<String> selectSupplierNamesByProductAndState(BasSku basSku);//
+
 }

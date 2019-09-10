@@ -212,7 +212,21 @@ where 1=1
 	LEFT JOIN first_business_product_apply t2 on t1.review_type_id = t2.apply_id
 	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
 	where t3.product_code = #{productCode} and  t1.apply_state = '40'
+
+
+
 	</select>
+
+	<select id="selectSupplierNamesByProductAndState" resultType="java.lang.String"  parameterType="Object">
+	select t4.DESCR_C from first_business_apply t1
+	LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
+	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
+	LEFT JOIN bas_customer t4 on t1.supplier_id = t4.CUSTOMERID
+	where t1.first_state = '40' and  t3.product_code = #{sku}  and t1.client_id = #{customerid};
+
+	</select>
+
+
 
 	<select id="selectFirstBusinessBySupplierAndProduct" resultType="java.lang.Integer"  parameterType="Object">
 		select  count(1) from first_business_apply t1
