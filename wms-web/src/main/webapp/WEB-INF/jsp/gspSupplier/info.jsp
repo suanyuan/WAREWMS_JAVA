@@ -180,8 +180,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             <legend>货主信息</legend>
             <table>
                 <tr>
-                    <th>客户代码：</th><td><input type='text' id='kehudaima1' class='easyui-textbox' data-options=''/></td>
-                    <th>客户名称：</th><td><input type='text' id='kehumingcehng1' class='easyui-textbox' data-options=''/></td>
+                    <th>客户代码：</th><td><input type='text' id='kehudaima1' data-options=''/></td>
+                    <th>客户名称：</th><td><input type='text' id='kehumingcehng1' data-options=''/></td>
                 </tr>
                 <tr>
                     <%-- <th>企业信息代码：</th><td><input type='text' id='qiyexinxidaima1' class='easyui-textbox' data-options=''/></td>
@@ -192,8 +192,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                          <!--<a href="javascript:void(0)" onclick="searchMainEnterprise()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
                      </td>
                      <th>首营状态：</th><td><input type='text' id='firstState' class='easyui-textbox' data-options=''/></td>--%>
-                    <td>
-                        <a onclick='doSearchClient();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                    <td colspan="2">
+                        <a onclick='doSearchClient();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
                         <a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
                     </td>
                 </tr>
@@ -374,23 +374,27 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         });
 
     });
-    //货主弹窗
-    ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
-        modal : true,
-        title : '<spring:message code="common.dialog.title"/>',
-        width:850,
-        height:500,
-        cache: false,
 
-        onClose : function() {
-            ezuiFormClear(ezuiForm);
-        }
-    }).dialog('close');
 
     function searchclient() {
-        if(ezuiDialogClientDetail){
+        /*if(ezuiDialogClientDetail){
             ezuiDialogClientDetail.dialog('open');
-        }
+        }*/
+        //货主弹窗
+        ezuiDialogClientDetail = $('#ezuiDialogClientDetail').dialog({
+            modal : true,
+            title : '<spring:message code="common.dialog.title"/>',
+            width:850,
+            height:500,
+            cache: false,
+            onOpen:function(){
+                $("#kehudaima1").textbox();
+                $("#kehumingcehng1").textbox();
+            },
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        })
     }
     //查询货主信息条件
     function doSearchClient() {
