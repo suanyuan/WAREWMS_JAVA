@@ -1674,7 +1674,7 @@ public class OrderHeaderForNormalService extends BaseService {
         list.add(map);
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
         model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTese.jasper");
-        model.addAttribute("format", "pdf");
+        model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
 
     }
