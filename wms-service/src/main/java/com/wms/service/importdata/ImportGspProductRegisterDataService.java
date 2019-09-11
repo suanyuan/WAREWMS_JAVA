@@ -396,12 +396,17 @@ public class ImportGspProductRegisterDataService {
 					throw new Exception();
 				}else{
 //					importDataVO.setApproveDate(new Date());
+                    Date approve = DateUtil.parse(dataArray.getApproveDate(),"yyyy-MM-dd");
+                    Date now = new Date();
+                    if(approve.getTime() > now.getTime()){
+                        throw new Exception();
+                    }
+
 					importDataVO.setApproveDate(DateUtil.parse(dataArray.getApproveDate(),"yyyy-MM-dd"));
 				}
 
 			}catch (Exception e){
-				rowResult.append("[批准日期]，未输入或者格式错误").append(" ");
-
+				rowResult.append("[批准日期]，未输入或者格式错误或批准日期超过了当前时间").append(" ");
 
 			}
 //有效期至
@@ -409,12 +414,15 @@ public class ImportGspProductRegisterDataService {
 				if(dataArray.getProductRegisterExpiryDate()==null||dataArray.getProductRegisterExpiryDate().equals("")||dataArray.getProductRegisterExpiryDate().equals("/xxxxxx")){
 					throw new Exception();
 				}else{
+				    if(DateUtil.parse(dataArray.getProductRegisterExpiryDate(),"yyyy-MM-dd").getTime()<DateUtil.parse(dataArray.getApproveDate(),"yyyy-MM-dd").getTime()){
+                        throw new Exception();
+                    }
 					//importDataVO.setProductRegisterExpiryDate(new Date());
 					importDataVO.setProductRegisterExpiryDate(DateUtil.parse(dataArray.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
 				}
 
 			}catch (Exception e){
-				rowResult.append("[有效期至]，未输入或者格式错误").append(" ");
+				rowResult.append("[有效期至]，未输入或者格式错误或有效期小于了批准日期").append(" ");
 
 
 			}

@@ -41,6 +41,11 @@ $(function() {
 		fitColumns : false,
 		nowrap: false,
 		striped: true,
+        rowStyler:function(index,row){
+            if(row.activeFlag == "0" ){
+                return 'color:red;';
+            }
+        },
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,

@@ -376,6 +376,9 @@
             $('#unit').combobox({required:false});
             $('#maintenanceCycle').numberbox({required:false});
             $('#licenseOrRecordNo').textbox({editable:true});
+            $('#ezuiFormInfo #productionAddress').textbox({editable:true});
+
+
 
 
         }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
@@ -389,6 +392,8 @@
             $('#unit').combobox({required:true});
             $('#maintenanceCycle').numberbox({required:true});
             $('#licenseOrRecordNo').textbox({editable:false});
+
+            $('#ezuiFormInfo #productionAddress').textbox({editable:false});
         }
     }
     function changeColdHainMark(){

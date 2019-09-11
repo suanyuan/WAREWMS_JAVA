@@ -36,6 +36,11 @@
                     fitColumns : false,
                     nowrap: true,
                     striped: true,
+                    rowStyler:function(index,row){
+                        if(row.isUse == "0" ){
+                            return 'color:red;';
+                        }
+                    },
                     collapsible:false,
                     pagination:true,
                     rownumbers:true,

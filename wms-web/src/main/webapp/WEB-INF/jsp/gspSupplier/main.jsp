@@ -36,6 +36,11 @@ $(function() {
 		fitColumns : false,
 		nowrap: true,
 		striped: true,
+        rowStyler:function(index,row){
+            if(row.isUse == "0" ){
+                return 'color:red;';
+            }
+        },
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
@@ -441,23 +446,23 @@ var doSearch = function(){
 
 //企业信息详情（所有页面都用这个打开企业信息）
 function enterpriseInfo(enterpriseId){
-    $(function() {
-        ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            buttons : '',
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-            width:1200,
-            height:530,
-            closable:true,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiDialogEditZONGEnterprise);
-            }
-        }).dialog('close');
-    })
+
+    ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '',
+        href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId,
+        width:1200,
+        height:530,
+        closable:true,
+        cache: false,
+        onClose : function() {
+            $(this).dialog("clear");
+        }
+    });
+
     if(enterpriseId!=null && enterpriseId!="" ){
-        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId).dialog('open');
         enterpriseId = "";
     }else{
         $.messager.show({

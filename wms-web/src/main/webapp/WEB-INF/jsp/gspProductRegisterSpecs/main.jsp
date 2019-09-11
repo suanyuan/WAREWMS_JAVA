@@ -39,6 +39,11 @@ $(function() {
 		striped: true,
 		collapsible:false,
 		pagination:true,
+        rowStyler:function(index,row){
+            if(row.isUse == "0" ){
+                return 'color:red;';
+            }
+        },
 		rownumbers:true,
 		singleSelect:true,
 		idField : 'specsId',

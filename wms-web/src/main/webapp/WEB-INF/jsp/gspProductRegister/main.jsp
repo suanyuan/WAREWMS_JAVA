@@ -39,6 +39,11 @@ $(function() {
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
+        rowStyler:function(index,row){
+            if(row.isUse == "0" ){
+                return 'color:red;';
+            }
+        },
 		singleSelect:true,
         queryParams:{
 		    isUse:"1"

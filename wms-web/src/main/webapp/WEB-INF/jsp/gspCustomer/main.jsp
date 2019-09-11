@@ -39,6 +39,11 @@ $(function() {
 		nowrap: true,
 		striped: true,
 		collapsible:false,
+        rowStyler:function(index,row){
+            if(row.isUse == "0" ){
+                return 'color:red;';
+            }
+        },
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,

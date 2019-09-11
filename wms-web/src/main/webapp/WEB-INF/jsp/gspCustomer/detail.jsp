@@ -624,14 +624,9 @@
                // ezuiFormClear(ezuiDialogCustomer);
                 $(this).dialog("clear");
             },
-
-
         })
         //processType = 'add';
-
         //var row = ezuiDatagrid.datagrid('getSelected');
-
-
         if (enterpriseIdCustomer != null && enterpriseIdCustomer != "") {
             ezuiDialogCustomer.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail" + "&id=" + enterpriseIdCustomer).dialog('open');
         } else {

@@ -39,13 +39,20 @@ $(function() {
 		fitColumns : false,
 		nowrap: false,
 		striped: true,
+        rowStyler:function(index,row){
+            if(row.activeFlag == "0" ){
+                return 'color:red;';
+            }
+        },
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
 		idField : 'customerid',
 		columns : [[
-
+            {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
+                    return rowData.activeFlag == '1' ? '是' : '否';
+                }},
             {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';
@@ -63,9 +70,7 @@ $(function() {
                         return rowData.customerType='主体';
 					}
                 } },
-            {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
-                    return rowData.activeFlag == '1' ? '是' : '否';
-                }},
+
             {field: 'customerid',		title: '客户代码',	width: 100 },
             {field: 'descrC',		title: '客户名称',	width: 250 },
             {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 100 },
@@ -556,23 +561,23 @@ var doExport = function(){
 
 //企业信息详情（所有页面都用这个打开企业信息）
 function enterpriseInfo(enterpriseId){
-    $(function() {
-        ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
-            modal : true,
-            title : '<spring:message code="common.dialog.title"/>',
-            buttons : '',
-            href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail",
-            width:1200,
-            height:530,
-            closable:true,
-            cache: false,
-            onClose : function() {
-                ezuiFormClear(ezuiDialogEditZONGEnterprise);
-            }
-        }).dialog('close');
-    })
+
+    ezuiDialogEditZONGEnterprise = $('#ezuiDialogEditZONGEnterprise').dialog({
+        modal : true,
+        title : '<spring:message code="common.dialog.title"/>',
+        buttons : '',
+        href:sy.bp()+"/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId,
+        width:1200,
+        height:530,
+        closable:true,
+        cache: false,
+        onClose : function() {
+            $(this).dialog("clear");
+        }
+    });
+
     if(enterpriseId!=null && enterpriseId!="" ){
-        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail"+"&id="+enterpriseId).dialog('open');
+        ezuiDialogEditZONGEnterprise.dialog('refresh', "/gspEnterpriseInfoController.do?toDetail&id="+enterpriseId).dialog('open');
         enterpriseId = "";
     }else{
         $.messager.show({
