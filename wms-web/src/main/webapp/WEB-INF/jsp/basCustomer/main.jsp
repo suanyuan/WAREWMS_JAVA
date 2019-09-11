@@ -410,7 +410,6 @@ var goon = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
     if (row) {
         var type = exchange(row.customerType);
-
         $.ajax({
             url : 'basCustomerController.do?selectCustomer',
             data : {enterpriseId : row.enterpriseId, customerType : type},
@@ -424,7 +423,7 @@ var goon = function(){
                         if(confirm){
                             $.ajax({
                                 url : 'basCustomerController.do?goon',
-                                data : {enterpriseId : row.enterpriseId, customerType : type},
+                                data : {enterpriseId : row.enterpriseId, customerType : type },
                                 type : 'POST',
                                 dataType : 'JSON',
                                 success : function(result){

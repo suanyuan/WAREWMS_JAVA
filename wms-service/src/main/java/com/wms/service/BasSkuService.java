@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.wms.constant.Constant;
 import com.wms.entity.BasCustomer;
 import com.wms.entity.FirstBusinessApply;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
+import com.wms.entity.GspProductRegister;
+import com.wms.mybatis.dao.*;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -46,8 +46,6 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSku;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.BasSkuQuery;
 import com.wms.service.importdata.ImportSkuDataService;
 import com.wms.utils.BarcodeGeneratorUtil;
@@ -71,6 +69,8 @@ public class BasSkuService extends BaseService {
 	private ImportSkuDataService importSkuDataService;
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
+    @Autowired
+	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //显示主页datagrid
@@ -451,7 +451,7 @@ public class BasSkuService extends BaseService {
 	 * 修改激活状态
 	 * @return
 	 */
-	public Json editActiveFlag(String customerid, String sku,String activeFlag){
+	public Json editActiveFlag(String customerid, String sku,String activeFlag,String reservedfield03){
 		Json json = new Json();
 		//根据activeflag 标记来判断是否激活状态
 		if(activeFlag == "1" || activeFlag.equals("1")){//修改为未激活状态
@@ -473,9 +473,17 @@ public class BasSkuService extends BaseService {
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEdittime(today);
 			basSku.setActiveFlag("1");
-			basSkuMybatisDao.updateBySelective(basSku);
-			json.setSuccess(true);
-			json.setMsg("资料处理成功！");
+			//根据注册证找到企业id 是否有效
+			GspProductRegister gspProductRegister =	gspProductRegisterMybatisDao.queryByNo(reservedfield03);
+			if (gspProductRegister != null){
+				basSkuMybatisDao.updateBySelective(basSku);
+				json.setSuccess(true);
+				json.setMsg("资料处理成功！");
+			}else{
+
+				json.setSuccess(false);
+				json.setMsg("资料处理失败(该产品注册证信息已经失效)！");
+			}
 		}
 		return json;
 	}

@@ -202,12 +202,12 @@ public class BasSkuController {
 	@Login
 	@RequestMapping(params = "editActiveFlag")
 	@ResponseBody
-	public Json editActiveFlag(String customerid, String sku,String activeFlag) {
-		Json json = basSkuService.editActiveFlag(customerid,sku,activeFlag);
+	public Json editActiveFlag(String customerid, String sku,String activeFlag,String reservedfield03) {
+		Json json = basSkuService.editActiveFlag(customerid,sku,activeFlag,reservedfield03);
 		if(json == null){
 			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
-		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
 

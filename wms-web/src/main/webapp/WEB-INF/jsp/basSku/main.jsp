@@ -18,10 +18,8 @@ var ezuiMenu;
 var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
-
 var ezuiCustDataDialog;
 var ezuiCustDataDialogId;
-
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
 
@@ -444,7 +442,7 @@ var editYesActiveFlag = function(){
 		}else {
 			$.ajax({
 				url : 'basSkuController.do?selectBasSku',
-				data : {customerid : row.customerid, sku : row.sku},
+				data : {customerid : row.customerid, sku : row.sku },
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
@@ -453,7 +451,7 @@ var editYesActiveFlag = function(){
 							if(confirm){
 								$.ajax({
 									url : 'basSkuController.do?editActiveFlag',
-									data : {customerid : row.customerid, sku : row.sku,activeFlag: row.activeFlag},
+									data : {customerid : row.customerid, sku : row.sku,activeFlag: row.activeFlag, reservedfield03 : row.reservedfield03},
 									type : 'POST',
 									dataType : 'JSON',
 									success : function(result){
@@ -462,11 +460,11 @@ var editYesActiveFlag = function(){
 											if(result.success){
 												msg = result.msg;
 											}else{
-												$.messager.alert('操作提示', result.msg);
+												$.messager.alert('操作提示',  '<spring:message code="common.message.data.process.failed"/>');
 												msg = '<font color="red">' + result.msg + '</font>';
 											}
 										} catch (e) {
-											msg = '<spring:message code="common.message.data.delete.failed"/>';
+											msg = '<spring:message code="common.message.data.process.failed"/>';
 										} finally {
 											$.messager.show({
 												msg : msg, title : '<spring:message code="common.message.prompt"/>'

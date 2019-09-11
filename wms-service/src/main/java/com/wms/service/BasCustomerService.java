@@ -8,6 +8,7 @@ import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasCustomerQuery;
+import com.wms.query.GspEnterpriseInfoQuery;
 import com.wms.query.ViewInvTranQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
@@ -15,6 +16,7 @@ import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
+import com.wms.vo.GspEnterpriseVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.GspCustomerForm;
@@ -462,12 +464,19 @@ public class BasCustomerService extends BaseService {
 		BasCustomerQuery customerQuery = new BasCustomerQuery();
 		customerQuery.setEnterpriseId(enterpriseId);
 		customerQuery.setCustomerType(customertype);
-
 		BasCustomer basCustomer = basCustomerMybatisDao.queryById(customerQuery);
 		if (basCustomer != null) {
-			basCustomerMybatisDao.goon(basCustomer);
-			json.setSuccess(true);
-			json.setMsg("资料处理成功！");
+			//增加一个效验企业信息是否有效
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCustomer.getEnterpriseId());
+			if (gspEnterpriseInfo == null){
+				json.setSuccess(false);
+				json.setMsg("资料处理失败-该企业信息已经失效!");
+			}else{
+				basCustomerMybatisDao.goon(basCustomer);
+				json.setSuccess(true);
+				json.setMsg("资料处理成功！");
+
+			}
 		}
 		return json;
 	}
