@@ -271,7 +271,7 @@ public class ImportDocAsnDoublecDataService {
             InvLotAttQuery query = new InvLotAttQuery();
             query.setLotatt05(docAsnDoublecVO.getContext2());
            List<InvLotAtt>  invLotAttList = invLotAttMybatisDao.queryByLotatts05(query);
-            if (invLotAttList != null) {
+            if (invLotAttList.size()>0) {
                 boolean con=false;
                 for (InvLotAtt invLotAtt : invLotAttList) {
                     if(!invLotAtt.getLotatt10().equals("DJ")){
