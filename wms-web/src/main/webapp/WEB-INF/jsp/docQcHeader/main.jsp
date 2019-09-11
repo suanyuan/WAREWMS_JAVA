@@ -336,10 +336,68 @@ var commitAcceptance = function(type){
 		});
 		return;
 	}
-	if(ezuiAcceptanceForm.form('validate')) {
-		$.messager.progress({
-			text: '<spring:message code="common.message.data.processing"/>', interval: 100
+	//判断不合格需要弹窗 合格则是继续做下去
+	if(typeC=="BHG"){
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '验收记录为不合格,是否继续操作!', function(confirm) {
+			if(confirm){
+				if(ezuiAcceptanceForm.form('validate')) {
+					$.messager.progress({
+						text: '<spring:message code="common.message.data.processing"/>', interval: 100
+					});
+
+					$.ajax({
+						url:url,
+						data:"forms="+JSON.stringify(forms),
+						dataType: 'json',
+						error: function () {
+
+						},
+						success: function (result) {
+							try{
+								if(result.success){
+									msg=result.msg;
+									ezuiDatagrid.datagrid('reload');
+									ezuiAcceptanceDialog.dialog('close');
+									$.messager.show({
+										msg : msg, title : '<spring:message code="common.message.prompt"/>'
+									});
+									$.messager.progress('close');
+								}else{
+									msg=result.msg;
+									ezuiDatagrid.datagrid('reload');
+									ezuiAcceptanceDialog.dialog('close');
+									$.messager.show({
+										msg : msg, title : '<spring:message code="common.message.prompt"/>'
+									});
+									$.messager.progress('close');
+
+								}
+							}catch (e) {
+								$.messager.show({
+									msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+								});
+								$.messager.progress('close');
+							}
+						}
+					});
+				}else{
+					msg = '<font color="red">' +'请输入完整!'+ '</font>';
+					$.messager.show({
+						msg : msg, title : '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+
+				}
+			}else{
+				return;
+			}
 		});
+
+	}else{
+		if(ezuiAcceptanceForm.form('validate')) {
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
 
 			$.ajax({
 				url:url,
@@ -352,13 +410,13 @@ var commitAcceptance = function(type){
 					try{
 						if(result.success){
 							msg=result.msg;
-						 	ezuiDatagrid.datagrid('reload');
+							ezuiDatagrid.datagrid('reload');
 							ezuiAcceptanceDialog.dialog('close');
 							$.messager.show({
 								msg : msg, title : '<spring:message code="common.message.prompt"/>'
 							});
 							$.messager.progress('close');
-						 }else{
+						}else{
 							msg=result.msg;
 							ezuiDatagrid.datagrid('reload');
 							ezuiAcceptanceDialog.dialog('close');
@@ -376,14 +434,17 @@ var commitAcceptance = function(type){
 					}
 				}
 			});
-	}else{
-		msg = '<font color="red">' +'请输入完整!'+ '</font>';
-		$.messager.show({
-			msg : msg, title : '<spring:message code="common.message.prompt"/>'
-		});
-		$.messager.progress('close');
+		}else{
+			msg = '<font color="red">' +'请输入完整!'+ '</font>';
+			$.messager.show({
+				msg : msg, title : '<spring:message code="common.message.prompt"/>'
+			});
+			$.messager.progress('close');
+
+		}
 
 	}
+
 
 };
 //验收作业
