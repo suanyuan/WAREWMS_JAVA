@@ -42,7 +42,7 @@
 
                     <th rowspan="2">生产范围</th>
                     <td rowspan="2">
-                        <input type='text' data="1" value="${gspProdLicense.businessScope}" id="businessScope" name='businessScope' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:300,height:60,editable:false'/>
+                        <input type='text' data="1"  id="showChose" name='showChose' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:300,height:60,editable:false'/>
                         <a onclick='selectOperateScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                     </td>
                 </tr>
@@ -72,6 +72,14 @@
                     <%--<th>经营方式</th>--%>
                     <%--<td colspan="2"><input type='text' value="${gspOperateLicense.operateMode}" data="1" id="operateMode" name='operateMode' class='easyui-textbox' data-options='required:true,width:250'/></td>--%>
 
+                </tr>
+
+                <tr>
+
+                    <th>生产范围</th>
+                    <td>
+                        <input type='text' value="${gspProdLicense.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300'/>
+                    </td>
                 </tr>
             </table>
         </fieldset>
@@ -173,9 +181,27 @@
                 }
             }
         });
-
+        initChoseText();
     })
+    function initChoseText() {
+        $.ajax({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
+            data : {
+                "licenseId":'${gspProdLicense.operateId}'
+            }
+            ,type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                if(result && result.length>0){
+                    var arr = new Array();
+                    for(var i=0;i<result.length;i++){
+                        arr.push(result[i].operateName);
 
+                    }
+                    $("#ezuiFormProd input[id='showChose']").textbox("setValue",arr.join(","))
+                }
+            }
+        });
+    }
     /**
      * 数据提交
 
@@ -327,10 +353,10 @@
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
-            $("#ezuiFormProd input[id='businessScope']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormProd input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
-            $("#ezuiFormProd input[id='businessScope']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
+            $("#ezuiFormProd input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormProd input[id='choseScope']").val(choseRowArrOperate.join(","));
         $(ezuidialogChoseScopeOperate1).dialog("close");

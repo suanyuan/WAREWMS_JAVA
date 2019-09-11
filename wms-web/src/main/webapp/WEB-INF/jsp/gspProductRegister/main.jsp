@@ -47,7 +47,7 @@ $(function() {
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
             {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
-			{field: 'productRegisterNo',		title: '注册证编号',	width: 150 },
+			{field: 'productRegisterNo',		title: '注册证编号/备案号',	width: 150 },
             {field: 'classifyId',		title: '管理分类',	width: 60 },
             //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
 			{field: 'productNameMain',		title: '产品名称',	width: 170 },
@@ -315,7 +315,7 @@ function doConfirm(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table>
 						<tr>
-							<th>注册证编号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox'  size='16' data-options=''/></td>
+							<th>注册证编号/备案号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox'  size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox'  size='16' data-options=''/></td>
 							<th>管理分类</th><td><input type='text' id='classifyId' class='easyui-combobox' size='16' data-options=''/></td>
 						</tr>

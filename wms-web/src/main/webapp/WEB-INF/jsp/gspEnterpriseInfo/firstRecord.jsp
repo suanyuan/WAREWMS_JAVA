@@ -39,27 +39,38 @@
                 </tr>
                 <tr>
                     <th>备案部门</th>
-                    <td><input type='text' value="${gspFirstRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    <td colspan="3"><input type='text' value="${gspFirstRecord.registrationAuthority}" id="registrationAuthority" name='registrationAuthority' class='easyui-textbox' data-options='required:true,width:300'/></td>
+                    </tr>
+                <tr>
                     <th>备案日期</th>
                     <td><input type='text' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspFirstRecord.approveDate}"/>" id="approveDate" name='approveDate' class='easyui-datebox' data-options='required:true,width:300'/></td>
-                </tr>
-                <tr>
-                    <%--<th>经营范围</th>--%>
-                    <%--<td colspan="2">--%>
-                        <%--<input type='text' value="${gspFirstRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350'/>--%>
-                    <%--</td>--%>
-                    <th>生产范围(已选择)</th>
-                    <td colspan="1">
-                        <input type='text' id="bussinessScope" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300,editable:false'/>
-                        <a onclick='selectRecordScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
-                    </td>
-
                     <th>备案照片</th>
                     <td>
                         <input type="hidden" data="2" class="textbox-value" name="recordUrl" id="recordUrl" value="${gspFirstRecord.recordUrl}"/>
                         <input id="firstRecordFile" name='firstRecordFile' value="${gspFirstRecord.recordUrl}" atth="fileUpload" data-options='required:true,width:300' >
                         <a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="" onclick="viewUrlSecond()">查看</a>
                     </td>
+
+                <%--<th>经营范围</th>--%>
+                    <%--<td colspan="2">--%>
+                        <%--<input type='text' value="${gspFirstRecord.businessScope}" id="businessScope" name='businessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:350'/>--%>
+                    <%--</td>--%>
+
+
+                </tr>
+                <tr>
+                    <th>生产范围</th>
+                    <td >
+                        <input type='text' value="${gspFirstRecord.bussinessScope}" id="bussinessScope" name='bussinessScope' class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300'/>
+                    </td>
+
+                    <th>生产范围(已选择)</th>
+                    <td >
+                        <input type='text' id="showChose" class='easyui-textbox' style="height: 60px;" data-options='required:true,multiline:true,width:300,editable:false'/>
+                        <a onclick='selectRecordScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
+                    </td>
+
+
                 </tr>
             </table>
         </fieldset>
@@ -175,8 +186,9 @@
                     var arr = new Array();
                     for(var i=0;i<result.length;i++){
                         arr.push(result[i].operateName);
+
                     }
-                    $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue",arr.join(","))
+                    $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",arr.join(","))
                 }
             }
         });
@@ -233,10 +245,10 @@
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
-            $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
-            $("#ezuiFormFirstRecord input[id='bussinessScope']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
+            $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormFirstRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
         $(ezuidialogChoseScopeRecord1).dialog("close");

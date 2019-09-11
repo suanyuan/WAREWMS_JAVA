@@ -525,37 +525,39 @@ var qlDetails = function(row){
 
 
 /* 编辑按钮 */
-var edit = function(row){
+var edit = function(row) {
 	processType = 'edit';
 	$('#docAsnHeaderId').val(0);
 	//时间控件初始化
 	$("#ezuiForm #addtime").datetimebox('calendar').calendar({
-        validator: function(date){
-        	var now = new Date();
+		validator: function (date) {
+			var now = new Date();
 			var validateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            return date <= validateDate;
-        }
-    });
-	$("#ezuiForm #expectedarrivetime1").datetimebox('calendar').calendar({
-        validator: function(date){
-        	var now = new Date();
-			var validateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            return date <= validateDate;
-        }
-    });
-	$("#ezuiForm #addtime").textbox({
-		editable:false,readonly:true
+			return date <= validateDate;
+		}
 	});
-	
+	$("#ezuiForm #expectedarrivetime1").datetimebox('calendar').calendar({
+		validator: function (date) {
+			var now = new Date();
+			var validateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			return date <= validateDate;
+		}
+	});
+	$("#ezuiForm #addtime").textbox({
+		editable: false, readonly: true
+	});
+
 	$("#ezuiForm #customerid").textbox({
-		editable:false,
-		icons:[]
+		editable: false,
+		icons: []
 	});
 	$("#ezuiForm #asnno1").textbox({
-		editable:false
+		editable: false
 	});
 	$("#ezuiForm #asnstatus").combo('readonly', true);
-	var row = row;//ezuiDatagrid.datagrid('getSelected');
+	if (!row) {
+		row = ezuiDatagrid.datagrid('getSelected');
+	}
 	if(row){
         //初始化根据货主初始化供应商
         $('#ezuiForm #supplierid').combobox({
@@ -1091,35 +1093,24 @@ var detailsEdit = function(){
 		ezuiDetailsForm.form('load',{
 			asnno : row.asnno,
 			customerid : row.customerid,
-			asnlineno : row.asnlineno,
-			linestatus : row.linestatus,
+			linestatus : row.linestatusName,
 			sku : row.sku,
 			skudescrc : row.skudescrc,
-			alternativesku : row.alternativesku,
-			packid : row.packid,
 			expectedqty : row.expectedqty,
 			receivedqty : row.receivedqty,
 			receivinglocation : row.receivinglocation,
-			totalgrossweight : row.totalgrossweight,
-			totalcubic : row.totalcubic,
-            grossweight : row.grossweight,
-            totalprice : row.totalprice,
-            lotatt01 : row.lotatt01,
-            lotatt02 : row.lotatt02,
-            lotatt03 : row.lotatt03,
-            lotatt04 : row.lotatt04,
-            lotatt05 : row.lotatt05,
-            lotatt06 : row.lotatt06,
-            lotatt07 : row.lotatt07,
-            lotatt08 : row.lotatt08,
-            lotatt09 : row.lotatt09,
-            lotatt10 : row.lotatt10,
-            lotatt11 : row.lotatt11,
-            lotatt12 : row.lotatt12,
-            lotatt13 : row.lotatt13,
-            lotatt14 : row.lotatt14
-		});
-        //$("#ezuiDetailsForm #customerid").textbox("setValue",row.customerid)
+			 lotatt01 : row.lotatt01,
+			 lotatt02 : row.lotatt02,
+             lotatt09 : row.lotatt09,
+             lotatt04 : row.lotatt04,
+             lotatt05 : row.lotatt05,
+             lotatt11 : row.lotatt11,
+			 lotatt14 : row.lotatt14,
+
+		}
+
+		);
+        // $("#ezuiDetailsForm #customerid").textbox("setValue",row.customerid)
 		if (row.linestatus == '00') {
 			$('#ezuiBtn_detailsCommit').linkbutton("enable");
 		} else {
