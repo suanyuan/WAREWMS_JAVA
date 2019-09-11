@@ -350,12 +350,7 @@ where 1=1
 		INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
 		LEFT JOIN bas_codes bc ON s.defaultreceivinguom = bc.`code` AND bc.codeid = 'uom'
 		<include refid="Example_Where_Clause"/>
-		<if test="orderByClause != null and orderByClause != ''" >
-			order by  ${orderByClause}
-		</if>
-		<if test="limitClause != null and limitClause != ''" >
-			${limitClause}
-		</if>
+		order by  c.orderno desc,c.traceid
 	</select>
   	
 </mapper>   

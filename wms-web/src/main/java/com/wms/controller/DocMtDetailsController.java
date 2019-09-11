@@ -121,7 +121,7 @@ public class DocMtDetailsController {
 
         List<DocMtHeader> docMtHeaderList = docMtDetailsService.printMtDetails(mtno,linestatus,descrc,customerid,sku,lotatt12,lotatt04,lotatt05,productLineName);
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(docMtHeaderList);
-        model.addAttribute("url", "WEB-INF/jasper/report1MAX.jasper");
+        model.addAttribute("url", "WEB-INF/jasper/reportDocMtDetails.jasper");
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";

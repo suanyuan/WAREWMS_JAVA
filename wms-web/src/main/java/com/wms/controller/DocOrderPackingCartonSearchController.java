@@ -1,5 +1,6 @@
 package com.wms.controller;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocOrderPackingCarton;
@@ -67,7 +68,7 @@ public class DocOrderPackingCartonSearchController {
         List<DocOrderPackingCartonInfo> docQcHeaderList = docOrderPackingCartonSearchService.printQcSearch(orderno, traceid, lotatt10, skudesce, customerid, shippershortname, sku, lotatt12, lotatt08, lotatt15, edittimeStart, edittimeEnd, lotatt14, packingflag);
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
         model.addAttribute("url", "WEB-INF/jasper/docOrderPackingCartonSearchPdf.jasper");
-        model.addAttribute("format", "pdf");
+        model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
     }

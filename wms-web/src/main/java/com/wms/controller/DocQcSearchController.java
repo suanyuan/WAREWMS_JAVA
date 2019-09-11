@@ -1,7 +1,9 @@
 package com.wms.controller;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.Country;
 import com.wms.entity.DocQcHeader;
 import com.wms.entity.DocQcSearchExportForm;
 import com.wms.query.DocQcDetailsQuery;
@@ -72,8 +74,8 @@ public class DocQcSearchController {
 		List<DocQcHeader> docQcHeaderList = docQcSearchService.printQcSearch(qcno, linestatus,lotatt10,descrc,customerid,shippershortname,sku,lotatt12,lotatt08,lotatt15,lotatt03Start,lotatt03End,lotatt14);
 
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
-		model.addAttribute("url", "WEB-INF/jasper/report1Query.jasper");
-		model.addAttribute("format", "pdf");
+		model.addAttribute("url", "WEB-INF/jasper/reportDocQcHeader.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
 		model.addAttribute("jrMainDataSource", jrDataSource);
 		return "iReportView";
 	}
