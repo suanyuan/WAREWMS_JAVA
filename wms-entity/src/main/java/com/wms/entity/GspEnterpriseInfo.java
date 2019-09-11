@@ -50,4 +50,7 @@ public class GspEnterpriseInfo implements Serializable {
 
 	private String prodNo;//生产
 
+	private String plicenseNo;
+	private String grecordNo;//生产第一类备案
+
 }

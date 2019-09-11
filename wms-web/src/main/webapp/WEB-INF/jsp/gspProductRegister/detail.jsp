@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <th>生产许可证号/备案号</th>
-                        <td><input type='text' data="1" id="licenseOrRecordNol" value="${gspProductRegister.licenseOrRecordNol}"  name='licenseOrRecordNol' class='easyui-combobox' data-options="editable:false,panelHeight: 'auto',width:185"/></td>
+                        <td><input type='text' data="1" id="licenseOrRecordNol" value="${gspProductRegister.licenseOrRecordNol}"  name='licenseOrRecordNol' class='easyui-textbox' data-options='' /></td>
 
                         <th>其他内容</th>
                         <td><input type='text' id1="otherContent" name='otherContent' class='easyui-textbox' value="${gspProductRegister.otherContent}" data-options=''/></td>
@@ -237,6 +237,7 @@
                 }
             }
         });
+
 
         ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
             url : sy.bp()+'/gspProductRegisterController.do?showSpecsList',
@@ -754,11 +755,14 @@
         var rows = enterpriseDatagrid.datagrid("getSelected") || enterpriseDatagrid.datagrid("getChecked");
         console.log(rows);
         if(rows){
-            $("#licenseOrRecordNol").combobox('clear');
+            $('#licenseOrRecordNol').textbox('clear');
+            console.log(rows);
             var licenseNo  = rows.licenseNo;
             var recordNo = rows.recordNo;
+            var plicenseNo = rows.plicenseNo;
+            var grecordNo = rows.grecordNo;
             $("#enterpriseId").val(rows.enterpriseId);
-            $("#enterpriseName").textbox("setValue",rows.enterpriseName);
+            $("#ezuiFormDetail #enterpriseName").textbox("setValue",rows.enterpriseName);
             //$("#licenseOrRecordNol").textbox("setValue",licenseNo);
             ezuiDialogEnterprise.dialog("close");
             //生产许可证号 备案号
@@ -772,6 +776,12 @@
                 }, {
                     label: recordNo,
                     value: recordNo
+                }, {
+                    label: plicenseNo,
+                    value: plicenseNo
+                }, {
+                    label: grecordNo,
+                    value: grecordNo
                 }]
 
             })

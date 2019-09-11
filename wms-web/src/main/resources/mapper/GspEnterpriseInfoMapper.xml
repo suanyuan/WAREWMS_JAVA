@@ -27,6 +27,9 @@
         <result column="record_no" property="recordNo"/>
         <result column="prod_no" property="prodNo"/>
 
+        <result column="plicenseno" property="plicenseNo"/>
+        <result column="grecord_no" property="grecordNo"/>
+
 
     </resultMap>
 
@@ -318,9 +321,9 @@
 
     <!-- 查询企业信息列表 -->
     <select id="queryPageListByType" resultMap="BaseResultMap" parameterType="Object">
-        SELECT DISTINCT
-        (g.enterprise_id),
-        g.enterprise_no,
+        select
+        DISTINCT(g.enterprise_id)
+        ,g.enterprise_no,
         g.shorthand_name,
         g.enterprise_name,
         g.enterprise_type,
@@ -332,16 +335,22 @@
         g.edit_id,
         g.edit_date,
         g.is_use,
-        ifnull(
-        gl.license_no,
-        pl.license_no
-        ) license_no,
-        gr.record_no
-        FROM
-        gsp_enterprise_info g
+        gl.license_no as license_no,
+        pl.license_no as plicenseno,
+        gr.record_no as record_no,
+        gf.record_no as grecord_no
+        from gsp_enterprise_info g
         LEFT JOIN gsp_customer cus ON g.enterprise_id = cus.enterprise_id
         LEFT JOIN gsp_supplier gs ON g.enterprise_id = gs.enterprise_id
-        LEFT JOIN `gsp_enterprise_info` r ON r.enterprise_id = g.enterprise_id
+        LEFT JOIN (
+        select DISTINCT(enterprise_id),record_no
+        from gsp_second_record
+        )gr ON g.enterprise_id = gr.enterprise_id
+        LEFT JOIN
+        (
+        select DISTINCT(enterprise_id),record_no
+        from gsp_first_record
+        ) gf on g.enterprise_id = gf.enterprise_id
         LEFT JOIN (
         SELECT
         *
@@ -360,7 +369,6 @@
         is_use = '1'
         AND operate_type = 'PROD'
         ) pl ON g.enterprise_id = pl.enterprise_id
-        LEFT JOIN gsp_second_record gr ON g.enterprise_id = gr.enterprise_id
         <include refid="Example_Where_Clause_Type"/>
         <if test="orderByClause != null and orderByClause != ''">
             order by ${orderByClause}
@@ -378,6 +386,8 @@
         left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
         <include refid="Example_Where_Clause_Type"/>
     </select>
+
+
 
     <!-- 查询营业执照已过期或将要过期的企业-->
     <select id="queryBusinessLicenseOutTime" resultMap="GspEnterpriseBusinessResultMap" parameterType="Object">

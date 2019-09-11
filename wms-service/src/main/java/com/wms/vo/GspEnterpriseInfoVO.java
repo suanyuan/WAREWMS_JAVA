@@ -26,6 +26,25 @@ public class GspEnterpriseInfoVO {
 //产品许可证 备案号
 	private String licenseNo;
 	private String recordNo;
+	private String plicenseNo;
+	private String grecordNo;//生产第一类备案
+
+
+	public String getPlicenseNo() {
+		return plicenseNo;
+	}
+
+	public void setPlicenseNo(String plicenseNo) {
+		this.plicenseNo = plicenseNo;
+	}
+
+	public String getGrecordNo() {
+		return grecordNo;
+	}
+
+	public void setGrecordNo(String grecordNo) {
+		this.grecordNo = grecordNo;
+	}
 
 	public String getLicenseNo() {
 		return licenseNo;
