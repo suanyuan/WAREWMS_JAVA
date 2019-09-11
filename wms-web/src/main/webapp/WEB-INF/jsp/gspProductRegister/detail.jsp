@@ -18,11 +18,11 @@
             <input type='hidden' id='choseScope' value="${choseScope}" name="choseScope" class="textbox-value"/>
             <input type="hidden" id="opType" name="opType" value="add"/>
             <fieldset>
-                <legend>产品注册证信息</legend>
+                <legend>产品注册证/备案信息</legend>
                 <input type='hidden' class="textbox-value" id='gspProductRegisterId' name='productRegisterId' value="${gspProductRegister.productRegisterId}"/>
                 <table width="80%">
                     <tr>
-                        <th>注册证编号</th>
+                        <th>产品注册证/备案</th>
                         <td><input type='text' id1="productRegisterNo" name='productRegisterNo' class='easyui-textbox' value="${gspProductRegister.productRegisterNo}" data-options='required:true'/></td>
                         <th>审批部门</th>
                         <td><input type='text' id1="approvalDepartment" name='approvalDepartment' class='easyui-textbox' value="${gspProductRegister.approvalDepartment}" data-options=''/></td>
@@ -43,9 +43,9 @@
                         <td><input type='text' id1="productRegisterExpiryDate" id="productRegisterExpiryDate" name='productRegisterExpiryDate' class='easyui-datebox' value="<fmt:formatDate pattern="yyyy-MM-dd" value="${gspProductRegister.productRegisterExpiryDate}"/>" data-options='required:true,width:185'/></td>
                     </tr>
                     <tr>
-                        <th>注册证版本</th>
+                        <th>注册证/备案版本</th>
                         <td><input type='text' id1="productRegisterVersion" name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
-                        <th>注册证附件</th>
+                        <th>注册证/备案附件</th>
                         <td>
                             <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='' value="${gspProductRegister.attachmentUrl}"/>
                             <a id="btn" href="javascript:void(0)" onclick="viewUrl()" class="easyui-linkbutton" data-options="">查看</a>
@@ -302,7 +302,7 @@
             idField : 'enterpriseId',
             columns : [[
                 {field: 'enterpriseId',		title: '主键',	width: 0 ,hidden:true},
-                {field: 'enterpriseNo',		title: '企业信息代码',	width: '20%' },
+                {field: 'enterpriseNo',		title: '企业代码',	width: '20%' },
                 {field: 'shorthandName',		title: '简称',	width: '20%' },
                 {field: 'enterpriseName',		title: '企业名称',	width: '20%' },
                 {field: 'enterpriseType',		title: '企业类型',	width: '20%' ,formatter:entTypeFormatter},
@@ -384,12 +384,12 @@
             idField : 'productRegisterId',
             columns : [[
                 {field: 'productRegisterId',		title: '主键',	width: 0 ,hidden:true},
-                {field: 'productRegisterNo',		title: '注册证编号',	width: '20%' },
+                {field: 'productRegisterNo',		title: '注册证编号/备案号',	width: '20%' },
                 {field: 'productNameMain',		title: '产品名称',	width: '20%' },
                 {field: 'isUse',		title: '是否有效',	width: '10%' ,formatter:isUseFormatter},
                 {field: 'checkerId',		title: '审核人',	width: '10%' },
                 {field: 'createDate',		title: '创建时间',	width: '20%' },
-                {field: '_operate',		title: '注册证附件',	width: '20%',
+                {field: '_operate',		title: '注册证/备案附件',	width: '20%',
                     formatter: formatOper
                 }
             ]],

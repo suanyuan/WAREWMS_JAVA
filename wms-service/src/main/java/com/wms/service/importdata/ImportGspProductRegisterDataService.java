@@ -537,11 +537,11 @@ public class ImportGspProductRegisterDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号", "seq");
-		map.put("注册证编号", "productRegisterNo");
+		map.put("注册证编号/备案号", "productRegisterNo");
 		map.put("产品名称", "productNameMain");
 		map.put("管理分类", "classifyId");
 
-	    map.put("注册证版本", "productRegisterVersion");
+	    map.put("注册证/备案版本", "productRegisterVersion");
 	    map.put("分类目录", "classifyCatalog");
 		map.put("产地", "productionAddress");
 	    map.put("储存条件", "storageConditions");
