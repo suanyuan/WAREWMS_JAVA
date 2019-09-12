@@ -425,6 +425,11 @@ public class DocQcDetailsService extends BaseService {
             List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
 
             /*
+            本次普通验收成功的批次号，获取asnno
+             */
+            InvLotAtt asnLotAtt = invLotAttMybatisDao.queryById(currentQcDetail.getLotnum());
+
+            /*
             查询出当前验收任务单下的同生产批号的待检的验收明细，并且批量设置为合格
             出了循环再直接在上架任务明细中修改此生产批号的默认的上架质量状态。
             */
@@ -436,6 +441,10 @@ public class DocQcDetailsService extends BaseService {
                 获取待检的验收明细中的批次属性
                 */
                 InvLotAtt lotatt_history = invLotAttMybatisDao.queryById(qcDetails.getLotnum());
+                if (!StringUtil.compare(lotatt_history.getLotatt14(), asnLotAtt.getLotatt14())) {
+                    continue;
+                }
+
                 InvLotAttQuery lotAttQuery = new InvLotAttQuery(lotatt_history);
                 lotAttQuery.setLotatt01(form.getLotatt01());
                 lotAttQuery.setLotatt02(form.getLotatt02());
