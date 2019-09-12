@@ -32,7 +32,7 @@
 				<td><input type='text' name='receivinglocation' id='location' class='easyui-textbox' size='16' /></td>
 			</tr>
 			<tr>
-				<th>生产日期</th><td><input type='text' name='lotatt01' id='lotatt01' class='easyui-datetimebox' size='16' data-options='required:true,editable:true'/></td>
+				<th>生产日期</th><td><input type='text' name='lotatt01' id='lotatt01' class='easyui-datebox' size='16' data-options='required:true,editable:true'/></td>
 				<th>效期</th><td><input type='text' name='lotatt02' id='lotatt02' class='easyui-datebox' size='16' data-options='required:true,editable:true'/></td>
 				<th>产品属性</th><td><input type='text' name='lotatt09' id='lotatt09'  size='16' data-options=''/></td>
 			</tr>
