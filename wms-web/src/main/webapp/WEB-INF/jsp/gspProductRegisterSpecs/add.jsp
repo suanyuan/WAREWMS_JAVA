@@ -363,7 +363,18 @@
         //     textField:'value'
         // });
         // changeRequired();
+        coldfield();
     });
+
+    function coldfield() {
+        console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
+        console.log($('#ezuiFormInfo #coldHainMark').val());
+        var cold = $('#ezuiFormInfo #coldHainMark').val();
+        if(cold=="" || cold==null){
+            $('#ezuiFormInfo #coldHainMark').combobox("setValue","FLL");
+        }
+    }
+
     function changeRequired(){
         if($('#medicalDeviceMark').combobox('getValue') == '0'){
             $('#productRegisterNo').textbox({required:false});
@@ -398,7 +409,8 @@
     }
     function changeColdHainMark(){
         //非冷链： FLL  冷藏： LC  冷冻：LD
-        console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
+
+        // console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
         if($('#ezuiFormInfo #coldHainMark').combobox('getValue') == 'FLL' || $('#ezuiFormInfo #coldHainMark').combobox('getValue') == ''){
             $('#transportCondition').textbox({required:false});
         }else {

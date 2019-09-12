@@ -17,10 +17,11 @@
             <legend>明细</legend>
             <table>
                 <tr>
-                    <th>证照编号</th>
-                    <td><input type='text' data="1" value="${gspBusinessLicense.licenseNumber}" id="licenseNumber" name='licenseNumber' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>统一社会信用代码</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.socialCreditCode}" id="socialCreditCode" name='socialCreditCode' class='easyui-textbox' data-options='required:true,width:200'/></td>
+
+                    <th>证照编号</th>
+                    <td><input type='text' data="1" value="${gspBusinessLicense.licenseNumber}" id="licenseNumber" name='licenseNumber' class='easyui-textbox' data-options='required:true,width:200'/></td>
                     <th>名称</th>
                     <td><input type='text' data="1" value="${gspBusinessLicense.licenseName}" id="licenseName" name='licenseName' class='easyui-textbox' data-options='required:true,width:200'/></td>
                 </tr>
@@ -107,8 +108,9 @@
             columns : [[
                 {field: 'businessId',title:'主键',hidden:true},
                 {field: 'isUse',title: '是否有效' ,width: '14%',formatter:isUseFormatter},
-                {field: 'licenseNumber',title: '统一社会信用代码' ,width: '14%'},
-                {field: 'socialCreditCode',title: '证照编号',width: '14%'},
+                {field: 'socialCreditCode',title: '统一社会信用代码',width: '14%'},
+                {field: 'licenseNumber',title: '证照编号' ,width: '14%'},
+
                 {field: 'issueDate',title: '发证日期',width: '14%'},
                 {field: '_operate',		title: '营业执照照片',	width: '14%',
                     formatter: formatOperAttachment
