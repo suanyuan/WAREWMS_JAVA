@@ -602,7 +602,7 @@ var ezuiCustDataDialogClick = function(){
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'id',
+		idField : 'customerid',
 		columns : [[
 					{field: 'customerid',		title: '客户代码',	width: 15},
 					{field: 'descrC',			title: '中文名称',	width: 50},

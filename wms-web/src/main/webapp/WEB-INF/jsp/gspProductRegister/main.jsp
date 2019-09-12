@@ -99,6 +99,7 @@ $(function() {
 	/* 控件初始化end */
 });
 var add = function(){
+	window.localStorage.clear();//清空局部储存器
 	processType = 'add';
 	$('#gspProductRegisterId').val(0);
     ezuiDialog = $('#ezuiDialog').dialog({
@@ -117,8 +118,9 @@ var add = function(){
 var edit = function(){
 	processType = 'edit';
 	var row = ezuiDatagrid.datagrid('getSelected');
+	window.localStorage.clear();//清空局部储存器
 	if(row){
-        //ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
+		//ezuiDialog.dialog("refresh",dialogUrl+"&id="+row.productRegisterId).dialog('open');
         ezuiDialog = $('#ezuiDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
