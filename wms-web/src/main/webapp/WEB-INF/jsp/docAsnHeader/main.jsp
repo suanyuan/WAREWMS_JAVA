@@ -1437,8 +1437,8 @@ var ezuiSkuDataClick = function(){
 	columns : [[
 				{field: 'customerid',	title: '客户代码',	width: 80},
 				{field: 'sku',			title: '产品代码',	width: 120},
-				{field: 'descrC',		title: '中文名称',	width: 160},
-				{field: 'descrE',		title: '英文名称',	width: 160},
+				{field: 'reservedfield01',		title: '中文名称',	width: 160},
+				{field: 'descrC',		title: '规格/型号',	width: 160},
 				{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
 					return rowData.activeFlag == '1' ? '是' : '否';
 	            }},
@@ -1465,8 +1465,8 @@ var selectSku = function(){
 	if(row){
 	    //TODO 去除产品档案信息会写界面
 		$("#ezuiDetailsForm #sku").textbox('setValue',row.sku);
-		$("#ezuiDetailsForm #skuName").textbox('setValue',row.descrC);
-		$("#ezuiDetailsForm #skudescrc").textbox('setValue',row.descrE);
+		$("#ezuiDetailsForm #skuName").textbox('setValue',row.reservedfield01);
+		$("#ezuiDetailsForm #skudescrc").textbox('setValue',row.reservedfield01);
 		$("#ezuiDetailsForm #alternativesku").textbox('setValue',row.alternateSku1);
 		$("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
 		$("#ezuiDetailsForm #expectedqty").numberbox('clear');
