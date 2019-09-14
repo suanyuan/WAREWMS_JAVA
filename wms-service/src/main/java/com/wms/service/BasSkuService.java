@@ -250,11 +250,11 @@ public class BasSkuService extends BaseService {
 		skuQuery.setQty(qty);
 
 		BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
-        BasCustomer b = new BasCustomer();
-        b.setCustomerid(basSku.getCustomerid());
-        b.setCustomerType("OW");
-        BasSku f =  basCustomerMybatisDao.queryById(b);
-        basSku.setClientName(f.getDescrC());
+//        BasCustomer b = new BasCustomer();
+//        b.setCustomerid(basSku.getCustomerid());
+//        b.setCustomerType("OW");
+//        BasSku f =  basCustomerMybatisDao.queryById(b);
+//        basSku.setClientName(f.getDescrC());
 		return basSku;
 	}
 

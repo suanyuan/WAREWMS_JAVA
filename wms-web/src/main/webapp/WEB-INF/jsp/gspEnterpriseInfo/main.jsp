@@ -400,16 +400,21 @@ var commit = function(){
 };
 
 function submitFormData(enterpriceId,gspEnterpriceFrom,url) {
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
     $.ajax({
         url : url,
         data : {"enterpriseId":enterpriceId,"gspEnterpriceFrom":JSON.stringify(gspEnterpriceFrom)},type : 'POST', dataType : 'JSON',async  :true,
-        success : function(result){
+		success : function(result){
+            $.messager.progress('close');
             var msg='';
             try{
                 if(result.success){
                     msg = result.msg;
                     ezuiDatagrid.datagrid('reload');
                     ezuiDialog.dialog('close');
+
                 }else{
                     msg = '<font color="red">' + result.msg + '</font>';
                 }

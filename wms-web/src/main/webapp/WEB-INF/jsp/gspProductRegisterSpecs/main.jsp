@@ -150,6 +150,7 @@ $(function() {
 
         <%--}--%>
     <%--})--%>
+	// loadfield();
 });
 
 
@@ -259,6 +260,7 @@ var addOrEdit = function(url,infoObj) {
         url : url,
         data : {"gspProductRegisterSpecsForm":JSON.stringify(infoObj)},type : 'POST', dataType : 'JSON',async  :true,
         success : function(result){
+            $.messager.progress('close');
             console.log(result);
             var msg='';
             try{
@@ -285,6 +287,11 @@ var addOrEdit = function(url,infoObj) {
 
 
 var commit = function(){
+
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
+
     console.log("qwe");
     var infoObj = new Object();
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
@@ -302,6 +309,8 @@ var commit = function(){
 
 
     console.log(infoObj);
+
+
     var url = '';
 		if (processType == 'edit') {
 			var row = ezuiDatagrid.datagrid('getSelected');

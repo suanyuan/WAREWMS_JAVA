@@ -845,7 +845,7 @@
                 href: sy.bp() + "/gspReceivingController.do?toDialogAddress&receivingId=" + $("#hiddenreceivingId").val(),
                 buttons: '#ezuiBtn',
                 onClose: function () {
-                    ezuiFormClear(ezuiForm);
+                    $(this).dialog("clear");
                 }
             })
         }
@@ -900,7 +900,7 @@
                 href: sy.bp() + "/gspReceivingController.do?toDialogAddress" + "&receivingId=" + $("#hiddenreceivingId").val() + "&receivingAddressId=" + row.receivingAddressId,
                 buttons: '#ezuiBtn',
                 onClose: function () {
-                    ezuiFormClear(ezuiForm);
+                    $(this).dialog("clear");
                 }
             })
         } else {

@@ -277,6 +277,7 @@ var addOrEdit = function(url,infoObj) {
         url: url,
         data: {"gspSupplierForm": JSON.stringify(infoObj)}, type: 'POST', dataType: 'JSON', async: true,
         success: function (result) {
+            $.messager.progress('close');
             console.log(result);
             var msg = '';
             try {
@@ -302,6 +303,11 @@ var addOrEdit = function(url,infoObj) {
 
 
 var commit = function(){
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
+
+
     var row = ezuiDatagrid.datagrid('getSelected');
     var infoObj = new Object();
     $("#ezuiFormSupInfo input[class='textbox-value']").each(function (index) {
