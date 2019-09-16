@@ -415,6 +415,7 @@
      * 经营范围选择
      */
     function selectProductRegisterScope() {
+
         ezuidialogChoseScope = $('#dialogChoseScope').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
@@ -428,11 +429,11 @@
     }
     
     function choseSelect_Catalog_productRegister(row) {
-        console.log(row)
         var choseRowNameArr = new Array();
         //var oldValue = $("#ezuiFormDetail input[id='classifyCatalog']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
+                console.log(row[i])
                 choseRowArr.push(row[i].instrumentCatalogId);
                 choseRowNameArr.push(row[i].instrumentCatalogName);
             }

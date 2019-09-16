@@ -23,7 +23,7 @@
                     <td>
                         <a onclick='searchCataLog_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
                         <a onclick='removeCataLog_${target}()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>清除</a>
-                        <a onclick='choseSelect_Catalog_${target}(ezuiCatalogDatagridDetail_${target}.datagrid("getSelections"))' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>选择</a>
+                        <a onclick='doChoseCateLog()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>选择</a>
                     </td>
                 </tr>
             </table>
@@ -74,16 +74,16 @@
 
             },
             onUncheckAll :function(rows){
-                storeAllOff(rows);
+                //storeAllOff(rows);
             },
             onSelect: function(rowIndex, rowData) {
-                storer(rowIndex, rowData);
+               // storer(rowIndex, rowData);
             },
             onUnselect:function(rowIndex, rowData){
-                storerTo(rowIndex,rowData);
+                //storerTo(rowIndex,rowData);
             },
             onSelectAll:function(rows){
-                storerAll(rows);
+               // storerAll(rows);
             },
             onLoadSuccess:function(data){
 
@@ -131,8 +131,6 @@
         //如果局部存储器为空就执行ajax 反之就读取剧本存储器里面的值
         var readAll = JSON.parse(storage.getItem('key_${target}'));
         if(readAll == null){
-
-
         $.ajax({
             url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
             data : {
@@ -149,19 +147,19 @@
         });
         }else {
 
-            console.log(readAll)
+            console.log("保存的值："+readAll)
             for (var i = 0; i < readAll.length; i++) {
                 data.datagrid("selectRecord", readAll[i]);
             }
-
+            console.log(storage.getItem('key_${target}'));
         }
     }
     //局部储存器
-    function storer(rowIndex, rowData) {
+  /*  function storer(rowIndex, rowData) {
             var fkr  =   rowData.instrumentCatalogId;
             dicList.push(fkr);
             storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicList))));
-    }
+    }*/
     //勾选取消
     function storerTo(rowIndex, rowData) {
       var check =  JSON.parse(storage.getItem('key_${target}'));
@@ -195,6 +193,25 @@
        storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicLists))));
        console.log(storage.getItem('key_${target}'));
 
+   }
+
+   function doChoseCateLog() {
+        //ezuiCatalogDatagridDetail_${target}.datagrid("getSelections")
+       var rowPuls = ezuiCatalogDatagridDetail_${target}.datagrid("getSelections");
+       var dicList = new Array();
+       for(var i=0;i<rowPuls.length;i++){
+           console.log(rowPuls[i])
+           dicList.push(rowPuls[i].instrumentCatalogId);
+
+       }
+      if(dicList.length > 0){
+          storage.setItem('key_${target}',JSON.stringify(Array.from(new Set(dicList))));
+      }else if (dicList.length == 0){
+          storage.clear();
+      }
+       console.log(storage.getItem('key_${target}'));
+
+       choseSelect_Catalog_${target}(ezuiCatalogDatagridDetail_${target}.datagrid("getSelections"));
    }
 
 

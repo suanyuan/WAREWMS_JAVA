@@ -1687,7 +1687,7 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("deliverAddress", "旭升街乐民小区4栋3单元-1层1号");
 
         //备注
-        map.put("remark","采购单号："+orderCodeList);
+        map.put("remark",orderCodeList);
         //托寄物
         map.put("cargo","2");
         //计费重量
@@ -1701,7 +1701,7 @@ public class OrderHeaderForNormalService extends BaseService {
         map.put("PALINENO", System.currentTimeMillis());
         list.add(map);
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
-        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTese.jasper");
+        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
 
