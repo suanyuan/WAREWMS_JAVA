@@ -98,14 +98,25 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	 * @param criteria
 	 * @return
 	 */
-	public <T> List<T> queryByListPano(MybatisCriteria criteria);
+	<T> List<T> queryByListPano(MybatisCriteria criteria);
 	/**
 	 * 验收记录查询
 	 * @param criteria
 	 * @return
 	 */
-	public <T> List<T> queryByListSearch(MybatisCriteria criteria);
-//用于导出
-	public <T> List<T> queryByListExport(MybatisCriteria criteria);
-	public int queryByCountPano(MybatisCriteria criteria);
+	<T> List<T> queryByListSearch(MybatisCriteria criteria);
+
+	//用于导出
+	<T> List<T> queryByListExport(MybatisCriteria criteria);
+
+	int queryByCountPano(MybatisCriteria criteria);
+
+    /**
+     * 查询同批号产品不同批次属性的记录(本次扫描的验收详情和已验收的详情进行比较)
+     * @param query qcno, customerid, sku, lotatt04,
+     *              lotatt01, lotatt02, lotatt06,
+     *              lotatt11, lotatt15
+     * @return ~
+     */
+	List<DocQcDetails> querySimilarDetails(PdaDocQcDetailQuery query);
 }

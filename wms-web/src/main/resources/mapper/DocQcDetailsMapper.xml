@@ -582,5 +582,22 @@ where 1=1
         where qcno = #{qcno} and customerid = #{customerid} and sku = #{sku}
         and userdefine3 = #{lotatt04}
     </select>
+
+    <select id="querySimilarDetails" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        a.*
+        from doc_qc_details a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+        where a.qcno = #{qcno}
+        and a.linestatus = '40'
+        and a.customerid = #{customerid}
+        and a.sku = #{sku}
+        and IFNULL(a.userdefine3,'') = IFNULL(rtrim(#{lotatt04, jdbcType=VARCHAR}),'')
+        and (IFNULL(b.lotatt01,'') <![CDATA[ <> ]]>  IFNULL(rtrim(#{lotatt01, jdbcType=VARCHAR}),'')
+            or IFNULL(b.lotatt02,'') <![CDATA[ <> ]]> IFNULL(rtrim(#{lotatt02, jdbcType=VARCHAR}),'')
+            or IFNULL(b.lotatt06,'') <![CDATA[ <> ]]> IFNULL(rtrim(#{lotatt06, jdbcType=VARCHAR}),'')
+            or IFNULL(b.lotatt11,'') <![CDATA[ <> ]]> IFNULL(rtrim(#{lotatt11, jdbcType=VARCHAR}),'')
+            or IFNULL(b.lotatt15,'') <![CDATA[ <> ]]> IFNULL(rtrim(#{lotatt15, jdbcType=VARCHAR}),''))
+    </select>
   	
 </mapper>   

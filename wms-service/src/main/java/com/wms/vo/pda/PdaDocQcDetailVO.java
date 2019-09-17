@@ -24,4 +24,6 @@ public class PdaDocQcDetailVO extends DocQcDetails {
     private int unacceptedQty;//未验件数
 
     private BasPackage basPackage;//包装规格（换算率）
+
+    private int alertflag;//是否需要提示同批号批属数据不同
 }

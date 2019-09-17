@@ -226,14 +226,27 @@ public class DocQcDetailsService extends BaseService {
         pdaDocQcDetailVO.setInvLotAtt(lotAtt);
 
         /*
-        666，此批号产品 已验件数 & 未验件数
+        666，查看是否需要提示同批号不同批属的提示
+         */
+        pdaDocQcDetailVO.setAlertflag(0);
+        PdaDocQcDetailQuery similarQuery = new PdaDocQcDetailQuery();
+        BeanUtils.copyProperties(query, similarQuery);
+        BeanUtils.copyProperties(lotAtt, similarQuery);
+        List<DocQcDetails> similarQcDetails = docQcDetailsDao.querySimilarDetails(similarQuery);
+        if (similarQcDetails.size() > 0) {
+
+            pdaDocQcDetailVO.setAlertflag(1);
+        }
+
+        /*
+        777，此批号产品 已验件数 & 未验件数
          */
         DocQcDetails qtyQcDetails = docQcDetailsDao.queryAcceptQty(query);
         pdaDocQcDetailVO.setAcceptedQty(qtyQcDetails.getQcqtyCompleted().intValue());
         pdaDocQcDetailVO.setUnacceptedQty((int) (qtyQcDetails.getQcqtyExpected() - qtyQcDetails.getQcqtyCompleted()));
 
         /*
-        777,当前批次-产品注册证对应的 生产厂家
+        888,当前批次-产品注册证对应的 生产厂家
          */
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
         if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
