@@ -555,8 +555,10 @@
                     }
                     console.log(result.obj);
                     $("#gspProductRegisterId").val(result.obj);
-                    console.log($("#gspProductRegisterId").val());
-                    ezuiDatagridDetail.datagrid("reload");
+                    // console.log($("#gspProductRegisterId").val());
+                    // ezuiDatagridDetail.datagrid("reload");
+                    ezuiDatagrid.datagrid("reload");
+                    ezuiDialog.dialog('close');
                 }
                 showMsg(result.msg);
 
