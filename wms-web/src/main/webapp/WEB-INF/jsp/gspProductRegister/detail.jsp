@@ -805,8 +805,12 @@
     }
 //查看上传文件
     function viewUrl(url) {
-        if(url){
-            showUrl(url);
+        if(url != null){
+            if (url) {
+                showUrl(url);
+            }else {
+                showMsg("请上传产品注册证附件！");
+            }
         }else{
             if($("#attachmentUrl").val()!=""){
                 showUrl($("#attachmentUrl").val());
