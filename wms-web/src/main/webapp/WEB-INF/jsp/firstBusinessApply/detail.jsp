@@ -499,7 +499,9 @@
     
     function submitApply() {
 
-
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
 
 
 
@@ -583,6 +585,7 @@
             dataType : 'JSON',
             async  :true,
             success : function(result){
+                $.messager.progress('close');
                 console.log(result);
                 var msg='';
                 try{

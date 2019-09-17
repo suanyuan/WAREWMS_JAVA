@@ -42,4 +42,7 @@ public interface GspEnterpriseInfoMybatisDao extends BaseDao {
 	 */
 	public <T> T queryNewByEnterpriseId(Object id);
 
+
+	public <T> T selectEnterpriseProductRegister(Object id);
+
 }

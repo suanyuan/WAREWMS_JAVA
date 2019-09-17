@@ -113,21 +113,21 @@ public class BasCustomer  implements Serializable {
 
 	private String defaultskulotid;
 
-	private String asnref1Tolot4;
+	private String asnref1tolot4;
 
-	private String asnref2Tolot5;
+	private String asnref2tolot5;
 
-	private String asnref3Tolot6;
+	private String asnref3tolot6;
 
-	private String asnref4Tolot7;
+	private String asnref4tolot7;
 
-	private String soref1Tolot4;
+	private String soref1tolot4;
 
-	private String soref2Tolot5;
+	private String soref2tolot5;
 
-	private String soref3Tolot6;
+	private String soref3tolot6;
 
-	private String soref4Tolot7;
+	private String soref4tolot7;
 
 	private String notes;
 
@@ -717,50 +717,6 @@ public class BasCustomer  implements Serializable {
 		this.defaultskulotid = defaultskulotid;
 	}
 
-	public String getAsnref1Tolot4() {
-		return asnref1Tolot4;
-	}
-
-	public void setAsnref1Tolot4(String asnref1Tolot4) {
-		this.asnref1Tolot4 = asnref1Tolot4;
-	}
-
-	public String getAsnref2Tolot5() {
-		return asnref2Tolot5;
-	}
-
-	public void setAsnref2Tolot5(String asnref2Tolot5) {
-		this.asnref2Tolot5 = asnref2Tolot5;
-	}
-
-	public String getAsnref3Tolot6() {
-		return asnref3Tolot6;
-	}
-
-	public void setAsnref3Tolot6(String asnref3Tolot6) {
-		this.asnref3Tolot6 = asnref3Tolot6;
-	}
-
-	public String getAsnref4Tolot7() {
-		return asnref4Tolot7;
-	}
-
-	public void setAsnref4Tolot7(String asnref4Tolot7) {
-		this.asnref4Tolot7 = asnref4Tolot7;
-	}
-
-	public String getSoref1Tolot4() {
-		return soref1Tolot4;
-	}
-
-	public void setSoref1Tolot4(String soref1Tolot4) {
-		this.soref1Tolot4 = soref1Tolot4;
-	}
-
-	public String getSoref2Tolot5() {
-		return soref2Tolot5;
-	}
-
 	public String getSupContractNo() {
 		return supContractNo;
 	}
@@ -769,24 +725,108 @@ public class BasCustomer  implements Serializable {
 		this.supContractNo = supContractNo;
 	}
 
-	public void setSoref2Tolot5(String soref2Tolot5) {
-		this.soref2Tolot5 = soref2Tolot5;
+	public String getContractUrl() {
+		return contractUrl;
 	}
 
-	public String getSoref3Tolot6() {
-		return soref3Tolot6;
+	public void setContractUrl(String contractUrl) {
+		this.contractUrl = contractUrl;
 	}
 
-	public void setSoref3Tolot6(String soref3Tolot6) {
-		this.soref3Tolot6 = soref3Tolot6;
+	public String getClientContent() {
+		return clientContent;
 	}
 
-	public String getSoref4Tolot7() {
-		return soref4Tolot7;
+	public void setClientContent(String clientContent) {
+		this.clientContent = clientContent;
 	}
 
-	public void setSoref4Tolot7(String soref4Tolot7) {
-		this.soref4Tolot7 = soref4Tolot7;
+	public Date getClientStartDate() {
+		return clientStartDate;
+	}
+
+	public void setClientStartDate(Date clientStartDate) {
+		this.clientStartDate = clientStartDate;
+	}
+
+	public Date getClientEndDate() {
+		return clientEndDate;
+	}
+
+	public void setClientEndDate(Date clientEndDate) {
+		this.clientEndDate = clientEndDate;
+	}
+
+	public String getClientTerm() {
+		return clientTerm;
+	}
+
+	public void setClientTerm(String clientTerm) {
+		this.clientTerm = clientTerm;
+	}
+
+	public String getAsnref1tolot4() {
+		return asnref1tolot4;
+	}
+
+	public void setAsnref1tolot4(String asnref1tolot4) {
+		this.asnref1tolot4 = asnref1tolot4;
+	}
+
+	public String getAsnref2tolot5() {
+		return asnref2tolot5;
+	}
+
+	public void setAsnref2tolot5(String asnref2tolot5) {
+		this.asnref2tolot5 = asnref2tolot5;
+	}
+
+	public String getAsnref3tolot6() {
+		return asnref3tolot6;
+	}
+
+	public void setAsnref3tolot6(String asnref3tolot6) {
+		this.asnref3tolot6 = asnref3tolot6;
+	}
+
+	public String getAsnref4tolot7() {
+		return asnref4tolot7;
+	}
+
+	public void setAsnref4tolot7(String asnref4tolot7) {
+		this.asnref4tolot7 = asnref4tolot7;
+	}
+
+	public String getSoref1tolot4() {
+		return soref1tolot4;
+	}
+
+	public void setSoref1tolot4(String soref1tolot4) {
+		this.soref1tolot4 = soref1tolot4;
+	}
+
+	public String getSoref2tolot5() {
+		return soref2tolot5;
+	}
+
+	public void setSoref2tolot5(String soref2tolot5) {
+		this.soref2tolot5 = soref2tolot5;
+	}
+
+	public String getSoref3tolot6() {
+		return soref3tolot6;
+	}
+
+	public void setSoref3tolot6(String soref3tolot6) {
+		this.soref3tolot6 = soref3tolot6;
+	}
+
+	public String getSoref4tolot7() {
+		return soref4tolot7;
+	}
+
+	public void setSoref4tolot7(String soref4tolot7) {
+		this.soref4tolot7 = soref4tolot7;
 	}
 
 	public String getNotes() {
