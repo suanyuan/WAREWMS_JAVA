@@ -248,13 +248,13 @@ public class GspEnterpriceService extends BaseService {
             }
             //医疗
             if(!BeanUtils.isEmptyFrom(gspMedicalRecordForm)){
-
+                String is_h = gspMedicalRecordForm.getOpType();
                 if(enterpriseIsNewVersion == true){
                     gspMedicalRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspMedicalRecordForm.setEnterpriseId(enterpriseId);
 //                gspMedicalLicenseForm.setOperateType(Constant.LICENSE_TYPE_MEDICAL);
-                gspMedicalRecordService.addGspMedicalRecord(enterpriseId,oldEnterpriseId,gspMedicalRecordForm,gspMedicalRecordForm.getScopArr(),gspMedicalRecordForm.getMedicalId(),gspMedicalRecordForm.getOpType());
+                gspMedicalRecordService.addGspMedicalRecord(enterpriseId,is_h,enterpriseIsNewVersion,oldEnterpriseId,gspMedicalRecordForm,gspMedicalRecordForm.getScopArr(),gspMedicalRecordForm.getMedicalId(),gspMedicalRecordForm.getOpType());
             }
             //一类
             if(!BeanUtils.isEmptyFrom(gspFirstRecordForm)){         //一类生产
@@ -269,11 +269,12 @@ public class GspEnterpriceService extends BaseService {
             }
 
             if(!BeanUtils.isEmptyFrom(gspSecondRecordForm)){        //二类经营
+                String is_h = gspSecondRecordForm.getOpType();
                 if(enterpriseIsNewVersion == true){
                     gspSecondRecordForm.setOpType(Constant.LICENSE_SUBMIT_UPDATE);
                 }
                 gspSecondRecordForm.setEnterpriseId(enterpriseId);
-                gspSecondRecordService.addGspSecondRecord(enterpriseId,oldEnterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
+                gspSecondRecordService.addGspSecondRecord(enterpriseId,is_h,enterpriseIsNewVersion,oldEnterpriseId,gspSecondRecordForm,gspSecondRecordForm.getScopArr(),gspSecondRecordForm.getRecordId(),gspSecondRecordForm.getOpType());
             }
 
             return Json.success("保存成功");
@@ -645,7 +646,9 @@ public class GspEnterpriceService extends BaseService {
     private String initScope(String scope){
         String[] scopeArr = scope.split(",");
         StringBuffer resultArr = new StringBuffer();
+
         for(String str : scopeArr){
+            str = str.trim();
             resultArr.append("{");
             resultArr.append("enterpriseId:''");
             resultArr.append(",operateId:'"+str+"'");

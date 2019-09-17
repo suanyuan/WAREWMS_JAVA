@@ -35,7 +35,7 @@ public class GspFirstRecordService extends BaseService {
 	@Autowired
 	private GspFirstRecordMybatisDao gspFirstRecordMybatisDao;
 	@Autowired
-	GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
     @Autowired
@@ -156,7 +156,6 @@ public class GspFirstRecordService extends BaseService {
 			//查询换证后报废企业的所有历史营业执照
 			if(gspEnterpriseInfo==null || enterpriseIsNewVersion ) {
 				GspFirstRecordQuery query = new GspFirstRecordQuery();
-//                GspFirstRecordQuery query = new GspFirstRecordQuery();
 				EasyuiDatagridPager pager = new EasyuiDatagridPager();
 				MybatisCriteria criteria = new MybatisCriteria();
 				if (oldEnterpriseId != null && enterpriseIsNewVersion) {
@@ -165,7 +164,6 @@ public class GspFirstRecordService extends BaseService {
 					criteria.setCurrentPage(pager.getPage());
 					criteria.setPageSize(9999);
 					List<GspFirstRecord> gF = gspFirstRecordMybatisDao.queryByList(criteria);
-
 					//循环插入新建的企业版本中
 					for (GspFirstRecord gspOperateOrProdLicense : gF) {
 					    String oldLicense = gspOperateOrProdLicense.getRecordId();
@@ -201,7 +199,7 @@ public class GspFirstRecordService extends BaseService {
 				if (gspOperateDetailForm.size() > 0) {
 					for (GspOperateDetailForm g : gspOperateDetailForm) {
 						g.setEnterpriseId(newBusinessLicenseId);
-						gspOperateDetailService.addGspOperateDetail(g, Constant.LICENSE_TYPE_FIRSTRECORD);
+						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_FIRSTRECORD);
 					}
 				}
 			}

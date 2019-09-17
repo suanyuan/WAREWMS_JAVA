@@ -201,6 +201,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		query.setIsUse(Constant.IS_USE_YES);
 		query.setEnterpriseNo(enterpriseNo);
 		query.setEnterpriseName(enterpriseName);
+		query.setSelect("juti");
 		criteria.setCondition(query);
 		GspEnterpriseInfoVO gspEnterpriseInfoVO = null;
 		List<GspEnterpriseInfo> gspEnterpriseInfoList = gspEnterpriseInfoMybatisDao.queryPageListByType(criteria);
