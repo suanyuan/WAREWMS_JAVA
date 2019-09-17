@@ -491,6 +491,29 @@ var acceptanceWork = function(){
 		});
 	}
 };
+
+//打印验收
+var printQcHeader = function(){
+
+	var qcno = $('#qcno').val();//验收单号
+	var linestatus = $('#linestatus').combobox('getValue');//验收状态
+	var lotatt10 = $('#lotatt10').combobox('getValue');  //z质量状态
+	//如果当前页面没有行数那么就不给它做
+	console.log($('#ezuiDatagrid').datagrid('getRows'));
+	var rowsSize = $('#ezuiDatagrid').datagrid('getRows');
+	if(rowsSize.length > 0){
+		window.open(sy.bp()+"/docQcHeaderController.do?printQcHeader&qcno="+qcno+"&linestatus="+linestatus+"&lotatt10="+lotatt10);
+	}else {
+		$.messager.show({
+			msg: "<spring:message code='common.message.export.failed'/>",
+			title: "<spring:message code='common.message.prompt'/>"
+		});
+	}
+
+}
+
+
+
 //主页查询
 var doSearch = function() {
 	if ($('#qcno').val() == null || $('#qcno').val() == "") {
@@ -699,6 +722,8 @@ var ezuiCustToolbarClear = function () {
 <%--					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 <%--					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+					<a onclick='printQcHeader()' id='ezuiBtn_printQcSeacrch' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印验收报告</a>
+
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

@@ -3,8 +3,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
+import com.wms.constant.Constant;
+import com.wms.entity.DocQcHeader;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -97,5 +103,22 @@ public class DocQcHeaderController {
 	public List<EasyuiCombobox> getCombobox() {
 		return docQcHeaderService.getDocQcHeaderCombobox();
 	}*/
+
+	/**
+	 * 打印验收作业
+	 *
+	 */
+	@Login
+	@RequestMapping(params = "printQcHeader")
+	public String printQcHeader(Model model, String qcno, String linestatus, String lotatt10){
+
+		List<DocQcHeader> docQcHeaderList = docQcHeaderService.printQcHeader(qcno, linestatus,lotatt10);
+
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocQcHeaderTask.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
 
 }
