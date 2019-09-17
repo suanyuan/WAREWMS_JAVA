@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
+import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspInstrumentCatalog;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.GspMedicalRecordMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.utils.RandomUtil;
@@ -34,7 +36,8 @@ public class GspMedicalRecordService extends BaseService {
 	private GspInstrumentCatalogService gspInstrumentCatalogService;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
-
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
 
 //	//证照历史信息列表
@@ -96,7 +99,7 @@ public class GspMedicalRecordService extends BaseService {
 	 * @param opType 操作类型
 	 * @return
 	 */
-	public Json addGspMedicalRecord(String enterpriceId,String oldEnterpriseId,GspMedicalRecordForm gspMedicalRecordForm,String operateDetailStr,String gspMedicalRecordId,String opType)throws Exception{
+	public Json addGspMedicalRecord(String enterpriceId,String is_h,boolean enterpriseIsNewVersion,String oldEnterpriseId,GspMedicalRecordForm gspMedicalRecordForm,String operateDetailStr,String gspMedicalRecordId,String opType)throws Exception{
 		//try{
 		//GspOperateLicenseForm gspOperateLicenseForm = JSON.parseObject(operateLicenseFormStr,GspOperateLicenseForm.class);
 		List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>(); //JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -109,7 +112,13 @@ public class GspMedicalRecordService extends BaseService {
 //		if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
 //			return Json.error("必须选择许可证经营范围！");
 //		}
-
+		GspEnterpriseInfo gspEnterpriseInfo =  gspEnterpriseInfoMybatisDao.selectEnterpriseProductRegister(oldEnterpriseId);
+		if(gspEnterpriseInfo!=null) {
+			//是生产企业
+			opType = Constant.LICENSE_SUBMIT_UPDATE;
+		}else if(oldEnterpriseId==null){
+			opType = Constant.LICENSE_SUBMIT_ADD;
+		}
 
 
 		//提交
@@ -143,26 +152,29 @@ public class GspMedicalRecordService extends BaseService {
 			}
 		}else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
 			//把旧证数据作废
-			updateGspMedicalRecordTagById(gspMedicalRecordId,Constant.IS_USE_NO);
-
+			if(Constant.LICENSE_SUBMIT_UPDATE.equals(is_h)) {
+				updateGspMedicalRecordTagById(gspMedicalRecordId, Constant.IS_USE_NO);
+			}
 
 			//查询换证后报废企业的所有历史营业执照
-			GspMedicalRecordQuery query = new GspMedicalRecordQuery();
-			EasyuiDatagridPager pager = new EasyuiDatagridPager();
-			MybatisCriteria criteria = new MybatisCriteria();
-			if(oldEnterpriseId!=null) {
-				query.setEnterpriseId(oldEnterpriseId);
-				criteria.setCondition(query);
-				criteria.setCurrentPage(pager.getPage());
-				criteria.setPageSize(9999);
-				List<GspMedicalRecord> gM = gspMedicalRecordMybatisDao.queryByList(criteria);
-				//循环插入新建的企业版本中
-				for (GspMedicalRecord gspMedicalRecord : gM) {
-					gspMedicalRecord.setMedicalId(RandomUtil.getUUID());
-					gspMedicalRecord.setEnterpriseId(enterpriceId);
+			if(gspEnterpriseInfo==null || enterpriseIsNewVersion ) {
+				GspMedicalRecordQuery query = new GspMedicalRecordQuery();
+				EasyuiDatagridPager pager = new EasyuiDatagridPager();
+				MybatisCriteria criteria = new MybatisCriteria();
+				if (oldEnterpriseId != null && enterpriseIsNewVersion) {
+					query.setEnterpriseId(oldEnterpriseId);
+					criteria.setCondition(query);
+					criteria.setCurrentPage(pager.getPage());
+					criteria.setPageSize(9999);
+					List<GspMedicalRecord> gM = gspMedicalRecordMybatisDao.queryByList(criteria);
+					//循环插入新建的企业版本中
+					for (GspMedicalRecord gspMedicalRecord : gM) {
+						gspMedicalRecord.setMedicalId(RandomUtil.getUUID());
+						gspMedicalRecord.setEnterpriseId(enterpriceId);
 //				gspMedicalRecord.setCreateDate(new Date());
-					gspMedicalRecord.setCreateId(getLoginUserId());
-					gspMedicalRecordMybatisDao.add(gspMedicalRecord);
+						gspMedicalRecord.setCreateId(getLoginUserId());
+						gspMedicalRecordMybatisDao.add(gspMedicalRecord);
+					}
 				}
 			}
 
@@ -170,18 +182,19 @@ public class GspMedicalRecordService extends BaseService {
 
 
 
-
 			//保存新证数据
-			String newOperateLicenseId = RandomUtil.getUUID();
-			gspMedicalRecordForm.setEnterpriseId(enterpriceId);
-			gspMedicalRecordForm.setMedicalId(newOperateLicenseId);
-			gspMedicalRecordForm.setIsUse(Constant.IS_USE_YES);
-			addGspMedicalRecord(gspMedicalRecordForm);
+			if(Constant.LICENSE_SUBMIT_UPDATE.equals(is_h)) {
+				String newOperateLicenseId = RandomUtil.getUUID();
+				gspMedicalRecordForm.setEnterpriseId(enterpriceId);
+				gspMedicalRecordForm.setMedicalId(newOperateLicenseId);
+				gspMedicalRecordForm.setIsUse(Constant.IS_USE_YES);
+				addGspMedicalRecord(gspMedicalRecordForm);
 
-			if(gspOperateDetailForm.size()>0){
-				for(GspOperateDetailForm g : gspOperateDetailForm){
-					g.setEnterpriseId(newOperateLicenseId);
-					gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_MEDICAL);
+				if (gspOperateDetailForm.size() > 0) {
+					for (GspOperateDetailForm g : gspOperateDetailForm) {
+						g.setEnterpriseId(newOperateLicenseId);
+						gspOperateDetailService.addGspOperateDetail(g, Constant.LICENSE_TYPE_MEDICAL);
+					}
 				}
 			}
 		}

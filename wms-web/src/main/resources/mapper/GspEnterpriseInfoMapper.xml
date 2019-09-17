@@ -250,6 +250,11 @@
     <sql id="Example_Where_Clause_Type">
         where 1=1
         <trim suffixOverrides=",">
+
+            <if test="condition.select == 'juti'">
+                and g.enterprise_no = #{condition.enterpriseNo} and g.enterprise_name = #{condition.enterpriseName}
+            </if>
+
             <if test="condition.enterpriseId != null and condition.enterpriseId != ''">
                 and g.enterprise_id = #{condition.enterpriseId}
             </if>

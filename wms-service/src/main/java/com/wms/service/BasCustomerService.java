@@ -303,9 +303,15 @@ public class BasCustomerService extends BaseService {
 			if(basCustomerHistory!=null){
 				//BasCustomer basCustomer = new BasCustomer();
 				//BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
-//				BasCustomerHistory basCustomerHistoryQ = new BasCustomerHistory();
-//				BeanUtils.copyProperties(basCustomerHistory,basCustomerHistoryQ);
-//				basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
+				BasCustomerHistory basCustomerHistoryQ = new BasCustomerHistory();
+				BeanUtils.copyProperties(basCustomerHistory,basCustomerHistoryQ);
+				basCustomerHistoryQ.setClientContent(basCustomerHistory.getClientContent());
+				basCustomerHistoryQ.setClientEndDate(basCustomerHistory.getClientEndDate());
+				basCustomerHistoryQ.setClientStartDate(basCustomerHistory.getClientStartDate());
+				basCustomerHistoryQ.setClientTerm(basCustomerHistory.getClientTerm());
+				basCustomerHistoryQ.setContractUrl(basCustomerHistory.getContractUrl());
+				basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
+
 				//TODO 插入history.add(basSkuHistory);
 				basCustomerMybatisDao.deleteBascustomerByCustomerID(basCustomerHistory.getCustomerid(),basCustomerHistory.getCustomerType());
 			}

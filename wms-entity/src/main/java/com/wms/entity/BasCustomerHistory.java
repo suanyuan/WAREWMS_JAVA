@@ -3,10 +3,11 @@ package com.wms.entity;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @Data
 @Entity
-public class BasCustomerHistory {
+public class BasCustomerHistory implements Serializable {
 
   private String customerid;
   private String customerType;
@@ -153,9 +154,9 @@ public class BasCustomerHistory {
   private String supContractNo;
   private String contractUrl;
   private String clientContent;
-  private java.sql.Date clientStartDate;
-  private java.sql.Date clientEndDate;
-  private java.sql.Date clientTerm;
+  private java.util.Date clientStartDate;
+  private java.util.Date clientEndDate;
+  private String clientTerm;
   private String isChineseLabel;
   private String receivingAddressId;
   private String asnref1tolot4;

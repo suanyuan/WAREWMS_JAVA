@@ -168,42 +168,41 @@ public class GspOperateLicenseService extends BaseService {
 
 
 				//查询换证后报废企业的所有历史营业执照
-				GspOperateLicenseQuery query = new GspOperateLicenseQuery();
-				EasyuiDatagridPager pager = new EasyuiDatagridPager();
-				MybatisCriteria criteria = new MybatisCriteria();
-				if(oldEnterpriseId!=null && enterpriseIsNewVersion) {
-					query.setEnterpriseId(oldEnterpriseId);
-					query.setOperateType(gspOperateLicenseForm.getOperateType());
-					criteria.setCondition(query);
-					criteria.setCurrentPage(pager.getPage());
-					criteria.setPageSize(9999);
-					List<GspOperateLicense> gO = gspOperateLicenseMybatisDao.queryByList(criteria);
-					//循环插入新建的企业版本中
-					for (GspOperateLicense gspOperateOrProdLicense : gO) {
-                        String oldLicense = gspOperateOrProdLicense.getOperateId();
-						gspOperateOrProdLicense.setOperateId(RandomUtil.getUUID());
-						gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
-						gspOperateOrProdLicense.setOperateType(LicenseType);
-						gspOperateOrProdLicense.setCreateId(getLoginUserId());
-						gspOperateLicenseMybatisDao.add(gspOperateOrProdLicense);
-                        //历史营业证照的所有经营范围
-                        GspOperateDetailQuery operateDetailQuery = new GspOperateDetailQuery();
-                        operateDetailQuery.setLicenseId(oldLicense);
-                        criteria.setCondition(operateDetailQuery);
-                        List<GspOperateDetail> GspOperateDetailList = gspOperateDetailMybatisDao.queryByList(criteria);
-                        if(GspOperateDetailList.size()>0){
-                            for (GspOperateDetail od : GspOperateDetailList) {
-                                GspOperateDetailForm god = new GspOperateDetailForm();
-                                god.setOperateId(od.getOperateId());
-                                god.setEnterpriseId(gspOperateOrProdLicense.getOperateId());
-                                gspOperateDetailService.addGspOperateDetail(god, od.getLicenseType());
-                            }
-                        }
-
-
+				if(gspEnterpriseInfo==null || enterpriseIsNewVersion ) {
+					GspOperateLicenseQuery query = new GspOperateLicenseQuery();
+					EasyuiDatagridPager pager = new EasyuiDatagridPager();
+					MybatisCriteria criteria = new MybatisCriteria();
+					if (oldEnterpriseId != null && enterpriseIsNewVersion) {
+						query.setEnterpriseId(oldEnterpriseId);
+						query.setOperateType(gspOperateLicenseForm.getOperateType());
+						criteria.setCondition(query);
+						criteria.setCurrentPage(pager.getPage());
+						criteria.setPageSize(9999);
+						List<GspOperateLicense> gO = gspOperateLicenseMybatisDao.queryByList(criteria);
+						//循环插入新建的企业版本中
+						for (GspOperateLicense gspOperateOrProdLicense : gO) {
+							String oldLicense = gspOperateOrProdLicense.getOperateId();
+							gspOperateOrProdLicense.setOperateId(RandomUtil.getUUID());
+							gspOperateOrProdLicense.setEnterpriseId(enterpriceId);
+							gspOperateOrProdLicense.setOperateType(LicenseType);
+							gspOperateOrProdLicense.setCreateId(getLoginUserId());
+							gspOperateLicenseMybatisDao.add(gspOperateOrProdLicense);
+							//历史营业证照的所有经营范围
+							GspOperateDetailQuery operateDetailQuery = new GspOperateDetailQuery();
+							operateDetailQuery.setLicenseId(oldLicense);
+							criteria.setCondition(operateDetailQuery);
+							List<GspOperateDetail> GspOperateDetailList = gspOperateDetailMybatisDao.queryByList(criteria);
+							if (GspOperateDetailList.size() > 0) {
+								for (GspOperateDetail od : GspOperateDetailList) {
+									GspOperateDetailForm god = new GspOperateDetailForm();
+									god.setOperateId(od.getOperateId());
+									god.setEnterpriseId(gspOperateOrProdLicense.getOperateId());
+									gspOperateDetailService.addGspOperateDetail(god, od.getLicenseType());
+								}
+							}
+						}
 					}
 				}
-
 
 
 				if(Constant.LICENSE_SUBMIT_UPDATE.equals(is_h)){
