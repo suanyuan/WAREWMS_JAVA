@@ -381,6 +381,8 @@ public class DocAsnHeader implements Serializable {
 
 //	用于导出
     private List<DocAsnDetail> details;
+	private String coldTag; //冷链标记
+	private String mdate; //预期到货时间
 
 	public List<DocAsnDetail> getDetails() {
 		return details;
@@ -1511,5 +1513,21 @@ public class DocAsnHeader implements Serializable {
 
 	public void setReservedfield07(String reservedfield07) {
 		this.reservedfield07 = reservedfield07;
+	}
+
+	public String getColdTag() {
+		return coldTag;
+	}
+
+	public void setColdTag(String coldTag) {
+		this.coldTag = coldTag;
+	}
+
+	public String getMdate() {
+		return mdate;
+	}
+
+	public void setMdate(String mdate) {
+		this.mdate = mdate;
 	}
 }

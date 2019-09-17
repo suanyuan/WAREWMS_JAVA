@@ -374,6 +374,15 @@ public class CommonController {
         return basCodesService.getBy(Constant.CODE_CATALOG_MT_STS);
     }
     /**
+     * 入库类型
+     * @return
+     * */
+    @RequestMapping(params = "getAsnType")
+    @ResponseBody
+    public List<EasyuiCombobox> getAsnType(){
+        return basCodesService.getBy(Constant.CODE_ASN_TYP);
+    }
+    /**
      * 盘点状态
      * @return
      * */
@@ -402,5 +411,6 @@ public class CommonController {
         }
         return easyuiComboboxList;
     }
+
 
 }
