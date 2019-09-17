@@ -468,6 +468,15 @@ public class OrderHeaderForNormal implements Serializable {
 	
 	private List<DocOrderPacking> docOrderPackingList;
 
+
+//	导出
+
+	private String excaddress1;   //地址
+	private String exctel1;       //联系电话
+
+
+
+
 	public OrderHeaderForNormal() {
 		
 	}

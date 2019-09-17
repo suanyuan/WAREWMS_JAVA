@@ -1,11 +1,14 @@
 package com.wms.controller;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.service.DocOrderExportService;
 import com.wms.service.OrderHeaderForNormalService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
@@ -14,14 +17,13 @@ import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,8 +42,8 @@ public class DocOrderHeaderController {
 	@Autowired
 	private OrderHeaderForNormalService orderHeaderForNormalService;
 
-//	@Autowired
-//	private ExportOrderService exportOrderService;
+	@Autowired
+	private DocOrderExportService docOrderExportService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -206,11 +208,6 @@ public class DocOrderHeaderController {
 //		}
 //	}
 
-//	@Login
-//	@RequestMapping(params = "exportOrderDataToExcel")
-//	public void exportOrderDataToExcel(HttpServletResponse response, OrderHeaderForNormalExportForm form) throws Exception {
-//		exportOrderService.exportOrderDataToExcel(response, form);
-//	}
 
 	@Login
 	@RequestMapping(params = "importExcelData")
@@ -359,11 +356,22 @@ public class DocOrderHeaderController {
 		return json;
 	}
 
-
+//导出序列号
+	@Login
+ 	@RequestMapping(params = "exportbasSerialNumToExcel")
+ 	public void exportbasSerialNumToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom) throws Exception {
+		orderHeaderForNormalService.exportbasSerialNumToExcel(response, orderNofrom);
+	}
+//导出
 	@Login
  	@RequestMapping(params = "exportOrderNoToExcel")
- 	public void exportOrderDataToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom) throws Exception {
-		orderHeaderForNormalService.exportOrderNoToExcel(response, orderNofrom);
+ 	public String exportOrderDataToExcel(Model model,String orderno){
+		List<OrderHeaderForNormal> orderHeaderForNormalList=docOrderExportService.docOrderToExcel(orderno);
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormalList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocOrderDetails.jasper");
+		model.addAttribute("format", Constant.JASPER_XLS);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
 	}
 	//检查orderno是否存在
 	@Login

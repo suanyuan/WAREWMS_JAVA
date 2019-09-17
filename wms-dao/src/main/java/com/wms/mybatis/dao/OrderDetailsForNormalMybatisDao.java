@@ -19,4 +19,10 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      * @param orderno 出口so编号
      */
 	void orderHeaderdelete (String orderno);
+
+
+/**
+ * 根据OrderNo获得细单
+ */
+    <T> List<T> queryByOrderNo(String orderno);
 }

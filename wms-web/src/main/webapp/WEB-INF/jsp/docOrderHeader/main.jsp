@@ -1086,36 +1086,36 @@ var doSearch = function(){
 
 /* 导出start */
 var doExport = function(){
-	if(navigator.cookieEnabled){
-		$('#ezuiBtn_export').linkbutton('disable');
-		var token = new Date().getTime();
-		var param = new HashMap();
-		param.put("token", token);
-		param.put("customerid", $('#customerid').val());
-		param.put("orderno", $('#orderno').val());
-		param.put("soreference1", $('#soreference1').val());
-		param.put("sostatus", $('#sostatus').combobox('getValue'));
-		param.put("sostatusTo", $('#sostatusTo').combobox('getValue'));
-		param.put("ordertime", $('#ordertime').datetimebox('getValue'));
-		param.put("ordertimeTo", $('#ordertimeTo').datetimebox('getValue'));
-		param.put("ordertype", $('#ordertype').combobox('getValue'));
-		param.put("releasestatus", $('#releasestatus').combobox('getValue'));
-		//--导出Excel
-		var formId = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderDataToExcel", param);
-		downloadCheckTimer = window.setInterval(function () {
-			window.clearInterval(downloadCheckTimer);
-			$('#'+formId).remove();
-			$('#ezuiBtn_export').linkbutton('enable');
-			$.messager.progress('close');
+	var row = ezuiDatagrid.datagrid('getSelected');
+    if(row) {
+		if (navigator.cookieEnabled) {
+			var order=row.orderno;
+			$('#ezuiBtn_export').linkbutton('disable');
+			//--导出Excel
+			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+			downloadCheckTimer = window.setInterval(function () {
+				window.clearInterval(downloadCheckTimer);
+				// $('#' + formId).remove();
+				$('#ezuiBtn_export').linkbutton('enable');
+				$.messager.progress('close');
+				$.messager.show({
+					msg: "<spring:message code='common.message.export.success'/>",
+					title: "<spring:message code='common.message.prompt'/>"
+				});
+			}, 1000);
+		} else {
 			$.messager.show({
-				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
+				title: "<spring:message code='common.message.prompt'/>"
 			});
-		}, 1000);
+		}
+		;
 	}else{
-		$.messager.show({
-			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
-		});
-	};
+			$.messager.show({
+				msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+			});
+		}
 };
 /* 导出end */
 
@@ -1213,7 +1213,7 @@ var doExportOrderNo = function(){
 
 						}else{
 							//--导出Excel
-							var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportOrderNoToExcel", setting);
+							var formIdb = ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportbasSerialNumToExcel", setting);
 							downloadCheckTimer = window.setInterval(function () {
 								window.clearInterval(downloadCheckTimer);
 								$('#'+formIdb).remove();

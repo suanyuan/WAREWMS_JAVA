@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 
@@ -376,6 +377,18 @@ public class DocAsnHeader implements Serializable {
 	private String reservedfield07;
 	
 	private Set<DocAsnDetail> docAsnDetailSet;
+
+
+//	用于导出
+    private List<DocAsnDetail> details;
+
+	public List<DocAsnDetail> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<DocAsnDetail> details) {
+		this.details = details;
+	}
 
 	public Set<DocAsnDetail> getDocAsnDetailSet() {
 		return docAsnDetailSet;

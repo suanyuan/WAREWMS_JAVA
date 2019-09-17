@@ -795,6 +795,11 @@ where 1=1
         select <include refid="Base_Column_List" />
         from doc_order_details where orderno = #{orderno} and orderlineno = #{orderlineno}
     </select>
+<!-- 根据id查询 订单明细 -->
+    <select id="queryByOrderNo"  resultMap="OrderDetailsForNormalMap" parameterType="Object">
+        select <include refid="Base_Column_List" />
+        from doc_order_details where orderno = #{orderno}
+    </select>
 
 <!-- 订单明细 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

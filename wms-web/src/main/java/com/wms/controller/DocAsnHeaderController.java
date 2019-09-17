@@ -1,5 +1,6 @@
 package com.wms.controller;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -7,6 +8,7 @@ import com.wms.entity.DocAsnHeader;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.result.AsnDetailResult;
+import com.wms.service.DocAsnExportService;
 import com.wms.service.DocAsnHeaderService;
 import com.wms.service.DocPaService;
 import com.wms.utils.ResourceUtil;
@@ -15,8 +17,11 @@ import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnHeaderForm;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +44,8 @@ public class DocAsnHeaderController {
 
 	@Autowired
 	private DocAsnHeaderService docAsnHeaderService;
+	@Autowired
+	private DocAsnExportService docAsnExportService;
 	@Autowired
 	private DocPaService docPaService;
 
@@ -262,4 +269,17 @@ public class DocAsnHeaderController {
         }
         return json;
     }
+
+
+//导出
+	@Login
+	@RequestMapping(params = "exportAsnDataToExcel")
+	public String exportAsnDataToExcel(Model model, String asnno){
+		List<DocAsnHeader> docAsnHeaderList=docAsnExportService.docAsnToExcel(asnno);
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docAsnHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocAsnDetails.jasper");
+		model.addAttribute("format", Constant.JASPER_XLS);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
 }

@@ -877,6 +877,11 @@ insert into doc_asn_details
 	select <include refid="Base_Column_List" /> 
 	 from Doc_Asn_Details where asnno = #{asnno, jdbcType=VARCHAR} and asnlineno = #{asnlineno, jdbcType=NUMERIC}
 </select>
+<!-- 根据id查询 入库单管理明细 -->
+<select id="queryByAsnNo"  resultMap="DocAsnDetailMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	 from Doc_Asn_Details where asnno = #{asnno, jdbcType=VARCHAR}
+</select>
 
 <!-- 入库单明细 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

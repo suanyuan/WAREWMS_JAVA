@@ -1857,7 +1857,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
 //导出序列号记录
-    public void exportOrderNoToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception {
+    public void exportbasSerialNumToExcel(HttpServletResponse response, OrderHeaderForNormalForm orderNofrom)throws Exception {
         Cookie cookie = new Cookie("exportToken", orderNofrom.getOrderFlag());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
