@@ -109,7 +109,7 @@ public class GspBusinessLicenseService extends BaseService {
 	 * @param gspBusinessLicenseId 营业执照id
 	 * @return
 	 */
-	public Json addGspBusinessLicense(String enterpriceId,String oldEnterpriseId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType) throws Exception{
+	public Json addGspBusinessLicense(String enterpriceId,String is_h,boolean enterpriseIsNewVersion,String oldEnterpriseId,GspBusinessLicenseForm gspBusinessLicenseForm,String operateDetailStr,String gspBusinessLicenseId,String opType) throws Exception{
 		//try{
 			//GspBusinessLicenseForm gspBusinessLicenseForm = JSON.parseObject(businessFormStr,GspBusinessLicenseForm.class);
 			List<GspOperateDetailForm> gspOperateDetailForm = new ArrayList<>();//JSON.parseArray(operateDetailStr,GspOperateDetailForm.class);
@@ -122,6 +122,15 @@ public class GspBusinessLicenseService extends BaseService {
 			/*if(gspOperateDetailForm == null || com.wms.utils.BeanUtils.isEmptyFrom(gspOperateDetailForm)){
 				return Json.error("必须选择营业执照经营范围！");
 			}*/
+		GspEnterpriseInfo gspEnterpriseInfo =  gspEnterpriseInfoMybatisDao.selectEnterpriseProductRegister(oldEnterpriseId);
+		if(gspEnterpriseInfo!=null) {
+			//是生产企业
+			opType = Constant.LICENSE_SUBMIT_UPDATE;
+		}else if(oldEnterpriseId==null){
+            opType = Constant.LICENSE_SUBMIT_ADD;
+        }
+
+
 			//提交
 			if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 				//新增
@@ -151,43 +160,57 @@ public class GspBusinessLicenseService extends BaseService {
 				}
 			}else if(opType.equals(Constant.LICENSE_SUBMIT_UPDATE)){//换证
 				//把旧证数据作废
-				updateGspBusinessLicenseTagById(gspBusinessLicenseId,Constant.IS_USE_NO);
-				//查询换证后报废企业的所有历史营业执照
+				if(Constant.LICENSE_SUBMIT_UPDATE.equals(is_h)) {
+					updateGspBusinessLicenseTagById(gspBusinessLicenseId, Constant.IS_USE_NO);
+				}
+				//查询换证后	报废企业的所有历史营业执照
 
-				GspBusinessLicenseQuery query = new GspBusinessLicenseQuery();
-				EasyuiDatagridPager pager = new EasyuiDatagridPager();
-				MybatisCriteria criteria = new MybatisCriteria();
-				if(oldEnterpriseId!=null){
-					query.setEnterpriseId(oldEnterpriseId);
-					criteria.setCondition(query);
-					criteria.setCurrentPage(pager.getPage());
-					criteria.setPageSize(9999);
-					List<GspBusinessLicense> gB = gspBusinessLicenseMybatisDao.queryByList(criteria);
-					//循环插入新建的企业版本中
-					for(GspBusinessLicense  gspBusinessLicense:gB){
-						gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
-						gspBusinessLicense.setEnterpriseId(enterpriceId);
 
-						gspBusinessLicense.setCreateId(getLoginUserId());
-						gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
+				if(gspEnterpriseInfo==null || enterpriseIsNewVersion ) {
+					//不是生产企业  或是 新版本
+					GspBusinessLicenseQuery query = new GspBusinessLicenseQuery();
+					EasyuiDatagridPager pager = new EasyuiDatagridPager();
+					MybatisCriteria criteria = new MybatisCriteria();
+					if (oldEnterpriseId != null && enterpriseIsNewVersion) {
+						query.setEnterpriseId(oldEnterpriseId);
+						criteria.setCondition(query);
+						criteria.setCurrentPage(pager.getPage());
+						criteria.setPageSize(9999);
+						List<GspBusinessLicense> gB = gspBusinessLicenseMybatisDao.queryByList(criteria);
+
+						//循环插入新建的企业版本中
+						for (GspBusinessLicense gspBusinessLicense : gB) {
+							gspBusinessLicense.setBusinessId(RandomUtil.getUUID());
+							gspBusinessLicense.setEnterpriseId(enterpriceId);
+							gspBusinessLicense.setCreateId(getLoginUserId());
+							gspBusinessLicenseMybatisDao.add(gspBusinessLicense);
+
+
+
+						}
 					}
 				}
 
-//
-				//保存新证数据
-				String newBusinessLicenseId = RandomUtil.getUUID();
-				gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
-				gspBusinessLicenseForm.setBusinessId(newBusinessLicenseId);
-				gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
-				addGspBusinessLicense(gspBusinessLicenseForm);
 
-				//
-				if(gspOperateDetailForm.size()>0){
-					for(GspOperateDetailForm g : gspOperateDetailForm){
-						g.setEnterpriseId(newBusinessLicenseId);
-						gspOperateDetailService.addGspOperateDetail(g,Constant.LICENSE_TYPE_BUSINESS);
+				if(Constant.LICENSE_SUBMIT_UPDATE.equals(is_h)){
+					//保存新证数据
+					String newBusinessLicenseId = RandomUtil.getUUID();
+					gspBusinessLicenseForm.setEnterpriseId(enterpriceId);
+					gspBusinessLicenseForm.setBusinessId(newBusinessLicenseId);
+					gspBusinessLicenseForm.setIsUse(Constant.IS_USE_YES);
+					addGspBusinessLicense(gspBusinessLicenseForm);
+
+					//
+					if (gspOperateDetailForm.size() > 0) {
+						for (GspOperateDetailForm g : gspOperateDetailForm) {
+							g.setEnterpriseId(newBusinessLicenseId);
+							gspOperateDetailService.addGspOperateDetail(g, Constant.LICENSE_TYPE_BUSINESS);
+						}
 					}
 				}
+
+
+
 			}
 			return Json.error("保存营业执照失败");
 		/*}catch (Exception e){

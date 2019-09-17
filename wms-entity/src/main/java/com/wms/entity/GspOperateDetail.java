@@ -24,4 +24,6 @@ public class GspOperateDetail  implements Serializable {
 	private String isUse;
 
 	private String licenseType;
+
+	private String enterpriseId;
 }

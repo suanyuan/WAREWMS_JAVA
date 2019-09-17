@@ -420,8 +420,8 @@
 
     //换证清空当前数据
     function operateUpdate() {
-        // opType = "update";
-        // $("#ezuiFormOperate input[id='opType']").val("update");
+        opType = "update";
+        $("#ezuiFormOperate input[id='opType']").val("update");
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

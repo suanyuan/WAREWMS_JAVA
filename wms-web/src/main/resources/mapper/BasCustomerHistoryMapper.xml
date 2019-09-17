@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.BasCustomerHistoryMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.BasCustomerHistory" >
+	<result column="customerid" property="customerid"/>
+	<result column="customer_type" property="customerType"/>
+	<result column="descr_c" property="descrC"/>
+	<result column="descr_e" property="descrE"/>
+	<result column="address1" property="address1"/>
+	<result column="address2" property="address2"/>
+	<result column="address3" property="address3"/>
+	<result column="address4" property="address4"/>
+	<result column="city" property="city"/>
+	<result column="province" property="province"/>
+	<result column="zip" property="zip"/>
+	<result column="country" property="country"/>
+	<result column="contact1" property="contact1"/>
+	<result column="contact1_tel1" property="contact1Tel1"/>
+	<result column="contact1_tel2" property="contact1Tel2"/>
+	<result column="contact1_fax" property="contact1Fax"/>
+	<result column="contact1_email" property="contact1Email"/>
+	<result column="contact1_title" property="contact1Title"/>
+	<result column="contact2" property="contact2"/>
+	<result column="contact2_tel1" property="contact2Tel1"/>
+	<result column="contact2_tel2" property="contact2Tel2"/>
+	<result column="contact2_fax" property="contact2Fax"/>
+	<result column="contact2_email" property="contact2Email"/>
+	<result column="contact2_title" property="contact2Title"/>
+	<result column="contact3" property="contact3"/>
+	<result column="contact3_tel1" property="contact3Tel1"/>
+	<result column="contact3_tel2" property="contact3Tel2"/>
+	<result column="contact3_fax" property="contact3Fax"/>
+	<result column="contact3_email" property="contact3Email"/>
+	<result column="contact3_title" property="contact3Title"/>
+	<result column="billto" property="billto"/>
+	<result column="active_flag" property="activeFlag"/>
+	<result column="cartongroup" property="cartongroup"/>
+	<result column="defaultsoftallocationrule" property="defaultsoftallocationrule"/>
+	<result column="currency" property="currency"/>
+	<result column="defaultputawayrule" property="defaultputawayrule"/>
+	<result column="doc_prefix" property="docPrefix"/>
+	<result column="udf1" property="udf1"/>
+	<result column="udf2" property="udf2"/>
+	<result column="udf3" property="udf3"/>
+	<result column="udf4" property="udf4"/>
+	<result column="udf5" property="udf5"/>
+	<result column="defaultskulotid" property="defaultskulotid"/>
+	<result column="asnref1tolot4" property="asnref1tolot4"/>
+	<result column="asnref2tolot5" property="asnref2tolot5"/>
+	<result column="asnref3tolot6" property="asnref3tolot6"/>
+	<result column="asnref4tolot7" property="asnref4tolot7"/>
+	<result column="soref1tolot4" property="soref1tolot4"/>
+	<result column="soref2tolot5" property="soref2tolot5"/>
+	<result column="soref3tolot6" property="soref3tolot6"/>
+	<result column="soref4tolot7" property="soref4tolot7"/>
+	<result column="notes" property="notes"/>
+	<result column="addtime" property="addtime"/>
+	<result column="addwho" property="addwho"/>
+	<result column="edittime" property="edittime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="defaultshipmentuom" property="defaultshipmentuom"/>
+	<result column="defaultreportuom" property="defaultreportuom"/>
+	<result column="overreceiving" property="overreceiving"/>
+	<result column="vat" property="vat"/>
+	<result column="bankaccount" property="bankaccount"/>
+	<result column="inbound_label" property="inboundLabel"/>
+	<result column="allinrate" property="allinrate"/>
+	<result column="billclass" property="billclass"/>
+	<result column="overrcvpercentage" property="overrcvpercentage"/>
+	<result column="r_owner" property="rOwner"/>
+	<result column="cubicuom" property="cubicuom"/>
+	<result column="weightuom" property="weightuom"/>
+	<result column="asnref5tolot8" property="asnref5tolot8"/>
+	<result column="soref5tolot8" property="soref5tolot8"/>
+	<result column="billclassinv" property="billclassinv"/>
+	<result column="defaultreplenishrule" property="defaultreplenishrule"/>
+	<result column="routecode" property="routecode"/>
+	<result column="easycode" property="easycode"/>
+	<result column="sn_asn_cls" property="snAsnCls"/>
+	<result column="sn_so_cls" property="snSoCls"/>
+	<result column="sn_asn_so" property="snAsnSo"/>
+	<result column="asn_snd_eml" property="asnSndEml"/>
+	<result column="so_snd_eml" property="soSndEml"/>
+	<result column="idx_load_sku" property="idxLoadSku"/>
+	<result column="idx_load_supplier" property="idxLoadSupplier"/>
+	<result column="idx_load_consignee" property="idxLoadConsignee"/>
+	<result column="invchgwithshipment" property="invchgwithshipment"/>
+	<result column="carrier" property="carrier"/>
+	<result column="outbound_label" property="outboundLabel"/>
+	<result column="edi_code" property="ediCode"/>
+	<result column="tariffid" property="tariffid"/>
+	<result column="rotationid" property="rotationid"/>
+	<result column="reservecode" property="reservecode"/>
+	<result column="calculatecode" property="calculatecode"/>
+	<result column="defaultpackid" property="defaultpackid"/>
+	<result column="billingdate" property="billingdate"/>
+	<result column="followup" property="followup"/>
+	<result column="h_edi_01" property="hEdi01"/>
+	<result column="h_edi_02" property="hEdi02"/>
+	<result column="h_edi_03" property="hEdi03"/>
+	<result column="h_edi_04" property="hEdi04"/>
+	<result column="h_edi_05" property="hEdi05"/>
+	<result column="h_edi_06" property="hEdi06"/>
+	<result column="h_edi_07" property="hEdi07"/>
+	<result column="h_edi_08" property="hEdi08"/>
+	<result column="h_edi_09" property="hEdi09"/>
+	<result column="h_edi_10" property="hEdi10"/>
+	<result column="h_edi_11" property="hEdi11"/>
+	<result column="h_edi_12" property="hEdi12"/>
+	<result column="h_edi_13" property="hEdi13"/>
+	<result column="h_edi_14" property="hEdi14"/>
+	<result column="h_edi_15" property="hEdi15"/>
+	<result column="h_edi_16" property="hEdi16"/>
+	<result column="h_edi_17" property="hEdi17"/>
+	<result column="h_edi_18" property="hEdi18"/>
+	<result column="h_edi_19" property="hEdi19"/>
+	<result column="h_edi_20" property="hEdi20"/>
+	<result column="d_edi_01" property="dEdi01"/>
+	<result column="d_edi_02" property="dEdi02"/>
+	<result column="orderbysql" property="orderbysql"/>
+	<result column="qcrule" property="qcrule"/>
+	<result column="billwithasntype" property="billwithasntype"/>
+	<result column="billwithsotype" property="billwithsotype"/>
+	<result column="allinflag" property="allinflag"/>
+	<result column="allinarea" property="allinarea"/>
+	<result column="allinratetype" property="allinratetype"/>
+	<result column="stop" property="stop"/>
+	<result column="copypricetolotatt09" property="copypricetolotatt09"/>
+	<result column="printmedicineqcreport" property="printmedicineqcreport"/>
+	<result column="bil_obd_stk" property="bilObdStk"/>
+	<result column="asnnobycustomer" property="asnnobycustomer"/>
+	<result column="ordernobycustomer" property="ordernobycustomer"/>
+	<result column="orderlotcontrol" property="orderlotcontrol"/>
+	<result column="fullcaselotcontrol" property="fullcaselotcontrol"/>
+	<result column="piecelotcontrol" property="piecelotcontrol"/>
+	<result column="asn_lnk_po" property="asnLnkPo"/>
+	<result column="inboundserialnoqtycontrol" property="inboundserialnoqtycontrol"/>
+	<result column="outboundserialnoqtycontrol" property="outboundserialnoqtycontrol"/>
+	<result column="validdatefrom" property="validdatefrom"/>
+	<result column="validdateto" property="validdateto"/>
+	<result column="emedicineqcreport" property="emedicineqcreport"/>
+	<result column="skuanalysisfields" property="skuanalysisfields"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="operate_type" property="operateType"/>
+	<result column="sup_contract_no" property="supContractNo"/>
+	<result column="contract_url" property="contractUrl"/>
+	<result column="client_content" property="clientContent"/>
+	<result column="client_start_date" property="clientStartDate"/>
+	<result column="client_end_date" property="clientEndDate"/>
+	<result column="client_term" property="clientTerm"/>
+	<result column="is_chinese_label" property="isChineseLabel"/>
+	<result column="receiving_address_id" property="receivingAddressId"/>
+	<result column="defaultallocationrule" property="defaultallocationrule"/>
+</resultMap>
+       
+<!-- bas_customer_history table all fields -->
+<sql id="Base_Column_List" >
+	 customerid,customer_type,descr_c,descr_e,address1,address2,address3,address4,city,province,zip,country,contact1,contact1_tel1,contact1_tel2,contact1_fax,contact1_email,contact1_title,contact2,contact2_tel1,contact2_tel2,contact2_fax,contact2_email,contact2_title,contact3,contact3_tel1,contact3_tel2,contact3_fax,contact3_email,contact3_title,billto,active_flag,cartongroup,defaultsoftallocationrule,currency,defaultputawayrule,doc_prefix,udf1,udf2,udf3,udf4,udf5,defaultskulotid,asnref1tolot4,asnref2tolot5,asnref3tolot6,asnref4tolot7,soref1tolot4,soref2tolot5,soref3tolot6,soref4tolot7,notes,addtime,addwho,edittime,editwho,defaultreceivinguom,defaultshipmentuom,defaultreportuom,overreceiving,vat,bankaccount,inbound_label,allinrate,billclass,overrcvpercentage,r_owner,cubicuom,weightuom,asnref5tolot8,soref5tolot8,billclassinv,defaultreplenishrule,routecode,easycode,sn_asn_cls,sn_so_cls,sn_asn_so,asn_snd_eml,so_snd_eml,idx_load_sku,idx_load_supplier,idx_load_consignee,invchgwithshipment,carrier,outbound_label,edi_code,tariffid,rotationid,reservecode,calculatecode,defaultpackid,billingdate,followup,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,h_edi_11,h_edi_12,h_edi_13,h_edi_14,h_edi_15,h_edi_16,h_edi_17,h_edi_18,h_edi_19,h_edi_20,d_edi_01,d_edi_02,orderbysql,qcrule,billwithasntype,billwithsotype,allinflag,allinarea,allinratetype,stop,copypricetolotatt09,printmedicineqcreport,bil_obd_stk,asnnobycustomer,ordernobycustomer,orderlotcontrol,fullcaselotcontrol,piecelotcontrol,asn_lnk_po,inboundserialnoqtycontrol,outboundserialnoqtycontrol,validdatefrom,validdateto,emedicineqcreport,skuanalysisfields,enterprise_id,operate_type,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,receiving_address_id,defaultallocationrule
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.customerType != null and condition.customerType != ''" >
+	    and customer_type =  #{condition.customerType}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+	    and descr_c =  #{condition.descrC}
+	</if>
+	<if test="condition.descrE != null and condition.descrE != ''" >
+	    and descr_e =  #{condition.descrE}
+	</if>
+	<if test="condition.address1 != null and condition.address1 != ''" >
+	    and address1 =  #{condition.address1}
+	</if>
+	<if test="condition.address2 != null and condition.address2 != ''" >
+	    and address2 =  #{condition.address2}
+	</if>
+	<if test="condition.address3 != null and condition.address3 != ''" >
+	    and address3 =  #{condition.address3}
+	</if>
+	<if test="condition.address4 != null and condition.address4 != ''" >
+	    and address4 =  #{condition.address4}
+	</if>
+	<if test="condition.city != null and condition.city != ''" >
+	    and city =  #{condition.city}
+	</if>
+	<if test="condition.province != null and condition.province != ''" >
+	    and province =  #{condition.province}
+	</if>
+	<if test="condition.zip != null and condition.zip != ''" >
+	    and zip =  #{condition.zip}
+	</if>
+	<if test="condition.country != null and condition.country != ''" >
+	    and country =  #{condition.country}
+	</if>
+	<if test="condition.contact1 != null and condition.contact1 != ''" >
+	    and contact1 =  #{condition.contact1}
+	</if>
+	<if test="condition.contact1Tel1 != null and condition.contact1Tel1 != ''" >
+	    and contact1_tel1 =  #{condition.contact1Tel1}
+	</if>
+	<if test="condition.contact1Tel2 != null and condition.contact1Tel2 != ''" >
+	    and contact1_tel2 =  #{condition.contact1Tel2}
+	</if>
+	<if test="condition.contact1Fax != null and condition.contact1Fax != ''" >
+	    and contact1_fax =  #{condition.contact1Fax}
+	</if>
+	<if test="condition.contact1Email != null and condition.contact1Email != ''" >
+	    and contact1_email =  #{condition.contact1Email}
+	</if>
+	<if test="condition.contact1Title != null and condition.contact1Title != ''" >
+	    and contact1_title =  #{condition.contact1Title}
+	</if>
+	<if test="condition.contact2 != null and condition.contact2 != ''" >
+	    and contact2 =  #{condition.contact2}
+	</if>
+	<if test="condition.contact2Tel1 != null and condition.contact2Tel1 != ''" >
+	    and contact2_tel1 =  #{condition.contact2Tel1}
+	</if>
+	<if test="condition.contact2Tel2 != null and condition.contact2Tel2 != ''" >
+	    and contact2_tel2 =  #{condition.contact2Tel2}
+	</if>
+	<if test="condition.contact2Fax != null and condition.contact2Fax != ''" >
+	    and contact2_fax =  #{condition.contact2Fax}
+	</if>
+	<if test="condition.contact2Email != null and condition.contact2Email != ''" >
+	    and contact2_email =  #{condition.contact2Email}
+	</if>
+	<if test="condition.contact2Title != null and condition.contact2Title != ''" >
+	    and contact2_title =  #{condition.contact2Title}
+	</if>
+	<if test="condition.contact3 != null and condition.contact3 != ''" >
+	    and contact3 =  #{condition.contact3}
+	</if>
+	<if test="condition.contact3Tel1 != null and condition.contact3Tel1 != ''" >
+	    and contact3_tel1 =  #{condition.contact3Tel1}
+	</if>
+	<if test="condition.contact3Tel2 != null and condition.contact3Tel2 != ''" >
+	    and contact3_tel2 =  #{condition.contact3Tel2}
+	</if>
+	<if test="condition.contact3Fax != null and condition.contact3Fax != ''" >
+	    and contact3_fax =  #{condition.contact3Fax}
+	</if>
+	<if test="condition.contact3Email != null and condition.contact3Email != ''" >
+	    and contact3_email =  #{condition.contact3Email}
+	</if>
+	<if test="condition.contact3Title != null and condition.contact3Title != ''" >
+	    and contact3_title =  #{condition.contact3Title}
+	</if>
+	<if test="condition.billto != null and condition.billto != ''" >
+	    and billto =  #{condition.billto}
+	</if>
+	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+	    and active_flag =  #{condition.activeFlag}
+	</if>
+	<if test="condition.cartongroup != null and condition.cartongroup != ''" >
+	    and cartongroup =  #{condition.cartongroup}
+	</if>
+	<if test="condition.defaultsoftallocationrule != null and condition.defaultsoftallocationrule != ''" >
+	    and defaultsoftallocationrule =  #{condition.defaultsoftallocationrule}
+	</if>
+	<if test="condition.currency != null and condition.currency != ''" >
+	    and currency =  #{condition.currency}
+	</if>
+	<if test="condition.defaultputawayrule != null and condition.defaultputawayrule != ''" >
+	    and defaultputawayrule =  #{condition.defaultputawayrule}
+	</if>
+	<if test="condition.docPrefix != null and condition.docPrefix != ''" >
+	    and doc_prefix =  #{condition.docPrefix}
+	</if>
+	<if test="condition.udf1 != null and condition.udf1 != ''" >
+	    and udf1 =  #{condition.udf1}
+	</if>
+	<if test="condition.udf2 != null and condition.udf2 != ''" >
+	    and udf2 =  #{condition.udf2}
+	</if>
+	<if test="condition.udf3 != null and condition.udf3 != ''" >
+	    and udf3 =  #{condition.udf3}
+	</if>
+	<if test="condition.udf4 != null and condition.udf4 != ''" >
+	    and udf4 =  #{condition.udf4}
+	</if>
+	<if test="condition.udf5 != null and condition.udf5 != ''" >
+	    and udf5 =  #{condition.udf5}
+	</if>
+	<if test="condition.defaultskulotid != null and condition.defaultskulotid != ''" >
+	    and defaultskulotid =  #{condition.defaultskulotid}
+	</if>
+	<if test="condition.asnref1tolot4 != null and condition.asnref1tolot4 != ''" >
+	    and asnref1tolot4 =  #{condition.asnref1tolot4}
+	</if>
+	<if test="condition.asnref2tolot5 != null and condition.asnref2tolot5 != ''" >
+	    and asnref2tolot5 =  #{condition.asnref2tolot5}
+	</if>
+	<if test="condition.asnref3tolot6 != null and condition.asnref3tolot6 != ''" >
+	    and asnref3tolot6 =  #{condition.asnref3tolot6}
+	</if>
+	<if test="condition.asnref4tolot7 != null and condition.asnref4tolot7 != ''" >
+	    and asnref4tolot7 =  #{condition.asnref4tolot7}
+	</if>
+	<if test="condition.soref1tolot4 != null and condition.soref1tolot4 != ''" >
+	    and soref1tolot4 =  #{condition.soref1tolot4}
+	</if>
+	<if test="condition.soref2tolot5 != null and condition.soref2tolot5 != ''" >
+	    and soref2tolot5 =  #{condition.soref2tolot5}
+	</if>
+	<if test="condition.soref3tolot6 != null and condition.soref3tolot6 != ''" >
+	    and soref3tolot6 =  #{condition.soref3tolot6}
+	</if>
+	<if test="condition.soref4tolot7 != null and condition.soref4tolot7 != ''" >
+	    and soref4tolot7 =  #{condition.soref4tolot7}
+	</if>
+	<if test="condition.notes != null and condition.notes != ''" >
+	    and notes =  #{condition.notes}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.defaultreceivinguom != null and condition.defaultreceivinguom != ''" >
+	    and defaultreceivinguom =  #{condition.defaultreceivinguom}
+	</if>
+	<if test="condition.defaultshipmentuom != null and condition.defaultshipmentuom != ''" >
+	    and defaultshipmentuom =  #{condition.defaultshipmentuom}
+	</if>
+	<if test="condition.defaultreportuom != null and condition.defaultreportuom != ''" >
+	    and defaultreportuom =  #{condition.defaultreportuom}
+	</if>
+	<if test="condition.overreceiving != null and condition.overreceiving != ''" >
+	    and overreceiving =  #{condition.overreceiving}
+	</if>
+	<if test="condition.vat != null and condition.vat != ''" >
+	    and vat =  #{condition.vat}
+	</if>
+	<if test="condition.bankaccount != null and condition.bankaccount != ''" >
+	    and bankaccount =  #{condition.bankaccount}
+	</if>
+	<if test="condition.inboundLabel != null and condition.inboundLabel != ''" >
+	    and inbound_label =  #{condition.inboundLabel}
+	</if>
+	<if test="condition.allinrate != null and condition.allinrate != ''" >
+	    and allinrate =  #{condition.allinrate}
+	</if>
+	<if test="condition.billclass != null and condition.billclass != ''" >
+	    and billclass =  #{condition.billclass}
+	</if>
+	<if test="condition.overrcvpercentage != null and condition.overrcvpercentage != ''" >
+	    and overrcvpercentage =  #{condition.overrcvpercentage}
+	</if>
+	<if test="condition.rOwner != null and condition.rOwner != ''" >
+	    and r_owner =  #{condition.rOwner}
+	</if>
+	<if test="condition.cubicuom != null and condition.cubicuom != ''" >
+	    and cubicuom =  #{condition.cubicuom}
+	</if>
+	<if test="condition.weightuom != null and condition.weightuom != ''" >
+	    and weightuom =  #{condition.weightuom}
+	</if>
+	<if test="condition.asnref5tolot8 != null and condition.asnref5tolot8 != ''" >
+	    and asnref5tolot8 =  #{condition.asnref5tolot8}
+	</if>
+	<if test="condition.soref5tolot8 != null and condition.soref5tolot8 != ''" >
+	    and soref5tolot8 =  #{condition.soref5tolot8}
+	</if>
+	<if test="condition.billclassinv != null and condition.billclassinv != ''" >
+	    and billclassinv =  #{condition.billclassinv}
+	</if>
+	<if test="condition.defaultreplenishrule != null and condition.defaultreplenishrule != ''" >
+	    and defaultreplenishrule =  #{condition.defaultreplenishrule}
+	</if>
+	<if test="condition.routecode != null and condition.routecode != ''" >
+	    and routecode =  #{condition.routecode}
+	</if>
+	<if test="condition.easycode != null and condition.easycode != ''" >
+	    and easycode =  #{condition.easycode}
+	</if>
+	<if test="condition.snAsnCls != null and condition.snAsnCls != ''" >
+	    and sn_asn_cls =  #{condition.snAsnCls}
+	</if>
+	<if test="condition.snSoCls != null and condition.snSoCls != ''" >
+	    and sn_so_cls =  #{condition.snSoCls}
+	</if>
+	<if test="condition.snAsnSo != null and condition.snAsnSo != ''" >
+	    and sn_asn_so =  #{condition.snAsnSo}
+	</if>
+	<if test="condition.asnSndEml != null and condition.asnSndEml != ''" >
+	    and asn_snd_eml =  #{condition.asnSndEml}
+	</if>
+	<if test="condition.soSndEml != null and condition.soSndEml != ''" >
+	    and so_snd_eml =  #{condition.soSndEml}
+	</if>
+	<if test="condition.idxLoadSku != null and condition.idxLoadSku != ''" >
+	    and idx_load_sku =  #{condition.idxLoadSku}
+	</if>
+	<if test="condition.idxLoadSupplier != null and condition.idxLoadSupplier != ''" >
+	    and idx_load_supplier =  #{condition.idxLoadSupplier}
+	</if>
+	<if test="condition.idxLoadConsignee != null and condition.idxLoadConsignee != ''" >
+	    and idx_load_consignee =  #{condition.idxLoadConsignee}
+	</if>
+	<if test="condition.invchgwithshipment != null and condition.invchgwithshipment != ''" >
+	    and invchgwithshipment =  #{condition.invchgwithshipment}
+	</if>
+	<if test="condition.carrier != null and condition.carrier != ''" >
+	    and carrier =  #{condition.carrier}
+	</if>
+	<if test="condition.outboundLabel != null and condition.outboundLabel != ''" >
+	    and outbound_label =  #{condition.outboundLabel}
+	</if>
+	<if test="condition.ediCode != null and condition.ediCode != ''" >
+	    and edi_code =  #{condition.ediCode}
+	</if>
+	<if test="condition.tariffid != null and condition.tariffid != ''" >
+	    and tariffid =  #{condition.tariffid}
+	</if>
+	<if test="condition.rotationid != null and condition.rotationid != ''" >
+	    and rotationid =  #{condition.rotationid}
+	</if>
+	<if test="condition.reservecode != null and condition.reservecode != ''" >
+	    and reservecode =  #{condition.reservecode}
+	</if>
+	<if test="condition.calculatecode != null and condition.calculatecode != ''" >
+	    and calculatecode =  #{condition.calculatecode}
+	</if>
+	<if test="condition.defaultpackid != null and condition.defaultpackid != ''" >
+	    and defaultpackid =  #{condition.defaultpackid}
+	</if>
+	<if test="condition.billingdate != null and condition.billingdate != ''" >
+	    and billingdate =  #{condition.billingdate}
+	</if>
+	<if test="condition.followup != null and condition.followup != ''" >
+	    and followup =  #{condition.followup}
+	</if>
+	<if test="condition.hEdi01 != null and condition.hEdi01 != ''" >
+	    and h_edi_01 =  #{condition.hEdi01}
+	</if>
+	<if test="condition.hEdi02 != null and condition.hEdi02 != ''" >
+	    and h_edi_02 =  #{condition.hEdi02}
+	</if>
+	<if test="condition.hEdi03 != null and condition.hEdi03 != ''" >
+	    and h_edi_03 =  #{condition.hEdi03}
+	</if>
+	<if test="condition.hEdi04 != null and condition.hEdi04 != ''" >
+	    and h_edi_04 =  #{condition.hEdi04}
+	</if>
+	<if test="condition.hEdi05 != null and condition.hEdi05 != ''" >
+	    and h_edi_05 =  #{condition.hEdi05}
+	</if>
+	<if test="condition.hEdi06 != null and condition.hEdi06 != ''" >
+	    and h_edi_06 =  #{condition.hEdi06}
+	</if>
+	<if test="condition.hEdi07 != null and condition.hEdi07 != ''" >
+	    and h_edi_07 =  #{condition.hEdi07}
+	</if>
+	<if test="condition.hEdi08 != null and condition.hEdi08 != ''" >
+	    and h_edi_08 =  #{condition.hEdi08}
+	</if>
+	<if test="condition.hEdi09 != null and condition.hEdi09 != ''" >
+	    and h_edi_09 =  #{condition.hEdi09}
+	</if>
+	<if test="condition.hEdi10 != null and condition.hEdi10 != ''" >
+	    and h_edi_10 =  #{condition.hEdi10}
+	</if>
+	<if test="condition.hEdi11 != null and condition.hEdi11 != ''" >
+	    and h_edi_11 =  #{condition.hEdi11}
+	</if>
+	<if test="condition.hEdi12 != null and condition.hEdi12 != ''" >
+	    and h_edi_12 =  #{condition.hEdi12}
+	</if>
+	<if test="condition.hEdi13 != null and condition.hEdi13 != ''" >
+	    and h_edi_13 =  #{condition.hEdi13}
+	</if>
+	<if test="condition.hEdi14 != null and condition.hEdi14 != ''" >
+	    and h_edi_14 =  #{condition.hEdi14}
+	</if>
+	<if test="condition.hEdi15 != null and condition.hEdi15 != ''" >
+	    and h_edi_15 =  #{condition.hEdi15}
+	</if>
+	<if test="condition.hEdi16 != null and condition.hEdi16 != ''" >
+	    and h_edi_16 =  #{condition.hEdi16}
+	</if>
+	<if test="condition.hEdi17 != null and condition.hEdi17 != ''" >
+	    and h_edi_17 =  #{condition.hEdi17}
+	</if>
+	<if test="condition.hEdi18 != null and condition.hEdi18 != ''" >
+	    and h_edi_18 =  #{condition.hEdi18}
+	</if>
+	<if test="condition.hEdi19 != null and condition.hEdi19 != ''" >
+	    and h_edi_19 =  #{condition.hEdi19}
+	</if>
+	<if test="condition.hEdi20 != null and condition.hEdi20 != ''" >
+	    and h_edi_20 =  #{condition.hEdi20}
+	</if>
+	<if test="condition.dEdi01 != null and condition.dEdi01 != ''" >
+	    and d_edi_01 =  #{condition.dEdi01}
+	</if>
+	<if test="condition.dEdi02 != null and condition.dEdi02 != ''" >
+	    and d_edi_02 =  #{condition.dEdi02}
+	</if>
+	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
+	    and orderbysql =  #{condition.orderbysql}
+	</if>
+	<if test="condition.qcrule != null and condition.qcrule != ''" >
+	    and qcrule =  #{condition.qcrule}
+	</if>
+	<if test="condition.billwithasntype != null and condition.billwithasntype != ''" >
+	    and billwithasntype =  #{condition.billwithasntype}
+	</if>
+	<if test="condition.billwithsotype != null and condition.billwithsotype != ''" >
+	    and billwithsotype =  #{condition.billwithsotype}
+	</if>
+	<if test="condition.allinflag != null and condition.allinflag != ''" >
+	    and allinflag =  #{condition.allinflag}
+	</if>
+	<if test="condition.allinarea != null and condition.allinarea != ''" >
+	    and allinarea =  #{condition.allinarea}
+	</if>
+	<if test="condition.allinratetype != null and condition.allinratetype != ''" >
+	    and allinratetype =  #{condition.allinratetype}
+	</if>
+	<if test="condition.stop != null and condition.stop != ''" >
+	    and stop =  #{condition.stop}
+	</if>
+	<if test="condition.copypricetolotatt09 != null and condition.copypricetolotatt09 != ''" >
+	    and copypricetolotatt09 =  #{condition.copypricetolotatt09}
+	</if>
+	<if test="condition.printmedicineqcreport != null and condition.printmedicineqcreport != ''" >
+	    and printmedicineqcreport =  #{condition.printmedicineqcreport}
+	</if>
+	<if test="condition.bilObdStk != null and condition.bilObdStk != ''" >
+	    and bil_obd_stk =  #{condition.bilObdStk}
+	</if>
+	<if test="condition.asnnobycustomer != null and condition.asnnobycustomer != ''" >
+	    and asnnobycustomer =  #{condition.asnnobycustomer}
+	</if>
+	<if test="condition.ordernobycustomer != null and condition.ordernobycustomer != ''" >
+	    and ordernobycustomer =  #{condition.ordernobycustomer}
+	</if>
+	<if test="condition.orderlotcontrol != null and condition.orderlotcontrol != ''" >
+	    and orderlotcontrol =  #{condition.orderlotcontrol}
+	</if>
+	<if test="condition.fullcaselotcontrol != null and condition.fullcaselotcontrol != ''" >
+	    and fullcaselotcontrol =  #{condition.fullcaselotcontrol}
+	</if>
+	<if test="condition.piecelotcontrol != null and condition.piecelotcontrol != ''" >
+	    and piecelotcontrol =  #{condition.piecelotcontrol}
+	</if>
+	<if test="condition.asnLnkPo != null and condition.asnLnkPo != ''" >
+	    and asn_lnk_po =  #{condition.asnLnkPo}
+	</if>
+	<if test="condition.inboundserialnoqtycontrol != null and condition.inboundserialnoqtycontrol != ''" >
+	    and inboundserialnoqtycontrol =  #{condition.inboundserialnoqtycontrol}
+	</if>
+	<if test="condition.outboundserialnoqtycontrol != null and condition.outboundserialnoqtycontrol != ''" >
+	    and outboundserialnoqtycontrol =  #{condition.outboundserialnoqtycontrol}
+	</if>
+	<if test="condition.validdatefrom != null and condition.validdatefrom != ''" >
+	    and validdatefrom =  #{condition.validdatefrom}
+	</if>
+	<if test="condition.validdateto != null and condition.validdateto != ''" >
+	    and validdateto =  #{condition.validdateto}
+	</if>
+	<if test="condition.emedicineqcreport != null and condition.emedicineqcreport != ''" >
+	    and emedicineqcreport =  #{condition.emedicineqcreport}
+	</if>
+	<if test="condition.skuanalysisfields != null and condition.skuanalysisfields != ''" >
+	    and skuanalysisfields =  #{condition.skuanalysisfields}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+	    and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.operateType != null and condition.operateType != ''" >
+	    and operate_type =  #{condition.operateType}
+	</if>
+	<if test="condition.supContractNo != null and condition.supContractNo != ''" >
+	    and sup_contract_no =  #{condition.supContractNo}
+	</if>
+	<if test="condition.contractUrl != null and condition.contractUrl != ''" >
+	    and contract_url =  #{condition.contractUrl}
+	</if>
+	<if test="condition.clientContent != null and condition.clientContent != ''" >
+	    and client_content =  #{condition.clientContent}
+	</if>
+	<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+	    and client_start_date =  #{condition.clientStartDate}
+	</if>
+	<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+	    and client_end_date =  #{condition.clientEndDate}
+	</if>
+	<if test="condition.clientTerm != null and condition.clientTerm != ''" >
+	    and client_term =  #{condition.clientTerm}
+	</if>
+	<if test="condition.isChineseLabel != null and condition.isChineseLabel != ''" >
+	    and is_chinese_label =  #{condition.isChineseLabel}
+	</if>
+	<if test="condition.receivingAddressId != null and condition.receivingAddressId != ''" >
+	    and receiving_address_id =  #{condition.receivingAddressId}
+	</if>
+	<if test="condition.defaultallocationrule != null and condition.defaultallocationrule != ''" >
+	    and defaultallocationrule =  #{condition.defaultallocationrule}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into bas_customer_history(customerid,customer_type,descr_c,descr_e,address1,address2,address3,address4,city,province,zip,country,contact1,contact1_tel1,contact1_tel2,contact1_fax,contact1_email,contact1_title,contact2,contact2_tel1,contact2_tel2,contact2_fax,contact2_email,contact2_title,contact3,contact3_tel1,contact3_tel2,contact3_fax,contact3_email,contact3_title,billto,active_flag,cartongroup,defaultsoftallocationrule,currency,defaultputawayrule,doc_prefix,udf1,udf2,udf3,udf4,udf5,defaultskulotid,asnref1tolot4,asnref2tolot5,asnref3tolot6,asnref4tolot7,soref1tolot4,soref2tolot5,soref3tolot6,soref4tolot7,notes,addtime,addwho,edittime,editwho,defaultreceivinguom,defaultshipmentuom,defaultreportuom,overreceiving,vat,bankaccount,inbound_label,allinrate,billclass,overrcvpercentage,r_owner,cubicuom,weightuom,asnref5tolot8,soref5tolot8,billclassinv,defaultreplenishrule,routecode,easycode,sn_asn_cls,sn_so_cls,sn_asn_so,asn_snd_eml,so_snd_eml,idx_load_sku,idx_load_supplier,idx_load_consignee,invchgwithshipment,carrier,outbound_label,edi_code,tariffid,rotationid,reservecode,calculatecode,defaultpackid,billingdate,followup,h_edi_01,h_edi_02,h_edi_03,h_edi_04,h_edi_05,h_edi_06,h_edi_07,h_edi_08,h_edi_09,h_edi_10,h_edi_11,h_edi_12,h_edi_13,h_edi_14,h_edi_15,h_edi_16,h_edi_17,h_edi_18,h_edi_19,h_edi_20,d_edi_01,d_edi_02,orderbysql,qcrule,billwithasntype,billwithsotype,allinflag,allinarea,allinratetype,stop,copypricetolotatt09,printmedicineqcreport,bil_obd_stk,asnnobycustomer,ordernobycustomer,orderlotcontrol,fullcaselotcontrol,piecelotcontrol,asn_lnk_po,inboundserialnoqtycontrol,outboundserialnoqtycontrol,validdatefrom,validdateto,emedicineqcreport,skuanalysisfields,enterprise_id,operate_type,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,is_chinese_label,receiving_address_id,defaultallocationrule)
+ values(#{customerid},#{customerType},#{descrC},#{descrE},#{address1},#{address2},#{address3},#{address4},#{city},#{province},#{zip},#{country},#{contact1},#{contact1Tel1},#{contact1Tel2},#{contact1Fax},#{contact1Email},#{contact1Title},#{contact2},#{contact2Tel1},#{contact2Tel2},#{contact2Fax},#{contact2Email},#{contact2Title},#{contact3},#{contact3Tel1},#{contact3Tel2},#{contact3Fax},#{contact3Email},#{contact3Title},#{billto},#{activeFlag},#{cartongroup},#{defaultsoftallocationrule},#{currency},#{defaultputawayrule},#{docPrefix},#{udf1},#{udf2},#{udf3},#{udf4},#{udf5},#{defaultskulotid},#{asnref1tolot4},#{asnref2tolot5},#{asnref3tolot6},#{asnref4tolot7},#{soref1tolot4},#{soref2tolot5},#{soref3tolot6},#{soref4tolot7},#{notes},#{addtime},#{addwho},#{edittime},#{editwho},#{defaultreceivinguom},#{defaultshipmentuom},#{defaultreportuom},#{overreceiving},#{vat},#{bankaccount},#{inboundLabel},#{allinrate},#{billclass},#{overrcvpercentage},#{rOwner},#{cubicuom},#{weightuom},#{asnref5tolot8},#{soref5tolot8},#{billclassinv},#{defaultreplenishrule},#{routecode},#{easycode},#{snAsnCls},#{snSoCls},#{snAsnSo},#{asnSndEml},#{soSndEml},#{idxLoadSku},#{idxLoadSupplier},#{idxLoadConsignee},#{invchgwithshipment},#{carrier},#{outboundLabel},#{ediCode},#{tariffid},#{rotationid},#{reservecode},#{calculatecode},#{defaultpackid},#{billingdate},#{followup},#{hEdi01},#{hEdi02},#{hEdi03},#{hEdi04},#{hEdi05},#{hEdi06},#{hEdi07},#{hEdi08},#{hEdi09},#{hEdi10},#{hEdi11},#{hEdi12},#{hEdi13},#{hEdi14},#{hEdi15},#{hEdi16},#{hEdi17},#{hEdi18},#{hEdi19},#{hEdi20},#{dEdi01},#{dEdi02},#{orderbysql},#{qcrule},#{billwithasntype},#{billwithsotype},#{allinflag},#{allinarea},#{allinratetype},#{stop},#{copypricetolotatt09},#{printmedicineqcreport},#{bilObdStk},#{asnnobycustomer},#{ordernobycustomer},#{orderlotcontrol},#{fullcaselotcontrol},#{piecelotcontrol},#{asnLnkPo},#{inboundserialnoqtycontrol},#{outboundserialnoqtycontrol},#{validdatefrom},#{validdateto},#{emedicineqcreport},#{skuanalysisfields},#{enterpriseId},#{operateType},#{supContractNo},#{contractUrl},#{clientContent},#{clientStartDate},#{clientEndDate},#{clientTerm},#{isChineseLabel},#{receivingAddressId},#{defaultallocationrule})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update bas_customer_history set customer_type=#{customerType},descr_c=#{descrC},descr_e=#{descrE},address1=#{address1},address2=#{address2},address3=#{address3},address4=#{address4},city=#{city},province=#{province},zip=#{zip},country=#{country},contact1=#{contact1},contact1_tel1=#{contact1Tel1},contact1_tel2=#{contact1Tel2},contact1_fax=#{contact1Fax},contact1_email=#{contact1Email},contact1_title=#{contact1Title},contact2=#{contact2},contact2_tel1=#{contact2Tel1},contact2_tel2=#{contact2Tel2},contact2_fax=#{contact2Fax},contact2_email=#{contact2Email},contact2_title=#{contact2Title},contact3=#{contact3},contact3_tel1=#{contact3Tel1},contact3_tel2=#{contact3Tel2},contact3_fax=#{contact3Fax},contact3_email=#{contact3Email},contact3_title=#{contact3Title},billto=#{billto},active_flag=#{activeFlag},cartongroup=#{cartongroup},defaultsoftallocationrule=#{defaultsoftallocationrule},currency=#{currency},defaultputawayrule=#{defaultputawayrule},doc_prefix=#{docPrefix},udf1=#{udf1},udf2=#{udf2},udf3=#{udf3},udf4=#{udf4},udf5=#{udf5},defaultskulotid=#{defaultskulotid},asnref1tolot4=#{asnref1tolot4},asnref2tolot5=#{asnref2tolot5},asnref3tolot6=#{asnref3tolot6},asnref4tolot7=#{asnref4tolot7},soref1tolot4=#{soref1tolot4},soref2tolot5=#{soref2tolot5},soref3tolot6=#{soref3tolot6},soref4tolot7=#{soref4tolot7},notes=#{notes},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},defaultreceivinguom=#{defaultreceivinguom},defaultshipmentuom=#{defaultshipmentuom},defaultreportuom=#{defaultreportuom},overreceiving=#{overreceiving},vat=#{vat},bankaccount=#{bankaccount},inbound_label=#{inboundLabel},allinrate=#{allinrate},billclass=#{billclass},overrcvpercentage=#{overrcvpercentage},r_owner=#{rOwner},cubicuom=#{cubicuom},weightuom=#{weightuom},asnref5tolot8=#{asnref5tolot8},soref5tolot8=#{soref5tolot8},billclassinv=#{billclassinv},defaultreplenishrule=#{defaultreplenishrule},routecode=#{routecode},easycode=#{easycode},sn_asn_cls=#{snAsnCls},sn_so_cls=#{snSoCls},sn_asn_so=#{snAsnSo},asn_snd_eml=#{asnSndEml},so_snd_eml=#{soSndEml},idx_load_sku=#{idxLoadSku},idx_load_supplier=#{idxLoadSupplier},idx_load_consignee=#{idxLoadConsignee},invchgwithshipment=#{invchgwithshipment},carrier=#{carrier},outbound_label=#{outboundLabel},edi_code=#{ediCode},tariffid=#{tariffid},rotationid=#{rotationid},reservecode=#{reservecode},calculatecode=#{calculatecode},defaultpackid=#{defaultpackid},billingdate=#{billingdate},followup=#{followup},h_edi_01=#{hEdi01},h_edi_02=#{hEdi02},h_edi_03=#{hEdi03},h_edi_04=#{hEdi04},h_edi_05=#{hEdi05},h_edi_06=#{hEdi06},h_edi_07=#{hEdi07},h_edi_08=#{hEdi08},h_edi_09=#{hEdi09},h_edi_10=#{hEdi10},h_edi_11=#{hEdi11},h_edi_12=#{hEdi12},h_edi_13=#{hEdi13},h_edi_14=#{hEdi14},h_edi_15=#{hEdi15},h_edi_16=#{hEdi16},h_edi_17=#{hEdi17},h_edi_18=#{hEdi18},h_edi_19=#{hEdi19},h_edi_20=#{hEdi20},d_edi_01=#{dEdi01},d_edi_02=#{dEdi02},orderbysql=#{orderbysql},qcrule=#{qcrule},billwithasntype=#{billwithasntype},billwithsotype=#{billwithsotype},allinflag=#{allinflag},allinarea=#{allinarea},allinratetype=#{allinratetype},stop=#{stop},copypricetolotatt09=#{copypricetolotatt09},printmedicineqcreport=#{printmedicineqcreport},bil_obd_stk=#{bilObdStk},asnnobycustomer=#{asnnobycustomer},ordernobycustomer=#{ordernobycustomer},orderlotcontrol=#{orderlotcontrol},fullcaselotcontrol=#{fullcaselotcontrol},piecelotcontrol=#{piecelotcontrol},asn_lnk_po=#{asnLnkPo},inboundserialnoqtycontrol=#{inboundserialnoqtycontrol},outboundserialnoqtycontrol=#{outboundserialnoqtycontrol},validdatefrom=#{validdatefrom},validdateto=#{validdateto},emedicineqcreport=#{emedicineqcreport},skuanalysisfields=#{skuanalysisfields},enterprise_id=#{enterpriseId},operate_type=#{operateType},sup_contract_no=#{supContractNo},contract_url=#{contractUrl},client_content=#{clientContent},client_start_date=#{clientStartDate},client_end_date=#{clientEndDate},client_term=#{clientTerm},is_chinese_label=#{isChineseLabel},receiving_address_id=#{receivingAddressId},defaultallocationrule=#{defaultallocationrule} where customerid=#{customerid}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update bas_customer_history set 
+	<trim  suffixOverrides="," >
+	<if test="customerType != null  ">
+		customer_type=#{customerType},
+	</if>
+	<if test="descrC != null  ">
+		descr_c=#{descrC},
+	</if>
+	<if test="descrE != null  ">
+		descr_e=#{descrE},
+	</if>
+	<if test="address1 != null  ">
+		address1=#{address1},
+	</if>
+	<if test="address2 != null  ">
+		address2=#{address2},
+	</if>
+	<if test="address3 != null  ">
+		address3=#{address3},
+	</if>
+	<if test="address4 != null  ">
+		address4=#{address4},
+	</if>
+	<if test="city != null  ">
+		city=#{city},
+	</if>
+	<if test="province != null  ">
+		province=#{province},
+	</if>
+	<if test="zip != null  ">
+		zip=#{zip},
+	</if>
+	<if test="country != null  ">
+		country=#{country},
+	</if>
+	<if test="contact1 != null  ">
+		contact1=#{contact1},
+	</if>
+	<if test="contact1Tel1 != null  ">
+		contact1_tel1=#{contact1Tel1},
+	</if>
+	<if test="contact1Tel2 != null  ">
+		contact1_tel2=#{contact1Tel2},
+	</if>
+	<if test="contact1Fax != null  ">
+		contact1_fax=#{contact1Fax},
+	</if>
+	<if test="contact1Email != null  ">
+		contact1_email=#{contact1Email},
+	</if>
+	<if test="contact1Title != null  ">
+		contact1_title=#{contact1Title},
+	</if>
+	<if test="contact2 != null  ">
+		contact2=#{contact2},
+	</if>
+	<if test="contact2Tel1 != null  ">
+		contact2_tel1=#{contact2Tel1},
+	</if>
+	<if test="contact2Tel2 != null  ">
+		contact2_tel2=#{contact2Tel2},
+	</if>
+	<if test="contact2Fax != null  ">
+		contact2_fax=#{contact2Fax},
+	</if>
+	<if test="contact2Email != null  ">
+		contact2_email=#{contact2Email},
+	</if>
+	<if test="contact2Title != null  ">
+		contact2_title=#{contact2Title},
+	</if>
+	<if test="contact3 != null  ">
+		contact3=#{contact3},
+	</if>
+	<if test="contact3Tel1 != null  ">
+		contact3_tel1=#{contact3Tel1},
+	</if>
+	<if test="contact3Tel2 != null  ">
+		contact3_tel2=#{contact3Tel2},
+	</if>
+	<if test="contact3Fax != null  ">
+		contact3_fax=#{contact3Fax},
+	</if>
+	<if test="contact3Email != null  ">
+		contact3_email=#{contact3Email},
+	</if>
+	<if test="contact3Title != null  ">
+		contact3_title=#{contact3Title},
+	</if>
+	<if test="billto != null  ">
+		billto=#{billto},
+	</if>
+	<if test="activeFlag != null  ">
+		active_flag=#{activeFlag},
+	</if>
+	<if test="cartongroup != null  ">
+		cartongroup=#{cartongroup},
+	</if>
+	<if test="defaultsoftallocationrule != null  ">
+		defaultsoftallocationrule=#{defaultsoftallocationrule},
+	</if>
+	<if test="currency != null  ">
+		currency=#{currency},
+	</if>
+	<if test="defaultputawayrule != null  ">
+		defaultputawayrule=#{defaultputawayrule},
+	</if>
+	<if test="docPrefix != null  ">
+		doc_prefix=#{docPrefix},
+	</if>
+	<if test="udf1 != null  ">
+		udf1=#{udf1},
+	</if>
+	<if test="udf2 != null  ">
+		udf2=#{udf2},
+	</if>
+	<if test="udf3 != null  ">
+		udf3=#{udf3},
+	</if>
+	<if test="udf4 != null  ">
+		udf4=#{udf4},
+	</if>
+	<if test="udf5 != null  ">
+		udf5=#{udf5},
+	</if>
+	<if test="defaultskulotid != null  ">
+		defaultskulotid=#{defaultskulotid},
+	</if>
+	<if test="asnref1tolot4 != null  ">
+		asnref1tolot4=#{asnref1tolot4},
+	</if>
+	<if test="asnref2tolot5 != null  ">
+		asnref2tolot5=#{asnref2tolot5},
+	</if>
+	<if test="asnref3tolot6 != null  ">
+		asnref3tolot6=#{asnref3tolot6},
+	</if>
+	<if test="asnref4tolot7 != null  ">
+		asnref4tolot7=#{asnref4tolot7},
+	</if>
+	<if test="soref1tolot4 != null  ">
+		soref1tolot4=#{soref1tolot4},
+	</if>
+	<if test="soref2tolot5 != null  ">
+		soref2tolot5=#{soref2tolot5},
+	</if>
+	<if test="soref3tolot6 != null  ">
+		soref3tolot6=#{soref3tolot6},
+	</if>
+	<if test="soref4tolot7 != null  ">
+		soref4tolot7=#{soref4tolot7},
+	</if>
+	<if test="notes != null  ">
+		notes=#{notes},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="edittime != null  ">
+		edittime=#{edittime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+	<if test="defaultreceivinguom != null  ">
+		defaultreceivinguom=#{defaultreceivinguom},
+	</if>
+	<if test="defaultshipmentuom != null  ">
+		defaultshipmentuom=#{defaultshipmentuom},
+	</if>
+	<if test="defaultreportuom != null  ">
+		defaultreportuom=#{defaultreportuom},
+	</if>
+	<if test="overreceiving != null  ">
+		overreceiving=#{overreceiving},
+	</if>
+	<if test="vat != null  ">
+		vat=#{vat},
+	</if>
+	<if test="bankaccount != null  ">
+		bankaccount=#{bankaccount},
+	</if>
+	<if test="inboundLabel != null  ">
+		inbound_label=#{inboundLabel},
+	</if>
+	<if test="allinrate != null  ">
+		allinrate=#{allinrate},
+	</if>
+	<if test="billclass != null  ">
+		billclass=#{billclass},
+	</if>
+	<if test="overrcvpercentage != null  ">
+		overrcvpercentage=#{overrcvpercentage},
+	</if>
+	<if test="rOwner != null  ">
+		r_owner=#{rOwner},
+	</if>
+	<if test="cubicuom != null  ">
+		cubicuom=#{cubicuom},
+	</if>
+	<if test="weightuom != null  ">
+		weightuom=#{weightuom},
+	</if>
+	<if test="asnref5tolot8 != null  ">
+		asnref5tolot8=#{asnref5tolot8},
+	</if>
+	<if test="soref5tolot8 != null  ">
+		soref5tolot8=#{soref5tolot8},
+	</if>
+	<if test="billclassinv != null  ">
+		billclassinv=#{billclassinv},
+	</if>
+	<if test="defaultreplenishrule != null  ">
+		defaultreplenishrule=#{defaultreplenishrule},
+	</if>
+	<if test="routecode != null  ">
+		routecode=#{routecode},
+	</if>
+	<if test="easycode != null  ">
+		easycode=#{easycode},
+	</if>
+	<if test="snAsnCls != null  ">
+		sn_asn_cls=#{snAsnCls},
+	</if>
+	<if test="snSoCls != null  ">
+		sn_so_cls=#{snSoCls},
+	</if>
+	<if test="snAsnSo != null  ">
+		sn_asn_so=#{snAsnSo},
+	</if>
+	<if test="asnSndEml != null  ">
+		asn_snd_eml=#{asnSndEml},
+	</if>
+	<if test="soSndEml != null  ">
+		so_snd_eml=#{soSndEml},
+	</if>
+	<if test="idxLoadSku != null  ">
+		idx_load_sku=#{idxLoadSku},
+	</if>
+	<if test="idxLoadSupplier != null  ">
+		idx_load_supplier=#{idxLoadSupplier},
+	</if>
+	<if test="idxLoadConsignee != null  ">
+		idx_load_consignee=#{idxLoadConsignee},
+	</if>
+	<if test="invchgwithshipment != null  ">
+		invchgwithshipment=#{invchgwithshipment},
+	</if>
+	<if test="carrier != null  ">
+		carrier=#{carrier},
+	</if>
+	<if test="outboundLabel != null  ">
+		outbound_label=#{outboundLabel},
+	</if>
+	<if test="ediCode != null  ">
+		edi_code=#{ediCode},
+	</if>
+	<if test="tariffid != null  ">
+		tariffid=#{tariffid},
+	</if>
+	<if test="rotationid != null  ">
+		rotationid=#{rotationid},
+	</if>
+	<if test="reservecode != null  ">
+		reservecode=#{reservecode},
+	</if>
+	<if test="calculatecode != null  ">
+		calculatecode=#{calculatecode},
+	</if>
+	<if test="defaultpackid != null  ">
+		defaultpackid=#{defaultpackid},
+	</if>
+	<if test="billingdate != null  ">
+		billingdate=#{billingdate},
+	</if>
+	<if test="followup != null  ">
+		followup=#{followup},
+	</if>
+	<if test="hEdi01 != null  ">
+		h_edi_01=#{hEdi01},
+	</if>
+	<if test="hEdi02 != null  ">
+		h_edi_02=#{hEdi02},
+	</if>
+	<if test="hEdi03 != null  ">
+		h_edi_03=#{hEdi03},
+	</if>
+	<if test="hEdi04 != null  ">
+		h_edi_04=#{hEdi04},
+	</if>
+	<if test="hEdi05 != null  ">
+		h_edi_05=#{hEdi05},
+	</if>
+	<if test="hEdi06 != null  ">
+		h_edi_06=#{hEdi06},
+	</if>
+	<if test="hEdi07 != null  ">
+		h_edi_07=#{hEdi07},
+	</if>
+	<if test="hEdi08 != null  ">
+		h_edi_08=#{hEdi08},
+	</if>
+	<if test="hEdi09 != null  ">
+		h_edi_09=#{hEdi09},
+	</if>
+	<if test="hEdi10 != null  ">
+		h_edi_10=#{hEdi10},
+	</if>
+	<if test="hEdi11 != null  ">
+		h_edi_11=#{hEdi11},
+	</if>
+	<if test="hEdi12 != null  ">
+		h_edi_12=#{hEdi12},
+	</if>
+	<if test="hEdi13 != null  ">
+		h_edi_13=#{hEdi13},
+	</if>
+	<if test="hEdi14 != null  ">
+		h_edi_14=#{hEdi14},
+	</if>
+	<if test="hEdi15 != null  ">
+		h_edi_15=#{hEdi15},
+	</if>
+	<if test="hEdi16 != null  ">
+		h_edi_16=#{hEdi16},
+	</if>
+	<if test="hEdi17 != null  ">
+		h_edi_17=#{hEdi17},
+	</if>
+	<if test="hEdi18 != null  ">
+		h_edi_18=#{hEdi18},
+	</if>
+	<if test="hEdi19 != null  ">
+		h_edi_19=#{hEdi19},
+	</if>
+	<if test="hEdi20 != null  ">
+		h_edi_20=#{hEdi20},
+	</if>
+	<if test="dEdi01 != null  ">
+		d_edi_01=#{dEdi01},
+	</if>
+	<if test="dEdi02 != null  ">
+		d_edi_02=#{dEdi02},
+	</if>
+	<if test="orderbysql != null  ">
+		orderbysql=#{orderbysql},
+	</if>
+	<if test="qcrule != null  ">
+		qcrule=#{qcrule},
+	</if>
+	<if test="billwithasntype != null  ">
+		billwithasntype=#{billwithasntype},
+	</if>
+	<if test="billwithsotype != null  ">
+		billwithsotype=#{billwithsotype},
+	</if>
+	<if test="allinflag != null  ">
+		allinflag=#{allinflag},
+	</if>
+	<if test="allinarea != null  ">
+		allinarea=#{allinarea},
+	</if>
+	<if test="allinratetype != null  ">
+		allinratetype=#{allinratetype},
+	</if>
+	<if test="stop != null  ">
+		stop=#{stop},
+	</if>
+	<if test="copypricetolotatt09 != null  ">
+		copypricetolotatt09=#{copypricetolotatt09},
+	</if>
+	<if test="printmedicineqcreport != null  ">
+		printmedicineqcreport=#{printmedicineqcreport},
+	</if>
+	<if test="bilObdStk != null  ">
+		bil_obd_stk=#{bilObdStk},
+	</if>
+	<if test="asnnobycustomer != null  ">
+		asnnobycustomer=#{asnnobycustomer},
+	</if>
+	<if test="ordernobycustomer != null  ">
+		ordernobycustomer=#{ordernobycustomer},
+	</if>
+	<if test="orderlotcontrol != null  ">
+		orderlotcontrol=#{orderlotcontrol},
+	</if>
+	<if test="fullcaselotcontrol != null  ">
+		fullcaselotcontrol=#{fullcaselotcontrol},
+	</if>
+	<if test="piecelotcontrol != null  ">
+		piecelotcontrol=#{piecelotcontrol},
+	</if>
+	<if test="asnLnkPo != null  ">
+		asn_lnk_po=#{asnLnkPo},
+	</if>
+	<if test="inboundserialnoqtycontrol != null  ">
+		inboundserialnoqtycontrol=#{inboundserialnoqtycontrol},
+	</if>
+	<if test="outboundserialnoqtycontrol != null  ">
+		outboundserialnoqtycontrol=#{outboundserialnoqtycontrol},
+	</if>
+	<if test="validdatefrom != null  ">
+		validdatefrom=#{validdatefrom},
+	</if>
+	<if test="validdateto != null  ">
+		validdateto=#{validdateto},
+	</if>
+	<if test="emedicineqcreport != null  ">
+		emedicineqcreport=#{emedicineqcreport},
+	</if>
+	<if test="skuanalysisfields != null  ">
+		skuanalysisfields=#{skuanalysisfields},
+	</if>
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
+	</if>
+	<if test="operateType != null  ">
+		operate_type=#{operateType},
+	</if>
+	<if test="supContractNo != null  ">
+		sup_contract_no=#{supContractNo},
+	</if>
+	<if test="contractUrl != null  ">
+		contract_url=#{contractUrl},
+	</if>
+	<if test="clientContent != null  ">
+		client_content=#{clientContent},
+	</if>
+	<if test="clientStartDate != null  ">
+		client_start_date=#{clientStartDate},
+	</if>
+	<if test="clientEndDate != null  ">
+		client_end_date=#{clientEndDate},
+	</if>
+	<if test="clientTerm != null  ">
+		client_term=#{clientTerm},
+	</if>
+	<if test="isChineseLabel != null  ">
+		is_chinese_label=#{isChineseLabel},
+	</if>
+	<if test="receivingAddressId != null  ">
+		receiving_address_id=#{receivingAddressId},
+	</if>
+	<if test="defaultallocationrule != null  ">
+		defaultallocationrule=#{defaultallocationrule},
+	</if>
+	</trim> where customerid=#{customerid}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from bas_customer_history where customerid = #{customerid}
+</delete>
+ 
+<!-- 根据id查询 客户档案历史 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from bas_customer_history where customerid = #{customerid}
+</select>
+
+<!-- 客户档案历史 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from bas_customer_history 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询客户档案历史列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from bas_customer_history 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

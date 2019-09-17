@@ -59,7 +59,8 @@ public class BasCustomerService extends BaseService {
 
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-
+	@Autowired
+	private BasCustomerHistoryMybatisDao basCustomerHistoryMybatisDao;
 
 
 
@@ -302,7 +303,9 @@ public class BasCustomerService extends BaseService {
 			if(basCustomerHistory!=null){
 				//BasCustomer basCustomer = new BasCustomer();
 				//BeanUtils.copyProperties(basCustomerHistory,basSkuHistory);
-
+//				BasCustomerHistory basCustomerHistoryQ = new BasCustomerHistory();
+//				BeanUtils.copyProperties(basCustomerHistory,basCustomerHistoryQ);
+//				basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
 				//TODO 插入history.add(basSkuHistory);
 				basCustomerMybatisDao.deleteBascustomerByCustomerID(basCustomerHistory.getCustomerid(),basCustomerHistory.getCustomerType());
 			}

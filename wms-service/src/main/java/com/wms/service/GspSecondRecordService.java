@@ -8,7 +8,10 @@ import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.GspOperateDetail;
+import com.wms.mybatis.dao.GspOperateDetailMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.GspOperateDetailQuery;
 import com.wms.utils.RandomUtil;
 import com.wms.vo.GspSecondRecordVO;
 import com.wms.vo.form.GspOperateDetailForm;
@@ -30,6 +33,8 @@ public class GspSecondRecordService extends BaseService {
 	private GspSecondRecordMybatisDao gspSecondRecordMybatisDao;
 	@Autowired
 	private GspOperateDetailService gspOperateDetailService;
+	@Autowired
+	private GspOperateDetailMybatisDao gspOperateDetailMybatisDao;
 
 	public Json addGspSecondRecord(GspSecondRecordForm gspSecondRecordForm) throws Exception {
 		Json json = new Json();
@@ -159,11 +164,25 @@ public class GspSecondRecordService extends BaseService {
 					List<GspSecondRecord> gS = gspSecondRecordMybatisDao.queryByList(criteria);
 					//循环插入新建的企业版本中
 					for (GspSecondRecord gspSecondRecord : gS) {
+						String oldLicense = gspSecondRecord.getRecordId();
 						gspSecondRecord.setRecordId(RandomUtil.getUUID());
 						gspSecondRecord.setEnterpriseId(enterpriceId);
-//					gspSecondRecord.setCreateDate(new Date());
 						gspSecondRecord.setCreateId(getLoginUserId());
 						gspSecondRecordMybatisDao.add(gspSecondRecord);
+						//历史营业证照的所有经营范围
+						GspOperateDetailQuery operateDetailQuery = new GspOperateDetailQuery();
+						operateDetailQuery.setLicenseId(oldLicense);
+						criteria.setCondition(operateDetailQuery);
+						List<GspOperateDetail> GspOperateDetailList = gspOperateDetailMybatisDao.queryByList(criteria);
+						if(GspOperateDetailList.size()>0){
+							for (GspOperateDetail od : GspOperateDetailList) {
+								GspOperateDetailForm god = new GspOperateDetailForm();
+								god.setOperateId(od.getOperateId());
+								god.setEnterpriseId(gspSecondRecord.getRecordId());
+								gspOperateDetailService.addGspOperateDetail(god, Constant.LICENSE_TYPE_RECORD);
+							}
+						}
+
 					}
 				}
 

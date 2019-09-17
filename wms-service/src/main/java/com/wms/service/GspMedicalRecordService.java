@@ -110,6 +110,8 @@ public class GspMedicalRecordService extends BaseService {
 //			return Json.error("必须选择许可证经营范围！");
 //		}
 
+
+
 		//提交
 		if(opType.equals(Constant.LICENSE_SUBMIT_ADD)){
 			//新增

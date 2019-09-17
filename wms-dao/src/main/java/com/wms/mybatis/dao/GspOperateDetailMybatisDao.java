@@ -23,4 +23,7 @@ public interface GspOperateDetailMybatisDao extends BaseDao {
      * @return
      */
     Long updateByLicenseId(@Param("licenseId") String licenseId,@Param("licenseType") String licenseType);
+
+
+
 }

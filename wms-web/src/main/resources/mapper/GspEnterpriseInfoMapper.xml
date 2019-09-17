@@ -216,6 +216,15 @@
 	</select>
 
 
+    <!-- 根据enterpriseId查询 已作为注册证生产企业的企业信息 -->
+    <select id="selectEnterpriseProductRegister" resultMap="BaseResultMap" parameterType="Object">
+        select * from gsp_enterprise_info t1
+        LEFT JOIN gsp_product_register t2 on t1.enterprise_id = t2.enterprise_id
+        and t1.is_use = '1' and t2.is_use = '1'
+        where t2.enterprise_id = #{enterpriseId}
+	</select>
+
+
     <!-- 企业信息 列表总数-->
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
         select count(1) from gsp_enterprise_info
@@ -344,12 +353,12 @@
         LEFT JOIN gsp_supplier gs ON g.enterprise_id = gs.enterprise_id
         LEFT JOIN (
         select DISTINCT(enterprise_id),record_no
-        from gsp_second_record
+        from gsp_second_record where is_use = '1'
         )gr ON g.enterprise_id = gr.enterprise_id
         LEFT JOIN
         (
         select DISTINCT(enterprise_id),record_no
-        from gsp_first_record
+        from gsp_first_record where is_use = '1'
         ) gf on g.enterprise_id = gf.enterprise_id
         LEFT JOIN (
         SELECT
@@ -386,6 +395,7 @@
         left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
         <include refid="Example_Where_Clause_Type"/>
     </select>
+
 
 
 
