@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
 </head>
@@ -447,6 +448,9 @@
     }
 //上传文件
     function doUpload(data) {
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -460,11 +464,20 @@
                 }
             },
             onload:function(data){
-                console.log(data)
-                $("#attachmentUrl").val(data.comment);
+                $.messager.progress('close');
+                console.log(data);
+                if (data.success) {
+                    $("#attachmentUrl").val(data.comment);
+                }else {
+                    showMsg("上传附件失败，请重试");
+                    $("#ezuiFormDetail input[id='attachmentUrlFile']").filebox("setValue","");
+                }
             },
             onerror:function(er){
+                $.messager.progress('close');
                 console.log(er);
+                showMsg("上传附件失败，请重试");
+                $("#ezuiFormDetail input[id='attachmentUrlFile']").filebox("setValue","");
             }
         });
         //$('#file').filebox('clear');//上传成功后清空里面的值
@@ -512,7 +525,7 @@
                 if($("#ezuiFormDetail #approveDate").datebox("getValue")>$("#ezuiFormDetail #productRegisterExpiryDate").datebox("getValue"))
                 {
                     $("#productRegisterExpiryDate").focus();
-                    showMsg("有效时间时间不能小于批准时间！");
+                    showMsg("有效时间不能小于批准时间！");
                     return false;
                 }
 
