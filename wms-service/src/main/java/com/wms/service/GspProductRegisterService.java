@@ -14,10 +14,7 @@ import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.importdata.ImportGspProductRegisterDataService;
-import com.wms.utils.DateUtil;
-import com.wms.utils.RandomUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.*;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import com.wms.vo.form.GspOperateDetailForm;
@@ -251,6 +248,10 @@ public class GspProductRegisterService extends BaseService {
 			}
 
 			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(id);
+			if (StringUtil.isEmpty(gspProductRegister.getAttachmentUrl())) {
+			    return Json.error("请上传注册证/备案附件");
+            }
+
 			gspProductRegister.setCheckDate(new Date());
 			gspProductRegister.setCheckerId(SfcUserLoginUtil.getLoginUser().getId());
 			gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);

@@ -40,7 +40,7 @@
                     <th>住所</th>
                     <td><input type='text' value="${gspProdLicense.residence}" data="1" id="residence" name='residence' class='easyui-textbox' data-options='required:true,width:300'/></td>
 
-                    <th rowspan="2">生产范围</th>
+                    <th rowspan="2">生产范围(已选择)</th>
                     <td rowspan="2">
                         <input type='text' data="1"  id="showChose" name='showChose' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:300,height:60,editable:false'/>
                         <a onclick='selectOperateScope1()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>

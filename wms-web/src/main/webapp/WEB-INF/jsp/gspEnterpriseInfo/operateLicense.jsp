@@ -85,7 +85,7 @@
 
                 </tr>
                 <tr>
-                    <th>经营范围</th>
+                    <th>经营范围(已选择)</th>
                     <td >
                         <input type='text' data="1" id="showChose" name='showChose' style="height:45px;" class='easyui-textbox' data-options='required:true,multiline:true,width:300,editable:false'/>
                         <a onclick='selectOperateScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
