@@ -276,7 +276,7 @@
             rownumbers:true,
             idField : 'specsId',
             columns : [[
-                // {field: 'ck',checkbox:true },
+                {field: 'ck',checkbox:true },
                 {field: 'specsId',title: '主键' ,hidden:true},
                 {field: 'productCode',title: '产品代码' ,width: '15%'},
                 {field: 'productName',title: '产品名称',width: '40%'},
