@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -21,7 +22,7 @@ public class BasSkuHistory  implements Serializable {
 
 	private String packid;
 
-	private Double tare;
+	private BigDecimal tare;
 
 	private String activeFlag;
 
@@ -31,25 +32,25 @@ public class BasSkuHistory  implements Serializable {
 
 	private String putawayzone;
 
-	private Double cube;
+	private BigDecimal cube;
 
 	private String putawaylocation;
 
-	private Double grossweight;
+	private BigDecimal grossweight;
 
-	private Double netweight;
+	private BigDecimal netweight;
 
 	private String cycleclass;
 
-	private java.sql.Date lastcyclecount;
+	private java.util.Date lastcyclecount;
 
-	private Double reorderqty;
+	private BigDecimal reorderqty;
 
-	private Double price;
+	private BigDecimal price;
 
 	private String shelflifeflag;
 
-	private Long inboundlifedays;
+	private BigDecimal inboundlifedays;
 
 	private String softallocationrule;
 
@@ -57,13 +58,13 @@ public class BasSkuHistory  implements Serializable {
 
 	private String shelflifetype;
 
-	private Long outboundlifedays;
+	private BigDecimal outboundlifedays;
 
-	private java.sql.Date addtime;
+	private java.util.Date addtime;
 
 	private String addwho;
 
-	private java.sql.Date edittime;
+	private java.util.Date edittime;
 
 	private String editwho;
 
@@ -111,11 +112,11 @@ public class BasSkuHistory  implements Serializable {
 
 	private String copypackidtolotatt12;
 
-	private Double qtymin;
+	private BigDecimal qtymin;
 
-	private Double qtymax;
+	private BigDecimal qtymax;
 
-	private Long shelflife;
+	private BigDecimal shelflife;
 
 	private String hscode;
 
@@ -133,13 +134,13 @@ public class BasSkuHistory  implements Serializable {
 
 	private String reservedfield12;
 
-	private Double overrcvpercentage;
+	private BigDecimal overrcvpercentage;
 
 	private String replenishrule;
 
 	private String specialmaintenance;
 
-	private java.sql.Date lastmaintenancedate;
+	private java.util.Date lastmaintenancedate;
 
 	private String firstop;
 
@@ -163,17 +164,17 @@ public class BasSkuHistory  implements Serializable {
 
 	private String reportuom;
 
-	private Double skulength;
+	private BigDecimal skulength;
 
-	private Double skuwidth;
+	private BigDecimal skuwidth;
 
-	private Double skuhigh;
+	private BigDecimal skuhigh;
 
-	private Double qctime;
+	private BigDecimal qctime;
 
 	private String qcrule;
 
-	private java.sql.Date firstinbounddate;
+	private java.util.Date firstinbounddate;
 
 	private String reservedfield13;
 
@@ -203,7 +204,7 @@ public class BasSkuHistory  implements Serializable {
 
 	private String scanwhenputaway;
 
-	private Long shelflifealertdays;
+	private BigDecimal shelflifealertdays;
 
 	private String reservedfield17;
 

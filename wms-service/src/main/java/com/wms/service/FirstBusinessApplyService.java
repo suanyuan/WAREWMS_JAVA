@@ -269,6 +269,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessApply.setIsUse(Constant.IS_USE_YES);
 				firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				firstBusinessApply.setProductline(productLine);
+
 				firstBusinessApplyMybatisDao.add(firstBusinessApply);
 
 //			    String[] arr = productArr.split(",");
