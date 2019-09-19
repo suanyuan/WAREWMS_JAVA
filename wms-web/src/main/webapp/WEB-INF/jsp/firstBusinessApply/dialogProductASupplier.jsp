@@ -469,7 +469,6 @@
 				dataType : 'JSON',
 				async  :false,
 				success : function(result){
-
                     for(var i=0;result.length>i;i++){
                         console.log(result);
                         console.log(result[i]);
@@ -478,6 +477,9 @@
 						}
 					}
 
+				},
+				error :function (){
+				    alert(11111);
 				}
 			});
 		}

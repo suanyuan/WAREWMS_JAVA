@@ -113,7 +113,25 @@ public class CommonController {
         }
         return null;
     }
-
+    /**
+     * 获取委托方获取供应商
+     * @return
+     */
+    @RequestMapping(params = "getSupplier")
+    @ResponseBody
+    public List<EasyuiCombobox> getSupplier(String customerId){
+        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
+        List<BasCustomer> basCustomers = basCustomerService.querySupplierByCustomer(customerId);
+        if(basCustomers!=null && basCustomers.size()>0){
+            for(BasCustomer b : basCustomers){
+                EasyuiCombobox box = new EasyuiCombobox();
+                box.setId(b.getCustomerid());
+                box.setValue(b.getDescrC());
+                easyuiComboboxList.add(box);
+            }
+        }
+        return easyuiComboboxList;
+    }
     /**
      * 是否启用
      * @return
@@ -392,25 +410,7 @@ public class CommonController {
         return basCodesService.getBy(Constant.CODE_CATALOG_COU_REQUEST);
     }
 
-    /**
-     * 获取委托方获取供应商
-     * @return
-     */
-    @RequestMapping(params = "getSupplier")
-    @ResponseBody
-    public List<EasyuiCombobox> getSupplier(String customerId){
-        List<EasyuiCombobox> easyuiComboboxList = new ArrayList<>();
-        List<BasCustomer> basCustomers = basCustomerService.querySupplierByCustomer(customerId);
-        if(basCustomers!=null && basCustomers.size()>0){
-            for(BasCustomer b : basCustomers){
-                EasyuiCombobox box = new EasyuiCombobox();
-                box.setId(b.getCustomerid());
-                box.setValue(b.getDescrC());
-                easyuiComboboxList.add(box);
-            }
-        }
-        return easyuiComboboxList;
-    }
+
 
 
 }

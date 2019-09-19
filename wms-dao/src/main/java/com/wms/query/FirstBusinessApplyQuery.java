@@ -5,7 +5,9 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class FirstBusinessApplyQuery implements IQuery {
 
-	private String applyId;
+	private String applyId;   //单号
+
+	private String firstState;
 	private String clientId;
 	private String supplierId;
 	private String createId;
@@ -18,6 +20,15 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String createDateStart;//附加
 	private String createDateEnd;//附加
 	private String productRegisterNo;
+
+
+	public String getFirstState() {
+		return firstState;
+	}
+
+	public void setFirstState(String firstState) {
+		this.firstState = firstState;
+	}
 
 	public String getProductRegisterNo() {
 		return productRegisterNo;

@@ -239,13 +239,24 @@
     function choseSelect_Catalog_firstRecord(row) {
         var choseRowNameArr = new Array();
         var choseRowArrRecord = new Array();
+        var Ifr = new Array();
+        var IIfr = new Array();
+        var IIIfr = new Array();
         //var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
+                if(row[i].classifyId=="I"){
+                    Ifr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="II"){
+                    IIfr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="III"){
+                    IIIfr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+
             }
-            $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue",Ifr.concat(IIfr).concat(IIIfr).join(","))
         }else{
             choseRowArrRecord.push(row.instrumentCatalogId);
             $("#ezuiFormFirstRecord input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);

@@ -22,9 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wms.constant.Constant;
-import com.wms.entity.BasCustomer;
-import com.wms.entity.FirstBusinessApply;
-import com.wms.entity.GspProductRegister;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
@@ -44,7 +42,6 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.BasSku;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.query.BasSkuQuery;
 import com.wms.service.importdata.ImportSkuDataService;
@@ -62,6 +59,8 @@ public class BasSkuService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
+	@Autowired
+	private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
 	@Autowired
 	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
 
@@ -163,15 +162,19 @@ public class BasSkuService extends BaseService {
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setAddtime(today);
 			basSku.setEdittime(today);
-			//
 			basSkuMybatisDao.add(basSku);
 		}else{
+
+
+
 			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setAddtime(today);
 			basSku.setEdittime(today);
 			basSku.setActiveFlag(Constant.IS_USE_YES);
 			basSku.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+
+
 			basSkuMybatisDao.updateBySelective(basSku);
 		}
 //		else {

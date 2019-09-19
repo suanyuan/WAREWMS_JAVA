@@ -175,7 +175,7 @@ var del = function(){
 
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		productRegisterNo : $('#productRegisterNo').val(),
+        productRegisterNo : $('#productRegisterNo').val(),
 		productNameMain : $('#productNameMain').val(),
         classifyId : $('#classifyId').combobox("getValue"),
 		//拿到classifyCatalog值 不是键

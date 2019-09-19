@@ -2,8 +2,11 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.BasSkuHistoryMybatisDao;
+import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.query.BasPackageQuery;
+import com.wms.query.BasSkuQuery;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
@@ -53,7 +56,10 @@ public class DataPublishService extends BaseService {
     private BasPackageService basPackageService;
     @Autowired
     private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
-
+    @Autowired
+    private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
+    @Autowired
+    private BasSkuMybatisDao basSkuMybatisDao;
     /**
      * 下发数据
      * @param no
@@ -193,8 +199,13 @@ public class DataPublishService extends BaseService {
                 }
 
                 BasCustomer basCustomer = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);//basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
+                if(basCustomer==null){
+                    return Json.error("供应商不存在");
+                }
                 BasCustomer customerId =  basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);//basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
-
+                if(customerId==null){
+                    return Json.error("货主不存在");
+                }
                 skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());
@@ -399,10 +410,21 @@ public class DataPublishService extends BaseService {
                 skuForm.setSkuGroup7(specObj.getIsDoublec());//是否需要双证
                 skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
                 skuForm.setSkuGroup9(specObj.getProductionAddress());*/
+
+
                 skuForm.setActiveFlag(Constant.IS_USE_NO);
                 skuForm.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
                 skuForm.setSku(specObj.getProductCode());
                 skuForm.setCustomerid(firstBusinessApply.getClientId());
+
+                BasSkuQuery skuQuery = new BasSkuQuery();
+                skuQuery.setCustomerid(skuForm.getCustomerid());
+                skuQuery.setSku(skuForm.getSku());
+                BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
+                BasSkuHistory basSkuHistory = new BasSkuHistory();
+                BeanUtils.copyProperties(basSku,basSkuHistory);
+                basSkuHistoryMybatisDao.add(basSkuHistory);
+
                 //skuForm
                 basSkuService.editBasSku(skuForm);
             }

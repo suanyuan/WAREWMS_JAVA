@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.FirstBusinessApplyForm;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service("firstBusinessApplyService")
@@ -61,6 +62,9 @@ public class FirstBusinessApplyService extends BaseService {
 	private  FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 	@Autowired
 	private GspVerifyService gspVerifyService;
+
+	@Autowired
+	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 
 	public EasyuiDatagrid<FirstBusinessApplyVO> getPagedDatagrid(EasyuiDatagridPager pager, FirstBusinessApplyQuery query) {
 		EasyuiDatagrid<FirstBusinessApplyVO> datagrid = new EasyuiDatagrid<FirstBusinessApplyVO>();
@@ -269,6 +273,7 @@ public class FirstBusinessApplyService extends BaseService {
 				firstBusinessApply.setIsUse(Constant.IS_USE_YES);
 				firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				firstBusinessApply.setProductline(productLine);
+
 				firstBusinessApplyMybatisDao.add(firstBusinessApply);
 
 //			    String[] arr = productArr.split(",");
@@ -290,15 +295,20 @@ public class FirstBusinessApplyService extends BaseService {
 				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				GspProductRegisterSpecs g  = gspProductRegisterSpecsMybatisDao.queryById(specsId);
                 String ProductName = "无";
-                String ProductRemark = "无";
+                String ProductRegisterNo = "无";
+				String SpecsName = "无";
+				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
 				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
 				    ProductName = g.getProductName();
                 }
-                if(g.getProductRemark()!=null && !"".equals(g.getProductRemark()) ){
-                    ProductRemark = g.getProductRemark();
+                if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
+					SpecsName = g.getSpecsName();
                 }
+				if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+					ProductRegisterNo = gpr.getProductRegisterNo();
+				}
 				String content = "产品名称:"+ProductName+" "+"产品代码:"+g.getProductCode()+" "+
-                        "产品描述:"+ProductRemark;
+						"规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
                 firstReviewLogForm.setApplyContent(content);
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
@@ -464,6 +474,8 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.error("操作失败");
 	}
 
+
+	@Transactional
 	public Json addReApply(String id){
 		try{
             String[] arrId = id.split(",");

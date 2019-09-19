@@ -247,19 +247,28 @@
 
     function choseSelect_Catalog_secondRecord(row) {
         var choseRowNameArr = new Array();
-        var choseRowArrRecord = new Array();
+        var choseRowArrSecondRecord = new Array();
+        var Isr = new Array();
+        var IIsr = new Array();
+        var IIIsr = new Array();
         //var oldValue = $("#ezuiFormRecord input[id='showChose']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
-                choseRowArrRecord.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                if(row[i].classifyId=="I"){
+                    Isr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="II"){
+                    IIsr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="III"){
+                    IIIsr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }
+                choseRowArrSecondRecord.push(row[i].instrumentCatalogId);
             }
-            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormRecord input[id='showChose']").textbox("setValue",Isr.concat(IIsr).concat(IIIsr).join(","))
         }else{
-            choseRowArrRecord.push(row.instrumentCatalogId);
+            choseRowArrSecondRecord.push(row.instrumentCatalogId);
             $("#ezuiFormRecord input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
-        $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrRecord.join(","));
+        $("#ezuiFormRecord input[id='choseScope']").val(choseRowArrSecondRecord.join(","));
         $(ezuidialogChoseScopeRecord).dialog("close");
     }
 

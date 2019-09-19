@@ -96,6 +96,9 @@ public class GspOperateDetailService extends BaseService {
 
 	public List<GspOperateDetailVO> queryOperateDetailByLicense(String license){
 		List<GspOperateDetailVO> voList = new ArrayList<>();
+		List<GspOperateDetailVO> IList = new ArrayList<>();
+		List<GspOperateDetailVO> IIList = new ArrayList<>();
+		List<GspOperateDetailVO> IIIList = new ArrayList<>();
 		GspOperateDetailQuery query = new GspOperateDetailQuery();
 		query.setLicenseId(license);
 		query.setIsUse(Constant.IS_USE_YES);
@@ -109,10 +112,21 @@ public class GspOperateDetailService extends BaseService {
 			if(gspInstrumentCatalog!=null){
 				v.setOperateName("["+gspInstrumentCatalog.getClassifyId()+"]"+gspInstrumentCatalog.getInstrumentCatalogName().trim());
 			}
-			voList.add(v);
+			if("I".equals(gspInstrumentCatalog.getClassifyId())){
+				IList.add(v);
+			}else if("II".equals(gspInstrumentCatalog.getClassifyId())){
+				IIList.add(v);
+			}else if("III".equals(gspInstrumentCatalog.getClassifyId())){
+				IIIList.add(v);
+			}
 		}
+		voList.addAll(IList);
+		voList.addAll(IIList);
+		voList.addAll(IIIList);
 		return voList;
 	}
+
+
 
 	public Json invalidGspOperateDetail(String id,String licenseType) {
 		Json json = new Json();

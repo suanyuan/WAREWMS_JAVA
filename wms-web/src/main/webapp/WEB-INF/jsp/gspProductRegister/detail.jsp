@@ -45,7 +45,8 @@
                     </tr>
                     <tr>
                         <th>注册证/备案版本</th>
-                        <td><input type='text' id1="productRegisterVersion" name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
+                        <td><input type='text' id="productRegisterVersion" name='productRegisterVersion' class='easyui-textbox' value="" data-options='required:true,editable:false'/></td>
+
                         <th>注册证/备案附件</th>
                         <td>
                             <input  id="attachmentUrlFile" name="attachmentUrlFile"  data-options='' value="${gspProductRegister.attachmentUrl}"/>
@@ -56,7 +57,7 @@
                     <tr>
                         <th>分类目录</th>
                         <td>
-                            <input type='text' id1="classifyCatalog" id="classifyCatalog" name="classifyCatalog"  value="${gspProductRegister.classifyCatalog}" data-options='required:true'/>
+                            <input type='text' id1="classifyCatalog" id="classifyCatalog" name="classifyCatalog"   data-options='required:true'/>
                             <a onclick='selectProductRegisterScope()' id='ezuiDetailsBtn_scope' class='easyui-linkbutton' data-options='required:true,plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>
                         </td>
                         <th>结构及组成</th>
@@ -345,7 +346,7 @@
             valueField:'id',
             textField:'value',
             width:185
-        })
+        });
 
         $("#ezuiFormDetail input[id='classifyCatalog']").textbox({
             width:186,
@@ -410,8 +411,28 @@
                 //sy.bp()+'/gspProductRegisterController.do?showSpecsList'
             }
         })
-    })
 
+        initChoseText();
+    });
+
+    function initChoseText() {
+        $.ajax({
+            url : sy.bp()+'/gspInstrumentCatalogController.do?searchCheckByLicenseId',
+            data : {
+                "licenseId":'${gspProductRegister.productRegisterId}'
+            }
+            ,type : 'POST', dataType : 'JSON',async  :true,
+            success : function(result){
+                if(result && result.length>0){
+                    var arr = new Array();
+                    for(var i=0;i<result.length;i++){
+                        arr.push(result[i].operateName);
+                    }
+                    $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",arr.join(","))
+                }
+            }
+        });
+    }
     /**
      * 经营范围选择
      */
@@ -424,7 +445,7 @@
             height:500,
             href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=productRegister&id=${gspProductRegister.productRegisterId}',
             onClose : function() {
-
+                ezuidialogChoseScope.dialog('clear');
             }
         });
     }
@@ -446,7 +467,7 @@
         $("#ezuiFormDetail input[id='choseScope']").val(choseRowArr.join(","));
         ezuidialogChoseScope.dialog("close");
     }
-//上传文件
+    //上传文件
     function doUpload(data) {
         $.messager.progress({
             text : '<spring:message code="common.message.data.processing"/>', interval : 100
@@ -867,9 +888,16 @@
                     }else if ($(this).attr("class").indexOf('easyui-numberbox') != -1) {
                         $(this).numberbox("setValue", row["" + $(this).attr("id1") + ""]);
                     }
+                    // else if ($(this).attr("class").indexOf('easyui-combobox') != -1) {
+                    //     $(this).combobox("setValue", row["" + $(this).attr("id1") + ""]);
+                    // }
                 }
             }
-        })
+        });
+
+
+        $("#ezuiFormDetail #productRegisterVersion").combobox("setValue",row.productRegisterVersion);
+
         $("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
         $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
         $("#licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);

@@ -195,7 +195,6 @@
                     var arr = new Array();
                     for(var i=0;i<result.length;i++){
                         arr.push(result[i].operateName);
-
                     }
                     $("#ezuiFormProd input[id='showChose']").textbox("setValue",arr.join(","))
                 }
@@ -346,19 +345,32 @@
 
     function choseSelect_Catalog_prodLicense(row) {
         var choseRowNameArr = new Array();
-        var choseRowArrOperate = new Array();
+        var choseRowArrProd = new Array();
+        var Ipl = new Array();
+        var IIpl = new Array();
+        var IIIpl = new Array();
         //var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
         if(row instanceof Array){
+            // alert(1111);
             for(var i=0;i<row.length;i++){
-                choseRowArrOperate.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                if(row[i].classifyId=="I"){
+                    Ipl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="II"){
+                    IIpl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="III"){
+                    IIIpl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }
+                choseRowArrProd.push(row[i].instrumentCatalogId);
+                // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+
             }
-            $("#ezuiFormProd input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormProd input[id='showChose']").textbox("setValue",Ipl.concat(IIpl).concat(IIIpl).join(","))
         }else{
-            choseRowArrOperate.push(row.instrumentCatalogId);
+            // alert(2222);
+            choseRowArrProd.push(row.instrumentCatalogId);
             $("#ezuiFormProd input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
-        $("#ezuiFormProd input[id='choseScope']").val(choseRowArrOperate.join(","));
+        $("#ezuiFormProd input[id='choseScope']").val(choseRowArrProd.join(","));
         $(ezuidialogChoseScopeOperate1).dialog("close");
     }
 

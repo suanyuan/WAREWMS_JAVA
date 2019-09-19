@@ -245,9 +245,9 @@ public class GspVerifyService {
             }
             GspProductRegister gspProductRegister = getGspProductRegister(registerNo);
             if(gspProductRegister != null){
-                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
-                    return Json.error("关联产品注册证已过期："+sku);
-                }
+//                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
+//                    return Json.error("关联产品注册证已过期："+sku);
+//                }
 
                 if(!StringUtil.isEmpty(lotatt01)){
                     //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
