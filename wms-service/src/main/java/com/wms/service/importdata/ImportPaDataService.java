@@ -11,6 +11,7 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.Json;
+import com.wms.vo.pda.PdaDocPaHeaderVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,20 @@ public class ImportPaDataService {
             }
             //保存实体集合
             List<PdaDocPaDetailForm> importDataList = this.listToBean(dataList, resultMsg);
+
+            //判断上架单状态
+            if (importDataList.size() > 0) {
+
+                PdaDocPaDetailForm pdaDocPaDetailForm = importDataList.get(0);
+                PdaDocPaHeaderVO pdaDocPaHeaderVO = docPaHeaderService.queryByPano(pdaDocPaDetailForm.getPano());
+                if (!pdaDocPaHeaderVO.getPastatus().equals("00")) {
+
+                    json.setSuccess(false);
+                    json.setMsg("上架单只有在订单创建状态下，才可进行PC端上架操作！");
+                    return json;
+                }
+            }
+
             //更新上架件数
             this.save(importDataList, resultMsg);
         } catch (IOException e1) {
@@ -239,7 +254,7 @@ public class ImportPaDataService {
             PdaDocPaDetailForm pdaDocPaDetailForm = importDataList.get(0);
             PdaDocPaEndForm pdaDocPaEndForm = new PdaDocPaEndForm();
             pdaDocPaEndForm.setPano(pdaDocPaDetailForm.getPano());
-            pdaDocPaDetailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+            pdaDocPaEndForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
             docPaHeaderService.endTask(pdaDocPaEndForm);
         }
     }
