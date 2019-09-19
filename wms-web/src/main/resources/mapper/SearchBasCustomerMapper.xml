@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.SearchBasCustomerMybatisDao">
+    <!-- Result Map-->
+    <resultMap id="BaseResultMap" type="com.wms.entity.SearchBasCustomer">
+        <result column="enterprise_name" property="enterpriseName"/>
+        <result column="license_number" property="licenseNumber"/>
+        <result column="residence" property="residence"/>
+        <result column="juridical_person" property="juridicalPerson"/>
+        <result column="head_name" property="headName"/>
+        <result column="business_residence" property="businessResidence"/>
+        <result column="warehouse_address" property="warehouseAddress"/>
+        <result column="business_scope" property="businessScope"/>
+        <result column="license_no" property="licenseNo"/>
+        <result column="license_expiry_date" property="licenseExpiryDate"/>
+        <result column="registrationAuthorityL" property="registrationAuthorityL"/>
+        <result column="record_no" property="recordNo"/>
+        <result column="registrationAuthorityR" property="registrationAuthorityR"/>
+        <result column="client_start_date" property="clientStartDate"/>
+        <result column="client_end_date" property="clientEndDate"/>
+        <result column="client_term" property="clientTerm"/>
+        <result column="is_chinese_label" property="isChineseLabel"/>
+        <result column="client_content" property="clientContent"/>
+
+        <result column="active_flag" property="activeFlag"/>
+
+
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="Example_Where_Clause">
+        <trim  suffixOverrides="," >
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+                and info.enterprise_name like concat('%', #{condition.enterpriseName},'%')
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and b.active_flag =  #{condition.activeFlag}
+            </if>
+            <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+                and client_start_date =  #{condition.clientStartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+                and client_end_date =  #{condition.clientEndDate,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+    <!-- 客户档案 列表总数-->
+    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT  count(1)
+        FROM  `bas_customer` b
+        LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1')  d   ON  d.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
+        WHERE b.customer_type='OW'
+        <include refid="Example_Where_Clause"/>
+    </select>
+
+    <!-- 查询客户档案列表 -->
+    <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
+   SELECT  info.enterprise_name,
+	           c.license_number,c.residence,c.juridical_person,
+	           d.head_name,d.business_residence,d.warehouse_address,d.business_scope,d.license_no,d.license_expiry_date,d.registration_authority registrationAuthorityL,
+	           e.record_no,e.registration_authority registrationAuthorityR,
+	           b.client_start_date,b.client_end_date,b.client_term,b.is_chinese_label,b.client_content,b.active_flag
+	            FROM  `bas_customer` b
+	          LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
+	          LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
+	          LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1')  d   ON  d.enterprise_id=info.enterprise_id
+	          LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
+	          WHERE b.customer_type='OW'
+          <include refid="Example_Where_Clause"/>
+
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+</select>
+
+
+</mapper>
