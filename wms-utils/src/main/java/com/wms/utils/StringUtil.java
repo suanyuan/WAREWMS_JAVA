@@ -1,6 +1,8 @@
 package com.wms.utils;
 
+import javax.xml.crypto.Data;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,6 +18,7 @@ public class StringUtil {
 
     /**
      * 解决传参null的问题
+     *
      * @param param 参数
      * @return ~
      */
@@ -29,6 +32,7 @@ public class StringUtil {
 
     /**
      * 判断两个字符串是否相同
+     *
      * @param str1 ~
      * @param str2 ~
      * @return ~
@@ -38,7 +42,34 @@ public class StringUtil {
         return StringUtil.fixNull(str1).equals(StringUtil.fixNull(str2));
     }
 
+    /**
+     * 判断时间格式是否满足 yyyy-MM-dd
+     */
+    public static boolean isyMdDate(String str) {
+
+        boolean convertSuccess = true;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            // 设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
+            format.setLenient(false);
+            format.parse(fixNull(str));
+        } catch (ParseException e) {
+            // e.printStackTrace();
+            // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+            convertSuccess = false;
+        }
+        return convertSuccess;
+    }
+
+    public static boolean isNotyMdDate(String str) {
+
+        return !isyMdDate(str);
+    }
+
     public static void main(String[] args) {
+
+        String date = "";
+        System.out.println(isyMdDate(date));
 
 //        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 //        try {

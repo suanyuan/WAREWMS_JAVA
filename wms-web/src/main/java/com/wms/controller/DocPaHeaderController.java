@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.DocPaHeaderService;
@@ -103,6 +104,22 @@ public class DocPaHeaderController {
 			e.printStackTrace();
 		}
 	}
+
+    /**
+     * 导出上架任务明细
+     */
+    @Login
+    @RequestMapping(params = "exportDocPaDataToExcel")
+    public void exportDocPaDataToExcel(HttpServletResponse response, String token, String pano) throws Exception {
+        docPaHeaderService.exportDocPaDataToExcel(response, token, pano);
+    }
+
+    @Login
+    @RequestMapping(params = "importExcelData")
+    @ResponseBody
+    public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+        return docPaHeaderService.importExcelData(mhsr);
+    }
 
 	/**
 	 * 收货回写
