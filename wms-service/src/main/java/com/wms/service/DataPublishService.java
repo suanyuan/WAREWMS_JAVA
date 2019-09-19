@@ -199,8 +199,13 @@ public class DataPublishService extends BaseService {
                 }
 
                 BasCustomer basCustomer = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);//basCustomerService.selectCustomer(register.getEnterpriseId(),Constant.CODE_CUS_TYP_VE);
+                if(basCustomer==null){
+                    return Json.error("供应商不存在");
+                }
                 BasCustomer customerId =  basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);//basCustomerService.selectCustomer(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
-
+                if(customerId==null){
+                    return Json.error("货主不存在");
+                }
                 skuForm.setDefaultreceivinguom(specObj.getUnit());
                 skuForm.setDescrC(specObj.getSpecsName());
                 skuForm.setDescrE(specObj.getProductModel());

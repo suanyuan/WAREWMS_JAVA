@@ -291,7 +291,8 @@ public class ImportSkuDataService {
 				rowResult.append("[序号]，资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
 			}
 			try {
-				importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+//				importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+				importDataVO.setCustomerid(dataArray.getCustomerid());
 				if (StringUtils.isEmpty(importDataVO.getCustomerid())) {
 					throw new Exception();
 				}
@@ -299,7 +300,8 @@ public class ImportSkuDataService {
 				rowResult.append("[客户代码]，未输入").append(" ");
 			}
 			try {
-				importDataVO.setSku(dataArray.getSku().toUpperCase());
+//				importDataVO.setSku(dataArray.getSku().toUpperCase());
+				importDataVO.setSku(dataArray.getSku());
 				if (StringUtils.isEmpty(importDataVO.getSku())) {
 					throw new Exception();
 				}

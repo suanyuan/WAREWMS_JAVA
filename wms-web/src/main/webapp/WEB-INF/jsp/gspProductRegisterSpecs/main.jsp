@@ -91,8 +91,6 @@ $(function() {
 			// {field: 'alternatName3',		title: '自赋码3',	width: 25 },
 			// {field: 'alternatName4',		title: '自赋码4',	width: 25 },
 			// {field: 'alternatName5',		title: '自赋码5',	width: 25 },
-
-
             // {field: 'productNameMain',		title: '产品名称',	width: 200 }
 		]],
 		onDblClickCell: function(index,field,value){

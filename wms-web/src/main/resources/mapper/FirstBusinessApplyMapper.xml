@@ -176,8 +176,14 @@ where 1=1
 		</if>
 
 		<if test="condition.applyId != null and condition.applyId != ''" >
-			and t1.apply_id =  #{condition.applyId}
+			and t1.apply_id like '%${condition.applyId}%'
 		</if>
+		<if test="condition.firstState != null and condition.firstState != ''" >
+			and t1.first_state like  '%${condition.firstState}%'
+		</if>
+
+
+
 		<if test="condition.clientId != null and condition.clientId != ''" >
 			and t1.client_id  like CONCAT('%',#{condition.clientId},'%')
 		</if>
@@ -199,9 +205,7 @@ where 1=1
 		<if test="condition.productName != null and condition.productName != ''" >
 			and product_name like CONCAT('%',#{condition.productName},'%')
 		</if>
-		<if test="condition.firstState != null and condition.firstState != ''" >
-			and t1.first_state =  #{condition.firstState}
-		</if>
+
 		<if test="condition.productline != null and condition.productline != ''" >
 			and t1.productline =  #{condition.productline}
 		</if>

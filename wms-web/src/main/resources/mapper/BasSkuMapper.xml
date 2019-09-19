@@ -475,8 +475,8 @@ where 1=1
 	sku_group1
 	)
 	values(
-	upper(#{customerid}),
-	upper(#{sku}),
+	#{customerid},
+	#{sku},
 	<if test="descrC != null  ">
 		#{descrC},
 	</if>
@@ -654,8 +654,8 @@ where 1=1
          reservedfield01=#{reservedfield01},
          reservedfield02=#{reservedfield02},
          reservedfield03=#{reservedfield03}
-   where customerid=upper(#{customerid})
-     and sku=upper(#{sku})
+   where customerid=#{customerid}
+     and sku=#{sku}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -882,15 +882,15 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete from Bas_Sku where customerid = upper(#{customerid}) and sku = upper(#{sku})
+	delete from Bas_Sku where customerid = #{customerid} and sku = #{sku}
 </delete>
  
 <!-- 根据id查询 商品档案 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="java.util.Map">
 	select <include refid="Base_Column_List" />
 	from Bas_Sku
-	where customerid = upper(#{customerid,jdbcType=VARCHAR})
-	and sku = upper(#{sku,jdbcType=VARCHAR})
+	where customerid = #{customerid,jdbcType=VARCHAR}
+	and sku = #{sku,jdbcType=VARCHAR}
 </select>
 
 <!-- 商品档案 -->
@@ -977,8 +977,8 @@ where 1=1
 	ifnull(grossweight,0) * #{qty,jdbcType=NUMERIC} as grossweight,
 	ifnull(price,0) * #{qty,jdbcType=NUMERIC} as price
 	from Bas_Sku
-	where customerid=upper(#{customerid,jdbcType=VARCHAR})
-	and sku=upper(#{sku,jdbcType=VARCHAR})) t
+	where customerid=#{customerid,jdbcType=VARCHAR}
+	and sku= #{sku,jdbcType=VARCHAR}) t
 </select>
 
 <!-- 删除商品记录判断 -->

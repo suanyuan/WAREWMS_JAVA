@@ -118,7 +118,7 @@ $(function() {
 		$("#sku").textbox('setValue',this.value.toUpperCase());
 	}); */
 	/* 产品编码限定大写字母 */
-	$("#sku").textbox('textbox').css('text-transform','uppercase');
+	// $("#sku").textbox('textbox').css('text-transform','uppercase');
 
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
@@ -184,7 +184,7 @@ $(function() {
 var toUpperFunction = function(){
 	/* var x=document.getElementById("fname");
 	x.value=x.value.toUpperCase(); */
-	$("#sku").textbox('setValue',$("#sku").val().toUpperCase());
+	// $("#sku").textbox('setValue',$("#sku").val().toUpperCase());
 };
 
 /* 新增 */
@@ -203,8 +203,8 @@ var add = function(){
 		}]
 	});
 	$("#ezuiForm #sku").textbox({
-		editable:true
-	}).textbox('textbox').css('text-transform','uppercase');
+		editable:true});
+		// .textbox('textbox').css('text-transform','uppercase');
 	$("#ezuiForm #activeFlag").combobox('setValue','1').combobox('setText','是');
 	$("#ezuiForm #packid").textbox({
 		editable:false

@@ -362,13 +362,22 @@
         console.log(row);
         var choseRowNameArr = new Array();
         var choseRowArrOperate = new Array();
+        var Iol = new Array();
+        var IIol = new Array();
+        var IIIol = new Array();
         //var oldValue = $("#ezuiFormOperate input[id='businessScope']").textbox("getValue");
         if(row instanceof Array){
             for(var i=0;i<row.length;i++){
+                if(row[i].classifyId=="I"){
+                    Iol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="II"){
+                    IIol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }else if(row[i].classifyId=="III"){
+                    IIIol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                }
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
-            $("#ezuiFormOperate input[id='showChose']").textbox("setValue",choseRowNameArr.join(","))
+            $("#ezuiFormOperate input[id='showChose']").textbox("setValue",Iol.concat(IIol).concat(IIIol).join(","))
         }else{
             choseRowArrOperate.push(row.instrumentCatalogId);
             $("#ezuiFormOperate input[id='showChose']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);

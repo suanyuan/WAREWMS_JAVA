@@ -131,5 +131,4 @@ public class GspInstrumentCatalogService extends BaseService {
 	public GspInstrumentCatalog getGspInstrumentCatalog(String id){
 		return gspInstrumentCatalogMybatisDao.queryById(id);
 	}
-
 }
