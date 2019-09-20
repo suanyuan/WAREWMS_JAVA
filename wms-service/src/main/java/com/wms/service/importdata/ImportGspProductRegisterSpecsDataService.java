@@ -554,11 +554,20 @@ public class ImportGspProductRegisterSpecsDataService {
 //					}else{
 //						importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
 //					}
-						importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
+//					GspProductRegister gpr = new GspProductRegister();
+                if(dataArray.getProductRegisterId()!=null && dataArray.getProductRegisterId()!="" &&dataArray.getProductRegisterId()!="无" ){
+                    importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
+                }else{
+                    GspProductRegister gpr  = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+                    if(gpr==null){
+                        throw new Exception();
+                    }
+                    importDataVO.setLicenseOrRecordNo(gpr.getLicenseOrRecordNol());
+                }
 
 
 			} catch (Exception e) {
-				rowResult.append("[生产许可号/备案号]，未输入并且生产企业没有生产许可号备案号").append(" ");
+				rowResult.append("[生产许可号/备案号]，注册证不存在").append(" ");
 			}
 
 
