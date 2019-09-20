@@ -65,8 +65,8 @@ $(function() {
 			{field: 'qtyallocatedEach',		title: '分配数量',	width: 71 },
 			{field: 'qtyavailed',		title: '可用件数',	width: 71 },
 			{field: 'qtyavailedEach',		title: '可用数量',	width: 71 },
-			{field: 'qtyholded',		title: '冻结件数',	width: 71 },
-			{field: 'qtyholdedEach',		title: '冻结数量',	width: 71 },
+			// {field: 'qtyholded',		title: '冻结件数',	width: 71 },
+			// {field: 'qtyholdedEach',		title: '冻结数量',	width: 71 },
 			{field: 'totalgrossweight',		title: '毛重',	width: 71 },
 			{field: 'totalcubic',		title: '体积',	width: 71 },
 
@@ -85,6 +85,7 @@ $(function() {
 			{field: 'lotatt09', title: '样品属性', width: 100,formatter:YP_TYPstatusFormatter},
 			{field: 'lotatt11', title: '存储条件', width: 100},
 			{field: 'lotatt10', title: '质量状态', width: 100, formatter:ZL_TYPstatusFormatter},
+			{field: 'onholdlocker', title: '冻结状态', width: 100, formatter:holdStatusFormatter},
 
 			// {field: 'fmid',		title: '跟踪号',	width: 71 },
 			// {field: 'lpn',		title: 'LPN',	width: 71 },
@@ -341,6 +342,7 @@ var doExport = function(){
 		param.put("lotatt05", $('#lotatt05').val());
 		param.put("lotatt06", $('#lotatt06').val());
 		param.put("lotatt12", $('#skudescrc').val());
+		param.put("onholdlocker", $('#onholdlocker').combobox('getValue'));
 
 		//--导出Excel
 		var formId = ajaxDownloadFile(sy.bp()+"/viewInvLotattController.do?exportViewInvLotattDataToExcel", param);
@@ -513,82 +515,120 @@ var mov = function(){
 };
 //库存冻结
 var hold = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row){
-		ezuiFormHold.form('load',{
-			allocationrule : row.allocationrule,
-			alternatesku1 : row.alternatesku1,
-			alternatesku2 : row.alternatesku2,
-			alternatesku3 : row.alternatesku3,
-			alternatesku4 : row.alternatesku4,
-			alternatesku5 : row.alternatesku5,
-			configlist01 : row.configlist01,
-			configlist02 : row.configlist02,
-			fmcustomerid : row.fmcustomerid,
-			fmid : row.fmid,
-			fmlocation : row.fmlocation,
-			fmlotnum : row.fmlotnum,
-			fmqty : row.fmqty,
-			fmsku : row.fmsku,
-			fmuomName : row.fmuomName,
-			iMv : row.iMv,
-			iPa : row.iPa,
-			imageaddress : row.imageaddress,
-			lotatt01 : row.lotatt01,
-			lotatt01text : row.lotatt01text,
-			lotatt02 : row.lotatt02,
-			lotatt02text : row.lotatt02text,
-			lotatt03 : row.lotatt03,
-			lotatt03text : row.lotatt03text,
-			lotatt04 : row.lotatt04,
-			lotatt04text : row.lotatt04text,
-			lotatt05 : row.lotatt05,
-			lotatt05text : row.lotatt05text,
-			lotatt06 : row.lotatt06,
-			lotatt06text : row.lotatt06text,
-			lotatt07 : row.lotatt07,
-			lotatt07text : row.lotatt07text,
-			lotatt08 : row.lotatt08,
-			lotatt08text : row.lotatt08text,
-			lotatt09 : row.lotatt09,
-			lotatt09text : row.lotatt09text,
-			lotatt10 : row.lotatt10,
-			lotatt10text : row.lotatt10text,
-			lotatt11 : row.lotatt11,
-			lotatt11text : row.lotatt11text,
-			lotatt12 : row.lotatt12,
-			lotatt12text : row.lotatt12text,
-			lpn : row.lpn,
-			netweight : row.netweight,
-			oMv : row.oMv,
-			pkey : row.pkey,
-			price : row.price,
-			qtyallocated : row.qtyallocated,
-			qtyavailed : row.qtyavailed,
-			qtyholded : row.qtyholded,
-			qtyrpin : row.qtyrpin,
-			qtyrpout : row.qtyrpout,
-			reservedfield01 : row.reservedfield01,
-			reservedfield02 : row.reservedfield02,
-			reservedfield03 : row.reservedfield03,
-			reservedfield04 : row.reservedfield04,
-			reservedfield05 : row.reservedfield05,
-			rotationid : row.rotationid,
-			skudescrc : row.skudescrc,
-			skudescre : row.skudescre,
-			skugroup1 : row.skugroup1,
-			skugroup2 : row.skugroup2,
-			skugroup3 : row.skugroup3,
-			skugroup4 : row.skugroup4,
-			skugroup5 : row.skugroup5,
-			softallocationrule : row.softallocationrule,
-			toadjqty : row.toadjqty,
-			totalcubic : row.totalcubic,
-			totalgrossweight : row.totalgrossweight,
-			uom : row.uom,
-			warehouseid : row.warehouseid
+	var rows = ezuiDatagrid.datagrid('getChecked');
+	var forms=[];
+	var data=null;
+	var msg='';
+	url = '<c:url value="/viewInvLotattController.do?hold"/>';
+	if(rows.length>0){
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否冻结选择的项目?', function(confirm) {
+			if(confirm){
+				$.messager.progress({
+					text: '<spring:message code="common.message.data.processing"/>', interval: 100
+				});
+				for (var i = 0; i < rows.length; i++) {
+					data=new Object();
+					data.customerid=rows[i].fmcustomerid;
+					data.sku=rows[i].fmsku;
+					data.lotnum=rows[i].fmlotnum;
+					data.locationid=rows[i].fmlocation;
+					forms.push(data);
+
+				}
+
+				$.ajax({
+					url :url,
+					data:"forms="+JSON.stringify(forms),
+					type : 'POST',
+					dataType : 'JSON',
+					success: function (result) {
+						try{
+							if(result.success){
+								msg=result.msg;
+								ezuiDatagrid.datagrid('reload');
+								$.messager.show({
+									msg:msg, title : '<spring:message code="common.message.prompt"/>'
+								});
+								$.messager.progress('close');
+							}else{
+								msg=result.msg;
+								ezuiDatagrid.datagrid('reload');
+								$.messager.show({
+									msg :msg, title : '<spring:message code="common.message.prompt"/>'
+								});
+								$.messager.progress('close');
+							}
+						}catch (e) {
+							$.messager.show({
+								msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						}
+					}
+				});
+			}
 		});
-		ezuiDialogHold.dialog('open');
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
+//库存解冻
+var nohold = function(){
+	var rows = ezuiDatagrid.datagrid('getChecked');
+	var forms=[];
+	var data=null;
+	var msg='';
+	url = '<c:url value="/viewInvLotattController.do?nohold"/>';
+	if(rows.length>0){
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否解冻选择的项目?', function(confirm) {
+			if(confirm){
+				$.messager.progress({
+					text: '<spring:message code="common.message.data.processing"/>', interval: 100
+				});
+				for (var i = 0; i < rows.length; i++) {
+					data=new Object();
+					data.customerid=rows[i].fmcustomerid;
+					data.sku=rows[i].fmsku;
+					data.lotnum=rows[i].fmlotnum;
+					data.locationid=rows[i].fmlocation;
+					forms.push(data);
+
+				}
+
+				$.ajax({
+					url :url,
+					data:"forms="+JSON.stringify(forms),
+					type : 'POST',
+					dataType : 'JSON',
+					success: function (result) {
+						try{
+							if(result.success){
+								msg=result.msg;
+								ezuiDatagrid.datagrid('reload');
+								$.messager.show({
+									msg:msg, title : '<spring:message code="common.message.prompt"/>'
+								});
+								$.messager.progress('close');
+							}else{
+								msg=result.msg;
+								ezuiDatagrid.datagrid('reload');
+								$.messager.show({
+									msg :msg, title : '<spring:message code="common.message.prompt"/>'
+								});
+								$.messager.progress('close');
+							}
+						}catch (e) {
+							$.messager.show({
+								msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+							});
+							$.messager.progress('close');
+						}
+					}
+				});
+			}
+		});
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -852,6 +892,7 @@ var doSearch = function(){
 		lotatt05 : $('#lotatt05').val(),
 		lotatt06 : $('#lotatt06').val(),
 		lotatt12 : $('#skudescrc').val(),
+		onholdlocker : $('#onholdlocker').combobox('getValue'),
 	});
 };
 /* 库位选择弹框查询 */
@@ -1064,6 +1105,18 @@ var ismove=function (location) {
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>生产批号</th>
 							<td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>冻结状态</th>
+							<td><input type='text' id='onholdlocker' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	valueField: 'id',
+																																     textField: 'value',
+																																     data: [{
+			                                                                                                                           id: '99',
+			                                                                                                                           value: '库存冻结'
+		                                                                                                                          },{
+			                                                                                                                           id: '0',
+			                                                                                                                           value: '库存解冻'
+		                                                                                                                          }]"/></td>
 
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -1076,7 +1129,8 @@ var ismove=function (location) {
 				<div>
 					<a onclick='adj();' id='ezuiBtn_adj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.adj'/></a>
 					<a onclick='mov();' id='ezuiBtn_mov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.mov'/></a>
-<%--					<a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>--%>
+  			        <a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>
+  			        <a onclick='nohold();' id='ezuiBtn_nohold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>库存解冻</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 <%-- 					<a onclick='adj();' id='ezuiBtn_importAdj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.adjBatch'/></a> --%>
 <%-- 					<a onclick='mov();' id='ezuiBtn_importMov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.movBatch'/></a> --%>

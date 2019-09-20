@@ -51,7 +51,7 @@ public class InvLotLocId  implements Serializable {
 
 	private Double price;
 
-	private Long onholdlocker;
+	private int onholdlocker;
 
 	private String lpn;
 

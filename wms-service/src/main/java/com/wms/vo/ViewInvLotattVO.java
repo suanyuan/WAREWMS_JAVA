@@ -79,6 +79,8 @@ public class ViewInvLotattVO {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String uom;
 	private java.lang.String warehouseid;
+	private int onholdlocker; //冻结
+
 
 	public BigDecimal getFmqtyEach() {
 		return fmqtyEach;
@@ -704,4 +706,11 @@ public class ViewInvLotattVO {
 		this.warehouseid = warehouseid;
 	}
 
+	public int getOnholdlocker() {
+		return onholdlocker;
+	}
+
+	public void setOnholdlocker(int onholdlocker) {
+		this.onholdlocker = onholdlocker;
+	}
 }

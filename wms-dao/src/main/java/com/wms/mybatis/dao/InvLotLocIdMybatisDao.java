@@ -3,7 +3,6 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.InvLotLocId;
 import com.wms.query.CouRequestDetailsQuery;
-import com.wms.query.DocMtHeaderQuery;
 import com.wms.query.pda.PdaInventoryQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -60,4 +59,13 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @return ~
      */
     double sumSameBatchInventory(@Param("customerid") String customerid, @Param("lotatt04") String lotatt04);
+
+     /**
+      * 根据唯一主键获取单条InvLotLocId
+     */
+    InvLotLocId queryByKey(InvLotLocId invLotLocId);
+    /**
+     * 根据唯一主键修改InvLotLocId的冻结状态
+     */
+    public <T> void updateByKey(InvLotLocId invLotLocId);
 }

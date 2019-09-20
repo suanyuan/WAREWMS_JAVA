@@ -74,6 +74,7 @@ public class ViewInvLotattForm {
 	private java.math.BigDecimal totalcubic;
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String uom;
+	private java.lang.String onholdlocker;
 	private java.lang.String warehouseid;
 
 	private String editwho;
@@ -668,6 +669,14 @@ public class ViewInvLotattForm {
 
 	public void setUom(java.lang.String uom) {
 		this.uom = uom;
+	}
+
+	public String getOnholdlocker() {
+		return onholdlocker;
+	}
+
+	public void setOnholdlocker(String onholdlocker) {
+		this.onholdlocker = onholdlocker;
 	}
 
 	public java.lang.String getWarehouseid() {
