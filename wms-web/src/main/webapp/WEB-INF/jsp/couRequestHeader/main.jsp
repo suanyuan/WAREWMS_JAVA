@@ -756,17 +756,17 @@ var doExport = function(cycleCountno){
 var doExportM=function () {
 	var rows = ezuiDatagrid.datagrid('getChecked');
 	if(rows.length>0) {
-	//循环导出excel
-	for (let i = 0; i < rows.length;i++) {
-		var cycleCountno=rows[i].cycleCountno;
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否导出盘点单:'+cycleCountno, function(confirm) {
-			if(confirm) {
-				cycleCountno=rows[i].cycleCountno;
-				doExport(cycleCountno);
+        //循环导出excel
+        for (let i = 0; i < rows.length;i++) {
+            var cycleCountno=rows[i].cycleCountno;
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否导出盘点单:'+cycleCountno, function(confirm) {
+                if(confirm) {
+                    cycleCountno=rows[i].cycleCountno;
+                    doExport(cycleCountno);
 
-			}
-		});
-	}
+                }
+            });
+        }
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

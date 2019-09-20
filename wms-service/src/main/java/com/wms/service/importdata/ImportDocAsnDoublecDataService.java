@@ -284,7 +284,8 @@ public class ImportDocAsnDoublecDataService {
                     BasSku basSku = basSkuMybatisDao.queryById(map);
                     if (basSku != null) {
                         if (basSku.getSkuGroup7().equals("1")) {
-                            if (basSku.getDescrE().toUpperCase().equals(docAsnDoublecVO.getContext1().toUpperCase())) {
+//                            if (basSku.getDescrE().toUpperCase().equals(docAsnDoublecVO.getContext1().toUpperCase())) {
+                            if (basSku.getDescrE().equals(docAsnDoublecVO.getContext1())) {
                                 json.setSuccess(true);
                                 docAsnDoublecVO.setCustomerid(invLotAtt.getCustomerid());
                             } else {

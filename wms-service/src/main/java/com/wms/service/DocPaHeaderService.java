@@ -13,30 +13,31 @@ import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.DocPaHeaderQuery;
 import com.wms.result.PdaResult;
-import com.wms.utils.BarcodeGeneratorUtil;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.DateUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.vo.DocAsnDetailVO;
-import com.wms.vo.DocPaDetailsVO;
-import com.wms.vo.DocPaHeaderVO;
-import com.wms.vo.Json;
+import com.wms.service.importdata.ImportPaDataService;
+import com.wms.utils.*;
+import com.wms.utils.exception.ExcelException;
+import com.wms.vo.*;
 import com.wms.vo.form.DocPaHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocPaHeaderVO;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("docPaHeaderService")
 public class DocPaHeaderService extends BaseService {
@@ -53,9 +54,12 @@ public class DocPaHeaderService extends BaseService {
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
 	@Autowired
     private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
-
+	@Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
     @Autowired
     private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
+    @Autowired
+    private ImportPaDataService importPaDataService;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -391,4 +395,114 @@ public class DocPaHeaderService extends BaseService {
         return String.valueOf(d);
     }
 
+    /**
+     * 导出上架任务清单
+     */
+    public void exportDocPaDataToExcel(HttpServletResponse response, String token, String pano) throws IOException {
+        Cookie cookie = new Cookie("exportToken",token);
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        response.setContentType(ContentTypeEnum.csv.getContentType());
+
+        DocPaHeaderForm query = new DocPaHeaderForm();
+        query.setPano(pano);
+        try {
+            // excel表格的表头，map
+            LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+            // excel的sheetName
+            String sheetName ="上架任务清单";
+            // excel要导出的数据
+
+            DocPaHeaderQuery docPaHeaderQuery = new DocPaHeaderQuery();
+            docPaHeaderQuery.setPano(pano);
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docPaHeaderQuery));
+            mybatisCriteria.setOrderByClause("palineno asc");
+            List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryByList(mybatisCriteria);
+            List<DocPaDetailsExportVO> exportVOs = new ArrayList<>();
+            DocPaDetailsExportVO docPaDetailsExportVO;
+
+            for (DocPaDetails docPaDetails : docPaDetailsList) {
+
+                docPaDetailsExportVO = new DocPaDetailsExportVO();
+                com.wms.utils.BeanUtils.copyProperties(docPaDetails, docPaDetailsExportVO);
+
+                //产品档案
+                BasSku basSku = basSkuService.getSkuInfo(docPaDetails.getCustomerid(), docPaDetails.getSku());
+                if (basSku != null) {
+
+                    docPaDetailsExportVO.setDescrc(basSku.getDescrC());
+                    docPaDetailsExportVO.setReservedfield01(basSku.getReservedfield01());
+                }
+
+                InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docPaDetails.getLotnum());
+                if (invLotAtt != null) {
+
+                    docPaDetailsExportVO.setLotatt01(invLotAtt.getLotatt01());
+                    docPaDetailsExportVO.setLotatt02(invLotAtt.getLotatt02());
+                    docPaDetailsExportVO.setLotatt04(invLotAtt.getLotatt04());
+                    docPaDetailsExportVO.setLotatt05(invLotAtt.getLotatt05());
+                    docPaDetailsExportVO.setLotatt07(invLotAtt.getLotatt07());
+                }
+                if (docPaDetailsExportVO.getPutwayqtyCompleted() == 0) docPaDetailsExportVO.setPutwayqtyCompleted(null);
+                if (docPaDetailsExportVO.getUserdefine1().equals("STAGE01")) docPaDetailsExportVO.setUserdefine1(null);
+
+
+                exportVOs.add(docPaDetailsExportVO);
+            }
+            // 导出
+            if (exportVOs.size() == 0) {
+                System.out.println("上架任务清单内容为空");
+            }else {
+                //将list集合转化为excle
+                ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,pano);
+            }
+        } catch (ExcelException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 得到导出Excle时题型的英中文map
+     *
+     * @return 返回题型的属性map
+     */
+    public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
+
+        LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+
+        superClassMap.put("pano","上架任务单号");
+        superClassMap.put("palineno","任务行号");
+        superClassMap.put("customerid", "货主");
+        superClassMap.put("sku", "产品代码");
+        superClassMap.put("reservedfield01", "产品名称");
+        superClassMap.put("descrc", "规格/型号");
+        superClassMap.put("lotatt04", "生产批号");
+        superClassMap.put("lotatt05", "序列号");
+        superClassMap.put("lotatt07", "灭菌批号");
+        superClassMap.put("lotatt01", "生产日期");
+        superClassMap.put("lotatt02", "有效期/失效期");
+        superClassMap.put("asnqtyExpected", "收货件数");
+        superClassMap.put("putwayqtyCompleted", "已上架件数");
+        superClassMap.put("userdefine1", "库位");
+        superClassMap.put("editwho", "上架人");
+
+        return superClassMap;
+    }
+
+    /**
+     * 导入上架结果
+     * 结束上架操作
+     */
+    public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+
+        Json json = null;
+        MultipartFile excelFile = mhsr.getFile("uploadData");
+
+        if(excelFile != null && excelFile.getSize() > 0){
+
+            json = importPaDataService.importExcelData(excelFile);
+        }
+        return json;
+    }
 }

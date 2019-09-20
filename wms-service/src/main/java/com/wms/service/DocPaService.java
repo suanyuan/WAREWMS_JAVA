@@ -191,8 +191,10 @@ public class DocPaService {
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
                     //引用入库和定向订单基本上相同，多出来的就是需要自动生成验收结果
+                    //预期到货设置了上架库位可直接完成上架操作
                     if(docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
-                            docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)){
+                            docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY) ||
+                            StringUtil.isNotEmpty(docPaDTO.getReceivinglocation())){
 
                         String paNo;
                         String qcNo;
@@ -246,7 +248,7 @@ public class DocPaService {
                         docPaDetailsForm.setUserdefine2(docPaDTO.getLotatt02());
                         docPaDetailsForm.setUserdefine3(docPaDTO.getLotatt04());
                         docPaDetailsForm.setUserdefine4(docPaDTO.getLotatt05());
-                        docPaDetailsForm.setUserdefine5(docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ? "DJ" : "HG");
+                        docPaDetailsForm.setUserdefine5(docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY) ? "HG" : "DJ");
                         docPaDetailsForm.setAddtime(new Date());
                         docPaDetailsForm.setAddwho(login.getId());
                         docPaDetailsForm.setPackid(basSku.getPackid());

@@ -147,7 +147,8 @@ public class ImportAsnDataService {
                 rowResult.append("序号：").append(dataArray.getSeq()).append(" 资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
             }
             try {
-                if (StringUtils.isEmpty(dataArray.getCustomerid().toUpperCase())) {
+//                if (StringUtils.isEmpty(dataArray.getCustomerid().toUpperCase())) {
+                if (StringUtils.isEmpty(dataArray.getCustomerid())) {
                     throw new Exception();
                 }
             } catch (Exception e) {
@@ -262,7 +263,8 @@ public class ImportAsnDataService {
                     //第一行操作
                     importDataVO = new DocAsnHeaderVO();
                     importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
-                    importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
+//                    importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
+                    importDataVO.setCustomerid(dataArray.getCustomerid());//货主代码
                     importDataVO.setAsnreference1(dataArray.getAsnreference1());
                     importDataVO.setAsnreference2(dataArray.getAsnreference2());
                     importDataVO.setAsntype(dataArray.getAsntype());
@@ -273,8 +275,10 @@ public class ImportAsnDataService {
                     }
                     importDetailsDataVO = new DocAsnDetailVO();
                     importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-                    importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
-                    importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+//                    importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+                    importDetailsDataVO.setCustomerid(dataArray.getCustomerid());
+//                    importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+                    importDetailsDataVO.setSku(dataArray.getSku());
 
                     if (!StringUtils.isEmpty(dataArray.getExpectedqty())) {
                         importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
@@ -332,7 +336,8 @@ public class ImportAsnDataService {
                             //遍历明细信息
                             for (DocAsnDetailVO docAsnDetailVO : docAsnHeaderVO.getDocAsnDetailVOList()) {
                                 if (docAsnDetailVO.getCustomerid().equals(dataArray.getCustomerid()) &&
-                                        docAsnDetailVO.getSku().equals(dataArray.getSku().toUpperCase()) &&
+//                                        docAsnDetailVO.getSku().equals(dataArray.getSku().toUpperCase()) &&
+                                        docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
                                         docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
                                         docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
@@ -353,8 +358,10 @@ public class ImportAsnDataService {
 //                          DocAsnDetailVO docAsnDetailVO = new DocAsnDetailVO();
                             importDetailsDataVO = new DocAsnDetailVO();
                             importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-                            importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
-                            importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+//                            importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+                            importDetailsDataVO.setCustomerid(dataArray.getCustomerid());
+//                            importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+                            importDetailsDataVO.setSku(dataArray.getSku());
                             //importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
                             //importDetailsDataVO.setExpectedqtyEach(new BigDecimal(dataArray.getExpectedqtyEach()));
                             if (!StringUtils.isEmpty(dataArray.getExpectedqty())) {
@@ -391,7 +398,8 @@ public class ImportAsnDataService {
                         //Header
                         importDataVO = new DocAsnHeaderVO();
                         importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));// 序号
-                        importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
+//                        importDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());//货主代码
+                        importDataVO.setCustomerid(dataArray.getCustomerid());//货主代码
                         importDataVO.setAsnreference1(dataArray.getAsnreference1());
                         importDataVO.setAsnreference2(dataArray.getAsnreference2());
                         importDataVO.setAsntype(dataArray.getAsntype());
@@ -403,8 +411,10 @@ public class ImportAsnDataService {
                         //Detail
                         importDetailsDataVO = new DocAsnDetailVO();
                         importDetailsDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-                        importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
-                        importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+//                        importDetailsDataVO.setCustomerid(dataArray.getCustomerid().toUpperCase());
+//                        importDetailsDataVO.setSku(dataArray.getSku().toUpperCase());
+                        importDetailsDataVO.setCustomerid(dataArray.getCustomerid());
+                        importDetailsDataVO.setSku(dataArray.getSku());
                         //importDetailsDataVO.setExpectedqty(new BigDecimal(dataArray.getExpectedqty()));
                         //importDetailsDataVO.setExpectedqtyEach(new BigDecimal(dataArray.getExpectedqtyEach()));
                         if (!StringUtils.isEmpty(dataArray.getExpectedqty())) {
