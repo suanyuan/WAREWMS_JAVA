@@ -93,8 +93,8 @@ public class SearchBasCustomerService extends BaseService {
                  	s.setClientTerm(s.getClientTerm()+"天");
 				 }
 				}
-				
-				
+
+
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
 				System.out.println("导出成功~~~~");

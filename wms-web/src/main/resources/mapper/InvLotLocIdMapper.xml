@@ -144,6 +144,11 @@ where 1=1
  <update id="update" parameterType="Object" >
   update inv_lot_loc_id set locationid=#{locationid},traceid=#{traceid},customerid=#{customerid},sku=#{sku},qty=#{qty},qtyallocated=#{qtyallocated},qtyrpin=#{qtyrpin},qtyrpout=#{qtyrpout},qtymvin=#{qtymvin},qtymvout=#{qtymvout},qtyonhold=#{qtyonhold},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},netweight=#{netweight},grossweight=#{grossweight},cubic=#{cubic},price=#{price},onholdlocker=#{onholdlocker},lpn=#{lpn},qtypa=#{qtypa} where lotnum=#{lotnum}
  </update>
+<!-- 根据id，修改记录-->
+ <update id="updateByKey" parameterType="Object" >
+    update inv_lot_loc_id set onholdlocker=#{onholdlocker}
+    where lotnum=#{lotnum} and locationid=#{locationid} and customerid=#{customerid} and sku=#{sku}
+ </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
@@ -227,6 +232,15 @@ where 1=1
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
 	 from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
+</select>
+<!-- 根据id查询 库位库存表 -->
+<select id="queryByKey"  resultMap="BaseResultMap" parameterType="Object">
+	select *
+	 from inv_lot_loc_id
+	   where lotnum = #{lotnum}
+	   and locationid=#{locationid}
+	   and customerid=#{customerid}
+	   and sku=#{sku}
 </select>
 
 <!-- 库位库存表 列表总数-->

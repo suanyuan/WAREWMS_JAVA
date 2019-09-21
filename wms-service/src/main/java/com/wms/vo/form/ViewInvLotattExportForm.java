@@ -16,6 +16,7 @@ public class ViewInvLotattExportForm {
 	private java.lang.String lotatt06;
 	private java.lang.String lotatt10;
 	private java.lang.String lotatt12;
+	private java.lang.String onholdlocker;
 	private java.lang.String warehouseid;
 	private String token;
 	
@@ -121,6 +122,11 @@ public class ViewInvLotattExportForm {
 		this.warehouseid = warehouseid;
 	}
 
+	public String getOnholdlocker() {
+		return onholdlocker;
+	}
 
-
+	public void setOnholdlocker(String onholdlocker) {
+		this.onholdlocker = onholdlocker;
+	}
 }

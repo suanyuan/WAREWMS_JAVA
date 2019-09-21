@@ -2,7 +2,10 @@ package com.wms.controller.gsp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.wms.entity.FirstReviewLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,4 +112,12 @@ public class FirstReviewLogController {
 	public Json returnCheck(String id,String remark) {
 		return firstReviewLogService.returnCheck(id,remark);
 	}
+
+	@Login
+	@RequestMapping(params = "exportFirstReviewLogDataToExcel")
+	public void exportFirstReviewLogDataToExcel(HttpServletResponse response, FirstReviewLogQuery form) throws Exception {
+		firstReviewLogService.exportFirstReviewLogDataToExcel(response, form);
+	}
+
+
 }

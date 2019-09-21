@@ -276,6 +276,14 @@
 			case "HG" : return "合格";
 		}
 	}
+//冻结状态
+	var holdStatusFormatter = function (value,row,index) {
+		switch (value.toString()) {
+			case "99" : return "库存冻结";
+			case "0" : return "库存解冻";
+			default: return "库存解冻";
+		}
+	}
 //样品属性
 	var YP_TYPstatusFormatter = function (value,row,index) {
 		switch (value) {

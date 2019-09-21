@@ -59,7 +59,8 @@ public class ViewInvLotattExportService {
 		viewInvLotattForm.setLotatt06(form.getLotatt06());
 		viewInvLotattForm.setLotatt10(form.getLotatt10());
 		viewInvLotattForm.setLotatt12(form.getLotatt12());
-		try {  
+		viewInvLotattForm.setOnholdlocker(form.getOnholdlocker());
+		try {
 			ViewInvLotattQuery query = new ViewInvLotattQuery();
 			//权限控制
 			//query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -101,6 +102,12 @@ public class ViewInvLotattExportService {
 						    break;
 					}
 					}
+				}
+				//冻结状态
+				if(viewInvLotatt.getOnholdlocker()==99){
+					viewInvLotatt.setOnholdlockerEx("库存冻结");
+				}else{
+					viewInvLotatt.setOnholdlockerEx("库存解冻");
 				}
 			}
 	        // 导出  
@@ -150,6 +157,7 @@ public class ViewInvLotattExportService {
 		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("lotatt06", "注册证号/备案凭证号");
 		superClassMap.put("lotatt10", "质量状态");
+		superClassMap.put("onholdlockerEx", "冻结状态");
 		superClassMap.put("lpn", "LPN");
 		superClassMap.put("netweight", "净重");
 		superClassMap.put("totalgrossweight", "毛重");

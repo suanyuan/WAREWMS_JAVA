@@ -163,6 +163,9 @@ public class ViewInvLotatt implements Serializable {
 
 	private String warehouseid;
 
+	private int onholdlocker; //冻结
+	private String onholdlockerEx; //导出冻结
+
 	public ViewInvLotatt() {
 	}
 
@@ -794,4 +797,19 @@ public class ViewInvLotatt implements Serializable {
 		this.warehouseid = warehouseid;
 	}
 
+	public int getOnholdlocker() {
+		return onholdlocker;
+	}
+
+	public void setOnholdlocker(int onholdlocker) {
+		this.onholdlocker = onholdlocker;
+	}
+
+	public String getOnholdlockerEx() {
+		return onholdlockerEx;
+	}
+
+	public void setOnholdlockerEx(String onholdlockerEx) {
+		this.onholdlockerEx = onholdlockerEx;
+	}
 }

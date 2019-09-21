@@ -77,8 +77,17 @@ public class ViewInvLotattQuery implements IQuery {
 	private java.math.BigDecimal totalgrossweight;
 	private java.lang.String uom;
 	private java.lang.String warehouseid;
+	private String onholdlocker;
 	private Set<SfcCustomer> customerSet;
-	
+
+	public String getOnholdlocker() {
+		return onholdlocker;
+	}
+
+	public void setOnholdlocker(String onholdlocker) {
+		this.onholdlocker = onholdlocker;
+	}
+
 	public java.lang.String getAllocationrule() {
 		return allocationrule;
 	}

@@ -107,8 +107,19 @@ public class ViewInvLotattController {
 	@Login
 	@RequestMapping(params = "hold")
 	@ResponseBody
-	public Json hold(ViewInvLotattForm viewInvLotattForm) throws Exception {
-		Json json = viewInvLotattService.holdViewInvLotatt(viewInvLotattForm);
+	public Json hold(String forms) throws Exception {
+		Json json = viewInvLotattService.holdViewInvLotatt(forms);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+    @Login
+	@RequestMapping(params = "nohold")
+	@ResponseBody
+	public Json nohold(String forms) throws Exception {
+		Json json = viewInvLotattService.noholdViewInvLotatt(forms);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

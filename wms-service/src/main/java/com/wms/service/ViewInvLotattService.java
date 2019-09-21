@@ -5,10 +5,7 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.BasLocationMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.ViewInvLotattMybatisDao;
+import com.wms.mybatis.dao.*;
 import com.wms.query.ViewInvLotattQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -35,6 +32,8 @@ public class ViewInvLotattService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private BasLocationMybatisDao basLocationMybatisDao;
+    @Autowired
+    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
 
     /**
      * 根据分页显示
@@ -208,35 +207,57 @@ public class ViewInvLotattService extends BaseService {
     /**
      * 库存冻结
      *
-     * @param viewInvLotattForm
+     * @param forms
      * @return
      */
-    public Json holdViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
+    public Json holdViewInvLotatt(String forms) {
         Json json = new Json();
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-        map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());
-        map.put("fmsku", viewInvLotattForm.getFmsku());
-        map.put("fmlotnum", viewInvLotattForm.getFmlotnum());
-        map.put("fmlocation", viewInvLotattForm.getFmlocation());
-        map.put("fmid", viewInvLotattForm.getFmid());
-        map.put("fmqty", String.valueOf(viewInvLotattForm.getFmqty()));
-        map.put("lotatt12", viewInvLotattForm.getLotatt12());//冻结原因
-        map.put("lotatt12text", viewInvLotattForm.getLotatt12text());//原因说明
-        map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
-        ViewInvLotatt viewInvLotatt = viewInvLotattMybatisDao.queryById(map);
-        if (viewInvLotatt != null) {
-            viewInvLotattMybatisDao.invHold(map);
-            String result = map.get("result").toString();
-            if (result.substring(0, 3).equals("000")) {
-                json.setSuccess(true);
-                json.setMsg("库存冻结成功！");
-            } else {
-                json.setSuccess(false);
-                json.setMsg("库存冻结失败！" + result);
+        //json转集合
+        List<InvLotLocId> list = JSON.parseArray(forms, InvLotLocId.class);
+        InvLotLocId  invLotLocId=null;
+        for (InvLotLocId form : list) {
+            invLotLocId=new InvLotLocId();
+            invLotLocId.setLotnum(form.getLotnum());
+            invLotLocId.setLocationid(form.getLocationid());
+            invLotLocId.setSku(form.getSku());
+            invLotLocId.setCustomerid(form.getCustomerid());
+            InvLotLocId  locId = invLotLocIdMybatisDao.queryByKey(invLotLocId);
+            if(locId!=null){
+                invLotLocId.setOnholdlocker(99);
+                invLotLocIdMybatisDao.updateByKey(invLotLocId);
             }
         }
+        json.setSuccess(true);
+        json.setMsg("冻结成功");
+
+        return json;
+    }
+    /**
+     * 库存解冻
+     *
+     * @param forms
+     * @return
+     */
+    public Json noholdViewInvLotatt(String forms) {
+        Json json = new Json();
+        //json转集合
+        List<InvLotLocId> list = JSON.parseArray(forms, InvLotLocId.class);
+        InvLotLocId  invLotLocId=null;
+        for (InvLotLocId form : list) {
+            invLotLocId=new InvLotLocId();
+            invLotLocId.setLotnum(form.getLotnum());
+            invLotLocId.setLocationid(form.getLocationid());
+            invLotLocId.setSku(form.getSku());
+            invLotLocId.setCustomerid(form.getCustomerid());
+            InvLotLocId  locId = invLotLocIdMybatisDao.queryByKey(invLotLocId);
+            if(locId!=null){
+                invLotLocId.setOnholdlocker(0);
+                invLotLocIdMybatisDao.updateByKey(invLotLocId);
+            }
+        }
+        json.setSuccess(true);
+        json.setMsg("解冻成功");
+
         return json;
     }
 
