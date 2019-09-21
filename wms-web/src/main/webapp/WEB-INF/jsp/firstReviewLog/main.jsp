@@ -253,6 +253,36 @@ function returnCheck() {
         }
     })
 }
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        // param.put("enterpriseName",$('#enterpriseName').val());
+        // param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/firstReviewLogController.do?exportFirstReviewLogDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+/* 导出end */
+
+
 </script>
 </head>
 <body>
@@ -284,6 +314,8 @@ function returnCheck() {
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<%--<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>--%>
+
 							</td>
 						</tr>
 					</table>
