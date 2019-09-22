@@ -285,13 +285,13 @@ public class ImportDocAsnDoublecDataService {
                     if (basSku != null) {
                         if (basSku.getSkuGroup7().equals("1")) {
 //                            if (basSku.getDescrE().toUpperCase().equals(docAsnDoublecVO.getContext1().toUpperCase())) {
-                            if (basSku.getDescrE().equals(docAsnDoublecVO.getContext1())) {
+//                            if (basSku.getDescrE().equals(docAsnDoublecVO.getContext1())) {
                                 json.setSuccess(true);
                                 docAsnDoublecVO.setCustomerid(invLotAtt.getCustomerid());
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("产品的型号不匹配");
-                            }
+//                            } else {
+//                                json.setSuccess(false);
+//                                json.setMsg("产品的型号不匹配");
+//                            }
                         } else {
                             json.setSuccess(false);
                             json.setMsg("没有需要匹配双证的产品");
