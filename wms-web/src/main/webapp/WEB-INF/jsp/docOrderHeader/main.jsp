@@ -69,24 +69,24 @@ $(function() {
 			sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N"
 		},
 		columns : [[
-		            {field: 'chk',                  checkbox:true,      width: 6},
+		            {field: 'chk',                  checkbox:true,          width: 6},
 					{field: 'customerid',			title: '客户编码',		width: 100 },
-                    {field: 'orderStatusName',			title: '订单状态',		width: 100 },
-					{field: 'orderno',				title: 'SO编号',		width: 100 },
-					{field: 'soreference1',			title: '客户单号',	width: 120 },
+                    {field: 'orderStatusName',		title: '订单状态',		width: 100 },
+					{field: 'orderno',				title: 'SO编号',		    width: 131 },
+					{field: 'soreference1',			title: '客户单号',	    width: 120 },
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
-            		{field: 'cAddress4',			title: '快递单号',	width: 120 },
+            		{field: 'cAddress4',			title: '快递单号',	    width: 120 },
 					{field: 'ordertime',			title: '创建时间',		width: 150 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
-					{field: 'cContact',		title: '收货方',		width: 100 },
-                    {field: 'cProvince',			title: '省',		width: 100 },
-                    {field: 'cCity',			title: '市',		width: 100 },
-                    {field: 'cAddress2',			title: '区',		width: 100 },
+					{field: 'cContact',		        title: '收货方',		    width: 100 },
+                    {field: 'cProvince',			title: '省',		        width: 100 },
+                    {field: 'cCity',			    title: '市',		        width: 100 },
+                    {field: 'cAddress2',			title: '区',		        width: 100 },
 					{field: 'cAddress1',			title: '收货地址',		width: 250 },
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
-					{field: 'addwho',				title: '创建人',		width: 70 },
+					{field: 'addwho',				title: '创建人',		    width: 70 },
 					{field: 'releasestatusName',	title: '释放状态',		width: 100 },
-					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 , hidden:true }
+					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 ,       hidden:true }
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
@@ -184,15 +184,15 @@ $(function() {
         rownumbers : true,
         singleSelect : true,
         columns : [[
-            {field: 'location',	title: '库位',		width: 120 },
-            {field: 'sku',				title: '商品编码',		width: 130 },
-            {field: 'skuName',			title: '商品名称',		width: 130 },
-            {field: 'qty',		title: '分配数',		width: 80 },
-            {field: 'qtyEach',		title: '分配件数',		width: 80 },
-            {field: 'qtypickedEach',		title: '拣货数',		width: 80 },
-            {field: 'qtyshippedEach',		title: '发货数',		width: 80 },
-            {field: 'status',		title: '状态',		width: 80 ,formatter:sostatusFormatter},
-            {field: 'pickName',	title: '包装',		width: 80 }
+            {field: 'location',	        title: '库位',		width: 120 },
+            {field: 'sku',				title: '商品编码',	width: 130 },
+            {field: 'skuName',			title: '商品名称',	width: 130 },
+            {field: 'qty',		        title: '分配数',		width: 80 },
+            {field: 'qtyEach',		    title: '分配件数',	width: 80 },
+            {field: 'qtypickedEach',	title: '拣货数',		width: 80 },
+            {field: 'qtyshippedEach',	title: '发货数',		width: 80 },
+            {field: 'status',		    title: '状态',		width: 80 ,formatter:sostatusFormatter},
+            {field: 'pickName',	        title: '包装',		width: 80 }
         ]],
         onDblClickCell: function(index,field,value){
             detailsEdit();
@@ -664,6 +664,7 @@ var allocation = function(){
 							operateResult = operateResult + "处理完毕" + "\n";
 						} else {
 							operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                            msg = msg.replace(/ /g, '\n');
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
 						};
 					} catch (e) {

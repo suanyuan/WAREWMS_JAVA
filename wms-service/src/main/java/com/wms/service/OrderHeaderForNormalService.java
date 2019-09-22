@@ -88,7 +88,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
     @Autowired
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
-
+    @Autowired
+    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
 
     /**
      * 订单列表显示
@@ -241,6 +242,11 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
             if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
+
+                //判断双证/质量合格证
+                json = fixCertificateFlag(orderNo);
+                if (!json.isSuccess()) return json;
+
                 Map<String, Object> map = new HashMap<>();
                 //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                 map.put("orderNo", orderNo);
@@ -288,6 +294,58 @@ public class OrderHeaderForNormalService extends BaseService {
             json.setMsg("查无出库单数据");
             return json;
         }
+    }
+
+    /**
+     * 遍历子单查看产品是否需要质量合格证或者双证，
+     * 如果没有匹配或者导入的，则不可进行分配操作
+     * @param orderno 出库单号
+     * @return ~
+     */
+    private Json fixCertificateFlag(String orderno) {
+
+        Json json = new Json();
+        json.setSuccess(true);
+
+        StringBuilder message = new StringBuilder();
+        List<OrderDetailsForNormal> docOrderDetailList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
+        for (OrderDetailsForNormal docOrderDetail : docOrderDetailList) {
+
+            BasSku basSku = docOrderDetail.getBasSku() == null ? new BasSku() : docOrderDetail.getBasSku();
+            if (StringUtil.fixNull(basSku.getSkuGroup7()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt05())) {
+
+                InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByLotatt05(docOrderDetail.getLotatt05());
+                if (invLotLocId == null) {
+
+                    json.setSuccess(false);
+                    message.append(" ").
+                            append("序列号:").
+                            append(docOrderDetail.getLotatt05()).
+                            append("，无库存;");
+                }else if (!invLotLocId.isDoublecflag()) {
+
+                    json.setSuccess(false);
+                    message.append(" ").
+                            append("序列号:").
+                            append(docOrderDetail.getLotatt05()).
+                            append("，未匹配双证;");
+                }
+            }else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt04())) {
+
+                DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryBylotatt04(docOrderDetail.getCustomerid(), docOrderDetail.getSku(), docOrderDetail.getLotatt04());
+                if (docAsnCertificate == null) {
+
+                    json.setSuccess(false);
+                    message.append(" ").
+                            append("生产批号:").
+                            append(docOrderDetail.getLotatt04()).
+                            append("，未导入质量合格证;");
+                }
+            }
+        }
+
+        json.setMsg(message.toString());
+        return json;
     }
 
     /**

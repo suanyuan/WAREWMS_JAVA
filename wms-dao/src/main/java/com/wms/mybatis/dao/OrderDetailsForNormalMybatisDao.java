@@ -8,21 +8,21 @@ import java.util.Map;
 
 public interface OrderDetailsForNormalMybatisDao extends BaseDao {
 
-	Integer getOrderLineNoById(OrderDetailsForNormalQuery query);
+    Integer getOrderLineNoById(OrderDetailsForNormalQuery query);
 
-	void allocationByOrderLine(Map<String, Object> map);
+    void allocationByOrderLine(Map<String, Object> map);
 
-	void deAllocationByOrderLine(Map<String, Object> map);
+    void deAllocationByOrderLine(Map<String, Object> map);
 
     /**
      * 用户删除发运订单头档 关联明细删除
+     *
      * @param orderno 出口so编号
      */
-	void orderHeaderdelete (String orderno);
+    void orderHeaderdelete(String orderno);
 
-
-/**
- * 根据OrderNo获得细单
- */
+    /**
+     * 根据OrderNo获得细单
+     */
     <T> List<T> queryByOrderNo(String orderno);
 }

@@ -80,4 +80,7 @@ public class InvLotLocId  implements Serializable {
 	private String lotatt04;
 	private String productLineName;//产品线
 
+
+    //双证是否匹配
+    private boolean doublecflag;
 }
