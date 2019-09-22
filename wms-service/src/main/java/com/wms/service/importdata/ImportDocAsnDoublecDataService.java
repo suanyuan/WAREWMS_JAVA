@@ -65,7 +65,7 @@ public class ImportDocAsnDoublecDataService {
             List<ImportDoublecData> GPRSList = null;
             try {
                 //调用excle共用类，转化成list
-                GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map,null);
+                GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map, null);
             } catch (ExcelException e) {
                 e.printStackTrace();
             }
@@ -157,8 +157,8 @@ public class ImportDocAsnDoublecDataService {
                 if (StringUtils.isEmpty(dataArray.getContext2())) {
                     throw new Exception();
                 }
-                DocAsnDoublec docAsnDoublec=docAsnDoublecMybatisDao.queryByContext2(dataArray.getContext2());
-                if(docAsnDoublec!=null){
+                DocAsnDoublec docAsnDoublec = docAsnDoublecMybatisDao.queryByContext2(dataArray.getContext2());
+                if (docAsnDoublec != null) {
                     throw new Exception();
                 }
                 for (DocAsnDoublecVO v : importData) {
@@ -192,7 +192,7 @@ public class ImportDocAsnDoublecDataService {
 
 
 // 匹配双证 前面没有错误才匹配双证
-            if(rowResult.length() <= 0) {
+            if (rowResult.length() <= 0) {
                 Json json = new Json();
                 try {
                     json = reqDouble(importDataVO);
@@ -268,16 +268,16 @@ public class ImportDocAsnDoublecDataService {
     public Json reqDouble(DocAsnDoublecVO docAsnDoublecVO) {
         Json json = new Json();
 //先根据序列号查出InvLotAtt
-            InvLotAttQuery query = new InvLotAttQuery();
-            query.setLotatt05(docAsnDoublecVO.getContext2());
-           List<InvLotAtt>  invLotAttList = invLotAttMybatisDao.queryByLotatts05(query);
-            if (invLotAttList.size()>0) {
-                boolean con=false;
-                for (InvLotAtt invLotAtt : invLotAttList) {
-                    if(!invLotAtt.getLotatt10().equals("DJ")){
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("customerid", invLotAtt.getCustomerid());
-                        map.put("sku", invLotAtt.getSku());
+        InvLotAttQuery query = new InvLotAttQuery();
+        query.setLotatt05(docAsnDoublecVO.getContext2());
+        List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByLotatts05(query);
+        if (invLotAttList.size() > 0) {
+            boolean con = false;
+            for (InvLotAtt invLotAtt : invLotAttList) {
+                if (!invLotAtt.getLotatt10().equals("DJ")) {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("customerid", invLotAtt.getCustomerid());
+                    map.put("sku", invLotAtt.getSku());
 
 
 //再根据customerid和sku查出BasSku
@@ -300,21 +300,21 @@ public class ImportDocAsnDoublecDataService {
                         json.setSuccess(false);
                         json.setMsg("没有需要匹配双证的产品");
                     }
-                        con=true;
-                         break;
-                    }
+                    con = true;
+                    break;
                 }
-                if(!con){
-                    json.setSuccess(false);
-                    json.setMsg("库存质量状态为待检");
-                }
-
-            } else {
+            }
+            if (!con) {
                 json.setSuccess(false);
-                json.setMsg("没有此序列号库存");
+                json.setMsg("库存质量状态为待检");
             }
 
-       return json;
+        } else {
+            json.setSuccess(false);
+            json.setMsg("没有此序列号库存");
+        }
+
+        return json;
 
     }
 }

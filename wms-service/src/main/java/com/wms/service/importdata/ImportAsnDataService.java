@@ -578,8 +578,10 @@ public class ImportAsnDataService {
     }
 
     private void saveAsn(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
+
         DocAsnHeader asnHeader = null;
-        Boolean addfalg = true;
+        boolean addfalg = true;
+        String supplierid = "";//供应商
         for (DocAsnHeaderVO importDataVO : importDataList) {
             asnHeader = new DocAsnHeader();
             BeanUtils.copyProperties(importDataVO, asnHeader);
@@ -659,6 +661,7 @@ public class ImportAsnDataService {
                             asnDetails.setLotatt08(basSku.getSkuGroup6());
                         }
                     }
+                    supplierid = asnDetails.getLotatt08();//用于存储于头档的供应商
 
                     //样品属性
                     if (StringUtils.isEmpty(asnDetails.getLotatt09())) {
@@ -727,11 +730,12 @@ public class ImportAsnDataService {
                     //保存订单明细信息
                     docAsnDetailsMybatisDao.add(asnDetails);
                 }
-                if(addfalg == true){
+                if(addfalg){
                     //赋值
                     //asnHeader.setAsntype("PR");
                     asnHeader.setAsntype(importDataVO.getAsntype());
                     asnHeader.setReleasestatus("Y");
+                    asnHeader.setSupplierid(supplierid);//取的是最后一条明细的供应商/默认供应商
                     asnHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     asnHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                     asnHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());

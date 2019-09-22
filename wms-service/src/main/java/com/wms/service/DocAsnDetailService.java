@@ -152,6 +152,33 @@ public class DocAsnDetailService extends BaseService {
         }
     }
 
+    /**
+     * 判断是否输入必填项
+     * @param form 生产日期, 效期, 生产批号, 序列号
+     * @return ~
+     */
+    private Json verifyRequiredFiled(DocAsnDetailForm form) {
+
+        Json json = new Json();
+        if (StringUtil.isEmpty(form.getLotatt01())) {
+
+            json.setSuccess(false);
+            json.setMsg("请输入生产日期");
+            return json;
+        }else if (StringUtil.isEmpty(form.getLotatt02())) {
+
+            json.setSuccess(false);
+            json.setMsg("请输入有效期/失效期");
+            return json;
+        }else if (StringUtil.isEmpty(form.getLotatt04()) && StringUtil.isEmpty(form.getLotatt05())) {
+
+            json.setSuccess(false);
+            json.setMsg("请输入生产批号或者序列号");
+            return json;
+        }
+        json.setSuccess(true);
+        return json;
+    }
 
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
 
@@ -162,6 +189,13 @@ public class DocAsnDetailService extends BaseService {
 		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(query);
 		Json statusJson =  asnObjCheck(docAsnHeader);
 
+		//单据状态判断
+	    if (!statusJson.isSuccess()) {
+	        return statusJson;
+        }
+
+        //detail内容判断
+        statusJson = verifyRequiredFiled(docAsnDetailForm);
 	    if (!statusJson.isSuccess()) {
 	        return statusJson;
         }
@@ -253,6 +287,13 @@ public class DocAsnDetailService extends BaseService {
 
 	public Json editDocAsnDetail(DocAsnDetailForm docAsnDetailForm) {
         Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
+        //单据状态判断
+        if (!statusJson.isSuccess()) {
+            return statusJson;
+        }
+
+        //detail内容判断
+        statusJson = verifyRequiredFiled(docAsnDetailForm);
         if (!statusJson.isSuccess()) {
             return statusJson;
         }

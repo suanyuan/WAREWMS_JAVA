@@ -64,8 +64,16 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
       * 根据唯一主键获取单条InvLotLocId
      */
     InvLotLocId queryByKey(InvLotLocId invLotLocId);
+
     /**
      * 根据唯一主键修改InvLotLocId的冻结状态
      */
-    public <T> void updateByKey(InvLotLocId invLotLocId);
+    void updateByKey(InvLotLocId invLotLocId);
+
+    /**
+     * 根据序列号查询产品的双证匹配状态
+     * @param lotatt05 序列号
+     * @return 双证是否匹配
+     */
+    InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05);
 }

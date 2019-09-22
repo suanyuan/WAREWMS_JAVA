@@ -93,6 +93,8 @@ public class DocPaService {
                         asnReference2 += ",";
                     }
                 }
+                if (asnReference1.length() > 0) asnReference1 = asnReference1.substring(0, asnReference1.length() - 1);
+                if (asnReference2.length() > 0) asnReference2 = asnReference2.substring(0, asnReference2.length() - 1);
                 /*
                 * End    ======================== */
 
@@ -156,6 +158,7 @@ public class DocPaService {
                     DocAsnHeader header = new DocAsnHeader();
                     header.setAsnno(asnNo);
                     header.setAsnPrintFlag("Y");
+                    header.setUserdefine1(panno);//预期到货通知头档记录上架任务单号
                     docAsnHeaderMybatisDao.updateBySelective(header);
                 }
                 return Json.success("合并成功");
@@ -227,6 +230,13 @@ public class DocPaService {
 
                             paNo = docPaHeader.getPano();
                         }
+
+                        //预期到货通知头档记录上架任务单号
+                        DocAsnHeader header = new DocAsnHeader();
+                        header.setAsnno(docPaDTO.getAsnno());
+                        header.setAsnPrintFlag("Y");
+                        header.setUserdefine1(paNo);
+                        docAsnHeaderMybatisDao.updateBySelective(header);
 
                         //处理无批次属性的情况
                         InvLotAtt invLotAttLeak = invLotAttService.queryInsertLotatts(docAsnDetail);
@@ -304,8 +314,6 @@ public class DocPaService {
                         docQcDetailsService.addDocQcDetails(docQcDetailsForm);
 
                         if (docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
-
-
 
                             PdaDocQcDetailForm pdaDocQcDetailForm = new PdaDocQcDetailForm();
                             BeanUtils.copyProperties(docQcDetailsForm, pdaDocQcDetailForm);

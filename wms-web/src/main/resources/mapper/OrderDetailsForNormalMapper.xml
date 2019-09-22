@@ -117,6 +117,13 @@
                      select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
     </resultMap>
 
+    <resultMap id="OrderSkuMap" type="com.wms.entity.order.OrderDetailsForNormal" extends="OrderDetailsForNormalMap">
+        <association property="basSku"
+                     column="{customerid=customerid, sku=sku}"
+                     javaType="com.wms.entity.BasSku"
+                     select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
+    </resultMap>
+
     <!-- doc_order_details table all fields -->
     <sql id="Base_Column_List" >
 	 orderno,orderlineno,customerid,sku,linestatus,lotnum,lotatt01,lotatt02,lotatt03,lotatt04,lotatt05,lotatt06,lotatt07,lotatt08,lotatt09,lotatt10,lotatt11,lotatt12,lotatt13,lotatt14,lotatt15,lotatt16,lotatt17,lotatt18,pickzone,location,traceid,qtyordered,qtysoftallocated,qtyallocated,qtypicked,qtyshipped,uom,packid,softallocationrule,allocationrule,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,notes,qtyordered_each,qtysoftallocated_each,qtyallocated_each,qtypicked_each,qtyshipped_each,addtime,addwho,edittime,editwho,rotationid,netweight,grossweight,cubic,price,alternativesku,kitreferenceno,d_edi_01,d_edi_02,d_edi_03,d_edi_04,d_edi_05,d_edi_06,d_edi_07,d_edi_08,d_edi_09,d_edi_10,orderlinereferenceno,d_edi_11,d_edi_12,d_edi_13,d_edi_14,d_edi_15,d_edi_16,d_edi_17,d_edi_18,d_edi_19,d_edi_20,kitsku,erpcancelflag,userdefine6,zonegroup,locgroup1,locgroup2,comminglesku,onestepallocation,orderlotcontrol,fullcaselotcontrol,piecelotcontrol,referencelineno,salesorderno,salesorderlineno,qtyreleased,freegift
@@ -796,7 +803,7 @@ where 1=1
         from doc_order_details where orderno = #{orderno} and orderlineno = #{orderlineno}
     </select>
 <!-- 根据id查询 订单明细 -->
-    <select id="queryByOrderNo"  resultMap="OrderDetailsForNormalMap" parameterType="Object">
+    <select id="queryByOrderNo"  resultMap="OrderSkuMap" parameterType="Object">
         select <include refid="Base_Column_List" />
         from doc_order_details where orderno = #{orderno}
     </select>

@@ -9,34 +9,41 @@ import java.io.Serializable;
 @Entity
 public class FirstReviewLog  implements Serializable {
 
-	private String reviewId;
+    private String token;
 
-	private String reviewTypeId;
+    private String reviewId;
 
-	private String applyContent;
+    private String reviewTypeId;
 
-	private String applyState;
+    private String applyContent;
 
-	private String checkIdQc;
+    private String applyState;
 
-	private java.util.Date checkDateQc;
+    private String applyType; //申请类型
 
-	private String checkRemarkQc;
+    private String checkIdQc;
 
-	private String checkIdHead;
+    private java.util.Date checkDateQc;
+    private String checkDateQcDC;
 
-	private java.util.Date checkDateHead;
+    private String checkRemarkQc;
 
-	private String checkRemarkHead;
+    private String checkIdHead;
 
-	private String createId;
+    private java.util.Date checkDateHead;
+    private String checkDateHeadDC;
 
-	private java.util.Date createDate;
+    private String checkRemarkHead;
 
-	private String editId;
+    private String createId;
 
-	private java.util.Date editDate;
+    private java.util.Date createDate;
+    private String createDateDC;
 
-	private String reviewType;
+    private String editId;
+
+    private java.util.Date editDate;
+
+    private String reviewType;
 
 }

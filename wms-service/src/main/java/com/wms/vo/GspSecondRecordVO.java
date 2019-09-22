@@ -16,7 +16,7 @@ public class GspSecondRecordVO {
 	private String recordUrl;
 	private java.util.Date approveDate;
 	private String registrationAuthority;
-	private Long createId;
+	private String createId;
 	private java.util.Date createDate;
 	private Long editId;
 	private java.util.Date editDate;
@@ -140,11 +140,11 @@ public class GspSecondRecordVO {
 		this.registrationAuthority = registrationAuthority;
 	}
 
-	public Long getCreateId() {
+	public String getCreateId() {
 		return createId;
 	}
 
-	public void setCreateId(Long createId) {
+	public void setCreateId(String createId) {
 		this.createId = createId;
 	}
 
