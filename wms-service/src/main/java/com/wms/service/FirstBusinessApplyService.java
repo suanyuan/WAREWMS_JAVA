@@ -61,6 +61,9 @@ public class FirstBusinessApplyService extends BaseService {
 	@Autowired
 	private  FirstReviewLogMybatisDao firstReviewLogMybatisDao;
 	@Autowired
+	private  BasCustomerMybatisDao basCustomerMybatisDao;
+
+	@Autowired
 	private GspVerifyService gspVerifyService;
 
 	@Autowired
@@ -297,7 +300,16 @@ public class FirstBusinessApplyService extends BaseService {
                 String ProductName = "无";
                 String ProductRegisterNo = "无";
 				String SpecsName = "无";
+				String clientName = "无";
+				String supName = "无";
 				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
+
+//				BasCustomer b = new BasCustomer();
+//				b.setCustomerType(Constant.CODE_CUS_TYP_VE);
+//				b.setCustomerid(supplierId);
+				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
+				BasCustomer cli =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_OW);
+
 				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
 				    ProductName = g.getProductName();
                 }
@@ -307,8 +319,14 @@ public class FirstBusinessApplyService extends BaseService {
 				if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
 					ProductRegisterNo = gpr.getProductRegisterNo();
 				}
-				String content = "产品名称:"+ProductName+" "+"产品代码:"+g.getProductCode()+" "+
-						"规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
+				if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
+					supName = sup.getDescrC();
+				}
+				if(cli.getDescrC()!=null && !"".equals(cli.getDescrC())){
+					clientName = cli.getDescrC();
+				}
+				String content ="委托方:"+clientName+" 供应商:"+supName+" 产品名称:"+ProductName+" 产品代码:"+g.getProductCode()+
+						" 规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
                 firstReviewLogForm.setApplyContent(content);
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
