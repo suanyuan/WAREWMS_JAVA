@@ -244,6 +244,7 @@ public class GspSecondRecordService extends BaseService {
 			for(GspSecondRecord g : operateLicenses){
 				GspSecondRecordVO vo = new GspSecondRecordVO();
 				BeanUtils.copyProperties(g,vo);
+				vo.setCreateId(g.getCreateId());
 				gspOperateLicenseVOList.add(vo);
 			}
 			int total = gspSecondRecordMybatisDao.queryByCount(criteria);
