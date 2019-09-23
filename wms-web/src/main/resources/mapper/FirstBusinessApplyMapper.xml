@@ -217,8 +217,6 @@ where 1=1
 	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
 	where t3.product_code = #{productCode} and  t1.apply_state = '40'
 
-
-
 	</select>
 
 	<select id="selectSupplierNamesByProductAndState" resultType="java.lang.String"  parameterType="Object">
@@ -230,6 +228,15 @@ where 1=1
 
 	</select>
 
+	<!--通过产品注册证id查询其下的产品的首营申请-->
+	<select id="selectByProductRegisterId" resultMap="PageResultMap"  parameterType="Object">
+	select t1.* from  first_business_apply t1
+	LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
+	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
+	left join gsp_product_register t4 on t4.product_register_id = t3.product_register_id
+	where t4.product_register_id = #{productRegisterId} and t1.is_use = '1'
+
+	</select>
 
 
 	<select id="selectFirstBusinessBySupplierAndProduct" resultType="java.lang.Integer"  parameterType="Object">
@@ -284,4 +291,7 @@ where 1=1
 <update id="updateBusinessByNo" parameterType="Object" >
   update first_business_apply set first_state=#{state} where apply_id=#{no}
  </update>
+
+
+
 </mapper>   

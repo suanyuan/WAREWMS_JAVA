@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 import com.wms.entity.BasSku;
+import com.wms.entity.FirstBusinessApply;
 import com.wms.result.FirstBusinessApplyResult;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,5 +26,9 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 
 
 	public List<String> selectSupplierNamesByProductAndState(BasSku basSku);//
+
+	//通过产品注册证id查询其下的产品的首营申请
+	List<FirstBusinessApply> selectByProductRegisterId(Object id);
+
 
 }

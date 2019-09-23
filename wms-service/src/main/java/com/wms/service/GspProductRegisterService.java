@@ -5,9 +5,11 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
+import com.wms.entity.FirstBusinessApply;
 import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegisterSpecs;
 import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
@@ -53,6 +55,8 @@ public class GspProductRegisterService extends BaseService {
 	private ImportGspProductRegisterDataService importGspProductRegisterDataService;
 	@Autowired
 	private DataPublishService dataPublishService;
+	@Autowired
+	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
 
 	/**
 	 * 查询分页数据
@@ -139,6 +143,25 @@ public class GspProductRegisterService extends BaseService {
 			}
 
 			if(gspProductRegisterForm.getOpType().equals("update")){
+
+				//注册证下产品是否首营   没首营直接换证
+				// 	首营过则判断产品状态  首营审核中不能换证
+				// 	首营审核通过换证 报废产品新建一条产品关联新注册证 报废首营申请新建一条首营关联新产品  报废产品档案
+				//	首营新建（直接换证报废报废产品新建一条产品关联新注册证 删除原新建的首营和新建的GSP审核  新增一个新建首营关联新产品 新增一个新建gsp审核）
+				List<FirstBusinessApply> firstBusinessApplyList = firstBusinessApplyMybatisDao.selectByProductRegisterId(gspProductRegisterForm.getProductRegisterId());
+				if(firstBusinessApplyList!=null && firstBusinessApplyList.size()>0){
+					for(FirstBusinessApply f:firstBusinessApplyList){
+						if(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING.equals(f.getFirstState())){
+							return Json.error("注册证关联产品存在首营审核中的申请，无法换证！");
+						}else if(Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(f.getFirstState())){
+
+						}else if(Constant.CODE_CATALOG_FIRSTSTATE_PASS.equals(f.getFirstState())){
+
+						}
+					}
+				}
+
+
                 //失效原数据
                 gspProductRegister.setIsUse(Constant.IS_USE_NO);
                 gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
