@@ -191,7 +191,8 @@ var commit = function(){
         businessObj[""+$(this).attr("name")+""] = $(this).val();
         // var a =0;
         // var b=0;
-        if($(this).val()!=""){
+		// alert(businessObj["businessScope"]);
+        if($(this).val()!="" || businessObj["businessScope"]=="" || businessObj["businessEndDate"]=="" ){
 			a++;
 		}
 		b++;
@@ -248,8 +249,8 @@ var commit = function(){
             showMsg("营业执照营业起始时间不能超过当前时间");
             return;
         }
-
-        if(!judgeDate($("#ezuiFormBusiness #businessEndDate").datebox("getValue"))){
+		// alert($("#ezuiFormBusiness #businessEndDate").datebox("getValue"));
+        if(!judgeDate($("#ezuiFormBusiness #businessEndDate").datebox("getValue")) && $("#ezuiFormBusiness #businessEndDate").datebox("getValue")!="" ){
             checkResult = false;
             showMsg("营业执照营业结束时间不能小于当前时间");
             return;

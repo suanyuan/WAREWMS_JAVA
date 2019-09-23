@@ -3,6 +3,7 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.DocAsnCertificate;
 import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 /**
  * 
@@ -10,6 +11,10 @@ import org.apache.ibatis.annotations.Param;
  * <b>功能：</b>DocAsnCertificateDao<br>
  */
 public interface DocAsnCertificateMybatisDao extends BaseDao {
+
+    public <T> List<T> queryPageListByType(MybatisCriteria criteria);//总查询分页
+    public int queryPageByCount(MybatisCriteria criteria);
+
 
     /**
      * 查询生产批号下的产品是否导入了质量合格证

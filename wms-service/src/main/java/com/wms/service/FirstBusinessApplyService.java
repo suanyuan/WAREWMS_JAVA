@@ -308,8 +308,13 @@ public class FirstBusinessApplyService extends BaseService {
 //				b.setCustomerType(Constant.CODE_CUS_TYP_VE);
 //				b.setCustomerid(supplierId);
 				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
-				BasCustomer cli =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_OW);
-
+                if(sup==null){
+                    return 	Json.error("供应商失效！");
+                }
+				BasCustomer cli =basCustomerMybatisDao.queryByIdType(clientId,Constant.CODE_CUS_TYP_OW);
+                if(cli==null){
+                    return 	Json.error("货主失效！");
+                }
 				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
 				    ProductName = g.getProductName();
                 }

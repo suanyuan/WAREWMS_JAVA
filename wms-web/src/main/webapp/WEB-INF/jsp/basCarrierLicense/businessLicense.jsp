@@ -61,7 +61,7 @@
                     </td>
                     <th>经营范围</th>
                     <td colspan="5">
-                        <input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope'  class='easyui-textbox' data-options='required:true,width:200'/>
+                        <input type='text' data="1" value="${gspBusinessLicense.businessScope}" id="businessScope" name='businessScope'  class='easyui-textbox' data-options='required:false,width:200'/>
                         <%--<a onclick='selectBusinessScope()' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>经营范围选择</a>--%>
                     </td>
                 </tr>
