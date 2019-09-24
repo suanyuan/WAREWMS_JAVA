@@ -1037,6 +1037,16 @@ var downloadTemplate = function(){
 					<th>产地</th>
 					<td><input type='text' name='skuGroup9' class='easyui-textbox' size='16' /></td>
 
+					<th>自赋码2</th>
+					<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
+
+
+				<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
+					<%--<th>宽</th>--%>
+					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
+				</tr>
+				<tr>
+
 					<th>双证</th>
 					<%--<td><input type='text' name='skuGroup7' class='easyui-textbox' size='16' /></td>--%>
 					<td><input type='text' name='skuGroup7' id="skuGroup7" class='easyui-combobox' size='16' data-options="required:true,
@@ -1048,14 +1058,6 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-
-					<%--<td><input type='text' name='skuGroup8' class='easyui-textbox' size='16' /></td>--%>
-					<%--<th>宽</th>--%>
-					<%--<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>--%>
-				</tr>
-				<tr>
-					<th>自赋码2</th>
-					<td><input type='text' name='alternateSku2' class='easyui-textbox' size='16' /></td>
 
 
 

@@ -52,7 +52,7 @@ public class DocAsnCertificateService extends BaseService {
 		criteria.setCondition(query);
 		DocAsnCertificateVO gspProductRegisterSpecsVO = null;
 		List<DocAsnCertificateVO> basGtnVOList = new ArrayList<DocAsnCertificateVO>();
-		List<DocAsnCertificate> gspProductRegisterSpecsList = docAsnCertificateMybatisDao.queryByList(criteria);
+		List<DocAsnCertificate> gspProductRegisterSpecsList = docAsnCertificateMybatisDao.queryPageListByType(criteria);
 
 
 		//System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
@@ -69,7 +69,7 @@ public class DocAsnCertificateService extends BaseService {
 
 			basGtnVOList.add(gspProductRegisterSpecsVO);
 		}
-		int total = docAsnCertificateMybatisDao.queryByCount(criteria);
+		int total = docAsnCertificateMybatisDao.queryPageByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(basGtnVOList);
 		return datagrid;

@@ -111,14 +111,15 @@ public class GspOperateDetailService extends BaseService {
 			GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogService.getGspInstrumentCatalog(g.getOperateId());
 			if(gspInstrumentCatalog!=null){
 				v.setOperateName("["+gspInstrumentCatalog.getClassifyId()+"]"+gspInstrumentCatalog.getInstrumentCatalogName().trim());
+				if("I".equals(gspInstrumentCatalog.getClassifyId())){
+					IList.add(v);
+				}else if("II".equals(gspInstrumentCatalog.getClassifyId())){
+					IIList.add(v);
+				}else if("III".equals(gspInstrumentCatalog.getClassifyId())){
+					IIIList.add(v);
+				}
 			}
-			if("I".equals(gspInstrumentCatalog.getClassifyId())){
-				IList.add(v);
-			}else if("II".equals(gspInstrumentCatalog.getClassifyId())){
-				IIList.add(v);
-			}else if("III".equals(gspInstrumentCatalog.getClassifyId())){
-				IIIList.add(v);
-			}
+
 		}
 		voList.addAll(IList);
 		voList.addAll(IIList);

@@ -27,4 +27,7 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     public <T> List<T> queryProductSUPByList(MybatisCriteria criteria);//总查询不分页，一般导出时使用
     public int queryProductSUPByCount(MybatisCriteria criteria);
 
+    //根据specsid查询 最新有效的该产品
+    public <T> T selectNewBySpecsId(Object id);
+
 }

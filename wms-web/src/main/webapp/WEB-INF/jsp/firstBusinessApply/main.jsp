@@ -235,6 +235,9 @@ var del = function(){
     }
 };
 var commit = function(){
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
 	var url = '';
 	if (processType == 'edit') {
 		url = '<c:url value="/firstBusinessApplyController.do?edit"/>';
@@ -244,6 +247,7 @@ var commit = function(){
 
 
     if(row.firstState == '10' || row.firstState =='40'){
+        $.messager.progress('close');
         $.messager.show({
             msg : '审核中与审核通过的申请无法编辑', title : '提示'
         });
@@ -251,6 +255,7 @@ var commit = function(){
         ezuiForm.form('submit', {
             url: url,
             onSubmit: function () {
+
                 if (ezuiForm.form('validate')) {
                     $.messager.progress({
                         text: '<spring:message code="common.message.data.processing"/>', interval: 100
@@ -261,6 +266,8 @@ var commit = function(){
                 }
             },
             success: function (data) {
+
+                $.messager.progress('close');
                 var msg = '';
                 try {
                     var result = $.parseJSON(data);
@@ -307,7 +314,9 @@ var doSearch = function(){
 //提交审核
 var doConfirm = function () {
     // var row = ezuiDatagrid1.datagrid('getSelected');
-
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
 
     var row = ezuiDatagrid1.datagrid('getSelections');
     var arrDel = new Array();
@@ -320,6 +329,7 @@ var doConfirm = function () {
         }
     }
 	if(!flag){
+        $.messager.progress('close');
         $.messager.show({
             msg : '审核中与审核通过的申请无法提交', title : '提示'
         });
@@ -334,6 +344,7 @@ var doConfirm = function () {
                     type : 'POST',
                     dataType : 'JSON',
                     success : function(result){
+                        $.messager.progress('close');
                         var msg = '';
                         try {
                             msg = result.msg;
@@ -350,6 +361,7 @@ var doConfirm = function () {
             }
         });
     }else{
+        $.messager.progress('close');
         $.messager.show({
             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
         });
@@ -357,6 +369,10 @@ var doConfirm = function () {
 }
 //发起新申请
 var reApply = function () {
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
+
     var row = ezuiDatagrid1.datagrid('getSelections');
     var arrDel = new Array();
     var arrFirstState =  new Array();
@@ -368,6 +384,7 @@ var reApply = function () {
         }
     }
     if(!flag){
+        $.messager.progress('close');
         $.messager.show({
             msg : '只有审核通过的申请才能发起新申请', title : '提示'
         });
@@ -383,6 +400,7 @@ var reApply = function () {
                     type : 'POST',
                     dataType : 'JSON',
                     success : function(result){
+                        $.messager.progress('close');
                         var msg = '';
                         try {
                             msg = result.msg;
@@ -399,6 +417,7 @@ var reApply = function () {
             }
         });
     }else{
+        $.messager.progress('close');
         $.messager.show({
             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
         });

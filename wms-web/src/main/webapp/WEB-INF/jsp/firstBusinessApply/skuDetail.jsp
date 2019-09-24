@@ -184,7 +184,8 @@
 
     var ezuiDialogEditSupplierEnterprise;
     var ezuiDialogEditClientEnterprise;
-
+    var enterpriseDialog1;
+    var productRegisterDialog1;
 
     $(function () {
 
@@ -503,6 +504,8 @@
                 onClose: function () {
                     // ezuiFormClear(ezuiForm);
                     // $(this).dialog('destroy');
+                    // enterpriseDialog1
+                    // ezuiFormClear(ezuiDialogEditClientEnterprise);
                 }
             });
         }
@@ -605,7 +608,7 @@
 
     function operateGrid1(id) {
         // processType = 'product';
-        $('#enterpriseDialog1').dialog({
+        enterpriseDialog1 =  $('#enterpriseDialog1').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
             href: sy.bp() + "/gspProductRegisterSpecsController.do?toAdd&specsId=" + id + "&type=product",
@@ -613,7 +616,8 @@
             height: 550,
             cache: false,
             onClose: function () {
-
+                enterpriseDialog1.dialog('clear');
+                // ezuiFormClear(enterpriseDialog1);
             }
         })
     }
@@ -637,7 +641,7 @@
 
     function operateGridProductRegister2(id) {
         console.log("---------->" + id);
-        $('#productRegisterDialog1').dialog({
+        productRegisterDialog1 = $('#productRegisterDialog1').dialog({
             modal: true,
             title: '<spring:message code="common.dialog.title"/>',
             href: sy.bp() + "/gspProductRegisterController.do?toDetail&id=" + id,
@@ -646,6 +650,8 @@
 
             onClose: function () {
                 // ezuiFormClear(ezuiForm);
+                // ezuiFormClear(productRegisterDialog1);
+                productRegisterDialog1.dialog('clear');
             },
             onLoad: function () {
 

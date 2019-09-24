@@ -189,7 +189,7 @@ public class ImportAsnDataService {
             }
             if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {//判供应商是否为空
                     //gsp校验
-                    Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(), dataArray.getLotatt08(), dataArray.getSku(), dataArray.getLotatt01(), dataArray.getLotatt02());
+                    Json verifyJson = gspVerifyService.verifyOperate(dataArray.getCustomerid(), dataArray.getLotatt08(), dataArray.getSku(), dataArray.getLotatt01(), dataArray.getLotatt02(), dataArray.getLotatt06());
                     if (!verifyJson.isSuccess()) {
                         rowResult.append("序号：").append(dataArray.getSeq()).append(verifyJson.getMsg()).append(" ");
                     }
@@ -652,7 +652,7 @@ public class ImportAsnDataService {
                     }
 
                     if (asnDetails.getLotatt08().equals("") || asnDetails.getLotatt08() == null) {
-                        Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02());
+                        Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
                         if (!verifyJson.isSuccess()) {
                             addfalg = false;
                             resultMsg.append(verifyJson.getMsg()).append(" ");

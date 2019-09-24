@@ -308,8 +308,13 @@ public class FirstBusinessApplyService extends BaseService {
 //				b.setCustomerType(Constant.CODE_CUS_TYP_VE);
 //				b.setCustomerid(supplierId);
 				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
-				BasCustomer cli =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_OW);
-
+                if(sup==null){
+                    return 	Json.error("供应商失效！");
+                }
+				BasCustomer cli =basCustomerMybatisDao.queryByIdType(clientId,Constant.CODE_CUS_TYP_OW);
+                if(cli==null){
+                    return 	Json.error("货主失效！");
+                }
 				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
 				    ProductName = g.getProductName();
                 }
@@ -525,6 +530,13 @@ public class FirstBusinessApplyService extends BaseService {
 
                 //重新插入单据
                 FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(DelId);
+                //获取产品最新的产品id
+				GspProductRegisterSpecs  gprs =gspProductRegisterSpecsMybatisDao.selectNewBySpecsId(newApply.getSpecsId());
+				if(gprs==null){
+					return Json.error("产品已失效");
+				}
+
+
                 Json result = firstBusinessProductApplyService.getListByApplyIdNoUse(DelId);
 
                 if (result.isSuccess()) {
@@ -534,7 +546,7 @@ public class FirstBusinessApplyService extends BaseService {
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                        addApply(newApply.getClientId(), newApply.getSupplierId(), newApply.getSpecsId(), "");
+                        addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline());
                     }
                 }
             }

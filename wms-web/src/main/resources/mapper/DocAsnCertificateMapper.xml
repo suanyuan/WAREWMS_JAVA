@@ -26,13 +26,13 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid  like   '%${condition.customerid}%'
+	    and customerid  =  ${condition.customerid}
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku like   '%${condition.sku}%'
+	    and sku =   ${condition.sku}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-	    and lotatt04 like   '%${condition.lotatt04}%'
+	    and lotatt04 =   ${condition.lotatt04}
 	</if>
 
 	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
@@ -42,24 +42,64 @@ where 1=1
 		and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> addtime
 	</if>
 
-	<!--<if test="condition.addtime != null and condition.addtime != ''" >-->
-	    <!--and addtime =  #{condition.addtime}-->
-	<!--</if>-->
-	<!--<if test="condition.addwho != null and condition.addwho != ''" >-->
-	    <!--and addwho =  #{condition.addwho}-->
-	<!--</if>-->
-	<!--<if test="condition.edittime != null and condition.edittime != ''" >-->
-	    <!--and edittime =  #{condition.edittime}-->
-	<!--</if>-->
-	<!--<if test="condition.editwho != null and condition.editwho != ''" >-->
-	    <!--and editwho =  #{condition.editwho}-->
-	<!--</if>-->
-	<!--<if test="condition.certificateContext != null and condition.certificateContext != ''" >-->
-	    <!--and certificate_context =  #{condition.certificateContext}-->
-	<!--</if>-->
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.certificateContext != null and condition.certificateContext != ''" >
+	    and certificate_context =  #{condition.certificateContext}
+	</if>
 </trim>
 </sql>
-   
+
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause_Type">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid  like   '%${condition.customerid}%'
+			</if>
+			<if test="condition.sku != null and condition.sku != ''" >
+				and sku like   '%${condition.sku}%'
+			</if>
+			<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+				and lotatt04 like   '%${condition.lotatt04}%'
+			</if>
+
+			<if test="condition.createDateStart != null and condition.createDateStart != ''" >
+				and addtime   <![CDATA[  >=  ]]>  #{condition.createDateStart}
+			</if>
+			<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+				and     #{condition.createDateEnd}  <![CDATA[  >=  ]]> addtime
+			</if>
+
+			<!--<if test="condition.addtime != null and condition.addtime != ''" >-->
+			<!--and addtime =  #{condition.addtime}-->
+			<!--</if>-->
+			<!--<if test="condition.addwho != null and condition.addwho != ''" >-->
+			<!--and addwho =  #{condition.addwho}-->
+			<!--</if>-->
+			<!--<if test="condition.edittime != null and condition.edittime != ''" >-->
+			<!--and edittime =  #{condition.edittime}-->
+			<!--</if>-->
+			<!--<if test="condition.editwho != null and condition.editwho != ''" >-->
+			<!--and editwho =  #{condition.editwho}-->
+			<!--</if>-->
+			<!--<if test="condition.certificateContext != null and condition.certificateContext != ''" >-->
+			<!--and certificate_context =  #{condition.certificateContext}-->
+			<!--</if>-->
+		</trim>
+	</sql>
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -133,11 +173,34 @@ where 1=1
 
 </select>
 
+
+	<!-- 质量合格证 列表总数-->
+	<select id="queryPageByCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from doc_asn_certificate
+		<include refid="Example_Where_Clause_Type"/>
+	</select>
+
+	<!-- 查询质量合格证列表 -->
+	<select id="queryPageListByType" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from doc_asn_certificate
+		<include refid="Example_Where_Clause_Type"/>
+		<!--<if test="orderByClause != null and orderByClause != ''" >-->
+		<!--order by  ${orderByClause}-->
+		<!--</if>-->
+		order by  addtime desc
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+
+</select>
+
     <select id="queryBylotatt04" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from doc_asn_certificate
         where customerid = #{customerid} and sku = #{sku} and lotatt04 = #{lotatt04}
     </select>
-  	
+
 </mapper>   

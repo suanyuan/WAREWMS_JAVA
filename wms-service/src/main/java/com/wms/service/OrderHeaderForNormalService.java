@@ -384,7 +384,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 拣货
+     * 拣货/确认复核
      */
     public Json picking(String orderNo) {
         Json json = new Json();
@@ -443,7 +443,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 取消拣货
+     * 取消拣货/取消复核
      */
     public Json unPicking(String orderNo) {
         Json json = new Json();

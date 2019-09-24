@@ -68,9 +68,21 @@ public class GspVerifyService {
      * @param sku 产品
      * @param lotatt01 生产日期
      * @param lotatt02 效期
-     * @return
      */
     public Json verifyOperate(String customerId,String supplierId,String sku,String lotatt01,String lotatt02){
+        return this.verifyOperate(customerId, supplierId, sku, lotatt01, lotatt02, "");
+    }
+
+    /**
+     * gsp申请经营范围校验
+     * @param customerId 客户id
+     * @param supplierId 供应商id
+     * @param sku 产品
+     * @param lotatt01 生产日期
+     * @param lotatt02 效期
+     * @param lotatt06 注册证号
+     */
+    public Json verifyOperate(String customerId,String supplierId,String sku,String lotatt01,String lotatt02, String lotatt06){
 
         if(StringUtils.isEmpty(customerId)){
             return Json.error("缺少货主信息，首营审核不通过");
@@ -226,23 +238,29 @@ public class GspVerifyService {
         //如果有产品需要判断注册证
         if(!StringUtils.isEmpty(sku)){
             String registerNo = "";
-            BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
-            if(basSku == null){
-                //如果为空查询是否是未下发产品
-                GspProductRegisterSpecs specs = gspProductRegisterSpecsMybatisDao.queryById(sku);
-                if(specs!=null){
-                    if(!StringUtil.isEmpty(specs.getProductRegisterId())){
-                        GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterId());
-                        if(register != null){
-                            registerNo = register.getProductRegisterNo();
+            if (StringUtil.isNotEmpty(lotatt06)) {
+
+                registerNo = lotatt06;
+            }else {
+                BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
+                if(basSku == null){
+                    //如果为空查询是否是未下发产品
+                    GspProductRegisterSpecs specs = gspProductRegisterSpecsMybatisDao.queryById(sku);
+                    if(specs!=null){
+                        if(!StringUtil.isEmpty(specs.getProductRegisterId())){
+                            GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterId());
+                            if(register != null){
+                                registerNo = register.getProductRegisterNo();
+                            }
                         }
+                    }else {
+                        return Json.error("查询不到对应的产品："+sku);
                     }
                 }else {
-                    return Json.error("查询不到对应的产品："+sku);
+                    registerNo = basSku.getReservedfield03();
                 }
-            }else {
-                registerNo = basSku.getReservedfield03();
             }
+
             GspProductRegister gspProductRegister = getGspProductRegister(registerNo);
             if(gspProductRegister != null){
 //                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){

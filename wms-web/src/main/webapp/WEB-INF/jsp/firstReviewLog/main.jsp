@@ -68,7 +68,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-
+            $(this).datagrid('unselectAll');
 		},onClickRow:function (index,row) {
 			if(row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50){
 				$("#doCheck").linkbutton("disable");
@@ -179,10 +179,14 @@ function doCheck() {
 				return;
 			}
             if(row){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
                 $.ajax({
                     url : sy.bp()+"/firstReviewLogController.do?check",
                     data : {"id":arr.join(","),"remark":$("#remark").val()},type : 'POST', dataType : 'JSON',async  :true,
                     success : function(result){
+                        $.messager.progress('close');
                         var msg='';
                         try{
                             msg = result.msg;
