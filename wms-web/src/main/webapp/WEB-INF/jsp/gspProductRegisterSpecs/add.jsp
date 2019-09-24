@@ -430,7 +430,8 @@
             height: 500,
             cache: false,
             onClose: function () {
-
+                // $(this).close(enterpriseDialog);
+                enterpriseDialog.dialog('clear');
             },
 
         })
