@@ -530,6 +530,13 @@ public class FirstBusinessApplyService extends BaseService {
 
                 //重新插入单据
                 FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(DelId);
+                //获取产品最新的产品id
+				GspProductRegisterSpecs  gprs =gspProductRegisterSpecsMybatisDao.selectNewBySpecsId(newApply.getSpecsId());
+				if(gprs==null){
+					return Json.error("产品已失效");
+				}
+
+
                 Json result = firstBusinessProductApplyService.getListByApplyIdNoUse(DelId);
 
                 if (result.isSuccess()) {
@@ -539,7 +546,7 @@ public class FirstBusinessApplyService extends BaseService {
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                        addApply(newApply.getClientId(), newApply.getSupplierId(), newApply.getSpecsId(), "");
+                        addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline());
                     }
                 }
             }

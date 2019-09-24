@@ -2,9 +2,7 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
-import com.wms.mybatis.dao.BasSkuHistoryMybatisDao;
-import com.wms.mybatis.dao.BasSkuMybatisDao;
-import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.utils.BeanUtils;
@@ -60,6 +58,13 @@ public class DataPublishService extends BaseService {
     private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
+    @Autowired
+    private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
+
+
     /**
      * 下发数据
      * @param no
@@ -561,6 +566,14 @@ public class DataPublishService extends BaseService {
                 BeanUtils.copyProperties(specs,formNew);
                 formNew.setIsUse(Constant.IS_USE_YES);
                 formNew.setProductRegisterId(newRegisterId);
+                GspProductRegister gPR = gspProductRegisterMybatisDao.queryById(newRegisterId);
+                if(gPR==null){
+                    return Json.error("注册证不存在");
+                }
+                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryById(gPR.getProductRegisterId());
+                formNew.setProductEnterpriseName(g.getEnterpriseName());
+                formNew.setLicenseOrRecordNo(gPR.getLicenseOrRecordNol());
+                formNew.setStorageCondition(gPR.getStorageConditions());
                 formNew.setSpecsId(RandomUtil.getUUID());
                 if(specs.getProductName() ==null || specs.getProductName().equals("")){
                     formNew.setProductName(specs.getProductNameMain());
