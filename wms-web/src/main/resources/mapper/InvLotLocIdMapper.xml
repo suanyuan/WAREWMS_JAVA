@@ -40,6 +40,18 @@
 
     <!--双证是否匹配-->
     <result column="doublecflag" property="doublecflag"/>
+<!--质量状态管理-->
+	<result column="lotatt14" property="lotatt14"/>
+	<result column="lotatt15" property="lotatt15"/>
+	<result column="lotatt08" property="lotatt08"/>
+	<result column="lotatt12" property="lotatt12"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="lotatt07" property="lotatt07"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt10" property="lotatt10"/>
+	<result column="descrc" property="descrc"/>
+	<result column="reservedfield06" property="reservedfield06"/>
 
 </resultMap>
 
@@ -244,6 +256,20 @@ where 1=1
 	   and locationid=#{locationid}
 	   and customerid=#{customerid}
 	   and sku=#{sku}
+</select>
+<!-- 根据id查询 库位库存表 带出lotatt-->
+<select id="queryByKeyLotatt"  resultMap="BaseResultMap" parameterType="Object">
+	select a.*,
+	b.lotatt01,b.lotatt02,b.lotatt03,b.lotatt04,b.lotatt05,b.lotatt06,b.lotatt07,b.lotatt08,b.lotatt10,b.lotatt12,b.lotatt14,b.lotatt15,
+	s.descr_c as descrc ,s.reservedfield06
+	 from inv_lot_loc_id a
+	 LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
+	 LEFT JOIN `bas_sku` s ON s.sku=a.`sku` AND s.customerid=a.`customerid`
+	   where a.lotnum = #{lotnum}
+	   and a.locationid=#{locationid}
+	   and a.customerid=#{customerid}
+	   and a.sku=#{sku}
+	   and b.lotatt10='HG'
 </select>
 
 <!-- 库位库存表 列表总数-->

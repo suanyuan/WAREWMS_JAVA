@@ -83,4 +83,18 @@ public class InvLotLocId  implements Serializable {
 
     //双证是否匹配
     private boolean doublecflag;
+
+   //质量状态管理
+    private String lotatt14;  //入库单号
+    private String lotatt15;
+    private String lotatt08;
+    private String lotatt12;
+    private String lotatt06;
+    private String lotatt07;
+    private String lotatt01;
+    private String lotatt02;
+    private String lotatt10;
+    private String descrc;
+    private String reservedfield06;
+
 }

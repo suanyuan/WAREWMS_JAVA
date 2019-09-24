@@ -64,6 +64,10 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
       * 根据唯一主键获取单条InvLotLocId
      */
     InvLotLocId queryByKey(InvLotLocId invLotLocId);
+    /**
+      * 根据唯一主键获取单条InvLotLocId和其lotatt批属
+     */
+    InvLotLocId queryByKeyLotatt(InvLotLocId invLotLocId);
 
     /**
      * 根据唯一主键修改InvLotLocId的冻结状态

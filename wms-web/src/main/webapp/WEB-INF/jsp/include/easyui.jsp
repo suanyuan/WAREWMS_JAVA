@@ -336,5 +336,15 @@
 			case "99" : return "盘点关闭";
 		}
 	}
+//质量状态更新
+	var qcustatusFormatter = function (value,row,index) {
+		value+="";
+    	switch (value) {
+			case "00" : return "任务创建";
+			case "40" : return "任务完成";
+			case "90" : return "任务取消";
+			case "99" : return "任务关闭";
+		}
+	}
 
 </script>
