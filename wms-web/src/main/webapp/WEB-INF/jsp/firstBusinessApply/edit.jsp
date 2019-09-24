@@ -700,7 +700,7 @@
     }
     function submitApply1() {
         if(processType == 'edit'){
-            var rowMain = ezuiDatagrid.datagrid('getSelected');
+            var rowMain = ezuiDatagrid1.datagrid('getSelected');
             if(rowMain.firstState == '10' || rowMain.firstState =='40'){
                 $.messager.show({
                     msg : '审核中与审核通过的申请无法修改', title : '提示'
@@ -757,7 +757,7 @@
                 try{
                     if(result.success){
                         msg = result.msg;
-                        ezuiDatagrid.datagrid('reload');
+                        ezuiDatagrid1.datagrid('reload');
                         ezuiDialog.dialog('close');
                     }else{
                         msg = '<font color="red">' + result.msg + '</font>';

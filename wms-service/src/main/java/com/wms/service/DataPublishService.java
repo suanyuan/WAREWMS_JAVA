@@ -570,9 +570,10 @@ public class DataPublishService extends BaseService {
                 if(gPR==null){
                     return Json.error("注册证不存在");
                 }
-                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryById(gPR.getProductRegisterId());
-                formNew.setProductEnterpriseName(g.getEnterpriseName());
+                GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gPR.getEnterpriseId());
+//                formNew.setProductEnterpriseName(g.getEnterpriseName());
                 formNew.setLicenseOrRecordNo(gPR.getLicenseOrRecordNol());
+                formNew.setEnterpriseName(g.getEnterpriseName());
                 formNew.setStorageCondition(gPR.getStorageConditions());
                 formNew.setSpecsId(RandomUtil.getUUID());
                 if(specs.getProductName() ==null || specs.getProductName().equals("")){
