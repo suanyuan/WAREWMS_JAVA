@@ -340,7 +340,8 @@ public class ImportAsnDataService {
                                         docAsnDetailVO.getSku().equals(dataArray.getSku()) &&
                                         docAsnDetailVO.getLotatt04().equals(dataArray.getLotatt04()) &&
                                         docAsnHeaderVO.getAsnreference1().equals(dataArray.getAsnreference1()) &&
-                                        docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05())
+                                        docAsnDetailVO.getLotatt05().equals(dataArray.getLotatt05()) &&
+                                        docAsnDetailVO.getReceivinglocation().equals(dataArray.getReceivinglocation())
                                 ) {
                                     if (StringUtil.isEmpty(dataArray.getExpectedqtyEach())) {
                                         docAsnDetailVO.setExpectedqty(docAsnDetailVO.getExpectedqty().add(new BigDecimal(dataArray.getExpectedqty())));
@@ -510,19 +511,49 @@ public class ImportAsnDataService {
     private void validateSku(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
         BasSku sku = null;
         BasSkuQuery skuQuery = new BasSkuQuery();
+
+        Map<String, Object> existSku = new HashMap<>();
         for (DocAsnHeaderVO importDataVO : importDataList) {
             for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
+
+                if (existSku.get(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku()) != null) {
+
+                    if (existSku.get(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku()).equals("0")) {
+
+                        resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
+                                .append("，货主代码：").append(importDataVO.getCustomerid())
+                                .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，查无资料").append(" ");
+                        continue;
+                    }else if (existSku.get(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku()).equals("1")) {
+
+                        resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
+                                .append("，货主代码：").append(importDataVO.getCustomerid())
+                                .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
+                        continue;
+                    }else {//2
+
+                        continue;
+                    }
+                }
+
                 skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());
                 skuQuery.setSku(importDetailsDataVO.getSku());
                 sku = basSkuMybatisDao.queryById(skuQuery);
                 if (sku == null) {
+
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，查无资料").append(" ");
+                    existSku.put(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku(), "0");
                 }else if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
+
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
+                    existSku.put(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku(), "1");
+                }else {
+
+                    existSku.put(importDetailsDataVO.getCustomerid() + importDetailsDataVO.getSku(), "2");
                 }
             }
         }
@@ -531,14 +562,36 @@ public class ImportAsnDataService {
     private void validateLocation(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
         BasLocation loc = null;
         BasLocationQuery locQuery = new BasLocationQuery();
+
+        Map<String, Object> existLocation = new HashMap<>();
         for (DocAsnHeaderVO importDataVO : importDataList) {
             for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
+
                 if (StringUtils.isNotEmpty(importDetailsDataVO.getReceivinglocation())) {
+
+                    if (existLocation.get(importDetailsDataVO.getReceivinglocation()) != null) {
+
+                        if (existLocation.get(importDetailsDataVO.getReceivinglocation()).equals("0")) {
+
+                            resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
+                                    .append("，库位编码：").append(importDetailsDataVO.getReceivinglocation()).append("，查无资料").append(" ");
+                            continue;
+                        }else {//1
+
+                            continue;
+                        }
+                    }
+
                     locQuery.setLocationid(importDetailsDataVO.getReceivinglocation());
                     loc = basLocationMybatisDao.queryById(locQuery);
                     if (loc == null) {
+
                         resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                                 .append("，库位编码：").append(importDetailsDataVO.getReceivinglocation()).append("，查无资料").append(" ");
+                        existLocation.put(importDetailsDataVO.getReceivinglocation(), "0");
+                    }else {
+
+                        existLocation.put(importDetailsDataVO.getReceivinglocation(), "1");
                     }
                 }
             }
@@ -548,34 +601,57 @@ public class ImportAsnDataService {
     private void validateCustomer(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
         BasCustomer customer = null;
         BasCustomerQuery customerQuery = new BasCustomerQuery();
+
+        Map<String, Object> existCustomer = new HashMap<>();
         for (DocAsnHeaderVO importDataVO : importDataList) {
+            if (existCustomer.get(importDataVO.getCustomerid()) != null) {
+
+                if (existCustomer.get(importDataVO.getCustomerid()).equals("0")) {
+
+                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
+                    continue;
+                }else if (existCustomer.get(importDataVO.getCustomerid()).equals("1")) {
+
+                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码合作状态为未合作状态").append(" ");
+                    continue;
+                }else {//2
+
+                    continue;
+                }
+            }
+
             customerQuery.setCustomerid(importDataVO.getCustomerid());
             customerQuery.setCustomerType("OW");
             customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
             if (customer == null) {// 是否有客户资料
+
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
-            }else
-            if(customer.getActiveFlag().equals(Constant.IS_USE_NO)){
+                existCustomer.put(customerQuery.getCustomerid(), "0");
+            }else if(customer.getActiveFlag().equals(Constant.IS_USE_NO)){
+
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码合作状态为未合作状态").append(" ");
+                existCustomer.put(customerQuery.getCustomerid(), "1");
+            }else {
 
+                existCustomer.put(customerQuery.getCustomerid(), "2");
             }
         }
     }
 
-    private void validateCustomerPermission(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
-        BasCustomer customer = null;
-        BasCustomerQuery customerQuery = new BasCustomerQuery();
-        for (DocAsnHeaderVO importDataVO : importDataList) {
-            customerQuery.setCustomerid(importDataVO.getCustomerid());
-            customerQuery.setCustomerType("OW");
-            customerQuery.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
-            customer = basCustomerMybatisDao.queryById(customerQuery);
-            if (customer == null) {// 是否有客户权限
-                resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户权限").append(" ");
-            }
-
-        }
-    }
+//    private void validateCustomerPermission(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
+//        BasCustomer customer = null;
+//        BasCustomerQuery customerQuery = new BasCustomerQuery();
+//        for (DocAsnHeaderVO importDataVO : importDataList) {
+//            customerQuery.setCustomerid(importDataVO.getCustomerid());
+//            customerQuery.setCustomerType("OW");
+//            customerQuery.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+//            customer = basCustomerMybatisDao.queryById(customerQuery);
+//            if (customer == null) {// 是否有客户权限
+//                resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户权限").append(" ");
+//            }
+//
+//        }
+//    }
 
     private void saveAsn(List<DocAsnHeaderVO> importDataList, StringBuilder resultMsg) {
 
@@ -592,6 +668,7 @@ public class ImportAsnDataService {
             String resultCode = map.get("resultCode").toString();
             String resultNo = map.get("resultNo").toString();
             if (resultCode.substring(0, 3).equals("000")) {
+                Map<String, Object> existGsp = new HashMap<>();
                 for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
                     //判断预入库明细里面的sku和客户id下的18个批属是否存在
@@ -651,14 +728,33 @@ public class ImportAsnDataService {
                         asnDetails.setLotatt06(basSku.getReservedfield03());
                     }
 
+
                     if (asnDetails.getLotatt08().equals("") || asnDetails.getLotatt08() == null) {
-                        Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
-                        if (!verifyJson.isSuccess()) {
-                            addfalg = false;
-                            resultMsg.append(verifyJson.getMsg()).append(" ");
-                            continue;
-                        }else {
-                            asnDetails.setLotatt08(basSku.getSkuGroup6());
+
+                        String existKey = asnDetails.getCustomerid() + basSku.getSkuGroup6() + asnDetails.getSku() + asnDetails.getLotatt01() + asnDetails.getLotatt02() + asnDetails.getLotatt06();
+                        if (existGsp.get(existKey) !=null) {
+
+                            if (existGsp.get(existKey).equals("1")) {
+
+                                asnDetails.setLotatt08(basSku.getSkuGroup6());
+                            } else {
+
+                                addfalg = false;
+                                resultMsg.append(existGsp.get(existKey)).append(" ");
+                                continue;
+                            }
+                        } else {
+
+                            Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
+                            if (!verifyJson.isSuccess()) {
+                                addfalg = false;
+                                resultMsg.append(verifyJson.getMsg()).append(" ");
+                                existGsp.put(existKey, verifyJson.getMsg());
+                                continue;
+                            }else {
+                                asnDetails.setLotatt08(basSku.getSkuGroup6());
+                                existGsp.put(existKey, "1");
+                            }
                         }
                     }
                     supplierid = asnDetails.getLotatt08();//用于存储于头档的供应商

@@ -5,6 +5,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StringUtil {
 
@@ -70,6 +72,10 @@ public class StringUtil {
 
         String date = "";
         System.out.println(isyMdDate(date));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("123", "12");
+        System.out.println("12"+ null);
 
 //        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 //        try {
