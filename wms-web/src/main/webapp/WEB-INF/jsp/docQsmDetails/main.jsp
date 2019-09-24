@@ -363,9 +363,9 @@ var commitQualityStatus=function () {
 	if(row){
 		var remarks=$("#qualityStatusForm #remarks").textbox('getValue');
 		var fmqtyF=$("#qualityStatusForm #fmqtyF").textbox('getValue');
-		if(fmqtyF>row.fmqty){
+		if(fmqtyF>row.qtyavailed){
 			$.messager.show({
-				msg : '请输入小于合格件数的数字!', title : '<spring:message code="common.message.prompt"/>'
+				msg : '请输入小于可用件数的数字!', title : '<spring:message code="common.message.prompt"/>'
 			});
 			return;
 		}
