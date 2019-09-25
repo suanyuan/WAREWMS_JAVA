@@ -475,7 +475,8 @@ public class OrderHeaderForNormal implements Serializable {
 	private String exctel1;       //联系电话
 
 
-
+//快递投诉
+private String courierComplaint;
 
 	public OrderHeaderForNormal() {
 		

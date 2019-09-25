@@ -3,7 +3,6 @@ package com.wms.mybatis.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.wms.entity.ExportOrderData;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.result.OrderStatusResult;
@@ -50,4 +49,6 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 
     List<OrderHeaderForNormal> queryByAllocationCustomerid(@Param("customerid") String customerid);
+//快递投诉
+	public  <T> int updateCourierComplaint(T t);
 }

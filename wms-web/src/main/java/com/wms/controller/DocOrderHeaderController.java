@@ -380,4 +380,18 @@ public class DocOrderHeaderController {
  	public Json isexportOrderNo(String orderno)throws Exception{
 		return  orderHeaderForNormalService.isexportOrderNo(orderno);
 	}
+
+
+//快递投诉
+@Login
+@RequestMapping(params = "courierComplaint")
+@ResponseBody
+public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm){
+	Json json = orderHeaderForNormalService.courierComplaint(orderHeaderForNormalForm);
+	if(json == null){
+		json = new Json();
+		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+	}
+	return json;
+}
 }

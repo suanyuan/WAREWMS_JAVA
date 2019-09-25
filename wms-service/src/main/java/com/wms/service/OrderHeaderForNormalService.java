@@ -2108,6 +2108,21 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
 
+    /**
+     * 快递投诉
+     */
+    public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+        Json json = new Json();
+        int num=orderHeaderForNormalMybatisDao.updateCourierComplaint(orderHeaderForNormalForm);
+        if(num>0){
+            json.setSuccess(true);
+            json.setMsg("资料处理成功！");
+        }else {
+            json.setSuccess(true);
+            json.setMsg("资料处理失败！");
+        }
 
+        return json;
+    }
 
 }

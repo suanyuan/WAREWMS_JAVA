@@ -469,6 +469,8 @@ public class OrderHeaderForNormalVO {
      * 打印模板
      */
     private String printTemplate;
+    //快递投诉
+    private String courierComplaint;
 
     private List<OrderDetailsForNormal> orderDetailsForNormalList;
 

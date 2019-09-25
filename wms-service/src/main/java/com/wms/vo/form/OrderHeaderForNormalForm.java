@@ -53,6 +53,10 @@ public class OrderHeaderForNormalForm {
 	 */
 	private String userdefine2;
 
+
+	//快递投诉
+	private String courierComplaint;
+
 	public String getOrderno() {
 		return orderno;
 	}
@@ -367,5 +371,13 @@ public class OrderHeaderForNormalForm {
 
 	public void setOrderFlag(String orderFlag) {
 		this.orderFlag = orderFlag;
+	}
+
+	public String getCourierComplaint() {
+		return courierComplaint;
+	}
+
+	public void setCourierComplaint(String courierComplaint) {
+		this.courierComplaint = courierComplaint;
 	}
 }

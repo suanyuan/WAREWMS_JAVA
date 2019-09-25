@@ -36,6 +36,9 @@ var ezuiImportDataForm;
 var ezuiOperateResultDataDialog;
 var ezuiOperateResultDataForm;
 var allocationDetailsDatagrid;
+
+var courierComplaintForm;       //快递投诉dialog form
+var courierComplaintDialog;     //快递投诉dialog
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -43,6 +46,7 @@ $(function() {
 	ezuiDetailsForm = $('#ezuiDetailsForm').form();
 	ezuiImportDataForm = $('#ezuiImportDataForm').form();
 	ezuiOperateResultDataForm = $('#ezuiOperateResultDataForm').form();
+	courierComplaintForm = $('#courierComplaintForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/docOrderHeaderController.do?showDatagrid"/>',
 		method:'POST',
@@ -86,7 +90,8 @@ $(function() {
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
 					{field: 'addwho',				title: '创建人',		    width: 70 },
 					{field: 'releasestatusName',	title: '释放状态',		width: 100 },
-					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 ,       hidden:true }
+					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 ,       hidden:true },
+					{field: 'courierComplaint' ,       title: '快递投诉内容' , width:200}
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
@@ -362,7 +367,17 @@ $(function() {
 		}
 	});
 
-
+//快递投诉dialog
+	courierComplaintDialog = $('#courierComplaintDialog').dialog({
+		modal : true,
+		width:270,
+		height:250,
+		title : '录入投诉内容',
+		buttons : '#courierComplaintDialogBtn',
+		onClose : function() {
+			ezuiFormClear(courierComplaintForm);
+		}
+	}).dialog('close');
 });
 
 /* 查询条件清空按钮 */
@@ -2139,8 +2154,68 @@ function choseOrderTypeAdd(value) {
     }
 }
 
+//快递投诉
+var courierComplaint = function() {
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if (row) {
+		$("#courierComplaintForm #orderno").textbox('setValue',row.orderno);
+		$("#courierComplaintForm #courierComplaint").textbox('setValue',row.courierComplaint);
+		courierComplaintDialog.dialog('open');
+	}else{
+		$.messager.show({
+			msg: '请选择一笔资料', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
 
+}
+//提交快递投诉
+var commitcourierComplaint = function(){
+	url = '<c:url value="/docOrderHeaderController.do?courierComplaint"/>';
+	var row = ezuiDatagrid.datagrid('getSelected');
+	var msg='';
+	if(courierComplaintForm.form('validate')){
+		var data=new Object();
+		data.orderno=row.orderno;
+		data.courierComplaint=$("#courierComplaintForm #courierComplaint").val();
 
+		$.messager.progress({
+			text: '<spring:message code="common.message.data.processing"/>', interval: 100
+		});
+		$.ajax({
+			url: url,
+			data:data,
+			dataType: 'json',
+			error: function (a, b, c) {
+				//alert(a + b + c);
+			},
+			success: function (result) {
+				try {
+					if (result.success) {
+						msg = result.msg;
+					} else {
+						msg = result.msg;
+
+					}
+				} catch (e) {
+
+					msg: '数据错误!';
+
+				}finally {
+					$.messager.show({
+						msg:msg, title: '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+					courierComplaintDialog.dialog('close');
+					ezuiDatagrid.datagrid('reload');
+				}
+			}
+		});
+	}else{
+		$.messager.show({
+			msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
 </script>
 </head>
 <body>
@@ -2283,6 +2358,7 @@ function choseOrderTypeAdd(value) {
 					<a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
 					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印质量合格证</a>
+					<a onclick='courierComplaint();' id='ezuiBtn_courierComplaint' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>快递投诉</a>
 
 				</div>
 			</div>
@@ -2400,6 +2476,28 @@ function choseOrderTypeAdd(value) {
 	</div>
 
 	<!-- 批量操作返回end -->
+
+	<%--关闭计划单点击弹窗--%>
+	<div id='courierComplaintDialog' style='padding: 10px;'>
+		<form id='courierComplaintForm' method='post'>
+			<table>
+
+				<tr>
+					<th>SO编号</th><td><input type='text' id='orderno' name="orderno" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
+
+				</tr>
+				<tr>
+					<th>投诉内容</th><td><input type='text' id='courierComplaint' name="courierComplaint" class='easyui-textbox' size='20' data-options="width:160,height:120,required:true,multiline:true"/></td>
+
+				</tr>
+
+
+			</table>
+		</form>
+	</div>
+	<div id='courierComplaintDialogBtn'>
+		<a onclick='commitcourierComplaint();' class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
+	</div>
 
 	<c:import url='/WEB-INF/jsp/docOrderHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/custDialog.jsp' />
