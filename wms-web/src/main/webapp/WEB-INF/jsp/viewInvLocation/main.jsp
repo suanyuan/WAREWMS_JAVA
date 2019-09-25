@@ -302,7 +302,7 @@
                             qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
                             qtyholdedEach:getTotalInit.qtyholdedEach},
                         {lotatt05:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
-                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalAllInit.qtyholded,
+                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyavailedEach:getTotalAllInit.qtyavailedEach,qtyholded:getTotalAllInit.qtyholded,
                             qtyholdedEach:getTotalAllInit.qtyholdedEach}
                     ]);
                 }
