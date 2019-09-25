@@ -51,6 +51,9 @@ public class DocQsmDetailsService extends BaseService {
 					docQsmDetailsVO.setLotatt08(basCustomer.getDescrC());
 				}
 			}
+			//计算数量
+			docQsmDetailsVO.setQtyeach(docQsmDetailsVO.getQty()*docQsmDetailsVO.getQty1());
+
 			docQsmDetailsVOList.add(docQsmDetailsVO);
 		}
 		datagrid.setTotal((long)docQsmDetailsMybatisDao.queryByCount(mybatisCriteria));

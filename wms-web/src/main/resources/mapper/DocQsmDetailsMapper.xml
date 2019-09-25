@@ -35,6 +35,7 @@
 	<result column="remarks" property="remarks"/>
 	<result column="recording_date" property="recordingDate"/>
 	<result column="recording_people" property="recordingPeople"/>
+	<result column="qty1" property="qty1"/>
 </resultMap>
        
 <!-- doc_qsm_details table all fields -->
@@ -54,82 +55,82 @@ where 1=1
 	    and qcustatus =  #{condition.qcustatus}
 	</if>
 	<if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
-	    and lotatt14 =  #{condition.lotatt14}
+	    and q.lotatt14 =  #{condition.lotatt14}
 	</if>
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
+	    and q.customerid =  #{condition.customerid}
 	</if>
 	<if test="condition.lotatt03 != null and condition.lotatt03 != ''" >
-	    and lotatt03 =  #{condition.lotatt03}
+	    and q.lotatt03 =  #{condition.lotatt03}
 	</if>
 	<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
-	    and lotatt08 =  #{condition.lotatt08}
+	    and q.lotatt08 =  #{condition.lotatt08}
 	</if>
 	<if test="condition.businesstype != null and condition.businesstype != ''" >
-	    and businesstype =  #{condition.businesstype}
+	    and q.businesstype =  #{condition.businesstype}
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =  #{condition.sku}
+	    and q.sku =  #{condition.sku}
 	</if>
 	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-	    and lotatt12 =  #{condition.lotatt12}
+	    and q.lotatt12 =  #{condition.lotatt12}
 	</if>
 	<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
-	    and lotatt06 =  #{condition.lotatt06}
+	    and q.lotatt06 =  #{condition.lotatt06}
 	</if>
 	<if test="condition.descrc != null and condition.descrc != ''" >
-	    and descrc =  #{condition.descrc}
+	    and q.descrc =  #{condition.descrc}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-	    and lotatt04 =  #{condition.lotatt04}
+	    and q.lotatt04 =  #{condition.lotatt04}
 	</if>
 	<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-	    and lotatt05 =  #{condition.lotatt05}
+	    and q.lotatt05 =  #{condition.lotatt05}
 	</if>
 	<if test="condition.lotatt07 != null and condition.lotatt07 != ''" >
-	    and lotatt07 =  #{condition.lotatt07}
+	    and q.lotatt07 =  #{condition.lotatt07}
 	</if>
 	<if test="condition.lotatt01 != null and condition.lotatt01 != ''" >
-	    and lotatt01 =  #{condition.lotatt01}
+	    and q.lotatt01 =  #{condition.lotatt01}
 	</if>
 	<if test="condition.lotatt02 != null and condition.lotatt02 != ''" >
-	    and lotatt02 =  #{condition.lotatt02}
+	    and q.lotatt02 =  #{condition.lotatt02}
 	</if>
 	<if test="condition.qty != null and condition.qty != ''" >
-	    and qty =  #{condition.qty}
+	    and q.qty =  #{condition.qty}
 	</if>
 	<if test="condition.qtyeach != null and condition.qtyeach != ''" >
-	    and qtyeach =  #{condition.qtyeach}
+	    and q.qtyeach =  #{condition.qtyeach}
 	</if>
 	<if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
-	    and lotatt15 =  #{condition.lotatt15}
+	    and q.lotatt15 =  #{condition.lotatt15}
 	</if>
 	<if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
-	    and lotatt10 =  #{condition.lotatt10}
+	    and q.lotatt10 =  #{condition.lotatt10}
 	</if>
 	<if test="condition.locationid != null and condition.locationid != ''" >
-	    and locationid =  #{condition.locationid}
+	    and q.locationid =  #{condition.locationid}
 	</if>
 	<if test="condition.finddate != null and condition.finddate != ''" >
-	    and finddate =  #{condition.finddate}
+	    and q.finddate =  #{condition.finddate}
 	</if>
 	<if test="condition.failedDescription != null and condition.failedDescription != ''" >
-	    and failed_description =  #{condition.failedDescription}
+	    and q.failed_description =  #{condition.failedDescription}
 	</if>
 	<if test="condition.customeridTreatment != null and condition.customeridTreatment != ''" >
-	    and customerid_treatment =  #{condition.customeridTreatment}
+	    and q.customerid_treatment =  #{condition.customeridTreatment}
 	</if>
 	<if test="condition.treatmentDate != null and condition.treatmentDate != ''" >
-	    and treatment_date =  #{condition.treatmentDate}
+	    and q.treatment_date =  #{condition.treatmentDate}
 	</if>
 	<if test="condition.remarks != null and condition.remarks != ''" >
-	    and remarks =  #{condition.remarks}
+	    and q.remarks =  #{condition.remarks}
 	</if>
 	<if test="condition.recordingDate != null and condition.recordingDate != ''" >
-	    and recording_date =  #{condition.recordingDate}
+	    and q.recording_date =  #{condition.recordingDate}
 	</if>
 	<if test="condition.recordingPeople != null and condition.recordingPeople != ''" >
-	    and recording_people =  #{condition.recordingPeople}
+	    and q.recording_people =  #{condition.recordingPeople}
 	</if>
 </trim>
 </sql>
@@ -247,15 +248,17 @@ where 1=1
 
 <!-- 质量状态管理 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from doc_qsm_details 
+	select count(1) from doc_qsm_details q
 	<include refid="Example_Where_Clause"/>
 </select>
   	
 <!-- 查询质量状态管理列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from doc_qsm_details 
+	SELECT
+	q.*,p.`qty1`
+	FROM doc_qsm_details q
+	LEFT JOIN  `bas_sku` s ON q.`sku`=s.`sku` AND q.`customerid`=s.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	<include refid="Example_Where_Clause"/>
        order by qcudocno desc
     <if test="limitClause != null and limitClause != ''" >

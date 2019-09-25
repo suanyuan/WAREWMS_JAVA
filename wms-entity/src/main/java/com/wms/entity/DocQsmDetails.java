@@ -25,9 +25,9 @@ public class DocQsmDetails {
   private String lotatt07;
   private Date lotatt01;
   private Date lotatt02;
-  private long locqty;
-  private long qty;
-  private double qtyeach;
+  private Long locqty;    //原库存件数
+  private Long qty;       //目标不合格件数
+  private Double qtyeach;   //目标不合格数量
   private String lotatt15;
   private String reservedfield06;
   private String lotatt10;
@@ -40,6 +40,7 @@ public class DocQsmDetails {
   private Date recordingDate;
   private String recordingPeople;
   private String lotnum;
+  private Double qty1;//换算率
 
 
 }

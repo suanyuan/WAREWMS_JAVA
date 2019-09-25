@@ -61,7 +61,7 @@ $(function() {
 			{field: 'lotatt02',		title: '有效期/失效期',	width: 150 },
 			{field: 'locqty',		title: '原库存件数',	width: 70,hidden:true},
 			{field: 'qty',		title: '件数',	width: 70 },
-			// {field: 'qtyeach',		title: '库存数量',	width: 70},
+			{field: 'qtyeach',		title: '数量',	width: 70},
 			{field: 'lotatt15',		title: '生产企业',	width: 100 },
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
 			{field: 'lotatt10',		title: '质量状态',	width: 100,formatter:ZL_TYPstatusFormatter },

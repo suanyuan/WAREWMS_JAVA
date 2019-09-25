@@ -20,9 +20,9 @@ public class DocQsmDetailsForm {
 	private String lotatt07;
 	private String lotatt01;
 	private String lotatt02;
-	private long locqty;
-	private long qty;
-	private double qtyeach;
+	private Long locqty;
+	private Long qty;
+	private Double qtyeach;
 	private String lotatt15;
 	private String reservedfield06;//生产许可证号/备案号
 	private String lotatt10;
@@ -36,7 +36,6 @@ public class DocQsmDetailsForm {
 	private String recordingPeople;
 //质量状态管理表单提交
     private String lotnum;
-
 
 	public String getQcudocno() {
 		return qcudocno;
@@ -166,19 +165,27 @@ public class DocQsmDetailsForm {
 		this.lotatt02 = lotatt02;
 	}
 
-	public long getQty() {
+	public Long getLocqty() {
+		return locqty;
+	}
+
+	public void setLocqty(Long locqty) {
+		this.locqty = locqty;
+	}
+
+	public Long getQty() {
 		return qty;
 	}
 
-	public void setQty(long qty) {
+	public void setQty(Long qty) {
 		this.qty = qty;
 	}
 
-	public double getQtyeach() {
+	public Double getQtyeach() {
 		return qtyeach;
 	}
 
-	public void setQtyeach(double qtyeach) {
+	public void setQtyeach(Double qtyeach) {
 		this.qtyeach = qtyeach;
 	}
 
@@ -276,13 +283,5 @@ public class DocQsmDetailsForm {
 
 	public void setLotnum(String lotnum) {
 		this.lotnum = lotnum;
-	}
-
-	public long getLocqty() {
-		return locqty;
-	}
-
-	public void setLocqty(long locqty) {
-		this.locqty = locqty;
 	}
 }

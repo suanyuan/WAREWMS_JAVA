@@ -4,6 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.Date;
+
 public class DocQsmDetailsVO {
 
 	private String qcudocno;
@@ -25,9 +27,9 @@ public class DocQsmDetailsVO {
 	private java.util.Date lotatt01;
 	@JSONField(format = "yyyy-MM-dd")
 	private java.util.Date lotatt02;
-	private long locqty;
-	private long qty;
-	private double qtyeach;
+	private Long locqty;
+	private Long qty;
+	private Double qtyeach;
 	private String lotatt15;
 	private String reservedfield06;
 	private String lotatt10;
@@ -40,6 +42,7 @@ public class DocQsmDetailsVO {
 	private java.util.Date recordingDate;
 	private String recordingPeople;
 	private String lotnum;
+	private Double qty1;//换算率
 
 
 	public String getQcudocno() {
@@ -74,12 +77,11 @@ public class DocQsmDetailsVO {
 		this.customerid = customerid;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getLotatt03() {
+	public Date getLotatt03() {
 		return lotatt03;
 	}
 
-	public void setLotatt03(java.util.Date lotatt03) {
+	public void setLotatt03(Date lotatt03) {
 		this.lotatt03 = lotatt03;
 	}
 
@@ -155,37 +157,43 @@ public class DocQsmDetailsVO {
 		this.lotatt07 = lotatt07;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getLotatt01() {
+	public Date getLotatt01() {
 		return lotatt01;
 	}
 
-	public void setLotatt01(java.util.Date lotatt01) {
+	public void setLotatt01(Date lotatt01) {
 		this.lotatt01 = lotatt01;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getLotatt02() {
+	public Date getLotatt02() {
 		return lotatt02;
 	}
 
-	public void setLotatt02(java.util.Date lotatt02) {
+	public void setLotatt02(Date lotatt02) {
 		this.lotatt02 = lotatt02;
 	}
 
-	public long getQty() {
+	public Long getLocqty() {
+		return locqty;
+	}
+
+	public void setLocqty(Long locqty) {
+		this.locqty = locqty;
+	}
+
+	public Long getQty() {
 		return qty;
 	}
 
-	public void setQty(long qty) {
+	public void setQty(Long qty) {
 		this.qty = qty;
 	}
 
-	public double getQtyeach() {
+	public Double getQtyeach() {
 		return qtyeach;
 	}
 
-	public void setQtyeach(double qtyeach) {
+	public void setQtyeach(Double qtyeach) {
 		this.qtyeach = qtyeach;
 	}
 
@@ -195,6 +203,14 @@ public class DocQsmDetailsVO {
 
 	public void setLotatt15(String lotatt15) {
 		this.lotatt15 = lotatt15;
+	}
+
+	public String getReservedfield06() {
+		return reservedfield06;
+	}
+
+	public void setReservedfield06(String reservedfield06) {
+		this.reservedfield06 = reservedfield06;
 	}
 
 	public String getLotatt10() {
@@ -213,12 +229,11 @@ public class DocQsmDetailsVO {
 		this.locationid = locationid;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getFinddate() {
+	public Date getFinddate() {
 		return finddate;
 	}
 
-	public void setFinddate(java.util.Date finddate) {
+	public void setFinddate(Date finddate) {
 		this.finddate = finddate;
 	}
 
@@ -238,12 +253,11 @@ public class DocQsmDetailsVO {
 		this.customeridTreatment = customeridTreatment;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getTreatmentDate() {
+	public Date getTreatmentDate() {
 		return treatmentDate;
 	}
 
-	public void setTreatmentDate(java.util.Date treatmentDate) {
+	public void setTreatmentDate(Date treatmentDate) {
 		this.treatmentDate = treatmentDate;
 	}
 
@@ -255,12 +269,11 @@ public class DocQsmDetailsVO {
 		this.remarks = remarks;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getRecordingDate() {
+	public Date getRecordingDate() {
 		return recordingDate;
 	}
 
-	public void setRecordingDate(java.util.Date recordingDate) {
+	public void setRecordingDate(Date recordingDate) {
 		this.recordingDate = recordingDate;
 	}
 
@@ -272,27 +285,19 @@ public class DocQsmDetailsVO {
 		this.recordingPeople = recordingPeople;
 	}
 
-	public String getReservedfield06() {
-		return reservedfield06;
-	}
-
-	public void setReservedfield06(String reservedfield06) {
-		this.reservedfield06 = reservedfield06;
-	}
-
-	public long getLocqty() {
-		return locqty;
-	}
-
-	public void setLocqty(long locqty) {
-		this.locqty = locqty;
-	}
-
 	public String getLotnum() {
 		return lotnum;
 	}
 
 	public void setLotnum(String lotnum) {
 		this.lotnum = lotnum;
+	}
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
 	}
 }
