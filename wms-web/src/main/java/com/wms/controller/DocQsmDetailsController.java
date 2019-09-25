@@ -1,7 +1,9 @@
 package com.wms.controller;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocQsmDetails;
 import com.wms.query.DocQsmDetailsQuery;
 import com.wms.service.DocQsmDetailsService;
 import com.wms.utils.ResourceUtil;
@@ -9,13 +11,17 @@ import com.wms.utils.annotation.Login;
 import com.wms.vo.DocQsmDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocQsmDetailsForm;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -84,7 +90,17 @@ public class DocQsmDetailsController {
 		return json;
 	}
 
-
+//导出
+	@Login
+	@RequestMapping(params = "exportDocQsmDataToPdf")
+	public String exportDocQsmDataToPdf(Model model, String qcudocno){
+		List<DocQsmDetails> docQsmDetailsList=docQsmDetailsService.docQsmToPdf(qcudocno);
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQsmDetailsList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocQsmDetails.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
 
 
 }

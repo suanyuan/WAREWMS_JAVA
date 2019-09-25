@@ -2,7 +2,9 @@ package com.wms.service;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.*;
+import com.wms.entity.BasCustomer;
+import com.wms.entity.DocQsmDetails;
+import com.wms.entity.InvLotLocId;
 import com.wms.mybatis.dao.BasCustomerMybatisDao;
 import com.wms.mybatis.dao.DocQsmDetailsMybatisDao;
 import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
@@ -17,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("docQsmDetailsService")
@@ -211,7 +214,7 @@ public class DocQsmDetailsService extends BaseService {
 
 		return json;
 	}
-
+//删除
 	public Json deleteDocQsmDetails(String id) {
 		Json json = new Json();
 		DocQsmDetails docQsmDetails = docQsmDetailsMybatisDao.queryById(id);
@@ -232,5 +235,32 @@ public class DocQsmDetailsService extends BaseService {
 		return json;
 	}
 
+	/**
+	 * 打印docQsm
+	 */
+	public List<DocQsmDetails> docQsmToPdf(String qcudocno) {
+		List<DocQsmDetails> docQsmDetailsList=new ArrayList<>();
+		//获得单子
+		DocQsmDetails docQsmDetails=docQsmDetailsMybatisDao.queryByqcudocno(qcudocno);
+	   //供应商名称
+		if(docQsmDetails.getLotatt08()!=null) {
+				String loatt08=docQsmDetails.getLotatt08();
+				BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
+				if(basCustomer!=null) {
+					docQsmDetails.setLotatt08(basCustomer.getDescrC());
+				}
+			}
+		//计算数量
+		docQsmDetails.setQtyeach(docQsmDetails.getQty()*docQsmDetails.getQty1());
+		//日期格式转换
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		String time="";
+		if(docQsmDetails.getLotatt02()!=null) {
+			time = sdf.format(docQsmDetails.getLotatt02());
+		}
+		docQsmDetails.setLotatt02Ex(time);
 
+		docQsmDetailsList.add(docQsmDetails);
+		return docQsmDetailsList;
+	}
 }

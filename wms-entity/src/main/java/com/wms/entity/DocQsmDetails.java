@@ -25,6 +25,7 @@ public class DocQsmDetails {
   private String lotatt07;
   private Date lotatt01;
   private Date lotatt02;
+  private String lotatt02Ex;
   private Long locqty;    //原库存件数
   private Long qty;       //目标不合格件数
   private Double qtyeach;   //目标不合格数量

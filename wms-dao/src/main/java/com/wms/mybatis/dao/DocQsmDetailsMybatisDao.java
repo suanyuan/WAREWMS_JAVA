@@ -11,4 +11,6 @@ import java.util.Map;
 public interface DocQsmDetailsMybatisDao extends BaseDao {
 
     void qualityStatus(Map<String, Object> map);
+
+    public <T> T queryByqcudocno(Object id);
 }

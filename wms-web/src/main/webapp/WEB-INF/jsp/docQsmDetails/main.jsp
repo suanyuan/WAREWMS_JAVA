@@ -577,7 +577,40 @@ var cancel= function(){
 		});
 	}
 };
-
+/* 导出start */
+var doExport = function(){
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if(row) {
+        if (navigator.cookieEnabled) {
+            var qcudocno=row.qcudocno;
+            $('#ezuiBtn_export').linkbutton('disable');
+            //--导出Excel
+            // window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+            var formId = ajaxDownloadFile(sy.bp()+ "/docQsmDetailsController.do?exportDocQsmDataToPdf&qcudocno="+qcudocno);
+            downloadCheckTimer = window.setInterval(function () {
+                window.clearInterval(downloadCheckTimer);
+                // $('#' + formId).remove();
+                $('#ezuiBtn_export').linkbutton('enable');
+                $.messager.progress('close');
+                $.messager.show({
+                    msg: "<spring:message code='common.message.export.success'/>",
+                    title: "<spring:message code='common.message.prompt'/>"
+                });
+            }, 1000);
+        } else {
+            $.messager.show({
+                msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
+                title: "<spring:message code='common.message.prompt'/>"
+            });
+        }
+        ;
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+};
+/* 导出end */
 </script>
 </head>
 <body>
@@ -607,7 +640,8 @@ var cancel= function(){
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-							</td>
+                                <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+                            </td>
 						</tr>
 					</table>
 				</fieldset>
