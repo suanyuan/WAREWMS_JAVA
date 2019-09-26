@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mybatis.dao.SearchBasCustomerMybatisDao">
-    <!-- Result Map-->
+    <!-- Result Map 委托客户-->
     <resultMap id="BaseResultMap" type="com.wms.entity.SearchBasCustomer">
         <result column="enterprise_name" property="enterpriseName"/>
         <result column="license_number" property="licenseNumber"/>
@@ -29,7 +29,7 @@
 
     </resultMap>
 
-    <!-- 查询条件 -->
+    <!-- 查询条件 委托客户-->
     <sql id="Example_Where_Clause">
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
@@ -46,8 +46,19 @@
             </if>
         </trim>
     </sql>
+    <!-- 查询条件 委托客户 -->
+    <sql id="Example_Where_Clause1">
+        <trim  suffixOverrides="," >
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and a.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and a.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
+        </trim>
+    </sql>
 
-    <!-- 客户档案 列表总数-->
+    <!-- 委托客户 列表总数-->
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT  count(1)
         FROM  `bas_customer` b
@@ -59,7 +70,7 @@
         <include refid="Example_Where_Clause"/>
     </select>
 
-    <!-- 查询客户档案列表 -->
+    <!-- 查询委托客户列表 -->
     <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
    SELECT  info.enterprise_name,
 	           c.license_number,c.residence,c.juridical_person,
@@ -80,4 +91,42 @@
 </select>
 
 
+
+    <!-- 查询库存信息列表 -->
+    <select id="querySearchInvLocation"  resultType="com.wms.entity.SearchInvLocation" parameterType="Object">
+        SELECT
+        i.locationid,i.`qty`,
+        p.`qty1`,
+        info.`enterprise_name` enterpriseName,
+        a.`lotatt01`,a.`lotatt02`,a.`lotatt03`,a.`lotatt04`,a.`lotatt05`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
+        s.`descr_c` descrc,s.defaultreceivinguom,
+        bb.codename_c uom
+        FROM `inv_lot_loc_id` i
+        LEFT JOIN `inv_lot_att` a ON a.lotnum=i.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
+        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=b.`enterprise_id`
+        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
+        WHERE bb.codeid='uom'
+        <include refid="Example_Where_Clause1"/>
+
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+    <!-- 库存信息 列表总数-->
+    <select id="querySearchInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT
+        count(1)
+        FROM `inv_lot_loc_id` i
+        LEFT JOIN `inv_lot_att` a ON a.lotnum=i.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
+        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=b.`enterprise_id`
+        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
+        WHERE bb.codeid='uom'
+        <include refid="Example_Where_Clause1"/>
+    </select>
 </mapper>
