@@ -56,6 +56,7 @@ public class OrderHeaderForNormalForm {
 
 	//快递投诉
 	private String courierComplaint;
+	private String courierComplaintU;
 
 	public String getOrderno() {
 		return orderno;
@@ -379,5 +380,13 @@ public class OrderHeaderForNormalForm {
 
 	public void setCourierComplaint(String courierComplaint) {
 		this.courierComplaint = courierComplaint;
+	}
+
+	public String getCourierComplaintU() {
+		return courierComplaintU;
+	}
+
+	public void setCourierComplaintU(String courierComplaintU) {
+		this.courierComplaintU = courierComplaintU;
 	}
 }

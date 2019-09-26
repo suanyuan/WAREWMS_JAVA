@@ -2113,6 +2113,7 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm) {
         Json json = new Json();
+        orderHeaderForNormalForm.setCourierComplaint(orderHeaderForNormalForm.getCourierComplaintU());
         int num=orderHeaderForNormalMybatisDao.updateCourierComplaint(orderHeaderForNormalForm);
         if(num>0){
             json.setSuccess(true);

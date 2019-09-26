@@ -2176,7 +2176,7 @@ var commitcourierComplaint = function(){
 	if(courierComplaintForm.form('validate')){
 		var data=new Object();
 		data.orderno=row.orderno;
-		data.courierComplaint=$("#courierComplaintForm #courierComplaint").val();
+		data.courierComplaintU=$("#courierComplaintForm #courierComplaint").val();
 
 		$.messager.progress({
 			text: '<spring:message code="common.message.data.processing"/>', interval: 100
@@ -2477,7 +2477,7 @@ var commitcourierComplaint = function(){
 
 	<!-- 批量操作返回end -->
 
-	<%--关闭计划单点击弹窗--%>
+	<%--快递投诉单点击弹窗--%>
 	<div id='courierComplaintDialog' style='padding: 10px;'>
 		<form id='courierComplaintForm' method='post'>
 			<table>
