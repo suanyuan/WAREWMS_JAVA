@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/searchBasCustomerController.do?showDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -102,7 +102,7 @@ var doExport = function(){
         param.put("enterpriseName",$('#enterpriseName').val());
         param.put("activeFlag", $('#activeFlag').combobox('getValue'));
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/searchBasCustomerController.do?exportBasCustomerDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportBasCustomerDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();

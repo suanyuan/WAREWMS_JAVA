@@ -32,7 +32,7 @@ public class DrugControlService extends BaseService {
 	private CustomerProductMybatisDao customerProductMybatisDao;
 
 
-
+	/**************************************委托客户****************************************/
 	public EasyuiDatagrid<SearchBasCustomer> getPagedDatagrid(EasyuiDatagridPager pager, SearchBasCustomer query) {
 		EasyuiDatagrid<SearchBasCustomer> datagrid = new EasyuiDatagrid<SearchBasCustomer>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();

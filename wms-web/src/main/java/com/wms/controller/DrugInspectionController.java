@@ -4,7 +4,6 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.SearchBasCustomer;
 import com.wms.entity.CustomerProduct;
-import com.wms.service.SearchBasCustomerService;
 import com.wms.service.DrugControlService;
 import com.wms.utils.annotation.Login;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,11 @@ import java.util.Map;
 public class DrugInspectionController {
 
 	@Autowired
-	private SearchBasCustomerService searchBasCustomerService;
-	@Autowired
 	private DrugControlService drugControlService;
 
 
-	/*委托客户*/
+
+	/**************************************委托客户****************************************/
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -41,14 +39,14 @@ public class DrugInspectionController {
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<SearchBasCustomer> showDatagrid(EasyuiDatagridPager pager, SearchBasCustomer query) {
-		return searchBasCustomerService.getPagedDatagrid(pager, query);
+		return drugControlService.getPagedDatagrid(pager, query);
 	}
 
 
 	@Login
 	@RequestMapping(params = "exportBasCustomerDataToExcel")
 	public void exportBasCustomerDataToExcel(HttpServletResponse response, SearchBasCustomer form) throws Exception {
-		searchBasCustomerService.exportBasCustomerDataToExcel(response, form);
+		drugControlService.exportBasCustomerDataToExcel(response, form);
 	}
 
 
