@@ -35,6 +35,7 @@
 	<result column="remarks" property="remarks"/>
 	<result column="recording_date" property="recordingDate"/>
 	<result column="recording_people" property="recordingPeople"/>
+	<result column="change_process" property="changeProcess"/>
 	<result column="qty1" property="qty1"/>
 </resultMap>
        
@@ -138,8 +139,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into doc_qsm_details(qcudocno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum)
- values(#{qcudocno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum})
+  insert into doc_qsm_details(qcudocno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,change_process)
+ values(#{qcudocno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -232,6 +233,9 @@ where 1=1
 	<if test="recordingPeople != null  ">
 		recording_people=#{recordingPeople},
 	</if>
+	<if test="changeProcess != null  ">
+		change_process=#{changeProcess},
+	</if>
 	</trim> where qcudocno=#{qcudocno}
 </update>
 
@@ -277,7 +281,7 @@ where 1=1
 <!--提交质量状态管理-->
 
 <select id="qualityStatus" statementType="CALLABLE" parameterType="java.util.Map">
-   {call SPINV_QcstatusUpdate_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'0','0',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{lotnum,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},'HG',#{locqty,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},'BHG',#{qty,mode=IN,jdbcType=VARCHAR},'0','0','now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+   {call SPINV_QcstatusUpdate_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'0','0',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{lotnum,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{fmqcstatus,mode=IN,jdbcType=VARCHAR},#{locqty,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{toqcstatus,mode=IN,jdbcType=VARCHAR},#{qty,mode=IN,jdbcType=VARCHAR},'0','0','now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
   	
 </mapper>   
