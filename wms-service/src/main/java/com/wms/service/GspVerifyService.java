@@ -2,9 +2,12 @@ package com.wms.service;
 
 import com.wms.constant.Constant;
 import com.wms.entity.*;
+import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
+import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.DateUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.GspOperateDetailVO;
@@ -49,6 +52,8 @@ public class GspVerifyService {
     private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
     @Autowired
     private GspInstrumentCatalogService gspInstrumentCatalogService;
+    @Autowired
+    private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 
 
     /**
@@ -269,7 +274,13 @@ public class GspVerifyService {
 
                 if(!StringUtil.isEmpty(lotatt01)){
                     //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
-                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
+//                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
+                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+                    GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+                    historyQuery.setVersion(gspProductRegister.getVersion());
+                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+                    mybatisCriteria.setOrderByClause("create_date desc");
+                    List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
                     Date beginDate = null;
                     Date endDate = null;
                     if(allRegister!=null && allRegister.size()>1){
