@@ -269,7 +269,7 @@ where 1=1
 	   and a.locationid=#{locationid}
 	   and a.customerid=#{customerid}
 	   and a.sku=#{sku}
-	   and b.lotatt10='HG'
+	   and b.lotatt10!='DJ'
 </select>
 
 <!-- 库位库存表 列表总数-->

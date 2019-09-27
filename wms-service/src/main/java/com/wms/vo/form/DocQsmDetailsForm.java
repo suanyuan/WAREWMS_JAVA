@@ -36,6 +36,7 @@ public class DocQsmDetailsForm {
 	private String recordingPeople;
 //质量状态管理表单提交
     private String lotnum;
+    private String changeProcess;  //质量状态变更过程
 
 	public String getQcudocno() {
 		return qcudocno;
@@ -283,5 +284,13 @@ public class DocQsmDetailsForm {
 
 	public void setLotnum(String lotnum) {
 		this.lotnum = lotnum;
+	}
+
+	public String getChangeProcess() {
+		return changeProcess;
+	}
+
+	public void setChangeProcess(String changeProcess) {
+		this.changeProcess = changeProcess;
 	}
 }

@@ -4,6 +4,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.SearchBasCustomer;
 import com.wms.entity.CustomerProduct;
+import com.wms.entity.SearchInvLocation;
 import com.wms.service.DrugControlService;
 import com.wms.utils.annotation.Login;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class DrugInspectionController {
 	public ModelAndView toMain(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
-		return new ModelAndView("SearchBasCustomer/main", model);
+		return new ModelAndView("searchBasCustomer/main", model);
 	}
 
 	@Login
@@ -73,5 +74,27 @@ public class DrugInspectionController {
         drugControlService.exportCustomerProductDataToExcel(response, form);
     }
 
+	/**************************************库存信息****************************************/
 
+	@Login
+	@RequestMapping(params = "toSearchInvLocationMain")
+	public ModelAndView toSearchInvLocationMain(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchInvLocation/main", model);
+	}
+
+	@Login
+	@RequestMapping(params = "showSearchInvLocationDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<SearchInvLocation> showSearchInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
+		return drugControlService.showSearchInvLocationDatagrid(pager, query);
+	}
+
+
+	@Login
+	@RequestMapping(params = "exportSearchInvLocationDataToExcel")
+	public void exportSearchInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
+		drugControlService.exportSearchInvLocationDataToExcel(response, form);
+	}
 }

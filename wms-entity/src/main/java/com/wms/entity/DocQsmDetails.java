@@ -41,6 +41,7 @@ public class DocQsmDetails {
   private Date recordingDate;
   private String recordingPeople;
   private String lotnum;
+  private String changeProcess;//质量状态变更过程
   private Double qty1;//换算率
 
 

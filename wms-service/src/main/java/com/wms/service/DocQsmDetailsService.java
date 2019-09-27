@@ -98,6 +98,7 @@ public class DocQsmDetailsService extends BaseService {
 				detailsForm.setLotatt15(invLotLocId.getLotatt15()==null?"":invLotLocId.getLotatt15());
 				detailsForm.setReservedfield06(invLotLocId.getReservedfield06());
 				detailsForm.setLotatt10(invLotLocId.getLotatt10());
+				detailsForm.setChangeProcess(invLotLocId.getLotatt10());
 				detailsForm.setLocationid(invLotLocId.getLocationid());
 				detailsForm.setFinddate(new Date());
 				detailsForm.setRemarks(form.getRemarks());
@@ -135,6 +136,8 @@ public class DocQsmDetailsService extends BaseService {
 			map.put("sku", invLotLocId.getSku());             //产品代码
 			map.put("lotnum", invLotLocId.getLotnum());       //批次
 			map.put("locationid", invLotLocId.getLocationid());   //库位
+			map.put("fmqcstatus", invLotLocId.getLotatt10());   //开始质量状态
+			map.put("toqcstatus", invLotLocId.getLotatt10().equals("HG")?"BHG":"HG");   //结束质量状态
 			map.put("locqty",form.getLocqty());   //库位原件数
 			map.put("qty",form.getQty());       //处理不合格件数
 			map.put("userid",addwho);
@@ -143,6 +146,8 @@ public class DocQsmDetailsService extends BaseService {
 					if (result.substring(0, 3).equals("000")) {
 						form.setQcustatus("40");
 						form.setTreatmentDate(new Date());
+						form.setLotatt10(invLotLocId.getLotatt10().equals("HG")?"BHG":"HG");
+						form.setChangeProcess(form.getChangeProcess()+">"+form.getLotatt10());
 						docQsmDetailsMybatisDao.updateBySelective(form);
 						json.setSuccess(true);
 						json.setMsg("质量状态变更成功！");
@@ -259,7 +264,21 @@ public class DocQsmDetailsService extends BaseService {
 			time = sdf.format(docQsmDetails.getLotatt02());
 		}
 		docQsmDetails.setLotatt02Ex(time);
+       //质量状态变更过程
+       if(docQsmDetails.getChangeProcess()!=null){
+       	 String changeP=docQsmDetails.getChangeProcess();
+       	  if(changeP.equals("HG")){
+       	  	  docQsmDetails.setChangeProcess("合格");
+		  }else if(changeP.equals("BHG")){
+			  docQsmDetails.setChangeProcess("不合格");
+		  }else  if(changeP.equals("HG>BHG")){
+			  docQsmDetails.setChangeProcess("合格>不合格");
+		  }else if(changeP.equals("BHG>HG")){
+			  docQsmDetails.setChangeProcess("不合格>合格");
+		  }else{
 
+		  }
+	   }
 		docQsmDetailsList.add(docQsmDetails);
 		return docQsmDetailsList;
 	}

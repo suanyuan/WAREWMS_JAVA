@@ -26,6 +26,8 @@ var qualityStatusWorkDialog;     //生成质量状态选择dialog
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiForm = $('#ezuiForm').form();
+	qualityStatusForm = $('#qualityStatusForm').form();
+	qualityStatusWorkForm = $('#qualityStatusWorkForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/docQsmDetailsController.do?showDatagrid"/>',
 		method:'POST',
@@ -65,6 +67,7 @@ $(function() {
 			{field: 'lotatt15',		title: '生产企业',	width: 100 },
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
 			{field: 'lotatt10',		title: '质量状态',	width: 100,formatter:ZL_TYPstatusFormatter },
+			{field: 'changeProcess',		title: '质量状态变更过程',	width: 120,formatter:ZL_TYPstatusFormatter },
 			{field: 'locationid',		title: '库位',	width: 150 },
 			{field: 'finddate',		title: '发现日期',	width: 150 },
 			{field: 'failedDescription',		title: '不合格说明',	width: 200 },
@@ -110,7 +113,6 @@ $(function() {
 
 		},
 		onClose: function () {
-
 		}
 	}).dialog('close');
 //库存信息选择dialog
@@ -281,9 +283,6 @@ var generatemanagement = function () {
 		pagination: true,
 		rownumbers: true,
 		singleSelect: true,
-		queryParams:{
-			lotatt10:'HG'
-		},
 		columns: [[
 			{field: 'fmlocation', title: '库位', width: 100},
 			{field: 'fmcustomerid',		title: '货主',	width: 100 },
@@ -320,7 +319,8 @@ var generatemanagement = function () {
 			generatemanagementT();
 		},
 		onRowContextMenu: function (event, rowIndex, rowData) {
-		}, onLoadSuccess: function (data) {
+		},
+		onLoadSuccess: function (data) {
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -332,14 +332,14 @@ var generatemanagementDialogSearch = function () {
 	generatemanagementDialogId.datagrid('load', {
 		lotatt04: $("#generatemanagementDialog #lotatt04").textbox("getValue"),
 		lotatt05: $("#generatemanagementDialog #lotatt05").textbox("getValue"),
-		lotatt10:"HG",
-
+		lotatt10:$("#generatemanagementDialog #lotatt10").combobox("getValue")
 	});
 };
 //生成质量状态管理清除
 var generatemanagementToolbarClear = function () {
 	$("#generatemanagementDialog #lotatt04").textbox('clear');
 	$("#generatemanagementDialog #lotatt05").textbox('clear');
+	$("#generatemanagementDialog #lotatt10").combobox('clear')
 };
 //生成管理end==========================
 
@@ -422,6 +422,7 @@ var qualityStatusWork=function () {
 		$("#qualityStatusWorkForm #locqty").textbox('setValue',row.locqty);
 		$("#qualityStatusWorkForm #qty").textbox('setValue',row.qty);
 		$("#qualityStatusWorkForm #failedDescription").textbox('setValue',"");
+		$("#qualityStatusWorkForm #customeridTreatment").textbox('setValue',"");
 		qualityStatusWorkDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -440,13 +441,13 @@ var commitQualityStatusWork=function () {
 		});
 		var data=new Object();
 		data.qcudocno=row.qcudocno;
-		data.locationid=row.location;
 		data.sku=row.sku;
 		data.customerid=row.customerid;
 		data.lotnum=row.lotnum;
 		data.locationid=row.locationid;
 		data.qty=row.qty;
 		data.locqty=row.locqty;
+		data.changeProcess=row.changeProcess;
 		data.failedDescription=failedDescription;
 		data.customeridTreatment=customeridTreatment;
 		$.ajax({
@@ -677,6 +678,17 @@ var doExport = function(){
 									<input type='text' id='lotatt05' name="lotatt05" class='easyui-textbox' size='12'
 										   data-options=''/></td>
 								<td>
+								<th>质量状态</th>
+								<td>
+									<input type='text' id='lotatt10' name="lotatt10" class='easyui-combobox' size='12' data-options=" panelHeight: 'auto',
+							                                                                                                        editable: false,
+							                                                                                                        valueField: 'label',
+																																	textField: 'value',
+																																data: [{label: 'HG',
+																																        value: '合格'},
+																																       {label: 'BHG',
+																																         value: '不合格'}]"/></td>
+								<td>
 									<a onclick='generatemanagementDialogSearch();' class='easyui-linkbutton'
 									   data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 									<a onclick='generatemanagementToolbarClear();' class='easyui-linkbutton'
@@ -706,11 +718,11 @@ var doExport = function(){
 		<table>
 			<input type='hidden' id='qty1' name="qty1" />
 			<tr>
-				<th>合格件数</th><td><input type='text' id='fmqty' name="fmqty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+				<th>库存件数</th><td><input type='text' id='fmqty' name="fmqty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
 
 			</tr>
 			<tr>
-				<th>不合格件数</th><td><input type='text' id='fmqtyF' name="fmqtyF" class='easyui-textbox' size='20' data-options="required:true"/></td>
+				<th>变更件数</th><td><input type='text' id='fmqtyF' name="fmqtyF" class='easyui-textbox' size='20' data-options="required:true"/></td>
 
 			</tr>
 			<tr>
@@ -728,15 +740,15 @@ var doExport = function(){
 	<form id='qualityStatusWorkForm' method='post'>
 		<table>
 			<tr>
-				<th>合格件数</th><td><input type='text' id='locqty' name="locqty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+				<th>库存件数</th><td><input type='text' id='locqty' name="locqty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
 
 			</tr>
 			<tr>
-				<th>不合格件数</th><td><input type='text' id='qty' name="qty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+				<th>变更件数</th><td><input type='text' id='qty' name="qty" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
 
 			</tr>
 			<tr>
-			  <th>不合格说明</th><td><input type='text' id='failedDescription' name="failedDescription" class='easyui-textbox' size='20' data-options=""/></td>
+			  <th>变更说明</th><td><input type='text' id='failedDescription' name="failedDescription" class='easyui-textbox' size='20' data-options=""/></td>
 
 			</tr>
 			<tr>

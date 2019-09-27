@@ -63,7 +63,9 @@ public class ViewInvLotattService extends BaseService {
                     viewInvLotattVO.setLotatt08(basCustomer.getDescrC());
                 }
             }
-            viewInvLotattVOList.add(viewInvLotattVO);
+            if(!viewInvLotattVO.getLotatt10().equals("DJ")) {
+                viewInvLotattVOList.add(viewInvLotattVO);
+            }
         }
         datagrid.setTotal((long) viewInvLotattMybatisDao.queryByCount(mybatisCriteria));
         datagrid.setRows(viewInvLotattVOList);

@@ -42,6 +42,7 @@ public class DocQsmDetailsVO {
 	private java.util.Date recordingDate;
 	private String recordingPeople;
 	private String lotnum;
+	private String changeProcess;//质量状态变更过程
 	private Double qty1;//换算率
 
 
@@ -291,6 +292,14 @@ public class DocQsmDetailsVO {
 
 	public void setLotnum(String lotnum) {
 		this.lotnum = lotnum;
+	}
+
+	public String getChangeProcess() {
+		return changeProcess;
+	}
+
+	public void setChangeProcess(String changeProcess) {
+		this.changeProcess = changeProcess;
 	}
 
 	public Double getQty1() {
