@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/drugInspectionController.do?showSearchInvLocationDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showSearchEnterInvLocationDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -36,6 +36,7 @@ $(function() {
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100 },
+			{field: 'lotatt03',		        title: '入库类型',	width: 100 },
 			{field: 'lotatt12',		        title: '产品名称',	width: 150 },
 			{field: 'descrc',		        title: '规格/型号',	width: 150 },
 			{field: 'lotatt15',		        title: '生产企业',	width: 150 },
@@ -92,7 +93,7 @@ var doExport = function(){
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchInvLocationDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchEnterInvLocationDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();
