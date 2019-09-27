@@ -11,4 +11,7 @@ public interface GspBusinessLicenseMybatisDao extends BaseDao {
 
     void updateGspBusinessLicenseActiveTag(@Param("enterpriseId") String enterpriseId,@Param("tag") String tag);
 
+
+    public <T> T selectCompareByEnterpriseId(Object id);
+
 }

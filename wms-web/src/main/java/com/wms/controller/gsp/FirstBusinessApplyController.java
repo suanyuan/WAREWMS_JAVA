@@ -168,10 +168,11 @@ public class FirstBusinessApplyController {
 	@RequestMapping(params = "apply")
 	@ResponseBody
 	public Json apply(String id,String clientId,String supplierArr,String productArr,String productLine) throws Exception {
+		boolean isReType = false;
 		if(!StringUtils.isEmpty(id)){
 			return firstBusinessApplyService.editApply(id,clientId,supplierArr,productArr,productLine);
 		}
-		return firstBusinessApplyService.addApply(clientId,supplierArr,productArr,productLine);
+		return firstBusinessApplyService.addApply(clientId,supplierArr,productArr,productLine,isReType);
 	}
 
 	@Login

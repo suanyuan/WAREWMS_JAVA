@@ -348,11 +348,11 @@
 
     function medecalCopy() {
         var row = ezuiMedicalDatagridDetail.datagrid("getSelected");
-        initHistoryData(row);
+        initHistoryMedicalData(row);
     }
 
     //加载历史证照信息
-    function initHistoryData(row) {
+    function initHistoryMedicalData(row) {
         $("#ezuiFormMedical input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

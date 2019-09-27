@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.wms.constant.Constant;
@@ -110,13 +111,20 @@ public class GspOperateDetailService extends BaseService {
 			v.setOperateId(g.getOperateId().trim());
 			GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogService.getGspInstrumentCatalog(g.getOperateId());
 			if(gspInstrumentCatalog!=null){
+
+				gspInstrumentCatalog.getInstrumentCatalogNo();
+
 				v.setOperateName("["+gspInstrumentCatalog.getClassifyId()+"]"+gspInstrumentCatalog.getInstrumentCatalogName().trim());
+				v.setInstrumentCatalogNo(Integer.parseInt(gspInstrumentCatalog.getInstrumentCatalogNo()));
 				if("I".equals(gspInstrumentCatalog.getClassifyId())){
 					IList.add(v);
+					Collections.sort(IList);
 				}else if("II".equals(gspInstrumentCatalog.getClassifyId())){
 					IIList.add(v);
+					Collections.sort(IIList);
 				}else if("III".equals(gspInstrumentCatalog.getClassifyId())){
 					IIIList.add(v);
+					Collections.sort(IIIList);
 				}
 			}
 

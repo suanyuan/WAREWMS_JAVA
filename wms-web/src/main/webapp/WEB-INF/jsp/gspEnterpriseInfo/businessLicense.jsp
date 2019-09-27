@@ -337,11 +337,11 @@
 
     function businessCopy() {
         var row = ezuiBussinessDatagridDetail.datagrid("getSelected");
-        initHistoryData(row);
+        initHistoryBusinessData(row);
     }
 
     //加载历史证照信息
-    function initHistoryData(row) {
+    function initHistoryBusinessData(row) {
         $("#ezuiFormBusiness input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

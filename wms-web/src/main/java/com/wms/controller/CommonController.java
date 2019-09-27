@@ -311,7 +311,9 @@ public class CommonController {
     @RequestMapping(params = "checkState")
     @ResponseBody
     public List<EasyuiCombobox> checkState(){
-        return basCodesService.getBy(Constant.CODE_CATALOG_CHECKSTATE);
+        List<EasyuiCombobox> a = basCodesService.getByIsUse(Constant.CODE_CATALOG_CHECKSTATE);
+
+        return a;
     }
 
     /**

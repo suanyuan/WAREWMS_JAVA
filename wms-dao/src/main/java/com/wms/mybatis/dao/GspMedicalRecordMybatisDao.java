@@ -8,6 +8,6 @@ package com.wms.mybatis.dao;
  * <b>功能：</b>GspMedicalRecordDao<br>
  */
 public interface GspMedicalRecordMybatisDao extends BaseDao {
-	
-	
+
+    public <T> T selectCompareByEnterprisId(Object id);
 }

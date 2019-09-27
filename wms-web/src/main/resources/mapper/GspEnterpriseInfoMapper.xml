@@ -29,6 +29,8 @@
 
         <result column="plicenseno" property="plicenseNo"/>
         <result column="grecord_no" property="grecordNo"/>
+        <result column="customerTypeName" property="customerTypeName"/>
+
 
 
     </resultMap>
@@ -222,6 +224,17 @@
         LEFT JOIN gsp_product_register t2 on t1.enterprise_id = t2.enterprise_id
         and t1.is_use = '1' and t2.is_use = '1'
         where t2.enterprise_id = #{enterpriseId}
+	</select>
+
+    <!-- 根据enterpriseId查询 需要对比字段的企业信息 -->
+    <select id="selectEnterpriseByCompare" resultMap="BaseResultMap" parameterType="Object">
+        select enterprise_no,enterprise_name,customerTypeName,shorthand_name,contacts,contacts_phone,remark
+        from gsp_enterprise_info t1
+        LEFT JOIN	(select code as customerType,codename_c as customerTypeName
+        from Bas_Codes
+        where codeid = 'ENT_TYP'
+        order by show_sequence) t2 on t1.enterprise_type = t2.customerType
+        where enterprise_id = #{enterpriseId}
 	</select>
 
 

@@ -370,10 +370,13 @@
             for(var i=0;i<row.length;i++){
                 if(row[i].classifyId=="I"){
                     Iol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    Iol.sort();
                 }else if(row[i].classifyId=="II"){
                     IIol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIol.sort();
                 }else if(row[i].classifyId=="III"){
                     IIIol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIIol.sort();
                 }
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
             }
@@ -404,11 +407,11 @@
 
     function operateCopy() {
         var row = ezuiOperateDatagridDetail.datagrid("getSelected");
-        initHistoryData(row);
+        initHistoryOperateLicenseData(row);
     }
 
     //加载历史证照信息
-    function initHistoryData(row) {
+    function initHistoryOperateLicenseData(row) {
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             console.log($(this).attr("class"));
             if($(this).attr("class")){

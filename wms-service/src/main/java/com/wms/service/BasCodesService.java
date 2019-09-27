@@ -52,4 +52,35 @@ public class BasCodesService {
         }
         return baseCodesVOList;
     }
+
+    /**
+     * 根据codeid查询code
+     * @param codeid
+     * @return
+     */
+    public List<EasyuiCombobox> getByIsUse(String codeid){
+        List<EasyuiCombobox> baseCodesVOList = new ArrayList<>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        Map<String,Object> map = new HashMap<>();
+        map.put("codeid",codeid);
+        map.put("select","00");
+        mybatisCriteria.setCondition(map);
+        mybatisCriteria.setOrderByClause("show_sequence");
+        List<BasCodes> list =  basCodesMybatisDao.queryByList(mybatisCriteria);
+        if(list!=null && list.size()>0){
+            EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+            easyuiCombobox.setId("");
+            easyuiCombobox.setValue("");
+            //easyuiCombobox.setSelected(true);
+            baseCodesVOList.add(easyuiCombobox);
+            for(BasCodes b : list){
+                easyuiCombobox = new EasyuiCombobox();
+                easyuiCombobox.setId(b.getCode());
+                easyuiCombobox.setValue(b.getCodenameC());
+                baseCodesVOList.add(easyuiCombobox);
+            }
+
+        }
+        return baseCodesVOList;
+    }
 }

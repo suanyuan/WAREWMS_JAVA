@@ -137,7 +137,17 @@ public class BasCustomer  implements Serializable {
 
 
 
-
+//	@Override
+//	public boolean equals(Object o) {
+//		if (this == o) return true;
+//		if (o == null || getClass() != o.getClass()) return false;
+//
+//		BasCustomer person = (BasCustomer) o;
+//
+//		if (age != person.age) return false;
+//		return name != null ? name.equals(person.name) : person.name == null;
+//
+//	}
 
 	public Date getAddtime() {
 		return addtime;

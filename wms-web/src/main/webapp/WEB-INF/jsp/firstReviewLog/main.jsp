@@ -46,7 +46,7 @@ $(function() {
             },
             {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
 			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
-			{field: 'applyContent',		title: '内容',	width: 200 },
+			{field: 'applyContent',		title: '内容',	width: 500},
 
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
 			{field: 'checkDateQc',		title: '审核时间',	width: 150 },

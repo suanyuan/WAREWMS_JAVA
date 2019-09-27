@@ -166,6 +166,12 @@ where 1=1
 	 from gsp_first_record where record_id = #{recordId}
 </select>
 
+	<!-- 根据注册证id查询 经营许可证 -->
+	<select id="selectCompareByEnterprisId"  resultMap="BaseResultMap" parameterType="Object">
+		select record_no,residence,reservedfield1,head_name,residence,reservedfield2,registration_authority,approve_date,registration_authority,approve_date,record_url,bussiness_scope
+		from gsp_first_record where enterprise_id = #{enterpriseId}  order by create_date desc limit 1
+	</select>
+
 <!-- 第一类生产备案凭证 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from gsp_first_record 
@@ -174,7 +180,7 @@ where 1=1
   	
 <!-- 查询第一类生产备案凭证列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
+	select
 	<include refid="Base_Column_List"/>
 	from gsp_first_record 
 	<include refid="Example_Where_Clause"/>

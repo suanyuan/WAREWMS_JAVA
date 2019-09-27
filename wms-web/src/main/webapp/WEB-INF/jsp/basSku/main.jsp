@@ -178,6 +178,14 @@ $(function() {
             <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
         }
     })
+
+    $("#defaultreceivinguom").combobox({
+        panelHeight: 'auto',
+        url:'/commonController.do?getUOM',
+        valueField:'id',
+        textField:'value'
+    });
+
 });
 
 /* 自动转大写 */
@@ -508,8 +516,8 @@ var doSearch = function(){
         reservedfield01 : $("#reservedfield01").val(),
         reservedfield02 : $("#reservedfield02").val(),
         reservedfield03 : $("#reservedfield03").val(),
-        sku_group1 : $("#sku_group1").val(),
-        sku_group2 : $("#sku_group2").val(),
+        skuGroup1 : $("#sku_group1").val(),
+        skuGroup2 : $("#sku_group2").val(),
         isUse : $('#isUse').val()
 	});
 };
@@ -805,7 +813,7 @@ var downloadTemplate = function(){
 																																{id: '60', value: '已停止'},
 																																{id: '90', value: '已报废'}
 																															]"/></td>
-							<th>包装规格代码</th>
+							<th>包装规格</th>
 							<td><input type='text' id='packidQ'  name="packid" class='easyui-textbox' size='16' /></td>
 							<th>产品名称</th>
 							<td><input type='text' id='reservedfield01'  name="reservedfield01" class='easyui-textbox' size='16' /></td>
@@ -819,7 +827,9 @@ var downloadTemplate = function(){
 
                             <tr>
                             <th>产品线</th>
-							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options=''/></td>
+							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options=''/>
+
+							</td>
 							<th>附卡类别</th>
 							<td><input type='text' id='sku_group2'  name="sku_group2" class='easyui-textbox' size='16' /></td>
 							<th>是否激活</th><td>
@@ -939,22 +949,7 @@ var downloadTemplate = function(){
 
 					<th>单位</th>
 					<td>
-						<input type='text' name='defaultreceivinguom' id="defaultreceivinguom" class='easyui-combobox' size='16' data-options="required:true,
-																															panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: 'BA', value: '包'},
-																																{id: 'CS', value: '箱'},
-																																{id: 'EA', value: '件'},
-																																{id: 'GE', value: '个'},
-																																{id: 'GN', value: '根'},
-																																{id: 'HE', value: '盒'},
-																																{id: 'IP', value: '内箱'},
-																																{id: 'OT', value: '其他'},
-																																{id: 'PL', value: '板'}
-																															]" readonly/>
+						<input type='text' name='defaultreceivinguom' id="defaultreceivinguom" class='easyui-textbox' data-options='required:true,width:150' readonly/>
 					</td>
 
 				</tr>

@@ -183,6 +183,9 @@
 <sql id="Example_Where_Clause">
 where 1=1
 <trim  suffixOverrides="," >
+
+
+
 	<if test="condition.customerid != null and condition.customerid != ''" >
 	    and customerid   like concat('%',#{condition.customerid},'%')
 	</if>
@@ -234,11 +237,11 @@ where 1=1
     <if test="condition.reservedfield03 != null and condition.reservedfield03 != ''" >
         and reservedfield03  like  '%${condition.reservedfield03}%'
     </if>
-    <if test="condition.sku_group1 != null and condition.sku_group1 != ''" >
-        and sku_group1  like  '%${condition.sku_group1}%'
+    <if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+        and sku_group1  like  '%${condition.skuGroup1}%'
     </if>
-    <if test="condition.sku_group2 != null and condition.sku_group2 != ''" >
-        and sku_group2  like  '%${condition.sku_group2}%'
+    <if test="condition.skuGroup2 != null and condition.skuGroup2 != ''" >
+        and sku_group2  like  '%${condition.skuGroup2}%'
     </if>
 	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
 		and orderbysql  like  '%${condition.orderbysql}%'
@@ -618,7 +621,7 @@ where 1=1
 	'STANDARD',
 	#{putawayrule},
 	'OK',
-	'EA',
+	#{defaultreceivinguom},
 	'EA',
 	0,
 	0,

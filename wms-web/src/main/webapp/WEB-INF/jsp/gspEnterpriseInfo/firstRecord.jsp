@@ -247,10 +247,13 @@
             for(var i=0;i<row.length;i++){
                 if(row[i].classifyId=="I"){
                     Ifr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    Ifr.sort();
                 }else if(row[i].classifyId=="II"){
                     IIfr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIfr.sort();
                 }else if(row[i].classifyId=="III"){
                     IIIfr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIIfr.sort();
                 }
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
@@ -279,11 +282,11 @@
 
     function recordCopy() {
         var row = ezuiFirstRecordDatagridDetail.datagrid("getSelected");
-        initHistoryData(row);
+        initHistoryFirstRecordData(row);
     }
 
     //加载历史证照信息
-    function initHistoryData(row) {
+    function initHistoryFirstRecordData(row) {
         $("#ezuiFormFirstRecord input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -295,9 +298,9 @@
         })
         //$("#recordUrl").val(row['recordUrl'])
         //$("#recordFile").filebox("setValue",row['recordUrl']);
-
-        //加载已选择的范围
-        initChoseText();
+        //
+        // //加载已选择的范围
+        // initChoseText();
 
         if($("#ezuiFormInfo input[id='enterpriseName']")){
 

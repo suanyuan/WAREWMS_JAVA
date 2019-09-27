@@ -49,5 +49,7 @@ public interface BasCustomerMybatisDao extends BaseDao {
 
 	public <T> List<T> queryByPageListByCustomer(MybatisCriteria criteria);//总查询分页  通过委托方查供应商
 
+	BasCustomer querySupplierByBankaccount(@Param("bankaccount") String bankaccount);
+
 
 }

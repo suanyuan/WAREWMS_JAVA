@@ -44,7 +44,7 @@ $(function() {
             {field: 'firstState',		title: '首营状态',	width: 100 ,formatter: firstStateFormatter},
 
             {field: 'applyId',		title: '申请单号',	width: 180},
-			// {field: 'clientId',		title: '委托客户',	width: 100 },
+			{field: 'clientId',		title: '委托客户代码',	width: 100 },
             {field: 'clientName',		title: '委托客户名称',	width: 180 },
 
             // {field: 'supplierId',		title: '供应商',	width: 150 },
@@ -471,7 +471,7 @@ function enterpriseInfo(enterpriseId){
 						<tr>
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>委托客户</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托客户代码</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>供应商</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
 
 						</tr>

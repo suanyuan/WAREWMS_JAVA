@@ -829,4 +829,9 @@ where 1=1
 	where s.costomerid = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
 	</select>
 
+	<select id="querySupplierByBankaccount" resultMap="BaseResultMap"  parameterType="Object">
+	select * from bas_customer
+	where bankaccount = #{bankaccount,jdbcType=VARCHAR}
+	</select>
+
 </mapper>
