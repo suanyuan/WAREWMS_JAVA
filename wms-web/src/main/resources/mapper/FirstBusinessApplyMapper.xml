@@ -37,6 +37,7 @@
 	<result column="productline" property="productline"/>
 	<result column="specs_id" property="specsId"/>
 	<result column="product_register_no" property="productRegisterNo"/>
+	<result column="product_apply_id" property="productApplyId"/>
 
 
 </resultMap>
@@ -300,7 +301,7 @@ where 1=1
 
 <!--通过产品注册证id查询其下的产品的首营申请-->
 <select id="selectByProductRegisterIdAll" resultMap="PageResultMap"  parameterType="Object">
-select t1.* from  first_business_apply t1
+select t1.*,t2.specs_id,t2.product_apply_id from  first_business_apply t1
 LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
 LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
 left join gsp_product_register t4 on t4.product_register_id = t3.product_register_id

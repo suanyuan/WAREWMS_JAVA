@@ -6,6 +6,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
+import com.wms.result.FirstBusinessApplyResult;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
 import com.wms.utils.RandomUtil;
@@ -640,15 +641,16 @@ public class DataPublishService extends BaseService {
             }
         }else{
 
-            List<FirstBusinessApply> firstBusinessApplyList = firstBusinessApplyMybatisDao.selectByProductRegisterIdAll(oldSpecs.getProductRegisterId());
+            List<FirstBusinessApplyResult> firstBusinessApplyList = firstBusinessApplyMybatisDao.selectByProductRegisterIdAll(oldSpecs.getProductRegisterId());
             if(firstBusinessApplyList!=null && firstBusinessApplyList.size()>0){
-                for(FirstBusinessApply apply : firstBusinessApplyList){
+                for(FirstBusinessApplyResult apply : firstBusinessApplyList){
                     //失效产品首营申请明细
 
                     FirstBusinessProductApplyForm fbpaForm = new FirstBusinessProductApplyForm();
                     fbpaForm.setApplyId(apply.getApplyId());
                     fbpaForm.setSpecsId(apply.getSpecsId());
                     fbpaForm.setIsUse(Constant.IS_USE_NO);
+                    fbpaForm.setProductApplyId(apply.getProductApplyId());
                     firstBusinessProductApplyService.editFirstBusinessProductApply(fbpaForm);
                     //失效产品首营申请表头
                     FirstBusinessApplyForm fbaHeadForm = new FirstBusinessApplyForm();

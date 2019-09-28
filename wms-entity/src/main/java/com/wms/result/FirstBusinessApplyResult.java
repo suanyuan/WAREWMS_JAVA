@@ -17,4 +17,5 @@ public class FirstBusinessApplyResult extends FirstBusinessApply {
     private String productline;
     private String specsId;
     private String productRegisterNo;
+    private String productApplyId;
 }
