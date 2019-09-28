@@ -245,6 +245,7 @@ public class GspVerifyService {
         }
 
         //如果有产品需要判断注册证
+        List<PdaGspProductRegister> allRegister = new ArrayList<>();
         if(!StringUtils.isEmpty(sku)){
             String registerNo = "";
             if (StringUtil.isNotEmpty(lotatt06)) {
@@ -284,7 +285,7 @@ public class GspVerifyService {
                     historyQuery.setVersion(gspProductRegister.getVersion());
                     mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
                     mybatisCriteria.setOrderByClause("create_date desc");
-                    List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+                    allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
                     Date beginDate = null;
                     Date endDate = null;
                     if(allRegister!=null && allRegister.size()>1){
@@ -299,15 +300,6 @@ public class GspVerifyService {
                     }
                     if(checkDate(lotatt01,endDate)>0){
                         return Json.error("生产日期超出注册证失效日期："+sku);
-                    }
-
-                    for (PdaGspProductRegister pdaGspProductRegister : allRegister) {
-
-                        if (betweenOn(lotatt01, pdaGspProductRegister.getApproveDate(), pdaGspProductRegister.getProductExpiryDate())) {
-
-                            json.setObj(pdaGspProductRegister);
-                            break;
-                        }
                     }
                 }
 
@@ -339,7 +331,9 @@ public class GspVerifyService {
 
                     if(catalog!=null){
                         if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
-                            return Json.success("一类不需要匹配经营范围");
+                            json = Json.success("一类不需要匹配经营范围");
+                            json.setObj(allRegister);
+                            return json;
                         }
                     }
 
@@ -354,13 +348,19 @@ public class GspVerifyService {
                     return Json.error("产品注册证没有关联器械目录");
                 }
 
-                return Json.success("");
+                json = Json.success("");
+                json.setObj(allRegister);
+                return json;
             }else {
-                return Json.success("产品没有注册证号");
+                json = Json.success("产品没有注册证号");
+                json.setObj(allRegister);
+                return json;
             }
         }else{
              if(checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier)){
-                 return Json.success("");
+                 json = Json.success("");
+                 json.setObj(allRegister);
+                 return json;
              }else {
                  return Json.error("货主与供应商经营范围没有交集");
              }
@@ -466,33 +466,18 @@ public class GspVerifyService {
         return startDate.compareTo(endDate);
     }
 
-    private static boolean betweenOn(String target, Date startTime, String endDate) {
-
-        if(target == null || startTime == null || endDate == null) return false;
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-
-            long start = startTime.getTime();
-            long end = dateFormat.parse(endDate).getTime();
-
-            long targetDate = dateFormat.parse(target).getTime();
-
-            return targetDate >= Math.min(start, end) && targetDate <= Math.max(start, end); // start <= value <= end
-        } catch (ParseException e) {
-
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public static void main(String[] args){
         try {
             //Date date = DateUtil.parse("20190907","yyyy-MM-dd");
             //System.out.println(checkDate("2019-09-08",new Date()));
-            List<String> arr = new ArrayList<>();
-            arr.add("1");
-            arr.add("2");
+//            List<String> arr = new ArrayList<>();
+//            arr.add("1");
+//            arr.add("2");
+
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            Date start = dateFormat.parse("2019-08-11");
+//
+//            System.out.println(betweenOn("2019-08-11", start, "2006-09-11"));
 
 
         }catch (Exception e){

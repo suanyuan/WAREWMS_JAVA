@@ -19,6 +19,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.service.BasGtnLotattService;
+import com.wms.service.DocAsnDetailService;
 import com.wms.service.GspVerifyService;
 import com.wms.service.InvLotAttService;
 import com.wms.utils.*;
@@ -59,6 +60,14 @@ public class ImportAsnDataService {
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
     private GspVerifyService gspVerifyService;
+    @Autowired
+    private DocAsnDetailService docAsnDetailService;
+
+    /**
+     * 1，导入有供应商代码
+     * 2，没有的话就在saveAsn方法中进行GSP验证
+     */
+    private List<PdaGspProductRegister> allRegister = new ArrayList<>();
 
     /**
      * 导入入库单
@@ -193,6 +202,7 @@ public class ImportAsnDataService {
                     if (!verifyJson.isSuccess()) {
                         rowResult.append("序号：").append(dataArray.getSeq()).append(verifyJson.getMsg()).append(" ");
                     }
+                    allRegister = (List<PdaGspProductRegister>) verifyJson.getObj();
             }
 
 			/*try {
@@ -723,11 +733,6 @@ public class ImportAsnDataService {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     asnDetails.setLotatt03(formatter.format(new Date()));
 
-                    //产品注册证
-                    if (StringUtils.isEmpty(asnDetails.getLotatt06())) {
-                        asnDetails.setLotatt06(basSku.getReservedfield03());
-                    }
-
 
                     if (asnDetails.getLotatt08().equals("") || asnDetails.getLotatt08() == null) {
 
@@ -737,6 +742,7 @@ public class ImportAsnDataService {
                             if (existGsp.get(existKey).equals("1")) {
 
                                 asnDetails.setLotatt08(basSku.getSkuGroup6());
+                                allRegister = (List<PdaGspProductRegister>) existGsp.get(existKey + "-register");
                             } else {
 
                                 addfalg = false;
@@ -754,6 +760,8 @@ public class ImportAsnDataService {
                             }else {
                                 asnDetails.setLotatt08(basSku.getSkuGroup6());
                                 existGsp.put(existKey, "1");
+                                existGsp.put(existKey + "-register", verifyJson.getObj());
+                                allRegister = (List<PdaGspProductRegister>) verifyJson.getObj();
                             }
                         }
                     }
@@ -775,16 +783,14 @@ public class ImportAsnDataService {
 
                     //预入库单号
                     asnDetails.setLotatt14(resultNo);
+
+                    //根据所输入的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
+                    DocAsnDetail subAsnDetail = docAsnDetailService.adaptSuitableRegisterNo(allRegister, basSku, asnDetails.getLotatt01());
+                    //产品注册证
+                    asnDetails.setLotatt06(subAsnDetail.getLotatt06());
                     //生产厂家
-                    if (StringUtil.isNotEmpty(asnDetails.getLotatt06())) {
-                        PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(asnDetails.getLotatt06());
-                        //生产厂家
-                        if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
+                    asnDetails.setLotatt15(subAsnDetail.getLotatt15());
 
-                            asnDetails.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
-                        }
-
-                    }
 
                     //赋值
                     asnDetails.setAsnlineno(asnlineno + 1);

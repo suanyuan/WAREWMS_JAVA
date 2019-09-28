@@ -220,6 +220,38 @@ public class DateUtil {
         return lotatt02;
     }
 
+    /**
+     * 日期是否在开始日期和结束日期之间
+     */
+    public static boolean betweenOn(String target, Date startTime, Date endDate) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String startstr = dateFormat.format(startTime);
+        String endstr = dateFormat.format(endDate);
+
+        return betweenOn(target, startstr, endstr);
+    }
+
+    public static boolean betweenOn(String target, String startTime, String endDate) {
+
+        if(target == null || startTime == null || endDate == null) return false;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+
+            long start = dateFormat.parse(startTime).getTime();
+            long end = dateFormat.parse(endDate).getTime();
+
+            long targetDate = dateFormat.parse(target).getTime();
+
+            return targetDate >= Math.min(start, end) && targetDate <= Math.max(start, end); // start <= value <= end
+        } catch (java.text.ParseException e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 	public static void main(String[] args) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {

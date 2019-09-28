@@ -13,6 +13,7 @@ import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocAsnDetailVO;
@@ -67,6 +68,9 @@ public class DocAsnDetailService extends BaseService {
 	private BasSkuService basSkuService;
 	@Autowired
 	private GspVerifyService gspVerifyService;
+
+	@Autowired
+	private GspProductRegisterService gspProductRegisterService;
 
 	public EasyuiDatagrid<DocAsnDetailVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnDetailQuery query) {
 		EasyuiDatagrid<DocAsnDetailVO> datagrid = new EasyuiDatagrid<DocAsnDetailVO>();
@@ -180,6 +184,71 @@ public class DocAsnDetailService extends BaseService {
         return json;
     }
 
+    /**
+     * 根据所输入的、所选的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
+     * @param pdaGspProductRegisters 产品最新的证号所有关联的已失效的注册证信息
+     */
+    public DocAsnDetail adaptSuitableRegisterNo(List<PdaGspProductRegister> pdaGspProductRegisters, BasSku basSku, String lotatt01) {
+
+        DocAsnDetail subAsnDetail = new DocAsnDetail();
+
+        //没有注册证的产品直接返回产品档案里的生产企业,注册证是没有的（非医疗器械）
+        if (pdaGspProductRegisters.size() == 0) {
+
+            subAsnDetail.setLotatt06("");
+            subAsnDetail.setLotatt15(basSku.getReservedfield14());
+            return subAsnDetail;
+        }
+
+        //如果导入的内容中没有生产日期，则将产品上下发的那个注册证赋上并查处生产厂家
+        if (StringUtil.isEmpty(lotatt01)) {
+
+            subAsnDetail.setLotatt06(basSku.getReservedfield03());
+            PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(basSku.getReservedfield03());
+            //生产厂家
+            if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
+
+                subAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
+            }
+            return subAsnDetail;
+        }
+
+        //根据所输入的、所选的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
+        for (PdaGspProductRegister pdaGspProductRegister : pdaGspProductRegisters) {
+
+            if (DateUtil.betweenOn(lotatt01, pdaGspProductRegister.getApproveDate(), pdaGspProductRegister.getProductRegisterExpiryDate())) {
+
+                subAsnDetail.setLotatt06(pdaGspProductRegister.getProductRegisterNo());
+                if (pdaGspProductRegister.getEnterpriseInfo() != null) {
+
+                    subAsnDetail.setLotatt15(pdaGspProductRegister.getEnterpriseInfo().getEnterpriseName());
+                }else {
+
+                    subAsnDetail.setLotatt15(basSku.getReservedfield14());
+                }
+                break;
+            }
+        }
+
+        return subAsnDetail;
+    }
+
+    /**
+     * 私有公共方法 通过产品中的注册证号查询所有的注册证历史，来做产品注册证适宜判断
+     */
+    private DocAsnDetail adaptSuitableRegisterNo(BasSku basSku, String lotatt01) {
+
+        GspProductRegister register = gspProductRegisterService.queryByRegisterNo(basSku.getReservedfield03());
+        if (register == null) register = new GspProductRegister();//防止为空之后get报错
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+        historyQuery.setVersion(register.getVersion());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+        mybatisCriteria.setOrderByClause("create_date desc");
+        List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+        return adaptSuitableRegisterNo(allRegister, basSku, lotatt01);
+    }
+
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
 
 	    //Json statusJson = asnStatusCheck(docAsnDetailForm.getAsnno());
@@ -235,9 +304,6 @@ public class DocAsnDetailService extends BaseService {
         //产品双证
 //        docAsnDetail.setLotatt13(basSku.getSkuGroup7());
 
-        //产品注册证
-        docAsnDetail.setLotatt06(basSku.getReservedfield03());
-
         //供应商取表头的
         docAsnDetail.setLotatt08(docAsnHeader.getSupplierid());
 
@@ -253,15 +319,12 @@ public class DocAsnDetailService extends BaseService {
 		//预入库单号
         docAsnDetail.setLotatt14(docAsnDetailForm.getAsnno());
 
-		//生产企业
-		if (docAsnDetail.getLotatt06() != null && !docAsnDetail.getLotatt06().equals("")) {
-
-            PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(docAsnDetail.getLotatt06());
-            if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
-
-                docAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
-            }
-		}
+        //根据所输入的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
+        DocAsnDetail subAsnDetail = adaptSuitableRegisterNo(basSku, docAsnDetail.getLotatt01());
+        //产品注册证
+        docAsnDetail.setLotatt06(subAsnDetail.getLotatt06());
+        //生产厂家
+        docAsnDetail.setLotatt15(subAsnDetail.getLotatt15());
 
 		//赋值
 		docAsnDetail.setPackid(basSku.getPackid());
@@ -312,6 +375,13 @@ public class DocAsnDetailService extends BaseService {
             //数量换算
             BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
             docAsnDetail.setExpectedqtyEach(docAsnDetail.getExpectedqty().multiply(basPackage.getQty1()));
+
+            //根据所输入的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
+            DocAsnDetail subAsnDetail = adaptSuitableRegisterNo(basSku, docAsnDetail.getLotatt01());
+            //产品注册证
+            docAsnDetail.setLotatt06(subAsnDetail.getLotatt06());
+            //生产厂家
+            docAsnDetail.setLotatt15(subAsnDetail.getLotatt15());
         }
 
         //判断是否要插入扫码批次匹配表
