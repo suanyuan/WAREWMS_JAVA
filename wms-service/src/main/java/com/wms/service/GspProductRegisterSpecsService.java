@@ -18,6 +18,7 @@ import com.wms.utils.RandomUtil;
 import com.wms.utils.ResourceUtil;
 import com.wms.vo.GspEnterpriseInfoVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.commons.lang.StringUtils;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +143,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		return json;
 	}
 
-	public Json editGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm) {
+	public Json editGspProductRegisterSpecs(GspProductRegisterSpecsForm gspProductRegisterSpecsForm,String productRegisterId) {
 		Json json = new Json();
 
 		GspProductRegisterSpecs oldSpecs = gspProductRegisterSpecsMybatisDao.queryById(gspProductRegisterSpecsForm.getSpecsId());
@@ -151,11 +152,20 @@ public class GspProductRegisterSpecsService extends BaseService {
 		}
 
 		//判断如果产品注册证号变更需要出发换证
-		if(gspProductRegisterSpecsForm.getProductRegisterId()!=null && oldSpecs.getProductRegisterId()!=null){
-			if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
-				dataPublishService.cancelDataBySpecsId(oldSpecs);
+		if(StringUtils.isEmpty(productRegisterId)){
+			if(gspProductRegisterSpecsForm.getProductRegisterId()!=null && oldSpecs.getProductRegisterId()!=null){
+				if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
+					dataPublishService.cancelDataBySpecsId(oldSpecs);
+				}
+			}
+		}else{
+			if(productRegisterId!=null && oldSpecs.getProductRegisterId()!=null){
+				if(!productRegisterId.equals(oldSpecs.getProductRegisterId())){
+					dataPublishService.cancelDataBySpecsId(oldSpecs);
+				}
 			}
 		}
+
 
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);

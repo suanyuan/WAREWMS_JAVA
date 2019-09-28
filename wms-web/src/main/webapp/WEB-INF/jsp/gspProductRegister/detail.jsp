@@ -899,7 +899,7 @@
         $("#ezuiFormDetail #productRegisterVersion").combobox("setValue",row.productRegisterVersion);
 
         //$("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
-        $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
+        //$("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
         $("#licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);
         //$("#ezuiFormDetail #choseScope").val(row.choseScope);
     }

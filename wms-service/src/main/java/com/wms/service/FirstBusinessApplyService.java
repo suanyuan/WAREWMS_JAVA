@@ -844,6 +844,19 @@ public class FirstBusinessApplyService extends BaseService {
 		return Json.success("更新成功");
 	}
 
+	/**
+	 * 更新申请中的产品申请单产品基础信息编号
+	 * @param specId
+	 * @return
+
+	public Json updateCheckingApplySpecId(String specId){
+		Long sum = firstBusinessApplyMybatisDao.updateCheckingApplySpecId(specId);
+		if(sum == 0){
+			return Json.error("更新失败");
+		}
+		return Json.success("更新成功");
+	}*/
+
 	public Json checkBusinessScope(String clientId,String supplierId,String productArr){
 		//委托客户scope是否需要判断
 		BasCustomer basCustomer = basCustomerService.selectCustomerById(supplierId,Constant.CODE_CUS_TYP_VE);

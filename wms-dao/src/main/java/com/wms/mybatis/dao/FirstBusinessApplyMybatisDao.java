@@ -36,4 +36,7 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	 * @return
 	 */
 	Long updateCheckingApplySupplierNo(String supplerId);
+
+    //通过产品注册证id查询其下的产品的首营申请
+    List<FirstBusinessApply> selectByProductRegisterIdAll(Object id);
 }

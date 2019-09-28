@@ -96,7 +96,7 @@ public class GspProductRegisterSpecsController {
 	public Json edit(@RequestParam(value="gspProductRegisterSpecsForm",required=true) String gspProductRegisterSpecsFormStr) throws Exception {
 		System.out.println();
 		GspProductRegisterSpecsForm gspProductRegisterSpecsForm = JSON.parseObject(gspProductRegisterSpecsFormStr,GspProductRegisterSpecsForm.class);
-		Json json = gspProductRegisterSpecsService.editGspProductRegisterSpecs(gspProductRegisterSpecsForm);
+		Json json = gspProductRegisterSpecsService.editGspProductRegisterSpecs(gspProductRegisterSpecsForm,"");
 		if(json == null){
 			json = new Json();
 

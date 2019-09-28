@@ -237,7 +237,7 @@ where 1=1
 	</update>
 
 	<update id="updateFirstReviewBySupplierId" parameterType="Object">
-	update first_review_log set apply_state=#{state},edit_id = #{editId},edit_date = now(),
+	update first_review_log set apply_state=#{state},edit_id = #{editId},edit_date = now()
 	 where review_type_id in
 	 (select apply_id from first_business_apply where first_state in ('00','10') and supplier_id = #{supplerId})
 </update>
