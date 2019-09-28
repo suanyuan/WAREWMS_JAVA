@@ -368,10 +368,13 @@ public class BasCustomerService extends BaseService {
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
 		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
 		System.out.println();
-		BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
+//		BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
+//		String customerId = basCustomer.getCustomerid();
+
+
+		BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(basCustomerForm.getBankaccount());
 		String customerId = basCustomer.getCustomerid();
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
-
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basCustomer.setCustomerid(customerId);
 		//换证customerId 给错

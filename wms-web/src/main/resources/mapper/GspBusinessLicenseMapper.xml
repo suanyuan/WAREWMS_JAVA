@@ -201,6 +201,12 @@ where 1=1
 	 from gsp_business_license where business_id = #{businessId}
 </select>
 
+	<!-- 根据id查询 营业执照 -->
+	<select id="selectCompareByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select social_credit_code,license_number,license_name,license_type,juridical_person,registered_capital,residence,registration_authority,establishment_date,issue_date,business_start_date,business_end_date,attachment_url,business_scope
+		from gsp_business_license where enterprise_id = #{enterpriseId}  order by create_date desc limit 1
+	</select>
+
 <!-- 营业执照 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from gsp_business_license 

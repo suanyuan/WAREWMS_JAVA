@@ -97,4 +97,55 @@ public class DrugInspectionController {
 	public void exportSearchInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
 		drugControlService.exportSearchInvLocationDataToExcel(response, form);
 	}
+
+
+
+    /**************************************入库信息****************************************/
+
+	@Login
+	@RequestMapping(params = "toSearchEnterInvLocationMain")
+	public ModelAndView toSearchEnterInvLocationMain(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchEnterInvLocation/main", model);
+	}
+
+	@Login
+	@RequestMapping(params = "showSearchEnterInvLocationDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<SearchInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
+		return drugControlService.showSearchEnterInvLocationDatagrid(pager, query);
+	}
+
+
+	@Login
+	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcel")
+	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
+		drugControlService.exportSearchEnterInvLocationDataToExcel(response, form);
+	}
+
+
+    /**************************************出库信息****************************************/
+
+    @Login
+    @RequestMapping(params = "toSearchOutInvLocationMain")
+    public ModelAndView toSearchOutInvLocationMain(String menuId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("menuId", menuId);
+        return new ModelAndView("searchOutInvLocation/main", model);
+    }
+
+    @Login
+    @RequestMapping(params = "showSearchOutInvLocationDatagrid")
+    @ResponseBody
+    public EasyuiDatagrid<SearchInvLocation> showSearchOutInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
+        return drugControlService.showSearchOutInvLocationDatagrid(pager, query);
+    }
+
+
+    @Login
+    @RequestMapping(params = "exportSearchOutInvLocationDataToExcel")
+    public void exportSearchOutInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
+        drugControlService.exportSearchOutInvLocationDataToExcel(response, form);
+    }
 }

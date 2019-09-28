@@ -1,9 +1,9 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-public class GspOperateDetailVO implements Comparable<GspOperateDetailVO> {
+public class GspOperateDetaiSumlVO implements Comparable<GspOperateDetaiSumlVO> {
 
 	private String licenseId;
 	private String operateId;
@@ -14,18 +14,16 @@ public class GspOperateDetailVO implements Comparable<GspOperateDetailVO> {
 	private java.util.Date editDate;
 	private String isUse;
 
-	private Integer instrumentCatalogNo;
+	private int instrumentCatalogNo;
 
-	@Override
-	public int compareTo(GspOperateDetailVO o) {
-		return this.instrumentCatalogNo - o.getInstrumentCatalogNo();
-	}
 
-	public Integer getInstrumentCatalogNo() {
+
+
+	public int getInstrumentCatalogNo() {
 		return instrumentCatalogNo;
 	}
 
-	public void setInstrumentCatalogNo(Integer instrumentCatalogNo) {
+	public void setInstrumentCatalogNo(int instrumentCatalogNo) {
 		this.instrumentCatalogNo = instrumentCatalogNo;
 	}
 
@@ -95,6 +93,9 @@ public class GspOperateDetailVO implements Comparable<GspOperateDetailVO> {
 		this.operateName = operateName;
 	}
 
-
+	@Override
+	public int compareTo(GspOperateDetaiSumlVO o) {
+		return this.instrumentCatalogNo - o.getInstrumentCatalogNo();
+	}
 
 }

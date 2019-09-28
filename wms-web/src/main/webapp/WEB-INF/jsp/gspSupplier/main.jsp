@@ -391,9 +391,9 @@ var commit = function(){
 
 function reApply(){
     var row = ezuiDatagrid.datagrid('getSelected');
-    if(row.firstState!="40") {
+    if(row.firstState!="40" && row.firstState!="90") {
         $.messager.show({
-            msg: '只有审核通过的能发起新申请', title: '提示'
+            msg: '只有审核通过和已报废的能发起新申请', title: '提示'
         });
         return;
     }

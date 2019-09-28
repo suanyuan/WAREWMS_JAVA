@@ -256,10 +256,13 @@
             for(var i=0;i<row.length;i++){
                 if(row[i].classifyId=="I"){
                     Isr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    Isr.sort();
                 }else if(row[i].classifyId=="II"){
                     IIsr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIsr.sort();
                 }else if(row[i].classifyId=="III"){
                     IIIsr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIIsr.sort();
                 }
                 choseRowArrSecondRecord.push(row[i].instrumentCatalogId);
             }

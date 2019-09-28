@@ -337,7 +337,7 @@ public class DataPublishService extends BaseService {
             gspSupplierService.editGspSupplier(updateSupplierForm);
 
             BasCustomerForm form = new BasCustomerForm();
-            form.setCustomerid(supplier.getSupplierId());
+            form.setBankaccount(supplier.getSupplierId());
             form.setEnterpriseId(supplier.getEnterpriseId());
             form.setOperateType(supplier.getOperateType());
             form.setActiveFlag(Constant.IS_USE_NO);

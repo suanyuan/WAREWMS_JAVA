@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/drugInspectionController.do?showSearchInvLocationDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showSearchOutInvLocationDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -92,7 +92,7 @@ var doExport = function(){
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchInvLocationDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchOutInvLocationDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();

@@ -197,6 +197,14 @@ where 1=1
 		where t2.product_register_no = #{productRegisterNo}
 	</select>
 
+	<!-- 根据注册证id查询 经营许可证 -->
+	<select id="selectCompareByEnterprisId"  resultMap="BaseResultMap" parameterType="Object">
+		select license_no,juridical_person,business_residence,head_name,residence,warehouse_address,registration_authority,approve_date,license_url,license_expiry_date,business_scope,operate_mode
+		from gsp_operate_license where enterprise_id = #{enterpriseId} and operate_type = #{operateType}  order by create_date desc limit 1
+	</select>
+
+
+
 <!-- 经营许可证 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from gsp_operate_license 

@@ -210,9 +210,9 @@ public class FirstBusinessApplyService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addApply(String clientId,String supplierArr,String productArr,String productLine){
+	public Json addApply(String clientId,String supplierArr,String productArr,String productLine,boolean isReType){
 		try{
-
+//			isReType = false;
 //			commonService.getSupplier
 
 			if("".equals(clientId)){
@@ -236,12 +236,7 @@ public class FirstBusinessApplyService extends BaseService {
 						return checkScopeResult;
 					}
 				}
-//				Json checkScopeResult = checkBusinessScope(clientId,supplierId,productArr);
-//				if(!checkScopeResult.isSuccess()){
-//					return checkScopeResult;
-//				}
 			}
-
 
 
 
@@ -296,42 +291,51 @@ public class FirstBusinessApplyService extends BaseService {
 				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				firstReviewLogForm.setReviewTypeId(no);
 				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
+				//产品详情
 				GspProductRegisterSpecs g  = gspProductRegisterSpecsMybatisDao.queryById(specsId);
-                String ProductName = "无";
-                String ProductRegisterNo = "无";
+				//产品注册证详情
+				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
+				//供应商详情
+				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
+				if(sup==null){
+					return 	Json.error("供应商失效！");
+				}
+				//货主详情
+				BasCustomer cli =basCustomerMybatisDao.queryByIdType(clientId,Constant.CODE_CUS_TYP_OW);
+				if(cli==null){
+					return 	Json.error("货主失效！");
+				}
+				String ProductName = "无";
+				String ProductRegisterNo = "无";
 				String SpecsName = "无";
 				String clientName = "无";
 				String supName = "无";
-				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
+				String content ="无";
+				if(isReType==false){
+					if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
+						ProductName = g.getProductName();
+					}
+					if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
+						SpecsName = g.getSpecsName();
+					}
+					if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+						ProductRegisterNo = gpr.getProductRegisterNo();
+					}
+					if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
+						supName = sup.getDescrC();
+					}
+					if(cli.getDescrC()!=null && !"".equals(cli.getDescrC())){
+						clientName = cli.getDescrC();
+					}
+					content ="委托方:"+clientName+" 供应商:"+supName+" 产品名称:"+ProductName+" 产品代码:"+g.getProductCode()+
+							" 规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
+				}else if(isReType==true){
+					//发起新申请   变更内容
 
-//				BasCustomer b = new BasCustomer();
-//				b.setCustomerType(Constant.CODE_CUS_TYP_VE);
-//				b.setCustomerid(supplierId);
-				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
-                if(sup==null){
-                    return 	Json.error("供应商失效！");
-                }
-				BasCustomer cli =basCustomerMybatisDao.queryByIdType(clientId,Constant.CODE_CUS_TYP_OW);
-                if(cli==null){
-                    return 	Json.error("货主失效！");
-                }
-				if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
-				    ProductName = g.getProductName();
-                }
-                if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
-					SpecsName = g.getSpecsName();
-                }
-				if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
-					ProductRegisterNo = gpr.getProductRegisterNo();
+
+
 				}
-				if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
-					supName = sup.getDescrC();
-				}
-				if(cli.getDescrC()!=null && !"".equals(cli.getDescrC())){
-					clientName = cli.getDescrC();
-				}
-				String content ="委托方:"+clientName+" 供应商:"+supName+" 产品名称:"+ProductName+" 产品代码:"+g.getProductCode()+
-						" 规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
+
                 firstReviewLogForm.setApplyContent(content);
 				firstReviewLogService.addFirstReviewLog(firstReviewLogForm);
 
@@ -546,7 +550,7 @@ public class FirstBusinessApplyService extends BaseService {
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                        addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline());
+                        return addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true);
                     }
                 }
             }

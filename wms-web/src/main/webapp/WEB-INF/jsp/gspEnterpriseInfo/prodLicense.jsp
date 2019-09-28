@@ -355,10 +355,13 @@
             for(var i=0;i<row.length;i++){
                 if(row[i].classifyId=="I"){
                     Ipl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    Ipl.sort();
                 }else if(row[i].classifyId=="II"){
                     IIpl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIpl.sort();
                 }else if(row[i].classifyId=="III"){
                     IIIpl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
+                    IIIpl.sort();
                 }
                 choseRowArrProd.push(row[i].instrumentCatalogId);
                 // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
