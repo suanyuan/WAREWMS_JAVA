@@ -691,8 +691,19 @@ public class FirstBusinessApplyService extends BaseService {
                 firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 
                 //更新申请记录
-                firstReviewLogService.updateFirstReviewByNo(DelId,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+//                firstReviewLogService.updateFirstReviewByNo(DelId,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
 
+                FirstReviewLog f = new FirstReviewLog();
+                f.setReviewTypeId(DelId);
+                f.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+                f.setCheckDateQc(null);
+                f.setCheckIdQc("");
+                f.setCheckRemarkQc("");
+                f.setCheckIdHead("");
+                f.setCheckDateHead(null);
+                f.setCheckRemarkHead("");
+
+                firstReviewLogMybatisDao.updateBytiJIAOSHENH(f);
 
 
 
@@ -725,6 +736,8 @@ public class FirstBusinessApplyService extends BaseService {
 //            for(true){
 //
 //            }
+            boolean type = true;
+            String content = "";
             for(String DelId : arrId) {
                 //TODO 失效已下发的数据
                 dataPublishService.cancelData(DelId);
@@ -757,8 +770,17 @@ public class FirstBusinessApplyService extends BaseService {
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                        return addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
+
+
+                        Json result11=   addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
+                        if(!result11.isSuccess()){
+                            content = content+"  单号"+DelId+" "+ result11.getMsg();
+                            type =false;
+                        }
                     }
+                }
+                if(!type){
+                    return Json.error(content);
                 }
             }
 

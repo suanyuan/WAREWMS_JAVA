@@ -199,6 +199,11 @@ where 1=1
 	 from first_review_log where review_id = #{reviewId}
 </select>
 
+	<!-- 根据id查询 产品首营审核记录表 -->
+	<select id="queryByreviewTypeId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from first_review_log where review_type_id = #{reviewTypeId}
+	</select>
 <!-- 产品首营审核记录表 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from first_review_log 
@@ -223,5 +228,12 @@ where 1=1
 	update first_review_log set apply_state=#{state},edit_id = #{editId},edit_date = now()
 	 where review_type_id = #{no}
 </update>
-  	
+
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateBytiJIAOSHENH" parameterType="Object" >
+		update first_review_log set check_id_qc=#{checkIdQc},check_date_qc=#{checkDateQc},apply_state=#{applyState},
+		check_remark_qc=#{checkRemarkQc},check_id_head=#{checkIdHead},check_date_head=#{checkDateHead},
+		check_remark_head=#{checkRemarkHead}  where review_type_id=#{reviewTypeId}
+	</update>
+
 </mapper>   
