@@ -66,6 +66,7 @@ public class GspVerifyService {
      */
     public Json verifyOperate(String customerId,String supplierId,String sku){
         return this.verifyOperate(customerId,supplierId,sku,"","");
+        //return Json.success("");
     }
 
     /**
@@ -78,6 +79,7 @@ public class GspVerifyService {
      */
     public Json verifyOperate(String customerId,String supplierId,String sku,String lotatt01,String lotatt02){
         return this.verifyOperate(customerId, supplierId, sku, lotatt01, lotatt02, "");
+        //return Json.success("");
     }
 
     /**
@@ -109,7 +111,7 @@ public class GspVerifyService {
             gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customerId);
             if(gspEnterpriseInfoCustomer == null){
                 //return Json.error("查询不到货主对应的企业信息："+customerId);
-                return Json.error("查询不到有效的货主："+customerId);
+                return Json.error("查询不到有效的货主");
             }
         }else {
             gspEnterpriseInfoCustomer = gspEnterpriseInfoService.getGspEnterpriseInfo(customer.getEnterpriseId());
@@ -121,7 +123,7 @@ public class GspVerifyService {
             gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplierId);
             if(gspEnterpriseInfoSupplier == null){
                 //return Json.error("查询不到供应商对应的企业信息："+supplierId);
-                return Json.error("查询不到有效的供应商："+supplierId);
+                return Json.error("查询不到有效的供应商");
             }
         }else {
             gspEnterpriseInfoSupplier = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
@@ -138,7 +140,9 @@ public class GspVerifyService {
                 || gspEnterpriseInfoSupplier.getEnterpriseType().equals(Constant.CODE_ENT_TYP_GWSC)
 
         ){
-            return Json.success("国外企业没有营业执照信息");
+            //return Json.success("国外企业没有营业执照信息");
+        }else{
+
         }
 
         //营业执照
@@ -178,40 +182,40 @@ public class GspVerifyService {
         //判断时间有没有过期
         if(!gspBusinessLicenseCustomer.getIsLong().equals("1")){
             if(checkDate(gspBusinessLicenseCustomer.getBusinessEndDate(),new Date())<0){
-                return Json.error("货主营业执照过期:"+customerId);
+                return Json.error("货主营业执照过期");
             }
         }
 
         if(!gspBusinessLicenseSupplier.getIsLong().equals("1")){
             if(checkDate(gspBusinessLicenseSupplier.getBusinessEndDate(),new Date())<0){
-                return Json.error("供应商营业执照过期:"+supplierId);
+                return Json.error("供应商营业执照过期");
             }
         }
 
         if(prodLicenseCustomer!=null){
             if(checkDate(prodLicenseCustomer.getLicenseExpiryDate(),new Date())<0){
-                return Json.error("货主生产许可证过期:"+customerId);
+                return Json.error("货主生产许可证过期");
             }
             operateDetailVOSCustomer.addAll(getOperateDetail(prodLicenseCustomer.getOperateId()));
         }
 
         if(prodLicenseSupplier!=null){
             if(checkDate(prodLicenseSupplier.getLicenseExpiryDate(),new Date())<0){
-                return Json.error("供应商生产许可证过期:"+supplierId);
+                return Json.error("供应商生产许可证过期");
             }
             operateDetailVOSSupplier.addAll(getOperateDetail(prodLicenseSupplier.getOperateId()));
         }
 
         if(operLicenseCustomer!=null){
             if(checkDate(operLicenseCustomer.getLicenseExpiryDate(),new Date())<0){
-                return Json.error("货主经营许可证过期:"+customerId);
+                return Json.error("货主经营许可证过期");
             }
             operateDetailVOSCustomer.addAll(getOperateDetail(operLicenseCustomer.getOperateId()));
         }
 
         if(operLicenseSupplier!=null){
             if(checkDate(operLicenseSupplier.getLicenseExpiryDate(),new Date())<0){
-                return Json.error("供应商经营许可证过期:"+supplierId);
+                return Json.error("供应商经营许可证过期");
             }
             operateDetailVOSSupplier.addAll(getOperateDetail(operLicenseSupplier.getOperateId()));
         }
@@ -234,13 +238,13 @@ public class GspVerifyService {
 
         if(medicalRecordCustomer!=null){
             if(checkDate(medicalRecordCustomer.getLicenseExpiryDateEnd(),new Date())<0){
-                return Json.error("货主医疗机构执业许可证过期:"+customerId);
+                return Json.error("货主医疗机构执业许可证过期");
             }
         }
 
         if(medicalRecordSupplier!=null){
             if(checkDate(medicalRecordSupplier.getLicenseExpiryDateEnd(),new Date())<0){
-                return Json.error("供应商医疗机构执业许可证过期:"+supplierId);
+                return Json.error("供应商医疗机构执业许可证过期");
             }
         }
 

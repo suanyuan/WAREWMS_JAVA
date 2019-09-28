@@ -98,9 +98,6 @@ public class FirstBusinessApplyService extends BaseService {
 	public Json addFirstBusinessApply(FirstBusinessApplyForm firstBusinessApplyForm) throws Exception {
 		Json json = new Json();
 		FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
-
-
-
 		BeanUtils.copyProperties(firstBusinessApplyForm, firstBusinessApply);
 		firstBusinessApply.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 		firstBusinessApply.setIsUse(Constant.IS_USE_YES);
@@ -832,6 +829,19 @@ public class FirstBusinessApplyService extends BaseService {
 			return Json.success("更新申请单首营状态成功");
 		}
 		return Json.error("更新申请单首营状态失败");
+	}
+
+	/**
+	 * 更新申请中的产品申请单供应商编号
+	 * @param supplerId
+	 * @return
+	 */
+	public Json updateCheckingApplySupplierNo(String supplerId){
+		Long sum = firstBusinessApplyMybatisDao.updateCheckingApplySupplierNo(supplerId);
+		if(sum == 0){
+			return Json.error("更新失败");
+		}
+		return Json.success("更新成功");
 	}
 
 	public Json checkBusinessScope(String clientId,String supplierId,String productArr){

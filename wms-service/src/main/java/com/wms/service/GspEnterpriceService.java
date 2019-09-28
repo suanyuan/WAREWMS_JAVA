@@ -158,6 +158,7 @@ public class GspEnterpriceService extends BaseService {
 //                            ){
 //                                //TODO 重新下发新申请
 //                                //TODO 修改首营状态为已报废
+
 //                                dataPublishService.cancelData(ent.getApplyNo());
 //                            }else{
 //                                return Json.error("请换证修改");

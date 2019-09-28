@@ -733,7 +733,12 @@ where 1=1
 		from Bas_Customer
 		<include refid="Example_Where_Clause"/>
 		) a LEFT JOIN gsp_supplier s on a.bankaccount = s.supplier_id , Bas_Codes b
-		where a.customer_type = b.code and  s.costomerid = #{condition.customer,jdbcType=VARCHAR}  and s.is_use='1'
+		where a.customer_type = b.code
+
+		<if test="condition.customerid != null and condition.customerid != ''" >
+			and  s.costomerid = #{condition.customer,jdbcType=VARCHAR}
+		</if>
+		and s.is_use='1'
 		and b.codeid = 'CUS_TYP'
 		) c
 		where 1 = 1
@@ -826,7 +831,8 @@ where 1=1
 
 	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
 	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id
-	where s.costomerid = #{customerId,jdbcType=VARCHAR} and s.is_use='1'
+	where  s.is_use='1'
+	<!-- s.costomerid = #{customerId,jdbcType=VARCHAR} and -->
 	</select>
 
 	<select id="querySupplierByBankaccount" resultMap="BaseResultMap"  parameterType="Object">

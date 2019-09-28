@@ -898,10 +898,10 @@
 
         $("#ezuiFormDetail #productRegisterVersion").combobox("setValue",row.productRegisterVersion);
 
-        $("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
+        //$("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
         $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
         $("#licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);
-        $("#ezuiFormDetail #choseScope").val(row.choseScope);
+        //$("#ezuiFormDetail #choseScope").val(row.choseScope);
     }
 
     //换证清空当前数据
