@@ -148,12 +148,12 @@ public class FirstBusinessApplyService extends BaseService {
 		if(firstBusinessApply!=null){
 			FirstBusinessApplyVO vo = new FirstBusinessApplyVO();
 			BeanUtils.copyProperties(firstBusinessApply,vo);
-			BasCustomer client = basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW);
+			BasCustomer client = basCustomerService.selectCustomerById(firstBusinessApply.getClientId(),Constant.CODE_CUS_TYP_OW,"");
 			if(client!=null){
 				vo.setClientName(client.getDescrC());
 				vo.setClientEnterpeiseId(client.getEnterpriseId());
 			}
-			BasCustomer supplier = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);
+			BasCustomer supplier = basCustomerService.selectCustomerById(firstBusinessApply.getSupplierId(),Constant.CODE_CUS_TYP_VE,"");
 			if(supplier!=null){
 				vo.setSupplierName(supplier.getDescrC());
 				vo.setSupplierEnterpeiseId(supplier.getEnterpriseId());

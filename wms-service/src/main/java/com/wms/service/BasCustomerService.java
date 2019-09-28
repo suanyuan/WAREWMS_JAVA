@@ -471,6 +471,26 @@ public class BasCustomerService extends BaseService {
 		return null;
 	}
 
+	public BasCustomer selectCustomerById(String customerID, String customertype,String isUse) {
+
+
+		BasCustomerQuery customerQuery = new BasCustomerQuery();
+		customerQuery.setCustomerid(customerID);
+		customerQuery.setCustomerType(customertype);
+		if(!StringUtils.isEmpty(isUse)){
+			customerQuery.setActiveFlag(isUse);
+		}
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCondition(customerQuery);
+
+
+		List<BasCustomer> list = basCustomerMybatisDao.queryByList(criteria);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+
 	public Json goonBasCustomer(String enterpriseId, String customertype) {
 		Json json = new Json();
 		BasCustomerQuery customerQuery = new BasCustomerQuery();
