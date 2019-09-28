@@ -191,6 +191,7 @@ public class FirstReviewLogService extends BaseService {
                     updateLog.setCheckDateHead(new Date());
                     updateLog.setCheckRemarkHead(remark);
                 }
+
                 //更新审核状态
                 updateLog.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_FAIL);
                 updateFirstReviewByNo(firstReviewLog.getReviewTypeId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);

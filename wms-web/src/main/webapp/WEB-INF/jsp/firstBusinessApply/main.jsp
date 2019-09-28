@@ -314,9 +314,7 @@ var doSearch = function(){
 //提交审核
 var doConfirm = function () {
     // var row = ezuiDatagrid1.datagrid('getSelected');
-    $.messager.progress({
-        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-    });
+
 
     var row = ezuiDatagrid1.datagrid('getSelections');
     var arrDel = new Array();
@@ -338,6 +336,9 @@ var doConfirm = function () {
     if(row){
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认提交审核吗', function(confirm) {
             if(confirm){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
                 $.ajax({
                     url : 'firstBusinessApplyController.do?confirmApply',
                     data : {id : arrDel.join(",")},
@@ -369,9 +370,6 @@ var doConfirm = function () {
 }
 //发起新申请
 var reApply = function () {
-    $.messager.progress({
-        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-    });
 
     var row = ezuiDatagrid1.datagrid('getSelections');
     var arrDel = new Array();
@@ -379,12 +377,11 @@ var reApply = function () {
     var flag = true;
     for(var i=0;i<row.length;i++){
         arrDel.push(row[i].applyId);
-        if(row[i].firstState!='40'){
+        if(row[i].firstState!='40' && row[i].firstState!='90'){
             flag =false;
         }
     }
     if(!flag){
-        $.messager.progress('close');
         $.messager.show({
             msg : '只有审核通过的申请才能发起新申请', title : '提示'
         });
@@ -392,8 +389,12 @@ var reApply = function () {
     }
     var row = ezuiDatagrid1.datagrid('getSelected');
     if(row){
+
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认发起新申请吗', function(confirm) {
             if(confirm){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
                 $.ajax({
                     url : 'firstBusinessApplyController.do?reApply',
                     data : {id : arrDel.join(",")},

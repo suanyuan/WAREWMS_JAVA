@@ -51,6 +51,7 @@ $(function() {
 			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
 			{field: 'checkDateQc',		title: '审核时间',	width: 150 },
 			{field: 'checkRemarkQc',		title: '备注',	width: 250 },
+
 			{field: 'checkIdHead',		title: '负责人审核',	width: 71 },
 			{field: 'checkDateHead',		title: '负责人审核时间',	width: 150 },
             {field: 'checkRemarkHead',		title: '备注',	width: 250 },
@@ -161,6 +162,7 @@ function showCheck() {
 //审核
 function doCheck() {
 
+
 	var a = 0;
     $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要进行审核操作吗', function(confirm) {
         if (confirm) {
@@ -173,6 +175,7 @@ function doCheck() {
 				}
             }
             if(a!=0){
+
                 $.messager.show({
                     msg : '新建和通过的未通过的不能审核', title : '<spring:message code="common.message.prompt"/>'
                 });

@@ -1,5 +1,7 @@
 package com.wms.service;
 
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -210,10 +212,29 @@ public class FirstBusinessApplyService extends BaseService {
 		return datagrid;
 	}
 
-	public Json addApply(String clientId,String supplierArr,String productArr,String productLine,boolean isReType){
+	@Transactional
+	public Json addApply(String clientId,String supplierArr,String productArr,String productLine,boolean isReType,String applyId){
 		try{
-//			isReType = false;
-//			commonService.getSupplier
+
+			String oldApplyId = "";
+			FirstBusinessApply oldApply = null;
+			GspProductRegisterSpecs oldProduct=null;
+			GspProductRegister oldgpr =null;
+			if(isReType){
+				//发起新申请
+				oldApplyId = applyId;
+				oldApply = firstBusinessApplyMybatisDao.queryById(applyId);
+				if(oldApply==null){
+					Json.error("单号不存在");
+				}
+				oldProduct  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(oldApply.getSpecsId());
+
+				GspProductRegisterSpecs oldProductR =gspProductRegisterSpecsMybatisDao.queryById(oldApply.getSpecsId());
+				oldgpr = gspProductRegisterMybatisDao.selectProductRegisterByCompare(oldProductR.getProductRegisterId());
+
+				BasCustomer oldSup =basCustomerMybatisDao.queryByIdType(oldApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);
+
+			}
 
 			if("".equals(clientId)){
 				return Json.error("请选择委托客户");
@@ -237,9 +258,6 @@ public class FirstBusinessApplyService extends BaseService {
 					}
 				}
 			}
-
-
-
 //			for(int a =0;arr.length>0;a++){
 			boolean flag = true;
 			int n = 0;
@@ -291,11 +309,11 @@ public class FirstBusinessApplyService extends BaseService {
 				firstReviewLogForm.setApplyState(Constant.CODE_CATALOG_FIRSTSTATE_NEW);
 				firstReviewLogForm.setReviewTypeId(no);
 				firstReviewLogForm.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-				//产品详情
-				GspProductRegisterSpecs g  = gspProductRegisterSpecsMybatisDao.queryById(specsId);
-				//产品注册证详情
+				//新产品详情
+				GspProductRegisterSpecs g = gspProductRegisterSpecsMybatisDao.queryById(specsId);
+				//新产品注册证详情
 				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
-				//供应商详情
+				//新供应商详情
 				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
 				if(sup==null){
 					return 	Json.error("供应商失效！");
@@ -331,8 +349,43 @@ public class FirstBusinessApplyService extends BaseService {
 							" 规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
 				}else if(isReType==true){
 					//发起新申请   变更内容
+//					//新申请信息
+					GspProductRegisterSpecs newGPRS  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(specsId);
+					GspProductRegisterSpecs newGPRSR =gspProductRegisterSpecsMybatisDao.queryById(specsId);
 
+					GspProductRegister newGPR = gspProductRegisterMybatisDao.selectProductRegisterByCompare(newGPRSR.getProductRegisterId());
 
+					if(oldApply.getSpecsId().equals(specsId)){
+						//无变更
+						content = "从申请单号"+oldApplyId+"变更到申请单号"+no+" :产品无变更,  ";
+						if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
+							ProductName = g.getProductName();
+						}
+						if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
+							SpecsName = g.getSpecsName();
+						}
+						if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+							ProductRegisterNo = gpr.getProductRegisterNo();
+						}
+						if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
+							supName = sup.getDescrC();
+						}
+						if(cli.getDescrC()!=null && !"".equals(cli.getDescrC())){
+							clientName = cli.getDescrC();
+						}
+						content =content+"委托方:"+clientName+" 供应商:"+supName+" 产品名称:"+ProductName+" 产品代码:"+g.getProductCode()+
+								" 规格:"+SpecsName+" 产品注册证:"+ProductRegisterNo;
+						;
+					}else{
+						CompareUtil<GspProductRegisterSpecs> compareUtil = new CompareUtil<GspProductRegisterSpecs>();
+						CompareUtil<GspProductRegister> compareUtilGPR = new CompareUtil<GspProductRegister>();
+
+						//Todo 需要把产品档案查出来用产品基础信息类接收 然后对比新旧信息 存入内容
+						content = "从申请单号"+oldApplyId+"变更到申请单号"+no+"["+
+								compareUtil.compareT(oldProduct,newGPRS,GspProductRegisterSpecs.class.getName(),GspProductRegisterSpecs.class.getSimpleName(),"")+
+								compareUtilGPR.compareT(oldgpr,newGPR,GspProductRegister.class.getName(),GspProductRegister.class.getSimpleName(),"")+
+								"]";
+					}
 
 				}
 
@@ -348,6 +401,160 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		return Json.error("申请失败");
 	}
+
+
+	public class CompareUtil<T> {
+
+		public List<String> compareT(T t1,T t2,String className,String simpleClassName,String type){
+			List<String> list = new ArrayList<String>();
+			//内容没改变直接返回
+			String result ="";
+			String s = "1";
+			String b = "1";
+			if(t1!=null){
+				if(t1.equals(t2)){
+					list.add(result);
+					return list;
+				}
+			}else {
+				s = "0";
+			}
+			if(t2==null){
+				b= "0";
+			}
+			try {
+				Class c = Class.forName(className);
+				//读取t1和t2中的所有属性
+				Field[] fields = c.getDeclaredFields();
+				for (int i = 0; i < fields.length; i++) {
+					Field field =fields[i];
+					field.setAccessible(true);
+					Object value1=null;
+					Object value2=null;
+					if("1".equals(s)){
+						value1=field.get(t1);
+					}
+//					field.get(t1);
+					if("1".equals(b)){
+						value2=field.get(t2);
+					}
+					Date date = new Date();
+					SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+					try{
+						value2 = sdf.format(value2);
+					}catch (Exception e){
+					}
+					try{
+						value1 = sdf.format(value1);
+					}catch (Exception e){
+					}
+					//判断这两个值是否相等
+					if(!isValueEquals(value1,value2)){
+//						Map map = new HashMap();
+//						map.put("name",field.getName());
+//						map.put("before",value1);
+//						map.put("after",value2);
+//						list.add(map);
+						if("GspProductRegisterSpecs".equals(simpleClassName)){
+
+							result = " 原产品"+GspProductRegisterSpecsChange(field.getName())+": "+(value1==null|| value1==""? "无":value1)+
+									",变更为"+": "+(value2==null|| value2==""? "无":value2);
+						}else if("GspProductRegister".equals(simpleClassName)){
+
+							result = " 原注册证"+GspProductRegisterChange(field.getName())+": "+(value1==null|| value1==""? "无":value1)+
+									",变更为 "+":"+(value2==null || value2==""? "无":value2);
+						}
+
+						list.add(result);
+					}
+
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			return list;
+		}
+		private boolean isValueEquals(Object value1, Object value2) {
+			if(value1==null&&value2==null){
+				return true;
+			}
+			if(value1==null&&value2!=null){
+				return false;
+			}
+			if(value1.equals(value2)){
+				return true;
+			}
+			return false;
+		}
+		public String GspProductRegisterChange(String zd){
+			if("productRegisterNo".equals(zd))return "产品注册证/备案";
+			if("approvalDepartment".equals(zd))return "审批部门";
+			if("productNameMain".equals(zd))return "产品名称";
+			if("approveDate".equals(zd))return "批准日期";
+			if("classifyId".equals(zd))return "管理分类";
+			if("productRegisterExpiryDate".equals(zd))return "有效期至";
+			if("productRegisterVersion".equals(zd))return "注册证/备案版本";
+			if("attachmentUrl".equals(zd))return "注册证/备案附件";
+			if("classifyCatalog".equals(zd))return "分类目录";
+			if("structureAndComposition".equals(zd))return "结构及组成";
+			if("productionAddress".equals(zd))return "产地";
+			if("applyScope".equals(zd))return "适用范围";
+			if("storageConditions".equals(zd))return "储存条件";
+			if("expectUse".equals(zd))return "预期用途";
+			if("transportConditionMain".equals(zd))return "产品运输条件";
+			if("mainPart".equals(zd))return "主要组成部分";
+			if("enterpriseId".equals(zd))return "注册人名称/生产企业";
+			if("productRegsiterUrl".equals(zd))return "附件";
+			if("licenseOrRecordNol".equals(zd))return "生产许可证号/备案号";
+			if("otherContent".equals(zd))return "其他内容";
+			if("productRegisterAddress".equals(zd))return "注册人住所";
+			if("remark".equals(zd))return "备注";
+			if("productProductionAddress".equals(zd))return "生产地址";
+			if("agentName".equals(zd))return "代理人名称";
+			if("agentAddress".equals(zd))return "代理人住所";
+			return "";
+		}
+		public String GspProductRegisterSpecsChange(String zd){
+			if("medicalDeviceMark".equals(zd))return "医疗器械标志";
+			if("productName".equals(zd))return "产品名称";
+			if("productRegisterNo".equals(zd))return "注册证编号";
+			if("productRegisterAddress".equals(zd))return "产品描述";
+			if("remark".equals(zd))return "产品代码";
+			if("productProductionAddress".equals(zd))return "单位";
+			if("agentName".equals(zd))return "规格";
+			if("agentAddress".equals(zd))return "包装单位";
+			if("otherContent".equals(zd))return "型号";
+			if("packingRequire".equals(zd))return "包装要求";
+			if("packingUnit".equals(zd))return "包装规格";
+			if("llong".equals(zd))return "长";
+			if("transportCondition".equals(zd))return "运输条件";
+			if("wide".equals(zd))return "宽";
+			if("storageCondition".equals(zd))return "储存条件";
+			if("hight".equals(zd))return "高";
+			if("enterpriseName".equals(zd))return "生产企业";
+			if("wight".equals(zd))return "重量";
+			if("licenseOrRecordNo".equals(zd))return "生产许可证号/备案号";
+			if("barCode".equals(zd))return "商品条码";
+			if("productionAddress".equals(zd))return "产地";
+			if("alternatName1".equals(zd))return "自赋码1";
+			if("isDoublec".equals(zd))return "双证";
+			if("alternatName2".equals(zd))return "自赋码2";
+			if("isCertificate".equals(zd))return "产品合格证";
+			if("alternatName3".equals(zd))return "自赋码3";
+			if("attacheCardCategory".equals(zd))return "附卡类别";
+			if("alternatName4".equals(zd))return "自赋码4";
+			if("coldHainMark".equals(zd))return "冷链标志";
+			if("alternatName5".equals(zd))return "自赋码5";
+			if("sterilizationMarkers".equals(zd))return "灭菌标志";
+			if("maintenanceCycle".equals(zd))return "养护周期(天)";
+
+			return "";
+		}
+
+	}
+
 
 	public Json editApply(String id,String clientId,String supplierArr,String productArr,String productLine){
 
@@ -484,8 +691,19 @@ public class FirstBusinessApplyService extends BaseService {
                 firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 
                 //更新申请记录
-                firstReviewLogService.updateFirstReviewByNo(DelId,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+//                firstReviewLogService.updateFirstReviewByNo(DelId,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
 
+                FirstReviewLog f = new FirstReviewLog();
+                f.setReviewTypeId(DelId);
+                f.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+                f.setCheckDateQc(null);
+                f.setCheckIdQc("");
+                f.setCheckRemarkQc("");
+                f.setCheckIdHead("");
+                f.setCheckDateHead(null);
+                f.setCheckRemarkHead("");
+
+                firstReviewLogMybatisDao.updateBytiJIAOSHENH(f);
 
 
 
@@ -518,6 +736,8 @@ public class FirstBusinessApplyService extends BaseService {
 //            for(true){
 //
 //            }
+            boolean type = true;
+            String content = "";
             for(String DelId : arrId) {
                 //TODO 失效已下发的数据
                 dataPublishService.cancelData(DelId);
@@ -550,8 +770,17 @@ public class FirstBusinessApplyService extends BaseService {
 //					for(FirstBusinessProductApply f : list){
 //						arrlist.add(f.getSpecsId());
 //					}
-                        return addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true);
+
+
+                        Json result11=   addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
+                        if(!result11.isSuccess()){
+                            content = content+"  单号"+DelId+" "+ result11.getMsg();
+                            type =false;
+                        }
                     }
+                }
+                if(!type){
+                    return Json.error(content);
                 }
             }
 

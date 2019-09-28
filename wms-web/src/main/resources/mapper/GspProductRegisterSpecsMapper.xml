@@ -332,6 +332,23 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
     and is_use = 1;
     </select>
 
+    <!-- 根据id查询 产品注册证规格关联产品注册证 -->
+    <select id="selectProductByCompare" resultMap="BaseResultMap" parameterType="Object">
+	select medical_device_mark,product_name,t2.product_register_no,product_remark,product_code,t3.codename_c unit,specs_name,
+	packaging_unit,product_model,packing_require,packing_unit,`long`,transport_condition,wide,storage_condition,
+	hight,product_enterprise_name,wight,LicenseOrRecordNo,bar_code,t1.production_address,alternat_name1,is_doublec,
+	alternat_name2,is_certificate,alternat_name3,attache_card_category,alternat_name4,t4.codename_c cold_hain_mark,alternat_name5,
+	sterilization_markers,maintenance_cycle
+	from gsp_product_register_specs t1
+	LEFT JOIN gsp_product_register t2 ON t1.product_register_id = t2.product_register_id
+	LEFT JOIN (select * from bas_codes where codeid = 'UOM') t3 on t1.unit = t3.code
+	LEFT JOIN (select * from bas_codes where codeid = 'LL_TYP') t4 on t1.cold_hain_mark = t4.code
+
+	where specs_id = #{specsId}
+    </select>
+
+
+
     <!-- 产品注册证规格 列表总数-->
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
         select count(1) from gsp_product_register_specs t1 left join gsp_product_register t2
