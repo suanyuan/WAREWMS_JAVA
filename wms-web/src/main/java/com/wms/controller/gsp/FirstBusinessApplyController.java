@@ -172,7 +172,7 @@ public class FirstBusinessApplyController {
 		if(!StringUtils.isEmpty(id)){
 			return firstBusinessApplyService.editApply(id,clientId,supplierArr,productArr,productLine);
 		}
-		return firstBusinessApplyService.addApply(clientId,supplierArr,productArr,productLine,isReType);
+		return firstBusinessApplyService.addApply(clientId,supplierArr,productArr,productLine,isReType,"");
 	}
 
 	@Login

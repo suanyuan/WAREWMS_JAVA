@@ -322,6 +322,21 @@
 		from gsp_product_register r where r.product_register_id = #{productRegisterId}
 	</select>
 
+	<!-- 根据id查询 产品注册证需要比较的字段 -->
+	<select id="selectProductRegisterByCompare"  resultMap="BaseResultMap" parameterType="Object">
+		select product_register_no,approval_department,product_name_main,approve_date,t2.codename_c classify_id,
+		product_register_expiry_date,t3.codename_c product_register_version,attachment_url,classify_catalog,structure_and_composition,
+		production_address,apply_scope,storage_conditions,expect_use,transport_condition_main,main_part,
+		t4.enterprise_name enterprise_id,product_regsiter_url,license_or_record_no,other_content,product_register_address,t1.remark,
+		product_production_address,agent_name,agent_address
+		from gsp_product_register t1
+		LEFT JOIN (select * from bas_codes where codeid = 'CATALOG_CLASSIFY') t2 on t1.classify_id = t2.code
+		LEFT JOIN (select * from bas_codes where codeid = 'CATALOG_VERSION') t3 on t1.product_register_version = t3.code
+		LEFT JOIN gsp_enterprise_info t4 ON t1.enterprise_id = t4.enterprise_id
+		where product_register_id = #{productRegisterId}  ORDER BY t1.create_date desc LIMIT 1
+
+	</select>
+
 	<!-- 产品注册证 列表总数-->
 	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from gsp_product_register r left join bas_codes vc on r.version = vc.code

@@ -30,4 +30,10 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     //根据specsid查询 最新有效的该产品
     public <T> T selectNewBySpecsId(Object id);
 
+
+    //查询需要比较的字段
+    public <T> T selectProductByCompare(Object id);
+
+
+
 }

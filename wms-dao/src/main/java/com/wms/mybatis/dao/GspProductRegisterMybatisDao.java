@@ -33,4 +33,9 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      * @return ~
      */
     List<PdaGspProductRegister> queryAllByNo(@Param("registerNo") String registerNo);
+
+
+    //查询需要比较的字段
+    public <T> T selectProductRegisterByCompare(Object id);
+
 }

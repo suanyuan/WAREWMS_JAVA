@@ -379,7 +379,7 @@ var reApply = function () {
     var flag = true;
     for(var i=0;i<row.length;i++){
         arrDel.push(row[i].applyId);
-        if(row[i].firstState!='40'){
+        if(row[i].firstState!='40' && row[i].firstState!='90'){
             flag =false;
         }
     }

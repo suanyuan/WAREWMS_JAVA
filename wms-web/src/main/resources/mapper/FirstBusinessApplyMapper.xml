@@ -284,10 +284,8 @@ where 1=1
 	union (select customerid,descr_c from bas_customer_history where customer_type = 'OW'  )) eic on t1.client_id = eic.customerid
 	left join ((select customerid,descr_c from bas_customer where active_flag ='1' and customer_type = 'VE')
 	union (select customerid,descr_c from bas_customer_history where customer_type = 'VE' )) eis on t1.supplier_id = eis.customerid
-
 	<!-- 查询条件 -->
 	<include refid="Example_Where_Clause_Page"/>
-
 </select>
 
 <!-- 根据id，修改记录-->
