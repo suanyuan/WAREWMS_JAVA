@@ -142,7 +142,7 @@
                 isUse : '1',
                 activeFlag :'1',
                 customerType:'VE',
-                customer: cusId,
+                //TODO 暂时放开所有供应商customer: cusId,
             },
             fit:true,
             collapsible:false,
@@ -460,7 +460,8 @@
 		console.log($("#ezuiFormDetail #clientId").val());
         // var cusId = $("#ezuiFormDetail #clientId").val();
         console.log(supId);
-        var a = 0;
+        //TODO 暂时放开不关联供应商
+        /*var a = 0;
         if(cusId!=null){
 			$.ajax({
 				url : sy.bp()+"/commonController.do?getSupplier",
@@ -488,7 +489,7 @@
                 msg : '该供应商未与该委托客户关联', title : '提示'
             });
             return;
-		}
+		}*/
 
         // $("#specsId").val();
         // $("#productNameP").textbox("getValue");

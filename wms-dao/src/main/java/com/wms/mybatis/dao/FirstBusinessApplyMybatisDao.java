@@ -30,5 +30,10 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	//通过产品注册证id查询其下的产品的首营申请
 	List<FirstBusinessApply> selectByProductRegisterId(Object id);
 
-
+	/**
+	 * 更新审核中或者新建状态单据供应商编号
+	 * @param supplerId
+	 * @return
+	 */
+	Long updateCheckingApplySupplierNo(String supplerId);
 }

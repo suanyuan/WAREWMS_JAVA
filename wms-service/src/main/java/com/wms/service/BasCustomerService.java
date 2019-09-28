@@ -367,7 +367,7 @@ public class BasCustomerService extends BaseService {
 //		basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
 		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
-		System.out.println();
+//		System.out.println();
 //		BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
 //		String customerId = basCustomer.getCustomerid();
 

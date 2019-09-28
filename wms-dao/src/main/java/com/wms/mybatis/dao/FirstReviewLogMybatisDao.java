@@ -11,7 +11,7 @@ public interface FirstReviewLogMybatisDao extends BaseDao {
 	
 	Long updateFirstReviewByNo(@Param("no")String no, @Param("state")String state, @Param("editId")String editId);
 
-
+    Long updateFirstReviewBySupplierId(@Param("state")String state, @Param("editId")String editId,@Param("supplerId")String supplerId);
 
     public <T> void updateBytiJIAOSHENH(T t);
 

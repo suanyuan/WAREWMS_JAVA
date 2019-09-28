@@ -169,6 +169,10 @@ public class FirstBusinessApplyController {
 	@ResponseBody
 	public Json apply(String id,String clientId,String supplierArr,String productArr,String productLine) throws Exception {
 		boolean isReType = false;
+		if(StringUtils.isEmpty(productLine)){
+			return Json.error("产品线不能为空");
+		}
+
 		if(!StringUtils.isEmpty(id)){
 			return firstBusinessApplyService.editApply(id,clientId,supplierArr,productArr,productLine);
 		}

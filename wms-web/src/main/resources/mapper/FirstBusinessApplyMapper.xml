@@ -293,6 +293,9 @@ where 1=1
   update first_business_apply set first_state=#{state} where apply_id=#{no}
  </update>
 
-
+	<!-- 根据id，修改记录-->
+<update id="updateCheckingApplySupplierNo" parameterType="Object" >
+  update first_business_apply set first_state = 90,is_use=0 where first_state in ('00','10') and supplier_id = #{supplerId}
+ </update>
 
 </mapper>   

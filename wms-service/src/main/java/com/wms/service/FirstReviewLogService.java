@@ -219,6 +219,14 @@ public class FirstReviewLogService extends BaseService {
 		return Json.error("");
 	}
 
+	public Json updateFirstReviewBySupplierId(String state,String supplierId){
+		Long result = firstReviewLogMybatisDao.updateFirstReviewBySupplierId(state,SfcUserLoginUtil.getLoginUser().getId(),supplierId);
+		if(result>0){
+			return Json.success("");
+		}
+		return Json.error("");
+	}
+
 
 	public void exportFirstReviewLogDataToExcel(HttpServletResponse response, FirstReviewLogQuery form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());

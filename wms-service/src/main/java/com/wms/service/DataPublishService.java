@@ -3,6 +3,7 @@ package com.wms.service;
 import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.utils.BeanUtils;
@@ -62,7 +63,8 @@ public class DataPublishService extends BaseService {
     private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
 
 
     /**
@@ -346,6 +348,15 @@ public class DataPublishService extends BaseService {
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
             //换证报废 customerId 给错 不是APSUP0000000087申请单号  应是GYS000000072
 
+            //更新产品申请单中的
+            BasCustomerQuery basCustomerQuery = new BasCustomerQuery();
+            basCustomerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
+            basCustomerQuery.setEnterpriseId(supplier.getEnterpriseId());
+
+            BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(no);
+
+            firstReviewLogService.updateFirstReviewBySupplierId(Constant.CODE_CATALOG_CHECKSTATE_FAIL,basCustomer.getCustomerid());
+            firstBusinessApplyService.updateCheckingApplySupplierNo(basCustomer.getCustomerid());
 
             return basCustomerService.editBasCustomerByEnterpriseId(form);
 
@@ -426,9 +437,12 @@ public class DataPublishService extends BaseService {
                 skuQuery.setCustomerid(skuForm.getCustomerid());
                 skuQuery.setSku(skuForm.getSku());
                 BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
-                BasSkuHistory basSkuHistory = new BasSkuHistory();
-                BeanUtils.copyProperties(basSku,basSkuHistory);
-                basSkuHistoryMybatisDao.add(basSkuHistory);
+
+                if(basSku!=null){
+                    BasSkuHistory basSkuHistory = new BasSkuHistory();
+                    BeanUtils.copyProperties(basSku,basSkuHistory);
+                    basSkuHistoryMybatisDao.add(basSkuHistory);
+                }
 
                 //skuForm
                 basSkuService.editBasSku(skuForm);
