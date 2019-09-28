@@ -16,6 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,6 +90,8 @@ public class GspVerifyService {
      * @param lotatt06 注册证号
      */
     public Json verifyOperate(String customerId,String supplierId,String sku,String lotatt01,String lotatt02, String lotatt06){
+
+        Json json = new Json();
 
         if(StringUtils.isEmpty(customerId)){
             return Json.error("缺少货主信息，首营审核不通过");
@@ -296,6 +300,15 @@ public class GspVerifyService {
                     if(checkDate(lotatt01,endDate)>0){
                         return Json.error("生产日期超出注册证失效日期："+sku);
                     }
+
+                    for (PdaGspProductRegister pdaGspProductRegister : allRegister) {
+
+                        if (betweenOn(lotatt01, pdaGspProductRegister.getApproveDate(), pdaGspProductRegister.getProductExpiryDate())) {
+
+                            json.setObj(pdaGspProductRegister);
+                            break;
+                        }
+                    }
                 }
 
                 if(!StringUtil.isEmpty(lotatt02)){
@@ -451,6 +464,26 @@ public class GspVerifyService {
 
     private static int checkDate(Date startDate,Date endDate){
         return startDate.compareTo(endDate);
+    }
+
+    private static boolean betweenOn(String target, Date startTime, String endDate) {
+
+        if(target == null || startTime == null || endDate == null) return false;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+
+            long start = startTime.getTime();
+            long end = dateFormat.parse(endDate).getTime();
+
+            long targetDate = dateFormat.parse(target).getTime();
+
+            return targetDate >= Math.min(start, end) && targetDate <= Math.max(start, end); // start <= value <= end
+        } catch (ParseException e) {
+
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static void main(String[] args){
