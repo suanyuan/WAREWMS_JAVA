@@ -170,7 +170,7 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
             orderHeaderForNormal.setOrdertime(new Date());
             orderHeaderForNormal.setEdittime(new Date());
-            orderHeaderForNormal.setEdisendflag(Constant.IS_USE_YES);
+            orderHeaderForNormal.setEdisendflag(Constant.IS_USE_NO);
             orderHeaderForNormal.setArchiveflag(Constant.IS_USE_YES);
             orderHeaderForNormalMybatisDao.add(orderHeaderForNormal);
             json.setSuccess(true);
