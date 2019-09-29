@@ -199,7 +199,7 @@ where 1=1
         select
         <include refid="Base_Column_List"/>
         from doc_asn_certificate
-        where customerid = #{customerid} and sku = #{sku} and rtrim(lotatt04) = #{lotatt04}
+        where customerid = #{customerid} and sku = #{sku} and LTRIM(lotatt04) = #{lotatt04}
     </select>
 
 </mapper>   
