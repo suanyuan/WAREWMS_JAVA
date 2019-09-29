@@ -1,8 +1,11 @@
 package com.wms.service.importdata;
 
+import com.wms.entity.BasLocation;
 import com.wms.entity.ImportDocPaData;
+import com.wms.mybatis.dao.BasLocationMybatisDao;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
+import com.wms.query.BasLocationQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.DocPaDetailsService;
 import com.wms.service.DocPaHeaderService;
@@ -22,9 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("importPaDataService")
 public class ImportPaDataService {
@@ -34,6 +35,9 @@ public class ImportPaDataService {
 
     @Autowired
     private DocPaDetailsService docPaDetailsService;
+
+    @Autowired
+    private BasLocationMybatisDao basLocationMybatisDao;
 
     /**
      * 导入上架结果
@@ -82,6 +86,9 @@ public class ImportPaDataService {
             }
 
             //更新上架件数
+            json = validateLocation(importDataList);
+            if (!json.isSuccess()) return json;
+
             this.save(importDataList, resultMsg);
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -233,6 +240,48 @@ public class ImportPaDataService {
         return map;
     }
 
+    private Json validateLocation(List<PdaDocPaDetailForm> importDataList) {
+
+        StringBuilder resultMsg = new StringBuilder();
+        BasLocation loc;
+        BasLocationQuery locQuery = new BasLocationQuery();
+        Json json = Json.success("");
+
+        Map<String, Object> existLocation = new HashMap<>();
+        for (PdaDocPaDetailForm pdaDocPaDetailForm : importDataList) {
+
+            if (StringUtils.isNotEmpty(pdaDocPaDetailForm.getUserdefine1())) {
+
+                if (existLocation.get(pdaDocPaDetailForm.getUserdefine1()) != null) {
+
+                    if (existLocation.get(pdaDocPaDetailForm.getUserdefine1()).equals("0")) {
+
+                        json.setSuccess(false);
+                        resultMsg.append("库位编码：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
+                        continue;
+                    }else {//1
+
+                        continue;
+                    }
+                }
+
+                locQuery.setLocationid(pdaDocPaDetailForm.getUserdefine1());
+                loc = basLocationMybatisDao.queryById(locQuery);
+                if (loc == null) {
+
+                    json.setSuccess(false);
+                    resultMsg.append("，库位编码：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
+                    existLocation.put(pdaDocPaDetailForm.getUserdefine1(), "0");
+                }else {
+
+                    existLocation.put(pdaDocPaDetailForm.getUserdefine1(), "1");
+                }
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
     @Transactional
     public void save(List<PdaDocPaDetailForm> importDataList, StringBuilder resultMsg) {
 
@@ -244,7 +293,7 @@ public class ImportPaDataService {
                 resultMsg.append("任务行号：").append(paDetailForm.getPalineno()).append(" 上架导入成功").append(" ");
             }else {
 
-                resultMsg.append("任务行号：").append(paDetailForm.getPalineno()).append(" 上架导入失败").append(" ");
+                resultMsg.append("任务行号：").append(paDetailForm.getPalineno()).append(" 上架导入失败，").append(paResult.getMsg()).append(" ");
             }
         }
 
