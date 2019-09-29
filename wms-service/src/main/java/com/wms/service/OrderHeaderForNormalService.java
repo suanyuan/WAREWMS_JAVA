@@ -1069,8 +1069,8 @@ public class OrderHeaderForNormalService extends BaseService {
                                 form.setField("card." + (j), getYesNo(basSku.getSkuGroup2()));
                                 form.setField("report." + (j), getYesNo(basSku.getSkuGroup8()));
                                 form.setField("remark." + (j), "");
-                                totalQtyE += detailsList.get(row * i + j).getQtyallocated();
-                                totalQty += detailsList.get(row * i + j).getQtyallocatedEach();
+                                totalQty += detailsList.get(row * i + j).getQtyallocated();
+                                totalQtyE += detailsList.get(row * i + j).getQtyallocatedEach();
                             }
                         }
                         if(orderHeaderForNormal.getNotes() == null){
