@@ -51,16 +51,24 @@ $(function() {
 
 			{field: 'specsId',		title: '主键',	width: 25 ,hidden:true},
             {field: 'isUse',		title: '是否有效',	width: 71, formatter:isUseFormatter},
-			{field: 'specsName',		title: '规格',	width: 150 },
 			{field: 'productCode',		title: '产品代码',	width: 180 },
-			{field: 'productName',		title: '产品名称',	width: 200 },
+            {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
+
+            {field: 'productName',		title: '产品名称',	width: 200 },
 			{field: 'productRemark',		title: '产品描述',	width:350 },
-			{field: 'productModel',		title: '型号',	width: 100 },
-			{field: 'productionAddress',		title: '产地',	width: 150 },
+            {field: 'specsName',		title: '规格',	width: 150 },
+            {field: 'productModel',		title: '型号',	width: 100 },
+            {field: 'enterpriseName',		title: '生产企业',	width: 100 },
+            {field: 'packingUnit',		title: '包装规格',	width: 80 },
+            {field: 'storageCondition',		title: '存储条件',	width: 100 },
+            {field: 'unit',		title: '单位',	width: 50 ,formatter : unitFormatter },
+
+            {field: 'maintenanceCycle',		title: '养护周期',	width: 50 ,formatter:day },
+            {field: 'isDoublec',		title: '双证',	width: 50 ,formatter:yesOrNoFormatter },
+
+			// {field: 'productionAddress',		title: '产地',	width: 150 },
 			//{field: 'barCode',		title: '商品条码',	width: 25 },
-			{field: 'unit',		title: '单位',	width: 50 ,formatter : unitFormatter },
-			{field: 'packingUnit',		title: '包装规格',	width: 80 },
-            {field: 'attacheCardCategory',		title: '附卡类别',	width: 100 },
+            // {field: 'attacheCardCategory',		title: '附卡类别',	width: 100 },
 			// {field: 'categories',		title: '分类目录',	width: 25 },
 			// {field: 'conversionRate',		title: '换算率',	width: 25 },
 			// {field: 'llong',		title: '长',	width: 25 },
@@ -69,15 +77,13 @@ $(function() {
 			// {field: 'productLine',		title: '管理分类',	width: 25 },
 			// {field: 'manageCategories',		title: '管理分类',	width: 25 },
 			// {field: 'packingRequire',		title: '包装要求',	width: 25 },
-			// {field: 'storageCondition',		title: '存储条件',	width: 25 },
 			// {field: 'transportCondition',		title: '运输条件',	width: 25 },
 
 
-            {field: 'productRegisterNo',		title: '注册证编号',	width: 200 },
 
 
 
-            {field: 'isDoublec',		title: '双证',	width: 90, formatter:yesOrNoFormatter},
+            // {field: 'isDoublec',		title: '双证',	width: 90, formatter:yesOrNoFormatter},
             {field: 'isCertificate',		title: '产品合格证',	width: 90, formatter:yesOrNoFormatter},
 
 

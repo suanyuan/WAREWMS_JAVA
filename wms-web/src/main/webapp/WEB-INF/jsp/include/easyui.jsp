@@ -30,6 +30,24 @@
 		return "<a onclick=\"showUrl('"+value+"','"+supContractNo+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
 	}
 
+    //注册证/备案附件  显示文件链接
+    function showProductRegisteUrlFile(value,row,index){
+        var attachmentUrl=row.attachmentUrl;
+        if(attachmentUrl!=null && attachmentUrl!=""){
+            return "<a onclick=\"showUrl('"+value+"','"+attachmentUrl+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }else{
+            return "<a>无</a>";
+		}
+    }
+    //质量合格证照片  显示文件链接
+    function showcertificateContextFile(value,row,index){
+        var certificateContext=row.certificateContext;
+        if(certificateContext!=null && certificateContext!=""){
+            return "<a onclick=\"showUrl('"+value+"','"+certificateContext+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }else{
+            return "<a>无</a>";
+        }
+    }
     var firstStateFormatter = function(value,row,index) {
         if(value == "00"){
             return "新建";

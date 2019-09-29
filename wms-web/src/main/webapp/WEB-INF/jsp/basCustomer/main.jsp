@@ -73,7 +73,7 @@ $(function() {
 
             {field: 'customerid',		title: '客户代码',	width: 100 },
             {field: 'descrC',		title: '客户名称',	width: 250 },
-            {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 100 },
+            {field: 'enterpriseNo',		title: '企业代码 ',	width: 100 },
             {field: 'shorthandName',		title: '简称 ',	width: 100 },
             {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
             {field: 'contacts',		title: '联系人 ',	width: 80 },
@@ -90,8 +90,9 @@ $(function() {
             /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
-            {field: 'notes',		title: '备注 ',	width: 200 },
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110,formatter:yesOrNoFormatter},
+
+            {field: 'notes',		title: '备注 ',	width: 200 },
 
 		]],
 		onDblClickCell: function(index,field,value){
@@ -521,8 +522,8 @@ var doSearch = function(){
         /*operateType : $('#operateType').combobox('getValue'),*/
 		activeFlag : $('#activeFlagQ').combobox('getValue'),
 
-        descrC : $('#descrCQ').val()
-
+        descrC : $('#descrCQ').val(),
+        enterpriseNo :$('#entertpriseNoQ').val(),
 	});
 };
 

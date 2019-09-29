@@ -60,18 +60,33 @@ $(function() {
 
             {field: 'customerid',		title: '货主代码',	width: 100},
             {field: 'clientName',		title: '货主名称',	width: 100},
-
-			{field: 'descrC',		title: '规格',	width: 150 },
-			{field: 'descrE',		title: '型号',	width: 150 },
+            {field: 'reservedfield09',		title: '医疗器械标志',	width: 100,formatter:yesOrNoFormatter},
             {field: 'sku',		title: '产品代码',	width: 150 },
-			{field: 'packid',		title: '包装规格代码',	width: 100,hidden:true },
-            {field: 'descr',		title: '包装描述',	width: 100},
-			{field: 'reservedfield01',		title: '产品名称',	width: 200 },
-			{field: 'reservedfield02',		title: '产品描述',	width: 300 },
-			{field: 'reservedfield03',		title: '注册证号',	width: 180 },
+            {field: 'reservedfield03',		title: '注册证号',	width: 180 },
+
+
+            {field: 'reservedfield04',		title: '管理分类',	width: 180 },
+            {field: 'reservedfield05',		title: '分类目录',	width: 180 },
+            {field: 'reservedfield01',		title: '产品名称',	width: 200 },
+            {field: 'reservedfield02',		title: '产品描述',	width: 300 },
+
+
+
+            {field: 'descrC',		title: '规格',	width: 150 },
+			{field: 'descrE',		title: '型号',	width: 150 },
+            {field: 'reservedfield14',		title: '生产企业',	width: 150 },
+
+
+            // {field: 'packid',		title: '包装规格代码',	width: 100,hidden:true },
+            {field: 'descr',		title: '包装规格',	width: 100},
+
+            {field: 'skuGroup4',		title: '储存条件',	width: 100},
+            {field: 'defaultreceivinguom',		title: '单位',	width: 100,formatter:unitFormatter},
+            {field: 'reservedfield10',		title: '养护周期（天）',	width: 100,formatter:day},
+            {field: 'skuGroup7',		title: '双证',	width: 100,formatter:yesOrNoFormatter},
 
             {field: 'productLineName',		title: '产品线',	width: 100 },
-            {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
+            // {field: 'skuGroup2',		title: '附卡类别',	width: 100 },
 
             {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
             // {field: 'supplierNum',		title: '产品供应商数量',	width: 250 },
@@ -1001,7 +1016,7 @@ var downloadTemplate = function(){
 
 
 				<tr>
-					<th>存储条件</th>
+					<th>储存条件</th>
 					<td><input type='text' name='skuGroup4' class='easyui-textbox' size='16' /></td>
 
 
