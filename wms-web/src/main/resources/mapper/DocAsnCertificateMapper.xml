@@ -109,35 +109,34 @@ where 1=1
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update doc_asn_certificate set sku=#{sku},lotatt04=#{lotatt04},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},certificate_context=#{certificateContext} where customerid=#{customerid}
+  update doc_asn_certificate set sku=#{sku},lotatt04=#{lotatt04},edittime=#{edittime},editwho=#{editwho},certificate_context=#{certificateContext} where customerid=#{customerid}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
 	update doc_asn_certificate set 
 	<trim  suffixOverrides="," >
-	<if test="sku != null  ">
-		sku=#{sku},
-	</if>
-	<if test="lotatt04 != null  ">
-		lotatt04=#{lotatt04},
-	</if>
-	<if test="addtime != null  ">
-		addtime=#{addtime},
-	</if>
-	<if test="addwho != null  ">
-		addwho=#{addwho},
-	</if>
-	<if test="edittime != null  ">
-		edittime=#{edittime},
-	</if>
+	<!--<if test="sku != null  ">-->
+		<!--sku=#{sku},-->
+	<!--</if>-->
+	<!--<if test="lotatt04 != null  ">-->
+		<!--lotatt04=#{lotatt04},-->
+	<!--</if>-->
+	<!--<if test="addtime != null  ">-->
+		<!--addtime=#{addtime},-->
+	<!--</if>-->
+	<!--<if test="addwho != null  ">-->
+		<!--addwho=#{addwho},-->
+	<!--</if>-->
+
 	<if test="editwho != null  ">
+		edittime=now(),
 		editwho=#{editwho},
 	</if>
 	<if test="certificateContext != null  ">
 		certificate_context=#{certificateContext},
 	</if>
-	</trim> where customerid=#{customerid}
+	</trim> where customerid=#{customerid} and sku=#{sku}  and lotatt04=#{lotatt04}
 </update>
 
 <!-- 删除记录 -->

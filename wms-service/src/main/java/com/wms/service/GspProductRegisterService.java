@@ -154,7 +154,7 @@ public class GspProductRegisterService extends BaseService {
 						if(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING.equals(f.getFirstState())){
 							return Json.error("注册证关联产品存在首营审核中的申请，无法换证！");
 						}else if(Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(f.getFirstState())){
-
+							return Json.error("注册证关联产品存在首营新建的申请，无法换证！");
 						}else if(Constant.CODE_CATALOG_FIRSTSTATE_PASS.equals(f.getFirstState())){
 
 						}
