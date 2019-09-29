@@ -53,6 +53,8 @@ $(function() {
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
             {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
 			{field: 'productRegisterNo',		title: '注册证编号/备案号',	width: 150 },
+            {field: 'attachmentUrl',		title: '注册证编号/备案附件',	width: 150,formatter:showProductRegisteUrlFile },
+
             {field: 'classifyId',		title: '管理分类',	width: 60 },
             {field: 'classifyCatalog',		title: '分类目录',	width: 280 },
 			{field: 'productNameMain',		title: '产品名称',	width: 170 },
@@ -62,6 +64,7 @@ $(function() {
 			{field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 ,formatter:function (value,row,index) {
                     return dateFormat2(value);
                 }},
+
 			{field: 'productRegisterVersionName',		title: '注册证/备案版本',	width: 100 },
 			{field: 'checkerId',		title: '审核人',	width: 100 },
 			{field: 'checkDate',		title: '审核时间',	width: 150 },
