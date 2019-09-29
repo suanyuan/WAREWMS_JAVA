@@ -93,7 +93,7 @@ public class DocAsnCertificateService extends BaseService {
 		Json json = new Json();
 		//DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.findById(docAsnCertificateForm.getSku());
 		//BeanUtils.copyProperties(docAsnCertificateForm, docAsnCertificate);
-		docAsnCertificateMybatisDao.update(docAsnCertificateForm);
+		docAsnCertificateMybatisDao.updateBySelective(docAsnCertificateForm);
 		json.setSuccess(true);
 		return json;
 	}

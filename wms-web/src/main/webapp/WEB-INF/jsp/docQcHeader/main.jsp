@@ -354,27 +354,18 @@ var commitAcceptance = function(type){
 						},
 						success: function (result) {
 							try{
-								if(result.success){
-									msg=result.msg;
-									ezuiDatagrid.datagrid('reload');
-									ezuiAcceptanceDialog.dialog('close');
-									$.messager.show({
-										msg : msg, title : '<spring:message code="common.message.prompt"/>'
-									});
-									$.messager.progress('close');
-								}else{
-									msg=result.msg;
-									ezuiDatagrid.datagrid('reload');
-									ezuiAcceptanceDialog.dialog('close');
-									$.messager.show({
-										msg : msg, title : '<spring:message code="common.message.prompt"/>'
-									});
-									$.messager.progress('close');
 
-								}
+									msg=result.msg;
+
 							}catch (e) {
 								$.messager.show({
 									msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+								});
+							}finally {
+								ezuiDatagrid.datagrid('reload');
+								ezuiAcceptanceDialog.dialog('close');
+								$.messager.show({
+									msg : msg, title : '<spring:message code="common.message.prompt"/>'
 								});
 								$.messager.progress('close');
 							}
@@ -408,27 +399,18 @@ var commitAcceptance = function(type){
 				},
 				success: function (result) {
 					try{
-						if(result.success){
-							msg=result.msg;
-							ezuiDatagrid.datagrid('reload');
-							ezuiAcceptanceDialog.dialog('close');
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							$.messager.progress('close');
-						}else{
-							msg=result.msg;
-							ezuiDatagrid.datagrid('reload');
-							ezuiAcceptanceDialog.dialog('close');
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							$.messager.progress('close');
+						msg=result.msg;
 
-						}
 					}catch (e) {
 						$.messager.show({
 							msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+						});
+
+					}finally {
+						ezuiDatagrid.datagrid('reload');
+						ezuiAcceptanceDialog.dialog('close');
+						$.messager.show({
+							msg : msg, title : '<spring:message code="common.message.prompt"/>'
 						});
 						$.messager.progress('close');
 					}
