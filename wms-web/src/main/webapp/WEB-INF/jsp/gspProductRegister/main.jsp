@@ -54,7 +54,7 @@ $(function() {
             {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
 			{field: 'productRegisterNo',		title: '注册证编号/备案号',	width: 150 },
             {field: 'classifyId',		title: '管理分类',	width: 60 },
-            //{field: 'classifyCatalog',		title: '分类目录',	width: 28 },
+            {field: 'classifyCatalog',		title: '分类目录',	width: 280 },
 			{field: 'productNameMain',		title: '产品名称',	width: 170 },
 			{field: 'approveDate',		title: '批准日期',	width: 150,formatter:function (value,row,index) {
                     return dateFormat2(value);
