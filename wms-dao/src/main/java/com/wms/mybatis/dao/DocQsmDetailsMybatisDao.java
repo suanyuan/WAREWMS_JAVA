@@ -3,6 +3,7 @@ package com.wms.mybatis.dao;
 
 import com.wms.query.DocQsmDetailsQuery;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ public interface DocQsmDetailsMybatisDao extends BaseDao {
 
     void qualityStatus(Map<String, Object> map);
 
-    public <T> T queryByqcudocno(Object id);
+    public <T> List<T> queryByqcudocno(Object id);
 //根据行号删除
     public void deletelineno(Object id);
 //获得最大行号

@@ -259,42 +259,42 @@ public class DocQsmDetailsService extends BaseService {
 	 * 打印docQsm
 	 */
 	public List<DocQsmDetails> docQsmToPdf(String qcudocno) {
-		List<DocQsmDetails> docQsmDetailsList=new ArrayList<>();
 		//获得单子
-		DocQsmDetails docQsmDetails=docQsmDetailsMybatisDao.queryByqcudocno(qcudocno);
-	   //供应商名称
-		if(docQsmDetails.getLotatt08()!=null) {
-				String loatt08=docQsmDetails.getLotatt08();
+		List<DocQsmDetails> docQsmDetailsList=docQsmDetailsMybatisDao.queryByqcudocno(qcudocno);
+		for (DocQsmDetails docQsmDetails : docQsmDetailsList) {
+			//供应商名称
+			if (docQsmDetails.getLotatt08() != null) {
+				String loatt08 = docQsmDetails.getLotatt08();
 				BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
-				if(basCustomer!=null) {
+				if (basCustomer != null) {
 					docQsmDetails.setLotatt08(basCustomer.getDescrC());
 				}
 			}
-		//计算数量
-		docQsmDetails.setQtyeach(docQsmDetails.getQty()*docQsmDetails.getQty1());
-		//日期格式转换
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-		String time="";
-		if(docQsmDetails.getLotatt02()!=null) {
-			time = sdf.format(docQsmDetails.getLotatt02());
-		}
-		docQsmDetails.setLotatt02Ex(time);
-       //质量状态变更过程
-       if(docQsmDetails.getChangeProcess()!=null){
-       	 String changeP=docQsmDetails.getChangeProcess();
-       	  if(changeP.equals("HG")){
-       	  	  docQsmDetails.setChangeProcess("合格");
-		  }else if(changeP.equals("BHG")){
-			  docQsmDetails.setChangeProcess("不合格");
-		  }else  if(changeP.equals("HG>BHG")){
-			  docQsmDetails.setChangeProcess("合格>不合格");
-		  }else if(changeP.equals("BHG>HG")){
-			  docQsmDetails.setChangeProcess("不合格>合格");
-		  }else{
+			//计算数量
+			docQsmDetails.setQtyeach(docQsmDetails.getQty() * docQsmDetails.getQty1());
+			//日期格式转换
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String time = "";
+			if (docQsmDetails.getLotatt02() != null) {
+				time = sdf.format(docQsmDetails.getLotatt02());
+			}
+			docQsmDetails.setLotatt02Ex(time);
+			//质量状态变更过程
+			if (docQsmDetails.getChangeProcess() != null) {
+				String changeP = docQsmDetails.getChangeProcess();
+				if (changeP.equals("HG")) {
+					docQsmDetails.setChangeProcess("合格");
+				} else if (changeP.equals("BHG")) {
+					docQsmDetails.setChangeProcess("不合格");
+				} else if (changeP.equals("HG>BHG")) {
+					docQsmDetails.setChangeProcess("合格>不合格");
+				} else if (changeP.equals("BHG>HG")) {
+					docQsmDetails.setChangeProcess("不合格>合格");
+				} else {
 
-		  }
-	   }
-		docQsmDetailsList.add(docQsmDetails);
+				}
+			}
+		}
 		return docQsmDetailsList;
 	}
 }

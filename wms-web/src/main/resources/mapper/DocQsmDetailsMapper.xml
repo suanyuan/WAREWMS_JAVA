@@ -276,7 +276,7 @@ where 1=1
 	FROM doc_qsm_details q
 	LEFT JOIN  `bas_sku` s ON q.`sku`=s.`sku` AND q.`customerid`=s.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-	where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
+	where qcudocno = #{qcudocno}
 </select>
 
 <!-- 质量状态管理 列表总数-->
