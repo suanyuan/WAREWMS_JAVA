@@ -274,6 +274,7 @@ public class DocPaHeaderService extends BaseService {
 
                         totalNum = detailsList.size();//总条数
                         pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
+                        int index = 0;
                         for(int i=0;i<pageSize;i++){//单头内容
                             baos = new ByteArrayOutputStream();
                             stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
@@ -294,6 +295,8 @@ public class DocPaHeaderService extends BaseService {
                             double totalPage = 0;
                             for(int j=0;j<row;j++){//主单产品明细
                                 if(totalNum > (row*i+j)){
+                                    index++;
+
                                     DocPaDetails docPaDetails = detailsList.get(row * i + j);
                                     BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
 
@@ -313,7 +316,7 @@ public class DocPaHeaderService extends BaseService {
                                     queryDetail.setAsnno(docPaDetails.getAsnno());
                                     queryDetail.setAsnlineno(docPaDetails.getAsnlineno());
                                     DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
-                                    form.setField("line."+j, (j+1)+"");
+                                    form.setField("line."+j, index+"");
                                     form.setField("sku."+j, docPaDetails.getSku());
                                     form.setField("skuN."+j, basSku.getReservedfield01());
                                     form.setField("regNo."+j, basSku.getReservedfield03());

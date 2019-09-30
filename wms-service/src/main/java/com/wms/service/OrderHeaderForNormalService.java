@@ -1011,6 +1011,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                     pageSize = (int) Math.ceil((double) totalNum / row);
 
+                    int index = 0;
                     for (int i = 0; i < pageSize; i++) {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         baos = new ByteArrayOutputStream();
@@ -1033,6 +1034,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         String note = "";
                         for (int j = 0; j < row; j++) {
                             if (totalNum > (row * i + j)) {
+                                index++;
                                 BasSku basSku = basSkuService.getSkuInfo(orderHeaderForNormal.getCustomerid(), detailsList.get(row * i + j).getSku());
 
                                 //获取冷链标志
@@ -1052,7 +1054,7 @@ public class OrderHeaderForNormalService extends BaseService {
                                     }
                                 }
 
-                                form.setField("lineNo." + (j), (j+1)+"");
+                                form.setField("lineNo." + (j), (index)+"");
                                 form.setField("location." + (j), detailsList.get(row * i + j).getLocation());
                                 form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
                                 form.setField("skuN." + (j), detailsList.get(row * i + j).getSkuName());
@@ -1450,6 +1452,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         totalNum++;
                         detailsList.add(result);
                     }
+                    int index = 0;
                     pageSize = (int) Math.ceil((double) totalNum / row);
                     for (int i = 0; i < pageSize; i++) {
                         ReceiptResult obj = receiptResult.get(0);
@@ -1473,8 +1476,9 @@ public class OrderHeaderForNormalService extends BaseService {
 
                         for (int j = 0; j < row; j++) {
                             if (totalNum > (row * i + j)) {
+                                index++;
                                 BasSku basSku = basSkuService.getSkuInfo(obj.getCustomerid(), detailsList.get(row * i + j).getSku());
-                                form.setField("lineNo." + j, j + 1 + "");
+                                form.setField("lineNo." + j, index + "");
                                 form.setField("location." + (j), detailsList.get(row * i + j).getDescrC());
                                 form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
                                 form.setField("skuN." + (j), detailsList.get(row * i + j).getLotatt12());
