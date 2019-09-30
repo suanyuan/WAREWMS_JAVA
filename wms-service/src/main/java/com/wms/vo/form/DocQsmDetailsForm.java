@@ -5,6 +5,7 @@ import java.util.Date;
 public class DocQsmDetailsForm {
 
 	private String qcudocno;
+	private int qcudoclineno;
 	private String qcustatus;
 	private String lotatt14;
 	private String customerid;
@@ -20,8 +21,8 @@ public class DocQsmDetailsForm {
 	private String lotatt07;
 	private String lotatt01;
 	private String lotatt02;
-	private Long locqty;
-	private Long qty;
+	private Double locqty;
+	private Double qty;
 	private Double qtyeach;
 	private String lotatt15;
 	private String reservedfield06;//生产许可证号/备案号
@@ -37,6 +38,16 @@ public class DocQsmDetailsForm {
 //质量状态管理表单提交
     private String lotnum;
     private String changeProcess;  //质量状态变更过程
+	private String userdefine1;
+	private String userdefine2;
+	private String userdefine3;
+	private String userdefine4;
+	private String userdefine5;
+	private String hedi01;
+	private String hedi02;
+	private String hedi03;
+	private String hedi04;
+	private String hedi05;
 
 	public String getQcudocno() {
 		return qcudocno;
@@ -166,19 +177,19 @@ public class DocQsmDetailsForm {
 		this.lotatt02 = lotatt02;
 	}
 
-	public Long getLocqty() {
+	public Double getLocqty() {
 		return locqty;
 	}
 
-	public void setLocqty(Long locqty) {
+	public void setLocqty(Double locqty) {
 		this.locqty = locqty;
 	}
 
-	public Long getQty() {
+	public Double getQty() {
 		return qty;
 	}
 
-	public void setQty(Long qty) {
+	public void setQty(Double qty) {
 		this.qty = qty;
 	}
 
@@ -292,5 +303,93 @@ public class DocQsmDetailsForm {
 
 	public void setChangeProcess(String changeProcess) {
 		this.changeProcess = changeProcess;
+	}
+
+	public String getUserdefine1() {
+		return userdefine1;
+	}
+
+	public void setUserdefine1(String userdefine1) {
+		this.userdefine1 = userdefine1;
+	}
+
+	public String getUserdefine2() {
+		return userdefine2;
+	}
+
+	public void setUserdefine2(String userdefine2) {
+		this.userdefine2 = userdefine2;
+	}
+
+	public String getUserdefine3() {
+		return userdefine3;
+	}
+
+	public void setUserdefine3(String userdefine3) {
+		this.userdefine3 = userdefine3;
+	}
+
+	public String getUserdefine4() {
+		return userdefine4;
+	}
+
+	public void setUserdefine4(String userdefine4) {
+		this.userdefine4 = userdefine4;
+	}
+
+	public String getUserdefine5() {
+		return userdefine5;
+	}
+
+	public void setUserdefine5(String userdefine5) {
+		this.userdefine5 = userdefine5;
+	}
+
+	public String getHedi01() {
+		return hedi01;
+	}
+
+	public void setHedi01(String hedi01) {
+		this.hedi01 = hedi01;
+	}
+
+	public String getHedi02() {
+		return hedi02;
+	}
+
+	public void setHedi02(String hedi02) {
+		this.hedi02 = hedi02;
+	}
+
+	public String getHedi03() {
+		return hedi03;
+	}
+
+	public void setHedi03(String hedi03) {
+		this.hedi03 = hedi03;
+	}
+
+	public String getHedi04() {
+		return hedi04;
+	}
+
+	public void setHedi04(String hedi04) {
+		this.hedi04 = hedi04;
+	}
+
+	public String getHedi05() {
+		return hedi05;
+	}
+
+	public void setHedi05(String hedi05) {
+		this.hedi05 = hedi05;
+	}
+
+	public int getQcudoclineno() {
+		return qcudoclineno;
+	}
+
+	public void setQcudoclineno(int qcudoclineno) {
+		this.qcudoclineno = qcudoclineno;
 	}
 }

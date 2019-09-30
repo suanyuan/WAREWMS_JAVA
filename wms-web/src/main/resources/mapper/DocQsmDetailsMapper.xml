@@ -6,6 +6,7 @@
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.DocQsmDetails" >
 	<result column="qcudocno" property="qcudocno"/>
+	<result column="qcudoclineno" property="qcudoclineno"/>
 	<result column="qcustatus" property="qcustatus"/>
 	<result column="lotatt14" property="lotatt14"/>
 	<result column="customerid" property="customerid"/>
@@ -37,11 +38,14 @@
 	<result column="recording_people" property="recordingPeople"/>
 	<result column="change_process" property="changeProcess"/>
 	<result column="qty1" property="qty1"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
 </resultMap>
        
 <!-- doc_qsm_details table all fields -->
 <sql id="Base_Column_List" >
-	 qcudocno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum
+	 qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,userdefine1,userdefine2
 </sql>
    
    
@@ -139,13 +143,15 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into doc_qsm_details(qcudocno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,change_process)
- values(#{qcudocno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess})
+  insert into doc_qsm_details(qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,change_process)
+ values(#{qcudocno},#{qcudoclineno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess})
 </insert>
 
 <!-- 根据id，修改记录-->  
  <update id="update" parameterType="Object" >
-  update doc_qsm_details set qcustatus=#{qcustatus},lotatt14=#{lotatt14},customerid=#{customerid},lotatt03=#{lotatt03},lotatt08=#{lotatt08},businesstype=#{businesstype},sku=#{sku},lotatt12=#{lotatt12},lotatt06=#{lotatt06},descrc=#{descrc},lotatt04=#{lotatt04},lotatt05=#{lotatt05},lotatt07=#{lotatt07},lotatt01=#{lotatt01},lotatt02=#{lotatt02},qty=#{qty},qtyeach=#{qtyeach},lotatt15=#{lotatt15},lotatt10=#{lotatt10},locationid=#{locationid},finddate=#{finddate},failed_description=#{failedDescription},customerid_treatment=#{customeridTreatment},treatment_date=#{treatmentDate},remarks=#{remarks},recording_date=#{recordingDate},recording_people=#{recordingPeople} where qcudocno=#{qcudocno}
+  update doc_qsm_details
+   set qcustatus=#{qcustatus}
+   where qcudocno=#{qcudocno}
  </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -197,7 +203,10 @@ where 1=1
 	<if test="lotatt02 != null  ">
 		lotatt02=#{lotatt02},
 	</if>
-	<if test="qty != null  ">
+	<if test="locqty != null  ">
+		locqty=#{locqty},
+	</if>
+		<if test="qty != null  ">
 		qty=#{qty},
 	</if>
 	<if test="qtyeach != null  ">
@@ -236,18 +245,29 @@ where 1=1
 	<if test="changeProcess != null  ">
 		change_process=#{changeProcess},
 	</if>
-	</trim> where qcudocno=#{qcudocno}
+	<if test="reservedfield06 != null  ">
+			reservedfield06=#{reservedfield06},
+	</if>
+	<if test="lotnum != null  ">
+			lotnum=#{lotnum}
+	</if>
+	</trim>
+	 where qcudocno=#{qcudocno} and qcudoclineno=#{qcudoclineno}
 </update>
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
 	delete 	 from doc_qsm_details where qcudocno = #{qcudocno}
 </delete>
+<!-- 删除记录 -->
+<delete id="deletelineno" parameterType="Object">
+	delete 	 from doc_qsm_details where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
+</delete>
  
 <!-- 根据id查询 质量状态管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from doc_qsm_details where qcudocno = #{qcudocno}
+	 from doc_qsm_details where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
 </select>
 <!-- 根据id查询 质量状态管理 -->
 <select id="queryByqcudocno"  resultMap="BaseResultMap" parameterType="Object">
@@ -256,7 +276,7 @@ where 1=1
 	FROM doc_qsm_details q
 	LEFT JOIN  `bas_sku` s ON q.`sku`=s.`sku` AND q.`customerid`=s.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-	where qcudocno = #{qcudocno}
+	where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
 </select>
 
 <!-- 质量状态管理 列表总数-->
@@ -273,7 +293,7 @@ where 1=1
 	LEFT JOIN  `bas_sku` s ON q.`sku`=s.`sku` AND q.`customerid`=s.`customerid`
 	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	<include refid="Example_Where_Clause"/>
-       order by qcudocno desc
+       order by qcudoclineno desc
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
@@ -283,5 +303,16 @@ where 1=1
 <select id="qualityStatus" statementType="CALLABLE" parameterType="java.util.Map">
    {call SPINV_QcstatusUpdate_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'0','0',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{lotnum,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{fmqcstatus,mode=IN,jdbcType=VARCHAR},#{locqty,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{toqcstatus,mode=IN,jdbcType=VARCHAR},#{qty,mode=IN,jdbcType=VARCHAR},'0','0','now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
-  	
+
+<!--行号-->
+	<select id="getqcudoclinenoById" resultType="java.lang.Long"  parameterType="Object">
+	select ifnull(max(qcudoclineno),0) from `doc_qsm_details`  where qcudocno = #{qcudocno,jdbcType=VARCHAR}
+</select>
+<!-- 根据主单号 状态查询-->
+	<select id="queryByListqcustatus" resultType="int"  parameterType="Object">
+		SELECT
+		 count(1)
+		FROM doc_qsm_details q
+		where qcudocno=#{qcudocno} and qcustatus=#{qcustatus}
+	</select>
 </mapper>   

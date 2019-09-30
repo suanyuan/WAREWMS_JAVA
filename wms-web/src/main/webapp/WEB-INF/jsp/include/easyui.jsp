@@ -361,6 +361,7 @@
 		value+="";
     	switch (value) {
 			case "00" : return "任务创建";
+			case "30" : return "部分完成";
 			case "40" : return "任务完成";
 			case "90" : return "任务取消";
 			case "99" : return "任务关闭";

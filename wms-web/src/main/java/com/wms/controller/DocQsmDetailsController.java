@@ -45,7 +45,7 @@ public class DocQsmDetailsController {
 	public EasyuiDatagrid<DocQsmDetailsVO> showDatagrid(EasyuiDatagridPager pager, DocQsmDetailsQuery query) {
 		return docQsmDetailsService.getPagedDatagrid(pager, query);
 	}
-//生成库存信息
+//生成库存信息 细单
     @Login
 	@RequestMapping(params = "commitQualityStatus")
 	@ResponseBody
@@ -61,27 +61,22 @@ public class DocQsmDetailsController {
 
 		return docQsmDetailsService.commitQualityStatusWork(form);
 	}
+//细单指定库存 提交
+    @Login
+	@RequestMapping(params = "upstreamT")
+	@ResponseBody
+	public Json upstreamT(DocQsmDetailsForm form) {
 
-	//关闭计划单
-	@Login
-	@RequestMapping(params = "close")
-	@ResponseBody
-	public Json close(DocQsmDetailsForm form) {
-		return docQsmDetailsService.close(form);
+		return docQsmDetailsService.upstreamT(form);
 	}
-	//取消计划单
-	@Login
-	@RequestMapping(params = "cancel")
-	@ResponseBody
-	public Json cancel(DocQsmDetailsForm form) {
-		return docQsmDetailsService.cancel(form);
-	}
-	//删除计划单
+
+
+//删除计划单
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String id) {
-		Json json = docQsmDetailsService.deleteDocQsmDetails(id);
+	public Json delete(DocQsmDetailsForm form) {
+		Json json = docQsmDetailsService.deleteDocQsmDetails(form);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

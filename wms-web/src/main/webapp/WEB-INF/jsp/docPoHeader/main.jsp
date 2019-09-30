@@ -138,7 +138,7 @@
                 toolbar: '#detailToolbar',
                 idField: 'polineno',
                 title: '入库单明细',
-                pageSize: 200,
+                pageSize: 50,
                 pageList: [50, 100, 200],
                 border: false,
                 fitColumns: false,

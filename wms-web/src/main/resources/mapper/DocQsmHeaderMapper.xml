@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocQsmHeaderMybatisDao">
+    <!-- Result Map-->
+    <resultMap id="BaseResultMap" type="com.wms.entity.DocQsmHeader">
+        <result column="qcudocno" property="qcudocno"/>
+        <result column="status" property="status"/>
+        <result column="warehouseid" property="warehouseid"/>
+        <result column="customerid" property="customerid"/>
+        <result column="userdefine1" property="userdefine1"/>
+        <result column="userdefine2" property="userdefine2"/>
+        <result column="userdefine3" property="userdefine3"/>
+        <result column="userdefine4" property="userdefine4"/>
+        <result column="userdefine5" property="userdefine5"/>
+        <result column="addtime" property="addtime"/>
+        <result column="addwho" property="addwho"/>
+        <result column="edittime" property="edittime"/>
+        <result column="editwho" property="editwho"/>
+        <result column="h_edi_01" property="hedi01"/>
+        <result column="h_edi_02" property="hedi02"/>
+        <result column="h_edi_03" property="hedi03"/>
+        <result column="h_edi_04" property="hedi04"/>
+        <result column="h_edi_05" property="hedi05"/>
+    </resultMap>
+
+
+    <!-- 查询条件 -->
+    <sql id="Example_Where_Clause">
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="condition.qcudocno != null and condition.qcudocno != ''">
+                and qcudocno like concat ('%',#{condition.qcudocno},'%')
+            </if>
+            <if test="condition.status != null and condition.status != ''">
+                and status =#{condition.status}
+            </if>
+            <if test="condition.warehouseid != null and condition.warehouseid != ''">
+                and warehouseid like concat ('%',#{condition.warehouseid},'%')
+            </if>
+            <if test="condition.customerid != null and condition.customerid != ''">
+                and customerid like concat ('%',#{condition.customerid},'%')
+            </if>
+            <if test="condition.userdefine1 != null and condition.userdefine1 != ''">
+                and userdefine1 like concat ('%',#{condition.userdefine1},'%')
+            </if>
+            <if test="condition.userdefine2 != null and condition.userdefine2 != ''">
+                and userdefine2 like concat ('%',#{condition.userdefine2},'%')
+            </if>
+            <if test="condition.userdefine3 != null and condition.userdefine3 != ''">
+                and userdefine3 like concat ('%',#{condition.userdefine3},'%')
+            </if>
+            <if test="condition.userdefine4!= null and condition.userdefine4 != ''">
+                and userdefine4 like concat ('%',#{condition.userdefine4},'%')
+            </if>
+            <if test="condition.userdefine5 != null and condition.userdefine5 != ''">
+                and userdefine5 like concat ('%',#{condition.userdefine5},'%')
+            </if>
+            <if test="condition.hedi01 != null and condition.hedi01 != ''">
+                and h_edi_01 like concat ('%',#{condition.hedi01},'%')
+            </if>
+            <if test="condition.hedi02 != null and condition.hedi02 != ''">
+                and h_edi_02 like concat ('%',#{condition.hedi02},'%')
+            </if>
+            <if test="condition.hedi03 != null and condition.hedi03 != ''">
+                and h_edi_03 like concat ('%',#{condition.hedi03},'%')
+            </if>
+            <if test="condition.hedi04 != null and condition.hedi04 != ''">
+                and h_edi_04 like concat ('%',#{condition.hedi04},'%')
+            </if>
+            <if test="condition.hedi05 != null and condition.hedi05 != ''">
+                and h_edi_05 like concat ('%',#{condition.hedi05},'%')
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 插入记录 -->
+    <insert id="add" parameterType="Object">
+  INSERT INTO
+  `warewms_dev`.`doc_qsm_header`
+  (`qcudocno`,`status`,`warehouseid`,`customerid`,`notes`,`userdefine1`,`userdefine2`,
+  `userdefine3`,`userdefine4`,`userdefine5`,`addtime`,`addwho`,
+  `edittime`,`editwho`,`h_edi_01`,`h_edi_02`,`h_edi_03`,`h_edi_04`,`h_edi_05`
+)
+VALUES
+  (#{qcudocno},#{status},#{warehouseid},#{customerid},#{notes},#{userdefine1},#{userdefine2},#{userdefine3},
+    #{userdefine4},#{userdefine5},#{addtime},#{addwho},#{edittime},#{editwho},#{hedi01},
+    #{hedi02},#{hedi03},#{hedi04},#{hedi05}) ;
+</insert>
+
+    <!-- 根据id，修改记录-->
+    <update id="update" parameterType="Object">
+     UPDATE
+      `warewms_dev`.`doc_qsm_header`
+    SET
+      `qcudocno` = 'qcudocno',
+      `status` = 'status',
+      `warehouseid` = 'warehouseid',
+      `customerid` = 'customerid',
+      `userdefine1` = 'userdefine1',
+      `userdefine2` = 'userdefine2',
+      `userdefine3` = 'userdefine3',
+      `userdefine4` = 'userdefine4',
+      `userdefine5` = 'userdefine5',
+      `addtime` = 'addtime',
+      `addwho` = 'addwho',
+      `edittime` = 'edittime',
+      `editwho` = 'editwho',
+      `h_edi_01` = 'h_edi_01',
+      `h_edi_02` = 'h_edi_02',
+      `h_edi_03` = 'h_edi_03',
+      `h_edi_04` = 'h_edi_04',
+      `h_edi_05` = 'h_edi_05'
+   WHERE `qcudocno` = 'qcudocno' ;
+ </update>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateBySelective" parameterType="Object">
+        update doc_qsm_header set
+        <trim suffixOverrides=",">
+            <if test="status != null ">
+                  status =#{status},
+            </if>
+            <if test="warehouseid != null ">
+                  warehouseid =#{warehouseid},
+            </if>
+            <if test="customerid != null ">
+                  customerid =#{customerid},
+            </if>
+            <if test="notes != null ">
+                 notes =#{notes},
+            </if>
+            <if test="userdefine1 != null ">
+                  userdefine1 =#{userdefine1},
+            </if>
+            <if test="userdefine2 != null ">
+                  userdefine2 =#{userdefine2},
+            </if>
+            <if test="userdefine3 != null ">
+                  userdefine3 =#{userdefine3},
+            </if>
+            <if test="userdefine4!= null ">
+                  userdefine4 =#{userdefine4},
+            </if>
+            <if test="userdefine5 != null ">
+                  userdefine5 =#{userdefine5},
+            </if>
+            <if test="addtime != null ">
+                addtime =#{addtime},
+            </if>
+            <if test="addwho != null ">
+                addwho =#{addwho},
+            </if>
+            <if test="edittime != null ">
+                edittime =#{edittime},
+            </if>
+            <if test="editwho != null ">
+                editwho =#{editwho},
+            </if>
+            <if test="hedi01 != null ">
+                  h_edi_01 =#{hedi01},
+            </if>
+            <if test="hedi02 != null ">
+                  h_edi_02 =#{hedi02},
+            </if>
+            <if test="hedi03 != null ">
+                  h_edi_03 =#{hedi03},
+            </if>
+            <if test="hedi04 != null ">
+                  h_edi_04 =#{hedi04},
+            </if>
+            <if test="hedi05 != null ">
+                  h_edi_05 =#{hedi05}
+            </if>
+        </trim>
+        where qcudocno=#{qcudocno}
+    </update>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="Object">
+	   DELETE
+            FROM
+         doc_qsm_header
+       WHERE `qcudocno` =#{qcudocno};
+
+</delete>
+
+    <!-- 根据id查询 质量状态管理 -->
+    <select id="queryById" resultMap="BaseResultMap" parameterType="Object">
+	select *
+	 from doc_qsm_header where qcudocno = #{qcudocno}
+</select>
+
+    <!-- 质量状态管理 列表总数-->
+    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from doc_qsm_header
+        <include refid="Example_Where_Clause"/>
+    </select>
+
+    <!-- 查询质量状态管理列表 -->
+    <select id="queryByList" resultMap="BaseResultMap" parameterType="Object">
+        SELECT
+         *
+        FROM doc_qsm_header
+        <include refid="Example_Where_Clause"/>
+        order by qcudocno desc
+        <if test="limitClause != null and limitClause != ''">
+            ${limitClause}
+        </if>
+    </select>
+
+</mapper>   

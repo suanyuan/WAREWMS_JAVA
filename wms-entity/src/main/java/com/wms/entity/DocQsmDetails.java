@@ -10,6 +10,7 @@ import java.util.Date;
 public class DocQsmDetails {
 
   private String qcudocno;
+  private int qcudoclineno;
   private String qcustatus;
   private String lotatt14;
   private String customerid;
@@ -26,8 +27,8 @@ public class DocQsmDetails {
   private Date lotatt01;
   private Date lotatt02;
   private String lotatt02Ex;
-  private Long locqty;    //原库存件数
-  private Long qty;       //目标不合格件数
+  private Double locqty;    //原库存件数
+  private Double qty;       //目标不合格件数
   private Double qtyeach;   //目标不合格数量
   private String lotatt15;
   private String reservedfield06;
@@ -43,6 +44,16 @@ public class DocQsmDetails {
   private String lotnum;
   private String changeProcess;//质量状态变更过程
   private Double qty1;//换算率
+  private String userdefine1;
+  private String userdefine2;
+  private String userdefine3;
+  private String userdefine4;
+  private String userdefine5;
+  private String hedi01;
+  private String hedi02;
+  private String hedi03;
+  private String hedi04;
+  private String hedi05;
 
 
 }
