@@ -1015,6 +1015,13 @@ public class DocOrderPackingService extends BaseService {
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             mybatisCriteria.setCondition(condition);
             List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+            if (actAllocationDetailsList.size() == 0) {
+
+                json.setSuccess(false);
+                json.setMsg("出库单号:" + orderno + ";当前单据未分配成功！");
+                return json;
+            }
+
             for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
 
                 //产品档案
