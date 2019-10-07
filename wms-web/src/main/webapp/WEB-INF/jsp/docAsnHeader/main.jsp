@@ -117,7 +117,7 @@ $(function() {
 			$(this).datagrid('clearChecked');
 		}
 	});
-	
+
 	//订单明细列表（数据窗口）
 	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
 		url : '<c:url value="/docAsnDetailController.do?showDatagrid"/>',
@@ -241,7 +241,7 @@ $(function() {
 
         }
     });
-	
+
 	/* 控件初始化start */
 	$("#customerid").textbox({
 		icons:[{
@@ -253,7 +253,7 @@ $(function() {
 			}
 		}]
 	});
-	
+
 	//时间控件初始化
 	$('#addtime').datetimebox('calendar').calendar({
         validator: function(date){
@@ -283,10 +283,10 @@ $(function() {
             return date <= validateDate;
         }
     });
-	
+
 	$("#ezuiSkuDataDialog #sku").textbox('textbox').css('text-transform','uppercase');
 	$("#ezuiDetailsForm #sku").textbox('textbox').css('text-transform','uppercase');
-	
+
 	$("input",$("#ezuiDetailsForm #expectedqty").next("span")).blur(function(){
 		if ($("#ezuiDetailsForm #expectedqty").val() != '') {
 			if ($("#ezuiDetailsForm #sku").val() == '') {
@@ -312,7 +312,7 @@ $(function() {
 			}
 		}
 	});
-	
+
 	//订单信息弹框
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
@@ -336,46 +336,46 @@ $(function() {
 			ezuiFormClear(ezuiDetailsForm);
 		}
 	}).dialog('close');
-	
+
 	//客户选择弹框
 	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '',
 		onOpen : function() {
-			
+
 		},
 		onClose : function() {
-			
+
 		}
 	}).dialog('close');
-	
+
 	//商品选择弹框
 	ezuiSkuDataDialog = $('#ezuiSkuDataDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '',
 		onOpen : function() {
-			
+
 		},
 		onClose : function() {
-			
+
 		}
 	}).dialog('close');
-	
+
 	//库位选择弹框
 	ezuiLocDataDialog = $('#ezuiLocDataDialog').dialog({
 		modal : true,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '',
 		onOpen : function() {
-			
+
 		},
 		onClose : function() {
-			
+
 		}
 	}).dialog('close');
-	
+
 	//导入
 	ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
 		modal : true,
@@ -479,7 +479,7 @@ var add = function(){
 	$("#ezuiForm #addtime").textbox({
 		editable:false,readonly:true
 	});
-	
+
 	$('#ezuiDetailsDatagrid').datagrid('load',{asnno:'-1'});
 	$("#ezuiForm #customerid").textbox({
 		editable:false,
@@ -960,7 +960,7 @@ var renew = function(){
 	$("#ezuiForm #addtime").textbox({
 		editable:false,readonly:true
 	});
-	
+
 	$('#ezuiDetailsDatagrid').datagrid('load',{asnno:'-1'});
 	$("#ezuiForm #customerid").textbox({
 		editable:false,
@@ -1009,7 +1009,7 @@ var commit = function(){
 					var result = $.parseJSON(data);
 					if(result.success){
 						if (processType == 'edit') {
-							
+
 						} else {
 							$("#ezuiForm #customerid").textbox({
 								editable:false,
@@ -1086,7 +1086,7 @@ var detailsAdd = function(){
 		$("#ezuiDetailsForm #linestatus").combobox('setValue','00').combo('readonly', true);
 		$("#ezuiDetailsForm #expectedqty").numberbox('setValue', 1);
 		$("#ezuiDetailsForm #receivedqty").numberbox('setValue', 0);
-		
+
 		$("#ezuiDetailsForm #totalgrossweight").numberbox("setValue",'0.000');
 		$("#ezuiDetailsForm #totalcubic").numberbox("setValue",'0.000');
 		$("#ezuiDetailsForm #totalprice").numberbox("setValue",'0.00');
@@ -1199,7 +1199,7 @@ var detailsReceive = function(){
 	var checkedItems = $('#ezuiDetailsDatagrid').datagrid('getChecked');
 	var rowcount = checkedItems.length;
 // 	alert(rowcount);
-	if(rowcount > 0) {  
+	if(rowcount > 0) {
 		$.each(checkedItems ,function(index, item){
 			if (item.linestatus != '00') {
 				showMsg("非创建状态不能确认收货！")
@@ -1964,6 +1964,51 @@ function deleteMain() {
 	}
 }
 
+
+// 打印收货任务清单
+function printTaskList() {
+    var row = $('#ezuiDatagrid').datagrid('getSelections');
+    var asnno;
+    if(row){
+        if(row.length == 1){
+            for (var i = 0; i < row.length; i++) {
+                asnno = row[i].asnno;
+            }
+            window.open(sy.bp()+"/docAsnHeaderController.do?printTaskList&asnno="+asnno);
+        }else{
+            $.messager.show({
+                msg: "<spring:message code='common.message.print.hint'/>",
+                title: "<spring:message code='common.message.prompt'/>"
+            });
+        }
+    }
+}
+
+
+
+
+
+
+//打印收货结果清单
+function printResultList(){
+	var row = $('#ezuiDatagrid').datagrid('getSelections');
+	var asnno;
+	if(row){
+		if(row.length == 1){
+			for (var i = 0; i < row.length; i++) {
+				asnno = row[i].asnno;
+			}
+			window.open(sy.bp()+"/docAsnHeaderController.do?printTaskResult&asnno="+asnno);
+		}else{
+			$.messager.show({
+				msg: "<spring:message code='common.message.print.hint'/>",
+				title: "<spring:message code='common.message.prompt'/>"
+			});
+		}
+	}
+}
+
+
 </script>
 </head>
 <body>
@@ -2042,8 +2087,12 @@ function deleteMain() {
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
                     <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
 				</div>
+				<div>
+					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
+                    <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货结果清单</a>
+				</div>
 			</div>
-			<table id='ezuiDatagrid'></table> 
+			<table id='ezuiDatagrid'></table>
 		</div>
 	</div>
 	<div id='ezuiDialogBtn'>
@@ -2064,7 +2113,7 @@ function deleteMain() {
 		<div onclick='detailsDel();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.skuDelete'/></div>
 		<div onclick='detailsEdit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.skuEdit'/></div>
 	</div>
-	
+
 	<!-- 导入start -->
 	<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>

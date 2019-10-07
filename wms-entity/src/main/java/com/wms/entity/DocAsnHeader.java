@@ -379,10 +379,39 @@ public class DocAsnHeader implements Serializable {
 	private Set<DocAsnDetail> docAsnDetailSet;
 
 
+
+	private List<DocAsnDetail> headerTakedetls;
 //	用于导出
     private List<DocAsnDetail> details;
 	private String coldTag; //冷链标记
 	private String mdate; //预期到货时间
+
+	private String supplierIdRef;
+	private String customerIdRef;
+
+	public String getSupplierIdRef() {
+		return supplierIdRef;
+	}
+
+	public void setSupplierIdRef(String supplierIdRef) {
+		this.supplierIdRef = supplierIdRef;
+	}
+
+	public String getCustomerIdRef() {
+		return customerIdRef;
+	}
+
+	public void setCustomerIdRef(String customerIdRef) {
+		this.customerIdRef = customerIdRef;
+	}
+
+	public List<DocAsnDetail> getHeaderTakedetls() {
+		return headerTakedetls;
+	}
+
+	public void setHeaderTakedetls(List<DocAsnDetail> headerTakedetls) {
+		this.headerTakedetls = headerTakedetls;
+	}
 
 	public List<DocAsnDetail> getDetails() {
 		return details;
