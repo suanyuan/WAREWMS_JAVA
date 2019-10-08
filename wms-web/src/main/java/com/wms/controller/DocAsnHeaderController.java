@@ -5,6 +5,7 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnHeader;
+import com.wms.entity.DocOrderPackingCartonInfo;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.result.AsnDetailResult;
@@ -279,6 +280,41 @@ public class DocAsnHeaderController {
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docAsnHeaderList);
 		model.addAttribute("url", "WEB-INF/jasper/reportDocAsnDetails.jasper");
 		model.addAttribute("format", Constant.JASPER_XLS);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
+
+
+	/**
+	 * 打印收货任务清单
+	 * @param model
+	 * @param asnno
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "printTaskList")
+	public String printTaskList(Model model, String asnno) {
+		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderService.printTaskList(asnno);
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docAsnHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocAsnHeaderTakeList.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
+
+	/**
+	 * 打印收货结果清单
+	 * @param model
+	 * @param asnno
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "printTaskResult")
+	public String printTaskResult(Model model, String asnno) {
+		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderService.printTaskResult(asnno);
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docAsnHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocAsnHeaderTakeResult.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
 		model.addAttribute("jrMainDataSource", jrDataSource);
 		return "iReportView";
 	}

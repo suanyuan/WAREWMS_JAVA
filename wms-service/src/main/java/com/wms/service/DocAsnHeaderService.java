@@ -43,6 +43,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,7 +53,6 @@ public class DocAsnHeaderService extends BaseService {
 
 	@Autowired
 	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
-	
 	@Autowired
 	private ImportAsnDataService importAsnDataService;
 	@Autowired
@@ -70,6 +71,10 @@ public class DocAsnHeaderService extends BaseService {
     private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
     @Autowired
     private BasCustomerService basCustomerService;
+    @Autowired
+	private BasCodesService basCodesService;
+    @Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -956,6 +961,113 @@ public class DocAsnHeaderService extends BaseService {
 		}
 		return Json.error("请选择要删除的预入库通知单");
 	}
+
+
+	public  List<DocAsnHeader> printTaskList(String asnno){
+		Double expectedqtySum = 0.0;
+		Double expectedqtyEachSum = 0.0;
+		List<DocAsnHeader> docAsnHeaderList = new ArrayList<DocAsnHeader>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		DocAsnHeader docAsnHeader = new DocAsnHeader();
+		docAsnHeader.setHeaderTakedetls(new ArrayList<DocAsnDetail>());
+		DocAsnDetail docAsnDetailQuery = new DocAsnDetail();
+		docAsnDetailQuery.setAsnno(asnno);
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+		List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+		List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
+		for (DocAsnDetail docAsnDetail1: docAsnDetailList) {
+			docAsnDetail1.setExpectedqty(docAsnDetail1.getExpectedqty().setScale(1, RoundingMode.HALF_UP));
+			docAsnDetail1.setExpectedqtyEach(docAsnDetail1.getExpectedqtyEach().setScale(1 , RoundingMode.HALF_UP));
+			docAsnDetail1.setReceivedqty(docAsnDetail1.getReceivedqty().setScale(1,RoundingMode.HALF_UP));
+			//单位
+			for (EasyuiCombobox easyuiCombobox:easyuiComboboxListUom) {
+				if (easyuiCombobox.getId().equals(docAsnDetail1.getUom())) {
+					docAsnDetail1.setUom(easyuiCombobox.getValue());
+				}
+			}
+			//合计 件数
+			expectedqtySum +=docAsnDetail1.getExpectedqty().doubleValue();
+			BigDecimal bigDecimalExpectedqrySum = new BigDecimal(expectedqtySum);
+			docAsnDetail1.setExpectedqtySum(bigDecimalExpectedqrySum.setScale(1,RoundingMode.HALF_UP));
+			// 数量
+			expectedqtyEachSum += docAsnDetail1.getExpectedqtyEach().doubleValue();
+			docAsnDetail1.setExpectedqtyEachSum(expectedqtyEachSum);
+			docAsnHeader.getHeaderTakedetls().add(docAsnDetail1);
+		}
+		DocAsnHeader docAsnHeaderQuery =  new DocAsnHeader();
+		docAsnHeaderQuery.setAsnno(asnno);
+		MybatisCriteria mybatisCriteriaHeader = new MybatisCriteria();
+		mybatisCriteriaHeader.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
+		List<DocAsnHeader> docAsnHeaderListQuery = docAsnHeaderMybatisDao.queryAsnno(mybatisCriteriaHeader);
+		for ( DocAsnHeader docAsnHeader1: docAsnHeaderListQuery) {
+			//BeanUtils.copyProperties(docAsnHeader1);
+			docAsnHeader.setAsnno(docAsnHeader1.getAsnno());
+			docAsnHeader.setExpectedarrivetime1(docAsnHeader1.getExpectedarrivetime1());
+			docAsnHeader.setWarehouseid(docAsnHeader1.getWarehouseid());
+			BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(docAsnHeader1.getCustomerid(),Constant.CODE_CUS_TYP_OW);//货主
+			docAsnHeader.setCustomerIdRef(basCustomer.getDescrC());
+			BasCustomer basCustomer1 = basCustomerMybatisDao.queryByIdType(docAsnHeader1.getSupplierid(),Constant.CODE_CUS_TYP_VE);//供应商
+			docAsnHeader.setSupplierIdRef(basCustomer1.getDescrC());
+			docAsnHeader.setColdTag(docAsnHeader1.getColdTag());
+		}
+
+		docAsnHeaderList.add(docAsnHeader);
+		return docAsnHeaderList;
+	}
+
+	public List<DocAsnHeader> printTaskResult(String asnno){
+		Double expectedqtySum = 0.0;
+		Double expectedqtyEachSum = 0.0;
+		List<DocAsnHeader> docAsnHeaderList = new ArrayList<DocAsnHeader>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		DocAsnHeader docAsnHeader = new DocAsnHeader();
+		docAsnHeader.setHeaderTakedetls(new ArrayList<DocAsnDetail>());
+		DocAsnDetail docAsnDetailQuery = new DocAsnDetail();
+		docAsnDetailQuery.setAsnno(asnno);
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(docAsnDetailQuery));
+		List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByList(mybatisCriteria);
+		List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
+		for (DocAsnDetail docAsnDetail1: docAsnDetailList) {
+			docAsnDetail1.setExpectedqty(docAsnDetail1.getExpectedqty().setScale(1, RoundingMode.HALF_UP));
+			docAsnDetail1.setExpectedqtyEach(docAsnDetail1.getExpectedqtyEach().setScale(1 , RoundingMode.HALF_UP));
+			docAsnDetail1.setReceivedqty(docAsnDetail1.getReceivedqty().setScale(1,RoundingMode.HALF_UP));
+			docAsnDetail1.setReceivedqty(null);
+			//单位
+			for (EasyuiCombobox easyuiCombobox:easyuiComboboxListUom) {
+				if (easyuiCombobox.getId().equals(docAsnDetail1.getUom())) {
+					docAsnDetail1.setUom(easyuiCombobox.getValue());
+				}
+			}
+			//合计 件数
+			expectedqtySum +=docAsnDetail1.getExpectedqty().doubleValue();
+			BigDecimal bigDecimalExpectedqrySum = new BigDecimal(expectedqtySum);
+			docAsnDetail1.setExpectedqtySum(bigDecimalExpectedqrySum.setScale(1,RoundingMode.HALF_UP));
+			// 数量
+			expectedqtyEachSum += docAsnDetail1.getExpectedqtyEach().doubleValue();
+			docAsnDetail1.setExpectedqtyEachSum(expectedqtyEachSum);
+			docAsnHeader.getHeaderTakedetls().add(docAsnDetail1);
+		}
+		DocAsnHeader docAsnHeaderQuery =  new DocAsnHeader();
+		docAsnHeaderQuery.setAsnno(asnno);
+		MybatisCriteria mybatisCriteriaHeader = new MybatisCriteria();
+		mybatisCriteriaHeader.setCondition(BeanConvertUtil.bean2Map(docAsnHeaderQuery));
+		List<DocAsnHeader> docAsnHeaderListQuery = docAsnHeaderMybatisDao.queryAsnno(mybatisCriteriaHeader);
+		for ( DocAsnHeader docAsnHeader1: docAsnHeaderListQuery) {
+			//BeanUtils.copyProperties(docAsnHeader1);
+			docAsnHeader.setAsnno(docAsnHeader1.getAsnno());
+			docAsnHeader.setExpectedarrivetime1(docAsnHeader1.getExpectedarrivetime1());
+			docAsnHeader.setWarehouseid(docAsnHeader1.getWarehouseid());
+			BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(docAsnHeader1.getCustomerid(),Constant.CODE_CUS_TYP_OW);//货主
+			docAsnHeader.setCustomerIdRef(basCustomer.getDescrC());
+			BasCustomer basCustomer1 = basCustomerMybatisDao.queryByIdType(docAsnHeader1.getSupplierid(),Constant.CODE_CUS_TYP_VE);//供应商
+			docAsnHeader.setSupplierIdRef(basCustomer1.getDescrC());
+			docAsnHeader.setColdTag(docAsnHeader1.getColdTag());
+		}
+
+		docAsnHeaderList.add(docAsnHeader);
+		return docAsnHeaderList;
+	}
+
 
 	private String getKey(OrderDetailsForNormal detail){
 		/*return detail.getSku()+""+detail.getLotatt01()+""+detail.getLotatt02()+""+detail.getLotatt03()+""+detail.getLotatt04()
