@@ -11,6 +11,7 @@ import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
+import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.query.OrderDetailsForNormalQuery;
@@ -75,6 +76,8 @@ public class DocAsnHeaderService extends BaseService {
 	private BasCodesService basCodesService;
     @Autowired
 	private BasCustomerMybatisDao basCustomerMybatisDao;
+    @Autowired
+	private BasSkuMybatisDao basSkuMybatisDao;
 
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -978,7 +981,7 @@ public class DocAsnHeaderService extends BaseService {
 		for (DocAsnDetail docAsnDetail1: docAsnDetailList) {
 			docAsnDetail1.setExpectedqty(docAsnDetail1.getExpectedqty().setScale(1, RoundingMode.HALF_UP));
 			docAsnDetail1.setExpectedqtyEach(docAsnDetail1.getExpectedqtyEach().setScale(1 , RoundingMode.HALF_UP));
-			docAsnDetail1.setReceivedqty(docAsnDetail1.getReceivedqty().setScale(1,RoundingMode.HALF_UP));
+			docAsnDetail1.setReceivedqty(null);
 			//单位
 			for (EasyuiCombobox easyuiCombobox:easyuiComboboxListUom) {
 				if (easyuiCombobox.getId().equals(docAsnDetail1.getUom())) {
@@ -992,6 +995,18 @@ public class DocAsnHeaderService extends BaseService {
 			// 数量
 			expectedqtyEachSum += docAsnDetail1.getExpectedqtyEach().doubleValue();
 			docAsnDetail1.setExpectedqtyEachSum(expectedqtyEachSum);
+			//规格
+			Map<String,Object> skuMap = new HashMap<String,Object>();
+			skuMap.put("customerid",docAsnDetail1.getCustomerid());
+			skuMap.put("sku",docAsnDetail1.getSku());
+			BasSku basSku = basSkuMybatisDao.queryById(skuMap);
+			if (basSku != null) {
+				docAsnDetail1.setDescre(basSku.getDescrE());
+			}else{
+				docAsnDetail1.setDescre(null);
+
+			}
+
 			docAsnHeader.getHeaderTakedetls().add(docAsnDetail1);
 		}
 		DocAsnHeader docAsnHeaderQuery =  new DocAsnHeader();
@@ -1031,7 +1046,6 @@ public class DocAsnHeaderService extends BaseService {
 			docAsnDetail1.setExpectedqty(docAsnDetail1.getExpectedqty().setScale(1, RoundingMode.HALF_UP));
 			docAsnDetail1.setExpectedqtyEach(docAsnDetail1.getExpectedqtyEach().setScale(1 , RoundingMode.HALF_UP));
 			docAsnDetail1.setReceivedqty(docAsnDetail1.getReceivedqty().setScale(1,RoundingMode.HALF_UP));
-			docAsnDetail1.setReceivedqty(null);
 			//单位
 			for (EasyuiCombobox easyuiCombobox:easyuiComboboxListUom) {
 				if (easyuiCombobox.getId().equals(docAsnDetail1.getUom())) {
@@ -1045,6 +1059,18 @@ public class DocAsnHeaderService extends BaseService {
 			// 数量
 			expectedqtyEachSum += docAsnDetail1.getExpectedqtyEach().doubleValue();
 			docAsnDetail1.setExpectedqtyEachSum(expectedqtyEachSum);
+			//规格
+			Map<String,Object> skuMap = new HashMap<String,Object>();
+			skuMap.put("customerid",docAsnDetail1.getCustomerid());
+			skuMap.put("sku",docAsnDetail1.getSku());
+			BasSku basSku = basSkuMybatisDao.queryById(skuMap);
+			if (basSku != null) {
+				docAsnDetail1.setDescre(basSku.getDescrE());
+			}else{
+				docAsnDetail1.setDescre(null);
+
+			}
+
 			docAsnHeader.getHeaderTakedetls().add(docAsnDetail1);
 		}
 		DocAsnHeader docAsnHeaderQuery =  new DocAsnHeader();
