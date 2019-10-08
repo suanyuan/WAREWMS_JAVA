@@ -196,7 +196,16 @@ var check = function () {
 					//修改审核状态为 质量部审核  20
                     $.ajax({
                         url: 'firstReviewLogController.do?updateByReviewTypeId',
-                        data: {reviewTypeId: row.supplierId,applyState:"20"},//质量部审核  20
+                        data: {
+                            reviewTypeId: row.supplierId,
+                            applyState:"20",
+                            checkIdQc:"",
+                            checkDateQc:null,
+                            checkRemarkQc:"",
+                            checkIdHead:"",
+                            checkDateHead:null,
+                            checkRemarkHead:""
+                        },//质量部审核  20
                         type: 'POST',
                         dataType: 'JSON',
                         success: function (result) {

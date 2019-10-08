@@ -157,18 +157,14 @@ where 1=1
 			<if test="checkIdQc != null  ">
 				check_id_qc=#{checkIdQc},
 			</if>
-			<if test="checkDateQc != null  ">
 				check_date_qc=#{checkDateQc},
-			</if>
 			<if test="checkRemarkQc != null  ">
 				check_remark_qc=#{checkRemarkQc},
 			</if>
 			<if test="checkIdHead != null  ">
 				check_id_head=#{checkIdHead},
 			</if>
-			<if test="checkDateHead != null  ">
 				check_date_head=#{checkDateHead},
-			</if>
 			<if test="checkRemarkHead != null  ">
 				check_remark_head=#{checkRemarkHead},
 			</if>
