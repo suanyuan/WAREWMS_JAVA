@@ -256,7 +256,19 @@ public class DocAsnDetail implements Serializable {
     private BigDecimal expectedqtySum;  //总计
     private BigDecimal receivedqtySum;
 
+    private String descre;//规格
+
+
+
 	public DocAsnDetail() {
+	}
+
+	public String getDescre() {
+		return descre;
+	}
+
+	public void setDescre(String descre) {
+		this.descre = descre;
 	}
 
 	public Double getExpectedqtyEachSum() {
