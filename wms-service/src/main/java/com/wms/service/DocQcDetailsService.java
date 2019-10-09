@@ -727,12 +727,26 @@ public class DocQcDetailsService extends BaseService {
     public void InitPdaDocQcDetailForm(PdaDocQcDetailForm form){
 
         InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(form.getLotnum());
-        form.setLotatt01(invLotAtt.getLotatt01());
-        form.setLotatt02(invLotAtt.getLotatt02());
-        form.setLotatt04(invLotAtt.getLotatt04());
-        form.setLotatt06(invLotAtt.getLotatt06());
-        form.setLotatt11(invLotAtt.getLotatt11());
-        form.setLotatt15(invLotAtt.getLotatt15());
+        if(invLotAtt!=null){
+            if(invLotAtt.getLotatt01()!=null) {
+                form.setLotatt01(invLotAtt.getLotatt01());
+            }
+            if(invLotAtt.getLotatt02()!=null) {
+                form.setLotatt02(invLotAtt.getLotatt02());
+            }
+            if(invLotAtt.getLotatt04()!=null) {
+                form.setLotatt04(invLotAtt.getLotatt04());
+            }
+            if(invLotAtt.getLotatt06()!=null) {
+                form.setLotatt06(invLotAtt.getLotatt06());
+            }
+            if(invLotAtt.getLotatt11()!=null) {
+                form.setLotatt11(invLotAtt.getLotatt11());
+            }
+            if(invLotAtt.getLotatt15()!=null) {
+                form.setLotatt15(invLotAtt.getLotatt15());
+            }
+        }
 
     }
 }
