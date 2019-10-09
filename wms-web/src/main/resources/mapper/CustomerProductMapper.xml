@@ -49,12 +49,14 @@
 
     <!-- 查询客户档案列表 -->
     <select id="queryCustomerProduct"  resultMap="BaseResultMap" parameterType="Object">
-        select t2.enterprise_name,t3.product_name,t3.specs_name,t3.product_model,t4.product_register_no,t4.product_register_expiry_date,t4.approve_date,t5.enterprise_name enterprise_sc,t3.LicenseOrRecordNo license_or_record_no,t3.unit,t3.storage_condition,t1.active_flag
+        select DISTINCT t2.enterprise_name,t3.product_name,t3.specs_name,t3.product_model,t4.product_register_no,t4.product_register_expiry_date,
+        t4.approve_date,t5.enterprise_name enterprise_sc,t3.LicenseOrRecordNo license_or_record_no,t3.unit,t3.storage_condition,t1.active_flag
         from bas_sku t1
-        LEFT JOIN gsp_enterprise_info t2 on t1.customerid = t2.enterprise_no
-        LEFT JOIN gsp_product_register_specs t3 on t1.sku = t3.product_code
+        LEFT JOIN (select * from gsp_enterprise_info where is_use = 1) t2 on t1.customerid = t2.enterprise_no
+        LEFT JOIN (select * from gsp_product_register_specs where is_use = 1) t3 on t1.sku = t3.product_code
         LEFT JOIN gsp_product_register t4 on t3.product_register_id = t4.product_register_id
         LEFT JOIN gsp_enterprise_info t5 on t4.enterprise_id = t5.enterprise_id
+
         <include refid="Example_Where_Clause"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -64,12 +66,15 @@
     <!-- 客户档案 列表总数-->
     <select id="queryCustomerProductByCount" resultType="java.lang.Integer" parameterType="Object">
         select count(1)
+        from (select DISTINCT t2.enterprise_name,t3.product_name,t3.specs_name,t3.product_model,t4.product_register_no,t4.product_register_expiry_date,
+        t4.approve_date,t5.enterprise_name enterprise_sc,t3.LicenseOrRecordNo license_or_record_no,t3.unit,t3.storage_condition,t1.active_flag
         from bas_sku t1
-        LEFT JOIN gsp_enterprise_info t2 on t1.customerid = t2.enterprise_no
-        LEFT JOIN gsp_product_register_specs t3 on t1.sku = t3.product_code
+        LEFT JOIN (select * from gsp_enterprise_info where is_use = 1) t2 on t1.customerid = t2.enterprise_no
+        LEFT JOIN (select * from gsp_product_register_specs where is_use = 1) t3 on t1.sku = t3.product_code
         LEFT JOIN gsp_product_register t4 on t3.product_register_id = t4.product_register_id
         LEFT JOIN gsp_enterprise_info t5 on t4.enterprise_id = t5.enterprise_id
-        <include refid="Example_Where_Clause"/>
+
+        <include refid="Example_Where_Clause"/>) z
     </select>
 
 </mapper>
