@@ -53,7 +53,7 @@
                             lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
                             lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
                             lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
-
+                            lotatt10 : $('#lotatt10').combobox('getValue')
                         });
                     }else{
                             initDateGrid();//隐藏的datagrif初始化成功 然后初始化主页的datagrid
@@ -414,6 +414,7 @@
                 param.put("lotatt02End",$('#lotatt02End').datebox('getValue'));//时间查询
                 param.put("lotatt03Start",$('#lotatt03Start').datebox('getValue'));//入库单号时间查询
                 param.put("lotatt03End",$('#lotatt03End').datebox('getValue'));//入库单号时间查询
+                param.put("lotatt10",$('#lotatt10').combobox('getValue'));//质量状态
 
                 //--导出Excel
                 var formId = ajaxDownloadFile(sy.bp() + "/viewInvLocationController.do?exportViewInvLocationDataToExcel", param);
@@ -451,6 +452,7 @@
                 lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
                 lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
                 lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
+                lotatt10 : $('#lotatt10').combobox('getValue')
             });
         };
 
@@ -741,8 +743,14 @@
                         <th>至
                         </th>
                         <td><input type='text' id='lotatt02End' class='easyui-datebox' size='16' data-options=''/></td>
-
-                        <td>
+                    </tr>
+                    <tr>
+                        <th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
+                        <td colspan="2">
                             <a onclick='doSearch();' class='easyui-linkbutton'
                                data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
                             <a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton'
