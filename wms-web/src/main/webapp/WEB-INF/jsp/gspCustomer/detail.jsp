@@ -253,6 +253,9 @@
         });
 
         function doUpload(data) {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
             var ajaxFile = new uploadFile({
                 "url":sy.bp()+"/commonController.do?uploadFileLocal",
                 "dataType":"json",
@@ -266,14 +269,26 @@
                     }
                 },
                 onload:function(data){
-                    $("#ezuiFormCustomer #contractUrl").val(data.comment);
+                    // $("#ezuiFormCustomer #contractUrl").val(data.comment);
+
+                    $.messager.progress('close');
+                    if (data.success) {
+                        $("#ezuiFormCustomer #contractUrl").val(data.comment);
+                    }else {
+                        showMsg("上传附件失败，请重试");
+                        $("#ezuiFormCustomer input[name='file']").filebox("setValue","");
+                    }
                 },
                 onerror:function(er){
+                    $.messager.progress('close');
                     console.log(er);
                 }
             });
         }
         function doUpload1(data) {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
             var ajaxFile = new uploadFile({
                 "url":sy.bp()+"/commonController.do?uploadFileLocal",
                 "dataType":"json",
@@ -287,14 +302,25 @@
                     }
                 },
                 onload:function(data1){
-                    $("#ezuiFormCustomer #empowerPhoto").val(data1.comment);
+                    // $("#ezuiFormCustomer #empowerPhoto").val(data1.comment);
+                    $.messager.progress('close');
+                    if (data1.success) {
+                        $("#ezuiFormCustomer #empowerPhoto").val(data1.comment);
+                    }else {
+                        showMsg("上传附件失败，请重试");
+                        $("#ezuiFormCustomer input[id='contractUrlFile1']").filebox("setValue","")
+                    }
                 },
                 onerror:function(er){
+                    $.messager.progress('close');
                     console.log(er);
                 }
             });
         }
         function doUpload2(data) {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
             var ajaxFile = new uploadFile({
                 "url":sy.bp()+"/commonController.do?uploadFileLocal",
                 "dataType":"json",
@@ -308,14 +334,26 @@
                     }
                 },
                 onload:function(data2){
-                    $("#ezuiFormCustomer #idCardFront").val(data2.comment);
+                    // $("#ezuiFormCustomer #idCardFront").val(data2.comment);
+
+                    $.messager.progress('close');
+                    if (data2.success) {
+                        $("#ezuiFormCustomer #idCardFront").val(data2.comment);
+                    }else {
+                        showMsg("上传附件失败，请重试");
+                        $("#ezuiFormCustomer input[name='file2']").filebox("setValue","");
+                    }
                 },
                 onerror:function(er){
+                    $.messager.progress('close');
                     console.log(er);
                 }
             });
         }
         function doUpload3(data) {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
             var ajaxFile = new uploadFile({
                 "url":sy.bp()+"/commonController.do?uploadFileLocal",
                 "dataType":"json",
@@ -330,11 +368,18 @@
                 },
                 onload:function(data3){
 
+                        // $("#ezuiFormCustomer #idCardBack").val(data3.comment);
+
+                    $.messager.progress('close');
+                    if (data3.success) {
                         $("#ezuiFormCustomer #idCardBack").val(data3.comment);
-
-
+                    }else {
+                        showMsg("上传附件失败，请重试");
+                        $("#ezuiFormCustomer input[name='file3']").filebox("setValue","");
+                    }
                 },
                 onerror:function(er){
+                    $.messager.progress('close');
                     console.log(er);
                 }
             });

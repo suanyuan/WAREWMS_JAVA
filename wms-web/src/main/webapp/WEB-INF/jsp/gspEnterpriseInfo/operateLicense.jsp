@@ -336,6 +336,9 @@
     }
 
     function doUploadOperateLisense(data) {
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -350,9 +353,17 @@
             },
             onload:function(data){
                 console.log("url"+data);
-                $("#ezuiFormOperate input[id='licenseUrl']").val(data.comment);
+                $.messager.progress('close');
+                if (data.success) {
+                    $("#ezuiFormOperate input[id='licenseUrl']").val(data.comment);
+
+                }else {
+                    showMsg("上传附件失败，请重试");
+                    $("#ezuiFormOperate input[id='licenseUrlFile']").filebox("setValue","");
+                }
             },
             onerror:function(er){
+                $.messager.progress('close');
                 console.log(er);
             }
         });

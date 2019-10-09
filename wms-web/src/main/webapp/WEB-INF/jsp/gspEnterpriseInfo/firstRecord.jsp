@@ -195,6 +195,9 @@
     }
 
     function doUploadSecondRecord(data) {
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -208,9 +211,16 @@
                 }
             },
             onload:function(data){
-                $("#ezuiFormFirstRecord #recordUrl").val(data.comment);
+                $.messager.progress('close');
+                if (data.success) {
+                    $("#ezuiFormFirstRecord #recordUrl").val(data.comment);
+                }else {
+                    showMsg("上传附件失败，请重试");
+                    $("#ezuiFormFirstRecord input[id='firstRecordFile']").filebox("setValue","");
+                }
             },
             onerror:function(er){
+                $.messager.progress('close');
                 console.log(er);
             }
         });

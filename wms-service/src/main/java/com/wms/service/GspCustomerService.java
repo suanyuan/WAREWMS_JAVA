@@ -31,6 +31,8 @@ public class GspCustomerService extends BaseService {
 	@Autowired
 	private GspCustomerMybatisDao gspCustomerMybatisDao;
 	@Autowired
+	private  FirstReviewLogMybatisDao firstReviewLogMybatisDao;
+	@Autowired
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
 	@Autowired
 	private FirstReviewLogService firstReviewLogService;
@@ -241,7 +243,19 @@ public class GspCustomerService extends BaseService {
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING);
 				gspCustomerMybatisDao.updateBySelective(gspCustomer);
 
-				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+
+//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+				FirstReviewLog f = new FirstReviewLog();
+				f.setReviewTypeId(s);
+				f.setApplyState(Constant.CODE_CATALOG_CHECKSTATE_QCCHECKING);
+				f.setCheckDateQc(null);
+				f.setCheckIdQc("");
+				f.setCheckRemarkQc("");
+				f.setCheckIdHead("");
+				f.setCheckDateHead(null);
+				f.setCheckRemarkHead("");
+				firstReviewLogMybatisDao.updateBytiJIAOSHENH(f);
+
 			}
 			return Json.success("确认成功");
 		}catch (Exception e){
