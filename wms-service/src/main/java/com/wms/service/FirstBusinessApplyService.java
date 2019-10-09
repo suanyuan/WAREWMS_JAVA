@@ -333,9 +333,14 @@ public class FirstBusinessApplyService extends BaseService {
 					if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
 						SpecsName = g.getSpecsName();
 					}
-					if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
-						ProductRegisterNo = gpr.getProductRegisterNo();
+					if(gpr!=null){
+						if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+							ProductRegisterNo = gpr.getProductRegisterNo();
+						}
+					}else{
+						ProductRegisterNo = "无";
 					}
+
 					if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
 						supName = sup.getDescrC();
 					}
@@ -671,9 +676,6 @@ public class FirstBusinessApplyService extends BaseService {
 
         Json json = new Json();
         String[] arrId = id.split(",");
-
-
-
 
 		try{
 
