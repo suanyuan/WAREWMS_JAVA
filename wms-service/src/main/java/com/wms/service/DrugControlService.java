@@ -67,21 +67,6 @@ public class DrugControlService extends BaseService {
 				System.out.println("题库为空");
 			}else {
 				for (SearchBasCustomer s: searchBasCustomerList) {
-			//时间格式转换
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-					Date date=null;
-					try {
-						if(s.getLicenseExpiryDate()!=null) {
-							date = sdf.parse(s.getLicenseExpiryDate());
-						}
-					} catch (ParseException e) {
-                        continue;
-					}finally {
-						if(date!=null) {
-							s.setLicenseExpiryDate(sdf.format(date));
-						}
-					}
-
 			//中文标签转换
 					if(s.getIsChineseLabel()!=null){
 						if(s.getIsChineseLabel().equals("1")){

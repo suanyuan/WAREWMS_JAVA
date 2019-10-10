@@ -64,25 +64,37 @@
         FROM  `bas_customer` b
         LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
         LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1')  d   ON  d.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=info.enterprise_id
         LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=info.enterprise_id
         WHERE b.customer_type='OW'
         <include refid="Example_Where_Clause"/>
     </select>
 
     <!-- 查询委托客户列表 -->
     <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
-   SELECT  info.enterprise_name,
-	           c.license_number,c.residence,c.juridical_person,
-	           d.head_name,d.business_residence,d.warehouse_address,d.business_scope,d.license_no,d.license_expiry_date,d.registration_authority registrationAuthorityL,
-	           e.record_no,e.registration_authority registrationAuthorityR,
-	           b.client_start_date,b.client_end_date,b.client_term,b.is_chinese_label,b.client_content,b.active_flag
-	            FROM  `bas_customer` b
-	          LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
-	          LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
-	          LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1')  d   ON  d.enterprise_id=info.enterprise_id
-	          LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
-	          WHERE b.customer_type='OW'
+        SELECT  info.enterprise_name,c.license_number,
+        IFNULL(IFNULL(IFNULL(c.residence,pr.residence),IFNULL(op.residence,r.residence)),e.residence) AS residence,
+        IFNULL(IFNULL(c.juridical_person,pr.juridical_person),IFNULL(op.juridical_person,e.juridical_person)) AS juridical_person,
+        IFNULL(IFNULL(pr.head_name,op.head_name),IFNULL(e.head_name,r.head_name)) AS head_name,
+        IFNULL(IFNULL(pr.business_residence,op.business_residence),e.operate_place) AS business_residence,
+        IFNULL(IFNULL(pr.warehouse_address,op.warehouse_address),e.warehouse_address) AS warehouse_address,
+        CONCAT(IFNULL(c.business_scope,''),IFNULL(pr.business_scope,''),IFNULL(op.business_scope,''),IFNULL(e.business_scope,''),IFNULL(r.bussiness_scope,'')) AS business_scope,
+        CONCAT(IFNULL(pr.license_no,''),'/',IFNULL(op.license_no,'')) AS license_no,
+        CONCAT(IFNULL(DATE_FORMAT(pr.license_expiry_date,'%Y-%m-%d '),''),'/',IFNULL(DATE_FORMAT(op.license_expiry_date,'%Y-%m-%d '),'')) AS license_expiry_date,
+        CONCAT(IFNULL(pr.registration_authority,''),'/',IFNULL(op.registration_authority,'')) AS registrationAuthorityL,
+        CONCAT(IFNULL(r.record_no,''),'/',IFNULL(e.record_no,'')) AS record_no,
+        CONCAT(IFNULL(r.registration_authority,''),'/',IFNULL(e.registration_authority,'')) AS registrationAuthorityR,
+        b.client_start_date,b.client_end_date,b.client_term,b.is_chinese_label,b.client_content,b.active_flag
+        FROM  `bas_customer` b
+        LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=info.enterprise_id
+        WHERE b.customer_type='OW'
           <include refid="Example_Where_Clause"/>
 
         <if test="limitClause != null and limitClause != ''" >
