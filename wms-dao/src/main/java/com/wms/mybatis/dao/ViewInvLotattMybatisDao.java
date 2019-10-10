@@ -19,6 +19,10 @@ public interface ViewInvLotattMybatisDao extends BaseDao {
 
     void invHold(Map<String, Object> map);
 
+    public <T> List<T> queryByPageListByData(MybatisCriteria criteria);//总查询分页
+    public int queryByPageListByDataCount(MybatisCriteria criteria);
+    public int queryByCountNotDJ(MybatisCriteria criteria);
+
     //	产品库存查询接口
     List<InvLotLocIdSkuInvLotAtt> getInvLotLocIdSkuInvLotAttList(@Param("sku") String sku,
                                                                  @Param("lotatt04") String lotatt04,

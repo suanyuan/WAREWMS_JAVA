@@ -44,14 +44,44 @@ public class ViewInvLotattController {
 		model.put("menuId", menuId);
 		return new ModelAndView("viewInvLotatt/main", model);
 	}
-	
+	/**
+	 * 分页显示
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
 	public EasyuiDatagrid<ViewInvLotattVO> showDatagrid(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
 		return viewInvLotattService.getPagedDatagrid(pager, query);
 	}
-	
+
+	/**
+	 * 分页显示  非待检
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showDatagridNotDJ")
+	@ResponseBody
+	public EasyuiDatagrid<ViewInvLotattVO> showDatagridNotDJ(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
+		return viewInvLotattService.getPagedDatagridNotDJ(pager, query);
+	}
+	/**
+	 * 分页显示  非待检或非不合格合格待处理
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showDatagridByData")
+	@ResponseBody
+	public EasyuiDatagrid<ViewInvLotattVO> showDatagridByData(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
+		return viewInvLotattService.getPagedDatagridByData(pager, query);
+	}
+
 	@Autowired
 	private ViewInvLotattExportService viewInvLotattExportService;
 	

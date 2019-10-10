@@ -63,11 +63,80 @@ public class ViewInvLotattService extends BaseService {
                     viewInvLotattVO.setLotatt08(basCustomer.getDescrC());
                 }
             }
+            viewInvLotattVOList.add(viewInvLotattVO);
+        }
+        datagrid.setTotal((long) viewInvLotattMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setRows(viewInvLotattVOList);
+        return datagrid;
+    }
+    /**
+     * 根据分页显示  非待检
+     *
+     * @param query
+     * @return
+     */
+    public EasyuiDatagrid<ViewInvLotattVO> getPagedDatagridNotDJ(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
+        EasyuiDatagrid<ViewInvLotattVO> datagrid = new EasyuiDatagrid<ViewInvLotattVO>();
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+        query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<ViewInvLotatt> viewInvLotattList = viewInvLotattMybatisDao.queryByPageList(mybatisCriteria);
+        ViewInvLotattVO viewInvLotattVO = null;
+        List<ViewInvLotattVO> viewInvLotattVOList = new ArrayList<ViewInvLotattVO>();
+        for (ViewInvLotatt viewInvLotatt : viewInvLotattList) {//james
+            viewInvLotattVO = new ViewInvLotattVO();
+            BeanUtils.copyProperties(viewInvLotatt, viewInvLotattVO);
+            //供应商名称
+            if(viewInvLotattVO.getLotatt08()!=null) {
+                String loatt08=viewInvLotattVO.getLotatt08();
+                BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
+                if(basCustomer!=null) {
+                    viewInvLotattVO.setLotatt08(basCustomer.getDescrC());
+                }
+            }
+            //筛选非待检
             if(!viewInvLotattVO.getLotatt10().equals("DJ")) {
                 viewInvLotattVOList.add(viewInvLotattVO);
             }
         }
-        datagrid.setTotal((long) viewInvLotattMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setTotal((long) viewInvLotattMybatisDao.queryByCountNotDJ(mybatisCriteria));
+        datagrid.setRows(viewInvLotattVOList);
+        return datagrid;
+    }
+    /**
+     * 根据分页显示  非待检或非不合格合格或非待处理
+     *
+     * @param query
+     * @return
+     */
+    public EasyuiDatagrid<ViewInvLotattVO> getPagedDatagridByData(EasyuiDatagridPager pager, ViewInvLotattQuery query) {
+        EasyuiDatagrid<ViewInvLotattVO> datagrid = new EasyuiDatagrid<ViewInvLotattVO>();
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+        query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<ViewInvLotatt> viewInvLotattList = viewInvLotattMybatisDao.queryByPageListByData(mybatisCriteria);
+        ViewInvLotattVO viewInvLotattVO = null;
+        List<ViewInvLotattVO> viewInvLotattVOList = new ArrayList<ViewInvLotattVO>();
+        for (ViewInvLotatt viewInvLotatt : viewInvLotattList) {//james
+            viewInvLotattVO = new ViewInvLotattVO();
+            BeanUtils.copyProperties(viewInvLotatt, viewInvLotattVO);
+            //供应商名称
+            if(viewInvLotattVO.getLotatt08()!=null) {
+                String loatt08=viewInvLotattVO.getLotatt08();
+                BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
+                if(basCustomer!=null) {
+                    viewInvLotattVO.setLotatt08(basCustomer.getDescrC());
+                }
+            }
+            viewInvLotattVOList.add(viewInvLotattVO);
+        }
+        datagrid.setTotal((long) viewInvLotattMybatisDao.queryByPageListByDataCount(mybatisCriteria));
         datagrid.setRows(viewInvLotattVOList);
         return datagrid;
     }

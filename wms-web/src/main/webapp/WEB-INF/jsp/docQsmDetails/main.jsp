@@ -128,6 +128,7 @@ $(function() {
 			{field: 'lotatt15',		title: '生产企业',	width: 100 },
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
 			{field: 'lotatt10',		title: '质量状态',	width: 100,formatter:ZL_TYPstatusFormatter },
+			{field: 'userdefine3',		title: '目标质量状态',width: 100,formatter:ZL_TYPstatusFormatter},
 			{field: 'changeProcess',		title: '质量状态变更过程',	width: 120,formatter:ZL_TYPstatusFormatter },
 			{field: 'locationid',		title: '库位',	width: 150 },
 			{field: 'finddate',		title: '发现日期',	width: 150 },
@@ -334,6 +335,7 @@ var detailedit = function(){
 			$("#ezuiBtn_detailsCommit").linkbutton('disable');
 		}
 		var  lotatt10=ZL_TYPstatusFormatter(row.lotatt10);
+		var  userdefine3=ZL_TYPstatusFormatter(row.userdefine3);
 		var  changeProcess=ZL_TYPstatusFormatter(row.changeProcess);
 		ezuiDetailsForm.form('load',{
 			qcudocno : row.qcudocno,
@@ -358,6 +360,7 @@ var detailedit = function(){
 			lotatt15:row.lotatt15,
 			reservedfield06:row.reservedfield06,
 			lotatt10:lotatt10,
+			userdefine3:userdefine3,
 			changeProcess:changeProcess,
 			locationid:row.locationid,
 			finddate:row.finddate,
@@ -464,84 +467,85 @@ var commitZ = function(){
 var detailsCommitZ = function(){
 	var row = ezuiDetailsDatagrid.datagrid('getSelected');
 	if(row) {
-        var customerid=row.customerid;
-		var sku=row.sku;
-		var lotatt04=row.lotatt04;
-		var lotatt05=row.lotatt05;
-		var lotatt08text=row.lotatt08text;
-		var lotatt08=row.lotatt08;
-		var lotatt10=row.lotatt10=="HG"?"BHG":"HG";
-		$("#upstreamToolbar #customerid").textbox('setValue',customerid);
-		$("#upstreamToolbar #sku").textbox('setValue',sku);
-		$("#upstreamToolbar #lotatt04").textbox('setValue',lotatt04);
-		$("#upstreamToolbar #lotatt05").textbox('setValue',lotatt05);
-		$("#upstreamToolbar #lotatt08").textbox('setValue',lotatt08);
-		$("#upstreamToolbar #lotatt10").textbox('setValue',lotatt10=="HG"?"合格":"不合格");
-		upstreamDialogId = $('#upstreamDialogId').datagrid({
-			url: '<c:url value="/viewInvLotattController.do?showDatagrid"/>',
-			method: 'POST',
-			toolbar: '#upstreamToolbar',
-			pageSize: 50,
-			pageList: [50, 100, 200],
-			fit: true,
-			border: false,
-			fitColumns: false,
-			nowrap: false,
-			striped: true,
-			collapsible: false,
-			pagination: true,
-			rownumbers: true,
-			singleSelect: true,
-			queryParams: {
-				fmcustomerid:customerid,
-				fmsku:sku,
-				lotatt04:lotatt04,
-				lotatt05:lotatt05,
-				lotatt08:lotatt08text,
-				lotatt10:lotatt10,
-			},
-			columns: [[
-				{field: 'fmlocation', title: '库位', width: 100},
-				{field: 'fmcustomerid', title: '货主', width: 100},
-				{field: 'fmsku', title: '产品代码', width: 150},
-				{field: 'lotatt12', title: '产品名称', width: 200},
-				{field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
-				{field: 'fmqty', title: '库存件数', width: 71},
-				{field: 'fmqtyEach', title: '库存数量', width: 71},
-				{field: 'qtyallocated', title: '分配件数', width: 71},
-				{field: 'qtyallocatedEach', title: '分配数量', width: 71},
-				{field: 'qtyavailed', title: '可用件数', width: 71},
-				{field: 'qtyavailedEach', title: '可用数量', width: 71},
-				// {field: 'totalgrossweight',		title: '毛重',	width: 71 },
-				// {field: 'totalcubic',		title: '体积',	width: 71 },
-				//
-				// {field: 'uom',		title: '单位',	width: 71 },
-				{field: 'fmlotnum', title: '批次', width: 81},
+			var customerid = row.customerid;
+			var sku = row.sku;
+			var lotatt04 = row.lotatt04;
+			var lotatt05 = row.lotatt05;
+			var lotatt08text = row.lotatt08text;
+			var lotatt08 = row.lotatt08;
+			var userdefine3 = row.userdefine3;
+			$("#upstreamToolbar #customerid").textbox('setValue', customerid);
+			$("#upstreamToolbar #sku").textbox('setValue', sku);
+			$("#upstreamToolbar #lotatt04").textbox('setValue', lotatt04);
+			$("#upstreamToolbar #lotatt05").textbox('setValue', lotatt05);
+			$("#upstreamToolbar #lotatt08").textbox('setValue', lotatt08);
+			$("#upstreamToolbar #lotatt10").textbox('setValue',"非待检");
+			upstreamDialogId = $('#upstreamDialogId').datagrid({
+				url: '<c:url value="/viewInvLotattController.do?showDatagridByData"/>',
+				method: 'POST',
+				toolbar: '#upstreamToolbar',
+				pageSize: 50,
+				pageList: [50, 100, 200],
+				fit: true,
+				border: false,
+				fitColumns: false,
+				nowrap: false,
+				striped: true,
+				collapsible: false,
+				pagination: true,
+				rownumbers: true,
+				singleSelect: true,
+				queryParams: {
+					fmcustomerid:customerid,
+					fmsku:sku,
+					lotatt04:lotatt04,
+					lotatt05:lotatt05,
+					lotatt08:lotatt08text,
+					lotatt10:userdefine3,
+				},
+				columns: [[
+					{field: 'fmlocation', title: '库位', width: 100},
+					{field: 'fmcustomerid', title: '货主', width: 100},
+					{field: 'fmsku', title: '产品代码', width: 150},
+					{field: 'lotatt12', title: '产品名称', width: 200},
+					{field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
+					{field: 'fmqty', title: '库存件数', width: 71},
+					{field: 'fmqtyEach', title: '库存数量', width: 71},
+					{field: 'qtyallocated', title: '分配件数', width: 71},
+					{field: 'qtyallocatedEach', title: '分配数量', width: 71},
+					{field: 'qtyavailed', title: '可用件数', width: 71},
+					{field: 'qtyavailedEach', title: '可用数量', width: 71},
+					// {field: 'totalgrossweight',		title: '毛重',	width: 71 },
+					// {field: 'totalcubic',		title: '体积',	width: 71 },
+					//
+					// {field: 'uom',		title: '单位',	width: 71 },
+					{field: 'fmlotnum', title: '批次', width: 81},
 
-				{field: 'lotatt06', title: '注册证号', width: 150},//加个字段
-				{field: 'skudescre', title: '规格型号', width: 103},
-				{field: 'lotatt05', title: '序列号', width: 110},
-				{field: 'lotatt04', title: '生产批号', width: 95},
-				{field: 'lotatt07', title: '灭菌批号', width: 120},
-				{field: 'lotatt03', title: '入库日期', width: 91},
-				{field: 'lotatt01', title: '生产日期', width: 112},
-				{field: 'lotatt02', title: '有效期/失效期', width: 113},
-				{field: 'lotatt08', title: '供应商', width: 120},
-				{field: 'lotatt09', title: '样品属性', width: 100, formatter: YP_TYPstatusFormatter},
-				{field: 'lotatt11', title: '存储条件', width: 100},
-				{field: 'onholdlocker', title: '冻结状态', width: 100, formatter: holdStatusFormatter},
-				{field: 'warehouseid', title: '仓库编码', width: 71}
-			]],
-			onDblClickCell: function (index, field, value) {
-				upstreamT();
-			},
-			onRowContextMenu: function (event, rowIndex, rowData) {
-			},
-			onLoadSuccess: function (data) {
-				$(this).datagrid('unselectAll');
-			}
-		});
-		upstreamDialog.dialog('open');
+					{field: 'lotatt06', title: '注册证号', width: 150},//加个字段
+					{field: 'skudescre', title: '规格型号', width: 103},
+					{field: 'lotatt05', title: '序列号', width: 110},
+					{field: 'lotatt04', title: '生产批号', width: 95},
+					{field: 'lotatt07', title: '灭菌批号', width: 120},
+					{field: 'lotatt03', title: '入库日期', width: 91},
+					{field: 'lotatt01', title: '生产日期', width: 112},
+					{field: 'lotatt02', title: '有效期/失效期', width: 113},
+					{field: 'lotatt08', title: '供应商', width: 120},
+					{field: 'lotatt09', title: '样品属性', width: 100, formatter: YP_TYPstatusFormatter},
+					{field: 'lotatt11', title: '存储条件', width: 100},
+					{field: 'onholdlocker', title: '冻结状态', width: 100, formatter: holdStatusFormatter},
+					{field: 'warehouseid', title: '仓库编码', width: 71}
+				]],
+				onDblClickCell: function (index, field, value) {
+					upstreamT();
+				},
+				onRowContextMenu: function (event, rowIndex, rowData) {
+				},
+				onLoadSuccess: function (data) {
+					$(this).datagrid('unselectAll');
+				}
+			});
+			upstreamDialog.dialog('open');
+
 	}
 };
 //细单指定库存 提交
@@ -621,7 +625,7 @@ var generatemanagement = function () {
 	$("#generatemanagementDialog #lotatt05").textbox('clear');
 	$("#generatemanagementDialog #lotatt10").combobox('clear');
 	generatemanagementDialogId = $('#generatemanagementDialogId').datagrid({
-		url: '<c:url value="/viewInvLotattController.do?showDatagrid"/>',
+		url: '<c:url value="/viewInvLotattController.do?showDatagridNotDJ"/>',
 		method: 'POST',
 		toolbar: '#generatemanagementToolbar',
 		pageSize: 50,
@@ -703,6 +707,18 @@ var generatemanagementToolbarClear = function () {
 var generatemanagementT=function () {
 	var row = generatemanagementDialogId.datagrid('getSelected');
 	if(row){
+		//判断处理的状态
+		if(row.lotatt10=='DCL'){
+			$("#qualityStatusForm #userdefine3").combobox('readonly',false);
+		}else if(row.lotatt10=='HG'){
+			$("#qualityStatusForm #userdefine3").combobox('setValue','BHG');
+			$("#qualityStatusForm #userdefine3").combobox('readonly',true);
+		}else{
+		    $("#qualityStatusForm #userdefine3").combobox('setValue','HG');
+			$("#qualityStatusForm #userdefine3").combobox('readonly',true);
+
+
+		}
 		$("#qualityStatusForm #fmqty").textbox('setValue',row.fmqty);
 		$("#qualityStatusForm #fmqtyF").textbox('setValue',"");
 		$("#qualityStatusForm #remarks").textbox('setValue',"");
@@ -717,47 +733,55 @@ var generatemanagementT=function () {
 var commitQualityStatus=function () {
 	var row = generatemanagementDialogId.datagrid('getSelected');
 	if(row){
-		var remarks=$("#qualityStatusForm #remarks").textbox('getValue');
-		var fmqtyF=$("#qualityStatusForm #fmqtyF").textbox('getValue');
-		if(fmqtyF>row.qtyavailed){
-			$.messager.show({
-				msg : '请输入小于可用件数的数字!', title : '<spring:message code="common.message.prompt"/>'
-			});
-			return;
-		}
-		$.messager.progress({
-			text: '<spring:message code="common.message.data.processing"/>', interval: 100
-		});
-		var data=new Object();
-		data.qcudocno=$("#ezuiForm #qcudocno").textbox('getValue');
-		data.locationid=row.fmlocation;
-		data.sku=row.fmsku;
-		data.customerid=row.fmcustomerid;
-		data.lotnum=row.fmlotnum;
-		data.qty=fmqtyF;
-		data.remarks=remarks;
-		$.ajax({
-			url : 'docQsmDetailsController.do?commitQualityStatus',
-			data :data,
-			type : 'POST',
-			dataType : 'JSON',
-			success : function(result){
-				var msg = '';
-				try {
-					msg = result.msg;
-				} catch (e) {
-					msg = '<spring:message code="common.message.data.delete.failed"/>';
-				} finally {
-					$.messager.show({
-						msg : msg, title : '<spring:message code="common.message.prompt"/>'
-					});
-					$.messager.progress('close');
-					qualityStatusDialog.dialog('close');
-					ezuiDetailsDatagrid.datagrid('load',{qcudocno:$("#ezuiForm #qcudocno").textbox('getValue')});
-
-				}
+		if(qualityStatusForm.form('validate')) {
+			var remarks = $("#qualityStatusForm #remarks").textbox('getValue');
+			var fmqtyF = $("#qualityStatusForm #fmqtyF").textbox('getValue');
+			var userdefine3 = $("#qualityStatusForm #userdefine3").combobox('getValue');
+			if (fmqtyF > row.qtyavailed) {
+				$.messager.show({
+					msg: '请输入小于可用件数的数字!', title: '<spring:message code="common.message.prompt"/>'
+				});
+				return;
 			}
-		});
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
+			var data = new Object();
+			data.qcudocno = $("#ezuiForm #qcudocno").textbox('getValue');
+			data.locationid = row.fmlocation;
+			data.sku = row.fmsku;
+			data.customerid = row.fmcustomerid;
+			data.lotnum = row.fmlotnum;
+			data.qty = fmqtyF;
+			data.userdefine3=userdefine3;
+			data.remarks = remarks;
+			$.ajax({
+				url: 'docQsmDetailsController.do?commitQualityStatus',
+				data: data,
+				type: 'POST',
+				dataType: 'JSON',
+				success: function (result) {
+					var msg = '';
+					try {
+						msg = result.msg;
+					} catch (e) {
+						msg = '<spring:message code="common.message.data.delete.failed"/>';
+					} finally {
+						$.messager.show({
+							msg: msg, title: '<spring:message code="common.message.prompt"/>'
+						});
+						$.messager.progress('close');
+						qualityStatusDialog.dialog('close');
+						ezuiDetailsDatagrid.datagrid('load', {qcudocno: $("#ezuiForm #qcudocno").textbox('getValue')});
+
+					}
+				}
+			});
+		}else{
+			$.messager.show({
+				msg: '请填写完整!', title: '<spring:message code="common.message.prompt"/>'
+			});
+		}
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -816,9 +840,6 @@ var commitQualityStatusWork=function () {
 		data.changeProcess=row.changeProcess;
 		data.failedDescription=failedDescription;
 		data.customeridTreatment=customeridTreatment;
-		if(row.userdefine1!=null||row.userdefine2!=null){
-			data.userdefine1='1';
-		}
 		$.ajax({
 			url : 'docQsmDetailsController.do?commitQualityStatusWork',
 			data :data,
@@ -1139,7 +1160,9 @@ var ezuiCustToolbarClear = function () {
 																																data: [{label: 'HG',
 																																        value: '合格'},
 																																       {label: 'BHG',
-																																         value: '不合格'}]"/></td>
+																																         value: '不合格'},
+																																         {label: 'DCL',
+																																         value: '待处理'}]"/></td>
 							<tr>
 						    </tr>
 								<td colspan="4">
@@ -1238,6 +1261,16 @@ var ezuiCustToolbarClear = function () {
 				<th>变更件数</th><td><input type='text' id='fmqtyF' name="fmqtyF" class='easyui-textbox' size='20' data-options="required:true"/></td>
 
 			</tr>
+			<th>目标质量状态</th>
+			<td>
+				<input type='text' id='userdefine3' name="userdefine3" class='easyui-combobox' size='20' data-options=" panelHeight: 'auto',required:true,
+				                                                                                                                   editable:'false',
+							                                                                                                        valueField: 'label',
+																																	textField: 'value',
+																																data: [{label: 'HG',
+																																        value: '合格'},
+																																       {label: 'BHG',
+																																         value: '不合格'}]"/></td>
 			<tr>
 			  <th>备注</th><td><input type='text' id='remarks' name="remarks" class='easyui-textbox' size='20' data-options=""/></td>
 

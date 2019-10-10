@@ -475,6 +475,47 @@ where 1=1
 	select count(1) from View_Inv_Lotatt 
 	<include refid="Example_Where_Clause"/>
 </select>
+<!-- 列表总数 非待检-->
+<select id="queryByCountNotDJ" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from (
+	select a.* from(
+	select <include refid="Base_Column_List"/>
+      from View_Inv_Lotatt
+	<include refid="Example_Where_Clause"/>
+	) a
+	where 1 = 1 and a.LotAtt10 !='DJ'
+	) b
+</select>
+<!--列表总数 指定上游数据库存-->
+<select id="queryByPageListByDataCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from (
+	select a.* from (
+	select
+	<include refid="Base_Column_List"/>
+	from View_Inv_Lotatt
+	where 1 = 1 and lotatt10!=#{condition.lotatt10} and lotatt10!='DJ'
+	<trim  suffixOverrides="," >
+		<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+			and fmcustomerid =#{condition.fmcustomerid}
+		</if>
+		<if test="condition.fmsku != null and condition.fmsku != ''" >
+			and fmsku =#{condition.fmsku}
+		</if>
+		<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+			and lotatt04 =#{condition.lotatt04}
+		</if>
+		<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+			and lotatt05 =  #{condition.lotatt05}
+		</if>
+		<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+			and lotatt08 =  #{condition.lotatt08}
+		</if>
+
+	</trim>
+	order by fmcustomerid,fmsku,fmlocation
+	) a
+	) b
+</select>
   	
 <!-- 查询库存余量按批次库位列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
@@ -492,6 +533,39 @@ where 1=1
 	) b
 	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+<!--指定上游数据库存 -->
+<select id="queryByPageListByData" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select a.* from (
+	select
+	<include refid="Base_Column_List"/>
+	from View_Inv_Lotatt
+	where 1 = 1 and lotatt10!=#{condition.lotatt10} and lotatt10!='DJ'
+	<trim  suffixOverrides="," >
+		<if test="condition.fmcustomerid != null and condition.fmcustomerid != ''" >
+			and fmcustomerid =#{condition.fmcustomerid}
+		</if>
+		<if test="condition.fmsku != null and condition.fmsku != ''" >
+			and fmsku =#{condition.fmsku}
+		</if>
+		<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+			and lotatt04 =#{condition.lotatt04}
+		</if>
+		<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+			and lotatt05 =  #{condition.lotatt05}
+		</if>
+		<if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
+			and lotatt08 =  #{condition.lotatt08}
+		</if>
+
+	</trim>
+    order by fmcustomerid,fmsku,fmlocation
+    ) a
+	) b
+	<if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
 </select>

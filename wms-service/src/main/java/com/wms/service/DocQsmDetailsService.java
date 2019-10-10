@@ -46,10 +46,10 @@ public class DocQsmDetailsService extends BaseService {
 			BeanUtils.copyProperties(docQsmDetails, docQsmDetailsVO);
 			//供应商名称
 			if(docQsmDetailsVO.getLotatt08()!=null) {
-				String loatt08=docQsmDetailsVO.getLotatt08();
-				BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
+				String lotatt08=docQsmDetailsVO.getLotatt08();
+				BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(lotatt08);
+				docQsmDetailsVO.setLotatt08text(lotatt08);
 				if(basCustomer!=null) {
-					docQsmDetailsVO.setLotatt08text(loatt08);
 					docQsmDetailsVO.setLotatt08(basCustomer.getDescrC());
 				}
 			}
@@ -105,6 +105,7 @@ public class DocQsmDetailsService extends BaseService {
 				detailsForm.setRecordingDate(new Date());
 				detailsForm.setRecordingPeople(addwho);
 				detailsForm.setLotnum(invLotLocId.getLotnum());
+				detailsForm.setUserdefine3(form.getUserdefine3());  //目标变更质量状态
 				docQsmDetailsMybatisDao.add(detailsForm);
 				json.setSuccess(true);
 				json.setMsg("生成细单成功!");
@@ -122,9 +123,9 @@ public class DocQsmDetailsService extends BaseService {
 		locId.setLotnum(form.getLotnum());
 		locId.setSku(form.getSku());
 		locId.setLocationid(form.getLocationid());
-		InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByKeyLotatt(locId);
-
-		if (invLotLocId != null) {
+		InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByKeyLotatt(locId); //查询库存
+		DocQsmDetails details=docQsmDetailsMybatisDao.queryById(form);           //查询变更单
+		if (invLotLocId != null&&details!=null) {
 			String warehouseid = SfcUserLoginUtil.getLoginUser().getWarehouse().getId();
 			String addwho = SfcUserLoginUtil.getLoginUser().getId();
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -133,13 +134,8 @@ public class DocQsmDetailsService extends BaseService {
 			map.put("sku", invLotLocId.getSku());             //产品代码
 			map.put("lotnum", invLotLocId.getLotnum());       //批次
 			map.put("locationid", invLotLocId.getLocationid());   //库位
-			if(form.getUserdefine1()!=null){
-				map.put("fmqcstatus", invLotLocId.getLotatt10());   //开始质量状态
-				map.put("toqcstatus", form.getLotatt10());
-			}else {
-				map.put("fmqcstatus", invLotLocId.getLotatt10());   //开始质量状态
-				map.put("toqcstatus", invLotLocId.getLotatt10().equals("HG") ? "BHG" : "HG");   //结束质量状态
-			}
+			map.put("fmqcstatus", invLotLocId.getLotatt10());   //开始质量状态
+			map.put("toqcstatus",details.getUserdefine3());   //结束质量状态
 			map.put("locqty",form.getLocqty());   //库位原件数
 			map.put("qty",form.getQty());       //处理不合格件数
 			map.put("userid",addwho);
@@ -148,10 +144,7 @@ public class DocQsmDetailsService extends BaseService {
 					if (result.substring(0, 3).equals("000")) {
 						form.setQcustatus("40");
 						form.setTreatmentDate(new Date());
-						if(form.getUserdefine1()==null) {
-							form.setLotatt10(invLotLocId.getLotatt10().equals("HG") ? "BHG" : "HG");
-							form.setChangeProcess(form.getChangeProcess() + ">" + form.getLotatt10());
-						}
+						form.setChangeProcess(form.getChangeProcess() + ">" +details.getUserdefine3());
 						docQsmDetailsMybatisDao.updateBySelective(form);
 						//判断主单状态  根据明细状态数量
 					   String status="-1";
@@ -217,6 +210,8 @@ public class DocQsmDetailsService extends BaseService {
 			detailsForm.setReservedfield06(invLotLocId.getReservedfield06());
 			detailsForm.setLocationid(invLotLocId.getLocationid());
 			detailsForm.setLotnum(invLotLocId.getLotnum());
+			detailsForm.setLotatt10(invLotLocId.getLotatt10());
+			detailsForm.setChangeProcess(invLotLocId.getLotatt10());
 			docQsmDetailsMybatisDao.updateBySelective(detailsForm);
 			json.setSuccess(true);
 			json.setMsg("指定库存成功!");
@@ -290,8 +285,10 @@ public class DocQsmDetailsService extends BaseService {
 					docQsmDetails.setChangeProcess("合格>不合格");
 				} else if (changeP.equals("BHG>HG")) {
 					docQsmDetails.setChangeProcess("不合格>合格");
-				} else {
-
+				} else if(changeP.equals("DCL>HG")){
+					docQsmDetails.setChangeProcess("待处理>合格");
+				} else if(changeP.equals("DCL>BHG")){
+					docQsmDetails.setChangeProcess("待处理>不合格");
 				}
 			}
 		}
