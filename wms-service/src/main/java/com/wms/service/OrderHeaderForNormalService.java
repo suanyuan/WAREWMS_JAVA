@@ -508,25 +508,8 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
             //判断订单状态
-            if (orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
-                //
-//				try {
-//					StockInXmlVo stockInXmlVo = new StockInXmlVo();
-//					stockInXmlVo.setOrderCode(orderHeaderForNormal.getOrderCode());
-//					stockInXmlVo.setOrderStatus(28);
-//					String xmldata = JaxbUtil.convertToXml(stockInXmlVo, false);
-//					logger.error("orderHeaderForNormalService-推送：" + xmldata);
-//					ResponseVO responseVO = new ServiceControllerProxy(END_POINT).updateOrder(xmldata);
-//					logger.error("orderHeaderForNormalService-接收：" + responseVO.getSuccess());
-//					if (responseVO.getSuccess() == false) {
-//						json.setSuccess(false);
-//						json.setMsg("出库处理失败：订单尚未配载！");
-//						return json;
-//					}
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+            if (orderHeaderForNormal.getSostatus().equals("40")) {//orderHeaderForNormal.getSostatus().equals("30") ||
+
                 //操作拣货
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
                 if (allocationDetailsIdList != null) {
@@ -647,10 +630,13 @@ public class OrderHeaderForNormalService extends BaseService {
                     json.setMsg("出库处理失败：订单数据异常！");
                     return json;
                 }
-            } else if (orderHeaderForNormal.getSostatus().equals("50") ||
-                    orderHeaderForNormal.getSostatus().equals("60") ||
-                    orderHeaderForNormal.getSostatus().equals("62") ||
-                    orderHeaderForNormal.getSostatus().equals("63")) {
+//            } else if (orderHeaderForNormal.getSostatus().equals("50") ||
+//                    orderHeaderForNormal.getSostatus().equals("60") ||
+//                    orderHeaderForNormal.getSostatus().equals("62") ||
+//                    orderHeaderForNormal.getSostatus().equals("63")) {
+
+            } else if (orderHeaderForNormal.getSostatus().equals("60")) {
+
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
                /* String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormalForm);
                 //响应报文
@@ -693,7 +679,7 @@ public class OrderHeaderForNormalService extends BaseService {
 //						return json;
 //					}
 //				} catch (Exception e) {
-//					// TODO Auto-generated catch block
+//
 //					e.printStackTrace();
 //				}
                 //拣货/装箱状态订单直接操作发运
@@ -755,8 +741,7 @@ public class OrderHeaderForNormalService extends BaseService {
  /*取消顺丰下单*/
     public ShunFengResponse CancelShunFengOrder(String Order){
         String cancelXml = CallExpressServiceTools.callSfExpressServiceByCSIM(RequestXmlUtil.getOrderCancelServiceRequestXml(Order));
-        ShunFengResponse shunFengResponseCanel = XmlHelper.xmlToBeanForSF(cancelXml);
-        return shunFengResponseCanel;
+        return XmlHelper.xmlToBeanForSF(cancelXml);
     }
 
     /**
