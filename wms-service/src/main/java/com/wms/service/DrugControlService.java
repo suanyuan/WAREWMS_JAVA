@@ -237,14 +237,6 @@ public class DrugControlService extends BaseService {
 		for (SearchInvLocation searchInvLocation : searchInvLocationList) {
 			//计算库存数量
 			searchInvLocation.setQtyeach(searchInvLocation.getQty()*searchInvLocation.getQty1());
-			//生产批号/序列号
-			if(!searchInvLocation.getLotatt04().isEmpty()){
-				 if(!searchInvLocation.getLotatt05().isEmpty()){
-                        searchInvLocation.setLotatt04(searchInvLocation.getLotatt04()+"/"+searchInvLocation.getLotatt05());
-				 }
-			}else if(!searchInvLocation.getLotatt05().isEmpty()){
-                   searchInvLocation.setLotatt04(searchInvLocation.getLotatt05());
-			}
 		}
 		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchInvLocationCount(mybatisCriteria));
 		datagrid.setRows(searchInvLocationList);
@@ -300,13 +292,13 @@ public class DrugControlService extends BaseService {
 						}
 					}
 					//生产批号/序列号
-                    if(!s.getLotatt04().isEmpty()){
-                        if(!s.getLotatt05().isEmpty()){
-                            s.setLotatt04(s.getLotatt04()+"/"+s.getLotatt05());
-                        }
-                    }else if(!s.getLotatt05().isEmpty()){
-                        s.setLotatt04(s.getLotatt05());
-                    }
+//                    if(!s.getLotatt04().isEmpty()){
+//                        if(!s.getLotatt05().isEmpty()){
+//                            s.setLotatt04(s.getLotatt04()+"/"+s.getLotatt05());
+//                        }
+//                    }else if(!s.getLotatt05().isEmpty()){
+//                        s.setLotatt04(s.getLotatt05());
+//                    }
 				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(searchInvLocationList, fieldMap, sheetName, response);
