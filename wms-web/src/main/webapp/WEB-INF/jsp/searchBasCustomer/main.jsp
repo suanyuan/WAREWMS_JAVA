@@ -87,7 +87,9 @@ $(function() {
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		enterpriseName : $('#enterpriseName').val(),
-		activeFlag : $('#activeFlag').combobox('getValue'),
+		clientStartDate : $('#clientStartDate').datebox('getValue'),
+		clientEndDate : $('#clientEndDate').datebox('getValue'),
+		// activeFlag : $('#activeFlag').combobox('getValue'),
 	});
 };
 
@@ -99,7 +101,9 @@ var doExport = function(){
         var param = new HashMap();
         param.put("token", token);
         param.put("enterpriseName",$('#enterpriseName').val());
-        param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        param.put("clientStartDate",$('#clientStartDate').datebox('getValue'));
+        param.put("clientEndDate",$('#clientEndDate').datebox('getValue'));
+        // param.put("activeFlag", $('#activeFlag').combobox('getValue'));
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportBasCustomerDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -132,18 +136,20 @@ var doExport = function(){
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
-						<tr >
-							<th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+						<tr>
+							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
 
-							<th >是否合作</th>
+<%--							<th >是否合作</th>--%>
+<%--							<td>--%>
+<%--								<select id="activeFlag" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">--%>
+<%--									<option value=""></option>--%>
+<%--									<option value="1">是</option>--%>
+<%--									<option value="0">否</option>--%>
+<%--								</select>--%>
+<%--							</td>--%>
+							<th>起始日期</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>截止日期</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<td>
-								<select id="activeFlag" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
-									<option value=""></option>
-									<option value="1">是</option>
-									<option value="0">否</option>
-								</select>
-							</td>
-							<td >
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

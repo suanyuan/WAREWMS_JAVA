@@ -35,18 +35,18 @@
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and info.enterprise_name like concat('%', #{condition.enterpriseName},'%')
             </if>
+            <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+                and client_start_date &gt;=  #{condition.clientStartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+                and client_end_date &lt;=  #{condition.clientEndDate,jdbcType=VARCHAR}
+            </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and b.active_flag =  #{condition.activeFlag}
             </if>
-            <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
-                and client_start_date =  #{condition.clientStartDate,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
-                and client_end_date =  #{condition.clientEndDate,jdbcType=VARCHAR}
-            </if>
         </trim>
     </sql>
-    <!-- 查询条件 委托客户 -->
+    <!-- 查询条件 库存信息 -->
     <sql id="Example_Where_Clause1">
         <trim  suffixOverrides="," >
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
@@ -58,7 +58,7 @@
         </trim>
     </sql>
 
-    <!-- 委托客户 列表总数-->
+<!-- 委托客户 列表总数-->
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT  count(1)
         FROM  `bas_customer` b
@@ -72,7 +72,7 @@
         <include refid="Example_Where_Clause"/>
     </select>
 
-    <!-- 查询委托客户列表 -->
+<!-- 查询委托客户列表 -->
     <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
         SELECT  info.enterprise_name,c.license_number,
         IFNULL(IFNULL(IFNULL(c.residence,pr.residence),IFNULL(op.residence,r.residence)),e.residence) AS residence,
@@ -104,7 +104,7 @@
 
 
 
-    <!-- 查询库存信息列表 -->
+<!-- 查询库存信息列表 -->
     <select id="querySearchInvLocation"  resultType="com.wms.entity.SearchInvLocation" parameterType="Object">
         SELECT
         i.locationid,i.`qty`,
@@ -127,7 +127,7 @@
             ${limitClause}
         </if>
     </select>
-    <!-- 库存信息 列表总数-->
+<!-- 库存信息 列表总数-->
     <select id="querySearchInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT
         count(1)
