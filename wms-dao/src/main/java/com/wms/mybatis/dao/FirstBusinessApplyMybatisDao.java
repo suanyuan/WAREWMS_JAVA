@@ -39,4 +39,7 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 
     //通过产品注册证id查询其下的产品的首营申请
     List<FirstBusinessApplyResult> selectByProductRegisterIdAll(Object id);
+
+
+	public  int countByClientAndProduct(@Param("clientId") String clientId,@Param("sku") String sku);
 }

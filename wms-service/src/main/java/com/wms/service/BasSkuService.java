@@ -211,9 +211,14 @@ public class BasSkuService extends BaseService {
 		}
 		BeanUtils.copyProperties(basSkuForm, basSku);
 
+
+		int num = firstBusinessApplyMybatisDao.countByClientAndProduct(basSkuForm.getCustomerid(),basSkuForm.getSku());
+
 		basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 		basSku.setEdittime(today);
-		basSkuMybatisDao.updateBySelective(basSku);
+		if(num==0){
+			basSkuMybatisDao.updateBySelective(basSku);
+		}
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

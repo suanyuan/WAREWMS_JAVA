@@ -76,6 +76,9 @@ $(function() {
             {field: 'enterpriseNo',		title: '企业代码 ',	width: 100 },
             {field: 'shorthandName',		title: '简称 ',	width: 100 },
             {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
+            {field: 'allClient',		title: '供应商对应货主 ',	width: 250 },
+
+
             {field: 'contacts',		title: '联系人 ',	width: 80 },
             {field: 'contactsPhone',		title: '联系人电话 ',	width: 100 },
 			{field: 'supContractNo',		title: '合同编号 ',	width: 120 },
