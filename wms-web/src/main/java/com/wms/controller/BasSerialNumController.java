@@ -87,8 +87,8 @@ public class BasSerialNumController {
 		Json json = basSerialNumService.deleteBasSerialNum(id);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
 		return json;
 	}
 
