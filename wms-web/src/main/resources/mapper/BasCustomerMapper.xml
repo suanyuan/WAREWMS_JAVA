@@ -675,12 +675,16 @@ where 1=1
 </select>
 
 	<select id="queryByCustomerId"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" />
-	from bas_customer
-	where CUSTOMERID=#{customerid,jdbcType=VARCHAR}
+		select <include refid="Base_Column_List" />
+		from bas_customer
+		where CUSTOMERID=#{customerid,jdbcType=VARCHAR}
 
-</select>
-
+	</select>
+	<select id="selectBySelective" resultType="java.lang.Integer"  parameterType="Object">
+		select  count(1) from Bas_Customer
+		where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+		and active_flag = 1
+	</select>
 <!-- 客户档案 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from Bas_Customer
@@ -697,11 +701,7 @@ where 1=1
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
 </select>
-<select id="selectBySelective" resultType="java.lang.Integer"  parameterType="Object">
-	select  count(1) from Bas_Customer
-	where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
-	and active_flag = 1
-</select>
+
 
 <select id="selectByIdType" resultMap="BaseResultMap"  parameterType="Object">
 	select  * from Bas_Customer
@@ -828,6 +828,11 @@ where 1=1
 	select  * from Bas_Customer
 	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 	</select>
+	<!--&lt;!&ndash; 该企业是 &ndash;&gt;-->
+	<!--<select id="countSupplierByIdTypeActiveFlag" resultType="java.lang.Integer"  parameterType="Object">-->
+	<!--select  count(1) from Bas_Customer-->
+	<!--where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}-->
+	<!--</select>-->
 
 	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
 	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id

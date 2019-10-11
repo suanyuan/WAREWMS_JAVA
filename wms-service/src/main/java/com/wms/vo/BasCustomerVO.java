@@ -97,7 +97,15 @@ public class BasCustomerVO {
 	private String isChineseLabel;
 
 	private String notes;
+	private String allClient;
 
+	public String getAllClient() {
+		return allClient;
+	}
+
+	public void setAllClient(String allClient) {
+		this.allClient = allClient;
+	}
 
 	public String getNotes() {
 		return notes;

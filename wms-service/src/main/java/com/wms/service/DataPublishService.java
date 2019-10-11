@@ -356,12 +356,15 @@ public class DataPublishService extends BaseService {
             basCustomerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
             basCustomerQuery.setEnterpriseId(supplier.getEnterpriseId());
 
-            BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(no);
-
+//          BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(no);
+            BasCustomer basCustomer = basCustomerMybatisDao.queryByenterId(basCustomerQuery);
+            if(basCustomer==null){
+                return Json.error("供应商不存在");
+            }
             firstReviewLogService.updateFirstReviewBySupplierId(Constant.CODE_CATALOG_CHECKSTATE_FAIL,basCustomer.getCustomerid());
             firstBusinessApplyService.updateCheckingApplySupplierNo(basCustomer.getCustomerid());
 
-            return basCustomerService.editBasCustomerByEnterpriseId(form);
+            return basCustomerService.editBasCustomerSupByEnterpriseId(form);
 
         }else if(no.indexOf(Constant.APLRECNO)!=-1){
 

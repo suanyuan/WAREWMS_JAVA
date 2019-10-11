@@ -22,14 +22,15 @@
     </div>
     <div title="营业执照信息" data-options="href:'gspEnterpriseInfoController.do?toBusinessLicense&id=${enterpriseId}'" style="overflow:auto;padding:10px;display:none;">
     </div>
-    <div title="生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toProdLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
-    </div>
-    <div title="第一类生产备案凭证" data-options="href:'gspEnterpriseInfoController.do?toFirstRecord&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
-    </div>
     <div title="经营许可证信息" data-options="href:'gspEnterpriseInfoController.do?toOperateLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
     </div>
     <div title="第二类经营备案凭证" data-options="href:'gspEnterpriseInfoController.do?toSecondRecord&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
     </div>
+    <div title="生产许可证信息" data-options="href:'gspEnterpriseInfoController.do?toProdLicense&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
+    </div>
+    <div title="第一类生产备案凭证" data-options="href:'gspEnterpriseInfoController.do?toFirstRecord&id=${enterpriseId}'" style="display:none;overflow:auto;padding:10px;">
+    </div>
+
     <div title="医疗机构执业许可证信息" data-options="href:'gspEnterpriseInfoController.do?toMedicalLicense&id=${enterpriseId}'" style="overflow:auto;padding:10px;display:none;">
     </div>
 
