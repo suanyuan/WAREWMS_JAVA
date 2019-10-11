@@ -95,7 +95,7 @@
         IFNULL(IFNULL(pr.head_name,op.head_name),IFNULL(e.head_name,r.head_name)) AS head_name,
         IFNULL(IFNULL(pr.business_residence,op.business_residence),e.operate_place) AS business_residence,
         IFNULL(IFNULL(pr.warehouse_address,op.warehouse_address),e.warehouse_address) AS warehouse_address,
-        CONCAT(IFNULL(c.business_scope,''),IFNULL(pr.business_scope,''),IFNULL(op.business_scope,''),IFNULL(e.business_scope,''),IFNULL(r.bussiness_scope,'')) AS business_scope,
+        CONCAT(IFNULL(pr.business_scope,''),IFNULL(op.business_scope,''),IFNULL(e.business_scope,''),IFNULL(r.bussiness_scope,'')) AS business_scope,
         CONCAT(IFNULL(pr.license_no,''),'/',IFNULL(op.license_no,'')) AS license_no,
         CONCAT(IFNULL(DATE_FORMAT(pr.license_expiry_date,'%Y-%m-%d '),''),'/',IFNULL(DATE_FORMAT(op.license_expiry_date,'%Y-%m-%d '),'')) AS license_expiry_date,
         CONCAT(IFNULL(pr.registration_authority,''),'/',IFNULL(op.registration_authority,'')) AS registrationAuthorityL,
