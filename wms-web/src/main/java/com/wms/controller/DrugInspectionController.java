@@ -2,9 +2,7 @@ package com.wms.controller;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.SearchBasCustomer;
-import com.wms.entity.CustomerProduct;
-import com.wms.entity.SearchInvLocation;
+import com.wms.entity.*;
 import com.wms.service.DrugControlService;
 import com.wms.utils.annotation.Login;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,14 +111,14 @@ public class DrugInspectionController {
 	@Login
 	@RequestMapping(params = "showSearchEnterInvLocationDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<SearchInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
 		return drugControlService.showSearchEnterInvLocationDatagrid(pager, query);
 	}
 
 
 	@Login
 	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcel")
-	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
+	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
 		drugControlService.exportSearchEnterInvLocationDataToExcel(response, form);
 	}
 
@@ -138,14 +136,14 @@ public class DrugInspectionController {
     @Login
     @RequestMapping(params = "showSearchOutInvLocationDatagrid")
     @ResponseBody
-    public EasyuiDatagrid<SearchInvLocation> showSearchOutInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
+    public EasyuiDatagrid<SearchOutInvLocation> showSearchOutInvLocationDatagrid(EasyuiDatagridPager pager, SearchOutInvLocation query) {
         return drugControlService.showSearchOutInvLocationDatagrid(pager, query);
     }
 
 
     @Login
     @RequestMapping(params = "exportSearchOutInvLocationDataToExcel")
-    public void exportSearchOutInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
+    public void exportSearchOutInvLocationDataToExcel(HttpServletResponse response,SearchOutInvLocation form) throws Exception {
         drugControlService.exportSearchOutInvLocationDataToExcel(response, form);
     }
 }
