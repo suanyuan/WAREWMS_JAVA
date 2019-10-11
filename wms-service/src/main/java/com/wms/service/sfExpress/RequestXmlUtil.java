@@ -2,6 +2,7 @@ package com.wms.service.sfExpress;
 import	java.text.SimpleDateFormat;
 
 
+import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 
 /**
@@ -22,7 +23,7 @@ public class RequestXmlUtil {
    /**
     * 获取下单请求体
    */
-public static String getOrderServiceRequestXml(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+public static String getOrderServiceRequestXml(OrderHeaderForNormal orderHeaderForNormal) {
 
 
 
@@ -35,7 +36,7 @@ public static String getOrderServiceRequestXml(OrderHeaderForNormalForm orderHea
         //客户订单号,建议英文字母+
         //YYMMDD(日期)+流水号,
         //如:TB1207300000001
-        strBuilder.append("orderid='" +orderHeaderForNormalForm.getOrderno() + "'").append(" ");
+        strBuilder.append("orderid='" +orderHeaderForNormal.getOrderno()+"22"+ "'").append(" ");
         //返回顺丰运单号
         strBuilder.append("express_type='1'").append(" ");
         //寄件方信息
@@ -47,21 +48,21 @@ public static String getOrderServiceRequestXml(OrderHeaderForNormalForm orderHea
         strBuilder.append("j_tel='" + "13246025290" + "'").append(" ");
         strBuilder.append("j_address='" + "北京东路77号(中德大厦)16楼" + "'").append(" ");
         //收件方信息
-        strBuilder.append("d_province='" + "广东省" + "'").append(" ");//省
-        strBuilder.append("d_city='" + "广州市" + "'").append(" ");//市
-        strBuilder.append("d_county='" + "白云区" + "'").append(" ");//区
-        strBuilder.append("d_company='" + "四胜贸易有限公司"+ "'").append(" ");//到件方公司名称
-        strBuilder.append("d_tel='" + "15674991723" + "'").append(" ");//到件方联系电话
-        strBuilder.append("d_contact='" + "高俊" + "'").append(" ");//到件方联系人
-        strBuilder.append("d_address='" + "白云东路130号" + "'").append(" ");//到件方详细地址
+//        strBuilder.append("d_province='" + "广东省" + "'").append(" ");//省
+//        strBuilder.append("d_city='" + "广州市" + "'").append(" ");//市
+//        strBuilder.append("d_county='" + "白云区" + "'").append(" ");//区
+//        strBuilder.append("d_company='" + "四胜贸易有限公司"+ "'").append(" ");//到件方公司名称
+//        strBuilder.append("d_tel='" + "15674991723" + "'").append(" ");//到件方联系电话
+//        strBuilder.append("d_contact='" + "高俊" + "'").append(" ");//到件方联系人
+//        strBuilder.append("d_address='" + "白云东路130号" + "'").append(" ");//到件方详细地址
 
-   /* strBuilder.append("d_province='" + orderHeaderForNormalForm.getcProvince() + "'").append(" ");//省
-    strBuilder.append("d_city='" + orderHeaderForNormalForm.getcCity() + "'").append(" ");//市
-    strBuilder.append("d_county='" + orderHeaderForNormalForm.getcAddress2() + "'").append(" ");//区
-    strBuilder.append("d_company='" + orderHeaderForNormalForm.getConsigneeid()+ "'").append(" ");//到件方公司名称
-    strBuilder.append("d_tel='" + orderHeaderForNormalForm.getcTel1() + "'").append(" ");//到件方联系电话
-    strBuilder.append("d_contact='" + orderHeaderForNormalForm.getcContact() + "'").append(" ");//到件方联系人
-    strBuilder.append("d_address='" + orderHeaderForNormalForm.getcAddress1() + "'").append(" ");//到件方详细地址*/
+    strBuilder.append("d_province='" + orderHeaderForNormal.getCProvince() + "'").append(" ");//省
+    strBuilder.append("d_city='" +  orderHeaderForNormal.getCCity() + "'").append(" ");//市
+    strBuilder.append("d_county='" + orderHeaderForNormal.getCAddress2()  + "'").append(" ");//区
+    strBuilder.append("d_company='" + orderHeaderForNormal.getConsigneeid() + "'").append(" ");//到件方公司名称
+    strBuilder.append("d_tel='" +  orderHeaderForNormal.getCTel1() + "'").append(" ");//到件方联系电话
+    strBuilder.append("d_contact='" + orderHeaderForNormal.getCContact()  + "'").append(" ");//到件方联系人
+    strBuilder.append("d_address='" + orderHeaderForNormal.getCAddress1() + "'").append(" ");//到件方详细地址
         //备注不为空就进行xml append()拼接
        /* try {
             if(!expressOrder.getRemark().equals(" ") || expressOrder != null){
@@ -89,10 +90,9 @@ public static String getOrderServiceRequestXml(OrderHeaderForNormalForm orderHea
     //海关批次（默认空的）
        // strBuilder.append("customs_batchs=''").append(" ");
         //货物类型
-      /*  strBuilder.append("<Cargo").append(" ");
-        strBuilder.append("name='医药器械'").append(" ");
-        strBuilder.append("count='1'").append(" ");
-        strBuilder.append("</Cargo>").append(" ");*/
+        strBuilder.append("<Cargo").append(" ");
+        strBuilder.append("name='医药器械'>").append(" ");
+        strBuilder.append("</Cargo>").append(" ");
         strBuilder.append("</Order>");
         strBuilder.append("</Body>");
         strBuilder.append("</Request>");

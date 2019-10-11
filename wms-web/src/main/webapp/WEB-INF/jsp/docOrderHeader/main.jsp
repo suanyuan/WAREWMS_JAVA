@@ -907,7 +907,7 @@ var shipment = function(){
 						;
 					}
 				});
-			};
+			 };
 	});
 	if (operateResult != '') {
 		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
@@ -1005,11 +1005,25 @@ var printExpress = function () {
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
-		if (orderList == null) {
-			orderList = item.orderno;
-		} else {
-			orderList = orderList + ',' + item.orderno;
+		//如果快递单号为空则不能打印电子面单
+		if(item.cAddress4 == null){
+			showMsg("选中的订单存在未发运订单无法打印快递单.......");
+			return;
+		}else{
+			console.log("++++++++++++++++++++++++++");
+			console.log(index);
+			if(index ==0){
+				if (orderList == null) {
+					orderList = item.orderno;
+				} else {
+					orderList = orderList + ',' + item.orderno;
+				}
+			}else{
+				showMsg("同时只支持一张电子面单打印......");
+				return;
+			}
 		}
+
 	});
 	if (orderList == null) {
 		return;
