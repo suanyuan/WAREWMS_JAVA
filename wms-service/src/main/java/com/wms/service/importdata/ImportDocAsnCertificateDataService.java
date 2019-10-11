@@ -147,8 +147,8 @@ public class ImportDocAsnCertificateDataService {
 			} catch (Exception e) {
 				rowResult.append("[序号]，资料格式转换失败，请输入大于0之正整数数字格式").append(" ");
 			}
-			System.out.println(dataArray.getSeq()+"=======================");
-			System.out.println(Integer.parseInt(dataArray.getSeq())+"=============");
+//			System.out.println(dataArray.getSeq()+"=======================");
+//			System.out.println(Integer.parseInt(dataArray.getSeq())+"=============");
 
 
 
@@ -189,7 +189,7 @@ public class ImportDocAsnCertificateDataService {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[产品代码或货主]，未输入或不存在").append(" ");
+                rowResult.append("[产品代码]，未输入或不存在").append(" ");
             }
 
 			try {
