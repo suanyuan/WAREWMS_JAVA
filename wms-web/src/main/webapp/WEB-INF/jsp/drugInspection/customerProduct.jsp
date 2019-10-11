@@ -49,7 +49,7 @@ $(function() {
 			{field: 'productModel',		title: '型号',	width: 150 },
 			{field: 'productRegisterNo',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
             {field: 'approveDate',		title: '批准日期 ',	width: 200,formatter:dateFormat2 },
-            {field: 'productRegisterExpiryDate',		title: '有效期/失效期 ',	width: 200 ,formatter:dateFormat2 },
+            {field: 'productRegisterExpiryDate',		title: '有效期',	width: 200 ,formatter:dateFormat2 },
 			{field: 'enterpriseSc',		title: '生产企业 ',	width: 500 },
 			{field: 'licenseOrRecordNo',		    title: '生产企业许可证号/备案凭证号 ',	width: 150 },
 			{field: 'unit',	title: '单位 ',	width: 120 },
