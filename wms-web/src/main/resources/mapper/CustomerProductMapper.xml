@@ -27,7 +27,7 @@
 
     <!-- 查询条件 -->
     <sql id="Example_Where_Clause">
-        where 1=1
+        where t1.reservedfield09='1'
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and t2.enterprise_name like concat('%', #{condition.enterpriseName},'%')

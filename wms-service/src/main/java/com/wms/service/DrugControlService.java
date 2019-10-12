@@ -234,7 +234,9 @@ public class DrugControlService extends BaseService {
 		List<SearchInvLocation> searchInvLocationList = searchBasCustomerMybatisDao.querySearchInvLocation(mybatisCriteria);
 		for (SearchInvLocation searchInvLocation : searchInvLocationList) {
 			//计算库存数量
-			searchInvLocation.setQtyeach(searchInvLocation.getQty()*searchInvLocation.getQty1());
+			if(searchInvLocation.getQty()!=null&&searchInvLocation.getQty1()!=null) {
+				searchInvLocation.setQtyeach(searchInvLocation.getQty() * searchInvLocation.getQty1());
+			}
 		}
 		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchInvLocationCount(mybatisCriteria));
 		datagrid.setRows(searchInvLocationList);
@@ -345,7 +347,9 @@ public class DrugControlService extends BaseService {
 		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocation(mybatisCriteria);
 		for (SearchEnterInvLocation searchEnterInvLocation : searchEnterInvLocationList) {
 			//计算数量
-			searchEnterInvLocation.setQtyeach(searchEnterInvLocation.getQty()*searchEnterInvLocation.getQty1());
+			if(searchEnterInvLocation.getQty()!=null&&searchEnterInvLocation.getQty1()!=null) {
+				searchEnterInvLocation.setQtyeach(searchEnterInvLocation.getQty() * searchEnterInvLocation.getQty1());
+			}
 		}
 		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationCount(mybatisCriteria));
 		datagrid.setRows(searchEnterInvLocationList);
@@ -449,7 +453,9 @@ public class DrugControlService extends BaseService {
         List<SearchOutInvLocation> searchOutInvLocationList = searchBasCustomerMybatisDao.querySearchOutInvLocation(mybatisCriteria);
         for (SearchOutInvLocation searchOutInvLocation : searchOutInvLocationList) {
         	//计算数量
-			searchOutInvLocation.setQtyeach(searchOutInvLocation.getQty()*searchOutInvLocation.getQty1());
+			if(searchOutInvLocation.getQty()!=null&&searchOutInvLocation.getQty1()!=null) {
+				searchOutInvLocation.setQtyeach(searchOutInvLocation.getQty() * searchOutInvLocation.getQty1());
+			}
         }
         datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchOutInvLocationCount(mybatisCriteria));
         datagrid.setRows(searchOutInvLocationList);

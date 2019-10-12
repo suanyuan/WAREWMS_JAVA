@@ -5,7 +5,7 @@
 <mapper namespace="com.wms.mybatis.dao.SearchBasCustomerMybatisDao">
     <!-- Result Map 委托客户-->
     <resultMap id="BaseResultMap" type="com.wms.entity.SearchBasCustomer">
-        <result column="enterprise_name" property="enterpriseName"/>
+        <result column="descr_c" property="enterpriseName"/>
         <result column="license_number" property="licenseNumber"/>
         <result column="residence" property="residence"/>
         <result column="juridical_person" property="juridicalPerson"/>
@@ -33,7 +33,7 @@
     <sql id="Example_Where_Clause">
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-                and info.enterprise_name like concat('%', #{condition.enterpriseName},'%')
+                and b.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
                 and client_start_date &gt;=  #{condition.clientStartDate,jdbcType=VARCHAR}
@@ -50,7 +50,7 @@
     <sql id="Example_Where_Clause1">
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-                and info.`enterprise_name` like concat('%', #{condition.enterpriseName},'%')
+                and b.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and a.lotatt12 like concat('%', #{condition.lotatt12},'%')
@@ -76,7 +76,7 @@
     <sql id="Example_Where_Clause2">
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-                and info.`enterprise_name` like concat('%', #{condition.enterpriseName},'%')
+                and r.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
                 and e.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
@@ -108,7 +108,7 @@
     <sql id="Example_Where_Clause3">
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-                and info.`enterprise_name` like concat('%', #{condition.enterpriseName},'%')
+                and r.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.outStartDate != null and condition.outStartDate != ''" >
                 and c.lotatt03 &gt;=  #{condition.outStartDate,jdbcType=VARCHAR}
@@ -132,7 +132,7 @@
                 and c.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
             <if test="condition.consigneeID != null and condition.consigneeID != ''" >
-                and h.consigneeID like concat('%', #{condition.consigneeID},'%')
+                and aa.consigneeID like concat('%', #{condition.consigneeID},'%')
             </if>
         </trim>
     </sql>
@@ -141,7 +141,7 @@
 
 <!-- 查询委托客户列表 -->
     <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
-        SELECT  info.enterprise_name,c.license_number,
+        SELECT  b.descr_c,c.license_number,
         IFNULL(IFNULL(IFNULL(c.residence,pr.residence),IFNULL(op.residence,r.residence)),e.residence) AS residence,
         IFNULL(IFNULL(c.juridical_person,pr.juridical_person),IFNULL(op.juridical_person,e.juridical_person)) AS juridical_person,
         IFNULL(IFNULL(pr.head_name,op.head_name),IFNULL(e.head_name,r.head_name)) AS head_name,
@@ -155,12 +155,11 @@
         CONCAT(IFNULL(r.registration_authority,''),'/',IFNULL(e.registration_authority,'')) AS registrationAuthorityR,
         b.client_start_date,b.client_end_date,b.client_term,b.is_chinese_label,b.client_content,b.active_flag
         FROM  `bas_customer` b
-        LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=b.enterprise_id
         WHERE b.customer_type='OW'
           <include refid="Example_Where_Clause"/>
 
@@ -172,12 +171,11 @@
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT  count(1)
         FROM  `bas_customer` b
-        LEFT JOIN  `gsp_enterprise_info`  info ON  info.enterprise_id=b.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=info.enterprise_id
-        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=info.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_business_license` WHERE  is_use='1')  c ON  c.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='PROD')  pr ON  pr.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_operate_license`  WHERE  is_use='1' AND `operate_type`='OPERATE')  op   ON  op.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_second_record`   WHERE  is_use='1') e   ON  e.enterprise_id=b.enterprise_id
+        LEFT JOIN   (SELECT * FROM `gsp_first_record`  WHERE  is_use='1') r   ON  r.enterprise_id=b.enterprise_id
         WHERE b.customer_type='OW'
         <include refid="Example_Where_Clause"/>
     </select>
@@ -189,7 +187,7 @@
         SELECT
         i.locationid,i.`qty`,
         p.`qty1`,
-        info.`enterprise_name` enterpriseName,
+        b.descr_c enterpriseName,
         CONCAT(IFNULL(a.`lotatt04`,''),'/',IFNULL(a.`lotatt05`,'')) AS lotatt04,
         a.`lotatt01`,a.`lotatt02`,a.`lotatt03`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
         s.`descr_c` descrc,s.defaultreceivinguom,
@@ -199,9 +197,8 @@
         LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=b.`enterprise_id`
-        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
-        WHERE bb.codeid='uom'
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        WHERE s.reservedfield09='1'
         <include refid="Example_Where_Clause1"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -217,9 +214,8 @@
         LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=b.`enterprise_id`
-        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
-        WHERE bb.codeid='uom'
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        WHERE s.reservedfield09='1'
         <include refid="Example_Where_Clause1"/>
     </select>
 
@@ -229,24 +225,25 @@
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
         SELECT
-        info.`enterprise_name` enterpriseName,
+        r.descr_c enterpriseName,
         d.qcqty_expected qty,d.userdefine1 locationid,
         p.`qty1`,
         CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
         e.`lotatt01`,e.`lotatt02`,e.`lotatt03`,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
-        s.`descr_c` descrc,s.defaultreceivinguom,
-        bb.codename_c uom
+        s.`descr_c` descrc,
+        bb.codename_c uom,`bb1`.codename_c type,aa.notes
         FROM doc_asn_details a
+        left join doc_asn_header aa on aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
         LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        inner JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=r.`enterprise_id`
-        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
-        WHERE bb.codeid='uom' AND  b.LINESTATUS = '40'
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE  (aa.asnstatus='70' or aa.asnstatus='99') AND s.reservedfield09='1'
         <include refid="Example_Where_Clause2"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -258,16 +255,17 @@
         SELECT
         count(1)
         FROM doc_asn_details a
+        left join doc_asn_header aa on aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
         LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        inner JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=r.`enterprise_id`
-        LEFT JOIN `bas_codes`  bb ON s.defaultreceivinguom=bb.code
-        WHERE bb.codeid='uom' AND  b.LINESTATUS = '40'
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE  (aa.asnstatus='70' or aa.asnstatus='99') AND s.reservedfield09='1'
         <include refid="Example_Where_Clause2"/>
     </select>
 
@@ -278,24 +276,23 @@
 <!-- 查询出库信息列表 -->
     <select id="querySearchOutInvLocation"  resultType="com.wms.entity.SearchOutInvLocation" parameterType="Object">
         SELECT
-        info.`enterprise_name` enterpriseName,
+        r.descr_c enterpriseName,
         b.qty, p.`qty1`,
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
-        c.`lotatt01`,c.`lotatt02`,c.`lotatt03`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
+        c.`lotatt01`,c.`lotatt02`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
         s.`descr_c` descrc,
-        bb.codename_c uom,`bb1`.codename_c type,
-        h.consigneeid consigneeID,h.`c_address1` caddress1,h.C_Contact contact,h.`c_tel1` ctel1
+        bb.codename_c uom,`bb1`.codename_c type,aa.notes,aa.edittime lotatt03,
+        aa.consigneeid consigneeID,aa.`c_address1` caddress1,aa.C_Contact contact,aa.`c_tel1` ctel1
         FROM  `doc_order_details` a
-        LEFT JOIN `doc_order_header` h ON h.orderno=a.`orderno`
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
         LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=r.`enterprise_id`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=h.OrderType
-        WHERE (a.linestatus='40' OR a.linestatus='99')
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE (aa.sostatus='80' OR aa.sostatus='99') AND s.reservedfield09='1'
 
         <include refid="Example_Where_Clause3"/>
 
@@ -308,16 +305,15 @@
         SELECT
         count(1)
         FROM  `doc_order_details` a
-        LEFT JOIN `doc_order_header` h ON h.orderno=a.`orderno`
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
         LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN `gsp_enterprise_info` info ON info.`enterprise_id`=r.`enterprise_id`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP')`bb1` ON  `bb1`.code=h.OrderType
-        WHERE (a.linestatus='40' OR a.linestatus='99')
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE (aa.sostatus='80' OR aa.sostatus='99') AND s.reservedfield09='1'
         <include refid="Example_Where_Clause3"/>
     </select>
 
