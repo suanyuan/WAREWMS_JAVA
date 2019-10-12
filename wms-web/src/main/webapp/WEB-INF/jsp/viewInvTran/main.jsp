@@ -345,7 +345,7 @@ var doExport = function(){
 		$('#ezuiBtn_export').linkbutton('disable');
 		var token = new Date().getTime();
 		var param = new HashMap();
-		param.put("token", token);
+            param.put("token", token);
 		
 		param.put("transactiontype", $('#transactiontype').combobox('getValue'));
 		param.put("doctype", $('#doctype').combobox('getValue'));

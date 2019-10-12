@@ -1,14 +1,12 @@
 package com.wms.service;
 
 import com.wms.constant.Constant;
-import com.wms.dao.GspEnterpriseInfoDao;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.entity.SfcUser;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.GspEnterpriseInfoQuery;
 import com.wms.utils.SfcUserLoginUtil;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service("gspEnterpriseInfoService")
@@ -61,7 +58,7 @@ public class GspEnterpriseInfoService extends BaseService {
 		if(StringUtils.isEmpty(query.getType())){
 			total = Long.parseLong(gspEnterpriseInfoMybatisDao.queryByCount(criteria)+"");
 		}else {
-			total = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);
+			total  = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);
 		}
 
 		datagrid.setTotal(Long.parseLong(total+""));
