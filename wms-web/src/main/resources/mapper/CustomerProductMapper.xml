@@ -27,20 +27,24 @@
 
     <!-- 查询条件 -->
     <sql id="Example_Where_Clause">
-        where 1=1
+        where t1.reservedfield09='1'
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and t2.enterprise_name like concat('%', #{condition.enterpriseName},'%')
             </if>
-            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
-                and t1.active_flag =  #{condition.activeFlag}
+            <if test="condition.productName != null and condition.productName != ''" >
+                and t3.product_name like concat('%', #{condition.productName},'%')
             </if>
-            <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
-                and client_start_date =  #{condition.clientStartDate,jdbcType=VARCHAR}
+            <if test="condition.specsName != null and condition.specsName != ''" >
+                and t3.specs_name like concat('%', #{condition.specsName},'%')
             </if>
-            <if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
-                and client_end_date =  #{condition.clientEndDate,jdbcType=VARCHAR}
+            <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
+                and t4.product_register_no like concat('%', #{condition.productRegisterNo},'%')
             </if>
+            <if test="condition.enterpriseSc != null and condition.enterpriseSc != ''" >
+                and t5.enterprise_name like concat('%', #{condition.enterpriseSc},'%')
+            </if>
+
         </trim>
     </sql>
 

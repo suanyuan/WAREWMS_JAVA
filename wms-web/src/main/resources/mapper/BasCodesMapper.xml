@@ -76,8 +76,14 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
 
+<!--单据类型-->
+<select id="queryByTransactionType" resultMap="BaseResultMap"  parameterType="Object">
+	SELECT codeid,udf2
+       FROM bas_codes
+       GROUP BY codeid,udf2
+       having udf2 is not null and udf2 !=''
+</select>
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into bas_codes(codeid,code,codename_c,codename_e,show_sequence,udf1,udf2,udf3,addtime,addwho,edittime,editwho,udf_opr_chk)
@@ -89,13 +95,11 @@ where 1=1
   update bas_codes set code=#{code},codename_c=#{codenameC},codename_e=#{codenameE},show_sequence=#{showSequence},udf1=#{udf1},udf2=#{udf2},udf3=#{udf3},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},udf_opr_chk=#{udfOprChk} where codeid=#{codeid}
  </update>
  
- <!-- 修改记录，只修改只不为空的字段 -->
+ <!-- 修改记录，只修改不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
 	update bas_codes set 
 	<trim  suffixOverrides="," >
-	<if test="code != null  ">
-		code=#{code},
-	</if>
+
 	<if test="codenameC != null  ">
 		codename_c=#{codenameC},
 	</if>
@@ -129,7 +133,7 @@ where 1=1
 	<if test="udfOprChk != null  ">
 		udf_opr_chk=#{udfOprChk},
 	</if>
-	</trim> where codeid=#{codeid}
+	</trim> where codeid=#{codeid,jdbcType=VARCHAR} and code=#{code}
 </update>
 
 <!-- 删除记录 -->
@@ -140,7 +144,7 @@ where 1=1
 <!-- 根据id查询 字典信息 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" />
-	 from bas_codes where codeid = #{codeid} and code = #{code}
+	 from bas_codes where codeid = #{codeid}
 </select>
 
 <!-- 字典信息 列表总数-->

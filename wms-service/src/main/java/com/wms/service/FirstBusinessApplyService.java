@@ -732,9 +732,6 @@ public class FirstBusinessApplyService extends BaseService {
 			//重新申请
 
 
-//            for(true){
-//
-//            }
             boolean type = true;
             String content = "";
             for(String DelId : arrId) {
@@ -791,7 +788,9 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		return Json.error("操作失败");
 	}
-//根据委托客户获取产品线
+
+
+	//根据委托客户获取产品线
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String customerId){
 
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();

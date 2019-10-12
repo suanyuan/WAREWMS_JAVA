@@ -44,14 +44,14 @@ $(function() {
 		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
-			{field: 'productName',		title: '产品名称',	width: 150 },
+			{field: 'productName',		title: '委托方货品名称',	width: 150 },
 			{field: 'specsName',		    title: '规格',	width: 150 },
 			{field: 'productModel',		title: '型号',	width: 150 },
-			{field: 'productRegisterNo',		        title: '产品注册证号 ',	width: 150 },
+			{field: 'productRegisterNo',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
             {field: 'approveDate',		title: '批准日期 ',	width: 200,formatter:dateFormat2 },
-            {field: 'productRegisterExpiryDate',		title: '有效期 ',	width: 200 ,formatter:dateFormat2 },
+            {field: 'productRegisterExpiryDate',		title: '有效期',	width: 200 ,formatter:dateFormat2 },
 			{field: 'enterpriseSc',		title: '生产企业 ',	width: 500 },
-			{field: 'licenseOrRecordNo',		    title: '生产许可证号/备案号 ',	width: 150 },
+			{field: 'licenseOrRecordNo',		    title: '生产企业许可证号/备案凭证号 ',	width: 150 },
 			{field: 'unit',	title: '单位 ',	width: 120 },
 			{field: 'storageCondition',title: '储存条件 ',	width: 150 },
 			// {field: 'recordNo',		        title: '备案凭证号 ',	width: 150 },
@@ -88,7 +88,10 @@ $(function() {
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		enterpriseName : $('#enterpriseName').val(),
-		activeFlag : $('#activeFlag').combobox('getValue'),
+		productName : $('#productName').val(),
+		specsName : $('#specsName').val(),
+		productRegisterNo : $('#productRegisterNo').val(),
+		enterpriseSc : $('#enterpriseSc').val(),
 	});
 };
 
@@ -100,7 +103,10 @@ var doExport = function(){
         var param = new HashMap();
         param.put("token", token);
         param.put("enterpriseName",$('#enterpriseName').val());
-        param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        param.put("productName",$('#productName').val());
+        param.put("specsName",$('#specsName').val());
+        param.put("productRegisterNo",$('#productRegisterNo').val());
+        param.put("enterpriseSc",$('#enterpriseSc').val());
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportCustomerProductDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -133,18 +139,16 @@ var doExport = function(){
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
-						<tr >
+						<tr>
 							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托方货品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>规格</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>产品注册证号/备案凭证号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>生产企业</th><td><input type='text' id='enterpriseSc' class='easyui-textbox' size='16' data-options=''/></td>
 
-							<th >是否合作</th>
-							<td>
-								<select id="activeFlag" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
-									<option value=""></option>
-									<option value="1">是</option>
-									<option value="0">否</option>
-								</select>
-							</td>
-							<td >
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

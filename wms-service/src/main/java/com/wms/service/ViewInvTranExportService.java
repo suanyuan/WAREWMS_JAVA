@@ -1,15 +1,5 @@
 package com.wms.service;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.wms.entity.ViewInvTran;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.MybatisCriteria;
@@ -22,6 +12,14 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.form.ViewInvTranExportForm;
 import com.wms.vo.form.ViewInvTranForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service("viewInvTranExportService")
 public class ViewInvTranExportService {
@@ -83,7 +81,7 @@ public class ViewInvTranExportService {
 	 * @return 返回题型的属性map
 	 */
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
-	
+
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 	
 		superClassMap.put("transactionid", "事务编号");

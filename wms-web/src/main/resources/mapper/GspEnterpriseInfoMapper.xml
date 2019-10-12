@@ -331,8 +331,9 @@
                     <when test="condition.type == 'noCustomer'">
                         and ( cus.enterprise_id is null)
                     </when>
+
                     <when test="condition.type == 'noSupplier'">
-                        and ( gs.enterprise_id is null)
+
                     </when>
                     <when test="condition.type == 'enterprise'">
                         and ( cus.enterprise_id is null or cus.first_state = '60' or cus.first_state = '90' or
@@ -345,7 +346,7 @@
             and g.is_use = '1'
         </trim>
     </sql>
-
+    <!--and ( gs.enterprise_id is null)-->
     <!-- 查询企业信息列表 -->
     <select id="queryPageListByType" resultMap="BaseResultMap" parameterType="Object">
         select
