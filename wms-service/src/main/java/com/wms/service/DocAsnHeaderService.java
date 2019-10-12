@@ -61,7 +61,7 @@ public class DocAsnHeaderService extends BaseService {
 	@Autowired
 	private DocPaService docPaService;
     @Autowired
-    private InvLotAttService invLotAttService;
+    private DocAsnCertificateMybatisDao docAsnCertificateMybatisDao;
     @Autowired
     private BasSkuService basSkuService;
     @Autowired
@@ -229,9 +229,60 @@ public class DocAsnHeaderService extends BaseService {
 	}
 
     /**
-     * 在关闭订单之前，判断订单是否部分收货
-     * @param asnnos
-     * @return
+     * 检查入库单号下面是否有没有导入的质量合格证
+     */
+	private Json checkAsnCertification(String asnno) {
+
+	    if (StringUtil.isEmpty(asnno)) return Json.error("未传入入库单号");
+
+	    Json json = new Json();
+	    json.setSuccess(true);
+	    List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByAsnNo(asnno);
+        StringBuilder message = new StringBuilder();
+        for (DocAsnDetail docAsnDetail : docAsnDetailList) {
+
+            BasSku basSku = basSkuService.getSkuInfo(docAsnDetail.getCustomerid(), docAsnDetail.getSku());
+            if (null == basSku) {//没有产品信息，一般不可能
+
+                json.setSuccess(false);
+                message.append(" ").
+                        append("[单号]:").append(docAsnDetail.getAsnno()).
+                        append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
+                        append(" [产品代码]:").append(docAsnDetail.getSku()).
+                        append(" 查无产品档案数据");
+            }else if (StringUtil.fixNull(basSku.getSkuGroup7()).equals("1")) {//产品有质量合格证
+
+                if (StringUtil.isEmpty(docAsnDetail.getLotatt04())) {//质量合格证是有对应的生产批号的
+
+                    json.setSuccess(false);
+                    message.append(" ").
+                            append("[单号]:").append(docAsnDetail.getAsnno()).
+                            append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
+                            append(" [产品代码]:").append(docAsnDetail.getSku()).
+                            append(" 数据错误，此产品有质量合格证，但入库数据未包含生产批号，请联系管理员");
+                }else {
+
+                    DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryBylotatt04(docAsnDetail.getCustomerid(), docAsnDetail.getSku(), docAsnDetail.getLotatt04());
+                    if (docAsnCertificate == null) {
+
+                        json.setSuccess(false);
+                        message.append(" ").
+                                append("[单号]:").append(docAsnDetail.getAsnno()).
+                                append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
+                                append(" [产品代码]:").append(docAsnDetail.getSku()).
+                                append(" 生产批号(").append(docAsnDetail.getLotatt04()).
+                                append(")，未导入质量合格证;");
+                    }
+                }
+            }
+        }
+
+        json.setMsg(message.toString());
+        return json;
+    }
+
+    /**
+     * 在关闭订单之前，1,是否导入质量合格证 2，判断订单是否部分收货
      */
 	public Json checkCloseAsn(String asnnos) {
 
@@ -243,6 +294,10 @@ public class DocAsnHeaderService extends BaseService {
             List<String> partReceivedAsns = new ArrayList<>();//部分收货入库的预入库单号
             for (String asnno : asnnoList) {
 
+                //是否导入质量合格证
+                json = checkAsnCertification(asnno);
+                if (!json.isSuccess()) return json;
+
                 DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
                 List<DocAsnDetail> unfinishedDetailList = docAsnDetailsMybatisDao.queryPartReceivedAsn(asnno);
                 if (unfinishedDetailList.size() > 0 && docAsnHeader.getAsnstatus().equals("70")) {//表示有部分收货入库的预期到货通知明细,前提是完全验收的单子
@@ -251,7 +306,7 @@ public class DocAsnHeaderService extends BaseService {
             }
             if (partReceivedAsns.size() > 1 || (partReceivedAsns.size() == 1 && asnnoList.length > 1)) {//asnnos中有多个部分收货的需要单条操作
 
-                message.append("请单条关闭部分收货入库的通知单;").append(partReceivedAsns.toString());
+                message.append("请逐条关闭部分收货入库的通知单;").append(partReceivedAsns.toString());
                 json.setSuccess(false);
             }else if (partReceivedAsns.size() == 1) {
 

@@ -257,7 +257,7 @@ public class ImportPaDataService {
                     if (existLocation.get(pdaDocPaDetailForm.getUserdefine1()).equals("0")) {
 
                         json.setSuccess(false);
-                        resultMsg.append("库位编码：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
+                        resultMsg.append("任务行号:").append(pdaDocPaDetailForm.getPalineno()).append("[库位]：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
                         continue;
                     }else {//1
 
@@ -270,7 +270,7 @@ public class ImportPaDataService {
                 if (loc == null) {
 
                     json.setSuccess(false);
-                    resultMsg.append("，库位编码：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
+                    resultMsg.append("任务行号:").append(pdaDocPaDetailForm.getPalineno()).append("[库位]：").append(pdaDocPaDetailForm.getUserdefine1()).append("，查无资料").append(" ");
                     existLocation.put(pdaDocPaDetailForm.getUserdefine1(), "0");
                 }else {
 

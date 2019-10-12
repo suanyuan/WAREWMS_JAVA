@@ -746,7 +746,7 @@ public class ImportAsnDataService {
                             } else {
 
                                 addfalg = false;
-                                resultMsg.append("序号：").append(importDataVO.getSeq()).append(existGsp.get(existKey)).append(" ");
+                                resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append(existGsp.get(existKey)).append(" ");
                                 continue;
                             }
                         } else {
@@ -754,7 +754,7 @@ public class ImportAsnDataService {
                             Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(),basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
                             if (!verifyJson.isSuccess()) {
                                 addfalg = false;
-                                resultMsg.append("序号：").append(importDataVO.getSeq()).append(verifyJson.getMsg()).append(" ");
+                                resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append(verifyJson.getMsg()).append(" ");
                                 existGsp.put(existKey, verifyJson.getMsg());
                                 continue;
                             }else {

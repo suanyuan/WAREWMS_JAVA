@@ -332,7 +332,8 @@ public class OrderHeaderForNormalService extends BaseService {
                             append(docOrderDetail.getLotatt05()).
                             append("，未匹配双证;");
                 }
-            } else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt04())) {
+            }
+            /*else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt04())) {
 
                 DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryBylotatt04(docOrderDetail.getCustomerid(), docOrderDetail.getSku(), docOrderDetail.getLotatt04());
                 if (docAsnCertificate == null) {
@@ -343,7 +344,7 @@ public class OrderHeaderForNormalService extends BaseService {
                             append(docOrderDetail.getLotatt04()).
                             append("，未导入质量合格证;");
                 }
-            }
+            }*/
         }
 
         json.setMsg(message.toString());
