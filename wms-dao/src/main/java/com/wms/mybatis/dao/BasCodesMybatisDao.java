@@ -3,6 +3,8 @@ package com.wms.mybatis.dao;
 import com.wms.entity.BasCodes;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -16,4 +18,6 @@ public interface BasCodesMybatisDao extends BaseDao {
      * @return ~
      */
     BasCodes queryForSO(@Param("code") String code);
+
+    List<BasCodes> queryByTransactionType();
 }
