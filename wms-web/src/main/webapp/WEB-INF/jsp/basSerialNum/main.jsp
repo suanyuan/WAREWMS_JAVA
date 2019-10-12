@@ -137,7 +137,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'basSerialNumController.do?delete',
-					data : {id : row.id},
+					data : {id : row.serialNum},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){

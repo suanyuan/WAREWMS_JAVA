@@ -108,7 +108,10 @@
 				<th>记录人</th>
 				<td><input type='text' name='recordingPeople' id='recordingPeople' class='easyui-textbox' size='16' data-options='editable:false'/></td>
 			</tr>
-
+			<tr>
+			  <th>目标质量状态</th>
+			  <td><input type='text' name='userdefine3' id='userdefine3' class='easyui-textbox' size='16' data-options='editable:false'/></td>
+			</tr>
 			</table>
 
 	</form>

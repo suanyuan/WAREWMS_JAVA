@@ -317,7 +317,7 @@ var commitAcceptance = function(type){
 		data.lotatt04=rows[i].userdefine3;  //生产批号
 		data.lotnum=rows[i].lotnum;
 		data.allqcflag=0;
-		data.lotatt10=typeC;                //合格 不合格
+		data.lotatt10=typeC;                //合格 待处理
 		//判断验收的行数
 		if(rows.length==1){
 			var qcqtyNum=$('#ezuiAcceptanceForm #qcqty').textbox('getValue');
@@ -336,9 +336,9 @@ var commitAcceptance = function(type){
 		});
 		return;
 	}
-	//判断不合格需要弹窗 合格则是继续做下去
-	if(typeC=="BHG"){
-		$.messager.confirm('<spring:message code="common.message.confirm"/>', '验收记录为不合格,是否继续操作!', function(confirm) {
+	//判断待处理需要弹窗 合格则是继续做下去
+	if(typeC=="DCL"){
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '验收记录为待处理,是否继续操作!', function(confirm) {
 			if(confirm){
 				if(ezuiAcceptanceForm.form('validate')) {
 					$.messager.progress({
@@ -872,7 +872,7 @@ var ezuiCustToolbarClear = function () {
 	</div>
 	<div id='ezuiAcceptanceDialogBtn'>
 		<a onclick='commitAcceptance("HG");' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
-		<a onclick='commitAcceptance("BHG");' class='easyui-linkbutton' href='javascript:void(0);'>不合格</a>
+		<a onclick='commitAcceptance("DCL");' class='easyui-linkbutton' href='javascript:void(0);'>待处理</a>
 	</div>
 
 <!-- 货主选择弹框 -->

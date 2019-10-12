@@ -141,9 +141,10 @@ public class GspSupplierService extends BaseService {
 			gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);//首营状态 审核通过 代码
 			firstReviewLog.setApplyContent("无需审核");
 		}
-		GspSupplier  gspSupplier1=gspSupplierMybatisDao.queryByEnterpriseId(gspSupplier.getEnterpriseId());
-		if(gspSupplier1!=null){
-			return Json.error("同一个企业不能重复申请");
+
+		int num =gspSupplierMybatisDao.countByEnterpriseIdAndClient(gspSupplier.getEnterpriseId(),gspSupplier.getCostomerid());
+		if(num>0){
+			return Json.error("存在同一个供应商企业和货主,不能重复申请!!!");
 		}
 
 
@@ -314,7 +315,7 @@ public class GspSupplierService extends BaseService {
 				gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 				gspSupplier.setIsUse(Constant.IS_USE_NO);
 				gspSupplierMybatisDao.updateBySelective(gspSupplier);
-				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
 
                 // 通过enterpriseId 查询该公司的最新的enterpriseId   赋值给申请

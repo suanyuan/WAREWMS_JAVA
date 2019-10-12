@@ -217,7 +217,22 @@ var edit = function(){
 		// 	alternatName4 : row.alternatName4,
 		// 	alternatName5 : row.alternatName5
 		// });
-		ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
+        ezuiDialog = $('#ezuiDialog').dialog({
+            modal : true,
+            left:0,
+            top:0,
+            width:1050,
+            height:550,
+            title : '<spring:message code="common.dialog.title"/>',
+            buttons : '#ezuiDialogBtn',
+            href:dialogUrl,
+            cache: false,
+            onClose : function() {
+                ezuiFormClear(ezuiForm);
+            }
+        });
+
+		// ezuiDialog.dialog('open').dialog('refresh', dialogUrl);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

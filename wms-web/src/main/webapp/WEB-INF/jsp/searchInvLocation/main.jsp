@@ -77,8 +77,13 @@ $(function() {
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
+		enterpriseName:$('#enterpriseName').val(),
+		lotatt12:$('#lotatt12').val(),
+		descrc:$('#descrc').val(),
+		lotatt15:$('#lotatt15').val(),
 		lotatt04 : $('#lotatt04').val(),
-		lotatt05 : $('#lotatt05').val()
+		lotatt05 : $('#lotatt05').val(),
+		lotatt06 : $('#lotatt06').val(),
 	});
 };
 
@@ -89,8 +94,13 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
+		param.put("enterpriseName",$('#enterpriseName').val());
+		param.put("lotatt12",$('#lotatt12').val());
+		param.put("descrc",$('#descrc').val());
+		param.put("lotatt15",$('#lotatt15').val());
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
+		param.put("lotatt06",$('#lotatt06').val());
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchInvLocationDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -124,10 +134,18 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
+						<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+						<th>产品名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+						<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr >
+							<th>生产企业</th><td><input type='text' id='lotatt15' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
-							<td >
+						</tr>
+						<tr >
+							<th>产品注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

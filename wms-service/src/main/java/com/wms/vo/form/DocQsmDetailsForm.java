@@ -40,7 +40,7 @@ public class DocQsmDetailsForm {
     private String changeProcess;  //质量状态变更过程
 	private String userdefine1;
 	private String userdefine2;
-	private String userdefine3;
+	private String userdefine3;    //目标变更质量状态
 	private String userdefine4;
 	private String userdefine5;
 	private String hedi01;

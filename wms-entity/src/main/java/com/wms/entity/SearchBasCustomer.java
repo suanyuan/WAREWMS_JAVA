@@ -23,7 +23,6 @@ public class SearchBasCustomer implements Serializable {
 	private String warehouseAddress;  //库房地址
 	private String businessScope;  //经营范围
 	private String licenseNo;  //经营许可证号
-	@JSONField(format="yyyy-MM-dd")
 	private String licenseExpiryDate;  //许可证效期
 	private String registrationAuthorityL;  //发证机关
 	private String recordNo;  //备案凭证号

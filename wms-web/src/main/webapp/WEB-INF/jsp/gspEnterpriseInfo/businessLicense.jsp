@@ -280,6 +280,9 @@
     }
 
     function doUploadbusinessLicense(data) {
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -293,9 +296,18 @@
                 }
             },
             onload:function(data){
-                $("#attachmentUrl").val(data.comment);
+                $.messager.progress('close');
+
+                    // $("#attachmentUrl").val(data.comment);
+                if (data.success) {
+                    $("#attachmentUrl").val(data.comment);
+                }else {
+                    showMsg("上传附件失败，请重试");
+                    $("#ezuiFormBusiness input[id='file']").filebox("setValue","");
+                }
             },
             onerror:function(er){
+                $.messager.progress('close');
                 console.log(er);
             }
         });

@@ -40,6 +40,7 @@ public class ViewInvLocationQuery implements IQuery {
 	private  Date lotatt02End;      //失效期查询结束
 	private  Date lotatt03Start;      //入库日期查询开始
 	private  Date lotatt03End;      //入库日期查询结束
+	private  String lotatt10;      //质量状态
 
 	private Set<SfcCustomer> customerSet;
 
@@ -153,6 +154,14 @@ public class ViewInvLocationQuery implements IQuery {
 
 	public void setLotatt14(String lotatt14) {
 		this.lotatt14 = lotatt14;
+	}
+
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
 	}
 
 	public String getDefaultreceivinguom() {

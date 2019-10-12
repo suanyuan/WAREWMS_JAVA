@@ -80,6 +80,7 @@ public class BasSerialNumService extends BaseService {
 			basSerialNumDao.delete(basSerialNum);
 		}
 		json.setSuccess(true);
+		json.setMsg("删除成功!");
 		return json;
 	}
 

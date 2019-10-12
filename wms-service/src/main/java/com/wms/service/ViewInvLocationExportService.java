@@ -61,6 +61,7 @@ public class ViewInvLocationExportService {
         viewInvLocationForm.setLotatt02End(form.getLotatt02End());
         viewInvLocationForm.setLotatt03Start(form.getLotatt03Start());
         viewInvLocationForm.setLotatt03End(form.getLotatt03End());
+        viewInvLocationForm.setLotatt10(form.getLotatt10());
 
         try {
             ViewInvLocationQuery query = new ViewInvLocationQuery();

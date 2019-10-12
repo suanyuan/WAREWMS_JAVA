@@ -41,11 +41,12 @@
 	<result column="lotnum" property="lotnum"/>
 	<result column="userdefine1" property="userdefine1"/>
 	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
 </resultMap>
        
 <!-- doc_qsm_details table all fields -->
 <sql id="Base_Column_List" >
-	 qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,userdefine1,userdefine2
+	 qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,change_process,lotnum,userdefine1,userdefine2,userdefine3
 </sql>
    
    
@@ -143,8 +144,8 @@ where 1=1
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
-  insert into doc_qsm_details(qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,change_process)
- values(#{qcudocno},#{qcudoclineno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess})
+  insert into doc_qsm_details(qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,lotnum,change_process,userdefine3)
+ values(#{qcudocno},#{qcudoclineno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess},#{userdefine3})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -249,7 +250,10 @@ where 1=1
 			reservedfield06=#{reservedfield06},
 	</if>
 	<if test="lotnum != null  ">
-			lotnum=#{lotnum}
+			lotnum=#{lotnum},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3}
 	</if>
 	</trim>
 	 where qcudocno=#{qcudocno} and qcudoclineno=#{qcudoclineno}
@@ -266,7 +270,7 @@ where 1=1
  
 <!-- 根据id查询 质量状态管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
+	select <include refid="Base_Column_List" />
 	 from doc_qsm_details where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
 </select>
 <!-- 根据id查询 质量状态管理 -->

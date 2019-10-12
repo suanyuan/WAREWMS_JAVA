@@ -290,6 +290,7 @@
                     if(result.success){
                         changeRequired();
                         changeColdHainMark();
+                        // coldfield();
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -363,7 +364,7 @@
         //     textField:'value'
         // });
         // changeRequired();
-        coldfield();
+
     });
 
     function coldfield() {

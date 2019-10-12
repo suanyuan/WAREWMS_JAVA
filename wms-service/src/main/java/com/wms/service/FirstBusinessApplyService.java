@@ -333,9 +333,14 @@ public class FirstBusinessApplyService extends BaseService {
 					if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
 						SpecsName = g.getSpecsName();
 					}
-					if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
-						ProductRegisterNo = gpr.getProductRegisterNo();
+					if(gpr!=null){
+						if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+							ProductRegisterNo = gpr.getProductRegisterNo();
+						}
+					}else{
+						ProductRegisterNo = "无";
 					}
+
 					if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
 						supName = sup.getDescrC();
 					}
@@ -672,9 +677,6 @@ public class FirstBusinessApplyService extends BaseService {
         Json json = new Json();
         String[] arrId = id.split(",");
 
-
-
-
 		try{
 
             for(String DelId : arrId){
@@ -730,9 +732,6 @@ public class FirstBusinessApplyService extends BaseService {
 			//重新申请
 
 
-//            for(true){
-//
-//            }
             boolean type = true;
             String content = "";
             for(String DelId : arrId) {
@@ -789,7 +788,9 @@ public class FirstBusinessApplyService extends BaseService {
 		}
 		return Json.error("操作失败");
 	}
-//根据委托客户获取产品线
+
+
+	//根据委托客户获取产品线
 	public List<EasyuiCombobox> getProductLineByEnterpriseId(String customerId){
 
 		List<EasyuiCombobox> comboboxList = new ArrayList<>();

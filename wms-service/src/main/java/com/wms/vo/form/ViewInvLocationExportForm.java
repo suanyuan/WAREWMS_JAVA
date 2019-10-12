@@ -17,6 +17,8 @@ public class ViewInvLocationExportForm {
 	private  Date lotatt02End;      //失效期查询结束
 	private Date  lotatt03Start;      //入库日期查询开始
 	private  Date lotatt03End;      //入库日期查询结束
+	private  String lotatt10;      //质量状态
+
 	private String token;
 
 	public String getLotatt05() {
@@ -89,6 +91,14 @@ public class ViewInvLocationExportForm {
 
 	public void setLotatt04(String lotatt04) {
 		this.lotatt04 = lotatt04;
+	}
+
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
 	}
 
 	public java.lang.String getFmcustomerid() {

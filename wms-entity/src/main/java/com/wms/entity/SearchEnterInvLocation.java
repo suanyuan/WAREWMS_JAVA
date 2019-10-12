@@ -16,6 +16,7 @@ public class SearchEnterInvLocation implements Serializable {
     private String enterpriseName;    //委托方企业名称
     @JSONField(format = "yyyy-MM-dd")
     private String lotatt03;          //入库日期
+    private String type;              //入库类型
     private String lotatt12;          //产品名称
     private String descrc;           //规格/型号
     private String lotatt15;          //生产企业
@@ -29,12 +30,15 @@ public class SearchEnterInvLocation implements Serializable {
     private Double qty;              //件数
     private Double qtyeach;          //数量
     private String uom;               //单位
-    private String locationid;        //库位
     private String lotatt11;           //储存条件
+    private String locationid;        //库位
     private String lotatt10;           //质量状态
     private String notes;             //备注
     private Double qty1;             //换算率
 
+//查询条件
+    private String lotatt03StartDate;           //入库日期开始
+    private String lotatt03EndDate;           //入库日期结束
 
 
 }
