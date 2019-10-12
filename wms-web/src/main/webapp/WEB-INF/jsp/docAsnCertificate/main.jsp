@@ -50,7 +50,7 @@ $(function() {
             {field: 'certificateContext',		title: '合格证照片',	width: 100,formatter:showcertificateContextFile},
 
             {field: 'addtime',		title: '创建人',	width: 100 },
-            // {field: 'contractUrl',		title: '合格证附件 ',	width: 80,formatter:showUrlFile},
+            // {field: 'contractUrl',		title: '规格 ',	width: 80,formatter:showUrlFile},
 
             {field: 'addwho',		title: '创建时间',	width: 100 },
 			{field: 'edittime',		title: '编辑时间',	width: 100 },

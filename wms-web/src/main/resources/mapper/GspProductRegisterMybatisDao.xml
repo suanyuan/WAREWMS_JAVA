@@ -313,8 +313,8 @@
 
 	<!-- 删除记录 -->
 	<delete id="delete" parameterType="Object">
-	delete 	 from gsp_product_register where product_register_id = #{productRegisterId}
-</delete>
+		delete 	 from gsp_product_register where product_register_id = #{productRegisterId}
+	</delete>
 
 	<!-- 根据id查询 产品注册证 -->
 	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
@@ -337,6 +337,11 @@
 
 	</select>
 
+
+	<!-- 通过产品注册证查询总数-->
+	<select id="countByproductResisterNo" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from gsp_product_register where product_register_no = #{productRegisterNo}
+	</select>
 	<!-- 产品注册证 列表总数-->
 	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from gsp_product_register r left join bas_codes vc on r.version = vc.code

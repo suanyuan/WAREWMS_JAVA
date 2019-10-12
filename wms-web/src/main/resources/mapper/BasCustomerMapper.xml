@@ -735,7 +735,7 @@ where 1=1
 		) a LEFT JOIN gsp_supplier s on a.bankaccount = s.supplier_id , Bas_Codes b
 		where a.customer_type = b.code
 
-		<if test="condition.customerid != null and condition.customerid != ''" >
+		<if test="condition.customer != null and condition.customer != ''" >
 			and  s.costomerid = #{condition.customer,jdbcType=VARCHAR}
 		</if>
 		and s.is_use='1'

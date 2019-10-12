@@ -236,14 +236,14 @@
         left join doc_asn_header aa on aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
         LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        inner JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE  (aa.asnstatus='70' or aa.asnstatus='99') AND s.reservedfield09='1'
+        WHERE  aa.asnstatus='99' AND s.reservedfield09='1'
         <include refid="Example_Where_Clause2"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -258,14 +258,14 @@
         left join doc_asn_header aa on aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
         LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        inner JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE  (aa.asnstatus='70' or aa.asnstatus='99') AND s.reservedfield09='1'
+        WHERE aa.asnstatus='99'  AND s.reservedfield09='1'
         <include refid="Example_Where_Clause2"/>
     </select>
 
@@ -292,7 +292,7 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE (aa.sostatus='80' OR aa.sostatus='99') AND s.reservedfield09='1'
+        WHERE aa.sostatus='99' AND s.reservedfield09='1'
 
         <include refid="Example_Where_Clause3"/>
 
@@ -313,7 +313,7 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE (aa.sostatus='80' OR aa.sostatus='99') AND s.reservedfield09='1'
+        WHERE aa.sostatus='99' AND s.reservedfield09='1'
         <include refid="Example_Where_Clause3"/>
     </select>
 
