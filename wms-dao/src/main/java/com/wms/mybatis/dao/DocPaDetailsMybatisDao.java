@@ -76,6 +76,12 @@ public interface DocPaDetailsMybatisDao extends BaseDao {
      */
     int queryUndoneNum4BatchNum(@Param("qcno") String qcno, @Param("batchNum") String batchNum);
 
+    /**
+     * 通过验收单号查询上架明细
+     * @param qcno 验收单号
+     */
+    List<DocPaDetails> queryPaDetialsByQcno(@Param("qcno") String qcno);
+
 
 
 //    /**

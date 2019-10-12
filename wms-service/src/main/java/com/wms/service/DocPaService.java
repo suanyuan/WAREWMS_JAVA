@@ -158,7 +158,7 @@ public class DocPaService {
                     DocAsnHeader header = new DocAsnHeader();
                     header.setAsnno(asnNo);
                     header.setAsnPrintFlag("Y");
-                    header.setUserdefine1(panno);//预期到货通知头档记录上架任务单号
+                    header.setUserdefine2(panno);//预期到货通知头档记录上架任务单号
                     docAsnHeaderMybatisDao.updateBySelective(header);
                 }
                 return Json.success("合并成功");

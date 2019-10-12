@@ -112,7 +112,7 @@ public class DocQcHeaderController {
 	@RequestMapping(params = "printQcHeader")
 	public String printQcHeader(Model model, String qcno, String linestatus, String lotatt10){
 
-		List<DocQcHeader> docQcHeaderList = docQcHeaderService.printQcHeader(qcno, linestatus,lotatt10);
+		List<DocQcHeader> docQcHeaderList = docQcHeaderService.printQcHeader(qcno, "","");
 
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
 		model.addAttribute("url", "WEB-INF/jasper/reportDocQcHeaderTask.jasper");
