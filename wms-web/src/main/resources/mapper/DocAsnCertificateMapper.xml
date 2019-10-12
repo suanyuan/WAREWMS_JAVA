@@ -13,6 +13,8 @@
 	<result column="edittime" property="edittime"/>
 	<result column="editwho" property="editwho"/>
 	<result column="certificate_context" property="certificateContext"/>
+
+	<result column="specs_name" property="specsName"/>
 </resultMap>
        
 <!-- doc_asn_certificate table all fields -->

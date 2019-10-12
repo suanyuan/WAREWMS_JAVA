@@ -142,6 +142,8 @@
                 isUse : '1',
                 activeFlag :'1',
                 customerType:'VE',
+                customer: cusId,
+                customerid:'',
                 //TODO 暂时放开所有供应商customer: cusId,
             },
             fit:true,
@@ -172,10 +174,10 @@
                         return rowData.activeFlag == '1' ? '是' : '否';
                     }},
                 {field: 'customerid',		title: '客户代码',	width: 150 },
-                {field: 'descrC',		title: '客户名称',	width: 150 },
-                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
+                {field: 'descrC',		title: '客户名称',	width: 200 },
+                {field: 'enterpriseNo',		title: '企业代码 ',	width: 80 },
                 {field: 'shorthandName',		title: '简称 ',	width: 85 },
-                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 }
+                {field: 'enterpriseName',		title: '企业名称 ',	width: 200 }
             ]],
             onDblClickCell: function(index,field,value){
                 choseSupplierSelect();
@@ -356,6 +358,7 @@
             activeFlag : '1',
             isUse : '1',
             customerType:'VE'
+
         });
     }
     //查询产品

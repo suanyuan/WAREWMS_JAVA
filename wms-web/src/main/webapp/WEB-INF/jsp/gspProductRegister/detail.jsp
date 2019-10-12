@@ -922,12 +922,12 @@
                 }
             }
         })
-        $("#ezuiFormDetail #classifyCatalog").textbox("setValue","");
+        // $("#ezuiFormDetail #classifyCatalog").textbox("setValue","");
         $("#ezuiFormDetail #enterpriseName").textbox("setValue","");
         $("#ezuiFormDetail input[id='attachmentUrl']").val("");
         $("#attachmentUrlFile").filebox("setValue","");
         $("#ezuiFormDetail #operateDetail").val("");
-        $("#ezuiFormDetail #choseScope").val("");
+        // $("#ezuiFormDetail #choseScope").val("");
         $("#licenseOrRecordNol").textbox("setValue","");
 
     }

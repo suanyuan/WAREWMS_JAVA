@@ -330,7 +330,7 @@
             pageSize : 50,
             pageList : [50, 100, 200],
             border: false,
-            fitColumns : false,
+            fitColumns : true,
             nowrap: true,
             striped: true,
             queryParams:{
@@ -339,7 +339,7 @@
                 activeFlag : '1',
             },
             fit:true,
-            collapsible:false,
+            collapsible:true,
             pagination:true,
             rownumbers:true,
             singleSelect:true,
@@ -366,10 +366,10 @@
                         return rowData.activeFlag == '1' ? '是' : '否';
                     }},
                 {field: 'customerid',		title: '客户代码',	width: 150 },
-                {field: 'descrC',		title: '客户名称',	width: 150 },
-                {field: 'enterpriseNo',		title: '企业信息代码 ',	width: 80 },
+                {field: 'descrC',		title: '客户名称',	width: 200 },
+                {field: 'enterpriseNo',		title: '企业代码 ',	width: 80 },
                 {field: 'shorthandName',		title: '简称 ',	width: 85 },
-                {field: 'enterpriseName',		title: '企业名称 ',	width: 80 }
+                {field: 'enterpriseName',		title: '企业名称 ',	width: 200 }
             ]],
             onDblClickCell: function(index,field,value){
                 choseSupplierSelect1();
@@ -556,7 +556,7 @@
             height:550,
             cache:false,
             onClose : function() {
-
+                $(this).dialog("clear");
             }
         })
     }
@@ -572,7 +572,6 @@
             return "<a onclick=\"operateGridProductRegister2('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
         }else{
             return "<a>无</a>";
-
         }
     }
     function operateGridProductRegister2(id) {
@@ -586,6 +585,7 @@
 
             onClose : function() {
                 // ezuiFormClear(ezuiForm);
+                $(this).dialog("clear");
             },
             onLoad:function () {
 

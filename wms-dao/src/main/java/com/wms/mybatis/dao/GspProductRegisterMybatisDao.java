@@ -20,6 +20,7 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      */
     PdaGspProductRegister queryByNo(@Param("registerNo") String registerNo);
 
+
     /**
      * 通过注册证名称查询
      * @param productNameMain 注册证名称
@@ -38,4 +39,6 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
     //查询需要比较的字段
     public <T> T selectProductRegisterByCompare(Object id);
 
+
+    int countByproductResisterNo(Object id);
 }

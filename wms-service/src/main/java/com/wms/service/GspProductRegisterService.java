@@ -141,6 +141,19 @@ public class GspProductRegisterService extends BaseService {
 			if(gspProductRegister == null){
 				return Json.error("查询不到对应的产品注册证信息");
 			}
+//			int num  =gspProductRegisterMybatisDao.countByproductResisterNo(gspProductRegisterForm.getProductRegisterNo());
+
+			if(!gspProductRegisterForm.getProductRegisterNo().equals(gspProductRegister.getProductRegisterNo())){
+				//换了注册证号
+				if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
+					return Json.error("产品注册证编号重复");
+				}
+//				!checkRep(gspProductRegisterForm.getProductRegisterNo());
+			}
+//			if(!checkRep(gspProductRegisterForm.getProductRegisterNo())){
+//				return Json.error("产品注册证编号重复");
+//			}
+
 
 			if(gspProductRegisterForm.getOpType().equals("update")){
 
@@ -337,21 +350,22 @@ public class GspProductRegisterService extends BaseService {
 	 * @return
 	 */
 	public Json bindProduct(String gspProductRegisterId,String specId){
-		if(gspProductRegisterId.equals("")){
-			return Json.error("产品注册证为空");
-		}
+//		if(gspProductRegisterId.equals("")){
+//			return Json.error("产品注册证为空");
+//		}
 
 		if(specId.equals("")){
 			return Json.error("请选择需要绑定的产品");
 		}
 
+
         GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterId);
-        if(gspProductRegister == null){
-            return Json.error("查询不到对应的注册证");
-        }
-        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
-            return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
-        }
+//        if(gspProductRegister == null){
+//            return Json.error("查询不到对应的注册证");
+//        }
+//        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
+//            return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+//        }
 
 		try{
 			String[] arr = specId.split(",");
@@ -455,12 +469,10 @@ public class GspProductRegisterService extends BaseService {
 //根据ProductRegisterNo查询
 	public GspProductRegister queryByRegisterNo(String registerNo){
 		return  gspProductRegisterMybatisDao.queryByNo(registerNo);
-
 	}
 //根据productNameMain查询
 	public GspProductRegister queryByproductNameMain(String productNameMain){
 		return  gspProductRegisterMybatisDao.queryByproductNameMain(productNameMain);
-
 	}
 
 	//查询历史证照信息

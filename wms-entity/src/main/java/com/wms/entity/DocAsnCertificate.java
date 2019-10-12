@@ -23,6 +23,17 @@ public class DocAsnCertificate implements Serializable {
   private String certificateContext;
   private String isUse;
 
+
+  private String specsName;
+
+  public String getSpecsName() {
+    return specsName;
+  }
+
+  public void setSpecsName(String specsName) {
+    this.specsName = specsName;
+  }
+
   public String getIsUse() {
     return isUse;
   }

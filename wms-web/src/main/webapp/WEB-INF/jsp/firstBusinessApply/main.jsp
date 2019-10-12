@@ -55,7 +55,7 @@ $(function() {
             {field: 'productRegisterNo',		title: '注册证号',	width: 180 },
 
             {field: 'createId',		title: '创建人',	width: 100 },
-			{field: 'createDate',		title: '创建时间',	width: 100 },
+			{field: 'createDate',		title: '创建时间',	width: 150 },
 		]],
 		onDblClickCell: function(index,field,value){
 			// edit();// TODO 不能修改需要提示
