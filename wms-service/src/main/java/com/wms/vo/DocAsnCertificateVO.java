@@ -15,6 +15,15 @@ public class DocAsnCertificateVO {
 	private String edittime;
 	private String editwho;
 	private String certificateContext;
+	private String specsName;
+
+	public String getSpecsName() {
+		return specsName;
+	}
+
+	public void setSpecsName(String specsName) {
+		this.specsName = specsName;
+	}
 
 	public Integer getSeq() {
 		return seq;

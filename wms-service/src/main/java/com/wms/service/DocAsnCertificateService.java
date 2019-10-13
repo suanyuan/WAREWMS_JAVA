@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wms.entity.GspProductRegisterSpecs;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.DocAsnCertificateMybatisDao;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.service.importdata.ImportDocAsnCertificateDataService;
 import com.wms.utils.ResourceUtil;
@@ -38,6 +40,8 @@ public class DocAsnCertificateService extends BaseService {
 
 	@Autowired
 	private DocAsnCertificateMybatisDao docAsnCertificateMybatisDao;
+	@Autowired
+	private GspProductRegisterSpecsMybatisDao gspProductRegisterSpecsMybatisDao;
 
 	@Autowired
 	private ImportDocAsnCertificateDataService importDocAsnCertificateDataService;
@@ -50,24 +54,28 @@ public class DocAsnCertificateService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
-		DocAsnCertificateVO gspProductRegisterSpecsVO = null;
+		DocAsnCertificateVO docAsnCertificateVO = null;
 		List<DocAsnCertificateVO> basGtnVOList = new ArrayList<DocAsnCertificateVO>();
-		List<DocAsnCertificate> gspProductRegisterSpecsList = docAsnCertificateMybatisDao.queryPageListByType(criteria);
+		List<DocAsnCertificate> DocAsnCertificateList = docAsnCertificateMybatisDao.queryPageListByType(criteria);
 
 
 		//System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
-		for (DocAsnCertificate gspProductRegisterSpecs : gspProductRegisterSpecsList) {
+		for (DocAsnCertificate DocAsnCertificate : DocAsnCertificateList) {
 			//System.out.println(gspProductRgisterSpecs.getCreateDate()+"==============================================");
-			gspProductRegisterSpecsVO = new DocAsnCertificateVO();
-			BeanUtils.copyProperties(gspProductRegisterSpecs, gspProductRegisterSpecsVO);
-			if (gspProductRegisterSpecs.getAddtime() != null) {
-				gspProductRegisterSpecsVO.setAddtime(simpleDateFormat.format(gspProductRegisterSpecs.getAddtime()));
+			docAsnCertificateVO = new DocAsnCertificateVO();
+			BeanUtils.copyProperties(DocAsnCertificate, docAsnCertificateVO);
+			if (DocAsnCertificate.getAddtime() != null) {
+				docAsnCertificateVO.setAddtime(simpleDateFormat.format(DocAsnCertificate.getAddtime()));
 			}
-			if (gspProductRegisterSpecs.getEdittime() != null) {
-				gspProductRegisterSpecsVO.setEdittime(simpleDateFormat.format(gspProductRegisterSpecs.getEdittime()));
+			if (DocAsnCertificate.getEdittime() != null) {
+				docAsnCertificateVO.setEdittime(simpleDateFormat.format(DocAsnCertificate.getEdittime()));
+			}
+			GspProductRegisterSpecs g = gspProductRegisterSpecsMybatisDao.selectByProductCode(DocAsnCertificate.getSku());
+			if(g!=null){
+				docAsnCertificateVO.setSpecsName(g.getSpecsName());
 			}
 
-			basGtnVOList.add(gspProductRegisterSpecsVO);
+			basGtnVOList.add(docAsnCertificateVO);
 		}
 		int total = docAsnCertificateMybatisDao.queryPageByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
