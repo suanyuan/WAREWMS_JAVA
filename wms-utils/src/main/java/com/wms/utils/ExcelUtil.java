@@ -18,6 +18,7 @@ import com.wms.utils.exception.ExcelException;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -644,6 +645,167 @@ public class ExcelUtil {
 					throw new ExcelException("Excel中有重复行，请检查");
 				}
 			}
+			}
+			// 将sheet转换为list
+			for (int i = 1; i < realRows; i++) {
+				// 新建要转换的对象
+				T entity = entityClass.newInstance();
+
+				// 给对象中的字段赋值
+				for (Entry<String, String> entry : fieldMap.entrySet()) {
+					// 获取中文字段名
+					String cnNormalName = entry.getKey();
+					// 获取英文字段名
+					String enNormalName = entry.getValue();
+					// 根据中文字段名获取列号
+					int col = colMap.get(cnNormalName);
+
+					// 获取当前单元格中的内容
+					String content = sheet.getCell(col, i).getContents()
+							.toString().trim();
+
+					// 给对象赋值
+					setFieldValueByName(enNormalName, content, entity);
+				}
+
+				resultList.add(entity);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 如果是ExcelException，则直接抛出
+			if (e instanceof ExcelException) {
+				throw (ExcelException) e;
+
+				// 否则将其它异常包装成ExcelException再抛出
+			} else {
+				e.printStackTrace();
+				throw new ExcelException("导入Excel失败");
+			}
+		}
+		return resultList;
+	}
+
+
+	/**
+	 * 将Excel转化为List
+	 *
+	 * @param in
+	 *            ：承载着Excel的输入流
+	 * @param sheetIndex
+	 *            ：要导入的工作表序号
+	 * @param entityClass
+	 *            ：List中对象的类型（Excel中的每一行都要转化为该类型的对象）
+	 * @param fieldMap
+	 *            ：Excel中的中文列头和类的英文属性的对应关系Map
+	 * @param uniqueFields
+	 *            ：指定业务主键组合（即复合主键），这些列的组合不能重复
+	 * @return list集合
+	 * @throws ExcelException
+	 *             异常
+	 */
+	public static <T> List<T> excelToListIso(InputStream in, String sheetName,
+										  Class<T> entityClass, LinkedHashMap<String, String> fieldMap,
+										  String[] uniqueFields) throws ExcelException {
+
+		// 定义要返回的list
+		List<T> resultList = new ArrayList<T>();
+
+		try {
+			WorkbookSettings workbookSettings=new   WorkbookSettings();
+			workbookSettings.setEncoding("iso-8859-1");
+			// 根据Excel数据源创建WorkBook
+			Workbook wb = Workbook.getWorkbook(in,workbookSettings);
+			// 获取工作表
+			Sheet sheet = wb.getSheet(sheetName);
+
+			// 获取工作表的有效行数
+			int realRows = 0;
+			for (int i = 0; i < sheet.getRows(); i++) {
+
+				int nullCols = 0;
+				for (int j = 0; j < sheet.getColumns(); j++) {
+					Cell currentCell = sheet.getCell(j, i);
+					if (currentCell == null
+							|| "".equals(currentCell.getContents().toString())) {
+						nullCols++;
+					}
+				}
+
+				if (nullCols == sheet.getColumns()) {
+					break;
+				} else {
+					realRows++;
+				}
+			}
+
+			// 如果Excel中没有数据则提示错误
+			if (realRows <= 1) {
+				throw new ExcelException("Excel文件中没有任何数据");
+			}
+
+			Cell[] firstRow = sheet.getRow(0);
+
+			String[] excelFieldNames = new String[firstRow.length];
+
+			// 获取Excel中的列名
+			for (int i = 0; i < firstRow.length; i++) {
+				excelFieldNames[i] = firstRow[i].getContents().toString()
+						.trim();
+			}
+
+			// 判断需要的字段在Excel中是否都存在
+			boolean isExist = true;
+			String errorMsg = "";
+			List<String> excelFieldList = Arrays.asList(excelFieldNames);
+			for (String cnName : fieldMap.keySet()) {
+				if (!excelFieldList.contains(cnName)) {
+					isExist = false;
+					errorMsg = cnName;
+					break;
+				}
+			}
+
+			// 如果有列名不存在，则抛出异常，提示错误
+			if (!isExist) {
+				throw new ExcelException("Excel中缺少必要的字段，或字段名称有误 [" + errorMsg + "]");
+			}
+
+			// 将列名和列号放入Map中,这样通过列名就可以拿到列号
+			LinkedHashMap<String, Integer> colMap = new LinkedHashMap<String, Integer>();
+			for (int i = 0; i < excelFieldNames.length; i++) {
+				colMap.put(excelFieldNames[i], firstRow[i].getColumn());
+			}
+
+			// 判断是否有重复行 如果uniqueFields为空 不检查重复行
+			// 1.获取uniqueFields指定的列
+			if (uniqueFields != null) {
+
+
+				Cell[][] uniqueCells = new Cell[uniqueFields.length][];
+				for (int i = 0; i < uniqueFields.length; i++) {
+					int col = colMap.get(uniqueFields[i]);
+					uniqueCells[i] = sheet.getColumn(col);
+				}
+
+				// 2.从指定列中寻找重复行
+				for (int i = 1; i < realRows; i++) {
+					int nullCols = 0;
+					for (int j = 0; j < uniqueFields.length; j++) {
+						String currentContent = uniqueCells[j][i].getContents();
+						Cell sameCell = sheet.findCell(currentContent,
+								uniqueCells[j][i].getColumn(),
+								uniqueCells[j][i].getRow() + 1,
+								uniqueCells[j][i].getColumn(),
+								uniqueCells[j][realRows - 1].getRow(), true);
+						if (sameCell != null) {
+							nullCols++;
+						}
+					}
+
+					if (nullCols == uniqueFields.length) {
+						throw new ExcelException("Excel中有重复行，请检查");
+					}
+				}
 			}
 			// 将sheet转换为list
 			for (int i = 1; i < realRows; i++) {
