@@ -55,6 +55,30 @@
 <!--            </if>-->
         </trim>
     </sql>
+    <!-- 查询条件 入库单列表 -->
+    <sql id="Example_Where_Clause1">
+        <trim  suffixOverrides="," >
+            <if test="condition.customerid != null and condition.customerid != ''" >
+                and a.customerid like concat('%', #{condition.customerid},'%')
+            </if>
+
+            <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+                and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
+            </if>
+            <if test="condition.descrc != null and condition.descrc != ''" >
+                and s.`descr_c` like concat('%', #{condition.descrc},'%')
+            </if>
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+<!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
+<!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->
+<!--            </if>-->
+<!--            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >-->
+<!--                and aaa.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}-->
+<!--            </if>-->
+        </trim>
+    </sql>
 
 
 
@@ -133,5 +157,43 @@
     </select>
 
 
-
+<!-- 入库单列表 -->
+    <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
+        SELECT
+        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        FROM doc_asn_details a
+        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
+        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE aa.asnstatus='99'
+        <include refid="Example_Where_Clause1"/>
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+<!-- 入库单列表 列表总数-->
+    <select id="queryAsnListCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1)
+        FROM doc_asn_details a
+        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
+        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE aa.asnstatus='99'
+        <include refid="Example_Where_Clause1"/>
+    </select>
 </mapper>
