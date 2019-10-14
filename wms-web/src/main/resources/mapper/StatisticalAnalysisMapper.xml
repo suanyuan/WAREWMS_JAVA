@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.StatisticalAnalysisMybatisDao">
+    <!-- Result Map-->
+    <resultMap id="BaseResultMap" type="com.wms.entity.SearchBasCustomer">
+        <result column="descr_c" property="enterpriseName"/>
+        <result column="license_number" property="licenseNumber"/>
+        <result column="residence" property="residence"/>
+        <result column="juridical_person" property="juridicalPerson"/>
+        <result column="head_name" property="headName"/>
+        <result column="business_residence" property="businessResidence"/>
+        <result column="warehouse_address" property="warehouseAddress"/>
+        <result column="business_scope" property="businessScope"/>
+        <result column="license_no" property="licenseNo"/>
+        <result column="license_expiry_date" property="licenseExpiryDate"/>
+        <result column="registrationAuthorityL" property="registrationAuthorityL"/>
+        <result column="record_no" property="recordNo"/>
+        <result column="registrationAuthorityR" property="registrationAuthorityR"/>
+        <result column="client_start_date" property="clientStartDate"/>
+        <result column="client_end_date" property="clientEndDate"/>
+        <result column="client_term" property="clientTerm"/>
+        <result column="is_chinese_label" property="isChineseLabel"/>
+        <result column="client_content" property="clientContent"/>
+
+        <result column="active_flag" property="activeFlag"/>
+
+
+    </resultMap>
+
+
+    <!-- 查询条件 出入库流水 -->
+    <sql id="Example_Where_Clause">
+         where 1=1
+        <trim  suffixOverrides="," >
+            <if test="condition.customerid != null and condition.customerid != ''" >
+                and aaa.customerid like concat('%', #{condition.customerid},'%')
+            </if>
+
+            <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+                and aaa.lotatt12 like concat('%', #{condition.lotatt12},'%')
+            </if>
+            <if test="condition.descrc != null and condition.descrc != ''" >
+                and aaa.`descrc` like concat('%', #{condition.descrc},'%')
+            </if>
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and aaa.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+<!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
+<!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->
+<!--            </if>-->
+<!--            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >-->
+<!--                and aaa.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}-->
+<!--            </if>-->
+        </trim>
+    </sql>
+
+
+
+
+
+<!-- 出入库流水 -->
+    <select id="querySoAsnInvLocation"  resultType="com.wms.entity.RptSoAsnDailyLocation" parameterType="Object">
+        select * from
+        (SELECT
+        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,d.qcqty_expected asnqty,null soqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        FROM doc_asn_details a
+        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
+        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE aa.asnstatus='99'
+        UNION ALL
+        SELECT
+        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
+        s.`descr_c` descrc,null asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,aa.`notes`,p.`qty1`
+        FROM  `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE aa.sostatus='99') aaa
+        <include refid="Example_Where_Clause"/>
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+<!-- 出入库流水 列表总数-->
+    <select id="querySoAsnInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from
+        (SELECT
+        aa.`asnno` documentNo,e.`lotatt03` soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,d.qcqty_expected asnqty,'' soqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        FROM doc_asn_details a
+        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
+        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        WHERE aa.asnstatus='99'  AND s.reservedfield09='1'
+        UNION ALL
+        SELECT
+        aa.`orderno` documentNo,aa.`edittime` soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
+        s.`descr_c` descrc,'' asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,aa.`notes`,p.`qty1`
+        FROM  `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE aa.sostatus='99' AND s.reservedfield09='1') aaa
+        <include refid="Example_Where_Clause"/>
+    </select>
+
+
+
+</mapper>

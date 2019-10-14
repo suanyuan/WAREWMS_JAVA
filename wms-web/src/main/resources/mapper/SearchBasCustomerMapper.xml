@@ -149,7 +149,7 @@
         IFNULL(IFNULL(pr.warehouse_address,op.warehouse_address),e.warehouse_address) AS warehouse_address,
         CONCAT(IFNULL(pr.business_scope,''),IFNULL(op.business_scope,''),IFNULL(e.business_scope,''),IFNULL(r.bussiness_scope,'')) AS business_scope,
         CONCAT(IFNULL(pr.license_no,''),'/',IFNULL(op.license_no,'')) AS license_no,
-        CONCAT(IFNULL(DATE_FORMAT(pr.license_expiry_date,'%Y-%m-%d '),''),'/',IFNULL(DATE_FORMAT(op.license_expiry_date,'%Y-%m-%d '),'')) AS license_expiry_date,
+        CONCAT(IFNULL(DATE_FORMAT(pr.license_expiry_date,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(op.license_expiry_date,'%Y-%m-%d'),'')) AS license_expiry_date,
         CONCAT(IFNULL(pr.registration_authority,''),'/',IFNULL(op.registration_authority,'')) AS registrationAuthorityL,
         CONCAT(IFNULL(r.record_no,''),'/',IFNULL(e.record_no,'')) AS record_no,
         CONCAT(IFNULL(r.registration_authority,''),'/',IFNULL(e.registration_authority,'')) AS registrationAuthorityR,
@@ -229,7 +229,7 @@
         d.qcqty_expected qty,d.userdefine1 locationid,
         p.`qty1`,
         CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
-        e.`lotatt01`,e.`lotatt02`,e.`lotatt03`,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
+        e.`lotatt01`,e.`lotatt02`,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
         s.`descr_c` descrc,
         bb.codename_c uom,`bb1`.codename_c type,aa.notes
         FROM doc_asn_details a
@@ -281,7 +281,7 @@
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
         c.`lotatt01`,c.`lotatt02`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
         s.`descr_c` descrc,
-        bb.codename_c uom,`bb1`.codename_c type,aa.notes,aa.edittime lotatt03,
+        bb.codename_c uom,`bb1`.codename_c type,aa.notes,DATE_FORMAT(aa.edittime,'%Y-%m-%d') lotatt03,
         aa.consigneeid consigneeID,aa.`c_address1` caddress1,aa.C_Contact contact,aa.`c_tel1` ctel1
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
