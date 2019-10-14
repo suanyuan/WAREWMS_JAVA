@@ -1828,7 +1828,11 @@ public class OrderHeaderForNormalService extends BaseService {
         //打印原寄地
         map.put("destRouteLabel", "021WG-021NA");
         //收件人相关信息
-        map.put("consignerName",  (orderHeaderForNormal.getConsigneeid().equals("") && orderHeaderForNormal.getConsigneeid().equals("")? orderHeaderForNormal.getConsigneeid() : orderHeaderForNormal.getCContact() ));
+        if(!orderHeaderForNormal.getCContact().equals("") &&  orderHeaderForNormal.getCContact() == null){
+            map.put("consignerName",  (orderHeaderForNormal.getCContact()));
+        }else {
+            map.put("consignerName",  (orderHeaderForNormal.getConsigneeid()));
+        }
         map.put("consignerTel", orderHeaderForNormal.getCTel1());
         map.put("consignerCompany", orderHeaderForNormal.getConsigneeid() );
         map.put("consignerProvince", orderHeaderForNormal.getCProvince() );

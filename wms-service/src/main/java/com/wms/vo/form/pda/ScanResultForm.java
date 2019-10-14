@@ -7,10 +7,10 @@ public class ScanResultForm {
 
     /**
      * 嘉和诚康 自赋码 规则
-     * 开头有JHCK，长度不限，但是不建议很长，扫码效率会降低
-     * 建议JHCK之后，8 ~ 16 位
+     * 开头有ZFM，长度不限，但是不建议很长，扫码效率会降低
+     * 建议ZFM之后，8 ~ 12 位
      */
-    public static final String ALTERNATE_SKU_ID = "JHCK";
+    public static final String ALTERNATE_SKU_ID = "ZFM";
 
     /**
      * 客户代码
