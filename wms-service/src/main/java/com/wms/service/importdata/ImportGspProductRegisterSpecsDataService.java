@@ -183,13 +183,18 @@ public class ImportGspProductRegisterSpecsDataService {
 					if(gspProductRegister!=null){
 						importDataVO.setProductRegisterId(gspProductRegister.getProductRegisterId());
 					}else {
-						throw new Exception();
+						if("是".equals(dataArray.getMedicalDeviceMark())){
+							throw new Exception();
+						}
+
 					}
 				}catch (Exception e){
 					rowResult.append("[注册证编号]，该注册证编号不存在").append(" ");
 				}
 				if (StringUtils.isEmpty(dataArray.getProductRegisterId())) {
-					throw new Exception();
+					if("1".equals(dataArray.getMedicalDeviceMark())){
+						throw new Exception();
+					}
 				}
 			} catch (Exception e) {
 				rowResult.append("[注册证编号]，未输入").append(" ");
@@ -229,32 +234,45 @@ public class ImportGspProductRegisterSpecsDataService {
 				if("0".equals(dataArray.getProductName()) || dataArray.getProductName()==""||dataArray.getProductName()==null){
 					//自动带入
 					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
-					if(gspProductRegister.getProductNameMain()!=null ){
-						importDataVO.setProductName(gspProductRegister.getProductNameMain());
+					if(gspProductRegister==null){
+						if("是".equals(dataArray.getMedicalDeviceMark())){
+							throw new Exception();
+						}
+					}else {
+						if(gspProductRegister.getProductNameMain()!=null ){
+							importDataVO.setProductName(gspProductRegister.getProductNameMain());
+						}
 					}
+
 				}else{
 					//人工手输
 					importDataVO.setProductName(dataArray.getProductName());
 				}
 			} catch (Exception e) {
-//				rowResult.append("[产品名称]，未输入").append(" ");
+				rowResult.append("[产品名称]，未输入").append(" ");
 			}
 
 			try {
 				if("0".equals(dataArray.getProductionAddress()) || dataArray.getProductionAddress()==""||dataArray.getProductionAddress()==null){
 					//自动带入
 					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
-
-//					GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
-					if(gspProductRegister.getProductionAddress()!=null){
-						importDataVO.setProductionAddress(gspProductRegister.getProductionAddress());
+					if(gspProductRegister==null){
+						if("是".equals(dataArray.getMedicalDeviceMark())){
+							throw new Exception();
+						}
+					}else{
+						if(gspProductRegister.getProductionAddress()!=null){
+							importDataVO.setProductionAddress(gspProductRegister.getProductionAddress());
+						}
 					}
+//					GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
+
 				}else{
 					//人工手输
 					importDataVO.setProductionAddress(dataArray.getProductionAddress());
 				}
 			} catch (Exception e) {
-//				rowResult.append("[产地]，未输入").append(" ");
+				rowResult.append("[产地]，未输入").append(" ");
 			}
 
 			if("0".equals(dataArray.getProductRemark()) || dataArray.getProductRemark()==""||dataArray.getProductRemark()==null){
@@ -470,7 +488,9 @@ public class ImportGspProductRegisterSpecsDataService {
 				importDataVO.setMaintenanceCycle(dataArray.getMaintenanceCycle());
 
 				if (StringUtils.isEmpty(dataArray.getMaintenanceCycle())) {//判日期是否为空
-					throw new Exception();
+					if("是".equals(dataArray.getMedicalDeviceMark())){
+						throw new Exception();
+					}
 				}
 			} catch (Exception e) {
 				rowResult.append("[养护周期]，未输入").append(" ");
@@ -560,12 +580,13 @@ public class ImportGspProductRegisterSpecsDataService {
                 }else{
                     GspProductRegister gpr  = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
                     if(gpr==null){
-                        throw new Exception();
-                    }
-                    importDataVO.setLicenseOrRecordNo(gpr.getLicenseOrRecordNol());
+                    	if("是".equals(dataArray.getMedicalDeviceMark())){
+							throw new Exception();
+						}
+                    }else{
+						importDataVO.setLicenseOrRecordNo(gpr.getLicenseOrRecordNol());
+					}
                 }
-
-
 			} catch (Exception e) {
 				rowResult.append("[生产许可号/备案号]，注册证不存在").append(" ");
 			}
@@ -660,10 +681,13 @@ public class ImportGspProductRegisterSpecsDataService {
 				}else {
 					//如果注册号有生产企业就带入
 					GspProductRegister gspProductRegister =	gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
-					if(gspProductRegister.getEnterpriseId() != null && !gspProductRegister.getEnterpriseId().equals("")){
-						GspEnterpriseInfo gspEnterpriseInfo1 =gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gspProductRegister.getEnterpriseId());
-						importDataVO.setEnterpriseName(gspEnterpriseInfo1.getEnterpriseName());
+					if(gspProductRegister!=null){
+						if(gspProductRegister.getEnterpriseId() != null && !gspProductRegister.getEnterpriseId().equals("")){
+							GspEnterpriseInfo gspEnterpriseInfo1 =gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gspProductRegister.getEnterpriseId());
+							importDataVO.setEnterpriseName(gspEnterpriseInfo1.getEnterpriseName());
+						}
 					}
+
 				}
 			} catch (Exception e) {
 					//rowResult.append("[生产企业]，未输入").append(" ");

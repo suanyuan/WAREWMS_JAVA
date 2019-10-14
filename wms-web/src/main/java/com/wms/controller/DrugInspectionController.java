@@ -31,7 +31,7 @@ public class DrugInspectionController {
 	public ModelAndView toMain(String menuId) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
-		return new ModelAndView("searchBasCustomer/main", model);
+		return new ModelAndView("SearchBasCustomer/main", model);
 	}
 
 	@Login

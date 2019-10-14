@@ -457,12 +457,12 @@
             for(var i=0;i<row.length;i++){
                 console.log(row[i])
                 choseRowArr.push(row[i].instrumentCatalogId);
-                choseRowNameArr.push(row[i].instrumentCatalogName);
+                choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
             }
             $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",choseRowNameArr.join(","))
         }else{
             choseRowArr.push(row.instrumentCatalogId);
-            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue",row.instrumentCatalogName);
+            $("#ezuiFormDetail input[id='classifyCatalog']").textbox("setValue","["+row.classifyId+"]"+row.instrumentCatalogName);
         }
         $("#ezuiFormDetail input[id='choseScope']").val(choseRowArr.join(","));
         ezuidialogChoseScope.dialog("close");

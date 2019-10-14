@@ -526,7 +526,7 @@ var doSearch = function(){
 		activeFlag : $('#activeFlagQ').combobox('getValue'),
 
         descrC : $('#descrCQ').val(),
-        enterpriseNo :$('#entertpriseNoQ').val(),
+        enterpriseNo :$('#enterpriseNoQ').val(),
 	});
 };
 
@@ -604,8 +604,8 @@ function enterpriseInfo(enterpriseId){
 					<table style="text-align: right">
 						<tr >
 							<th>客户代码</th><td><input type='text' id='customeridQ' class='easyui-textbox' size='16' data-options='' align="left"/></td>
-							<%--<th>企业信息代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
-						<%--<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>企业代码</th><td><input type='text' id='enterpriseNoQ' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' size='16' data-options=''/></td>--%>
 							<th >客户类型</th><td><input type='text' id='customerTypeQ' class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',

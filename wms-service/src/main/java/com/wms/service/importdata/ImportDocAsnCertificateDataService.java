@@ -154,7 +154,7 @@ public class ImportDocAsnCertificateDataService {
 
 			try {
 
-				importDataVO.setCustomerid(dataArray.getCustomerid());
+				importDataVO.setCustomerid(dataArray.getCustomerid().trim());
 
 //                BasCustomer basCustomer  = basCustomerMybatisDao.queryByCustomerId(dataArray.getCustomerid());
 //                if(basCustomer==null){
@@ -177,7 +177,7 @@ public class ImportDocAsnCertificateDataService {
 			}
 
 			try {
-                importDataVO.setSku(dataArray.getSku());
+                importDataVO.setSku(dataArray.getSku().trim());
                 Map<String,Object> param = new HashMap<>();
                 param.put("customerid",dataArray.getCustomerid());
                 param.put("sku",dataArray.getSku());
@@ -193,7 +193,8 @@ public class ImportDocAsnCertificateDataService {
             }
 
 			try {
-				importDataVO.setLotatt04(dataArray.getLotatt04());
+
+				importDataVO.setLotatt04(dataArray.getLotatt04().trim());
 				if (StringUtils.isEmpty(dataArray.getLotatt04())) {//判日期是否为空
 					throw new Exception();
 				}
