@@ -17,6 +17,7 @@ public class BasCustomer  implements Serializable {
 	private java.util.Date clientStartDate;
 	private java.util.Date clientEndDate;
 	private String clientTerm;
+	private String enterpriseNo;
 
 
 	private String customerid;
