@@ -77,7 +77,7 @@ public class ImportGspProductRegisterDataService {
             List<ImportGPRData> GPRSList = null;
             try {
                 //调用excle共用类，转化成list
-				GPRSList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
+				GPRSList = ExcelUtil.excelToListIso(in, sheetName, asn, map, uniqueFields);
 
             } catch (ExcelException e) {
                 //e.printStackTrace();
