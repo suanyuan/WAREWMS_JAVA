@@ -91,7 +91,7 @@
 
 	<result column="clientName" property="clientName"/>
 
-
+	<result column="unit" property="unit"/>
 </resultMap>
 
 <resultMap id="SkuInfoMap" type="com.wms.entity.BasSku" >
@@ -237,17 +237,108 @@ where 1=1
     <if test="condition.reservedfield03 != null and condition.reservedfield03 != ''" >
         and reservedfield03  like  '%${condition.reservedfield03}%'
     </if>
+
+	<if test="condition.reservedfield14 != null and condition.reservedfield14 != ''" >
+		and reservedfield14  like  '%${condition.reservedfield14}%'
+	</if>
+
+
     <if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
         and sku_group1  like  '%${condition.skuGroup1}%'
     </if>
     <if test="condition.skuGroup2 != null and condition.skuGroup2 != ''" >
         and sku_group2  like  '%${condition.skuGroup2}%'
     </if>
+
+    <if test="condition.skuGroup6 != null and condition.skuGroup6 != ''" >
+        and sku_group6  like  '%${condition.skuGroup6}%'
+    </if>
+
 	<if test="condition.orderbysql != null and condition.orderbysql != ''" >
 		and orderbysql  like  '%${condition.orderbysql}%'
 	</if>
 </trim>
 </sql>
+    <!-- 主界面分页查询条件 -->
+    <sql id="Example_Where_Clause_ByPage">
+        where 1=1
+        <trim  suffixOverrides="," >
+
+
+
+            <if test="condition.customerid != null and condition.customerid != ''" >
+                and t1.customerid   like concat('%',#{condition.customerid},'%')
+            </if>
+            <if test="condition.sku != null and condition.sku != ''" >
+                and t1.sku  like  '%${condition.sku}%'
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and t1.active_flag  like  '%${condition.activeFlag}%'
+            </if>
+            <if test="condition.addTimeStart != null and condition.addTimeStart != ''" >
+                and t1.addtime   <![CDATA[  >=  ]]>  #{condition.addTimeStart}
+            </if>
+            <if test="condition.addTimeEnd != null and condition.addTimeEnd != ''" >
+                and     #{condition.addTimeEnd}  <![CDATA[  >=  ]]> t1.addtime
+            </if>
+            <if test="condition.edittimeStart != null and condition.edittimeStart != ''" >
+                and t1.edittime   <![CDATA[  >=  ]]>  #{condition.edittimeStart}
+            </if>
+            <if test="condition.edittimeEnd != null and condition.edittimeEnd != ''" >
+                and     #{condition.edittimeEnd}  <![CDATA[  >=  ]]> t1.edittime
+            </if>
+            <if test="condition.addwho != null and condition.addwho != ''" >
+                and t1.addwho  like  '%${condition.addwho}%'
+            </if>
+            <if test="condition.descrC != null and condition.descrC != ''" >
+                and t1.descr_c  like  '%${condition.descrC}%'
+            </if>
+            <if test="condition.descrE != null and condition.descrE != ''" >
+                and t1.descr_e  like  '%${condition.descrE}%'
+            </if>
+            <if test="condition.edittime != null and condition.edittime != ''" >
+                and t1.edittime  like  '%${condition.edittime}%'
+            </if>
+            <if test="condition.editwho != null and condition.editwho != ''" >
+                and t1.editwho   like  '%${condition.editwho}%'
+            </if>
+            <if test="condition.firstop != null and condition.firstop != ''" >
+                and t1.firstop  like  '%${condition.firstop}%'
+            </if>
+            <if test="condition.packid != null and condition.packid != ''" >
+                and t1.packid  like  '%${condition.packid}%'
+            </if>
+            <if test="condition.reservedfield01 != null and condition.reservedfield01 != ''" >
+                and t1.reservedfield01  like  '%${condition.reservedfield01}%'
+            </if>
+            <if test="condition.reservedfield02 != null and condition.reservedfield02 != ''" >
+                and t1.reservedfield02  like  '%${condition.reservedfield02}%'
+            </if>
+            <if test="condition.reservedfield03 != null and condition.reservedfield03 != ''" >
+                and t1.reservedfield03  like  '%${condition.reservedfield03}%'
+            </if>
+
+            <if test="condition.reservedfield14 != null and condition.reservedfield14 != ''" >
+                and t1.reservedfield14  like  '%${condition.reservedfield14}%'
+            </if>
+
+
+            <if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+                and t1.sku_group1  like  '%${condition.skuGroup1}%'
+            </if>
+            <if test="condition.skuGroup2 != null and condition.skuGroup2 != ''" >
+                and t1.sku_group2  like  '%${condition.skuGroup2}%'
+            </if>
+
+            <if test="condition.skuGroup6 != null and condition.skuGroup6 != ''" >
+                and t2.descr_c  like  '%${condition.skuGroup6}%'
+            </if>
+
+            <if test="condition.orderbysql != null and condition.orderbysql != ''" >
+                and t1.orderbysql  like  '%${condition.orderbysql}%'
+            </if>
+        </trim>
+    </sql>
 <!-- 查询条件 和inv_lot联接查询带出库存件数 -->
 <sql id="Example_Where_Clause1">
 where 1=1
@@ -922,17 +1013,17 @@ where 1=1
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT a.*,b.descr_c AS skuGroup6Name,e.DESCR_C clientName,c.descr,d.name productLineName,iv.codename_c  from
-	(select
-	<include refid="Base_Column_List"/>
-	from Bas_Sku
-	<include refid="Example_Where_Clause"/>) as a
+	SELECT a.*,b.descr_c AS skuGroup6Name,e.DESCR_C clientName,c.descr,d.name productLineName,iv.codename_c,uom.codename_c unit
+	from
+	(select t1.*
+	from Bas_Sku t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
+	<include refid="Example_Where_Clause_ByPage"/>) as a
 	LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
 	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 	LEFT JOIN bas_package c ON a.packid=c.packid
 	left join product_line d on a.sku_group1 =  d.product_line_id
 	left join bas_codes iv on a.reservedfield04 = iv.code
-
+	left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = a.defaultreceivinguom
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>

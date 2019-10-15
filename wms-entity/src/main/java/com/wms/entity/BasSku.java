@@ -32,6 +32,9 @@ public class BasSku implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date addtime;
 
+	private String addtimeDc;
+
+
 	private String addwho;
 
 	private String allocationrule;
@@ -75,6 +78,7 @@ public class BasSku implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date edittime;
+	private String edittimeDc;
 
 	private String editwho;
 
@@ -180,6 +184,44 @@ public class BasSku implements Serializable {
 	private String orderbysql;
 
 	private String clientName;
+
+
+	private String supplierNames; //多供应商
+
+	private String unit;
+
+
+	public String getAddtimeDc() {
+		return addtimeDc;
+	}
+
+	public void setAddtimeDc(String addtimeDc) {
+		this.addtimeDc = addtimeDc;
+	}
+
+	public String getEdittimeDc() {
+		return edittimeDc;
+	}
+
+	public void setEdittimeDc(String edittimeDc) {
+		this.edittimeDc = edittimeDc;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getSupplierNames() {
+		return supplierNames;
+	}
+
+	public void setSupplierNames(String supplierNames) {
+		this.supplierNames = supplierNames;
+	}
 
 	public String getClientName() {
 		return clientName;

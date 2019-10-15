@@ -531,8 +531,13 @@ var doSearch = function(){
         reservedfield01 : $("#reservedfield01").val(),
         reservedfield02 : $("#reservedfield02").val(),
         reservedfield03 : $("#reservedfield03").val(),
+
+        reservedfield14 : $("#reservedfield14").val(),
+
         skuGroup1 : $("#sku_group1").val(),
         skuGroup2 : $("#sku_group2").val(),
+        skuGroup6 : $("#skuGroup6Q").val(),
+
         isUse : $('#isUse').val()
 	});
 };
@@ -667,8 +672,28 @@ var doExport = function(){
 		param.put("token", token);
 		param.put("customerid", $('#customerid').val());
 		param.put("sku", $('#sku').val());
-		param.put("activeFlag", $('#activeFlag').combobox('getValue'));
-		//--导出Excel
+		param.put("activeFlag", $('#activeFlagQ').combobox('getValue'));
+        param.put("addTimeEnd ", $('#addTimeEnd').datebox("getValue"));
+        param.put("addTimeStart ", $('#addTimeEnd').datebox("getValue"));
+        param.put("edittimeStart", $('#edittimeStart').datebox("getValue"));
+        param.put("edittimeEnd", $('#edittimeEnd').datebox("getValue"));
+        param.put("addwho", $('#addwho').val());
+        param.put("descrC", $('#descrC').val());
+        param.put("descrE", $('#descrE').val());
+        param.put("editwho", $('#editwho').val());
+        param.put("firstop", $('#firstop').combobox("getValue"));
+        param.put("packid", $('#packidQ').val());
+        param.put("reservedfield01", $('#reservedfield01').val());
+        param.put("reservedfield02", $('#reservedfield02').val());
+        param.put("reservedfield03", $('#reservedfield03').val());
+        param.put("reservedfield14", $('#reservedfield14').val());
+        param.put("skuGroup1", $('#sku_group1').val());
+        param.put("skuGroup2", $('#sku_group2').val());
+        param.put("skuGroup6", $('#sku_group6Q').val());
+        param.put("isUse", $('#isUse').val());
+
+
+        //--导出Excel
 		var formId = ajaxDownloadFile(sy.bp()+"/basSkuController.do?exportSkuDataToExcel", param);
 		downloadCheckTimer = window.setInterval(function () {
 			window.clearInterval(downloadCheckTimer);
@@ -701,6 +726,9 @@ var doExport = function(){
 	}
 };
 /* 导出end */
+
+
+
 
 /* 导入start */
 var commitImportData = function(obj){
@@ -856,7 +884,10 @@ var downloadTemplate = function(){
 																																	{id: '1', value: '是'},
 																																	{id: '0', value: '否'}
 																																]"/></td>
-
+							<th>默认供应商</th>
+							<td><input type='text' id='skuGroup6Q'  name="skuGroup6Q" class='easyui-textbox' size='16' /></td>
+							<th>生产企业</th>
+							<td><input type='text' id='reservedfield14'  name="reservedfield14" class='easyui-textbox' size='16' /></td>
 
 
 						</tr>
@@ -864,7 +895,7 @@ var downloadTemplate = function(){
                         <td colspan="10">
                             <a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
                             <a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-                            <%--<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>--%>
+                            <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
                             <%--<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>--%>
                         </td>
 

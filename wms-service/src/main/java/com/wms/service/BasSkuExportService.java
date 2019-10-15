@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -12,6 +14,9 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wms.constant.Constant;
+import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
+import com.wms.vo.BasSkuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +45,8 @@ public class BasSkuExportService {
 	
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
+	@Autowired
+	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
 	
 	private static final String ORDER_HEAD = "客户代码,产品,是否激活,中文名称,英文名称,条形码,包装代码,单位,首次入库,重量,体积,单价";
 	public void exportSkuData(HttpServletResponse response, BasSkuExportForm form) throws IOException {
@@ -128,13 +135,76 @@ public class BasSkuExportService {
 	        // excel的sheetName  
 	        String sheetName = "产品档案";  
 	        // excel要导出的数据  
-	        List<BasSku> skuList = basSkuMybatisDao.queryByList(mybatisCriteria); 
+	        List<BasSku> basSkuList = basSkuMybatisDao.queryByPageList(mybatisCriteria);
 	        // 导出  
-	        if (skuList == null || skuList.size() == 0) {  
+	        if (basSkuList == null || basSkuList.size() == 0) {
 	        	//System.out.println("题库为空");  
-	        }else {  
-	            //将list集合转化为excle  
-	            ExcelUtil.listToExcel(skuList, fieldMap, sheetName, response);  
+	        }else {
+
+				for (BasSku basSku : basSkuList) {
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					Date date=null;
+
+					if("1".equals(basSku.getActiveFlag())){
+						basSku.setActiveFlag("是");
+					}else if("0".equals(basSku.getActiveFlag())){
+						basSku.setActiveFlag("否");
+					}
+
+					if(Constant.CODE_CATALOG_FIRSTSTATE_PASS.equals(basSku.getFirstop())){
+						basSku.setFirstop("审核通过");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_USELESS.equals(basSku.getFirstop())){
+						basSku.setFirstop("已报废");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(basSku.getFirstop())){
+						basSku.setFirstop("新建");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_STOP.equals(basSku.getFirstop())){
+						basSku.setFirstop("已停止");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING.equals(basSku.getFirstop())){
+						basSku.setFirstop("审核中");
+					}
+
+					if("1".equals(basSku.getReservedfield09())){
+						basSku.setReservedfield09("是");
+					}else if("0".equals(basSku.getReservedfield09())){
+						basSku.setReservedfield09("否");
+					}
+					if("1".equals(basSku.getSkuGroup7())){
+						basSku.setSkuGroup7("是");
+					}else if("0".equals(basSku.getSkuGroup7())){
+						basSku.setSkuGroup7("否");
+					}
+
+					if(basSku.getAddtime()!=null) {
+						basSku.setAddtimeDc(sdf.format(basSku.getAddtime()));
+					}
+					if(basSku.getEdittime()!=null) {
+						basSku.setEdittimeDc(sdf.format(basSku.getEdittime()));
+					}
+
+
+
+					//所有供应商
+					String content = "";
+					BasSku bs = new BasSku();
+					bs.setSku(basSku.getSku());
+					bs.setCustomerid(basSku.getCustomerid());
+					List<String> sup = firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
+					int a = 1;
+					for (String supNanme : sup) {
+						if (a == 1) {
+							content = supNanme;
+						}
+						if (supNanme != null && a != 1) {
+							System.out.println();
+							content = content + "," + supNanme;
+						}
+						a++;
+					}
+					basSku.setSupplierNames(content);
+				}
+
+
+	            ExcelUtil.listToExcel(basSkuList, fieldMap, sheetName, response);
 	        	//System.out.println("导出成功~~~~");  
 	        }  
 	    } catch (ExcelException e) {  
@@ -150,20 +220,34 @@ public class BasSkuExportService {
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
 	
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-	
-		superClassMap.put("customerid", "客户代码");
-		superClassMap.put("sku", "产品");
 		superClassMap.put("activeFlag", "激活");
-		superClassMap.put("descrC", "中文名称");
-		superClassMap.put("descrE", "英文名称");
-		superClassMap.put("descrE", "英文名称");
-		superClassMap.put("packid", "包装代码");
-		superClassMap.put("alternateSku1", "条形码");
-		superClassMap.put("reservedfield01", "单位");
-		superClassMap.put("grossweight", "重量");
-		superClassMap.put("cube", "体积");
-		superClassMap.put("price", "单价");
-	
+		superClassMap.put("firstop", "首营状态");
+		superClassMap.put("customerid", "货主代码");
+		superClassMap.put("clientName", "货主名称");
+		superClassMap.put("reservedfield09", "医疗器械标志");
+		superClassMap.put("sku", "产品代码");
+		superClassMap.put("reservedfield03", "产品代码");
+		superClassMap.put("reservedfield04", "管理分类");
+		superClassMap.put("reservedfield05", "分类目录");
+		superClassMap.put("reservedfield01", "产品名称");
+		superClassMap.put("reservedfield02", "产品描述");
+		superClassMap.put("descrC", "规格");
+
+		superClassMap.put("descrE", "型号");
+		superClassMap.put("reservedfield14", "生产企业");
+		superClassMap.put("descr", "包装规格");
+		superClassMap.put("skuGroup4", "储存条件");
+		superClassMap.put("unit", "单位");
+		superClassMap.put("reservedfield10", "养护周期（天）");
+		superClassMap.put("skuGroup7", "双证");
+		superClassMap.put("productLineName", "产品线");
+		superClassMap.put("skuGroup6Name", "默认供应商");
+		superClassMap.put("supplierNames", "所有供应商");
+		superClassMap.put("addwho", "创建人");
+		superClassMap.put("addtimeDc", "创建时间");
+		superClassMap.put("editwho", "编辑人");
+		superClassMap.put("edittimeDc", "编辑时间");
+
 		return superClassMap;
 	}
 

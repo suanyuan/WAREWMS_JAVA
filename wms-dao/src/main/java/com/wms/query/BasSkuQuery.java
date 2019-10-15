@@ -53,12 +53,17 @@ public class BasSkuQuery implements IQuery {
 	private java.lang.String reservedfield03;
 	private java.lang.String reservedfield04;
 	private java.lang.String reservedfield05;
+
+	private java.lang.String reservedfield14;
+
+
 	private java.lang.String rotationid;
 	private java.lang.String skuGroup1;
 	private java.lang.String skuGroup2;
 	private java.lang.String skuGroup3;
 	private java.lang.String skuGroup4;
 	private java.lang.String skuGroup5;
+	private java.lang.String skuGroup6;
 	private java.math.BigDecimal skuhigh;
 	private java.math.BigDecimal skulength;
 	private java.math.BigDecimal skuwidth;
@@ -73,7 +78,7 @@ public class BasSkuQuery implements IQuery {
 
 	private String firstop;
 
-	private String skuGroup6;
+//	private String skuGroup6;
 
 	private String skuGroup7;
 
@@ -82,9 +87,13 @@ public class BasSkuQuery implements IQuery {
 	private String skuGroup9;
 
 
+	public String getReservedfield14() {
+		return reservedfield14;
+	}
 
-
-
+	public void setReservedfield14(String reservedfield14) {
+		this.reservedfield14 = reservedfield14;
+	}
 
 	public String getFirstop() {
 		return firstop;
