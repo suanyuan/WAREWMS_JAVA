@@ -72,7 +72,7 @@ public class BasSkuService extends BaseService {
 	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//显示主页datagrid
+	//显示主页datagrid
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();

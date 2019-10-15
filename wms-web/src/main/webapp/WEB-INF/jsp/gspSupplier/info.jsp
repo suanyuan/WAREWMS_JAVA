@@ -82,7 +82,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             </td>
             <th>授权照片</th>
             <td>
-                <input type="hidden" class="textbox-value" data="1" name="empowerPhoto" id="empowerPhoto" value="${gspSupplier.contractUrl}" />
+                <input type="hidden" class="textbox-value" data="1" name="empowerPhoto" id="empowerPhoto" value="${gspSupplier.empowerPhoto}" />
                 <input id="contractUrlFile1" name='file1' value="${gspSupplier.empowerPhoto}"  />
                 <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewUrl1()">查看</a>
             </td>
@@ -639,26 +639,26 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
     });
 
     function viewUrl(url) {
-        if(url){
-            showUrl(url);
-        }else{
-            if($("#ezuiFormSupInfo #contractUrl").val()!=""){
-                showUrl($("#ezuiFormSupInfo #contractUrl").val());
+        // if(url){
+        //     showUrl(url);
+        // }else{
+            if($("#ezuiFormSupInfo input[id='contractUrlFile']").val()!=""){
+                showUrl($("#ezuiFormSupInfo input[id='contractUrlFile']").val());
             }else {
                 showMsg("请上传合同附件！");
             }
-        }
+        // }
     }
     function viewUrl1(url) {
-        if(url){
-            showUrl(url);
-        }else{
-            if($("#ezuiFormSupInfo #empowerPhoto").val()!=""){
-                showUrl($("#ezuiFormSupInfo #empowerPhoto").val());
+        // if(url){
+        //     showUrl(url);
+        // }else{
+            if($("#ezuiFormSupInfo input[id='contractUrlFile1']").val()!=""){
+                showUrl($("#ezuiFormSupInfo input[id='contractUrlFile1']").val());
             }else {
                 showMsg("请上传授权照片！");
             }
-        }
+        // }
     }
 
 

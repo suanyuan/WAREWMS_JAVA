@@ -109,7 +109,7 @@
 <!-- Bas_Customer table all fields -->
 <sql id="Base_Column_List" >
 	customerid,
-	customer_type,enterprise_no
+	customer_type,
 	active_flag,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,
 	address1,
 	address2,
