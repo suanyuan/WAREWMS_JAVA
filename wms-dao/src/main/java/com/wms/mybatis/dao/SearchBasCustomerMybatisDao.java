@@ -1,10 +1,7 @@
 package com.wms.mybatis.dao;
 
 
-import com.wms.entity.SearchBasCustomer;
-import com.wms.entity.SearchEnterInvLocation;
-import com.wms.entity.SearchInvLocation;
-import com.wms.entity.SearchOutInvLocation;
+import com.wms.entity.*;
 
 import java.util.List;
 
@@ -16,6 +13,9 @@ import java.util.List;
 public interface SearchBasCustomerMybatisDao extends BaseDao {
 //委托客户
 	public List<SearchBasCustomer> querySearchCustomer(MybatisCriteria criteria);
+//货主商品
+    public List<CustomerProduct> queryCustomerProduct(MybatisCriteria criteria);
+	public int queryCustomerProductByCount(MybatisCriteria criteria);
 //库存信息
 	public List<SearchInvLocation> querySearchInvLocation(MybatisCriteria criteria);
 	public int querySearchInvLocationCount(MybatisCriteria criteria);

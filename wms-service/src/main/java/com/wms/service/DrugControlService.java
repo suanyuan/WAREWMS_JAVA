@@ -6,7 +6,6 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.CustomerProductMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.SearchBasCustomerMybatisDao;
 import com.wms.utils.BeanConvertUtil;
@@ -29,8 +28,6 @@ public class DrugControlService extends BaseService {
 
 	@Autowired
 	private SearchBasCustomerMybatisDao searchBasCustomerMybatisDao;
-	@Autowired
-	private CustomerProductMybatisDao customerProductMybatisDao;
 	@Autowired
 	private BasCodesService basCodesService;
 
@@ -125,8 +122,8 @@ public class DrugControlService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		System.out.println();
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		List<CustomerProduct> searchCustomerProductList = customerProductMybatisDao.queryCustomerProduct(mybatisCriteria);
-		datagrid.setTotal((long) customerProductMybatisDao.queryCustomerProductByCount(mybatisCriteria));
+		List<CustomerProduct> searchCustomerProductList = searchBasCustomerMybatisDao.queryCustomerProduct(mybatisCriteria);
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.queryCustomerProductByCount(mybatisCriteria));
 		datagrid.setRows(searchCustomerProductList);
 		return datagrid;
 	}
@@ -145,7 +142,7 @@ public class DrugControlService extends BaseService {
             // excel的sheetName
             String sheetName = "货主商品";
             // excel要导出的数据
-            List<CustomerProduct> searchBasCustomerList = customerProductMybatisDao.queryCustomerProduct(mybatisCriteria);
+            List<CustomerProduct> searchBasCustomerList = searchBasCustomerMybatisDao.queryCustomerProduct(mybatisCriteria);
             // 导出
             if (searchBasCustomerList == null || searchBasCustomerList.size() == 0) {
                 System.out.println("题库为空");
