@@ -207,12 +207,12 @@ public class DrugControlService extends BaseService {
 
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
         superClassMap.put("enterpriseName", "委托方企业名称");
-        superClassMap.put("productName", "产品名称");
-        superClassMap.put("specsName", "规格");
-        superClassMap.put("productModel", "型号");
-        superClassMap.put("productRegisterNo", "产品注册证号");
-        superClassMap.put("productRegisterExpiryDate", "有效期");
-        superClassMap.put("approveDate", "批准日期");
+        superClassMap.put("productName", "委托方货品名称");
+        superClassMap.put("specsName", "规格/型号");
+//        superClassMap.put("productModel", "型号");
+        superClassMap.put("productRegisterNo", "产品注册证号/备案凭证号");
+		superClassMap.put("approveDate", "批准日期");
+		superClassMap.put("productRegisterExpiryDate", "有效期");
         superClassMap.put("enterpriseSc", "生产企业");
         superClassMap.put("licenseOrRecordNo", "生产许可证号/备案号");
         superClassMap.put("unit", "单位");
@@ -634,6 +634,85 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("clientTerm", "委托期限");
 		superClassMap.put("isChineseLabel", "是否贴中文标签");
 		superClassMap.put("clientContent", "委托业务范围");
+		return superClassMap;
+	}
+
+
+	/******************************   历史货主商品   *********************************/
+
+	public EasyuiDatagrid<CustomerProduct> getCustomerProductHistoryPagedDatagrid(EasyuiDatagridPager pager, CustomerProduct query) {
+		EasyuiDatagrid<CustomerProduct> datagrid = new EasyuiDatagrid<CustomerProduct>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		System.out.println();
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<CustomerProduct> searchCustomerProductList = searchBasCustomerMybatisDao.queryCustomerHistoryProduct(mybatisCriteria);
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.queryCustomerProductHistoryByCount(mybatisCriteria));
+		datagrid.setRows(searchCustomerProductList);
+		return datagrid;
+	}
+
+
+	public void exportCustomerProductHistoryDataToExcel(HttpServletResponse response, CustomerProduct form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getCustomerProductHistoryLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "历史货主商品";
+			// excel要导出的数据
+			List<CustomerProduct> searchBasCustomerList = searchBasCustomerMybatisDao.queryCustomerHistoryProduct(mybatisCriteria);
+			// 导出
+			if (searchBasCustomerList == null || searchBasCustomerList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (CustomerProduct s: searchBasCustomerList) {
+//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						s.setApproveDate(sdf.format(sdf.parse(s.getApproveDate())));
+						s.setProductRegisterExpiryDate(sdf.format(sdf.parse(s.getProductRegisterExpiryDate())));
+
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+
+
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getCustomerProductHistoryLeadToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("productName", "委托方货品名称");
+		superClassMap.put("specsName", "规格/型号");
+//        superClassMap.put("productModel", "型号");
+		superClassMap.put("productRegisterNo", "产品注册证号/备案凭证号");
+		superClassMap.put("approveDate", "批准日期");
+		superClassMap.put("productRegisterExpiryDate", "有效期");
+		superClassMap.put("enterpriseSc", "生产企业");
+		superClassMap.put("licenseOrRecordNo", "生产许可证号/备案号");
+		superClassMap.put("unit", "单位");
+		superClassMap.put("storageCondition", "储存条件");
+
 		return superClassMap;
 	}
 }
