@@ -146,4 +146,48 @@ public class DrugInspectionController {
     public void exportSearchOutInvLocationDataToExcel(HttpServletResponse response,SearchOutInvLocation form) throws Exception {
         drugControlService.exportSearchOutInvLocationDataToExcel(response, form);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+	 * 药监核查-历史数据
+	 */
+
+
+
+
+	/**************************************委托客户-历史数据****************************************/
+
+	@Login
+	@RequestMapping(params = "toMainHistory")
+	public ModelAndView toMainHistory(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("SearchBasCustomer/main_history", model);
+	}
+
+	@Login
+	@RequestMapping(params = "showDatagridBasCustomerHistory")
+	@ResponseBody
+	public EasyuiDatagrid<SearchBasCustomer> showDatagridBasCustomerHistory(EasyuiDatagridPager pager, SearchBasCustomer query) {
+		return drugControlService.getPagedDatagridBasCustomerHistory(pager, query);
+	}
+
+
+	@Login
+	@RequestMapping(params = "exportBasCustomerHistoryDataToExcel")
+	public void exportBasCustomerHistoryDataToExcel(HttpServletResponse response, SearchBasCustomer form) throws Exception {
+		drugControlService.exportBasCustomerHistoryDataToExcel(response, form);
+	}
 }

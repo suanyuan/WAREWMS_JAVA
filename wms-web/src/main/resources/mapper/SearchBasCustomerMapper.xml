@@ -405,4 +405,54 @@
         LEFT JOIN bas_customer t7 on t7.customerid=t1.customerid
         <include refid="Example_Where_Clause4"/>) z
     </select>
+
+
+
+
+
+
+
+
+<!--++++++++++++++++++++++++++++++++++++++++++药监核查-历史数据++++++++++++++++++++++++++++++++++++++++++-->
+<!--++++++++++++++++++++++++++++++++++++++++++药监核查-历史数据++++++++++++++++++++++++++++++++++++++++++-->
+
+    <!-- 查询条件 历史委托客户-->
+    <sql id="Example_Where_Clause_History">
+            where 1=1
+        <trim  suffixOverrides="," >
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+                and  enterpriseName like concat('%', #{condition.enterpriseName},'%')
+            </if>
+            <if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+                and clientStartDate &gt;=  #{condition.clientStartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+                and clientEndDate &lt;=  #{condition.clientEndDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and activeFlag =  #{condition.activeFlag}
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- *******************************委托客户********************************** -->
+    <!-- 查询委托客户列表 -->
+    <select id="querySearchBasCustomerHistory"  resultType="com.wms.entity.SearchBasCustomer" parameterType="Object">
+        SELECT *
+        FROM
+        history_bas_customer
+        <include refid="Example_Where_Clause_History"/>
+
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+    <!-- 委托客户 列表总数-->
+    <select id="querySearchBasCustomerHistoryCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT  count(1)
+        FROM
+        history_bas_customer
+        <include refid="Example_Where_Clause_History"/>
+    </select>
 </mapper>

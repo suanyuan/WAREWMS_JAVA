@@ -532,4 +532,108 @@ public class DrugControlService extends BaseService {
         superClassMap.put("qty1", "换算率");
         return superClassMap;
     }
+
+
+
+
+
+
+
+	/**
+	 * 药监核查-历史数据
+	 */
+
+	/**************************************历史委托客户****************************************/
+	public EasyuiDatagrid<SearchBasCustomer> getPagedDatagridBasCustomerHistory(EasyuiDatagridPager pager, SearchBasCustomer query) {
+		EasyuiDatagrid<SearchBasCustomer> datagrid = new EasyuiDatagrid<SearchBasCustomer>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<SearchBasCustomer> searchBasCustomerList = searchBasCustomerMybatisDao.querySearchBasCustomerHistory(mybatisCriteria);
+		for (SearchBasCustomer s: searchBasCustomerList) {
+			//时间格式转换
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				  s.setLicenseExpiryDate(sdf.format(sdf.parse(s.getLicenseExpiryDate())));
+				  s.setClientStartDate(sdf.format(sdf.parse(s.getClientStartDate())));
+				  s.setClientEndDate(sdf.format(sdf.parse(s.getClientEndDate())));
+
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchBasCustomerHistoryCount(mybatisCriteria));
+		datagrid.setRows(searchBasCustomerList);
+		return datagrid;
+	}
+	public void exportBasCustomerHistoryDataToExcel(HttpServletResponse response, SearchBasCustomer form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getBasCustomerHistoryLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "历史委托客户";
+			// excel要导出的数据
+			List<SearchBasCustomer> searchBasCustomerList = searchBasCustomerMybatisDao.querySearchBasCustomerHistory(mybatisCriteria);
+			// 导出
+			if (searchBasCustomerList == null || searchBasCustomerList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (SearchBasCustomer s: searchBasCustomerList) {
+					//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						s.setLicenseExpiryDate(sdf.format(sdf.parse(s.getLicenseExpiryDate())));
+						s.setClientStartDate(sdf.format(sdf.parse(s.getClientStartDate())));
+						s.setClientEndDate(sdf.format(sdf.parse(s.getClientEndDate())));
+
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					//委托期限
+					if(s.getClientTerm()!=null){
+						s.setClientTerm(s.getClientTerm()+"天");
+					}
+				}
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getBasCustomerHistoryLeadToFiledPublicQuestionBank() {
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("licenseNumber", "营业执照编号");
+		superClassMap.put("residence", "住所");
+		superClassMap.put("juridicalPerson", "法定代表人");
+		superClassMap.put("headName", "企业负责人");
+		superClassMap.put("businessResidence", "经营场所");
+		superClassMap.put("warehouseAddress", "库房地址");
+		superClassMap.put("businessScope", "经营范围");
+		superClassMap.put("licenseNo", "经营许可证号");
+		superClassMap.put("licenseExpiryDate", "许可证效期");
+		superClassMap.put("registrationAuthorityL", "发证机关");
+		superClassMap.put("recordNo", "备案凭证号");
+		superClassMap.put("registrationAuthorityR", "发证机关");
+		superClassMap.put("clientStartDate", "合同开始时间");
+		superClassMap.put("clientEndDate", "合同结束时间");
+		superClassMap.put("clientTerm", "委托期限");
+		superClassMap.put("isChineseLabel", "是否贴中文标签");
+		superClassMap.put("clientContent", "委托业务范围");
+		return superClassMap;
+	}
 }

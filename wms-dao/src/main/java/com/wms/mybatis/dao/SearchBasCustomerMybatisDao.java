@@ -28,4 +28,14 @@ public interface SearchBasCustomerMybatisDao extends BaseDao {
 
 
 
+
+/**
+ * 药监核查-历史数据
+ */
+
+
+//历史委托客户
+   public List<SearchBasCustomer> querySearchBasCustomerHistory(MybatisCriteria criteria);
+   public int querySearchBasCustomerHistoryCount(MybatisCriteria criteria);
+
 }
