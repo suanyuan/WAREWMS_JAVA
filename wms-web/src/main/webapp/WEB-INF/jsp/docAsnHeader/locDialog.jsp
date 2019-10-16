@@ -10,13 +10,13 @@
 					<table>
 						<tr>
 							<th>库位：</th><td>
-							<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码",editable:false'/></td>
-							<th>库位类型：</th><td>
-							<input type='text' id='locationcategory' name="locationcategory" class='easyui-combobox' size='12' data-options="panelHeight:'auto',
-																																		    editable:false,
-																																			url:'<c:url value="/basLocationController.do?getCatTypeCombobox"/>',
-																																			valueField: 'id',
-																																			textField: 'value'"/></td>
+							<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='16' data-options='prompt:"请输入库位",editable:true'/></td>
+<%--							<th>库位类型：</th><td>--%>
+<%--							<input type='text' id='locationcategory' name="locationcategory" class='easyui-combobox' size='12' data-options="panelHeight:'auto',--%>
+<%--																																		    editable:false,--%>
+<%--																																			url:'<c:url value="/basLocationController.do?getCatTypeCombobox"/>',--%>
+<%--																																			valueField: 'id',--%>
+<%--																																			textField: 'value'"/></td>--%>
 							<td>
 								<a onclick='ezuiLocDataSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='selectLocation();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>

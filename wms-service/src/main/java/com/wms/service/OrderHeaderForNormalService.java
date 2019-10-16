@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
+import com.sun.mail.util.BASE64DecoderStream;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -390,7 +391,10 @@ public class OrderHeaderForNormalService extends BaseService {
      * 拣货/确认复核
      */
     public Json picking(String orderNo) {
-        Json json = new Json();
+
+        Json json = fixLLPackage(orderNo);
+        if (!json.isSuccess()) return json;
+
         //
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -486,6 +490,9 @@ public class OrderHeaderForNormalService extends BaseService {
                             return json;
                         }
                     }
+
+                    //todo 取消快递单
+
                     //删除序列号记录 add by Gizmo 2019-08-29
                     docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
                     return Json.success("取消拣货成功");
@@ -512,6 +519,9 @@ public class OrderHeaderForNormalService extends BaseService {
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("40")) {//orderHeaderForNormal.getSostatus().equals("30") ||
+
+                json = fixLLPackage(orderHeaderForNormal.getOrderno());
+                if (!json.isSuccess()) return json;
 
                 //操作拣货
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
@@ -652,6 +662,9 @@ public class OrderHeaderForNormalService extends BaseService {
 //                    orderHeaderForNormal.getSostatus().equals("63")) {
 
             } else if (orderHeaderForNormal.getSostatus().equals("60")) {
+
+                json = fixLLPackage(orderHeaderForNormal.getOrderno());
+                if (!json.isSuccess()) return json;
 
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
                 String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
@@ -2130,6 +2143,44 @@ public class OrderHeaderForNormalService extends BaseService {
         return json;
     }
 
+    /**
+     * 快递投诉
+     */
+    public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+        Json json = new Json();
+        orderHeaderForNormalForm.setCourierComplaint(orderHeaderForNormalForm.getCourierComplaintU());
+        int num = orderHeaderForNormalMybatisDao.updateCourierComplaint(orderHeaderForNormalForm);
+        if (num > 0) {
+            json.setSuccess(true);
+            json.setMsg("资料处理成功！");
+        } else {
+            json.setSuccess(true);
+            json.setMsg("资料处理失败！");
+        }
+
+        return json;
+    }
+
+
+    /* ********************* J **********************
+     * ********************* U **********************
+     * ********************* D **********************
+     * ********************* G **********************
+     * ********************* E **********************
+     * 判断是否是冷链出库，如果是的话，只能通过PDA/打包台进行转有的冷链出库操作，不可再PC上进行复核
+     */
+    private Json fixLLPackage(String orderno) {
+
+        List<OrderDetailsForNormal> docOrderDetailsList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
+        if (docOrderDetailsList.size() == 0) return Json.success("");
+
+        BasSku basSku = basSkuService.getSkuInfo(docOrderDetailsList.get(0).getCustomerid(), docOrderDetailsList.get(0).getSku());
+        if (basSku == null) return Json.success("");
+
+        if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC")) return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");
+
+        return Json.success("");
+    }
 
     private String getKey(OrderDetailsForNormal detail) {
         return detail.getSku() + "" + detail.getLotatt01() + detail.getLotatt02() + detail.getLotatt03() + detail.getLotatt04()
@@ -2151,25 +2202,4 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return String.valueOf(d);
     }
-
-
-    /**
-     * 快递投诉
-     */
-    public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm) {
-        Json json = new Json();
-        orderHeaderForNormalForm.setCourierComplaint(orderHeaderForNormalForm.getCourierComplaintU());
-        int num = orderHeaderForNormalMybatisDao.updateCourierComplaint(orderHeaderForNormalForm);
-        if (num > 0) {
-            json.setSuccess(true);
-            json.setMsg("资料处理成功！");
-        } else {
-            json.setSuccess(true);
-            json.setMsg("资料处理失败！");
-        }
-
-        return json;
-    }
-
-
 }
