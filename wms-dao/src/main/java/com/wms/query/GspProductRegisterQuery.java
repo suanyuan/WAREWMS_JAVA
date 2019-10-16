@@ -6,7 +6,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 @Data
 public class GspProductRegisterQuery implements IQuery {
-
+	private String token;
 	private String productRegisterId;
 	private String productRegisterNo;
 	private String productNameMain;

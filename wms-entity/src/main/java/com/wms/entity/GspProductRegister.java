@@ -38,8 +38,10 @@ public class GspProductRegister  implements Serializable {
 	private String remark;
 
 	private java.util.Date approveDate;
+	private String approveDateDc;
 
 	private java.util.Date productRegisterExpiryDate;
+	private String productRegisterExpiryDateDc;
 
 	private String productRegisterVersion;
 	private String productRegisterVersionName;
@@ -49,11 +51,11 @@ public class GspProductRegister  implements Serializable {
 	private String checkerId;
 
 	private java.util.Date checkDate;
-
+	private String checkDateDc;
 	private String createId;
 
 	private java.util.Date createDate;
-
+	private String createDateDc;
 	private String editId;
 
 	private java.util.Date editDate;

@@ -138,7 +138,7 @@
             method:'POST',
             toolbar : '#detailToolbar',
             title: '',
-            pageSize : 50,
+            pageSize : 200,
             pageList : [50, 100, 200],
             border: false,
             fitColumns : false,

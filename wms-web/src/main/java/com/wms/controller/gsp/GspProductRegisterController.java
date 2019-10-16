@@ -216,6 +216,12 @@ public class GspProductRegisterController {
 		return gspProductRegisterService.importExcelData(mhsr);
 	}
 
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, GspProductRegisterQuery form) throws Exception {
+		gspProductRegisterService.exportDataToExcel(response, form);
+	}
 	@Login
 	@RequestMapping(params = "showHistoryDatagrid")
 	@ResponseBody

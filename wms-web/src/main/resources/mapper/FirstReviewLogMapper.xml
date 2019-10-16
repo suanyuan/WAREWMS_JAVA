@@ -82,6 +82,8 @@ where 1=1
 	<if test="condition.applyNo != null and condition.applyNo != ''" >
 		and review_type_id like CONCAT('%',#{condition.applyNo},'%')
 	</if>
+
+
 </trim>
 </sql>
    

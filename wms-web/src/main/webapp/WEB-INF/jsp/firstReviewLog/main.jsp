@@ -268,8 +268,12 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        // param.put("enterpriseName",$('#enterpriseName').val());
-        // param.put("activeFlag", $('#activeFlag').combobox('getValue'));
+        param.put("reviewTypeId",$('#applyType').combobox('getValue'));
+        param.put("applyNo",$('#applyNo').val());
+        param.put("applyState",$('#applyState').combobox('getValue'));
+        param.put("createDateBegin",$('#createDateBegin').datebox('getValue'));
+        param.put("createDateEnd", $('#createDateEnd').datebox('getValue'));
+
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/firstReviewLogController.do?exportFirstReviewLogDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {

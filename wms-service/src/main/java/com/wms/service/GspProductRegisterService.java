@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
@@ -17,6 +18,7 @@ import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.importdata.ImportGspProductRegisterDataService;
 import com.wms.utils.*;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
 import com.wms.vo.form.GspOperateDetailForm;
@@ -466,6 +468,106 @@ public class GspProductRegisterService extends BaseService {
 		}
 		return json;
 	}
+
+	public void exportDataToExcel(HttpServletResponse response, GspProductRegisterQuery form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getCustomerProductLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "货主商品";
+			// excel要导出的数据
+			List<GspProductRegister> searchBasCustomerList = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+			// 导出
+
+
+			if (searchBasCustomerList == null || searchBasCustomerList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (GspProductRegister gspProductRegister: searchBasCustomerList) {
+//                    FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
+//                    BeanUtils.copyProperties(s, firstReviewLogForm);
+
+
+					//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd");
+					Date date=null;
+
+
+					if("1".equals(gspProductRegister.getIsUse())){
+						gspProductRegister.setIsUse("是");
+					}else if("0".equals(gspProductRegister.getIsUse())){
+						gspProductRegister.setIsUse("否");
+					}
+
+
+					//时间转格式
+
+					if(gspProductRegister.getApproveDate()!=null) {
+						gspProductRegister.setApproveDateDc(sdf1.format(gspProductRegister.getApproveDate()));
+					}
+					if(gspProductRegister.getProductRegisterExpiryDate()!=null) {
+						gspProductRegister.setProductRegisterExpiryDateDc(sdf1.format(gspProductRegister.getProductRegisterExpiryDate()));
+					}
+					if(gspProductRegister.getCheckDate()!=null) {
+						gspProductRegister.setCheckDateDc(sdf.format(gspProductRegister.getCheckDate()));
+					}
+					if(gspProductRegister.getCreateDate()!=null) {
+						gspProductRegister.setCreateDateDc(sdf.format(gspProductRegister.getCreateDate()));
+					}
+//
+//
+//
+////
+				}
+//                List<FirstReviewLog> searchBasCustomerFormList  = new ArrayList<FirstReviewLog>();
+
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getCustomerProductLeadToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("isUse", "是否有效");
+		superClassMap.put("productRegisterNo", "注册证编号/备案号");
+		superClassMap.put("attachmentUrl", "注册证编号/备案附件");
+		superClassMap.put("classifyId", "管理分类");
+		superClassMap.put("classifyCatalog", "分类目录");
+		superClassMap.put("productNameMain", "产品名称");
+		superClassMap.put("approveDateDc", "批准日期");
+		superClassMap.put("productRegisterExpiryDateDc", "有效期至");
+		superClassMap.put("productRegisterVersionName", "注册证/备案版本");
+		superClassMap.put("checkerId", "审核人");
+		superClassMap.put("checkDateDc", "审核时间");
+		superClassMap.put("createId", "创建人");
+		superClassMap.put("createDateDc", "创建时间");
+		return superClassMap;
+	}
+
+
+
+
+
+
+
+
+
 //根据ProductRegisterNo查询
 	public GspProductRegister queryByRegisterNo(String registerNo){
 		return  gspProductRegisterMybatisDao.queryByNo(registerNo);
@@ -509,4 +611,9 @@ public class GspProductRegisterService extends BaseService {
 	public List<PdaGspProductRegister> queryAllByRegisterNo(String registerNo){
 		return gspProductRegisterMybatisDao.queryAllByNo(registerNo);
 	}
+
+
+
+
+
 }
