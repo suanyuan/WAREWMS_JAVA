@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/drugInspectionController.do?showCustomerProductDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showCustomerProductHistoryDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -38,10 +38,6 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
-		idField : 'enterpriseName',
-		queryParams: {
-			customerType:'OW'
-		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
 			{field: 'productName',		title: '委托方货品名称',	width: 150 },
@@ -112,7 +108,7 @@ var doExport = function(){
 		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
 
 		//--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportCustomerProductDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportCustomerProductHistoryDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();

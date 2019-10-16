@@ -417,7 +417,7 @@
 <!--++++++++++++++++++++++++++++++++++++++++++药监核查-历史数据++++++++++++++++++++++++++++++++++++++++++-->
 
     <!-- 查询条件 历史委托客户-->
-    <sql id="Example_Where_Clause_History">
+    <sql id="Example_Where_Clause_History1">
             where 1=1
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
@@ -434,15 +434,39 @@
             </if>
         </trim>
     </sql>
+    <!-- 查询条件 历史货主商品 -->
+    <sql id="Example_Where_Clause_History2">
+        where 1=1
+        <trim  suffixOverrides="," >
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+                and enterpriseName like concat('%', #{condition.enterpriseName},'%')
+            </if>
+            <if test="condition.productName != null and condition.productName != ''" >
+                and productName like concat('%', #{condition.productName},'%')
+            </if>
+            <if test="condition.specsName != null and condition.specsName != ''" >
+                and specsName like concat('%', #{condition.specsName},'%')
+            </if>
+            <if test="condition.productRegisterNo != null and condition.productRegisterNo != ''" >
+                and productRegisterNo like concat('%', #{condition.productRegisterNo},'%')
+            </if>
+            <if test="condition.enterpriseSc != null and condition.enterpriseSc != ''" >
+                and enterpriseSc like concat('%', #{condition.enterpriseSc},'%')
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and activeFlag =#{condition.activeFlag}
+            </if>
+        </trim>
+    </sql>
 
 
-    <!-- *******************************委托客户********************************** -->
+    <!-- *******************************历史委托客户********************************** -->
     <!-- 查询委托客户列表 -->
     <select id="querySearchBasCustomerHistory"  resultType="com.wms.entity.SearchBasCustomer" parameterType="Object">
         SELECT *
         FROM
         history_bas_customer
-        <include refid="Example_Where_Clause_History"/>
+        <include refid="Example_Where_Clause_History1"/>
 
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
@@ -453,6 +477,27 @@
         SELECT  count(1)
         FROM
         history_bas_customer
-        <include refid="Example_Where_Clause_History"/>
+        <include refid="Example_Where_Clause_History1"/>
+    </select>
+
+
+    <!-- *******************************历史货主商品********************************** -->
+
+    <!-- 查询客户档案列表 -->
+    <select id="queryCustomerHistoryProduct"  resultType="com.wms.entity.CustomerProduct" parameterType="Object">
+        select * from
+        history_customer_product
+        <include refid="Example_Where_Clause_History2"/>
+
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+    <!-- 客户档案 列表总数-->
+    <select id="queryCustomerProductHistoryByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1)
+        from
+        history_customer_product
+        <include refid="Example_Where_Clause_History2"/>
     </select>
 </mapper>
