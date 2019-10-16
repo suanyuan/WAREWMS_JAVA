@@ -124,7 +124,7 @@
         </tr>
         <tr>
             <th>产地</th>
-            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='editable:false' /></td>
+            <td><input type="text" data="1" id="productionAddress"  name="productionAddress"  class="easyui-textbox" size='50' data-options='editable:true' /></td>
 
 
             <th>自赋码1</th>

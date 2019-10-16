@@ -240,16 +240,16 @@
             }
         });
 
-
+        //绑定产品列表
         ezuiDatagridDetail = $("#ezuiDatagridDetail").datagrid({
             url : sy.bp()+'/gspProductRegisterController.do?showSpecsList',
             method:'POST',
-            toolbar : '#detailToolbar',
+            toolbar : '',
             title: '',
             pageSize : 50,
             pageList : [50, 100, 200],
             border: false,
-            fit:true,
+
             fitColumns : false,
             nowrap: true,
             striped: true,
@@ -257,6 +257,7 @@
             queryParams:{'productRegisterId':'${gspProductRegister.productRegisterId}'},
             pagination:true,
             rownumbers:true,
+            scrollbarSize:100,
             idField : 'specsId',
             columns : [[
                 {field: 'specsId',title:'主键',hidden:true},
@@ -276,7 +277,7 @@
             },
             onLoadSuccess:function(data){
                 $(this).datagrid('unselectAll');
-                $(this).datagrid("resize",{height:520});
+                $(this).datagrid("resize",{height:540});
             }
         })
 
@@ -377,13 +378,14 @@
             fitColumns : false,
             nowrap: true,
             striped: true,
-            queryParams:{
-                version : '${gspProductRegister.version}'
-            },
+
             collapsible:false,
             pagination:true,
             rownumbers:true,
             singleSelect:true,
+            queryParams:{
+                version : '${gspProductRegister.version}'
+            },
             idField : 'productRegisterId',
             columns : [[
                 {field: 'productRegisterId',		title: '主键',	width: 0 ,hidden:true},
@@ -623,12 +625,13 @@
         dataGridProduct = $("#dataGridProduct").datagrid({
             url : sy.bp()+'/gspProductRegisterSpecsController.do?showDatagrid',
             method:'POST',
-            toolbar : '#productToolbar',
+            toolbar : '',
             title: '',
             pageSize : 50,
             pageList : [50, 100, 200],
             border: false,
-            fitColumns : false,
+            fitColumns : true,
+            scrollbarSize:100,
             nowrap: true,
             striped: true,
             collapsible:false,
@@ -895,12 +898,16 @@
             }
         });
 
+        // alert(row.enterpriseId+"==="+row.enterpriseName+"======"+row.licenseOrRecordNol);
+        $("#ezuiFormDetail #enterpriseId").val(row.enterpriseId);
+        $("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
 
+        $("#ezuiFormDetail #licenseOrRecordNol").textbox("setValue",row.licenseOrRecordNol);
         $("#ezuiFormDetail #productRegisterVersion").combobox("setValue",row.productRegisterVersion);
 
         //$("#ezuiFormDetail #classifyCatalog").textbox("setValue",row.classifyCatalog);
         //$("#ezuiFormDetail #enterpriseName").textbox("setValue",row.enterpriseName);
-        $("#licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);
+        // $("#ezuiFormDetail #licenseOrRecordNol").combobox("setValue",row.licenseOrRecordNol);
         //$("#ezuiFormDetail #choseScope").val(row.choseScope);
     }
 
@@ -922,7 +929,9 @@
                 }
             }
         })
+
         // $("#ezuiFormDetail #classifyCatalog").textbox("setValue","");
+
         $("#ezuiFormDetail #enterpriseName").textbox("setValue","");
         $("#ezuiFormDetail input[id='attachmentUrl']").val("");
         $("#attachmentUrlFile").filebox("setValue","");

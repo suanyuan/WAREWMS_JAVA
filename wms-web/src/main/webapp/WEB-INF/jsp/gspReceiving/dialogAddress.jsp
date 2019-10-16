@@ -19,11 +19,11 @@
 				</tr>--%>
 				<tr>
 					<th>销售人</th>
-					<td><input type='text' name="sellerName" value="${gspReceivingAddress.sellerName}"  class='easyui-textbox' size='20' data-options='required:true'/></td>
+					<td><input type='text' name="sellerName" value="${gspReceivingAddress.sellerName}"  class='easyui-textbox' size='20' data-options='required:false'/></td>
 				</tr>
 				<tr>
 					<th>国家</th>
-					<td><input type='text'   name="country" value="${gspReceivingAddress.country}"   class='easyui-textbox' size='20' data-options='required:true'/></td>
+					<td><input type='text'   name="country" value="${gspReceivingAddress.country}"    class='easyui-textbox' size='20' data-options='required:true'/></td>
 				</tr>
 				<tr>
 					<th>省</th>
@@ -104,9 +104,15 @@
             url:sy.bp()+'/commonController.do?getYesOrNoCombobox',
             valueField:'id',
             textField:'value'
+
         });
         console.log($("#hiddenreceivingId").val());
+		if($("#dialogAddAddressForm input[name='country']").val()==null ||$("#dialogAddAddressForm input[name='country']").val()==undefined ||$("#dialogAddAddressForm input[name='country']").val()==""){
+            $("#dialogAddAddressForm input[name='country']").val("中国");
+		}
+
     });
+
 
     function addOredit(infoObj,url){
         $.ajax({

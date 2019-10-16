@@ -64,7 +64,8 @@ public class BasCustomerService extends BaseService {
 	private BasCustomerHistoryMybatisDao basCustomerHistoryMybatisDao;
 	@Autowired
 	private GspSupplierMybatisDao gspSupplierMybatisDao;
-
+	@Autowired
+	private GspEnterpriseInfoService gspEnterpriseInfoService;
 
 
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
@@ -168,6 +169,9 @@ public class BasCustomerService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}*/
+
+
+	//单独收货单位的无需审核的下发
 	@Transactional
 	public Json addBasCustomer(BasCustomerForm basCustomerForm) throws Exception {
 		Json json = null;
@@ -247,8 +251,9 @@ public class BasCustomerService extends BaseService {
                     gspReceivingMybatisDao.add(gspReceiving);
                 }
 				firstReviewLogMybatisDao.add(firstReviewLog);
+				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(basCustomer.getEnterpriseId());
 
-
+				basCustomer.setDescrC(gspEnterpriseInfo.getEnterpriseName());
                 basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
                 basCustomer.setActiveFlag(Constant.IS_USE_YES);
                 basCustomerMybatisDao.add(basCustomer);
@@ -315,6 +320,12 @@ public class BasCustomerService extends BaseService {
 
 			}else if("Client".equals(flag)){
 				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
+			}else if("Receving".equals(flag)){
+				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
+				basCustomerQuery.setDescrC(g.getEnterpriseName());
+				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
+				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+
 			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 
@@ -333,8 +344,8 @@ public class BasCustomerService extends BaseService {
                 //相同供应商相同货主第一次下发不删  第二次删
 //                if("Supplier".equals(flag)){
 //                    if(supNum==1){
-						basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
-                        basCustomerMybatisDao.deleteBascustomerByCustomerID(basCustomerHistory.getCustomerid(),basCustomerHistory.getCustomerType());
+				basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
+				basCustomerMybatisDao.deleteBascustomerByCustomerID(basCustomerHistory.getCustomerid(),basCustomerHistory.getCustomerType());
 //                    }
 //                }else{
 //					basCustomerHistoryMybatisDao.add(basCustomerHistoryQ);
@@ -359,7 +370,7 @@ public class BasCustomerService extends BaseService {
 			basCustomer.setEdittime(new Date());
 
 
-				basCustomerMybatisDao.add(basCustomer);
+			basCustomerMybatisDao.add(basCustomer);
 
 
 			json.setSuccess(true);
