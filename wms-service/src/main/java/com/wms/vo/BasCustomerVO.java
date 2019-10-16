@@ -89,8 +89,9 @@ public class BasCustomerVO {
 	private String clientContent;
 
 	private java.util.Date clientStartDate;
-
+	private String clientStartDateDc;
 	private java.util.Date clientEndDate;
+	private String clientEndDateDc;
 
 	private String clientTerm;
 
@@ -98,6 +99,23 @@ public class BasCustomerVO {
 
 	private String notes;
 	private String allClient;
+
+
+	public String getClientStartDateDc() {
+		return clientStartDateDc;
+	}
+
+	public void setClientStartDateDc(String clientStartDateDc) {
+		this.clientStartDateDc = clientStartDateDc;
+	}
+
+	public String getClientEndDateDc() {
+		return clientEndDateDc;
+	}
+
+	public void setClientEndDateDc(String clientEndDateDc) {
+		this.clientEndDateDc = clientEndDateDc;
+	}
 
 	public String getAllClient() {
 		return allClient;

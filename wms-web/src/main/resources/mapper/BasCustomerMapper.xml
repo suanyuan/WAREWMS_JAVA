@@ -76,7 +76,7 @@
 	<result column="client_term" property="clientTerm"/>
  	<result column="notes" property="notes"/>
 <!--是否贴中文标签-->
-	<result column="isChineseLabel" property="isChineseLabel"/>
+	<result column="is_Chinese_label" property="isChineseLabel"/>
 <!--申请单号-->
 	<result column="bankaccount" property="bankaccount"/>
     <!--企业代码-->

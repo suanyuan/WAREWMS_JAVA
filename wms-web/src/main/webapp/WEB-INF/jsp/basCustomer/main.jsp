@@ -539,12 +539,15 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        param.put("descrC", $('#descrC').val());
-        param.put("activeFlag", $('#activeFlag').combobox('getValue'));
-        param.put("customerid", $('#customerid').val());
-        param.put("customerType", $('#customerType').combobox('getValue'));
+        param.put("descrC", $('#descrCQ').val());
+        param.put("enterpriseNo", $('#enterpriseNoQ').val());
+        param.put("activeFlag", $('#activeFlagQ').combobox('getValue'));
+        param.put("customerid", $('#customeridQ').val());
+        param.put("customerType", $('#customerTypeQ').combobox('getValue'));
+
+
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportBasCustomerDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();

@@ -34,6 +34,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("basCustomerService")
@@ -631,7 +632,7 @@ public class BasCustomerService extends BaseService {
 			// excel的sheetName
 			String sheetName = "客户档案查询结果";
 			// excel要导出的数据
-			//List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
+			List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
 			EasyuiDatagridPager page = new EasyuiDatagridPager();
 			EasyuiDatagrid<BasCustomerVO> pagedDatagrid = getPagedDatagrid(page, query);
 			List<BasCustomerVO> basCustomerVOList = pagedDatagrid.getRows();
@@ -642,6 +643,53 @@ public class BasCustomerService extends BaseService {
 				System.out.println("题库为空");
 			}else {
 				//将list集合转化为excle
+				for (BasCustomerVO basCustomerVO : basCustomerVOList) {
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+
+
+
+					if ("1".equals(basCustomerVO.getActiveFlag())) {
+						basCustomerVO.setActiveFlag("是");
+					}else if("0".equals(basCustomerVO.getActiveFlag())){
+						basCustomerVO.setActiveFlag("否");
+					}
+
+					if(Constant.CODE_CUS_TYP_VE.equals(basCustomerVO.getCustomerType())){
+						basCustomerVO.setCustomerType("供应商");
+					}else if(Constant.CODE_CUS_TYP_OW.equals(basCustomerVO.getCustomerType())){
+						basCustomerVO.setCustomerType("货主");
+					}else if(Constant.CODE_CUS_TYP_CO.equals(basCustomerVO.getCustomerType())){
+						basCustomerVO.setCustomerType("收货单位");
+					}else if(Constant.CODE_CUS_TYP_WH.equals(basCustomerVO.getCustomerType())){
+						basCustomerVO.setCustomerType("主体");
+					}
+
+
+					if(basCustomerVO.getClientStartDate()!=null) {
+						basCustomerVO.setClientStartDateDc(sdf.format(basCustomerVO.getClientStartDate()));
+					}
+					if(basCustomerVO.getClientEndDate()!=null) {
+						basCustomerVO.setClientEndDateDc(sdf.format(basCustomerVO.getClientEndDate()));
+					}
+
+
+
+					if(basCustomerVO.getClientTerm()!=null&& !"".equals(basCustomerVO.getClientTerm())){
+						basCustomerVO.setClientTerm(basCustomerVO.getClientTerm()+"天");
+					}
+
+
+
+
+
+
+
+
+
+				}
+
+
+
 				ExcelUtil.listToExcel(basCustomerVOList, fieldMap, sheetName, response);
 				System.out.println("导出成功~~~~");
 			}
@@ -658,25 +706,31 @@ public class BasCustomerService extends BaseService {
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
 
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-		superClassMap.put("customerType", "客户类型");
 		superClassMap.put("activeFlag", "是否合作");
-		superClassMap.put("customerid", "客户ID");
-		superClassMap.put("enterpriseNo", "企业信息代码");
+		superClassMap.put("customerType", "客户类型");
+
+		superClassMap.put("customerid", "客户代码");
+		superClassMap.put("descrC", "客户名称");
+		superClassMap.put("enterpriseNo", "企业代码");
 		superClassMap.put("shorthandName", "简称");
 		superClassMap.put("enterpriseName", "企业名称");
+		superClassMap.put("allClient", "供应商对应货主");
+
 		superClassMap.put("contacts", "联系人");
 		superClassMap.put("contactsPhone", "联系人电话");
-		superClassMap.put("remark", "备注");
 		superClassMap.put("supContractNo", "合同编号");
+
+
 		superClassMap.put("contractUrl", "合同文件");
-		superClassMap.put("clientContent", "委托内容");
-		superClassMap.put("clientStartDate", "委托开始时间");
-		superClassMap.put("clientEndDate", "委托结束时间");
-		superClassMap.put("clientTerm", "委托期限");
+		superClassMap.put("clientContent", "委托/合同内容");
+		superClassMap.put("clientStartDateDc", "委托/合同开始时间");
+		superClassMap.put("clientEndDateDc", "委托/合同结束时间");
+		superClassMap.put("clientTerm", "委托/合同结束时间 ");
 		superClassMap.put("isChineseLabel", "是否贴中文标签");
 		//superClassMap.put("descrC", "中文描述");
 		//superClassMap.put("descrE", "英文描述");
 		//superClassMap.put("operateType", "类型");
+		superClassMap.put("notes", "备注");
 		return superClassMap;
 	}
 
