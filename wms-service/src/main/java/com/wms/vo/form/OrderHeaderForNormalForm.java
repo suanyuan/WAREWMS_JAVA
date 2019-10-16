@@ -53,10 +53,20 @@ public class OrderHeaderForNormalForm {
 	 */
 	private String userdefine2;
 
+	private String returnSfOrder;
+
 
 	//快递投诉
 	private String courierComplaint;
 	private String courierComplaintU;
+
+	public String getReturnSfOrder() {
+		return returnSfOrder;
+	}
+
+	public void setReturnSfOrder(String returnSfOrder) {
+		this.returnSfOrder = returnSfOrder;
+	}
 
 	public String getOrderno() {
 		return orderno;

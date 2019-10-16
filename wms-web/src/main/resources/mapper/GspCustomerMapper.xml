@@ -255,7 +255,7 @@ where 1=1
 	<include refid="Example_Where_Clause"/>
 </select>
   	
-<!-- 查询产品注册证列表 -->
+<!-- 查询委托方列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
 	<include refid="Base_Column_List"/>
@@ -268,6 +268,16 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+	<!-- 查询委托方代码列表 -->
+	<select id="queryCustomerNoByAll" resultMap="BaseResultMap"  parameterType="Object">
+
+		select
+		DISTINCT client_no
+		from gsp_customer
+
+
+	</select>
 
 <!-- 根据id，修改记录-->
 <update id="updateFirstState" parameterType="Object" >

@@ -108,6 +108,20 @@ $(function() {
         valueField:'id',
         textField:'value'
     });
+    $('#clientIdQuery').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/gspCustomerController.do?getCustomerNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+    $('#supplierNameQ').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/gspSupplierController.do?getCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
+
     $("#firstStateQ").combobox({
         panelHeight: 'auto',
         url:sy.bp()+'/commonController.do?getCatalogFirstState',
@@ -298,8 +312,9 @@ var doSearch = function(){
     ezuiDatagrid1.datagrid('load', {
         productCode : $('#productCode').val(),
         productName:$('#productName').val(),
-		clientId : $('#clientIdQuery').val(),
-		supplierId : $('#supplierIdQuery').val(),
+		clientId : $('#clientIdQuery').combobox('getValue'),
+		// supplierId : $('#supplierIdQuery').val(),
+        supplierName:$('#supplierNameQ').combobox('getValue'),
         createDateStart : $('#createDateStart').datebox('getValue'),
         createDateEnd : $('#createDateEnd').datebox('getValue'),
 		isUse : $('#isUse').combobox('getValue'),
@@ -473,7 +488,7 @@ function enterpriseInfo(enterpriseId){
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>委托客户代码</th><td><input type='text' id='clientIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供应商</th><td><input type='text' id='supplierIdQuery' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供应商名称</th><td><input type='text' id='supplierNameQ' class='easyui-textbox' size='16' data-options=''/></td>
 
 						</tr>
 						<tr>

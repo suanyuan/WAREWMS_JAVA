@@ -31,4 +31,6 @@ public interface GspSupplierMybatisDao extends BaseDao {
 
     public int  countByEnterpriseIdAndClient(@Param("enterpriseId") String enterpriseId, @Param("costomerid") String costomerid);
 
+    public <T> List<T> querySupNameListByAll();
+
 }

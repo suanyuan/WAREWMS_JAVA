@@ -215,6 +215,22 @@ public class GspCustomerService extends BaseService {
 		return comboboxList;
 	}
 
+	public List<EasyuiCombobox> getGspCustomerNoCombobox() {
+		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+		EasyuiCombobox combobox = null;
+		List<GspCustomer> gspCustomerList = gspCustomerMybatisDao.queryCustomerNoByAll();
+		if(gspCustomerList != null && gspCustomerList.size() > 0){
+			for(GspCustomer gspCustomer : gspCustomerList){
+				System.out.println();
+				combobox = new EasyuiCombobox();
+				combobox.setId(gspCustomer.getClientNo());
+				combobox.setValue(gspCustomer.getClientNo());
+				comboboxList.add(combobox);
+			}
+		}
+		return comboboxList;
+	}
+
 	public Json getGspCustomerById(String id){
 		GspCustomer gspCustomer = gspCustomerMybatisDao.queryById(id);
 		if(gspCustomer != null){

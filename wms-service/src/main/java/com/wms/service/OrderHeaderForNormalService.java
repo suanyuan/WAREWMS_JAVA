@@ -654,8 +654,7 @@ public class OrderHeaderForNormalService extends BaseService {
             } else if (orderHeaderForNormal.getSostatus().equals("60")) {
 
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal);
+                String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
                 //响应报文
                 String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
 
@@ -686,11 +685,22 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
                 //时效
                 orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
+                //  原寄递地代码  zipCode;
+                shunFengResponse.getOrderResponse().getZipCode();
+
+                // /目的地的代码  destCode;
+                shunFengResponse.getOrderResponse().getDestCode();
+
 
                 List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
                 for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
                     //二维码
                     orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
+                    //入港映射码  codingMapping
+                    rlsInfoDto.getCodingMapping();
+                    //出港映射码  codingMappingOut
+                    rlsInfoDto.getCodingMappingOut();
+
                 }
                 orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
                 /*顺丰下单end*/
@@ -1788,12 +1798,11 @@ public class OrderHeaderForNormalService extends BaseService {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
         if (orderHeaderForNormal != null) {
-        map.put("logo", "imgFile/sflogo.jpg");
-        map.put("sftelLogo", "imgFile/qiao.jpg");
-        map.put("proCode", "imgFile/FM/T4.jpg");
-        map.put("so", "imgFile/FM/so.jpg");
+            map.put("sftelLogo", "imgFile/qiao.jpg");
+            map.put("proCode", "imgFile/FM/T4.jpg");
+            map.put("so", "imgFile/FM/so.jpg");
 
-        //二维码
+            //二维码
 //       String binary =  "MMM={'k1':'755WF','k2':'755AQ','k3':'036','k4':'T4','k5':'619428034014','k6':'','k7':'dce4e1c6','k7':'3fc52389'}", 200,200);
 
       /*  byte[] bytes = null;
@@ -1803,79 +1812,87 @@ public class OrderHeaderForNormalService extends BaseService {
                 bytes[K] = (byte) (bytes[K] + 256);
             }
         }*/
-        map.put("QRcode",orderHeaderForNormal.getUserdefine4());
-        map.put("ji", "imgFile/FM/ji.jpg");
-        map.put("tips5", "imgFile/FM/POD.jpg");
+            map.put("QRcode", orderHeaderForNormal.getUserdefine4());
+            map.put("ji", "imgFile/FM/ji.jpg");
+            map.put("tips5", "imgFile/FM/POD.jpg");
 
-        map.put("expressType", "1");
-        map.put("codingMappingOut", "3A");
-        //打印时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String str = format.format(new Date());
-        map.put("electric", "SF  打印时间    " + str);
-        //piece
-        map.put("addedService", "POD");
-        //订单条码的生成
-        map.put("childMailNo", orderHeaderForNormal.getCAddress4());
-        //子单号
-        //map.put("mailNo", "217276730473");
-        //打印单号
-        //map.put("addedService","A");
-        //母单号
-        map.put("mailNoStr", "单号   " + orderHeaderForNormal.getCAddress4());
-        //map.put("mailNoStr", "签回单号");
-        //map.put("childMailNoStr", "217276730473");
-        //打印原寄地
-        map.put("destRouteLabel", "021WG-021NA");
-        //收件人相关信息
-        if(!orderHeaderForNormal.getCContact().equals("") &&  orderHeaderForNormal.getCContact() == null){
-            map.put("consignerName",  (orderHeaderForNormal.getCContact()));
-        }else {
-            map.put("consignerName",  (orderHeaderForNormal.getConsigneeid()));
-        }
-        map.put("consignerTel", orderHeaderForNormal.getCTel1());
-        map.put("consignerCompany", orderHeaderForNormal.getConsigneeid() );
-        map.put("consignerProvince", orderHeaderForNormal.getCProvince() );
-        map.put("consignerCity", orderHeaderForNormal.getCCity() );
-        map.put("consignerCounty",orderHeaderForNormal.getCAddress2());
-        map.put("consignerAddress",orderHeaderForNormal.getCAddress1());
-        //支付方式
-        map.put("monthAccount", "0213071013");//月结卡号
-        map.put("payMethod", "1");
-        //金额
-        // map.put("codValue","9999.9");
-        //进港信息<去识别不同的代码>
-        //map.put("codingMapping", "021NA");
-        //出港中转场代码
-       // map.put("sourceTransferCode", "451W");
+            map.put("expressType", "1");
+            map.put("codingMappingOut", "3A");
+            //打印时间
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String str = format.format(new Date());
+            map.put("electric", "SF  打印时间    " + str);
+            //piece
+            map.put("addedService", "POD");
+            //订单条码的生成
+            map.put("childMailNo", orderHeaderForNormal.getCAddress4());
+            //子单号
+            map.put("sfmonthly", "217276730473");
 
-        //寄件人的相关信息
-        map.put("deliverName", "郑洁");
-        //map.put("deliverTel", "");
-        map.put("deliverMobile", "021-62091927");
-        map.put("consignerCompany", "上海嘉事嘉意医疗器材有限公司");
-        map.put("deliverProvince", "上海市");
-        map.put("deliverCity", "上海市");
-        map.put("deliverCounty", "浦东新区");
-        map.put("deliverAddress", "上海市上海市浦东新区施湾八路1026号2号楼 201108");
-        //备注
-        map.put("remark", orderCodeList);
-        //托寄物
+            //打印单号
+            //map.put("addedService","A");
+            //母单号
+            map.put("mailNoStr", "单号   " + orderHeaderForNormal.getCAddress4());
+            //map.put("mailNoStr", "签回单号");
+            //map.put("childMailNoStr", "217276730473");
+            //打印原寄地
+            map.put("destRouteLabel", "021WG-021NA");
+            //收件人相关信息
+            if (orderHeaderForNormal.getCContact() == null || orderHeaderForNormal.getCContact().equals("")) {
+                map.put("consignerName", (orderHeaderForNormal.getConsigneeid()));
+            } else {
+                map.put("consignerName", (orderHeaderForNormal.getCContact()));
+
+            }
+            map.put("consignerTel", orderHeaderForNormal.getCTel1());
+            map.put("consignerCompany", orderHeaderForNormal.getConsigneeid());
+            map.put("consignerProvince", orderHeaderForNormal.getCProvince());
+            map.put("consignerCity", orderHeaderForNormal.getCCity());
+            map.put("consignerCounty", orderHeaderForNormal.getCAddress2());
+            map.put("consignerAddress", orderHeaderForNormal.getCAddress1());
+            //支付方式
+            map.put("monthAccount", "0213071013");//月结卡号
+            map.put("payMethod", "1");
+            //金额
+            // map.put("codValue","9999.9");
+            //进港信息<去识别不同的代码>
+            //map.put("codingMapping", "021NA");
+            //出港中转场代码
+            // map.put("sourceTransferCode", "451W");
+
+            //寄件人的相关信息
+            map.put("deliverName", "郑洁");
+            //map.put("deliverTel", "");
+            map.put("deliverMobile", "021-62091927");
+            map.put("consignerCompany", "上海嘉事嘉意医疗器材有限公司");
+            map.put("deliverProvince", "上海市");
+            map.put("deliverCity", "上海市");
+            map.put("deliverCounty", "浦东新区");
+            map.put("deliverAddress", "上海市上海市浦东新区施湾八路1026号2号楼 201108");
+            //备注
+            map.put("remark", orderCodeList);
+            //托寄物
             map.put("cargo", "医疗器械");
-        //计费重量
-        //map.put("cargoTotalWeight", "3");
-        //实际重量
-        //map.put("cargoTotalWeight", "4");
-        //费用合计
-        //map.put("totalFee", "5");
-            map.put("cargoBack","签单返回");
-        map.put("childMailNoStrSignBack","签回单号     "+orderHeaderForNormal.getCAddress3());//签回单号
+            //计费重量
+            //map.put("cargoTotalWeight", "3");
+            //实际重量
+            //map.put("cargoTotalWeight", "4");
+            //费用合计
+            //map.put("totalFee", "5");
+            map.put("cargoBack", "签单返回");
+            map.put("childMailNoStrSignBack", "签回单号     " + orderHeaderForNormal.getCAddress3());//签回单号
 
-        map.put("PALINENO", System.currentTimeMillis());
-        list.add(map);
+            map.put("PALINENO", System.currentTimeMillis());
+            list.add(map);
         }
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
-        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
+        //如果签回单号存在需要打印签回单 反之---
+        if (orderHeaderForNormal.getCAddress3().equals("") || orderHeaderForNormal.getCAddress3() == null) {
+            model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
+        } else {
+            model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
+
+        }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
 
@@ -2153,5 +2170,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
         return json;
     }
+
 
 }

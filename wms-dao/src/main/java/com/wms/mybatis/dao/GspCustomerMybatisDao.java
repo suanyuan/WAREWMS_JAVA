@@ -3,6 +3,8 @@ package com.wms.mybatis.dao;
 import com.wms.entity.GspCustomer;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -16,5 +18,7 @@ public interface GspCustomerMybatisDao extends BaseDao {
     public void deleteF(Object id);
 
     public <T> T queryByEnterpriseId(Object id);
+
+    public <T> List<T> queryCustomerNoByAll();
 
 }

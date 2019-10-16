@@ -39,6 +39,8 @@ var allocationDetailsDatagrid;
 
 var courierComplaintForm;       //快递投诉dialog form
 var courierComplaintDialog;     //快递投诉dialog
+var returnSfodd;
+var returnSfoddForm;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -374,15 +376,27 @@ $(function() {
 
 //快递投诉dialog
 	courierComplaintDialog = $('#courierComplaintDialog').dialog({
-		modal : true,
-		width:270,
-		height:250,
-		title : '录入投诉内容',
-		buttons : '#courierComplaintDialogBtn',
-		onClose : function() {
-			ezuiFormClear(courierComplaintForm);
-		}
-	}).dialog('close');
+        modal : true,
+        width:270,
+        height:250,
+        title : '录入投诉内容',
+        buttons : '#courierComplaintDialogBtn',
+        onClose : function() {
+            ezuiFormClear(courierComplaintForm);
+        }
+    }).dialog('close');
+
+    returnSfodd = $('#returnSfodd').dialog({
+        modal : true,
+        width:200,
+        height:130,
+        title : '订单下单是否需要签回单号',
+        buttons : '#returnSfoddDialogBtn',
+        onClose : function() {
+            ezuiFormClear(returnSfoddForm);
+        }
+    }).dialog('close');
+
 });
 
 /* 查询条件清空按钮 */
@@ -882,32 +896,36 @@ var shipment = function(){
 				operateResult = operateResult + "订单编号：" + item.orderno + ",";
 				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
 			} else {
-				$.ajax({
-					async: false,
-					url: 'docOrderHeaderController.do?shipment',
-					data: {orderno: item.orderno},
-					type: 'POST',
-					dataType: 'JSON',
-					success: function (result) {
-						ezuiDatagrid.datagrid('reload');
-						var msg = '';
-						try {
-							msg = result.msg;
-							if (result.success) {
-								operateResult = operateResult + "订单编号：" + item.orderno + ",";
-								operateResult = operateResult + "处理完毕" + "\n";
-							} else {
-								operateResult = operateResult + "订单编号：" + item.orderno + ",";
-								operateResult = operateResult + "处理时错误：" + msg + "\n";
-							}
-							;
-						} catch (e) {
-							msg = '<spring:message code="common.message.data.delete.failed"/>';
-						}
-						;
-					}
-				});
-			 };
+                returnSfodd.dialog('open');
+                $('#returnSfoddBtn').click(function () {
+                  var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
+                    $.ajax({
+                        async: false,
+                        url: 'docOrderHeaderController.do?shipment',
+                        data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
+                        type: 'POST',
+                        dataType: 'JSON',
+                        success: function (result) {
+                            ezuiDatagrid.datagrid('reload');
+                            var msg = '';
+                            try {
+                                msg = result.msg;
+                                if (result.success) {
+                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                    operateResult = operateResult + "处理完毕" + "\n";
+                                } else {
+                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                                    operateResult = operateResult + "处理时错误：" + msg + "\n";
+                                }
+                                ;
+                            } catch (e) {
+                                msg = '<spring:message code="common.message.data.delete.failed"/>';
+                            }
+                            ;
+                        }
+                    });
+                });
+			};
 	});
 	if (operateResult != '') {
 		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
@@ -2517,6 +2535,25 @@ var commitcourierComplaint = function(){
 	<div id='courierComplaintDialogBtn'>
 		<a onclick='commitcourierComplaint();' class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
 	</div>
+
+
+	<!-- 是否需要签回单 -->
+	<div id='returnSfodd' style='padding: 10px;'>
+		<form id='returnSfoddForm' method='post'>
+			<table>
+                <select id="returnSfoddid" class="easyui-combobox" name="returnSfoddid" style="width:170px;">
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+
+			</table>
+		</form>
+	</div>
+	<div id='returnSfoddDialogBtn'>
+		<a id="returnSfoddBtn" class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
+	</div>
+
+
 
 	<c:import url='/WEB-INF/jsp/docOrderHeader/dialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/custDialog.jsp' />

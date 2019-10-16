@@ -146,6 +146,16 @@ public class GspCustomerController {
 	}
 
 	@Login
+	@RequestMapping(params = "getCustomerNoCombobox")
+	@ResponseBody
+	public List<EasyuiCombobox> getCustomerNoCombobox() {
+		return gspCustomerService.getGspCustomerNoCombobox();
+	}
+
+
+
+
+	@Login
 	@RequestMapping(params = "confirmSubmit")
 	@ResponseBody
 	public Json confirmSubmit(String id){
