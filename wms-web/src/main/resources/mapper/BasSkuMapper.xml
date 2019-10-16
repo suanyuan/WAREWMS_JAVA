@@ -1084,7 +1084,7 @@ where 1=1
         select
         <include refid="Base_Column_List"/>
         from bas_sku
-        where customerid = #{customerid} and sku in (
+        where active_flag = 1 and customerid = #{customerid} and sku in (
             select
               DISTINCT a.sku
             from bas_sku a
