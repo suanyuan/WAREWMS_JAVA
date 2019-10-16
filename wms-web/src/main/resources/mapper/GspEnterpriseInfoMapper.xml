@@ -408,11 +408,38 @@
 
     <!-- 企业信息 列表总数-->
     <select id="queryByCountByType" resultType="java.lang.Long" parameterType="Object">
-        select count(1)
+        select count(1) from  (select DISTINCT(g.enterprise_id)
         from gsp_enterprise_info g
         left join gsp_customer cus on g.enterprise_id = cus.enterprise_id
         left join gsp_supplier gs on g.enterprise_id = gs.enterprise_id
-        <include refid="Example_Where_Clause_Type"/>
+        LEFT JOIN (
+        select DISTINCT(enterprise_id),record_no
+        from gsp_second_record where is_use = '1'
+        )gr ON g.enterprise_id = gr.enterprise_id
+        LEFT JOIN
+        (
+        select DISTINCT(enterprise_id),record_no
+        from gsp_first_record where is_use = '1'
+        ) gf on g.enterprise_id = gf.enterprise_id
+        LEFT JOIN (
+        SELECT
+        *
+        FROM
+        gsp_operate_license
+        WHERE
+        is_use = '1'
+        AND operate_type = 'OPERATE'
+        ) gl ON g.enterprise_id = gl.enterprise_id
+        LEFT JOIN (
+        SELECT
+        *
+        FROM
+        gsp_operate_license
+        WHERE
+        is_use = '1'
+        AND operate_type = 'PROD'
+        ) pl ON g.enterprise_id = pl.enterprise_id
+        <include refid="Example_Where_Clause_Type"/>) a
     </select>
 
 

@@ -84,6 +84,7 @@ $(function() {
             {field: 'defaultreceivinguom',		title: '单位',	width: 100,formatter:unitFormatter},
             {field: 'reservedfield10',		title: '养护周期（天）',	width: 100,formatter:day},
             {field: 'skuGroup7',		title: '双证',	width: 100,formatter:yesOrNoFormatter},
+            {field: 'skuGroup8',		title: '质量合格证',	width: 100,formatter:yesOrNoFormatter},
 
             {field: 'productLineName',		title: '产品线',	width: 100 },
             // {field: 'skuGroup2',		title: '附卡类别',	width: 100 },

@@ -84,7 +84,6 @@ public class GspEnterpriseInfoService extends BaseService {
 			}else {
 				gspEnterpriseInfoVO.setIsUse("失效");
 			}*/
-
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
 		Long total = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);

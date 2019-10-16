@@ -890,6 +890,10 @@ where 1=1
 	select  * from Bas_Customer
 	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
 	</select>
+
+
+
+
 	<!--&lt;!&ndash; 该企业是 &ndash;&gt;-->
 	<!--<select id="countSupplierByIdTypeActiveFlag" resultType="java.lang.Integer"  parameterType="Object">-->
 	<!--select  count(1) from Bas_Customer-->
