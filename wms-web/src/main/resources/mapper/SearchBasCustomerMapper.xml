@@ -102,6 +102,9 @@
             <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
                 and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and r.active_flag =#{condition.activeFlag}
+            </if>
         </trim>
     </sql>
     <!-- 查询条件 出库信息 -->
@@ -133,6 +136,9 @@
             </if>
             <if test="condition.consigneeID != null and condition.consigneeID != ''" >
                 and aa.consigneeID like concat('%', #{condition.consigneeID},'%')
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and r.active_flag =#{condition.activeFlag}
             </if>
         </trim>
     </sql>
@@ -189,7 +195,8 @@
         p.`qty1`,
         b.descr_c enterpriseName,
         CONCAT(IFNULL(a.`lotatt04`,''),'/',IFNULL(a.`lotatt05`,'')) AS lotatt04,
-        a.`lotatt01`,a.`lotatt02`,a.`lotatt03`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
+        CONCAT(IFNULL(DATE_FORMAT(a.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(a.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
+        a.`lotatt03`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
         s.`descr_c` descrc,s.defaultreceivinguom,
         bb.codename_c uom
         FROM `inv_lot_loc_id` i
@@ -225,11 +232,12 @@
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
         SELECT
-        r.descr_c enterpriseName,
+        r.descr_c enterpriseName,r.active_flag activeFlag,
         d.qcqty_expected qty,d.userdefine1 locationid,
         p.`qty1`,
         CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
-        e.`lotatt01`,e.`lotatt02`,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
+        CONCAT(IFNULL(DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
+        DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
         s.`descr_c` descrc,
         bb.codename_c uom,`bb1`.codename_c type,aa.notes
         FROM doc_asn_details a
@@ -276,7 +284,7 @@
 <!-- 查询出库信息列表 -->
     <select id="querySearchOutInvLocation"  resultType="com.wms.entity.SearchOutInvLocation" parameterType="Object">
         SELECT
-        r.descr_c enterpriseName,
+        r.descr_c enterpriseName,r.active_flag activeFlag,
         b.qty, p.`qty1`,
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
         c.`lotatt01`,c.`lotatt02`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,

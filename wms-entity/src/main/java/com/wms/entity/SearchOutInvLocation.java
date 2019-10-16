@@ -37,6 +37,7 @@ public class SearchOutInvLocation implements Serializable {
     //查询条件
     private String outStartDate;           //出库日期开始
     private String outEndDate;           //出库日期结束
+    private String activeFlag;  //是否合作
 
 
 }

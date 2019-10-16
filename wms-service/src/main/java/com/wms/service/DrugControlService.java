@@ -323,8 +323,7 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("lotatt15", "生产企业");
 		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
 		superClassMap.put("lotatt04", "生产批号/序列号");
-		superClassMap.put("lotatt01", "生产日期");
-		superClassMap.put("lotatt02", "有效期/失效期");
+		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
 		superClassMap.put("qty", "库存件数");
 		superClassMap.put("qtyeach", "库存数量");
 		superClassMap.put("uom", "单位");
@@ -429,8 +428,7 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("lotatt15", "生产企业");
 		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
 		superClassMap.put("lotatt04", "生产批号/序列号");
-		superClassMap.put("lotatt01", "生产日期");
-		superClassMap.put("lotatt02", "有效期/失效期");
+		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
 		superClassMap.put("qty", "库存件数");
 		superClassMap.put("qtyeach", "库存数量");
 		superClassMap.put("uom", "单位");

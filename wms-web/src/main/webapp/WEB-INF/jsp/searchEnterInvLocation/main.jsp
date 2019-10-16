@@ -33,6 +33,11 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
+		rowStyler:function(index,row){
+			if(row.activeFlag == "0" ){
+				return 'color:red;';
+			}
+		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100 },
@@ -43,8 +48,7 @@ $(function() {
 			{field: 'lotatt06',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
 			{field: 'lotatt04',		        title: '生产批号/序列号',	width: 100 },
 			// {field: 'lotatt05',		        title: '序列号',	width: 100 },
-			{field: 'lotatt01',		        title: '生产日期',	width: 100 },
-			{field: 'lotatt02',	            title: '有效期/失效期',	width: 100 },
+			{field: 'lotatt01Andlotatt02',		        title: '生产日期和有效期(或者失效期)',	width: 200 },
 			{field: 'qty',                  title: '库存件数 ',	width: 100 },
 			{field: 'qtyeach',		        title: '库存数量 ',	width: 100 },
 			{field: 'uom',                  title: '单位 ',	width: 100 },
@@ -87,6 +91,8 @@ var doSearch = function(){
 		lotatt06 : $('#lotatt06').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
+		activeFlag : $('#activeFlag').combobox('getValue')
+
 	});
 };
 
@@ -106,7 +112,9 @@ var doExport = function(){
 		param.put("lotatt06",$('#lotatt06').val());
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
-        //--导出Excel
+		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+
+		//--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchEnterInvLocationDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
@@ -153,6 +161,17 @@ var doExport = function(){
 							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td >
+						</tr>
+						<tr>
+							<th >是否合作</th>
+							<td>
+								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

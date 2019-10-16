@@ -92,6 +92,8 @@ var doSearch = function(){
 		specsName : $('#specsName').val(),
 		productRegisterNo : $('#productRegisterNo').val(),
 		enterpriseSc : $('#enterpriseSc').val(),
+		activeFlag : $('#activeFlag').combobox('getValue')
+
 	});
 };
 
@@ -107,7 +109,9 @@ var doExport = function(){
         param.put("specsName",$('#specsName').val());
         param.put("productRegisterNo",$('#productRegisterNo').val());
         param.put("enterpriseSc",$('#enterpriseSc').val());
-        //--导出Excel
+		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+
+		//--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportCustomerProductDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
@@ -147,6 +151,14 @@ var doExport = function(){
 						<tr>
 							<th>产品注册证号/备案凭证号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>生产企业</th><td><input type='text' id='enterpriseSc' class='easyui-textbox' size='16' data-options=''/></td>
+							<th >是否合作</th>
+							<td>
+								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
 
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>

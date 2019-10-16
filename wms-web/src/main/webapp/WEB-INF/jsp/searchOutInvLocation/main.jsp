@@ -33,6 +33,11 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
+		rowStyler:function(index,row){
+			if(row.activeFlag == "0" ){
+				return 'color:red;';
+			}
+		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '出库日期',	width: 100 },
@@ -87,6 +92,8 @@ var doSearch = function(){
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 		consigneeID:$('#consigneeID').val(),
+		activeFlag : $('#activeFlag').combobox('getValue')
+
 	});
 };
 
@@ -106,6 +113,8 @@ var doExport = function(){
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
 		param.put("consigneeID",$('#consigneeID').val());
+		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+
 		//--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchOutInvLocationDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -152,7 +161,17 @@ var doExport = function(){
 							<th>生产批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>收货客户名称</th><td><input type='text' id='consigneeID' class='easyui-textbox' size='16' data-options=''/></td>
-							<td >
+						</tr>
+						<tr>
+							<th >是否合作</th>
+							<td>
+								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

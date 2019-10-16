@@ -89,6 +89,7 @@ var doSearch = function(){
 		enterpriseName : $('#enterpriseName').val(),
 		clientStartDate : $('#clientStartDate').datebox('getValue'),
 		clientEndDate : $('#clientEndDate').datebox('getValue'),
+		activeFlag : $('#activeFlag').combobox('getValue')
 		// activeFlag : $('#activeFlag').combobox('getValue'),
 	});
 };
@@ -103,6 +104,7 @@ var doExport = function(){
         param.put("enterpriseName",$('#enterpriseName').val());
         param.put("clientStartDate",$('#clientStartDate').datebox('getValue'));
         param.put("clientEndDate",$('#clientEndDate').datebox('getValue'));
+        param.put("activeFlag",$('#activeFlag').combobox('getValue'));
         // param.put("activeFlag", $('#activeFlag').combobox('getValue'));
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportBasCustomerDataToExcel", param);
@@ -149,6 +151,14 @@ var doExport = function(){
 <%--							</td>--%>
 							<th>起始日期</th><td><input type='text' id='clientStartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>截止日期</th><td><input type='text' id='clientEndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th >是否合作</th>
+							<td>
+								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
+									<option value=""></option>
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</td>
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 

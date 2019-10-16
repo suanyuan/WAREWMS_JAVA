@@ -23,10 +23,7 @@ public class SearchEnterInvLocation implements Serializable {
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
     private String lotatt05;         //序列号
-    @JSONField(format = "yyyy-MM-dd")
-    private String lotatt01;         //生产日期
-    @JSONField(format = "yyyy-MM-dd")
-    private String lotatt02;          //有效期/失效期
+    private String lotatt01Andlotatt02;         //生产日期和有效期(或者失效期)
     private Double qty;              //件数
     private Double qtyeach;          //数量
     private String uom;               //单位
@@ -39,6 +36,7 @@ public class SearchEnterInvLocation implements Serializable {
 //查询条件
     private String lotatt03StartDate;           //入库日期开始
     private String lotatt03EndDate;           //入库日期结束
+    private String activeFlag;  //是否合作
 
 
 }

@@ -32,7 +32,7 @@ public class SearchBasCustomer implements Serializable {
 	private String clientTerm;  //委托期限
 	private String isChineseLabel;  //是否委托加贴中文标签
 	private String clientContent;  //委托业务范围
-	private String activeFlag;  //是否激活
+	private String activeFlag;  //是否合作
 
 
 
