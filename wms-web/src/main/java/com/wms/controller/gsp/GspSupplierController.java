@@ -179,12 +179,10 @@ public class GspSupplierController {
 	@ResponseBody
 	public Json add(@RequestParam(value="gspSupplierForm",required=true) String gspSupplierFormStr) throws Exception {
 		GspSupplierForm gspSupplierForm = JSON.parseObject(gspSupplierFormStr,GspSupplierForm.class);
-
 		Json json = gspSupplierService.addGspSupplier(gspSupplierForm);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
-
 		}
 		return json;
 	}

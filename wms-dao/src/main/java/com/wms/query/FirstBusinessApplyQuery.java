@@ -10,6 +10,7 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String firstState;
 	private String clientId;
 	private String supplierId;
+	private String supplierName;
 	private String createId;
 	private String createDate;
 	private String editId;
@@ -21,6 +22,14 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String createDateEnd;//附加
 	private String productRegisterNo;
 
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
 
 	public String getFirstState() {
 		return firstState;

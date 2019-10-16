@@ -183,7 +183,9 @@ where 1=1
 			and t1.first_state like  '%${condition.firstState}%'
 		</if>
 
-
+		<if test="condition.supplierName != null and condition.supplierName != ''" >
+			and eis.descr_c like '%${condition.supplierName}%'
+		</if>
 
 		<if test="condition.clientId != null and condition.clientId != ''" >
 			and t1.client_id  like CONCAT('%',#{condition.clientId},'%')
@@ -191,6 +193,9 @@ where 1=1
 		<if test="condition.supplierId != null and condition.supplierId != ''" >
 			and t1.supplier_id  like CONCAT('%',#{condition.supplierId},'%')
 		</if>
+		<!--<if test="condition.suppliernName != null and condition.supplierId != ''" >-->
+			<!--and t1.supplier_id  like CONCAT('%',#{condition.supplierId},'%')-->
+		<!--</if>-->
 		<if test="condition.createDateStart != null and condition.createDateStart != ''" >
 			and t1.create_Date &gt;= #{condition.createDateStart}
 		</if>

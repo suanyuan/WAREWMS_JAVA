@@ -614,12 +614,16 @@ public class GspSupplierService extends BaseService {
 	public List<EasyuiCombobox> getGspSupplierCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;
-		List<GspSupplier> gspSupplierList = gspSupplierMybatisDao.queryListByAll();
+		List<GspSupplier> gspSupplierList = gspSupplierMybatisDao.querySupNameListByAll();
 		if(gspSupplierList != null && gspSupplierList.size() > 0){
 			for(GspSupplier gspSupplier : gspSupplierList){
 				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(gspSupplier.getSupplierId()));
-				combobox.setValue(gspSupplier.getEnterpriseId());
+
+				if(gspSupplier!=null&&gspSupplier.getEnterpriseName()!=null){
+					combobox.setId(gspSupplier.getEnterpriseName());
+					combobox.setValue(gspSupplier.getEnterpriseName());
+
+				}
 				comboboxList.add(combobox);
 			}
 		}

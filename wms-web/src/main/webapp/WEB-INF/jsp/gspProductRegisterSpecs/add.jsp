@@ -234,16 +234,16 @@
     var row;
     var type;
     $(function(){
-        $('#medicalDeviceMark').combobox({
-            onChange: function(){
-                changeRequired();
-            }
-        });
-        $('#coldHainMark').combobox({
-                onChange: function(){
-                changeColdHainMark();
-            }
-        });
+        // $('#medicalDeviceMark').combobox({
+        //     onChange: function(){
+        //         changeRequired();
+        //     }
+        // });
+        // $('#coldHainMark').combobox({
+        //         onChange: function(){
+        //         changeColdHainMark();
+        //     }
+        // });
         //主页编辑
         // debugger
         //
@@ -279,7 +279,7 @@
 
 
         // changeRequired();
-        if( id!="" || row !=null){
+        if(id!="" || row !=null){
             if(processType == 'edit' || processType == 'product' ){
             $.ajax({
                 url : 'gspProductRegisterSpecsController.do?getInfo',
@@ -288,9 +288,9 @@
                 dataType : 'JSON',
                 success : function(result){
                     if(result.success){
-                        changeRequired();
                         changeColdHainMark();
-                        // coldfield();
+                        changeRequired();
+                        coldfield();//默认非冷链
                         $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){

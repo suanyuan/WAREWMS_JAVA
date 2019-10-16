@@ -280,6 +280,17 @@ where 1=1
     </if>
 </select>
 
+
+	<!-- 查询供应商名称 列表 -->
+	<select id="querySupNameListByAll" resultMap="BaseResultMap"  parameterType="Object">
+		select distinct t2.enterprise_name  from bas_customer t1
+		left join gsp_enterprise_info t2 on t1.enterprise_id = t2.enterprise_id
+
+
+	</select>
+
+
+
 <!-- 根据id，修改记录-->
 <update id="updateFirstState" parameterType="Object" >
 	update gsp_supplier set first_state=#{state} where supplier_id=#{no}
