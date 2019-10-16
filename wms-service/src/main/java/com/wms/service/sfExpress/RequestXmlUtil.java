@@ -33,26 +33,18 @@ public class RequestXmlUtil {
         strBuilder.append("<Order").append(" ");
         //客户订单号,建议英文字母+
         //YYMMDD(日期)+流水号,
-        //如:TB1207300000001  TODO 测试使用流水号
+        //如:TB1207300000001
         strBuilder.append("orderid='" + orderHeaderForNormal.getOrderno() + "22" + "'").append(" ");
         //返回顺丰运单号  //运输方式
         strBuilder.append("express_type='1'").append(" ");
         //寄件方信息
-        strBuilder.append("j_province='" + "江苏省" + "'").append(" ");
-        strBuilder.append("j_city='" + "太仓市" + "'").append(" ");
-        strBuilder.append("j_county='" + "经济开发区" + "'").append(" ");
-        strBuilder.append("j_company='" + "数宗信息技术有限公司" + "'").append(" ");
-        strBuilder.append("j_contact='" + "Skr" + "'").append(" ");
-        strBuilder.append("j_tel='" + "13246025290" + "'").append(" ");
-        strBuilder.append("j_address='" + "北京东路77号(中德大厦)16楼" + "'").append(" ");
-        //收件方信息
-//        strBuilder.append("d_province='" + "广东省" + "'").append(" ");//省
-//        strBuilder.append("d_city='" + "广州市" + "'").append(" ");//市
-//        strBuilder.append("d_county='" + "白云区" + "'").append(" ");//区
-//        strBuilder.append("d_company='" + "四胜贸易有限公司"+ "'").append(" ");//到件方公司名称
-//        strBuilder.append("d_tel='" + "15674991723" + "'").append(" ");//到件方联系电话
-//        strBuilder.append("d_contact='" + "高俊" + "'").append(" ");//到件方联系人
-//        strBuilder.append("d_address='" + "白云东路130号" + "'").append(" ");//到件方详细地址
+        strBuilder.append("j_province='" + "上海市" + "'").append(" ");
+        strBuilder.append("j_city='" + "上海市" + "'").append(" ");
+        strBuilder.append("j_county='" + "浦东新区" + "'").append(" ");
+        strBuilder.append("j_company='" + "哈尔滨四圣商贸有限公司" + "'").append(" ");
+        strBuilder.append("j_contact='" + "郑洁" + "'").append(" ");
+        strBuilder.append("j_tel='" + "021-62091927" + "'").append(" ");
+        strBuilder.append("j_address='" + "施湾八路1026号2号楼" + "'").append(" ");
 
         strBuilder.append("d_province='" + orderHeaderForNormal.getCProvince() + "'").append(" ");//省
         strBuilder.append("d_city='" + orderHeaderForNormal.getCCity() + "'").append(" ");//市
