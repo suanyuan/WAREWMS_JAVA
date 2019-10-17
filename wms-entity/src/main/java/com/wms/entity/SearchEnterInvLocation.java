@@ -32,8 +32,11 @@ public class SearchEnterInvLocation implements Serializable {
     private String lotatt10;           //质量状态
     private String notes;             //备注
     private Double qty1;             //换算率
+    private String addtime;             //制单时间
+    private String addwho;             //制单人
 
-//查询条件
+
+    //查询条件
     private String lotatt03StartDate;           //入库日期开始
     private String lotatt03EndDate;           //入库日期结束
     private String activeFlag;  //是否合作

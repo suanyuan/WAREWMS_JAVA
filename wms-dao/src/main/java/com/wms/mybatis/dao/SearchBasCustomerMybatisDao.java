@@ -45,5 +45,8 @@ public interface SearchBasCustomerMybatisDao extends BaseDao {
 //入库信息
 	public List<SearchEnterInvLocation> querySearchEnterInvLocationHistory(MybatisCriteria criteria);
 	public int querySearchEnterInvLocationHistoryCount(MybatisCriteria criteria);
+//出库信息
+	public List<SearchOutInvLocation> querySearchOutInvLocationHistory(MybatisCriteria criteria);
+	public int querySearchOutInvLocationHistoryCount(MybatisCriteria criteria);
 
 }

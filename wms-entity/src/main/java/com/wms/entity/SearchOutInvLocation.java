@@ -34,6 +34,8 @@ public class SearchOutInvLocation implements Serializable {
     private String ctel1;             //联系电话
     private String notes;             //备注
     private Double qty1;             //换算率
+    private String addtime;             //制单时间
+    private String addwho;             //制单人
 
     //查询条件
     private String outStartDate;           //出库日期开始
