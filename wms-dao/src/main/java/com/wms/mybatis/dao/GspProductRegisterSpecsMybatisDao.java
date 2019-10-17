@@ -1,6 +1,8 @@
 package com.wms.mybatis.dao;
 
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Map;
 import java.util.List;
 
@@ -33,6 +35,9 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
 
     //查询需要比较的字段
     public <T> T selectProductByCompare(Object id);
+
+    //查询需要比较的字段
+    public <T> T selectBasSkuByCompare(@Param("customerid") String customerid, @Param("sku") String sku);
 
 
 

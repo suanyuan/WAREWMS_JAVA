@@ -146,11 +146,12 @@
             striped: true,
             collapsible:false,
             queryParams:{'applyId':<c:choose><c:when test="${firstBusinessApply.applyId == null}">'empty'</c:when><c:otherwise>'${firstBusinessApply.applyId}'</c:otherwise></c:choose>},
-            pagination:true,
+            // pagination:true,
             rownumbers:true,
             singleSelect:false,
             idField : 'productApplyId',
             columns : [[
+                {field: 'productApplyId',title:'主键',hidden:true},
                 {field: 'productApplyId',title:'主键',hidden:true},
                 {field: 'specsId',title:'主键',hidden:true},
                 {field: 'customerid',title:'主键',hidden:true},
@@ -363,7 +364,7 @@
             height:550,
             cache:false,
             onClose : function() {
-
+                ezuiFormClear(ezuiForm);
             }
         })
     }
@@ -397,7 +398,8 @@
             cache: false,
 
             onClose : function() {
-                // ezuiFormClear(ezuiForm);
+                ezuiFormClear(ezuiForm);
+
             },
             onLoad:function () {
 

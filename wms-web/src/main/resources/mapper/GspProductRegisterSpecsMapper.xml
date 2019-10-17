@@ -348,6 +348,27 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
     </select>
 
 
+    <!-- 根据id查询 产品注册证规格关联产品注册证 -->
+    <select id="selectBasSkuByCompare" resultMap="BaseResultMap" parameterType="Object">
+        select reservedfield09 medical_device_mark,reservedfield01 product_name,reservedfield03 product_register_no,reservedfield02 product_remark,
+         sku product_code,t5.codename_c unit,descr_c specs_name,
+        reservedfield13 packaging_unit,descr_e product_model,sku_group3 packing_require,t4.descr packing_unit,skulength `long`,sku_group5 transport_condition,
+        skuwidth wide,sku_group4 storage_condition,
+        skuhigh	hight,reservedfield14 product_enterprise_name,reservedfield11 wight,reservedfield06 LicenseOrRecordNo,reservedfield12 bar_code,
+         sku_group9 production_address,alternate_sku1 alternat_name1,sku_group7 is_doublec,
+            alternate_sku2 alternat_name2,sku_group8 is_certificate,alternate_sku3 alternat_name3,sku_group2 attache_card_category,alternate_sku4 alternat_name4,
+        t6.codename_c cold_hain_mark,alternate_sku5 alternat_name5,
+            reservedfield08 sterilization_markers,reservedfield10 maintenance_cycle
+        from bas_sku t1
+        LEFT JOIN gsp_product_register_specs t2 on t1.sku  = t2.product_code
+        LEFT JOIN gsp_product_register t3 ON t2.product_register_id = t3.product_register_id
+        LEFT JOIN bas_package t4 on t4.packid = t1.packid
+        LEFT JOIN (select * from bas_codes where codeid = 'UOM') t5 on t1.defaultreceivinguom = t5.code
+        LEFT JOIN (select * from bas_codes where codeid = 'LL_TYP') t6 on t1.reservedfield07 = t6.code
+        where sku = #{sku} and customerid = #{customerid};
+
+    </select>
+
 
     <!-- 产品注册证规格 列表总数-->
     <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">

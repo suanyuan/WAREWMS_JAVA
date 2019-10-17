@@ -34,6 +34,10 @@ public class FirstBusinessApplyService extends BaseService {
 	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
 	@Autowired
 	private FirstBusinessProductApplyMybatisDao firstBusinessProductApplyMybatisDao;
+
+	@Autowired
+	private BasSkuMybatisDao basSkuMybatisDao;
+
 	@Autowired
 	private FirstReviewLogService firstReviewLogService;
 	@Autowired
@@ -224,9 +228,13 @@ public class FirstBusinessApplyService extends BaseService {
 				if(oldApply==null){
 					Json.error("单号不存在");
 				}
+//				BasSku oldSku =basSkuMybatisDao.queryById();
 				oldProduct  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(oldApply.getSpecsId());
 
+				oldProduct=	gspProductRegisterSpecsMybatisDao.selectBasSkuByCompare(clientId,oldProduct.getProductCode());
 				GspProductRegisterSpecs oldProductR =gspProductRegisterSpecsMybatisDao.queryById(oldApply.getSpecsId());
+
+
 				oldgpr = gspProductRegisterMybatisDao.selectProductRegisterByCompare(oldProductR.getProductRegisterId());
 
 				BasCustomer oldSup =basCustomerMybatisDao.queryByIdType(oldApply.getSupplierId(),Constant.CODE_CUS_TYP_VE);
@@ -312,6 +320,7 @@ public class FirstBusinessApplyService extends BaseService {
 				GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(g.getProductRegisterId());
 				//新供应商详情
 				BasCustomer sup =basCustomerMybatisDao.queryByIdType(supplierId,Constant.CODE_CUS_TYP_VE);
+
 				if(sup==null){
 					return 	Json.error("供应商失效！");
 				}
@@ -333,6 +342,7 @@ public class FirstBusinessApplyService extends BaseService {
 					if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
 						SpecsName = g.getSpecsName();
 					}
+
 					if(gpr!=null){
 						if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
 							ProductRegisterNo = gpr.getProductRegisterNo();
@@ -352,12 +362,14 @@ public class FirstBusinessApplyService extends BaseService {
 				}else if(isReType==true){
 					//发起新申请   变更内容
 //					//新申请信息
+					GspProductRegister newGPR= null;
 					GspProductRegisterSpecs newGPRS  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(specsId);
-					GspProductRegisterSpecs newGPRSR =gspProductRegisterSpecsMybatisDao.queryById(specsId);
+					GspProductRegisterSpecs newGPRSR =gspProductRegisterSpecsMybatisDao.queryById(specsId);//過程
+					if(newGPRSR.getProductRegisterId()!=null){
+						newGPR = gspProductRegisterMybatisDao.selectProductRegisterByCompare(newGPRSR.getProductRegisterId());
+					}
 
-					GspProductRegister newGPR = gspProductRegisterMybatisDao.selectProductRegisterByCompare(newGPRSR.getProductRegisterId());
-
-					if(oldApply.getSpecsId().equals(specsId)){
+					if(false){
 						//无变更
 						content = "从申请单号"+oldApplyId+"变更到申请单号"+no+" :产品无变更,  ";
 						if(g.getProductName()!=null && !"".equals(g.getProductName()) ){
@@ -366,9 +378,14 @@ public class FirstBusinessApplyService extends BaseService {
 						if(g.getSpecsName()!=null && !"".equals(g.getSpecsName()) ){
 							SpecsName = g.getSpecsName();
 						}
-						if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
-							ProductRegisterNo = gpr.getProductRegisterNo();
+						if(gpr!=null){
+							if(gpr.getProductRegisterNo()!=null && !"".equals(gpr.getProductRegisterNo()) ){
+								ProductRegisterNo = gpr.getProductRegisterNo();
+							}
+						}else{
+							ProductRegisterNo = "无";
 						}
+
 						if(sup.getDescrC()!=null && !"".equals(sup.getDescrC())){
 							supName = sup.getDescrC();
 						}
@@ -382,10 +399,17 @@ public class FirstBusinessApplyService extends BaseService {
 						CompareUtil<GspProductRegisterSpecs> compareUtil = new CompareUtil<GspProductRegisterSpecs>();
 						CompareUtil<GspProductRegister> compareUtilGPR = new CompareUtil<GspProductRegister>();
 
-						//Todo 需要把产品档案查出来用产品基础信息类接收 然后对比新旧信息 存入内容
+						//To 需要把产品档案查出来用产品基础信息类接收 然后对比新旧信息 存入内容
+
+
+
+
+
 						content = "从申请单号"+oldApplyId+"变更到申请单号"+no+"["+
 								compareUtil.compareT(oldProduct,newGPRS,GspProductRegisterSpecs.class.getName(),GspProductRegisterSpecs.class.getSimpleName(),"")+
 								compareUtilGPR.compareT(oldgpr,newGPR,GspProductRegister.class.getName(),GspProductRegister.class.getSimpleName(),"")+
+
+
 								"]";
 					}
 
@@ -458,12 +482,10 @@ public class FirstBusinessApplyService extends BaseService {
 //						map.put("after",value2);
 //						list.add(map);
 						if("GspProductRegisterSpecs".equals(simpleClassName)){
-
 							result = " 原产品"+GspProductRegisterSpecsChange(field.getName())+": "+(value1==null|| value1==""? "无":value1)+
 									",变更为"+": "+(value2==null|| value2==""? "无":value2);
 						}else if("GspProductRegister".equals(simpleClassName)){
-
-							result = " 原注册证"+GspProductRegisterChange(field.getName())+": "+(value1==null|| value1==""? "无":value1)+
+							result = " 原产品注册证"+GspProductRegisterChange(field.getName())+": "+(value1==null|| value1==""? "无":value1)+
 									",变更为 "+":"+(value2==null || value2==""? "无":value2);
 						}
 
@@ -745,7 +767,7 @@ public class FirstBusinessApplyService extends BaseService {
                 firstBusinessApply.setIsUse(Constant.IS_USE_NO);
                 firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
                 //更新申请记录
-                firstReviewLogService.updateFirstReviewByNo(DelId, Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//                firstReviewLogService.updateFirstReviewByNo(DelId, Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
 
                 //重新插入单据
@@ -847,7 +869,7 @@ public class FirstBusinessApplyService extends BaseService {
 
 	/**
 	 * 更新申请中的产品申请单产品基础信息编号
-	 * @param specId
+	 * @param clientId
 	 * @return
 
 	public Json updateCheckingApplySpecId(String specId){
