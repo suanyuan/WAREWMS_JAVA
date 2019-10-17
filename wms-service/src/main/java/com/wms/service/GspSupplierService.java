@@ -315,7 +315,7 @@ public class GspSupplierService extends BaseService {
 				gspSupplier.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 				gspSupplier.setIsUse(Constant.IS_USE_NO);
 				gspSupplierMybatisDao.updateBySelective(gspSupplier);
-//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL); //发起新申请不修改GSP里这条审核通过数据
 
 
                 // 通过enterpriseId 查询该公司的最新的enterpriseId   赋值给申请

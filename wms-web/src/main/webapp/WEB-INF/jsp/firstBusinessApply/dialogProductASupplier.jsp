@@ -459,6 +459,10 @@
         // var rows = dataGridProduct.datagrid("getSelections");
 		// rows1
 		// alert(rows)
+
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var supId = $("#supplierId").val();
 		console.log($("#ezuiFormDetail #clientId").val());
         // var cusId = $("#ezuiFormDetail #clientId").val();
@@ -533,9 +537,6 @@
 								"supplierName" :rows1.descrC,
 								"productRegisterNo":rows[i].productRegisterNo,
                                 "productRegisterId":rows[i].productRegisterId,
-
-
-
 							});
 							arr.push(rows[i].specsId);
 							//arr1 = rows1[i].supplierId;
@@ -547,6 +548,7 @@
             }
 
         }
+        $.messager.progress('close');
         enterpriseProduct.dialog("close");
     }
     <%--function doSubmitAddress() {--%>

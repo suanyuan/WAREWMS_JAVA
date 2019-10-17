@@ -313,7 +313,7 @@ public class GspCustomerService extends BaseService {
 				gspCustomer.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 				gspCustomer.setIsUse(Constant.IS_USE_NO);
 				gspCustomerMybatisDao.updateBySelective(gspCustomer);
-//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//				firstReviewLogService.updateFirstReviewByNo(s,Constant.CODE_CATALOG_CHECKSTATE_FAIL);   //发起新申请不修改GSP里这条审核通过数据
 
 
                 // 通过enterpriseId 查询该公司的最新的enterpriseId
