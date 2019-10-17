@@ -215,4 +215,30 @@ public class DrugInspectionController {
 	public void exportCustomerProductHistoryDataToExcel(HttpServletResponse response, CustomerProduct form) throws Exception {
 		drugControlService.exportCustomerProductHistoryDataToExcel(response, form);
 	}
+
+
+
+	/**************************************历史入库信息****************************************/
+
+	@Login
+	@RequestMapping(params = "toSearchEnterInvLocationMainHistory")
+	public ModelAndView toSearchEnterInvLocationMainHistory(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchEnterInvLocation/main_history", model);
+	}
+
+	@Login
+	@RequestMapping(params = "showSearchEnterInvLocationHistoryDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationHistoryDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		return drugControlService.showSearchEnterInvLocationHistoryDatagrid(pager, query);
+	}
+
+
+	@Login
+	@RequestMapping(params = "exportSearchEnterInvLocationHistoryDataToExcel")
+	public void exportSearchEnterInvLocationHistoryDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
+		drugControlService.exportSearchEnterInvLocationHistoryDataToExcel(response, form);
+	}
 }

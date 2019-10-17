@@ -738,4 +738,86 @@ public class DrugControlService extends BaseService {
 
 		return superClassMap;
 	}
+
+
+
+	/**************************************历史入库信息****************************************/
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationHistoryDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		EasyuiDatagrid<SearchEnterInvLocation> datagrid = new EasyuiDatagrid<SearchEnterInvLocation>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationHistory(mybatisCriteria);
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationHistoryCount(mybatisCriteria));
+		datagrid.setRows(searchEnterInvLocationList);
+		return datagrid;
+	}
+
+	public void exportSearchEnterInvLocationHistoryDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getSearchEnterInvLocationHistoryLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "历史入库信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="入库信息"+timeNow;
+			// excel要导出的数据
+			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationHistory(mybatisCriteria);
+			// 导出
+			if (searchEnterInvLocationList == null || searchEnterInvLocationList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (SearchEnterInvLocation s: searchEnterInvLocationList) {
+//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						s.setLotatt03(sdf.format(sdf.parse(s.getLotatt03())));
+
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getSearchEnterInvLocationHistoryLeadToFiledPublicQuestionBank() {
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("type", "入库类型");
+		superClassMap.put("lotatt12", "产品名称");
+		superClassMap.put("descrc", "规格/型号");
+		superClassMap.put("lotatt15", "生产企业");
+		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
+		superClassMap.put("lotatt04", "生产批号/序列号");
+		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
+//		superClassMap.put("qty", "库存件数");
+		superClassMap.put("qtyeach", "数量");
+		superClassMap.put("uom", "单位");
+		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("locationid", "库存地点(货架号)");
+		superClassMap.put("lotatt10", "质量状态");
+		superClassMap.put("notes", "备注");
+//		superClassMap.put("qty1", "换算率");
+		return superClassMap;
+	}
 }
