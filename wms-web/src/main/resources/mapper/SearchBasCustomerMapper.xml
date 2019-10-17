@@ -332,7 +332,8 @@
         r.descr_c enterpriseName,r.active_flag activeFlag,
         b.qty, p.`qty1`,
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
-        c.`lotatt01`,c.`lotatt02`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
+        CONCAT(IFNULL(DATE_FORMAT(c.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
+        c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
         s.`descr_c` descrc,
         bb.codename_c uom,`bb1`.codename_c type,aa.notes,DATE_FORMAT(aa.edittime,'%Y-%m-%d') lotatt03,
         aa.consigneeid consigneeID,aa.`c_address1` caddress1,aa.C_Contact contact,aa.`c_tel1` ctel1

@@ -43,14 +43,14 @@ $(function() {
 			{field: 'lotatt04',		        title: '生产批号/序列号',	width: 100 },
 			// {field: 'lotatt05',		        title: '序列号',	width: 100 },
 			{field: 'lotatt01Andlotatt02',		        title: '生产日期和有效期(或者失效期)',	width: 200 },
-			{field: 'qty',                  title: '库存件数 ',	width: 100 },
+			// {field: 'qty',                  title: '库存件数 ',	width: 100 },
 			{field: 'qtyeach',		        title: '库存数量 ',	width: 100 },
 			{field: 'uom',                  title: '单位 ',	width: 100 },
 			{field: 'locationid',		    title: '库存地点(货架号)',	width: 130 },
 			{field: 'lotatt11',		        title: '储存条件',	width: 130 },
 			{field: 'lotatt10',	            title: '质量状态',	width: 100,formatter:ZL_TYPstatusFormatter},
 			{field: 'notes',		        title: '备注 ',	width: 200},
-			{field: 'qty1',		           title: '换算率 ',	width: 70},
+			{field: 'qty1',		           title: '换算率 ',	width: 70,hidden:true},
 
 
 		]],

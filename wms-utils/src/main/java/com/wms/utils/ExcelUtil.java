@@ -2,6 +2,7 @@ package com.wms.utils;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -241,7 +242,7 @@ public class ExcelUtil {
 	public static <T> void listToExcel(List<T> list,
 			LinkedHashMap<String, String> fieldMap, String sheetName,
 			int sheetSize, HttpServletResponse response, String fileName)
-			throws ExcelException {
+			throws ExcelException, UnsupportedEncodingException {
 
 		// 如果文件名没提供，则使用时间戳
 		if (fileName == null || fileName.trim().equals("")) {
@@ -254,7 +255,7 @@ public class ExcelUtil {
 		response.reset();
 		response.setContentType("application/vnd.ms-excel"); // 改成输出excel文件
 		response.setHeader("Content-disposition", "attachment; filename="
-				+ fileName + ".xls");
+				+ new String(fileName.getBytes(),"iso-8859-1") + ".xls");
 
 		// 创建工作簿并发送到浏览器
 		try {
@@ -362,7 +363,11 @@ public class ExcelUtil {
 		String fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(
 				new Date()).toString();
 
-		listToExcel(list, fieldMap, sheetName, sheetSize, response, fileName);
+		try {
+			listToExcel(list, fieldMap, sheetName, sheetSize, response, fileName);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
