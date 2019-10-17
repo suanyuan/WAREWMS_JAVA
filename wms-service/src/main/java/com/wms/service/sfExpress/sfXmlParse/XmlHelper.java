@@ -64,7 +64,7 @@ public class XmlHelper {
                     //入港映射码
                     rlsInfoDto.setCodingMapping(rlsDetail.attributeValue("codingMapping"));
                     //出港映射码
-                    rlsInfoDto.setCodingMappingOut("");
+                    rlsInfoDto.setCodingMappingOut(rlsDetail.attributeValue("codingMappingOut"));
                     //产品名称
                     rlsInfoDto.setProName(rlsDetail.attributeValue("proName"));
                     System.err.println(rlsInfoDto.getProName());
@@ -93,6 +93,10 @@ public class XmlHelper {
                 response.setResultFlag(false);
                 String headf = root.elementTextTrim("ERROR");
                 response.setErrorMsg(headf);
+                response.setMailNo("");
+                response.setOrderResponse(null);
+                response.setOpCode("");
+                response.setCom(null);
             }
 
         } catch (Exception e) {
