@@ -332,11 +332,11 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
     and is_use = 1;
     </select>
 
-    <!-- 根据id查询 产品注册证规格关联产品注册证 -->
+    <!-- 根据id查询 产品注册证规格关联产品注册证,`long`,wide hight, -->
     <select id="selectProductByCompare" resultMap="BaseResultMap" parameterType="Object">
 	select medical_device_mark,product_name,t2.product_register_no,product_remark,product_code,t3.codename_c unit,specs_name,
-	packaging_unit,product_model,packing_require,packing_unit,`long`,transport_condition,wide,storage_condition,
-	hight,product_enterprise_name,wight,LicenseOrRecordNo,bar_code,t1.production_address,alternat_name1,is_doublec,
+	packaging_unit,product_model,packing_require,packing_unit,transport_condition,storage_condition,
+	product_enterprise_name,wight,LicenseOrRecordNo,bar_code,t1.production_address,alternat_name1,is_doublec,
 	alternat_name2,is_certificate,alternat_name3,attache_card_category,alternat_name4,t4.codename_c cold_hain_mark,alternat_name5,
 	sterilization_markers,maintenance_cycle
 	from gsp_product_register_specs t1
@@ -348,13 +348,13 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
     </select>
 
 
-    <!-- 根据id查询 产品注册证规格关联产品注册证 -->
+    <!-- 根据id查询 产品注册证规格关联产品注册证skuwidth wide,,skulength `long` skuhigh	hight, -->
     <select id="selectBasSkuByCompare" resultMap="BaseResultMap" parameterType="Object">
         select reservedfield09 medical_device_mark,reservedfield01 product_name,reservedfield03 product_register_no,reservedfield02 product_remark,
          sku product_code,t5.codename_c unit,descr_c specs_name,
-        reservedfield13 packaging_unit,descr_e product_model,sku_group3 packing_require,t4.descr packing_unit,skulength `long`,sku_group5 transport_condition,
-        skuwidth wide,sku_group4 storage_condition,
-        skuhigh	hight,reservedfield14 product_enterprise_name,reservedfield11 wight,reservedfield06 LicenseOrRecordNo,reservedfield12 bar_code,
+        reservedfield13 packaging_unit,descr_e product_model,sku_group3 packing_require,t4.descr packing_unit,sku_group5 transport_condition,
+        sku_group4 storage_condition,
+        reservedfield14 product_enterprise_name,reservedfield11 wight,reservedfield06 LicenseOrRecordNo,reservedfield12 bar_code,
          sku_group9 production_address,alternate_sku1 alternat_name1,sku_group7 is_doublec,
             alternate_sku2 alternat_name2,sku_group8 is_certificate,alternate_sku3 alternat_name3,sku_group2 attache_card_category,alternate_sku4 alternat_name4,
         t6.codename_c cold_hain_mark,alternate_sku5 alternat_name5,
