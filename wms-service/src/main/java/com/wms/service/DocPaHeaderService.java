@@ -60,6 +60,18 @@ public class DocPaHeaderService extends BaseService {
     private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
     @Autowired
     private ImportPaDataService importPaDataService;
+    @Autowired
+    private BasCustomerService basCustomerService;
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
+    @Autowired
+    private BasSkuMybatisDao basSkuMybatisDao;
+    @Autowired
+    private InvLotAttService invLotAttService;
+    @Autowired
+    private BasPackageMybatisDao basPackageMybatisDao;
+    @Autowired
+    private BasCodesMybatisDao basCodesMybatisDao;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
@@ -231,7 +243,103 @@ public class DocPaHeaderService extends BaseService {
         return docPaDetailsVOList;
     }
 
-/*打印*/
+    /*
+        单数据打印
+     */
+    public DocPaHeader printPaTaskPdf(String pano) {
+        // 上架表头  docPaHeaderList 1 doc_pa_header
+       /* List<DocPaHeader> docPaHeaderList = new ArrayList<DocPaHeader>();*/
+        DocPaHeader docPaHeader = docPaHeaderDao.queryById(pano);
+        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
+
+        //制单日期 docpaheader.addtime
+        if(docAsnHeader !=null){
+            //客户单号1 docasnheader.asnreference1
+            docPaHeader.setAsnreference1(docAsnHeader.getAsnreference1());
+            //采购单号 变更一下描述 客户单号2 docasnheader.asnreference2
+            docPaHeader.setAsnreference2(docAsnHeader.getAsnreference2());
+        }
+        //仓库名 docpaheader.warehousid
+        //货主 docpaheader.customerid JSGR  BasCustomerService.query   BasCustomer.DESCR_C
+        BasCustomer basCustomerList = basCustomerMybatisDao.queryByCustomerId(docPaHeader.getCustomerid());
+        if(basCustomerList != null){
+            docPaHeader.setDescrC(basCustomerList.getDescrC());
+        }
+        //供应商 docasnheader.supplierid BasCustomerService.query   BasCustomer.DESCR_C
+        if (null != docAsnHeader) {
+            BasCustomer basCustomerList1 = basCustomerMybatisDao.queryByCustomerId(docAsnHeader.getSupplierid());
+            if (basCustomerList1 != null) {
+                docPaHeader.setDescrC1(basCustomerList1.getDescrC());
+            }
+        }
+        //冷链 todo 待定
+
+        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaList(pano);
+
+        double a=0;
+        double b=0;
+        Integer c=0;
+        for(int i=0;i<docPaDetailsList.size();i++){
+
+            DocPaDetails docPaDetails = docPaDetailsList.get(i);
+            //序号 1~。。。
+            //产品代码docpadetails.sku
+            //产品名称 1,details.customerid + details.sku => BasSku     BasSku.reservedfield01
+            Map<String,Object> param = new HashMap<>();
+            param.put("customerid",docPaDetails.getCustomerid());
+            param.put("sku",docPaDetails.getSku());
+            BasSku basSku =  basSkuMybatisDao.queryById(param);
+            if (basSku != null) {
+                docPaDetails.setReservedfield01(basSku.getReservedfield01());
+                //规格/型号 bassku.descr_c
+                docPaDetails.setDescrs(basSku.getDescrC());
+            }
+            //生产批号 1,details.lotnum =》 InvLotAttmybatisdao.querybyid =>Invlotatt   invlotatt.lotatt04
+            InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(docPaDetails.getLotnum());
+            if(invLotAtt != null){
+                docPaDetails.setLotatt04(invLotAtt.getLotatt04());
+                //序列号 invlotatt.lotatt05
+                docPaDetails.setLotatt05(invLotAtt.getLotatt05());
+                //生产日期 invlotatt.lotatt01
+                docPaDetails.setLotatt01(invLotAtt.getLotatt01());
+                //有效期/失效日期 invlotatt.lotatt02
+                docPaDetails.setLotatt02(invLotAtt.getLotatt02());
+            }
+
+            //待上数量 bassku.packid => BasPackage.querybyid => docpadetails.putwayqtyExpected * baspackage.qty1
+            BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+            if(basPackage != null){
+                docPaDetails.setPutwayqtynum(docPaDetails.getPutwayqtyExpected()*basPackage.getQty1().doubleValue());
+                a=a+docPaDetails.getPutwayqtynum();//待上数量合计
+                b=b+docPaDetails.getPutwayqtyExpected();//待上件数合计
+                docPaDetails.setPutwayqtynums(a);
+                docPaDetails.setPutwayqtyExpecteds(b);
+            }
+            //单位 bassku.defaultreceivinguom => BasCode query (条件 codeid=UOM，code = defaultreceivinguom) => bascode.codename_c
+            BasCodes basCodes = basCodesMybatisDao.query(basSku.getDefaultreceivinguom());
+            if(basCodes != null){
+                docPaDetails.setCodename(basCodes.getCodenameC());
+            }
+            c+=1;
+            docPaDetails.setIndex(c);
+        }
+
+        docPaHeader.setDetls(docPaDetailsList);
+        //待上件数 docpadetails.putwayqtyExpected
+        //已上件数 null
+        //库位 null
+        //上架人 null
+        // 页码
+        // 上架明细  padetails'多个 doc_pa_details
+        /*docPaHeaderList.add(docPaHeader);*/
+        return docPaHeader;
+    }
+
+    /**
+     * 打印
+     * @param response
+     * @param orderCodeList
+     */
     public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
         StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()){

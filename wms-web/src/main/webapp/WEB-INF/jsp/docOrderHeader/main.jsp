@@ -1002,6 +1002,7 @@ var printPacking = function(){
 	}
 	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
+/* 打印随货清单 */
 var printAccompanying = function () {
     orderList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');

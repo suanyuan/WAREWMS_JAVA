@@ -371,18 +371,36 @@ var commitImportData = function(obj){
 
 //打印
 var batchPrint = function(){
-    var orderCodeList = null;
-    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
-    $.each(checkedItems, function(index, item){
-        if (orderCodeList != null) {
-            orderCodeList = orderCodeList + ',' + item.pano;
-        } else {
-            orderCodeList = item.pano;
+    var rows = $('#ezuiDatagrid').datagrid('getChecked');
+    var pano="";
+    if (rows.length > 0) {
+        for (var i = 0; i < rows.length; i++) {
+            pano += rows[i].pano+",";
         }
-    });
+
+        /*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
+        window.open(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);
+
+
+
+    } else {
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+	/*    var orderCodeList = null;
+        var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+        $.each(checkedItems, function(index, item){
+            if (orderCodeList != null) {
+                orderCodeList = orderCodeList + ',' + item.pano;
+            } else {
+                orderCodeList = item.pano;
+            }
+        });
     if (orderCodeList != null) {
         window.open(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&orderCodeList="+orderCodeList, "Report_"+orderCodeList, "scrollbars=yes,resizable=no");
-    }
+    }*/
+
 };
 
 var parowStyle = function (index,row) {

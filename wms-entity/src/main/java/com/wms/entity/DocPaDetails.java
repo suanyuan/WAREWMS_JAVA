@@ -22,7 +22,7 @@ public class DocPaDetails  implements Serializable {
 
 	private String customerid;
 
-	private String sku;
+	private String sku;  //产品代码
 
 	private String lotnum;
 
@@ -62,4 +62,17 @@ public class DocPaDetails  implements Serializable {
 	private InvLotAtt invLotAtt;
 
 	List<String> lotnumList;
+
+	//明细
+	private String reservedfield01;//产品名称
+	private String descrs;//规格型号
+	private String lotatt01;//生产日期
+	private String lotatt02;//有效期/失效日期
+	private String lotatt04;//生产批号
+	private String lotatt05;//序列号
+	private Double putwayqtynum;//待上数量
+	private Double putwayqtynums = 0.0;//待上数量合计
+	private Double putwayqtyExpecteds = 0.0;//待上件数合计
+	private String codename;//单位
+	private Integer index;//序号
 }
