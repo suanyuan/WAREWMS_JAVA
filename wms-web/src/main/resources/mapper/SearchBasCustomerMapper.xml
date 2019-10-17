@@ -332,7 +332,8 @@
         r.descr_c enterpriseName,r.active_flag activeFlag,
         b.qty, p.`qty1`,
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
-        c.`lotatt01`,c.`lotatt02`,c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
+        CONCAT(IFNULL(DATE_FORMAT(c.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
+        c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
         s.`descr_c` descrc,
         bb.codename_c uom,`bb1`.codename_c type,aa.notes,DATE_FORMAT(aa.edittime,'%Y-%m-%d') lotatt03,
         aa.consigneeid consigneeID,aa.`c_address1` caddress1,aa.C_Contact contact,aa.`c_tel1` ctel1
@@ -458,6 +459,42 @@
             </if>
         </trim>
     </sql>
+    <!-- 查询条件 历史入库信息 -->
+    <sql id="Example_Where_Clause_History3">
+       where 1=1
+        <trim  suffixOverrides="," >
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+                and enterpriseName like concat('%', #{condition.enterpriseName},'%')
+            </if>
+            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
+                and lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
+                and lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+                and lotatt12 like concat('%', #{condition.lotatt12},'%')
+            </if>
+            <if test="condition.descrc != null and condition.descrc != ''" >
+                and `descrc` like concat('%', #{condition.descrc},'%')
+            </if>
+            <if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
+                and lotatt15 like concat('%', #{condition.lotatt15},'%')
+            </if>
+            <if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+                and lotatt06 like concat('%', #{condition.lotatt06},'%')
+            </if>
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
+            <if test="condition.activeFlag != null and condition.activeFlag != ''" >
+                and activeflag =#{condition.activeFlag}
+            </if>
+        </trim>
+    </sql>
 
 
     <!-- *******************************历史委托客户********************************** -->
@@ -499,5 +536,27 @@
         from
         history_customer_product
         <include refid="Example_Where_Clause_History2"/>
+    </select>
+
+
+
+    <!-- *******************************入库信息********************************** -->
+    <!-- 查询入库信息列表 -->
+    <select id="querySearchEnterInvLocationHistory"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
+        SELECT * from
+        history_enter_invlocation
+
+        <include refid="Example_Where_Clause_History3"/>
+
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+    <!-- 入库信息 列表总数-->
+    <select id="querySearchEnterInvLocationHistoryCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT
+        count(1) from
+        history_enter_invlocation
+        <include refid="Example_Where_Clause_History3"/>
     </select>
 </mapper>

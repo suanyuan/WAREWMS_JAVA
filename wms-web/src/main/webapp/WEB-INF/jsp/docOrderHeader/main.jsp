@@ -899,6 +899,7 @@ var shipment = function(){
                 returnSfodd.dialog('open');
                 $('#returnSfoddBtn').click(function () {
                   var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
+					returnSfodd.dialog('close');
                     $.ajax({
                         async: false,
                         url: 'docOrderHeaderController.do?shipment',
@@ -906,6 +907,8 @@ var shipment = function(){
                         type: 'POST',
                         dataType: 'JSON',
                         success: function (result) {
+							console.log(result);
+							console.log("-----------------------------");
                             ezuiDatagrid.datagrid('reload');
                             var msg = '';
                             try {
@@ -920,8 +923,13 @@ var shipment = function(){
                                 ;
                             } catch (e) {
                                 msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            }
-                            ;
+                            }finally {
+								$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+								$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
+								ezuiOperateResultDataDialog.dialog('open');
+								ezuiDatagrid.datagrid('reload');
+							}
+
                         }
                     });
                 });
@@ -932,6 +940,7 @@ var shipment = function(){
 		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
 		ezuiOperateResultDataDialog.dialog('open');
 		ezuiDatagrid.datagrid('reload');
+
 	};
 };
 

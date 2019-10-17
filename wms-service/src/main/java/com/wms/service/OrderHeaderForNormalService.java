@@ -526,46 +526,50 @@ public class OrderHeaderForNormalService extends BaseService {
                 //操作拣货
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
                 if (allocationDetailsIdList != null) {
-//                    /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-//                    String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal);
-//                    //响应报文
-//                    String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-//
-////                    String callXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>OK</Head><Body><OrderResponse filter_result=\"2\" destcode=\"755\" mailno=\"SF1011547784874\" return_tracking_no=\"SF1060174366080\" origincode=\"755\" orderid=\"SFKD-20160219000029\"><rls_info rls_errormsg=\"SF1011547784874:\" invoke_result=\"OK\" rls_code=\"1000\"><rls_detail waybillNo=\"SF1011547784874\" sourceTransferCode=\"755W\" sourceCityCode=\"755\" sourceDeptCode=\"755AP\" sourceTeamCode=\"028\" destCityCode=\"755\" destDeptCode=\"755FG\" destDeptCodeMapping=\"755W\" destTeamCode=\"016\" destTransferCode=\"755W\" destRouteLabel=\"755W-755FG\" proName=\"顺丰标快\" cargoTypeCode=\"C201\" limitTypeCode=\"T4\" expressTypeCode=\"B1\" codingMapping=\"C2\" xbFlag=\"0\" printFlag=\"000000000\" twoDimensionCode=\"MMM={'k1':'755W','k2':'755FG','k3':'016','k4':'T4','k5':'SF1011547784874','k6':'','k7':'613f0c59'}\" proCode=\"T4\" printIcon=\"00000000\" checkCode=\"613f0c59\"/></rls_info></OrderResponse></Body></Response>";
-////                    String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
-//                    //  System.err.println("响应报文"+callXml);
-//                    //解析响应报文
-//                    ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
-//
-//                    if (!shunFengResponse.isResultFlag()) {
-//                        json.setSuccess(false);
-//                        json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
-//                        return json;
-//                    }
-//                    System.err.println("//解析响应报文" + shunFengResponse.toString());
-//                    //解析后修改到表中
-//                    OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
-//                    orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-//                    orderHeaderForNormalSf.setEdittime(new Date());
-//                    orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
-//                    //运单号
-//                    orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
-//                    //签回单号
-//                    orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
-//
-//                    //原寄地区域代码
-//                    orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
-//                    //目的地区域代码,
-//                    orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
-//                    //时效
-//                    orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
-//
-//                    List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
-//                    for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
-//                        //二维码
-//                        orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
-//                    }
-//                    orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
+                    /*如果订单发运成功那么就进行顺丰下单  下单报文*/
+                    String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
+                    //响应报文
+                    String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
+                    //解析响应报文
+                    ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
+                    if (!shunFengResponse.isResultFlag()) {
+                        json.setSuccess(false);
+                        json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
+                        return json;
+                    }
+                    //解析后修改到表中
+                    OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
+                    orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                    orderHeaderForNormalSf.setEdittime(new Date());
+                    orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
+                    //运单号
+                    orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
+                    //签回单号
+                    orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
+                    //原寄地区域代码
+                    orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
+                    //目的地区域代码,
+                    orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
+                    //时效
+                    orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
+                    //  原寄递地代码  zipCode;
+                    shunFengResponse.getOrderResponse().getZipCode();
+
+                    // /目的地的代码  destCode;
+                    shunFengResponse.getOrderResponse().getDestCode();
+
+
+                    List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
+                    for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
+                        //二维码
+                        orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
+                        //入港映射码  codingMapping
+                        rlsInfoDto.getCodingMapping();
+                        //出港映射码  codingMappingOut
+                        rlsInfoDto.getCodingMappingOut();
+
+                    }
+                    orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
                     /*顺丰下单end*/
                     for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
                         Map<String, Object> map = new HashMap<String, Object>();
@@ -578,32 +582,32 @@ public class OrderHeaderForNormalService extends BaseService {
                             if (pickResult.equals("000")) {
                                 continue;
                             } else {
-                                /*//取消顺丰下单
+                                //取消顺丰下单
                                 ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                                 if(!responseCancel.isResultFlag()){
                                     json.setSuccess(false);
                                     String error="出库处理失败：" + pickResult+"/br";
                                     json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                                     return json;
-                                }else {*/
+                                }else {
                                 json.setSuccess(false);
                                 json.setMsg("出库处理失败：" + pickResult);
                                 return json;
-                                /*  }*/
+                                  }
                             }
                         } else {
-                           /* //取消顺丰下单
+                            //取消顺丰下单
                             ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                             if(!responseCancel.isResultFlag()){
                                 json.setSuccess(false);
                                 String error="出库处理失败：订单数据异常！/br";
                                 json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                                 return json;
-                            }else {*/
+                            }else {
                             json.setSuccess(false);
                             json.setMsg("出库处理失败：订单数据异常！");
                             return json;
-                            /* }*/
+                             }
                         }
                     }
                     //操作发运
@@ -624,32 +628,32 @@ public class OrderHeaderForNormalService extends BaseService {
                             json.setObj(orderHeaderForNormal);
                             return json;
                         } else {
-                           /* //取消顺丰下单
+                            //取消顺丰下单
                             ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                             if(!responseCancel.isResultFlag()){
                                 json.setSuccess(false);
                                 String error="出库处理失败：" + shippmentResult+"/br";
                                 json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                                 return json;
-                            }else {*/
+                            }else {
                             json.setSuccess(false);
                             json.setMsg("出库处理失败：" + shippmentResult);
                             return json;
-                            /* }*/
+                             }
                         }
                     } else {
-                       /* //取消顺丰下单
+                        //取消顺丰下单
                         ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                         if(!responseCancel.isResultFlag()){
                             json.setSuccess(false);
                             String error="出库处理失败：订单数据异常！/br";
                             json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                             return json;
-                        }else {*/
+                        }else {
                         json.setSuccess(false);
                         json.setMsg("出库处理失败：订单数据异常！");
                         return json;
-                        /* }*/
+                         }
                     }
                 } else {
                     json.setSuccess(false);
@@ -670,13 +674,9 @@ public class OrderHeaderForNormalService extends BaseService {
                 String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
                 //响应报文
                 String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-
-//                    String callXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>OK</Head><Body><OrderResponse filter_result=\"2\" destcode=\"755\" mailno=\"SF1011547784874\" return_tracking_no=\"SF1060174366080\" origincode=\"755\" orderid=\"SFKD-20160219000029\"><rls_info rls_errormsg=\"SF1011547784874:\" invoke_result=\"OK\" rls_code=\"1000\"><rls_detail waybillNo=\"SF1011547784874\" sourceTransferCode=\"755W\" sourceCityCode=\"755\" sourceDeptCode=\"755AP\" sourceTeamCode=\"028\" destCityCode=\"755\" destDeptCode=\"755FG\" destDeptCodeMapping=\"755W\" destTeamCode=\"016\" destTransferCode=\"755W\" destRouteLabel=\"755W-755FG\" proName=\"顺丰标快\" cargoTypeCode=\"C201\" limitTypeCode=\"T4\" expressTypeCode=\"B1\" codingMapping=\"C2\" xbFlag=\"0\" printFlag=\"000000000\" twoDimensionCode=\"MMM={'k1':'755W','k2':'755FG','k3':'016','k4':'T4','k5':'SF1011547784874','k6':'','k7':'613f0c59'}\" proCode=\"T4\" printIcon=\"00000000\" checkCode=\"613f0c59\"/></rls_info></OrderResponse></Body></Response>";
-//                    String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
-                //  System.err.println("响应报文"+callXml);
-                //解析响应报文
+                //解析响应报文  TODO 下单重复反馈回来数据有问题
+               // String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
                 ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
-
                 if (!shunFengResponse.isResultFlag()) {
                     json.setSuccess(false);
                     json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
@@ -698,11 +698,6 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
                 //时效
                 orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
-                //  原寄递地代码  zipCode;
-                shunFengResponse.getOrderResponse().getZipCode();
-
-                // /目的地的代码  destCode;
-                shunFengResponse.getOrderResponse().getDestCode();
 
 
                 List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
@@ -710,9 +705,9 @@ public class OrderHeaderForNormalService extends BaseService {
                     //二维码
                     orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
                     //入港映射码  codingMapping
-                    rlsInfoDto.getCodingMapping();
+                    orderHeaderForNormalSf.setUserdefine5(rlsInfoDto.getCodingMapping());
                     //出港映射码  codingMappingOut
-                    rlsInfoDto.getCodingMappingOut();
+                    orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getCodingMappingOut());
 
                 }
                 orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
@@ -754,31 +749,31 @@ public class OrderHeaderForNormalService extends BaseService {
                         return json;
                     } else {
                         //取消顺丰下单
-                       /* ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                        ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                         if(!responseCancel.isResultFlag()){
                             json.setSuccess(false);
                             String error="出库处理失败：" + shippmentResult+"/br";
                             json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                             return json;
-                        }else {*/
+                        }else {
                         json.setSuccess(false);
                         json.setMsg("出库处理失败：" + shippmentResult);
                         return json;
-                        /* }*/
+                         }
                     }
                 } else {
-                   /* //取消顺丰下单
+                    //取消顺丰下单
                     ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
                     if(!responseCancel.isResultFlag()){
                         json.setSuccess(false);
                         String error="出库处理失败：订单数据异常！/br";
                         json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
                         return json;
-                    }else {*/
+                    }else {
                     json.setSuccess(false);
                     json.setMsg("出库处理失败：订单数据异常！");
                     return json;
-                    /* }*/
+                     }
                 }
             } else {
                 json.setSuccess(false);
@@ -1814,17 +1809,6 @@ public class OrderHeaderForNormalService extends BaseService {
             map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/T4.jpg");
             map.put("so", "imgFile/FM/so.jpg");
-
-            //二维码
-//       String binary =  "MMM={'k1':'755WF','k2':'755AQ','k3':'036','k4':'T4','k5':'619428034014','k6':'','k7':'dce4e1c6','k7':'3fc52389'}", 200,200);
-
-      /*  byte[] bytes = null;
-        bytes = new Base64().decode(binary);
-        for (int K = 0; K < bytes.length; ++K) {
-            if (bytes[K] < 0) {
-                bytes[K] = (byte) (bytes[K] + 256);
-            }
-        }*/
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
             map.put("ji", "imgFile/FM/ji.jpg");
             map.put("tips5", "imgFile/FM/POD.jpg");
@@ -1849,7 +1833,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("mailNoStr", "签回单号");
             //map.put("childMailNoStr", "217276730473");
             //打印原寄地
-            map.put("destRouteLabel", "021WG-021NA");
+            map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
             //收件人相关信息
             if (orderHeaderForNormal.getCContact() == null || orderHeaderForNormal.getCContact().equals("")) {
                 map.put("consignerName", (orderHeaderForNormal.getConsigneeid()));
@@ -1869,9 +1853,9 @@ public class OrderHeaderForNormalService extends BaseService {
             //金额
             // map.put("codValue","9999.9");
             //进港信息<去识别不同的代码>
-            //map.put("codingMapping", "021NA");
+            map.put("codingMapping", orderHeaderForNormal.getUserdefine5());
             //出港中转场代码
-            // map.put("sourceTransferCode", "451W");
+            map.put("sourceTransferCode", orderHeaderForNormal.getUserdefine6());
 
             //寄件人的相关信息
             map.put("deliverName", "郑洁");

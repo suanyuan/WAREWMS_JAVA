@@ -23,6 +23,7 @@ public class SearchOutInvLocation implements Serializable {
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
     private String lotatt05;         //序列号
+    private String lotatt01Andlotatt02;  //生产日期和有效期(或者失效期)
     private String lotatt11;           //储存条件
     private String uom;               //单位
     private Double qty;              //件数

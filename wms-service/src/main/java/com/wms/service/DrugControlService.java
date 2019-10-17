@@ -30,6 +30,7 @@ public class DrugControlService extends BaseService {
 	private SearchBasCustomerMybatisDao searchBasCustomerMybatisDao;
 	@Autowired
 	private BasCodesService basCodesService;
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HHmmss");
 
 	/**************************************委托客户****************************************/
 	public EasyuiDatagrid<SearchBasCustomer> getPagedDatagrid(EasyuiDatagridPager pager, SearchBasCustomer query) {
@@ -55,6 +56,9 @@ public class DrugControlService extends BaseService {
 			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
 			// excel的sheetName
 			String sheetName = "委托客户";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="委托客户"+timeNow;
 			// excel要导出的数据
 			List<SearchBasCustomer> searchBasCustomerList = searchBasCustomerMybatisDao.querySearchCustomer(mybatisCriteria);
 			// 导出
@@ -78,7 +82,7 @@ public class DrugControlService extends BaseService {
 				 }
 				}
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName,-1,response,fileName);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
@@ -105,10 +109,10 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("registrationAuthorityL", "发证机关");
 		superClassMap.put("recordNo", "备案凭证号");
 		superClassMap.put("registrationAuthorityR", "发证机关");
-		superClassMap.put("clientStartDate", "合同开始时间");
-		superClassMap.put("clientEndDate", "合同结束时间");
+		superClassMap.put("clientStartDate", "开始委托时间");
+		superClassMap.put("clientEndDate", "停止委托时间");
 		superClassMap.put("clientTerm", "委托期限");
-		superClassMap.put("isChineseLabel", "是否贴中文标签");
+		superClassMap.put("isChineseLabel", "是否委托加贴中文标签");
 		superClassMap.put("clientContent", "委托业务范围");
 		return superClassMap;
 	}
@@ -141,6 +145,9 @@ public class DrugControlService extends BaseService {
             LinkedHashMap<String, String> fieldMap = getCustomerProductLeadToFiledPublicQuestionBank();
             // excel的sheetName
             String sheetName = "货主商品";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="货主商品"+timeNow;
             // excel要导出的数据
             List<CustomerProduct> searchBasCustomerList = searchBasCustomerMybatisDao.queryCustomerProduct(mybatisCriteria);
             // 导出
@@ -191,7 +198,7 @@ public class DrugControlService extends BaseService {
 
 
                 //将list集合转化为excle
-                ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+                ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName,-1,response,fileName);
                 System.out.println("导出成功~~~~");
             }
         } catch (ExcelException e) {
@@ -252,6 +259,9 @@ public class DrugControlService extends BaseService {
 			LinkedHashMap<String, String> fieldMap = getSearchInvLocationLeadToFiledPublicQuestionBank();
 			// excel的sheetName
 			String sheetName = "库存信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="库存信息"+timeNow;
 			// excel要导出的数据
 			List<SearchInvLocation> searchInvLocationList = searchBasCustomerMybatisDao.querySearchInvLocation(mybatisCriteria);
 			// 导出
@@ -298,7 +308,7 @@ public class DrugControlService extends BaseService {
 //                    }
 				}
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(searchInvLocationList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(searchInvLocationList, fieldMap, sheetName,-1,response,fileName);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
@@ -321,14 +331,14 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
 		superClassMap.put("lotatt04", "生产批号/序列号");
 		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
-		superClassMap.put("qty", "库存件数");
+//		superClassMap.put("qty", "库存件数");
 		superClassMap.put("qtyeach", "库存数量");
 		superClassMap.put("uom", "单位");
 		superClassMap.put("locationid", "库存地点(货架号)");
 		superClassMap.put("lotatt11", "储存条件");
 		superClassMap.put("lotatt10", "质量状态");
 		superClassMap.put("notes", "备注");
-		superClassMap.put("qty1", "换算率");
+//		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
 
@@ -364,6 +374,9 @@ public class DrugControlService extends BaseService {
 			LinkedHashMap<String, String> fieldMap = getSearchEnterInvLocationLeadToFiledPublicQuestionBank();
 			// excel的sheetName
 			String sheetName = "入库信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="入库信息"+timeNow;
 			// excel要导出的数据
 			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocation(mybatisCriteria);
 			// 导出
@@ -402,7 +415,7 @@ public class DrugControlService extends BaseService {
 					}
 				}
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
@@ -426,14 +439,14 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
 		superClassMap.put("lotatt04", "生产批号/序列号");
 		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
-		superClassMap.put("qty", "库存件数");
-		superClassMap.put("qtyeach", "库存数量");
+//		superClassMap.put("qty", "库存件数");
+		superClassMap.put("qtyeach", "数量");
 		superClassMap.put("uom", "单位");
 		superClassMap.put("lotatt11", "储存条件");
 		superClassMap.put("locationid", "库存地点(货架号)");
 		superClassMap.put("lotatt10", "质量状态");
 		superClassMap.put("notes", "备注");
-		superClassMap.put("qty1", "换算率");
+//		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
 
@@ -469,6 +482,9 @@ public class DrugControlService extends BaseService {
             LinkedHashMap<String, String> fieldMap = getSearchOutInvLocationLeadToFiledPublicQuestionBank();
             // excel的sheetName
             String sheetName = "出库信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="出库信息"+timeNow;
             // excel要导出的数据
             List<SearchOutInvLocation> searchOutInvLocationList = searchBasCustomerMybatisDao.querySearchOutInvLocation(mybatisCriteria);
             // 导出
@@ -497,7 +513,7 @@ public class DrugControlService extends BaseService {
                     }
                 }
                 //将list集合转化为excle
-                ExcelUtil.listToExcel(searchOutInvLocationList, fieldMap, sheetName, response);
+                ExcelUtil.listToExcel(searchOutInvLocationList, fieldMap, sheetName,-1,response,fileName);
                 System.out.println("导出成功~~~~");
             }
         } catch (ExcelException e) {
@@ -520,16 +536,17 @@ public class DrugControlService extends BaseService {
         superClassMap.put("lotatt15", "生产企业");
         superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
         superClassMap.put("lotatt04", "生产批号/序列号");
+		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
 		superClassMap.put("lotatt11", "储存条件");
 		superClassMap.put("uom", "单位");
-		superClassMap.put("qty", "库存件数");
-		superClassMap.put("qtyeach", "库存数量");
+//		superClassMap.put("qty", "库存件数");
+		superClassMap.put("qtyeach", "数量");
 		superClassMap.put("consigneeID", "收货客户名称");
 		superClassMap.put("caddress1", "收货地址");
 		superClassMap.put("contact", "联系人");
         superClassMap.put("ctel1", "联系电话");
         superClassMap.put("notes", "备注");
-        superClassMap.put("qty1", "换算率");
+//        superClassMap.put("qty1", "换算率");
         return superClassMap;
     }
 
@@ -579,6 +596,9 @@ public class DrugControlService extends BaseService {
 			LinkedHashMap<String, String> fieldMap = getBasCustomerHistoryLeadToFiledPublicQuestionBank();
 			// excel的sheetName
 			String sheetName = "历史委托客户";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="历史委托客户"+timeNow;
 			// excel要导出的数据
 			List<SearchBasCustomer> searchBasCustomerList = searchBasCustomerMybatisDao.querySearchBasCustomerHistory(mybatisCriteria);
 			// 导出
@@ -602,7 +622,7 @@ public class DrugControlService extends BaseService {
 					}
 				}
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName,-1,response,fileName);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
@@ -629,10 +649,10 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("registrationAuthorityL", "发证机关");
 		superClassMap.put("recordNo", "备案凭证号");
 		superClassMap.put("registrationAuthorityR", "发证机关");
-		superClassMap.put("clientStartDate", "合同开始时间");
-		superClassMap.put("clientEndDate", "合同结束时间");
+		superClassMap.put("clientStartDate", "开始委托时间");
+		superClassMap.put("clientEndDate", "停止委托时间");
 		superClassMap.put("clientTerm", "委托期限");
-		superClassMap.put("isChineseLabel", "是否贴中文标签");
+		superClassMap.put("isChineseLabel", "是否委托加贴中文标签");
 		superClassMap.put("clientContent", "委托业务范围");
 		return superClassMap;
 	}
@@ -666,6 +686,9 @@ public class DrugControlService extends BaseService {
 			LinkedHashMap<String, String> fieldMap = getCustomerProductHistoryLeadToFiledPublicQuestionBank();
 			// excel的sheetName
 			String sheetName = "历史货主商品";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="历史货主商品"+timeNow;
 			// excel要导出的数据
 			List<CustomerProduct> searchBasCustomerList = searchBasCustomerMybatisDao.queryCustomerHistoryProduct(mybatisCriteria);
 			// 导出
@@ -686,7 +709,7 @@ public class DrugControlService extends BaseService {
 
 
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName,-1,response,fileName);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
@@ -713,6 +736,88 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("unit", "单位");
 		superClassMap.put("storageCondition", "储存条件");
 
+		return superClassMap;
+	}
+
+
+
+	/**************************************历史入库信息****************************************/
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationHistoryDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		EasyuiDatagrid<SearchEnterInvLocation> datagrid = new EasyuiDatagrid<SearchEnterInvLocation>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationHistory(mybatisCriteria);
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationHistoryCount(mybatisCriteria));
+		datagrid.setRows(searchEnterInvLocationList);
+		return datagrid;
+	}
+
+	public void exportSearchEnterInvLocationHistoryDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getSearchEnterInvLocationHistoryLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "历史入库信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="入库信息"+timeNow;
+			// excel要导出的数据
+			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationHistory(mybatisCriteria);
+			// 导出
+			if (searchEnterInvLocationList == null || searchEnterInvLocationList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (SearchEnterInvLocation s: searchEnterInvLocationList) {
+//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						s.setLotatt03(sdf.format(sdf.parse(s.getLotatt03())));
+
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getSearchEnterInvLocationHistoryLeadToFiledPublicQuestionBank() {
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("type", "入库类型");
+		superClassMap.put("lotatt12", "产品名称");
+		superClassMap.put("descrc", "规格/型号");
+		superClassMap.put("lotatt15", "生产企业");
+		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
+		superClassMap.put("lotatt04", "生产批号/序列号");
+		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
+//		superClassMap.put("qty", "库存件数");
+		superClassMap.put("qtyeach", "数量");
+		superClassMap.put("uom", "单位");
+		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("locationid", "库存地点(货架号)");
+		superClassMap.put("lotatt10", "质量状态");
+		superClassMap.put("notes", "备注");
+//		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
 }
