@@ -171,5 +171,8 @@ where 1=1
         select <include refid="Base_Column_List" />
         from bas_codes where codeid = 'SO_STS' and code = #{code}
     </select>
-  	
+	<select id="query" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" />
+		from bas_codes where codeid = 'UOM' and code = #{code}
+	</select>
 </mapper>   

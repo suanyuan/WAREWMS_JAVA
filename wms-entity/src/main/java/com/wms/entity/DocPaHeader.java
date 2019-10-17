@@ -2,8 +2,9 @@ package com.wms.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,4 +56,13 @@ public class DocPaHeader  implements Serializable {
 
 	private String warehouseid;
 
+
+	//头单信息
+	private String asnreference1; //客户单号1
+	private String asnreference2;//客户单号2
+	private String descrC;//货主
+	private String descrC1;//供应商
+
+
+	private  List<DocPaDetails> detls;
 }

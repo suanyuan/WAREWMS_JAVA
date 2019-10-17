@@ -1,26 +1,34 @@
 package com.wms.controller;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
+
+import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.DocPaHeader;
 import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.DocPaHeaderQuery;
 import com.wms.service.DocPaHeaderService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
 import com.wms.vo.DocPaHeaderVO;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.vo.Json;
 import com.wms.vo.form.DocPaHeaderForm;
-import com.wms.query.DocPaHeaderQuery;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("docPaHeaderController")
@@ -89,20 +97,24 @@ public class DocPaHeaderController {
 
 	/**
 	 * 打印上架任务单
-	 * @param response
-	 * @param orderCodeList
-	 * @throws Exception
+	 *
 	 */
 	@Login
 	@RequestMapping(params = "exportBatchPdf")
-	public void exportBatchPdf(HttpServletResponse response, String orderCodeList) throws Exception {
-		try {
-			//entryOrderHeaderForCrossDockingService.exportBatchPdf(response, orderCodeList);
+	public String exportBatchPdf(Model model,@RequestParam(value = "pano") String pano) {
 
-			docPaHeaderService.exportBatchPdf(response,orderCodeList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+        String[] s = pano.split(",");
+		List<DocPaHeader> docPaHeaderList = new ArrayList<DocPaHeader>();
+        for (String a:s) {
+            docPaHeaderList.add(docPaHeaderService.printPaTaskPdf(a));
+        }
+
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docPaHeaderList);
+		model.addAttribute("url", "WEB-INF/jasper/reportDocPaHeader.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
 	}
 
     /**

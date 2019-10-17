@@ -74,6 +74,12 @@ public class InvLotAttService extends BaseService {
 		return json;
 	}
 
+    public InvLotAtt InvLotAttInfo(String id) {
+        Json json = new Json();
+        InvLotAtt invLotAtt = invLotAttDao.queryById(id);
+        return invLotAtt;
+    }
+
     /**
      * 导入预入库通知单的时候，判断下是否有这个批次记录,如果有就返回，没有就插入新的
      * @param docAsnDetail customerid, sku, lotatt01~18

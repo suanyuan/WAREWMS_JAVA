@@ -188,7 +188,7 @@ var printQcSearch = function(){
 			msg: "<spring:message code='common.message.export.failed'/>",
 			title: "<spring:message code='common.message.prompt'/>"
 		});
-	}
+        com.lowagie.text	}
 
 
 

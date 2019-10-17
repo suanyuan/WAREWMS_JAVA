@@ -333,7 +333,7 @@ where 1=1
     <select id="queryPaDetialsByQcno" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select a.* from doc_pa_details a
         left join doc_qc_header b on b.pano = a.pano
-        where b.qcno = #{qcno} order by a.palineno asc
+        where b.pano = #{qcno} order by a.palineno asc
     </select>
 
     <!--<select id="querySumQty4SameBatch" parameterType="java.util.Map" resultMap="BaseResultMap">-->

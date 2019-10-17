@@ -1,6 +1,5 @@
 package com.wms.service;
 
-import com.sun.org.apache.xml.internal.resolver.readers.DOMCatalogParser;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -8,7 +7,6 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasSkuQuery;
-import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.DocQcHeaderQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.DocQcHeaderVO;
