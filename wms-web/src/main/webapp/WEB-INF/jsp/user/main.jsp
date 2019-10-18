@@ -35,6 +35,7 @@ $(function() {
 		idField : 'id',
 		treeField : 'userName',
 		columns : [[
+			{field: 'id',		title: "用户ID",	width: 120 },
 			{field: 'userName',		title: "<spring:message code='adminUser.datagrid.userName'/>",	width: 120 },
 			{field: 'gender',		title: "<spring:message code='adminUser.datagrid.gender'/>",	width: 40 ,
 				formatter:function(value,rowData,rowIndex){
@@ -464,7 +465,7 @@ var clearParentName = function(){
 				<tr>
 					<th>GSP审核权限</th>
 					<td colspan="7">
-						<input type="text" id="userGrade" name="userGrade" class="easyui-combobox" size='96' data-options="	required:true,
+						<input type="text" id="userGrade" name="userGrade" class="easyui-combobox" size='96' data-options="	required:false,
 																															panelHeight:'auto',
 																															multiple:'multiple',
 																															editable:false,

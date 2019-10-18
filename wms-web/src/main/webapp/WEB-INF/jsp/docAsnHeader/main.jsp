@@ -1238,8 +1238,8 @@ var detailsReceive = function(){
 
 /* 明细提交按钮 */
 var detailsCommit = function(){
-    console.log("------------");
-	var asnstatus = $("#ezuiDetailsDialog #linestatus").combobox('getValue');
+
+	var asnstatus = $("#ezuiDialog #asnstatus").combobox('getValue');
 	if (asnstatus == '00' || asnstatus == '30' || asnstatus == '40') {
         var url = '';
         if (processType == 'edit') {
@@ -1275,7 +1275,8 @@ var detailsCommit = function(){
 						msg = '<font color="red">' + result.msg + '</font>';
 					}
 				} catch (e) {
-					msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+					// msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+					msg = '<font color="red">' + JSON.stringify(data) + '</font>';
 					msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
 				} finally {
 					$.messager.show({

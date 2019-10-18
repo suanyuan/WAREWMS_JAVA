@@ -122,8 +122,8 @@
             <a onclick='detailsDel();' id='ezuiDetailsBtn_del' class='easyui-linkbutton'
                data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message
                     code='common.button.skuDelete'/></a>
-            <a onclick='detailsReceive();' id='ezuiDetailsBtn_receive' class='easyui-linkbutton'
-               data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>确认收货</a>
+<%--            <a onclick='detailsReceive();' id='ezuiDetailsBtn_receive' class='easyui-linkbutton'--%>
+<%--               data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>确认收货</a>--%>
             <a onclick='clearDatagridSelected("#ezuiDetailsDatagrid");' class='easyui-linkbutton'
                data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
                     code='common.button.cancelSelect'/></a>
