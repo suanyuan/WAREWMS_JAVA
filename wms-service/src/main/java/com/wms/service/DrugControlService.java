@@ -768,7 +768,7 @@ public class DrugControlService extends BaseService {
 			String sheetName = "历史入库信息";
 			//导出表格名称
 			String timeNow=sdf.format(new Date());
-			String fileName="入库信息"+timeNow;
+			String fileName="历史入库信息"+timeNow;
 			// excel要导出的数据
 			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationHistory(mybatisCriteria);
 			// 导出
