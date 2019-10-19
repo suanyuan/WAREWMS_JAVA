@@ -30,10 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("docOrderHeaderController")
@@ -257,22 +254,25 @@ public class DocOrderHeaderController {
 		return orderHeaderForNormalService.getRefOut();
 	}
 
+
 	/**
 	 * 打印拣货
-	 * @param response
-	 * @param orderCodeList
-	 * @throws Exception
 	 */
 	@Login
 	@RequestMapping(params = "exportPackingPdf")
-	public void exportPackingPdf(HttpServletResponse response, String orderCodeList) throws Exception {
-		try {
-			orderHeaderForNormalService.exportPickingPdf(response,orderCodeList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public String exportPackingPdf(Model model,@RequestParam(value = "orderno") String orderno){
 
+		String[] s = orderno.split(",");
+		List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
+		for (String a:s) {
+			orderHeaderForNormal.add(orderHeaderForNormalService.exportPickingPdf(a));
+		}
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
+		model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader.jasper");
+		model.addAttribute("format", Constant.JASPER_PDF);
+		model.addAttribute("jrMainDataSource", jrDataSource);
+		return "iReportView";
+	}
 	/**
 	 * 随货清单
 	 * @param response

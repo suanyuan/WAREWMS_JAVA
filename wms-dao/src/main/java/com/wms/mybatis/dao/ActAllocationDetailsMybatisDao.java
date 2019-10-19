@@ -3,9 +3,9 @@ package com.wms.mybatis.dao;
 import com.wms.entity.ActAllocationDetails;
 import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.ActAllocationDetailsQuery;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -41,4 +41,5 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	void callPickingProcedure(PdaOrderPackingForm form);
 
 	int queryPackedNum(ActAllocationDetailsQuery query);
+	int  queryByorder (Map<String, Object> map);
 }

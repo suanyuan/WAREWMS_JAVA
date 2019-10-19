@@ -993,23 +993,19 @@ var cancel = function(){
 
 /* 批量打印拣货单按钮 */
 var printPacking = function(){
-	orderList = null;
-	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
-	$.each(checkedItems, function(index, item){
-		if(item.orderStatusName == "创建订单"){
-            showMsg("创建状态订单无法打印拣货单");
-			return;
+	var rows = $('#ezuiDatagrid').datagrid('getSelections');
+	var orderno="";
+	if (rows.length > 0) {
+		for (var i = 0; i < rows.length; i++) {
+			orderno += rows[i].orderno+",";
 		}
-		if (orderList == null) {
-			orderList = item.orderno;
-		} else {
-			orderList = orderList + ',' + item.orderno;
-		}
-	});
-	if (orderList == null) {
-		return;
+		/*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
+		ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderno="+orderno);
+	} else {
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
 	}
-	window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
 };
 /* 打印随货清单 */
 var printAccompanying = function () {
