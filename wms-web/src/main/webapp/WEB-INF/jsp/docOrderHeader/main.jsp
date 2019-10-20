@@ -1000,7 +1000,7 @@ var printPacking = function(){
 			orderno += rows[i].orderno+",";
 		}
 		/*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
-		ajaxDownloadFile(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderno="+orderno);
+        window.open(sy.bp()+"/docOrderHeaderController.do?exportPackingPdf&orderno="+orderno);
 	} else {
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
