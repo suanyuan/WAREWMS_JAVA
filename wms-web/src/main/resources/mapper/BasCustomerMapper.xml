@@ -901,9 +901,12 @@ where 1=1
 	<!--</select>-->
 
 	<select id="querySupplierByCustomer" resultMap="BaseResultMap"  parameterType="Object">
-	select b.* from bas_customer b left join gsp_supplier s on b.bankaccount = s.supplier_id
-	where  s.is_use='1' and
-	 s.costomerid = #{customerId,jdbcType=VARCHAR}
+
+
+		select b.* from bas_customer b
+		left join gsp_supplier s on b.enterprise_id = s.enterprise_id
+		where s.is_use='1' and b.CUSTOMER_TYPE = 'VE' and s.costomerid = #{customerId,jdbcType=VARCHAR}
+
 	</select>
 
 	<select id="querySupplierByBankaccount" resultMap="BaseResultMap"  parameterType="Object">
