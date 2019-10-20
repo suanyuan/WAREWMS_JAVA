@@ -996,7 +996,14 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     public OrderHeaderForNormal exportPickingPdf(String orderno) {
+
         OrderHeaderForNormal ohForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+
+        //TODO 出库单号 不叫出库单元
+        //TODO 收货单位 不要了，在Jasper中删除，目前显示的是收获单元
+        //TODO 发货日期 删掉
+        //TODO 结算方式 不叫"快速结算方式"，就算要也是快递结算方式
+
         //出库单元 ohForNormal.getOrderno();
         //收货单元 不要了
         //收获地址 ohForNormal.getCAddress1();
@@ -1022,65 +1029,80 @@ public class OrderHeaderForNormalService extends BaseService {
         double a=0;
         double b=0;
         Integer c=0;
+        OrderDetailsForNormal docOrderDetail;
+        List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
         for(int i=0;i<odForNormalList.size();i++){
-            OrderDetailsForNormal odForNormal = odForNormalList.get(i);
+
+            docOrderDetail = new OrderDetailsForNormal();
+            BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
             //货位 odForNormal.getLocation();
             //产品代码 odForNormal.getSku();
             //产品名称
-            InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(odForNormal.getLotnum());
+            InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
             if(invLotAtt != null){
-                odForNormal.setLotatt12(invLotAtt.getLotatt12());
+                docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
                 //注册证号/备案凭证书
-                odForNormal.setLotatt06(invLotAtt.getLotatt06());
+                docOrderDetail.setLotatt06(invLotAtt.getLotatt06());
                 //生产批号
-                odForNormal.setLotatt04(invLotAtt.getLotatt04());
+                docOrderDetail.setLotatt04(invLotAtt.getLotatt04());
                 //序列号
-                odForNormal.setLotatt05(invLotAtt.getLotatt05());
+                docOrderDetail.setLotatt05(invLotAtt.getLotatt05());
                 //生产日期
-                odForNormal.setLotatt01(invLotAtt.getLotatt01());
+                docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
                 //有效期/失效期
-                odForNormal.setLotatt02(invLotAtt.getLotatt02());
+                docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
             }
             Map<String,Object> param1 = new HashMap<>();
-            param1.put("customerid",odForNormal.getCustomerid());
-            param1.put("sku",odForNormal.getSku());
+            param1.put("customerid",docOrderDetail.getCustomerid());
+            param1.put("sku",docOrderDetail.getSku());
             BasSku basSku1 =  basSkuMybatisDao.queryById(param1);
             //数量 qtyallocated   odForNormal.getQtyallocated();
             //件数 qtyallocatedEach
-            Map<String,Object> param = new HashMap<>();
-            param.put("orderno",odForNormal.getOrderno());
-            param.put("sku",odForNormal.getSku());
-            int d = actAllocationDetailsMybatisDao.queryByorder(param);
-            odForNormal.setQtyallocatedEach(Double.valueOf(d));
-            a = a+odForNormal.getQtyallocated();
-            b = b+odForNormal.getQtyallocatedEach();
-            odForNormal.setQtyorderedEachSum(a);//数量和
-            odForNormal.setQtyorderedSum(b);//件数和
-            if(basSku1 !=null){
-                //实拣数 null
-                //规格型号
-                odForNormal.setDescrc(basSku1.getDescrC());
-                //产品双证
-                if(basSku1.getSkuGroup7()=="0"){
-                    odForNormal.setDoublec("否");
-                }else{
-                    odForNormal.setDoublec("是");
+            MybatisCriteria allocationCriteria = new MybatisCriteria();
+            ActAllocationDetails allocationQuery = new ActAllocationDetails();
+            allocationQuery.setOrderno(docOrderDetail.getOrderno());
+            allocationQuery.setOrderlineno(docOrderDetail.getOrderlineno());
+            allocationCriteria.setCondition(BeanConvertUtil.bean2Map(allocationQuery));
+            List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(allocationCriteria);
+            for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
+
+                OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
+                BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
+                //库位
+                orderDetailsForNormal.setLocation(actAllocationDetails.getLocation());
+                orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
+                a = a+actAllocationDetails.getQty();
+                b = b+actAllocationDetails.getQtyEach();
+                orderDetailsForNormal.setQtyorderedEachSum(a);//数量和
+                orderDetailsForNormal.setQtyorderedSum(b);//件数和
+                if(basSku1 !=null){
+                    //实拣数 null
+                    //规格型号
+                    orderDetailsForNormal.setDescrc(basSku1.getDescrC());
+                    //产品双证
+                    if(basSku1.getSkuGroup7()=="0"){
+                        orderDetailsForNormal.setDoublec("否");
+                    }else{
+                        orderDetailsForNormal.setDoublec("是");
+                    }
+                    //附卡类别
+                    orderDetailsForNormal.setCard(basSku1.getSkuGroup2());
+                    //检验报告
+                    if(basSku1.getSkuGroup8()=="0"){
+                        orderDetailsForNormal.setReport("否");
+                    }else{
+                        orderDetailsForNormal.setReport("是");
+                    }
                 }
-                //附卡类别
-                odForNormal.setCard(basSku1.getSkuGroup2());
-                //检验报告
-                if(basSku1.getSkuGroup8()=="0"){
-                    odForNormal.setReport("否");
-                }else{
-                    odForNormal.setReport("是");
-                }
+                c = c+1;
+                orderDetailsForNormal.setIndex(c);
+
+                orderDetailsForNormalList.add(orderDetailsForNormal);
             }
-            c = c+1;
-            odForNormal.setIndex(c);
             //备注
         }
 
-        ohForNormal.setOrderDetailsForNormalList(odForNormalList);
+        ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
         return  ohForNormal;
        /* StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()) {

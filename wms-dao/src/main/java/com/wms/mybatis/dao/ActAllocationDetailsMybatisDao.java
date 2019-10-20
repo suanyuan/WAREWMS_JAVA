@@ -41,5 +41,6 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	void callPickingProcedure(PdaOrderPackingForm form);
 
 	int queryPackedNum(ActAllocationDetailsQuery query);
-	int  queryByorder (Map<String, Object> map);
+
+//	int  queryByorder (Map<String, Object> map);
 }
