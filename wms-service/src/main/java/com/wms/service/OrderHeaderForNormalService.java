@@ -1004,7 +1004,7 @@ public class OrderHeaderForNormalService extends BaseService {
         //TODO 发货日期 删掉
         //TODO 结算方式 不叫"快速结算方式"，就算要也是快递结算方式
 
-        //出库单元 ohForNormal.getOrderno();
+        //出库单号 ohForNormal.getOrderno();
         //收货单元 不要了
         //收获地址 ohForNormal.getCAddress1();
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
@@ -1022,7 +1022,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
         //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
-        //快速结算方式 暂缓
         //拣货人 null
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
 
@@ -1070,6 +1069,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
                 //库位
                 orderDetailsForNormal.setLocation(actAllocationDetails.getLocation());
+
+                orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
                 orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
                 a = a+actAllocationDetails.getQty();
                 b = b+actAllocationDetails.getQtyEach();
@@ -1080,18 +1081,18 @@ public class OrderHeaderForNormalService extends BaseService {
                     //规格型号
                     orderDetailsForNormal.setDescrc(basSku1.getDescrC());
                     //产品双证
-                    if(basSku1.getSkuGroup7()=="0"){
-                        orderDetailsForNormal.setDoublec("否");
-                    }else{
+                    if(basSku1.getSkuGroup7().equals("1")){
                         orderDetailsForNormal.setDoublec("是");
+                    }else{
+                        orderDetailsForNormal.setDoublec("否");
                     }
                     //附卡类别
                     orderDetailsForNormal.setCard(basSku1.getSkuGroup2());
-                    //检验报告
-                    if(basSku1.getSkuGroup8()=="0"){
-                        orderDetailsForNormal.setReport("否");
-                    }else{
+                    //质量合格证
+                    if(basSku1.getSkuGroup8().equals("1")){
                         orderDetailsForNormal.setReport("是");
+                    }else{
+                        orderDetailsForNormal.setReport("否");
                     }
                 }
                 c = c+1;
