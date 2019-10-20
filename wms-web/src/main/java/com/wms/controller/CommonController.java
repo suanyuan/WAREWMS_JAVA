@@ -74,6 +74,7 @@ public class CommonController {
         } catch (IOException e) {
             uploadResult.setSuccess(false);
             uploadResult.setComment("uploadFile 上传文件 error");
+            e.printStackTrace();
         } finally {
             if (stream != null) {
                 try {

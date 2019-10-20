@@ -681,7 +681,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
                     return json;
                 }
-                System.err.println("//解析响应报文" + shunFengResponse.toString());
+//                System.err.println("//解析响应报文" + shunFengResponse.toString());
                 //解析后修改到表中
                 OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
                 orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
