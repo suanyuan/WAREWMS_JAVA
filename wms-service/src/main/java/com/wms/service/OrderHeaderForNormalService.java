@@ -1055,8 +1055,15 @@ public class OrderHeaderForNormalService extends BaseService {
             param1.put("customerid",docOrderDetail.getCustomerid());
             param1.put("sku",docOrderDetail.getSku());
             BasSku basSku1 =  basSkuMybatisDao.queryById(param1);
-            //数量 qtyallocated   odForNormal.getQtyallocated();
-            //件数 qtyallocatedEach
+            String notes = basSku1.getReservedfield07();
+            if(notes.equals("LD")){
+                ohForNormal.setNotes("冷冻");
+            }else if (notes.equals("FLL")){
+                ohForNormal.setNotes("非冷链");
+            }else if (notes.equals("LC")){
+                ohForNormal.setNotes("冷藏");
+            }
+
             MybatisCriteria allocationCriteria = new MybatisCriteria();
             ActAllocationDetails allocationQuery = new ActAllocationDetails();
             allocationQuery.setOrderno(docOrderDetail.getOrderno());
@@ -1069,8 +1076,9 @@ public class OrderHeaderForNormalService extends BaseService {
                 BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
                 //库位
                 orderDetailsForNormal.setLocation(actAllocationDetails.getLocation());
-
+                //数量
                 orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
+                //件数
                 orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
                 a = a+actAllocationDetails.getQty();
                 b = b+actAllocationDetails.getQtyEach();
@@ -1094,13 +1102,15 @@ public class OrderHeaderForNormalService extends BaseService {
                     }else{
                         orderDetailsForNormal.setReport("否");
                     }
+                    //备注
+
                 }
                 c = c+1;
                 orderDetailsForNormal.setIndex(c);
 
                 orderDetailsForNormalList.add(orderDetailsForNormal);
             }
-            //备注
+
         }
 
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
