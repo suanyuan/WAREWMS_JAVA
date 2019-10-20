@@ -258,7 +258,7 @@ public class DocAsnHeaderService extends BaseService {
                         append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
                         append(" [产品代码]:").append(docAsnDetail.getSku()).
                         append(" 查无产品档案数据");
-            } else if (StringUtil.fixNull(basSku.getSkuGroup7()).equals("1")) {//产品有质量合格证
+            } else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1")) {//产品有质量合格证
 
                 if (StringUtil.isEmpty(docAsnDetail.getLotatt04())) {//质量合格证是有对应的生产批号的
 
