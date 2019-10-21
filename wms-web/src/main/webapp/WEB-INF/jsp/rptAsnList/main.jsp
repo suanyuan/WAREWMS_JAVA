@@ -50,8 +50,8 @@ $(function() {
 			{field: 'lotatt04',		    title: '批号',	width: 130 },
 			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
 			{field: 'notes',	        title: '备注',	width: 100},
-			{field: 'planPrice',		        title: '计划价',	width: 200},
-			{field: 'qty1',		        title: '换算率 ',	width: 70},
+			{field: 'planPrice',		title: '计划价',	width: 200},
+			// {field: 'qty1',		        title: '换算率 ',	width: 70},
 
 
 		]],

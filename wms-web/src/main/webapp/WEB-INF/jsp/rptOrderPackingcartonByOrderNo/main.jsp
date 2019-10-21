@@ -44,7 +44,7 @@ $(function() {
 			{field: 'sku', title: '产品代码', width: 150},
 			{field: 'lotatt12', title: '产品名称', width: 200},
 			{field: 'lotatt06', title: '注册证号', width: 200},
-			{field: 'skudesce', title: '规格/型号', width: 150},
+			{field: 'skudescrc', title: '规格/型号', width: 150},
 			{field: 'lotatt04', title: '生产批号', width: 110},
 			{field: 'lotatt07',title: '灭菌批号',	width: 110 },
 			{field: 'lotatt05', title: '序列号', width: 110},
@@ -66,7 +66,7 @@ $(function() {
 			{field: 'lotatt14', title: '入库单号', width: 100},
 			{field: 'lotatt09', title: '产品属性', width: 100,formatter:YP_TYPstatusFormatter},
 			{field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
-			{field: 'qty1', title: '换算率', width: 100}
+			// {field: 'qty1', title: '换算率', width: 100}
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -94,7 +94,7 @@ var doSearch = function(){
 		// lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
 		lotatt12:$('#lotatt12').val(),
-		skudesce:$('#descrc').val(),
+		skudescrc:$('#descrc').val(),
 		lotatt04 : $('#lotatt04').val(),
 	});
 };
@@ -110,7 +110,7 @@ var doExport = function(){
 		// param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
 		param.put("lotatt12",$('#lotatt12').val());
-		param.put("skudesce",$('#descrc').val());
+		param.put("skudescrc",$('#descrc').val());
 		param.put("lotatt04",$('#lotatt04').val());
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/statisticalAnalysisController.do?exportOrderPackingcartonByOrderNoDataToExcel", param);

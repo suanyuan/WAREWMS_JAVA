@@ -30,7 +30,7 @@ public class RptOrderPackingcartonByOrderNo implements Serializable {
 
     private String lotnum;
 
-    private String skudesce;//规格型号
+    private String skudescrc;//规格型号
 
     private String description;//复核说明
 

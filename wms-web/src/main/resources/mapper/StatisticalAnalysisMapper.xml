@@ -111,8 +111,8 @@
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and c.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
-            <if test="condition.skudesce != null and condition.skudesce != ''" >
-                and c.skudesce like concat('%', #{condition.skudesce},'%')
+            <if test="condition.skudescrc != null and condition.skudescrc != ''" >
+                and s.descr_c like concat('%', #{condition.skudescrc},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and c.lotatt04 like concat('%', #{condition.lotatt04},'%')
@@ -289,20 +289,19 @@
 <!-- 销售出库单列表 -->
     <select id="querySalesSoList"  resultType="com.wms.entity.RptSalesSo" parameterType="Object">
         SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+         c.lotatt14 sourceOrder,aa.soreference1 soOrderNum,aa.`orderno` soOrderNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soDate,bb1.codename_c soType,
+         a.`customerid`,a.`sku`,c.lotatt12,s.`descr_c` descrc,b.qty,bb.codename_c uom,c.lotatt04,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
+         aa.addwho,aa.editwho reviewWho,aa.c_address4 trackingNumber,p.qty1
+        FROM  `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE aa.sostatus='99'
         <include refid="Example_Where_Clause3"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
@@ -310,19 +309,17 @@
     </select>
 <!-- 销售出库单列表 列表总数-->
 <select id="querySalesSoListCount" resultType="java.lang.Integer" parameterType="Object">
-        select count(1)
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'
+   select count(1)
+    FROM  `doc_order_details` a
+    LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+    LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+    LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
+    LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+    LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+    LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+    LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+    LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+    WHERE aa.sostatus='99'
         <include refid="Example_Where_Clause3"/>
     </select>
 
@@ -333,13 +330,13 @@
 <!-- 订单装箱清单-按发运单号 -->
     <select id="queryOrderPackingcartonByOrderNo"  resultType="com.wms.entity.RptOrderPackingcartonByOrderNo" parameterType="Object">
         SELECT
-        c.*,info.*,b.`DESCR_C` shippershortname,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.codename_c uom
+        c.*,info.*,b.`DESCR_C` shippershortname,s.descr_c skudescrc,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.codename_c uom
         FROM doc_order_packing_carton c
-        INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
-        INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
-        INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
-        INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
-        INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+        LEFT JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+        LEFT JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+        LEFT JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN (select * from `bas_codes` where  codeid='uom') bc ON s.defaultreceivinguom=bc.code
         <include refid="Example_Where_Clause4"/>
         order by  c.orderno desc,c.traceid

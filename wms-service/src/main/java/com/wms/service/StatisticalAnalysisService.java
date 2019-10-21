@@ -10,6 +10,7 @@ import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.StatisticalAnalysisMybatisDao;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -283,7 +284,13 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<RptSalesSo> rptRptSalesSoList= statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
 		for (RptSalesSo s: rptRptSalesSoList) {
-
+             //计算数量
+			if(s.getQty1()!=null&&s.getQty()!=null) {
+				s.setQtyeach(s.getQty1() * s.getQty());
+			}
+			//仓库编码
+			s.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+			s.setWarehouse(SfcUserLoginUtil.getLoginUser().getWarehouse().getWarehouseName());
 		}
 		datagrid.setTotal((long) statisticalAnalysisMybatisDao.querySalesSoListCount(mybatisCriteria));
 		datagrid.setRows(rptRptSalesSoList);
@@ -308,7 +315,13 @@ public class StatisticalAnalysisService extends BaseService {
 				System.out.println("题库为空");
 			}else {
 				for (RptSalesSo s: rptRptSalesSoList) {
-
+					//计算数量
+					if(s.getQty1()!=null&&s.getQty()!=null) {
+						s.setQtyeach(s.getQty1() * s.getQty());
+					}
+					//仓库编码
+					s.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+					s.setWarehouse(SfcUserLoginUtil.getLoginUser().getWarehouse().getWarehouseName());
 				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(rptRptSalesSoList, fieldMap, sheetName, response);
@@ -455,7 +468,7 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("sku", "产品代码");
 		superClassMap.put("lotatt12", "产品名称");
 		superClassMap.put("lotatt06", "注册证号");
-		superClassMap.put("skudesce", "规格/型号");
+		superClassMap.put("skudescrc", "规格/型号");
 		superClassMap.put("lotatt04", "生产批号");
 		superClassMap.put("lotatt07", "灭菌批号");
 		superClassMap.put("lotatt05", "序列号");

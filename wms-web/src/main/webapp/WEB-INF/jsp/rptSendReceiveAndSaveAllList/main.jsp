@@ -36,8 +36,8 @@ $(function() {
 		columns : [[
 			{field: 'warehouse',		title: '仓库名称',	width: 150 },
 			{field: 'sku',		        title: '存货编码',	width: 150 },
-			{field: 'lotatt12',		    title: '存货名称',	width: 150 },
-			{field: 'descrc',		    title: '规格型号',	width: 100 },
+			{field: 'lotatt12',		    title: '存货名称',	width: 200 },
+			{field: 'descrc',		    title: '规格型号',	width: 150 },
 			{field: 'uom',              title: '主计量单位',	width: 100 },
 			{field: 'skuCategoryName',	title: '存货分类名称',	width: 150 },
 			{field: 'startResultQty',	title: '期初结存件数',	width: 100 },
@@ -45,7 +45,7 @@ $(function() {
 			{field: 'soqtySum',		    title: '总计_出库件数',	width: 100 },
 			{field: 'endResultQty',		title: '期末结存件数',	width: 100 },
 
-			{field: 'qty1',		        title: '换算率 ',	width: 70},
+			// {field: 'qty1',		        title: '换算率 ',	width: 70},
 
 
 		]],

@@ -11,7 +11,7 @@
 	<result column="cartonno" property="cartonno"/>
 	<result column="customerid" property="customerid"/>
 	<result column="sku" property="sku"/>
-	<result column="skudesce" property="skudesce"/>
+	<result column="descrc" property="skudesce"/>
 	<result column="qty" property="qty"/>
 	<result column="allocationdetailsid" property="allocationdetailsid"/>
 	<result column="lotnum" property="lotnum"/>
@@ -79,7 +79,7 @@ where 1=1
 	    and c.sku like concat('%',#{condition.sku},'%')
 	</if>
 	<if test="condition.skudesce != null and condition.skudesce != ''" >
-	    and c.skudesce like concat('%',#{condition.skudesce},'%')
+	    and s.descr_c like concat('%',#{condition.skudesce},'%')
 	</if>
 	<if test="condition.qty != null and condition.qty != ''" >
 	    and c.qty =  #{condition.qty}
@@ -311,24 +311,24 @@ where 1=1
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1)
 	FROM doc_order_packing_carton c
-	INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
-	INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
-	INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
-	INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
-	INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+	LEFT JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+	LEFT JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+	LEFT JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	<include refid="Example_Where_Clause"/>
 </select>
   	
 <!-- 查询复核记录查询列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	c.*,info.*,b.`DESCR_C` shippershortname,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.codename_c uom
+	c.*,info.*,b.`DESCR_C` shippershortname,s.descr_c descrc,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.codename_c uom
 	FROM doc_order_packing_carton c
-	INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
-	INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
-	INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
-	INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
-	INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+	LEFT JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+	LEFT JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+	LEFT JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+	LEFT JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+	LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 	LEFT JOIN `bas_codes`  bc ON s.defaultreceivinguom=bc.code
 	<include refid="Example_Where_Clause"/>
     and bc.codeid='uom'
@@ -341,13 +341,13 @@ where 1=1
 	<!-- 打印复核记录查询列表 -->
 	<select id="queryByListPrinth" resultMap="BaseResultMap"  parameterType="Object">
 		SELECT
-		c.*,info.*,b.`DESCR_C` shippershortname,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.code uom
+		c.*,info.*,b.`DESCR_C` shippershortname,s.descr_c descrc,s.`reservedfield06`,p.`qty1`,bb.`DESCR_C` lotatt08Name,bc.code uom
 		FROM doc_order_packing_carton c
-		INNER JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
-		INNER JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
-		INNER JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
-		INNER JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
-		INNER JOIN `bas_package` p ON s.`packid`=p.`packid`
+		LEFT JOIN `doc_order_packing_carton_info` info ON info.orderno=c.`orderno` AND info.`traceid`=c.`traceid`
+		LEFT JOIN `bas_customer` b ON b.`CUSTOMERID`=c.`customerid`
+		LEFT JOIN `bas_customer` bb ON bb.`CUSTOMERID`=c.`lotatt08`
+		LEFT JOIN `bas_sku` s ON c.`sku`=s.`sku` AND c.`customerid`=s.`customerid`
+		LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
 		LEFT JOIN bas_codes bc ON s.defaultreceivinguom = bc.`code` AND bc.codeid = 'uom'
 		<include refid="Example_Where_Clause"/>
 		order by  c.orderno desc,c.traceid
