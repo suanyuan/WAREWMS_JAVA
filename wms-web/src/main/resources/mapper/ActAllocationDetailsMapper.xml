@@ -478,5 +478,10 @@ where 1=1
         where a.orderno = #{orderno} and a.customerid = #{customerid} and a.sku = #{sku} and a.lotnum = #{lotnum}
         and a.packflag = 1
     </select>
+    <!--<select id="queryByorder" parameterType="java.util.Map" resultType="integer">-->
+        <!--select sum(qty_Each)-->
+        <!--from  act_allocation_details-->
+        <!--where orderno = #{orderno} and sku=#{sku}-->
+    <!--</select>-->
 
 </mapper>   

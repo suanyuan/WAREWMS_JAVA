@@ -256,7 +256,7 @@ public class DocPaHeaderService extends BaseService {
         if(docAsnHeader !=null){
             //客户单号1 docasnheader.asnreference1
             docPaHeader.setAsnreference1(docAsnHeader.getAsnreference1());
-            //采购单号 变更一下描述 客户单号2 docasnheader.asnreference2
+            //客户单号2 docasnheader.asnreference2
             docPaHeader.setAsnreference2(docAsnHeader.getAsnreference2());
         }
         //仓库名 docpaheader.warehousid
@@ -273,6 +273,7 @@ public class DocPaHeaderService extends BaseService {
             }
         }
         //冷链 todo 待定
+
 
         List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaList(pano);
 
@@ -293,6 +294,14 @@ public class DocPaHeaderService extends BaseService {
                 docPaDetails.setReservedfield01(basSku.getReservedfield01());
                 //规格/型号 bassku.descr_c
                 docPaDetails.setDescrs(basSku.getDescrC());
+            }
+            String notes = basSku.getReservedfield07();
+            if(notes.equals("LD")){
+                docPaDetails.setNotes("冷冻");
+            }else if (notes.equals("FLL")){
+                docPaDetails.setNotes("非冷链");
+            }else if (notes.equals("LC")){
+                docPaDetails.setNotes("冷藏");
             }
             //生产批号 1,details.lotnum =》 InvLotAttmybatisdao.querybyid =>Invlotatt   invlotatt.lotatt04
             InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(docPaDetails.getLotnum());

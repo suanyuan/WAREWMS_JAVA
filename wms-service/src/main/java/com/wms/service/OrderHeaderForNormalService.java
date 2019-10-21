@@ -2,7 +2,6 @@ package com.wms.service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
-import com.sun.mail.util.BASE64DecoderStream;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -42,7 +41,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -92,7 +90,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
     @Autowired
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
-
+    @Autowired
+    private BasSkuMybatisDao basSkuMybatisDao;
     /**
      * 订单列表显示
      */
@@ -682,7 +681,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
                     return json;
                 }
-                System.err.println("//解析响应报文" + shunFengResponse.toString());
+//                System.err.println("//解析响应报文" + shunFengResponse.toString());
                 //解析后修改到表中
                 OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
                 orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -996,8 +995,127 @@ public class OrderHeaderForNormalService extends BaseService {
         }
     }
 
-    public void exportPickingPdf(HttpServletResponse response, String orderNo) {
-        StringBuilder sb = new StringBuilder();
+    public OrderHeaderForNormal exportPickingPdf(String orderno) {
+
+        OrderHeaderForNormal ohForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+
+        //TODO 出库单号 不叫出库单元
+        //TODO 收货单位 不要了，在Jasper中删除，目前显示的是收获单元
+        //TODO 发货日期 删掉
+        //TODO 结算方式 不叫"快速结算方式"，就算要也是快递结算方式
+
+        //出库单号 ohForNormal.getOrderno();
+        //收货单元 不要了
+        //收获地址 ohForNormal.getCAddress1();
+        ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
+        //客户单号 ohForNormal.getSoreference1();
+        //发货日期 不要了
+        //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
+        if(ohForNormal.getCContact()!=null && ohForNormal.getCContact()!=""){
+            ohForNormal.setPrintmen(ohForNormal.getCContact());
+        }else{
+            ohForNormal.setPrintmen(ohForNormal.getConsigneeid());
+        }
+        //联系电话 ohForNormal.getCTel1();
+        ohForNormal.setExctel1(ohForNormal.getCTel1());
+        //备注 header.notes
+
+        //快递公司 暂缓
+        //发运方式 ZT BK LY 暂缓
+        //拣货人 null
+        List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
+
+        double a=0;
+        double b=0;
+        Integer c=0;
+        OrderDetailsForNormal docOrderDetail;
+        List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
+        for(int i=0;i<odForNormalList.size();i++){
+
+            docOrderDetail = new OrderDetailsForNormal();
+            BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
+            //货位 odForNormal.getLocation();
+            //产品代码 odForNormal.getSku();
+            //产品名称
+            InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
+            if(invLotAtt != null){
+                docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
+                //注册证号/备案凭证书
+                docOrderDetail.setLotatt06(invLotAtt.getLotatt06());
+                //生产批号
+                docOrderDetail.setLotatt04(invLotAtt.getLotatt04());
+                //序列号
+                docOrderDetail.setLotatt05(invLotAtt.getLotatt05());
+                //生产日期
+                docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
+                //有效期/失效期
+                docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
+            }
+            Map<String,Object> param1 = new HashMap<>();
+            param1.put("customerid",docOrderDetail.getCustomerid());
+            param1.put("sku",docOrderDetail.getSku());
+            BasSku basSku1 =  basSkuMybatisDao.queryById(param1);
+            String notes = basSku1.getReservedfield07();
+            if(notes.equals("LD")){
+                ohForNormal.setNotes("冷冻");
+            }else if (notes.equals("FLL")){
+                ohForNormal.setNotes("非冷链");
+            }else if (notes.equals("LC")){
+                ohForNormal.setNotes("冷藏");
+            }
+
+            MybatisCriteria allocationCriteria = new MybatisCriteria();
+            ActAllocationDetails allocationQuery = new ActAllocationDetails();
+            allocationQuery.setOrderno(docOrderDetail.getOrderno());
+            allocationQuery.setOrderlineno(docOrderDetail.getOrderlineno());
+            allocationCriteria.setCondition(BeanConvertUtil.bean2Map(allocationQuery));
+            List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(allocationCriteria);
+            for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
+
+                OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
+                BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
+                //库位
+                orderDetailsForNormal.setLocation(actAllocationDetails.getLocation());
+                //数量
+                orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
+                //件数
+                orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
+                a = a+actAllocationDetails.getQty();
+                b = b+actAllocationDetails.getQtyEach();
+                orderDetailsForNormal.setQtyorderedEachSum(a);//数量和
+                orderDetailsForNormal.setQtyorderedSum(b);//件数和
+                if(basSku1 !=null){
+                    //实拣数 null
+                    //规格型号
+                    orderDetailsForNormal.setDescrc(basSku1.getDescrC());
+                    //产品双证
+                    if(basSku1.getSkuGroup7().equals("1")){
+                        orderDetailsForNormal.setDoublec("是");
+                    }else{
+                        orderDetailsForNormal.setDoublec("否");
+                    }
+                    //附卡类别
+                    orderDetailsForNormal.setCard(basSku1.getSkuGroup2());
+                    //质量合格证
+                    if(basSku1.getSkuGroup8().equals("1")){
+                        orderDetailsForNormal.setReport("是");
+                    }else{
+                        orderDetailsForNormal.setReport("否");
+                    }
+                    //备注
+
+                }
+                c = c+1;
+                orderDetailsForNormal.setIndex(c);
+
+                orderDetailsForNormalList.add(orderDetailsForNormal);
+            }
+
+        }
+
+        ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
+        return  ohForNormal;
+       /* StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()) {
             sb.append("inline; filename=")
                     .append(URLEncoder.encode("拣货单PDF", "UTF-8"))
@@ -1128,7 +1246,7 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 //	public void exportReceiptPdf(HttpServletResponse response, String orderNo) {

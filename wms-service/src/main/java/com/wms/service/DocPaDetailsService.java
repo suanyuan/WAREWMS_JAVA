@@ -333,11 +333,13 @@ public class DocPaDetailsService extends BaseService {
         String locationid = form.getUserdefine1();
         String userdefine2 = form.getUserdefine2();
         String userdefine5 = form.getUserdefine5();
+        String lotatt01 = form.getLotatt01();
         String editwho = form.getEditwho();
         BeanUtils.copyProperties(docPaDetails, form);
         form.setUserdefine1(locationid);
         form.setUserdefine2(userdefine2);
         form.setUserdefine5(userdefine5);
+        form.setLotatt01(lotatt01);
 
         form.setAsnlineno(docPaDetails.getAsnlineno());
         form.setUserid(editwho);

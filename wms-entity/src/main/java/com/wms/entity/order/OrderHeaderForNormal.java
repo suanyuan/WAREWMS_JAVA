@@ -1,12 +1,13 @@
 package com.wms.entity.order;
 
-import java.io.Serializable;
-
-import javax.persistence.*;
-
 import com.wms.entity.DocOrderPacking;
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -463,7 +464,7 @@ public class OrderHeaderForNormal implements Serializable {
 	 * 打印模板
 	 */
 	private String printTemplate;
-	
+	private String printmen;//收货方
 	private List<OrderDetailsForNormal> orderDetailsForNormalList;
 	
 	private List<DocOrderPacking> docOrderPackingList;

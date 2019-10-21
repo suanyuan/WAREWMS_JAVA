@@ -1,27 +1,9 @@
 package com.wms.service.importdata;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import com.wms.constant.Constant;
-import com.wms.entity.BasPackage;
-import com.wms.query.BasPackageQuery;
-import com.wms.service.BasPackageService;
-import com.wms.service.CommonService;
-import com.wms.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.wms.entity.BasSku;
 import com.wms.entity.BasCustomer;
+import com.wms.entity.BasPackage;
+import com.wms.entity.BasSku;
 import com.wms.entity.ImportOrderData;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
@@ -30,15 +12,33 @@ import com.wms.mybatis.dao.BasSkuMybatisDao;
 import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
 import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
 import com.wms.query.BasCustomerQuery;
+import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.OrderDetailsForNormalQuery;
+import com.wms.service.BasPackageService;
+import com.wms.service.CommonService;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
+import com.wms.vo.Json;
 import com.wms.vo.OrderDetailsForNormalVO;
 import com.wms.vo.OrderHeaderForNormalVO;
-import com.wms.vo.Json;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service("ImportOrderDataService")
 public class ImportOrderDataService {
@@ -101,7 +101,11 @@ public class ImportOrderDataService {
                     if (resultMsg.length() == 0) {
                         this.validateSku(importDataList, resultMsg);// 验证商品是否存在
                         if (resultMsg.length() == 0) {
-                            this.saveOrder(importDataList, resultMsg);// 转成订单资料存入资料库
+                            json = this.saveOrder(importDataList, resultMsg);// 转成订单资料存入资料库
+                            if (!json.isSuccess()) {
+                                json.setSuccess(true);
+                                return json;
+                            }
                             isSuccess = true;
                         }
                     }
@@ -201,13 +205,13 @@ public class ImportOrderDataService {
                     customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
                     customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
                     if (customer == null) {// 是否有供应商资料
-                       throw new Exception();
+                        throw new Exception();
                     }
                     try {
-                        if (customer.getActiveFlag().equals(Constant.IS_USE_NO)){
+                        if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
                             throw new Exception();
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         rowResult.append("[供应商代码],合作状态为未合作").append(" ");
                     }
                 }
@@ -358,7 +362,7 @@ public class ImportOrderDataService {
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品代码查无商品资料").append(" ");
-                }else if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
+                } else if (!sku.getActiveFlag().equals(Constant.IS_USE_YES)) {
                     resultMsg.append("序号：").append(importDetailsDataVO.getSeq())
                             .append("，货主代码：").append(importDataVO.getCustomerid())
                             .append("，产品代码：").append(importDetailsDataVO.getSku()).append("，产品已失效").append(" ");
@@ -366,7 +370,6 @@ public class ImportOrderDataService {
             }
         }
     }
-
 
 
     private void validateCustomer(List<OrderHeaderForNormalVO> importDataList, StringBuilder resultMsg) {
@@ -378,8 +381,7 @@ public class ImportOrderDataService {
             customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
             if (customer == null) {// 是否有客户资料
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码查无客户资料").append(" ");
-            }else
-            if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
+            } else if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
                 resultMsg.append("序号：").append(importDataVO.getSeq()).append("，货主代码合作状态为未合作状态").append(" ");
 
             }
@@ -400,100 +402,118 @@ public class ImportOrderDataService {
         }
     }
 
-    private void saveOrder(List<OrderHeaderForNormalVO> importDataList, StringBuilder resultMsg) {
-        OrderHeaderForNormal orderHeader = null;
-        for (OrderHeaderForNormalVO importDataVO : importDataList) {
-            orderHeader = new OrderHeaderForNormal();
-            BeanUtils.copyProperties(importDataVO, orderHeader);
-            //获取SO编号
+    private Json saveOrder(List<OrderHeaderForNormalVO> importDataList, StringBuilder resultMsg) {
+
+        Json json = Json.success("导入成功");
+        try {
+
+            OrderHeaderForNormal orderHeader = null;
+            for (OrderHeaderForNormalVO importDataVO : importDataList) {
+                orderHeader = new OrderHeaderForNormal();
+                BeanUtils.copyProperties(importDataVO, orderHeader);
+                //获取SO编号
 			/*Map<String ,Object> map=new HashMap<String, Object>();
 			map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			orderHeaderForNormalMybatisDao.getIdSequence(map);
 			String resultCode = map.get("resultCode").toString();
 			String resultNo = map.get("resultNo").toString();*/
-            String resultNo = commonService.generateSeq("ORDERNO", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-            if (!StringUtils.isEmpty(resultNo)) {
-                //赋值
-                orderHeader.setOrderno(resultNo);
-                orderHeader.setOrdertype(importDataVO.getOrderTypeName());
-                orderHeader.setOrdertime(new Date());
-                orderHeader.setConsigneeid(importDataVO.getConsigneeid());
-                orderHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                orderHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                orderHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                orderHeader.setOrdertime(new Date());
-                orderHeader.setEdittime(new Date());
-                orderHeader.setEdisendflag(Constant.IS_USE_YES);
-                orderHeader.setArchiveflag(Constant.IS_USE_YES);
-                orderHeader.setSostatus("00");
-                orderHeader.setReleasestatus("Y");
-                orderHeader.setSoreference1(importDataVO.getSoreference1());
-                orderHeader.setSoreference2(importDataVO.getSoreference2());
-                orderHeader.setConsigneeid(importDataVO.getConsigneeid());
-                //保存订单主信息
-                orderHeaderForNormalMybatisDao.add(orderHeader);
-                for (OrderDetailsForNormalVO importDetailsDataVO : importDataVO.getOrderDetailsForNormalVOList()) {
-                    OrderDetailsForNormal orderDetails = new OrderDetailsForNormal();
-                    BeanUtils.copyProperties(importDetailsDataVO, orderDetails);
-                    orderDetails.setOrderno(resultNo);
-                    OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
-                    orderDetailsForNormalQuery.setOrderno(resultNo);
-                    //获取订单明细行号
-                    int orderlineno = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
-                    //获取SKU信息(条码、包装、重量、体积、金额)
-                    BasSkuQuery skuQuery = new BasSkuQuery();
-                    skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());
-                    skuQuery.setSku(importDetailsDataVO.getSku());
-                    skuQuery.setQty(new BigDecimal(importDetailsDataVO.getQtyordered()));
-                    BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+                String resultNo = commonService.generateSeq("ORDERNO", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                if (!StringUtils.isEmpty(resultNo)) {
                     //赋值
-                    if (basSku != null) {
-                        BasPackageQuery query = new BasPackageQuery();
-                        query.setPackid(basSku.getPackid());
-                        BasPackage basPackage = basPackageService.queryBasPackBy(query);
-                        orderDetails.setUom(basPackage.getPackuom1());
-                        if (importDetailsDataVO.getQtyordered() > 0 && importDetailsDataVO.getQtyorderedEach() > 0) {
-                            orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
-                            orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
-                        } else {
-                            //有件数计算
-                            if (importDetailsDataVO.getQtyordered() > 0) {
-                                orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue() * (importDetailsDataVO.getQtyordered()));
+                    orderHeader.setOrderno(resultNo);
+                    orderHeader.setOrdertype(importDataVO.getOrderTypeName());
+                    orderHeader.setOrdertime(new Date());
+                    orderHeader.setConsigneeid(importDataVO.getConsigneeid());
+                    orderHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                    orderHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                    orderHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                    orderHeader.setOrdertime(new Date());
+                    orderHeader.setEdittime(new Date());
+                    orderHeader.setEdisendflag(Constant.IS_USE_YES);
+                    orderHeader.setArchiveflag(Constant.IS_USE_YES);
+                    orderHeader.setSostatus("00");
+                    orderHeader.setReleasestatus("Y");
+                    orderHeader.setSoreference1(importDataVO.getSoreference1());
+                    orderHeader.setSoreference2(importDataVO.getSoreference2());
+                    orderHeader.setConsigneeid(importDataVO.getConsigneeid());
+                    //保存订单主信息
+                    orderHeaderForNormalMybatisDao.add(orderHeader);
+                    for (OrderDetailsForNormalVO importDetailsDataVO : importDataVO.getOrderDetailsForNormalVOList()) {
+                        OrderDetailsForNormal orderDetails = new OrderDetailsForNormal();
+                        BeanUtils.copyProperties(importDetailsDataVO, orderDetails);
+                        orderDetails.setOrderno(resultNo);
+                        OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
+                        orderDetailsForNormalQuery.setOrderno(resultNo);
+                        //获取订单明细行号
+                        int orderlineno = orderDetailsForNormalMybatisDao.getOrderLineNoById(orderDetailsForNormalQuery);
+                        //获取SKU信息(条码、包装、重量、体积、金额)
+                        BasSkuQuery skuQuery = new BasSkuQuery();
+                        skuQuery.setCustomerid(importDetailsDataVO.getCustomerid());
+                        skuQuery.setSku(importDetailsDataVO.getSku());
+                        skuQuery.setQty(new BigDecimal(importDetailsDataVO.getQtyordered()));
+                        BasSku basSku = basSkuMybatisDao.queryBySkuInfo(skuQuery);
+                        //赋值
+                        if (basSku != null) {
+                            BasPackageQuery query = new BasPackageQuery();
+                            query.setPackid(basSku.getPackid());
+                            BasPackage basPackage = basPackageService.queryBasPackBy(query);
+                            orderDetails.setUom(basPackage.getPackuom1());
+                            if (importDetailsDataVO.getQtyordered() > 0 && importDetailsDataVO.getQtyorderedEach() > 0) {
+                                orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
                                 orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
-                            } else if (importDetailsDataVO.getQtyorderedEach() > 0) {
-                                //有数量计算件数
-                                //orderDetails.setQtyorderedEach(basPackage.getQty1().multiply(importDetailsDataVO.getQtyordered()));
-                                if (importDetailsDataVO.getQtyorderedEach() % basPackage.getQty1().doubleValue() == 0) {
-                                    double qty = importDetailsDataVO.getQtyorderedEach() / basPackage.getQty1().doubleValue();
-                                    orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
-                                    orderDetails.setQtyordered(qty);
-                                } else {
-                                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
-                                    continue;
+                            } else {
+                                //有件数计算
+                                if (importDetailsDataVO.getQtyordered() > 0) {
+                                    orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue() * (importDetailsDataVO.getQtyordered()));
+                                    orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
+                                } else if (importDetailsDataVO.getQtyorderedEach() > 0) {
+                                    //有数量计算件数
+                                    //orderDetails.setQtyorderedEach(basPackage.getQty1().multiply(importDetailsDataVO.getQtyordered()));
+                                    if (importDetailsDataVO.getQtyorderedEach() % basPackage.getQty1().doubleValue() == 0) {
+                                        double qty = importDetailsDataVO.getQtyorderedEach() / basPackage.getQty1().doubleValue();
+                                        orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
+                                        orderDetails.setQtyordered(qty);
+                                    } else {
+                                        json.setSuccess(false);
+                                        resultMsg.append("序号：").append(importDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
+                                        continue;
+                                    }
                                 }
-                            }
 
+                            }
                         }
+                        orderDetails.setPackid(basSku.getPackid());
+                        orderDetails.setOrderlineno((double) (orderlineno + 1));
+                        orderDetails.setNetweight(basSku.getGrossweight().doubleValue());
+                        orderDetails.setGrossweight(basSku.getGrossweight().doubleValue());
+                        orderDetails.setCubic(basSku.getCube().doubleValue());
+                        orderDetails.setPrice(basSku.getPrice().doubleValue());
+                        orderDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                        orderDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                        orderDetails.setAddtime(new Date());
+                        if (StringUtils.isEmpty(orderDetails.getLotatt10())) {
+                            orderDetails.setLotatt10("HG");
+                        }
+                        //保存订单明细信息
+                        orderDetailsForNormalMybatisDao.add(orderDetails);
                     }
-                    orderDetails.setPackid(basSku.getPackid());
-                    orderDetails.setOrderlineno((double) (orderlineno + 1));
-                    orderDetails.setNetweight(basSku.getGrossweight().doubleValue());
-                    orderDetails.setGrossweight(basSku.getGrossweight().doubleValue());
-                    orderDetails.setCubic(basSku.getCube().doubleValue());
-                    orderDetails.setPrice(basSku.getPrice().doubleValue());
-                    orderDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                    orderDetails.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                    orderDetails.setAddtime(new Date());
-                    if (StringUtils.isEmpty(orderDetails.getLotatt10())) {
-                        orderDetails.setLotatt10("HG");
-                    }
-                    //保存订单明细信息
-                    orderDetailsForNormalMybatisDao.add(orderDetails);
+                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+                } else {
+                    json.setSuccess(false);
+                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
                 }
-                resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
-            } else {
-                resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
             }
+
+            if (!json.isSuccess()) {
+                throw new Exception(resultMsg.toString());
+            } else {
+                json.setMsg(resultMsg.toString());
+                return json;
+            }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            json.setMsg(e.getMessage());
+            return json;
         }
     }
 

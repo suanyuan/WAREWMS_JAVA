@@ -235,7 +235,7 @@ public class DocPaService {
                         DocAsnHeader header = new DocAsnHeader();
                         header.setAsnno(docPaDTO.getAsnno());
                         header.setAsnPrintFlag("Y");
-                        header.setUserdefine1(paNo);
+                        header.setUserdefine2(paNo);
                         docAsnHeaderMybatisDao.updateBySelective(header);
 
                         //处理无批次属性的情况
