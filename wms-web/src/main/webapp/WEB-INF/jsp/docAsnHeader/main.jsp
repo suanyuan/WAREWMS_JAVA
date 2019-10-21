@@ -1142,7 +1142,7 @@ var detailsEdit = function(){
              lotatt05 : row.lotatt05,
              lotatt11 : row.lotatt11,
 			 lotatt14 : row.lotatt14,
-
+			 asnlineno : row.asnlineno
 		}
 
 		);
