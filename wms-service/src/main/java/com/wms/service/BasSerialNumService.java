@@ -111,7 +111,7 @@ public class BasSerialNumService extends BaseService {
 		}
 	}
 //导入
-	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+	public Json importExcelData(MultipartHttpServletRequest mhsr){
 		Json json = null;
 		MultipartFile excelFile = mhsr.getFile("uploadData");
 		//System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());

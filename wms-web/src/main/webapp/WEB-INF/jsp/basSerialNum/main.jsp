@@ -37,21 +37,17 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'serialNum',		title: '序列号',	width:100 },
-			{field: 'batchNum',		title: '批号',	width: 100 },
+			{field: 'deliveryNum',		title: '发货凭证号',	width:100 },
 			{field: 'materialNum',		title: '产品代码',	width: 100 },
-			{field: 'expireDate',		title: '效期',	width: 100 },
-			{field: 'productDate',		title: '生产日期',	width: 100 },
-			{field: 'batchFlag',		title: 'batchFlag',	width: 100 },
-			{field: 'uom',		title: '单位',	width: 100 },
-			{field: 'purchaseOrder',		title: '销售单号',	width: 100 },
-			{field: 'packageNum',		title: '包装号',	width: 100 },
-			{field: 'deliveryNum',		title: '运输单号',	width: 100 },
-			{field: 'addwho',		title: '创建人',	width: 100 },
-			{field: 'addtime',		title: '创建时间',	width: 100 },
-			{field: 'editwho',		title: '编辑人',	width: 100 },
-			{field: 'edittime',		title: '编辑时间',	width: 100 },
-			{field: 'outFlag',		title: '是否出库',	width: 100 }
+			{field: 'batchNum',		title: '批号',	width: 100 },
+			{field: 'serialNum',		title: '序列号',	width:100 },
+			{field: 'userdefine1',		title: '入库时间',	width: 150 },
+			{field: 'userdefine2',		title: '出库时间',	width: 150 },
+			{field: 'userdefine3',		title: '出库单号',	width: 150 },
+			{field: 'addtime',		   title: '创建时间',	width: 150 },
+			{field: 'addwho',		   title: '创建人',	width: 100 },
+			{field: 'edittime',		   title: '编辑时间',	width: 150 },
+			{field: 'editwho',		   title: '编辑人',	width: 100 }
 
 		]],
 		onDblClickCell: function(index,field,value){

@@ -2,7 +2,6 @@ package com.wms.service.importdata;
 
 import com.wms.entity.BasSerialNum;
 import com.wms.entity.ImportBasSerialNumPackingLineData;
-import com.wms.entity.ImportBasSerialNumPackingListData;
 import com.wms.mybatis.dao.BasSerialNumMybatisDao;
 import com.wms.service.BasCodesService;
 import com.wms.service.BasSerialNumService;
@@ -14,15 +13,15 @@ import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasSerialNumVO;
 import com.wms.vo.Json;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.mapping.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,26 +58,19 @@ public class ImportBasSerialNumDataService {
             in = excelFile.getInputStream();
 
             //获取sheetName名字
-            String sheetName = "PACKING_LIST";
-            String sheetName1 = "PACKING_LINE";
+            String sheetName = "PACKING_LINE";
 
             //excel的表头与文字对应，获取excel表头
-            LinkedHashMap<String, String> PackingListMap = getLeadInFiledPublicQuestionBank();
-            LinkedHashMap<String, String> PackingLineMap = getLeadInFiledPublicQuestionBank1();
+            LinkedHashMap<String, String> PackingLineMap = getLeadInFiledPublicQuestionBank();
             //获取组合excel表头数组，防止重复用的
             String[] uniqueFields = new String[]{"SERIAL_NUMBER"};
-            String[] uniqueFields1 = new String[]{"DELIVERY_NUMBER", "PACKAGE_NUMBER", "MATERIAL_NUMBER", "BATCH_NUMBER"};
             //获取需要导入的具体的表
-            Class list = new ImportBasSerialNumPackingListData().getClass();
             Class line = new ImportBasSerialNumPackingLineData().getClass();
             //excel转化成的list集合
-            List<ImportBasSerialNumPackingListData> BasList = null;
             List<ImportBasSerialNumPackingLineData> BasLine = null;
             try {
 //调用excle共用类，转化成list
-                BasList = ExcelUtil.excelToList(in, sheetName, list, PackingListMap, null);
-                in = excelFile.getInputStream();
-                BasLine = ExcelUtil.excelToList(in, sheetName1, line, PackingLineMap, null);
+                BasLine = ExcelUtil.excelToList(in, sheetName, line, PackingLineMap, null);
 
 
             } catch (ExcelException e) {
@@ -86,23 +78,23 @@ public class ImportBasSerialNumDataService {
 
             }
 //保存实体集合
-            if (BasList == null) {
-                resultMsg.append("错误:execel的Sheet表名应为:PACKING_LIST!");
-            }
+
             if (BasLine == null) {
                 resultMsg.append("错误:execel的Sheet表名应为:PACKING_LINE!");
             } else {
-                List<BasSerialNumVO> importDataList = this.listToBean(BasList, BasLine, resultMsg);
+                List<BasSerialNumVO> importDataList = this.listToBean(BasLine, resultMsg);
 
 
-                if (importDataList.size() == BasList.size()) {
+                if (importDataList.size() == BasLine.size()) {
 
                     this.saveBasSerialNum(importDataList, resultMsg);// 转成订单资料存入资料库
                     isSuccess = true;
                 }else if (resultMsg.length() == 0) {
 
                 	resultMsg.append("错误:excel预期导入行数和实际数据不匹配，请联系管理员");
-				}
+				}else{
+                    resultMsg.append("错误:excel预期导入行数和实际数据不匹配，已停止导入");
+                }
             }
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -116,26 +108,38 @@ public class ImportBasSerialNumDataService {
     /**
      * 把导入的list数据转换成BasSerialNumVO
      *
-     * @param BasList
+     * @param
      * @param resultMsg
      * @return
      */
-    private List<BasSerialNumVO> listToBean(List<ImportBasSerialNumPackingListData> BasList, List<ImportBasSerialNumPackingLineData> BasLine, StringBuilder resultMsg) {
+    private List<BasSerialNumVO> listToBean(List<ImportBasSerialNumPackingLineData> BasLine, StringBuilder resultMsg) {
         StringBuilder rowResult = new StringBuilder();
         List<BasSerialNumVO> importData = new ArrayList<BasSerialNumVO>();
-        List<BasSerialNumVO> importDataR = new ArrayList<BasSerialNumVO>();
         BasSerialNumVO importDataVO = null;
-//定义时间格式转换
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
-//设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
-        format.setLenient(false);
-        formatRQ.setLenient(false);
+////定义时间格式转换
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat formatRQ = new SimpleDateFormat("yyyy-MM-dd");
+////设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
+//        format.setLenient(false);
+//        formatRQ.setLenient(false);
 
-        for (ImportBasSerialNumPackingListData dataArray : BasList) {
+        for (ImportBasSerialNumPackingLineData dataArray : BasLine) {
             importDataVO = new BasSerialNumVO();
+//序号
+            try {
+                if (Integer.parseInt(dataArray.getSeq()) <= 0) {
+                    throw new Exception();
+                }
+                if (StringUtils.isEmpty(dataArray.getSeq())) {
+                    throw new Exception();
+                }
+                importDataVO.setSeq(dataArray.getSeq());
 
-//SERIAL_NUMBER
+            } catch (Exception e) {
+                rowResult.append("[序号]，资料格式转换失败 ，请输入大于0之正整数数字格式 ").append(" ");
+            }
+
+//SERIAL_NUMBER序列号
             try {
                 if (StringUtils.isEmpty(dataArray.getSerialNum())) {
                     throw new Exception();
@@ -147,7 +151,7 @@ public class ImportBasSerialNumDataService {
                         }
                     }
 //						判断数据库是否已经又已经存在的序列号
-                    BasSerialNum num = basSerialNumMybatisDao.queryById(dataArray.getSerialNum());
+                    BasSerialNum num = basSerialNumMybatisDao.queryBySerialNum(dataArray.getSerialNum());
                     if (num != null) {
                         throw new Exception();
                     } else {
@@ -157,11 +161,11 @@ public class ImportBasSerialNumDataService {
 
                 }
             } catch (Exception e) {
-                rowResult.append("[SERIAL_NUMBER]该SERIAL_NUMBER已经存在或者没有输入").append(" ");
+                rowResult.append("[序列号]已经存在或者没有输入").append(" ");
             }
 
 
-//BATCH_NUMBER
+//BATCH_NUMBER批号
             try {
                 if (StringUtils.isEmpty(dataArray.getBatchNum())) {
                     throw new Exception();
@@ -170,9 +174,9 @@ public class ImportBasSerialNumDataService {
                     importDataVO.setBatchNum(dataArray.getBatchNum());
                 }
             } catch (Exception e) {
-                rowResult.append("[BATCH_NUMBER]该BATCH_NUMBER没有输入").append(" ");
+                rowResult.append("[批号]没有输入").append(" ");
             }
-//MATERIAL_NUMBER
+//MATERIAL_NUMBER产品代码
             try {
                 if (StringUtils.isEmpty(dataArray.getMaterialNum())) {
                     throw new Exception();
@@ -181,29 +185,14 @@ public class ImportBasSerialNumDataService {
                     importDataVO.setMaterialNum(dataArray.getMaterialNum());
                 }
             } catch (Exception e) {
-                rowResult.append("[MATERIAL_NUMBER]该MATERIAL_NUMBER没有输入").append(" ");
+                rowResult.append("[产品代码]没有输入").append(" ");
             }
-//DELIVERY_NUMBER
+//DELIVERY_NUMBER发货凭证号
             try {
-                if (StringUtils.isEmpty(dataArray.getDeliveryNum())) {
-                    throw new Exception();
-                } else if (dataArray.getBatchNum() != null) {
+               importDataVO.setDeliveryNum(dataArray.getDeliveryNum());
 
-                    importDataVO.setDeliveryNum(dataArray.getDeliveryNum());
-                }
             } catch (Exception e) {
-                rowResult.append("[DELIVERY_NUMBER]该DELIVERY_NUMBER已经存在或者没有输入").append(" ");
-            }
-//PACKAGE_NUMBER
-            try {
-                if (StringUtils.isEmpty(dataArray.getPackageNum())) {
-                    throw new Exception();
-                } else if (dataArray.getBatchNum() != null) {
-
-                    importDataVO.setPackageNum(dataArray.getPackageNum());
-                }
-            } catch (Exception e) {
-                rowResult.append("[PACKAGE_NUMBER]该PACKAGE_NUMBER没有输入").append(" ");
+                rowResult.append("[发货凭证号]没有输入").append(" ");
             }
 
             //增加resultMsg
@@ -211,7 +200,7 @@ public class ImportBasSerialNumDataService {
                 if (rowResult.lastIndexOf("，") > -1) {
                     rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
                 }
-                resultMsg.append("SERIAL_NUMBER：").append(dataArray.getSerialNum()).append("资料有错 ").append(rowResult).append(" ");
+                resultMsg.append("序号:").append(dataArray.getSeq()).append("资料有错! ").append(rowResult).append(" ");
                 rowResult.setLength(0);
             } else {
                 importData.add(importDataVO);
@@ -220,29 +209,29 @@ public class ImportBasSerialNumDataService {
         }
 
         //循环importData 判断BasLine是否为空 插入BasLine数据 为空要去除
-        if (importData.size() > 0) {
-            boolean con;
-            for (BasSerialNumVO serialNumVO : importData) {
-                con = false;
-                for (ImportBasSerialNumPackingLineData line : BasLine) {
-                    if (serialNumVO.getDeliveryNum().equals(line.getDeliveryNum()) && serialNumVO.getBatchNum().equals(line.getBatchNum())
-                            && serialNumVO.getMaterialNum().equals(line.getMaterialNum()) && serialNumVO.getPackageNum().equals(line.getPackageNum())) {
-                        serialNumVO.setPurchaseOrder(line.getPurchaseOrder());
-                        serialNumVO.setUom(line.getUom());
-                        serialNumVO.setExpireDate(line.getExpireDate());
-                        serialNumVO.setBatchFlag(line.getBatchFlag());
-                        serialNumVO.setProductDate(line.getProductDate());
-                        importDataR.add(serialNumVO);
-                        con = true;
-                        break;
-                    }
-                }
-                if (!con) {
-                    resultMsg.append("SERIAL_NUMBER：").append(serialNumVO.getSerialNum()).append("资料有错 ").append("[SERIAL_NUMBER]该SERIAL_NUMBER在PACKING_LINE没有对应的行!").append(" ");
-                }
-            }
-        }
-        return importDataR;
+//        if (importData.size() > 0) {
+//            boolean con;
+//            for (BasSerialNumVO serialNumVO : importData) {
+//                con = false;
+//                for (ImportBasSerialNumPackingLineData line : BasLine) {
+//                    if (serialNumVO.getDeliveryNum().equals(line.getDeliveryNum()) && serialNumVO.getBatchNum().equals(line.getBatchNum())
+//                            && serialNumVO.getMaterialNum().equals(line.getMaterialNum()) && serialNumVO.getPackageNum().equals(line.getPackageNum())) {
+//                        serialNumVO.setPurchaseOrder(line.getPurchaseOrder());
+//                        serialNumVO.setUom(line.getUom());
+//                        serialNumVO.setExpireDate(line.getExpireDate());
+//                        serialNumVO.setBatchFlag(line.getBatchFlag());
+//                        serialNumVO.setProductDate(line.getProductDate());
+//                        importDataR.add(serialNumVO);
+//                        con = true;
+//                        break;
+//                    }
+//                }
+//                if (!con) {
+//                    resultMsg.append("SERIAL_NUMBER：").append(serialNumVO.getSerialNum()).append("资料有错 ").append("[SERIAL_NUMBER]该SERIAL_NUMBER在PACKING_LINE没有对应的行!").append(" ");
+//                }
+//            }
+//        }
+        return importData;
     }
 
     /**
@@ -253,28 +242,11 @@ public class ImportBasSerialNumDataService {
     public LinkedHashMap<String, String> getLeadInFiledPublicQuestionBank() {
         // excel的表头与文字对应
         LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-        map.put("SERIAL_NUMBER", "serialNum");
-        map.put("BATCH_NUMBER", "batchNum");
-        map.put("MATERIAL_NUMBER", "materialNum");
-        map.put("PACKAGE_NUMBER", "packageNum");
-        map.put("DELIVERY_NUMBER", "deliveryNum");
-        return map;
-    }
-
-    public LinkedHashMap<String, String> getLeadInFiledPublicQuestionBank1() {
-        // excel的表头与文字对应
-        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-        map.put("BATCH_NUMBER", "batchNum");
-        map.put("MATERIAL_NUMBER", "materialNum");
-        map.put("PACKAGE_NUMBER", "packageNum");
-        map.put("DELIVERY_NUMBER", "deliveryNum");
-        map.put("PURCHASE_ORDER", "purchaseOrder");
-//			map.put("DELIVERY_QTY", "deliveryNum");
-        map.put("UOM", "uom");
-        map.put("EXP_DATE", "expireDate");
-        map.put("生产日期", "productDate");
-        map.put("BATCH_FLAG", "batchFlag");
-
+        map.put("序号", "seq");
+        map.put("发货凭证号", "deliveryNum");
+        map.put("产品代码(必填)", "materialNum");
+        map.put("批号(必填)", "batchNum");
+        map.put("序列号(必填)", "serialNum");
         return map;
     }
 
@@ -285,7 +257,8 @@ public class ImportBasSerialNumDataService {
      * @param importDataList
      * @param resultMsg
      */
-    private void saveBasSerialNum(List<BasSerialNumVO> importDataList, StringBuilder resultMsg) {
+    @Transactional
+    public void saveBasSerialNum(List<BasSerialNumVO> importDataList, StringBuilder resultMsg) {
         BasSerialNum basSerialNum = null;
 
         for (BasSerialNumVO importDataVO : importDataList) {
@@ -294,12 +267,18 @@ public class ImportBasSerialNumDataService {
 
             basSerialNum.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 //				basSerialNum.setAddtime(new Date()+"");
-            basSerialNum.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-//				basSerialNum.setEdittime(new Date()+"");
             //保存订单主信息
-            basSerialNumMybatisDao.add(basSerialNum);
+            try {
 
-            resultMsg.append("SERIAL_NUMBER：").append(importDataVO.getSerialNum()).append("资料导入成功").append(" ");
+                basSerialNumMybatisDao.add(basSerialNum);
+                resultMsg.append("序号:"+importDataVO.getSeq()).append(",资料导入成功!").append(" ");
+            }catch (Exception e) {
+                resultMsg.append("序号:"+importDataVO.getSeq()).append(",后台sql执行异常,请重新操作!").append(" ");
+                  TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                  e.printStackTrace();
+                  break;
+            }
+
 
         }
 

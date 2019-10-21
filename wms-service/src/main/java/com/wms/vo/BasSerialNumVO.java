@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasSerialNumVO {
 
+	private String seq; //序号
 	private String serialNum;
 	private String batchNum;
 	private String materialNum;
@@ -25,6 +26,14 @@ public class BasSerialNumVO {
 	private String addtime;
 	private String editwho;
 	private String edittime;
+
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
 
 	public String getOutFlag() {
 		return outFlag;

@@ -108,8 +108,11 @@ public class BasSerialNumController {
 	@Login
 	@RequestMapping(params = "importExcelData")
 	@ResponseBody
-	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
-		return basSerialNumService.importExcelData(mhsr);
+	public Json importExcelData(MultipartHttpServletRequest mhsr){
+		Json json=null;
+		json = basSerialNumService.importExcelData(mhsr);
+       return json;
+
 	}
 
 //	@Login

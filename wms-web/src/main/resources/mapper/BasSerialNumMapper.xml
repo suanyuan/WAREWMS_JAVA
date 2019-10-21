@@ -104,7 +104,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into bas_serial_num(serial_num,batch_num,material_num,expire_date,product_date,batch_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime)
- values(#{serialNum},#{batchNum},#{materialNum},#{expireDate},#{productDate},#{batchFlag},#{uom},#{purchaseOrder},#{packageNum},#{deliveryNum},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addwho},now(),#{editwho},now())
+ values(#{serialNum},#{batchNum},#{materialNum},#{expireDate},#{productDate},#{batchFlag},#{uom},#{purchaseOrder},#{packageNum},#{deliveryNum},now(),#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5},#{addwho},now(),#{editwho},#{edittime})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -184,8 +184,18 @@ where 1=1
 <!-- 根据id查询 序列号管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" /> 
-	 from bas_serial_num where serial_num = #{serialNum}
+	 from bas_serial_num
+	 where serial_num = #{serialNum}
+
 </select>
+
+<!-- 根据queryBySerialNum查询 序列号管理 -->
+	<select id="queryBySerialNum"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from bas_serial_num
+		where serial_num = #{serialNum} and userdefine2 is null and userdefine3 is null
+
+	</select>
 
 <!-- 序列号管理 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

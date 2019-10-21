@@ -20,9 +20,9 @@ public class BasSerialNum implements Serializable {
     private String purchaseOrder; //？销售单号
     private String packageNum;
     private String deliveryNum;
-    private String userdefine1;
-    private String userdefine2;
-    private String userdefine3;
+    private String userdefine1;  //入库时间
+    private String userdefine2;  //出库时间
+    private String userdefine3;  //出库单号
     private String userdefine4;
     private String userdefine5;
     private String addwho;

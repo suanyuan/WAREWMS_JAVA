@@ -19,4 +19,6 @@ public interface BasSerialNumMybatisDao extends BaseDao {
      * @return ~
      */
 	List<BasSerialNum> queryAvailableNum(BasSerialNumQuery query);
+    public <T> T queryBySerialNum(Object id);
+
 }
