@@ -5,6 +5,10 @@ import java.util.Date;
 
 public class OrderHeaderForNormalForm {
 
+
+
+
+
 	private String orderno;
 	private String customerid;
 	private String customerShortName;
@@ -26,7 +30,7 @@ public class OrderHeaderForNormalForm {
 	private String cAddress1;
 	private String cTel1;
 	private String zipCode;
-	private String carrierId;
+	private String carrierid;
 	private String carrierName;
 	private java.util.Date lastshipmenttime;
 	private String notes;
@@ -59,6 +63,36 @@ public class OrderHeaderForNormalForm {
 	//快递投诉
 	private String courierComplaint;
 	private String courierComplaintU;
+
+
+	private String door; //温度记录表
+	private String route;//发运方式
+	private String stop; //结算方式
+
+
+	public String getDoor() {
+		return door;
+	}
+
+	public void setDoor(String door) {
+		this.door = door;
+	}
+
+	public String getRoute() {
+		return route;
+	}
+
+	public void setRoute(String route) {
+		this.route = route;
+	}
+
+	public String getStop() {
+		return stop;
+	}
+
+	public void setStop(String stop) {
+		this.stop = stop;
+	}
 
 	public String getReturnSfOrder() {
 		return returnSfOrder;
@@ -204,12 +238,12 @@ public class OrderHeaderForNormalForm {
 		this.zipCode = zipCode;
 	}
 
-	public String getCarrierId() {
-		return carrierId;
+	public String getCarrierid() {
+		return carrierid;
 	}
 
-	public void setCarrierId(String carrierId) {
-		this.carrierId = carrierId;
+	public void setCarrierid(String carrierid) {
+		this.carrierid = carrierid;
 	}
 
 	public String getCarrierName() {

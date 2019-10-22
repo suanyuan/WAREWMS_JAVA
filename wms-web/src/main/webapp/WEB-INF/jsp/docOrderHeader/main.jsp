@@ -540,7 +540,14 @@ var edit = function(srow){
             consigneeid:row.consigneeid,
             cProvince:row.cProvince,
             cCity:row.cCity,
-            cAddress2:row.cAddress2
+            cAddress2:row.cAddress2,
+            cContact:row.cContact,
+            stop:row.stop,
+            door:row.door,
+            // coldTag:row.door,
+            route:row.route,
+            // carrierid:row.carrierid,
+
 
 		});
 		if (row.sostatus == '90' || row.sostatus == '99') {
@@ -584,7 +591,7 @@ var edit = function(srow){
 		ezuiDetailsDatagrid.datagrid('load',{orderno:row.orderno});
         allocationDetailsDatagrid.datagrid('load',{ordero:row.orderno});
 		$('#ezuiDetailsDatagrid').parent().parent().parent().show();
-
+        // $('#coldTag').filebox("setValue",row.door);
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({

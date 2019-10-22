@@ -197,7 +197,7 @@ public class OrderHeaderForNormalService extends BaseService {
         BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
         orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
         orderHeaderForNormal.setAddtime(addtime);
-        orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
+        orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
         json.setSuccess(true);
         json.setMsg("资料处理成功！");
         return json;
