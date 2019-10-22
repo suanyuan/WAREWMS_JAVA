@@ -1,5 +1,5 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
-<form id='ezuiFormInfo' method='post'>
+<form id='ezuiFormInfoProduct' method='post'>
     <input type='hidden' id='gspProductRegisterSpecsId' name='gspProductRegisterSpecsId'/>
     <table>
         <tr style="display: none">
@@ -234,16 +234,16 @@
     var row;
     var type;
     $(function(){
-        // $('#medicalDeviceMark').combobox({
-        //     onChange: function(){
-        //         changeRequired();
-        //     }
-        // });
-        // $('#coldHainMark').combobox({
-        //         onChange: function(){
-        //         changeColdHainMark();
-        //     }
-        // });
+        $('#medicalDeviceMark').combobox({
+            onChange: function(){
+                changeRequired();
+            }
+        });
+        $('#coldHainMark').combobox({
+                onChange: function(){
+                changeColdHainMark();
+            }
+        });
         //主页编辑
         // debugger
         //
@@ -259,12 +259,12 @@
 //         debugger
 //         alert($("#ezuiFormInfo #specsId").val());
 
-        type = $("#ezuiFormInfo #type").val();
+        type = $("#ezuiFormInfoProduct #type").val();
         if(""!=type){
             processType =type;
         }
         if(processType == 'product'){
-            id = $("#ezuiFormInfo #specsId").val();
+            id = $("#ezuiFormInfoProduct #specsId").val();
         }else if(processType == 'edit'){
             row = ezuiDatagrid.datagrid('getSelected');
             id = row.specsId;
@@ -277,7 +277,7 @@
         //
         // }
 
-
+        // alert(id+"==============="+row);
         // changeRequired();
         if(id!="" || row !=null){
             if(processType == 'edit' || processType == 'product' ){
@@ -288,10 +288,8 @@
                 dataType : 'JSON',
                 success : function(result){
                     if(result.success){
-                        changeColdHainMark();
-                        changeRequired();
-                        coldfield();//默认非冷链
-                        $("#ezuiFormInfo input[id!=''][data='1']").each(function (index) {
+
+                        $("#ezuiFormInfoProduct input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
                                     $(this).textbox("setValue",result.obj[""+$(this).attr("id")+""]);
@@ -304,10 +302,10 @@
                                     $(this).numberbox("setValue",result.obj[""+$(this).attr("id")+""]);
                                 }
                             }
-
-
                         })
-
+                        changeColdHainMark();
+                        changeRequired();
+                        coldfield();//默认非冷链
                     }
 
                 }
@@ -368,54 +366,51 @@
     });
 
     function coldfield() {
-        console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
-        console.log($('#ezuiFormInfo #coldHainMark').val());
-        var cold = $('#ezuiFormInfo #coldHainMark').val();
+        console.log($('#ezuiFormInfoProduct #coldHainMark').combobox('getValue'));
+        console.log($('#ezuiFormInfoProduct #coldHainMark').val());
+        var cold = $('#ezuiFormInfoProduct #coldHainMark').val();
         if(cold=="" || cold==null){
-            $('#ezuiFormInfo #coldHainMark').combobox("setValue","FLL");
+            $('#ezuiFormInfoProduct #coldHainMark').combobox("setValue","FLL");
         }
     }
 
     function changeRequired(){
-        if($('#medicalDeviceMark').combobox('getValue') == '0'){
-            $('#productRegisterNo').textbox({required:false});
-            $('#specsName').textbox({required:false});
-            $('#productModel').textbox({required:false});
-            $('#packingUnit').combobox({required:false});
-            $('#storageCondition').textbox({required:false});
-            $('#isDoublec').combobox({required:false});
-            $('#isCertificate').combobox({required:false});
-            $('#unit').combobox({required:false});
-            $('#maintenanceCycle').numberbox({required:false});
-            $('#licenseOrRecordNo').textbox({editable:true});
-            $('#ezuiFormInfo #productionAddress').textbox({editable:true});
+        alert($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue'));
+        if($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue') == '0'){
+            $('#ezuiFormInfoProduct #productRegisterNo').textbox({required:false});
+            $('#ezuiFormInfoProduct #specsName').textbox({required:false});
+            $('#ezuiFormInfoProduct #productModel').textbox({required:false});
+            $('#ezuiFormInfoProduct #packingUnit').combobox({required:false});
+            $('#ezuiFormInfoProduct #storageCondition').textbox({required:false});
+            $('#ezuiFormInfoProduct #isDoublec').combobox({required:false});
+            $('#ezuiFormInfoProduct #isCertificate').combobox({required:false});
+            $('#ezuiFormInfoProduct #unit').combobox({required:false});
+            $('#ezuiFormInfoProduct #maintenanceCycle').numberbox({required:false});
+            $('#ezuiFormInfoProduct #licenseOrRecordNo').textbox({editable:true});
+            $('#ezuiFormInfoProduct #productionAddress').textbox({editable:true});
 
-
-
-
-        }else if($('#medicalDeviceMark').combobox('getValue') == '1'){
-            $('#ezuiFormInfo #productRegisterNo').textbox({required:true});
-            $('#ezuiFormInfo #productName').textbox({required:true});
-            $('#ezuiFormInfo #productModel').textbox({required:true});
-            $('#ezuiFormInfo #packingUnit').combobox({required:true});
-            $('#storageCondition').textbox({required:true});
-            $('#isDoublec').combobox({required:true});
-            $('#isCertificate').combobox({required:true});
-            $('#unit').combobox({required:true});
-            $('#maintenanceCycle').numberbox({required:true});
-            $('#licenseOrRecordNo').textbox({editable:false});
-
-            $('#ezuiFormInfo #productionAddress').textbox({editable:false});
+        }else if($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue') == '1'){
+            $('#ezuiFormInfoProduct #productRegisterNo').textbox({required:true});
+            $('#ezuiFormInfoProduct #productName').textbox({required:true});
+            $('#ezuiFormInfoProduct #productModel').textbox({required:true});
+            $('#ezuiFormInfoProduct #packingUnit').combobox({required:true});
+            $('#ezuiFormInfoProduct #storageCondition').textbox({required:true});
+            $('#ezuiFormInfoProduct #isDoublec').combobox({required:true});
+            $('#ezuiFormInfoProduct #isCertificate').combobox({required:true});
+            $('#ezuiFormInfoProduct #unit').combobox({required:true});
+            $('#ezuiFormInfoProduct #maintenanceCycle').numberbox({required:true});
+            $('#ezuiFormInfoProduct #licenseOrRecordNo').textbox({editable:false});
+            $('#ezuiFormInfoProduct #productionAddress').textbox({editable:false});
         }
     }
     function changeColdHainMark(){
         //非冷链： FLL  冷藏： LC  冷冻：LD
 
         // console.log($('#ezuiFormInfo #coldHainMark').combobox('getValue'));
-        if($('#ezuiFormInfo #coldHainMark').combobox('getValue') == 'FLL' || $('#ezuiFormInfo #coldHainMark').combobox('getValue') == ''){
-            $('#transportCondition').textbox({required:false});
+        if($('#ezuiFormInfoProduct #coldHainMark').combobox('getValue') == 'FLL' || $('#ezuiFormInfoProduct #coldHainMark').combobox('getValue') == ''){
+            $('#ezuiFormInfoProduct #transportCondition').textbox({required:false});
         }else {
-            $('#transportCondition').textbox({required:true});
+            $('#ezuiFormInfoProduct #transportCondition').textbox({required:true});
 
         }
     }
@@ -461,15 +456,15 @@
         //$("input[name='enterpriseId'][data='1']").val(id);
         console.log(licenseNo+'======='+recordNo+'==='+enterpriseId);
 
-        $("#ezuiFormInfo input[id='productNameMain']").textbox('setValue',name);
-        $("#ezuiFormInfo input[id='productionAddress']").textbox('setValue',address);
+        $("#ezuiFormInfoProduct input[id='productNameMain']").textbox('setValue',name);
+        $("#ezuiFormInfoProduct input[id='productionAddress']").textbox('setValue',address);
         $("#productRegisterNo").textbox("setValue",no);
         $("#productRegisterId").textbox("setValue",id);
         $("#enterpriseName").textbox("setValue",enterpriseName);
         //储存条件
         $("#storageCondition").textbox("setValue",storageConditions);
         $("#enterpriseId").val(enterpriseId);
-        $("#ezuiFormInfo #licenseOrRecordNo").textbox("setValue",licenseNo);
+        $("#ezuiFormInfoProduct #licenseOrRecordNo").textbox("setValue",licenseNo);
 
 
 
