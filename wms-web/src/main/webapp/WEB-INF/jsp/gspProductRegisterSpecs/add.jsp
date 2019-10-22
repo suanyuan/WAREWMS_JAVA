@@ -375,7 +375,7 @@
     }
 
     function changeRequired(){
-        alert($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue'));
+        // alert($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue'));
         if($('#ezuiFormInfoProduct #medicalDeviceMark').combobox('getValue') == '0'){
             $('#ezuiFormInfoProduct #productRegisterNo').textbox({required:false});
             $('#ezuiFormInfoProduct #specsName').textbox({required:false});
