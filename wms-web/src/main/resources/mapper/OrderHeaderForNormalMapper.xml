@@ -1280,7 +1280,7 @@
 		update doc_order_header set
 		<trim  suffixOverrides="," >
 			<if test="customerid != null  ">
-				customerid=#{customerId},
+				customerid=#{customerid},
 			</if>
 			<if test="soreference1 != null  ">
 				soreference1=#{soreference1},

@@ -76,24 +76,20 @@ $(function() {
 		},
 		columns : [[
 		            {field: 'chk',                  checkbox:true,          width: 6},
-					{field: 'customerid',			title: '客户编码',		width: 100 },
-                    {field: 'orderStatusName',		title: '订单状态',		width: 100 },
-					{field: 'orderno',				title: 'SO编号',		    width: 131 },
-					{field: 'soreference1',			title: '客户单号',	    width: 120 },
+					{field: 'customerid',			title: '客户编码',		width: 75 },
+                    {field: 'orderStatusName',		title: '订单状态',		width: 80 },
+					{field: 'orderno',				title: 'SO编号',		    width: 120 },
+					{field: 'soreference1',			title: '客户单号',	    width: 100 },
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
             		{field: 'cAddress4',			title: '快递单号',	    width: 120 },
-					{field: 'ordertime',			title: '创建时间',		width: 150 },
-					{field: 'orderTypeName',		title: '订单类型',		width: 100 },
-					{field: 'cContact',		        title: '收货方',		    width: 100 },
-                    {field: 'cProvince',			title: '省',		        width: 100 },
-                    {field: 'cCity',			    title: '市',		        width: 100 },
-                    {field: 'cAddress2',			title: '区',		        width: 100 },
+					{field: 'ordertime',			title: '创建时间',		width: 145 },
+					{field: 'orderTypeName',		title: '订单类型',		width: 80 },
+					{field: 'cContact',		        title: '收货方',		    width: 75 },
 					{field: 'cAddress1',			title: '收货地址',		width: 250 },
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
 					{field: 'addwho',				title: '创建人',		    width: 70 },
-					{field: 'releasestatusName',	title: '释放状态',		width: 100 },
-					{field: 'udfprintflag1' ,       title: '是否导出序列号' , width:80 ,       hidden:true },
-					{field: 'courierComplaint' ,       title: '快递投诉内容' , width:200}
+					{field: 'notes',				title: '备注',		    width: 150 },
+					{field: 'courierComplaint' ,       title: '快递投诉内容' , width:150}
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();

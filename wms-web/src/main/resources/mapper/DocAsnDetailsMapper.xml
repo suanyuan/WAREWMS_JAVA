@@ -1037,7 +1037,7 @@ insert into doc_asn_details
     </delete>
 
 	<select id="queryLeakLotatt4YYAsn" parameterType="java.util.Map" resultType="int">
-		select count(*) from doc_asn_detials
+		select count(*) from doc_asn_details
 		where asnno	= #{asnno}
 		and (ifnull(lotatt01, '') = '' or
 			ifnull(lotatt02, '') = '')

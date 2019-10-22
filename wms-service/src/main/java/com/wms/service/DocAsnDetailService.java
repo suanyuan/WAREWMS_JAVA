@@ -366,11 +366,23 @@ public class DocAsnDetailService extends BaseService {
 		docAsnDetailQuery.setAsnno(docAsnDetailForm.getAsnno());
 		docAsnDetailQuery.setAsnlineno(docAsnDetailForm.getAsnlineno());
 		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(docAsnDetailQuery);
-		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
+//		BeanUtils.copyProperties(docAsnDetailForm, docAsnDetail);
+        docAsnDetail.setExpectedqty(docAsnDetailForm.getExpectedqty());
+        docAsnDetail.setLotatt01(docAsnDetailForm.getLotatt01());
+        docAsnDetail.setLotatt02(docAsnDetailForm.getLotatt02());
+        docAsnDetail.setLotatt04(docAsnDetailForm.getLotatt04());
+        docAsnDetail.setLotatt05(docAsnDetailForm.getLotatt05());
+        docAsnDetail.setLotatt09(docAsnDetailForm.getLotatt09());
+        docAsnDetail.setReceivinglocation(docAsnDetailForm.getReceivinglocation());
 		docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 
         BasSku basSku = basSkuService.getSkuInfo(docAsnDetail.getCustomerid(),docAsnDetail.getSku());
         if(basSku!=null){
+
+            //产品名称
+            docAsnDetail.setLotatt12(basSku.getReservedfield01());
+            //储存条件
+            docAsnDetail.setLotatt11(basSku.getSkuGroup4());
 
             //数量换算
             BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
