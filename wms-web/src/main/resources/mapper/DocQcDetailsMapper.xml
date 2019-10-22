@@ -48,6 +48,7 @@
 <!--bas_sku-->
 	<result column="descr_c" property="descrc"/>
 	<result column="reservedfield06" property="reservedfield06"/>
+	<result column="reservedfield09" property="reservedfield09"/>
 <!--bas_package-->
 	<result column="qty1" property="qty1"/>
 <!--bas_customer-->
@@ -400,7 +401,7 @@ where 1=1
 <!-- 查询验收明细档列表 pano -->
 <select id="queryByListPano" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,p.`qty1`,c.`descr_c`  descrcM,cc.descr_c lotatt08Name
+	SELECT d.*,h.pano,a.*,s.descr_c,s.reservedfield06,s.reservedfield09,p.`qty1`,c.`descr_c`  descrcM,cc.descr_c lotatt08Name
 	FROM doc_qc_details  d
 	LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum

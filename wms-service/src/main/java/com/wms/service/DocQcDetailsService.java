@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
@@ -703,7 +704,9 @@ public class DocQcDetailsService extends BaseService {
         List<PdaDocQcDetailForm> list=JSON.parseArray(forms,PdaDocQcDetailForm.class);
         Boolean con=true;
         for (PdaDocQcDetailForm detailForm : list) {
-            InitPdaDocQcDetailForm(detailForm);//完善form值
+            if(list.size()>1) {
+                InitPdaDocQcDetailForm(detailForm);//完善form值
+            }
             detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
             detailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
             PdaResult pdaResult = submitDocQc(detailForm);//调用验收作业方法 单个验收
@@ -748,5 +751,36 @@ public class DocQcDetailsService extends BaseService {
             }
         }
 
+    }
+
+    /**
+     * 根据lotatt06查询所有注册证号
+     */
+
+    public List<PdaGspProductRegister> getRgisterListBylotatt06(String lotatt06) {
+
+        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotatt06);
+        List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
+        if (productRegister != null && StringUtil.isNotEmpty(productRegister.getVersion())) {
+
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+            historyQuery.setVersion(productRegister.getVersion());
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+            List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
+            List<String> numberList = new ArrayList<>();
+            for (PdaGspProductRegister pdaGspProductRegister : gspProductRegisterList) {
+
+                if (StringUtil.isEmpty(pdaGspProductRegister.getProductRegisterNo())) continue;
+
+                if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
+
+                    numberList.add(pdaGspProductRegister.getProductRegisterNo());
+                    returnRgisterList.add(pdaGspProductRegister);
+                }
+            }
+
+        }
+      return  returnRgisterList;
     }
 }

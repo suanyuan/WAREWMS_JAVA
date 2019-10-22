@@ -1,8 +1,12 @@
 package com.wms.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
+import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +84,15 @@ public class DocQcDetailsController {
 		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+	}
+	/**
+	 * 根据lotatt06查询所有注册证号
+	 * @return
+	 * */
+	@RequestMapping(params = "getRgisterListBylotatt06")
+	@ResponseBody
+	public List<PdaGspProductRegister> getRgisterListBylotatt06(String lotatt06){
+		return docQcDetailsService.getRgisterListBylotatt06(lotatt06);
 	}
 
 //	@Login

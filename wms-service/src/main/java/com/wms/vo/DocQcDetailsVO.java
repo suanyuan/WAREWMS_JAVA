@@ -53,7 +53,9 @@ public class DocQcDetailsVO {
 //bas_sku
 	private String descrc;  //规格型号
 	private String reservedfield06;  //生产许可证号/备案号
-//bas_package
+	private String reservedfield09;  //医疗器械
+
+	//bas_package
 	private Double qty1;  //转换率
 //bas_customer
 	private String shippershortname;  //货主简称
@@ -418,5 +420,13 @@ public class DocQcDetailsVO {
 
 	public void setLotatt03(String lotatt03) {
 		this.lotatt03 = lotatt03;
+	}
+
+	public String getReservedfield09() {
+		return reservedfield09;
+	}
+
+	public void setReservedfield09(String reservedfield09) {
+		this.reservedfield09 = reservedfield09;
 	}
 }
