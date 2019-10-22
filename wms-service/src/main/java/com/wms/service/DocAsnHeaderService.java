@@ -1004,32 +1004,35 @@ public class DocAsnHeaderService extends BaseService {
         }
 
         String[] noarr = asnnos.split(",");
-        for (String s : noarr) {
+        StringBuilder resultMsg = new StringBuilder();
+        for (String asnno : noarr) {
+
             DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-            docAsnHeaderQuery.setAsnno(s);
+            docAsnHeaderQuery.setAsnno(asnno);
             DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
+            resultMsg.append(asnno);
+
             if (docAsnHeader != null) {
                 if (docAsnHeader.getAsnstatus().equals("00") || docAsnHeader.getAsnstatus().equals("90")) {
-                    if (docAsnHeader.getAddwho().equals("EDI")) {
+                    if (docAsnHeader.getAddwho().contains("EDI")) {
                         json.setSuccess(false);
-                        json.setMsg("EDI订单,不能删除!");
-                        return json;
+                        resultMsg.append(": 接口订单,不可删除!").append("</br>");
                     } else {
                         docAsnHeaderMybatisDao.delete(docAsnHeader);
                         docAsnDetailsMybatisDao.deleteByHead(docAsnHeader.getAsnno());
-                        return Json.success("删除成功");
+                        resultMsg.append(": 删除成功;").append("</br>");
                     }
                 } else {
                     json.setSuccess(false);
-                    json.setMsg("当前状态订单,不能删除!");
-                    return json;
+                    resultMsg.append(": 只有订单创建和订单取消状态才可删除!").append("</br>");
                 }
+            } else {
+                json.setSuccess(false);
+                resultMsg.append(": 订单不存在!").append("</br>");
             }
-            json.setSuccess(true);
-            json.setMsg("资料处理成功！");
-            return json;
+            json.setMsg(resultMsg.toString());
         }
-        return Json.error("请选择要删除的预入库通知单");
+        return json;
     }
 
 

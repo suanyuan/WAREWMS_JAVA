@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 
 import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.utils.StringUtil;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 
 /**
@@ -50,7 +51,11 @@ public class RequestXmlUtil {
         strBuilder.append("d_city='" + orderHeaderForNormal.getCCity() + "'").append(" ");//市
         strBuilder.append("d_county='" + orderHeaderForNormal.getCAddress2() + "'").append(" ");//区
         strBuilder.append("d_company='" + orderHeaderForNormal.getConsigneeid() + "'").append(" ");//到件方公司名称
-        strBuilder.append("d_tel='" + orderHeaderForNormal.getCTel1() + "'").append(" ");//到件方联系电话
+        if (StringUtil.isEmpty(orderHeaderForNormal.getCTel1())) {
+            strBuilder.append("d_tel='" + orderHeaderForNormal.getCTel2() + "'").append(" ");//到件方联系电话
+        }else {
+            strBuilder.append("d_tel='" + orderHeaderForNormal.getCTel1() + "'").append(" ");//到件方联系电话
+        }
         strBuilder.append("d_contact='" + orderHeaderForNormal.getCContact() + "'").append(" ");//到件方联系人
         strBuilder.append("d_address='" + orderHeaderForNormal.getCAddress1() + "'").append(" ");//到件方详细地址
         //备注不为空就进行xml append()拼接

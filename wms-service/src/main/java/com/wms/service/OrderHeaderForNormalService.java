@@ -97,6 +97,7 @@ public class OrderHeaderForNormalService extends BaseService {
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
+
     /**
      * 订单列表显示
      */
@@ -587,31 +588,31 @@ public class OrderHeaderForNormalService extends BaseService {
                                 continue;
                             } else {
                                 //取消顺丰下单
-                                ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                                if(!responseCancel.isResultFlag()){
+                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                                if (!responseCancel.isResultFlag()) {
                                     json.setSuccess(false);
-                                    String error="出库处理失败：" + pickResult+"/br";
-                                    json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                                    String error = "出库处理失败：" + pickResult + "/br";
+                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                                     return json;
-                                }else {
-                                json.setSuccess(false);
-                                json.setMsg("出库处理失败：" + pickResult);
-                                return json;
-                                  }
+                                } else {
+                                    json.setSuccess(false);
+                                    json.setMsg("出库处理失败：" + pickResult);
+                                    return json;
+                                }
                             }
                         } else {
                             //取消顺丰下单
-                            ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if(!responseCancel.isResultFlag()){
+                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                            if (!responseCancel.isResultFlag()) {
                                 json.setSuccess(false);
-                                String error="出库处理失败：订单数据异常！/br";
-                                json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                                String error = "出库处理失败：订单数据异常！/br";
+                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                                 return json;
-                            }else {
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：订单数据异常！");
-                            return json;
-                             }
+                            } else {
+                                json.setSuccess(false);
+                                json.setMsg("出库处理失败：订单数据异常！");
+                                return json;
+                            }
                         }
                     }
                     //操作发运
@@ -633,31 +634,31 @@ public class OrderHeaderForNormalService extends BaseService {
                             return json;
                         } else {
                             //取消顺丰下单
-                            ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if(!responseCancel.isResultFlag()){
+                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                            if (!responseCancel.isResultFlag()) {
                                 json.setSuccess(false);
-                                String error="出库处理失败：" + shippmentResult+"/br";
-                                json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                                String error = "出库处理失败：" + shippmentResult + "/br";
+                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                                 return json;
-                            }else {
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：" + shippmentResult);
-                            return json;
-                             }
+                            } else {
+                                json.setSuccess(false);
+                                json.setMsg("出库处理失败：" + shippmentResult);
+                                return json;
+                            }
                         }
                     } else {
                         //取消顺丰下单
-                        ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                        if(!responseCancel.isResultFlag()){
+                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                        if (!responseCancel.isResultFlag()) {
                             json.setSuccess(false);
-                            String error="出库处理失败：订单数据异常！/br";
-                            json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                            String error = "出库处理失败：订单数据异常！/br";
+                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                             return json;
-                        }else {
-                        json.setSuccess(false);
-                        json.setMsg("出库处理失败：订单数据异常！");
-                        return json;
-                         }
+                        } else {
+                            json.setSuccess(false);
+                            json.setMsg("出库处理失败：订单数据异常！");
+                            return json;
+                        }
                     }
                 } else {
                     json.setSuccess(false);
@@ -671,15 +672,12 @@ public class OrderHeaderForNormalService extends BaseService {
 
             } else if (orderHeaderForNormal.getSostatus().equals("60")) {
 
-                json = fixLLPackage(orderHeaderForNormal.getOrderno());
-                if (!json.isSuccess()) return json;
-
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
                 String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
                 //响应报文
                 String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
                 //解析响应报文  TODO 下单重复反馈回来数据有问题
-               // String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
+                // String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
                 ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
                 if (!shunFengResponse.isResultFlag()) {
                     json.setSuccess(false);
@@ -716,24 +714,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
                 orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
                 /*顺丰下单end*/
-                //
-//				try {
-//					StockInXmlVo stockInXmlVo = new StockInXmlVo();
-//					stockInXmlVo.setOrderCode(orderHeaderForNormal.getOrderCode());
-//					stockInXmlVo.setOrderStatus(28);
-//					String xmldata = JaxbUtil.convertToXml(stockInXmlVo, false);
-//					logger.error("orderHeaderForNormalService-推送：" + xmldata);
-//					ResponseVO responseVO = new ServiceControllerProxy(END_POINT).updateOrder(xmldata);
-//					logger.error("orderHeaderForNormalService-接收：" + responseVO.getSuccess());
-//					if (responseVO.getSuccess() == false) {
-//						json.setSuccess(false);
-//						json.setMsg("出库处理失败：订单尚未配载！");
-//						return json;
-//					}
-//				} catch (Exception e) {
-//
-//					e.printStackTrace();
-//				}
+
                 //拣货/装箱状态订单直接操作发运
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -753,31 +734,31 @@ public class OrderHeaderForNormalService extends BaseService {
                         return json;
                     } else {
                         //取消顺丰下单
-                        ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                        if(!responseCancel.isResultFlag()){
+                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                        if (!responseCancel.isResultFlag()) {
                             json.setSuccess(false);
-                            String error="出库处理失败：" + shippmentResult+"/br";
-                            json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                            String error = "出库处理失败：" + shippmentResult + "/br";
+                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                             return json;
-                        }else {
-                        json.setSuccess(false);
-                        json.setMsg("出库处理失败：" + shippmentResult);
-                        return json;
-                         }
+                        } else {
+                            json.setSuccess(false);
+                            json.setMsg("出库处理失败：" + shippmentResult);
+                            return json;
+                        }
                     }
                 } else {
                     //取消顺丰下单
-                    ShunFengResponse responseCancel=CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                    if(!responseCancel.isResultFlag()){
+                    ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                    if (!responseCancel.isResultFlag()) {
                         json.setSuccess(false);
-                        String error="出库处理失败：订单数据异常！/br";
-                        json.setMsg(error+"顺丰单号:"+shunFengResponse.getOrderResponse().getMailNo()+"取消失败,原因:"+shunFengResponse.getErrorMsg());
+                        String error = "出库处理失败：订单数据异常！/br";
+                        json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
                         return json;
-                    }else {
-                    json.setSuccess(false);
-                    json.setMsg("出库处理失败：订单数据异常！");
-                    return json;
-                     }
+                    } else {
+                        json.setSuccess(false);
+                        json.setMsg("出库处理失败：订单数据异常！");
+                        return json;
+                    }
                 }
             } else {
                 json.setSuccess(false);
@@ -1002,6 +983,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 打印拣货单
+     *
      * @param orderno
      * @return
      */
@@ -1021,9 +1003,9 @@ public class OrderHeaderForNormalService extends BaseService {
         //客户单号 ohForNormal.getSoreference1();
         //发货日期 不要了
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
-        if(ohForNormal.getCContact()!=null && ohForNormal.getCContact()!=""){
+        if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
-        }else{
+        } else {
             ohForNormal.setPrintmen(ohForNormal.getConsigneeid());
         }
         //联系电话 ohForNormal.getCTel1();
@@ -1035,20 +1017,20 @@ public class OrderHeaderForNormalService extends BaseService {
         //拣货人 null
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
 
-        double a=0;
-        double b=0;
-        Integer c=0;
+        double a = 0;
+        double b = 0;
+        Integer c = 0;
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
-        for(int i=0;i<odForNormalList.size();i++){
+        for (int i = 0; i < odForNormalList.size(); i++) {
 
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
             //货位 odForNormal.getLocation();
             //产品代码 odForNormal.getSku();
 
-            InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
-            if(invLotAtt != null){
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
+            if (invLotAtt != null) {
                 //产品名称
                 docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
                 //注册证号/备案凭证书
@@ -1062,16 +1044,16 @@ public class OrderHeaderForNormalService extends BaseService {
                 //有效期/失效期
                 docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
             }
-            Map<String,Object> param1 = new HashMap<>();
-            param1.put("customerid",docOrderDetail.getCustomerid());
-            param1.put("sku",docOrderDetail.getSku());
-            BasSku basSku1 =  basSkuMybatisDao.queryById(param1);
+            Map<String, Object> param1 = new HashMap<>();
+            param1.put("customerid", docOrderDetail.getCustomerid());
+            param1.put("sku", docOrderDetail.getSku());
+            BasSku basSku1 = basSkuMybatisDao.queryById(param1);
             String notes = basSku1.getReservedfield07();
-            if(notes.equals("LD")){
+            if (notes.equals("LD")) {
                 ohForNormal.setNotes("冷冻");
-            }else if (notes.equals("FLL")){
+            } else if (notes.equals("FLL")) {
                 ohForNormal.setNotes("非冷链");
-            }else if (notes.equals("LC")){
+            } else if (notes.equals("LC")) {
                 ohForNormal.setNotes("冷藏");
             }
 
@@ -1091,32 +1073,32 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
                 //件数
                 orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
-                a = a+actAllocationDetails.getQty();
-                b = b+actAllocationDetails.getQtyEach();
+                a = a + actAllocationDetails.getQty();
+                b = b + actAllocationDetails.getQtyEach();
                 orderDetailsForNormal.setQtyorderedEachSum(a);//数量和
                 orderDetailsForNormal.setQtyorderedSum(b);//件数和
-                if(basSku1 !=null){
+                if (basSku1 != null) {
                     //实拣数 null
                     //规格型号
                     orderDetailsForNormal.setDescrc(basSku1.getDescrE());
                     //产品双证
-                    if(basSku1.getSkuGroup7().equals("1")){
+                    if (basSku1.getSkuGroup7().equals("1")) {
                         orderDetailsForNormal.setDoublec("是");
-                    }else{
+                    } else {
                         orderDetailsForNormal.setDoublec("否");
                     }
                     //附卡类别
                     orderDetailsForNormal.setCard(basSku1.getSkuGroup2());
                     //质量合格证
-                    if(basSku1.getSkuGroup8().equals("1")){
+                    if (basSku1.getSkuGroup8().equals("1")) {
                         orderDetailsForNormal.setReport("是");
-                    }else{
+                    } else {
                         orderDetailsForNormal.setReport("否");
                     }
                     //备注
 
                 }
-                c = c+1;
+                c = c + 1;
                 orderDetailsForNormal.setIndex(c);
 
                 orderDetailsForNormalList.add(orderDetailsForNormal);
@@ -1125,7 +1107,7 @@ public class OrderHeaderForNormalService extends BaseService {
         }
 
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
-        return  ohForNormal;
+        return ohForNormal;
     }
 
     /**
@@ -1138,9 +1120,9 @@ public class OrderHeaderForNormalService extends BaseService {
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
-        if(ohForNormal.getCContact()!=null && ohForNormal.getCContact()!=""){
+        if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
-        }else{
+        } else {
             ohForNormal.setPrintmen(ohForNormal.getConsigneeid());
         }
         //联系电话 ohForNormal.getCTel1();
@@ -1150,12 +1132,12 @@ public class OrderHeaderForNormalService extends BaseService {
         //发运方式 ZT BK LY 暂缓
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
 
-        double a=0;
-        double b=0;
-        Integer c=0;
+        double a = 0;
+        double b = 0;
+        Integer c = 0;
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
-        for(int i=0;i<odForNormalList.size();i++){
+        for (int i = 0; i < odForNormalList.size(); i++) {
 
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
@@ -1166,8 +1148,8 @@ public class OrderHeaderForNormalService extends BaseService {
             }
             //产品代码 odForNormal.getSku();
 
-            InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
-            if(invLotAtt != null){
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
+            if (invLotAtt != null) {
                 //生产日期
                 docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
                 //产品名称
@@ -1187,17 +1169,17 @@ public class OrderHeaderForNormalService extends BaseService {
                 //生产企业
                 docOrderDetail.setLotatt15(invLotAtt.getLotatt15());
             }
-            Map<String,Object> param1 = new HashMap<>();
-            param1.put("customerid",docOrderDetail.getCustomerid());
-            param1.put("sku",docOrderDetail.getSku());
-            BasSku basSku1 =  basSkuMybatisDao.queryById(param1);
+            Map<String, Object> param1 = new HashMap<>();
+            param1.put("customerid", docOrderDetail.getCustomerid());
+            param1.put("sku", docOrderDetail.getSku());
+            BasSku basSku1 = basSkuMybatisDao.queryById(param1);
             //备注
             String notes = basSku1.getReservedfield07();
-            if(notes.equals("LD")){
+            if (notes.equals("LD")) {
                 ohForNormal.setNotes("冷冻");
-            }else if (notes.equals("FLL")){
+            } else if (notes.equals("FLL")) {
                 ohForNormal.setNotes("非冷链");
-            }else if (notes.equals("LC")){
+            } else if (notes.equals("LC")) {
                 ohForNormal.setNotes("冷藏");
             }
 
@@ -1217,29 +1199,29 @@ public class OrderHeaderForNormalService extends BaseService {
                 orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
                 //件数
                 orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
-                a = a+actAllocationDetails.getQty();
-                b = b+actAllocationDetails.getQtyEach();
+                a = a + actAllocationDetails.getQty();
+                b = b + actAllocationDetails.getQtyEach();
                 orderDetailsForNormal.setQtyorderedEachSum(a);//数量和
                 orderDetailsForNormal.setQtyorderedSum(b);//件数和
-                if(basSku1 !=null){
+                if (basSku1 != null) {
                     //规格型号
                     orderDetailsForNormal.setDescrc(basSku1.getDescrE());
                     BasPackage basPackage = basPackageMybatisDao.queryById(basSku1.getPackid());
                     //换算率
-                    if(basPackage != null){
+                    if (basPackage != null) {
                         orderDetailsForNormal.setDescrc(basPackage.getDescr());
                     }
 
                     //产品双证
-                    if(basSku1.getSkuGroup7().equals("1")){
+                    if (basSku1.getSkuGroup7().equals("1")) {
                         orderDetailsForNormal.setDoublec("是");
-                    }else{
+                    } else {
                         orderDetailsForNormal.setDoublec("否");
                     }
                     //质量合格证
-                    if(basSku1.getSkuGroup8().equals("1")){
+                    if (basSku1.getSkuGroup8().equals("1")) {
                         orderDetailsForNormal.setReport("是");
-                    }else{
+                    } else {
                         orderDetailsForNormal.setReport("否");
                     }
                     //商品描述
@@ -1251,10 +1233,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
                 //单位
                 BasCodes basCodes = basCodesMybatisDao.query(basSku1.getDefaultreceivinguom());
-                if(basCodes != null){
+                if (basCodes != null) {
                     orderDetailsForNormal.setCodename(basCodes.getCodenameC());
                 }
-                c = c+1;
+                c = c + 1;
                 orderDetailsForNormal.setIndex(c);
 
                 orderDetailsForNormalList.add(orderDetailsForNormal);
@@ -1679,7 +1661,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
         return headerVO;
     }
-
 
 
     /**
@@ -2294,7 +2275,8 @@ public class OrderHeaderForNormalService extends BaseService {
         BasSku basSku = basSkuService.getSkuInfo(docOrderDetailsList.get(0).getCustomerid(), docOrderDetailsList.get(0).getSku());
         if (basSku == null) return Json.success("");
 
-        if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC")) return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");
+        if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC"))
+            return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");
 
         return Json.success("");
     }

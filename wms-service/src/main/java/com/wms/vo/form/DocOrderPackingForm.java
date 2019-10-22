@@ -54,4 +54,10 @@ public class DocOrderPackingForm {
     // ex. lotatt05,lotatt05,lotatt05
     // 以英文逗号分割
     private String serialNums;
+
+    /**
+     * add by Gizmo 2019-10-22
+     * 扫描的GS1条码，用于JSJY、BDL回传记录GS1条码
+     */
+    private String gs1Code;
 }

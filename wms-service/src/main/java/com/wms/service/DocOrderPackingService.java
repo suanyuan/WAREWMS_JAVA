@@ -860,6 +860,10 @@ public class DocOrderPackingService extends BaseService {
                 }
             }
 
+            //再分配明细上记录本次扫描的GS1条码内容
+			matchDetails.setNotes(form.getGs1Code());
+            actAllocationDetailsMybatisDao.update(matchDetails);
+
             //本次装箱件数+分配明细对应的已装箱件数 == 分配明细件数
             if (matchDetails.getQty() == (form.getQty() + packedNum)) {
 

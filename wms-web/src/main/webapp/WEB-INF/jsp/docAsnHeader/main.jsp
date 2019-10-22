@@ -1939,27 +1939,26 @@ function deleteMain() {
                 var arr = new Array();
                 for (var i = 0; i < row.length; i++) {
                     arr.push(row[i].asnno);
-
-                    $.ajax({
-                        url : 'docAsnHeaderController.do?delete',
-                        data : {'asnnos' : arr.join(",")},
-                        type : 'POST',
-                        dataType : 'JSON',
-                        success : function(result){
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                            } catch (e) {
-                                msg = '删除订单异常';
-                            } finally {
-                                $.messager.show({
-                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                                });
-                                ezuiDatagrid.datagrid('reload');
-                            }
-                        }
-                    });
                 }
+				$.ajax({
+					url : 'docAsnHeaderController.do?delete',
+					data : {'asnnos' : arr.join(",")},
+					type : 'POST',
+					dataType : 'JSON',
+					success : function(result){
+						var msg = '';
+						try {
+							msg = result.msg;
+						} catch (e) {
+							msg = '删除订单异常';
+						} finally {
+							$.messager.show({
+								msg : msg, title : '<spring:message code="common.message.prompt"/>'
+							});
+							ezuiDatagrid.datagrid('reload');
+						}
+					}
+				});
             }
         })
 	}
