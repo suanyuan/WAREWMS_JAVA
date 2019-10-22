@@ -234,47 +234,40 @@ var edit = function(){
 //发起 新申请
  var newAdd = function(){
      processType='newAdd';
-
+     $.messager.progress({
+         text : '<spring:message code="common.message.data.processing"/>', interval : 100
+     });
      var row = ezuiDatagrid.datagrid('getSelected');
+     if(row.firstState=="40" || row.firstState=="90"){
+
+	 }else{
+         $.messager.progress('close');
+         $.messager.show({
+             msg : '只有已报废和审核通过的可以发起新申请', title : '<spring:message code="common.message.prompt"/>'
+         });
+
+         return;
+	 }
      if (row) {
-         $.ajax({
-             url: '/gspReceivingController.do?validateReceiv',
-             data: {receivingId: row.receivingId},
-             type: 'POST',
-             dataType: 'JSON',
-			 success: function (res) {
-                 if(res.firstState=="40"){
-                     $('#ezuiDialog').dialog({
-                         modal : true,
-                         title : '<spring:message code="common.dialog.title"/>',
-                         fit:true,
-                         cache:false,
-                         buttons : '#ezuiDialogBtn',
-                         onClose : function() {
-                             ezuiFormClear(ezuiForm);
-                         }
-                     }).dialog('refresh', dialogUrll+"&enterpriseId="+row.enterpriseId+"&receivingId="+row.receivingId);
+         $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要发起新申请吗', function(confirm) {
+			 if (confirm) {
+				 $.ajax({
+					 url: '/gspReceivingController.do?reApply',
+					 data: {receivingId: row.receivingId},
+					 type: 'POST',
+					 dataType: 'JSON',
+					 success: function (result) {
+                         $.messager.progress('close');
+                         var msgss = result.msg;
+                         showMsg(msgss);
+                         ezuiDatagrid.datagrid("reload");
+					 }
 
-                 }else {
-                     $.messager.show({
-                         msg : '该项审核未通过，请重新选择！', title : '<spring:message code="common.message.prompt"/>'
-                     });
-				 }
-
-
-             }
-
-
-
-
-
-		 })
-
-
-
-
-
-
+				 })
+			 }else {
+                 $.messager.progress('close');
+			 }
+         })
      }else {
          $.messager.show({
              msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -306,7 +299,10 @@ var edit = function(){
             }else{
 
             }*/
-            };
+ };
+
+
+
  var del = function(){
                 var row = ezuiDatagrid.datagrid('getSelected');
                 if(row){
@@ -395,7 +391,7 @@ var commit = function(){
 
 
 
-
+//提交审核
 function xiafa() {
 
     //processType = 'edit';

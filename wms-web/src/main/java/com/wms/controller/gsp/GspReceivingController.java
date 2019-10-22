@@ -121,6 +121,25 @@ public class GspReceivingController {
 		return gspReceivingService.validateReceiv(receivingId);
 	}
 
+//	@Login
+//	@RequestMapping(params = "reApply")
+//	@ResponseBody
+//	public GspReceiving reApply(@RequestParam(value = "receivingId") String receivingId) throws Exception {
+//		return gspReceivingService.reApply(receivingId);
+//	}
+	@Login
+	@RequestMapping(params = "reApply")
+	@ResponseBody
+	public Json reApply(@RequestParam(value = "receivingId") String receivingId) throws Exception {
+		Json json = gspReceivingService.reApply(receivingId);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+
+
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody

@@ -377,17 +377,18 @@ public class DataPublishService extends BaseService {
             gspReceivingForm.setReceivingId(gspReceiving.getReceivingId());
             gspReceivingForm.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
             gspReceivingForm.setIsUse(Constant.IS_USE_NO);
-            gspReceivingForm.setClientId(no);
+//            gspReceivingForm.setClientId(no);
 
             gspReceivingService.editGspReceiving(gspReceivingForm);
 
             BasCustomerForm form = new BasCustomerForm();
-            form.setCustomerid(gspReceiving.getReceivingId());
+            form.setBankaccount(gspReceiving.getReceivingId());
+//            form.setCustomerid(gspReceiving.getReceivingId());
             form.setEnterpriseId(enterpriseId);
             form.setOperateType(gspReceiving.getEnterpriseType());
             form.setActiveFlag(Constant.IS_USE_NO);
             form.setBillclass(gspReceivingForm.getFirstState());
-            form.setCustomerid(gspReceiving.getReceivingId());
+//            form.setCustomerid(gspReceiving.getReceivingId());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
             return basCustomerService.editBasCustomerByEnterpriseId(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){

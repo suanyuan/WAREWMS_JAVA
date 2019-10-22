@@ -290,12 +290,12 @@ public class GspSupplierService extends BaseService {
                 CustomerQ.setCustomerid(gspSupplier.getCostomerid());
                 BasCustomer customer = basCustomerMybatisDao.selectByIdTypeActiveFlag(CustomerQ);
                 if(customer!=null){
-                    if("0".equals(customer.getActiveFlag())){
-                        return Json.error("对应的货主已不合作");
-                    }
-                }else{
-                    return Json.error("货主不存在");
-                }
+					if("0".equals(customer.getActiveFlag())){
+						return Json.error("对应的货主已不合作");
+					}
+				}else{
+					return Json.error("货主不存在");
+				}
 				GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryNewByEnterpriseId(gspSupplier.getEnterpriseId());
 				if(g==null){
 					return  Json.error("企业信息已失效");
@@ -422,6 +422,7 @@ public class GspSupplierService extends BaseService {
 			String b = "1";
 			if(t1!=null){
 				if(t1.equals(t2)){
+					result ="无变更内容";
 					list.add(result);
 					return list;
 				}
@@ -492,6 +493,8 @@ public class GspSupplierService extends BaseService {
 						}
 
 						list.add(result);
+					}else {
+
 					}
 
 				}

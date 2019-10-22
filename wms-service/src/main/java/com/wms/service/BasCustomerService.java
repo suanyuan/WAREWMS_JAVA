@@ -252,7 +252,7 @@ public class BasCustomerService extends BaseService {
                 }
 				firstReviewLogMybatisDao.add(firstReviewLog);
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(basCustomer.getEnterpriseId());
-
+				basCustomer.setBankaccount(number);
 				basCustomer.setDescrC(gspEnterpriseInfo.getEnterpriseName());
                 basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
                 basCustomer.setActiveFlag(Constant.IS_USE_YES);
@@ -412,9 +412,10 @@ public class BasCustomerService extends BaseService {
 //		System.out.println();
 //		BasCustomer basCustomer = basCustomerMybatisDao.queryById(basCustomerQuery);
 //		String customerId = basCustomer.getCustomerid();
-
-
 		BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(basCustomerForm.getBankaccount());
+		if(basCustomer==null){
+			Json.error("客户不存在");
+		}
 		String customerId = basCustomer.getCustomerid();
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);
 		basCustomer.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
