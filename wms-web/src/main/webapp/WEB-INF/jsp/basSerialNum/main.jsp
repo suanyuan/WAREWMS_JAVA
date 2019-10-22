@@ -37,6 +37,7 @@ $(function() {
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
+			{field: 'id',		title: '序号',	width:100,hidden:true},
 			{field: 'deliveryNum',		title: '发货凭证号',	width:100 },
 			{field: 'materialNum',		title: '产品代码',	width: 100 },
 			{field: 'batchNum',		title: '批号',	width: 100 },
@@ -133,7 +134,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'basSerialNumController.do?delete',
-					data : {id : row.serialNum},
+					data : {id : row.id},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){

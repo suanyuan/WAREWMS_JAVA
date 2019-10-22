@@ -73,14 +73,21 @@ public class BasSerialNumService extends BaseService {
 		return json;
 	}
 
+	/**
+	 * 根据序列号删除出库日期出库单号为空的数据
+	 * @param id
+	 * @return
+	 */
 	public Json deleteBasSerialNum(String id) {
 		Json json = new Json();
-		BasSerialNum basSerialNum = basSerialNumDao.queryById(id);
-		if(basSerialNum != null){
-			basSerialNumDao.delete(basSerialNum);
+		int num=basSerialNumDao.deleteById(id);
+		if(num>0){
+			json.setSuccess(true);
+			json.setMsg("删除成功!");
+		}else {
+			json.setSuccess(false);
+			json.setMsg("当前状态不可删除!");
 		}
-		json.setSuccess(true);
-		json.setMsg("删除成功!");
 		return json;
 	}
 

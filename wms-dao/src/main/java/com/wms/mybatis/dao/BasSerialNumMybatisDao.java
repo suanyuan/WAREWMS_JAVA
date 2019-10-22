@@ -19,6 +19,20 @@ public interface BasSerialNumMybatisDao extends BaseDao {
      * @return ~
      */
 	List<BasSerialNum> queryAvailableNum(BasSerialNumQuery query);
+
+    /**
+     * 根据序号删除出库日期出库单号为空的数据
+     * @param id
+     * @param
+     * @return
+     */
+      int  deleteById(Object id);
+    /**
+     * 根据序列号查询出库日期出库单号为空的数据
+     * @param id
+     * @param <T>
+     * @return
+     */
     public <T> T queryBySerialNum(Object id);
 
 }

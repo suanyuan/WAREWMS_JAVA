@@ -5,6 +5,7 @@
 <mapper namespace="com.wms.mybatis.dao.BasSerialNumMybatisDao" >
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.wms.entity.BasSerialNum" >
+	<result column="id" property="id"/>
 	<result column="serial_num" property="serialNum"/>
 	<result column="batch_num" property="batchNum"/>
 	<result column="material_num" property="materialNum"/>
@@ -29,7 +30,7 @@
        
 <!-- bas_serial_num table all fields -->
 <sql id="Base_Column_List" >
-	 serial_num,batch_num,material_num,expire_date,product_date,batch_flag,out_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime
+	 id,serial_num,batch_num,material_num,expire_date,product_date,batch_flag,out_flag,uom,purchase_order,package_num,delivery_num,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime
 </sql>
    
    
@@ -180,6 +181,10 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	delete 	 from bas_serial_num where serial_num = #{serialNum}
 </delete>
+<!-- 根据序号删除出库日期出库单号为空的数据 -->
+<delete id="deleteById" parameterType="Object">
+	delete 	 from bas_serial_num where id = #{id} and userdefine2 is null and userdefine3 is null
+</delete>
  
 <!-- 根据id查询 序列号管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
@@ -189,7 +194,7 @@ where 1=1
 
 </select>
 
-<!-- 根据queryBySerialNum查询 序列号管理 -->
+<!-- 根据序列号查询出库日期出库单号为空的数据 -->
 	<select id="queryBySerialNum"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
 		from bas_serial_num

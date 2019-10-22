@@ -9,6 +9,7 @@ import java.util.Date;
 @Data
 @Entity
 public class BasSerialNum implements Serializable {
+    private Integer id; //序号  主键
     private String serialNum; //lotatt05 序列号
     private String batchNum; //lotatt04 批号
     private String materialNum; //sku 产品代码
