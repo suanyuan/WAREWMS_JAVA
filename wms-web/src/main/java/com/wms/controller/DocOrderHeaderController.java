@@ -275,18 +275,27 @@ public class DocOrderHeaderController {
 	}
 	/**
 	 * 随货清单
-	 * @param response
-	 * @param orderCodeList
 	 * @throws Exception
 	 */
 	@Login
 	@RequestMapping(params = "exportAccompanyingPdf")
-	public void exportAccompanyingPdf(HttpServletResponse response, String orderCodeList) throws Exception {
-		try {
-			orderHeaderForNormalService.exportAccompanyingPdf(response,orderCodeList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String exportAccompanyingPdf(Model model,@RequestParam(value = "orderno") String orderno) throws Exception {
+
+        String[] s = orderno.split(",");
+        List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
+        for (String a:s) {
+            orderHeaderForNormal.add(orderHeaderForNormalService.exportAccompanyingPdf(a));
+        }
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
+        //原随后清单
+        /*model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");*/
+        //明伦 A4
+        /*model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");*/
+        //国润 A4 letter
+        /*model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");*/
+        model.addAttribute("format", Constant.JASPER_PDF);
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView";
 	}
 
 	@Login

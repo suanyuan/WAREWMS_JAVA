@@ -244,7 +244,7 @@ public class DocPaHeaderService extends BaseService {
     }
 
     /*
-        单数据打印
+        数据打印
      */
     public DocPaHeader printPaTaskPdf(String pano) {
         // 上架表头  docPaHeaderList 1 doc_pa_header
@@ -297,11 +297,11 @@ public class DocPaHeaderService extends BaseService {
             }
             String notes = basSku.getReservedfield07();
             if(notes.equals("LD")){
-                docPaDetails.setNotes("冷冻");
+                docPaHeader.setNotes("冷冻");
             }else if (notes.equals("FLL")){
-                docPaDetails.setNotes("非冷链");
+                docPaHeader.setNotes("非冷链");
             }else if (notes.equals("LC")){
-                docPaDetails.setNotes("冷藏");
+                docPaHeader.setNotes("冷藏");
             }
             //生产批号 1,details.lotnum =》 InvLotAttmybatisdao.querybyid =>Invlotatt   invlotatt.lotatt04
             InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(docPaDetails.getLotnum());

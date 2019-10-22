@@ -215,12 +215,17 @@ public class OrderDetailsForNormal implements Serializable {
 
 //    导出带出字段
     private String descrc;   //规格/型号
+    private String basdescrc; //供应商
     private String doublec;  //双证
     private String card;     //附卡类别
     private String report;   //质量合格证
     private double qtyorderedSum;   //订货件数总和
     private double qtyorderedEachSum;   //订货数量总和
     private Integer index;  //序号
+    private String codename;//单位
+    private String reservedfield02;//商品描述
+    private String reservedfield01;//商品名称
+    private String descr;//换算率
 	public OrderDetailsForNormal() {
 		
 	}

@@ -1009,20 +1009,20 @@ var printPacking = function(){
 };
 /* 打印随货清单 */
 var printAccompanying = function () {
-    orderList = null;
-    var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
-    $.each(checkedItems, function(index, item){
-        if (orderList == null) {
-            orderList = item.orderno;
-        } else {
-            orderList = orderList + ',' + item.orderno;
+    var rows = $('#ezuiDatagrid').datagrid('getSelections');
+    var orderno="";
+    if (rows.length > 0) {
+        for (var i = 0; i < rows.length; i++) {
+            orderno += rows[i].orderno+",";
         }
-    });
-    if (orderList == null) {
-        return;
+        /*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
+        window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderno="+orderno);
+    } else {
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
     }
-    console.log(orderList);
-    window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderCodeList="+orderList, "Report_"+orderList, "scrollbars=yes,resizable=no");
+
 }
 
 var printExpress = function () {
