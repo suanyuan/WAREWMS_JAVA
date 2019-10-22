@@ -12,87 +12,121 @@ var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
 $(function() {
-	ezuiMenu = $('#ezuiMenu').menu();
-	ezuiForm = $('#ezuiForm').form();
+    ezuiMenu = $('#ezuiMenu').menu();
+    ezuiForm = $('#ezuiForm').form();
     var ezuiDialog;
 
-	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/firstReviewLogController.do?showDatagrid"/>',
-		method:'POST',
-		toolbar : '#toolbar',
-		title: '',
-		pageSize : 50,
-		pageList : [50, 100, 200],
-		fit: true,
-		border: false,
-		fitColumns : false,
-		nowrap: false,
-		striped: true,
-		collapsible:false,
-		pagination:true,
-		rownumbers:true,
-		singleSelect:false,
-        rowStyler:function(index,row){
-		    if(row.applyState == CHECKSTATE.CHECKSTATE_50){
+    ezuiDatagrid = $('#ezuiDatagrid').datagrid({
+        url: '<c:url value="/firstReviewLogController.do?showDatagrid"/>',
+        method: 'POST',
+        toolbar: '#toolbar',
+        title: '',
+        pageSize: 50,
+        pageList: [50, 100, 200],
+        fit: true,
+        border: false,
+        fitColumns: false,
+        nowrap: false,
+        striped: true,
+        collapsible: false,
+        pagination: true,
+        rownumbers: true,
+        singleSelect: false,
+        rowStyler: function (index, row) {
+            if (row.applyState == CHECKSTATE.CHECKSTATE_50) {
                 return 'color:red;';
-			}
-		},
-		idField : 'reviewId',
-		columns : [[
-            {field: 'ck',checkbox:true },
-			{field: 'reviewId',		title: '主键',	width: 57 ,hidden:true},
-            {field: 'applyState',		title: '状态',	width: 100 ,
-                formatter:checkStateTypeFormatter
+            }
+        },
+        idField: 'reviewId',
+        columns: [[
+            {field: 'ck', checkbox: true},
+            {field: 'reviewId', title: '主键', width: 57, hidden: true},
+            {
+                field: 'applyState', title: '状态', width: 100,
+                formatter: checkStateTypeFormatter
             },
-            {field: '申请类型',		title: '申请类型',	width: 71,formatter:applyTypeFormatter },
-			{field: 'reviewTypeId',		title: '申请单编号',	width: 130 },
-			{field: 'applyContent',		title: '内容',	width: 500},
+            {field: '申请类型', title: '申请类型', width: 71, formatter: applyTypeFormatter},
+            {field: 'reviewTypeId', title: '申请单编号', width: 130},
+            {field: 'applyContent', title: '内容', width: 500},
 
-			{field: 'checkIdQc',		title: '质量部审核人',	width: 100 },
-			{field: 'checkDateQc',		title: '审核时间',	width: 150 },
-			{field: 'checkRemarkQc',		title: '备注',	width: 250 },
+            {field: 'checkIdQc', title: '质量部审核人', width: 100},
+            {field: 'checkDateQc', title: '审核时间', width: 150},
+            {field: 'checkRemarkQc', title: '备注', width: 250},
 
-			{field: 'checkIdHead',		title: '负责人审核',	width: 71 },
-			{field: 'checkDateHead',		title: '负责人审核时间',	width: 150 },
-            {field: 'checkRemarkHead',		title: '备注',	width: 250 },
-			{field: 'createDate',		title: '创建时间',	width: 150 }
-		]],
-        onDblClickRow: function(index,row){
-			edit(row);
-		},
-		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
-		},onLoadSuccess:function(data){
+            {field: 'checkIdHead', title: '负责人审核', width: 71},
+            {field: 'checkDateHead', title: '负责人审核时间', width: 150},
+            {field: 'checkRemarkHead', title: '备注', width: 250},
+            {field: 'createDate', title: '创建时间', width: 150}
+        ]],
+        onDblClickRow: function (index, row) {
+            edit(row);
+        },
+        onRowContextMenu: function (event, rowIndex, rowData) {
+            event.preventDefault();
             $(this).datagrid('unselectAll');
-		},onClickRow:function (index,row) {
-			if(row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50){
-				$("#doCheck").linkbutton("disable");
-			}else{
+            $(this).datagrid('selectRow', rowIndex);
+            ezuiMenu.menu('show', {
+                left: event.pageX,
+                top: event.pageY
+            });
+        }, onLoadSuccess: function (data) {
+            $(this).datagrid('unselectAll');
+            // row = ezuiDatagrid.datagrid("getSelections");
+            // var a = row.length;
+            // // alert(a);
+            // $('#nummm').html(a);
+        }, onClickRow: function (index, row) {
+            if (row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50) {
+                $("#doCheck").linkbutton("disable");
+                // alert(111111111111);
+            } else {
                 $("#doCheck").linkbutton("enable");
-			}
-        }
-	});
-	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		title : '<spring:message code="common.dialog.title"/>',
-		buttons : '#ezuiDialogBtn',
-		onClose : function() {
-			ezuiFormClear(ezuiForm);
-		}
-	}).dialog('close');
+                // alert(222222222222);
+            }
+            row = ezuiDatagrid.datagrid("getSelections");
+            var a = row.length;
+            // alert(a);
+            $('#nummm').html(a);
 
-	$("#applyState").combobox({
-        panelHeight: 'auto',
-        url:sy.bp()+'/commonController.do?checkState',
-        valueField:'id',
-        textField:'value'
+
+        }
     });
+    ezuiDialog = $('#ezuiDialog').dialog({
+        modal: true,
+        title: '<spring:message code="common.dialog.title"/>',
+        buttons: '#ezuiDialogBtn',
+        onClose: function () {
+            ezuiFormClear(ezuiForm);
+        }
+    }).dialog('close');
+
+    $("#applyState").combobox({
+        panelHeight: 'auto',
+        url: sy.bp() + '/commonController.do?checkState',
+        valueField: 'id',
+        textField: 'value'
+    });
+    $("input").each(function () {
+        // alert($(this));
+        $(this).click(function () {
+
+            jishu();
+
+            // 全选中
+        });
+    })
+
+    $('div').on('click','tbody>tr',function(){
+        jishu();
+    })
+    // $("#datagrid-body").onchange(function (){
+    //     jishu();
+    // });
+    // $("input").click(function () {
+	// 	// alert(1111);
+    //     jishu();
+    //     // 全选中
+    // });
 });
 
 var edit = function(row){
@@ -143,7 +177,12 @@ var doSearch = function(){
         createDateEnd : $('#createDateEnd').textbox("getValue")
 	});
 };
-
+    function  jishu(){
+        row = ezuiDatagrid.datagrid("getSelections");
+        var a = row.length;
+        // alert(a);
+        $('#nummm').html(a);
+	}
 function showCheck() {
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
@@ -333,7 +372,11 @@ var doExport = function(){
 				</fieldset>
 				<div>
 					<a id="doCheck" onclick='showCheck()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>审核</a>
+					<div style="float: right">
+						<a class='easyui-linkbutton' data-options='plain:true'>已选择</a><a id="nummm" class='easyui-linkbutton' data-options='plain:true'>0</a><a class='easyui-linkbutton' data-options='plain:true'>条</a>
+					</div>
 				</div>
+
 			</div>
 			<table id='ezuiDatagrid'></table>
 		</div>

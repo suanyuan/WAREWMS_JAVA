@@ -350,21 +350,22 @@
         <%--}--%>
     <%--}--%>
 
-
-    function operateGridProductAdd(id) {
-        console.log("---------->"+id);
+    //查看产品
+    function operateGridProductAdd(productId) {
+        console.log("---------->"+productId);
         // var type = 'product';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
         $('#ProductDialog').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+id+"&type=product",
+            href:sy.bp()+"/gspProductRegisterSpecsController.do?toAdd&specsId="+productId+"&type=product",
             width:1050,
             height:550,
             cache:false,
             onClose : function() {
-                ezuiFormClear(ezuiForm);
+                // ezuiFormClear(ezuiForm);
+                $(this).dialog("clear");
             }
         })
     }
@@ -375,7 +376,7 @@
         return "<a onclick=\"operateGridProductAdd('"+row.specsId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
     }
 
-
+    //查看注册证
     function formatOperProductRegeister(value,row,index){
         if(row.productRegisterId!=null && row.productRegisterId!=""){
             return "<a onclick=\"operateGridProductRegeister('"+row.productRegisterId+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
@@ -384,22 +385,24 @@
 
         }
     }
-    function operateGridProductRegeister(id) {
-        console.log("---------->"+id);
+    function operateGridProductRegeister(productRegisterId) {
+        console.log("---------->"+productRegisterId);
         // processType = 'product';
         // processType = 'edit';
         // enterpriseDialog.dialog("refresh","/gspProductRegisterSpecsController.do?toAdd&specsId="+id).dialog('open');
         // enterpriseDialog.dialog('close');
         $('#productRegisterDialog').dialog({
             modal : true,
+            // width:1050,
+            // height:550,
             title : '<spring:message code="common.dialog.title"/>',
-            href:sy.bp()+"/gspProductRegisterController.do?toDetail&id="+id,
+            href:sy.bp()+"/gspProductRegisterController.do?toDetail&id="+productRegisterId,
             fit:true,
             cache: false,
 
             onClose : function() {
-                ezuiFormClear(ezuiForm);
-
+                // ezuiFormClear(ezuiForm);
+                $(this).dialog("clear");
             },
             onLoad:function () {
 
