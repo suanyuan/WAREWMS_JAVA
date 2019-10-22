@@ -18,7 +18,6 @@ import com.wms.vo.form.DocPaDetailsForm;
 import com.wms.vo.form.DocPaHeaderForm;
 import com.wms.vo.form.DocQcDetailsForm;
 import com.wms.vo.form.DocQcHeaderForm;
-import com.wms.vo.pda.PdaDocPaHeaderVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -185,10 +184,15 @@ public class DocPaService {
                 List<PdaDocQcDetailForm> pdaDocQcDetailFormArrayList = new ArrayList<>();
 
                 for(DocPaDTO docPaDTO : listDTO){
+
                     if(!docPaDTO.getAsnstatus().equals("00")){
-                        return Json.error("只有创建状态的通知单才能确认收货");
+                        return Json.error("只有创建状态的通知单才能确认收货:" + docPaDTO.getAsnno());
                     }
-                    Json json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
+
+                    Json json = checkLeakLotatt(docPaDTO);
+                    if (!json.isSuccess()) return json;
+
+                    json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
                     if(!json.isSuccess()){
                         throw new Exception(json.getMsg());
                     }
@@ -363,5 +367,20 @@ public class DocPaService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error("确认收货系统异常"+e.getMessage());
         }
+    }
+
+    /**
+     * 判断引用入库的单子是否批属的缺失
+     * @param asnno 入库单号
+     * @return ~
+     */
+    private Json checkLeakLotatt(DocPaDTO docPaDTO) {
+
+        if (!docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) return Json.success("");
+        int count = docAsnDetailsMybatisDao.queryLeakLotatt4YYAsn(docPaDTO.getAsnno());
+        if (count > 0) {
+            return Json.error("引用入库单：" + docPaDTO.getAsnno() + "：缺失必要的批次属性，请前往明细中查看并填写!");
+        }
+        return Json.success("");
     }
 }

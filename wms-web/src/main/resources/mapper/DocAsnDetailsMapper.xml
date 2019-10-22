@@ -1035,4 +1035,11 @@ insert into doc_asn_details
     <delete id="deleteByHead" parameterType="Object">
 	delete from doc_asn_details where asnno = #{asnno, jdbcType=VARCHAR}
     </delete>
+
+	<select id="queryLeakLotatt4YYAsn" parameterType="java.util.Map" resultType="int">
+		select count(*) from doc_asn_detials
+		where asnno	= #{asnno}
+		and (ifnull(lotatt01, '') = '' or
+			ifnull(lotatt02, '') = '')
+	</select>
 </mapper>

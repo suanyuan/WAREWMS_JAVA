@@ -43,4 +43,11 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
 
 //  根据单号查所有明细
     <T> List<T> queryByAsnNo(String Asnno);//总查询分页
+
+    /**
+     * 为引用入库查看是否有缺失的批属
+     * lotatt01、lotatt02
+     * @return
+     */
+    int queryLeakLotatt4YYAsn(@Param("asnno") String asnno);
 }
