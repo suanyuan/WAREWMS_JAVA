@@ -432,14 +432,16 @@ var mov = function(){
 	var num=rows.length;
 	var locs=new Map();
 
+//冻结库位不可移动
 //待检产品库位不可移动
 //设置库位不可移出
 	if(num>0){
 		for (var i = 0; i < rows.length; i++) {
-			var lot=rows[i].lotatt10;
-			if(lot=='DJ'){
+			var onholdlocker=rows[i].onholdlocker;
+			var lotatt10=rows[i].lotatt10;
+			if(lotatt10=='DJ'||onholdlocker=='99'){
 				$.messager.show({
-					msg :"产品质量状态为待检不可调整!", title : '<spring:message code="common.message.prompt"/>'
+					msg :"库位状态为[库存冻结]或产品质量状态为[待检]不可调整!", title : '<spring:message code="common.message.prompt"/>'
 				});
 				return;
 			}
