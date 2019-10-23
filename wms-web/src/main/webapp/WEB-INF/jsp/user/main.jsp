@@ -162,12 +162,15 @@ $(function() {
 
 var add = function(){
 	processType = 'add';
+    // $('#ezuiForm #cosPassword').textbox('enable');
 	ezuiDialog.dialog('open');
 };
 
 var edit = function(){
 
 	processType = 'edit';
+
+
 	var row = ezuiTreegrid.treegrid('getSelected');
 	if(row){
 
@@ -247,7 +250,7 @@ var edit = function(){
 			}
 		}
 		$('#parentNodeId').combotree('setValue', row.parent ? row.parent.parentNodeId : "");
-
+        // sda();
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -255,7 +258,12 @@ var edit = function(){
 		});
 	}
 };
+function sda() {
+    // alert(11111);
+    // $('#ezuiForm #cosPassword1').html('');
 
+    // $('#ezuiForm #cosPassword').textbox('disable');
+}
 var del = function(){
 	var row = ezuiTreegrid.treegrid('getSelected');
 	if(row){
@@ -338,6 +346,14 @@ var commit = function(){
 		}
 	});
 };
+// function rePassword(){
+// 	// row = ezuiTreegrid.dialog("get");
+//     var row = ezuiTreegrid.treegrid('getSelected');
+//
+//
+//
+// }
+
 
 var clearParentName = function(){
 	$('#parentNodeId').combotree('clear');
@@ -354,6 +370,8 @@ var clearParentName = function(){
 					<a onclick="add();" 	id="ezuiBtn_add"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-add"'		href="javascript:void(0);"><spring:message code="common.button.add"/></a>
 					<a onclick="edit();" 	id="ezuiBtn_edit"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);"><spring:message code="common.button.edit"/></a>
 					<a onclick="clearTreegridSelected('#ezuiTreegrid');" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-undo"'	href="javascript:void(0);"><spring:message code="common.button.cancelSelect"/></a>
+					<%--<a onclick="rePassword();" 	id="ezuiBtn_rePassword"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);">重置密码</a>--%>
+
 				</div>
 			</div>
 			
@@ -442,25 +460,36 @@ var clearParentName = function(){
 																																	{id: '1', value: '<spring:message code='adminUser.datagrid.enable.y'/>'}
 																																]"/>  
 					</td>
-					<th><spring:message code="menu.datagrid.parent"/></th>
-					<td colspan="3">
-						<input type="text" id="parentNodeId" name="parentNodeId" class="easyui-combotree" size='16' data-options=" 	url : '<c:url value="/userController.do?getTree"/>',
-																																animate : true,
-																																lines : true,
-																																onLoadSuccess : function(node, data) {
-																																	var t = $(this);
-																																	if (data) {
-																																		$(data).each(function(index, d) {
-																																			if (this.state == 'closed') {
-																																				t.tree('expandAll');
-																																			}
-																																		});
-																																	}
-																																}">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"' onclick="clearParentName();">
-							<spring:message code="common.button.clear"/>
-						</a>
-					</td>
+					<%--<th><spring:message code="menu.datagrid.parent"/></th>--%>
+					<%--<td colspan="3">--%>
+						<%--<input type="text" id="parentNodeId" name="parentNodeId" class="easyui-combotree" size='16' data-options=" 	url : '<c:url value="/userController.do?getTree"/>',--%>
+																																<%--animate : true,--%>
+																																<%--lines : true,--%>
+																																<%--onLoadSuccess : function(node, data) {--%>
+																																	<%--var t = $(this);--%>
+																																	<%--if (data) {--%>
+																																		<%--$(data).each(function(index, d) {--%>
+																																			<%--if (this.state == 'closed') {--%>
+																																				<%--t.tree('expandAll');--%>
+																																			<%--}--%>
+																																		<%--});--%>
+																																	<%--}--%>
+																																<%--}">--%>
+						<%--<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"' onclick="clearParentName();">--%>
+							<%--<spring:message code="common.button.clear"/>--%>
+						<%--</a>--%>
+					<%--</td>--%>
+					<%--<th>密码</th>--%>
+					<%--<td colspan="2">--%>
+						<%--<input type="text" id="password" name="password" class="easyui-textbox" size='16' data-options='required:true'>--%>
+						<%--&lt;%&ndash;<a href="javascript:void(0);" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"' onclick="rePassword();">&ndash;%&gt;--%>
+							<%--&lt;%&ndash;重置&ndash;%&gt;--%>
+						<%--&lt;%&ndash;</a>&ndash;%&gt;--%>
+					<%--</td>--%>
+
+					<th id="cosPassword1">密码</th>
+					<td><input type="text"   id="cosPassword" name="cosPassword" class="easyui-textbox"   /></td>
+
 				</tr>
 				<tr>
 					<th>GSP审核权限</th>

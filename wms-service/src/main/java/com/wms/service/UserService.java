@@ -246,6 +246,7 @@ public class UserService extends BaseService {
 			sfcUser.setNodeId(RandomUtil.getUUID().replaceAll("-", ""));
 			
 			if(userForm.getUserType() > 0){
+				//新增的是员工
 				String pwd = null;
 				if(StringUtils.isNotEmpty(userForm.getCosPassword())){
 					pwd = userForm.getCosPassword();
