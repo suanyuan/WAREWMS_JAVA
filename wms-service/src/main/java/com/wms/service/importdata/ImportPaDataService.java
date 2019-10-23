@@ -211,6 +211,7 @@ public class ImportPaDataService {
                 pdaDocPaDetailForm.setUserdefine3(importDocPaData.getLotatt04());
                 pdaDocPaDetailForm.setUserdefine4(importDocPaData.getLotatt05());
                 pdaDocPaDetailForm.setUserdefine5("DJ");
+                pdaDocPaDetailForm.setOtherCode(importDocPaData.getSku());
                 importData.add(pdaDocPaDetailForm);
             }
 

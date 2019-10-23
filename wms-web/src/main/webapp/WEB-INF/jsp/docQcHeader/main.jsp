@@ -78,7 +78,8 @@ $(function() {
 			{field: 'addtime',		title: '创建时间',	width: 134 },
 			{field: 'addwho',		title: '创建人',	width: 100 },
 			{field: 'qty1',		title: '换算率',	width: 100},
-			{field: 'reservedfield09',		title: '医疗',	width: 100,hidden:true}
+			{field: 'reservedfield09',		title: '医疗',	width: 100,hidden:true},
+			{field: 'reservedfield14',		title: '生产企业（默认）',	width: 100,hidden:true}
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -612,7 +613,7 @@ var acceptanceWork = function(){
 			lotatt01:rows[0].lotatt01,
 			lotatt02:rows[0].lotatt02,
 			lotatt06:rows[0].lotatt06,
-			lotatt15:rows[0].lotatt15,
+			lotatt15:rows[0].reservedfield14,
 			reservedfield06:rows[0].reservedfield06,
 			qcqtyExpected:rows[0].qcqtyExpected,
 			qcqtyExpectedEach:rows[0].qcqtyExpectedEach,
@@ -862,7 +863,7 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 			if(result!=null){
 				console.log(result.enterpriseInfo.enterpriseName)
 
-				$("#ezuiAcceptanceFormS #lotatt15").textbox('setValue',result.enterpriseName);
+				$("#ezuiAcceptanceFormS #lotatt15").textbox('setValue',result.enterpriseInfo.enterpriseName);
 				$("#ezuiAcceptanceFormS #lotatt11").textbox('setValue',result.storageConditions);
 				$("#ezuiAcceptanceFormS #reservedfield06").textbox('setValue',result.licenseOrRecordNol);
 			}

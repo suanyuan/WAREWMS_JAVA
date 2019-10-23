@@ -775,8 +775,9 @@ public class DocQcDetailsService extends BaseService {
 
                 if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
 
+                    String jsonStr1 = JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect);
                     numberList.add(pdaGspProductRegister.getProductRegisterNo());
-                    returnRgisterList.add(pdaGspProductRegister);
+                    returnRgisterList.add(JSONObject.parseObject(jsonStr1, PdaGspProductRegister.class));
                 }
             }
 

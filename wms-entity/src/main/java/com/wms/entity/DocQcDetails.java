@@ -81,6 +81,7 @@ public class DocQcDetails  implements Serializable {
 	private String descrc;  //规格型号
 	private String reservedfield06;  //生产许可证号/备案号
 	private String reservedfield09;  //医疗器械
+	private String reservedfield14;  //默认生产企业
 //bas_package
 	private Double qty1;  //转换率
 //bas_customer
