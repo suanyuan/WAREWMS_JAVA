@@ -623,6 +623,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
                     // $("#ezuiFormSupInfo #empowerPhoto").val(data.comment);
                     $.messager.progress('close');
                     if (data.success) {
+                        console.log(1111);
                         $("#ezuiFormSupInfo #empowerPhoto").val(data.comment);
                     }else {
                         showMsg("上传附件失败，请重试");
@@ -642,8 +643,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         // if(url){
         //     showUrl(url);
         // }else{
-            if($("#ezuiFormSupInfo input[id='contractUrlFile']").val()!=""){
-                showUrl($("#ezuiFormSupInfo input[id='contractUrlFile']").val());
+            if($("#ezuiFormSupInfo input[id='contractUrl']").val()!=""){
+                showUrl($("#ezuiFormSupInfo input[id='contractUrl']").val());
             }else {
                 showMsg("请上传合同附件！");
             }
@@ -653,8 +654,8 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         // if(url){
         //     showUrl(url);
         // }else{
-            if($("#ezuiFormSupInfo input[id='contractUrlFile1']").val()!=""){
-                showUrl($("#ezuiFormSupInfo input[id='contractUrlFile1']").val());
+            if($("#ezuiFormSupInfo input[id='empowerPhoto']").val()!=""){
+                showUrl($("#ezuiFormSupInfo input[id='empowerPhoto']").val());
             }else {
                 showMsg("请上传授权照片！");
             }
