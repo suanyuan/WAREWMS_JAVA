@@ -1,20 +1,20 @@
 package com.wms.utils.generator;
 
+import com.wms.entity.BasCodes;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 
-import com.wms.entity.*;
-
 public class CodeGenerator {
 	//windows路径
-	private static final String VO_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String FORM_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String QUERY_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String DAO_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String SERVICE_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String CONTROLLER_PATH = "D:\\InsertList\\CodeGenerator\\";
-	private static final String JSP_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String VO_PATH = "F:\\codesG";
+	private static final String FORM_PATH = "F:\\codesG";
+	private static final String QUERY_PATH = "F:\\codesG";
+	private static final String DAO_PATH = "F:\\codesG";
+	private static final String SERVICE_PATH = "F:\\codesG";
+	private static final String CONTROLLER_PATH = "F:\\codesG";
+	private static final String JSP_PATH = "F:\\codesG";
 
 	//mac路径
 
@@ -36,7 +36,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new BasCustomerHistory());
+		CodeGenerator generator = new CodeGenerator(new BasCodes());
 		generator.genData();
 	}
 	

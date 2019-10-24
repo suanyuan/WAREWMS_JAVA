@@ -276,12 +276,21 @@ public class DocPaHeaderService extends BaseService {
 
 
         List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaList(pano);
+        //总页数
+        int pageSize = (int) Math.ceil((double) docPaDetailsList.size() / 9);
+        docPaHeader.setPageSize(pageSize);
+        int pageNo=1;//页码
+        docPaHeader.setPageNo(pageNo);
+        if(docPaDetailsList.size()>9){
+            pageNo +=1;
+        }
+        docPaHeader.setPageNo(pageNo);
+
 
         double a=0;
         double b=0;
         Integer c=0;
         for(int i=0;i<docPaDetailsList.size();i++){
-
             DocPaDetails docPaDetails = docPaDetailsList.get(i);
             //序号 1~。。。
             //产品代码docpadetails.sku
@@ -329,6 +338,7 @@ public class DocPaHeaderService extends BaseService {
             if(basCodes != null){
                 docPaDetails.setCodename(basCodes.getCodenameC());
             }
+
             c+=1;
             docPaDetails.setIndex(c);
         }
@@ -338,9 +348,7 @@ public class DocPaHeaderService extends BaseService {
         //已上件数 null
         //库位 null
         //上架人 null
-        // 页码
         // 上架明细  padetails'多个 doc_pa_details
-        /*docPaHeaderList.add(docPaHeader);*/
         return docPaHeader;
     }
 

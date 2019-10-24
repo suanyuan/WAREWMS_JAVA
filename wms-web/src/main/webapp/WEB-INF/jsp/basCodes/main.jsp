@@ -121,7 +121,7 @@ var del = function(){
 			if(confirm){
 				$.ajax({
 					url : 'basCodesController.do?delete',
-					data : {id : row.codeid},
+					data : {codeid : row.codeid , code : row.code},
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){

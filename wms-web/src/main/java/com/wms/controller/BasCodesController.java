@@ -77,8 +77,8 @@ public class BasCodesController {
 	@Login
 	@RequestMapping(params = "delete")
 	@ResponseBody
-	public Json delete(String id) {
-		Json json = basCodesService.deleteBasCodes(id);
+	public Json delete(String codeid,String code) {
+		Json json = basCodesService.deleteBasCodes(codeid,code);
 		if(json == null){
 			json = new Json();
 		}

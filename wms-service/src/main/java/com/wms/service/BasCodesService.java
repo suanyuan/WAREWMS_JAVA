@@ -76,11 +76,11 @@ public class BasCodesService {
         return json;
     }
 
-    public Json deleteBasCodes(String id) {
+    public Json deleteBasCodes(String codeid,String code) {
         Json json = new Json();
 //        BasCodes basCodes = basCodesMybatisDao.queryById(id);
 //        if(basCodes != null){
-            basCodesMybatisDao.delete(id);
+            basCodesMybatisDao.delByIDCode(codeid,code);
 //        }
         json.setSuccess(true);
         return json;

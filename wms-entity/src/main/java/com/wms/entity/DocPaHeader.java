@@ -62,7 +62,8 @@ public class DocPaHeader  implements Serializable {
 	private String asnreference2;//客户单号2
 	private String descrC;//货主
 	private String descrC1;//供应商
-
+	private Integer pageSize;//总页数
+	private Integer pageNo;//页码
 
 	private  List<DocPaDetails> detls;
 }

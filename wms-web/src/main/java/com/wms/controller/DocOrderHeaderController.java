@@ -287,12 +287,17 @@ public class DocOrderHeaderController {
             orderHeaderForNormal.add(orderHeaderForNormalService.exportAccompanyingPdf(a));
         }
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
-        //原随后清单
-        /*model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");*/
-        //明伦 A4
-        /*model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");*/
-        //国润 A4 letter
-        /*model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");*/
+        String customer = orderHeaderForNormal.get(0).getCustomerid();
+        if(customer.equals("JSGR")){
+            //国润 A4 letter
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");
+        }else if (customer.equals("JSML")){
+            //明伦 A4
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");
+        }else{
+            //原随后清单
+            model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+        }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
