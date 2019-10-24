@@ -288,7 +288,15 @@ public class DocPaDetailsService extends BaseService {
         DocPaDetails docPaDetails = null;
         if (StringUtil.isNotEmpty(form.getPalineno())) {
 
-            docPaDetails = docPaDetailsMybatisDao.queryByLineNo(form.getPano(), Integer.valueOf(form.getPalineno()));
+            docPaDetails = docPaDetailsMybatisDao.queryByLineNo(form.getPano(), Integer.parseInt(form.getPalineno()));
+            /*
+            add by Gizmo 2019-10-24
+            如果有palineno就说明是扫码先获取上架详情的，在这边判断上架数是否超出 "待上架件数(指导)"
+             */
+            if (form.getPaqty().intValue() > (docPaDetails.getPutwayqtyExpected() - docPaDetails.getPutwayqtyCompleted())) {
+
+                return new PdaResult(PdaResult.CODE_FAILURE, "上架件数超出'待上件数(指导)'，请核对!");
+            }
         }else {
 
             List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();
@@ -324,6 +332,7 @@ public class DocPaDetailsService extends BaseService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return new PdaResult(PdaResult.CODE_FAILURE, "上架过程中日期转换出错");
         }
 
 

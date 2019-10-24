@@ -65,83 +65,94 @@ public class DocPaService {
         if (StringUtils.isEmpty(asnNos)) {
             return Json.error("请选择需要操作的单据");
         }
+
+        String[] arr = asnNos.split(",");
+        List<DocPaDTO> listDTO = docAsnDetailsMybatisDao.queryDocPaDTO(arr);
+
+        if (listDTO == null || listDTO.size() == 0) return Json.error("单据已经合并过或所选入库单没有上架任务可以生成");
+
+        /* Begin ========================
+         * add by Gizmo 2019-08-20
+         * 定向订单/引用订单无需生成上架任务，否则打印出来的上架单是错误的。
+         * 这两个类型的订单在确认收货后已经上架完成了
+         *
+         * edit by Gizmo 2019-10-24
+         * 本来是用listDTO来获取单据类型来做的，但是后来才发现
+         * listDTO 查询来的内容如果生成过了，就不会查出来了，所以如果一个已经生成过了，一个没有，还是可以合并成功，
+         * 只不过上架明细里面只有没有生成过的入库单的上架任务。所以只是显示的上架单号不对
+         * */
+        String asnReference1 = "";
+        String asnReference2 = "";
+        for (String asnno : arr) {
+
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+            if (docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
+                    docAsnHeader.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
+                return Json.error("定向订单/引用订单无需生成上架任务！");
+            }
+            if (!asnReference1.contains(StringUtil.fixNull(docAsnHeader.getAsnreference1()))) {
+                asnReference1 += StringUtil.fixNull(docAsnHeader.getAsnreference1());
+                asnReference1 += ",";
+            }
+            if (!asnReference2.contains(StringUtil.fixNull(docAsnHeader.getAsnreference2()))) {
+                asnReference2 += StringUtil.fixNull(docAsnHeader.getAsnreference2());
+                asnReference2 += ",";
+            }
+        }
+        if (asnReference1.length() > 0) asnReference1 = asnReference1.substring(0, asnReference1.length() - 1);
+        if (asnReference2.length() > 0) asnReference2 = asnReference2.substring(0, asnReference2.length() - 1);
+        /*
+         * End    ========================
+         * */
+
         try {
-            String[] arr = asnNos.split(",");
-            List<DocPaDTO> listDTO = docAsnDetailsMybatisDao.queryDocPaDTO(arr);
-            if (listDTO != null && listDTO.size() > 0) {
 
-                /* Begin ========================
-                * add by Gizmo 2019-08-20
-                * 定向订单/引用订单无需生成上架任务，否则打印出来的上架单是错误的。
-                * 这两个类型的订单在确认收货后已经上架完成了
-                * */
-                String asnReference1 = "";
-                String asnReference2 = "";
-                for (DocPaDTO typeDto:
-                     listDTO) {
-                    if (typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_DX) ||
-                    typeDto.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) {
-                        return Json.error("定向订单/引用订单无需生成上架任务！");
-                    }
-                    if (!asnReference1.contains(StringUtil.fixNull(typeDto.getAsnreference1()))) {
-                        asnReference1 += StringUtil.fixNull(typeDto.getAsnreference1());
-                        asnReference1 += ",";
-                    }
-                    if (!asnReference2.contains(StringUtil.fixNull(typeDto.getAsnreference2()))) {
-                        asnReference2 += StringUtil.fixNull(typeDto.getAsnreference2());
-                        asnReference2 += ",";
-                    }
-                }
-                if (asnReference1.length() > 0) asnReference1 = asnReference1.substring(0, asnReference1.length() - 1);
-                if (asnReference2.length() > 0) asnReference2 = asnReference2.substring(0, asnReference2.length() - 1);
-                /*
-                * End    ======================== */
-
-                SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
-                DocPaHeaderForm docPaHeaderForm = new DocPaHeaderForm();
-                Map<String, Object> map = new HashMap<>();
-                map.put("warehouseid", login.getWarehouse().getId());
-                map.put("resultNo", "");
-                map.put("resultCode", "");
-                //int length = asnNos.length() >= 200 ? 200 : asnNos.length();
-                docAsnDetailsMybatisDao.getIdSequence(map);
-                String panno = map.get("resultNo").toString();
-                docPaHeaderForm.setPano(panno);
-                docPaHeaderForm.setAsnno(asnNos);
-                docPaHeaderForm.setPastatus("00");
-                docPaHeaderForm.setAddtime(new Date());
-                docPaHeaderForm.setAddwho(login.getId());
-                docPaHeaderForm.setPareference1(asnReference1);
-                docPaHeaderForm.setPareference2(asnReference2);
-                docPaHeaderForm.setPaPrintFlag(Constant.CODE_YES_OR_NO);
-                docPaHeaderForm.setCustomerid(listDTO.get(0).getCustomerid());
-                //docPaHeader.setWarehouseid();
-                Json json = docPaHeaderService.addDocPaHeader(docPaHeaderForm);
-                if (!json.isSuccess()) {
-                    return Json.error("上架作业表头信息生成失败");
-                }
-                for (DocPaDTO docPaDTO : listDTO) {
-                    DocPaDetailsForm detailsForm = new DocPaDetailsForm();
-                    detailsForm.setPano(panno);
-                    detailsForm.setLinestatus("00");
-                    detailsForm.setLotnum(docPaDTO.getLotnum());
-                    detailsForm.setAsnno(docPaDTO.getAsnno());
-                    detailsForm.setAsnlineno(docPaDTO.getAsnlineno());
-                    detailsForm.setAsnqtyExpected(docPaDTO.getReceivedqty().doubleValue());
-                    detailsForm.setPutwayqtyExpected(docPaDTO.getReceivedqty().doubleValue());
-                    detailsForm.setPutwayqtyCompleted(0d);
-                    detailsForm.setCustomerid(docPaDTO.getCustomerid());
-                    detailsForm.setSku(docPaDTO.getSku());
-                    detailsForm.setUserdefine1("STAGE01");
-                    detailsForm.setUserdefine2(docPaDTO.getLotatt02());
-                    detailsForm.setUserdefine3(docPaDTO.getLotatt04());
-                    detailsForm.setUserdefine4(docPaDTO.getLotatt05());
-                    detailsForm.setUserdefine5(docPaDTO.getLotatt10());
-                    detailsForm.setPalineno((docPaDetailService.queryMaxLineNo(panno)+1) + "");
-                    detailsForm.setPackid(docPaDTO.getPackid());
-                    detailsForm.setAddwho(login.getId());
-                    detailsForm.setAddtime(new Date());
-                    Json rest = docPaDetailService.addDocPaDetails(detailsForm);
+            SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
+            DocPaHeaderForm docPaHeaderForm = new DocPaHeaderForm();
+            Map<String, Object> map = new HashMap<>();
+            map.put("warehouseid", login.getWarehouse().getId());
+            map.put("resultNo", "");
+            map.put("resultCode", "");
+            //int length = asnNos.length() >= 200 ? 200 : asnNos.length();
+            docAsnDetailsMybatisDao.getIdSequence(map);
+            String panno = map.get("resultNo").toString();
+            docPaHeaderForm.setPano(panno);
+            docPaHeaderForm.setAsnno(asnNos);
+            docPaHeaderForm.setPastatus("00");
+            docPaHeaderForm.setAddtime(new Date());
+            docPaHeaderForm.setAddwho(login.getId());
+            docPaHeaderForm.setPareference1(asnReference1);
+            docPaHeaderForm.setPareference2(asnReference2);
+            docPaHeaderForm.setPaPrintFlag(Constant.CODE_YES_OR_NO);
+            docPaHeaderForm.setCustomerid(listDTO.get(0).getCustomerid());
+            docPaHeaderForm.setWarehouseid(login.getWarehouse().getId());
+            Json json = docPaHeaderService.addDocPaHeader(docPaHeaderForm);
+            if (!json.isSuccess()) {
+                return Json.error("上架作业表头信息生成失败");
+            }
+            for (DocPaDTO docPaDTO : listDTO) {
+                DocPaDetailsForm detailsForm = new DocPaDetailsForm();
+                detailsForm.setPano(panno);
+                detailsForm.setLinestatus("00");
+                detailsForm.setLotnum(docPaDTO.getLotnum());
+                detailsForm.setAsnno(docPaDTO.getAsnno());
+                detailsForm.setAsnlineno(docPaDTO.getAsnlineno());
+                detailsForm.setAsnqtyExpected(docPaDTO.getReceivedqty().doubleValue());
+                detailsForm.setPutwayqtyExpected(docPaDTO.getReceivedqty().doubleValue());
+                detailsForm.setPutwayqtyCompleted(0d);
+                detailsForm.setCustomerid(docPaDTO.getCustomerid());
+                detailsForm.setSku(docPaDTO.getSku());
+                detailsForm.setUserdefine1("STAGE01");
+                detailsForm.setUserdefine2(docPaDTO.getLotatt02());
+                detailsForm.setUserdefine3(docPaDTO.getLotatt04());
+                detailsForm.setUserdefine4(docPaDTO.getLotatt05());
+                detailsForm.setUserdefine5(docPaDTO.getLotatt10());
+                detailsForm.setPalineno((docPaDetailService.queryMaxLineNo(panno)+1) + "");
+                detailsForm.setPackid(docPaDTO.getPackid());
+                detailsForm.setAddwho(login.getId());
+                detailsForm.setAddtime(new Date());
+//                Json rest =
+                docPaDetailService.addDocPaDetails(detailsForm);
                     /*if(rest.isSuccess()){
                         DocAsnDetail detail = new DocAsnDetail();
                         detail.setAsnlineno(Long.parseLong(docPaDTO.getAsnno()));
@@ -152,18 +163,15 @@ public class DocPaService {
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                         return Json.error("合并上架清单系统异常");
                     }*/
-                }
-                for(String asnNo : arr){
-                    DocAsnHeader header = new DocAsnHeader();
-                    header.setAsnno(asnNo);
-                    header.setAsnPrintFlag("Y");
-                    header.setUserdefine2(panno);//预期到货通知头档记录上架任务单号
-                    docAsnHeaderMybatisDao.updateBySelective(header);
-                }
-                return Json.success("合并成功");
-            }else{
-                return Json.error("单据已经合并过");
             }
+            for(String asnNo : arr){
+                DocAsnHeader header = new DocAsnHeader();
+                header.setAsnno(asnNo);
+                header.setAsnPrintFlag("Y");
+                header.setUserdefine2(panno);//预期到货通知头档记录上架任务单号
+                docAsnHeaderMybatisDao.updateBySelective(header);
+            }
+            return Json.success("合并成功");
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -371,7 +379,7 @@ public class DocPaService {
 
     /**
      * 判断引用入库的单子是否批属的缺失
-     * @param asnno 入库单号
+     * @param docPaDTO 入库单号
      * @return ~
      */
     private Json checkLeakLotatt(DocPaDTO docPaDTO) {
