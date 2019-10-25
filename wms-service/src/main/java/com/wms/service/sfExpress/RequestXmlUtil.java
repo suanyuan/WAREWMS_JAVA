@@ -36,7 +36,15 @@ public class RequestXmlUtil {
         //YYMMDD(日期)+流水号,
         //如:TB1207300000001
         strBuilder.append("orderid='" + orderHeaderForNormal.getOrderno() + "22" + "'").append(" ");
-        //返回顺丰运单号  //运输方式
+        //返回顺丰运单号
+        /*
+         运输方式
+         您好，可以通过更改“express_type”值来选择不同的产品类型，
+         请查阅https://qiao.sf-express.com/pages/developDoc/index.html?level2=689001选择符合您需求的产品。
+         1 - 顺丰标快
+         2 - 顺丰特惠
+         TODO 现在顺丰下单都是标快，不对，需要区分特惠、标快（丰桥）根据发运方式下不同的类型，还要区分快递公司，如果是顺丰的才去下顺丰的单子。其他的快递公司最好提供一个填写快递单号的地方用来记录一下。
+         */
         strBuilder.append("express_type='1'").append(" ");
         //寄件方信息
         strBuilder.append("j_province='" + "上海市" + "'").append(" ");
@@ -82,7 +90,11 @@ public class RequestXmlUtil {
         //需要写实体类获取（没有实现）
         strBuilder.append("custid ='" + CallExpressServiceTools.CUST_ID + "'").append(" ");//顺丰月结卡号
 
-        //付款方式:1寄付 2.收支付 3.第三方付
+        //付款方式:1寄方付 2.收支付 3.第三方付
+        /*
+        月结 - 1 寄方付
+        到付 - 2 收支付
+         */
         strBuilder.append("pay_method = '" + "1" + "'").append(" ");
         strBuilder.append(" is_unified_waybill_no='1'>").append(" ");
 
