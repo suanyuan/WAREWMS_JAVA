@@ -1159,29 +1159,26 @@ public class OrderHeaderForNormalService extends BaseService {
         //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-        //总页数
-        int pageSize = (int) Math.ceil((double) odForNormalList.size() / 8);
-        ohForNormal.setPageSize(pageSize);
 
         double a=0;//数量
         double b=0;//件数
         Integer c=0;//序号
-        int pageNo=1;//页码
-        ohForNormal.setPageNo(pageNo);
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
         for (int i = 0; i < odForNormalList.size(); i++) {
 
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
-            //供应商
-            BasCustomer basCustomerList = basCustomerMybatisDao.queryByCustomerId(docOrderDetail.getCustomerid());
+
+/*            BasCustomer basCustomerList = basCustomerMybatisDao.queryByCustomerId(docOrderDetail.getCustomerid());
             if (basCustomerList != null) {
                 docOrderDetail.setBasdescrc(basCustomerList.getDescrC());
-            }
+            }*/
             //产品代码 odForNormal.getSku();
             InvLotAtt  invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
             if(invLotAtt != null){
+                //供应商
+                docOrderDetail.setLotatt08(invLotAtt.getLotatt08());
                 //生产日期
                 docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
                 //产品名称
@@ -1267,10 +1264,6 @@ public class OrderHeaderForNormalService extends BaseService {
                 if (basCodes != null) {
                     orderDetailsForNormal.setCodename(basCodes.getCodenameC());
                 }
-                if(i>8){
-                    pageNo +=1;
-                }
-                ohForNormal.setPageNo(pageNo);
                 c = c+1;
                 orderDetailsForNormal.setIndex(c);
 

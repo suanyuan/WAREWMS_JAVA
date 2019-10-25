@@ -215,7 +215,6 @@ public class OrderDetailsForNormal implements Serializable {
 
 //    导出带出字段
     private String descrc;   //规格/型号
-    private String basdescrc; //供应商
     private String doublec;  //双证
     private String card;     //附卡类别
     private String report;   //质量合格证

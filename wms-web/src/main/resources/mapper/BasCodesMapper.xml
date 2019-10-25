@@ -140,7 +140,7 @@ where 1=1
 <delete id="delete" parameterType="Object">
 	delete 	 from bas_codes where codeid = #{codeid}
 </delete>
-<!-- 删除记录 -->
+<!-- 选中单条信息删除 -->
 <delete id="delByIDCode" parameterType="Object">
 	delete 	 from bas_codes where codeid = #{codeid} and code = #{code}
 </delete>
