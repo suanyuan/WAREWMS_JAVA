@@ -631,6 +631,7 @@ public class BasCustomerService extends BaseService {
 		basCustomerForm.setCustomerid(form.getCustomerid());
 		basCustomerForm.setDescrC(form.getDescrC());
 		basCustomerForm.setActiveFlag(form.getActiveFlag());
+		basCustomerForm.setEnterpriseNo(form.getEnterpriseNo());
 		try {
 			BasCustomerQuery query = new BasCustomerQuery();
 			//权限控制
@@ -690,13 +691,11 @@ public class BasCustomerService extends BaseService {
 						basCustomerVO.setClientTerm(basCustomerVO.getClientTerm()+"天");
 					}
 
-
-
-
-
-
-
-
+					if ("1".equals(basCustomerVO.getIsChineseLabel())) {
+						basCustomerVO.setIsChineseLabel("是");
+					}else if("0".equals(basCustomerVO.getIsChineseLabel())){
+						basCustomerVO.setIsChineseLabel("否");
+					}
 
 				}
 

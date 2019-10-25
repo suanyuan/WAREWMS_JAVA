@@ -547,7 +547,7 @@ var doExport = function(){
 
 
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportBasCustomerDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();

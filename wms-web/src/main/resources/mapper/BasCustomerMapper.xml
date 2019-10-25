@@ -757,10 +757,10 @@ where 1=1
 <!-- 查询客户档案列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select a.*,b.codename_c as customerTypeName
-	from (select <include refid="Base_Column_List"/>
-	from Bas_Customer 
-	<include refid="Example_Where_Clause"/>
-    ) a, Bas_Codes b
+	from (select t1.*,t2.enterprise_no
+	from Bas_Customer t1  LEFT JOIN gsp_enterprise_info t2 on t1.enterprise_id = t2.enterprise_id
+	<include refid="Example_Where_Clause_Type"/>
+	) a, Bas_Codes b
     where a.customer_type = b.code
     and b.codeid = 'CUS_TYP'
 </select>
