@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +57,19 @@ public class GspVerifyService {
     @Autowired
     private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
 
+    /**
+     * 验证上架提交日期有效性
+     */
+    public Json verifyPaDateValidation(String lotatt01, String lotatt02) {
+        return verifyGspDateValidation("", "", lotatt01, lotatt02, false);
+    }
+
+    /**
+     * 验证验收提交日期有效性
+     */
+    public Json verifyQcDateValidation(String customerid, String sku, String lotatt01, String lotatt02) {
+        return verifyGspDateValidation(customerid, sku, lotatt01, lotatt02, true);
+    }
 
     /**
      * gsp申请经营范围校验
@@ -80,6 +93,67 @@ public class GspVerifyService {
     public Json verifyOperate(String customerId,String supplierId,String sku,String lotatt01,String lotatt02){
         return this.verifyOperate(customerId, supplierId, sku, lotatt01, lotatt02, "");
         //return Json.success("");
+    }
+
+    /**
+     * 验证产品入库的时间校验 上架 && 验收
+     * @param lotatt01 生产日期
+     * @param lotatt02 效期
+     * @param customerid 货主代码
+     * @param sku 产品代码
+     */
+    private Json verifyGspDateValidation(String customerid, String sku, String lotatt01, String lotatt02, boolean isCheckLotatt01) {
+
+        if (StringUtil.isEmpty(lotatt01)) {
+            return Json.error("请选择生产日期");
+        }else if (StringUtil.isEmpty(lotatt02   )) {
+            return Json.error("请选择有效期/失效期");
+        }
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date prdDate = format.parse(lotatt01);
+            Date expiryDate = format.parse(lotatt02);
+            if (prdDate.getTime() >= expiryDate.getTime()) {
+                return Json.error("有效期/失效期不可小于生产日期");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Json.error("日期转换出错");
+        }
+
+        if (!isCheckLotatt01) return Json.success("验证通过");
+
+        // ↑↑↑↑↑上架↑↑↑↑↑
+
+        // ↓↓↓↓↓验收↓↓↓↓↓
+        if (StringUtil.isEmpty(customerid)) {
+            return Json.error("未传入货主代码");
+        }else if (StringUtil.isEmpty(sku)) {
+            return Json.error("未传入产品代码");
+        }
+
+        //GSP-注册证：lotatt01 from 注册证.批准日期 to 注册证.有效期
+        BasSku basSku = basSkuService.getSkuInfo(customerid, sku);
+        if (null == basSku) return Json.error("查无此产品档案数据");
+        if (basSku.getReservedfield09().equals("0")) return Json.success("验证通过（非医疗器械）");
+        if (StringUtil.isEmpty(basSku.getReservedfield03())) return Json.error("验证不通过，此产品为医疗器械，却查无注册证号，请联系质量部进行排查");
+
+        //通过注册证号 查询注册证，可能存在多个注册证 create_date asc
+        List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryAllByNo(basSku.getReservedfield03());
+        if (allRegister == null || allRegister.size() == 0) return Json.error("验证不通过，此产品已有注册证，却查无此证号的注册证数据，请联系质量部进行排查");
+
+        Date beginDate;
+        Date endDate;
+        beginDate = allRegister.get(0).getApproveDate();
+        endDate = allRegister.get(allRegister.size() - 1).getProductRegisterExpiryDate();
+        if(checkDate(lotatt01,beginDate)<0){
+            return Json.error("生产日期小于注册证批准日期："+sku);
+        }
+        if(checkDate(lotatt01,endDate)>0){
+            return Json.error("生产日期超出注册证失效日期："+sku);
+        }
+        return Json.success("验证通过");
     }
 
     /**

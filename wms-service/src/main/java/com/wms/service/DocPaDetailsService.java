@@ -46,16 +46,10 @@ public class DocPaDetailsService extends BaseService {
 	private BasSkuMybatisDao basSkuMybatisDao;
 
 	@Autowired
-	private InvLotAttMybatisDao invLotAttMybatisDao;
-
-	@Autowired
-	private BasSerialNumMybatisDao basSerialNumMybatisDao;
-
-	@Autowired
-	private ProductLineMybatisDao productLineMybatisDao;
-
-	@Autowired
 	private CommonService commonService;
+
+	@Autowired
+	private GspVerifyService gspVerifyService;
 
 	public EasyuiDatagrid<DocPaDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaDetailsQuery query) {
         EasyuiDatagrid<DocPaDetailsVO> datagrid = new EasyuiDatagrid<>();
@@ -253,6 +247,10 @@ public class DocPaDetailsService extends BaseService {
      */
     public PdaResult putawayGoods(PdaDocPaDetailForm form) {
 
+        //add by Gizmo 2019-10-26 日期校验
+        Json json = gspVerifyService.verifyPaDateValidation(form.getLotatt01(), form.getUserdefine2());
+        if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
+
         /*
         111，处理BasSku获取问题，并返回准确的批号、序列号条件
          */
@@ -306,34 +304,6 @@ public class DocPaDetailsService extends BaseService {
 
         InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
         if (invLotAtt == null) return new PdaResult(PdaResult.CODE_FAILURE, "查无产品批次属性数据");
-
-
-        /*
-         ********************************* 日期校验 *********************************
-         */
-        if (StringUtil.isEmpty(form.getLotatt01())) {
-            form.setLotatt01(invLotAtt.getLotatt01());
-        }
-        if (StringUtil.isEmpty(form.getUserdefine2())) {
-            form.setUserdefine2(invLotAtt.getLotatt02());
-        }
-        if (StringUtil.isEmpty(form.getLotatt01())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
-        }else if (StringUtil.isEmpty(form.getUserdefine2())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择有效期/失效期");
-        }
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date prdDate = format.parse(form.getLotatt01());
-            Date expiryDate = format.parse(form.getUserdefine2());
-            if (prdDate.getTime() >= expiryDate.getTime()) {
-                return new PdaResult(PdaResult.CODE_FAILURE, "有效期/失效期不可小于生产日期");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new PdaResult(PdaResult.CODE_FAILURE, "上架过程中日期转换出错");
-        }
 
 
         /*

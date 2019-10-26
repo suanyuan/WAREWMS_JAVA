@@ -12,7 +12,6 @@ import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.*;
-import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.*;
@@ -22,26 +21,20 @@ import com.wms.vo.form.DocOrderPackingForm;
 import com.wms.vo.form.pda.ScanResultForm;
 import com.wms.vo.pda.CommonVO;
 import com.wms.vo.pda.PdaDocPackageVO;
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.exolab.castor.util.OrderedHashMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import javax.crypto.Mac;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("docOrderPackingService")
 public class DocOrderPackingService extends BaseService {
@@ -78,7 +71,6 @@ public class DocOrderPackingService extends BaseService {
 
 	@Autowired
     private CommonService commonService;
-
 
 	public EasyuiDatagrid<DocOrderPackingVO> getPagedDatagrid(EasyuiDatagridPager pager, DocOrderPackingQuery query) {
 		EasyuiDatagrid<DocOrderPackingVO> datagrid = new EasyuiDatagrid<DocOrderPackingVO>();

@@ -40,38 +40,38 @@ import java.util.*;
 @Service("docQcDetailsService")
 public class DocQcDetailsService extends BaseService {
 
-	@Autowired
-	private DocQcDetailsMybatisDao docQcDetailsDao;
-
-	@Autowired
-	private BasSkuMybatisDao basSkuMybatisDao;
-
-	@Autowired
-	private BasPackageMybatisDao basPackageMybatisDao;
-
-	@Autowired
-	private InvLotAttMybatisDao invLotAttMybatisDao;
-
-	@Autowired
-	private GspProductRegisterMybatisDao productRegisterMybatisDao;
-
-	@Autowired
-	private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
-
-	@Autowired
-	private InvLotMybatisDao invLotMybatisDao;
-
-	@Autowired
-	private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
-
-	@Autowired
-	private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
-
-	@Autowired
-	private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
+    @Autowired
+    private DocQcDetailsMybatisDao docQcDetailsDao;
 
     @Autowired
-    private ProductLineMybatisDao productLineMybatisDao;
+    private BasSkuMybatisDao basSkuMybatisDao;
+
+    @Autowired
+    private BasPackageMybatisDao basPackageMybatisDao;
+
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
+
+    @Autowired
+    private GspProductRegisterMybatisDao productRegisterMybatisDao;
+
+    @Autowired
+    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
+
+    @Autowired
+    private InvLotMybatisDao invLotMybatisDao;
+
+    @Autowired
+    private DocPaHeaderMybatisDao docPaHeaderMybatisDao;
+
+    @Autowired
+    private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
+
+    @Autowired
+    private DocQcHeaderMybatisDao docQcHeaderMybatisDao;
+
+    @Autowired
+    private GspVerifyService gspVerifyService;
 
     @Autowired
     private CommonService commonService;
@@ -79,20 +79,21 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 显示细单 分页 pano
+     *
      * @param pager
      * @param query
      * @return
      */
-	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
+    public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
         List<DocQcDetailsVO> docQcDetailsVOList = new ArrayList<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        if(query.getQcno()==null||query.getQcno()==""){
+        if (query.getQcno() == null || query.getQcno() == "") {
             datagrid.setRows(docQcDetailsVOList);
-            datagrid.setTotal((long)0);
+            datagrid.setTotal((long) 0);
             return datagrid;
         }
         List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListPano(mybatisCriteria);
@@ -100,35 +101,35 @@ public class DocQcDetailsService extends BaseService {
         for (DocQcDetails docQcDetails : docQcDetailsList) {
             docQcDetailsVO = new DocQcDetailsVO();
             //计算件数
-            docQcDetails.setQcqtyExpected(docQcDetails.getQcqtyExpected()-docQcDetails.getQcqtyCompleted());
+            docQcDetails.setQcqtyExpected(docQcDetails.getQcqtyExpected() - docQcDetails.getQcqtyCompleted());
             //计算数量
-            docQcDetails.setQcqtyExpectedEach(docQcDetails.getQcqtyExpected()*docQcDetails.getQty1());
-            docQcDetails.setQcqtyCompletedEach(docQcDetails.getQcqtyCompleted()*docQcDetails.getQty1());
+            docQcDetails.setQcqtyExpectedEach(docQcDetails.getQcqtyExpected() * docQcDetails.getQty1());
+            docQcDetails.setQcqtyCompletedEach(docQcDetails.getQcqtyCompleted() * docQcDetails.getQty1());
             BeanUtils.copyProperties(docQcDetails, docQcDetailsVO);
             docQcDetailsVOList.add(docQcDetailsVO);
         }
         datagrid.setTotal((long) docQcDetailsDao.queryByCountPano(mybatisCriteria));
         datagrid.setRows(docQcDetailsVOList);
         return datagrid;
-	}
+    }
 
-	public Json addDocQcDetails(DocQcDetailsForm docQcDetailsForm) throws Exception {
-		Json json = new Json();
-		DocQcDetails docQcDetails = new DocQcDetails();
-		BeanUtils.copyProperties(docQcDetailsForm, docQcDetails);
-		docQcDetailsDao.add(docQcDetails);
-		json.setSuccess(true);
-		return json;
-	}
+    public Json addDocQcDetails(DocQcDetailsForm docQcDetailsForm) throws Exception {
+        Json json = new Json();
+        DocQcDetails docQcDetails = new DocQcDetails();
+        BeanUtils.copyProperties(docQcDetailsForm, docQcDetails);
+        docQcDetailsDao.add(docQcDetails);
+        json.setSuccess(true);
+        return json;
+    }
 
-	public Json editDocQcDetails(DocQcDetailsForm docQcDetailsForm) {
-		Json json = new Json();
-		DocQcDetails docQcDetails = docQcDetailsDao.queryById(docQcDetailsForm);
-		BeanUtils.copyProperties(docQcDetailsForm, docQcDetails);
-		docQcDetailsDao.update(docQcDetails);
-		json.setSuccess(true);
-		return json;
-	}
+    public Json editDocQcDetails(DocQcDetailsForm docQcDetailsForm) {
+        Json json = new Json();
+        DocQcDetails docQcDetails = docQcDetailsDao.queryById(docQcDetailsForm);
+        BeanUtils.copyProperties(docQcDetailsForm, docQcDetails);
+        docQcDetailsDao.update(docQcDetails);
+        json.setSuccess(true);
+        return json;
+    }
 
     //TODO WARNING!! 此处不可用个，删除条件欠缺 应该qcno + qclineno
 //	public Json deleteDocQcDetails(String id) {
@@ -158,6 +159,7 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 获取验收详情
+     *
      * @param query ~
      * @return ~
      */
@@ -250,8 +252,8 @@ public class DocQcDetailsService extends BaseService {
         888,当前批次-产品注册证对应的 生产厂家
          */
         PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
-        if ((productRegister == null || productRegister.getEnterpriseInfo() == null ) &&
-        StringUtil.isEmpty(basSku.getReservedfield14())) {
+        if ((productRegister == null || productRegister.getEnterpriseInfo() == null) &&
+                StringUtil.isEmpty(basSku.getReservedfield14())) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产企业信息"));
             return map;
         }
@@ -296,6 +298,7 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 查询任务明细列表
+     *
      * @param qcno ~
      * @return ~
      */
@@ -328,7 +331,8 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 更新已验收的验收说明
-     * @param query  ~
+     *
+     * @param query ~
      * @return ~
      */
     public PdaResult editQcDesc(DocQcDetailsQuery query) {
@@ -343,48 +347,23 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 验收提交
+     *
      * @param form ~
      * @return ~
      */
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
 
-        /**
-         * 日期校验
-         */
-        if (StringUtil.isEmpty(form.getLotatt01())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择生产日期");
-        }else if (StringUtil.isEmpty(form.getLotatt02())) {
-            return new PdaResult(PdaResult.CODE_FAILURE, "请选择有效期/失效期");
-        }
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date prdDate = format.parse(form.getLotatt01());
-            Date expiryDate = format.parse(form.getLotatt02());
-            if (prdDate.getTime() >= expiryDate.getTime()) {
-                return new PdaResult(PdaResult.CODE_FAILURE, "有效期/失效期不可小于生产日期");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        /**
-         * 批量修改日期校验
-         * 目前批量修改日期可操作，但是同批号、未上架的产品，日期就还是原来的
-         * 所以这边做个限制，批量操作如果上架任务中有此批号的未上架产品，不允许批量验收
-         */
-//        DocQcDetails docQcDetails = new DocQcDetails();
-//        if (form.getAllqcflag() == 1) {
-//
-//            docQcDetails = docQcDetailsDao.queryById(form);
-//            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docQcDetails);
-//            int paPiece = docPaDetailsMybatisDao.queryUndoneNum4BatchNum(form.getQcno(), form.getLotatt04());
-//            if ((StringUtil.fixNull(invLotAtt.getLotatt01()).equals(form.getLotatt01()) || StringUtil.fixNull(invLotAtt.getLotatt02()).equals(form.getLotatt02())) &&
-//                    paPiece > 0) {
-//
-//                return new PdaResult(PdaResult.CODE_FAILURE, "当前生产批号下还有未上架的产品，不可进行批量修改日期操作");
-//            }
-//        }
+        //add by Gizmo 2019-10-26 日期校验
+        DocQcDetailsQuery qcQuery = new DocQcDetailsQuery();
+        qcQuery.setQcno(form.getQcno());
+        qcQuery.setQclineno(form.getQclineno());
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcQuery));
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
+        if (null == docQcDetailsList || docQcDetailsList.size() == 0) return new PdaResult(PdaResult.CODE_FAILURE, "查无此验收明细数据");
+        DocQcDetails docQcDetails = docQcDetailsList.get(0);
+        Json json = gspVerifyService.verifyQcDateValidation(docQcDetails.getCustomerid(), docQcDetails.getSku(), form.getLotatt01(), form.getLotatt02());
+        if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
 
         form.setLanguage("CN");
         form.setReturncode("");
@@ -392,10 +371,10 @@ public class DocQcDetailsService extends BaseService {
         try {
 
             docQcDetailsDao.submitDocQc(form);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
             return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "验收系统错误");
         }
@@ -404,9 +383,9 @@ public class DocQcDetailsService extends BaseService {
             if (form.getAllqcflag() == 1) {
 
                 //处理批量验收合格操作
-                DocQcDetails docQcDetails = docQcDetailsDao.queryById(form);//更新批次号，存在批属修改的情况
-                return configAllQc(form, docQcDetails);
-            }else {
+                DocQcDetails docQcDetailsSub = docQcDetailsDao.queryById(form);//更新批次号，存在批属修改的情况
+                return configAllQc(form, docQcDetailsSub);
+            } else {
 
                 return new PdaResult(PdaResult.CODE_SUCCESS, "验收成功");
             }
@@ -418,6 +397,7 @@ public class DocQcDetailsService extends BaseService {
 
     /**
      * 处理批量验收操作 procedure 拆出来的
+     *
      * @param form ~
      * @return ~
      */
@@ -492,7 +472,7 @@ public class DocQcDetailsService extends BaseService {
                     lotatt_hg.setAddwho(form.getEditwho());
                     lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
                     invLotAttMybatisDao.add(lotatt_hg);
-                }else {
+                } else {
 
                     lotatt_hg = invLotAttList.get(0);//18个批次属性匹配完查询只有一个
                 }
@@ -523,7 +503,7 @@ public class DocQcDetailsService extends BaseService {
 
                     //无 插入
                     invLotLocIdMybatisDao.add(invLotLocId_hg);//插入合格批次的库位库存
-                }else {
+                } else {
 
                     //有 更新
                     invLotLocId_tmp.setQty(invLotLocId_tmp.getQty() + qcDetails.getQcqtyExpected());
@@ -571,7 +551,7 @@ public class DocQcDetailsService extends BaseService {
                     //插入
                     invLot_hg.setQty(qcDetails.getQcqtyExpected());
                     invLotMybatisDao.add(invLot_hg);
-                }else {
+                } else {
 
                     InvLot invLot_exist = invLotList_hg.get(0);
 
@@ -599,10 +579,10 @@ public class DocQcDetailsService extends BaseService {
                 //  ,userdefine5等
 
                 if (currentQcDetail.getLotnum().equals(lotatt_history.getLotnum()) &&
-                currentQcDetail.getCustomerid().equals(qcDetails.getCustomerid()) &&
-                currentQcDetail.getSku().equals(qcDetails.getSku()) &&
+                        currentQcDetail.getCustomerid().equals(qcDetails.getCustomerid()) &&
+                        currentQcDetail.getSku().equals(qcDetails.getSku()) &&
 //                currentQcDetail.getPalineno().equals(qcDetails.getPalineno()) &&
-                currentQcDetail.getUserdefine1().equals(qcDetails.getUserdefine1())) {//其实这个适用于在批量验收的时候，验收数量没有满足预期验收数，需要把普通验收后的两条记录合并成一条
+                        currentQcDetail.getUserdefine1().equals(qcDetails.getUserdefine1())) {//其实这个适用于在批量验收的时候，验收数量没有满足预期验收数，需要把普通验收后的两条记录合并成一条
 
                     // 获取普通验收通过的验收明细
                     PdaDocQcDetailQuery pdaDocQcDetailQuery = new PdaDocQcDetailQuery();
@@ -627,7 +607,7 @@ public class DocQcDetailsService extends BaseService {
 
                     //删除qcdetails
                     docQcDetailsDao.delete(qcDetails);
-                }else {
+                } else {
 
                     qcDetails.setLotnum(lotatt_hg.getLotnum());
                     qcDetails.setQcqtyCompleted(qcDetails.getQcqtyExpected());
@@ -678,10 +658,10 @@ public class DocQcDetailsService extends BaseService {
             if (StringUtils.isEmpty(e.getMessage())) {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败");
-            }else if (e.getMessage().equals("111")) {
+            } else if (e.getMessage().equals("111")) {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
-            }else if (e.getMessage().equals("222")) {
+            } else if (e.getMessage().equals("222")) {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(批次库存错误)");
             }
@@ -690,63 +670,64 @@ public class DocQcDetailsService extends BaseService {
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }
 
-    public int queryMaxLineNo(String qcno){
+    public int queryMaxLineNo(String qcno) {
         return docQcDetailsDao.queryMaxLineNo(qcno);
     }
 
     /**
      * 批量验收
      */
-    public Json submitDocQcList(String forms){
-        Json json=new Json();
-        StringBuffer result=new StringBuffer();
+    public Json submitDocQcList(String forms) {
+        Json json = new Json();
+        StringBuilder result = new StringBuilder();
 //        json转集合
-        List<PdaDocQcDetailForm> list=JSON.parseArray(forms,PdaDocQcDetailForm.class);
-        Boolean con=true;
+        List<PdaDocQcDetailForm> list = JSON.parseArray(forms, PdaDocQcDetailForm.class);
+        boolean con = true;
         for (PdaDocQcDetailForm detailForm : list) {
-            if(list.size()>1) {
+            if (list.size() > 1) {
                 InitPdaDocQcDetailForm(detailForm);//完善form值
             }
             detailForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
             detailForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
             PdaResult pdaResult = submitDocQc(detailForm);//调用验收作业方法 单个验收
-            if(pdaResult.getErrorCode()==400){
-                result.append("验收单号:"+detailForm.getQcno()).append(","+pdaResult.getMsg()).append("<br/>");
-                con=false;
+            if (pdaResult.getErrorCode() == 400) {
+                result.append("验收单号:").append(detailForm.getQcno()).append(",").append(pdaResult.getMsg()).append("<br/>");
+                con = false;
             }
         }
-         if(con){
-             json.setSuccess(true);
-             json.setMsg("验收成功!");
-         }else{
-             json.setSuccess(false);
-             json.setMsg("部分验收未成功!<br/>"+result.toString());
-         }
-         return json;
+        if (con) {
+            json.setSuccess(true);
+            json.setMsg("验收成功!");
+        } else {
+            json.setSuccess(false);
+            json.setMsg("部分未验收成功!<br/>" + result.toString());
+        }
+        return json;
     }
+
     /**
      * 查批属 赋给form
      */
-    public void InitPdaDocQcDetailForm(PdaDocQcDetailForm form){
+    public void InitPdaDocQcDetailForm(PdaDocQcDetailForm form) {
 
-        InvLotAtt invLotAtt= invLotAttMybatisDao.queryById(form.getLotnum());
-        if(invLotAtt!=null){
-            if(invLotAtt.getLotatt01()!=null) {
+        InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
+        if (invLotAtt != null) {
+            if (invLotAtt.getLotatt01() != null) {
                 form.setLotatt01(invLotAtt.getLotatt01());
             }
-            if(invLotAtt.getLotatt02()!=null) {
+            if (invLotAtt.getLotatt02() != null) {
                 form.setLotatt02(invLotAtt.getLotatt02());
             }
-            if(invLotAtt.getLotatt04()!=null) {
+            if (invLotAtt.getLotatt04() != null) {
                 form.setLotatt04(invLotAtt.getLotatt04());
             }
-            if(invLotAtt.getLotatt06()!=null) {
+            if (invLotAtt.getLotatt06() != null) {
                 form.setLotatt06(invLotAtt.getLotatt06());
             }
-            if(invLotAtt.getLotatt11()!=null) {
+            if (invLotAtt.getLotatt11() != null) {
                 form.setLotatt11(invLotAtt.getLotatt11());
             }
-            if(invLotAtt.getLotatt15()!=null) {
+            if (invLotAtt.getLotatt15() != null) {
                 form.setLotatt15(invLotAtt.getLotatt15());
             }
         }
@@ -782,6 +763,6 @@ public class DocQcDetailsService extends BaseService {
             }
 
         }
-      return  returnRgisterList;
+        return returnRgisterList;
     }
 }

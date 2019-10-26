@@ -89,10 +89,10 @@ public class ImportBasSerialNumDataService {
 
                     this.saveBasSerialNum(importDataList, resultMsg);// 转成订单资料存入资料库
                     isSuccess = true;
-                }else if (resultMsg.length() == 0) {
+                } else if (resultMsg.length() == 0) {
 
-                	resultMsg.append("错误:excel预期导入行数和实际数据不匹配，请联系管理员");
-				}else{
+                    resultMsg.append("错误:excel预期导入行数和实际数据不匹配，请联系管理员");
+                } else {
                     resultMsg.append("错误:excel预期导入行数和实际数据不匹配，已停止导入");
                 }
             }
@@ -151,7 +151,7 @@ public class ImportBasSerialNumDataService {
                         }
                     }
 //						判断数据库是否已经又已经存在的序列号
-                    BasSerialNum num = basSerialNumMybatisDao.queryBySerialNum(dataArray.getSerialNum());
+                    BasSerialNum num = basSerialNumMybatisDao.queryExistBySerialNum(dataArray.getSerialNum());
                     if (num != null) {
                         throw new Exception();
                     } else {
@@ -189,7 +189,7 @@ public class ImportBasSerialNumDataService {
             }
 //DELIVERY_NUMBER发货凭证号
             try {
-               importDataVO.setDeliveryNum(dataArray.getDeliveryNum());
+                importDataVO.setDeliveryNum(dataArray.getDeliveryNum());
 
             } catch (Exception e) {
                 rowResult.append("[发货凭证号]没有输入").append(" ");
@@ -253,36 +253,27 @@ public class ImportBasSerialNumDataService {
 
     /**
      * 保存importDataList
-     *
-     * @param importDataList
-     * @param resultMsg
      */
     @Transactional
     public void saveBasSerialNum(List<BasSerialNumVO> importDataList, StringBuilder resultMsg) {
-        BasSerialNum basSerialNum = null;
 
-        for (BasSerialNumVO importDataVO : importDataList) {
-            basSerialNum = new BasSerialNum();
-            BeanUtils.copyProperties(importDataVO, basSerialNum);
+        try {
 
-            basSerialNum.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-//				basSerialNum.setAddtime(new Date()+"");
-            //保存订单主信息
-            try {
+            BasSerialNum basSerialNum;
+            for (BasSerialNumVO importDataVO : importDataList) {
 
+                basSerialNum = new BasSerialNum();
+                BeanUtils.copyProperties(importDataVO, basSerialNum);
+
+                basSerialNum.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                 basSerialNumMybatisDao.add(basSerialNum);
-                resultMsg.append("序号:"+importDataVO.getSeq()).append(",资料导入成功!").append(" ");
-            }catch (Exception e) {
-                resultMsg.append("序号:"+importDataVO.getSeq()).append(",后台sql执行异常,请重新操作!").append(" ");
-                  TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                  e.printStackTrace();
-                  break;
+                resultMsg.append("序号:").append(importDataVO.getSeq()).append(",资料导入成功!").append(" ");
             }
+        } catch (Exception e) {
 
-
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            resultMsg.append("系统错误，序列号导入失败");
         }
-
     }
-
-
 }
