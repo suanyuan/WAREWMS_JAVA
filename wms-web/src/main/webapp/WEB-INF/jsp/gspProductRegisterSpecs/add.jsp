@@ -288,7 +288,10 @@
                 dataType : 'JSON',
                 success : function(result){
                     if(result.success){
+                        changeColdHainMark();
 
+                        coldfield();//默认非冷链
+                        changeRequired();
                         $("#ezuiFormInfoProduct input[id!=''][data='1']").each(function (index) {
                             if($(this).attr("class")){
                                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
@@ -303,9 +306,7 @@
                                 }
                             }
                         })
-                        changeColdHainMark();
-                        changeRequired();
-                        coldfield();//默认非冷链
+
                     }
 
                 }
