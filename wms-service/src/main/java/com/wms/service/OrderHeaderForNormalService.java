@@ -196,9 +196,12 @@ public class OrderHeaderForNormalService extends BaseService {
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         Date addtime = orderHeaderForNormal.getAddtime();
+        String addwho = orderHeaderForNormal.getAddwho();
         BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
-        orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
         orderHeaderForNormal.setAddtime(addtime);
+        orderHeaderForNormal.setAddwho(addwho);
+        orderHeaderForNormal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+        orderHeaderForNormal.setEdittime(new Date());
         orderHeaderForNormalMybatisDao.update(orderHeaderForNormal);
         json.setSuccess(true);
         json.setMsg("资料处理成功！");
@@ -658,8 +661,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
                         orderHeaderForNormalQuery.setCurrentTime(new Date());
                         orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                        //删除序列号出库记录 edit by Gizmo 2019-08-29 出库不删除序列号记录
-//                        docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                         json.setSuccess(true);
                         json.setMsg("出库处理成功！");
                         json.setObj(orderHeaderForNormal);

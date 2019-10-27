@@ -1014,7 +1014,7 @@ public class DocAsnHeaderService extends BaseService {
 
             if (docAsnHeader != null) {
                 if (docAsnHeader.getAsnstatus().equals("00") || docAsnHeader.getAsnstatus().equals("90")) {
-                    if (docAsnHeader.getAddwho().contains("EDI")) {
+                    if (docAsnHeader.getAddwho().equals("EDI")) {
                         json.setSuccess(false);
                         resultMsg.append(": 接口订单,不可删除!").append("</br>");
                     } else {
