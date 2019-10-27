@@ -57,6 +57,9 @@ public class BasCodesService {
     public Json addBasCodes(BasCodesForm basCodesForm) throws Exception {
         Json json = new Json();
         BasCodes basCodes = new BasCodes();
+        Date date = new Date(System.currentTimeMillis());
+        basCodesForm.setAddtime(date);
+        basCodesForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
         BeanUtils.copyProperties(basCodesForm, basCodes);
         basCodesMybatisDao.add(basCodes);
         json.setSuccess(true);

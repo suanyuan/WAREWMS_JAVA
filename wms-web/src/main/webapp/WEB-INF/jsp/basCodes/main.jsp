@@ -149,7 +149,6 @@ var del = function(){
 var commit = function(){
 	var url = '';
 	if (processType == 'edit') {
-
 		url = '<c:url value="/basCodesController.do?edit"/>';
 	}else{
 		url = '<c:url value="/basCodesController.do?add"/>';
@@ -274,6 +273,14 @@ var doExport = function(){
 				<tr>
 					<th>码表类型</th>
 					<td><input type='text' name='codeid' class='easyui-textbox' size='16' data-options='required:true' id="asc"/></td>
+				</tr>
+				<tr>
+					<th>类型描述</th>
+					<td><input type='text' name='udf2' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																															editable: false,
+																															url:'<c:url value="/basCodesController.do?getTransactionTypeCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/></td>
 				</tr>
 				<tr>
 					<th>类型编码</th>

@@ -1152,6 +1152,14 @@ public class OrderHeaderForNormalService extends BaseService {
         //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
+        //总页数
+        int pageSize = (int) Math.ceil((double) odForNormalList.size() / 7);
+        ohForNormal.setPageSize(pageSize);
+        //页码
+        int pageNo=1;
+        ohForNormal.setPageNo(pageNo);
+
+
 
         double a = 0;//数量
         double b = 0;//件数
@@ -1159,7 +1167,9 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
         for (int i = 0; i < odForNormalList.size(); i++) {
-
+            if(i>7){
+                pageNo +=1;
+            }
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
 
