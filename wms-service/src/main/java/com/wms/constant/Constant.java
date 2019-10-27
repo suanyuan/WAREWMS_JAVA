@@ -44,6 +44,7 @@ public class Constant {
     public static final String CODE_CATALOG_CLASSIFY_TWO = "CLASSIFY_TWO";//分类二
     public static final String CODE_CATALOG_CLASSIFY_THREE = "CLASSIFY_THREE";//分类三
     public static final String CODE_ASN_TYP = "ASN_TYP";//入库类型
+    public static final String CODE_CATALOG_SF_EXPRESS = "SF_SET";//月结账号
 
 
 

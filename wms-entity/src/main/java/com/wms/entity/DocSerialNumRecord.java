@@ -10,6 +10,9 @@ import java.util.Date;
 @Entity
 public class DocSerialNumRecord  implements Serializable {
 
+    public static final String RECORD_TYPE_OUT = "OUT";
+    public static final String RECORD_TYPE_IN = "IN";
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -53,7 +56,18 @@ public class DocSerialNumRecord  implements Serializable {
         this.serialNum = serialNum;
     }
 
-    public DocSerialNumRecord(String customerid, int cartonNo, String soreference, String orderNo, String batchNum, String serialNum, String addwho) {
+    /**
+     * 出入库都会调用
+     * @param type OUT || IN
+     * @param customerid 货主
+     * @param cartonNo 箱号（出）null（入）
+     * @param soreference 客户单号（出/入）
+     * @param orderNo 单号（出/入）
+     * @param batchNum 批号
+     * @param serialNum 序列号
+     * @param addwho 添加人
+     */
+    public DocSerialNumRecord(String type, String customerid, int cartonNo, String soreference, String orderNo, String batchNum, String serialNum, String addwho) {
         this.customerid = customerid;
         this.cartonNo = cartonNo;
         this.soreference = soreference;
@@ -61,5 +75,6 @@ public class DocSerialNumRecord  implements Serializable {
         this.batchNum = batchNum;
         this.serialNum = serialNum;
         this.addwho = addwho;
+        this.userdefine1 = type;
     }
 }

@@ -1,11 +1,7 @@
 package com.wms.service.sfExpress;
 
-import java.text.SimpleDateFormat;
-
-
-import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.entity.sfExpress.SFOrderHeader;
 import com.wms.utils.StringUtil;
-import com.wms.vo.form.OrderHeaderForNormalForm;
 
 /**
  * 顺丰请求的工具类
@@ -23,7 +19,7 @@ public class RequestXmlUtil {
     /**
      * 获取下单请求体
      */
-    public static String getOrderServiceRequestXml(OrderHeaderForNormal orderHeaderForNormal, String returnSfOrder) {
+    public static String getOrderServiceRequestXml(SFOrderHeader sfOrderHeader, String returnSfOrder) {
 
 
         StringBuilder strBuilder = new StringBuilder();
@@ -35,7 +31,7 @@ public class RequestXmlUtil {
         //客户订单号,建议英文字母+
         //YYMMDD(日期)+流水号,
         //如:TB1207300000001
-        strBuilder.append("orderid='" + orderHeaderForNormal.getOrderno() + "22" + "'").append(" ");
+        strBuilder.append("orderid='" + sfOrderHeader.getOrderno() + "'").append(" ");
         //返回顺丰运单号
         /*
          运输方式
@@ -45,27 +41,31 @@ public class RequestXmlUtil {
          2 - 顺丰特惠
          TODO 现在顺丰下单都是标快，不对，需要区分特惠、标快（丰桥）根据发运方式下不同的类型，还要区分快递公司，如果是顺丰的才去下顺丰的单子。其他的快递公司最好提供一个填写快递单号的地方用来记录一下。
          */
-        strBuilder.append("express_type='1'").append(" ");
+        if (sfOrderHeader.getRoute().equals("TH")) {
+            strBuilder.append("express_type='2'").append(" ");
+        } else {
+            strBuilder.append("express_type='1'").append(" ");
+        }
         //寄件方信息
         strBuilder.append("j_province='" + "上海市" + "'").append(" ");
         strBuilder.append("j_city='" + "上海市" + "'").append(" ");
         strBuilder.append("j_county='" + "浦东新区" + "'").append(" ");
-        strBuilder.append("j_company='" + "哈尔滨四圣商贸有限公司" + "'").append(" ");
-        strBuilder.append("j_contact='" + "郑洁" + "'").append(" ");
-        strBuilder.append("j_tel='" + "021-62091927" + "'").append(" ");
+        strBuilder.append("j_company='").append(sfOrderHeader.getJ_company()).append("'").append(" ");
+        strBuilder.append("j_contact='").append(sfOrderHeader.getJ_contact()).append("'").append(" ");
+        strBuilder.append("j_tel='").append(sfOrderHeader.getJ_tel()).append("'").append(" ");
         strBuilder.append("j_address='" + "施湾八路1026号2号楼" + "'").append(" ");
 
-        strBuilder.append("d_province='" + orderHeaderForNormal.getCProvince() + "'").append(" ");//省
-        strBuilder.append("d_city='" + orderHeaderForNormal.getCCity() + "'").append(" ");//市
-        strBuilder.append("d_county='" + orderHeaderForNormal.getCAddress2() + "'").append(" ");//区
-        strBuilder.append("d_company='" + orderHeaderForNormal.getConsigneeid() + "'").append(" ");//到件方公司名称
-        if (StringUtil.isEmpty(orderHeaderForNormal.getCTel1())) {
-            strBuilder.append("d_tel='" + orderHeaderForNormal.getCTel2() + "'").append(" ");//到件方联系电话
-        }else {
-            strBuilder.append("d_tel='" + orderHeaderForNormal.getCTel1() + "'").append(" ");//到件方联系电话
+        strBuilder.append("d_province='").append(sfOrderHeader.getCProvince()).append("'").append(" ");//省
+        strBuilder.append("d_city='").append(sfOrderHeader.getCCity()).append("'").append(" ");//市
+        strBuilder.append("d_county='").append(sfOrderHeader.getCAddress2()).append("'").append(" ");//区
+        strBuilder.append("d_company='").append(sfOrderHeader.getConsigneeid()).append("'").append(" ");//到件方公司名称
+        if (StringUtil.isEmpty(sfOrderHeader.getCTel1())) {
+            strBuilder.append("d_tel='").append(sfOrderHeader.getCTel2()).append("'").append(" ");//到件方联系电话
+        } else {
+            strBuilder.append("d_tel='").append(sfOrderHeader.getCTel1()).append("'").append(" ");//到件方联系电话
         }
-        strBuilder.append("d_contact='" + orderHeaderForNormal.getCContact() + "'").append(" ");//到件方联系人
-        strBuilder.append("d_address='" + orderHeaderForNormal.getCAddress1() + "'").append(" ");//到件方详细地址
+        strBuilder.append("d_contact='").append(sfOrderHeader.getCContact()).append("'").append(" ");//到件方联系人
+        strBuilder.append("d_address='").append(sfOrderHeader.getCAddress1()).append("'").append(" ");//到件方详细地址
         //备注不为空就进行xml append()拼接
        /* try {
             if(!expressOrder.getRemark().equals(" ") || expressOrder != null){
@@ -87,15 +87,17 @@ public class RequestXmlUtil {
         strBuilder.append("parcel_quantity='1'").append(" ");
         //货物-总-重量
         strBuilder.append("cargo_total_weight='1'").append(" ");
-        //需要写实体类获取（没有实现）
-        strBuilder.append("custid ='" + CallExpressServiceTools.CUST_ID + "'").append(" ");//顺丰月结卡号
+        //需要写实体类获取
+        strBuilder.append("custid ='" + sfOrderHeader.getCustid() + "'").append(" ");//顺丰月结卡号
 
-        //付款方式:1寄方付 2.收支付 3.第三方付
-        /*
-        月结 - 1 寄方付
-        到付 - 2 收支付
-         */
-        strBuilder.append("pay_method = '" + "1" + "'").append(" ");
+        //付款方式:1寄方付(月结) 2.收方付(到付) 3.第三方付(不用)
+        if (StringUtil.isNotEmpty(sfOrderHeader.getStop()) && sfOrderHeader.getStop().equals("DF")) {
+
+            strBuilder.append("pay_method = '" + "2" + "'").append(" ");
+        } else {
+
+            strBuilder.append("pay_method = '" + "1" + "'").append(" ");
+        }
         strBuilder.append(" is_unified_waybill_no='1'>").append(" ");
 
         //海关批次（默认空的）

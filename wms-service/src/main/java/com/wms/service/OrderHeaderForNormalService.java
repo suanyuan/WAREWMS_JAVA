@@ -10,6 +10,7 @@ import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.entity.sfExpress.SFOrderHeader;
 import com.wms.mybatis.dao.*;
 import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
@@ -524,51 +525,13 @@ public class OrderHeaderForNormalService extends BaseService {
                 //操作拣货
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
                 if (allocationDetailsIdList != null) {
+
                     /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                    String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
-                    //响应报文
-                    String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-                    //解析响应报文
-                    ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
-                    if (!shunFengResponse.isResultFlag()) {
-                        json.setSuccess(false);
-                        json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
-                        return json;
-                    }
-                    //解析后修改到表中
-                    OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
-                    orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                    orderHeaderForNormalSf.setEdittime(new Date());
-                    orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
-                    //运单号
-                    orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
-                    //签回单号
-                    orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
-                    //原寄地区域代码
-                    orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
-                    //目的地区域代码,
-                    orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
-                    //时效
-                    orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
-                    //  原寄递地代码  zipCode;
-                    shunFengResponse.getOrderResponse().getZipCode();
+                    json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+                    if (!json.isSuccess()) return json;
+                    boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
+                    ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
 
-                    // /目的地的代码  destCode;
-                    shunFengResponse.getOrderResponse().getDestCode();
-
-
-                    List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
-                    for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
-                        //二维码
-                        orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
-                        //入港映射码  codingMapping
-                        rlsInfoDto.getCodingMapping();
-                        //出港映射码  codingMappingOut
-                        rlsInfoDto.getCodingMappingOut();
-
-                    }
-                    orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
-                    /*顺丰下单end*/
                     for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
                         Map<String, Object> map = new HashMap<String, Object>();
                         map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -581,31 +544,33 @@ public class OrderHeaderForNormalService extends BaseService {
                                 continue;
                             } else {
                                 //取消顺丰下单
-                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                                if (!responseCancel.isResultFlag()) {
-                                    json.setSuccess(false);
-                                    String error = "出库处理失败：" + pickResult + "/br";
-                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                    return json;
-                                } else {
-                                    json.setSuccess(false);
-                                    json.setMsg("出库处理失败：" + pickResult);
-                                    return json;
+                                if (shunfengPlacedFlag) {
+                                    ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                                    if (!responseCancel.isResultFlag()) {
+                                        json.setSuccess(false);
+                                        String error = "出库处理失败：" + pickResult + "/br";
+                                        json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                                        return json;
+                                    }
                                 }
+                                json.setSuccess(false);
+                                json.setMsg("出库处理失败：" + pickResult);
+                                return json;
                             }
                         } else {
                             //取消顺丰下单
-                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if (!responseCancel.isResultFlag()) {
-                                json.setSuccess(false);
-                                String error = "出库处理失败：订单数据异常！/br";
-                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                return json;
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("出库处理失败：订单数据异常！");
-                                return json;
+                            if (shunfengPlacedFlag) {
+                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                                if (!responseCancel.isResultFlag()) {
+                                    json.setSuccess(false);
+                                    String error = "出库处理失败：订单数据异常！/br";
+                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                                    return json;
+                                }
                             }
+                            json.setSuccess(false);
+                            json.setMsg("出库处理失败：订单数据异常！");
+                            return json;
                         }
                     }
                     //操作发运
@@ -623,39 +588,39 @@ public class OrderHeaderForNormalService extends BaseService {
 
                             orderHeaderForNormalQuery.setCurrentTime(new Date());
                             orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                            //删除序列号出库记录 edit by Gizmo 2019-08-29 出库不删除序列号记录
-//                            docSerialNumRecordMybatisDao.clearRecordByOrderno(orderHeaderForNormalForm.getOrderno());
                             json.setSuccess(true);
                             json.setMsg("出库处理成功！");
                             json.setObj(orderHeaderForNormal);
                             return json;
                         } else {
                             //取消顺丰下单
-                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if (!responseCancel.isResultFlag()) {
-                                json.setSuccess(false);
-                                String error = "出库处理失败：" + shippmentResult + "/br";
-                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                return json;
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("出库处理失败：" + shippmentResult);
-                                return json;
+                            if (shunfengPlacedFlag) {
+                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                                if (!responseCancel.isResultFlag()) {
+                                    json.setSuccess(false);
+                                    String error = "出库处理失败：" + shippmentResult + "/br";
+                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                                    return json;
+                                }
                             }
+                            json.setSuccess(false);
+                            json.setMsg("出库处理失败：" + shippmentResult);
+                            return json;
                         }
                     } else {
                         //取消顺丰下单
-                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                        if (!responseCancel.isResultFlag()) {
-                            json.setSuccess(false);
-                            String error = "出库处理失败：订单数据异常！/br";
-                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                            return json;
-                        } else {
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：订单数据异常！");
-                            return json;
+                        if (shunfengPlacedFlag) {
+                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                            if (!responseCancel.isResultFlag()) {
+                                json.setSuccess(false);
+                                String error = "出库处理失败：订单数据异常！/br";
+                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                                return json;
+                            }
                         }
+                        json.setSuccess(false);
+                        json.setMsg("出库处理失败：订单数据异常！");
+                        return json;
                     }
                 } else {
                     json.setSuccess(false);
@@ -673,65 +638,11 @@ public class OrderHeaderForNormalService extends BaseService {
                 if (!json.isSuccess()) return json;
 
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                String requestXml = RequestXmlUtil.getOrderServiceRequestXml(orderHeaderForNormal, orderHeaderForNormalForm.getReturnSfOrder());
-                //响应报文
-                String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-                //解析响应报文  TODO 下单重复反馈回来数据有问题
-                // String errXml = "<?xml version='1.0' encoding='UTF-8'?><Response service=\"OrderService\"><Head>ERR</Head><ERROR code=\"8119\">月结卡号不存在或已失效</ERROR></Response>";
-                ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
-                if (!shunFengResponse.isResultFlag()) {
-                    json.setSuccess(false);
-                    json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
-                    return json;
-                }
-//                System.err.println("//解析响应报文" + shunFengResponse.toString());
-                //解析后修改到表中
-                OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
-                orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                orderHeaderForNormalSf.setEdittime(new Date());
-                orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
-                //运单号
-                orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
-                //签回单号
-                orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
-                //原寄地区域代码
-                orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
-                //目的地区域代码,
-                orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
-                //时效
-                orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
+                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+                if (!json.isSuccess()) return json;
+                boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
+                ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
 
-
-                List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
-                for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
-                    //二维码
-                    orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
-                    //入港映射码  codingMapping
-                    orderHeaderForNormalSf.setUserdefine5(rlsInfoDto.getCodingMapping());
-                    //出港映射码  codingMappingOut
-                    orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getCodingMappingOut());
-
-                }
-                orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
-                /*顺丰下单end*/
-                //
-//				try {
-//					StockInXmlVo stockInXmlVo = new StockInXmlVo();
-//					stockInXmlVo.setOrderCode(orderHeaderForNormal.getOrderCode());
-//					stockInXmlVo.setOrderStatus(28);
-//					String xmldata = JaxbUtil.convertToXml(stockInXmlVo, false);
-//					logger.error("orderHeaderForNormalService-推送：" + xmldata);
-//					ResponseVO responseVO = new ServiceControllerProxy(END_POINT).updateOrder(xmldata);
-//					logger.error("orderHeaderForNormalService-接收：" + responseVO.getSuccess());
-//					if (responseVO.getSuccess() == false) {
-//						json.setSuccess(false);
-//						json.setMsg("出库处理失败：订单尚未配载！");
-//						return json;
-//					}
-//				} catch (Exception e) {
-//
-//					e.printStackTrace();
-//				}
                 //拣货/装箱状态订单直接操作发运
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -755,31 +666,33 @@ public class OrderHeaderForNormalService extends BaseService {
                         return json;
                     } else {
                         //取消顺丰下单
-                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                        if (!responseCancel.isResultFlag()) {
-                            json.setSuccess(false);
-                            String error = "出库处理失败：" + shippmentResult + "/br";
-                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                            return json;
-                        } else {
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：" + shippmentResult);
-                            return json;
+                        if (shunfengPlacedFlag) {
+                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                            if (!responseCancel.isResultFlag()) {
+                                json.setSuccess(false);
+                                String error = "出库处理失败：" + shippmentResult + "/br";
+                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                                return json;
+                            }
                         }
+                        json.setSuccess(false);
+                        json.setMsg("出库处理失败：" + shippmentResult);
+                        return json;
                     }
                 } else {
                     //取消顺丰下单
-                    ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                    if (!responseCancel.isResultFlag()) {
-                        json.setSuccess(false);
-                        String error = "出库处理失败：订单数据异常！/br";
-                        json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                        return json;
-                    } else {
-                        json.setSuccess(false);
-                        json.setMsg("出库处理失败：订单数据异常！");
-                        return json;
+                    if (shunfengPlacedFlag) {
+                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+                        if (!responseCancel.isResultFlag()) {
+                            json.setSuccess(false);
+                            String error = "出库处理失败：订单数据异常！/br";
+                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+                            return json;
+                        }
                     }
+                    json.setSuccess(false);
+                    json.setMsg("出库处理失败：订单数据异常！");
+                    return json;
                 }
             } else {
                 json.setSuccess(false);
@@ -793,8 +706,86 @@ public class OrderHeaderForNormalService extends BaseService {
         }
     }
 
+    /**
+     * 顺丰下单
+     *
+     * @param orderHeaderForNormalForm returnSfOrder是否需要回执单
+     */
+    private Json placeSFExpressOrder(OrderHeaderForNormal orderHeaderForNormal, OrderHeaderForNormalForm orderHeaderForNormalForm) {
+
+        Json json = new Json();
+
+        SFOrderHeader sfOrderHeader = new SFOrderHeader();
+        BeanUtils.copyProperties(orderHeaderForNormal, sfOrderHeader);
+
+        //月结账号 TODO 不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
+        if (!orderHeaderForNormal.getCarrierId().equals("SF") ||
+                StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
+                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
+            return Json.success("不用下顺丰单");
+        }
+
+        //寄件人信息
+        BasCodesQuery basCodesQuery = new BasCodesQuery();
+        basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
+        basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
+        BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+        sfOrderHeader.setJ_company(basCodes.getCodenameC());
+        sfOrderHeader.setJ_contact(basCodes.getCodenameE());
+        sfOrderHeader.setJ_tel(basCodes.getUdf3());
+
+        String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
+        //响应报文
+        String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
+        //解析响应报文 TODO 下单重复反馈回来数据有问题
+        ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
+        if (!shunFengResponse.isResultFlag()) {
+
+            json.setSuccess(false);
+            json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
+            return json;
+        }
+        //解析后修改到表中
+        OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
+        orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+        orderHeaderForNormalSf.setEdittime(new Date());
+        orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
+        //运单号
+        orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
+        //签回单号
+        orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
+        //原寄地区域代码
+        orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
+        //目的地区域代码,
+        orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
+        //时效
+        orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
+        //原寄递地代码  zipCode;
+        shunFengResponse.getOrderResponse().getZipCode();
+        //目的地的代码  destCode;
+        shunFengResponse.getOrderResponse().getDestCode();
+
+
+        List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
+        for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
+
+            //二维码
+            orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
+            //入港映射码  codingMapping
+            rlsInfoDto.getCodingMapping();
+            //出港映射码  codingMappingOut
+            rlsInfoDto.getCodingMappingOut();
+
+        }
+        orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
+        json.setMsg("顺丰下单成功");
+        json.setSuccess(true);
+        json.setObj(shunFengResponse);
+        return json;
+    }
+
     /*取消顺丰下单*/
-    public ShunFengResponse CancelShunFengOrder(String Order) {
+    private ShunFengResponse CancelShunFengOrder(String Order) {
         String cancelXml = CallExpressServiceTools.callSfExpressServiceByCSIM(RequestXmlUtil.getOrderCancelServiceRequestXml(Order));
         return XmlHelper.xmlToBeanForSF(cancelXml);
     }

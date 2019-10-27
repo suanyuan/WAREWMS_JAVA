@@ -843,8 +843,8 @@ public class DocOrderPackingService extends BaseService {
                     if (StringUtil.isNotEmpty(serialNum)) {
 
                         OrderHeaderForNormal orderHeader = orderHeaderForNormalMybatisDao.queryById(form.getOrderno());
-                        DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(
-                                form.getCustomerid(), Integer.valueOf(form.getTraceid().split("#")[1]),
+                        DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(DocSerialNumRecord.RECORD_TYPE_OUT,
+                                form.getCustomerid(), Integer.parseInt(form.getTraceid().split("#")[1]),
                                 orderHeader.getSoreference1(), form.getOrderno(), invLotAtt.getLotatt04(),
                                 serialNum, form.getEditwho());
                         docSerialNumRecordMybatisDao.add(docSerialNumRecord);
