@@ -429,7 +429,7 @@ public class OrderHeaderForNormalVO {
     /**
      * 快递
      */
-    private String carrierId;
+//    private String carrierId;
     /**
      * 快递名称
      */

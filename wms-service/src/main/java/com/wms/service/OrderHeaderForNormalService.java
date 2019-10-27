@@ -719,7 +719,7 @@ public class OrderHeaderForNormalService extends BaseService {
         BeanUtils.copyProperties(orderHeaderForNormal, sfOrderHeader);
 
         //月结账号 TODO 不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        if (!orderHeaderForNormal.getCarrierId().equals("SF") ||
+        if (!"SF".equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
                 (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
             return Json.success("不用下顺丰单");

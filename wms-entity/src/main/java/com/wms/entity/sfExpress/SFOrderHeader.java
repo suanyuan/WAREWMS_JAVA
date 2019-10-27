@@ -1,7 +1,6 @@
 package com.wms.entity.sfExpress;
 
 import com.wms.entity.order.OrderHeaderForNormal;
-import lombok.Data;
 
 public class SFOrderHeader extends OrderHeaderForNormal {
 
