@@ -279,7 +279,7 @@ var doExport = function(){
 					<td><input type='text' name='udf2' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
 																															url:'<c:url value="/basCodesController.do?getTransactionTypeCombobox"/>',
-																															valueField: 'id',
+																															valueField: 'value',
 																															textField: 'value'"/></td>
 				</tr>
 				<tr>
