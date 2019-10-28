@@ -2,6 +2,8 @@ package com.wms.mybatis.dao;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -24,6 +26,8 @@ public interface GspOperateDetailMybatisDao extends BaseDao {
      */
     Long updateByLicenseId(@Param("licenseId") String licenseId,@Param("licenseType") String licenseType);
 
+
+    public <T> List<T> queryListByLicenseId(String id);//通过id查询分类目录
 
 
 }

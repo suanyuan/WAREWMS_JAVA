@@ -203,7 +203,11 @@ where 1=1
 		from gsp_operate_license where enterprise_id = #{enterpriseId} and operate_type = #{operateType}  order by create_date desc limit 1
 	</select>
 
-
+	<!-- 根据注册证id查询 经营许可证 -->
+	<select id="selectByEnterprisId"  resultMap="BaseResultMap" parameterType="Object">
+		select * from gsp_operate_license where enterprise_id = #{enterpriseId}
+		and operate_type = #{operateType}  order by create_date desc limit 1
+	</select>
 
 <!-- 经营许可证 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">

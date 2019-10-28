@@ -11,4 +11,8 @@ public interface GspSecondRecordMybatisDao extends BaseDao {
 
 
     public <T> T selectCompareByEnterprisId(Object id);
+
+    public <T> T selectByEnterprisId(Object id);
+
+
 }

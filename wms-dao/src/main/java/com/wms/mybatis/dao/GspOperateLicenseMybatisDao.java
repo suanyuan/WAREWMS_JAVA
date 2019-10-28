@@ -19,6 +19,7 @@ public interface GspOperateLicenseMybatisDao extends BaseDao {
     public <T> List<T> queryByListLicenseTime(@Param("licenseId") String licenseId , @Param("licenseType") String licenseType );
 
     public <T> T selectCompareByEnterprisId(@Param("enterpriseId") Object id, @Param("operateType") String type);
+    public <T> T selectByEnterprisId(@Param("enterpriseId") Object id, @Param("operateType") String type);
 
 
 }

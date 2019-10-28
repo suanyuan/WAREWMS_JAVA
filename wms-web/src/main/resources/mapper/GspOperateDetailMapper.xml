@@ -122,7 +122,12 @@ where 1=1
        ${limitClause}
     </if>
 </select>
-
+	<!-- 通过licenseId 查询经营范围列表 -->
+	<select id="queryListByLicenseId" resultMap="BaseResultMap"  parameterType="Object">
+		select *
+		from gsp_operate_detail
+		where license_id = #{licenseId}
+	</select>
 <!-- 根据id，修改记录-->
 <update id="deleteByLicenseId" parameterType="Object" >
 	delete from gsp_operate_detail where license_id = #{licenseId}

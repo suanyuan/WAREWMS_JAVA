@@ -159,9 +159,18 @@ var add = function(){
 };
 var edit = function(){
 	processType = 'edit';
-	var row = ezuiDatagrid1.datagrid('getSelected');
+    var  applyid ="";
+    // var row = null;
+	// debugger
+    var row = ezuiDatagrid1.datagrid('getSelections');
+    for(var i=0;i<row.length;i++){
+        // arrDel.push(row[i].applyId);
+        if(i+1==row.length){
+			applyid = row[i].applyId;
+        }
+    }
 	if(row){
-		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toEdit&id="+row.applyId);
+		ezuiDialog.dialog('open').dialog('refresh',"/firstBusinessApplyController.do?toEdit&id="+applyid);
 	}else{
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'

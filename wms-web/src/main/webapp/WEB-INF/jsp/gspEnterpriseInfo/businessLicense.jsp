@@ -111,7 +111,7 @@
                 {field: 'socialCreditCode',title: '统一社会信用代码',width: '14%'},
                 {field: 'licenseNumber',title: '证照编号' ,width: '14%'},
 
-                {field: 'issueDate',title: '发证日期',width: '14%'},
+                {field: 'issueDate',title: '发证日期',width: '14%',formatter:dateFormat2},
                 {field: '_operate',		title: '营业执照照片',	width: '14%',
                     formatter: formatOperAttachment
                 },

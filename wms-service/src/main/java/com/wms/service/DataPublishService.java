@@ -140,7 +140,17 @@ public class DataPublishService extends BaseService {
             GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(supplier.getEnterpriseId());
 
             BasCustomerForm form = new BasCustomerForm();
-            form.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+            BasCustomer basCustomer1 = new BasCustomer();
+            basCustomer1.setEnterpriseId(supplier.getEnterpriseId());
+            basCustomer1.setCustomerType(Constant.CODE_CUS_TYP_VE);
+            BasCustomer basCustomer =  basCustomerMybatisDao.queryByenterId(basCustomer1);
+            if(basCustomer!=null){
+                //供应商重新下发   供应商代码不变
+                form.setCustomerid(basCustomer.getCustomerid());
+            }else{
+                //第一次下发   供应商代码自增
+                form.setCustomerid(commonService.generateSeq(Constant.BASSUPNO, SfcUserLoginUtil.getLoginUser().getWarehouse().getId()));
+            }
             form.setDescrC(gspEnterpriseInfo.getEnterpriseName());
             form.setCustomerType(Constant.CODE_CUS_TYP_VE);
             form.setEnterpriseId(supplier.getEnterpriseId());

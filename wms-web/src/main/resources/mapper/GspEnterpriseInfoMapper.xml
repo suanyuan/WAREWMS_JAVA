@@ -466,20 +466,33 @@
     <!-- 查询企业身份信息-->
     <select id="queryEnterpriseApplyListById" resultMap="GspEnterpriseTypeResultMap" parameterType="Object">
 
-	select * from (
-	select g.enterprise_id,enterprise_type,c.first_state,c.client_id applyNo from gsp_enterprise_info g
-	left join gsp_customer c on g.enterprise_id = c.enterprise_id
-	where g.is_use = '1' and c.is_use='1'
-	union
-	select g.enterprise_id,enterprise_type,s.first_state,s.supplier_id applyNo from gsp_enterprise_info g
-	left join gsp_supplier s on g.enterprise_id = s.enterprise_id
-	where g.is_use = '1' and s.is_use='1'
-	union
-	select g.enterprise_id,enterprise_type,s.first_state,s.receiving_id applyNo from gsp_enterprise_info g
-	left join gsp_receiving s on g.enterprise_id = s.enterprise_id
-	where g.is_use = '1' and s.is_use='1'
-	) t where enterprise_id = #{enterpriseId}
-
+        select * from (
+        select g.enterprise_id,enterprise_type,c.first_state,c.client_id applyNo from gsp_enterprise_info g
+        left join gsp_customer c on g.enterprise_id = c.enterprise_id
+        where g.is_use = '1' and c.is_use='1'
+        union
+        select g.enterprise_id,enterprise_type,s.first_state,s.supplier_id applyNo from gsp_enterprise_info g
+        left join gsp_supplier s on g.enterprise_id = s.enterprise_id
+        where g.is_use = '1' and s.is_use='1'
+        union
+        select g.enterprise_id,enterprise_type,s.first_state,s.receiving_id applyNo from gsp_enterprise_info g
+        left join gsp_receiving s on g.enterprise_id = s.enterprise_id
+        where g.is_use = '1' and s.is_use='1'
+        ) t where enterprise_id = #{enterpriseId}
+        union
+        select t1.enterprise_id,t1.enterprise_type,t2.first_state,t2.apply_id applyNo from
+        (SELECT t1.*,t2.customerid from gsp_enterprise_info t1
+            LEFT JOIN (select * from bas_customer where customer_type = 'OW' ) t2 on t1.enterprise_id =t2.enterprise_id
+        where t1.enterprise_id = #{enterpriseId}) t1,first_business_apply t2 where t1.customerid = t2.client_id and t2.is_use ='1'
+        union
+        select t1.enterprise_id,t1.enterprise_type,t2.first_state,t2.apply_id applyNo from
+        (SELECT t1.*,t2.customerid from gsp_enterprise_info t1
+            LEFT JOIN (select * from bas_customer where customer_type = 'VE' ) t2 on t1.enterprise_id =t2.enterprise_id
+        where t1.enterprise_id = #{enterpriseId}) t1,first_business_apply t2 where t1.customerid = t2.supplier_id and t2.is_use ='1'
 </select>
+
+
+
+
 
 </mapper>   

@@ -428,7 +428,10 @@
             if($(this).attr("class")){
                 if($(this).attr("id")) {
                     if ($(this).attr("class").indexOf('easyui-textbox') != -1) {
-                        $(this).textbox("setValue", row["" + $(this).attr("id") + ""]);
+                        if($(this).val()!=$("#ezuiFormOperate input[id='showChose']").val()) {
+                            $(this).textbox("setValue", row["" + $(this).attr("id") + ""]);
+                        }
+
                     }else if ($(this).attr("class").indexOf('easyui-datebox') != -1) {
                         $(this).datebox("setValue", dateFormat2(row["" + $(this).attr("id") + ""]));
                     }else if ($(this).attr("class").indexOf('easyui-numberbox') != -1) {
@@ -448,7 +451,13 @@
         $("#ezuiFormOperate input[type!=hidden]").each(function (index) {
             if($(this).attr("class")){
                 if($(this).attr("class").indexOf('easyui-textbox')!=-1){
-                    $(this).textbox("setValue","");
+                    if($(this).val()==$("#ezuiFormOperate input[id='showChose']").val()){
+
+                    }else{
+                        $(this).textbox("setValue","");
+                    }
+                    // console.log($(this).val()+"============"+$("#ezuiFormOperate input[id='showChose']").val());
+
                 }else if($(this).attr("class").indexOf('easyui-datebox')!=-1){
                     $(this).datebox("setValue","");
                 }else if($(this).attr("class").indexOf('easyui-numberbox')!=-1){
@@ -456,6 +465,7 @@
                 }
             }
         })
+
         $("#ezuiFormOperate input[id='licenseUrl']").val("");
         $("#licenseUrlFile").filebox("setValue","");
     }
