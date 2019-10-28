@@ -466,8 +466,6 @@ public class OrderHeaderForNormal implements Serializable {
 	private String printTemplate;
 	private String printmen;//收货方
 	private List<OrderDetailsForNormal> orderDetailsForNormalList;
-	private Integer pageSize;//总页数
-	private Integer pageNo;//页码
 	private List<DocOrderPacking> docOrderPackingList;
 
 

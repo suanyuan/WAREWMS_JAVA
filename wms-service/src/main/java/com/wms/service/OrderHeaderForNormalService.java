@@ -93,7 +93,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
-
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
     /**
      * 订单列表显示
      */
@@ -1023,29 +1024,19 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         //联系电话 ohForNormal.getCTel1();
         ohForNormal.setExctel1(ohForNormal.getCTel1());
-        //备注 header.notes
 
         //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
         //拣货人 null
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-        //总页数
-        int pageSize = (int) Math.ceil((double) odForNormalList.size() / 8);
-        ohForNormal.setPageSize(pageSize);
 
 
         double a = 0;
         double b = 0;
         Integer c = 0;
-        int pageNo = 1;//页码
-        ohForNormal.setPageNo(pageNo);
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
         for (int i = 0; i < odForNormalList.size(); i++) {
-            if (i > 8) {
-                pageNo += 1;
-            }
-            ohForNormal.setPageNo(pageNo);
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
             //货位 odForNormal.getLocation();
@@ -1153,12 +1144,6 @@ public class OrderHeaderForNormalService extends BaseService {
         //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-        //总页数
-        int pageSize = (int) Math.ceil((double) odForNormalList.size() / 7);
-        ohForNormal.setPageSize(pageSize);
-        //页码
-        int pageNo=1;
-        ohForNormal.setPageNo(pageNo);
 
 
 
@@ -1168,21 +1153,18 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
         for (int i = 0; i < odForNormalList.size(); i++) {
-            if(i>7){
-                pageNo +=1;
-            }
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
 
-/*            BasCustomer basCustomerList = basCustomerMybatisDao.queryByCustomerId(docOrderDetail.getCustomerid());
-            if (basCustomerList != null) {
-                docOrderDetail.setBasdescrc(basCustomerList.getDescrC());
-            }*/
+
             //产品代码 odForNormal.getSku();
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
             if (invLotAtt != null) {
                 //供应商
-                docOrderDetail.setLotatt08(invLotAtt.getLotatt08());
+                BasCustomer basCustomerList = basCustomerMybatisDao.queryByIdType(invLotAtt.getLotatt08(),Constant.CODE_CUS_TYP_VE);
+                if (basCustomerList != null) {
+                    docOrderDetail.setLotatt08(basCustomerList.getDescrC());
+                }
                 //生产日期
                 docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
                 //产品名称
