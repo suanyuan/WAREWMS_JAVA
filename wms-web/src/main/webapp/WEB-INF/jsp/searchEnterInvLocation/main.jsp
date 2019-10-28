@@ -91,8 +91,8 @@ var doSearch = function(){
 		lotatt06 : $('#lotatt06').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
-		activeFlag : $('#activeFlag').combobox('getValue')
-
+		activeFlag : $('#activeFlag').combobox('getValue'),
+		reservedfield09 : '1'
 	});
 };
 

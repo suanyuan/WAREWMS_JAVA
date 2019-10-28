@@ -40,6 +40,6 @@ public class SearchEnterInvLocation implements Serializable {
     private String lotatt03StartDate;           //入库日期开始
     private String lotatt03EndDate;           //入库日期结束
     private String activeFlag;  //是否合作
-
+    private String reservedfield09;//是否是医疗器械
 
 }

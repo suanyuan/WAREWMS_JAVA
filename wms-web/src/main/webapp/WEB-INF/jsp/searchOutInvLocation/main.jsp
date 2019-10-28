@@ -93,8 +93,8 @@ var doSearch = function(){
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 		consigneeID:$('#consigneeID').val(),
-		activeFlag : $('#activeFlag').combobox('getValue')
-
+		activeFlag : $('#activeFlag').combobox('getValue'),
+		reservedfield09 : '1'
 	});
 };
 

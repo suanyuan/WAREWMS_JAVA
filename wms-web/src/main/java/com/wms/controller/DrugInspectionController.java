@@ -58,6 +58,13 @@ public class DrugInspectionController {
 		model.put("menuId", menuId);
 		return new ModelAndView("drugInspection/customerProduct", model);
 	}
+	@Login
+	@RequestMapping(params = "toCustomerProductMainInfo")
+	public ModelAndView toCustomerProductMainInfo(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("drugInspection/customerProduct_info", model);
+	}
 
 	@Login
 	@RequestMapping(params = "showCustomerProductDatagrid")
@@ -80,6 +87,13 @@ public class DrugInspectionController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuId", menuId);
 		return new ModelAndView("searchInvLocation/main", model);
+	}
+	@Login
+	@RequestMapping(params = "toSearchInvLocationMainInfo")
+	public ModelAndView toSearchInvLocationMainInfo(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchInvLocation/main_info", model);
 	}
 
 	@Login
@@ -107,6 +121,13 @@ public class DrugInspectionController {
 		model.put("menuId", menuId);
 		return new ModelAndView("searchEnterInvLocation/main", model);
 	}
+	@Login
+	@RequestMapping(params = "toSearchEnterInvLocationMainInfo")
+	public ModelAndView toSearchEnterInvLocationMainInfo(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchEnterInvLocation/main_info", model);
+	}
 
 	@Login
 	@RequestMapping(params = "showSearchEnterInvLocationDatagrid")
@@ -132,6 +153,13 @@ public class DrugInspectionController {
         model.put("menuId", menuId);
         return new ModelAndView("searchOutInvLocation/main", model);
     }
+	@Login
+	@RequestMapping(params = "toSearchOutInvLocationMainInfo")
+	public ModelAndView toSearchOutInvLocationMainInfo(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("searchOutInvLocation/main_info", model);
+	}
 
     @Login
     @RequestMapping(params = "showSearchOutInvLocationDatagrid")

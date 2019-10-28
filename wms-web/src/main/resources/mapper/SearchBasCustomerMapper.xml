@@ -91,6 +91,9 @@
             <if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
                 and a.lotatt06 like concat('%', #{condition.lotatt06},'%')
             </if>
+            <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
+                AND s.reservedfield09=#{condition.reservedfield09}
+            </if>
         </trim>
     </sql>
     <!-- 查询条件 入库信息 -->
@@ -125,6 +128,9 @@
             </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and r.active_flag =#{condition.activeFlag}
+            </if>
+            <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
+                AND s.reservedfield09=#{condition.reservedfield09}
             </if>
         </trim>
     </sql>
@@ -161,11 +167,13 @@
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and r.active_flag =#{condition.activeFlag}
             </if>
+            <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
+                AND s.reservedfield09=#{condition.reservedfield09}
+            </if>
         </trim>
     </sql>
     <!-- 查询条件 货主商品 -->
     <sql id="Example_Where_Clause4">
-        where t1.reservedfield09='1'
         <trim  suffixOverrides="," >
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and t2.enterprise_name like concat('%', #{condition.enterpriseName},'%')
@@ -184,6 +192,9 @@
             </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and t7.active_flag =#{condition.activeFlag}
+            </if>
+            <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
+                AND t1.reservedfield09=#{condition.reservedfield09}
             </if>
         </trim>
     </sql>
@@ -250,9 +261,8 @@
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        WHERE s.reservedfield09='1'
+        WHERE 1=1
         <include refid="Example_Where_Clause1"/>
-
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -267,7 +277,7 @@
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        WHERE s.reservedfield09='1'
+        WHERE 1=1
         <include refid="Example_Where_Clause1"/>
     </select>
 
@@ -296,9 +306,8 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE  aa.asnstatus='99' AND s.reservedfield09='1'
+        WHERE  aa.asnstatus='99'
         <include refid="Example_Where_Clause2"/>
-
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -318,7 +327,7 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'  AND s.reservedfield09='1'
+        WHERE aa.asnstatus='99'
         <include refid="Example_Where_Clause2"/>
     </select>
 
@@ -346,8 +355,7 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE aa.sostatus='99' AND s.reservedfield09='1'
-
+        WHERE aa.sostatus='99'
         <include refid="Example_Where_Clause3"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -367,7 +375,7 @@
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE aa.sostatus='99' AND s.reservedfield09='1'
+        WHERE aa.sostatus='99'
         <include refid="Example_Where_Clause3"/>
     </select>
 
@@ -386,6 +394,7 @@
         LEFT JOIN gsp_enterprise_info t5 on t4.enterprise_id = t5.enterprise_id
         LEFT JOIN (select * from bas_codes where codeid ='UOM' ) t6 on t6.code = t1.defaultreceivinguom
         LEFT JOIN bas_customer t7 on t7.customerid=t1.customerid
+        WHERE 1=1
         <include refid="Example_Where_Clause4"/>
 
         <if test="limitClause != null and limitClause != ''" >
@@ -404,6 +413,7 @@
         LEFT JOIN gsp_enterprise_info t5 on t4.enterprise_id = t5.enterprise_id
         LEFT JOIN (select * from bas_codes where codeid ='UOM' ) t6 on t6.code = t1.defaultreceivinguom
         LEFT JOIN bas_customer t7 on t7.customerid=t1.customerid
+        WHERE 1=1
         <include refid="Example_Where_Clause4"/>) z
     </select>
 

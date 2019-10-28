@@ -31,7 +31,7 @@ public class SearchInvLocation implements Serializable {
     private String lotatt10;           //质量状态
     private String notes;             //备注
     private Double qty1;             //换算率
-
+    private String reservedfield09;//是否是医疗器械
 
 
 }

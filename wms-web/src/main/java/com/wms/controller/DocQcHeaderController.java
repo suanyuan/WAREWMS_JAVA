@@ -1,11 +1,16 @@
 package com.wms.controller;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpSession;
-
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocQcHeader;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.DocQcHeaderQuery;
+import com.wms.service.DocQcHeaderService;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.annotation.Login;
+import com.wms.vo.DocQcHeaderVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.DocQcHeaderForm;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +19,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.DocQcHeaderService;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
-import com.wms.vo.DocQcHeaderVO;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocQcHeaderForm;
-import com.wms.query.DocQcHeaderQuery;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("docQcHeaderController")
@@ -112,7 +111,7 @@ public class DocQcHeaderController {
 	@RequestMapping(params = "printQcHeader")
 	public String printQcHeader(Model model, String qcno, String linestatus, String lotatt10){
 
-		List<DocQcHeader> docQcHeaderList = docQcHeaderService.printQcHeader(qcno, "","");
+		List<DocQcHeader> docQcHeaderList = docQcHeaderService.printQcHeader(qcno, linestatus,lotatt10);
 
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(docQcHeaderList);
 		model.addAttribute("url", "WEB-INF/jasper/reportDocQcHeaderTask.jasper");

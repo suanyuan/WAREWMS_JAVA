@@ -95,6 +95,10 @@ public class OrderHeaderForNormalService extends BaseService {
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
+    @Autowired
+    private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     /**
      * 订单列表显示
      */
@@ -1024,10 +1028,17 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         //联系电话 ohForNormal.getCTel1();
         ohForNormal.setExctel1(ohForNormal.getCTel1());
-
-        //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
-        //拣货人 null
+        Map<String, Object> param = new HashMap<>();
+        param.put("codeid", "EXP_TYP");
+        param.put("code", ohForNormal.getRoute());
+        BasCodes bascodes = basCodesMybatisDao.queryById(param);
+        ohForNormal.setRoute(bascodes.getCodenameC());
+        //快递公司 暂缓
+        BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(ohForNormal.getCarrierid());
+        GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
+        ohForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
 
 

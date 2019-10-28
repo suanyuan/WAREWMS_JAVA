@@ -92,8 +92,8 @@ var doSearch = function(){
 		specsName : $('#specsName').val(),
 		productRegisterNo : $('#productRegisterNo').val(),
 		enterpriseSc : $('#enterpriseSc').val(),
-		activeFlag : $('#activeFlag').combobox('getValue')
-
+		activeFlag : $('#activeFlag').combobox('getValue'),
+		reservedfield09 : '1'
 	});
 };
 

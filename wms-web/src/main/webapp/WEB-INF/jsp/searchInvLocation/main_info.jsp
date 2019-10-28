@@ -83,7 +83,7 @@ var doSearch = function(){
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 		lotatt06 : $('#lotatt06').val(),
-		reservedfield09 : '1'
+		reservedfield09 : $('#reservedfield09').combobox('getValue')
 	});
 };
 
@@ -145,7 +145,15 @@ var doExport = function(){
 						</tr>
 						<tr >
 							<th>产品注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
-							<td colspan="2">
+							<th >是否医疗器械</th>
+							<td>
+								<select id="reservedfield09" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
+									<option value=""></option>
+									<option value="1">医疗器械</option>
+									<option value="0">非医疗器械</option>
+								</select>
+							</td>
+							<td colspan="1">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
