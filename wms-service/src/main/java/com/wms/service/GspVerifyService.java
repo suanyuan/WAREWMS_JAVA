@@ -61,14 +61,14 @@ public class GspVerifyService {
      * 验证上架提交日期有效性
      */
     public Json verifyPaDateValidation(String lotatt01, String lotatt02) {
-        return verifyGspDateValidation("", "", lotatt01, lotatt02, false);
+        return verifyGspDateValidation(lotatt01, lotatt02, "");
     }
 
     /**
      * 验证验收提交日期有效性
      */
-    public Json verifyQcDateValidation(String customerid, String sku, String lotatt01, String lotatt02) {
-        return verifyGspDateValidation(customerid, sku, lotatt01, lotatt02, true);
+    public Json verifyQcDateValidation(String lotatt01, String lotatt02, String lotatt06) {
+        return verifyGspDateValidation(lotatt01, lotatt02, lotatt06);
     }
 
     /**
@@ -99,10 +99,9 @@ public class GspVerifyService {
      * 验证产品入库的时间校验 上架 && 验收
      * @param lotatt01 生产日期
      * @param lotatt02 效期
-     * @param customerid 货主代码
-     * @param sku 产品代码
+     * @param lotatt06 注册证号
      */
-    private Json verifyGspDateValidation(String customerid, String sku, String lotatt01, String lotatt02, boolean isCheckLotatt01) {
+    private Json verifyGspDateValidation(String lotatt01, String lotatt02, String lotatt06) {
 
         if (StringUtil.isEmpty(lotatt01)) {
             return Json.error("请选择生产日期");
@@ -122,36 +121,26 @@ public class GspVerifyService {
             return Json.error("日期转换出错");
         }
 
-        if (!isCheckLotatt01) return Json.success("验证通过");
+        if (!StringUtil.isEmpty(lotatt06)) return Json.success("无注册证传入");
 
         // ↑↑↑↑↑上架↑↑↑↑↑
 
         // ↓↓↓↓↓验收↓↓↓↓↓
-        if (StringUtil.isEmpty(customerid)) {
-            return Json.error("未传入货主代码");
-        }else if (StringUtil.isEmpty(sku)) {
-            return Json.error("未传入产品代码");
-        }
 
         //GSP-注册证：lotatt01 from 注册证.批准日期 to 注册证.有效期
-        BasSku basSku = basSkuService.getSkuInfo(customerid, sku);
-        if (null == basSku) return Json.error("查无此产品档案数据");
-        if (basSku.getReservedfield09().equals("0")) return Json.success("验证通过（非医疗器械）");
-        if (StringUtil.isEmpty(basSku.getReservedfield03())) return Json.error("验证不通过，此产品为医疗器械，却查无注册证号，请联系质量部进行排查");
-
         //通过注册证号 查询注册证，可能存在多个注册证 create_date asc
-        List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryAllByNo(basSku.getReservedfield03());
-        if (allRegister == null || allRegister.size() == 0) return Json.error("验证不通过，此产品已有注册证，却查无此证号的注册证数据，请联系质量部进行排查");
+        List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryAllByNo(lotatt06);
+        if (allRegister == null || allRegister.size() == 0) return Json.error("验证不通过，查无此证号[" + lotatt06 + "]的注册证数据，请联系质量部进行排查");
 
         Date beginDate;
         Date endDate;
         beginDate = allRegister.get(0).getApproveDate();
         endDate = allRegister.get(allRegister.size() - 1).getProductRegisterExpiryDate();
         if(checkDate(lotatt01,beginDate)<0){
-            return Json.error("生产日期小于注册证批准日期："+sku);
+            return Json.error("生产日期小于注册证批准日期");
         }
         if(checkDate(lotatt01,endDate)>0){
-            return Json.error("生产日期超出注册证失效日期："+sku);
+            return Json.error("生产日期超出注册证失效日期");
         }
         return Json.success("验证通过");
     }
@@ -349,8 +338,11 @@ public class GspVerifyService {
                 }
             }
 
-            GspProductRegister gspProductRegister = getGspProductRegister(registerNo);
-            if(gspProductRegister != null){
+            GspProductRegister gspProductRegister;
+            List<PdaGspProductRegister> pdaGspProductRegisterList = gspProductRegisterMybatisDao.queryAllByNo(registerNo);
+            if(pdaGspProductRegisterList != null && pdaGspProductRegisterList.size() > 0){
+
+                gspProductRegister = pdaGspProductRegisterList.get(0);
 //                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
 //                    return Json.error("关联产品注册证已过期："+sku);
 //                }

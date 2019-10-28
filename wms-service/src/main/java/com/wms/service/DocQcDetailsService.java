@@ -251,19 +251,25 @@ public class DocQcDetailsService extends BaseService {
         /*
         888,当前批次-产品注册证对应的 生产厂家
          */
-        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotAtt.getLotatt06());
-        if ((productRegister == null || productRegister.getEnterpriseInfo() == null) &&
+        PdaGspProductRegister productRegister = null;
+        List<PdaGspProductRegister> pdaGspProductRegisterList = productRegisterMybatisDao.queryAllByNo(lotAtt.getLotatt06());
+
+        if (pdaGspProductRegisterList.size() == 0 &&
                 StringUtil.isEmpty(basSku.getReservedfield14())) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产企业信息"));
             return map;
+        } else if (pdaGspProductRegisterList.size() > 0) {
+
+            productRegister = pdaGspProductRegisterList.get(0);
+
+            pdaDocQcDetailVO.setEnterpriseName(
+                    (productRegister.getEnterpriseInfo() == null)
+                            ?
+                            basSku.getReservedfield14()
+                            :
+                            productRegister.getEnterpriseInfo().getEnterpriseName()
+            );
         }
-        pdaDocQcDetailVO.setEnterpriseName(
-                (productRegister == null || productRegister.getEnterpriseInfo() == null)
-                        ?
-                        basSku.getReservedfield14()
-                        :
-                        productRegister.getEnterpriseInfo().getEnterpriseName()
-        );
 
         /*
         888，最新+历史注册证(+生产企业详情)
@@ -354,15 +360,15 @@ public class DocQcDetailsService extends BaseService {
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
 
         //add by Gizmo 2019-10-26 日期校验
-        DocQcDetailsQuery qcQuery = new DocQcDetailsQuery();
-        qcQuery.setQcno(form.getQcno());
-        qcQuery.setQclineno(form.getQclineno());
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcQuery));
-        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
-        if (null == docQcDetailsList || docQcDetailsList.size() == 0) return new PdaResult(PdaResult.CODE_FAILURE, "查无此验收明细数据");
-        DocQcDetails docQcDetails = docQcDetailsList.get(0);
-        Json json = gspVerifyService.verifyQcDateValidation(docQcDetails.getCustomerid(), docQcDetails.getSku(), form.getLotatt01(), form.getLotatt02());
+//        DocQcDetailsQuery qcQuery = new DocQcDetailsQuery();
+//        qcQuery.setQcno(form.getQcno());
+//        qcQuery.setQclineno(form.getQclineno());
+//        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcQuery));
+//        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
+//        if (null == docQcDetailsList || docQcDetailsList.size() == 0) return new PdaResult(PdaResult.CODE_FAILURE, "查无此验收明细数据");
+//        DocQcDetails docQcDetails = docQcDetailsList.get(0);
+        Json json = gspVerifyService.verifyQcDateValidation(form.getLotatt01(), form.getLotatt02(), form.getLotatt06());
         if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
 
         form.setLanguage("CN");
@@ -740,13 +746,17 @@ public class DocQcDetailsService extends BaseService {
 
     public List<PdaGspProductRegister> getRgisterListBylotatt06(String lotatt06) {
 
-        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotatt06);
+        List<PdaGspProductRegister> pdaGspProductRegisterList = productRegisterMybatisDao.queryAllByNo(lotatt06);
+//        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotatt06);
         List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
-        if (productRegister != null && StringUtil.isNotEmpty(productRegister.getVersion())) {
+        if (pdaGspProductRegisterList != null &&
+                pdaGspProductRegisterList.size() > 0 &&
+                StringUtil.isNotEmpty(pdaGspProductRegisterList.get(0).getVersion())) {
 
+            PdaGspProductRegister firstPdaGspProductRegister = pdaGspProductRegisterList.get(0);
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-            historyQuery.setVersion(productRegister.getVersion());
+            historyQuery.setVersion(firstPdaGspProductRegister.getVersion());
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
             List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
             List<String> numberList = new ArrayList<>();
