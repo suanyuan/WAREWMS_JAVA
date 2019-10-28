@@ -10,4 +10,8 @@ package com.wms.mybatis.dao;
 public interface GspFirstRecordMybatisDao extends BaseDao {
 
     public <T> T selectCompareByEnterprisId(Object id);
+
+    public <T> T selectByEnterprisId(Object id);
+
+
 }

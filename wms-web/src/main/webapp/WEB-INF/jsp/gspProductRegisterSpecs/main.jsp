@@ -313,7 +313,7 @@ var commit = function(){
 
     console.log("qwe");
     var infoObj = new Object();
-    $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
+    $("#ezuiFormInfoProduct input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
 
