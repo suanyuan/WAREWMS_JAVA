@@ -275,7 +275,7 @@ public class CommonService extends BaseService{
 
     /**
      * 判断养护扫码条码数据是否齐全
-     * @param invLotAtt 验证通过的养护明细对应的批属
+//     * @param invLotAtt 验证通过的养护明细对应的批属
      * @param query 查询明细 mtno, lotatt04, lotatt05, GTIN, locationid, otherCode
      * @return 结果
      */
