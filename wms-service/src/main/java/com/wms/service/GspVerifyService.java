@@ -121,7 +121,7 @@ public class GspVerifyService {
             return Json.error("日期转换出错");
         }
 
-        if (!StringUtil.isEmpty(lotatt06)) return Json.success("无注册证传入");
+        if (StringUtil.isEmpty(lotatt06)) return Json.success("无注册证传入");
 
         // ↑↑↑↑↑上架↑↑↑↑↑
 

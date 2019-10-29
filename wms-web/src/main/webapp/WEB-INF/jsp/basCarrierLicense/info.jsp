@@ -207,7 +207,7 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'default'
+                enterpriseType:'KD'
             },
             fit:true,
             collapsible:false,
