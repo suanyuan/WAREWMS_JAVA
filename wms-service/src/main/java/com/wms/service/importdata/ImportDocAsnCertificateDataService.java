@@ -204,8 +204,20 @@ public class ImportDocAsnCertificateDataService {
 			System.out.println(dataArray.getCustomerid()+"===="+dataArray.getSku()+"===="+dataArray.getLotatt04());
 
 			try {
+				boolean flag1 = false;
 				DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryById(dataArray);
 				if(docAsnCertificate!=null){
+					throw new Exception();
+				}
+
+				for(DocAsnCertificateVO  a: importData){
+					if(dataArray.getCustomerid().equals(a.getCustomerid())
+							&&dataArray.getSku().equals(a.getSku())
+							&&dataArray.getLotatt04().equals(a.getLotatt04())){
+						flag1 = true;
+					}
+				}
+				if(flag1){
 					throw new Exception();
 				}
 			} catch (Exception e) {
