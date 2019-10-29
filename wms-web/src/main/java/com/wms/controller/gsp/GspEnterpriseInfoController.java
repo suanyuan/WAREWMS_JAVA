@@ -154,6 +154,7 @@ public class GspEnterpriseInfoController {
 	}
 
 
+
 	@Login
 	@RequestMapping(params = "getBtn")
 	@ResponseBody

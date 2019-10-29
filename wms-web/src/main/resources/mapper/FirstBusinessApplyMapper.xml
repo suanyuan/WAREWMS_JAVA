@@ -270,11 +270,11 @@ where 1=1
 	left join gsp_product_register_specs sp on t2.specs_id = sp.specs_id
 	left join gsp_product_register gpr on sp.product_register_id = gpr.product_register_id
 	left join
-	((select customerid,descr_c from bas_customer where active_flag ='1' and customer_type = 'OW')
+	((select customerid,descr_c from bas_customer where  customer_type = 'OW')
 	union
 	(select customerid,descr_c from bas_customer_history where customer_type = 'OW'  )) eic on t1.client_id = eic.customerid
 	left join
-	((select customerid,descr_c from bas_customer where active_flag ='1' and customer_type = 'VE')
+	((select customerid,descr_c from bas_customer where   customer_type = 'VE')
 	union
 	(select customerid,descr_c from bas_customer_history where customer_type = 'VE' )) eis on t1.supplier_id = eis.customerid
 

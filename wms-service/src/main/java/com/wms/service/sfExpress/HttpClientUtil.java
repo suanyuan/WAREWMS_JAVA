@@ -83,6 +83,25 @@ public class HttpClientUtil {
         return body;
     }
 
+
+/*    public String postSFAPI1(String url, String xml) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        List<NameValuePair> parameters = new ArrayList();
+        parameters.add(new BasicNameValuePair("xml", xml));
+        HttpPost post = this.postForm(url, new UrlEncodedFormEntity(parameters, Charset.forName("UTF-8")));
+        String body = "";
+        body = this.invoke(httpClient, post);
+
+        try {
+            httpClient.close();
+        } catch (IOException var9) {
+            logger.error("HttpClientService post error", var9);
+        }
+
+        return body;
+    }*/
+
     public String get(String url) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);

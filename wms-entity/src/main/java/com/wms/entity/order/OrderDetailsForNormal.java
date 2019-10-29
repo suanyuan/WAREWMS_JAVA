@@ -224,7 +224,10 @@ public class OrderDetailsForNormal implements Serializable {
     private String codename;//单位
     private String reservedfield02;//商品描述
     private String reservedfield01;//商品名称
+    private String reservedfield06;//生产许可证/备案号
     private String descr;//换算率
+    private String skugroup5;//运输条件
+    private String skugroup4;//存储条件
 	public OrderDetailsForNormal() {
 		
 	}

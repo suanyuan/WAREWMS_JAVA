@@ -165,8 +165,6 @@ public class BasSkuService extends BaseService {
 			basSkuMybatisDao.add(basSku);
 		}else{
 
-
-
 			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setAddtime(today);
@@ -219,6 +217,31 @@ public class BasSkuService extends BaseService {
 		if(num==0){
 			basSkuMybatisDao.updateBySelective(basSku);
 		}
+		json.setSuccess(true);
+		json.setMsg("资料处理成功！");
+		return json;
+	}
+
+
+	public Json editBasSkuRegister(BasSkuForm basSkuForm) {
+		Json json = new Json();
+		Date today = new Date();
+		BasSkuQuery skuQuery = new BasSkuQuery();
+		skuQuery.setCustomerid(basSkuForm.getCustomerid());
+		skuQuery.setSku(basSkuForm.getSku());
+		BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
+		if(basSku == null){
+			return Json.error("查询不到对应的产品");
+		}
+		BeanUtils.copyProperties(basSkuForm, basSku);
+
+
+
+		basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+		basSku.setEdittime(today);
+
+		basSkuMybatisDao.updateBySelective(basSku);
+
 		json.setSuccess(true);
 		json.setMsg("资料处理成功！");
 		return json;

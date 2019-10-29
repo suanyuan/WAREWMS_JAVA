@@ -1033,11 +1033,21 @@ public class OrderHeaderForNormalService extends BaseService {
         param.put("codeid", "EXP_TYP");
         param.put("code", ohForNormal.getRoute());
         BasCodes bascodes = basCodesMybatisDao.queryById(param);
-        ohForNormal.setRoute(bascodes.getCodenameC());
+        if(bascodes!=null){
+            ohForNormal.setRoute(bascodes.getCodenameC());
+        }
         //快递公司 暂缓
-        BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(ohForNormal.getCarrierid());
-        GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
-        ohForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+        if(ohForNormal.getCarrierid()!=null){
+            BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(ohForNormal.getCarrierid());
+            if(basCarrierLicense!=null){
+                GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
+                if(gspEnterpriseInfo!=null){
+                    ohForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+                }
+            }
+        }
+        //备注ohForNormal.getNotes();
+
 
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
 
@@ -1072,13 +1082,13 @@ public class OrderHeaderForNormalService extends BaseService {
             param1.put("customerid", docOrderDetail.getCustomerid());
             param1.put("sku", docOrderDetail.getSku());
             BasSku basSku1 = basSkuMybatisDao.queryById(param1);
-            String notes = basSku1.getReservedfield07();
-            if (notes.equals("LD")) {
-                ohForNormal.setNotes("冷冻");
-            } else if (notes.equals("FLL")) {
-                ohForNormal.setNotes("非冷链");
-            } else if (notes.equals("LC")) {
-                ohForNormal.setNotes("冷藏");
+            String rf07 = basSku1.getReservedfield07();
+            if (rf07.equals("LD")) {
+                ohForNormal.setReservedfield07("冷冻");
+            } else if (rf07.equals("FLL")) {
+                ohForNormal.setReservedfield07("非冷链");
+            } else if (rf07.equals("LC")) {
+                ohForNormal.setReservedfield07("冷藏");
             }
 
             MybatisCriteria allocationCriteria = new MybatisCriteria();
@@ -1119,7 +1129,6 @@ public class OrderHeaderForNormalService extends BaseService {
                     } else {
                         orderDetailsForNormal.setReport("否");
                     }
-                    //备注
 
                 }
 
@@ -1190,8 +1199,6 @@ public class OrderHeaderForNormalService extends BaseService {
                 docOrderDetail.setLotatt07(invLotAtt.getLotatt07());
                 //有效期/失效期
                 docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
-                //储存条件
-                docOrderDetail.setLotatt11(invLotAtt.getLotatt11());
                 //生产企业
                 docOrderDetail.setLotatt15(invLotAtt.getLotatt15());
             }
@@ -1200,14 +1207,18 @@ public class OrderHeaderForNormalService extends BaseService {
             param1.put("sku", docOrderDetail.getSku());
             BasSku basSku1 = basSkuMybatisDao.queryById(param1);
             //备注
-            String notes = basSku1.getReservedfield07();
-            if (notes.equals("LD")) {
-                ohForNormal.setNotes("冷冻");
-            } else if (notes.equals("FLL")) {
-                ohForNormal.setNotes("非冷链");
-            } else if (notes.equals("LC")) {
-                ohForNormal.setNotes("冷藏");
+            String rf07 = basSku1.getReservedfield07();
+            if (rf07.equals("LD")) {
+                ohForNormal.setReservedfield07("冷冻");
+            } else if (rf07.equals("FLL")) {
+                ohForNormal.setReservedfield07("非冷链");
+            } else if (rf07.equals("LC")) {
+                ohForNormal.setReservedfield07("冷藏");
             }
+            //储存条件
+            docOrderDetail.setSkugroup4(basSku1.getSkuGroup4());
+            //运输条件
+            docOrderDetail.setSkugroup5(basSku1.getSkuGroup5());
 
             MybatisCriteria allocationCriteria = new MybatisCriteria();
             ActAllocationDetails allocationQuery = new ActAllocationDetails();
@@ -1253,7 +1264,8 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderDetailsForNormal.setReservedfield02(basSku1.getReservedfield02());
                     //商品名称
                     orderDetailsForNormal.setReservedfield01(basSku1.getReservedfield01());
-                    //备注
+                    //生产许可证号/备案号
+                    orderDetailsForNormal.setReservedfield06(basSku1.getReservedfield06());
 
                 }
                 //单位

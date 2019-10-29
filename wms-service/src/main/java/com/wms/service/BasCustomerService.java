@@ -92,7 +92,7 @@ public class BasCustomerService extends BaseService {
 			if (gspEnterpriseInfo != null) {
 				basCustomerVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
 				basCustomerVO.setShorthandName(gspEnterpriseInfo.getShorthandName());
-//				basCustomerVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
+				basCustomerVO.setEnterpriseNo(gspEnterpriseInfo.getEnterpriseNo());
 				basCustomerVO.setContacts(gspEnterpriseInfo.getContacts());
 				basCustomerVO.setContactsPhone(gspEnterpriseInfo.getContactsPhone());
 				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());

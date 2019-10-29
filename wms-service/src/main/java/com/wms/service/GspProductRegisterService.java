@@ -251,10 +251,19 @@ public class GspProductRegisterService extends BaseService {
 
 	public Json deleteGspProductRegister(String id) {
 		Json json = new Json();
+
+
 		GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(id);
+		int num  = gspProductRegisterSpecsMybatisDao.queryByListBind(id);
+		if(num>0){
+			return Json.error("注册证下有产品无法删除");
+		}
+
 		if(gspProductRegister != null){
 			gspProductRegisterMybatisDao.delete(gspProductRegister);
 		}
+
+		json.setMsg("删除成功");
 		json.setSuccess(true);
 		return json;
 	}
