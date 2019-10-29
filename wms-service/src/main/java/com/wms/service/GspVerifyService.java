@@ -400,7 +400,7 @@ public class GspVerifyService {
                     }
 
                     if(catalog!=null){
-                        if(catalog.getVersion().equals(Constant.CODE_CATALOG_CLASSIFY_ONE)){
+                        if(catalog.getClassifyId().equals("I")){
                             json = Json.success("一类不需要匹配经营范围");
                             json.setObj(allRegister);
                             return json;

@@ -625,8 +625,19 @@ public class DataPublishService extends BaseService {
             for(BasSku b : basSkuList){
                 BasSkuForm form = new BasSkuForm();
                 BeanUtils.copyProperties(b,form);
+
                 form.setActiveFlag(Constant.IS_USE_NO);
-                basSkuService.editBasSku(form);
+                form.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+                basSkuService.editBasSkuRegister(form);
+                if(b!=null){
+                    BasSkuHistory basSkuHistory = new BasSkuHistory();
+                    BeanUtils.copyProperties(b,basSkuHistory);
+                    basSkuHistory.setAddtime(new Date());
+                    basSkuHistory.setActiveFlag(Constant.IS_USE_NO);
+                    basSkuHistory.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+                    basSkuHistoryMybatisDao.add(basSkuHistory);
+                }
+
 
                 firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 

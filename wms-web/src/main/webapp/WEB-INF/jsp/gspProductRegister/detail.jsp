@@ -151,13 +151,13 @@
                     </div>
                 <table id='ezuiDetailsDatagrid'></table>
             </div>
-            <%--<div title="绑定产品列表" style="padding:0px">--%>
-                    <%--<div>--%>
-                        <%--<a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>--%>
-                        <%--<a onclick='detailsUnBind();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>解除产品</a>--%>
-                    <%--</div>--%>
-                <%--<table id='ezuiDatagridDetail' ></table>--%>
-            <%--</div>--%>
+            <div title="绑定产品列表" style="padding:0px">
+                    <div>
+                        <a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>
+                        <a onclick='detailsUnBind();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>解除产品</a>
+                    </div>
+                <table id='ezuiDatagridDetail' ></table>
+            </div>
         </div>
     </div>
     <!--产品查询列表dialog -->
@@ -860,11 +860,17 @@
     }
 
     function getBy() {
-        dataGridProduct.datagrid("load",{"productCode":$("#productCode").textbox("getValue"),"productName":$("#productName").textbox("getValue"),"isUse":"1"})
+        dataGridProduct.datagrid("load",
+            {"productCode":$("#productCode").textbox("getValue"),
+                "productName":$("#productName").textbox("getValue"),
+                "isUse":"1"})
     }
 
     function productQuery() {
-        enterpriseDatagrid.datagrid("reload",{"enterpriseNo":$("#enterpriseNo").textbox("getValue"),"shorthandName":$("#shorthandName").textbox("getValue"),"isUse":"1"})
+        enterpriseDatagrid.datagrid("reload",
+            {"enterpriseNo":$("#ezuiEnterpriseToolbar #enterpriseNo").textbox("getValue"),
+                "shorthandName":$("#ezuiEnterpriseToolbar #shorthandName").textbox("getValue"),
+                "isUse":"1"})
     }
 
     function productChose() {

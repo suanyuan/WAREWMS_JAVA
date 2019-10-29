@@ -123,8 +123,9 @@ public class GspProductRegisterController {
 		Json json = gspProductRegisterService.deleteGspProductRegister(id);
 		if(json == null){
 			json = new Json();
-		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+		}
 		return json;
 	}
 
