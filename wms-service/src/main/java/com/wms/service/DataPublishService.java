@@ -661,7 +661,7 @@ public class DataPublishService extends BaseService {
                     firstBusinessApplyService.editFirstBusinessApply(fbaHeadForm);
 
                     //失效审核日志
-                    firstReviewLogService.updateFirstReviewByNo(productApply.getApplyId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//                    firstReviewLogService.updateFirstReviewByNo(productApply.getApplyId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
                 }
             }
         }else{
@@ -685,7 +685,7 @@ public class DataPublishService extends BaseService {
                     firstBusinessApplyService.editFirstBusinessApply(fbaHeadForm);
 
                     //失效审核日志
-                    firstReviewLogService.updateFirstReviewByNo(apply.getApplyId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
+//                    firstReviewLogService.updateFirstReviewByNo(apply.getApplyId(),Constant.CODE_CATALOG_CHECKSTATE_FAIL);
                 }
             }
 
