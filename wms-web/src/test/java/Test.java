@@ -1,4 +1,14 @@
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,9 +19,10 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
-        //String arr = "123,2,4";
-        //System.out.println(initScope(arr));
-        toStr();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeNow=sdf.format(new Date());
+        String fileName="委托客户"+timeNow;
+        System.out.println(fileName);
     }
 
     private static void toStr(){
