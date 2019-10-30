@@ -447,6 +447,13 @@ var commitAcceptance = function(type){
 
 
 };
+function escEncode(strSendToServer){
+	strSendToServer = strSendToServer.replace(/\%/g,'%25').replace(/\&/g,'%26').replace(/\#/g,'%23');
+	strSendToServer = strSendToServer.replace(/\+/g,'%2B').replace(/\//g,'%2F').replace(/\\/g,'%5C');
+	strSendToServer = strSendToServer.replace(/\=/g,'%3D').replace(/\?/g,'%3F').replace(/\ /g,'%20');
+	strSendToServer = strSendToServer.replace(/\./g,'%2E').replace(/\:/g,'%3A');
+	return strSendToServer;
+}
 //验收作业提交 单条验收
 var commitAcceptanceS = function(type){
 	var typeC=type; //是否合格
@@ -477,7 +484,7 @@ var commitAcceptanceS = function(type){
 		data.lotatt04=$('#ezuiAcceptanceFormS #lotatt04').textbox('getValue');
 		data.lotatt05=$('#ezuiAcceptanceFormS #lotatt05').textbox('getValue');
 		data.lotatt06=$('#ezuiAcceptanceFormS #lotatt06').combobox('getValue');
-		data.lotatt11=$('#ezuiAcceptanceFormS #lotatt11').textbox('getValue');
+		data.lotatt11=escEncode($('#ezuiAcceptanceFormS #lotatt11').textbox('getValue'));
 		data.lotatt15=$('#ezuiAcceptanceFormS #lotatt15').textbox('getValue');
 		forms.push(data);
 
