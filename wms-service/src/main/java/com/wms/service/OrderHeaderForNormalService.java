@@ -2048,11 +2048,10 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
         //如果签回单号存在需要打印签回单 反之---
-        if (orderHeaderForNormal.getCAddress3().equals("") || orderHeaderForNormal.getCAddress3() == null) {
+        if ( orderHeaderForNormal.getCAddress3() == null) {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
         } else {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
-
         }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);

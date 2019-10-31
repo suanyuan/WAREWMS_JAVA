@@ -289,15 +289,39 @@ public class DocOrderHeaderController {
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
         String customer = orderHeaderForNormal.get(0).getCustomerid();
         if(customer.equals("JSGR")){
-            //国润 A4 letter
+            //1 国润
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");
         }else if (customer.equals("JSML")){
-            //明伦 A4
+            //2 明伦
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");
-        }else{
-            //原随后清单
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSBZ.jasper");
-        }
+        }else if (customer.equals("MY")){
+			//3 妙有
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingMY.jasper");
+		}else if (customer.equals("JSJY")){
+			//4 嘉意
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSJY.jasper");
+		}else if (customer.equals("BL")){
+			//5 佰礼
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBL.jasper");
+		}else if (customer.equals("YG")){
+			//6 亦舸
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingYG.jasper");
+		}else if (customer.equals("WQ")){
+			//7 稳勤
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingWQ.jasper");
+		}else if (customer.equals("BDL")){
+			//8 百多力
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBDL.jasper");
+		}else if(customer.equals("BZ")){
+            //9 标准
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBZ.jasper");
+        }else if(customer.equals("HQ")){
+			//10 宏确
+			model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingHQ.jasper");
+		}else {
+        	//原随货单
+			model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+		}
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
