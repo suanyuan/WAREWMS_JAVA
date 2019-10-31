@@ -528,122 +528,123 @@ public class OrderHeaderForNormalService extends BaseService {
 
         if (orderHeaderForNormal != null) {
             //判断订单状态
-            if (orderHeaderForNormal.getSostatus().equals("40")) {//orderHeaderForNormal.getSostatus().equals("30") ||
-
-                json = fixLLPackage(orderHeaderForNormal.getOrderno());
-                if (!json.isSuccess()) return json;
-
-                //操作拣货
-                List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
-                if (allocationDetailsIdList != null) {
-
-                    /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                    json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-                    if (!json.isSuccess()) return json;
-                    boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
-                    ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
-
-                    for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                        map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
-                        map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                        orderHeaderForNormalMybatisDao.pickingByOrder(map);
-                        String pickResult = map.get("result").toString();
-                        if (pickResult != null && pickResult.length() > 0) {
-                            if (pickResult.equals("000")) {
-                                continue;
-                            } else {
-                                //取消顺丰下单
-                                if (shunfengPlacedFlag) {
-                                    ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                                    if (!responseCancel.isResultFlag()) {
-                                        json.setSuccess(false);
-                                        String error = "出库处理失败：" + pickResult + "/br";
-                                        json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                        return json;
-                                    }
-                                }
-                                json.setSuccess(false);
-                                json.setMsg("出库处理失败：" + pickResult);
-                                return json;
-                            }
-                        } else {
-                            //取消顺丰下单
-                            if (shunfengPlacedFlag) {
-                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                                if (!responseCancel.isResultFlag()) {
-                                    json.setSuccess(false);
-                                    String error = "出库处理失败：订单数据异常！/br";
-                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                    return json;
-                                }
-                            }
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：订单数据异常！");
-                            return json;
-                        }
-                    }
-                    //操作发运
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                    map.put("orderNo", orderHeaderForNormalForm.getOrderno());
-                    map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                    orderHeaderForNormalMybatisDao.shipmentByOrder(map);
-                    String shippmentResult = map.get("result").toString();
-                    if (shippmentResult != null && shippmentResult.length() > 0) {
-                        if (shippmentResult.equals("000")) {
-
-                            //发运成功之后记录序列号出库
-                            recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
-
-                            orderHeaderForNormalQuery.setCurrentTime(new Date());
-                            orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                            json.setSuccess(true);
-                            json.setMsg("出库处理成功！");
-                            json.setObj(orderHeaderForNormal);
-                            return json;
-                        } else {
-                            //取消顺丰下单
-                            if (shunfengPlacedFlag) {
-                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                                if (!responseCancel.isResultFlag()) {
-                                    json.setSuccess(false);
-                                    String error = "出库处理失败：" + shippmentResult + "/br";
-                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                    return json;
-                                }
-                            }
-                            json.setSuccess(false);
-                            json.setMsg("出库处理失败：" + shippmentResult);
-                            return json;
-                        }
-                    } else {
-                        //取消顺丰下单
-                        if (shunfengPlacedFlag) {
-                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if (!responseCancel.isResultFlag()) {
-                                json.setSuccess(false);
-                                String error = "出库处理失败：订单数据异常！/br";
-                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                return json;
-                            }
-                        }
-                        json.setSuccess(false);
-                        json.setMsg("出库处理失败：订单数据异常！");
-                        return json;
-                    }
-                } else {
-                    json.setSuccess(false);
-                    json.setMsg("出库处理失败：订单数据异常！");
-                    return json;
-                }
-//            } else if (orderHeaderForNormal.getSostatus().equals("50") ||
-//                    orderHeaderForNormal.getSostatus().equals("60") ||
-//                    orderHeaderForNormal.getSostatus().equals("62") ||
-//                    orderHeaderForNormal.getSostatus().equals("63")) {
-
-            } else if (orderHeaderForNormal.getSostatus().equals("60")) {
+//            if (orderHeaderForNormal.getSostatus().equals("40")) {//orderHeaderForNormal.getSostatus().equals("30") ||
+//
+//                json = fixLLPackage(orderHeaderForNormal.getOrderno());
+//                if (!json.isSuccess()) return json;
+//
+//                //操作拣货
+//                List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderHeaderForNormalForm.getOrderno());
+//                if (allocationDetailsIdList != null) {
+//
+//                    /*如果订单发运成功那么就进行顺丰下单  下单报文*/
+//                    json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//                    if (!json.isSuccess()) return json;
+//                    boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
+//                    ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
+//
+//                    for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
+//                        Map<String, Object> map = new HashMap<String, Object>();
+//                        map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//                        map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
+//                        map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+//                        orderHeaderForNormalMybatisDao.pickingByOrder(map);
+//                        String pickResult = map.get("result").toString();
+//                        if (pickResult != null && pickResult.length() > 0) {
+//                            if (pickResult.equals("000")) {
+//                                continue;
+//                            } else {
+//                                //取消顺丰下单
+//                                if (shunfengPlacedFlag) {
+//                                    ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                                    if (!responseCancel.isResultFlag()) {
+//                                        json.setSuccess(false);
+//                                        String error = "出库处理失败：" + pickResult + "/br";
+//                                        json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                                        return json;
+//                                    }
+//                                }
+//                                json.setSuccess(false);
+//                                json.setMsg("出库处理失败：" + pickResult);
+//                                return json;
+//                            }
+//                        } else {
+//                            //取消顺丰下单
+//                            if (shunfengPlacedFlag) {
+//                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                                if (!responseCancel.isResultFlag()) {
+//                                    json.setSuccess(false);
+//                                    String error = "出库处理失败：订单数据异常！/br";
+//                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                                    return json;
+//                                }
+//                            }
+//                            json.setSuccess(false);
+//                            json.setMsg("出库处理失败：订单数据异常！");
+//                            return json;
+//                        }
+//                    }
+//                    //操作发运
+//                    Map<String, Object> map = new HashMap<String, Object>();
+//                    //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//                    map.put("orderNo", orderHeaderForNormalForm.getOrderno());
+//                    map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+//                    orderHeaderForNormalMybatisDao.shipmentByOrder(map);
+//                    String shippmentResult = map.get("result").toString();
+//                    if (shippmentResult != null && shippmentResult.length() > 0) {
+//                        if (shippmentResult.equals("000")) {
+//
+//                            //发运成功之后记录序列号出库
+//                            recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
+//
+//                            orderHeaderForNormalQuery.setCurrentTime(new Date());
+//                            orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+//                            json.setSuccess(true);
+//                            json.setMsg("出库处理成功！");
+//                            json.setObj(orderHeaderForNormal);
+//                            return json;
+//                        } else {
+//                            //取消顺丰下单
+//                            if (shunfengPlacedFlag) {
+//                                ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                                if (!responseCancel.isResultFlag()) {
+//                                    json.setSuccess(false);
+//                                    String error = "出库处理失败：" + shippmentResult + "/br";
+//                                    json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                                    return json;
+//                                }
+//                            }
+//                            json.setSuccess(false);
+//                            json.setMsg("出库处理失败：" + shippmentResult);
+//                            return json;
+//                        }
+//                    } else {
+//                        //取消顺丰下单
+//                        if (shunfengPlacedFlag) {
+//                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                            if (!responseCancel.isResultFlag()) {
+//                                json.setSuccess(false);
+//                                String error = "出库处理失败：订单数据异常！/br";
+//                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                                return json;
+//                            }
+//                        }
+//                        json.setSuccess(false);
+//                        json.setMsg("出库处理失败：订单数据异常！");
+//                        return json;
+//                    }
+//                } else {
+//                    json.setSuccess(false);
+//                    json.setMsg("出库处理失败：订单数据异常！");
+//                    return json;
+//                }
+////            } else if (orderHeaderForNormal.getSostatus().equals("50") ||
+////                    orderHeaderForNormal.getSostatus().equals("60") ||
+////                    orderHeaderForNormal.getSostatus().equals("62") ||
+////                    orderHeaderForNormal.getSostatus().equals("63")) {
+//
+//            } else
+            if (orderHeaderForNormal.getSostatus().equals("60")) {
 
                 json = fixLLPackage(orderHeaderForNormal.getOrderno());
                 if (!json.isSuccess()) return json;
