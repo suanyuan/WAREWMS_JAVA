@@ -1,6 +1,5 @@
 package com.wms.mybatis.dao;
 
-import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.query.OrderDetailsForNormalQuery;
 
 import java.util.List;
@@ -25,4 +24,5 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      * 根据OrderNo获得细单
      */
     <T> List<T> queryByOrderNo(String orderno);
+    <T> List<T> queryByOrderNo1(String orderno);
 }

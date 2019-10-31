@@ -805,9 +805,15 @@ where 1=1
 <!-- 根据id查询 订单明细 -->
     <select id="queryByOrderNo"  resultMap="OrderSkuMap" parameterType="Object">
         select <include refid="Base_Column_List" />
-        from doc_order_details where orderno = #{orderno}
+        from doc_order_details where orderno = #{orderno} order by location
     </select>
-
+    <!-- 根据id查询 订单明细 -->
+    <select id="queryByOrderNo1"  resultMap="OrderSkuMap" parameterType="Object">
+        select a.*,d.*  from doc_order_details d
+        RIGHT  JOIN act_allocation_details a on d.orderno = a.orderno and d.orderlineno = a.orderlineno
+        WHERE a.orderno = #{orderno}
+        ORDER BY a.location
+    </select>
 <!-- 订单明细 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from doc_order_details where orderno = #{condition.orderno,jdbcType=VARCHAR}

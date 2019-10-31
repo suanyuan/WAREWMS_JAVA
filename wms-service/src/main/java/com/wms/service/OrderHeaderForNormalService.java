@@ -1019,7 +1019,8 @@ public class OrderHeaderForNormalService extends BaseService {
         //收获地址 ohForNormal.getCAddress1();
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
-        //发货日期 不要了
+        //发货日期
+
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
         if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
@@ -1036,7 +1037,7 @@ public class OrderHeaderForNormalService extends BaseService {
         if(bascodes!=null){
             ohForNormal.setRoute(bascodes.getCodenameC());
         }
-        //快递公司 暂缓
+        //快递公司
         if(ohForNormal.getCarrierid()!=null){
             BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(ohForNormal.getCarrierid());
             if(basCarrierLicense!=null){
@@ -1049,7 +1050,7 @@ public class OrderHeaderForNormalService extends BaseService {
         //备注ohForNormal.getNotes();
 
 
-        List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
+        List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo1(orderno);
 
 
         double a = 0;
@@ -1090,55 +1091,39 @@ public class OrderHeaderForNormalService extends BaseService {
             } else if (rf07.equals("LC")) {
                 ohForNormal.setReservedfield07("冷藏");
             }
-
-            MybatisCriteria allocationCriteria = new MybatisCriteria();
-            ActAllocationDetails allocationQuery = new ActAllocationDetails();
-            allocationQuery.setOrderno(docOrderDetail.getOrderno());
-            allocationQuery.setOrderlineno(docOrderDetail.getOrderlineno());
-            allocationCriteria.setCondition(BeanConvertUtil.bean2Map(allocationQuery));
-            List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(allocationCriteria);
-            for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
-
-                OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
-                BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
-                //库位
-                orderDetailsForNormal.setLocation(actAllocationDetails.getLocation());
-                //数量
-                orderDetailsForNormal.setQtyallocated(actAllocationDetails.getQty());
-                //件数
-                orderDetailsForNormal.setQtyallocatedEach(actAllocationDetails.getQtyEach());
-                a = a + actAllocationDetails.getQty();
-                b = b + actAllocationDetails.getQtyEach();
-                orderDetailsForNormal.setQtyorderedEachSum(a);//数量和
-                orderDetailsForNormal.setQtyorderedSum(b);//件数和
-                if (basSku1 != null) {
-                    //实拣数 null
-                    //规格型号
-                    orderDetailsForNormal.setDescrc(basSku1.getDescrE());
-                    //产品双证
-                    if (basSku1.getSkuGroup7().equals("1")) {
-                        orderDetailsForNormal.setDoublec("是");
-                    } else {
-                        orderDetailsForNormal.setDoublec("否");
-                    }
-                    //附卡类别
-                    orderDetailsForNormal.setCard(basSku1.getSkuGroup2());
-                    //质量合格证
-                    if (basSku1.getSkuGroup8().equals("1")) {
-                        orderDetailsForNormal.setReport("是");
-                    } else {
-                        orderDetailsForNormal.setReport("否");
-                    }
-
+            if (basSku1 != null) {
+                //实拣数 null
+                //规格型号
+                docOrderDetail.setDescrc(basSku1.getDescrE());
+                //产品双证
+                if (basSku1.getSkuGroup7().equals("1")) {
+                    docOrderDetail.setDoublec("是");
+                } else {
+                    docOrderDetail.setDoublec("否");
+                }
+                //附卡类别
+                docOrderDetail.setCard(basSku1.getSkuGroup2());
+                //质量合格证
+                if (basSku1.getSkuGroup8().equals("1")) {
+                    docOrderDetail.setReport("是");
+                } else {
+                    docOrderDetail.setReport("否");
                 }
 
+            }
+                //库位
+                docOrderDetail.getLocation();
+                a = a + docOrderDetail.getQty();
+                b = b + docOrderDetail.getQtyeach();
+                docOrderDetail.setQtyorderedEachSum(a);//数量和
+                docOrderDetail.setQtyorderedSum(b);//件数和
                 c = c + 1;
-                orderDetailsForNormal.setIndex(c);
+                docOrderDetail.setIndex(c);
 
-                orderDetailsForNormalList.add(orderDetailsForNormal);
+                orderDetailsForNormalList.add(docOrderDetail);
             }
 
-        }
+
 
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
         return ohForNormal;
@@ -1153,6 +1138,9 @@ public class OrderHeaderForNormalService extends BaseService {
         //收获地址 ohForNormal.getCAddress1();
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
+        //发货单号
+        //销售订单号
+        ohForNormal.setHedi01pdf(ohForNormal.getHEdi01());
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
         if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
@@ -1161,11 +1149,36 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         //联系电话 ohForNormal.getCTel1();
         ohForNormal.setExctel1(ohForNormal.getCTel1());
-        //快递公司 暂缓
         //发运方式 ZT BK LY 暂缓
+        Map<String, Object> param = new HashMap<>();
+        param.put("codeid", "EXP_TYP");
+        param.put("code", ohForNormal.getRoute());
+        BasCodes bascodes = basCodesMybatisDao.queryById(param);
+        if(bascodes!=null){
+            ohForNormal.setRoute(bascodes.getCodenameC());
+        }
+        //快递公司
+        if(ohForNormal.getCarrierid()!=null){
+            BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(ohForNormal.getCarrierid());
+            if(basCarrierLicense!=null){
+                GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
+                if(gspEnterpriseInfo!=null){
+                    ohForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+                }
+            }
+        }
+        //发货日期 ohForNormal.getEdittime();
+        //快递结算方式
+        Map<String, Object> param1 = new HashMap<>();
+        param1.put("codeid", "JS_FS");
+        param1.put("code", ohForNormal.getStop());
+        BasCodes bascodes1 = basCodesMybatisDao.queryById(param1);
+        if(bascodes1!=null){
+            ohForNormal.setEndmode(bascodes1.getCodenameC());
+        }
+
+
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-
-
 
         double a = 0;//数量
         double b = 0;//件数
@@ -1202,10 +1215,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 //生产企业
                 docOrderDetail.setLotatt15(invLotAtt.getLotatt15());
             }
-            Map<String, Object> param1 = new HashMap<>();
-            param1.put("customerid", docOrderDetail.getCustomerid());
-            param1.put("sku", docOrderDetail.getSku());
-            BasSku basSku1 = basSkuMybatisDao.queryById(param1);
+            Map<String, Object> param2 = new HashMap<>();
+            param2.put("customerid", docOrderDetail.getCustomerid());
+            param2.put("sku", docOrderDetail.getSku());
+            BasSku basSku1 = basSkuMybatisDao.queryById(param2);
             //备注
             String rf07 = basSku1.getReservedfield07();
             if (rf07.equals("LD")) {

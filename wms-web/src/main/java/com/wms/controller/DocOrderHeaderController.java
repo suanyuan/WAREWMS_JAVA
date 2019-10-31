@@ -296,7 +296,7 @@ public class DocOrderHeaderController {
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");
         }else{
             //原随后清单
-            model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSBZ.jasper");
         }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
