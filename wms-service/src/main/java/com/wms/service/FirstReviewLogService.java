@@ -150,6 +150,8 @@ public class FirstReviewLogService extends BaseService {
 					//下发数据
 					dataPublishService.publishData(firstReviewLog.getReviewTypeId());
 
+				}else{
+					return Json.error("请刷新页面");
 				}
 				updateLog.setReviewId(reviewId);
 				firstReviewLogMybatisDao.updateBySelective(updateLog);
