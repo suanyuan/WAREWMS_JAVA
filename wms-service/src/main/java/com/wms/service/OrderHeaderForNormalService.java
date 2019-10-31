@@ -733,7 +733,8 @@ public class OrderHeaderForNormalService extends BaseService {
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
 
         //月结账号 TODO 不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        if (!basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
+        if (!orderHeaderForNormal.getCustomerid().equals("JSGR") ||
+                !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
                 (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
             return Json.success("不用下顺丰单");
@@ -1990,7 +1991,7 @@ public class OrderHeaderForNormalService extends BaseService {
             String custid = basCodes.getUdf1();
 
             map.put("sftelLogo", "imgFile/qiao.jpg");
-            map.put("proCode", "imgFile/FM/T4.jpg");
+            map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
             map.put("so", "imgFile/FM/so.jpg");
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
             map.put("ji", "imgFile/FM/ji.jpg");
@@ -2051,7 +2052,7 @@ public class OrderHeaderForNormalService extends BaseService {
             map.put("deliverName", j_contact);
             //map.put("deliverTel", "");
             map.put("deliverMobile", j_tel);
-            map.put("consignerCompany", j_company);
+            map.put("deliverCompany", j_company);
             map.put("deliverProvince", "上海市");
             map.put("deliverCity", "上海市");
             map.put("deliverCounty", "浦东新区");
@@ -2078,7 +2079,6 @@ public class OrderHeaderForNormalService extends BaseService {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
         } else {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
-
         }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
