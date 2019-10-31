@@ -79,5 +79,5 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @param lotatt05 序列号
      * @return 双证是否匹配
      */
-    InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05);
+    InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05, @Param("customerId") String customerId);
 }

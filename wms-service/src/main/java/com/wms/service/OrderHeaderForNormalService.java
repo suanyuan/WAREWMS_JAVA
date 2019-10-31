@@ -326,7 +326,7 @@ public class OrderHeaderForNormalService extends BaseService {
             BasSku basSku = docOrderDetail.getBasSku() == null ? new BasSku() : docOrderDetail.getBasSku();
             if (StringUtil.fixNull(basSku.getSkuGroup7()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt05())) {
 
-                InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByLotatt05(docOrderDetail.getLotatt05());
+                InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByLotatt05(docOrderDetail.getLotatt05(), docOrderDetail.getCustomerid());
                 if (invLotLocId == null) {
 
                     json.setSuccess(false);
@@ -523,6 +523,9 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//        return json;
+
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("40")) {//orderHeaderForNormal.getSostatus().equals("30") ||
@@ -724,21 +727,27 @@ public class OrderHeaderForNormalService extends BaseService {
         SFOrderHeader sfOrderHeader = new SFOrderHeader();
         BeanUtils.copyProperties(orderHeaderForNormal, sfOrderHeader);
 
+        BasCodesQuery basCodesQuery = new BasCodesQuery();
+        basCodesQuery.setCodeid(Constant.CODE_CATALOG_SENDCOMPANY);
+        basCodesQuery.setCode("SF");
+        BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+
         //月结账号 TODO 不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        if (!"SF".equals(sfOrderHeader.getCarrierid()) ||
+        if (!basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
                 (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
             return Json.success("不用下顺丰单");
         }
 
         //寄件人信息
-        BasCodesQuery basCodesQuery = new BasCodesQuery();
+        basCodesQuery = new BasCodesQuery();
         basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
         basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
-        BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+        basCodes = basCodesMybatisDao.queryById(basCodesQuery);
         sfOrderHeader.setJ_company(basCodes.getCodenameC());
         sfOrderHeader.setJ_contact(basCodes.getCodenameE());
         sfOrderHeader.setJ_tel(basCodes.getUdf3());
+        sfOrderHeader.setCustid(basCodes.getUdf1());
 
         String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
         //响应报文
@@ -1970,6 +1979,16 @@ public class OrderHeaderForNormalService extends BaseService {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
         if (orderHeaderForNormal != null) {
+
+            BasCodesQuery basCodesQuery = new BasCodesQuery();
+            basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
+            basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
+            BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+            String j_company = basCodes.getCodenameC();
+            String j_contact = basCodes.getCodenameE();
+            String j_tel = basCodes.getUdf3();
+            String custid = basCodes.getUdf1();
+
             map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/T4.jpg");
             map.put("so", "imgFile/FM/so.jpg");
@@ -1988,7 +2007,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //订单条码的生成
             map.put("childMailNo", orderHeaderForNormal.getCAddress4());
             //子单号
-            map.put("sfmonthly", "217276730473");
+            map.put("sfmonthly", custid);
 
             //打印单号
             //map.put("addedService","A");
@@ -2012,8 +2031,15 @@ public class OrderHeaderForNormalService extends BaseService {
             map.put("consignerCounty", orderHeaderForNormal.getCAddress2());
             map.put("consignerAddress", orderHeaderForNormal.getCAddress1());
             //支付方式
-            map.put("monthAccount", "0213071013");//月结卡号
-            map.put("payMethod", "1");
+            map.put("monthAccount", custid);//月结卡号
+            //todo 支付方式
+            if (StringUtil.isNotEmpty(orderHeaderForNormal.getStop()) && orderHeaderForNormal.getStop().equals("DF")) {
+
+                map.put("payMethod", "2");
+            } else {
+
+                map.put("payMethod", "1");
+            }
             //金额
             // map.put("codValue","9999.9");
             //进港信息<去识别不同的代码>
@@ -2022,10 +2048,10 @@ public class OrderHeaderForNormalService extends BaseService {
             map.put("sourceTransferCode", orderHeaderForNormal.getUserdefine6());
 
             //寄件人的相关信息
-            map.put("deliverName", "郑洁");
+            map.put("deliverName", j_contact);
             //map.put("deliverTel", "");
-            map.put("deliverMobile", "021-62091927");
-            map.put("consignerCompany", "上海嘉事嘉意医疗器材有限公司");
+            map.put("deliverMobile", j_tel);
+            map.put("consignerCompany", j_company);
             map.put("deliverProvince", "上海市");
             map.put("deliverCity", "上海市");
             map.put("deliverCounty", "浦东新区");
@@ -2048,7 +2074,7 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
         //如果签回单号存在需要打印签回单 反之---
-        if (orderHeaderForNormal.getCAddress3().equals("") || orderHeaderForNormal.getCAddress3() == null) {
+        if (StringUtil.isEmpty(orderHeaderForNormal.getCAddress3())) {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
         } else {
             model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");

@@ -34,6 +34,7 @@ public class Constant {
     public static final String CODE_CATALOG_UOM = "UOM";//单位
     public static final String CODE_CATALOG_SAMPLEATTR = "YP_TYP";//样品属性
     public static final String CODE_CATALOG_SENDFUNCTION = "EXP_TYP";//发运方式
+    public static final String CODE_CATALOG_SENDCOMPANY = "EXP_CO";//发运公司
     public static final String CODE_CATALOG_SETTLEMENT = "JS_FS";//结算方式
     public static final String CODE_CATALOG_QCSTATE = "ZL_TYP";//质量状态
     public static final String CODE_CATALOG_COLDHAINMARK= "LL_TYP";//冷链标志
