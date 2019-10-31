@@ -1,10 +1,16 @@
 package com.wms.service.importdata;
 
 import com.wms.constant.Constant;
-import com.wms.entity.*;
+import com.wms.entity.BasCustomer;
+import com.wms.entity.BasPackage;
+import com.wms.entity.BasSku;
+import com.wms.entity.ImportOrderData;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.mybatis.dao.*;
+import com.wms.mybatis.dao.BasCustomerMybatisDao;
+import com.wms.mybatis.dao.BasSkuMybatisDao;
+import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
+import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
 import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
@@ -49,8 +55,6 @@ public class ImportOrderDataService {
     private CommonService commonService;
     @Autowired
     private BasPackageService basPackageService;
-    @Autowired
-    private BasCodesMybatisDao basCodesMybatisDao;
 
     /**
      * 导入订单数据
@@ -432,14 +436,6 @@ public class ImportOrderDataService {
                     orderHeader.setSoreference1(importDataVO.getSoreference1());
                     orderHeader.setSoreference2(importDataVO.getSoreference2());
                     orderHeader.setConsigneeid(importDataVO.getConsigneeid());
-                    BasCodes basCodes = new BasCodes();
-                    basCodes.setCode("EXP_CO");
-                    basCodes.setCode("SF");
-                    BasCodes SFCode = basCodesMybatisDao.queryById(basCodes);
-                    orderHeader.setCarrierid(SFCode == null ? "1" : SFCode.getUdf1());
-                    orderHeader.setStop("YJ");
-                    orderHeader.setRoute("TH");
-
                     //保存订单主信息
                     orderHeaderForNormalMybatisDao.add(orderHeader);
                     for (OrderDetailsForNormalVO importDetailsDataVO : importDataVO.getOrderDetailsForNormalVOList()) {

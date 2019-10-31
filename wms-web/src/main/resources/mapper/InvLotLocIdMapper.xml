@@ -404,6 +404,6 @@ where 1=1
         ,IFNULL(b.lotatt13, 0) as doublecflag
         FROM inv_lot_loc_id a
         LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
-        WHERE b.lotatt05 = #{lotatt05} and b.customerId = #{customerId}
+        WHERE b.lotatt05 = #{lotatt05}
     </select>
 </mapper>   
