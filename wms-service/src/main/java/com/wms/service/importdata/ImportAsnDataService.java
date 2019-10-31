@@ -17,6 +17,7 @@ import com.wms.utils.exception.ExcelException;
 import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("ImportAsnDataService")
+@Slf4j
 public class ImportAsnDataService {
 
     @Autowired
@@ -860,13 +862,18 @@ public class ImportAsnDataService {
             }
             if (!json.isSuccess()) {
 
-                throw new Exception(resultMsg.toString());
+                json.setMsg(resultMsg.toString());
+                return json;
+//                throw new Exception(resultMsg.toString());
             } else {
 
                 json.setMsg(resultMsg.toString());
                 return json;
             }
         } catch (Exception e) {
+
+            e.printStackTrace();
+            log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error(e.getMessage());
         }

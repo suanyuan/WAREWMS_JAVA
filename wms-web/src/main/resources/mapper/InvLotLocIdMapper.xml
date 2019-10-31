@@ -1,255 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.mybatis.dao.InvLotLocIdMybatisDao" >
-<!-- Result Map-->
-<resultMap id="BaseResultMap" type="com.wms.entity.InvLotLocId" >
-	<result column="lotnum" property="lotnum"/>
-	<result column="locationid" property="locationid"/>
-	<result column="traceid" property="traceid"/>
-	<result column="customerid" property="customerid"/>
-	<result column="sku" property="sku"/>
-	<result column="qty" property="qty"/>
-	<result column="qtyallocated" property="qtyallocated"/>
-	<result column="qtyrpin" property="qtyrpin"/>
-	<result column="qtyrpout" property="qtyrpout"/>
-	<result column="qtymvin" property="qtymvin"/>
-	<result column="qtymvout" property="qtymvout"/>
-	<result column="qtyonhold" property="qtyonhold"/>
-	<result column="addtime" property="addtime"/>
-	<result column="addwho" property="addwho"/>
-	<result column="edittime" property="edittime"/>
-	<result column="editwho" property="editwho"/>
-	<result column="netweight" property="netweight"/>
-	<result column="grossweight" property="grossweight"/>
-	<result column="cubic" property="cubic"/>
-	<result column="price" property="price"/>
-	<result column="onholdlocker" property="onholdlocker"/>
-	<result column="lpn" property="lpn"/>
-<!--养护计划需要加的字段-->
-	<result column="lotatt03" property="lotatt03"/>
-	<result column="lotatt03test" property="lotatt03test"/>
-	<result column="reservedfield10" property="reservedfield10"/>
-	<result column="packuom1" property="packuom1"/>
-	<result column="qty1" property="qty1"/>
-<!--盘点任务-->
-	<result column="name" property="productLineName"/>
-	<result column="lotatt04" property="lotatt04"/>
-	<result column="lotatt05" property="lotatt05"/>
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.wms.entity.InvLotLocId" >
+		<result column="lotnum" property="lotnum"/>
+		<result column="locationid" property="locationid"/>
+		<result column="traceid" property="traceid"/>
+		<result column="customerid" property="customerid"/>
+		<result column="sku" property="sku"/>
+		<result column="qty" property="qty"/>
+		<result column="qtyallocated" property="qtyallocated"/>
+		<result column="qtyrpin" property="qtyrpin"/>
+		<result column="qtyrpout" property="qtyrpout"/>
+		<result column="qtymvin" property="qtymvin"/>
+		<result column="qtymvout" property="qtymvout"/>
+		<result column="qtyonhold" property="qtyonhold"/>
+		<result column="addtime" property="addtime"/>
+		<result column="addwho" property="addwho"/>
+		<result column="edittime" property="edittime"/>
+		<result column="editwho" property="editwho"/>
+		<result column="netweight" property="netweight"/>
+		<result column="grossweight" property="grossweight"/>
+		<result column="cubic" property="cubic"/>
+		<result column="price" property="price"/>
+		<result column="onholdlocker" property="onholdlocker"/>
+		<result column="lpn" property="lpn"/>
+		<!--养护计划需要加的字段-->
+		<result column="lotatt03" property="lotatt03"/>
+		<result column="lotatt03test" property="lotatt03test"/>
+		<result column="reservedfield10" property="reservedfield10"/>
+		<result column="packuom1" property="packuom1"/>
+		<result column="qty1" property="qty1"/>
+		<!--盘点任务-->
+		<result column="name" property="productLineName"/>
+		<result column="lotatt04" property="lotatt04"/>
+		<result column="lotatt05" property="lotatt05"/>
 
-    <!--双证是否匹配-->
-    <result column="doublecflag" property="doublecflag"/>
-<!--质量状态管理-->
-	<result column="lotatt14" property="lotatt14"/>
-	<result column="lotatt15" property="lotatt15"/>
-	<result column="lotatt08" property="lotatt08"/>
-	<result column="lotatt12" property="lotatt12"/>
-	<result column="lotatt06" property="lotatt06"/>
-	<result column="lotatt07" property="lotatt07"/>
-	<result column="lotatt01" property="lotatt01"/>
-	<result column="lotatt02" property="lotatt02"/>
-	<result column="lotatt10" property="lotatt10"/>
-	<result column="descrc" property="descrc"/>
-	<result column="reservedfield06" property="reservedfield06"/>
+		<!--双证是否匹配-->
+		<result column="doublecflag" property="doublecflag"/>
+		<!--质量状态管理-->
+		<result column="lotatt14" property="lotatt14"/>
+		<result column="lotatt15" property="lotatt15"/>
+		<result column="lotatt08" property="lotatt08"/>
+		<result column="lotatt12" property="lotatt12"/>
+		<result column="lotatt06" property="lotatt06"/>
+		<result column="lotatt07" property="lotatt07"/>
+		<result column="lotatt01" property="lotatt01"/>
+		<result column="lotatt02" property="lotatt02"/>
+		<result column="lotatt10" property="lotatt10"/>
+		<result column="descrc" property="descrc"/>
+		<result column="reservedfield06" property="reservedfield06"/>
 
-</resultMap>
+	</resultMap>
 
-    <resultMap id="ExtendResultMap" type="com.wms.entity.InvLotLocId" extends="BaseResultMap" >
-        <association property="invLotAtt"
-                     column="lotnum"
-                     javaType="com.wms.entity.InvLotAtt"
-                     select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
-        <association property="basSku"
-                     column="{customerid=customerid, sku=sku}"
-                     javaType="com.wms.entity.BasSku"
-                     select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
-    </resultMap>
-       
-<!-- inv_lot_loc_id table all fields -->
-<sql id="Base_Column_List" >
+	<resultMap id="ExtendResultMap" type="com.wms.entity.InvLotLocId" extends="BaseResultMap" >
+		<association property="invLotAtt"
+					 column="lotnum"
+					 javaType="com.wms.entity.InvLotAtt"
+					 select="com.wms.mybatis.dao.InvLotAttMybatisDao.queryById"/>
+		<association property="basSku"
+					 column="{customerid=customerid, sku=sku}"
+					 javaType="com.wms.entity.BasSku"
+					 select="com.wms.mybatis.dao.BasSkuMybatisDao.queryById"/>
+	</resultMap>
+
+	<!-- inv_lot_loc_id table all fields -->
+	<sql id="Base_Column_List" >
 	 lotnum,locationid,traceid,customerid,sku,qty,qtyallocated,qtyrpin,qtyrpout,qtymvin,qtymvout,qtyonhold,addtime,addwho,edittime,editwho,netweight,grossweight,cubic,price,onholdlocker,lpn,qtypa
 </sql>
-   
-   
-<!-- 查询条件 -->
-<sql id="Example_Where_Clause">
-where 1=1
-<trim  suffixOverrides="," >
-	<if test="condition.lotnum != null and condition.lotnum != ''" >
-	    and lotnum =  #{condition.lotnum}
-	</if>
-	<if test="condition.locationid != null and condition.locationid != ''" >
-	    and locationid =  #{condition.locationid}
-	</if>
-	<if test="condition.traceid != null and condition.traceid != ''" >
-	    and traceid =  #{condition.traceid}
-	</if>
-	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid =  #{condition.customerid}
-	</if>
-	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =  #{condition.sku}
-	</if>
-	<if test="condition.qty != null and condition.qty != ''" >
-	    and qty =  #{condition.qty}
-	</if>
-	<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
-	    and qtyallocated =  #{condition.qtyallocated}
-	</if>
-	<if test="condition.qtyrpin != null and condition.qtyrpin != ''" >
-	    and qtyrpin =  #{condition.qtyrpin}
-	</if>
-	<if test="condition.qtyrpout != null and condition.qtyrpout != ''" >
-	    and qtyrpout =  #{condition.qtyrpout}
-	</if>
-	<if test="condition.qtymvin != null and condition.qtymvin != ''" >
-	    and qtymvin =  #{condition.qtymvin}
-	</if>
-	<if test="condition.qtymvout != null and condition.qtymvout != ''" >
-	    and qtymvout =  #{condition.qtymvout}
-	</if>
-	<if test="condition.qtyonhold != null and condition.qtyonhold != ''" >
-	    and qtyonhold =  #{condition.qtyonhold}
-	</if>
-	<if test="condition.addtime != null and condition.addtime != ''" >
-	    and addtime =  #{condition.addtime}
-	</if>
-	<if test="condition.addwho != null and condition.addwho != ''" >
-	    and addwho =  #{condition.addwho}
-	</if>
-	<if test="condition.edittime != null and condition.edittime != ''" >
-	    and edittime =  #{condition.edittime}
-	</if>
-	<if test="condition.editwho != null and condition.editwho != ''" >
-	    and editwho =  #{condition.editwho}
-	</if>
-	<if test="condition.netweight != null and condition.netweight != ''" >
-	    and netweight =  #{condition.netweight}
-	</if>
-	<if test="condition.grossweight != null and condition.grossweight != ''" >
-	    and grossweight =  #{condition.grossweight}
-	</if>
-	<if test="condition.cubic != null and condition.cubic != ''" >
-	    and cubic =  #{condition.cubic}
-	</if>
-	<if test="condition.price != null and condition.price != ''" >
-	    and price =  #{condition.price}
-	</if>
-	<if test="condition.onholdlocker != null and condition.onholdlocker != ''" >
-	    and onholdlocker =  #{condition.onholdlocker}
-	</if>
-	<if test="condition.lpn != null and condition.lpn != ''" >
-	    and lpn =  #{condition.lpn}
-	</if>
-	<if test="condition.qtypa != null and condition.qtypa != ''" >
-	    and qtypa =  #{condition.qtypa}
-	</if>
-</trim>
-</sql>
-   
 
-<!-- 插入记录 -->
-<insert id="add" parameterType="Object" >
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.lotnum != null and condition.lotnum != ''" >
+				and lotnum =  #{condition.lotnum}
+			</if>
+			<if test="condition.locationid != null and condition.locationid != ''" >
+				and locationid =  #{condition.locationid}
+			</if>
+			<if test="condition.traceid != null and condition.traceid != ''" >
+				and traceid =  #{condition.traceid}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid =  #{condition.customerid}
+			</if>
+			<if test="condition.sku != null and condition.sku != ''" >
+				and sku =  #{condition.sku}
+			</if>
+			<if test="condition.qty != null and condition.qty != ''" >
+				and qty =  #{condition.qty}
+			</if>
+			<if test="condition.qtyallocated != null and condition.qtyallocated != ''" >
+				and qtyallocated =  #{condition.qtyallocated}
+			</if>
+			<if test="condition.qtyrpin != null and condition.qtyrpin != ''" >
+				and qtyrpin =  #{condition.qtyrpin}
+			</if>
+			<if test="condition.qtyrpout != null and condition.qtyrpout != ''" >
+				and qtyrpout =  #{condition.qtyrpout}
+			</if>
+			<if test="condition.qtymvin != null and condition.qtymvin != ''" >
+				and qtymvin =  #{condition.qtymvin}
+			</if>
+			<if test="condition.qtymvout != null and condition.qtymvout != ''" >
+				and qtymvout =  #{condition.qtymvout}
+			</if>
+			<if test="condition.qtyonhold != null and condition.qtyonhold != ''" >
+				and qtyonhold =  #{condition.qtyonhold}
+			</if>
+			<if test="condition.addtime != null and condition.addtime != ''" >
+				and addtime =  #{condition.addtime}
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and addwho =  #{condition.addwho}
+			</if>
+			<if test="condition.edittime != null and condition.edittime != ''" >
+				and edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.netweight != null and condition.netweight != ''" >
+				and netweight =  #{condition.netweight}
+			</if>
+			<if test="condition.grossweight != null and condition.grossweight != ''" >
+				and grossweight =  #{condition.grossweight}
+			</if>
+			<if test="condition.cubic != null and condition.cubic != ''" >
+				and cubic =  #{condition.cubic}
+			</if>
+			<if test="condition.price != null and condition.price != ''" >
+				and price =  #{condition.price}
+			</if>
+			<if test="condition.onholdlocker != null and condition.onholdlocker != ''" >
+				and onholdlocker =  #{condition.onholdlocker}
+			</if>
+			<if test="condition.lpn != null and condition.lpn != ''" >
+				and lpn =  #{condition.lpn}
+			</if>
+			<if test="condition.qtypa != null and condition.qtypa != ''" >
+				and qtypa =  #{condition.qtypa}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object" >
   insert into inv_lot_loc_id(lotnum,locationid,traceid,customerid,sku,qty,qtyallocated,qtyrpin,qtyrpout,qtymvin,qtymvout,qtyonhold,addtime,addwho,edittime,editwho,netweight,grossweight,cubic,price,onholdlocker,lpn,qtypa)
  values(#{lotnum},#{locationid},#{traceid},#{customerid},#{sku},#{qty},#{qtyallocated},#{qtyrpin},#{qtyrpout},#{qtymvin},#{qtymvout},#{qtyonhold},#{addtime},#{addwho},#{edittime},#{editwho},#{netweight},#{grossweight},#{cubic},#{price},#{onholdlocker},#{lpn},#{qtypa})
 </insert>
 
-<!-- 根据id，修改记录-->  
- <update id="update" parameterType="Object" >
+	<!-- 根据id，修改记录-->
+	<update id="update" parameterType="Object" >
   update inv_lot_loc_id set locationid=#{locationid},traceid=#{traceid},customerid=#{customerid},sku=#{sku},qty=#{qty},qtyallocated=#{qtyallocated},qtyrpin=#{qtyrpin},qtyrpout=#{qtyrpout},qtymvin=#{qtymvin},qtymvout=#{qtymvout},qtyonhold=#{qtyonhold},addtime=#{addtime},addwho=#{addwho},edittime=#{edittime},editwho=#{editwho},netweight=#{netweight},grossweight=#{grossweight},cubic=#{cubic},price=#{price},onholdlocker=#{onholdlocker},lpn=#{lpn},qtypa=#{qtypa} where lotnum=#{lotnum}
  </update>
-<!-- 根据id，修改记录-->
- <update id="updateByKey" parameterType="Object" >
+	<!-- 根据id，修改记录-->
+	<update id="updateByKey" parameterType="Object" >
     update inv_lot_loc_id set onholdlocker=#{onholdlocker}
     where lotnum=#{lotnum} and locationid=#{locationid} and customerid=#{customerid} and sku=#{sku}
  </update>
- 
- <!-- 修改记录，只修改只不为空的字段 -->
-<update id="updateBySelective" parameterType="Object" >
-	update inv_lot_loc_id set 
-	<trim  suffixOverrides="," >
-	<if test="locationid != null  ">
-		locationid=#{locationid},
-	</if>
-	<if test="traceid != null  ">
-		traceid=#{traceid},
-	</if>
-	<if test="customerid != null  ">
-		customerid=#{customerid},
-	</if>
-	<if test="sku != null  ">
-		sku=#{sku},
-	</if>
-	<if test="qty != null  ">
-		qty=#{qty},
-	</if>
-	<if test="qtyallocated != null  ">
-		qtyallocated=#{qtyallocated},
-	</if>
-	<if test="qtyrpin != null  ">
-		qtyrpin=#{qtyrpin},
-	</if>
-	<if test="qtyrpout != null  ">
-		qtyrpout=#{qtyrpout},
-	</if>
-	<if test="qtymvin != null  ">
-		qtymvin=#{qtymvin},
-	</if>
-	<if test="qtymvout != null  ">
-		qtymvout=#{qtymvout},
-	</if>
-	<if test="qtyonhold != null  ">
-		qtyonhold=#{qtyonhold},
-	</if>
-	<if test="addtime != null  ">
-		addtime=#{addtime},
-	</if>
-	<if test="addwho != null  ">
-		addwho=#{addwho},
-	</if>
-	<if test="edittime != null  ">
-		edittime=#{edittime},
-	</if>
-	<if test="editwho != null  ">
-		editwho=#{editwho},
-	</if>
-	<if test="netweight != null  ">
-		netweight=#{netweight},
-	</if>
-	<if test="grossweight != null  ">
-		grossweight=#{grossweight},
-	</if>
-	<if test="cubic != null  ">
-		cubic=#{cubic},
-	</if>
-	<if test="price != null  ">
-		price=#{price},
-	</if>
-	<if test="onholdlocker != null  ">
-		onholdlocker=#{onholdlocker},
-	</if>
-	<if test="lpn != null  ">
-		lpn=#{lpn},
-	</if>
-	<if test="qtypa != null  ">
-		qtypa=#{qtypa},
-	</if>
-	</trim> where lotnum=#{lotnum}
-</update>
 
-<!-- 删除记录 -->
-<delete id="delete" parameterType="Object">
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateBySelective" parameterType="Object" >
+		update inv_lot_loc_id set
+		<trim  suffixOverrides="," >
+			<if test="locationid != null  ">
+				locationid=#{locationid},
+			</if>
+			<if test="traceid != null  ">
+				traceid=#{traceid},
+			</if>
+			<if test="customerid != null  ">
+				customerid=#{customerid},
+			</if>
+			<if test="sku != null  ">
+				sku=#{sku},
+			</if>
+			<if test="qty != null  ">
+				qty=#{qty},
+			</if>
+			<if test="qtyallocated != null  ">
+				qtyallocated=#{qtyallocated},
+			</if>
+			<if test="qtyrpin != null  ">
+				qtyrpin=#{qtyrpin},
+			</if>
+			<if test="qtyrpout != null  ">
+				qtyrpout=#{qtyrpout},
+			</if>
+			<if test="qtymvin != null  ">
+				qtymvin=#{qtymvin},
+			</if>
+			<if test="qtymvout != null  ">
+				qtymvout=#{qtymvout},
+			</if>
+			<if test="qtyonhold != null  ">
+				qtyonhold=#{qtyonhold},
+			</if>
+			<if test="addtime != null  ">
+				addtime=#{addtime},
+			</if>
+			<if test="addwho != null  ">
+				addwho=#{addwho},
+			</if>
+			<if test="edittime != null  ">
+				edittime=#{edittime},
+			</if>
+			<if test="editwho != null  ">
+				editwho=#{editwho},
+			</if>
+			<if test="netweight != null  ">
+				netweight=#{netweight},
+			</if>
+			<if test="grossweight != null  ">
+				grossweight=#{grossweight},
+			</if>
+			<if test="cubic != null  ">
+				cubic=#{cubic},
+			</if>
+			<if test="price != null  ">
+				price=#{price},
+			</if>
+			<if test="onholdlocker != null  ">
+				onholdlocker=#{onholdlocker},
+			</if>
+			<if test="lpn != null  ">
+				lpn=#{lpn},
+			</if>
+			<if test="qtypa != null  ">
+				qtypa=#{qtypa},
+			</if>
+		</trim> where lotnum=#{lotnum}
+	</update>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
 	delete 	 from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
 </delete>
- 
-<!-- 根据id查询 库位库存表 -->
-<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
-	select <include refid="Base_Column_List" /> 
-	 from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
-</select>
-<!-- 根据id查询 库位库存表 -->
-<select id="queryByKey"  resultMap="BaseResultMap" parameterType="Object">
+
+	<!-- 根据id查询 库位库存表 -->
+	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from inv_lot_loc_id where lotnum = #{lotnum} and locationid = #{locationid}
+	</select>
+	<!-- 根据id查询 库位库存表 -->
+	<select id="queryByKey"  resultMap="BaseResultMap" parameterType="Object">
 	select *
 	 from inv_lot_loc_id
 	   where lotnum = #{lotnum}
@@ -257,8 +257,8 @@ where 1=1
 	   and customerid=#{customerid}
 	   and sku=#{sku}
 </select>
-<!-- 根据id查询 库位库存表 带出lotatt-->
-<select id="queryByKeyLotatt"  resultMap="BaseResultMap" parameterType="Object">
+	<!-- 根据id查询 库位库存表 带出lotatt-->
+	<select id="queryByKeyLotatt"  resultMap="BaseResultMap" parameterType="Object">
 	select a.*,
 	b.lotatt01,b.lotatt02,b.lotatt03,b.lotatt04,b.lotatt05,b.lotatt06,b.lotatt07,b.lotatt08,b.lotatt10,b.lotatt12,b.lotatt14,b.lotatt15,
 	s.descr_c as descrc ,s.reservedfield06
@@ -272,33 +272,33 @@ where 1=1
 	   and b.lotatt10!='DJ'
 </select>
 
-<!-- 库位库存表 列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from inv_lot_loc_id 
-	<include refid="Example_Where_Clause"/>
-</select>
-  	
-<!-- 查询库位库存表列表 -->
-<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from inv_lot_loc_id 
-	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
-</select>
+	<!-- 库位库存表 列表总数-->
+	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from inv_lot_loc_id
+		<include refid="Example_Where_Clause"/>
+	</select>
 
-    <update id="updateQty" parameterType="java.util.Map">
+	<!-- 查询库位库存表列表 -->
+	<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from inv_lot_loc_id
+		<include refid="Example_Where_Clause"/>
+		<if test="orderByClause != null and orderByClause != ''" >
+			order by  ${orderByClause}
+		</if>
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
+
+	<update id="updateQty" parameterType="java.util.Map">
         update inv_lot_loc_id set
         qty = #{qty}, editwho = #{editwho}, edittime = now()
         where lotnum = #{lotnum} and locationid = #{locationid}
     </update>
-<!-- 查出in_lot_att_id的list  养护计划	-->
-<select id="getLotLocIdistListByMaintenanceTime" resultMap="BaseResultMap" >
+	<!-- 查出in_lot_att_id的list  养护计划	-->
+	<select id="getLotLocIdistListByMaintenanceTime" resultMap="BaseResultMap" >
       SELECT i.*,a.lotatt03,DATE_ADD(a.lotatt03,INTERVAL s.reservedfield10 DAY)  lotatt03test,s.reservedfield10,p.qty1,p.packuom1
          FROM `inv_lot_loc_id`  i
         INNER JOIN `bas_sku` s ON i.customerid=s.customerid AND i.sku=s.sku
@@ -307,8 +307,8 @@ where 1=1
         INNER JOIN `doc_asn_header` h ON a.lotatt14=h.asnno
        WHERE h.asntype='PR' AND i.locationid NOT IN('STAGE01','SORTATION01','YY-01-01-01','DX-01-01-01') AND s.reservedfield10 IS NOT NULL AND s.reservedfield10 <![CDATA[  <>  ]]> ''
 </select>
-    
-<select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">
+
+	<select id="queryInventorys" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         a.*
         from inv_lot_loc_id a
@@ -317,71 +317,71 @@ where 1=1
           and IFNULL(b.lotatt04,'') = IFNULL(rtrim(#{lotatt04}),'')
           and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
     </select>
-<!--获得盘点任务-->
-<select id="queryByListByCouRequest" resultMap="BaseResultMap" >
-	SELECT aa.*,p.name  FROM
-	(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
-	FROM `inv_lot_loc_id` i
-	INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
-	GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
-	LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
-	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
-       where 1=1
-	<trim  suffixOverrides="," >
-	<if test="lotatt04 != null and lotatt04 != ''" >
-		and aa.lotatt04 like concat('%',#{lotatt04},'%')
-	</if>
-	<if test="lotatt05 != null and lotatt05 != ''" >
-		and aa.lotatt05 like concat('%',#{lotatt05},'%')
-	</if>
-	<if test="customerid != null and customerid != ''" >
-		and aa.customerid like concat('%',#{customerid},'%')
-	</if>
-	<if test="sku != null and sku != ''" >
-		and aa.sku  like concat('%',#{sku},'%')
-	</if>
-	<if test="productLineName != null and productLineName != ''" >
-		and p.name  like concat('%',#{productLineName},'%')
-	</if>
-	<if test="locationid != null and locationid != ''" >
-		and aa.locationid like concat('%',#{locationid},'%')
-	</if>
-	</trim>
-	ORDER BY aa.locationid DESC
-</select>
+	<!--获得盘点任务-->
+	<select id="queryByListByCouRequest" resultMap="BaseResultMap" >
+		SELECT aa.*,p.name  FROM
+		(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
+		FROM `inv_lot_loc_id` i
+		INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
+		GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
+		LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
+		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="lotatt04 != null and lotatt04 != ''" >
+				and aa.lotatt04 like concat('%',#{lotatt04},'%')
+			</if>
+			<if test="lotatt05 != null and lotatt05 != ''" >
+				and aa.lotatt05 like concat('%',#{lotatt05},'%')
+			</if>
+			<if test="customerid != null and customerid != ''" >
+				and aa.customerid like concat('%',#{customerid},'%')
+			</if>
+			<if test="sku != null and sku != ''" >
+				and aa.sku  like concat('%',#{sku},'%')
+			</if>
+			<if test="productLineName != null and productLineName != ''" >
+				and p.name  like concat('%',#{productLineName},'%')
+			</if>
+			<if test="locationid != null and locationid != ''" >
+				and aa.locationid like concat('%',#{locationid},'%')
+			</if>
+		</trim>
+		ORDER BY aa.locationid DESC
+	</select>
 
-    <select id="queryInventoryForScan" parameterType="java.util.Map" resultMap="ExtendResultMap">
-        SELECT a.*
-        FROM inv_lot_loc_id a
-        LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
-        LEFT JOIN bas_sku c ON a.sku = c.sku AND a.customerid = c.customerid
-        <if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
-            LEFT JOIN bas_gtn d ON a.sku = d.sku
-        </if>
-        WHERE 1 = 0
-        <if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
-            OR d.gtncode = #{GTIN}
-        </if>
-        <if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
-            OR (
-                ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
-                AND
-                ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
-                )
-        </if>
-        <if test="otherCode != null and otherCode != ''">
-            OR c.alternate_sku1 = #{otherCode, jdbcType=VARCHAR}
-            OR c.alternate_sku2 = #{otherCode, jdbcType=VARCHAR}
-            OR c.alternate_sku3 = #{otherCode, jdbcType=VARCHAR}
-            OR c.alternate_sku4 = #{otherCode, jdbcType=VARCHAR}
-            OR c.alternate_sku5 = #{otherCode, jdbcType=VARCHAR}
-            OR c.sku = #{otherCode, jdbcType=VARCHAR}
-        </if>
-        ORDER BY a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
-        limit #{start}, #{pageSize}
-    </select>
+	<select id="queryInventoryForScan" parameterType="java.util.Map" resultMap="ExtendResultMap">
+		SELECT a.*
+		FROM inv_lot_loc_id a
+		LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
+		LEFT JOIN bas_sku c ON a.sku = c.sku AND a.customerid = c.customerid
+		<if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
+			LEFT JOIN bas_gtn d ON a.sku = d.sku
+		</if>
+		WHERE 1 = 0
+		<if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
+			OR d.gtncode = #{GTIN}
+		</if>
+		<if test="(lotatt04 != null and lotatt04 != '') or (lotatt05 != null and lotatt05 != '')">
+			OR (
+			ifnull(b.lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
+			AND
+			ifnull(b.lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
+			)
+		</if>
+		<if test="otherCode != null and otherCode != ''">
+			OR c.alternate_sku1 = #{otherCode, jdbcType=VARCHAR}
+			OR c.alternate_sku2 = #{otherCode, jdbcType=VARCHAR}
+			OR c.alternate_sku3 = #{otherCode, jdbcType=VARCHAR}
+			OR c.alternate_sku4 = #{otherCode, jdbcType=VARCHAR}
+			OR c.alternate_sku5 = #{otherCode, jdbcType=VARCHAR}
+			OR c.sku = #{otherCode, jdbcType=VARCHAR}
+		</if>
+		ORDER BY a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
+		limit #{start}, #{pageSize}
+	</select>
 
-    <select id="queryInventoryForLocation" parameterType="java.util.Map" resultMap="ExtendResultMap">
+	<select id="queryInventoryForLocation" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         a.*
         from inv_lot_loc_id a
@@ -391,19 +391,19 @@ where 1=1
         limit #{start}, #{pageSize}
     </select>
 
-    <select id="sumSameBatchInventory" parameterType="java.util.Map" resultType="double">
+	<select id="sumSameBatchInventory" parameterType="java.util.Map" resultType="double">
         select sum(a.qty) from inv_lot_loc_id a
         left join inv_lot_att b on a.lotnum = b.lotnum
         where b.lotatt04 = #{lotatt04} and b.customerid = #{customerid}
     </select>
 
-    <!--doublecflag-->
-    <select id="queryByLotatt05" parameterType="java.util.Map" resultMap="BaseResultMap">
+	<!--doublecflag-->
+	<select id="queryByLotatt05" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
         a.*
         ,IFNULL(b.lotatt13, 0) as doublecflag
         FROM inv_lot_loc_id a
         LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
-        WHERE b.lotatt05 = #{lotatt05}
+        WHERE b.lotatt05 = #{lotatt05} and b.customerId = #{customerId}
     </select>
 </mapper>   
