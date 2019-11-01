@@ -136,6 +136,8 @@ $(function() {
 		columns : [[
 			{field: 'orderlineno',		title: '行号',		width: 130 },
 			{field: 'sku',				title: '商品编码',		width: 130 },
+            {field: 'lotatt04',	title: '生产批号',		width: 130 },
+            {field: 'lotatt05',	title: '序列号',		width: 130 },
 			{field: 'skuName',			title: '商品名称',		width: 130 },
 			{field: 'linestatusName',	title: '状态',		width: 130 },
 			{field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
@@ -150,8 +152,7 @@ $(function() {
             {field: 'lotatt01',	title: '生产日期',		width: 130 },
             {field: 'lotatt02',	title: '效期',		width: 130 },
             {field: 'lotatt03',	title: '入库日期',		width: 130 },
-            {field: 'lotatt04',	title: '生产批号',		width: 130 },
-            {field: 'lotatt05',	title: '序列号',		width: 130 },
+
             {field: 'lotatt06',	title: '产品注册证',		width: 130 },
             {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
             {field: 'lotatt08',	title: '供应商',		width: 130 },
