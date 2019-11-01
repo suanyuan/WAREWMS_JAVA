@@ -732,74 +732,74 @@ public class OrderHeaderForNormalService extends BaseService {
         basCodesQuery.setCodeid(Constant.CODE_CATALOG_SENDCOMPANY);
         basCodesQuery.setCode("SF");
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-
+        return Json.success("不用下顺丰单");
         //月结账号 TODO 不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        if (!orderHeaderForNormal.getCustomerid().equals("JSGR") ||
-                !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
-                StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
-                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
-            return Json.success("不用下顺丰单");
-        }
-
-        //寄件人信息
-        basCodesQuery = new BasCodesQuery();
-        basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
-        basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
-        basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-        sfOrderHeader.setJ_company(basCodes.getCodenameC());
-        sfOrderHeader.setJ_contact(basCodes.getCodenameE());
-        sfOrderHeader.setJ_tel(basCodes.getUdf3());
-        sfOrderHeader.setCustid(basCodes.getUdf1());
-
-        String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
-        //响应报文
-        String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-        //解析响应报文 TODO 下单重复反馈回来数据有问题
-        ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
-        if (!shunFengResponse.isResultFlag()) {
-
-            json.setSuccess(false);
-            json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
-            return json;
-        }
-        //解析后修改到表中
-        OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
-        orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-        orderHeaderForNormalSf.setEdittime(new Date());
-        orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
-        //运单号
-        orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
-        //签回单号
-        orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
-        //目的地区域代码,
-        orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
-        //时效
-        orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
-        //原寄递地代码  zipCode;
-        //shunFengResponse.getOrderResponse().getZipCode();
-        //目的地的代码  destCode;
-       // shunFengResponse.getOrderResponse().getDestCode();
-
-
-        List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
-        for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
-            //二维码
-            orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
-            //入港映射码  codingMapping
-            orderHeaderForNormalSf.setUserdefine5(rlsInfoDto.getCodingMapping());
-            //出港映射码  codingMappingOut
-            orderHeaderForNormalSf.setCarrieraddress1(rlsInfoDto.getCodingMappingOut());
-            //原寄地区域代码
-            orderHeaderForNormalSf.setUserdefine1(rlsInfoDto.getDestRouteLabel());
-            //中转场代码
-            orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getSourceTransferCode());
-
-        }
-        orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
-        json.setMsg("顺丰下单成功");
-        json.setSuccess(true);
-        json.setObj(shunFengResponse);
-        return json;
+//        if (!orderHeaderForNormal.getCustomerid().equals("JSGR") ||
+//                !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
+//                StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
+//                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
+//            return Json.success("不用下顺丰单");
+//        }
+//
+//        //寄件人信息
+//        basCodesQuery = new BasCodesQuery();
+//        basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
+//        basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
+//        basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+//        sfOrderHeader.setJ_company(basCodes.getCodenameC());
+//        sfOrderHeader.setJ_contact(basCodes.getCodenameE());
+//        sfOrderHeader.setJ_tel(basCodes.getUdf3());
+//        sfOrderHeader.setCustid(basCodes.getUdf1());
+//
+//        String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
+//        //响应报文
+//        String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
+//        //解析响应报文 TODO 下单重复反馈回来数据有问题
+//        ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
+//        if (!shunFengResponse.isResultFlag()) {
+//
+//            json.setSuccess(false);
+//            json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
+//            return json;
+//        }
+//        //解析后修改到表中
+//        OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
+//        orderHeaderForNormalSf.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+//        orderHeaderForNormalSf.setEdittime(new Date());
+//        orderHeaderForNormalSf.setOrderno(orderHeaderForNormalForm.getOrderno());
+//        //运单号
+//        orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
+//        //签回单号
+//        orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
+//        //目的地区域代码,
+//        orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
+//        //时效
+//        orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
+//        //原寄递地代码  zipCode;
+//        //shunFengResponse.getOrderResponse().getZipCode();
+//        //目的地的代码  destCode;
+//       // shunFengResponse.getOrderResponse().getDestCode();
+//
+//
+//        List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
+//        for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
+//            //二维码
+//            orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
+//            //入港映射码  codingMapping
+//            orderHeaderForNormalSf.setUserdefine5(rlsInfoDto.getCodingMapping());
+//            //出港映射码  codingMappingOut
+//            orderHeaderForNormalSf.setCarrieraddress1(rlsInfoDto.getCodingMappingOut());
+//            //原寄地区域代码
+//            orderHeaderForNormalSf.setUserdefine1(rlsInfoDto.getDestRouteLabel());
+//            //中转场代码
+//            orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getSourceTransferCode());
+//
+//        }
+//        orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
+//        json.setMsg("顺丰下单成功");
+//        json.setSuccess(true);
+//        json.setObj(shunFengResponse);
+//        return json;
     }
 
     /*取消顺丰下单*/
