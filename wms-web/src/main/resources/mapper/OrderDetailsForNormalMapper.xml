@@ -100,6 +100,8 @@
     <result column="salesorderlineno" property="salesorderlineno"/>
     <result column="qtyreleased" property="qtyreleased"/>
     <result column="freegift" property="freegift"/>
+    <result column="qty" property="qty"/>
+    <result column="qty_each" property="qtyeach"/>
 </resultMap>
 
     <resultMap id="ExtendResultMap" type="com.wms.entity.order.OrderDetailsForNormal" extends="OrderDetailsForNormalMap">
@@ -810,7 +812,7 @@ where 1=1
     <!-- 根据id查询 订单明细 -->
     <select id="queryByOrderNo1"  resultMap="OrderSkuMap" parameterType="Object">
         select a.*,d.*  from doc_order_details d
-        RIGHT  JOIN act_allocation_details a on d.orderno = a.orderno and d.orderlineno = a.orderlineno
+        left  JOIN act_allocation_details a on d.orderno = a.orderno and d.orderlineno = a.orderlineno
         WHERE a.orderno = #{orderno}
         ORDER BY a.location
     </select>
