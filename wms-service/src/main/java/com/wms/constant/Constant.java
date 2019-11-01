@@ -7,7 +7,7 @@ package com.wms.constant;
  */
 public class Constant {
 
-//  数据是否有效
+    //  数据是否有效
     public static final String IS_USE_YES = "1"; //有效
     public static final String IS_USE_NO = "0";  //无效
 
@@ -34,6 +34,7 @@ public class Constant {
     public static final String CODE_CATALOG_UOM = "UOM";//单位
     public static final String CODE_CATALOG_SAMPLEATTR = "YP_TYP";//样品属性
     public static final String CODE_CATALOG_SENDFUNCTION = "EXP_TYP";//发运方式
+    public static final String CODE_CATALOG_SENDCOMPANY = "EXP_CO";//发运公司
     public static final String CODE_CATALOG_SETTLEMENT = "JS_FS";//结算方式
     public static final String CODE_CATALOG_QCSTATE = "ZL_TYP";//质量状态
     public static final String CODE_CATALOG_COLDHAINMARK= "LL_TYP";//冷链标志
@@ -48,7 +49,7 @@ public class Constant {
 
 
 
-//  企业类型
+    //  企业类型
     public static final String CODE_ENT_TYP_JY = "JY";//经营
     public static final String CODE_ENT_TYP_GNSC = "GNSC";//国内生产
     public static final String CODE_ENT_TYP_GWSC = "GWSC";//国外生产
@@ -57,7 +58,7 @@ public class Constant {
     public static final String CODE_ENT_TYP_ZT = "ZT";//主体
     public static final String CODE_ENT_TYP_GW = "GW";
 
-//  客户类型
+    //  客户类型
     public static final String CODE_CUS_TYP_CA = "CA";//承运商
     public static final String CODE_CUS_TYP_CO = "CO";//收货单位
     public static final String CODE_CUS_TYP_OT = "OT";//其他
@@ -67,7 +68,7 @@ public class Constant {
     public static final String CODE_CUS_TYP_WH = "WH";//主体
 
 
-// 权限
+    // 权限
     public static final String USER_GRADE_NONE = "00";
     public static final String USER_GRADE_QC = "10";
     public static final String USER_GRADE_HEAD = "01";
@@ -75,11 +76,11 @@ public class Constant {
 
 
 
-//是否
+    //是否
     public static final String CODE_YES_OR_YES = "1";
     public static final String CODE_YES_OR_NO = "0";
 
-//Seq
+    //Seq
     public static final String APLCUSNO = "APCUS";//委托客户申请
     public static final String APLSUPNO = "APSUP";//供应商申请
     public static final String APLRECNO = "APREC";//收货单位申请
@@ -109,7 +110,7 @@ public class Constant {
     public static final String JASPER_PDF = "pdf";
     public static final String JASPER_XLS = "xls";
 
-//GSP开关
+    //GSP开关
     public static final String QC_FLAG = "QC_FLAG";
 
     public static final String uploadUrl = "/Users/quendi/fileUpload";

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
+ *
  * <br>
  * <b>功能：</b>InvLotLocIdDao<br>
  */
@@ -20,14 +20,14 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @param invLotLocId ~
      * @return ~
      */
-	int updateQty(InvLotLocId invLotLocId);
+    int updateQty(InvLotLocId invLotLocId);
 
     /**
      * 查询库位上对应扫码的产品数据，可能存在多货主、多质量状态
      * @param query ~
      * @return ~
      */
-	List<InvLotLocId> queryInventorys(PdaInventoryQuery query);
+    List<InvLotLocId> queryInventorys(PdaInventoryQuery query);
 
     /**
      * 查出in_lot_att_id的list 养护计划
@@ -60,12 +60,12 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      */
     double sumSameBatchInventory(@Param("customerid") String customerid, @Param("lotatt04") String lotatt04);
 
-     /**
-      * 根据唯一主键获取单条InvLotLocId
+    /**
+     * 根据唯一主键获取单条InvLotLocId
      */
     InvLotLocId queryByKey(InvLotLocId invLotLocId);
     /**
-      * 根据唯一主键获取单条InvLotLocId和其lotatt批属
+     * 根据唯一主键获取单条InvLotLocId和其lotatt批属
      */
     InvLotLocId queryByKeyLotatt(InvLotLocId invLotLocId);
 
@@ -79,5 +79,5 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @param lotatt05 序列号
      * @return 双证是否匹配
      */
-    InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05);
+    InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05, @Param("customerId") String customerId);
 }
