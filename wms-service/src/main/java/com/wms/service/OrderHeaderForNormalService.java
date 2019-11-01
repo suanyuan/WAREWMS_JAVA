@@ -771,27 +771,28 @@ public class OrderHeaderForNormalService extends BaseService {
         orderHeaderForNormalSf.setCAddress4(shunFengResponse.getOrderResponse().getMailNo());
         //签回单号
         orderHeaderForNormalSf.setCAddress3(shunFengResponse.getOrderResponse().getReturnTrackingNo());
-        //原寄地区域代码
-        orderHeaderForNormalSf.setUserdefine1(shunFengResponse.getOrderResponse().getZipCode());
         //目的地区域代码,
         orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
         //时效
         orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
         //原寄递地代码  zipCode;
-        shunFengResponse.getOrderResponse().getZipCode();
+        //shunFengResponse.getOrderResponse().getZipCode();
         //目的地的代码  destCode;
-        shunFengResponse.getOrderResponse().getDestCode();
+       // shunFengResponse.getOrderResponse().getDestCode();
 
 
         List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
         for (RlsInfoDto rlsInfoDto : rlsInfoDtoList) {
-
             //二维码
             orderHeaderForNormalSf.setUserdefine4(rlsInfoDto.getQrcode());
             //入港映射码  codingMapping
-            rlsInfoDto.getCodingMapping();
+            orderHeaderForNormalSf.setUserdefine5(rlsInfoDto.getCodingMapping());
             //出港映射码  codingMappingOut
-            rlsInfoDto.getCodingMappingOut();
+            orderHeaderForNormalSf.setCarrieraddress1(rlsInfoDto.getCodingMappingOut());
+            //原寄地区域代码
+            orderHeaderForNormalSf.setUserdefine1(rlsInfoDto.getDestRouteLabel());
+            //中转场代码
+            orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getSourceTransferCode());
 
         }
         orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
@@ -1986,20 +1987,26 @@ public class OrderHeaderForNormalService extends BaseService {
             basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
             basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
             BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-            String j_company = basCodes.getCodenameC();
-            String j_contact = basCodes.getCodenameE();
-            String j_tel = basCodes.getUdf3();
+            String j_company =  basCodes.getCodenameC();
+            String j_contact =  basCodes.getCodenameE();
+            String j_tel =  basCodes.getUdf3();
             String custid = basCodes.getUdf1();
 
             map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
+
             map.put("so", "imgFile/FM/so.jpg");
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
             map.put("ji", "imgFile/FM/ji.jpg");
             map.put("tips5", "imgFile/FM/POD.jpg");
 
-            map.put("expressType", "1");
-            map.put("codingMappingOut", "3A");
+
+            if (orderHeaderForNormal.getUserdefine3().equals("T4")){
+                map.put("expressType", "1");
+            }else if(orderHeaderForNormal.getUserdefine3().equals("T6")){
+                //T6  ：顺丰特惠
+                map.put("expressType", "2");
+            }
             //打印时间
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String str = format.format(new Date());
@@ -2044,9 +2051,10 @@ public class OrderHeaderForNormalService extends BaseService {
             }
             //金额
             // map.put("codValue","9999.9");
+            map.put("codingMappingOut", orderHeaderForNormal.getCarrieraddress1());
             //进港信息<去识别不同的代码>
             map.put("codingMapping", orderHeaderForNormal.getUserdefine5());
-            //出港中转场代码
+            //原寄地中转场代码
             map.put("sourceTransferCode", orderHeaderForNormal.getUserdefine6());
 
             //寄件人的相关信息
