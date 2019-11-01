@@ -28,13 +28,13 @@
 where 1=1
 <trim  suffixOverrides="," >
 	<if test="condition.customerid != null and condition.customerid != ''" >
-	    and customerid  =  ${condition.customerid}
+	    and customerid  =  #{condition.customerid}
 	</if>
 	<if test="condition.sku != null and condition.sku != ''" >
-	    and sku =   ${condition.sku}
+	    and sku =   #{condition.sku}
 	</if>
 	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-	    and lotatt04 =   ${condition.lotatt04}
+	    and lotatt04 =   #{condition.lotatt04}
 	</if>
 
 	<if test="condition.createDateStart != null and condition.createDateStart != ''" >
