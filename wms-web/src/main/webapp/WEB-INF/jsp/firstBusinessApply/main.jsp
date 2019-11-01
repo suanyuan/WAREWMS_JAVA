@@ -338,8 +338,6 @@ var doSearch = function(){
 //提交审核
 var doConfirm = function () {
     // var row = ezuiDatagrid1.datagrid('getSelected');
-
-
     var row = ezuiDatagrid1.datagrid('getSelections');
     var arrDel = new Array();
     var arrFirstState =  new Array();
@@ -379,6 +377,7 @@ var doConfirm = function () {
                             $.messager.show({
                                 msg : msg, title : '<spring:message code="common.message.prompt"/>'
                             });
+                            ezuiDatagrid1.datagrid('clearSelections');
                             ezuiDatagrid1.datagrid('reload');
                         }
                     }

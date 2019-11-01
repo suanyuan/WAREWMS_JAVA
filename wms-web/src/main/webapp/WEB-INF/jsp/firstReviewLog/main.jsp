@@ -71,9 +71,10 @@ $(function() {
             });
         }, onLoadSuccess: function (data) {
             $(this).datagrid('unselectAll');
+
             // row = ezuiDatagrid.datagrid("getSelections");
             // var a = row.length;
-            // // alert(a);
+            // alert(ezuiDatagrid.datagrid("getSelections"));
             // $('#nummm').html(a);
         }, onClickRow: function (index, row) {
             if (row.applyState == CHECKSTATE.CHECKSTATE_40 || row.applyState == CHECKSTATE.CHECKSTATE_50) {
@@ -108,16 +109,16 @@ $(function() {
     });
     $("input").each(function () {
         // alert($(this));
+
         $(this).click(function () {
-
             jishu();
-
             // 全选中
         });
     })
 
     $('div').on('click','tbody>tr',function(){
         jishu();
+
     })
     // $("#datagrid-body").onchange(function (){
     //     jishu();
@@ -232,6 +233,11 @@ function doCheck() {
                         var msg='';
                         try{
                             msg = result.msg;
+
+                            // alert(row);
+                            row = '';
+                            // alert(row);
+                            ezuiDatagrid.datagrid('clearSelections');
                             ezuiDatagrid.datagrid('reload');
                             ezuiDialog.dialog('close');
                         }catch (e) {
