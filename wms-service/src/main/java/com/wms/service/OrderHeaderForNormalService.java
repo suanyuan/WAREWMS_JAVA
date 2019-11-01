@@ -1284,8 +1284,8 @@ public class OrderHeaderForNormalService extends BaseService {
             docOrderDetail.getQtyeach(); //数量
             a = a + docOrderDetail.getQty(); //件数
             b = b + docOrderDetail.getQtyeach();  //数量
-            docOrderDetail.setQtyorderedEachSum(a);//数量和
-            docOrderDetail.setQtyorderedSum(b);//件数和
+            docOrderDetail.setQtyorderedEachSum(b);//数量和
+            docOrderDetail.setQtyorderedSum(a);//件数和
             c = c + 1;
             docOrderDetail.setIndex(c);
             orderDetailsForNormalList.add(docOrderDetail);
