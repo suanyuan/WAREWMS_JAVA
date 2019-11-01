@@ -1151,8 +1151,10 @@ public class OrderHeaderForNormalService extends BaseService {
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
         //发货单号
-        //销售订单号
         ohForNormal.setHedi01pdf(ohForNormal.getHEdi01());
+        //销售订单号
+        //收货单位
+        ohForNormal.getConsigneeid();
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
         if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
@@ -1200,8 +1202,6 @@ public class OrderHeaderForNormalService extends BaseService {
         for (int i = 0; i < odForNormalList.size(); i++) {
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
-
-
             //产品代码 odForNormal.getSku();
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
             if (invLotAtt != null) {
@@ -1252,7 +1252,6 @@ public class OrderHeaderForNormalService extends BaseService {
             allocationCriteria.setCondition(BeanConvertUtil.bean2Map(allocationQuery));
             List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(allocationCriteria);
             for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
-
                 OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
                 BeanUtils.copyProperties(docOrderDetail, orderDetailsForNormal);
                 //库位
