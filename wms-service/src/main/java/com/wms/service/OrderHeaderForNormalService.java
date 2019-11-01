@@ -646,14 +646,14 @@ public class OrderHeaderForNormalService extends BaseService {
 //            } else
             if (orderHeaderForNormal.getSostatus().equals("60")) {
 
-                json = fixLLPackage(orderHeaderForNormal.getOrderno());
-                if (!json.isSuccess()) return json;
+//                json = fixLLPackage(orderHeaderForNormal.getOrderno());
+//                if (!json.isSuccess()) return json;
 
                 /*如果订单发运成功那么就进行顺丰下单  下单报文*/
-                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-                if (!json.isSuccess()) return json;
-                boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
-                ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
+//                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//                if (!json.isSuccess()) return json;
+//                boolean shunfengPlacedFlag = !"不用下顺丰单".equals(json.getMsg());//是否下了顺丰的单子
+//                ShunFengResponse shunFengResponse = (ShunFengResponse) json.getObj();
 
                 //拣货/装箱状态订单直接操作发运
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -676,30 +676,30 @@ public class OrderHeaderForNormalService extends BaseService {
                         return json;
                     } else {
                         //取消顺丰下单
-                        if (shunfengPlacedFlag) {
-                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                            if (!responseCancel.isResultFlag()) {
-                                json.setSuccess(false);
-                                String error = "出库处理失败：" + shippmentResult + "/br";
-                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                                return json;
-                            }
-                        }
+//                        if (shunfengPlacedFlag) {
+//                            ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                            if (!responseCancel.isResultFlag()) {
+//                                json.setSuccess(false);
+//                                String error = "出库处理失败：" + shippmentResult + "/br";
+//                                json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                                return json;
+//                            }
+//                        }
                         json.setSuccess(false);
                         json.setMsg("出库处理失败：" + shippmentResult);
                         return json;
                     }
                 } else {
                     //取消顺丰下单
-                    if (shunfengPlacedFlag) {
-                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
-                        if (!responseCancel.isResultFlag()) {
-                            json.setSuccess(false);
-                            String error = "出库处理失败：订单数据异常！/br";
-                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
-                            return json;
-                        }
-                    }
+//                    if (shunfengPlacedFlag) {
+//                        ShunFengResponse responseCancel = CancelShunFengOrder(shunFengResponse.getOrderResponse().getMailNo());
+//                        if (!responseCancel.isResultFlag()) {
+//                            json.setSuccess(false);
+//                            String error = "出库处理失败：订单数据异常！/br";
+//                            json.setMsg(error + "顺丰单号:" + shunFengResponse.getOrderResponse().getMailNo() + "取消失败,原因:" + shunFengResponse.getErrorMsg());
+//                            return json;
+//                        }
+//                    }
                     json.setSuccess(false);
                     json.setMsg("出库处理失败：订单数据异常！");
                     return json;
@@ -2345,7 +2345,7 @@ public class OrderHeaderForNormalService extends BaseService {
         if (docOrderDetailsList.size() == 0) return Json.success("");
 
         BasSku basSku = basSkuService.getSkuInfo(docOrderDetailsList.get(0).getCustomerid(), docOrderDetailsList.get(0).getSku());
-        if (basSku == null) return Json.success("");
+        if (basSku == null || StringUtil.isEmpty(basSku.getReservedfield06())) return Json.success("");
 
         if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC"))
             return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");

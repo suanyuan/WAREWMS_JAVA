@@ -671,7 +671,7 @@ select a.orderno as orderNo,
         qty = #{qty},
         editwho = #{editwho},
         edittime = now()
-        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum}
+        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum} and allocationdetailsid = #{allocationdetailsid}
     </update>
 
     <update id="updatePackingCartonInfo" parameterType="java.util.Map">
