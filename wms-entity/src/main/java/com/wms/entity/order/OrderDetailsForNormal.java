@@ -220,8 +220,8 @@ public class OrderDetailsForNormal implements Serializable {
     private String report;   //质量合格证
     private double qtyorderedSum;   //订货件数总和
     private double qtyorderedEachSum;   //订货数量总和
-    private double qty;
-    private double qtyeach;
+    private double qty; //件数
+    private double qtyeach;  //数量
     private Integer index;  //序号
     private String codename;//单位
     private String reservedfield02;//商品描述
