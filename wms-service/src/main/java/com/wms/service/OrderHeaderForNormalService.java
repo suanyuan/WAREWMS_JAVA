@@ -1022,19 +1022,13 @@ public class OrderHeaderForNormalService extends BaseService {
 
         OrderHeaderForNormal ohForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
 
-        //TODO 出库单号 不叫出库单元
-        //TODO 收货单位 不要了，在Jasper中删除，目前显示的是收获单元
-        //TODO 发货日期 删掉
-        //TODO 结算方式 不叫"快速结算方式"，就算要也是快递结算方式
-
         //出库单号 ohForNormal.getOrderno();
         //收货单位 ohForNormal.getConsigneeid();
         //收货单元 不要了
         //收获地址 ohForNormal.getCAddress1();
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
-        //发货凭证号
-        ohForNormal.getSoreference4();
+        //发货凭证号 ohForNormal.getSoreference4();
         //发货日期
 
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
@@ -1059,7 +1053,7 @@ public class OrderHeaderForNormalService extends BaseService {
             if (basCarrierLicense != null) {
                 GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
                 if (gspEnterpriseInfo != null) {
-                    ohForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+                    ohForNormal.setCarriername(gspEnterpriseInfo.getShorthandName());
                 }
             }
         }

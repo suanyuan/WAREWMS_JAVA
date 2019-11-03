@@ -60,4 +60,6 @@ public class DocOrderPackingForm {
      * 扫描的GS1条码，用于JSJY、BDL回传记录GS1条码
      */
     private String gs1Code;
+
+    private String version;
 }

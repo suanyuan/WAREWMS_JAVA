@@ -21,4 +21,6 @@ public class PdaDocQcDetailQuery extends BaseLotatt {
     private String lotnum;//批量合格操作中，赋值为当前detail对应的合格批次，
 
     private String otherCode;
+
+    private String version;
 }

@@ -4,6 +4,7 @@ import com.wms.constant.Constant;
 import com.wms.entity.DocMtProgressDetail;
 import com.wms.query.DocMtDetailsQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.DocMtDetailsService;
 import com.wms.service.DocMtHeaderService;
 import com.wms.utils.StringUtil;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mDocMt")
+@SuppressWarnings("unchecked")
 public class PdaDocMtController {
 
     @Autowired
@@ -33,6 +35,9 @@ public class PdaDocMtController {
 
     @Autowired
     private DocMtDetailsService docMtDetailsService;
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 获取未完成的养护任务单
@@ -44,6 +49,11 @@ public class PdaDocMtController {
     public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         List<DocMtHeaderVO> pdaDocAsnHeaderVOList = docMtHeaderService.queryUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -54,15 +64,19 @@ public class PdaDocMtController {
 
     /**
      * 获取养护任务单header信息
-     * @param mtno 收货任务单号
+     * @param form 收货任务单号
      * @return header信息
      */
     @RequestMapping(params = "docMtHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocMtHeader(String mtno) {
+    public Map<String, Object> queryDocMtHeader(DocMtHeaderForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        DocMtHeaderVO docMtHeaderVO = docMtHeaderService.queryByMtno(mtno);
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+        DocMtHeaderVO docMtHeaderVO = docMtHeaderService.queryByMtno(form.getMtno());
 
         PdaResult result;
         if (StringUtil.isEmpty(docMtHeaderVO.getMtno())) {
@@ -85,7 +99,11 @@ public class PdaDocMtController {
     public Map<String, Object> queryDocMtDetail(DocMtDetailsQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = docMtDetailsService.queryMtDetail(query);
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+        json = docMtDetailsService.queryMtDetail(query);
 
         if (!json.isSuccess()) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
@@ -108,6 +126,11 @@ public class PdaDocMtController {
     public Map<String, Object> submit(DocMtDetailsForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docMtDetailsService.mtSubmit(form));
         return resultMap;
     }
@@ -122,6 +145,21 @@ public class PdaDocMtController {
     public Map<String, Object> endTask(DocMtHeaderForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docMtHeaderService.endDocMt(form));
         return resultMap;
     }
@@ -133,14 +171,19 @@ public class PdaDocMtController {
      */
     @RequestMapping(params = "docMtList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocPaList(String mtno) {
+    public Map<String, Object> queryDocPaList(DocMtHeaderForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        if (StringUtil.isEmpty(mtno)) {
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        if (StringUtil.isEmpty(form.getMtno())) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "计划单号缺失"));
             return resultMap;
         }
-        List<DocMtProgressDetail> docMtProgressDetails = docMtDetailsService.queryDocMtList(mtno);
+        List<DocMtProgressDetail> docMtProgressDetails = docMtDetailsService.queryDocMtList(form.getMtno());
         resultMap.put(Constant.DATA, docMtProgressDetails);
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
         return resultMap;
@@ -153,9 +196,14 @@ public class PdaDocMtController {
      */
     @RequestMapping(params = "docMtGuides", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocMtGuides(String mtno,@RequestParam(defaultValue = "1") int pageNum) {
+    public Map<String, Object> queryDocMtGuides(String mtno,@RequestParam(defaultValue = "1") int pageNum, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         if (StringUtil.isEmpty(mtno)) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "计划单号缺失"));
             return resultMap;

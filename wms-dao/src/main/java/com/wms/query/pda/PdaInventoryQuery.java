@@ -27,4 +27,6 @@ public class PdaInventoryQuery {
     private int start;
 
     private int pageSize;
+
+    private String version;
 }

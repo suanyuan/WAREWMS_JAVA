@@ -24,6 +24,16 @@ public class CouRequestDetailsForm {
 	private String userdefined2; //备注
 	private String userdefined3; //复核人
 
+	private String version;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getCycleCountno() {
 		return cycleCountno;
 	}

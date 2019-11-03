@@ -3,8 +3,10 @@ package com.wms.api;
 import com.wms.constant.Constant;
 import com.wms.query.pda.PdaInventoryQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.InvLotLocIdService;
 import com.wms.service.ViewInvLotattService;
+import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.ViewInvLotattForm;
 import com.wms.vo.form.pda.PageForm;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mInvLotAtt")
+@SuppressWarnings("unchecked")
 public class PdaInvLotAttController {
 
     @Autowired
@@ -28,6 +31,9 @@ public class PdaInvLotAttController {
 
     @Autowired
     private InvLotLocIdService invLotLocIdService;
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 通过库位和条码信息获取产品信息
@@ -39,8 +45,12 @@ public class PdaInvLotAttController {
     public Map<String, Object> queryInventorys(PdaInventoryQuery query) {
 
         Map<String, Object> map = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
-        Json json = invLotLocIdService.queryInventorys(query);
+        json = invLotLocIdService.queryInventorys(query);
         if (!json.isSuccess()) {
 
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
@@ -57,6 +67,10 @@ public class PdaInvLotAttController {
     public Map<String, Object> invMoveSubmit(PdaInventoryMoveForm form) {
 
         Map<String, Object> map = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
         ViewInvLotattForm invLotattForm = new ViewInvLotattForm();
         invLotattForm.setWarehouseid(form.getWarehouseid());
@@ -65,13 +79,13 @@ public class PdaInvLotAttController {
         invLotattForm.setFmsku(form.getSku());
         invLotattForm.setFmlotnum(form.getLotnum());
         invLotattForm.setFmlocation(form.getFmlocationid());
-        invLotattForm.setFmqty(BigDecimal.valueOf(Integer.valueOf(form.getFmqty())));
+        invLotattForm.setFmqty(BigDecimal.valueOf(Integer.parseInt(form.getFmqty())));
         invLotattForm.setLotatt11text(form.getTolocationid());
         invLotattForm.setLotatt11(form.getToqty());
         invLotattForm.setLotatt12(form.getReasoncode());
         invLotattForm.setLotatt12text(form.getReasontext());
 
-        Json json = viewInvLotattService.movViewInvLotatt(invLotattForm);
+        json = viewInvLotattService.movViewInvLotatt(invLotattForm);
         if (!json.isSuccess()) {
 
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
@@ -92,8 +106,12 @@ public class PdaInvLotAttController {
     public Map<String, Object> queryInventoryForScan(PdaInventoryQuery query, PageForm pageForm) {
 
         Map<String, Object> map = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(StringUtil.isEmpty(query.getVersion()) ? pageForm.getVersion() : query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
-        Json json = invLotLocIdService.queryInventoryForScan(query, pageForm);
+        json = invLotLocIdService.queryInventoryForScan(query, pageForm);
         if (!json.isSuccess()) {
 
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
@@ -116,8 +134,12 @@ public class PdaInvLotAttController {
     public Map<String, Object> queryInventoryForLocation(PdaInventoryQuery query, PageForm pageForm) {
 
         Map<String, Object> map = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(StringUtil.isEmpty(query.getVersion()) ? pageForm.getVersion() : query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
-        Json json = invLotLocIdService.queryInventoryForLocation(query, pageForm);
+        json = invLotLocIdService.queryInventoryForLocation(query, pageForm);
         if (!json.isSuccess()) {
 
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));

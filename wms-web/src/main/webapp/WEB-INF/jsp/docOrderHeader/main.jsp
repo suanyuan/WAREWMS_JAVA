@@ -2292,16 +2292,16 @@ var commitcourierComplaint = function(){
 //回写快递单号/签回单号
 var writeBackExpress = function(){
     var row = ezuiDatagrid.datagrid('getSelected');
-    if (row.cAddress4 != null) {
+    // if (row.cAddress4 != null) {
         $("#writeBackExpressForm #orderno").textbox('setValue',row.orderno);
         $("#writeBackExpressForm #caddress4").textbox('setValue',row.cAddress4);
         $("#writeBackExpressForm #caddress3").textbox('setValue',row.cAddress3);
         writeBackExpressDiv.dialog('open');
-    }else{
-        $.messager.show({
-            msg: '请选择一笔成功发运的信息', title: '<spring:message code="common.message.prompt"/>'
-        });
-    }
+    <%--}else{--%>
+    <%--    $.messager.show({--%>
+    <%--        msg: '请选择一笔成功发运的信息', title: '<spring:message code="common.message.prompt"/>'--%>
+    <%--    });--%>
+    <%--}--%>
 }
 //提交回写快递单号/签回单号
 var writeBackExpressBtnCommit = function(){

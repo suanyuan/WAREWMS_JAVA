@@ -8,4 +8,6 @@ public class PdaDocPaEndForm {
     private String pano;//单号
 
     private String editwho;
+
+    private String version;
 }

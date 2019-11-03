@@ -3,6 +3,7 @@ package com.wms.api;
 import com.wms.constant.Constant;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.CouRequestDetailsService;
 import com.wms.service.CouRequestHeaderService;
 import com.wms.utils.StringUtil;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mInvCou")
+@SuppressWarnings("unchecked")
 public class PdaInvCouController {
 
     @Autowired
@@ -27,6 +29,9 @@ public class PdaInvCouController {
 
     @Autowired
     private CouRequestDetailsService couRequestDetailsService;
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 获取未完成的盘点任务单
@@ -38,7 +43,12 @@ public class PdaInvCouController {
     public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = couRequestHeaderService.queryUndoneList(form);
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = couRequestHeaderService.queryUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, json.getObj());
@@ -53,11 +63,15 @@ public class PdaInvCouController {
      */
     @RequestMapping(params = "couRequestHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryCouRequestHeader(String cycleCountno) {
+    public Map<String, Object> queryCouRequestHeader(String cycleCountno, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
-        Json json = couRequestHeaderService.queryCouRequestHeader(cycleCountno);
+        json = couRequestHeaderService.queryCouRequestHeader(cycleCountno);
 
         if (!json.isSuccess()) {
 
@@ -79,7 +93,12 @@ public class PdaInvCouController {
     public Map<String, Object> couRequestDetail(CouRequestDetailsQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = couRequestDetailsService.queryCouRequestDetail(query);
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = couRequestDetailsService.queryCouRequestDetail(query);
 
         if (!json.isSuccess()) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
@@ -102,8 +121,12 @@ public class PdaInvCouController {
     public Map<String, Object> submit(CouRequestDetailsForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
-        Json json = couRequestDetailsService.couSubmit(form);
+        json = couRequestDetailsService.couSubmit(form);
         if (!json.isSuccess()) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
         }else {
@@ -122,11 +145,16 @@ public class PdaInvCouController {
     public Map<String, Object> couRequestList(String cycleCountno, PageForm pageForm) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(pageForm.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         if (StringUtil.isEmpty(cycleCountno)) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "任务单号缺失"));
             return resultMap;
         }
-        Json json = couRequestDetailsService.couRequestList(cycleCountno, pageForm);
+        json = couRequestDetailsService.couRequestList(cycleCountno, pageForm);
         if (!json.isSuccess()) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));
             return resultMap;

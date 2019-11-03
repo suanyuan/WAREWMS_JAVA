@@ -39,6 +39,16 @@ public class DocQcDetailsQuery implements IQuery {
 	private String lotatt03End;     //入库日期
 	private String lotatt14;    //入库单号
 
+	private String version;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getQcno() {
 		return qcno;
 	}

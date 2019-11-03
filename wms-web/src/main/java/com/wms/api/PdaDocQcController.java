@@ -5,9 +5,11 @@ import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.query.pda.PdaDocQcDetailQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.DocQcDetailsService;
 import com.wms.service.DocQcHeaderService;
 import com.wms.utils.StringUtil;
+import com.wms.vo.Json;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocQcDetailVO;
 import com.wms.vo.pda.PdaDocQcHeaderVO;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.Version;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mDocQc")
+@SuppressWarnings("unchecked")
 public class PdaDocQcController {
 
     @Autowired
@@ -31,6 +35,9 @@ public class PdaDocQcController {
 
     @Autowired
     private DocQcDetailsService docQcDetailsService;
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 获取未验收任务列表
@@ -42,6 +49,11 @@ public class PdaDocQcController {
     public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         List<PdaDocQcHeaderVO> pdaDocQcHeaderVOS = docQcHeaderService.queryUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -57,9 +69,14 @@ public class PdaDocQcController {
      */
     @RequestMapping(params = "docQcHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocQcHeader(String qcno) {
+    public Map<String, Object> queryDocQcHeader(String qcno, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         PdaDocQcHeaderVO pdaDocQcHeaderVO = docQcHeaderService.queryByQcno(qcno);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -75,9 +92,14 @@ public class PdaDocQcController {
      */
     @RequestMapping(params = "docQcHeaderByPano", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocQcHeaderByPano(String pano) {
+    public Map<String, Object> queryDocQcHeaderByPano(String pano, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         PdaDocQcHeaderVO pdaDocQcHeaderVO = docQcHeaderService.queryDocQcHeaderByPano(pano);
         if (pdaDocQcHeaderVO == null) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此上架单对应的验收任务"));
@@ -97,6 +119,11 @@ public class PdaDocQcController {
     @ResponseBody
     public Map<String, Object> queryDocQcDetail(PdaDocQcDetailQuery query) {
 
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         return  docQcDetailsService.queryDocQcDetail(query);
     }
 
@@ -110,6 +137,11 @@ public class PdaDocQcController {
     public Map<String, Object> submit(PdaDocQcDetailForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docQcDetailsService.submitDocQc(form));
         return resultMap;
     }
@@ -124,6 +156,11 @@ public class PdaDocQcController {
     public Map<String, Object> editDesc(DocQcDetailsQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docQcDetailsService.editQcDesc(query));
         return resultMap;
     }
@@ -136,9 +173,14 @@ public class PdaDocQcController {
      */
     @RequestMapping(params = "docQcList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocPaList(String qcno,@RequestParam(defaultValue = "1") int pageNum) {
+    public Map<String, Object> queryDocPaList(String qcno,@RequestParam(defaultValue = "1") int pageNum, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         if (StringUtil.isEmpty(qcno)) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "任务单号缺失"));
             return resultMap;

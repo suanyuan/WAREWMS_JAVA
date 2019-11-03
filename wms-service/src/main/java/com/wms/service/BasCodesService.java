@@ -175,6 +175,15 @@ public class BasCodesService {
 
         Json json = new Json();
         Map<String, Object> resultMap = new HashMap<>();
+        if (StringUtil.isEmpty(version)) {
+
+            PdaResult result = new PdaResult(PdaResult.CODE_FAILURE, "当前版本过旧，请根据首页右上角个人中心中的更新流程进行更新");
+            resultMap.put(Constant.RESULT, result);
+            json.setSuccess(false);
+            json.setObj(resultMap);
+            return json;
+        }
+
         BasCodesQuery basCodesQuery = new BasCodesQuery();
         basCodesQuery.setCodeid(Constant.CODE_CATALOG_PDA_VERSION);
         basCodesQuery.setCode(Constant.CODE_PDA_VERSION);

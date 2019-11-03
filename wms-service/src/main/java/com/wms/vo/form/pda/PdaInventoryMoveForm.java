@@ -29,4 +29,6 @@ public class PdaInventoryMoveForm {
     private String reasontext;
 
     private String editwho;
+
+    private String version;
 }

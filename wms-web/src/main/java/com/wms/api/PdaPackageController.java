@@ -3,6 +3,7 @@ package com.wms.api;
 import com.wms.constant.Constant;
 import com.wms.query.pda.PdaDocPackageQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.DocOrderPackingService;
 import com.wms.service.OrderHeaderForNormalService;
 import com.wms.vo.Json;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mPackage")
+@SuppressWarnings("unchecked")
 public class PdaPackageController {
 
     @Autowired
@@ -28,6 +30,9 @@ public class PdaPackageController {
 
     @Autowired
     private OrderHeaderForNormalService orderHeaderForNormalService;
+
+    @Autowired
+    private BasCodesService basCodesService;
 
     /**
      * 获取包装复核任务列表、收货任务列表
@@ -39,6 +44,11 @@ public class PdaPackageController {
     public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = orderHeaderForNormalService.getUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -54,9 +64,13 @@ public class PdaPackageController {
      */
     @RequestMapping(params = "docOrderHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocOrderHeader(String orderno) {
+    public Map<String, Object> queryDocOrderHeader(String orderno, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
 
         OrderHeaderForNormalVO headerVO = orderHeaderForNormalService.queryByOrderno(orderno);
         if (headerVO == null || headerVO.getOrderno() == null) {
@@ -89,6 +103,10 @@ public class PdaPackageController {
     @ResponseBody
     public Map<String, Object> queryDocPackage(PdaDocPackageQuery query) {
 
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
         return docOrderPackingService.queryDocPackage(query);
     }
 
@@ -102,6 +120,11 @@ public class PdaPackageController {
     public Map<String, Object> docPackageCommit(DocOrderPackingForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docOrderPackingService.packageCommit(form));
         return resultMap;
     }
@@ -111,10 +134,15 @@ public class PdaPackageController {
      */
     @RequestMapping(params = "getOrderPackingInfo", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> getOrderPackingInfo(String orderNo) {
+    public Map<String, Object> getOrderPackingInfo(String orderNo, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = docOrderPackingService.getOrderPackingInfo(orderNo);
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = docOrderPackingService.getOrderPackingInfo(orderNo);
         if (json.isSuccess()) {
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, json.getMsg()));
             return resultMap;
@@ -134,6 +162,11 @@ public class PdaPackageController {
     public Map<String, Object> commitCartonType(DocOrderPackingForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docOrderPackingService.commitCartonType(form));
         return resultMap;
     }
@@ -142,7 +175,6 @@ public class PdaPackageController {
      * 包装复核结束提交
      * 先查询包装复核是否完全装箱（根据分配明细来）
      * 完全才能结束
-     * @param orderno ~
      * @return ~
      */
     @RequestMapping(params = "endPacking", method = RequestMethod.POST)
@@ -150,7 +182,12 @@ public class PdaPackageController {
     public Map<String, Object> endPacking(DocOrderPackingForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = docOrderPackingService.getOrderPackingInfo(form.getOrderno());
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        json = docOrderPackingService.getOrderPackingInfo(form.getOrderno());
         if (json.isSuccess()) {
             resultMap.put(Constant.RESULT, docOrderPackingService.endPacking(form));
             return resultMap;

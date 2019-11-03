@@ -26,6 +26,8 @@ public class PdaDocQcDetailForm extends BaseLotatt {
 
     private String editwho;
 
+    private String version;
+
     //--------------------上面是pda传参、lotatt01、02、04、06、11
 
 //    private String lotatt01;//生产日期

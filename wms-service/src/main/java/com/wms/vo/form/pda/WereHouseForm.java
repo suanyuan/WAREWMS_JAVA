@@ -12,4 +12,5 @@ import lombok.Setter;
 @Setter
 public class WereHouseForm {
     private String id;
+    private String version;
 }

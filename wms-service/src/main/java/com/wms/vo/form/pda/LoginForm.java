@@ -14,4 +14,5 @@ public class LoginForm {
     private String userId;
     private String pwd;
     private String wareHouseId;
+    private String version;
 }

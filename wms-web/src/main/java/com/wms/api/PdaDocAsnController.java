@@ -26,6 +26,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mDocAsn")
+@SuppressWarnings("unchecked")
 public class PdaDocAsnController {
 
     @Autowired
@@ -67,15 +68,15 @@ public class PdaDocAsnController {
      */
     @RequestMapping(params = "docAsnHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocAsnHeader(String asnno, String version) {
+    public Map<String, Object> queryDocAsnHeader(PdaDocAsnDetailQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Json json = basCodesService.verifyRequestValidation(version);
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
         if (!json.isSuccess()) {
             return (Map<String, Object>) json.getObj();
         }
 
-        PdaDocAsnHeaderVO pdaDocAsnHeaderVO = docAsnHeaderService.queryByAsnno(asnno);
+        PdaDocAsnHeaderVO pdaDocAsnHeaderVO = docAsnHeaderService.queryByAsnno(query.getAsnno());
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
         resultMap.put(Constant.DATA, pdaDocAsnHeaderVO);

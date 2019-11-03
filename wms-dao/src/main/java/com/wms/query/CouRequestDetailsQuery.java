@@ -29,4 +29,5 @@ public class CouRequestDetailsQuery{
     //pda 扫码查询
     private String GTIN;
     private String otherCode;
+    private String version;
 }

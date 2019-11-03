@@ -2,6 +2,7 @@ package com.wms.api;
 
 import com.wms.constant.Constant;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.UserSessionService;
 import com.wms.vo.Json;
 import com.wms.vo.form.pda.LoginForm;
@@ -22,24 +23,36 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("mLogin")
+@SuppressWarnings("unchecked")
 public class PdaLoginController {
 
     @Autowired
     private UserSessionService userSessionService;
 
+    @Autowired
+    private BasCodesService basCodesService;
+
     @RequestMapping(params = "login", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> login(LoginForm form) {
 
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
         return userSessionService.login(form);
     }
 
     @RequestMapping(params = "queryWarehouse", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> queryWarehouse(WereHouseForm form) {
-        Map<String, Object> resultMap = new HashMap<>();
 
-        Json json = userSessionService.queryWereHouseByUser(form);
+        Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+        json = userSessionService.queryWereHouseByUser(form);
         if (!json.isSuccess()) {
 
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, json.getMsg()));

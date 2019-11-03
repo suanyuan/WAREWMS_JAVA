@@ -14,4 +14,6 @@ public class PdaDocPackageQuery extends PdaBasSkuQuery {
     private String otherCode;
 
     private String cartonNum;
+
+    private String version;
 }

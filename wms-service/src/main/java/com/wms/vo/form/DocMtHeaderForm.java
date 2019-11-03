@@ -27,6 +27,16 @@ public class DocMtHeaderForm {
 	private String editwho;
 	private String warehouseid;
 
+	private String version;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getMtno() {
 		return mtno;
 	}

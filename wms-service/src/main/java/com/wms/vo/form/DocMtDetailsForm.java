@@ -30,6 +30,16 @@ public class DocMtDetailsForm {
 	private String warehouseid;
 	private String userid;
 
+	private String version;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getMtno() {
 		return mtno;
 	}
