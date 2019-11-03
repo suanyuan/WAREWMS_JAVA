@@ -1,17 +1,24 @@
 package com.wms.service;
 
+import com.wms.entity.BasCodes;
 import com.wms.entity.BasCustomer;
 import com.wms.entity.BasSku;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.mybatis.dao.BasCustomerMybatisDao;
-import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
-import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
+import com.wms.mybatis.dao.*;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
+import com.wms.utils.exception.ExcelException;
+import com.wms.vo.form.DocOrderHeaderExportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -33,7 +40,9 @@ public class DocOrderExportService {
     private BasSkuService basSkuService;
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
-
+    @Autowired
+    private BasCodesMybatisDao basCodesMybatisDao;
+    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HHmmss");
 
 
     /**
@@ -85,7 +94,63 @@ public class DocOrderExportService {
         return orderHeaderForNormalList;
     }
 
+    public void docOrderToExcel1(HttpServletResponse response, DocOrderHeaderExportForm from) throws UnsupportedEncodingException, ExcelException {
+        Cookie cookie = new Cookie("exportToken",from.getToken());
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        response.setContentType(ContentTypeEnum.csv.getContentType());
 
+        try{
+            //获得单头
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(from));
+            mybatisCriteria.setOrderByClause("orderno desc");
+            List<OrderHeaderForNormal> orderHeaderForNormalList=orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
+            //发运方式 ZT BK LY 暂缓
+            for (OrderHeaderForNormal a:orderHeaderForNormalList) {
+                Map<String, Object> param = new HashMap<>();
+                param.put("codeid", "EXP_TYP");
+                param.put("code", a.getRoute());
+                BasCodes bascodes = basCodesMybatisDao.queryById(param);
+                if(bascodes!=null){
+                    a.setRoute(bascodes.getCodenameC());
+                }
+            }
+            // excel表格的表头，map
+            LinkedHashMap<String, String> fieldMap = getCustomerProductLeadToFiledPublicQuestionBank();
+            // excel的sheetName
+            String sheetName = "发运订单";
+            //导出表格名称
+            String timeNow=sdf.format(new Date());
+            String fileName="发运订单"+timeNow;
+            //将list集合转化为excle
+            ExcelUtil.listToExcel(orderHeaderForNormalList, fieldMap, sheetName,-1,response,fileName);
+            System.out.println("导出成功~~~~");
+        } catch (ExcelException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public LinkedHashMap<String, String> getCustomerProductLeadToFiledPublicQuestionBank() {
+
+        LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+        superClassMap.put("customerid", "客户编码");
+        superClassMap.put("orderStatusName", "订单状态");
+        superClassMap.put("orderno", "SO编号");
+        superClassMap.put("soreference1", "客户单号");
+        superClassMap.put("route", "发运方式");
+        superClassMap.put("soreference2", "定向入库单号");
+        superClassMap.put("cAddress4", "快递单号");
+        superClassMap.put("ordertime", "创建时间");
+        superClassMap.put("orderTypeName", "订单类型");
+        superClassMap.put("cContact", "收货方");
+        superClassMap.put("cAddress1", "收货地址");
+        superClassMap.put("cTel1", "联系方式");
+        superClassMap.put("addwho", "创建人");
+        superClassMap.put("notes", "备注");
+        superClassMap.put("courierComplaint", "快递投诉内容");
+        return superClassMap;
+    }
     private String getYesNo(String obj){
         if(obj == null || obj.equals("0")||obj.equals("")){
             return "否";

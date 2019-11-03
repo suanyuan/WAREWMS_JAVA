@@ -17,7 +17,6 @@ import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
 import com.wms.service.sfExpress.CallExpressServiceTools;
 import com.wms.service.sfExpress.RequestXmlUtil;
-import com.wms.service.sfExpress.sfXmlParse.RlsInfoDto;
 import com.wms.service.sfExpress.sfXmlParse.ShunFengResponse;
 import com.wms.service.sfExpress.sfXmlParse.XmlHelper;
 import com.wms.utils.*;
@@ -1027,10 +1026,13 @@ public class OrderHeaderForNormalService extends BaseService {
         //TODO 结算方式 不叫"快速结算方式"，就算要也是快递结算方式
 
         //出库单号 ohForNormal.getOrderno();
+        //收货单位 ohForNormal.getConsigneeid();
         //收货单元 不要了
         //收获地址 ohForNormal.getCAddress1();
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
+        //发货凭证号
+        ohForNormal.getSoreference4();
         //发货日期
 
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
@@ -1073,8 +1075,9 @@ public class OrderHeaderForNormalService extends BaseService {
         for (int i = 0; i < odForNormalList.size(); i++) {
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
-            //货位 odForNormal.getLocation();
-            //产品代码 odForNormal.getSku();
+            //货位 docOrderDetail.getLocation();
+            docOrderDetail.setLocation("ASD");
+            //产品代码 docOrderDetail.getSku();
 
             InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docOrderDetail.getLotnum());
             if (invLotAtt != null) {

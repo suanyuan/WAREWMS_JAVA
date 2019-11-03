@@ -1174,11 +1174,13 @@ var doExport = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
     if(row) {
 		if (navigator.cookieEnabled) {
-			var order=row.orderno;
 			$('#ezuiBtn_export').linkbutton('disable');
 			//--导出Excel
 			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
-			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+            var token = new Date().getTime();
+            var param = new HashMap();
+            param.put("token", token);
+            var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
 			downloadCheckTimer = window.setInterval(function () {
 				window.clearInterval(downloadCheckTimer);
 				// $('#' + formId).remove();

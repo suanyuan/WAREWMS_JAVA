@@ -13,9 +13,11 @@ import com.wms.service.OrderHeaderForNormalService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.utils.editor.CustomDateEditor;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
+import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -29,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -411,6 +414,13 @@ public class DocOrderHeaderController {
 		model.addAttribute("jrMainDataSource", jrDataSource);
 		return "iReportView";
 	}
+    //导出
+    @Login
+    @RequestMapping(params = "exportOrderNoToExcel1")
+    public void exportOrderDataToExcel1(HttpServletResponse response,DocOrderHeaderExportForm from) throws UnsupportedEncodingException, ExcelException {
+        docOrderExportService.docOrderToExcel1(response,from);
+    }
+
 	//检查orderno是否存在
 	@Login
  	@RequestMapping(params = "isexportOrderNo")
