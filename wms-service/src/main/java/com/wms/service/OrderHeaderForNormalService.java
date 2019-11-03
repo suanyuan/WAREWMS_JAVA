@@ -1978,16 +1978,12 @@ public class OrderHeaderForNormalService extends BaseService {
             String j_contact =  basCodes.getCodenameE();
             String j_tel =  basCodes.getUdf3();
             String custid = basCodes.getUdf1();
-
             map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
-
             map.put("so", "imgFile/FM/so.jpg");
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
             map.put("ji", "imgFile/FM/ji.jpg");
             map.put("tips5", "imgFile/FM/POD.jpg");
-
-
             if (orderHeaderForNormal.getUserdefine3().equals("T4")){
                 map.put("expressType", "1");
             }else if(orderHeaderForNormal.getUserdefine3().equals("T6")){
@@ -2013,6 +2009,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("childMailNoStr", "217276730473");
             //打印原寄地
             map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
+            map.put("destRouteLabelBack",orderHeaderForNormal.getUserdefine2());//签回单目的代码
             //收件人相关信息
             if (orderHeaderForNormal.getCContact() == null || orderHeaderForNormal.getCContact().equals("")) {
                 map.put("consignerName", (orderHeaderForNormal.getConsigneeid()));

@@ -80,7 +80,9 @@ public class RequestXmlUtil {
         //是否要求签回单号  根据前端选中是否
         if (returnSfOrder.equals("1")) {
             strBuilder.append("need_return_tracking_no='1'").append(" ");
+            strBuilder.append("routelabelForReturn='1'").append(" ");//签回单路由标签返回:
             strBuilder.append("routelabelService='1'").append(" ");
+
         }
 
         //货物信息
