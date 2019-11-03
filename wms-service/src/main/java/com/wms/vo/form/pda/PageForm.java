@@ -4,11 +4,21 @@ import com.wms.constant.Constant;
 
 public class PageForm {
 
+    private String version;
+
     private int pageNum;
 
     private int start;
 
     private int pageSize;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     public int getPageSize() {
         return Constant.pageSize;

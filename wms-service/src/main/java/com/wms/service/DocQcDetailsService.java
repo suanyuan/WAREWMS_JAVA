@@ -269,6 +269,9 @@ public class DocQcDetailsService extends BaseService {
                             :
                             productRegister.getEnterpriseInfo().getEnterpriseName()
             );
+        } else {
+
+            pdaDocQcDetailVO.setEnterpriseName(basSku.getReservedfield14());
         }
 
         /*

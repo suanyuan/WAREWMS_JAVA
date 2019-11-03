@@ -17,4 +17,6 @@ public class PdaDocAsnDetailQuery extends BaseLotatt {
     private String sku;
 
     private String otherCode;
+
+    private String version;
 }

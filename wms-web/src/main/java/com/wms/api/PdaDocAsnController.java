@@ -1,12 +1,15 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.entity.BasCodes;
 import com.wms.mybatis.entity.pda.PdaDocAsnDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.query.pda.PdaDocAsnDetailQuery;
 import com.wms.result.PdaResult;
+import com.wms.service.BasCodesService;
 import com.wms.service.DocAsnDetailService;
 import com.wms.service.DocAsnHeaderService;
+import com.wms.vo.Json;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnDetailVO;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
@@ -31,6 +34,9 @@ public class PdaDocAsnController {
     @Autowired
     private DocAsnDetailService docAsnDetailService;
 
+    @Autowired
+    private BasCodesService basCodesService;
+
     /**
      * 获取未完成的收货任务单
      * @param form 页码
@@ -41,6 +47,11 @@ public class PdaDocAsnController {
     public Map<String, Object> queryUndoneList(PageForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         List<PdaDocAsnHeaderVO> pdaDocAsnHeaderVOList = docAsnHeaderService.queryUndoneList(form);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -56,9 +67,14 @@ public class PdaDocAsnController {
      */
     @RequestMapping(params = "docAsnHeader", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryDocAsnHeader(String asnno) {
+    public Map<String, Object> queryDocAsnHeader(String asnno, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         PdaDocAsnHeaderVO pdaDocAsnHeaderVO = docAsnHeaderService.queryByAsnno(asnno);
 
         PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
@@ -77,6 +93,11 @@ public class PdaDocAsnController {
     public Map<String, Object> queryDocAsnDetail(PdaDocAsnDetailQuery query) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         PdaDocAsnDetailVO pdaDocAsnDetailVO = docAsnDetailService.queryDocAsnDetail(query);
 
         if (pdaDocAsnDetailVO == null) {
@@ -109,6 +130,11 @@ public class PdaDocAsnController {
     public Map<String, Object> submit(PdaDocAsnDetailForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docAsnDetailService.receiveGoods(form));
         return resultMap;
     }
@@ -123,6 +149,11 @@ public class PdaDocAsnController {
     public Map<String, Object> endTask(PdaDocAsnEndForm form) {
 
         Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(form.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
         resultMap.put(Constant.RESULT, docAsnHeaderService.endTask(form));
         return resultMap;
     }

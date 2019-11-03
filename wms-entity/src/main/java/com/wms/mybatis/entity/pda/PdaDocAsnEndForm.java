@@ -9,4 +9,5 @@ public class PdaDocAsnEndForm {
 
     private String editwho;
 
+    private String version;
 }

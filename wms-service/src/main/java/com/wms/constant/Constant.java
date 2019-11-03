@@ -46,6 +46,8 @@ public class Constant {
     public static final String CODE_CATALOG_CLASSIFY_THREE = "CLASSIFY_THREE";//分类三
     public static final String CODE_ASN_TYP = "ASN_TYP";//入库类型
     public static final String CODE_CATALOG_SF_EXPRESS = "SF_SET";//月结账号
+    public static final String CODE_CATALOG_PDA_VERSION = "PDA_VS";//pda请求版本检查
+
 
 
 
@@ -74,6 +76,9 @@ public class Constant {
     public static final String USER_GRADE_HEAD = "01";
     public static final String USER_GRADE_QCHEAD = "11";
 
+
+    //pda请求
+    public static final String CODE_PDA_VERSION = "VERSION";
 
 
     //是否

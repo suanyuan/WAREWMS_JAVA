@@ -24,5 +24,4 @@ public class RequestUtil {
 		requestPath = requestPath.substring(request.getContextPath().length());// 去掉项目路径
 		return requestPath;
 	}
-
 }

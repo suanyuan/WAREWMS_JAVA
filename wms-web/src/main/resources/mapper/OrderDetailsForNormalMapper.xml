@@ -816,6 +816,14 @@ where 1=1
         WHERE a.orderno = #{orderno}
         ORDER BY a.location
     </select>
+
+    <select id="findSerialNumRecordRequired" resultType="int" parameterType="Object">
+        select count(1) from doc_order_details dod
+        left join bas_sku bs on dod.customerid = bs.customerid and dod.sku = bs.sku
+        left join product_line pl on bs.sku_group1 = pl.product_line_id
+        where dod.orderno = #{orderno} and pl.serial_flag = 1
+    </select>
+
 <!-- 订单明细 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from doc_order_details where orderno = #{condition.orderno,jdbcType=VARCHAR}

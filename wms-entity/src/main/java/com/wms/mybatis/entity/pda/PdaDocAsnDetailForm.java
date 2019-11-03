@@ -16,6 +16,7 @@ public class PdaDocAsnDetailForm extends BaseLotatt {
     private String asnno;
     private long asnlineno;//行号
     private String receivedqty;//收货件数
+    private String version;
 
     private String receivinglocation;
     private String receivingtime;

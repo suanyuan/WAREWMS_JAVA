@@ -1,6 +1,7 @@
 package com.wms.mybatis.dao;
 
 import com.wms.query.OrderDetailsForNormalQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,9 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      */
     <T> List<T> queryByOrderNo(String orderno);
     <T> List<T> queryByOrderNo1(String orderno);
+
+    /**
+     * 查询出库单中是否有需要记录序列号的产品
+     */
+    int findSerialNumRecordRequired(@Param("orderno") String orderno);
 }

@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -7,9 +8,11 @@ import com.wms.entity.BasCodes;
 import com.wms.mybatis.dao.BasCodesMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.BasCodesQuery;
+import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.BasCodesVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
@@ -163,5 +166,36 @@ public class BasCodesService {
 
         }
         return baseCodesVOList;
+    }
+
+    /**
+     * 验证PDA请求版本
+     */
+    public Json verifyRequestValidation(String version) {
+
+        Json json = new Json();
+        Map<String, Object> resultMap = new HashMap<>();
+        BasCodesQuery basCodesQuery = new BasCodesQuery();
+        basCodesQuery.setCodeid(Constant.CODE_CATALOG_PDA_VERSION);
+        basCodesQuery.setCode(Constant.CODE_PDA_VERSION);
+        BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
+        if (null == basCodes || StringUtil.isEmpty(basCodes.getUdf1())) {
+
+            PdaResult result = new PdaResult(PdaResult.CODE_FAILURE, "服务器配置出错，请联系管理员");
+            resultMap.put(Constant.RESULT, result);
+            json.setSuccess(false);
+            json.setObj(resultMap);
+            return json;
+        }
+
+        if (!version.equals(basCodes.getUdf1())) {
+            PdaResult result = new PdaResult(PdaResult.CODE_FAILURE, "当前版本过旧，请根据首页右上角个人中心中的更新流程进行更新");
+            resultMap.put(Constant.RESULT, result);
+            json.setSuccess(false);
+            json.setObj(resultMap);
+            return json;
+        }
+
+        return Json.success("");
     }
 }

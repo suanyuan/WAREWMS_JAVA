@@ -1058,7 +1058,7 @@ public class DocOrderPackingService extends BaseService {
                     numQuery.setMaterialNum(actAllocationDetails.getSku());
                     //注：这两两个userdefine不是bas_serial_num的userdefine，只是暂用下
                     numQuery.setUserdefine1(orderno);
-                    numQuery.setUserdefine2(docAsnHeader.getAsnreference2());//预入库的客户单号 流水号 delivery_number
+                    numQuery.setUserdefine2(docAsnHeader.getAsnreference1());//预入库的客户单号 流水号 delivery_number
                     List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryAvailableNum(numQuery);
 
                     StringBuilder serialNums = new StringBuilder();
