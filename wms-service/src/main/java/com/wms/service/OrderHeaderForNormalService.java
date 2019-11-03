@@ -2328,6 +2328,30 @@ public class OrderHeaderForNormalService extends BaseService {
         return json;
     }
 
+    /**
+     * 回写快递单号/签回单号
+     * @param orderHeaderForNormalForm
+     * @return
+     */
+    public Json writeBackExpressBtnCommit(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+        Json json = new Json();
+        OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
+        try {
+            orderHeaderForNormalForm.setCarrieraddress1("1");
+            BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
+            orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
+            json.setSuccess(true);
+            json.setMsg("回写快递单号处理成功！");
+        } catch (Exception e) {
+            json.setSuccess(false);
+            json.setMsg("回写快递单号处理失败！");
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
+
 
     /* ********************* J **********************
      * ********************* U **********************

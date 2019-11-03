@@ -51,4 +51,5 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
     List<OrderHeaderForNormal> queryByAllocationCustomerid(@Param("customerid") String customerid);
 //快递投诉
 	public  <T> int updateCourierComplaint(T t);
+
 }

@@ -41,6 +41,8 @@ var courierComplaintForm;       //快递投诉dialog form
 var courierComplaintDialog;     //快递投诉dialog
 var returnSfodd;
 var returnSfoddForm;
+var writeBackExpressDiv;
+var writeBackExpressForm;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -394,6 +396,16 @@ $(function() {
         }
     }).dialog('close');
 
+	writeBackExpressDiv = $('#writeBackExpressDiv').dialog({
+        modal : true,
+        width:270,
+        height:210,
+        title : '回写快递单号/签回单号',
+        buttons : '#writeBackExpressBtn',
+        onClose : function() {
+		ezuiFormClear(writeBackExpressForm);
+	}
+}).dialog('close');
 });
 
 /* 查询条件清空按钮 */
@@ -1038,26 +1050,30 @@ var printAccompanying = function () {
 var printExpress = function () {
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
-	$.each(checkedItems, function(index, item){
-		//如果快递单号为空则不能打印电子面单
-		if(item.cAddress4 == null){
-			showMsg("选中的订单存在未发运订单无法打印快递单.......");
-			return;
-		}else{
-			console.log("++++++++++++++++++++++++++");
-			console.log(index);
-			if(index ==0){
-				if (orderList == null) {
-					orderList = item.orderno;
-				} else {
-					orderList = orderList + ',' + item.orderno;
-				}
-			}else{
-				showMsg("同时只支持一张电子面单打印......");
-				return;
-			}
-		}
-
+	$.each(checkedItems, function(index, item) {
+        if (item.carrieraddress1 == "1") {
+            showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
+            return;
+        } else {
+        //如果快递单号为空则不能打印电子面单
+        if (item.cAddress4 == null) {
+            showMsg("选中的订单存在未发运订单无法打印快递单.......");
+            return;
+        } else {
+            console.log("++++++++++++++++++++++++++");
+            console.log(index);
+            if (index == 0) {
+                if (orderList == null) {
+                    orderList = item.orderno;
+                } else {
+                    orderList = orderList + ',' + item.orderno;
+                }
+            } else {
+                showMsg("同时只支持一张电子面单打印......");
+                return;
+            }
+        }
+    }
 	});
 	if (orderList == null) {
 		return;
@@ -2221,6 +2237,7 @@ var courierComplaint = function() {
 	}
 
 }
+
 //提交快递投诉
 var commitcourierComplaint = function(){
 	url = '<c:url value="/docOrderHeaderController.do?courierComplaint"/>';
@@ -2269,6 +2286,63 @@ var commitcourierComplaint = function(){
 		});
 	}
 };
+
+//回写快递单号/签回单号
+var writeBackExpress = function(){
+    var row = ezuiDatagrid.datagrid('getSelected');
+    if (row.cAddress4 != null) {
+        $("#writeBackExpressForm #orderno").textbox('setValue',row.orderno);
+        $("#writeBackExpressForm #caddress4").textbox('setValue',row.cAddress4);
+        $("#writeBackExpressForm #caddress3").textbox('setValue',row.cAddress3);
+        writeBackExpressDiv.dialog('open');
+    }else{
+        $.messager.show({
+            msg: '请选择一笔成功发运的信息', title: '<spring:message code="common.message.prompt"/>'
+        });
+    }
+}
+//提交回写快递单号/签回单号
+var writeBackExpressBtnCommit = function(){
+    url = '<c:url value="/docOrderHeaderController.do?writeBackExpressBtnCommit"/>';
+    var row = ezuiDatagrid.datagrid('getSelected');
+    var msg='';
+    if(row){
+        var data=new Object();
+        data.orderno=$("#writeBackExpressForm #orderno").val();
+        data.cAddress3=$("#writeBackExpressForm #caddress3").val();
+        data.cAddress4=$("#writeBackExpressForm #caddress4").val();
+        $.messager.progress({
+            text: '<spring:message code="common.message.data.processing"/>', interval: 100
+        });
+        $.ajax({
+            url: url,
+            data:data,
+            dataType: 'json',
+            success: function (result) {
+                try {
+                    if (result.success) {
+                        msg = result.msg;
+                    } else {
+                        msg = result.msg;
+
+                    }
+                } catch (e) {
+
+                    msg: '数据错误!';
+
+                }finally {
+                    $.messager.show({
+                        msg:msg, title: '<spring:message code="common.message.prompt"/>'
+                    });
+                    $.messager.progress('close');
+                    writeBackExpressDiv.dialog('close');
+                    ezuiDatagrid.datagrid('reload');
+                }
+            }
+        });
+    }
+};
+
 </script>
 </head>
 <body>
@@ -2412,6 +2486,7 @@ var commitcourierComplaint = function(){
 					<a onclick='printExpress();' id='ezuiBtn_PrintExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印快递单</a>
 					<a onclick='printH()' id='ezuiBtn_h' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印质量合格证</a>
 					<a onclick='courierComplaint();' id='ezuiBtn_courierComplaint' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>快递投诉</a>
+					<a onclick='writeBackExpress();' id='ezuiBtn_WriteBackExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>回写快递单号</a>
 
 				</div>
 			</div>
@@ -2565,9 +2640,32 @@ var commitcourierComplaint = function(){
 			</table>
 		</form>
 	</div>
-	<div id='returnSfoddDialogBtn'>
-		<a id="returnSfoddBtn" class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
+
+    <div id='returnSfoddDialogBtn'>
+        <a id="returnSfoddBtn" class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
+    </div>
+	<!-- 回写快递单号/签回单号 -->
+	<div id='writeBackExpressDiv' style='padding: 10px;'>
+		<form id='writeBackExpressForm' method='post'>
+			<table>
+                <tr>
+                    <th>SO编号</th><td><input type='text' id='orderno' name="orderno" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
+                </tr>
+                <tr>
+                    <th>快递单号</th><td><input type='text' id='caddress4' name="caddress4" class='easyui-textbox' size='20' data-options="required:true" /></td>
+
+                </tr>
+                <tr>
+                    <th>签回单号</th><td><input type='text' id='caddress3' name="caddress3" class='easyui-textbox' size='20'  /></td>
+
+                </tr>
+			</table>
+		</form>
 	</div>
+    <div id='writeBackExpressBtn'>
+        <a onclick='writeBackExpressBtnCommit()' class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
+    </div>
+
 
 
 

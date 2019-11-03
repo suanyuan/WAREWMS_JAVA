@@ -432,4 +432,17 @@ public Json courierComplaint(OrderHeaderForNormalForm orderHeaderForNormalForm){
 	}
 	return json;
 }
+	//回写快递单号/签回单号
+	@Login
+	@RequestMapping(params = "writeBackExpressBtnCommit")
+	@ResponseBody
+	public Json writeBackExpressBtnCommit(OrderHeaderForNormalForm orderHeaderForNormalForm){
+		Json json = orderHeaderForNormalService.writeBackExpressBtnCommit(orderHeaderForNormalForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+
 }

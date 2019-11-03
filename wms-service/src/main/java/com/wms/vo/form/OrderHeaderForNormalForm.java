@@ -24,6 +24,8 @@ public class OrderHeaderForNormalForm {
 	private String cProvince;
 	private String cCity;
 	private String cAddress2;
+	private String cAddress4;
+	private String cAddress3;
 	private String province;
 	private String city;
 	private String district;
@@ -59,6 +61,7 @@ public class OrderHeaderForNormalForm {
 
 	private String returnSfOrder;
 
+	private String carrieraddress1;//是否回写签回单号标记：1：是
 
 	//快递投诉
 	private String courierComplaint;
@@ -69,6 +72,29 @@ public class OrderHeaderForNormalForm {
 	private String route;//发运方式
 	private String stop; //结算方式
 
+	public String getCarrieraddress1() {
+		return carrieraddress1;
+	}
+
+	public String getcAddress4() {
+		return cAddress4;
+	}
+
+	public void setcAddress4(String cAddress4) {
+		this.cAddress4 = cAddress4;
+	}
+
+	public String getcAddress3() {
+		return cAddress3;
+	}
+
+	public void setcAddress3(String cAddress3) {
+		this.cAddress3 = cAddress3;
+	}
+
+	public void setCarrieraddress1(String carrieraddress1) {
+		this.carrieraddress1 = carrieraddress1;
+	}
 
 	public String getDoor() {
 		return door;
