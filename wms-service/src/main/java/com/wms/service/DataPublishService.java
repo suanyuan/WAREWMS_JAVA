@@ -371,7 +371,7 @@ public class DataPublishService extends BaseService {
             if(basCustomer==null){
                 return Json.error("供应商不存在");
             }
-            firstReviewLogService.updateFirstReviewBySupplierId(Constant.CODE_CATALOG_CHECKSTATE_FAIL,basCustomer.getCustomerid());
+//            firstReviewLogService.updateFirstReviewBySupplierId(Constant.CODE_CATALOG_CHECKSTATE_FAIL,basCustomer.getCustomerid());
             firstBusinessApplyService.updateCheckingApplySupplierNo(basCustomer.getCustomerid());
 
             return basCustomerService.editBasCustomerSupByEnterpriseId(form);

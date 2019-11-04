@@ -517,6 +517,13 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         </trim>
     </select>
 
+    <!-- 查询库存数 -->
+    <select id="queryKUCUN" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from  inv_lot a
+        left join inv_lot_att b on a.lotnum = b.lotnum
+		LEFT JOIN gsp_product_register c on b.lotatt06 = c.product_register_no
+        where c.product_register_id = #{condition.productRegisterId}
+    </select>
 
     <select id="queryByListBind" resultType="java.lang.Integer" parameterType="Object">
         select
@@ -526,6 +533,8 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         ON t1.product_register_id = t2.product_register_id
         where t1.product_register_id = #{condition.productRegisterId}
     </select>
+
+
     <!-- 查询产品注册证规格列表未绑定 -->
     <select id="queryByListUnBind" resultMap="BaseResultMap" parameterType="Object">
         select

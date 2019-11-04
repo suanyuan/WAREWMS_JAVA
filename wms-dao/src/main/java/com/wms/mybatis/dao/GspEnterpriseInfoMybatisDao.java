@@ -48,6 +48,6 @@ public interface GspEnterpriseInfoMybatisDao extends BaseDao {
 	//需要对比的企业信息
 	public <T> T selectEnterpriseByCompare(Object id);
 
-
+	List<GspEnterpriseInfo> queryIsUse1ByAll();
 
 }

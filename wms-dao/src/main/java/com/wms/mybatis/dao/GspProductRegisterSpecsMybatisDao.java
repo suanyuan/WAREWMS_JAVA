@@ -18,7 +18,7 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     <T> List<T> queryByListUnBind(MybatisCriteria criteria);
 
     int queryByListBind(String id);
-
+    int queryKUCUN(String id);
 
     int queryByCountUnBind(MybatisCriteria criteria);
 

@@ -347,6 +347,15 @@
         </trim>
     </sql>
     <!--and ( gs.enterprise_id is null)-->
+
+
+    <!-- 查询所有有效企业的信息列表 -->
+    <select id="queryIsUse1ByAll" resultMap="BaseResultMap" parameterType="Object">
+      select * from gsp_enterprise_info where is_use = '1'
+
+    </select>
+
+
     <!-- 查询企业信息列表 -->
     <select id="queryPageListByType" resultMap="BaseResultMap" parameterType="Object">
         select

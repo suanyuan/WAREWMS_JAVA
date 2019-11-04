@@ -414,7 +414,7 @@ public class BasCustomerService extends BaseService {
 //		String customerId = basCustomer.getCustomerid();
 		BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(basCustomerForm.getBankaccount());
 		if(basCustomer==null){
-			Json.error("客户不存在");
+			return Json.error("客户不存在");
 		}
 		String customerId = basCustomer.getCustomerid();
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);

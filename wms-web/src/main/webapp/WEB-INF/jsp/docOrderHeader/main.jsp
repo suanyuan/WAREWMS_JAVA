@@ -699,6 +699,10 @@ var allocation = function(){
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
 			operateResult = operateResult + "处理时错误：订单此状态不能操作分配" + "\n";
 		} else {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
+
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?allocation',
@@ -706,6 +710,7 @@ var allocation = function(){
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
+                    $.messager.progress('close');
 					var msg = '';
 					try {
 						msg = result.msg;
@@ -741,13 +746,19 @@ var deAllocation = function(){
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
 			operateResult = operateResult + "处理时错误：订单此状态不能取消分配" + "\n";
 		} else {
-			$.ajax({
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
+
+
+            $.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?deAllocation',
 				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
+                    $.messager.progress('close');
 					var msg = '';
 					try {
 						msg = result.msg;
@@ -782,13 +793,19 @@ var picking = function(){
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
 			operateResult = operateResult + "处理时错误：订单此状态不能操作拣货" + "\n";
 		} else {
-			$.ajax({
+
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
+
+            $.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?picking',
 				data : {orderNo : item.orderno},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
+                    $.messager.progress('close');
 					var msg = '';
 					try {
 					    console.log(result);
@@ -824,6 +841,10 @@ var unPicking = function(){
 			operateResult = operateResult + "订单编号：" + item.orderno + ",";
 			operateResult = operateResult + "处理时错误：订单此状态不能取消拣货" + "\n";
 		} else {
+
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
 			$.ajax({
 				async: false,
 				url : 'docOrderHeaderController.do?unPicking',
@@ -831,6 +852,7 @@ var unPicking = function(){
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
+                    $.messager.progress('close');
 					var msg = '';
 					try {
 						msg = result.msg;
@@ -867,6 +889,10 @@ var unPacking = function(){
 					operateResult = operateResult + "订单编号：" + item.orderno + ",";
 					operateResult = operateResult + "处理时错误：订单此状态不能取消装箱" + "\n";
 				} else {
+                    $.messager.progress({
+                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                    });
+
 					$.ajax({
 						async: false,
 						url : 'docOrderHeaderController.do?unPacking',
@@ -874,6 +900,7 @@ var unPacking = function(){
 						type : 'POST',
 						dataType : 'JSON',
 						success : function(result){
+                            $.messager.progress('close');
 							var msg = '';
 							try {
 								msg = result.msg;
@@ -916,6 +943,10 @@ var shipment = function(){
                 $('#returnSfoddBtn').click(function () {
                   var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
 					returnSfodd.dialog('close');
+
+                    $.messager.progress({
+                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                    });
                     $.ajax({
                         async: false,
                         url: 'docOrderHeaderController.do?shipment',
@@ -923,6 +954,7 @@ var shipment = function(){
                         type: 'POST',
                         dataType: 'JSON',
                         success: function (result) {
+                            $.messager.progress('close');
 							console.log(result);
 							console.log("-----------------------------");
                             ezuiDatagrid.datagrid('reload');
@@ -971,6 +1003,9 @@ var cancel = function(){
 					operateResult = operateResult + "订单编号：" + item.orderno + ",";
 					operateResult = operateResult + "处理时错误：订单此状态不能操作取消" + "\n";
 				} else {
+                    $.messager.progress({
+                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                    });
 					$.ajax({
 						async: false,
 						url : 'docOrderHeaderController.do?cancel',
@@ -978,6 +1013,7 @@ var cancel = function(){
 						type : 'POST',
 						dataType : 'JSON',
 						success : function(result){
+                            $.messager.progress('close');
 							var msg = '';
 							try {
 								msg = result.msg;
