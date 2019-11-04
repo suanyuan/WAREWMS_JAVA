@@ -2016,8 +2016,9 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("mailNoStr", "签回单号");
             //map.put("childMailNoStr", "217276730473");
             //打印原寄地
+//            map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
             map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
-            map.put("destRouteLabelBack", orderHeaderForNormal.getUserdefine2());//签回单目的代码
+            map.put("destRouteLabelBack", "021");//签回单目的代码
             //收件人相关信息
             if (orderHeaderForNormal.getCContact() == null || orderHeaderForNormal.getCContact().equals("")) {
                 map.put("consignerName", (orderHeaderForNormal.getConsigneeid()));
