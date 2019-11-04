@@ -2172,6 +2172,9 @@ function doRefOut() {
     });
 }
 
+/*
+打印质量合格证
+ */
 function printH() {
     orderList = null;
     var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');

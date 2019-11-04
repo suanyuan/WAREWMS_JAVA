@@ -467,6 +467,7 @@ public class OrderHeaderForNormal implements Serializable {
 	private String printmen;//收货方
 	private String endmode;//快递结算方式
 	private String hedi01pdf;//发货单号
+	private String descrc;//供应商
 	private List<OrderDetailsForNormal> orderDetailsForNormalList;
 	private List<DocOrderPacking> docOrderPackingList;
 	private String reservedfield07;//冷链标志

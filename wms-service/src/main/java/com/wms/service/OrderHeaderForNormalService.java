@@ -1030,7 +1030,11 @@ public class OrderHeaderForNormalService extends BaseService {
         //客户单号 ohForNormal.getSoreference1();
         //发货凭证号 ohForNormal.getSoreference4();
         //发货日期
-
+        //供应商
+        BasCustomer basCustomerList = basCustomerMybatisDao.queryByIdType(ohForNormal.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+        if (basCustomerList != null) {
+            ohForNormal.setDescrc(basCustomerList.getDescrC());
+        }
         //联系人->收货方 ohForNormal.getCContact() || header.consigneeid;
         if (ohForNormal.getCContact() != null && ohForNormal.getCContact() != "") {
             ohForNormal.setPrintmen(ohForNormal.getCContact());
@@ -1910,6 +1914,11 @@ public class OrderHeaderForNormalService extends BaseService {
         return "";
     }
 
+    /**
+     * 打印质量合格证
+     * @param response
+     * @param orderCodeList
+     */
     public void printH(HttpServletResponse response, String orderCodeList) {
         StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()) {
@@ -1939,7 +1948,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     List<OrderDetailsForNormal> details = orderDetailsForNormalMybatisDao.queryByPageList(criteria);
                     for (OrderDetailsForNormal de : details) {
                         doc.newPage();
-                        String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());
+                        String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());//获取质量合格证
                         if (!"".equals(url)) {
                             PdfReader reader = new PdfReader(Constant.uploadUrl + File.separator + url);
 

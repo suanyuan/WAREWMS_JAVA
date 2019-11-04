@@ -351,6 +351,12 @@ public class DocOrderHeaderController {
 		return orderHeaderForNormalService.reqDouble(orderno);
 	}
 
+    /**
+     * 打印质量合格证
+     * @param response
+     * @param orderCodeList
+     * @throws Exception
+     */
 	@Login
 	@RequestMapping(params = "printH")
 	public void printH(HttpServletResponse response, String orderCodeList) throws Exception {
@@ -414,7 +420,7 @@ public class DocOrderHeaderController {
 		model.addAttribute("jrMainDataSource", jrDataSource);
 		return "iReportView";
 	}
-    //导出
+    //导出Excel格式所有信息
     @Login
     @RequestMapping(params = "exportOrderNoToExcel1")
     public void exportOrderDataToExcel1(HttpServletResponse response,DocOrderHeaderExportForm from) throws UnsupportedEncodingException, ExcelException {
