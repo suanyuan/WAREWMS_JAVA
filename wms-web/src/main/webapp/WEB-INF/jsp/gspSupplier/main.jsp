@@ -175,9 +175,9 @@ var check = function () {
     infoObj["firstState"] = "10";
 
     //alert(row.supplierId+"================="+row.firstState);
-    if(row.firstState!="00"){
+    if(row.firstState!="00" || row.isUse != '1'){
         $.messager.show({
-            msg : '只有新建的可以开始审核', title : '提示'
+            msg : '只有有效的新建状态申请可以开始审核', title : '提示'
         });
     }else {
         if (row) {

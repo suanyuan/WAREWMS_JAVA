@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -797,7 +800,66 @@ public class GspEnterpriceService extends BaseService {
         }
         return Json.error("");
     }
+    /**
+     * 企业过期
 
+     * @param
+     * @return
+     */
+    public Object enterpriseOutTime() throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        int num = 0;
+        boolean flag = true;
+        List<GspEnterpriseInfo> list = gspEnterpriseInfoMybatisDao.queryIsUse1ByAll();
+        for(GspEnterpriseInfo s:list){
+            String enterpriseid = s.getEnterpriseId();
+//            GspEnterpriseInfo GYS = gspEnterpriseInfoMybatisDao.selectEnterpriseByCompare(enterpriseid);
+            GspBusinessLicense ClientBusiness = gspBusinessLicenseMybatisDao.selectCompareByEnterpriseId(enterpriseid);
+            GspOperateLicense GspProdLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(enterpriseid,Constant.LICENSE_TYPE_PROD);
+            GspOperateLicense GspOperateLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(enterpriseid,Constant.LICENSE_TYPE_OPERATE);
+            GspFirstRecord GspFirstRecord = gspFirstRecordMybatisDao.selectCompareByEnterprisId(enterpriseid);
+            GspSecondRecord GspSecondRecord = gspSecondRecordMybatisDao.selectCompareByEnterprisId(enterpriseid);
+            GspMedicalRecord GspMedicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(enterpriseid);
+            if(ClientBusiness!=null){
+                if(ClientBusiness.getBusinessEndDate()!=null){
+                    flag = ClientBusiness.getBusinessEndDate().getTime() >= new Date().getTime();
+                }
+            }
+            if(GspProdLicense!=null){
+                flag = GspProdLicense.getLicenseExpiryDate().getTime() >= new Date().getTime();
+            }
+            if(GspOperateLicense!=null){
+                flag = GspOperateLicense.getLicenseExpiryDate().getTime() >=new Date().getTime();
+            }
+            //备案没有有效期
+//            if(GspFirstRecord!=null){
+//                flag = GspFirstRecord.getApproveDate().getTime() >=new Date().getTime();
+//            }
+//            if(GspSecondRecord!=null){
+//                flag = GspSecondRecord.getApproveDate().getTime() >=new Date().getTime();
+//            }
+            if(GspMedicalRecord!=null){
+                flag = GspMedicalRecord.getLicenseExpiryDateEnd().getTime() >=new Date().getTime();
+            }
+            if(!flag){
+                //报废企业
+                List<GspEnterpriseTypeDTO> enterpriseTypeDTOS = queryEnterpriseType(enterpriseid);
+                if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0){ //判断是否有首营申请
+//                    int n=0;
+                    for(GspEnterpriseTypeDTO ent : enterpriseTypeDTOS){
+                        dataPublishService.cancelData(ent.getApplyNo());
+                    }
+                }
+                num++;
+                gspEnterpriseInfoService.updateGspEnterpriseInfoActiveTag(enterpriseid,Constant.IS_USE_NO);
+            }
+
+        }
+
+
+
+        return num;
+    }
     /**
      * 根据企业信息代码查询是否重复
      * @param enterpriseNo

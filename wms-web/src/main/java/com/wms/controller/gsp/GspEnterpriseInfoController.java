@@ -398,4 +398,15 @@ public class GspEnterpriseInfoController {
 		Json json = gspEnterpriceService.getBusinessLicenseOutTime("", Constant.CODE_ENT_TYP_ZT,1);
 		return json;
 	}
+
+
+	//查询企业证照有效期过期的企业并报废  返回报废数量
+	@Login
+	@RequestMapping(params = "enterpriseOutTime")
+	@ResponseBody
+	public Object enterpriseOutTime() throws Exception {
+		return gspEnterpriceService.enterpriseOutTime();
+	}
+
+
 }

@@ -533,7 +533,18 @@ var doSearch = function(){
 		isUse : $('#isUse').combobox("getValue")
 	});
 };
+function test(){
+    $.ajax({
+        url : sy.bp()+"/gspEnterpriseInfoController.do?enterpriseOutTime",
+        // data : {},
+		type : 'POST',
+		dataType : 'JSON',
+		async  :true,
+        success : function(result){
 
+        }
+    });
+}
 </script>
 </head>
 <body>
@@ -561,6 +572,7 @@ var doSearch = function(){
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<%--<a onclick='test();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>测试</a>--%>
 							</td>
 						</tr>
 					</table>

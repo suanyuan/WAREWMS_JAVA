@@ -88,10 +88,10 @@ $(function() {
         onSelect: function(rowIndex, rowData) {
             if (rowIndex - 1){
                 console.log(rowData);
-                if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_00){
+                if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_00 && rowData.isUse == '1'){
                     $('#ezuiBtn_confirm').linkbutton('enable');
                     $('#ezuiBtn_reApply').linkbutton('disable');
-                }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40){
+                }else if(rowData.firstState == FIRSTSTATE.FIRSTSTATE_90 || rowData.firstState == FIRSTSTATE.FIRSTSTATE_40 && rowData.isUse =='1'){
                     $('#ezuiBtn_reApply').linkbutton('enable');
                     $('#ezuiBtn_confirm').linkbutton('disable');
                 }else {

@@ -254,9 +254,15 @@ public class GspProductRegisterService extends BaseService {
 
 
 		GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(id);
+
 		int num  = gspProductRegisterSpecsMybatisDao.queryByListBind(id);
 		if(num>0){
 			return Json.error("注册证下有产品无法删除");
+		}
+
+		int num1  = gspProductRegisterSpecsMybatisDao.queryKUCUN(id);
+		if(num1>0){
+			return Json.error("注册证下有库存无法删除");
 		}
 
 		if(gspProductRegister != null){
