@@ -693,13 +693,19 @@ var mergeOrder = function () {
     }
 
 }
-
+//确认收货
 var mergeReceiving = function () {
     var row = ezuiDatagrid.datagrid('getSelections');
     // console.log(row);
+
+
     if(row) {
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认收货？', function(confirm) {
             if (confirm) {
+
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
                 var arr = new Array();
                 for(var i=0;i<row.length;i++){
                     arr.push(row[i].asnno);
@@ -708,6 +714,7 @@ var mergeReceiving = function () {
                     url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
                     data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
                     success : function(result){
+                        $.messager.progress('close');
                         console.log(result);
                         var msg='';
                         try{
