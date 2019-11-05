@@ -2069,10 +2069,12 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("cargoTotalWeight", "4");
             //费用合计
             //map.put("totalFee", "5");
-            map.put("cargoBack", "签单返回");
-            map.put("childMailNoStrSignBack", "签回单号     " + orderHeaderForNormal.getCAddress3());//签回单号
-            map.put("mailNoStrBank","签回单号     " + orderHeaderForNormal.getCAddress3());
-
+            if (StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress3())) {
+                map.put("cargoBack", "签单返回");
+                map.put("childMailNoStrSignBack", "签回单号     " + orderHeaderForNormal.getCAddress3());//签回单号
+                map.put("mailNoStrBank","签回单号     " + orderHeaderForNormal.getCAddress3());
+                map.put("childMailNoBank",orderHeaderForNormal.getCAddress3());//签回单条码
+            }
             map.put("PALINENO", System.currentTimeMillis());
             list.add(map);
         }
