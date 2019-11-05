@@ -735,10 +735,11 @@ public class OrderHeaderForNormalService extends BaseService {
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
         //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
         // TODO 目前只开放嘉事国润的顺丰下单功能
-        if (!"JSGR".equals(orderHeaderForNormal.getCustomerid()) ||
+        if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid())) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
                 (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
+
             return Json.success("不用下顺丰单");
         }
 

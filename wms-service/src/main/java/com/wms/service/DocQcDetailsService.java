@@ -383,7 +383,7 @@ public class DocQcDetailsService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
 
-//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
             return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "验收系统错误");
         }
