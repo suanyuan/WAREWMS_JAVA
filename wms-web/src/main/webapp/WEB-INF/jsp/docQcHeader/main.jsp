@@ -52,6 +52,9 @@ $(function() {
 			{field: 'linestatus',		title: '行状态',	width: 80,formatter:AcceptancestatusFormatter},
 			{field: 'lotatt10',		title: '质量状态',	width: 80,formatter:ZL_TYPstatusFormatter },
 			{field: 'userdefine1',		title: '库位',	width: 110 },
+
+
+
 			{field: 'customerid',		title: '货主代码',	width: 134 },
 			{field: 'shippershortname',		title: '货主简称',	width: 134 },
 			{field: 'lotatt08',		title: '供应商',	width: 134 },
@@ -688,8 +691,14 @@ var doSearch = function() {
 			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
 			// customerid: $('#customerid').val(),              //货主代码
 			// shippershortname: $('#shippershortname').val(),   //货主简称
+			sku:$('#skuQ').val(),
+            descrc:$('#descrcQ').val(),
+            lotatt04:$('#lotatt04Q').val(),
+            lotatt05:$('#lotatt05Q').val(),
 
-		});
+
+
+        });
 		$.messager.show({
 			msg: '请先选择验收单号!', title: '<spring:message code="common.message.prompt"/>'
 		});
@@ -700,6 +709,10 @@ var doSearch = function() {
 			lotatt10: $('#lotatt10').combobox('getValue'),  //z质量状态
 			// customerid: $('#customerid').val(),              //货主代码
 			// shippershortname: $('#shippershortname').val(),   //货主简称
+            sku:$('#skuQ').val(),
+            descrc:$('#descrcQ').val(),
+            lotatt04:$('#lotatt04Q').val(),
+            lotatt05:$('#lotatt05Q').val(),
 		});
 
 	}
@@ -707,6 +720,10 @@ var doSearch = function() {
 //主页清空查询
 var ezuiToolbarClear=function () {
 	ezuiComboboxClear("#toolbar");
+    $("#skuQ").textbox('clear');
+    $('#descrcQ').textbox('clear');
+    $('#lotatt04Q').textbox('clear');
+    $('#lotatt05Q').textbox('clear');
 }
 
 /* 单号选择弹框查询 */
@@ -714,7 +731,9 @@ var ezuiAccDataDialogSearch = function () {
 	ezuiAccDataDialogId.datagrid('load', {
 		pano: $("#ezuiAccDataDialog #pano").textbox("getValue"),
 		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue"),
-		customerid: $("#ezuiAccDataDialog #customerid").textbox("getValue")
+		customerid: $("#ezuiAccDataDialog #customerid").textbox("getValue"),
+        asnreference1: $("#ezuiAccDataDialog #asnreference1").textbox("getValue"),
+
 	});
 };
 /* 单号选择弹框清空 */
@@ -722,11 +741,16 @@ var ezuiAccToolbarClear = function () {
 	$("#ezuiAccDataDialog #pano").textbox('clear');
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
     $("#ezuiAccDataDialog #customerid").textbox('clear');
+    $("#ezuiAccDataDialog #asnreference1").textbox('clear');
+    // $("#ezuiAccDataDialog #skuQ").textbox('clear');
+	// $('#descrcQ').textbox('clear');
+	// $('#lotatt04Q').textbox('clear');
+	// $('#lotatt05Q').textbox('clear');
 };
 /* 单号选择弹框 */
 var ezuiAccDataClick = function () {
 	ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
-		url: '<c:url value="/docQcHeaderController.do?showDatagrid"/>',
+		url: '<c:url value="/docQcHeaderController.do?showDatagrid1"/>',
 		method: 'POST',
 		toolbar: '#ezuiAccToolbar',
 		pageSize: 50,
@@ -743,7 +767,9 @@ var ezuiAccDataClick = function () {
 		columns: [[
 			{field: 'pano', title: '上架单号', width: 80},
 			{field: 'qcno', title: '验收单号', width: 100},
+            {field: 'asnreference1',		title: '客户订单号',	width: 134 },
 			{field: 'qcstatus', title: '验收状态', width: 100,formatter:AcceptancestatusFormatter},
+
 			{field: 'customerid', title: '货主代码', width: 100}
 		]],
 		onDblClickCell: function (index, field, value) {
@@ -906,8 +932,13 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 																																	url:'<c:url value="/commonController.do?qcState"/>',
 																																	valueField: 'id',
 																																     textField: 'value'"/></td>
-<%--							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>--%>
-<%--							<th>货主简称</th><td><input type='text' id='shippershortname' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>产品代码</th><td><input type='text' id='skuQ' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>规格</th><td><input type='text' id='descrcQ' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='lotatt04Q' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>序列号</th><td><input type='text' id='lotatt05Q' class='easyui-textbox' size='16' data-options=''/></td>
+
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -1018,13 +1049,18 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 							<tr>
 								<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-
 								<td>
 									<a onclick='ezuiAccDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 									<a onclick='selectAcceptance();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
 									<a onclick='ezuiAccToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								</td>
+							</tr>
+							<tr>
+
+								<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
+								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+
+
 							</tr>
 						</table>
 					</fieldset>

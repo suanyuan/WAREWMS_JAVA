@@ -28,6 +28,12 @@
 	<result column="editwho" property="editwho"/>
 	<result column="qc_print_flag" property="qcPrintFlag"/>
 	<result column="warehouseid" property="warehouseid"/>
+
+
+	<!--客户订单号-->
+	<result column="asnreference1" property="asnreference1"/>
+
+
 </resultMap>
        
 <!-- doc_qc_header table all fields -->
@@ -111,6 +117,85 @@ where 1=1
 	</if>
 </trim>
 </sql>
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause_Type">
+		where 1=1
+		<trim  suffixOverrides="," >
+
+			<if test="condition.asnreference1 != null and condition.asnreference1 != ''" >
+				and t4.asnreference1 like concat('%',#{condition.asnreference1},'%')
+			</if>
+			<if test="condition.qcno != null and condition.qcno != ''" >
+				and t1.qcno like concat('%',#{condition.qcno},'%')
+			</if>
+			<if test="condition.pano != null and condition.pano != ''" >
+				and t1.pano like concat('%',#{condition.pano},'%')
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and t1.customerid like concat('%',#{condition.customerid},'%')
+			</if>
+			<if test="condition.qcreference1 != null and condition.qcreference1 != ''" >
+				and t1.qcreference1 =  #{condition.qcreference1}
+			</if>
+			<if test="condition.qcreference2 != null and condition.qcreference2 != ''" >
+				and t1.qcreference2 =  #{condition.qcreference2}
+			</if>
+			<if test="condition.qcreference3 != null and condition.qcreference3 != ''" >
+				and t1.qcreference3 =  #{condition.qcreference3}
+			</if>
+			<if test="condition.qcreference4 != null and condition.qcreference4 != ''" >
+				and t1.qcreference4 =  #{condition.qcreference4}
+			</if>
+			<if test="condition.qcreference5 != null and condition.qcreference5 != ''" >
+				and t1.qcreference5 =  #{condition.qcreference5}
+			</if>
+			<if test="condition.qctype != null and condition.qctype != ''" >
+				and t1.qctype =  #{condition.qctype}
+			</if>
+			<if test="condition.qcstatus != null and condition.qcstatus != ''" >
+				and t1.qcstatus =  #{condition.qcstatus}
+			</if>
+			<if test="condition.qccreationtime != null and condition.qccreationtime != ''" >
+				and t1.qccreationtime =  #{condition.qccreationtime}
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and t1.userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and t1.userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and t1.userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and t1.userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and t1.userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.notes != null and condition.notes != ''" >
+				and t1.notes =  #{condition.notes}
+			</if>
+			<if test="condition.addtime != null and condition.addtime != ''" >
+				and t1.addtime =  #{condition.addtime}
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and t1.addwho =  #{condition.addwho}
+			</if>
+			<if test="condition.edittime != null and condition.edittime != ''" >
+				and t1.edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and t1.editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.qcPrintFlag != null and condition.qcPrintFlag != ''" >
+				and t1.qc_print_flag =  #{condition.qcPrintFlag}
+			</if>
+			<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+				and t1.warehouseid =  #{condition.warehouseid}
+			</if>
+		</trim>
+	</sql>
    
 
 <!-- 插入记录 -->
@@ -225,6 +310,20 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+	<!-- 查询验收头档列表 加客户订单号字段 -->
+	<select id="queryByList1" resultMap="BaseResultMap"  parameterType="Object">
+
+		select t1.*,t4.asnreference1 from doc_qc_header t1
+		left JOIN doc_qc_details t2 on t2.qcno = t1.qcno
+		LEFT JOIN doc_pa_details t3 on (t3.PANO = t1.pano and t3.PALINENO = t2.palineno)
+		LEFT JOIN doc_asn_header t4 on t4.asnno = t3.ASNNO
+		<include refid="Example_Where_Clause_Type"/>
+		order by  qcstatus
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
 
     <!-- 查询未完成列表-->
     <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">

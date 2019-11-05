@@ -29,6 +29,16 @@ public class DocQcHeaderQuery implements IQuery {
 	private String qcPrintFlag;
 	private String warehouseid;
 
+	private String asnreference1;//客户订单号
+
+	public String getAsnreference1() {
+		return asnreference1;
+	}
+
+	public void setAsnreference1(String asnreference1) {
+		this.asnreference1 = asnreference1;
+	}
+
 	public String getQcno() {
 		return qcno;
 	}

@@ -63,4 +63,6 @@ public class DocQcHeader  implements Serializable {
 	private String descrC;//供应商名称
 	private String userdefine1Temp;
 
+
+	private String asnreference1;//客户订单号
 }

@@ -73,6 +73,32 @@ public class DocQcHeaderService extends BaseService {
         return datagrid;
 	}
 
+    /**
+     * 分页 查询弹出框 加客户订单号
+     * @param pager
+     * @param query
+     * @return
+     */
+    public EasyuiDatagrid<DocQcHeaderVO> getPagedDatagrid1(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
+        EasyuiDatagrid<DocQcHeaderVO> datagrid = new EasyuiDatagrid<>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<DocQcHeader> docQcHeaderList = docQcHeaderMybatisDao.queryByList1(mybatisCriteria);
+        System.out.println();
+        DocQcHeaderVO docQcHeaderVO = null;
+        List<DocQcHeaderVO> docQcHeaderVOList = new ArrayList<>();
+        for (DocQcHeader docPaDetails : docQcHeaderList) {
+            docQcHeaderVO = new DocQcHeaderVO();
+            BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
+            docQcHeaderVOList.add(docQcHeaderVO);
+        }
+        datagrid.setTotal((long) docQcHeaderMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setRows(docQcHeaderVOList);
+        return datagrid;
+    }
+
 	public Json addDocQcHeader(DocQcHeaderForm docQcHeaderForm) throws Exception {
 		Json json = new Json();
 		DocQcHeader docQcHeader = new DocQcHeader();

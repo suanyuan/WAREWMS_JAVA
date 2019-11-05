@@ -53,6 +53,19 @@ public class DocQcHeaderController {
 		return docQcHeaderService.getPagedDatagrid(pager, query);
 	}
 
+	/**
+	 * 分页 窗口查询加上客户订单号
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showDatagrid1")
+	@ResponseBody
+	public EasyuiDatagrid<DocQcHeaderVO> showDatagrid1(EasyuiDatagridPager pager, DocQcHeaderQuery query) {
+		return docQcHeaderService.getPagedDatagrid1(pager, query);
+	}
+
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody

@@ -245,6 +245,17 @@ where 1=1
    <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
 		and a.lotatt12  like concat('%',#{condition.lotatt12},'%')
 	</if>
+
+	<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+		and a.lotatt04  like concat('%',#{condition.lotatt04},'%')
+	</if>
+	<if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+		and a.lotatt05  like concat('%',#{condition.lotatt05},'%')
+	</if>
+
+
+
+
     <if test="condition.lotatt08 != null and condition.lotatt08 != ''" >
 		and cc.descr_c  like concat('%',#{condition.lotatt08},'%')
 	</if>
