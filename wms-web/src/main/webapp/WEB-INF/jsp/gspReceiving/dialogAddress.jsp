@@ -152,7 +152,7 @@
             infoObj[""+$(this).attr("name")+""] = $(this).val();
         });
 
-		var defaultAddress=$('#isDefault').combobox('getValue');
+		var defaultAddress=$('#dialogAddAddressForm #isDefault').combobox('getValue');
 
 
         var url = '';

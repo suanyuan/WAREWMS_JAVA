@@ -54,6 +54,8 @@ public class DocAsnCertificateService extends BaseService {
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
+		criteria.setOrderByClause("edittime,addtime desc");
+
 		DocAsnCertificateVO docAsnCertificateVO = null;
 		List<DocAsnCertificateVO> basGtnVOList = new ArrayList<DocAsnCertificateVO>();
 		List<DocAsnCertificate> DocAsnCertificateList = docAsnCertificateMybatisDao.queryPageListByType(criteria);
@@ -87,7 +89,10 @@ public class DocAsnCertificateService extends BaseService {
 		Json json = new Json();
 		DocAsnCertificate docAsnCertificate = new DocAsnCertificate();
 		BeanUtils.copyProperties(docAsnCertificateForm, docAsnCertificate);
-
+		DocAsnCertificate docAsnCertificate1 =docAsnCertificateMybatisDao.queryById(docAsnCertificate);
+		if(docAsnCertificate1!=null){
+			return Json.error("已存在同一货主，规格，生产批号的质量合格证，添加失败！");
+		}
 		docAsnCertificate.setAddtime(new Date());
 		docAsnCertificate.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 		docAsnCertificate.setEdittime(new Date());

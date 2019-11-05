@@ -964,7 +964,8 @@
             href: sy.bp()+"/gspReceivingController.do?toDialogAddress&receivingId="+$("#hiddenreceivingId").val(),
             buttons : '#ezuiBtn',
             onClose : function() {
-                 ezuiFormClear(ezuiForm);
+                 // ezuiFormClear(ezuiForm);
+                $(this).dialog("clear");
             }
         })
         }
@@ -1011,15 +1012,18 @@
         if(row){
 
              $('#dialogAddAddress').dialog({
+                 buttons : '#ezuiBtn',
                 modal : true,
                 title : '<spring:message code="common.dialog.title"/>',
                 width:320,
                 height:390,
                 href: sy.bp()+"/gspReceivingController.do?toDialogAddress"+"&receivingId="+$("#hiddenreceivingId").val()+"&receivingAddressId="+row.receivingAddressId,
-                buttons : '#ezuiBtn',
+
                 onClose : function() {
-                    ezuiFormClear(ezuiForm);
+                    // ezuiFormClear(ezuiForm);
+                    $(this).dialog("clear");
                 }
+
             })
         }else{
             $.messager.show({
