@@ -621,6 +621,9 @@ var cancel = function(){
 	if(row){
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认取消？', function(confirm) {
 			if(confirm){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
                 var arr = new Array();
                 for(var i=0;i<row.length;i++){
                     arr.push(row[i].asnno);
@@ -632,6 +635,7 @@ var cancel = function(){
 					type : 'POST',
 					dataType : 'JSON',
 					success : function(result){
+                        $.messager.progress('close');
 						var msg = '';
 						try {
                             msg = result.msg;
@@ -659,6 +663,10 @@ var mergeOrder = function () {
     if(row) {
         $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否确认合并生成上架清单？', function(confirm) {
             if (confirm) {
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
+
                 var arr = new Array();
                 for(var i=0;i<row.length;i++){
                     arr.push(row[i].asnno);
@@ -667,6 +675,7 @@ var mergeOrder = function () {
                     url : sy.bp()+"/docAsnHeaderController.do?addDocPa",
                     data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
                         success : function(result){
+                            $.messager.progress('close');
                             console.log(result);
                             var msg='';
                             try{
@@ -747,6 +756,9 @@ var mergeReceiving = function () {
 var closeCheck = function(){
     var row = ezuiDatagrid.datagrid('getSelections');
     if(row){
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var asnnos = new Array();
         for(var i=0;i<row.length;i++){
             asnnos.push(row[i].asnno);
@@ -757,6 +769,7 @@ var closeCheck = function(){
             type : 'GET',
             dataType : 'JSON',
             success : function(result){
+                $.messager.progress('close');
                 var msg = '';
                 try {
                     msg = result.msg;
