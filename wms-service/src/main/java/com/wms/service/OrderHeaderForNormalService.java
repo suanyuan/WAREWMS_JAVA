@@ -1,6 +1,6 @@
 package com.wms.service;
 
-import com.itextpdf.text.Document;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
@@ -44,6 +44,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1932,15 +1933,14 @@ public class OrderHeaderForNormalService extends BaseService {
 
             Document doc = new Document();
             AcroFields form = null;
-            PdfStamper stamper = null;
             PdfImportedPage page = null;
             ByteArrayOutputStream baos = null;
 
             if (StringUtils.isNotEmpty(orderCodeList)) {
                 String[] orderNoArr = orderCodeList.split(",");
-                //PdfWriter writer = PdfWriter.getInstance(doc,os);
                 PdfCopy copy = new PdfCopy(doc, os);
                 doc.open();
+
                 for (String order : orderNoArr) {
                     MybatisCriteria criteria = new MybatisCriteria();
                     OrderDetailsForNormalQuery query = new OrderDetailsForNormalQuery();
@@ -1951,11 +1951,57 @@ public class OrderHeaderForNormalService extends BaseService {
                         doc.newPage();
                         String url = getCertificate(de.getCustomerid(), de.getSku(), de.getLotatt04());//获取质量合格证
                         if (!"".equals(url)) {
+                            ByteArrayOutputStream bout = new ByteArrayOutputStream();
                             PdfReader reader = new PdfReader(Constant.uploadUrl + File.separator + url);
 
-                            PdfImportedPage newPage = copy.getImportedPage(reader, 1);
+                            PdfStamper pdfStamper = new PdfStamper(reader,bout);
 
-                            copy.addPage(newPage);
+                            PdfContentByte under;
+                            Rectangle pageRect = null;
+                            int pageSize = reader.getNumberOfPages();// 原pdf文件的总页数
+                            for(int i = 1; i <= pageSize; i++) {
+
+                                pageRect = pdfStamper.getReader().getPageSizeWithRotation(i);
+                                // 计算水印X,Y坐标
+                        //                float x = pageRect.getWidth()/10;
+                        //                float y = pageRect.getHeight()/10-10;
+                                // 获得PDF最顶层
+                                under = pdfStamper.getOverContent(i);
+                                under.saveState();
+                                // set Transparency
+                                PdfGState gs = new PdfGState();
+                                // 设置透明度为0.2
+                                gs.setFillOpacity(0.8f);
+                                under.setGState(gs);
+                                under.restoreState();
+                                under.beginText();
+                                under.setFontAndSize(BaseFont.createFont("STSong-Light","UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 25);
+                                under.setTextMatrix(30, 30);
+                                under.setColorFill(BaseColor.RED);
+                                under.showTextAligned(Element.ALIGN_LEFT, order, 30, 800,0);
+
+                                // 添加水印文字
+                                under.endText();
+                                under.setLineWidth(1f);
+                                under.stroke();
+                            }
+
+                            pdfStamper.close();
+                            reader.close();
+
+                            PdfReader newReader = new PdfReader(bout.toByteArray());
+                            int pages = newReader.getNumberOfPages();
+                            for(int i=1;i<=pages;i++){
+                                PdfImportedPage newPage = copy.getImportedPage(newReader, i);
+                                copy.addPage(newPage);
+                            }
+
+//                            PdfReader reader = new PdfReader(Constant.uploadUrl + File.separator + url);
+//                            int pages = reader.getNumberOfPages();
+//                            for(int i=1;i<=pages;i++){
+//                                PdfImportedPage newPage = copy.getImportedPage(reader, i);
+//                                copy.addPage(newPage);
+//                            }
                             /*Image png = Image.getInstance(Constant.uploadUrl+File.separator+url);
                             png.scaleAbsolute(500.0F,750F);
                             doc.add(png);*/
@@ -1963,6 +2009,8 @@ public class OrderHeaderForNormalService extends BaseService {
 
                     }
                 }
+
+
                 doc.close();
             }
         } catch (Exception e) {
