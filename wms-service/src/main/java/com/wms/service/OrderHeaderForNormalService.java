@@ -2061,7 +2061,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //打印单号
             //map.put("addedService","A");
             //母单号
-            map.put("mailNoStr", "单号   " + orderHeaderForNormal.getCAddress4());
+            map.put("mailNoStr", "单号  " + orderHeaderForNormal.getCAddress4());
             //map.put("mailNoStr", "签回单号");
             //map.put("childMailNoStr", "217276730473");
             //打印原寄地
@@ -2120,8 +2120,8 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("totalFee", "5");
             if (StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress3())) {
                 map.put("cargoBack", "签单返回");
-                map.put("childMailNoStrSignBack", "签回单号     " + orderHeaderForNormal.getCAddress3());//签回单号
-                map.put("mailNoStrBank","签回单号     " + orderHeaderForNormal.getCAddress3());
+                map.put("childMailNoStrSignBack", "签回单号  " + orderHeaderForNormal.getCAddress3());//签回单号
+                map.put("mailNoStrBank","签回单号 " + orderHeaderForNormal.getCAddress3());
                 map.put("childMailNoBank",orderHeaderForNormal.getCAddress3());//签回单条码
             }
             map.put("PALINENO", System.currentTimeMillis());
