@@ -750,7 +750,7 @@ var ezuiAccToolbarClear = function () {
 /* 单号选择弹框 */
 var ezuiAccDataClick = function () {
 	ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
-		url: '<c:url value="/docQcHeaderController.do?showDatagrid1"/>',
+		url: '<c:url value="/docQcHeaderController.do?showDatagrid"/>',
 		method: 'POST',
 		toolbar: '#ezuiAccToolbar',
 		pageSize: 50,
