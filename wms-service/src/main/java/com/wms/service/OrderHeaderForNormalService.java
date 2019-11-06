@@ -2035,7 +2035,6 @@ public class OrderHeaderForNormalService extends BaseService {
             String j_contact = basCodes.getCodenameE();
             String j_tel = basCodes.getUdf3();
             String custid = basCodes.getUdf1();
-            map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
             map.put("so", "imgFile/FM/so.jpg");
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
@@ -2061,7 +2060,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //打印单号
             //map.put("addedService","A");
             //母单号
-            map.put("mailNoStr", "单号   " + orderHeaderForNormal.getCAddress4());
+            map.put("mailNoStr", orderHeaderForNormal.getCAddress4());
             //map.put("mailNoStr", "签回单号");
             //map.put("childMailNoStr", "217276730473");
             //打印原寄地
@@ -2120,8 +2119,8 @@ public class OrderHeaderForNormalService extends BaseService {
             //map.put("totalFee", "5");
             if (StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress3())) {
                 map.put("cargoBack", "签单返回");
-                map.put("childMailNoStrSignBack", "签回单号     " + orderHeaderForNormal.getCAddress3());//签回单号
-                map.put("mailNoStrBank","签回单号     " + orderHeaderForNormal.getCAddress3());
+                map.put("childMailNoStrSignBack",  orderHeaderForNormal.getCAddress3());//签回单号
+                map.put("mailNoStrBank", orderHeaderForNormal.getCAddress3());
                 map.put("childMailNoBank",orderHeaderForNormal.getCAddress3());//签回单条码
             }
             map.put("PALINENO", System.currentTimeMillis());
