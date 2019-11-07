@@ -1,10 +1,9 @@
 package com.wms.query;
 
+import com.wms.mybatis.entity.SfcCustomer;
+
 import java.util.Date;
 import java.util.Set;
-
-import com.wms.mybatis.entity.SfcCustomer;
-import lombok.Data;
 
 
 public class OrderHeaderForNormalQuery implements IQuery {
@@ -43,7 +42,49 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String sostatusCheck;
     //产品线
     private String psName;
+    //订单发运时间    起始时间
+    private String edittime;
+    //订单发运时间    结束时间
+    private String edittimeTo;
+    //导出类型
+    private String outtype;
+    private String token;
 
+
+    public String getOuttype() {
+        return outtype;
+    }
+
+    public void setOuttype(String outtype) {
+        this.outtype = outtype;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public OrderHeaderForNormalQuery() {
+    }
+
+    public String getEdittime() {
+        return edittime;
+    }
+
+    public void setEdittime(String edittime) {
+        this.edittime = edittime;
+    }
+
+    public String getEdittimeTo() {
+        return edittimeTo;
+    }
+
+    public void setEdittimeTo(String edittimeTo) {
+        this.edittimeTo = edittimeTo;
+    }
     public String getPsName() {
         return psName;
     }

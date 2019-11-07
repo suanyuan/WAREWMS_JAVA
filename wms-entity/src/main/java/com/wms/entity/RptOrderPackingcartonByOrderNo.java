@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity
@@ -75,6 +74,7 @@ public class RptOrderPackingcartonByOrderNo implements Serializable {
 
     private double qty1; //换算率
     private String uom;
+    private String traceid1;//冷链虚拟箱号
 
 
 }

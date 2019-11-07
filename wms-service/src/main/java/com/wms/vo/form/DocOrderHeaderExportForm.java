@@ -12,7 +12,31 @@ public class DocOrderHeaderExportForm {
 	private java.lang.String ordertype;
 	private java.lang.String releasestatus;
 	private String token;
-	
+
+
+
+	//订单发运时间    起始时间
+	private String edittime;
+	//订单发运时间    结束时间
+	private String edittimeTo;
+
+
+
+	public String getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(String edittime) {
+		this.edittime = edittime;
+	}
+
+	public String getEdittimeTo() {
+		return edittimeTo;
+	}
+
+	public void setEdittimeTo(String edittimeTo) {
+		this.edittimeTo = edittimeTo;
+	}
 	public java.lang.String getCustomerid() {
 		return customerid;
 	}

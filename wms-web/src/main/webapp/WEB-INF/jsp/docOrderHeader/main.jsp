@@ -33,6 +33,8 @@ var ezuiLocDataDialog;
 var ezuiLocDataDialogId;
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
+var ezuiOutToExcelDataDialog;
+var ezuiOutToExcel1Form;
 var ezuiOperateResultDataDialog;
 var ezuiOperateResultDataForm;
 var allocationDetailsDatagrid;
@@ -329,7 +331,17 @@ $(function() {
 			ezuiFormClear(ezuiImportDataForm);
 		}
 	}).dialog('close');
-
+	//导出
+    ezuiOutToExcelDataDialog = $('#ezuiOutToExcelDataDialog').dialog({
+        modal : true,
+        width:270,
+        height:210,
+        title : '选择导出内容',
+        buttons : '#ezuiOutToExcel1Btn',
+        onClose : function() {
+            ezuiFormClear(ezuiOutToExcel1Form);
+        }
+    }).dialog('close');
 	//批量操作返回结果
 	ezuiOperateResultDataDialog = $('#ezuiOperateResultDataDialog').dialog({
 		modal : true,
@@ -494,7 +506,6 @@ var add = function(){
 	ezuiDialog.dialog('open');
 };
 
-
 /*  查询是否有明细 */
 var qlOrderDetails = function(row){
 	$.ajax({
@@ -516,8 +527,6 @@ var qlOrderDetails = function(row){
 		}
 	});
 }
-
-
 
 /* 编辑按钮 */
 var edit = function(srow){
@@ -1196,6 +1205,8 @@ var doSearch = function(){
 		sostatusTo : $('#sostatusTo').combobox('getValue'),
 		ordertime : $('#ordertime').datetimebox('getValue'),
 		ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
+		edittime : $('#edittime').datetimebox('getValue'),
+		edittimeTo : $('#edittimeTo').datetimebox('getValue'),
 		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
 		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
@@ -1208,38 +1219,24 @@ var doSearch = function(){
 
 /* 导出start */
 var doExport = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
-    if(row) {
-		if (navigator.cookieEnabled) {
-			$('#ezuiBtn_export').linkbutton('disable');
-			//--导出Excel
-			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+    var rows = $('#ezuiDatagrid').datagrid('getSelections');
+    if(rows.length>0) {
+            var orderno="";
+            for (var i = 0; i < rows.length; i++) {
+                orderno += rows[i].orderno+",";
+            }
             var token = new Date().getTime();
             var param = new HashMap();
+            param.put("orderno",orderno);
+            param.put("outtype", $("#ezuiOutToExcel1Form #outtype").combobox('getValue'));
             param.put("token", token);
-            var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
-			downloadCheckTimer = window.setInterval(function () {
-				window.clearInterval(downloadCheckTimer);
-				// $('#' + formId).remove();
-				$('#ezuiBtn_export').linkbutton('enable');
-				$.messager.progress('close');
-				$.messager.show({
-					msg: "<spring:message code='common.message.export.success'/>",
-					title: "<spring:message code='common.message.prompt'/>"
-				});
-			}, 1000);
-		} else {
-			$.messager.show({
-				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
-				title: "<spring:message code='common.message.prompt'/>"
-			});
-		}
-		;
-	}else{
-			$.messager.show({
-				msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-			});
-		}
+            ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
+    }else{
+        $.messager.show({
+            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+        });
+    }
+
 };
 /* 导出end */
 
@@ -1254,8 +1251,7 @@ var doExportGoodsList = function(){
 			var token = new Date().getTime();
 			var param = new HashMap();
 			param.put("token", token);
-			var orderno = row.orderno;
-			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportAccompanyingExcel&orderno=" + orderno);
+			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportAccompanyingExcel&orderno=" + param);
 			downloadCheckTimer = window.setInterval(function () {
 				window.clearInterval(downloadCheckTimer);
 				// $('#' + formId).remove();
@@ -1318,6 +1314,9 @@ var commitImportData = function(obj){
 };
 var toImportData = function(){
 	ezuiImportDataDialog.dialog('open');
+};
+var toOutData = function(){
+    ezuiOutToExcelDataDialog.dialog('open');
 };
 /* 下载导入模板 */
 var downloadTemplate = function(){
@@ -2382,7 +2381,7 @@ var writeBackExpress = function(){
     <%--}--%>
 }
 //提交回写快递单号/签回单号
-var writeBackExpressBtnCommit = function(){
+var Commit = function(){
     url = '<c:url value="/docOrderHeaderController.do?writeBackExpressBtnCommit"/>';
     var row = ezuiDatagrid.datagrid('getSelected');
     var msg='';
@@ -2529,11 +2528,16 @@ var writeBackExpressBtnCommit = function(){
 																																required:true,
 																																showSeconds:false,
 																																value:ordertimeDateTo(new Date())"/></td>
-							<th colspan="2" style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick="" checked="checked"><label for="sostatusCheck">显示完成/取消订单</label></th>
-							<td colspan="2">
+							<th>订单发运时间</th><td><input type='text' id='edittime' class='easyui-datetimebox' size='16' data-options=""/></td>
+							<th>至</th><td><input type='text' id='edittimeTo' class='easyui-datetimebox' size='16' data-options=""/></td>
+							<th style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick="" checked="checked"><label for="sostatusCheck">显示完成/取消订单</label></th>
+
+						</tr>
+						<tr>
+							<td colspan="4" style="text-align: right">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+								<a onclick='toOutData();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
 								<a onclick='doExportGoodsList();' id='ezuiBtn_export_goods_list' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出随货</a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 								<a onclick='doExportOrderNo();' id='ezuiBtn_exportOerderNo' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出序列号记录</a>
@@ -2616,7 +2620,34 @@ var writeBackExpressBtnCommit = function(){
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 	<!-- 导入end -->
-
+    <!-- 导出start -->
+    <div id='ezuiOutToExcelDataDialog' class='easyui-dialog' style='padding: 10px;'>
+        <form id='ezuiOutToExcel1Form' method='post' enctype='multipart/form-data'>
+            <table>
+                <tr>
+                    <th>选择导出内容</th>
+                    <td><input id='outtype' class="easyui-combobox" size='100' style="height:30px" data-options="
+																								editable: false,
+																								panelHeight: 'auto',
+																								width:'150',
+																								valueField: 'id',
+																								textField: 'value',
+																								data: [{
+																									id: '1',
+																									value: '导出头档'
+																								},{
+																									id: '-1',
+																									value: '导出明细'
+																								}]" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id='ezuiOutToExcel1Btn'>
+        <a onclick='doExport();' id='ezuiBtn_outDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+        <a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+    </div>
+    <!-- 导出end -->
 	<!-- 批量操作返回start -->
 	<div id='ezuiOperateResultDataDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='ezuiOperateResultDataForm' method='post' enctype='multipart/form-data'>
@@ -2738,7 +2769,6 @@ var writeBackExpressBtnCommit = function(){
                 </tr>
                 <tr>
                     <th>签回单号</th><td><input type='text' id='caddress3' name="caddress3" class='easyui-textbox' size='20'  /></td>
-
                 </tr>
 			</table>
 		</form>

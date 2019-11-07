@@ -36,6 +36,7 @@ $(function() {
 		columns : [[
 			{field: 'orderno', title: '出库单号', width: 124},
 			{field: 'traceid',		title: '箱号',	width: 150 },
+			{field: 'traceid1',		title: '冷链虚拟箱号',	width: 100 },
 			{field: 'packingflag', title: '是否装箱完成', width: 90,formatter:yesOrNoFormatter},
 			{field: 'lotatt10', title: '质量状态', width: 80, formatter: ZL_TYPstatusFormatter},
 			{field: 'customerid', title: '货主代码', width: 134},
