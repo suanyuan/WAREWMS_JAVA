@@ -1141,8 +1141,8 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 				   <th>序列号</th><td><input type='text' id='lotatt05' name="lotatt05" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
 				</tr>
 				<tr>
-				   <th>生产日期</th><td><input type='text' id='lotatt01' name="lotatt01" class='easyui-datebox' size='20' data-options="required:true,editable:false"/></td>
-				   <th>有效期/失效期</th><td><input type='text' id='lotatt02' name="lotatt02" class='easyui-datebox' size='20' data-options="required:true,editable:false"/></td>
+				   <th>生产日期</th><td><input type='text' id='lotatt01' name="lotatt01" class='easyui-datebox' size='20' data-options="required:true,editable:true"/></td>
+				   <th>有效期/失效期</th><td><input type='text' id='lotatt02' name="lotatt02" class='easyui-datebox' size='20' data-options="required:true,editable:true"/></td>
 				</tr>
 				<tr>
 				   <th>产品注册证号/备案号</th><td><input type='text' id='lotatt06' name="lotatt06" class='easyui-combobox' size='20' data-options="editable:false"/></td>

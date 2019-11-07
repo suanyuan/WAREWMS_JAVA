@@ -1041,7 +1041,7 @@
     if (processType != "newAdd"){
     var a = $("#first").val();
     var b =$("#enterpriseId").val();
-    if (a =='40'||a == '10'||b == ''){
+    if (a =='40'||a == '10'|| a=='00'||b == ''){
     $('#enterpriseN').css('display', 'none');
     $('#enterpriseN').attr("readonly",false);
     $('#enterpriseNo').css('display', 'none');
@@ -1070,6 +1070,10 @@
     $('#ezuiBtn_commit').attr("readonly",true);
     $('#ezuiBtn_clear').css('display', 'none');
     $('#ezuiBtn_clear').attr("readonly",true);
+    console.log(processType+"======="+$('#isChec').val());
+    if(processType == "edit"){
+        $('#isChec').attr("readonly",true);
+    }
 }
 }
 }

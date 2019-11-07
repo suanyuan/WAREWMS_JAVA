@@ -18,11 +18,7 @@ import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
 import com.wms.vo.GspEnterpriseVO;
 import com.wms.vo.Json;
-import com.wms.vo.form.BasCustomerForm;
-import com.wms.vo.form.GspCustomerForm;
-import com.wms.vo.form.GspSupplierForm;
-import com.wms.vo.form.ViewInvTranExportForm;
-import com.wms.vo.form.ViewInvTranForm;
+import com.wms.vo.form.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -190,12 +186,21 @@ public class BasCustomerService extends BaseService {
 //				basCustomer1.setCustomerType("CO");
 //				basCustomer1 = basCustomerMybatisDao.queryByenterId(basCustomer1);//俩条数据不能有一样的企业id
 //
+				GspReceivingForm gspReceivingForm = new GspReceivingForm();
+				gspReceivingForm.setEnterpriseId(basCustomerForm.getEnterpriseId());
+				gspReceivingForm.setClientId(basCustomerForm.getClientId());
+				int num1 = gspReceivingMybatisDao.selectByClientIdAndReceiving(gspReceivingForm);
+				if(num1>0){
+					return Json.error("同一货主和收获单位！不能重复申请！");
+				}
 
 				basCustomer.setEnterpriseId(basCustomerForm.getEnterpriseId());
 				int num = basCustomerMybatisDao.selectBySelective(basCustomer);
 				if(num!=0){
 					basCustomerMybatisDao.delete(basCustomer);
 				}
+
+
 
 				 basCustomer = new BasCustomer();
 				String number = commonService.generateSeq(Constant.APLRECNO,SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -221,6 +226,9 @@ public class BasCustomerService extends BaseService {
 
 				GspReceiving gspReceiving = new GspReceiving();
 				BeanUtils.copyProperties(basCustomerForm,gspReceiving);
+
+
+
 				gspReceiving.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
 				gspReceiving.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
 				gspReceiving.setEditId(SfcUserLoginUtil.getLoginUser().getId());
@@ -241,15 +249,9 @@ public class BasCustomerService extends BaseService {
 //                 GspReceiving gspReceiving1 = new GspReceiving();
 //                gspReceiving1.setEnterpriseId(basCustomerForm.getEnterpriseId());
 
-                GspReceiving  gspReceiving2 = gspReceivingMybatisDao.queryByEnterpriseId(basCustomerForm.getEnterpriseId());
-                if(gspReceiving2!=null){
-                    //json.setSuccess(false);
-                    json.setMsg("已有相同收货单位！");
-                    //json.setMsg(resultMsg.toString());
-                    return json;
-                }else{
-                    gspReceivingMybatisDao.add(gspReceiving);
-                }
+
+				gspReceivingMybatisDao.add(gspReceiving);
+
 				firstReviewLogMybatisDao.add(firstReviewLog);
 				GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(basCustomer.getEnterpriseId());
 				basCustomer.setBankaccount(number);
