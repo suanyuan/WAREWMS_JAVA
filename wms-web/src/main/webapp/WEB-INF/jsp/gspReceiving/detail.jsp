@@ -1041,40 +1041,42 @@
     if (processType != "newAdd"){
     var a = $("#first").val();
     var b =$("#enterpriseId").val();
-    if (a =='40'||a == '10'|| a=='00'||b == ''){
-    $('#enterpriseN').css('display', 'none');
-    $('#enterpriseN').attr("readonly",false);
-    $('#enterpriseNo').css('display', 'none');
-    $('#enterpriseNo').attr("readonly",true);
-    $('#use').css('display', 'none');
-    $('#use').attr("readonly",true);
-    $('#s').css('display', 'none');
-    $('#s').attr("readonly",true);
-    $('#return').css('display', 'none');
-    $('#return').attr("readonly",true);
-    $('#isChec').css('display', 'none');
-    $('#isChec').attr("readonly",true);
-    $('#client').css('display', 'none');
-    $('#client').attr("readonly",true);
-    $('#supplier').css('display', 'none');
-    $('#supplier').attr("readonly",true);
-    $('#ezuiDetailsBtn_add').css('display', 'none');
-    $('#ezuiDetailsBtn_add').attr("readonly",true);
-    $('#ezuiDetailsBtn_edit').css('display', 'none');
-    $('#ezuiDetailsBtn_edit').attr("readonly",true);
-    $('#ezuiDetailsBtn_del').css('display', 'none');
-    $('#ezuiDetailsBtn_del').attr("readonly",true);
-    $('#clearBtn').css('display', 'none');
-    $('#clearBtn').attr("readonly",true);
-    $('#ezuiBtn_commit').css('display', 'none');
-    $('#ezuiBtn_commit').attr("readonly",true);
-    $('#ezuiBtn_clear').css('display', 'none');
-    $('#ezuiBtn_clear').attr("readonly",true);
-    console.log(processType+"======="+$('#isChec').val());
-    if(processType == "edit"){
+    if (a =='40'||a == '10'||b == ''){
+        $('#enterpriseN').css('display', 'none');
+        $('#enterpriseN').attr("readonly",false);
+        $('#enterpriseNo').css('display', 'none');
+        $('#enterpriseNo').attr("readonly",true);
+        $('#use').css('display', 'none');
+        $('#use').attr("readonly",true);
+        $('#s').css('display', 'none');
+        $('#s').attr("readonly",true);
+        $('#return').css('display', 'none');
+        $('#return').attr("readonly",true);
+        $('#isChec').css('display', 'none');
+        $('#isChec').attr("readonly",true);
+        $('#client').css('display', 'none');
+        $('#client').attr("readonly",true);
+        $('#supplier').css('display', 'none');
+        $('#supplier').attr("readonly",true);
+        $('#ezuiDetailsBtn_add').css('display', 'none');
+        $('#ezuiDetailsBtn_add').attr("readonly",true);
+        $('#ezuiDetailsBtn_edit').css('display', 'none');
+        $('#ezuiDetailsBtn_edit').attr("readonly",true);
+        $('#ezuiDetailsBtn_del').css('display', 'none');
+        $('#ezuiDetailsBtn_del').attr("readonly",true);
+        $('#clearBtn').css('display', 'none');
+        $('#clearBtn').attr("readonly",true);
+        $('#ezuiBtn_commit').css('display', 'none');
+        $('#ezuiBtn_commit').attr("readonly",true);
+        $('#ezuiBtn_clear').css('display', 'none');
+        $('#ezuiBtn_clear').attr("readonly",true);
+        console.log(processType+"======="+$('#isChec').val());
+    }
+    if(a=='00'){
+        $('#isChec').css('disedplay', 'none');
+
         $('#isChec').attr("readonly",true);
     }
-}
 }
 }
     function viewSupEnterpriseUrl() {
