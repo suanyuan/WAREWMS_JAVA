@@ -232,5 +232,12 @@ where 1=1
             where order_no = #{userdefine1}
           )
     </select>
+
+	<select id="countSerialNum4Match" parameterType="Object" resultType="int">
+		SELECT COUNT(1) FROM bas_serial_num bsn
+		LEFT JOIN doc_asn_header dah ON dah.asnreference1 = bsn.delivery_num
+		LEFT JOIN doc_order_header doh ON doh.soreference2 = dah.asnno
+		WHERE doh.orderno = #{orderno}
+	</select>
   	
 </mapper>   

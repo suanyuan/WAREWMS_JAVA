@@ -3,6 +3,7 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.BasSerialNum;
 import com.wms.query.BasSerialNumQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -33,5 +34,10 @@ public interface BasSerialNumMybatisDao extends BaseDao {
      * @param <T>
      * @return
      */
-    public <T> T queryExistBySerialNum(Object id);
+    <T> T queryExistBySerialNum(Object id);
+
+    /**
+     * 通过发运订单号，查看关联的发货凭证号是否导入了入库序列号,并返回行数量
+     */
+    int countSerialNum4Match(@Param("orderno") String orderno);
 }

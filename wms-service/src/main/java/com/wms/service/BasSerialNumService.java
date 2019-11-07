@@ -6,6 +6,7 @@ import com.wms.entity.BasSerialNum;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.BasSerialNumMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
 import com.wms.query.BasSerialNumQuery;
 import com.wms.service.importdata.ImportBasSerialNumDataService;
 import com.wms.utils.BeanConvertUtil;
@@ -35,6 +36,9 @@ public class BasSerialNumService extends BaseService {
 	private BasSerialNumMybatisDao basSerialNumDao;
     @Autowired
 	private ImportBasSerialNumDataService importBasSerialNumDataService;
+    @Autowired
+	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+
 //显示主页datagrid
 	public EasyuiDatagrid<BasSerialNumVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSerialNumQuery query) {
 		EasyuiDatagrid<BasSerialNumVO> datagrid = new EasyuiDatagrid<BasSerialNumVO>();
@@ -126,6 +130,24 @@ public class BasSerialNumService extends BaseService {
       		json = importBasSerialNumDataService.importExcelData(excelFile);
 		}
 		return json;
+	}
+
+	/**
+	 * 通过发运订单号，查看关联的发货凭证号是否导入了入库序列号
+	 * 并且验证总数和出库总数是否对的上
+	 * @param orderno 出库单号
+	 */
+	public Json countSerialNum4Match(String orderno) {
+
+		int importedCount = basSerialNumDao.countSerialNum4Match(orderno);
+		if (importedCount == 0) {
+			return Json.error(orderno + ":未导入序列号，请至入库序列号管理中完善数据!");
+		}
+		int orderedCount = orderDetailsForNormalMybatisDao.sumSerialNumRecordRequired(orderno);
+		if (orderedCount != importedCount) {
+			return Json.error(orderno + ":已导入的序列号条数与出库订单件数合计不匹配，请进行排查!");
+		}
+		return Json.success("");
 	}
 
 

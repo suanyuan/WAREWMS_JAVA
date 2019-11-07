@@ -100,6 +100,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+    @Autowired
+    private DocOrderUtilService docOrderUtilService;
 
     /**
      * 订单列表显示
@@ -249,12 +251,15 @@ public class OrderHeaderForNormalService extends BaseService {
      * 分配
      */
     public Json allocation(String orderNo) {
-        Json json = new Json();
-        OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-        orderHeaderForNormalQuery.setOrderno(orderNo);
-        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+
+        Json json = docOrderUtilService.validateAllocation(orderNo);
+        if (!json.isSuccess()) return json;
+
+        OrderHeaderForNormal orderHeaderForNormal = (OrderHeaderForNormal) json.getObj();
         if (orderHeaderForNormal != null) {
-            if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
+
+            if (orderHeaderForNormal.getSostatus().equals("00") ||
+                    orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
 
                 //判断双证/质量合格证
                 json = fixCertificateFlag(orderNo);
@@ -406,7 +411,7 @@ public class OrderHeaderForNormalService extends BaseService {
         Json json = fixLLPackage(orderNo);
         if (!json.isSuccess()) return json;
 
-        json = validateShipment(orderNo, false);
+        json = docOrderUtilService.validateSerialNumRecords(orderNo, 1);
         if (!json.isSuccess()) return json;
 
         //
@@ -640,7 +645,7 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
 
-        Json json = validateShipment(orderHeaderForNormalForm.getOrderno(), true);
+        Json json = docOrderUtilService.validateSerialNumRecords(orderHeaderForNormalForm.getOrderno(), 2);
         if (!json.isSuccess()) return json;
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
@@ -705,24 +710,24 @@ public class OrderHeaderForNormalService extends BaseService {
      * 验证单据是否可以发运
      * 1，需要记录序列号出库的产品没有记录的不能发运
      */
-    private Json validateShipment(String orderno, boolean isshipment) {
-
-        int count = orderDetailsForNormalMybatisDao.findSerialNumRecordRequired(orderno);
-        if (count > 0) {
-            if (!isshipment) return Json.error("此出库单中包含了需要扫码记录序列号的产品，不可一键复核");
-
-            MybatisCriteria mybatisCriteria = new MybatisCriteria();
-            DocSerialNumRecord recordQuery = new DocSerialNumRecord();
-            recordQuery.setOrderNo(orderno);
-            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(recordQuery));
-            List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
-            if (docSerialNumRecordList.size() == 0) return Json.error("此出库单复核未记录序列号，不可发运");
-            return Json.success("");
-        }else {
-
-            return Json.success("");
-        }
-    }
+//    private Json validateShipment(String orderno, boolean isshipment) {
+//
+//        int count = orderDetailsForNormalMybatisDao.findSerialNumRecordRequired(orderno);
+//        if (count > 0) {
+//            if (!isshipment) return Json.error("此出库单中包含了需要扫码记录序列号的产品，不可一键复核");
+//
+//            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//            DocSerialNumRecord recordQuery = new DocSerialNumRecord();
+//            recordQuery.setOrderNo(orderno);
+//            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(recordQuery));
+//            List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
+//            if (docSerialNumRecordList.size() == 0) return Json.error("此出库单复核未记录序列号，不可发运");
+//            return Json.success("");
+//        }else {
+//
+//            return Json.success("");
+//        }
+//    }
 
     /**
      * 顺丰下单

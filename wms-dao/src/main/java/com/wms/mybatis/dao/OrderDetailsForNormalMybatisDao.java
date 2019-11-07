@@ -31,4 +31,9 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      * 查询出库单中是否有需要记录序列号的产品
      */
     int findSerialNumRecordRequired(@Param("orderno") String orderno);
+
+    /**
+     * 查询出库单中需要记录序列号的产品的 件数总和
+     */
+    int sumSerialNumRecordRequired(@Param("orderno") String orderno);
 }
