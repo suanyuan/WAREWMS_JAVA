@@ -7,10 +7,10 @@ import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
+import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.exception.ExcelException;
-import com.wms.vo.form.DocOrderHeaderExportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,8 +93,8 @@ public class DocOrderExportService {
         orderHeaderForNormalList.add(orderHeaderForNormal);
         return orderHeaderForNormalList;
     }
-
-    public void docOrderToExcel1(HttpServletResponse response, DocOrderHeaderExportForm from) throws UnsupportedEncodingException, ExcelException {
+    //导出Excel格式所有信息
+    public void docOrderToExcel1(HttpServletResponse response, OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
         Cookie cookie = new Cookie("exportToken",from.getToken());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
@@ -107,13 +107,13 @@ public class DocOrderExportService {
             mybatisCriteria.setOrderByClause("orderno desc");
             List<OrderHeaderForNormal> orderHeaderForNormalList=orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
             //发运方式 ZT BK LY 暂缓
-            for (OrderHeaderForNormal a:orderHeaderForNormalList) {
+            for (OrderHeaderForNormal ohlist:orderHeaderForNormalList) {
                 Map<String, Object> param = new HashMap<>();
                 param.put("codeid", "EXP_TYP");
-                param.put("code", a.getRoute());
+                param.put("code", ohlist.getRoute());
                 BasCodes bascodes = basCodesMybatisDao.queryById(param);
                 if(bascodes!=null){
-                    a.setRoute(bascodes.getCodenameC());
+                    ohlist.setRoute(bascodes.getCodenameC());
                 }
             }
             // excel表格的表头，map

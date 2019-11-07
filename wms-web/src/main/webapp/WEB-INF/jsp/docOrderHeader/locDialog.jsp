@@ -10,7 +10,7 @@
 					<table>
 						<tr>
 							<th>库位：</th><td>
-							<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码",editable:false'/></td>
+							<input type='text' id='locationid' name="locationid" class='easyui-textbox'  size='12' data-options='prompt:"请输入客户代码",editable:true'/></td>
 							<th>库位类型：</th><td>
 							<input type='text' id='locationcategory' name="locationcategory" class='easyui-combobox' size='12' data-options="panelHeight:'auto',
 																																		    editable:false,

@@ -494,7 +494,6 @@ var add = function(){
 	ezuiDialog.dialog('open');
 };
 
-
 /*  查询是否有明细 */
 var qlOrderDetails = function(row){
 	$.ajax({
@@ -516,8 +515,6 @@ var qlOrderDetails = function(row){
 		}
 	});
 }
-
-
 
 /* 编辑按钮 */
 var edit = function(srow){
@@ -1196,6 +1193,8 @@ var doSearch = function(){
 		sostatusTo : $('#sostatusTo').combobox('getValue'),
 		ordertime : $('#ordertime').datetimebox('getValue'),
 		ordertimeTo : $('#ordertimeTo').datetimebox('getValue'),
+		edittime : $('#edittime').datetimebox('getValue'),
+		edittimeTo : $('#edittimeTo').datetimebox('getValue'),
 		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
 		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
@@ -1208,14 +1207,27 @@ var doSearch = function(){
 
 /* 导出start */
 var doExport = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
-    if(row) {
 		if (navigator.cookieEnabled) {
 			$('#ezuiBtn_export').linkbutton('disable');
 			//--导出Excel
 			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
             var token = new Date().getTime();
             var param = new HashMap();
+			param.put("customerid", $('#customerid').val());
+			param.put("soreference1", $('#soreference1').val());
+			param.put("soreference2", $('#soreference2').val());
+			param.put("cContact", $('#cContact').val());
+			param.put("psName", $("#toolbar #productLineOrder").combobox('getText'));
+			param.put("cAddress1", $('#cAddress1').val());
+			param.put("orderStatusName", $('#sostatus').combobox('getValue'));
+			param.put("sostatusTo", $('#sostatusTo').combobox('getValue'));
+			param.put("ordertime",$('#ordertime').datetimebox('getValue'));
+			param.put("ordertimeTo", $('#ordertimeTo').datetimebox('getValue'));
+			param.put("edittime", $('#edittime').datetimebox('getValue'));
+			param.put("edittimeTo", $('#edittimeTo').datetimebox('getValue'));
+			param.put("orderTypeName", $('#ordertype').combobox('getValue'));
+			param.put("releasestatus", $('#releasestatus').combobox('getValue'));
+			param.put("sostatusCheck", $('#sostatusCheck').is(':checked') == true ? "Y" : "N");
             param.put("token", token);
             var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
 			downloadCheckTimer = window.setInterval(function () {
@@ -1234,12 +1246,7 @@ var doExport = function(){
 				title: "<spring:message code='common.message.prompt'/>"
 			});
 		}
-		;
-	}else{
-			$.messager.show({
-				msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-			});
-		}
+
 };
 /* 导出end */
 
@@ -2529,8 +2536,13 @@ var writeBackExpressBtnCommit = function(){
 																																required:true,
 																																showSeconds:false,
 																																value:ordertimeDateTo(new Date())"/></td>
-							<th colspan="2" style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick="" checked="checked"><label for="sostatusCheck">显示完成/取消订单</label></th>
-							<td colspan="2">
+							<th>订单发运时间</th><td><input type='text' id='edittime' class='easyui-datetimebox' size='16' data-options=""/></td>
+							<th>至</th><td><input type='text' id='edittimeTo' class='easyui-datetimebox' size='16' data-options=""/></td>
+							<th style="text-align: left"><input id="sostatusCheck" type="checkbox" onclick="" checked="checked"><label for="sostatusCheck">显示完成/取消订单</label></th>
+
+						</tr>
+						<tr>
+							<td colspan="4" style="text-align: right">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
