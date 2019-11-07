@@ -1228,7 +1228,6 @@ public class OrderHeaderForNormalService extends BaseService {
                 docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
                 //有效期/失效期
                 docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
-
                 //产品名称
                 docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
                 //注册证号/备案凭证书

@@ -17,7 +17,6 @@ import com.wms.utils.exception.ExcelException;
 import com.wms.vo.ActAllocationDetailsVO;
 import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
-import com.wms.vo.form.DocOrderHeaderExportForm;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -423,7 +422,7 @@ public class DocOrderHeaderController {
     //导出Excel格式所有信息
     @Login
     @RequestMapping(params = "exportOrderNoToExcel1")
-    public void exportOrderDataToExcel1(HttpServletResponse response,DocOrderHeaderExportForm from) throws UnsupportedEncodingException, ExcelException {
+    public void exportOrderDataToExcel1(HttpServletResponse response,OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
         docOrderExportService.docOrderToExcel1(response,from);
     }
 

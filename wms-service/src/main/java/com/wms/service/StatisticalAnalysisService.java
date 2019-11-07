@@ -376,8 +376,9 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<RptOrderPackingcartonByOrderNo> rptOrderPackingcartonByOrderNoList= statisticalAnalysisMybatisDao.queryOrderPackingcartonByOrderNo(mybatisCriteria);
 		for (RptOrderPackingcartonByOrderNo s: rptOrderPackingcartonByOrderNoList) {
- //计算数量
+ 			//计算数量
 			s.setQtyEach(s.getQty() * s.getQty1());
+			s.setTraceid1(s.getTraceid().substring(5,10)+s.getTraceid().substring(11,14));
 		}
 		datagrid.setTotal((long) statisticalAnalysisMybatisDao.queryOrderPackingcartonByOrderNoCount(mybatisCriteria));
 		datagrid.setRows(rptOrderPackingcartonByOrderNoList);

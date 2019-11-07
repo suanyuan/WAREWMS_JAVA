@@ -1,7 +1,7 @@
 <%@ page language='java' pageEncoding='UTF-8'%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
-<div id='ezuiDialog' class='easyui-dialog' style='padding: 10px;'>
+<div id='ezuiDialog' class='easyui-dialog' style='height: 100%; width: 100%;'>
 	<form id='ezuiForm' method='post' >
 		<input type='hidden' id='docOrderHeaderId' name='docOrderHeaderId'/>
 		<fieldset>
@@ -91,7 +91,7 @@
 			</table>
 		</fieldset>
 	</form>
-	<div class="easyui-tabs" style="width:950px;height:200px">
+	<div class="easyui-tabs" style="width:100%">
 		<div title="出库明细" style="padding:3px">
 			<table id='ezuiDetailsDatagrid'></table>
 		</div>

@@ -46,7 +46,18 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String edittime;
     //订单发运时间    结束时间
     private String edittimeTo;
+    //导出类型
+    private String outtype;
     private String token;
+
+
+    public String getOuttype() {
+        return outtype;
+    }
+
+    public void setOuttype(String outtype) {
+        this.outtype = outtype;
+    }
 
     public String getToken() {
         return token;
