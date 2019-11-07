@@ -682,7 +682,425 @@ where 1=1
 	</if>
 </trim>
 </sql>
+	<!-- 预期到货主界面  分页模糊查询条件  -->
+	<sql id="Example_Where_Clause_Main">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.asnstatusCheck != null and condition.asnstatusCheck != ''" >
+				<if test="condition.asnstatusCheck eq 'N'.toString() " >
+					and asnstatus not in ('90','99')
+				</if>
+			</if>
+			<if test="condition.actualarrivetime != null and condition.actualarrivetime != ''" >
+				and actualarrivetime =  #{condition.actualarrivetime}
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and addwho like CONCAT('%',#{condition.addwho},'%')
+			</if>
+			<if test="condition.archiveflag != null and condition.archiveflag != ''" >
+				and archiveflag =  #{condition.archiveflag}
+			</if>
+			<if test="condition.asncreationtime != null and condition.asncreationtime != ''" >
+				and asncreationtime =  #{condition.asncreationtime}
+			</if>
+			<if test="condition.asnno != null and condition.asnno != ''" >
+				and asnno like CONCAT('%',#{condition.asnno},'%')
+			</if>
+			<if test="condition.asnreference1 != null and condition.asnreference1 != ''" >
+				and asnreference1 like CONCAT('%',#{condition.asnreference1},'%')
+			</if>
+			<if test="condition.asnreference2 != null and condition.asnreference2 != ''" >
+				and asnreference2 like CONCAT('%',#{condition.asnreference2},'%')
+			</if>
+			<if test="condition.asnreference3 != null and condition.asnreference3 != ''" >
+				and asnreference3 =  #{condition.asnreference3}
+			</if>
+			<if test="condition.asnreference4 != null and condition.asnreference4 != ''" >
+				and asnreference4 =  #{condition.asnreference4}
+			</if>
+			<if test="condition.asnreference5 != null and condition.asnreference5 != ''" >
+				and asnreference5 =  #{condition.asnreference5}
+			</if>
 
+			<if test="condition.asnstatus != null and condition.asnstatus != '' and condition.userdefinea != null and condition.userdefinea != ''" >
+				and asnstatus between #{condition.asnstatus} and #{condition.userdefinea}
+			</if>
+
+			<if test="condition.asntype != null and condition.asntype != ''" >
+				and asntype =  #{condition.asntype}
+			</if>
+			<if test="condition.asnPrintFlag != null and condition.asnPrintFlag != ''" >
+				and asn_print_flag =  #{condition.asnPrintFlag}
+			</if>
+			<if test="condition.billingclassGroup != null and condition.billingclassGroup != ''" >
+				and billingclass_group =  #{condition.billingclassGroup}
+			</if>
+			<if test="condition.billingid != null and condition.billingid != ''" >
+				and billingid =  #{condition.billingid}
+			</if>
+			<if test="condition.billingname != null and condition.billingname != ''" >
+				and billingname =  #{condition.billingname}
+			</if>
+			<if test="condition.bytraceFlag != null and condition.bytraceFlag != ''" >
+				and bytrace_flag =  #{condition.bytraceFlag}
+			</if>
+			<if test="condition.bAddress1 != null and condition.bAddress1 != ''" >
+				and b_address1 =  #{condition.bAddress1}
+			</if>
+			<if test="condition.bAddress2 != null and condition.bAddress2 != ''" >
+				and b_address2 =  #{condition.bAddress2}
+			</if>
+			<if test="condition.bAddress3 != null and condition.bAddress3 != ''" >
+				and b_address3 =  #{condition.bAddress3}
+			</if>
+			<if test="condition.bAddress4 != null and condition.bAddress4 != ''" >
+				and b_address4 =  #{condition.bAddress4}
+			</if>
+			<if test="condition.bCity != null and condition.bCity != ''" >
+				and b_city =  #{condition.bCity}
+			</if>
+			<if test="condition.bContact != null and condition.bContact != ''" >
+				and b_contact =  #{condition.bContact}
+			</if>
+			<if test="condition.bCountry != null and condition.bCountry != ''" >
+				and b_country =  #{condition.bCountry}
+			</if>
+			<if test="condition.bFax != null and condition.bFax != ''" >
+				and b_fax =  #{condition.bFax}
+			</if>
+			<if test="condition.bMail != null and condition.bMail != ''" >
+				and b_mail =  #{condition.bMail}
+			</if>
+			<if test="condition.bProvince != null and condition.bProvince != ''" >
+				and b_province =  #{condition.bProvince}
+			</if>
+			<if test="condition.bTel1 != null and condition.bTel1 != ''" >
+				and b_tel1 =  #{condition.bTel1}
+			</if>
+			<if test="condition.bTel2 != null and condition.bTel2 != ''" >
+				and b_tel2 =  #{condition.bTel2}
+			</if>
+			<if test="condition.bZip != null and condition.bZip != ''" >
+				and b_zip =  #{condition.bZip}
+			</if>
+			<if test="condition.carrieraddress1 != null and condition.carrieraddress1 != ''" >
+				and carrieraddress1 =  #{condition.carrieraddress1}
+			</if>
+			<if test="condition.carrieraddress2 != null and condition.carrieraddress2 != ''" >
+				and carrieraddress2 =  #{condition.carrieraddress2}
+			</if>
+			<if test="condition.carrieraddress3 != null and condition.carrieraddress3 != ''" >
+				and carrieraddress3 =  #{condition.carrieraddress3}
+			</if>
+			<if test="condition.carrieraddress4 != null and condition.carrieraddress4 != ''" >
+				and carrieraddress4 =  #{condition.carrieraddress4}
+			</if>
+			<if test="condition.carriercity != null and condition.carriercity != ''" >
+				and carriercity =  #{condition.carriercity}
+			</if>
+			<if test="condition.carriercontact != null and condition.carriercontact != ''" >
+				and carriercontact =  #{condition.carriercontact}
+			</if>
+			<if test="condition.carriercountry != null and condition.carriercountry != ''" >
+				and carriercountry =  #{condition.carriercountry}
+			</if>
+			<if test="condition.carrierfax != null and condition.carrierfax != ''" >
+				and carrierfax =  #{condition.carrierfax}
+			</if>
+			<if test="condition.carrierid != null and condition.carrierid != ''" >
+				and carrierid =  #{condition.carrierid}
+			</if>
+			<if test="condition.carriermail != null and condition.carriermail != ''" >
+				and carriermail =  #{condition.carriermail}
+			</if>
+			<if test="condition.carriername != null and condition.carriername != ''" >
+				and carriername =  #{condition.carriername}
+			</if>
+			<if test="condition.carrierprovince != null and condition.carrierprovince != ''" >
+				and carrierprovince =  #{condition.carrierprovince}
+			</if>
+			<if test="condition.carriertel1 != null and condition.carriertel1 != ''" >
+				and carriertel1 =  #{condition.carriertel1}
+			</if>
+			<if test="condition.carriertel2 != null and condition.carriertel2 != ''" >
+				and carriertel2 =  #{condition.carriertel2}
+			</if>
+			<if test="condition.carrierzip != null and condition.carrierzip != ''" >
+				and carrierzip =  #{condition.carrierzip}
+			</if>
+			<if test="condition.countryofdestination != null and condition.countryofdestination != ''" >
+				and countryofdestination =  #{condition.countryofdestination}
+			</if>
+			<if test="condition.countryoforigin != null and condition.countryoforigin != ''" >
+				and countryoforigin =  #{condition.countryoforigin}
+			</if>
+			<if test="condition.createsource != null and condition.createsource != ''" >
+				and createsource =  #{condition.createsource}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid =  #{condition.customerid}
+			</if>
+			<if test="condition.deliveryterms != null and condition.deliveryterms != ''" >
+				and deliveryterms =  #{condition.deliveryterms}
+			</if>
+			<if test="condition.deliverytermsdescr != null and condition.deliverytermsdescr != ''" >
+				and deliverytermsdescr =  #{condition.deliverytermsdescr}
+			</if>
+			<if test="condition.deliveryvehicleno != null and condition.deliveryvehicleno != ''" >
+				and deliveryvehicleno =  #{condition.deliveryvehicleno}
+			</if>
+			<if test="condition.deliveryvehicletype != null and condition.deliveryvehicletype != ''" >
+				and deliveryvehicletype =  #{condition.deliveryvehicletype}
+			</if>
+			<if test="condition.door != null and condition.door != ''" >
+				and door =  #{condition.door}
+			</if>
+			<if test="condition.driver != null and condition.driver != ''" >
+				and driver =  #{condition.driver}
+			</if>
+			<if test="condition.edisendflag != null and condition.edisendflag != ''" >
+				and edisendflag =  #{condition.edisendflag}
+			</if>
+			<if test="condition.edisendtime != null and condition.edisendtime != ''" >
+				and edisendtime =  #{condition.edisendtime}
+			</if>
+			<if test="condition.edisendtime2 != null and condition.edisendtime2 != ''" >
+				and edisendtime2 =  #{condition.edisendtime2}
+			</if>
+			<if test="condition.edisendtime3 != null and condition.edisendtime3 != ''" >
+				and edisendtime3 =  #{condition.edisendtime3}
+			</if>
+			<if test="condition.edisendtime4 != null and condition.edisendtime4 != ''" >
+				and edisendtime4 =  #{condition.edisendtime4}
+			</if>
+			<if test="condition.edittime != null and condition.edittime != ''" >
+				and edittime =  #{condition.edittime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.followup != null and condition.followup != ''" >
+				and followup =  #{condition.followup}
+			</if>
+			<if test="condition.hEdi01 != null and condition.hEdi01 != ''" >
+				and h_edi_01 =  #{condition.hEdi01}
+			</if>
+			<if test="condition.hEdi02 != null and condition.hEdi02 != ''" >
+				and h_edi_02 =  #{condition.hEdi02}
+			</if>
+			<if test="condition.hEdi03 != null and condition.hEdi03 != ''" >
+				and h_edi_03 =  #{condition.hEdi03}
+			</if>
+			<if test="condition.hEdi04 != null and condition.hEdi04 != ''" >
+				and h_edi_04 =  #{condition.hEdi04}
+			</if>
+			<if test="condition.hEdi05 != null and condition.hEdi05 != ''" >
+				and h_edi_05 =  #{condition.hEdi05}
+			</if>
+			<if test="condition.hEdi06 != null and condition.hEdi06 != ''" >
+				and h_edi_06 =  #{condition.hEdi06}
+			</if>
+			<if test="condition.hEdi07 != null and condition.hEdi07 != ''" >
+				and h_edi_07 =  #{condition.hEdi07}
+			</if>
+			<if test="condition.hEdi08 != null and condition.hEdi08 != ''" >
+				and h_edi_08 =  #{condition.hEdi08}
+			</if>
+			<if test="condition.hEdi09 != null and condition.hEdi09 != ''" >
+				and h_edi_09 =  #{condition.hEdi09}
+			</if>
+			<if test="condition.hEdi10 != null and condition.hEdi10 != ''" >
+				and h_edi_10 =  #{condition.hEdi10}
+			</if>
+			<if test="condition.hEdi11 != null and condition.hEdi11 != ''" >
+				and h_edi_11 =  #{condition.hEdi11}
+			</if>
+			<if test="condition.issuepartyid != null and condition.issuepartyid != ''" >
+				and issuepartyid =  #{condition.issuepartyid}
+			</if>
+			<if test="condition.issuepartyname != null and condition.issuepartyname != ''" >
+				and issuepartyname =  #{condition.issuepartyname}
+			</if>
+			<if test="condition.iAddress1 != null and condition.iAddress1 != ''" >
+				and i_address1 =  #{condition.iAddress1}
+			</if>
+			<if test="condition.iAddress2 != null and condition.iAddress2 != ''" >
+				and i_address2 =  #{condition.iAddress2}
+			</if>
+			<if test="condition.iAddress3 != null and condition.iAddress3 != ''" >
+				and i_address3 =  #{condition.iAddress3}
+			</if>
+			<if test="condition.iAddress4 != null and condition.iAddress4 != ''" >
+				and i_address4 =  #{condition.iAddress4}
+			</if>
+			<if test="condition.iCity != null and condition.iCity != ''" >
+				and i_city =  #{condition.iCity}
+			</if>
+			<if test="condition.iContact != null and condition.iContact != ''" >
+				and i_contact =  #{condition.iContact}
+			</if>
+			<if test="condition.iCountry != null and condition.iCountry != ''" >
+				and i_country =  #{condition.iCountry}
+			</if>
+			<if test="condition.iFax != null and condition.iFax != ''" >
+				and i_fax =  #{condition.iFax}
+			</if>
+			<if test="condition.iMail != null and condition.iMail != ''" >
+				and i_mail =  #{condition.iMail}
+			</if>
+			<if test="condition.iProvince != null and condition.iProvince != ''" >
+				and i_province =  #{condition.iProvince}
+			</if>
+			<if test="condition.iTel1 != null and condition.iTel1 != ''" >
+				and i_tel1 =  #{condition.iTel1}
+			</if>
+			<if test="condition.iTel2 != null and condition.iTel2 != ''" >
+				and i_tel2 =  #{condition.iTel2}
+			</if>
+			<if test="condition.iZip != null and condition.iZip != ''" >
+				and i_zip =  #{condition.iZip}
+			</if>
+			<if test="condition.lastreceivingtime != null and condition.lastreceivingtime != ''" >
+				and lastreceivingtime =  #{condition.lastreceivingtime}
+			</if>
+			<if test="condition.medicalxmltime != null and condition.medicalxmltime != ''" >
+				and medicalxmltime =  #{condition.medicalxmltime}
+			</if>
+			<if test="condition.notes != null and condition.notes != ''" >
+				and notes  like CONCAT('%',#{condition.notes},'%')
+			</if>
+			<if test="condition.packmaterialconsume != null and condition.packmaterialconsume != ''" >
+				and packmaterialconsume =  #{condition.packmaterialconsume}
+			</if>
+			<if test="condition.paymentterms != null and condition.paymentterms != ''" >
+				and paymentterms =  #{condition.paymentterms}
+			</if>
+			<if test="condition.paymenttermsdescr != null and condition.paymenttermsdescr != ''" >
+				and paymenttermsdescr =  #{condition.paymenttermsdescr}
+			</if>
+			<if test="condition.placeofdelivery != null and condition.placeofdelivery != ''" >
+				and placeofdelivery =  #{condition.placeofdelivery}
+			</if>
+			<if test="condition.placeofdischarge != null and condition.placeofdischarge != ''" >
+				and placeofdischarge =  #{condition.placeofdischarge}
+			</if>
+			<if test="condition.placeofloading != null and condition.placeofloading != ''" >
+				and placeofloading =  #{condition.placeofloading}
+			</if>
+			<if test="condition.pono != null and condition.pono != ''" >
+				and pono =  #{condition.pono}
+			</if>
+			<if test="condition.priority != null and condition.priority != ''" >
+				and priority =  #{condition.priority}
+			</if>
+			<if test="condition.qcstatus != null and condition.qcstatus != ''" >
+				and qcstatus =  #{condition.qcstatus}
+			</if>
+			<if test="condition.receiveid != null and condition.receiveid != ''" >
+				and receiveid =  #{condition.receiveid}
+			</if>
+			<if test="condition.releasestatus != null and condition.releasestatus != ''" >
+				and releasestatus =  #{condition.releasestatus}
+			</if>
+			<if test="condition.reserveFlag != null and condition.reserveFlag != ''" >
+				and reserve_flag =  #{condition.reserveFlag}
+			</if>
+			<if test="condition.returnPrintFlag != null and condition.returnPrintFlag != ''" >
+				and return_print_flag =  #{condition.returnPrintFlag}
+			</if>
+			<if test="condition.serialnocatch != null and condition.serialnocatch != ''" >
+				and serialnocatch =  #{condition.serialnocatch}
+			</if>
+			<if test="condition.supplierid != null and condition.supplierid != ''" >
+				and supplierid =  #{condition.supplierid}
+			</if>
+			<if test="condition.supplierAddress1 != null and condition.supplierAddress1 != ''" >
+				and supplier_address1 =  #{condition.supplierAddress1}
+			</if>
+			<if test="condition.supplierAddress2 != null and condition.supplierAddress2 != ''" >
+				and supplier_address2 =  #{condition.supplierAddress2}
+			</if>
+			<if test="condition.supplierAddress3 != null and condition.supplierAddress3 != ''" >
+				and supplier_address3 =  #{condition.supplierAddress3}
+			</if>
+			<if test="condition.supplierAddress4 != null and condition.supplierAddress4 != ''" >
+				and supplier_address4 =  #{condition.supplierAddress4}
+			</if>
+			<if test="condition.supplierCity != null and condition.supplierCity != ''" >
+				and supplier_city =  #{condition.supplierCity}
+			</if>
+			<if test="condition.supplierContact != null and condition.supplierContact != ''" >
+				and supplier_contact =  #{condition.supplierContact}
+			</if>
+			<if test="condition.supplierCountry != null and condition.supplierCountry != ''" >
+				and supplier_country =  #{condition.supplierCountry}
+			</if>
+			<if test="condition.supplierFax != null and condition.supplierFax != ''" >
+				and supplier_fax =  #{condition.supplierFax}
+			</if>
+			<if test="condition.supplierMail != null and condition.supplierMail != ''" >
+				and supplier_mail =  #{condition.supplierMail}
+			</if>
+			<if test="condition.supplierName != null and condition.supplierName != ''" >
+				and supplier_name =  #{condition.supplierName}
+			</if>
+			<if test="condition.supplierProvince != null and condition.supplierProvince != ''" >
+				and supplier_province =  #{condition.supplierProvince}
+			</if>
+			<if test="condition.supplierTel1 != null and condition.supplierTel1 != ''" >
+				and supplier_tel1 =  #{condition.supplierTel1}
+			</if>
+			<if test="condition.supplierTel2 != null and condition.supplierTel2 != ''" >
+				and supplier_tel2 =  #{condition.supplierTel2}
+			</if>
+			<if test="condition.supplierZip != null and condition.supplierZip != ''" >
+				and supplier_zip =  #{condition.supplierZip}
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.userdefine6 != null and condition.userdefine6 != ''" >
+				and userdefine6 =  #{condition.userdefine6}
+			</if>
+
+			<if test="condition.userdefineb != null and condition.userdefineb != ''" >
+				and userdefineb =  #{condition.userdefineb}
+			</if>
+			<if test="condition.warehouseid != null and condition.warehouseid != ''" >
+				and warehouseid =  #{condition.warehouseid}
+			</if>
+			<if test="condition.zonegroup != null and condition.zonegroup != ''" >
+				and zonegroup =  #{condition.zonegroup}
+			</if>
+			<if test="condition.addtime != null and condition.edisendtime5 != null" >
+				and addtime between #{condition.addtime} and #{condition.edisendtime5}
+			</if>
+			<if test="condition.expectedarrivetime1 != null and condition.expectedarrivetime2 != null" >
+				and expectedarrivetime1 between #{condition.expectedarrivetime1} and #{condition.expectedarrivetime2}
+			</if>
+			<if test="condition.customerSet != null" >
+				<if test="condition.customerSet.isEmpty() == false" >
+					and customerid in (
+					<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+						#{customerSet.id,jdbcType=VARCHAR}
+					</foreach>
+					)
+				</if>
+			</if>
+		</trim>
+	</sql>
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -1242,8 +1660,26 @@ insert into doc_asn_header
 
 <!--订单列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Doc_Asn_Header
-	<include refid="Example_Where_Clause"/>
+	select count(1) from (
+	select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, (@rowNum :=@rowNum + 1) as row_num
+	from (select
+	<include refid="Base_Column_List"/>
+	from Doc_Asn_Header
+	<include refid="Example_Where_Clause_Main"/>
+	) as a,
+	Bas_Codes b,
+	Bas_Codes c,
+	Bas_Codes d,
+	(SELECT(@rowNum := 0)) e
+	where a.asnstatus = b.code
+	and b.codeid = 'ASN_STS'
+	and a.asntype = c.code
+	and c.codeid = 'ASN_TYP'
+	and a.releasestatus = d.code
+	and d.codeid = 'RLS_STS'
+	) as t
+	left join (select * from doc_asn_details where asnlineno=1) detail on t.asnno = detail.asnno
+	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
 </select>
 
 <!-- 查询入库单管理列表 -->
@@ -1253,7 +1689,7 @@ insert into doc_asn_header
 	from (select
 	<include refid="Base_Column_List"/>
 	from Doc_Asn_Header
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause_Main"/>
 	) as a,
     Bas_Codes b,
     Bas_Codes c,

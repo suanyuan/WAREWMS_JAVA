@@ -448,10 +448,10 @@ var ezuiToolbarClear = function(){
 	$('#edisendtime5').datetimebox('clear');
 	$('#addwho').textbox('clear');
 	$("#asnstatusCheck").attr("checked",false);
-    $('#addwho').textbox('clear');
-    $('#customerid').textbox('clear');
     $('#productId').textbox('clear');
     $('#supplierId').textbox('clear');
+    $('#notes').textbox('clear');
+    $('#warehouseId').textbox('clear');
 };
 
 /* 新增按钮 */
@@ -838,7 +838,7 @@ var doSearch = function(){
 		customerid : $('#customerid').val(),
 		asnno : $('#asnno').val(),
 		releasestatus : $('#releasestatus').combobox('getValue'),
-		asnstatus : $('#asnstatus').combobox('getValue'),
+        asnstatus : $('#asnstatus').combobox('getValue'),
 		userdefinea : $('#userdefinea').combobox('getValue'),
 		asntype : $('#asntype').combobox('getValue'),
 		asnreference1 : $('#asnreference1').val(),
@@ -849,7 +849,13 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
-		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
+		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N",
+        supplierid:$('#supplierId').val(),
+        notes:$('#notes').val(),
+        warehouseid:$('#warehouseId').combobox('getValue'),
+
+        productId:$('#productId').val(),
+
 	});
 };
 
