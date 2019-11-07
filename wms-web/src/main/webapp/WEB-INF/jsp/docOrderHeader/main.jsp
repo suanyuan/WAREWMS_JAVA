@@ -1243,6 +1243,44 @@ var doExport = function(){
 };
 /* 导出end */
 
+/* 导出start */
+var doExportGoodsList = function(){
+	var row = ezuiDatagrid.datagrid('getSelected');
+	if(row) {
+		if (navigator.cookieEnabled) {
+			$('#ezuiBtn_export_goods_list').linkbutton('disable');
+			//--导出Excel
+			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
+			var token = new Date().getTime();
+			var param = new HashMap();
+			param.put("token", token);
+			var orderno = row.orderno;
+			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportAccompanyingExcel&orderno=" + orderno);
+			downloadCheckTimer = window.setInterval(function () {
+				window.clearInterval(downloadCheckTimer);
+				// $('#' + formId).remove();
+				$('#ezuiBtn_export_goods_list').linkbutton('enable');
+				$.messager.progress('close');
+				$.messager.show({
+					msg: "<spring:message code='common.message.export.success'/>",
+					title: "<spring:message code='common.message.prompt'/>"
+				});
+			}, 1000);
+		} else {
+			$.messager.show({
+				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
+				title: "<spring:message code='common.message.prompt'/>"
+			});
+		}
+		;
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+};
+/* 导出end */
+
 /* 导入start */
 var commitImportData = function(obj){
 	ezuiImportDataForm.form('submit', {
@@ -2496,6 +2534,7 @@ var writeBackExpressBtnCommit = function(){
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+								<a onclick='doExportGoodsList();' id='ezuiBtn_export_goods_list' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出随货</a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 								<a onclick='doExportOrderNo();' id='ezuiBtn_exportOerderNo' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出序列号记录</a>
 

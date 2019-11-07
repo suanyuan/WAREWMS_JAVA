@@ -406,6 +406,9 @@ public class OrderHeaderForNormalService extends BaseService {
         Json json = fixLLPackage(orderNo);
         if (!json.isSuccess()) return json;
 
+        json = validateShipment(orderNo, false);
+        if (!json.isSuccess()) return json;
+
         //
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -637,7 +640,8 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
 
-        Json json = validateShipment(orderHeaderForNormalForm.getOrderno());
+        Json json = validateShipment(orderHeaderForNormalForm.getOrderno(), true);
+        if (!json.isSuccess()) return json;
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
@@ -701,10 +705,11 @@ public class OrderHeaderForNormalService extends BaseService {
      * 验证单据是否可以发运
      * 1，需要记录序列号出库的产品没有记录的不能发运
      */
-    private Json validateShipment(String orderno) {
+    private Json validateShipment(String orderno, boolean isshipment) {
 
         int count = orderDetailsForNormalMybatisDao.findSerialNumRecordRequired(orderno);
         if (count > 0) {
+            if (!isshipment) return Json.error("此出库单中包含了需要扫码记录序列号的产品，不可一键复核");
 
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             DocSerialNumRecord recordQuery = new DocSerialNumRecord();
@@ -735,7 +740,7 @@ public class OrderHeaderForNormalService extends BaseService {
         basCodesQuery.setCode("SF");
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
         //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        // TODO 目前只开放嘉事国润的顺丰下单功能
+        // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能
         if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid())) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
@@ -1221,6 +1226,9 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
                 //生产日期
                 docOrderDetail.setLotatt01(invLotAtt.getLotatt01());
+                //有效期/失效期
+                docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
+
                 //产品名称
                 docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
                 //注册证号/备案凭证书
@@ -1231,8 +1239,6 @@ public class OrderHeaderForNormalService extends BaseService {
                 docOrderDetail.setLotatt05(invLotAtt.getLotatt05());
                 //灭菌批号
                 docOrderDetail.setLotatt07(invLotAtt.getLotatt07());
-                //有效期/失效期
-                docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
                 //生产企业
                 docOrderDetail.setLotatt15(invLotAtt.getLotatt15() + "/" + StringUtil.fixNull(basSku1.getReservedfield06()));
             }
