@@ -1685,22 +1685,22 @@ insert into doc_asn_header
 <!-- 查询入库单管理列表 -->
 <select id="queryByPageList" resultMap="DocAsnHeaderMap"  parameterType="Object">
 	select t.*,sku.reservedfield07 from (
-	select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, (@rowNum :=@rowNum + 1) as row_num
-	from (select
-	<include refid="Base_Column_List"/>
-	from Doc_Asn_Header
-	<include refid="Example_Where_Clause_Main"/>
-	) as a,
-    Bas_Codes b,
-    Bas_Codes c,
-    Bas_Codes d,
-    (SELECT(@rowNum := 0)) e
-	where a.asnstatus = b.code
-    and b.codeid = 'ASN_STS'
-    and a.asntype = c.code
-    and c.codeid = 'ASN_TYP'
-    and a.releasestatus = d.code
-	and d.codeid = 'RLS_STS'
+		select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, (@rowNum :=@rowNum + 1) as row_num
+		from (select
+				<include refid="Base_Column_List"/>
+				from Doc_Asn_Header
+				<include refid="Example_Where_Clause_Main"/>
+			) as a,
+		Bas_Codes b,
+		Bas_Codes c,
+		Bas_Codes d,
+		(SELECT(@rowNum := 0)) e
+		where a.asnstatus = b.code
+		and b.codeid = 'ASN_STS'
+		and a.asntype = c.code
+		and c.codeid = 'ASN_TYP'
+		and a.releasestatus = d.code
+		and d.codeid = 'RLS_STS'
 	) as t
 	left join (select * from doc_asn_details where asnlineno=1) detail on t.asnno = detail.asnno
 	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
