@@ -1135,12 +1135,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 } else {
                     docOrderDetail.setReport("否");
                 }
-
             }
 
-
             //库位
-            docOrderDetail.getLocation();
+            docOrderDetail.getAlocation();
             a = a + docOrderDetail.getQty(); //件数
             b = b + docOrderDetail.getQtyeach();  //数量
             docOrderDetail.setQtyorderedEachSum(b);//数量和
@@ -1294,7 +1292,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //运输条件
             docOrderDetail.setSkugroup5(basSku1.getSkuGroup5());
 
-            docOrderDetail.getLocation();//库位
+            docOrderDetail.getAlocation();//库位
             docOrderDetail.getQty(); //件数
             docOrderDetail.getQtyeach(); //数量
             a = a + docOrderDetail.getQty(); //件数
