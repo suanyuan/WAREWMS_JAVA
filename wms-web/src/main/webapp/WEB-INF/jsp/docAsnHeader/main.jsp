@@ -194,7 +194,7 @@ $(function() {
 		},
 		onLoadSuccess:function(data){
 			$(this).datagrid('unselectAll');
-			$(this).datagrid("resize",{height:200});
+			$(this).datagrid("resize",{height:300});
 		}
 	});
     /* 收货明细列表*/

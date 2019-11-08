@@ -34,18 +34,18 @@
                     <th>入库单状态</th>
                     <td><input type='text' id='asnstatus' name='asnstatus' class='easyui-combobox' size='16'
                                data-options="panelHeight: 'auto',
-																														editable: false,
-																														url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
-																														valueField: 'id',
-																														textField: 'value'"/>
+                                                                                                            editable: false,
+                                                                                                            url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
+                                                                                                            valueField: 'id',
+                                                                                                            textField: 'value'"/>
                     </td>
                     <th>释放状态</th>
                     <td><input type='text' id='releasestatus' name='releasestatus' class='easyui-combobox' size='16'
                                data-options="panelHeight: 'auto',
-																												editable: false,
-																												url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
-																												valueField: 'id',
-																												textField: 'value'"/>
+                                                                                                            editable: false,
+                                                                                                            url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
+                                                                                                            valueField: 'id',
+                                                                                                            textField: 'value'"/>
                     </td>
                     <th>入库单类型</th>
                     <td><input type='text' id='asntype' name='asntype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',

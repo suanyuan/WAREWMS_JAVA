@@ -750,7 +750,7 @@ var ezuiAccToolbarClear = function () {
 /* 单号选择弹框 */
 var ezuiAccDataClick = function () {
 	ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
-		url: '<c:url value="/docQcHeaderController.do?showDatagrid"/>',
+		url: '<c:url value="/docQcHeaderController.do?showDatagrid1"/>',
 		method: 'POST',
 		toolbar: '#ezuiAccToolbar',
 		pageSize: 50,
@@ -767,7 +767,7 @@ var ezuiAccDataClick = function () {
 		columns: [[
 			{field: 'pano', title: '上架单号', width: 80},
 			{field: 'qcno', title: '验收单号', width: 100},
-            // {field: 'asnreference1',		title: '客户订单号',	width: 134 },
+            {field: 'asnreference1',		title: '客户订单号',	width: 134 },
 			{field: 'qcstatus', title: '验收状态', width: 100,formatter:AcceptancestatusFormatter},
 
 			{field: 'customerid', title: '货主代码', width: 100}
