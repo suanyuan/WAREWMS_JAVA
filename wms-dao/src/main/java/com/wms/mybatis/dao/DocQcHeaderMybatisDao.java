@@ -30,6 +30,8 @@ public interface DocQcHeaderMybatisDao extends BaseDao {
 
     DocQcHeader queryByPano(@Param("pano") String pano);
 
-
+    //查询验收头档列表 加客户订单号字段
     public <T> List<T> queryByList1(MybatisCriteria criteria);//总查询不分页，一般导出时使用
+    public int queryByCount1(MybatisCriteria criteria);
+
 }

@@ -94,7 +94,7 @@ public class DocQcHeaderService extends BaseService {
             BeanUtils.copyProperties(docPaDetails, docQcHeaderVO);
             docQcHeaderVOList.add(docQcHeaderVO);
         }
-        datagrid.setTotal((long) docQcHeaderMybatisDao.queryByCount(mybatisCriteria));
+        datagrid.setTotal((long) docQcHeaderMybatisDao.queryByCount1(mybatisCriteria));
         datagrid.setRows(docQcHeaderVOList);
         return datagrid;
     }

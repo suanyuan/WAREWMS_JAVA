@@ -123,7 +123,7 @@ where 1=1
 		<trim  suffixOverrides="," >
 
 			<if test="condition.asnreference1 != null and condition.asnreference1 != ''" >
-				and t4.asnreference1 like concat('%',#{condition.asnreference1},'%')
+				and t3.asnreference1 like concat('%',#{condition.asnreference1},'%')
 			</if>
 			<if test="condition.qcno != null and condition.qcno != ''" >
 				and t1.qcno like concat('%',#{condition.qcno},'%')
@@ -314,16 +314,24 @@ where 1=1
 	<!-- 查询验收头档列表 加客户订单号字段 -->
 	<select id="queryByList1" resultMap="BaseResultMap"  parameterType="Object">
 
-		select t1.*,t4.asnreference1 from doc_qc_header t1
-		left JOIN doc_qc_details t2 on t2.qcno = t1.qcno
-		LEFT JOIN doc_pa_details t3 on (t3.PANO = t1.pano and t3.PALINENO = t2.palineno)
-		LEFT JOIN doc_asn_header t4 on t4.asnno = t3.ASNNO
+
+		select t1.*,t3.asnreference1 from doc_qc_header t1
+		left JOIN doc_pa_header t2 on t2.PANO = t1.pano
+		LEFT JOIN doc_asn_header t3 on t3.asnno = t2.ASNNO
 		<include refid="Example_Where_Clause_Type"/>
 		order by  qcstatus
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
 	</select>
+    <!-- 查询验收头档列表 加客户订单号字段 列表总数-->
+    <select id="queryByCount1" resultType="java.lang.Integer"  parameterType="Object">
+        select count(1) from doc_qc_header t1
+        left JOIN doc_pa_header t2 on t2.PANO = t1.pano
+        LEFT JOIN doc_asn_header t3 on t3.asnno = t2.ASNNO
+        <include refid="Example_Where_Clause_Type"/>
+    </select>
+
 
     <!-- 查询未完成列表-->
     <select id="queryUndoneList" resultMap="BaseResultMap" parameterType="java.util.Map">
