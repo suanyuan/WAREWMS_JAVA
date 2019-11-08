@@ -2381,7 +2381,7 @@ var writeBackExpress = function(){
     <%--}--%>
 }
 //提交回写快递单号/签回单号
-var Commit = function(){
+var writeBackExpressBtnCommit = function(){
     url = '<c:url value="/docOrderHeaderController.do?writeBackExpressBtnCommit"/>';
     var row = ezuiDatagrid.datagrid('getSelected');
     var msg='';

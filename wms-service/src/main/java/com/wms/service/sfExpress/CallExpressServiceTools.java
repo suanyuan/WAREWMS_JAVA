@@ -13,7 +13,7 @@ public class CallExpressServiceTools {
 
     public static final String REQUEST_URL = "http://bsp-oisp.sf-express.com/bsp-oisp/sfexpressService";
 
-    //效验码
+    //校验码
     public static final String CHECKWORD = "Ixi8k5Icv21UucHiZy7a627vO4NATqSm";
     //月卡号
     public static final String CUST_ID = "0213071013";

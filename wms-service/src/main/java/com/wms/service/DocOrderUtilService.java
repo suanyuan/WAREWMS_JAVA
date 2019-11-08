@@ -56,13 +56,18 @@ public class DocOrderUtilService {
 
             //如果count == 0说明没有需要记录序列号的产品
             int count = orderDetailsForNormalMybatisDao.findSerialNumRecordRequired(orderno);
-            if (count == 0) return Json.success("无需记录序列号的产品，可直接分配");
+            if (count == 0) {
+
+                json.setMsg("无需记录序列号的产品，可直接分配");
+                return json;
+            }
 
             json = basSerialNumService.countSerialNum4Match(orderno);
             if (!json.isSuccess()) return json;
 
             //Success
             json.setMsg("分配验证成功");
+            json.setObj(orderHeaderForNormal);
             return json;
         }
         return json;
