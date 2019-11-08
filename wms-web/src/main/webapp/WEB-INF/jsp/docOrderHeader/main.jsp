@@ -179,7 +179,7 @@ $(function() {
 		},
 		onLoadSuccess:function(data){
 			$(this).datagrid('unselectAll');
-			//$(this).datagrid("resize",{height:195});
+			$(this).datagrid("resize",{height:300});
 		}
 	});
 
@@ -335,7 +335,7 @@ $(function() {
     ezuiOutToExcelDataDialog = $('#ezuiOutToExcelDataDialog').dialog({
         modal : true,
         width:270,
-        height:210,
+        height:150,
         title : '选择导出内容',
         buttons : '#ezuiOutToExcel1Btn',
         onClose : function() {
@@ -1222,15 +1222,17 @@ var doExport = function(){
     var rows = $('#ezuiDatagrid').datagrid('getSelections');
     if(rows.length>0) {
             var orderno="";
+            var outtype = $("#ezuiOutToExcel1Form #outtype").combobox('getValue');
             for (var i = 0; i < rows.length; i++) {
                 orderno += rows[i].orderno+",";
             }
             var token = new Date().getTime();
             var param = new HashMap();
             param.put("orderno",orderno);
-            param.put("outtype", $("#ezuiOutToExcel1Form #outtype").combobox('getValue'));
+            param.put("outtype",outtype);
             param.put("token", token);
             ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
+            ezuiOutToExcelDataDialog.dialog('close');
     }else{
         $.messager.show({
             msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
@@ -1262,6 +1264,7 @@ var doExportGoodsList = function(){
 					title: "<spring:message code='common.message.prompt'/>"
 				});
 			}, 1000);
+
 		} else {
 			$.messager.show({
 				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
@@ -1316,6 +1319,7 @@ var toImportData = function(){
 	ezuiImportDataDialog.dialog('open');
 };
 var toOutData = function(){
+    $('#outtype').combobox('select', '1');
     ezuiOutToExcelDataDialog.dialog('open');
 };
 /* 下载导入模板 */
@@ -2645,7 +2649,7 @@ var Commit = function(){
     </div>
     <div id='ezuiOutToExcel1Btn'>
         <a onclick='doExport();' id='ezuiBtn_outDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-        <a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+        <a onclick='ezuiDialogClose("#ezuiOutToExcelDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
     </div>
     <!-- 导出end -->
 	<!-- 批量操作返回start -->

@@ -104,25 +104,36 @@ public class DocOrderExportService {
             String[] s = from.getOrderno().split(",");
             List<OrderHeaderForNormal> orderHeaderForNormalList = new ArrayList<OrderHeaderForNormal>();
             List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<OrderDetailsForNormal>();
+            List<OrderDetailsForNormal> orderDetailsForNormalListShow = new ArrayList<OrderDetailsForNormal>();
             //获得单头
-            OrderHeaderForNormal ohForNormal;
-            for (String a:s) {
-                ohForNormal = orderHeaderForNormalMybatisDao.queryById(a);
-                orderHeaderForNormalList.add(ohForNormal);
-
-                MybatisCriteria mybatisCriteria = new MybatisCriteria();
-                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(a));
-                orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
-
-            }
-            //发运方式 ZT BK LY 暂缓
-            for (OrderHeaderForNormal ohlist:orderHeaderForNormalList) {
-                Map<String, Object> param = new HashMap<>();
-                param.put("codeid", "EXP_TYP");
-                param.put("code", ohlist.getRoute());
-                BasCodes bascodes = basCodesMybatisDao.queryById(param);
-                if(bascodes!=null){
-                    ohlist.setRoute(bascodes.getCodenameC());
+            OrderHeaderForNormal ohForNormal ;
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            //1 为打印头档，否则为明细
+            if(from.getOuttype().equals("1")){
+                for (String a:s) {
+                    ohForNormal = orderHeaderForNormalMybatisDao.queryById(a);
+                    //发运方式 ZT BK LY 暂缓
+                    Map<String, Object> param = new HashMap<>();
+                    param.put("codeid", "EXP_TYP");
+                    param.put("code", ohForNormal.getRoute());
+                    BasCodes bascodes = basCodesMybatisDao.queryById(param);
+                    if(bascodes!=null){
+                        ohForNormal.setRoute(bascodes.getCodenameC());
+                    }
+                    if(ohForNormal!=null){
+                        orderHeaderForNormalList.add(ohForNormal);
+                    }
+                }
+            }else{
+                for (String a:s) {
+                    from.setOrderno(a);
+                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(from));
+                    orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+                    if(orderDetailsForNormalList.size()>0){
+                        for (OrderDetailsForNormal orderDetailsForNormal:orderDetailsForNormalList) {
+                            orderDetailsForNormalListShow.add(orderDetailsForNormal);
+                        }
+                    }
                 }
             }
 
@@ -142,11 +153,8 @@ public class DocOrderExportService {
                 String sheetName = "发运订单-明细";
                 fieldMap = getOutDetilesInfo();
                 //将list集合转化为excle
-                ExcelUtil.listToExcel(orderDetailsForNormalList, fieldMap, sheetName,-1,response,fileName);
+                ExcelUtil.listToExcel(orderDetailsForNormalListShow, fieldMap, sheetName,-1,response,fileName);
             }
-
-
-
             System.out.println("导出成功~~~~");
         } catch (ExcelException e) {
             e.printStackTrace();
