@@ -895,7 +895,13 @@ where 1=1
 	</select>
 
 
+	<select id="selectNewBySupplier" resultMap="BaseResultMap"  parameterType="Object">
+		select * from bas_customer where customer_type = 'VE' and ACTIVE_FLAG = '1' and  descr_c = (select descr_c from (
+		(select descr_c from bas_customer_history where customerid = #{customerid,jdbcType=VARCHAR} ORDER BY addtime desc)
+		UNION
+		(select descr_c from bas_customer where customerid = #{customerid,jdbcType=VARCHAR} ORDER BY addtime desc)) t)
 
+	</select>
 
 	<!--&lt;!&ndash; 该企业是 &ndash;&gt;-->
 	<!--<select id="countSupplierByIdTypeActiveFlag" resultType="java.lang.Integer"  parameterType="Object">-->

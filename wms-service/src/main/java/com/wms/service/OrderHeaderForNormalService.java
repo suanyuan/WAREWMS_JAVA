@@ -454,7 +454,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     }
                     return Json.success("拣货成功");
                 } else {
-                    return Json.success("拣货失败,查询不到对应的分配明细");
+                    return Json.error("拣货失败,查询不到对应的分配明细");
                 }
             } else {
                 json.setSuccess(false);

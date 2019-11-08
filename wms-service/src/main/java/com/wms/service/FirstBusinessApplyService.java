@@ -37,6 +37,8 @@ public class FirstBusinessApplyService extends BaseService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
+	@Autowired
+	private GspSupplierMybatisDao gspSupplierMybatisDao;
 
 	@Autowired
 	private FirstReviewLogService firstReviewLogService;
@@ -772,10 +774,16 @@ public class FirstBusinessApplyService extends BaseService {
 
                 //重新插入单据
                 FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(DelId);
+
                 //获取产品最新的产品id
 				GspProductRegisterSpecs  gprs =gspProductRegisterSpecsMybatisDao.selectNewBySpecsId(newApply.getSpecsId());
 				if(gprs==null){
 					return Json.error("产品已失效");
+				}
+				//获取供应商最新的供应商id
+				BasCustomer s =basCustomerMybatisDao.selectNewBySupplier(newApply.getSupplierId());
+				if(s==null){
+					return Json.error("供应商已失效");
 				}
 
 
@@ -790,7 +798,7 @@ public class FirstBusinessApplyService extends BaseService {
 //					}
 
 
-                        Json result11=   addApply(newApply.getClientId(), newApply.getSupplierId(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
+                        Json result11=   addApply(newApply.getClientId(), s.getCustomerid(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
                         if(!result11.isSuccess()){
                             content = content+"  单号"+DelId+" "+ result11.getMsg();
                             type =false;

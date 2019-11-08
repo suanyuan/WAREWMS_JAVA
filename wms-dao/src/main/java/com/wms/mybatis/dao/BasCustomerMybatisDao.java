@@ -53,4 +53,7 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	BasCustomer querySupplierByBankaccount(@Param("bankaccount") String bankaccount);
 
 
+	BasCustomer selectNewBySupplier(Object id);
+
+
 }

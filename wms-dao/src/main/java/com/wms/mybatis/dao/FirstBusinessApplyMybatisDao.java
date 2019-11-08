@@ -42,4 +42,9 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 
 
 	public  int countByClientAndProduct(@Param("clientId") String clientId,@Param("sku") String sku);
+
+
+	//通过 产品首营申请单号 和 产品的分类目录 找产品首营申请
+	List<FirstBusinessApply> selectByOperateId(@Param("operateId") String id,@Param("applyId") String applyId);
+
 }

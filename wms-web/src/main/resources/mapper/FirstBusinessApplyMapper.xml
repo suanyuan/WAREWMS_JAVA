@@ -245,6 +245,18 @@ where 1=1
 	</select>
 
 
+	<!--通过产品注册证id查询其下的产品的首营申请-->
+	<select id="selectByOperateId" resultMap="PageResultMap"  parameterType="Object">
+		select t1.* from first_business_apply t1
+		LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
+		LEFT JOIN gsp_product_register_specs t3 on t2.specs_id = t3.specs_id
+		LEFT JOIN (select * from gsp_product_register where is_use='1') t4 on t3.product_register_id = t4.product_register_id
+		LEFT JOIN gsp_operate_detail T5 ON T5.license_id= t4.product_register_id
+		where T5.operate_id =  #{operateId}  and t1.apply_id =#{applyId}
+	</select>
+
+
+
 	<select id="selectFirstBusinessBySupplierAndProduct" resultType="java.lang.Integer"  parameterType="Object">
 		select  count(1) from first_business_apply t1
 		left join first_business_product_apply t2 on t1.apply_id = t2.apply_id

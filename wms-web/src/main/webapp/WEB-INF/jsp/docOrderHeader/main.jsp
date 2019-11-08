@@ -714,7 +714,7 @@ var allocation = function(){
             });
 
 			$.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?allocation',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -732,19 +732,22 @@ var allocation = function(){
                             msg = msg.replace(/ /g, '\n');
 							operateResult = operateResult + "处理时错误：" + msg + "\n";
 						};
+                        ezuiDatagrid.datagrid('reload');
 					} catch (e) {
 						msg = '<spring:message code="common.message.data.delete.failed"/>';
-					};
+					}finally {
+                        if (operateResult != '') {
+                            $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                            $('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
+                            ezuiOperateResultDataDialog.dialog('open');
+                            ezuiDatagrid.datagrid('reload');
+                        };
+                    }
 				}
 			});
 		};
 	});
-	if (operateResult != '') {
-		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：分配"});
-		ezuiOperateResultDataDialog.dialog('open');
-		ezuiDatagrid.datagrid('reload');
-	};
+
 };
 
 /* 取消分配按钮 */
@@ -762,7 +765,7 @@ var deAllocation = function(){
 
 
             $.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?deAllocation',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -781,17 +784,21 @@ var deAllocation = function(){
 						};
 					} catch (e) {
 						msg = '<spring:message code="common.message.data.delete.failed"/>';
-					};
+					}finally {
+                        if (operateResult != '') {
+                            $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                            $('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消分配"});
+                            ezuiOperateResultDataDialog.dialog('open');
+                            ezuiDatagrid.datagrid('reload');
+                        };
+                    }
+
+                    ezuiDatagrid.datagrid('reload');
 				}
 			});
 		};
 	});
-	if (operateResult != '') {
-		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消分配"});
-		ezuiOperateResultDataDialog.dialog('open');
-		ezuiDatagrid.datagrid('reload');
-	};
+
 };
 
 /* 拣货按钮 */
@@ -809,7 +816,7 @@ var picking = function(){
             });
 
             $.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?picking',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -829,17 +836,20 @@ var picking = function(){
 						};
 					} catch (e) {
 						msg = '<spring:message code="common.message.data.delete.failed"/>';
-					};
+					}finally {
+                        if (operateResult != '') {
+                            $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                            $('#ezuiOperateResultDataDialog').panel({title: "批量操作：拣货"});
+                            ezuiOperateResultDataDialog.dialog('open');
+                            ezuiDatagrid.datagrid('reload');
+                        };
+                    }
+                    ezuiDatagrid.datagrid('reload');
 				}
 			});
 		};
 	});
-	if (operateResult != '') {
-		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：拣货"});
-		ezuiOperateResultDataDialog.dialog('open');
-		ezuiDatagrid.datagrid('reload');
-	};
+
 };
 
 /* 取消拣货按钮 */
@@ -856,7 +866,7 @@ var unPicking = function(){
                 text : '<spring:message code="common.message.data.processing"/>', interval : 100
             });
 			$.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?unPicking',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -875,17 +885,20 @@ var unPicking = function(){
 						};
 					} catch (e) {
 						msg = '<spring:message code="common.message.data.delete.failed"/>';
-					};
+					}finally {
+                        if (operateResult != '') {
+                            $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                            $('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消拣货"});
+                            ezuiOperateResultDataDialog.dialog('open');
+                            ezuiDatagrid.datagrid('reload');
+                        };
+                    }
+                    ezuiDatagrid.datagrid('reload');
 				}
 			});
 		};
 	});
-	if (operateResult != '') {
-		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消拣货"});
-		ezuiOperateResultDataDialog.dialog('open');
-		ezuiDatagrid.datagrid('reload');
-	};
+
 };
 
 /* 取消装箱按钮 */
@@ -904,7 +917,7 @@ var unPacking = function(){
                     });
 
 					$.ajax({
-						async: false,
+						async: true,
 						url : 'docOrderHeaderController.do?unPacking',
 						data : {orderno : item.orderno},
 						type : 'POST',
@@ -921,19 +934,22 @@ var unPacking = function(){
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理时错误：" + msg + "\n";
 								};
+                                ezuiDatagrid.datagrid('reload');
 							} catch (e) {
 								msg = '<spring:message code="common.message.data.delete.failed"/>';
-							};
+							}finally {
+                                if (operateResult != '') {
+                                    $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                                    $('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消装箱"});
+                                    ezuiOperateResultDataDialog.dialog('open');
+                                    ezuiDatagrid.datagrid('reload');
+                                };
+                            }
 						}
 					});
 				};
 			});
-			if (operateResult != '') {
-				$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-				$('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消装箱"});
-				ezuiOperateResultDataDialog.dialog('open');
-				ezuiDatagrid.datagrid('reload');
-			};
+
 		} else {
 			return;
 		}
@@ -958,7 +974,7 @@ var shipment = function(){
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
                     $.ajax({
-                        async: false,
+                        async: true,
                         url: 'docOrderHeaderController.do?shipment',
                         data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
                         type: 'POST',
@@ -979,6 +995,7 @@ var shipment = function(){
                                     operateResult = operateResult + "处理时错误：" + msg + "\n";
                                 }
                                 ;
+                                ezuiDatagrid.datagrid('reload');
                             } catch (e) {
                                 msg = '<spring:message code="common.message.data.delete.failed"/>';
                             }finally {
@@ -993,13 +1010,13 @@ var shipment = function(){
                 });
 			};
 	});
-	if (operateResult != '') {
-		$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-		$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
-		ezuiOperateResultDataDialog.dialog('open');
-		ezuiDatagrid.datagrid('reload');
-
-	};
+	// if (operateResult != '') {
+	// 	$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+	// 	$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
+	// 	ezuiOperateResultDataDialog.dialog('open');
+	// 	ezuiDatagrid.datagrid('reload');
+    //
+	// };
 };
 
 /* 订单取消按钮 */
@@ -1017,7 +1034,7 @@ var cancel = function(){
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
 					$.ajax({
-						async: false,
+						async: true,
 						url : 'docOrderHeaderController.do?cancel',
 						data : {orderno : item.orderno},
 						type : 'POST',
@@ -1034,19 +1051,23 @@ var cancel = function(){
 									operateResult = operateResult + "订单编号：" + item.orderno + ",";
 									operateResult = operateResult + "处理时错误：" + msg + "\n";
 								};
+
 							} catch (e) {
 								msg = '<spring:message code="common.message.data.delete.failed"/>';
-							};
+							}finally {
+                                if (operateResult != '') {
+                                    $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                                    $('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
+                                    ezuiOperateResultDataDialog.dialog('open');
+                                    ezuiDatagrid.datagrid('reload');
+                                }
+                            }
+                            ezuiDatagrid.datagrid('reload');
 						}
 					});
 				};
 			});
-			if (operateResult != '') {
-				$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-				$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
-				ezuiOperateResultDataDialog.dialog('open');
-				ezuiDatagrid.datagrid('reload');
-			}
+
 		} else {
 			return;
 		}
