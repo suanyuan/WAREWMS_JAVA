@@ -21,6 +21,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +69,11 @@ public class GspEnterpriceService extends BaseService {
     @Autowired
     private GspOperateDetailMybatisDao gspOperateDetailMybatisDao;
 
+    @Autowired
+    private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
+
+    @Autowired
+    private GspInstrumentCatalogMybatisDao gspInstrumentCatalogMybatisDao;
 
 
 //    @Autowired
@@ -150,6 +156,213 @@ public class GspEnterpriceService extends BaseService {
 ////
 ////                }
             }else{
+
+                //查询是否减少了分类目录 或者 修改了证照编号
+                List<GspOperateDetail> gspProdDetailList =null;
+                List<GspOperateDetail> gspOperateDetailList =null;
+                List<GspOperateDetail> gspFirstRecordDetailList =null;
+                List<GspOperateDetail> gspSecondRecordDetailList =null;
+
+
+                GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.selectCompareByEnterpriseId(oldEnterpriseId);
+
+                GspOperateLicense oldGspProdLicense = gspOperateLicenseMybatisDao.selectByEnterprisId(oldEnterpriseId,Constant.LICENSE_TYPE_PROD);
+                if(oldGspProdLicense!=null){
+                    gspProdDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspProdLicense.getOperateId());
+                }
+                GspOperateLicense oldGspOperateLicense = gspOperateLicenseMybatisDao.selectByEnterprisId(oldEnterpriseId,Constant.LICENSE_TYPE_OPERATE);
+                if(oldGspOperateLicense!=null){
+                    gspOperateDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspOperateLicense.getOperateId());
+                }
+                GspFirstRecord oldGspFirstRecord = gspFirstRecordMybatisDao.selectByEnterprisId(oldEnterpriseId);
+                if(oldGspFirstRecord!=null){
+                    gspFirstRecordDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspFirstRecord.getRecordId());
+
+                }
+                GspSecondRecord oldGspSecondRecord = gspSecondRecordMybatisDao.selectByEnterprisId(oldEnterpriseId);
+                if(oldGspSecondRecord!=null){
+                    gspSecondRecordDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspSecondRecord.getRecordId());
+                }
+
+                GspMedicalRecord oldGspMedicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(oldEnterpriseId);
+
+
+                boolean BusinessResult = false;
+                boolean ProdResult = false;
+                boolean OperateResult = false;
+                boolean FirstResult = false;
+                boolean SecondResult = false;
+                boolean MedicalResult = false;
+//                            String st=new String(request.getParameter("st").getBytes("ISO-8859-1").trim());
+//                            String stt = new String("借阅".getBytes("ISO-8859-1"),"UTF-8");
+                //减少的分类目录集合
+                List<String> Flist = new ArrayList<String>();
+
+                //TODO 判断是否（分类目录减少，证号变更）
+                if(gspBusinessLicense!=null){
+                    if(gspBusinessLicense.getLicenseNumber().equals(gspBusinessLicenseForm.getLicenseNumber())){
+//                                    flag = false;
+//                                    BusinessResult = false;
+                    }else{
+                        //证号变更   报废关联
+                        BusinessResult = true;
+                    }
+
+                }
+
+                if(oldGspProdLicense!=null){
+                    if(oldGspProdLicense.getLicenseNo().equals(gspProdLicenseForm.getLicenseNo())){
+
+                    }else{
+                        //证号变更
+                        ProdResult = true;
+                    }
+                    String scope =  gspProdLicenseForm.getScopArr();
+                    String[] scopeArr = scope.split(",");//新分类目录
+
+//                                if(gspProdDetailList!=null){
+//
+//                                }
+                    for(GspOperateDetail s : gspProdDetailList){//老分类目录
+                        boolean flag = true;
+                        String operateId = s.getOperateId();
+                        for(String str : scopeArr){             //新分类目录
+                            if(str.equals(operateId)){
+                                flag = false;
+                            }
+                        }
+                        if(flag){
+                            //分类目录减少了  创建新版本  正常换证流程
+//                                    enterpriseIsNewVersion = true;
+                            Flist.add(operateId);
+                            ProdResult = true;
+//                            break;
+                        }else{
+                            //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
+//                                    enterpriseIsNewVersion = false;
+                        }
+                    }
+
+
+                }
+
+                if(oldGspOperateLicense!=null){
+                    if(oldGspOperateLicense.getLicenseNo().equals(gspOperateLicenseForm.getLicenseNo())){
+
+                    }else{
+                        //证号变更
+                        OperateResult = true;
+                    }
+                    String scope =  gspOperateLicenseForm.getScopArr();
+                    String[] scopeArr = scope.split(",");//新分类目录
+
+                    for(GspOperateDetail s : gspOperateDetailList){//老分类目录
+                        boolean flag = true;
+                        String operateId = s.getOperateId();
+                        for(String str : scopeArr){             //新分类目录
+                            if(str.trim().equals(operateId.trim())){
+                                flag = false;
+                                System.out.println();
+                            }
+                        }
+                        if(flag){
+                            //分类目录减少了  创建新版本  正常换证流程
+//                                    enterpriseIsNewVersion = true;
+                            Flist.add(operateId);
+                            OperateResult = true;
+//                            break;
+                        }else{
+                            //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
+//                                    enterpriseIsNewVersion = false;
+                        }
+                    }
+
+
+
+
+
+                }
+                if(oldGspFirstRecord!=null){
+                    if(oldGspFirstRecord.getRecordNo().equals(gspFirstRecordForm.getRecordNo())){
+
+                    }else{
+                        //证号变更
+                        FirstResult = true;
+                    }
+                    String scope =  gspFirstRecordForm.getScopArr();
+                    String[] scopeArr = scope.split(",");//新分类目录
+
+                    for(GspOperateDetail s : gspFirstRecordDetailList){//老分类目录
+                        boolean flag = true;
+                        String operateId = s.getOperateId();
+                        System.out.println();
+                        for(String str : scopeArr){             //新分类目录
+                            if(str.equals(operateId)){
+                                flag = false;
+                            }
+                        }
+                        if(flag){
+                            //分类目录减少了  创建新版本  正常换证流程
+//                                    enterpriseIsNewVersion = true;
+                            Flist.add(operateId);
+                            ProdResult = true;
+//                            break;
+                        }else{
+                            //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
+//                                    enterpriseIsNewVersion = false;
+                        }
+
+                    }
+
+
+
+
+                }
+                if(oldGspSecondRecord!=null){
+                    if(oldGspSecondRecord.getRecordNo().equals(gspSecondRecordForm.getRecordNo())){
+
+                    }else{
+                        //证号变更
+                        SecondResult = true;
+                    }
+                    String scope =  gspSecondRecordForm.getScopArr();
+                    String[] scopeArr = scope.split(",");//新分类目录
+
+                    for(GspOperateDetail s : gspSecondRecordDetailList){//老分类目录
+                        boolean flag = true;
+                        String operateId = s.getOperateId();
+                        for(String str : scopeArr){             //新分类目录
+                            if(str.equals(operateId)){
+                                flag = false;
+                            }
+                        }
+                        if(flag){
+                            System.out.println();
+                            //分类目录减少了  创建新版本  正常换证流程
+//                                    enterpriseIsNewVersion = true;
+                            Flist.add(operateId);
+                            OperateResult = true;
+//                            break;
+                        }else{
+                            //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
+//                                    enterpriseIsNewVersion = false;
+                        }
+                    }
+
+
+
+                }
+                if(oldGspMedicalRecord!=null){
+                    if(oldGspMedicalRecord.getMedicalRegisterNo().equals(gspMedicalRecordForm.getMedicalRegisterNo())){
+
+                    }else{
+                        MedicalResult = true;
+                    }
+                }
+
+
+
+
                 //判断首营状态
                 GspEnterpriseInfo info = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriseId);
                 if(info == null){
@@ -180,206 +393,35 @@ public class GspEnterpriceService extends BaseService {
 //                            }else{
 //                                return Json.error("请换证修改");
 //                            }
-                            List<GspOperateDetail> gspProdDetailList =null;
-                            List<GspOperateDetail> gspOperateDetailList =null;
-                            List<GspOperateDetail> gspFirstRecordDetailList =null;
-                            List<GspOperateDetail> gspSecondRecordDetailList =null;
-
-
-                            GspBusinessLicense gspBusinessLicense = gspBusinessLicenseMybatisDao.selectCompareByEnterpriseId(ent.getEnterpriseId());
-
-                            GspOperateLicense oldGspProdLicense = gspOperateLicenseMybatisDao.selectByEnterprisId(ent.getEnterpriseId(),Constant.LICENSE_TYPE_PROD);
-                            if(oldGspProdLicense!=null){
-                                 gspProdDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspProdLicense.getOperateId());
-                            }
-                            GspOperateLicense oldGspOperateLicense = gspOperateLicenseMybatisDao.selectByEnterprisId(ent.getEnterpriseId(),Constant.LICENSE_TYPE_OPERATE);
-                            if(oldGspOperateLicense!=null){
-                                 gspOperateDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspOperateLicense.getOperateId());
-                            }
-                            GspFirstRecord oldGspFirstRecord = gspFirstRecordMybatisDao.selectByEnterprisId(ent.getEnterpriseId());
-                            if(oldGspFirstRecord!=null){
-                                 gspFirstRecordDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspFirstRecord.getRecordId());
-
-                            }
-                            GspSecondRecord oldGspSecondRecord = gspSecondRecordMybatisDao.selectByEnterprisId(ent.getEnterpriseId());
-                            if(oldGspSecondRecord!=null){
-                                 gspSecondRecordDetailList = gspOperateDetailMybatisDao.queryListByLicenseId(oldGspSecondRecord.getRecordId());
-                            }
-
-                            GspMedicalRecord oldGspMedicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(ent.getEnterpriseId());
-
-
-                            boolean BusinessResult = false;
-                            boolean ProdResult = false;
-                            boolean OperateResult = false;
-                            boolean FirstResult = false;
-                            boolean SecondResult = false;
-                            boolean MedicalResult = false;
-//                            String st=new String(request.getParameter("st").getBytes("ISO-8859-1").trim());
-//                            String stt = new String("借阅".getBytes("ISO-8859-1"),"UTF-8");
-                            //TODO 判断是否（分类目录减少，证号变更）
-                            if(gspBusinessLicense!=null){
-                                if(gspBusinessLicense.getLicenseNumber().equals(gspBusinessLicenseForm.getLicenseNumber())){
-//                                    flag = false;
-//                                    BusinessResult = false;
-                                }else{
-                                    //证号变更   报废关联
-                                    BusinessResult = true;
-                                }
-
-                            }
-
-                            if(oldGspProdLicense!=null){
-                                if(oldGspProdLicense.getLicenseNo().equals(gspProdLicenseForm.getLicenseNo())){
-
-                                }else{
-                                    //证号变更
-                                    ProdResult = true;
-                                }
-                                String scope =  gspProdLicenseForm.getScopArr();
-                                String[] scopeArr = scope.split(",");//新分类目录
-                                boolean flag = true;
-//                                if(gspProdDetailList!=null){
-//
-//                                }
-                                for(GspOperateDetail s : gspProdDetailList){//老分类目录
-                                    String operateId = s.getOperateId();
-                                    for(String str : scopeArr){             //新分类目录
-                                        if(str.equals(operateId)){
-                                            flag = false;
-                                        }
-                                    }
-                                    if(flag){
-                                        //分类目录减少了  创建新版本  正常换证流程
-//                                    enterpriseIsNewVersion = true;
-                                        ProdResult = true;
-                                        break;
-                                    }else{
-                                        //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
-//                                    enterpriseIsNewVersion = false;
-                                    }
-                                }
-
-
-                            }
-
-                            if(oldGspOperateLicense!=null){
-                                if(oldGspOperateLicense.getLicenseNo().equals(gspOperateLicenseForm.getLicenseNo())){
-
-                                }else{
-                                    //证号变更
-                                    OperateResult = true;
-                                }
-                                String scope =  gspOperateLicenseForm.getScopArr();
-                                String[] scopeArr = scope.split(",");//新分类目录
-
-                                for(GspOperateDetail s : gspOperateDetailList){//老分类目录
-                                    boolean flag = true;
-                                    String operateId = s.getOperateId();
-                                    for(String str : scopeArr){             //新分类目录
-                                        if(str.trim().equals(operateId.trim())){
-                                            flag = false;
-                                            System.out.println();
-                                        }
-                                    }
-                                    if(flag){
-                                        //分类目录减少了  创建新版本  正常换证流程
-//                                    enterpriseIsNewVersion = true;
-                                        OperateResult = true;
-                                        break;
-                                    }else{
-                                        //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
-//                                    enterpriseIsNewVersion = false;
-                                    }
-                                }
-
-
-
-
-
-                            }
-                            if(oldGspFirstRecord!=null){
-                                if(oldGspFirstRecord.getRecordNo().equals(gspFirstRecordForm.getRecordNo())){
-
-                                }else{
-                                    //证号变更
-                                    FirstResult = true;
-                                }
-                                String scope =  gspFirstRecordForm.getScopArr();
-                                String[] scopeArr = scope.split(",");//新分类目录
-                                boolean flag = true;
-                                for(GspOperateDetail s : gspFirstRecordDetailList){//老分类目录
-                                    String operateId = s.getOperateId();
-                                    System.out.println();
-                                    for(String str : scopeArr){             //新分类目录
-                                        if(str.equals(operateId)){
-                                            flag = false;
-                                        }
-                                    }
-                                    if(flag){
-                                        //分类目录减少了  创建新版本  正常换证流程
-//                                    enterpriseIsNewVersion = true;
-                                        ProdResult = true;
-                                        break;
-                                    }else{
-                                        //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
-//                                    enterpriseIsNewVersion = false;
-                                    }
-
-                                }
-
-
-
-
-                            }
-                            if(oldGspSecondRecord!=null){
-                                if(oldGspSecondRecord.getRecordNo().equals(gspSecondRecordForm.getRecordNo())){
-
-                                }else{
-                                    //证号变更
-                                    SecondResult = true;
-                                }
-                                String scope =  gspSecondRecordForm.getScopArr();
-                                String[] scopeArr = scope.split(",");//新分类目录
-                                boolean flag = true;
-                                for(GspOperateDetail s : gspSecondRecordDetailList){//老分类目录
-                                    String operateId = s.getOperateId();
-                                    for(String str : scopeArr){             //新分类目录
-                                        if(str.equals(operateId)){
-                                            flag = false;
-                                        }
-                                    }
-                                    if(flag){
-                                        System.out.println();
-                                        //分类目录减少了  创建新版本  正常换证流程
-//                                    enterpriseIsNewVersion = true;
-                                        OperateResult = true;
-                                        break;
-                                    }else{
-                                        //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
-//                                    enterpriseIsNewVersion = false;
-                                    }
-                                }
-
-
-
-                            }
-                            if(oldGspMedicalRecord!=null){
-                                if(oldGspMedicalRecord.getMedicalRegisterNo().equals(gspMedicalRecordForm.getMedicalRegisterNo())){
-
-                                }else{
-                                    MedicalResult = true;
-                                }
-                            }
-
-
-
 
                             if(BusinessResult||ProdResult||OperateResult||FirstResult||SecondResult||MedicalResult){
                                 //创建新版本  报废关联申请、档案  新增企业证照版本
 //                                if(flag){
                                 enterpriseIsNewVersion = true;
-                                dataPublishService.cancelData(ent.getApplyNo());
+                                if(ent.getApplyNo().indexOf(Constant.APLPRONO)!=-1){
+                                    //产品报废  报废具体减少的分类目录下的注册证下的产品
+                                    List<String> listNew = new ArrayList<String>(new HashSet(Flist));   //去重                                 System.out.println(uniqueList.toString());
+                                    for(String operateId:listNew){   //分类目录id
+//                                        GspInstrumentCatalog catalog1 = gspInstrumentCatalogMybatisDao.queryById(operateId)
+//                                        if(catalog1!=null){
+//                                            if(Constant.CODE_CATALOG_CLASSIFY_ONE.equals(catalog1.getClassifyId())){
+//
+//                                            }
+//                                        }
+                                        //判断产品首营申请的 产品 是否是在减少了的分类目录下
+                                        List<FirstBusinessApply> firstBusinessApplyLista =  firstBusinessApplyMybatisDao.selectByOperateId(operateId,ent.getApplyNo());
+                                        if(firstBusinessApplyLista.size()>0){
+                                            dataPublishService.cancelData(ent.getApplyNo());
+                                        }
+
+                                    }
+
+
+
+                                }else{
+                                    //供应商   货主    收货单位   直接报废
+                                    dataPublishService.cancelData(ent.getApplyNo());
+                                }
 //                                }
                             }else{
                                 //不创建新版本 不报废关联申请、档案  新增企业证照版本
@@ -629,6 +671,32 @@ public class GspEnterpriceService extends BaseService {
         }
         return Json.success("",gspEnterpriseInfo);
     }
+
+
+    /**
+     * 获取企业是否存在 首营申请
+     * @param enterpriceId 企业信息流水号
+     * @return
+     */
+    public Json verify(String enterpriceId){
+        String flag = "0";
+        GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriceId);
+        if(gspEnterpriseInfo == null){
+            return Json.error("企业信息不存在！");
+        }
+
+
+        List<GspEnterpriseTypeDTO> enterpriseTypeDTOS = queryEnterpriseType(enterpriceId);
+        if(enterpriseTypeDTOS!=null && enterpriseTypeDTOS.size()>0) {
+            flag = "1";
+        }
+
+        return Json.success("",flag);
+    }
+
+
+
+
 
     /**
      * 获取企业营业执照信息

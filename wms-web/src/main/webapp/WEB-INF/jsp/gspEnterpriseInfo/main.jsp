@@ -164,25 +164,34 @@ var commit = function(){
     var infoObj = new Object();				//基本信息
     var businessObj = new Object();
     var medicalObj =new Object();
-
     var operateobj = new Object();
     var secondRecord = new Object();
     var firstRecord = new Object();
     var prodObj = new Object();
     var url = '';
     var isVal = true;
-	var isVal1 =true;
+    var isVal1 =true;
 
-    /*if (processType == 'edit') {
-        url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
-    }else{*/
-        url = sy.bp()+"/gspEnterpriseInfoController.do?add";
+    var ffff=false;
+    url = sy.bp()+"/gspEnterpriseInfoController.do?add";
     //}
     var enterpriceId = "";
     var row = ezuiDatagrid.datagrid('getSelected');
     if(row){
-        enterpriceId = row.enterpriceId;
+        enterpriceId = row.enterpriseId;
     }
+
+
+
+
+
+
+
+
+    /*if (processType == 'edit') {
+        url = sy.bp()+"/gspEnterpriseInfoController.do?edit";
+    }else{*/
+
     //判断基本信息
     isVal = checkFormData("ezuiFormInfo",infoObj);
 	if(isVal == false){
@@ -382,6 +391,56 @@ var commit = function(){
             return;
         }
     }
+	// debugger
+
+    console.log(businessObj.opType);
+    console.log(operateobj.opType);
+    console.log(prodObj.opType);
+    console.log(medicalObj.opType);
+    console.log(firstRecord.opType);
+    console.log(secondRecord.opType);
+
+    $.ajax({
+        url : sy.bp()+"/gspEnterpriseInfoController.do?verify",
+        data : {"enterpriseId":enterpriceId},
+        type : 'POST', dataType : 'JSON',
+        async  :false,
+        success : function(result){
+            // $.messager.progress('close');
+            var msg='';
+            try{
+                if(result.success){
+                    // alert(result+"==="+result.obj);
+                    // alert(businessObj.opType+operateobj.opType+prodObj.opType+prodObj.opType+
+					// 	medicalObj.opType+firstRecord.opType+secondRecord.opType);
+                    // msg = result.msg;
+                    // ezuiDatagrid.datagrid('reload');
+                    // ezuiDialog.dialog('close');
+
+                    if(result.obj=="1" && (businessObj.opType!="update"&&
+						 						 operateobj.opType!="update"&&
+													prodObj.opType!="update"&&
+												 medicalObj.opType!="update"&&
+												firstRecord.opType!="update"&&secondRecord.opType!="update")  ){
+                        $.messager.show({
+                            msg : "企业已有相关首营申请,请点击开始换证进行换证!", title : '<spring:message code="common.message.prompt"/>'
+                        });
+						ffff=true;
+
+                    }
+
+                }else{
+                    msg = '<font color="red">' + '提交错误' + '</font>';
+                    return ;
+                }
+            }catch (e) {
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            }
+        }
+    });
+	if(ffff){
+		return;
+	}
 
     gspEnterpriceFrom["gspEnterpriseInfoForm"] = infoObj;
 
@@ -396,6 +455,8 @@ var commit = function(){
     gspEnterpriceFrom["gspSecondRecordForm"] = secondRecord;
 	console.log(gspEnterpriceFrom);
 	//提交
+    // alert(111);
+
     submitFormData(enterpriceId,gspEnterpriceFrom,url);
 };
 

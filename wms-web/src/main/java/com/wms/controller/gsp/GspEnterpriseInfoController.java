@@ -153,7 +153,12 @@ public class GspEnterpriseInfoController {
 		return json;
 	}
 
-
+	@Login
+	@RequestMapping(params = "verify")
+	@ResponseBody
+	public Object verify(String enterpriseId) {
+		return gspEnterpriceService.verify(enterpriseId);
+	}
 
 	@Login
 	@RequestMapping(params = "getBtn")
