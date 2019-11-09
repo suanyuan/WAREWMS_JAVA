@@ -117,6 +117,7 @@ $(function() {
 			ajaxBtn($('#menuId').val(), '<c:url value="/docOrderHeaderController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('clearChecked');
+			$(this).datagrid('clearSelections');
 		}
 	});
 	//订单明细列表
