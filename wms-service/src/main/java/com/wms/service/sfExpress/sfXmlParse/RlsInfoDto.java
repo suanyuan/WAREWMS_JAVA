@@ -14,6 +14,55 @@ public class RlsInfoDto {
     private String sourceTransferCode;
     private String proName;
 
+    private String returnQrcode;
+    private String returnestRouteLabel;
+
+
+    private String returnSourceTransferCode;
+    private String returnCodingMapping;
+    private String returnCodingMappingOut;
+
+
+    public String getReturnCodingMapping() {
+        return returnCodingMapping;
+    }
+
+    public void setReturnCodingMapping(String returnCodingMapping) {
+        this.returnCodingMapping = returnCodingMapping;
+    }
+
+    public String getReturnCodingMappingOut() {
+        return returnCodingMappingOut;
+    }
+
+    public void setReturnCodingMappingOut(String returnCodingMappingOut) {
+        this.returnCodingMappingOut = returnCodingMappingOut;
+    }
+
+    public String getReturnSourceTransferCode() {
+        return returnSourceTransferCode;
+    }
+
+    public void setReturnSourceTransferCode(String returnSourceTransferCode) {
+        this.returnSourceTransferCode = returnSourceTransferCode;
+    }
+
+    public String getReturnestRouteLabel() {
+        return returnestRouteLabel;
+    }
+
+    public void setReturnestRouteLabel(String returnestRouteLabel) {
+        this.returnestRouteLabel = returnestRouteLabel;
+    }
+
+    public String getReturnQrcode() {
+        return returnQrcode;
+    }
+
+    public void setReturnQrcode(String returnQrcode) {
+        this.returnQrcode = returnQrcode;
+    }
+
     public String getProName() {
         return proName;
     }

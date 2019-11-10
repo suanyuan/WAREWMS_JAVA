@@ -989,9 +989,11 @@ var shipment = function(){
                             try {
                                 msg = result.msg;
                                 if (result.success) {
+                                	operateResult = '';
                                     operateResult = operateResult + "订单编号：" + item.orderno + ",";
                                     operateResult = operateResult + "处理完毕" + "\n";
                                 } else {
+									operateResult = '';
                                     operateResult = operateResult + "订单编号：" + item.orderno + ",";
                                     operateResult = operateResult + "处理时错误：" + msg + "\n";
                                 }
@@ -999,13 +1001,13 @@ var shipment = function(){
                                 ezuiDatagrid.datagrid('reload');
                             } catch (e) {
                                 msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            }finally {
+                            }
+                            finally {
 								$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
 								$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
 								ezuiOperateResultDataDialog.dialog('open');
 								ezuiDatagrid.datagrid('reload');
 							}
-
                         }
                     });
                 });
