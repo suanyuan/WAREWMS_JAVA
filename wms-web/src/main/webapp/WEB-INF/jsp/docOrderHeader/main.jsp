@@ -701,8 +701,32 @@ var del = function(){
 	};*/
 };
 
+var chooseExpressType = function() {
+
+	returnSfodd = $('#returnSfodd').dialog({
+		modal : true,
+		width:200,
+		height:130,
+		title : '是否需要签回单号',
+		buttons : [{
+			id: 'returnSfoddBtn',
+			text: '提交',
+			handler: function () {
+				returnSfodd.dialog('close');
+				allocation();
+			}
+		}],
+		onClose : function() {
+			ezuiFormClear(returnSfoddForm);
+		}
+	}).dialog('open');
+};
+
+
 /* 分配按钮 */
 var allocation = function(){
+
+	var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
 	var operateResult = '';
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
@@ -717,7 +741,7 @@ var allocation = function(){
 			$.ajax({
 				async: true,
 				url : 'docOrderHeaderController.do?allocation',
-				data : {orderNo : item.orderno},
+				data : {orderno : item.orderno, returnSfOrder : returnSfOrder},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
@@ -957,31 +981,9 @@ var unPacking = function(){
 	});
 };
 
-var chooseExpressType = function() {
-
-    returnSfodd = $('#returnSfodd').dialog({
-        modal : true,
-        width:200,
-        height:130,
-        title : '订单下单是否需要签回单号',
-        buttons : [{
-            id: 'returnSfoddBtn',
-            text: '提交',
-            handler: function () {
-				returnSfodd.dialog('close');
-                shipment();
-            }
-        }],
-        onClose : function() {
-            ezuiFormClear(returnSfoddForm);
-        }
-    }).dialog('open');
-};
-
 /* 订单发货按钮 */
 var shipment = function(){
 
-    var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
     var operateResult = '';
     var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
     $.each(checkedItems, function(index, item) {
@@ -998,7 +1000,7 @@ var shipment = function(){
             $.ajax({
                 async: true,
                 url: 'docOrderHeaderController.do?shipment',
-                data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
+                data: {orderno: item.orderno},
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (result) {
@@ -1145,7 +1147,7 @@ var printExpress = function () {
         } else {
         //如果快递单号为空则不能打印电子面单
         if (item.cAddress4 == null) {
-            showMsg("选中的订单存在未发运订单无法打印快递单.......");
+            showMsg("选中的订单未在系统内下单，无法打印快递单.......");
             return;
         } else {
             console.log("++++++++++++++++++++++++++");
@@ -2599,11 +2601,11 @@ var writeBackExpressBtnCommit = function(){
 <%--
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 --%>
-					<a onclick='allocation();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
+					<a onclick='chooseExpressType();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
 					<a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelAllocation'/></a>
  					<a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
  					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a>
-                    <a onclick='chooseExpressType();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
+                    <a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
                    <!-- <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> -->
 					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.rubBish'/></a>
 <%--                    <a onclick='showRefOut()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>--%>

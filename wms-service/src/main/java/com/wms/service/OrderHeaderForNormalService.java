@@ -250,10 +250,13 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 分配
      */
-    public Json allocation(String orderNo) {
+    public Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 
-        Json json = docOrderUtilService.validateAllocation(orderNo);
+        Json json = docOrderUtilService.validateAllocation(orderHeaderForNormalForm.getOrderno());
         if (!json.isSuccess()) return json;
+
+//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//        return json;
 
         OrderHeaderForNormal orderHeaderForNormal = (OrderHeaderForNormal) json.getObj();
         if (orderHeaderForNormal != null) {
@@ -262,12 +265,16 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
 
                 //判断双证/质量合格证
-                json = fixCertificateFlag(orderNo);
+                json = fixCertificateFlag(orderHeaderForNormalForm.getOrderno());
+                if (!json.isSuccess()) return json;
+
+                /*进行顺丰下单  下单报文*/
+                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
                 if (!json.isSuccess()) return json;
 
                 Map<String, Object> map = new HashMap<>();
                 //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                map.put("orderNo", orderNo);
+                map.put("orderNo", orderHeaderForNormalForm.getOrderno());
                 map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
                 //map.put("result", "");
                 orderHeaderForNormalMybatisDao.allocationByOrder(map);
@@ -278,7 +285,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                     if (orderHeaderForNormal.getOrdertype().equals("DX")) {
 
-                        Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
+                        Json fixReuslt = docOrderPackingService.fixOrderPacking(orderHeaderForNormalForm.getOrderno());
                         if (!fixReuslt.isSuccess()) {
 
                             json.setSuccess(false);
@@ -650,16 +657,10 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-//        return json;
 
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("60")) {
-
-                /*进行顺丰下单  下单报文*/
-                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-                if (!json.isSuccess()) return json;
 
                 //拣货/装箱状态订单直接操作发运
                 Map<String, Object> map = new HashMap<>();
@@ -744,12 +745,13 @@ public class OrderHeaderForNormalService extends BaseService {
         basCodesQuery.setCodeid(Constant.CODE_CATALOG_SENDCOMPANY);
         basCodesQuery.setCode("SF");
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-        //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能
-        if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid()) && !"JSJY".equals(orderHeaderForNormal.getCustomerid())) ||
+        //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单;已经回写过快递单号的也不用下单；
+        // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能 && !"JSJY".equals(orderHeaderForNormal.getCustomerid())
+        if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid())) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
-                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
+                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK")) ||
+                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1")) {
 
             return Json.success("不用下顺丰单");
         }
@@ -767,7 +769,7 @@ public class OrderHeaderForNormalService extends BaseService {
         String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
         //响应报文
         String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-        //解析响应报文 TODO 下单重复反馈回来数据有问题
+        //解析响应报文
         ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
         if (!shunFengResponse.isResultFlag()) {
 
@@ -1822,7 +1824,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
             }
             //分配库存
-            Json result = allocation(orderno);
+            OrderHeaderForNormalForm forNormalForm = new OrderHeaderForNormalForm();
+            forNormalForm.setOrderno(orderno);
+            forNormalForm.setReturnSfOrder("0");
+            Json result = allocation(forNormalForm);
             if (result.isSuccess()) {
                 head = orderHeaderForNormalMybatisDao.queryById(orderno);
                 if (head.getSostatus().equals("40")) {
