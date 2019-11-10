@@ -31,7 +31,7 @@ public class RequestXmlUtil {
         //客户订单号,建议英文字母+
         //YYMMDD(日期)+流水号,
         //如:TB1207300000001
-        strBuilder.append("orderid='" + sfOrderHeader.getOrderno() + "3'").append(" ");
+        strBuilder.append("orderid='" + sfOrderHeader.getOrderno() + "'").append(" ");
         //返回顺丰运单号
         /*
          运输方式
