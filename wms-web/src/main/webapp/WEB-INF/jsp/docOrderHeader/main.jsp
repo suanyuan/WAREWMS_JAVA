@@ -957,62 +957,80 @@ var unPacking = function(){
 	});
 };
 
+var chooseExpressType = function() {
+
+    returnSfodd = $('#returnSfodd').dialog({
+        modal : true,
+        width:200,
+        height:130,
+        title : '订单下单是否需要签回单号',
+        buttons : [{
+            id: 'returnSfoddBtn',
+            text: '提交',
+            handler: function () {
+				returnSfodd.dialog('close');
+                shipment();
+            }
+        }],
+        onClose : function() {
+            ezuiFormClear(returnSfoddForm);
+        }
+    }).dialog('open');
+};
+
 /* 订单发货按钮 */
 var shipment = function(){
-	var operateResult = '';
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
-	$.each(checkedItems, function(index, item) {
-			if (item.sostatus <= '40' || item.sostatus >= '90') {
-				operateResult = operateResult + "订单编号：" + item.orderno + ",";
-				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
-			} else {
-                returnSfodd.dialog('open');
-                $('#returnSfoddBtn').click(function () {
-                  var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
-					returnSfodd.dialog('close');
 
-                    $.messager.progress({
-                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-                    });
-                    $.ajax({
-                        async: true,
-                        url: 'docOrderHeaderController.do?shipment',
-                        data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
-                        type: 'POST',
-                        dataType: 'JSON',
-                        success: function (result) {
-                            $.messager.progress('close');
-							console.log(result);
-							console.log("-----------------------------");
-                            ezuiDatagrid.datagrid('reload');
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                                if (result.success) {
-                                	operateResult = '';
-                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                    operateResult = operateResult + "处理完毕" + "\n";
-                                } else {
-									operateResult = '';
-                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                    operateResult = operateResult + "处理时错误：" + msg + "\n";
-                                }
-                                ;
-                                ezuiDatagrid.datagrid('reload');
-                            } catch (e) {
-                                msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            }
-                            finally {
-								$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-								$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
-								ezuiOperateResultDataDialog.dialog('open');
-								ezuiDatagrid.datagrid('reload');
-							}
+    var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
+    var operateResult = '';
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    $.each(checkedItems, function(index, item) {
+
+        if (item.sostatus <= '40' || item.sostatus >= '90') {
+
+            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+            operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
+        } else {
+
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
+            $.ajax({
+                async: true,
+                url: 'docOrderHeaderController.do?shipment',
+                data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (result) {
+                    $.messager.progress('close');
+                    ezuiDatagrid.datagrid('reload');
+                    var msg = '';
+                    try {
+                        msg = result.msg;
+                        if (result.success) {
+
+                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                            operateResult = operateResult + "处理完毕" + "\n";
+                        } else {
+
+                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                            operateResult = operateResult + "处理时错误：" + msg + "\n";
                         }
-                    });
-                });
-			};
-	});
+                        ;
+                        ezuiDatagrid.datagrid('reload');
+                    } catch (e) {
+                        msg = '<spring:message code="common.message.data.delete.failed"/>';
+                    }
+                    finally {
+                        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
+                        ezuiOperateResultDataDialog.dialog('open');
+                        ezuiDatagrid.datagrid('reload');
+                    }
+                }
+            });
+        }
+    });
 	// if (operateResult != '') {
 	// 	$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
 	// 	$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
@@ -2585,7 +2603,7 @@ var writeBackExpressBtnCommit = function(){
 					<a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelAllocation'/></a>
  					<a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
  					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a>
-                    <a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
+                    <a onclick='chooseExpressType();' id='ezuiBtn_shipment' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.shipment'/></a>
                    <!-- <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> -->
 					<a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.rubBish'/></a>
 <%--                    <a onclick='showRefOut()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用出库</a>--%>
