@@ -650,60 +650,60 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-        return json;
+//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//        return json;
 
-//        if (orderHeaderForNormal != null) {
-//            //判断订单状态
-//            if (orderHeaderForNormal.getSostatus().equals("60")) {
-//
-//                /*进行顺丰下单  下单报文*/
-//                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-//                if (!json.isSuccess()) return json;
-//
-//                //拣货/装箱状态订单直接操作发运
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-//                map.put("orderNo", orderHeaderForNormalForm.getOrderno());
-//                map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-//                orderHeaderForNormalMybatisDao.shipmentByOrder(map);
-//                String shippmentResult = map.get("result").toString();
-//                if (shippmentResult != null && shippmentResult.length() > 0) {
-//                    if (shippmentResult.equals("000")) {
-//
-//                        //发运成功之后记录序列号出库
-//                        recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
-//
-//                        orderHeaderForNormalQuery.setCurrentTime(new Date());
-//                        orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-//                        json.setSuccess(true);
-//                        json.setMsg("出库处理成功！");
-//                        json.setObj(orderHeaderForNormal);
-//                        return json;
-//                    } else {
-//
-//                        json.setSuccess(false);
-//                        json.setMsg("出库处理失败：" + shippmentResult);
-//                        return json;
-//                    }
-//                } else {
-//
-//                    json.setSuccess(false);
-//                    json.setMsg("出库处理失败：订单数据异常！");
-//                    return json;
-//                }
-//            } else {
-//
-//                json.setSuccess(false);
-//                json.setMsg("出库处理失败：当前状态订单,不能操作出库!");
-//                return json;
-//            }
-//        } else {
-//
-//            json.setSuccess(false);
-//            json.setMsg("出库处理失败：订单数据异常！");
-//            return json;
-//        }
+        if (orderHeaderForNormal != null) {
+            //判断订单状态
+            if (orderHeaderForNormal.getSostatus().equals("60")) {
+
+                /*进行顺丰下单  下单报文*/
+                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+                if (!json.isSuccess()) return json;
+
+                //拣货/装箱状态订单直接操作发运
+                Map<String, Object> map = new HashMap<>();
+                map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                map.put("orderNo", orderHeaderForNormalForm.getOrderno());
+                map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+                orderHeaderForNormalMybatisDao.shipmentByOrder(map);
+                String shippmentResult = map.get("result").toString();
+                if (shippmentResult != null && shippmentResult.length() > 0) {
+                    if (shippmentResult.equals("000")) {
+
+                        //发运成功之后记录序列号出库
+                        recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
+
+                        orderHeaderForNormalQuery.setCurrentTime(new Date());
+                        orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+                        json.setSuccess(true);
+                        json.setMsg("出库处理成功！");
+                        json.setObj(orderHeaderForNormal);
+                        return json;
+                    } else {
+
+                        json.setSuccess(false);
+                        json.setMsg("出库处理失败：" + shippmentResult);
+                        return json;
+                    }
+                } else {
+
+                    json.setSuccess(false);
+                    json.setMsg("出库处理失败：订单数据异常！");
+                    return json;
+                }
+            } else {
+
+                json.setSuccess(false);
+                json.setMsg("出库处理失败：当前状态订单,不能操作出库!");
+                return json;
+            }
+        } else {
+
+            json.setSuccess(false);
+            json.setMsg("出库处理失败：订单数据异常！");
+            return json;
+        }
     }
 
     /**
