@@ -1139,7 +1139,7 @@ var printExpress = function () {
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item) {
-        if (item.carrieraddress1 == "1") {
+        if (item.carriercountry == "1") {
             showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
             return;
         } else {

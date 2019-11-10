@@ -2421,8 +2421,8 @@ public class OrderHeaderForNormalService extends BaseService {
         Json json = new Json();
         OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
         try {
-            orderHeaderForNormalForm.setCarrieraddress1("1");
             BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
+            orderHeaderForNormal.setCarriercountry("1");
             orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
             json.setSuccess(true);
             json.setMsg("回写快递单号处理成功！");
