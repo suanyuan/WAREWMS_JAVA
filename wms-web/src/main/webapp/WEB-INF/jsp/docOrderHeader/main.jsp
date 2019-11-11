@@ -118,7 +118,15 @@ $(function() {
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('clearChecked');
 			$(this).datagrid('clearSelections');
-		}
+		}, onClickRow: function (index, row) {
+
+            row = ezuiDatagrid.datagrid("getSelections");
+            var a = row.length;
+            // alert(a);
+            $('#nummm').html(a);
+
+
+        }
 	});
 	//订单明细列表
 	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
@@ -420,8 +428,26 @@ $(function() {
 		ezuiFormClear(writeBackExpressForm);
 	}
 }).dialog('close');
-});
 
+    $("input").each(function () {
+        // alert($(this));
+
+        $(this).click(function () {
+            jishu();
+            // 全选中
+        });
+    })
+    $('div').on('click','tbody>tr',function(){
+        jishu();
+
+    })
+});
+function  jishu(){
+    row = ezuiDatagrid.datagrid("getSelections");
+    var a = row.length;
+    // alert(a);
+    $('#nummm').html(a);
+}
 /* 查询条件清空按钮 */
 var ezuiToolbarClear = function(){
 	$("#orderno").textbox('clear');
@@ -2612,6 +2638,9 @@ var writeBackExpressBtnCommit = function(){
 
 <%--					<a onclick='rDouble()' id='ezuiBtn_double' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>匹配双证</a>--%>
 					<!--<a onclick='print();' id='ezuiBtn_print' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成波次（D）</a>-->
+					<div style="float: right">
+						<a class='easyui-linkbutton' data-options='plain:true'>已选择</a><a id="nummm" class='easyui-linkbutton' data-options='plain:true'>0</a><a class='easyui-linkbutton' data-options='plain:true'>条</a>
+					</div>
 				</div>
 				<div>
 					<a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
@@ -2622,6 +2651,7 @@ var writeBackExpressBtnCommit = function(){
 					<a onclick='writeBackExpress();' id='ezuiBtn_WriteBackExpress' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>回写快递单号</a>
 
 				</div>
+
 			</div>
 			<table id='ezuiDatagrid'></table>
 		</div>
@@ -2821,6 +2851,7 @@ var writeBackExpressBtnCommit = function(){
 			</table>
 		</form>
 	</div>
+
     <div id='writeBackExpressBtn'>
         <a onclick='writeBackExpressBtnCommit()' class='easyui-linkbutton' href='javascript:void(0);'>提交</a>
     </div>
