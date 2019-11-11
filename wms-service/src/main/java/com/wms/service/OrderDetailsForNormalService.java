@@ -1,36 +1,29 @@
 package com.wms.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.wms.constant.Constant;
-import com.wms.entity.*;
-import com.wms.mybatis.dao.BasPackageMybatisDao;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasPackage;
+import com.wms.entity.BasSku;
+import com.wms.entity.order.OrderDetailsForNormal;
+import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasPackageQuery;
-import com.wms.query.GspOperateLicenseQuery;
-import com.wms.vo.GspOperateDetailVO;
+import com.wms.query.OrderDetailsForNormalQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.Json;
+import com.wms.vo.OrderDetailsForNormalVO;
+import com.wms.vo.form.OrderDetailsForNormalForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
-import com.wms.mybatis.dao.OrderHeaderForNormalMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.entity.order.OrderDetailsForNormal;
-import com.wms.entity.order.OrderHeaderForNormal;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.vo.OrderDetailsForNormalVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.OrderDetailsForNormalForm;
-import com.wms.query.OrderDetailsForNormalQuery;
-import com.wms.query.OrderHeaderForNormalQuery;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("orderDetailsForNormalService")
 public class OrderDetailsForNormalService extends BaseService {
@@ -53,6 +46,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	private GspOperateDetailService gspOperateDetailService;
 	@Autowired
 	private BasPackageMybatisDao basPackageMybatisDao;
+	@Autowired
+	private BasSkuMybatisDao basSkuMybatisDao;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
@@ -66,7 +61,14 @@ public class OrderDetailsForNormalService extends BaseService {
 		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
 			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
 			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);
+			Map<String, Object> param2 = new HashMap<>();
+			param2.put("customerid", orderDetailsForNormal.getCustomerid());
+			param2.put("sku", orderDetailsForNormal.getSku());
+			BasSku basSku1 = basSkuMybatisDao.queryById(param2);
+			orderDetailsForNormalVO.setSkuName(basSku1.getReservedfield01()); //产品名
+			orderDetailsForNormalVO.setDescrc(basSku1.getDescrC());//规格
 			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
+
 		}
 		datagrid.setTotal((long) orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(orderDetailsForNormalVOList);

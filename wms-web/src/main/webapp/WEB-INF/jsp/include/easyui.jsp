@@ -268,11 +268,18 @@
     var sostatusFormatter = function (value,row,index) {
 		console.log(value);
         switch (value) {
+			case "00" : return "创建订单";
+			case "30" : return "部分分配";
             case "40" : return "分配完成";
+			case "50" : return "部分拣货";
             case "60" : return "拣货完成";
-            case "50" : return "部分拣货";
+            case "62" : return "部分装箱";
+			case "63" : return "完全装箱";
+			case "70" : return "部分发运";
             case "80" : return "完全发运";
-            case "90" : return "订单完成";
+            case "90" : return "订单取消";
+			case "98" : return "等待释放";
+			case "99" : return "订单完成";
         }
     }
 //上架状态
