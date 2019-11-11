@@ -1,10 +1,6 @@
 package com.wms.vo;
 
 import lombok.Data;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import com.wms.utils.serialzer.JsonDateSerializer;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 @Data
 public class OrderDetailsForNormalVO {
@@ -209,4 +205,5 @@ public class OrderDetailsForNormalVO {
     private String cContact;
     private String consigneeid;
     private String skuName;
+    private String descrc;   //规格/型号
 }

@@ -222,7 +222,6 @@
                     lotatt12: row.lotatt12,
                     lotatt06: row.lotatt06,
                     name: row.name,
-                    enterpriseName: row.enterpriseName,
                     warehouseid: row.warehouseid
                 });
                 ezuiDialog.dialog('open');
@@ -276,7 +275,7 @@
                     {field: 'lotatt06', title: '注册证号', width: 170},//加个字段
                     {field: 'qtyholded', title: '冻结件数', width: 100,hidden:true},
                     {field: 'qtyholdedEach', title: '冻结数量', width: 100,hidden:true},
-                    {field: 'defaultreceivinguom', title: '单位', width: 100},
+                    {field: 'defaultreceivinguom', title: '单位', width: 100,formatter:unitFormatter},
                     {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
                     {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
                     // {field: 'lotatt07', title: '灭菌批号', width: 120},
@@ -818,7 +817,11 @@
                 <th>可用件数</th>
                 <td><input type='text' name='qtyavailed' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>单位</th>
-                <td><input type='text' name='defaultreceivinguom' class='easyui-textbox' size='50' data-options='required:true'/></td>
+                <td><input type='text' name='defaultreceivinguom' class='easyui-combobox' size='50' data-options="panelHeight: 'auto',
+																																editable: false,
+																																url:'<c:url value="/commonController.do?getUOM"/>',
+																																valueField: 'id',
+																																textField: 'value'"/></td>
             </tr>
             <tr>
                 <th>注册证号/备案凭证号</th>
