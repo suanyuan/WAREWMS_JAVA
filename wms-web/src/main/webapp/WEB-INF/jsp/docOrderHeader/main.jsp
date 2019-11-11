@@ -1286,7 +1286,7 @@ var doExport = function(){
 };
 /* 导出end */
 
-/* 导出start */
+/* 导出随货start */
 var doExportGoodsList = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row) {
@@ -1322,7 +1322,7 @@ var doExportGoodsList = function(){
 		});
 	}
 };
-/* 导出end */
+/* 导出随货end */
 
 /* 导入start */
 var commitImportData = function(obj){
