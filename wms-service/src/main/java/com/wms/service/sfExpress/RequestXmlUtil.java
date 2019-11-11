@@ -1,7 +1,12 @@
 package com.wms.service.sfExpress;
 
 import com.wms.entity.sfExpress.SFOrderHeader;
+import com.wms.service.sfExpress.sfXmlParse.RlsInfoDto;
+import com.wms.service.sfExpress.sfXmlParse.ShunFengResponse;
+import com.wms.service.sfExpress.sfXmlParse.XmlHelper;
 import com.wms.utils.StringUtil;
+
+import java.util.List;
 
 /**
  * 顺丰请求的工具类
