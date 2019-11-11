@@ -751,7 +751,8 @@ public class OrderHeaderForNormalService extends BaseService {
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
                 (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK")) ||
-                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1")) {
+                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1") ||
+                StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress4())) {
 
             return Json.success("不用下顺丰单");
         }
