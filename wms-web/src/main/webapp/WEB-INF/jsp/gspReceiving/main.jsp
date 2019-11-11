@@ -240,6 +240,13 @@ var edit = function(){
      var row = ezuiDatagrid.datagrid('getSelected');
      if(row.firstState=="40" || row.firstState=="90"){
 
+         if(row.isCheck =="0"){
+             $.messager.progress('close');
+             $.messager.show({
+                 msg : '无需审核的申请无法发起新申请', title : '<spring:message code="common.message.prompt"/>'
+             });
+             return;
+		 }
 	 }else{
          $.messager.progress('close');
          $.messager.show({
@@ -248,6 +255,7 @@ var edit = function(){
 
          return;
 	 }
+
      if (row) {
          $.messager.confirm('<spring:message code="common.message.confirm"/>', '确认要发起新申请吗', function(confirm) {
 			 if (confirm) {
