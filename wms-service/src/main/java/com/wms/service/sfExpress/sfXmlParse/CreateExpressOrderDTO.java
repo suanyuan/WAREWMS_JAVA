@@ -55,6 +55,7 @@ public class CreateExpressOrderDTO implements Cloneable{
     /** 包裹数量 大于1则会生成子单号*/
     private Integer parcelQuantity;
 
+
     /** 丰密运单相关设置 */
     private List<RlsInfoDto> rlsInfoDtoList;
 
@@ -241,6 +242,8 @@ public class CreateExpressOrderDTO implements Cloneable{
     public void setLimitTypeCode(String limitTypeCode) {
         this.limitTypeCode = limitTypeCode;
     }
+
+
     @Override
     public Object clone() {
         //实例化下单解析实体

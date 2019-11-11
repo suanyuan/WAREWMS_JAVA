@@ -250,10 +250,13 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 分配
      */
-    public Json allocation(String orderNo) {
+    public Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 
-        Json json = docOrderUtilService.validateAllocation(orderNo);
+        Json json = docOrderUtilService.validateAllocation(orderHeaderForNormalForm.getOrderno());
         if (!json.isSuccess()) return json;
+
+//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
+//        return json;
 
         OrderHeaderForNormal orderHeaderForNormal = (OrderHeaderForNormal) json.getObj();
         if (orderHeaderForNormal != null) {
@@ -262,12 +265,16 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
 
                 //判断双证/质量合格证
-                json = fixCertificateFlag(orderNo);
+                json = fixCertificateFlag(orderHeaderForNormalForm.getOrderno());
+                if (!json.isSuccess()) return json;
+
+                /*进行顺丰下单  下单报文*/
+                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
                 if (!json.isSuccess()) return json;
 
                 Map<String, Object> map = new HashMap<>();
                 //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                map.put("orderNo", orderNo);
+                map.put("orderNo", orderHeaderForNormalForm.getOrderno());
                 map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
                 //map.put("result", "");
                 orderHeaderForNormalMybatisDao.allocationByOrder(map);
@@ -278,7 +285,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                     if (orderHeaderForNormal.getOrdertype().equals("DX")) {
 
-                        Json fixReuslt = docOrderPackingService.fixOrderPacking(orderNo);
+                        Json fixReuslt = docOrderPackingService.fixOrderPacking(orderHeaderForNormalForm.getOrderno());
                         if (!fixReuslt.isSuccess()) {
 
                             json.setSuccess(false);
@@ -650,16 +657,10 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-//        return json;
 
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("60")) {
-
-                /*进行顺丰下单  下单报文*/
-                json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-                if (!json.isSuccess()) return json;
 
                 //拣货/装箱状态订单直接操作发运
                 Map<String, Object> map = new HashMap<>();
@@ -744,12 +745,13 @@ public class OrderHeaderForNormalService extends BaseService {
         basCodesQuery.setCodeid(Constant.CODE_CATALOG_SENDCOMPANY);
         basCodesQuery.setCode("SF");
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-        //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单
-        // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能
+        //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单;已经回写过快递单号的也不用下单；
+        // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能 && !"JSJY".equals(orderHeaderForNormal.getCustomerid())
         if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid())) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
-                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK"))) {
+                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK")) ||
+                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1")) {
 
             return Json.success("不用下顺丰单");
         }
@@ -767,7 +769,7 @@ public class OrderHeaderForNormalService extends BaseService {
         String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
         //响应报文
         String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
-        //解析响应报文 TODO 下单重复反馈回来数据有问题
+        //解析响应报文
         ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
         if (!shunFengResponse.isResultFlag()) {
 
@@ -788,10 +790,6 @@ public class OrderHeaderForNormalService extends BaseService {
         orderHeaderForNormalSf.setUserdefine2(shunFengResponse.getOrderResponse().getDestCode());
         //时效
         orderHeaderForNormalSf.setUserdefine3(shunFengResponse.getOrderResponse().getLimitTypeCode());
-        //原寄递地代码  zipCode;
-        //shunFengResponse.getOrderResponse().getZipCode();
-        //目的地的代码  destCode;
-        // shunFengResponse.getOrderResponse().getDestCode();
 
 
         List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
@@ -806,6 +804,18 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormalSf.setUserdefine1(rlsInfoDto.getDestRouteLabel());
             //中转场代码
             orderHeaderForNormalSf.setUserdefine6(rlsInfoDto.getSourceTransferCode());
+            //签回单：二维码
+            orderHeaderForNormalSf.setCarrieraddress2(rlsInfoDto.getReturnQrcode());
+            //签回单：目的地代码
+            orderHeaderForNormalSf.setCarrieraddress3(rlsInfoDto.getReturnestRouteLabel());
+
+            //签回单：入港映射码
+            orderHeaderForNormalSf.setCarrieraddress4(rlsInfoDto.getReturnCodingMapping());
+            //签回单：中转场代码
+            orderHeaderForNormalSf.setCarriercity(rlsInfoDto.getReturnSourceTransferCode());
+            //签回单：出港映射码
+            orderHeaderForNormalSf.setCarrierprovince(rlsInfoDto.getReturnCodingMappingOut());
+
 
         }
         orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormalSf);
@@ -1135,12 +1145,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 } else {
                     docOrderDetail.setReport("否");
                 }
-
             }
 
-
             //库位
-            docOrderDetail.getLocation();
+            docOrderDetail.getAlocation();
             a = a + docOrderDetail.getQty(); //件数
             b = b + docOrderDetail.getQtyeach();  //数量
             docOrderDetail.setQtyorderedEachSum(b);//数量和
@@ -1294,7 +1302,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //运输条件
             docOrderDetail.setSkugroup5(basSku1.getSkuGroup5());
 
-            docOrderDetail.getLocation();//库位
+            docOrderDetail.getAlocation();//库位
             docOrderDetail.getQty(); //件数
             docOrderDetail.getQtyeach(); //数量
             a = a + docOrderDetail.getQty(); //件数
@@ -1816,7 +1824,10 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
             }
             //分配库存
-            Json result = allocation(orderno);
+            OrderHeaderForNormalForm forNormalForm = new OrderHeaderForNormalForm();
+            forNormalForm.setOrderno(orderno);
+            forNormalForm.setReturnSfOrder("0");
+            Json result = allocation(forNormalForm);
             if (result.isSuccess()) {
                 head = orderHeaderForNormalMybatisDao.queryById(orderno);
                 if (head.getSostatus().equals("40")) {
@@ -2041,10 +2052,11 @@ public class OrderHeaderForNormalService extends BaseService {
             basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
             basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
             BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-            String j_company = basCodes.getCodenameC();
-            String j_contact = basCodes.getCodenameE();
-            String j_tel = basCodes.getUdf3();
-            String custid = basCodes.getUdf1();
+            String j_company =  basCodes.getCodenameC();
+            String j_contact =  basCodes.getCodenameE();
+            String j_tel =  basCodes.getUdf3();
+            String custid =  basCodes.getUdf1();
+            map.put("sftelLogo", "imgFile/qiao.jpg");
             map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
             map.put("so", "imgFile/FM/so.jpg");
             map.put("QRcode", orderHeaderForNormal.getUserdefine4());
@@ -2076,7 +2088,6 @@ public class OrderHeaderForNormalService extends BaseService {
             //打印原寄地
 //            map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
             map.put("destRouteLabel", orderHeaderForNormal.getUserdefine1());
-            map.put("destRouteLabelBack", "021");//签回单目的代码
             //收件人相关信息
             if (orderHeaderForNormal.getCContact() == null || orderHeaderForNormal.getCContact().equals("")) {
                 map.put("consignerName", (orderHeaderForNormal.getConsigneeid()));
@@ -2132,6 +2143,13 @@ public class OrderHeaderForNormalService extends BaseService {
                 map.put("childMailNoStrSignBack",  orderHeaderForNormal.getCAddress3());//签回单号
                 map.put("mailNoStrBank", orderHeaderForNormal.getCAddress3());
                 map.put("childMailNoBank",orderHeaderForNormal.getCAddress3());//签回单条码
+                map.put("destRouteLabelBack", orderHeaderForNormal.getCarrieraddress3());//签回单目的代码
+                map.put("returnQRcode", orderHeaderForNormal.getCarrieraddress2());//签回单：二维码
+
+                map.put("returnCodingMapping", orderHeaderForNormal.getCarrieraddress4()); //签回单：入港映射码
+                map.put("returnSourceTransferCode", orderHeaderForNormal.getCarriercity());//签回单：中转场代码
+                map.put("returnCodingMappingOut", orderHeaderForNormal.getCarrierprovince());//签回单：出港映射码
+
             }
             map.put("PALINENO", System.currentTimeMillis());
             list.add(map);
@@ -2408,8 +2426,8 @@ public class OrderHeaderForNormalService extends BaseService {
         Json json = new Json();
         OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
         try {
-            orderHeaderForNormalForm.setCarrieraddress1("1");
             BeanUtils.copyProperties(orderHeaderForNormalForm, orderHeaderForNormal);
+            orderHeaderForNormal.setCarriercountry("1");
             orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
             json.setSuccess(true);
             json.setMsg("回写快递单号处理成功！");

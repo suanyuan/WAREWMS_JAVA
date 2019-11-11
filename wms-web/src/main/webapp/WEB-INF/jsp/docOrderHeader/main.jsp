@@ -117,6 +117,7 @@ $(function() {
 			ajaxBtn($('#menuId').val(), '<c:url value="/docOrderHeaderController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('clearChecked');
+			$(this).datagrid('clearSelections');
 		}
 	});
 	//订单明细列表
@@ -700,8 +701,32 @@ var del = function(){
 	};*/
 };
 
+var chooseExpressType = function() {
+
+	returnSfodd = $('#returnSfodd').dialog({
+		modal : true,
+		width:200,
+		height:130,
+		title : '是否需要签回单号',
+		buttons : [{
+			id: 'returnSfoddBtn',
+			text: '提交',
+			handler: function () {
+				returnSfodd.dialog('close');
+				allocation();
+			}
+		}],
+		onClose : function() {
+			ezuiFormClear(returnSfoddForm);
+		}
+	}).dialog('open');
+};
+
+
 /* 分配按钮 */
 var allocation = function(){
+
+	var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
 	var operateResult = '';
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item){
@@ -716,7 +741,7 @@ var allocation = function(){
 			$.ajax({
 				async: true,
 				url : 'docOrderHeaderController.do?allocation',
-				data : {orderNo : item.orderno},
+				data : {orderno : item.orderno, returnSfOrder : returnSfOrder},
 				type : 'POST',
 				dataType : 'JSON',
 				success : function(result){
@@ -958,58 +983,56 @@ var unPacking = function(){
 
 /* 订单发货按钮 */
 var shipment = function(){
-	var operateResult = '';
-	var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
-	$.each(checkedItems, function(index, item) {
-			if (item.sostatus <= '40' || item.sostatus >= '90') {
-				operateResult = operateResult + "订单编号：" + item.orderno + ",";
-				operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
-			} else {
-                returnSfodd.dialog('open');
-                $('#returnSfoddBtn').click(function () {
-                  var returnSfOrder  =   $('#returnSfoddid').combobox('getValue');
-					returnSfodd.dialog('close');
 
-                    $.messager.progress({
-                        text : '<spring:message code="common.message.data.processing"/>', interval : 100
-                    });
-                    $.ajax({
-                        async: true,
-                        url: 'docOrderHeaderController.do?shipment',
-                        data: {orderno: item.orderno, returnSfOrder : returnSfOrder},
-                        type: 'POST',
-                        dataType: 'JSON',
-                        success: function (result) {
-                            $.messager.progress('close');
-							console.log(result);
-							console.log("-----------------------------");
-                            ezuiDatagrid.datagrid('reload');
-                            var msg = '';
-                            try {
-                                msg = result.msg;
-                                if (result.success) {
-                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                    operateResult = operateResult + "处理完毕" + "\n";
-                                } else {
-                                    operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                    operateResult = operateResult + "处理时错误：" + msg + "\n";
-                                }
-                                ;
-                                ezuiDatagrid.datagrid('reload');
-                            } catch (e) {
-                                msg = '<spring:message code="common.message.data.delete.failed"/>';
-                            }finally {
-								$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
-								$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
-								ezuiOperateResultDataDialog.dialog('open');
-								ezuiDatagrid.datagrid('reload');
-							}
+    var operateResult = '';
+    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
+    $.each(checkedItems, function(index, item) {
 
+        if (item.sostatus <= '40' || item.sostatus >= '90') {
+
+            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+            operateResult = operateResult + "处理时错误：订单此状态不能操作发货" + "\n";
+        } else {
+
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
+            $.ajax({
+                async: true,
+                url: 'docOrderHeaderController.do?shipment',
+                data: {orderno: item.orderno},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (result) {
+                    $.messager.progress('close');
+                    ezuiDatagrid.datagrid('reload');
+                    var msg = '';
+                    try {
+                        msg = result.msg;
+                        if (result.success) {
+
+                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                            operateResult = operateResult + "处理完毕" + "\n";
+                        } else {
+
+                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
+                            operateResult = operateResult + "处理时错误：" + msg + "\n";
                         }
-                    });
-                });
-			};
-	});
+                        ;
+                        ezuiDatagrid.datagrid('reload');
+                    } catch (e) {
+                        msg = '<spring:message code="common.message.data.delete.failed"/>';
+                    }
+                    finally {
+                        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
+                        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
+                        ezuiOperateResultDataDialog.dialog('open');
+                        ezuiDatagrid.datagrid('reload');
+                    }
+                }
+            });
+        }
+    });
 	// if (operateResult != '') {
 	// 	$('#ezuiOperateResultDataForm #operateResult').textbox('setValue',operateResult);
 	// 	$('#ezuiOperateResultDataDialog').panel({title: "批量操作：发货"});
@@ -1118,13 +1141,13 @@ var printExpress = function () {
 	orderList = null;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item) {
-        if (item.carrieraddress1 == "1") {
+        if (item.carriercountry == "1") {
             showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
             return;
         } else {
         //如果快递单号为空则不能打印电子面单
         if (item.cAddress4 == null) {
-            showMsg("选中的订单存在未发运订单无法打印快递单.......");
+            showMsg("选中的订单未在系统内下单，无法打印快递单.......");
             return;
         } else {
             console.log("++++++++++++++++++++++++++");
@@ -1263,7 +1286,7 @@ var doExport = function(){
 };
 /* 导出end */
 
-/* 导出start */
+/* 导出随货start */
 var doExportGoodsList = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row) {
@@ -1299,7 +1322,7 @@ var doExportGoodsList = function(){
 		});
 	}
 };
-/* 导出end */
+/* 导出随货end */
 
 /* 导入start */
 var commitImportData = function(obj){
@@ -2578,7 +2601,7 @@ var writeBackExpressBtnCommit = function(){
 <%--
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 --%>
-					<a onclick='allocation();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
+					<a onclick='chooseExpressType();' id='ezuiBtn_allocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.allocation'/></a>
 					<a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelAllocation'/></a>
  					<a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message code='common.button.picking'/></a>
  					<a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelPicking'/></a>

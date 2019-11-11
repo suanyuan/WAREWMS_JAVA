@@ -112,6 +112,7 @@ $(function() {
 			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnHeaderController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('clearChecked');
+			$(this).datagrid('clearSelections');
 		}
 	});
 
