@@ -799,9 +799,113 @@ public class DocOrderPackingService extends BaseService {
         }
     }
 
-//    暂缓
-//    public PdaResult singlePackageCommit(DocOrderPackingForm form) {
+	/**
+	 * PDA 复核模块
+	 */
+//	public PdaResult singlePackageCommit(PdaDocPackageQuery query) {
 //
+//		Json statusJson = orderStatusCheck(query.getOrderno());
+//		if (!statusJson.isSuccess()) {
+//			return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
+//		}
+//
+//		ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
+//		DocOrderPackingCarton packingCartonQuery = new DocOrderPackingCarton();
+//
+//		//分配明细
+//		allocationQuery.setAllocationdetailsid(form.getAllocationdetailsid());
+//		ActAllocationDetails matchDetails = actAllocationDetailsMybatisDao.queryById(allocationQuery);
+//
+//		//分配明细中装箱的件数
+//		packingCartonQuery.setOrderno(form.getOrderno());
+//		packingCartonQuery.setAllocationdetailsid(form.getAllocationdetailsid());
+//		int packedNum = docOrderPackingMybatisDao.queryPackedNum(packingCartonQuery);
+//		if (matchDetails.getQty() < (form.getQty() + packedNum)) {
+//			return new PdaResult(PdaResult.CODE_FAILURE, "当前提交数超出分配数");
+//		}
+//
+//		//批次获取
+//		InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
+//
+//		try {
+//
+//			//记录序列号出库
+//			if (StringUtil.isNotEmpty(form.getSerialNums())) {
+//
+//				String[] serialNumList = form.getSerialNums().split(",");
+//				for (String serialNum : serialNumList) {
+//
+//					if (StringUtil.isNotEmpty(serialNum)) {
+//
+//						OrderHeaderForNormal orderHeader = orderHeaderForNormalMybatisDao.queryById(form.getOrderno());
+//						DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(DocSerialNumRecord.RECORD_TYPE_OUT,
+//								form.getCustomerid(), Integer.parseInt(form.getTraceid().split("#")[1]),
+//								orderHeader.getSoreference1(), form.getOrderno(), invLotAtt.getLotatt04(),
+//								serialNum, form.getEditwho());
+//						docSerialNumRecordMybatisDao.add(docSerialNumRecord);
+//					}
+//				}
+//			}
+//
+//			//再分配明细上记录本次扫描的GS1条码内容
+//			matchDetails.setNotes(form.getGs1Code());
+//			actAllocationDetailsMybatisDao.update(matchDetails);
+//
+//			//本次装箱件数+分配明细对应的已装箱件数 == 分配明细件数
+//			if (matchDetails.getQty() == (form.getQty() + packedNum)) {
+//
+//				allocationQuery.setEditwho(form.getEditwho());
+//				actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
+//			}
+//
+//			DocOrderPackingCartonInfo packingCartonInfo = docOrderPackingMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
+//			if (packingCartonInfo == null) {
+//
+//				DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();
+//				BeanUtils.copyProperties(form, docOrderPackingCartonInfo);
+//				docOrderPackingCartonInfo.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
+//				docOrderPackingCartonInfo.setAddwho(form.getEditwho());
+//				docOrderPackingMybatisDao.packingCartonInfoInsert(docOrderPackingCartonInfo);
+//			}
+//
+//			packingCartonQuery.setTraceid(form.getTraceid());
+//			packingCartonQuery.setSku(form.getSku());
+//			packingCartonQuery.setLotnum(form.getLotnum());
+//			DocOrderPackingCarton packingCarton = docOrderPackingMybatisDao.queryAvailablePackedDetail(packingCartonQuery);
+//			if (packingCarton == null) {
+//
+//				DocOrderPackingCarton packingCartonInsert = new DocOrderPackingCarton();
+//				BeanUtils.copyProperties(invLotAtt, packingCartonInsert);
+//				int maxlineno = docOrderPackingMybatisDao.getMaxPacklineno(form.getOrderno());
+//				packingCartonInsert.setPacklineno(maxlineno + 1);
+//				packingCartonInsert.setOrderno(form.getOrderno());
+//				packingCartonInsert.setTraceid(form.getTraceid());
+//				packingCartonInsert.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
+//				packingCartonInsert.setCustomerid(form.getCustomerid());
+//				packingCartonInsert.setSku(form.getSku());
+//				packingCartonInsert.setSkudesce(form.getSkudesce());
+//				packingCartonInsert.setQty(form.getQty());
+//				packingCartonInsert.setAllocationdetailsid(form.getAllocationdetailsid());
+//				packingCartonInsert.setDescription(form.getDescription());
+//				packingCartonInsert.setConclusion(form.getConclusion());
+//				packingCartonInsert.setAddwho(form.getEditwho());
+//				packingCartonInsert.setEditwho(form.getEditwho());
+//				docOrderPackingMybatisDao.packingCartonInsert(packingCartonInsert);
+//			}else {
+//
+//				//这边的packingCartonInfo的pickflag肯定是0，在上yigefangfa获取的时候已经作了处理
+//				packingCarton.setQty(packingCarton.getQty() + form.getQty());
+//				packingCarton.setEditwho(form.getEditwho());
+//				docOrderPackingMybatisDao.updatePackingCarton(packingCarton);
+//			}
+//
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
+//
+//			return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "包装复核失败(系统错误:" + e.getMessage() + ")");
+//		}
+//		return new PdaResult(PdaResult.CODE_SUCCESS, "包装复核成功");
 //    }
 
     /**

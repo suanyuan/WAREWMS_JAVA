@@ -113,7 +113,16 @@ $(function() {
 			$(this).datagrid('unselectAll');
 			$(this).datagrid('clearChecked');
 			$(this).datagrid('clearSelections');
-		}
+		},
+		onClickRow: function (index, row) {
+
+            row = ezuiDatagrid.datagrid("getSelections");
+            var a = row.length;
+            // alert(a);
+            $('#nummm').html(a);
+
+
+        }
 	});
 
 	//订单明细列表（数据窗口）
@@ -428,9 +437,25 @@ $(function() {
 	$("#asnstatusCheck").change(function() {
 		doSearch();
 	});
+    $("input").each(function () {
+        // alert($(this));
 
+        $(this).click(function () {
+            jishu();
+            // 全选中
+        });
+    })
+    $('div').on('click','tbody>tr',function(){
+        jishu();
+
+    })
 });
-
+function  jishu(){
+    row = ezuiDatagrid.datagrid("getSelections");
+    var a = row.length;
+    // alert(a);
+    $('#nummm').html(a);
+}
 
 /* 查询条件清空按钮 */
 var ezuiToolbarClear = function(){
@@ -632,6 +657,7 @@ var cancel = function(){
 					data : {'asnnos' : arr.join(",")},
 					type : 'POST',
 					dataType : 'JSON',
+                    async: true,
 					success : function(result){
                         $.messager.progress('close');
 						var msg = '';
@@ -766,6 +792,7 @@ var closeCheck = function(){
             data : {'asnnos' : asnnos.join(",")},
             type : 'GET',
             dataType : 'JSON',
+            async: true,
             success : function(result){
                 $.messager.progress('close');
                 var msg = '';
@@ -2110,6 +2137,9 @@ function printResultList(){
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
                     <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
+					<div style="float: right">
+						<a class='easyui-linkbutton' data-options='plain:true'>已选择</a><a id="nummm" class='easyui-linkbutton' data-options='plain:true'>0</a><a class='easyui-linkbutton' data-options='plain:true'>条</a>
+					</div>
 				</div>
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
