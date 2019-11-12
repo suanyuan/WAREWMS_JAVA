@@ -279,7 +279,7 @@ public class DocQcHeaderService extends BaseService {
                 docQcDetails.setUserdefine5(null);
                 docQcDetails.setPackid(docPaDetails.getPackid());
                 docQcDetails.setQcqtyCompleted(null);
-                docQcDetails.setQcqtyExpected(null);
+                docQcDetails.setQcqtyExpected(docPaDetails.getPutwayqtyExpected());
                 docQcDetails.setNotes("");
                 docQcDetails.setPaqtyExpected(basPackage.getQty1().doubleValue() * (docPaDetails.getPutwayqtyExpected()));//到货件数（这里是拆开的后面需要合计下）
                 docQcDetails.setQcqtyCompletedSum(null);
@@ -321,6 +321,8 @@ public class DocQcHeaderService extends BaseService {
                     docQcHeader.setLotatt14(docAsnHeader.getAsnno());
                     //冷链随货温度
                     docQcHeader.setUserdefine1Temp(docAsnHeader.getUserdefine1());
+
+                    docQcHeader.setPano(docAsnHeader.getPono());
                 }
             } else {
                 //货主
