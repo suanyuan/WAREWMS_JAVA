@@ -325,12 +325,18 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
 
-    <!-- 根据specsid查询 最新有效的该产品 -->
+    <!--通过规格找产品代码-->
     <select id="selectNewBySpecsId" resultMap="BaseResultMap" parameterType="Object">
-    select * from gsp_product_register_specs where product_code =
-    (select product_code from gsp_product_register_specs where specs_id = #{specsId})
-    and is_use = 1;
+        select * from gsp_product_register_specs where product_code =
+        (select product_code from gsp_product_register_specs where specs_id = #{specsId})
+        and is_use = 1;
     </select>
+
+    <!-- 根据specsid查询 最新有效的该产品 -->
+    <select id="selectBySpecsName" resultMap="BaseResultMap" parameterType="Object">
+        select * from gsp_product_register_specs where specs_name = #{specsName}
+    </select>
+
 
     <!-- 根据id查询 产品注册证规格关联产品注册证,`long`,wide hight, -->
     <select id="selectProductByCompare" resultMap="BaseResultMap" parameterType="Object">

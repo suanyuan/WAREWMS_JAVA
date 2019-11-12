@@ -94,6 +94,7 @@ public class BasCustomerService extends BaseService {
 				basCustomerVO.setEnterpriseType(gspEnterpriseInfo.getEnterpriseType());
 				basCustomerVO.setRemark(gspEnterpriseInfo.getRemark());
 			}
+			//供应商对应 所有货主
 			if(Constant.CODE_CUS_TYP_VE.equals(basCustomerVO.getCustomerType())){
 				List<GspSupplier> supList = gspSupplierMybatisDao.queryListByEnterpriseId(basCustomerVO.getEnterpriseId());
 				String content = "";
@@ -106,6 +107,20 @@ public class BasCustomerService extends BaseService {
 			}else{
 				basCustomerVO.setAllClient("");
 			}
+//			//收货单位 对应 所有货主
+//			if(Constant.CODE_CUS_TYP_CO.equals(basCustomerVO.getCustomerType())){
+//				List<GspSupplier> supList = gspSupplierMybatisDao.queryListByEnterpriseId(basCustomerVO.getEnterpriseId());
+//				String content = "";
+//				for(GspSupplier sup:supList){
+//					if(sup.getCustomerName()!=null){
+//						content =content + sup.getCustomerName()+",";
+//					}
+//				}
+//				basCustomerVO.setAllClient(content);
+//			}else{
+//				basCustomerVO.setAllClient("");
+//			}
+
 
 
 			basCustomerVOList.add(basCustomerVO);
@@ -327,7 +342,6 @@ public class BasCustomerService extends BaseService {
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
 				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
-
 			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 

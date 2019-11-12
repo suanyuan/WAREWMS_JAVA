@@ -1058,14 +1058,14 @@
         $('#client').attr("readonly",true);
         $('#supplier').css('display', 'none');
         $('#supplier').attr("readonly",true);
-        $('#ezuiDetailsBtn_add').css('display', 'none');
-        $('#ezuiDetailsBtn_add').attr("readonly",true);
-        $('#ezuiDetailsBtn_edit').css('display', 'none');
-        $('#ezuiDetailsBtn_edit').attr("readonly",true);
-        $('#ezuiDetailsBtn_del').css('display', 'none');
-        $('#ezuiDetailsBtn_del').attr("readonly",true);
-        $('#clearBtn').css('display', 'none');
-        $('#clearBtn').attr("readonly",true);
+        // $('#ezuiDetailsBtn_add').css('display', 'none');
+        // $('#ezuiDetailsBtn_add').attr("readonly",true);
+        // $('#ezuiDetailsBtn_edit').css('display', 'none');
+        // $('#ezuiDetailsBtn_edit').attr("readonly",true);
+        // $('#ezuiDetailsBtn_del').css('display', 'none');
+        // $('#ezuiDetailsBtn_del').attr("readonly",true);
+        // $('#clearBtn').css('display', 'none');
+        // $('#clearBtn').attr("readonly",true);
         $('#ezuiBtn_commit').css('display', 'none');
         $('#ezuiBtn_commit').attr("readonly",true);
         $('#ezuiBtn_clear').css('display', 'none');
@@ -1074,7 +1074,6 @@
     }
     if(a=='00'){
         $('#isChec').css('disedplay', 'none');
-
         $('#isChec').attr("readonly",true);
     }
 }

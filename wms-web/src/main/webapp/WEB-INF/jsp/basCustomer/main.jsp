@@ -53,6 +53,9 @@ $(function() {
             {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
+            // {field: 'fisrtop',		title: '首营状态 ',	width: 71,formatter:function(value,rowData,rowIndex){
+            //         return rowData.activeFlag == '1' ? '是' : '否';
+            //     }},
             {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';
@@ -75,8 +78,9 @@ $(function() {
             {field: 'descrC',		title: '客户名称',	width: 250 },
             {field: 'enterpriseNo',		title: '企业代码 ',	width: 100 },
             {field: 'shorthandName',		title: '简称 ',	width: 100 },
-            {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
+            // {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
             {field: 'allClient',		title: '供应商对应货主 ',	width: 250 },
+            // {field: 'receivingAllClient',		title: '收货单位对应货主 ',	width: 250 },
 
 
             {field: 'contacts',		title: '联系人 ',	width: 80 },
