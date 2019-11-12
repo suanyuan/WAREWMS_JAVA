@@ -1165,36 +1165,38 @@ var printAccompanying = function () {
 
 var printExpress = function () {
 	orderList = null;
+	var printFlag = 2;
 	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
 	$.each(checkedItems, function(index, item) {
         if (item.carriercountry == "1") {
-            showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
-            return;
+			printFlag=0;
+
         } else {
         //如果快递单号为空则不能打印电子面单
         if (item.cAddress4 == null) {
-            showMsg("选中的订单未在系统内下单，无法打印快递单.......");
-            return;
+			printFlag = 1;
         } else {
             console.log("++++++++++++++++++++++++++");
-            console.log(index);
-            if (index == 0) {
                 if (orderList == null) {
                     orderList = item.orderno;
                 } else {
                     orderList = orderList + ',' + item.orderno;
                 }
-            } else {
-                showMsg("同时只支持一张电子面单打印......");
-                return;
-            }
         }
     }
+
+		console.log(orderList);
 	});
+	if(printFlag == 0){
+		return  showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
+	}
+	if(printFlag == 1){
+		return  showMsg("选中的订单未在系统内下单，无法打印快递单.......");
+	}
+	console.log(printFlag);
 	if (orderList == null) {
 		return;
 	}
-	console.log(orderList);
 	window.open(sy.bp()+"/docOrderHeaderController.do?printExpress&orderCodeList="+orderList);
 }
 
