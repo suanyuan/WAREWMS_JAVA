@@ -230,6 +230,7 @@ var del = function(){
         if(row){
 
             if(row.firstState=="10" || row.firstState=="40"){
+                $.messager.progress('close');
                 $.messager.show({
                     msg : '审核中与审核通过的申请无法删除', title : '提示'
                 });
@@ -333,6 +334,7 @@ var commit = function(){
 		// }
 
         if(row.firstState=="40" || row.firstState=="10"){
+            $.messager.progress('close');
             $.messager.show({
                 msg : '审核中与审核通过的申请无法编辑', title : '提示'
             });

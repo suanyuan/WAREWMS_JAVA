@@ -42,6 +42,6 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     //查询需要比较的字段
     public <T> T selectBasSkuByCompare(@Param("customerid") String customerid, @Param("sku") String sku);
 
-
-
+    //通过规格找产品代码
+    public <T> T selectBySpecsName(Object id);
 }

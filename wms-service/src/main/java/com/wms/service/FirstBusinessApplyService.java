@@ -509,6 +509,9 @@ public class FirstBusinessApplyService extends BaseService {
 			if(value1==null&&value2!=null){
 				return false;
 			}
+			if((value1==null||value1==""||value1==" ") && (value2==""||value2==null||value2==" ")){
+				return true;
+			}
 			if(value1.equals(value2)){
 				return true;
 			}
@@ -546,12 +549,12 @@ public class FirstBusinessApplyService extends BaseService {
 			if("medicalDeviceMark".equals(zd))return "医疗器械标志";
 			if("productName".equals(zd))return "产品名称";
 			if("productRegisterNo".equals(zd))return "注册证编号";
-			if("productRegisterAddress".equals(zd))return "产品描述";
-			if("remark".equals(zd))return "产品代码";
-			if("productProductionAddress".equals(zd))return "单位";
-			if("agentName".equals(zd))return "规格";
-			if("agentAddress".equals(zd))return "包装单位";
-			if("otherContent".equals(zd))return "型号";
+			if("productRemark".equals(zd))return "产品描述";
+			if("productCode".equals(zd))return "产品代码";
+			if("unit".equals(zd))return "单位";
+			if("specsName".equals(zd))return "规格";
+			if("packagingUnit".equals(zd))return "包装单位";
+			if("productModel".equals(zd))return "型号";
 			if("packingRequire".equals(zd))return "包装要求";
 			if("packingUnit".equals(zd))return "包装规格";
 			if("llong".equals(zd))return "长";

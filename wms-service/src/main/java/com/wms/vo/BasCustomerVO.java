@@ -98,8 +98,16 @@ public class BasCustomerVO {
 	private String isChineseLabel;
 
 	private String notes;
-	private String allClient;
+	private String allClient; //供应商所有货主
+	private String receivingAllClient; //收货单位对应货主
 
+	public String getReceivingAllClient() {
+		return receivingAllClient;
+	}
+
+	public void setReceivingAllClient(String receivingAllClient) {
+		this.receivingAllClient = receivingAllClient;
+	}
 
 	public String getClientStartDateDc() {
 		return clientStartDateDc;
