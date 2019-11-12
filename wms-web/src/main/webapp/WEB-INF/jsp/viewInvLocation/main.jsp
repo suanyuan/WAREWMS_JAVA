@@ -222,6 +222,7 @@
                     lotatt12: row.lotatt12,
                     lotatt06: row.lotatt06,
                     name: row.name,
+                    enterpriseName: row.enterpriseName,
                     warehouseid: row.warehouseid
                 });
                 ezuiDialog.dialog('open');
@@ -817,7 +818,7 @@
                 <th>可用件数</th>
                 <td><input type='text' name='qtyavailed' class='easyui-textbox' size='50' data-options='required:true'/></td>
                 <th>单位</th>
-                <td><input type='text' name='defaultreceivinguom' class='easyui-combobox' size='50' data-options="panelHeight: 'auto',
+                <td><input type='text' name='defaultreceivinguom' class='easyui-combobox' readonly="readonly" size='50' data-options="panelHeight: 'auto',
 																																editable: false,
 																																url:'<c:url value="/commonController.do?getUOM"/>',
 																																valueField: 'id',

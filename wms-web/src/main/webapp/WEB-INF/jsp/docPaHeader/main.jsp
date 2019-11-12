@@ -255,7 +255,7 @@ var doSearch = function(){
 		pareference4 : $('#pareference4').val(),
 		pareference5 : $('#pareference5').val(),
 		patype : $('#patype').val(),
-		pastatus : $('#pastatus').val(),
+		pastatus : $('#pastatus').combobox('getValue'),
 		pacreationtime : $('#pacreationtime').val(),
 		userdefine1 : $('#userdefine1').val(),
 		userdefine2 : $('#userdefine2').val(),
@@ -457,6 +457,11 @@ function btnReset() {
 						<tr>
 							<th>上架单号：</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>入库单号：</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>上架状态：</th><td><input type='text' id='pastatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																										editable: false,
+																										url:'<c:url value="/commonController.do?getPaState"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
 						</tr>
 						<tr>
 							<th>创建时间起始：</th><td><input type='text' id='addtimeBegin' class='easyui-datebox' size='16' data-options=''/></td>
@@ -465,7 +470,7 @@ function btnReset() {
 						<tr>
 							<th>是否打印：</th><td><input type='text' id='paPrintFlag' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>仓库：</th><td><input type='text' id='warehouseid' class='easyui-textbox' size='16' data-options=''/></td>
-							<td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='doExport();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>任务导出</a>
 								<a onclick='doImport();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>结果导入</a>
