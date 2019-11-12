@@ -47,7 +47,8 @@ public class DocQcHeaderService extends BaseService {
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
-
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
     /**
      * 分页 显示主单
      * @param pager
@@ -241,7 +242,7 @@ public class DocQcHeaderService extends BaseService {
         DocQcHeader docQcHeader = new DocQcHeader();
         List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
         Double paQtySum = 0.00;//到货数量
-
+        Double pcQtySum = 0.00;//件数
         docQcHeader.setDetls(new ArrayList<DocQcDetails>());
         List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryPaDetialsByQcno(qcno);
         if (docPaDetailsList.size() > 0) {
@@ -268,7 +269,7 @@ public class DocQcHeaderService extends BaseService {
 
                     BeanUtils.copyProperties(docPaDetails.getInvLotAtt(), docQcDetails);
                 }
-
+                docQcDetails.setPano(docPaDetails.getPano());
                 docQcDetails.setCustomerid(docPaDetails.getCustomerid());
                 docQcDetails.setSku(docPaDetails.getSku());
                 docQcDetails.setLotnum(docPaDetails.getLotnum());
@@ -290,7 +291,9 @@ public class DocQcHeaderService extends BaseService {
                 //合计数量
                 paQtySum += docQcDetails.getPaqtyExpected();
                 docQcDetails.setPaqtyExpectedSum(paQtySum);
-
+                //件数
+                pcQtySum += docQcDetails.getQcqtyExpected();
+                docQcDetails.setQcqtyExpectedSum(pcQtySum);
                 docQcHeader.getDetls().add(docQcDetails);
             }
 
@@ -305,24 +308,37 @@ public class DocQcHeaderService extends BaseService {
                 for (DocQcDetails docqcDetails : docQcHeader.getDetls()) {//这里判断不行 先去list中去重如果size大于1就正面不是同一个ASN编号
                     //这里还有查询。
                     DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docqcDetails.getLotatt14());//根据ASN编号查询预期入库头档
-                    docQcHeader.setCustomerid(docAsnHeader.getCustomerid());
-                    //供应商
-                    BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(docqcDetails.getLotatt08(), Constant.CODE_CUS_TYP_VE);
-                    if (basCustomer == null) {
-
-                        docQcHeader.setDescrC(" ");
-                    } else {
-
-                        docQcHeader.setDescrC(basCustomer.getDescrC());
+                    BasCustomer basCustomerList = basCustomerMybatisDao.queryByIdType(docAsnHeader.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+                    if (basCustomerList != null) {
+                        docQcHeader.setCustomerid(basCustomerList.getDescrC());
                     }
-                    //入库日期
-                    docQcHeader.setLotatt03(docqcDetails.getLotatt03());
-                    //入库单号
-                    docQcHeader.setLotatt14(docAsnHeader.getAsnno());
-                    //冷链随货温度
-                    docQcHeader.setUserdefine1Temp(docAsnHeader.getUserdefine1());
+                    //供应商
+                    InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(docqcDetails.getLotnum());
+                    if(invLotAtt !=null){
+                        BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(invLotAtt.getLotatt08(), Constant.CODE_CUS_TYP_VE);
+                        if (basCustomer == null) {
+                            docQcHeader.setDescrC(" ");
+                        } else {
+                            docQcHeader.setDescrC(basCustomer.getDescrC());
+                        }
+                        //入库日期
+                        docQcHeader.setLotatt03(docqcDetails.getLotatt03());
+                        //入库单号
+                        docQcHeader.setLotatt14(docAsnHeader.getAsnno());
+                        //上架单号
+                        docQcHeader.setPano(docqcDetails.getPano());
+                        //客户订单号
+                        if(docQcHeader.getPano() != null){
+                            DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryById(docQcHeader.getPano());
+                            docQcHeader.setAsnreference1(docPaHeader.getPareference1());
+                            DocAsnHeader docAsnHeader1 = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
+                            if(docAsnHeader1 !=null){
+                                //冷链随货温度
+                                docQcHeader.setUserdefine1Temp(docAsnHeader1.getUserdefine1());
+                            }
+                        }
 
-                    docQcHeader.setPano(docAsnHeader.getPono());
+                    }
                 }
             } else {
                 //货主
