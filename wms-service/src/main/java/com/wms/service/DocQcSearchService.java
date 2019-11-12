@@ -9,6 +9,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,10 @@ public class DocQcSearchService extends BaseService {
         List<DocQcDetails> docQcDetailsList = docQcDetailsMybatisDao.queryByListPano(mybatisCriteria);//获取需要打印的数据
         if(docQcDetailsList.size()>0) {
             for (DocQcDetails docQcDetails1 : docQcDetailsList) { //规格  数量 不合格数量
+                //供应商
+//                BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(docQcDetails1.getLotatt08(), Constant.CODE_CUS_TYP_VE);
+//                docQcDetails1.setLotatt08(basCustomer == null ? "N/A" : basCustomer.getDescrC());
+
                 //到货数量
                 skuQuery.setCustomerid(docQcDetails1.getCustomerid());
                 skuQuery.setSku(docQcDetails1.getSku());
@@ -136,6 +141,7 @@ public class DocQcSearchService extends BaseService {
                 }
                 if (docQcDetails1.getUserdefine5().equals("DJ")) {
                     docQcDetails1.setQcqtyCompleted(0d);
+                    docQcDetails1.setQcqtyExpected(0d);
                     //qcQtyComSum += docQcDetails1.setQcqtyCompleted();
                 }
                /* //质量状态为不合格、 合格 、 待检 、 分别插入不同的数值
@@ -163,6 +169,7 @@ public class DocQcSearchService extends BaseService {
                 docQcDetails1.setPaqtyExpectedSum(paQtySum);
                 docQcDetails1.setQcqtyCompletedSum(qcQtySum);
                 docQcDetails1.setQcqtyExpectedSum(qcQtyComSum);
+                docQcDetails1.setEditwho(StringUtil.fixNull(docQcDetails1.getEditwho()));
                 docQcHeader.getDetls().add(docQcDetails1);
             }
             List<String> stringList = new ArrayList<>();
