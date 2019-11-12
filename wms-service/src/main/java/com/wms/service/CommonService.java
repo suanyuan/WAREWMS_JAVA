@@ -76,10 +76,10 @@ public class CommonService extends BaseService{
         if (StringUtil.isNotEmpty(form.getLotatt05()) ||
                 StringUtil.isNotEmpty(form.getOtherCode())) {
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+            List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryValidatedId(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
+            if (basSerialNumList != null && basSerialNumList.size() > 0) {
 
+                basSerialNum = basSerialNumList.get(0);
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
                 //如果扫了序列号管理中的序列号，自动匹配出批号进行SKU查询
                 form.setLotatt04(basSerialNum.getBatchNum());

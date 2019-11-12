@@ -488,10 +488,10 @@ public class DocAsnDetailService extends BaseService {
         if (StringUtil.isNotEmpty(query.getOtherCode()) ||
                 StringUtil.isNotEmpty(query.getLotatt05())) {
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+            List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryValidatedId(StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+            if (basSerialNumList != null && basSerialNumList.size() > 0) {
 
+                basSerialNum = basSerialNumList.get(0);
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
                 query.setLotatt04(basSerialNum.getBatchNum());
             }
@@ -545,10 +545,10 @@ public class DocAsnDetailService extends BaseService {
         if (StringUtil.isNotEmpty(form.getOtherCode()) ||
                 StringUtil.isNotEmpty(form.getLotatt05())) {
 
-            BasSerialNumQuery serialNumQuery = new BasSerialNumQuery(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
-            basSerialNum = basSerialNumMybatisDao.queryById(serialNumQuery);
-            if (basSerialNum != null) {
+            List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryValidatedId(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
+            if (basSerialNumList != null && basSerialNumList.size() > 0) {
 
+                basSerialNum = basSerialNumList.get(0);
                 //序列号扫码数据缺失 效期、生产批号（注：序列号不需要传，效期不参与查询）
                 form.setLotatt04(basSerialNum.getBatchNum());
             }

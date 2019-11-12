@@ -334,7 +334,7 @@ public class DocPaHeaderService extends BaseService {
                 docPaDetails.setPutwayqtyExpecteds(b);
             }
             //单位 bassku.defaultreceivinguom => BasCode query (条件 codeid=UOM，code = defaultreceivinguom) => bascode.codename_c
-            BasCodes basCodes = basCodesMybatisDao.query(basSku.getDefaultreceivinguom());
+            BasCodes basCodes = basCodesMybatisDao.query4UOM(basSku.getDefaultreceivinguom());
             if(basCodes != null){
                 docPaDetails.setCodename(basCodes.getCodenameC());
             }

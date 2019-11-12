@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("docOrderUtils")
+@Service
 public class DocOrderUtilService {
 
     @Autowired

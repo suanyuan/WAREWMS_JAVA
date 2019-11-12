@@ -194,6 +194,12 @@ where 1=1
 
 </select>
 
+	<select id="queryValidatedId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from bas_serial_num
+		where serial_num = #{serialNum} and (userdefine2 is null or userdefine2 = '')
+	</select>
+
 <!-- 根据序列号查询出库日期出库单号为空的数据 -->
 	<select id="queryExistBySerialNum" resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />

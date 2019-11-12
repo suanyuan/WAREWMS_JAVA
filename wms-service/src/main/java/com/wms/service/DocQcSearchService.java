@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class DocQcSearchService extends BaseService {
     @Autowired
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
-    private BasCodesService basCodesService;
+    private BasCodesMybatisDao basCodesMybatisDao;
     @Autowired
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
@@ -75,13 +76,9 @@ public class DocQcSearchService extends BaseService {
                                             String lotatt03End,String lotatt14) {
 
         //验收记录
-        List<DocQcHeader> docQcHeaderList = new ArrayList<DocQcHeader>();
-        MybatisCriteria mybatisCriteria1 = new MybatisCriteria();
+        List<DocQcHeader> docQcHeaderList = new ArrayList<>();
         BasSkuQuery skuQuery = new BasSkuQuery();
-        List<BasSku> basSkuList;
         DocQcHeader docQcHeader = new DocQcHeader();
-        List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
-        List<EasyuiCombobox> easyuiComboboxListZl = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);//查询质量状态
         Double paQtySum = 0.00;//到货数量
         Double qcQtySum = 0.00;
         Double qcQtyComSum = 0.00;
@@ -114,41 +111,31 @@ public class DocQcSearchService extends BaseService {
                 BasSku basSku = basSkuMybatisDao.queryById(skuQuery);//得到sku的packid
                 BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
                 //规格
-                BasSkuQuery basSkuQuery = new BasSkuQuery();
-                basSkuQuery.setSku(docQcDetails1.getSku());
-                basSkuQuery.setCustomerid(docQcDetails1.getCustomerid());
-                mybatisCriteria1.setCondition(BeanConvertUtil.bean2Map(basSkuQuery));
-                basSkuList = basSkuMybatisDao.queryByList(mybatisCriteria1);
-                for (BasSku basSku1 : basSkuList) {
-                    docQcDetails1.setDescrc(basSku1.getDescrC());
-                    //单位
-                    for (EasyuiCombobox easyuiComboboxUom : easyuiComboboxListUom) {
-                        if (basSku1.getDefaultreceivinguom().equals(easyuiComboboxUom.getId())) {//单位类型
-                            docQcDetails1.setQcUnit(easyuiComboboxUom.getValue());
-                        }
-                    }
-                }
+                docQcDetails1.setDescrc(basSku.getDescrC());
+                //单位
+                BasCodes basCodes = basCodesMybatisDao.query4UOM(basSku.getDefaultreceivinguom());
+                docQcDetails1.setQcUnit(basCodes == null ? "N/A" : basCodes.getCodenameC());
+
                 docQcDetails1.setQcqtyExpected(basPackage.getQty1().doubleValue() * docQcDetails1.getQcqtyExpected());
                 docQcDetails1.setQcqtyCompleted(basPackage.getQty1().doubleValue() * docQcDetails1.getQcqtyCompleted());
 
-                if (docQcDetails1.getUserdefine5().equals("BHG")) {
+                if (docQcDetails1.getUserdefine5().equals("DCL")) {
                     docQcDetails1.setQcqtyCompleted(docQcDetails1.getQcqtyExpected() - docQcDetails1.getQcqtyCompleted());//不合格数量
                     if(docQcDetails1.getQcqtyCompleted() == 0){
-                        docQcDetails1.setQcqtyCompleted(null);
+                        docQcDetails1.setQcqtyCompleted(0d);
                     }
                     qcQtyComSum += docQcDetails1.getQcqtyExpected();
                 }
                 if (docQcDetails1.getUserdefine5().equals("HG")) {
                     docQcDetails1.setQcqtyExpected(docQcDetails1.getQcqtyCompleted() - docQcDetails1.getQcqtyExpected());//合格数量
                     if(docQcDetails1.getQcqtyExpected() == 0){
-                        docQcDetails1.setQcqtyExpected(null);
+                        docQcDetails1.setQcqtyExpected(0d);
                     }
                     qcQtySum += docQcDetails1.getQcqtyCompleted();
 
                 }
                 if (docQcDetails1.getUserdefine5().equals("DJ")) {
-                    docQcDetails1.setQcqtyCompleted(null);
-                    docQcDetails1.setQcqtyExpected(null);
+                    docQcDetails1.setQcqtyCompleted(0d);
                     //qcQtyComSum += docQcDetails1.setQcqtyCompleted();
                 }
                /* //质量状态为不合格、 合格 、 待检 、 分别插入不同的数值
@@ -159,7 +146,17 @@ public class DocQcSearchService extends BaseService {
                     }
                 }*/
                 docQcDetails1.setNotes("");
-                docQcDetails1.setUserdefine5(null);
+                switch (docQcDetails1.getUserdefine5()) {
+                    case "DJ":
+                        docQcDetails1.setUserdefine5("待检");
+                        break;
+                    case "HG":
+                        docQcDetails1.setUserdefine5("合格");
+                        break;
+                    case "DCL":
+                        docQcDetails1.setUserdefine5("待处理");
+                        break;
+                }
                 docQcDetails1.setPaqtyExpected(basPackage.getQty1().doubleValue() * (docQcDetails1.getPaqtyExpected()));//到货件数（这里是拆开的后面需要合计下）
                 //合计数量
                 paQtySum += docQcDetails1.getPaqtyExpected();
@@ -179,19 +176,12 @@ public class DocQcSearchService extends BaseService {
                 for (DocQcDetails docqcDetails : docQcHeader.getDetls()) {//这里判断不行 先去list中去重如果size大于1就正面不是同一个ASN编号
                     //这里还有查询。
                     DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docqcDetails.getLotatt14());//根据ASN编号查询预期入库头档
-                    docQcHeader.setCustomerid(docAsnHeader.getCustomerid());
-                    //供应商
-                    BasCustomer basCustomer = basCustomerMybatisDao.queryByIdType(docqcDetails.getLotatt08(), Constant.CODE_CUS_TYP_VE);
-                    if(basCustomer == null){
-                        docQcHeader.setDescrC(" ");
-
-                    }else {
-                        docQcHeader.setDescrC(basCustomer.getDescrC());
-                    }
+                    BasCustomer owCustomer = basCustomerMybatisDao.queryByIdType(docqcDetails.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+                    docQcHeader.setCustomerid(owCustomer.getDescrC());
                     //入库日期
                     docQcHeader.setLotatt03(docqcDetails.getLotatt03());
                     //入库单号
-                    docQcHeader.setLotatt14(docAsnHeader.getAsnno());
+                    docQcHeader.setLotatt14(docqcDetails.getQcno());
                     //冷链随货温度
                     docQcHeader.setUserdefine1Temp(docAsnHeader.getUserdefine1());
                 }

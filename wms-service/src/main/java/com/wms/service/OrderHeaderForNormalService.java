@@ -1360,7 +1360,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
             }
             //单位
-            BasCodes basCodes = basCodesMybatisDao.query(basSku1.getDefaultreceivinguom());
+            BasCodes basCodes = basCodesMybatisDao.query4UOM(basSku1.getDefaultreceivinguom());
             if (basCodes != null) {
                 docOrderDetail.setCodename(basCodes.getCodenameC());
             }

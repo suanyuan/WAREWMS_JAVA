@@ -21,7 +21,7 @@ public interface BasCodesMybatisDao extends BaseDao {
 
     List<BasCodes> queryByTransactionType();
 
-    BasCodes query(@Param("code")String code);
+    BasCodes query4UOM(@Param("code")String code);
 
     void delByIDCode(@Param("codeid") String codeid,@Param("code") String code);
 }

@@ -40,4 +40,9 @@ public interface BasSerialNumMybatisDao extends BaseDao {
      * 通过发运订单号，查看关联的发货凭证号是否导入了入库序列号,并返回行数量
      */
     int countSerialNum4Match(@Param("orderno") String orderno);
+
+    /**
+     * 查询可用的序列号记录（没出库的）
+     */
+    List<BasSerialNum> queryValidatedId(@Param("serialNum") String serialNum);
 }
