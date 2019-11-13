@@ -786,7 +786,7 @@ var ezuiAccDataClick = function () {
 var selectAcceptance = function () {
 	var row = ezuiAccDataDialogId.datagrid('getSelected');
 	if (row) {
-		// $("#toolbar #pano").textbox('setValue', row.pano);
+		$("#toolbar #pano").textbox('setValue', row.pano);
 		$("#toolbar #qcno").textbox('setValue', row.qcno);
 		doSearch();
 		ezuiAccDataDialog.dialog('close');

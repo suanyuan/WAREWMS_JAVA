@@ -1,7 +1,6 @@
 package com.wms.service;
 
 import com.wms.constant.Constant;
-import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
@@ -15,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,7 +139,7 @@ public class DocQcSearchService extends BaseService {
                 }
                 if (docQcDetails1.getUserdefine5().equals("DJ")) {
                     docQcDetails1.setQcqtyCompleted(0d);
-                    docQcDetails1.setQcqtyExpected(0d);
+                    qcQtyComSum += docQcDetails1.getQcqtyCompleted();
                     //qcQtyComSum += docQcDetails1.setQcqtyCompleted();
                 }
                /* //质量状态为不合格、 合格 、 待检 、 分别插入不同的数值
@@ -168,6 +166,7 @@ public class DocQcSearchService extends BaseService {
                 paQtySum += docQcDetails1.getPaqtyExpected();
                 docQcDetails1.setPaqtyExpectedSum(paQtySum);
                 docQcDetails1.setQcqtyCompletedSum(qcQtySum);
+                qcQtyComSum +=docQcDetails1.getQcqtyExpected();
                 docQcDetails1.setQcqtyExpectedSum(qcQtyComSum);
                 docQcDetails1.setEditwho(StringUtil.fixNull(docQcDetails1.getEditwho()));
                 docQcHeader.getDetls().add(docQcDetails1);

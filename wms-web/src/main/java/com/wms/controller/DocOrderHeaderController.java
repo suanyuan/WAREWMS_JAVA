@@ -304,9 +304,9 @@ public class DocOrderHeaderController {
         } else if (customer.equals("JSJY")) {
             //4 嘉意
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSJY.jasper");
-        } else if (customer.equals("BL")) {
+        } else if (customer.equals("BLJG")) {
             //5 佰礼
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBL.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBLJG.jasper");
         } else if (customer.equals("YG")) {
             //6 亦舸
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingYG.jasper");
