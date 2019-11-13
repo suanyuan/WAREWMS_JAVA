@@ -243,7 +243,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     return json;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
@@ -262,7 +262,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
 //        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
 //        return json;
-        try{
+        try {
             OrderHeaderForNormal orderHeaderForNormal = (OrderHeaderForNormal) json.getObj();
             if (orderHeaderForNormal != null) {
 
@@ -324,7 +324,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 json.setMsg("查无出库单数据");
                 return json;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             json.setSuccess(false);
@@ -397,7 +397,7 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
             if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
-                try{
+                try {
                     Map<String, Object> map = new HashMap<String, Object>();
                     //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     map.put("orderNo", orderNo);
@@ -411,7 +411,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     json.setSuccess(true);
                     json.setMsg(result);
                     return json;
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     json.setSuccess(true);
@@ -458,7 +458,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
                 if (allocationDetailsIdList != null && allocationDetailsIdList.size() > 0) {
-                    try{
+                    try {
                         for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
                             Map<String, Object> map = new HashMap<String, Object>();
                             //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -480,7 +480,7 @@ public class OrderHeaderForNormalService extends BaseService {
                                 return json;
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                         json.setSuccess(false);
@@ -523,7 +523,7 @@ public class OrderHeaderForNormalService extends BaseService {
             } else {
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
                 if (allocationDetailsIdList != null) {
-                    try{
+                    try {
                         for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
                             Map<String, Object> map = new HashMap<String, Object>();
                             //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -547,7 +547,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         }
                         //删除序列号记录 add by Gizmo 2019-08-29
                         docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                         return Json.success("取消拣货错误！");
@@ -694,7 +694,7 @@ public class OrderHeaderForNormalService extends BaseService {
         if (orderHeaderForNormal != null) {
             //判断订单状态
             if (orderHeaderForNormal.getSostatus().equals("60")) {
-                try{
+                try {
                     //拣货/装箱状态订单直接操作发运
                     Map<String, Object> map = new HashMap<>();
                     map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -726,7 +726,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         json.setMsg("出库处理失败：订单数据异常！");
                         return json;
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     json.setSuccess(false);
@@ -809,7 +809,6 @@ public class OrderHeaderForNormalService extends BaseService {
         sfOrderHeader.setCustid(basCodes.getUdf1());
 
 
-
         String requestXml = RequestXmlUtil.getOrderServiceRequestXml(sfOrderHeader, orderHeaderForNormalForm.getReturnSfOrder());
         //响应报文
         String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
@@ -818,11 +817,11 @@ public class OrderHeaderForNormalService extends BaseService {
 
 
         //效验响应报文是否反馈二维码、目的地区域代码是否存在
-        if(shunFengResponse.getOrderResponse() == null && shunFengResponse.isResultFlag()){
+        if (shunFengResponse.getOrderResponse() == null && shunFengResponse.isResultFlag()) {
             ShunFengResponse ShunFengResponseAbo = CancelShunFengOrder(sfOrderHeader.getOrderno());
             //TODO 这里消单成功反馈该怎么显示呢
             json.setSuccess(false);
-            json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认" );
+            json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认");
             return json;
         }
 
@@ -883,7 +882,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 取消顺丰下单
-     *
      */
     private ShunFengResponse CancelShunFengOrder(String Order) {
         String cancelXml = CallExpressServiceTools.callSfExpressServiceByCSIM(RequestXmlUtil.getOrderCancelServiceRequestXml(Order));
@@ -895,7 +893,7 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json cancel(String orderNo) {
         Json json = new Json();
-        try{
+        try {
             OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
             orderHeaderForNormalQuery.setOrderno(orderNo);
             OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
@@ -1059,7 +1057,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 json.setMsg("出库取消成功！");
                 return json;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             json.setSuccess(false);
@@ -2006,6 +2004,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 打印质量合格证
+     *
      * @param response
      * @param orderCodeList
      */
@@ -2042,17 +2041,17 @@ public class OrderHeaderForNormalService extends BaseService {
                             ByteArrayOutputStream bout = new ByteArrayOutputStream();
                             PdfReader reader = new PdfReader(Constant.uploadUrl + File.separator + url);
 
-                            PdfStamper pdfStamper = new PdfStamper(reader,bout);
+                            PdfStamper pdfStamper = new PdfStamper(reader, bout);
 
                             PdfContentByte under;
                             Rectangle pageRect = null;
                             int pageSize = reader.getNumberOfPages();// 原pdf文件的总页数
-                            for(int i = 1; i <= pageSize; i++) {
+                            for (int i = 1; i <= pageSize; i++) {
 
                                 pageRect = pdfStamper.getReader().getPageSizeWithRotation(i);
                                 // 计算水印X,Y坐标
-                        //                float x = pageRect.getWidth()/10;
-                        //                float y = pageRect.getHeight()/10-10;
+                                //                float x = pageRect.getWidth()/10;
+                                //                float y = pageRect.getHeight()/10-10;
                                 // 获得PDF最顶层
                                 under = pdfStamper.getOverContent(i);
                                 under.saveState();
@@ -2063,10 +2062,10 @@ public class OrderHeaderForNormalService extends BaseService {
                                 under.setGState(gs);
                                 under.restoreState();
                                 under.beginText();
-                                under.setFontAndSize(BaseFont.createFont("STSong-Light","UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 25);
+                                under.setFontAndSize(BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 25);
                                 under.setTextMatrix(30, 30);
                                 under.setColorFill(BaseColor.RED);
-                                under.showTextAligned(Element.ALIGN_LEFT, order, 30, 800,0);
+                                under.showTextAligned(Element.ALIGN_LEFT, order, 30, 800, 0);
 
                                 // 添加水印文字
                                 under.endText();
@@ -2079,7 +2078,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
                             PdfReader newReader = new PdfReader(bout.toByteArray());
                             int pages = newReader.getNumberOfPages();
-                            for(int i=1;i<=pages;i++){
+                            for (int i = 1; i <= pages; i++) {
                                 PdfImportedPage newPage = copy.getImportedPage(newReader, i);
                                 copy.addPage(newPage);
                             }
@@ -2111,24 +2110,23 @@ public class OrderHeaderForNormalService extends BaseService {
 
         //分割字符串
         List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        Boolean bankFlag = false;//是否签回单标记
+        OrderHeaderForNormal orderHeaderForNormal = new OrderHeaderForNormal();
         if (StringUtils.isNotEmpty(orderCodeList)) {
             String[] orderNoArr = orderCodeList.split(",");
-            for (String orderNo: orderNoArr ) {
+            for (String orderNo : orderNoArr) {
+                Map<String, Object> map = new HashMap<>();
                 OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
                 orderHeaderForNormalQuery.setOrderno(orderNo);
-                OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+                orderHeaderForNormal= orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
                 if (orderHeaderForNormal != null) {
-
                     BasCodesQuery basCodesQuery = new BasCodesQuery();
                     basCodesQuery.setCodeid(Constant.CODE_CATALOG_SF_EXPRESS);
                     basCodesQuery.setCode(orderHeaderForNormal.getCustomerid());
                     BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
-                    String j_company =  basCodes.getCodenameC();
-                    String j_contact =  basCodes.getCodenameE();
-                    String j_tel =  basCodes.getUdf3();
-                    String custid =  basCodes.getUdf1();
+                    String j_company = basCodes.getCodenameC();
+                    String j_contact = basCodes.getCodenameE();
+                    String j_tel = basCodes.getUdf3();
+                    String custid = basCodes.getUdf1();
                     map.put("sftelLogo", "imgFile/qiao.jpg");
                     map.put("proCode", "imgFile/FM/" + (StringUtil.isEmpty(orderHeaderForNormal.getUserdefine3()) ? "T4" : orderHeaderForNormal.getUserdefine3()) + ".jpg");
                     map.put("so", "imgFile/FM/so.jpg");
@@ -2178,7 +2176,6 @@ public class OrderHeaderForNormalService extends BaseService {
                     map.put("monthAccount", custid);//月结卡号
                     //todo 支付方式
                     if (StringUtil.isNotEmpty(orderHeaderForNormal.getStop()) && orderHeaderForNormal.getStop().equals("DF")) {
-
                         map.put("payMethod", "2");
                     } else {
 
@@ -2202,7 +2199,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     map.put("deliverCounty", "浦东新区");
                     map.put("deliverAddress", "上海市上海市浦东新区施湾八路1026号2号楼 201108");
                     //备注
-                    map.put("remark", orderCodeList);
+                    map.put("remark", orderHeaderForNormal.getOrderno());
                     //托寄物
                     map.put("cargo", "医疗器械");
                     //计费重量
@@ -2212,11 +2209,10 @@ public class OrderHeaderForNormalService extends BaseService {
                     //费用合计
                     //map.put("totalFee", "5");
                     if (StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress3())) {
-                        bankFlag = true;
                         map.put("cargoBack", "签单返回");
-                        map.put("childMailNoStrSignBack",  orderHeaderForNormal.getCAddress3());//签回单号
+                        map.put("childMailNoStrSignBack", orderHeaderForNormal.getCAddress3());//签回单号
                         map.put("mailNoStrBank", orderHeaderForNormal.getCAddress3());
-                        map.put("childMailNoBank",orderHeaderForNormal.getCAddress3());//签回单条码
+                        map.put("childMailNoBank", orderHeaderForNormal.getCAddress3());//签回单条码
                         map.put("destRouteLabelBack", orderHeaderForNormal.getCarrieraddress3());//签回单目的代码
                         map.put("returnQRcode", orderHeaderForNormal.getCarrieraddress2());//签回单：二维码
 
@@ -2224,21 +2220,24 @@ public class OrderHeaderForNormalService extends BaseService {
                         map.put("returnSourceTransferCode", orderHeaderForNormal.getCarriercity());//签回单：中转场代码
                         map.put("returnCodingMappingOut", orderHeaderForNormal.getCarrierprovince());//签回单：出港映射码
 
+                    } else {
+
                     }
                     map.put("PALINENO", System.currentTimeMillis());
-                    list.add(map);
                 }
+                list.add(map);
             }
-            for (int i=0;i<list.size();i++){
-            JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
-            //如果签回单号存在需要打印签回单 反之---
-            if (bankFlag) {
-                model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
-            } else {
-                model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
-            }
-            model.addAttribute("format", Constant.JASPER_PDF);
-            model.addAttribute("jrMainDataSource", jrDataSource);
+            for (int i = 0; i < list.size(); i++) {
+                //如果签回单号存在需要打印签回单 反之---
+                Map<String, Object> maps = list.get(i);
+                JRDataSource jrDataSource = new JRMapArrayDataSource(list.toArray());
+                    if (maps.get("cargoBack") != null) {
+                        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSf.jasper");
+                    } else {
+                        model.addAttribute("url", "WEB-INF/jasper/V3.1.FM_poster_100mm210mmTeseSfNoOadd.jasper");
+                    }
+                model.addAttribute("format", Constant.JASPER_PDF);
+                model.addAttribute("jrMainDataSource", jrDataSource);
             }
         }
     }
@@ -2249,7 +2248,7 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json copyDetailGo(String generalNO, String detailOrderno, String customerid, String soreference2, String copyFlag) {
         Json json = new Json();
-        try{
+        try {
             OrderDetailsForNormal orderDetailsForNormal = new OrderDetailsForNormal();
             MybatisCriteria criteria = new MybatisCriteria();
             Double index = 1.000;
@@ -2390,7 +2389,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 json.setMsg("请填写编号");
             }
             return json;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error("复用入库明细异常！");
