@@ -63,7 +63,7 @@ public class GspOperateDateTimeService {
     }
 
     /**
-     * 根据当前系统时间查询最近30天需要养护的产品距离下一次养护还有多少天
+     * 根据当前系统时间查询最近20天需要养护的产品距离下一次养护还有多少天
      */
     public List<InvLotLocId> getSkuDisDay(String systemTime) throws Exception {
         String remoteDate = "1990-01-01";
@@ -71,7 +71,7 @@ public class GspOperateDateTimeService {
         Calendar cal = Calendar.getInstance();//计算天数
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // 日期格式
         //Date fromdate = new Date(); //测试用的当前系统时间
-        Date newDate = addDate(dateFormat.parse(systemTime), 30); //传一个当前日期，基础上增加30天进行查询
+        Date newDate = addDate(dateFormat.parse(systemTime), 20); //传一个当前日期，基础上增加30天进行查询
         DocMtHeaderQuery query = new DocMtHeaderQuery();
         query.setFromdate(remoteDate);
         query.setTodate(dateFormat.format(newDate));

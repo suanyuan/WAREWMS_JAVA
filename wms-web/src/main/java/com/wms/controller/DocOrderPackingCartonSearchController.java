@@ -59,7 +59,7 @@ public class DocOrderPackingCartonSearchController {
 	}
 
     /**
-     * 打印验收报告
+     * 出库复核报告单
      */
 
     @Login
