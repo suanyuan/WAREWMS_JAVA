@@ -23,12 +23,15 @@
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and aaa.lotatt04 like concat('%', #{condition.lotatt04},'%')
             </if>
-<!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
-<!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->
-<!--            </if>-->
-<!--            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >-->
-<!--                and aaa.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}-->
-<!--            </if>-->
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and aaa.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
+            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
+                and aaa.soasndate &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
+                and aaa.soasndate &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+            </if>
         </trim>
     </sql>
 <!-- 查询条件 入库单列表 -->
@@ -47,12 +50,18 @@
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
             </if>
-<!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
-<!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->
-<!--            </if>-->
-<!--            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >-->
-<!--                and aaa.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}-->
-<!--            </if>-->
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
+            <if test="condition.documentNo != null and condition.documentNo != ''" >
+                and aa.`asnno` like concat('%', #{condition.documentNo},'%')
+            </if>
+            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
+                and e.`lotatt03` &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
+                and e.`lotatt03` &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+            </if>
         </trim>
     </sql>
 <!-- 查询条件 收发存汇总表 -->
@@ -89,12 +98,12 @@
             <if test="condition.descrc != null and condition.descrc != ''" >
                 and s.`descr_c` like concat('%', #{condition.descrc},'%')
             </if>
-            <!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
-            <!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->
-            <!--            </if>-->
-            <!--            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >-->
-            <!--                and aaa.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}-->
-            <!--            </if>-->
+            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
+                and aa.`edittime` &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
+                and aa.`edittime` &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+            </if>
         </trim>
     </sql>
 <!-- 查询条件 销售出库单列表 -->
@@ -134,7 +143,7 @@
         select * from
         (SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,null soqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,d.qcqty_expected asnqty,null soqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
@@ -150,7 +159,7 @@
         UNION ALL
         SELECT
         aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
-        s.`descr_c` descrc,null asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,null asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
@@ -171,7 +180,7 @@
         select count(1) from
         (SELECT
         aa.`asnno` documentNo,e.`lotatt03` soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,'' soqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,d.qcqty_expected asnqty,'' soqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
@@ -187,7 +196,7 @@
         UNION ALL
         SELECT
         aa.`orderno` documentNo,aa.`edittime` soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
-        s.`descr_c` descrc,'' asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,'' asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
@@ -206,7 +215,7 @@
     <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
         SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
@@ -291,7 +300,7 @@
         SELECT
          c.lotatt14 sourceOrder,aa.soreference1 soOrderNum,aa.`orderno` soOrderNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soDate,bb1.codename_c soType,
          a.`customerid`,a.`sku`,c.lotatt12,s.`descr_c` descrc,b.qty,bb.codename_c uom,c.lotatt04,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
-         aa.addwho,aa.editwho reviewWho,aa.c_address4 trackingNumber,p.qty1
+         aa.addwho,aa.editwho reviewWho,aa.c_address4 trackingNumber,aa.consigneeid,p.qty1
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`

@@ -1,6 +1,5 @@
 package com.wms.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -12,6 +11,9 @@ public class RptSalesSo implements Serializable {
 
     private String token;
 
+    private String lotatt03StartDate;            //开始日期
+    private String lotatt03EndDate;            //结束日期
+    private String consigneeid;            //收货单位
     private Integer serialNumber ;          //序号
     private String choose ;                //选择
     private String warehouseid;              //仓库编码

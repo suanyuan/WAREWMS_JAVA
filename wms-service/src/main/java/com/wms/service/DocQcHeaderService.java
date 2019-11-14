@@ -270,6 +270,7 @@ public class DocQcHeaderService extends BaseService {
                     BeanUtils.copyProperties(docPaDetails.getInvLotAtt(), docQcDetails);
                 }
                 docQcDetails.setPano(docPaDetails.getPano());
+                docQcDetails.setQcno(qcno);
                 docQcDetails.setCustomerid(docPaDetails.getCustomerid());
                 docQcDetails.setSku(docPaDetails.getSku());
                 docQcDetails.setLotnum(docPaDetails.getLotnum());
@@ -327,6 +328,8 @@ public class DocQcHeaderService extends BaseService {
                         docQcHeader.setLotatt14(docAsnHeader.getAsnno());
                         //上架单号
                         docQcHeader.setPano(docqcDetails.getPano());
+                        //验收单号
+                        docQcHeader.setQcno(docqcDetails.getQcno());
                         //客户订单号
                         if(docQcHeader.getPano() != null){
                             DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryById(docQcHeader.getPano());

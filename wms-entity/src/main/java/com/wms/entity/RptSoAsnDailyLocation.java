@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity
@@ -17,6 +16,9 @@ public class RptSoAsnDailyLocation implements Serializable {
     private String documentNo ;          //单据号
     @JSONField(format = "yyyy-MM-dd")
     private String soasndate;            //日期
+    private String lotatt03StartDate;            //开始日期
+    private String lotatt03EndDate;            //结束日期
+    private String lotatt05;            //序列号
     private String documentType;         //单据类型
     private String warehouse;            //仓库
     private String customerid;           //供货单位

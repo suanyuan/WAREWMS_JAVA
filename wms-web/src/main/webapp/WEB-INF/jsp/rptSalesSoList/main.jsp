@@ -37,6 +37,7 @@ $(function() {
 			{field: 'warehouseid',		title: '仓库编码',	width: 100 },
 			{field: 'sourceOrder',		title: '来源订单号',	width: 150 },
 			{field: 'soOrderNum',		title: '发货单号码',	width: 150 },
+			{field: 'consigneeid',		title: '收货单位',	width: 150 },
 			{field: 'soOrderNo',		title: '出库单号',	width: 150 },
 			{field: 'soDate',		    title: '出库日期',	width: 100 },
 			{field: 'soType',		    title: '出库类别',	width: 100 },
@@ -79,8 +80,8 @@ $(function() {
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		// lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
-		// lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
+		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
+		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
 		lotatt12:$('#lotatt12').val(),
 		descrc:$('#descrc').val(),
@@ -95,8 +96,8 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
-		// param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
-		// param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
+		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
+		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
 		param.put("lotatt12",$('#lotatt12').val());
 		param.put("descrc",$('#descrc').val());
@@ -134,17 +135,18 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-<%--							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
-<%--							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
 	                        <th>客户名称</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+	                        <th>存货编码</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
 	                        <th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-	                       <td >
+						</tr>
+						<tr >
+							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
-
 							</td>
 						</tr>
 					</table>

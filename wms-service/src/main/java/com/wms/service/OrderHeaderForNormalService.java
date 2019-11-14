@@ -1152,16 +1152,16 @@ public class OrderHeaderForNormalService extends BaseService {
 
 
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo1(orderno);
-
+        List<OrderDetailsForNormal> odForNormalListMerge = this.odForNormalListShow(odForNormalList);
 
         double a = 0;
         double b = 0;
         Integer c = 0;
         OrderDetailsForNormal docOrderDetail;
         List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<>();
-        for (int i = 0; i < odForNormalList.size(); i++) {
+        for (int i = 0; i < odForNormalListMerge.size(); i++) {
             docOrderDetail = new OrderDetailsForNormal();
-            BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
+            BeanUtils.copyProperties(odForNormalListMerge.get(i), docOrderDetail);
             //货位 docOrderDetail.getLocation();
             //产品代码 docOrderDetail.getSku();
 
@@ -1212,8 +1212,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
             }
 
-            //库位
-            docOrderDetail.getAlocation();
+            //库位 docOrderDetail.getAlocation();
             a = a + docOrderDetail.getQty(); //件数
             b = b + docOrderDetail.getQtyeach();  //数量
             docOrderDetail.setQtyorderedEachSum(b);//数量和
@@ -1225,11 +1224,31 @@ public class OrderHeaderForNormalService extends BaseService {
 
         }
 
-
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
         return ohForNormal;
     }
 
+    /**
+     * 合并货位，产品代码，生产批号相同的数据
+     * @param odList
+     * @return
+     */
+    public  List<OrderDetailsForNormal> odForNormalListShow(List<OrderDetailsForNormal> odList){
+        for(int i=0;i<odList.size()-1;i++){
+            for(int j=odList.size()-1;j>i;j--){
+                if(odList.get(i).getAlocation().equals(odList.get(j).getAlocation())
+                        && odList.get(i).getLotatt04().equals(odList.get(j).getLotatt04())
+                        && odList.get(i).getSku().equals(odList.get(j).getSku())){
+                    //合并数量，件数
+                    odList.get(i).setQty(odList.get(i).getQty()+odList.get(j).getQty());
+                    odList.get(i).setQtyeach(odList.get(i).getQtyeach()+odList.get(j).getQtyeach());
+                    //删除货位，产品代码，生产批号相同的数据
+                    odList.remove(j);
+                }
+            }
+        }
+        return  odList;
+    }
     /**
      * 打印随货清单
      */
