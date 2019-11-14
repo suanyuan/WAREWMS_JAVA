@@ -113,8 +113,11 @@ public class GspOperateDetailService extends BaseService {
 			if(gspInstrumentCatalog!=null){
 
 				gspInstrumentCatalog.getInstrumentCatalogNo();
-
-				v.setOperateName("["+gspInstrumentCatalog.getClassifyId()+"]"+gspInstrumentCatalog.getInstrumentCatalogName().trim());
+				if(gspInstrumentCatalog.getClassifyId()!=null){
+					v.setOperateName("["+gspInstrumentCatalog.getClassifyId()+"]"+gspInstrumentCatalog.getInstrumentCatalogName().trim());
+				}else{
+					v.setOperateName(gspInstrumentCatalog.getInstrumentCatalogName().trim());
+				}
 				v.setInstrumentCatalogNo(Integer.parseInt(gspInstrumentCatalog.getInstrumentCatalogNo()));
 				if("I".equals(gspInstrumentCatalog.getClassifyId())){
 					IList.add(v);
@@ -125,6 +128,8 @@ public class GspOperateDetailService extends BaseService {
 				}else if("III".equals(gspInstrumentCatalog.getClassifyId())){
 					IIIList.add(v);
 					Collections.sort(IIIList);
+				}else{
+					IList.add(v);
 				}
 			}
 

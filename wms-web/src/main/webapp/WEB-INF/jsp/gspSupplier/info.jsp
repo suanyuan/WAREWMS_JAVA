@@ -66,8 +66,9 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             <td><input type='text'  data="1" id="contractNo" value="${gspSupplier.contractNo}"  name='contractNo' class='easyui-textbox' data-options='required:false,width:200'/></td>
 
             <th>货主</th>
-            <td><input type='text' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}" class='easyui-textbox' data-options='required:true,width:200'/>
-            <input type="hidden" name="cli_enterpriseId" id="cli_enterpriseId" value="${clientEnterpriseId}" />
+            <td><input type='text' data="1" id='costomerName' name='costomerName' value="${clientEnterpriseName}" class='easyui-textbox' data-options='required:true,width:200'/>
+                <input type='hidden' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}"  />
+                <input type="hidden" name="cli_enterpriseId" id="cli_enterpriseId" value="${clientEnterpriseId}" />
             <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewClientEnterpriseUrl()">查看</a>
             </td>
 
@@ -296,7 +297,7 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
             }]
         });
 
-        $("#ezuiFormSupInfo #costomerid").textbox({
+        $("#ezuiFormSupInfo #costomerName").textbox({
             width: 200,
             icons: [{
                 iconCls: 'icon-search',
@@ -414,7 +415,9 @@ var dialogUrl1 = "/gspEnterpriseInfoController.do?toDetail";
         var row = clientDatagrid.datagrid("getSelected");
         // alert(row.enterpriseId);
         if(row){
-            $("#ezuiFormSupInfo #costomerid").textbox("setValue",row.customerid);
+            $("#ezuiFormSupInfo #costomerName").textbox('setValue',row.descrC);
+
+            $("#ezuiFormSupInfo #costomerid").val(row.customerid);
             $("#ezuiFormSupInfo #cli_enterpriseId").val(row.enterpriseId);
             ezuiDialogClientDetail.dialog('close');
         }

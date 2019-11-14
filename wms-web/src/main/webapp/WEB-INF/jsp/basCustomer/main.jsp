@@ -53,9 +53,8 @@ $(function() {
             {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }},
-            // {field: 'fisrtop',		title: '首营状态 ',	width: 71,formatter:function(value,rowData,rowIndex){
-            //         return rowData.activeFlag == '1' ? '是' : '否';
-            //     }},
+            {field: 'billclass',		title: '首营状态 ',	width: 71,formatter:firstStateFormatter
+                },
             {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
                     if (rowData.customerType=='CO') {
                         return rowData.customerType='收货单位';

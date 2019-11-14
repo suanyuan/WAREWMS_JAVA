@@ -324,7 +324,9 @@ var commit = function(){
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
     infoObj["enterpriseId"] = $("#ezuiFormSupInfo input[id='enterpriseId'][data='1']").val();
-	//alert(infoObj["enterpriseId"]);
+    infoObj["costomerid"] = $("#ezuiFormSupInfo input[id='costomerid'][data='1']").val();
+
+    //alert(infoObj["enterpriseId"]);
     //alert(infoObj["enterpriseName"]);
 	//console.log(infoObj+"infoObj====="+infoObj.isCheck);
 	var url = '';

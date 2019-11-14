@@ -176,21 +176,42 @@ public class ImportDocAsnCertificateDataService {
 				rowResult.append("[货主]，未输入").append(" ");
 			}
 
+
 			try {
-                importDataVO.setSku(dataArray.getSku().trim());
-                Map<String,Object> param = new HashMap<>();
-                param.put("customerid",dataArray.getCustomerid());
-                param.put("sku",dataArray.getSku());
-                BasSku basSku = basSkuMybatisDao.queryById(param);
-                if(basSku==null){
-                    throw new Exception();
+				importDataVO.setSpecsName(dataArray.getSpecsName().trim());
+//				Map<String,Object> param = new HashMap<>();
+//
+//				param.put("customerid",dataArray.getCustomerid());
+//				param.put("sku",dataArray.getSku());
+//				BasSku basSku = basSkuMybatisDao.queryById(param);
+//				if(basSku==null){
+//					throw new Exception();
+//				}
+				if (StringUtils.isEmpty(dataArray.getSpecsName())) {//是否为空
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				rowResult.append("[规格]，未输入或不存在").append(" ");
+			}
+
+
+			try {
+//
+				GspProductRegisterSpecs g = gspProductRegisterSpecsMybatisDao.selectBySpecsName(dataArray.getSpecsName().trim());
+                if(g!=null){
+                    importDataVO.setSku(g.getProductCode().trim());
                 }
-                if (StringUtils.isEmpty(dataArray.getSku())) {//判日期是否为空
-                    throw new Exception();
-                }
+//                if (StringUtils.isEmpty(dataArray.getSku())) {//判日期是否为空
+//                    throw new Exception();
+//
+//                }
             } catch (Exception e) {
-                rowResult.append("[产品代码]，未输入或不存在").append(" ");
+                rowResult.append("[产品代码]，规格与产品代码不是一对一，无法带入！").append(" ");
             }
+
+
+
+
 
 			try {
 
@@ -221,7 +242,7 @@ public class ImportDocAsnCertificateDataService {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("货主,产品代码,生产批号三个一起重复").append(" ");
+				rowResult.append("货主,规格,生产批号三个一起重复").append(" ");
 			}
 
 
@@ -253,7 +274,8 @@ public class ImportDocAsnCertificateDataService {
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 		map.put("序号", "seq");
 		map.put("货主", "customerid");
-		map.put("产品代码", "sku");
+//		map.put("产品代码", "sku");
+		map.put("规格", "specsName");
 		map.put("生产批号", "lotatt04");
 
 

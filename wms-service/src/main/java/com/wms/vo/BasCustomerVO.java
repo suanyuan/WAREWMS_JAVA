@@ -101,7 +101,18 @@ public class BasCustomerVO {
 	private String allClient; //供应商所有货主
 	private String receivingAllClient; //收货单位对应货主
 
-	public String getReceivingAllClient() {
+    private String billclass;   //首营状态
+
+
+    public String getBillclass() {
+        return billclass;
+    }
+
+    public void setBillclass(String billclass) {
+        this.billclass = billclass;
+    }
+
+    public String getReceivingAllClient() {
 		return receivingAllClient;
 	}
 

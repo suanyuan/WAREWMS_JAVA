@@ -111,6 +111,8 @@ public class DataPublishService extends BaseService {
             form.setClientContent(customer.getClientContent());
             form.setClientStartDate(customer.getClientStartDate());
             form.setClientEndDate(customer.getClientEndDate());
+//            form.setBillclass(customer.getFirstState());//用作首营状态
+
 //            form.setClientTerm(Long.parseLong(customer.getClientTerm()));
 
             form.setActiveFlag(Constant.IS_USE_YES);

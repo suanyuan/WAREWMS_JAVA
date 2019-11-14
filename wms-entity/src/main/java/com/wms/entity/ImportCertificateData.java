@@ -17,7 +17,16 @@ public class ImportCertificateData implements Serializable {
 
 	private String customerid;
 	private String sku;
+	private String specsName;
 	private String lotatt04;
+
+	public String getSpecsName() {
+		return specsName;
+	}
+
+	public void setSpecsName(String specsName) {
+		this.specsName = specsName;
+	}
 
 	public void setSeq(String seq) {
 		this.seq = seq;

@@ -26,6 +26,34 @@ public class DocAsnCertificate implements Serializable {
 
   private String specsName;
 
+  private String oldSpecsName;
+  private String oldCustomerid;
+  private String oldLotatt04;
+
+  public String getOldSpecsName() {
+    return oldSpecsName;
+  }
+
+  public void setOldSpecsName(String oldSpecsName) {
+    this.oldSpecsName = oldSpecsName;
+  }
+
+  public String getOldCustomerid() {
+    return oldCustomerid;
+  }
+
+  public void setOldCustomerid(String oldCustomerid) {
+    this.oldCustomerid = oldCustomerid;
+  }
+
+  public String getOldLotatt04() {
+    return oldLotatt04;
+  }
+
+  public void setOldLotatt04(String oldLotatt04) {
+    this.oldLotatt04 = oldLotatt04;
+  }
+
   public String getSpecsName() {
     return specsName;
   }

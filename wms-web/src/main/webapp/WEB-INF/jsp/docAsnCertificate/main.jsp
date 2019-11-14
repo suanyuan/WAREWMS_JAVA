@@ -75,8 +75,8 @@ $(function() {
 	});
 	ezuiDialog = $('#ezuiDialog').dialog({
 		modal : true,
-		width:350,
-		height:330,
+		width:360,
+		height:355,
 		title : '<spring:message code="common.dialog.title"/>',
 		buttons : '#ezuiDialogBtn',
         href:dialogUrl,
@@ -166,11 +166,18 @@ var del = function(){
 
 
 var addOrEdit = function(url,infoObj) {
+    var row = ezuiDatagrid.datagrid('getSelected');
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
     console.log(44444);
     $.ajax({
         url: url,
-        data: {"docAsnCertificateForm": JSON.stringify(infoObj)}, type: 'POST', dataType: 'JSON', async: true,
+        data: {"docAsnCertificateForm": JSON.stringify(infoObj),
+
+		}, type: 'POST', dataType: 'JSON', async: true,
         success: function (result) {
+            $.messager.progress('close');
             console.log(result);
             var msg = '';
             try {
@@ -201,10 +208,13 @@ var commit = function(){
     $("#ezuiFormInfo input[class='textbox-value']").each(function (index) {
         infoObj[""+$(this).attr("name")+""] = $(this).val();
     })
-    //infoObj["enterpriseId"] = $("#ezuiFormInfo input[id='enterpriseId'][data='1']").val();
+
 
     var url = '';
     if (processType == 'edit') {
+        infoObj["oldSpecsName"] = row.specsName;
+        infoObj["oldCustomerid"] = row.customerid;
+        infoObj["oldLotatt04"] = row.lotatt04;
 		infoObj["supplierId"] = row.supplierId;
 		url = sy.bp()+'/docAsnCertificateController.do?edit';
 		addOrEdit(url,infoObj);

@@ -72,10 +72,10 @@ public class DocAsnCertificateService extends BaseService {
 			if (DocAsnCertificate.getEdittime() != null) {
 				docAsnCertificateVO.setEdittime(simpleDateFormat.format(DocAsnCertificate.getEdittime()));
 			}
-			GspProductRegisterSpecs g = gspProductRegisterSpecsMybatisDao.selectByProductCode(DocAsnCertificate.getSku());
-			if(g!=null){
-				docAsnCertificateVO.setSpecsName(g.getSpecsName());
-			}
+//			GspProductRegisterSpecs g = gspProductRegisterSpecsMybatisDao.selectByProductCode(DocAsnCertificate.getSku());
+//			if(g!=null){
+//				docAsnCertificateVO.setSpecsName(g.getSpecsName());
+//			}
 
 			basGtnVOList.add(docAsnCertificateVO);
 		}
