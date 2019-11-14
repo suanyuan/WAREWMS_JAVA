@@ -111,6 +111,8 @@ public class DataPublishService extends BaseService {
             form.setClientContent(customer.getClientContent());
             form.setClientStartDate(customer.getClientStartDate());
             form.setClientEndDate(customer.getClientEndDate());
+//            form.setBillclass(customer.getFirstState());//用作首营状态
+
 //            form.setClientTerm(Long.parseLong(customer.getClientTerm()));
 
             form.setActiveFlag(Constant.IS_USE_YES);
@@ -400,7 +402,7 @@ public class DataPublishService extends BaseService {
             form.setBillclass(gspReceivingForm.getFirstState());
 //            form.setCustomerid(gspReceiving.getReceivingId());
             form.setCustomerType(Constant.CODE_CUS_TYP_CO);
-            return basCustomerService.editBasCustomerByEnterpriseId(form);
+            return basCustomerService.editBasCustomerSupByEnterpriseId(form);
         }else if(no.indexOf(Constant.APLPRONO)!=-1){
             Json json = firstBusinessApplyService.queryFirstBusinessApply(no);
             if(!json.isSuccess()){

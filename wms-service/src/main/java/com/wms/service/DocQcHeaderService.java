@@ -331,9 +331,9 @@ public class DocQcHeaderService extends BaseService {
                         if(docQcHeader.getPano() != null){
                             DocPaHeader docPaHeader = docPaHeaderMybatisDao.queryById(docQcHeader.getPano());
                             docQcHeader.setAsnreference1(docPaHeader.getPareference1());
+                            //冷链随货温度
                             DocAsnHeader docAsnHeader1 = docAsnHeaderMybatisDao.queryById(docPaHeader.getAsnno());
                             if(docAsnHeader1 !=null){
-                                //冷链随货温度
                                 docQcHeader.setUserdefine1Temp(docAsnHeader1.getUserdefine1());
                             }
                         }

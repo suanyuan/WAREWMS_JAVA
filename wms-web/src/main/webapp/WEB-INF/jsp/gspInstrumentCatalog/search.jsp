@@ -63,13 +63,13 @@
                 {field: 'classifyId',		title: '分类',width:'25%'},
                 {field: 'version',		title: '版本',width:'25%'},
             ]],
-            onDblClickRow: function(index,row){
-                choseSelect_Catalog_${target}(row);
-                storeAllOff();
-                storeOnDblClickRow(index,row);
+            <%--onDblClickRow: function(index,row){--%>
+                <%--choseSelect_Catalog_${target}(row);--%>
+                <%--storeAllOff();--%>
+                <%--storeOnDblClickRow(index,row);--%>
 
 
-            },
+            <%--},--%>
             onRowContextMenu : function(event, rowIndex, rowData) {
 
             },

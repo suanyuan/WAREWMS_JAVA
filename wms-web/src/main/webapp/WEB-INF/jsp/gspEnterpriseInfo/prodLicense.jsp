@@ -374,6 +374,8 @@
                 }else if(row[i].classifyId=="III"){
                     IIIpl.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
                     IIIpl.sort();
+                }else{
+                    Ipl.push(row[i].instrumentCatalogName);
                 }
                 choseRowArrProd.push(row[i].instrumentCatalogId);
                 // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);

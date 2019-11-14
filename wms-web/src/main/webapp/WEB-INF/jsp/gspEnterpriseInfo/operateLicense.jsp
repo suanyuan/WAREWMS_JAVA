@@ -388,7 +388,12 @@
                 }else if(row[i].classifyId=="III"){
                     IIIol.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
                     IIIol.sort();
+                }else{
+                    Iol.push(row[i].instrumentCatalogName);
                 }
+                console.log(row[i].instrumentCatalogName);
+                console.log(row[i].instrumentCatalogName);
+                console.log(Iol.concat(IIol).concat(IIIol).join(","));
                 choseRowArrOperate.push(row[i].instrumentCatalogId);
             }
             $("#ezuiFormOperate input[id='showChose']").textbox("setValue",Iol.concat(IIol).concat(IIIol).join(","))

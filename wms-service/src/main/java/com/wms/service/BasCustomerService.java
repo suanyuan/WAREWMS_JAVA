@@ -107,19 +107,19 @@ public class BasCustomerService extends BaseService {
 			}else{
 				basCustomerVO.setAllClient("");
 			}
-//			//收货单位 对应 所有货主
-//			if(Constant.CODE_CUS_TYP_CO.equals(basCustomerVO.getCustomerType())){
-//				List<GspSupplier> supList = gspSupplierMybatisDao.queryListByEnterpriseId(basCustomerVO.getEnterpriseId());
-//				String content = "";
-//				for(GspSupplier sup:supList){
-//					if(sup.getCustomerName()!=null){
-//						content =content + sup.getCustomerName()+",";
-//					}
-//				}
-//				basCustomerVO.setAllClient(content);
-//			}else{
-//				basCustomerVO.setAllClient("");
-//			}
+			//收货单位 对应 所有货主
+			if(Constant.CODE_CUS_TYP_CO.equals(basCustomerVO.getCustomerType())){
+				List<GspReceiving> clientList = gspReceivingMybatisDao.querySHTGByEnterpriseId(basCustomerVO.getEnterpriseId());
+				String content = "";
+				for(GspReceiving sup:clientList){
+					if(sup.getClientId()!=null){
+						content =content + sup.getClientId()+",";
+					}
+				}
+				basCustomerVO.setReceivingAllClient(content);
+			}else{
+				basCustomerVO.setReceivingAllClient("");
+			}
 
 
 
@@ -322,7 +322,7 @@ public class BasCustomerService extends BaseService {
 	public Json clientAddCustomer(BasCustomerForm basCustomerForm,String flag) {
 		//try{
 			boolean fff = true;
-			int supNum =0;
+//			int supNum =0;
 			Json json = new Json();
 			BasCustomer basCustomerQuery = new BasCustomer();
 			basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
@@ -333,7 +333,7 @@ public class BasCustomerService extends BaseService {
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
-				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+//				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
 
 			}else if("Client".equals(flag)){
 				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
@@ -341,7 +341,7 @@ public class BasCustomerService extends BaseService {
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
-				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+//				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
 			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 
@@ -446,14 +446,21 @@ public class BasCustomerService extends BaseService {
 
 	public Json editBasCustomerSupByEnterpriseId(BasCustomerForm basCustomerForm) {
 		Json json = new Json();
+        int num=0;
 		BasCustomerQuery basCustomerQuery = new BasCustomerQuery();
 		basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
 		basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
 //		BasCustomer basCustomer = basCustomerMybatisDao.querySupplierByBankaccount(basCustomerForm.getBankaccount());
 		BasCustomer basCustomer = basCustomerMybatisDao.queryByenterId(basCustomerQuery);
 
-		//供应商
-		int num = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+
+        if(basCustomerForm.getBankaccount().indexOf(Constant.APLSUPNO)!=-1){
+            //供应商多货主
+             num = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+        }else if(basCustomerForm.getBankaccount().indexOf(Constant.APLRECNO)!=-1){
+            //收货单位多货主
+             num = gspReceivingMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+        }
 
 		String customerId = basCustomer.getCustomerid();
 		BeanUtils.copyProperties(basCustomerForm, basCustomer);

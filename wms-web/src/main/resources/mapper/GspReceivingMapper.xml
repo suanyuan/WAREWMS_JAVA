@@ -234,13 +234,28 @@ where 1=1
 		and is_use = 1
 	</select>
 
+	<!--<select id="countByEnterpriseIdAnd40" resultType="java.lang.Integer"  parameterType="Object">-->
+		<!--select  count(1) from gsp_receiving-->
+		<!--where enterprise_id=#{enterpriseId,jdbcType=VARCHAR} and client_id=#{clientId,jdbcType=VARCHAR}-->
+		<!--and is_use = 1-->
+	<!--</select>-->
+	<!-- 收货单位首营申请  同收货单位不同货主的审核通过的申请数量-->
+	<select id="countByEnterpriseIdAnd40" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from gsp_receiving where enterprise_id = #{enterpriseId}
+		and is_use = '1' and first_state = '40'
+	</select>
+
 	<!-- 根据企业id查询收货单位-->
 <select id="queryByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
 		select <include refid="Base_Column_List" />
 		from gsp_receiving where enterprise_id = #{enterpriseId}
 </select>
 
-
+	<!-- 根据企业id查询 已经审核通过的收货单位首营申请-->
+	<select id="querySHTGByEnterpriseId"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" />
+		from gsp_receiving where enterprise_id = #{enterpriseId} and first_state = '40' and is_use = '1'
+	</select>
 
 
  <!--查询收货地址列表-->

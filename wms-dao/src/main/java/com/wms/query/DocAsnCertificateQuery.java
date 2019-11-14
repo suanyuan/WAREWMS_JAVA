@@ -17,6 +17,16 @@ public class DocAsnCertificateQuery implements IQuery {
 	private String createDateStart;
 	private String createDateEnd;
 
+	private String specsName;
+
+	public String getSpecsName() {
+		return specsName;
+	}
+
+	public void setSpecsName(String specsName) {
+		this.specsName = specsName;
+	}
+
 	public String getCreateDateStart() {
 		return createDateStart;
 	}

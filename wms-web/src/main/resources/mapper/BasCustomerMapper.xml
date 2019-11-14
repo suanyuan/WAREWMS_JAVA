@@ -81,6 +81,7 @@
 	<result column="bankaccount" property="bankaccount"/>
     <!--企业代码-->
     <result column="enterprise_no" property="enterpriseNo"/>
+	<result column="billclass" property="billclass"/>
 
 
 </resultMap>
@@ -111,6 +112,7 @@
 	customerid,
 	customer_type,
 	active_flag,sup_contract_no,contract_url,client_content,client_start_date,client_end_date,client_term,
+	billclass,
 	address1,
 	address2,
 	bankaccount,
@@ -171,7 +173,7 @@
 	receiving_address_id,
 	notes,
 	is_chinese_label
-	isChineseLabel
+
 </sql>
    
    
@@ -353,6 +355,11 @@ where 1=1
     <if test="notes != null  ">
         notes,
     </if>
+	<if test="billclass != null  ">
+		billclass,
+	</if>
+
+
 	easycode,
 	addtime,
 	addwho,
@@ -438,6 +445,10 @@ where 1=1
     <if test="notes != null  ">
         #{notes},
     </if>
+	<if test="billclass != null  ">
+		#{billclass},
+	</if>
+
 	'',
 	now(),
 	#{addwho},
@@ -520,10 +531,10 @@ where 1=1
 		address1=#{address1},
 	</if>
 		<if test="followup != null  ">
-		address1=#{address1},
+			followup=#{followup},
 	</if>
 	<if test="address2 != null  ">
-		followup=#{followup},
+		address2=#{address2},
 	</if>
 	<if test="address3 != null  ">
 		address3=#{address3},
@@ -734,7 +745,7 @@ where 1=1
 	select <include refid="Base_Column_List" />
 	from bas_customer
 	where enterprise_id=#{enterpriseId,jdbcType=VARCHAR}
-	and customer_type=#{customerType,jdbcType=VARCHAR}
+	and customer_type=#{customerType,jdbcType=VARCHAR}  order by addtime desc LIMIT 1
 </select>
 
 	<select id="queryByCustomerId"  resultMap="BaseResultMap" parameterType="Object">
@@ -891,7 +902,8 @@ where 1=1
 </select>
 	<select id="selectSupplierByIdTypeActiveFlag" resultMap="BaseResultMap"  parameterType="Object">
 	select  * from Bas_Customer
-	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR} and active_flag = '1'
+	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	ORDER BY addtime desc LIMIT 1
 	</select>
 
 

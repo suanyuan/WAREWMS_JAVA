@@ -1165,35 +1165,39 @@ var printAccompanying = function () {
 
 var printExpress = function () {
 	orderList = null;
-	var printFlag = 2;
-	var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
-	$.each(checkedItems, function(index, item) {
-        if (item.carriercountry == "1") {
-			printFlag=0;
+	var falgNo = 1;
+    var falgTwo = 1;
+    var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+	console.log(checkedItems)
+        for (var i = 0; i < checkedItems.length; i++) {
+            if (orderList == null) {
+                orderList  = checkedItems[i].orderno
+            }else{
+                orderList  = orderList + ',' + checkedItems[i].orderno ;
 
-        } else {
-        //如果快递单号为空则不能打印电子面单
-        if (item.cAddress4 == null) {
-			printFlag = 1;
-        } else {
-            console.log("++++++++++++++++++++++++++");
-                if (orderList == null) {
-                    orderList = item.orderno;
-                } else {
-                    orderList = orderList + ',' + item.orderno;
+            }
+            if(checkedItems[i].carriercountry == "1"){
+                return  showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
+            }
+            if(checkedItems[i].cAddress4 ==null){
+                return  showMsg("选中的订单未在系统内下单，无法打印快递单.......");
+            }
+            if(i>0){
+                if(checkedItems[0].cAddress3 != null ){
+                    falgNo = 1;
+                }else{
+                    falgNo = 0 ;
                 }
+                if(checkedItems[i].cAddress3 != null){
+                    falgTwo = 1;
+                }else{
+                    falgTwo = 0;
+                }
+                if(falgNo != falgTwo){
+                    return  showMsg("打印电子面单请区分-有无签回单-进行连打确认!");
+                }
+            }
         }
-    }
-
-		console.log(orderList);
-	});
-	if(printFlag == 0){
-		return  showMsg("选中的订单存在已回写-快递单号-无法打印快递单.......");
-	}
-	if(printFlag == 1){
-		return  showMsg("选中的订单未在系统内下单，无法打印快递单.......");
-	}
-	console.log(printFlag);
 	if (orderList == null) {
 		return;
 	}

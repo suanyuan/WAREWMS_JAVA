@@ -65,10 +65,13 @@ public class GspSupplierController {
 			BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(gspSupplier.getCostomerid(),"OW");
 			if(basCustomer!=null){
 				model.put("clientEnterpriseId", basCustomer.getEnterpriseId());
+				model.put("clientEnterpriseName", basCustomer.getDescrC());
 			}
-		}
-		model.put("gspSupplier", gspSupplier);
+//			BasCustomer b = basCustomerMybatisDao.queryById(gspSupplier.getCostomerid());
 
+		}
+
+		model.put("gspSupplier", gspSupplier);
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);

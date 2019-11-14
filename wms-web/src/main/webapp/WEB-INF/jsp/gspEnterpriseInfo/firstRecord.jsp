@@ -264,6 +264,8 @@
                 }else if(row[i].classifyId=="III"){
                     IIIfr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
                     IIIfr.sort();
+                }else{
+                    Ifr.push(row[i].instrumentCatalogName);
                 }
                 choseRowArrRecord.push(row[i].instrumentCatalogId);
                 // choseRowNameArr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);

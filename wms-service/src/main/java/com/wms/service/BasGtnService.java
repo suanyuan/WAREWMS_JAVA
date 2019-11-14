@@ -4,10 +4,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.itextpdf.text.log.SysoCounter;
+import com.wms.entity.BasCodes;
 import com.wms.entity.BasGtn;
+import com.wms.entity.Remind;
 import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.mybatis.dao.BasCodesMybatisDao;
 import com.wms.mybatis.dao.BasGtnMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.query.BasCodesQuery;
 import com.wms.service.importdata.ImportBasGtnDataService;
 import com.wms.utils.ResourceUtil;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -39,23 +44,10 @@ public class BasGtnService extends BaseService {
 	private BasGtnMybatisDao basGtnMybatisDao;
 	@Autowired
 	private ImportBasGtnDataService importBasGtnDataService;
+	@Autowired
+	private BasCodesMybatisDao basCodesMybatisDao;
 
 	public EasyuiDatagrid<BasGtnVO> getPagedDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
-		/*EasyuiDatagrid<BasGtnVO> datagrid = new EasyuiDatagrid<BasGtnVO>();
-		List<BasGtn> basGtnList = basGtnDao.getPagedDatagrid(pager, query);
-		BasGtnVO basGtnVO = null;
-		List<BasGtnVO> basGtnVOList = new ArrayList<BasGtnVO>();
-		for (BasGtn basGtn : basGtnList) {
-			basGtnVO = new BasGtnVO();
-			BeanUtils.copyProperties(basGtn, basGtnVO);
-			basGtnVOList.add(basGtnVO);
-		}
-		datagrid.setTotal(basGtnDao.countAll(query));
-		datagrid.setRows(basGtnVOList);
-
-
-		return datagrid;*/
-		//System.out.println(query.getSku()+"============================="+query.getGtncode());
 		EasyuiDatagrid<BasGtnVO> datagrid = new EasyuiDatagrid<BasGtnVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 		criteria.setCurrentPage(pager.getPage());
@@ -72,6 +64,24 @@ public class BasGtnService extends BaseService {
 		int total = basGtnMybatisDao.queryByCount(criteria);
 		datagrid.setTotal(Long.parseLong(total+""));
 		datagrid.setRows(basGtnVOList);
+		return datagrid;
+	}
+
+	public EasyuiDatagrid<BasCodes> getPagedDatagrid1(EasyuiDatagridPager pager, BasCodesQuery query) {
+		EasyuiDatagrid<BasCodes> datagrid = new EasyuiDatagrid<BasCodes>();
+		MybatisCriteria criteria = new MybatisCriteria();
+		criteria.setCurrentPage(pager.getPage());
+		criteria.setPageSize(pager.getRows());
+		query.setCodeid("remind");
+		criteria.setCondition(query);
+		Remind basGtnVO = null;
+//		List<Remind> basGtnVOList = new ArrayList<Remind>();
+//		System.out.println();
+//		List<Remind> remindList = .queryByList(criteria);
+		List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+//		int total = basGtnMybatisDao.queryByCount(criteria);
+		datagrid.setTotal((long)list.size() );
+		datagrid.setRows(list);
 		return datagrid;
 	}
 

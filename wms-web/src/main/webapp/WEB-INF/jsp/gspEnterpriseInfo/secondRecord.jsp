@@ -274,6 +274,8 @@
                 }else if(row[i].classifyId=="III"){
                     IIIsr.push("["+row[i].classifyId+"]"+row[i].instrumentCatalogName);
                     IIIsr.sort();
+                }else{
+                    Isr.push(row[i].instrumentCatalogName);
                 }
                 choseRowArrSecondRecord.push(row[i].instrumentCatalogId);
             }

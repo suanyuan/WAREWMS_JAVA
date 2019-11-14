@@ -34,6 +34,10 @@ var enterpriseDialog;
             <td><input type='text' data="1" id="sku" name='sku'  class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
         <tr>
+            <th>规格</th>
+            <td><input type='text' data="1" id="specsName" name='specsName'  class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
+        </tr>
+        <tr>
             <th>生产批号</th>
             <td><input type='text' data="1" id="lotatt04" name='lotatt04'  class='easyui-textbox' size='16' data-options='required:true,width:200'/></td>
         </tr>
@@ -77,13 +81,17 @@ var enterpriseDialog;
 
     $(function(){
         var row = ezuiDatagrid.datagrid('getSelected');
+
         //alert(row.supplierId);
         if(row){
 
             if(processType == 'edit'){
             $.ajax({
                 url : 'docAsnCertificateController.do?getInfo',
-                data : {"sku" : row.sku,"lotatt04":row.lotatt04,"customerid":row.customerid},
+                data : {"specsName" : row.specsName,
+                    "lotatt04":row.lotatt04,
+                    "customerid":row.customerid,
+                },
                 type : 'POST',
                 dataType : 'JSON',
                 success : function(result){
@@ -143,11 +151,11 @@ var enterpriseDialog;
 
 
     $(function () {
-        if(processType == 'edit'){
-            $('input[name=customerid]').attr("readonly","readonly");
-            $('input[name=sku]').attr("readonly","readonly");
-            $('input[name=lotatt04]').attr("readonly","readonly");
-        }
+        // if(processType == 'edit'){
+        //     $('input[name=customerid]').attr("readonly","readonly");
+        //     $('input[name=sku]').attr("readonly","readonly");
+        //     $('input[name=lotatt04]').attr("readonly","readonly");
+        // }
 
 
         $('#certificateContextFile').filebox({
@@ -164,6 +172,9 @@ var enterpriseDialog;
         });
 
         function doUpload(data) {
+            $.messager.progress({
+                text : '<spring:message code="common.message.data.processing"/>', interval : 100
+            });
             var ajaxFile = new uploadFile({
                 "url":sy.bp()+"/commonController.do?uploadFileLocal",
                 "dataType":"json",
@@ -177,10 +188,21 @@ var enterpriseDialog;
                     }
                 },
                 onload:function(data){
+                    $.messager.progress('close');
+
                     //alert(data.comment);
-                    $("#certificateContext").val(data.comment);
+                    if (data.success) {
+                        $("#certificateContext").val(data.comment);
+
+                        // $("#ezuiFormFirstRecord #recordUrl").val(data.comment);
+                    }else {
+                        showMsg("上传附件失败，请重试");
+                        $("#certificateContextFile").filebox("setValue","");
+                    }
                 },
                 onerror:function(er){
+                    $.messager.progress('close');
+
                     // console.log(er);
                 }
             });

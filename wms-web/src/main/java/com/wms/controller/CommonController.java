@@ -415,7 +415,15 @@ public class CommonController {
         return basCodesService.getBy(Constant.CODE_CATALOG_COU_REQUEST);
     }
 
-
+    /**
+     * 收货单位首营申请  通过收货单位查询货主
+     * @return
+     * */
+    @RequestMapping(params = "getClientByRecevingId")
+    @ResponseBody
+    public List<EasyuiCombobox> getClientByRecevingId(String enterpriseId){
+        return basCodesService.getClientByRecevingId(enterpriseId);
+    }
 
 
 }
