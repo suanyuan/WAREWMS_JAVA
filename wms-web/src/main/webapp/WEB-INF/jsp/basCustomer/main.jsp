@@ -17,7 +17,7 @@ var customerType;
 var ezuiDialogClientEnterpriseAddress;
 var ezuiDialogEditZONGEnterprise;
 var dialogUrl = sy.bp()+"/gspCustomerController.do?toDetail"; //委托客户  企业信息查看
-
+var ezuiDialogRecevingBySelectClient;
 var clientInfo;
 var supplier1;
 var receivingInfo;
@@ -80,7 +80,7 @@ $(function() {
             {field: 'shorthandName',		title: '简称 ',	width: 100 },
             // {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
             {field: 'allClient',		title: '供应商对应货主 ',	width: 250 },
-            // {field: 'receivingAllClient',		title: '收货单位对应货主 ',	width: 250 },
+            {field: 'receivingAllClient',		title: '收货单位对应货主 ',	width: 250 },
 
 
             {field: 'contacts',		title: '联系人 ',	width: 80 },
@@ -189,22 +189,58 @@ var edit = function(){
 
 function receivingInfo1(receivingId){
     console.log(receivingId);
-    // $('#ezuiDialog1').dialog('destroy');
-    // $('#ezuiDialogSupplier').dialog('destroy');
-    // title = "收货单位首营申请单";
-    // dialogUrl = sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+row.reviewTypeId;
-    receivingInfo = $('#receivingInfo').dialog({
+
+    var recevingId = '';
+    var row = ezuiDatagrid.datagrid('getSelected');
+    recevingId = row.enterpriseId;
+    ezuiDialogRecevingBySelectClient = $('#ezuiDialogRecevingBySelectClient').dialog({
         modal : true,
+        top:200,
+        left:500,
+        width:300,
+        height:150,
         title : '<spring:message code="common.dialog.title"/>',
-        href:sy.bp()+"/gspReceivingController.do?toreceivingDetail"+"&receivingId="+receivingId,
-        fit:true,
+        buttons : '#ezuiBtn1',
+        // href: '/basCustomerController.do?toDetail',
         cache:false,
+        onOpen:function(){
+        // alert(row.enterpriseId);
+            $('#ezuiDialogRecevingBySelectClient #recevingName').textbox('setValue',row.descrC);
+            // $('#ezuiDialogRecevingBySelectClient #recEnterpriseId').textbox('setValue',row.enterpriseId);
+
+            $('#ezuiDialogRecevingBySelectClient #clientName').combobox({
+                panelHeight: 'auto',
+                url:sy.bp()+'/commonController.do?getClientByRecevingId&enterpriseId='+recevingId,
+                valueField:'id',
+                textField:'value'
+            });
+        },
         onClose : function() {
-            ezuiFormClear(ezuiForm);
+            //
+            // $(this).dialog("clear");
+            // ezuiFormClear(ezuiForm);
         }
     })
     // $('#ezuiDialog1').dialog('destroy');
     // $('#ezuiDialogSupplier').dialog('destroy');
+}
+
+function RecevingBySelectClient() {
+    var client = $('#ezuiDialogRecevingBySelectClient #clientName').combobox('getValue');
+// alert($('#ezuiDialogRecevingBySelectClient #clientName').combobox('getValue'));
+    // var row = ezuiDatagrid.datagrid('getSelected');
+    // recevingId = row.enterpriseId;
+    receivingInfo = $('#receivingInfo').dialog({
+        modal: true,
+        title: '<spring:message code="common.dialog.title"/>',
+        href: sy.bp() + "/gspReceivingController.do?toreceivingDetail" + "&receivingId="+client,
+        fit: true,
+        cache: false,
+        onClose: function () {
+            // ezuiFormClear(ezuiForm);
+            $(this).dialog("clear");
+        }
+    })
 }
 
 function ClientInfo(enterpriseId){
@@ -219,7 +255,9 @@ function ClientInfo(enterpriseId){
         href:"/gspCustomerController.do?basCustomerToDetail&id="+enterpriseId,
         cache:false,
         onClose : function() {
-            ezuiFormClear(ezuiForm);
+            // ezuiFormClear(ezuiForm);
+            $(this).dialog("clear");
+
         }
     })
     // $('#ezuiDialog1').dialog('destroy');
@@ -238,7 +276,8 @@ function supplierInfo(enterpriseId){
         href:"/gspSupplierController.do?basCustomerToAdd&id="+enterpriseId,
         cache:false,
         onClose : function() {
-            ezuiFormClear(ezuiForm);
+            // ezuiFormClear(ezuiForm);
+            $(this).dialog("clear");
         }
     })
     // $('#ezuiDialog1').dialog('destroy');
@@ -596,6 +635,9 @@ function enterpriseInfo(enterpriseId){
     }
 }
 
+var  clearDialog=function () {
+    $('#ezuiDialogRecevingBySelectClient').dialog('close');
+}
 
 </script>
 </head>
@@ -809,6 +851,38 @@ function enterpriseInfo(enterpriseId){
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 	</div>--%>
+
+    <div id='ezuiDialogRecevingBySelectClient' style='padding: 10px;display: none'>
+        <form id='dialogAddAddressForm' method='post' >
+            <input  id='r'  type="hidden" name='receivingId' value="${receivingId}" class='textbox-value' />
+            <input  id='rece'  type="hidden" name='receivingAddressId' value="${gspReceivingAddress.receivingAddressId}" class='textbox-value' />
+            <%--<input    name='receivingId' value="${receivingId}" class='easyui-textbox' />--%>
+            <table>
+                <tr>
+                    <th>收货单位</th>
+                    <td>
+                        <input type='text'  id='recevingName' class='easyui-textbox' data-options='required:true,editable:false,width:200'/>
+                        <input type="hidden" name="recEnterpriseId" id="recEnterpriseId" />
+                        <input type="hidden" name="sup_enterpriseId" id="sup_enterpriseId" />
+                        <%--<a href="javascript:void(0);" class="easyui-linkbutton"  data-options="" onclick="viewSupplierEnterpriseUrl()">查看</a>--%>
+                    </td>
+                </tr>
+                <tr>
+                    <th>对应货主</th>
+                    <td>
+                        <input type='text'  id='clientName' class='easyui-textbox' data-options='required:true,width:200'/>
+                        <input type="hidden" name="clientId" id="clientId" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id='ezuiBtn1' style="display: none">
+            <a onclick='RecevingBySelectClient();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+            <%--<a onclick='clearDialog();' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
+        </div>
+    </div>
+
+
 
 	<div id="ezuiDialogClientEnterprise">
 

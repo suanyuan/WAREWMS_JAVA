@@ -42,5 +42,7 @@ public class GspReceiving  implements Serializable {
 	private String enterpriseType;
 	private String customerid;
 
+	private String clientName;
+	private String receivingAllClient; //收货单位对应货主
 
 }

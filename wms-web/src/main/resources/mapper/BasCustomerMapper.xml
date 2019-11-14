@@ -891,7 +891,8 @@ where 1=1
 </select>
 	<select id="selectSupplierByIdTypeActiveFlag" resultMap="BaseResultMap"  parameterType="Object">
 	select  * from Bas_Customer
-	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR} and active_flag = '1'
+	where descr_c=#{descrC,jdbcType=VARCHAR} and customer_type=#{customerType,jdbcType=VARCHAR}
+	ORDER BY addtime desc LIMIT 1
 	</select>
 
 

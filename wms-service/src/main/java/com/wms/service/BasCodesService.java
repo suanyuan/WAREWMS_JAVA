@@ -5,7 +5,10 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasCodes;
+import com.wms.entity.GspReceiving;
 import com.wms.mybatis.dao.BasCodesMybatisDao;
+import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
+import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.BasCodesQuery;
 import com.wms.result.PdaResult;
@@ -36,6 +39,9 @@ public class BasCodesService {
 
     @Autowired
     private BasCodesMybatisDao basCodesMybatisDao;
+
+    @Autowired
+    private GspReceivingMybatisDao gspReceivingMybatisDao;
 
     public EasyuiDatagrid<BasCodesVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
         EasyuiDatagrid<BasCodesVO> datagrid = new EasyuiDatagrid<BasCodesVO>();
@@ -167,6 +173,45 @@ public class BasCodesService {
         }
         return baseCodesVOList;
     }
+
+    /**
+     * 收货单位首营申请  通过收货单位查询货主
+     * @param enterpriseId
+     * @return
+     */
+    public List<EasyuiCombobox> getClientByRecevingId(String enterpriseId){
+        List<EasyuiCombobox> baseCodesVOList = new ArrayList<>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        Map<String,Object> map = new HashMap<>();
+//        map.put("codeid",codeid);
+        map.put("isUse","1");
+        map.put("enterpriseId",enterpriseId);
+        map.put("firstState","40");
+        mybatisCriteria.setCondition(map);
+//        mybatisCriteria.setOrderByClause("show_sequence");
+        List<GspReceiving> list =  gspReceivingMybatisDao.queryByList(mybatisCriteria);
+        if(list!=null && list.size()>0){
+            EasyuiCombobox easyuiCombobox = new EasyuiCombobox();
+            easyuiCombobox.setId("");
+            easyuiCombobox.setValue("");
+            //easyuiCombobox.setSelected(true);
+            System.out.println();
+            baseCodesVOList.add(easyuiCombobox);
+            for(GspReceiving b : list){
+                easyuiCombobox = new EasyuiCombobox();
+                easyuiCombobox.setId(b.getReceivingId());
+                easyuiCombobox.setValue(b.getClientId());
+                baseCodesVOList.add(easyuiCombobox);
+            }
+
+        }
+        return baseCodesVOList;
+    }
+
+
+
+
+
 
     /**
      * 验证PDA请求版本
