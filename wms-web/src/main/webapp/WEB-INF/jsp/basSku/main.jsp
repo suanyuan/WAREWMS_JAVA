@@ -98,7 +98,6 @@ $(function() {
             {field: 'edittime',		title: '编辑时间',	width: 100 },
             {field: 'editwho',		title: '编辑人',	width: 100 },
 
-
 		]],
 		onDblClickCell: function(index,field,value){
 			edit();

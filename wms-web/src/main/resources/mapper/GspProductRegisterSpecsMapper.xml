@@ -332,9 +332,9 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         and is_use = 1;
     </select>
 
-    <!-- 根据specsid查询 最新有效的该产品 -->
+    <!-- 根据规格查询 有效的产品 -->
     <select id="selectBySpecsName" resultMap="BaseResultMap" parameterType="Object">
-        select * from gsp_product_register_specs where specs_name = #{specsName}
+        select * from gsp_product_register_specs where specs_name = #{specsName} and is_use='1'
     </select>
 
 

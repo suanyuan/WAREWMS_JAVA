@@ -173,6 +173,22 @@ public class BasSkuExportService {
 					}else if("0".equals(basSku.getSkuGroup7())){
 						basSku.setSkuGroup7("否");
 					}
+					if("1".equals(basSku.getSkuGroup8())){
+						basSku.setSkuGroup8("是");
+					}else if("0".equals(basSku.getSkuGroup8())){
+						basSku.setSkuGroup8("否");
+					}
+					if("FLL".equals(basSku.getReservedfield07())){
+						basSku.setReservedfield07("非冷链");
+					}else if("LC".equals(basSku.getReservedfield07())){
+						basSku.setReservedfield07("冷藏");
+					}else if("LD".equals(basSku.getReservedfield07())){
+						basSku.setReservedfield07("冷冻");
+					}
+					if(basSku.getReservedfield10()!=null){
+						basSku.setReservedfield10(basSku.getReservedfield10()+"天");
+					}
+
 
 					if(basSku.getAddtime()!=null) {
 						basSku.setAddtimeDc(sdf.format(basSku.getAddtime()));
@@ -184,23 +200,23 @@ public class BasSkuExportService {
 
 
 					//所有供应商
-					String content = "";
-					BasSku bs = new BasSku();
-					bs.setSku(basSku.getSku());
-					bs.setCustomerid(basSku.getCustomerid());
-					List<String> sup = firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
-					int a = 1;
-					for (String supNanme : sup) {
-						if (a == 1) {
-							content = supNanme;
-						}
-						if (supNanme != null && a != 1) {
-							System.out.println();
-							content = content + "," + supNanme;
-						}
-						a++;
-					}
-					basSku.setSupplierNames(content);
+//					String content = "";
+//					BasSku bs = new BasSku();
+//					bs.setSku(basSku.getSku());
+//					bs.setCustomerid(basSku.getCustomerid());
+//					List<String> sup = firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
+//					int a = 1;
+//					for (String supNanme : sup) {
+//						if (a == 1) {
+//							content = supNanme;
+//						}
+//						if (supNanme != null && a != 1) {
+//							System.out.println();
+//							content = content + "," + supNanme;
+//						}
+//						a++;
+//					}
+//					basSku.setSupplierNames(content);
 				}
 
 
@@ -220,29 +236,55 @@ public class BasSkuExportService {
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
 	
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-		superClassMap.put("activeFlag", "激活");
 		superClassMap.put("firstop", "首营状态");
+		superClassMap.put("activeFlag", "激活");
 		superClassMap.put("customerid", "货主代码");
 		superClassMap.put("clientName", "货主名称");
+		superClassMap.put("skuGroup6Name", "默认供应商");
+		superClassMap.put("productLineName", "产品线");
 		superClassMap.put("reservedfield09", "医疗器械标志");
+		superClassMap.put("reservedfield03", "注册证");
 		superClassMap.put("sku", "产品代码");
-		superClassMap.put("reservedfield03", "产品代码");
-		superClassMap.put("reservedfield04", "管理分类");
-		superClassMap.put("reservedfield05", "分类目录");
 		superClassMap.put("reservedfield01", "产品名称");
 		superClassMap.put("reservedfield02", "产品描述");
 		superClassMap.put("descrC", "规格");
-
 		superClassMap.put("descrE", "型号");
-		superClassMap.put("reservedfield14", "生产企业");
-		superClassMap.put("descr", "包装规格");
-		superClassMap.put("skuGroup4", "储存条件");
 		superClassMap.put("unit", "单位");
-		superClassMap.put("reservedfield10", "养护周期（天）");
+		superClassMap.put("descr", "包装规格");
+
+
+		superClassMap.put("skuGroup5", "运输条件");//
+		superClassMap.put("skuGroup4", "储存条件");
+		superClassMap.put("reservedfield14", "生产企业");
+		superClassMap.put("reservedfield06", "生产许可证号/备案号");//
+		superClassMap.put("skuGroup9", "产地");//
 		superClassMap.put("skuGroup7", "双证");
-		superClassMap.put("productLineName", "产品线");
-		superClassMap.put("skuGroup6Name", "默认供应商");
-		superClassMap.put("supplierNames", "所有供应商");
+		superClassMap.put("skuGroup8", "产品合格证");//
+		superClassMap.put("skuGroup2", "附卡类别");//
+		superClassMap.put("reservedfield07", "冷链标志");//
+		superClassMap.put("reservedfield08", "灭菌标志");//
+		superClassMap.put("reservedfield10", "养护周期（天）");
+		superClassMap.put("reservedfield13", "包装单位");//
+		superClassMap.put("skuGroup3", "包装要求");//
+		superClassMap.put("skuhigh", "长");//
+		superClassMap.put("skulength", "宽");//
+		superClassMap.put("skuwidth", "高");//
+		superClassMap.put("reservedfield11", "重量");//
+		superClassMap.put("reservedfield12", "商品条码");//
+		superClassMap.put("alternateSku1", "自附码1");//
+		superClassMap.put("alternateSku2", "自附码2");//
+		superClassMap.put("alternateSku3", "自附码3");//
+		superClassMap.put("alternateSku4", "自附码4");//
+		superClassMap.put("alternateSku5", "自附码5");//
+
+
+//		superClassMap.put("reservedfield04", "管理分类");
+//		superClassMap.put("reservedfield05", "分类目录");
+
+
+//		superClassMap.put("supplierNames", "所有供应商");
+
+
 		superClassMap.put("addwho", "创建人");
 		superClassMap.put("addtimeDc", "创建时间");
 		superClassMap.put("editwho", "编辑人");

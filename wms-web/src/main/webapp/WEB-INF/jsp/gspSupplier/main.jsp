@@ -105,6 +105,16 @@ $(function() {
             ezuiFormClear(ezuiForm);
         }
     }).dialog('close');
+
+
+
+    $("#firstStateQuery").combobox({
+        panelHeight: 'auto',
+        url:sy.bp()+'/commonController.do?getCatalogFirstState',
+        valueField:'id',
+        textField:'value'
+    });
+
 });
 var add = function(){
 	processType = 'add';
@@ -346,16 +356,7 @@ var commit = function(){
             url = sy.bp()+'/gspSupplierController.do?edit';
             addOrEdit(url,infoObj);
         }
-
-
-
-
-
-
-
-
 	}else{
-
 	    if(infoObj.isCheck==0 && infoObj.isCheck!=null&&infoObj.isCheck!=""){
             //alert(infoObj.isCheck);
             console.log(11111);
@@ -454,8 +455,8 @@ var doSearch = function(){
 		//editDate : $('#editDate').val(),
         enterpriseNo: $('#enterpriseNoQuery').val(),
         customerid: $('#clientQuery').val(),
-
-
+        firstState :$('#firstStateQuery').combobox('getValue'),
+        descrC:$('#customernameQuery').val(),
 
 	});
 };
@@ -511,13 +512,7 @@ function enterpriseInfo(enterpriseId){
 								<input type="hidden" id="enterpriseId" name="enterpriseId">
 								<!--<a href="javascript:void(0)" onclick='searchMainEnterprise()' class="easyui-linkbutton" data-options="iconCls:'icon-search'"></a>-->
 							</td>
-							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-
-							<%--<td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>--%>
-						</tr>
-						<tr>
-							<th>企业类型</th><td><input type="text" id="operateType"  name="operateType"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+								<th>企业类型</th><td><input type="text" id="operateType"  name="operateType"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
 																																	editable:false,
 																																	valueField: 'id',
 																																	textField: 'value',
@@ -525,9 +520,17 @@ function enterpriseInfo(enterpriseId){
 																																	{id: 'JY', value: '经营'},
 																																	{id: 'SC', value: '生产'}
 																																]"/></td>
+							<th>创建时间</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
+
+							<%--<td><input type='text' id='operateType' class='easyui-textbox' size='16' data-options=''/></td>--%>
+						</tr>
+						<tr>
+							<th>首营状态</th><td><input type='text' id='firstStateQuery' class="easyui-combobox"  size='16' data-options=''/></td>
+
                             <th>货主代码</th><td><input type='text' id='clientQuery' class='easyui-textbox' size='16' data-options=''/></td>
 
-
+							<th>货主名称</th><td><input type='text' id='customernameQuery' class='easyui-textbox' size='16' data-options=''/></td>
                             <th>是否审查</th><td><input type='text' id='isCheck' class='easyui-textbox' size='16' data-options=''/></td>
 							<%--<th>是否审查</th><td><input type="text" id="ischeck"  name="ischeck"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',--%>
 																																	<%--editable:false,--%>

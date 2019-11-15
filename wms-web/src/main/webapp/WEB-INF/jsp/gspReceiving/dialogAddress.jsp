@@ -71,7 +71,7 @@
 				</tr>
 				<tr>
 					<th>邮编</th>
-					<td><input type='text' name="zipcode" value="${gspReceivingAddress.zipcode}"   class='easyui-textbox' size='20' data-options='required:true'/></td>
+					<td><input type='text' name="zipcode" value="${gspReceivingAddress.zipcode}"   class='easyui-textbox' size='20' data-options='required:false'/></td>
 				</tr>
 				<tr>
 					<th>联系人</th>

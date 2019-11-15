@@ -876,7 +876,7 @@ var  clearDialog=function () {
             </table>
         </form>
         <div id='ezuiBtn1' style="display: none">
-            <a onclick='RecevingBySelectClient();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+            <a onclick='RecevingBySelectClient();' id='ezuiBtn_commit1' class='easyui-linkbutton' href='javascript:void(0);'>查看</a>
             <%--<a onclick='clearDialog();' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
         </div>
     </div>
