@@ -75,8 +75,12 @@ where 1=1
 	<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
 		and  t1.edit_date  <![CDATA[ <=  ]]>  #{condition.editDateEnd}
 	</if>
-
-
+	<if test="condition.firstState != null and condition.firstState != ''" >
+		and t1.first_state = #{condition.firstState}
+	</if>
+	<if test="condition.descrC != null and condition.descrC != ''" >
+		and t3.descr_c like '%${condition.descrC}%'
+	</if>
 	<!--<if test="condition.operateType != null and condition.operateType != ''" >-->
 	    <!--and operate_type =  #{condition.operateType}-->
 	<!--</if>-->
@@ -237,12 +241,6 @@ where 1=1
 		and t1.is_use ='1' and t1.first_state = '40'
 	</select>
 
-<!-- 供应商首营申请 列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from gsp_supplier t1 left join gsp_enterprise_info t2
-	ON t1.enterprise_id = t2.enterprise_id
-	<include refid="Example_Where_Clause"/>
-</select>
 	<!--&lt;!&ndash; 供应商首营申请  同供应商不同货主的申请数量&ndash;&gt;-->
 	<!--<select id="queryByEnterpriseId" resultType="java.lang.Integer"  parameterType="Object">-->
 		<!--select count(1) from gsp_supplier where enterprise_id = #{enterpriseId} and is_use = '1'-->
@@ -280,6 +278,16 @@ where 1=1
     </if>
 </select>
 
+	<!-- 供应商首营申请 列表总数-->
+	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1)
+		from gsp_supplier t1
+		left join gsp_enterprise_info t2
+		ON t1.enterprise_id = t2.enterprise_id
+		left join bas_customer t3
+		ON t1.costomerid = t3.customerid
+		<include refid="Example_Where_Clause"/>
+	</select>
 
 	<!-- 查询供应商名称 列表 -->
 	<select id="querySupNameListByAll" resultMap="BaseResultMap"  parameterType="Object">

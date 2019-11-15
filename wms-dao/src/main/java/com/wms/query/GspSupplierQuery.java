@@ -25,6 +25,16 @@ public class GspSupplierQuery implements IQuery {
 	private String shorthandName;
 	private String customerid;
 
+	private String descrC;//货主名称
+
+	public String getDescrC() {
+		return descrC;
+	}
+
+	public void setDescrC(String descrC) {
+		this.descrC = descrC;
+	}
+
 	public String getCustomerid() {
 		return customerid;
 	}
