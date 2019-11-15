@@ -139,7 +139,7 @@ public class DocQcSearchService extends BaseService {
                 }
                 if (docQcDetails1.getUserdefine5().equals("DJ")) {
                     docQcDetails1.setQcqtyCompleted(0d);
-                    qcQtyComSum += docQcDetails1.getQcqtyCompleted();
+                    docQcDetails1.setQcqtyExpected(0d);
                     //qcQtyComSum += docQcDetails1.setQcqtyCompleted();
                 }
                /* //质量状态为不合格、 合格 、 待检 、 分别插入不同的数值
