@@ -105,7 +105,7 @@ public class DocOrderPackingCartonSearchService extends BaseService {
                     docOrderPackingCarton1.setUom(easyuiComboboxUom.getValue());
                 }
             }
-            docOrderPackingCarton1.setLotatt06("1123");
+            docOrderPackingCarton1.setReservedfield06(docOrderPackingCarton1.getLotatt06());//字段设置有问题
             docOrderPackingCarton1.setQtyEach(docOrderPackingCarton1.getQty() * docOrderPackingCarton1.getQty1());//计算复核数量
             //合计的出库数量
             qtySum += docOrderPackingCarton1.getQtyEach();

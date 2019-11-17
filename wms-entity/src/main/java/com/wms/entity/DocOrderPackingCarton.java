@@ -72,7 +72,7 @@ public class DocOrderPackingCarton extends BaseLotatt implements Serializable {
 
 //bas表
    private String shippershortname;//货主简称
-   private String reservedfield06;//生产许可证号/备案号
+   private String reservedfield06;
 
 	private double qty1; //换算率
 
