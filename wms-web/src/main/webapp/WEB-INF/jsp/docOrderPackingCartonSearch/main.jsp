@@ -176,11 +176,14 @@ var printQcSearch = function(){
 	var packingflag= $('#packingflag').combobox('getValue');      //是否装箱完成
 
 	//必须点击查询按钮。
-	window.open(sy.bp()+"/docOrderPackingCartonSearchController.do?printQcSearch&orderno="+orderno+
-			"&traceid="+traceid+"&lotatt10="+lotatt10+"&skudesce="+skudesce+"&customerid="+customerid+"&shippershortname="
-			+shippershortname+"&sku="+sku+ "&lotatt12="+lotatt12+"&lotatt08="+lotatt08+"&lotatt15="
-			+lotatt15+"&edittimeStart="+edittimeStart+"&edittimeEnd="+edittimeEnd+"&lotatt14="+lotatt14+"&packingflag="+packingflag);
-
+	if (null === orderno || orderno === '') {
+		showMsg("请先选择(出库单号)再进行打印操作......");
+	} else {
+		window.open(sy.bp()+"/docOrderPackingCartonSearchController.do?printQcSearch&orderno="+orderno+
+				"&traceid="+traceid+"&lotatt10="+lotatt10+"&skudesce="+skudesce+"&customerid="+customerid+"&shippershortname="
+				+shippershortname+"&sku="+sku+ "&lotatt12="+lotatt12+"&lotatt08="+lotatt08+"&lotatt15="
+				+lotatt15+"&edittimeStart="+edittimeStart+"&edittimeEnd="+edittimeEnd+"&lotatt14="+lotatt14+"&packingflag="+packingflag);
+	}
 }
 
 

@@ -159,7 +159,7 @@
                     {field: 'skudescrc', title: '产品名称', width: 107},
                     {field: 'uom', title: '单位', width: 155},
                     {field: 'packid', title: '包装代码', width: 100},
-                    {field: 'orderedqty', title: '订单数量', width: 60},
+                    {field: 'orderedqtyEach', title: '订单数量', width: 60},
                     {field: 'totalcubic', title: '总体积', width: 70},
                     {field: 'totalgrossweight', title: '总重量', width: 70},
                     {field: 'totalnetweight', title: '总净重量', width: 70},

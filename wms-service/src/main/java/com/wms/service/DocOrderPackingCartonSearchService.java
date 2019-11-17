@@ -4,9 +4,7 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.ActAllocationDetails;
-import com.wms.entity.DocOrderPackingCarton;
-import com.wms.entity.DocOrderPackingCartonInfo;
+import com.wms.entity.*;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.utils.BeanConvertUtil;
@@ -15,29 +13,25 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("docOrderPackingCartonSearchService")
 public class DocOrderPackingCartonSearchService extends BaseService {
 
-
-    @Autowired
-    private BasSkuMybatisDao basSkuMybatisDao;
-    @Autowired
-    private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private BasCodesService basCodesService;
     @Autowired
-    private BasCustomerMybatisDao basCustomerMybatisDao;
-    @Autowired
-    private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+    private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
     @Autowired
     private DocOrderPackingCartonMybatisDao docOrderPackingCartonMybatisDao;
     @Autowired
     private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
     @Autowired
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
-
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
     /**
      * 显示细单 分页
@@ -71,11 +65,10 @@ public class DocOrderPackingCartonSearchService extends BaseService {
     public List<DocOrderPackingCartonInfo> printQcSearch(String orderno, String traceid, String lotatt10, String skudesce, String customerid,
                                                          String shippershortname, String sku, String lotatt12, String lotatt08, String lotatt15,
                                                          String edittimeStart, String edittimeEnd, String lotatt14, String packingflag) {
-        //验收记录
+
         List<DocOrderPackingCartonInfo> docOrderPackingCartonInfoList = new ArrayList<DocOrderPackingCartonInfo>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
-       /* BasSkuQuery skuQuery = new BasSkuQuery();
-        List<BasSku> basSkuList;*/
+
         DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();//头档
         docOrderPackingCartonInfo.setDetls(new ArrayList<DocOrderPackingCarton>());
         List<EasyuiCombobox> easyuiComboboxListUom = basCodesService.getBy(Constant.CODE_CATALOG_UOM);//查询单位
@@ -112,6 +105,7 @@ public class DocOrderPackingCartonSearchService extends BaseService {
                     docOrderPackingCarton1.setUom(easyuiComboboxUom.getValue());
                 }
             }
+            docOrderPackingCarton1.setLotatt06("1123");
             docOrderPackingCarton1.setQtyEach(docOrderPackingCarton1.getQty() * docOrderPackingCarton1.getQty1());//计算复核数量
             //合计的出库数量
             qtySum += docOrderPackingCarton1.getQtyEach();
@@ -121,67 +115,45 @@ public class DocOrderPackingCartonSearchService extends BaseService {
             docOrderPackingCarton1.setAllqtyEachsum(qtyEachSum);
             docOrderPackingCartonInfo.getDetls().add(docOrderPackingCarton1);
         }
-        //获取头档 需要到出库头档寻找
-        List<String> stringList = new ArrayList<>();
-        for (DocOrderPackingCarton docOrderPackingCarton1 : docOrderPackingCartonInfo.getDetls()) {//这里判断不行 先去list中去重如果size大于1就正面不是同一个ASN编号
-            stringList.add(docOrderPackingCarton1.getOrderno());
-        }
-        //去重后的size大于1就说明多个so编号那么头档全部为空
-        if (removeDuplicate(stringList).size() == 1) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //获取头档
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-            for (DocOrderPackingCarton docOrderPackingCartonSo : docOrderPackingCartonInfo.getDetls()) {
-                OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(docOrderPackingCartonSo.getOrderno());
-                //收货单位
-                docOrderPackingCartonInfo.setConsigneeid(orderHeaderForNormal.getConsigneeid());
-                //收货地址
-                docOrderPackingCartonInfo.setPlaceofdelivery(orderHeaderForNormal.getPlaceofdelivery());
-                //客户单号
-                docOrderPackingCartonInfo.setOrderCode(orderHeaderForNormal.getOrderCode());
-                //发货日期
-                docOrderPackingCartonInfo.setEdittime(format.format(orderHeaderForNormal.getEdittime()));
-                //联系人
-                docOrderPackingCartonInfo.setCcontact(orderHeaderForNormal.getCContact());
-                //联系电话
-                docOrderPackingCartonInfo.setBtel1(orderHeaderForNormal.getBTel1());
-                //备注
-                docOrderPackingCartonInfo.setNotes(orderHeaderForNormal.getNotes());
-                //快递公司
-                docOrderPackingCartonInfo.setCarriercontact(orderHeaderForNormal.getCarriercontact());
-                //发运方式
-                for (EasyuiCombobox easyuiUserdefine1 : easyuiComboboxListUserdefine1) {
-                    if (orderHeaderForNormal.getUserdefine1().equals(easyuiUserdefine1.getId())) {
-                        docOrderPackingCartonInfo.setUserdefine1(easyuiUserdefine1.getValue());
-                    }
-                }
-                //快递结算方式
-                for (EasyuiCombobox easyuiUserdefine2 : easyuiComboboxListUserdefine2) {
-                    if (orderHeaderForNormal.getUserdefine2().equals(easyuiUserdefine2.getId())) {
-                        docOrderPackingCartonInfo.setUserdefine2(easyuiUserdefine2.getValue());
-                    }
+
+        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+        docOrderPackingCartonInfo.setOrderno(orderno);
+        //收货单位
+        docOrderPackingCartonInfo.setConsigneeid(orderHeaderForNormal.getConsigneeid());
+        //收货地址
+        docOrderPackingCartonInfo.setPlaceofdelivery(orderHeaderForNormal.getCAddress1());
+        //客户单号
+        docOrderPackingCartonInfo.setOrderCode(orderHeaderForNormal.getSoreference1());
+        //发货日期
+        docOrderPackingCartonInfo.setEdittime(format.format(orderHeaderForNormal.getEdittime()));
+        //联系人
+        docOrderPackingCartonInfo.setCcontact(orderHeaderForNormal.getCContact());
+        //联系电话
+        docOrderPackingCartonInfo.setBtel1(orderHeaderForNormal.getCTel1());
+        //备注
+        docOrderPackingCartonInfo.setNotes(orderHeaderForNormal.getNotes());
+        //快递公司
+        if (orderHeaderForNormal.getCarrierid() != null) {
+            BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(orderHeaderForNormal.getCarrierid());
+            if (basCarrierLicense != null) {
+                GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
+                if (gspEnterpriseInfo != null) {
+                    docOrderPackingCartonInfo.setCarriercontact(gspEnterpriseInfo.getEnterpriseName());
                 }
             }
-        } else {
-            //收货单位
-            docOrderPackingCartonInfo.setConsigneeid("");
-            //收货地址
-            docOrderPackingCartonInfo.setPlaceofdelivery("");
-            //客户单号
-            docOrderPackingCartonInfo.setOrderCode("");
-            //发货日期
-            docOrderPackingCartonInfo.setEdittime("");
-            //联系人
-            docOrderPackingCartonInfo.setCcontact("");
-            //联系电话
-            docOrderPackingCartonInfo.setBtel1("");
-            //备注
-            docOrderPackingCartonInfo.setNotes("");
-            //快递公司
-            docOrderPackingCartonInfo.setCarriercontact("");
-            //发运方式
-            docOrderPackingCartonInfo.setUserdefine1("");
-            //快递结算方式
-            docOrderPackingCartonInfo.setUserdefine2("");
+        }
+        //发运方式
+        BasCodes bascodes = basCodesService.queryBasCode(Constant.CODE_CATALOG_SENDFUNCTION, orderHeaderForNormal.getRoute());
+        if (bascodes != null) {
+            docOrderPackingCartonInfo.setUserdefine1(bascodes.getCodenameC());
+        }
+        //快递结算方式
+        bascodes = basCodesService.queryBasCode(Constant.CODE_CATALOG_SETTLEMENT, orderHeaderForNormal.getStop());
+        if (bascodes != null) {
+            docOrderPackingCartonInfo.setUserdefine2(bascodes.getCodenameC());
         }
         docOrderPackingCartonInfoList.add(docOrderPackingCartonInfo);
         return docOrderPackingCartonInfoList;

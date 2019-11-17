@@ -17,6 +17,7 @@ import com.wms.utils.BeanUtils;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.BasCodesVO;
+import com.wms.vo.BaseCodesVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +112,17 @@ public class BasCodesService {
             }
         }
         return comboboxList;
+    }
+
+    /**
+     * 查询码表内容
+     */
+    public BasCodes queryBasCode(String codeid, String code) {
+
+        BasCodesQuery query = new BasCodesQuery();
+        query.setCodeid(codeid);
+        query.setCode(code);
+        return basCodesMybatisDao.queryById(query);
     }
 
     /**
