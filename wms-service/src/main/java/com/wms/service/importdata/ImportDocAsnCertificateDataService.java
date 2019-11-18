@@ -223,6 +223,7 @@ public class ImportDocAsnCertificateDataService {
 				rowResult.append("[生产批号]，未输入").append(" ");
 			}
 			System.out.println(dataArray.getCustomerid()+"===="+dataArray.getSku()+"===="+dataArray.getLotatt04());
+			System.out.println(dataArray.getCustomerid()+"===="+dataArray.getSpecsName()+"===="+dataArray.getLotatt04());
 
 			try {
 				boolean flag1 = false;
@@ -233,7 +234,7 @@ public class ImportDocAsnCertificateDataService {
 
 				for(DocAsnCertificateVO  a: importData){
 					if(dataArray.getCustomerid().equals(a.getCustomerid())
-							&&dataArray.getSku().equals(a.getSku())
+							&&dataArray.getSpecsName().equals(a.getSpecsName())
 							&&dataArray.getLotatt04().equals(a.getLotatt04())){
 						flag1 = true;
 					}
