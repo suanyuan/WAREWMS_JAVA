@@ -166,7 +166,13 @@
 		}
 
     }
+    var month = function(value,row,index) {
 
+        if(value!=null && value!=""){
+            return value+"月";
+        }
+
+    }
     var yesOrNoFormatter = function(value,row,index) {
         if(value == "1"){
             return "是";
