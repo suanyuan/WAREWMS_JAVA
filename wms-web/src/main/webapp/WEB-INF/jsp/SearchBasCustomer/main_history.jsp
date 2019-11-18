@@ -57,7 +57,7 @@ $(function() {
 			{field: 'registrationAuthorityR',title: '发证机关 ',	width: 150 },
 			{field: 'clientStartDate',		title: '开始委托时间',	width: 130 },
 			{field: 'clientEndDate',		title: '停止委托时间',	width: 130 },
-			{field: 'clientTerm',	        title: '委托期限',	width: 100 ,formatter:day},
+			{field: 'clientTerm',	        title: '委托期限',	width: 100 ,formatter:month},
 			{field: 'isChineseLabel',		title: '是否委托加贴中文标签',	width: 150},
 			{field: 'clientContent',		title: '委托业务范围',	width: 200 },
 

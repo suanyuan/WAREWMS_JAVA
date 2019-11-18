@@ -50,9 +50,10 @@ $(function() {
 			{field: 'lotatt01Andlotatt02',		        title: '生产日期和有效期(或者失效期)',	width: 200 },
 			// {field: 'lotatt05',		        title: '序列号',	width: 100 },
 			{field: 'lotatt11',		        title: '储存条件',	width: 130 },
-			{field: 'uom',                  title: '单位 ',	width: 100 },
+            {field: 'qtyeach',		        title: '数量 ',	width: 100 },
+
+            {field: 'uom',                  title: '单位 ',	width: 100 },
 			// {field: 'qty',                  title: '库存件数 ',	width: 100 },
-			{field: 'qtyeach',		        title: '数量 ',	width: 100 },
 			{field: 'consigneeID',		    title: '收货客户名称',	width: 100 },
 			{field: 'caddress1',	        title: '收货地址',	width: 250 },
 			{field: 'contact',		            title: '联系人',	width: 100 },

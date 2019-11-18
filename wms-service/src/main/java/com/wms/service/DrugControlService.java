@@ -538,9 +538,10 @@ public class DrugControlService extends BaseService {
         superClassMap.put("lotatt04", "生产批号/序列号");
 		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
 		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("qtyeach", "数量");
+
 		superClassMap.put("uom", "单位");
 //		superClassMap.put("qty", "库存件数");
-		superClassMap.put("qtyeach", "数量");
 		superClassMap.put("consigneeID", "收货客户名称");
 		superClassMap.put("caddress1", "收货地址");
 		superClassMap.put("contact", "联系人");
@@ -618,7 +619,7 @@ public class DrugControlService extends BaseService {
 					}
 					//委托期限
 					if(s.getClientTerm()!=null){
-						s.setClientTerm(s.getClientTerm()+"天");
+						s.setClientTerm(s.getClientTerm()+"月");
 					}
 				}
 				//将list集合转化为excle
@@ -893,9 +894,10 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("lotatt04", "生产批号/序列号");
 		superClassMap.put("lotatt01Andlotatt02", "生产日期和有效期(或者失效期)");
 		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("qtyeach", "数量");
+
 		superClassMap.put("uom", "单位");
 //		superClassMap.put("qty", "库存件数");
-		superClassMap.put("qtyeach", "数量");
 		superClassMap.put("consigneeID", "收货客户名称");
 		superClassMap.put("caddress1", "收货地址");
 		superClassMap.put("contact", "联系人");

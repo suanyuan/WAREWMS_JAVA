@@ -104,20 +104,45 @@ public class BasCustomerVO {
     private String billclass;   //首营状态
 
 
-    public String getBillclass() {
-        return billclass;
-    }
+    private String socialCreditCode;//营业执照统一社会会信用代码
+    private String licenseNumber;//编号
+    private String businessStartDate; //营业执照开始时间
+    private String businessEndDate;   //营业执照结束时间
 
-    public void setBillclass(String billclass) {
-        this.billclass = billclass;
-    }
+    private String prodLicenseNo;    //生产许可编号
+    private String prodLicenseExpiryDate; //生产许可有效期
 
-    public String getReceivingAllClient() {
-		return receivingAllClient;
+    private String firstRecordNo;    //一类生产备案许可编号
+    private String firstRecordApproveDate;//一类生产备案发证日期
+
+    private String operateLicenseNo; //经营许可证编号
+	private String operateLicenseExpiryDate;//经营许可有效期
+
+	private String secondRecordNo;    //二类生产备案许可编号
+	private String secondRecordApproveDate;//二类生产备案发证日期
+
+	private String medicalRegisterNo;    			//医疗机构登记号许可编号
+	private String medicalRegisterApproveDate;//医疗机构登记号发证日期
+
+
+	public String getBankaccount() {
+		return bankaccount;
 	}
 
-	public void setReceivingAllClient(String receivingAllClient) {
-		this.receivingAllClient = receivingAllClient;
+	public void setBankaccount(String bankaccount) {
+		this.bankaccount = bankaccount;
+	}
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public String getSupContractNo() {
+		return supContractNo;
+	}
+
+	public void setSupContractNo(String supContractNo) {
+		this.supContractNo = supContractNo;
 	}
 
 	public String getClientStartDateDc() {
@@ -136,14 +161,6 @@ public class BasCustomerVO {
 		this.clientEndDateDc = clientEndDateDc;
 	}
 
-	public String getAllClient() {
-		return allClient;
-	}
-
-	public void setAllClient(String allClient) {
-		this.allClient = allClient;
-	}
-
 	public String getNotes() {
 		return notes;
 	}
@@ -152,24 +169,140 @@ public class BasCustomerVO {
 		this.notes = notes;
 	}
 
-	public String getBankaccount() {
-		return bankaccount;
+	public String getAllClient() {
+		return allClient;
 	}
 
-	public void setBankaccount(String bankaccount) {
-		this.bankaccount = bankaccount;
+	public void setAllClient(String allClient) {
+		this.allClient = allClient;
 	}
 
-	public String getSupContractNo() {
-		return supContractNo;
+	public String getReceivingAllClient() {
+		return receivingAllClient;
 	}
 
-	public void setSupContractNo(String supContractNo) {
-		this.supContractNo = supContractNo;
+	public void setReceivingAllClient(String receivingAllClient) {
+		this.receivingAllClient = receivingAllClient;
 	}
 
-	public String getContractNo() {
-		return contractNo;
+	public String getBillclass() {
+		return billclass;
+	}
+
+	public void setBillclass(String billclass) {
+		this.billclass = billclass;
+	}
+
+	public String getSocialCreditCode() {
+		return socialCreditCode;
+	}
+
+	public void setSocialCreditCode(String socialCreditCode) {
+		this.socialCreditCode = socialCreditCode;
+	}
+
+	public String getLicenseNumber() {
+		return licenseNumber;
+	}
+
+	public void setLicenseNumber(String licenseNumber) {
+		this.licenseNumber = licenseNumber;
+	}
+
+	public String getBusinessStartDate() {
+		return businessStartDate;
+	}
+
+	public void setBusinessStartDate(String businessStartDate) {
+		this.businessStartDate = businessStartDate;
+	}
+
+	public String getBusinessEndDate() {
+		return businessEndDate;
+	}
+
+	public void setBusinessEndDate(String businessEndDate) {
+		this.businessEndDate = businessEndDate;
+	}
+
+	public String getProdLicenseNo() {
+		return prodLicenseNo;
+	}
+
+	public void setProdLicenseNo(String prodLicenseNo) {
+		this.prodLicenseNo = prodLicenseNo;
+	}
+
+	public String getProdLicenseExpiryDate() {
+		return prodLicenseExpiryDate;
+	}
+
+	public void setProdLicenseExpiryDate(String prodLicenseExpiryDate) {
+		this.prodLicenseExpiryDate = prodLicenseExpiryDate;
+	}
+
+	public String getFirstRecordNo() {
+		return firstRecordNo;
+	}
+
+	public void setFirstRecordNo(String firstRecordNo) {
+		this.firstRecordNo = firstRecordNo;
+	}
+
+	public String getFirstRecordApproveDate() {
+		return firstRecordApproveDate;
+	}
+
+	public void setFirstRecordApproveDate(String firstRecordApproveDate) {
+		this.firstRecordApproveDate = firstRecordApproveDate;
+	}
+
+	public String getOperateLicenseNo() {
+		return operateLicenseNo;
+	}
+
+	public void setOperateLicenseNo(String operateLicenseNo) {
+		this.operateLicenseNo = operateLicenseNo;
+	}
+
+	public String getOperateLicenseExpiryDate() {
+		return operateLicenseExpiryDate;
+	}
+
+	public void setOperateLicenseExpiryDate(String operateLicenseExpiryDate) {
+		this.operateLicenseExpiryDate = operateLicenseExpiryDate;
+	}
+
+	public String getSecondRecordNo() {
+		return secondRecordNo;
+	}
+
+	public void setSecondRecordNo(String secondRecordNo) {
+		this.secondRecordNo = secondRecordNo;
+	}
+
+	public String getSecondRecordApproveDate() {
+		return secondRecordApproveDate;
+	}
+
+	public void setSecondRecordApproveDate(String secondRecordApproveDate) {
+		this.secondRecordApproveDate = secondRecordApproveDate;
+	}
+
+	public String getMedicalRegisterNo() {
+		return medicalRegisterNo;
+	}
+
+	public void setMedicalRegisterNo(String medicalRegisterNo) {
+		this.medicalRegisterNo = medicalRegisterNo;
+	}
+
+	public String getMedicalRegisterApproveDate() {
+		return medicalRegisterApproveDate;
+	}
+
+	public void setMedicalRegisterApproveDate(String medicalRegisterApproveDate) {
+		this.medicalRegisterApproveDate = medicalRegisterApproveDate;
 	}
 
 	public void setContractNo(String contractNo) {

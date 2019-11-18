@@ -62,7 +62,17 @@ public class BasCustomerService extends BaseService {
 	private GspSupplierMybatisDao gspSupplierMybatisDao;
 	@Autowired
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
+    @Autowired
+    private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+    @Autowired
+    private GspOperateLicenseMybatisDao gspOperateLicenseMybatisDao;
 
+    @Autowired
+    private GspFirstRecordMybatisDao gspFirstRecordMybatisDao;
+    @Autowired
+    private GspSecondRecordMybatisDao gspSecondRecordMybatisDao;
+    @Autowired
+    private GspMedicalRecordMybatisDao gspMedicalRecordMybatisDao;
 
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
@@ -273,6 +283,11 @@ public class BasCustomerService extends BaseService {
 				basCustomer.setDescrC(gspEnterpriseInfo.getEnterpriseName());
                 basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
                 basCustomer.setActiveFlag(Constant.IS_USE_YES);
+                if(basCustomerForm.getIsUse()=="1"){
+					basCustomer.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+				}else{
+					basCustomer.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+				}
                 basCustomerMybatisDao.add(basCustomer);
 
 				json.setSuccess(true);
@@ -682,6 +697,71 @@ public class BasCustomerService extends BaseService {
 				for (BasCustomerVO basCustomerVO : basCustomerVOList) {
 					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
+                    GspBusinessLicense BusinessLicense = gspBusinessLicenseMybatisDao.selectCompareByEnterpriseId(basCustomerVO.getEnterpriseId());
+                    GspOperateLicense GspProdLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId(),Constant.LICENSE_TYPE_PROD);
+                    GspOperateLicense GspGspOperateLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId(),Constant.LICENSE_TYPE_OPERATE);
+                    GspFirstRecord GspFirstRecord = gspFirstRecordMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId());
+                    GspSecondRecord GspSecondRecord = gspSecondRecordMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId());
+                    GspMedicalRecord GspMedicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId());
+
+
+                    if(BusinessLicense!=null){
+                        basCustomerVO.setSocialCreditCode(BusinessLicense.getSocialCreditCode());
+                        basCustomerVO.setLicenseNumber(BusinessLicense.getLicenseNumber());
+                        if(BusinessLicense.getBusinessStartDate()!=null){
+                            basCustomerVO.setBusinessStartDate(sdf.format(BusinessLicense.getBusinessStartDate()));
+                        }else{
+                            basCustomerVO.setBusinessStartDate("无期限");
+                        }
+                        if(BusinessLicense.getBusinessEndDate()!=null){
+                            basCustomerVO.setBusinessEndDate(sdf.format(BusinessLicense.getBusinessEndDate()));
+                        }else{
+                            basCustomerVO.setBusinessEndDate("无期限");
+                        }
+                    }else{
+                        basCustomerVO.setSocialCreditCode("无");
+                        basCustomerVO.setLicenseNumber("无");
+                        basCustomerVO.setBusinessStartDate("无");
+                        basCustomerVO.setBusinessEndDate("无");
+                    }
+
+                    if(GspProdLicense!=null){
+                        basCustomerVO.setProdLicenseNo(GspProdLicense.getLicenseNo());
+                        basCustomerVO.setProdLicenseExpiryDate(sdf.format(GspProdLicense.getLicenseExpiryDate()));
+                    }else{
+                        basCustomerVO.setProdLicenseNo("无");
+                        basCustomerVO.setProdLicenseExpiryDate("无");
+                    }
+
+                    if(GspGspOperateLicense!=null){
+                        basCustomerVO.setOperateLicenseNo(GspGspOperateLicense.getLicenseNo());
+                        basCustomerVO.setOperateLicenseExpiryDate(sdf.format(GspGspOperateLicense.getLicenseExpiryDate()));
+                    }else{
+                        basCustomerVO.setOperateLicenseNo("无");
+                        basCustomerVO.setOperateLicenseExpiryDate("无");
+                    }
+
+                    if(GspFirstRecord!=null){
+                        basCustomerVO.setFirstRecordNo(GspFirstRecord.getRecordNo());
+                        basCustomerVO.setFirstRecordApproveDate(sdf.format(GspFirstRecord.getApproveDate()));
+                    }else{
+                        basCustomerVO.setFirstRecordNo("无");
+                        basCustomerVO.setFirstRecordApproveDate("无");
+                    }
+                    if(GspSecondRecord!=null){
+                        basCustomerVO.setSecondRecordNo(GspSecondRecord.getRecordNo());
+                        basCustomerVO.setSecondRecordApproveDate(sdf.format(GspSecondRecord.getApproveDate()));
+                    }else{
+                        basCustomerVO.setSecondRecordNo("无");
+                        basCustomerVO.setSecondRecordApproveDate("无");
+                    }
+                    if(GspMedicalRecord!=null){
+                        basCustomerVO.setMedicalRegisterNo(GspMedicalRecord.getMedicalRegisterNo());
+                        basCustomerVO.setMedicalRegisterApproveDate(sdf.format(GspMedicalRecord.getApproveDate()));
+                    }else{
+                        basCustomerVO.setMedicalRegisterNo("无");
+                        basCustomerVO.setMedicalRegisterApproveDate("无");
+                    }
 
 
 					if ("1".equals(basCustomerVO.getActiveFlag())) {
@@ -742,19 +822,29 @@ public class BasCustomerService extends BaseService {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 		superClassMap.put("activeFlag", "是否合作");
 		superClassMap.put("customerType", "客户类型");
-
 		superClassMap.put("customerid", "客户代码");
 		superClassMap.put("descrC", "客户名称");
 		superClassMap.put("enterpriseNo", "企业代码");
 		superClassMap.put("shorthandName", "简称");
-		superClassMap.put("enterpriseName", "企业名称");
+		superClassMap.put("socialCreditCode", "营业执照统一社会会信用代码");
+        superClassMap.put("licenseNumber", "营业执照编号");
+        superClassMap.put("businessStartDate", "营业执照开始时间");
+        superClassMap.put("businessEndDate", "营业执照结束时间");
+        superClassMap.put("prodLicenseNo", "生产许可编号");
+        superClassMap.put("prodLicenseExpiryDate", "生产许可有效期");
+        superClassMap.put("firstRecordNo", "一类生产备案许可编号");
+        superClassMap.put("firstRecordApproveDate", "一类生产备案发证日期");
+        superClassMap.put("operateLicenseNo", "经营许可证编号");
+        superClassMap.put("operateLicenseExpiryDate", "经营许可有效期");
+        superClassMap.put("secondRecordNo", "二类生产备案许可编号");
+        superClassMap.put("secondRecordApproveDate", "二类生产备案发证日期");
+        superClassMap.put("medicalRegisterNo", "医疗机构登记号许可编号");
+        superClassMap.put("medicalRegisterApproveDate", "医疗机构登记号发证日期");
+//		superClassMap.put("enterpriseName", "企业名称");
 		superClassMap.put("allClient", "供应商对应货主");
-
 		superClassMap.put("contacts", "联系人");
 		superClassMap.put("contactsPhone", "联系人电话");
 		superClassMap.put("supContractNo", "合同编号");
-
-
 		superClassMap.put("contractUrl", "合同文件");
 		superClassMap.put("clientContent", "委托/合同内容");
 		superClassMap.put("clientStartDateDc", "委托/合同开始时间");
