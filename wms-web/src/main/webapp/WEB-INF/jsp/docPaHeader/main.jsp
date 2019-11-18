@@ -42,6 +42,7 @@ $(function() {
 			{field:'ck',checkbox:true},
 			{field: 'pano',		title: '上架任务单号',	width: 150 },
 			{field: 'asnno',		title: '入库单号',	width: 150},
+			{field: 'pareference1',		title: '发货凭证号',	width: 150},
 			// {field: 'patype',		title: '类型',	width: 71 },
 			{field: 'pastatus',		title: '上架状态',	width: 71,formatter: pastatusFormatter},
 			{field: 'addtime',		title: '创建时间',	width: 150},

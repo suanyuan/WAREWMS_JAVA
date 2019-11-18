@@ -56,7 +56,6 @@ public class DocPaHeader  implements Serializable {
 
 	private String warehouseid;
 
-
 	//头单信息
 	private String asnreference1; //客户单号1
 	private String asnreference2;//客户单号2
