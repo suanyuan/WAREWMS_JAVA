@@ -130,6 +130,25 @@ public class PdaPackageController {
     }
 
     /**
+     * 包装复核提交(单次)
+     * @param query ~
+     * @return ~
+     */
+    @RequestMapping(params = "singlePackageCommit", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> singlePackageCommit(PdaDocPackageQuery query) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(query.getVersion());
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        resultMap.put(Constant.RESULT, docOrderPackingService.singlePackageCommit(query));
+        return resultMap;
+    }
+
+    /**
      *
      */
     @RequestMapping(params = "getOrderPackingInfo", method = RequestMethod.POST)

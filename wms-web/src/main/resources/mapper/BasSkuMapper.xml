@@ -1119,6 +1119,57 @@ where 1=1
         )
     </select>
 
+	<select id="query4ScanInBasGtnLotatt" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from bas_sku
+		where active_flag = 1 and customerid = #{customerid} and sku in (
+			select
+			DISTINCT sku from bas_gtn_lotatt
+			WHERE ifnull(lotatt04, '') = ifnull(rtrim(#{lotatt04, jdbcType=VARCHAR}), '')
+			  AND ifnull(lotatt05, '') = ifnull(rtrim(#{lotatt05, jdbcType=VARCHAR}), '')
+		)
+	</select>
+
+	<select id="query4ScanInBasGtn" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from bas_sku
+		where active_flag = 1 and customerid = #{customerid} and sku in (
+				select
+				DISTINCT sku
+				from bas_gtn
+				WHERE GTNCODE = #{GTIN, jdbcType=VARCHAR}
+		)
+	</select>
+
+	<select id="query4ScanInBasSku" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from bas_sku
+		where active_flag = 1 and customerid = #{customerid} and sku in (
+				select
+				DISTINCT sku
+				from bas_sku
+				WHERE 0=1
+				<if test="alternate_sku1 != null and alternate_sku1 != ''">
+					or alternate_sku1 = #{alternate_sku1, jdbcType=VARCHAR}
+				</if>
+				<if test="alternate_sku2 != null and alternate_sku2 != ''">
+					or alternate_sku2 = #{alternate_sku2, jdbcType=VARCHAR}
+				</if>
+				<if test="alternate_sku3 != null and alternate_sku3 != ''">
+					or alternate_sku3 = #{alternate_sku3, jdbcType=VARCHAR}
+				</if>
+				<if test="alternate_sku4 != null and alternate_sku4 != ''">
+					or alternate_sku4 = #{alternate_sku4, jdbcType=VARCHAR}
+				</if>
+				<if test="alternate_sku5 != null and alternate_sku5 != ''">
+					or alternate_sku5 = #{alternate_sku5, jdbcType=VARCHAR}
+				</if>
+		)
+	</select>
+
     <!--<select id="queryListForScan" resultMap="BaseResultMap" parameterType="java.util.Map">-->
         <!--select-->
         <!--<include refid="Base_Column_List"/>-->

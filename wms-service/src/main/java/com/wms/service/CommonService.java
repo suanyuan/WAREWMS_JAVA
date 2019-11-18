@@ -94,7 +94,9 @@ public class CommonService extends BaseService{
                 StringUtil.fixNull(form.getOtherCode()).contains(ScanResultForm.ALTERNATE_SKU_ID) ? form.getOtherCode() : "",//如果包含自赋码的规则字符串，则赋上自赋码
                 form.getLotatt04(),
                 basSerialNum != null ? "" : form.getLotatt05());//如果是序列号存在于序列号导入模块，则说明产品是批号入，出库记录序列号的.
-        BasSku basSku = basSkuMybatisDao.queryForScan(pdaBasSkuQuery);
+        BasSku basSku = basSkuMybatisDao.query4ScanInBasGtnLotatt(pdaBasSkuQuery);
+        if (null == basSku) basSku = basSkuMybatisDao.query4ScanInBasGtn(pdaBasSkuQuery);
+        if (null == basSku) basSku = basSkuMybatisDao.query4ScanInBasSku(pdaBasSkuQuery);
 
         //如果获取不到，可能属于适配情况3（基本上）
         if (basSku == null) {

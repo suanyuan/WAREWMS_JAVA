@@ -697,7 +697,7 @@ var mergeOrder = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?addDocPa",
-                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
+                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
                         success : function(result){
                             $.messager.progress('close');
                             console.log(result);
@@ -745,7 +745,7 @@ var mergeReceiving = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
-                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :true,
+                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
                     success : function(result){
                         $.messager.progress('close');
                         console.log(result);
@@ -792,7 +792,7 @@ var closeCheck = function(){
             data : {'asnnos' : asnnos.join(",")},
             type : 'GET',
             dataType : 'JSON',
-            async: true,
+            async: false,
             success : function(result){
                 $.messager.progress('close');
                 var msg = '';
