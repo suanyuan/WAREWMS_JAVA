@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service("docOrderPackingCartonSearchService")
 public class DocOrderPackingCartonSearchService extends BaseService {
@@ -32,7 +30,8 @@ public class DocOrderPackingCartonSearchService extends BaseService {
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-
+    @Autowired
+    private BasCustomerMybatisDao basCustomerMybatisDao;
     /**
      * 显示细单 分页
      *
@@ -120,6 +119,11 @@ public class DocOrderPackingCartonSearchService extends BaseService {
 
 
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+        //货主名
+        BasCustomer basCustomerList = basCustomerMybatisDao.queryByIdType(orderHeaderForNormal.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+        if (basCustomerList != null) {
+            docOrderPackingCartonInfo.setCodenamec(basCustomerList.getDescrC());
+        }
         docOrderPackingCartonInfo.setOrderno(orderno);
         //收货单位
         docOrderPackingCartonInfo.setConsigneeid(orderHeaderForNormal.getConsigneeid());

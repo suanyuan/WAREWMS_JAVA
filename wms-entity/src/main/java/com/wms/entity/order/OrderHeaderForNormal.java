@@ -463,6 +463,7 @@ public class OrderHeaderForNormal implements Serializable {
 	/**
 	 * 打印模板
 	 */
+
 	private String printTemplate;
 	private String printmen;//收货方
 	private String endmode;//快递结算方式

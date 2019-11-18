@@ -2,9 +2,8 @@ package com.wms.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -55,6 +54,6 @@ public class DocOrderPackingCartonInfo  implements Serializable {
 	private String userdefine1 ;
 	//快递结算方式
 	private String userdefine2;
-
+	private String codenamec;//货主名
 
 }
