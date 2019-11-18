@@ -1,8 +1,7 @@
 package com.wms.service;
 
-import com.wms.entity.BasCodes;
-import com.wms.entity.BasCustomer;
-import com.wms.entity.BasSku;
+import com.wms.constant.Constant;
+import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
@@ -10,6 +9,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
+import com.wms.utils.StringUtil;
 import com.wms.utils.exception.ExcelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,14 @@ public class DocOrderExportService {
     @Autowired
     private BasCodesMybatisDao basCodesMybatisDao;
     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HHmmss");
-
+    @Autowired
+    private BasSkuMybatisDao basSkuMybatisDao;
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
+    @Autowired
+    private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
     /**
      * 打印order检查记录
@@ -53,38 +60,71 @@ public class DocOrderExportService {
         //获得单头
         OrderHeaderForNormal orderHeaderForNormal=orderHeaderForNormalMybatisDao.queryById(order);
         //获得细单
-        List<OrderDetailsForNormal> orderDetailsForNormalList=orderDetailsForNormalMybatisDao.queryByOrderNo(order);
+        List<OrderDetailsForNormal> orderDetailsForNormalList=orderDetailsForNormalMybatisDao.queryByOrderNo1(order);
         if(orderHeaderForNormal!=null&&orderDetailsForNormalList!=null){
 //            头像显示地址和电话  发运结算方式
             orderHeaderForNormal.setExcaddress1(orderHeaderForNormal.getCAddress1()==null?"":orderHeaderForNormal.getCAddress1());
             orderHeaderForNormal.setExctel1(orderHeaderForNormal.getCTel1()==null?"":orderHeaderForNormal.getCTel1());
-            if(orderHeaderForNormal.getUserdefine1()!=null) {
-                orderHeaderForNormal.setUserdefine1(getU1Name(orderHeaderForNormal.getUserdefine1()));
+            //快递公司
+            if (orderHeaderForNormal.getCarrierid() != null) {
+                BasCarrierLicense basCarrierLicense = basCarrierLicenseMybatisDao.queryById(orderHeaderForNormal.getCarrierid());
+                if (basCarrierLicense != null) {
+                    GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(basCarrierLicense.getEnterpriseId());
+                    if (gspEnterpriseInfo != null) {
+                        orderHeaderForNormal.setCarriername(gspEnterpriseInfo.getEnterpriseName());
+                    }
+                }
             }
-            if(orderHeaderForNormal.getUserdefine2()!=null) {
-                orderHeaderForNormal.setUserdefine2(getU2Name(orderHeaderForNormal.getUserdefine2()));
+            //发运方式 ZT BK LY 暂缓
+            Map<String, Object> param = new HashMap<>();
+            param.put("codeid", "EXP_TYP");
+            param.put("code", orderHeaderForNormal.getRoute());
+            BasCodes bascodes = basCodesMybatisDao.queryById(param);
+            if (bascodes != null) {
+                orderHeaderForNormal.setUserdefine1(bascodes.getCodenameC());
+            }
+            //快递结算方式
+            Map<String, Object> param1 = new HashMap<>();
+            param1.put("codeid", "JS_FS");
+            param1.put("code", orderHeaderForNormal.getStop());
+            BasCodes bascodes1 = basCodesMybatisDao.queryById(param1);
+            if (bascodes1 != null) {
+                orderHeaderForNormal.setUserdefine2(bascodes1.getCodenameC());
             }
             double qtyorderedSum=0;   //订货件数总和
             double qtyorderedEachSum=0;   //订货数量总和
             for (OrderDetailsForNormal d : orderDetailsForNormalList) {
-//                供应商中文
-                BasCustomer basCustomer=basCustomerMybatisDao.queryByCustomerId(d.getLotatt08());
-                if(basCustomer!=null){
-                    d.setLotatt08(basCustomer.getDescrC());
-                }
+
                 //计算总数
                 qtyorderedSum+=d.getQtyordered();
                 qtyorderedEachSum+=d.getQtyorderedEach();
-
                 d.setQtyorderedSum(qtyorderedSum);
                 d.setQtyorderedEachSum(qtyorderedEachSum);
-                BasSku basSku = basSkuService.getSkuInfo(d.getCustomerid(),d.getSku());
+
+                Map<String, Object> param2 = new HashMap<>();
+                param2.put("customerid", d.getCustomerid());
+                param2.put("sku", d.getSku());
+                BasSku basSku = basSkuMybatisDao.queryById(param2);
 //                细单部分01转换是否
                 if(basSku!=null){
                     d.setCard(getYesNo(basSku.getSkuGroup2()));
                     d.setReport(getYesNo(basSku.getSkuGroup8()));
                     d.setDoublec(getYesNo(basSku.getSkuGroup7()));
+                    d.setLotatt12(basSku.getReservedfield01());
+                    d.setLotatt11(basSku.getSkuGroup4());
                     d.setDescrc(basSku.getDescrC());
+                }
+                InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(d.getLotnum());
+                if(invLotAtt!=null){
+                    d.setLotatt06(invLotAtt.getLotatt06());
+                    d.setLotatt07(invLotAtt.getLotatt07());
+                    d.setLotatt02(invLotAtt.getLotatt02());
+                    d.setLotatt15(invLotAtt.getLotatt15() + "/" + StringUtil.fixNull(basSku.getReservedfield06()));
+                }
+                //供应商中文
+                BasCustomer basCustomer=basCustomerMybatisDao.queryByIdType(invLotAtt.getLotatt08(), Constant.CODE_CUS_TYP_VE);
+                if(basCustomer!=null){
+                    d.setLotatt08(basCustomer.getDescrC());
                 }
             }
 

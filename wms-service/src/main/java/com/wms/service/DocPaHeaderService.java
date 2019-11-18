@@ -258,6 +258,9 @@ public class DocPaHeaderService extends BaseService {
             docPaHeader.setAsnreference1(docAsnHeader.getAsnreference1());
             //客户单号2 docasnheader.asnreference2
             docPaHeader.setAsnreference2(docAsnHeader.getAsnreference2());
+        }else{
+            docPaHeader.setAsnreference1(docPaHeader.getPareference1());
+            docPaHeader.setAsnreference2(docPaHeader.getPareference2());
         }
         //仓库名 docpaheader.warehousid
         //货主 docpaheader.customerid JSGR  BasCustomerService.query   BasCustomer.DESCR_C
