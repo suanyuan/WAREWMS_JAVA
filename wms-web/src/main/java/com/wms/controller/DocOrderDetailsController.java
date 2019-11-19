@@ -1,10 +1,16 @@
 package com.wms.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.servlet.http.HttpSession;
-
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.OrderDetailsForNormalQuery;
+import com.wms.service.OrderDetailsForNormalService;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.annotation.Login;
+import com.wms.utils.editor.CustomDateEditor;
+import com.wms.vo.Json;
+import com.wms.vo.OrderDetailsForNormalVO;
+import com.wms.vo.form.OrderDetailsForNormalForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -12,17 +18,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.OrderDetailsForNormalService;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.utils.editor.CustomDateEditor;
-import com.wms.vo.Json;
-import com.wms.vo.OrderDetailsForNormalVO;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.OrderDetailsForNormalForm;
-import com.wms.query.OrderDetailsForNormalQuery;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping("docOrderDetailsController")
@@ -45,7 +43,12 @@ public class DocOrderDetailsController {
 	public EasyuiDatagrid<OrderDetailsForNormalVO> showDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		return orderDetailsForNormalService.getPagedDatagrid(pager, query);
 	}
-
+	@Login
+	@RequestMapping(params = "showDatagridAll")
+	@ResponseBody
+	public EasyuiDatagrid<OrderDetailsForNormalVO> showDatagridAll(OrderDetailsForNormalQuery query) {
+		return orderDetailsForNormalService.getPagedDatagridAll(query);
+	}
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody

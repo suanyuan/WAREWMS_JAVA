@@ -5,7 +5,6 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocAsnHeader;
-import com.wms.entity.DocOrderPackingCartonInfo;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.result.AsnDetailResult;
@@ -303,7 +302,7 @@ public class DocAsnHeaderController {
 	}
 
 	/**
-	 * 打印收货结果清单
+	 * 打印收货记录
 	 * @param model
 	 * @param asnno
 	 * @return

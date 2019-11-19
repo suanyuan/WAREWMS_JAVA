@@ -22,6 +22,7 @@ var ezuiDetailsForm;
 var ezuiDialog;
 var ezuiDetailsDialog;
 var ezuiDatagrid;
+var ezuiDetailsDatagridAll;
 var ezuiDetailsDatagrid;
 var ezuiCustDataDialog;
 var ezuiCustDataDialogId;
@@ -97,9 +98,9 @@ $(function() {
 					{field: 'addwho',				title: '创建人',		    width: 70 },
 					{field: 'courierComplaint' ,    title: '快递投诉内容' , 	width:150}
 		]],
-		onDblClickCell: function(index,field,value){
+		onDblClickCell: function(index,field,value,row){
 			//edit();
-
+			aaa(row);
 		},
 		onDblClickRow(index,row){
             edit(row);
@@ -129,82 +130,8 @@ $(function() {
 
         }
 	});
-	//订单明细列表
-	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
-		url : '<c:url value="/docOrderDetailsController.do?showDatagrid"/>',
-		method : 'POST',
-		toolbar : '#detailToolbar',
-		idField : 'orderlineno',
-		title : '',
-        pageSize : 50,
-        pageList : [50, 100, 200],
-        border : false,
-        fitColumns : false,
-        nowrap : false,
-        striped : true,
-        collapsible : false,
-        pagination:true,
-        rownumbers : true,
-        singleSelect : true,
-        checkOnSelect:true,
-        selectOnCheck: false,
-		columns : [[
-			{field: 'orderlineno',		title: '行号',		width: 130 },
-			{field: 'sku',				title: '商品编码',		width: 130 },
-            {field: 'lotatt04',	title: '生产批号',		width: 130 },
-            {field: 'lotatt05',	title: '序列号',		width: 130 },
-			{field: 'skuName',			title: '产品名称',		width: 130 },
-			{field: 'linestatus',	title: '状态',		width: 130 ,formatter:sostatusFormatter},
-			{field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
-            {field: 'qtyordered',		title: '订货件数',		width: 130 },
-			{field: 'qtyallocatedEach',		title: '分配数量',		width: 130 },
-            {field: 'qtyallocated',		title: '分配件数',		width: 130 },
-			{field: 'qtypickedEach',		title: '拣货数量',		width: 130 },
-            {field: 'qtypicked',		title: '拣货件数',		width: 130 },
-			{field: 'qtyshippedEach',		title: '发货数量',		width: 130 },
-            {field: 'qtyshipped',		title: '发货件数',		width: 130 },
-			{field: 'alternativesku',	title: '商品条码',		width: 130 },
-            {field: 'lotatt01',	title: '生产日期',		width: 130 },
-            {field: 'lotatt02',	title: '效期',		width: 130 },
-            {field: 'lotatt03',	title: '入库日期',		width: 130 },
 
-            {field: 'lotatt06',	title: '产品注册证',		width: 130 },
-            {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
-            {field: 'lotatt08',	title: '供应商',		width: 130 },
-            {field: 'lotatt09',	title: '样品属性',		width: 130 },
-            {field: 'lotatt10',	title: '质量状态',		width: 130 },
-            {field: 'lotatt11',	title: '存储条件',		width: 130 },
-            {field: 'descrc',	title: '规格型号',		width: 130 },
-            {field: 'lotatt13',	title: '双证',		width: 130 },
-            {field: 'lotatt14',	title: '入库单号',		width: 130 },
-            {field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
-            /*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
-            {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
-            {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
-		]],
-		onDblClickCell: function(index,field,value){
-			detailsEdit();
-		},
-		onRowContextMenu : function(event, rowIndex, rowData) {
-		},
-		onLoadSuccess:function(data){
-			$(this).datagrid('unselectAll');
-			$(this).datagrid("resize",{height:300});
-			 compute();
-			// getTotalAllInit=getTotalAll();
-			// ezuiDetailsDatagrid.datagrid('reloadFooter',[
-			// 	{linestatus:'总计:',
-			// 		qtyorderedEach:getTotalAllInit.qtyorderedEach,
-			// 		qtyordered:getTotalAllInit.qtyordered,
-			// 		qtyallocatedEach:getTotalAllInit.qtyallocatedEach,
-			// 		qtyallocated:getTotalAllInit.qtyallocated,
-			// 		qtypickedEach:getTotalAllInit.qtypickedEach,
-			// 		qtypicked:getTotalAllInit.qtypicked,
-			// 		qtyshippedEach:getTotalAllInit.qtyshippedEach,
-			// 		qtyshipped:getTotalAllInit.qtyshipped}
-			// ]);
-		}
-	});
+
 
 	/* 分配明细列表*/
     allocationDetailsDatagrid = $('#allocationDetailsDatagrid').datagrid({
@@ -219,6 +146,7 @@ $(function() {
         fitColumns : false,
         nowrap : false,
         striped : true,
+        showFooter: true,
         collapsible : false,
         pagination:true,
         rownumbers : true,
@@ -244,6 +172,12 @@ $(function() {
         onLoadSuccess:function(data){
             $(this).datagrid('unselectAll');
             $(this).datagrid("resize",{height:300});
+            $('#allocationDetailsDatagrid').datagrid('reloadFooter',[{skuName:'合计:',
+                qty:compute("qty"),
+                qtyEach:compute("qtyEach"),
+                qtypickedEach:compute("qtypickedEach"),
+                qtyshippedEach:compute("qtyshippedEach")
+            }]);
         }
     });
 
@@ -463,51 +397,143 @@ $(function() {
 
     })
 });
-// 统计总计 start
-function getTotalAll(){
-	var sums=new Object();
-	var rows = ezuiDetailsDatagrid.datagrid('getRows');//获取当前页的数据行
-	sums.qtyorderedEach = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyorderedEach  += rows[i]['qtyorderedEach']; //获取指定列
-	}
-	sums.qtyordered = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyordered += rows[i]['qtyordered']; //获取指定列
-	}
-	sums.qtyallocatedEach= 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyallocatedEach+= rows[i]['qtyallocatedEach']; //获取指定列
-	}
-	sums.qtyallocated= 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyallocated+= rows[i]['qtyallocated']; //获取指定列
-	}
-	sums.qtypickedEach = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtypickedEach += rows[i]['qtypickedEach']; //获取指定列
-	}
-	sums.qtypicked = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtypicked+= rows[i]['qtypicked']; //获取指定列
-	}
-	sums.qtyshippedEach = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyshippedEach += rows[i]['qtyshippedEach']; //获取指定列
-	}
-	sums.qtyshipped = 0;
-	for (var i = 0; i < rows.length; i++) {
-		sums.qtyshipped += rows[i]['qtyshipped']; //获取指定列
-	}
-	return sums;
+//出库明细合计
+function  computea(colName) {
+    var rows=$('#ezuiDetailsDatagrid').datagrid('getRows');
+    var total = 0;
+    for(var i=0;i<rows.length;i++){
+        if(rows[i][colName]!=null && rows[i][colName]!=""){
+            total  += parseFloat(rows[i][colName]);
+        }
+    }
+    return total ;
 }
-function  compute() {
-	var rows=$("#ezuiDetailsDatagrid").datagrid("getRows");
-	var qtyorderedEach = 0;
-	for(var i=0;i<rows.length;i++){
-		qtyorderedEach += parseFloat(rows[i]['qtyorderedEach']);
-	}
-	$("#ezuiDetailsDatagrid").datagrid('reloadFooter',{qtyorderedEach:"总计:"+qtyorderedEach});
+var aaa = function(row){
+	//隐藏的datagrid  用于总计的数据获取
+	ezuiDetailsDatagridAll = $('#ezuiDetailsDatagridAll').datagrid({
+		url: '<c:url value="/docOrderDetailsController.do?showDatagridAll"/>',
+		method: 'POST',
+		onLoadSuccess:function (index,field,value) {
+			//判断ezuiDetailsDatagrid是否初始化
+			if(ezuiDetailsDatagrid){
+				ezuiDetailsDatagrid.datagrid('load', {
+					orderno : row.orderNo,
+					customerid : row.customerid,
+				});
+			}else{
+				initDateGrid();//隐藏的datagrif初始化成功 然后初始化主页的datagrid
+			}
+		}
+	});
+}
+function initDateGrid() {
+	//订单明细列表
+	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
+		url : '<c:url value="/docOrderDetailsController.do?showDatagrid"/>',
+		method : 'POST',
+		toolbar : '#detailToolbar',
+		idField : 'orderlineno',
+		title : '',
+		pageSize : 5,
+		pageList : [5, 10, 20],
+		border : false,
+		fitColumns : false,
+		nowrap : false,
+		striped : true,
+		showFooter: true,
+		collapsible : false,
+		pagination:true,
+		rownumbers : true,
+		singleSelect : true,
+		checkOnSelect:true,
+		selectOnCheck: false,
+		columns : [[
+			{field: 'orderlineno',		title: '行号',		width: 130 },
+			{field: 'sku',				title: '商品编码',		width: 130 },
+			{field: 'lotatt04',	title: '生产批号',		width: 130 },
+			{field: 'lotatt05',	title: '序列号',		width: 130 },
+			{field: 'skuName',			title: '产品名称',		width: 130 },
+			{field: 'linestatus',	title: '状态',		width: 130 ,formatter:sostatusFormatter},
+			{field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
+			{field: 'qtyordered',		title: '订货件数',		width: 130 },
+			{field: 'qtyallocatedEach',		title: '分配数量',		width: 130 },
+			{field: 'qtyallocated',		title: '分配件数',		width: 130 },
+			{field: 'qtypickedEach',		title: '拣货数量',		width: 130 },
+			{field: 'qtypicked',		title: '拣货件数',		width: 130 },
+			{field: 'qtyshippedEach',		title: '发货数量',		width: 130 },
+			{field: 'qtyshipped',		title: '发货件数',		width: 130 },
+			{field: 'alternativesku',	title: '商品条码',		width: 130 },
+			{field: 'lotatt01',	title: '生产日期',		width: 130 },
+			{field: 'lotatt02',	title: '效期',		width: 130 },
+			{field: 'lotatt03',	title: '入库日期',		width: 130 },
+
+			{field: 'lotatt06',	title: '产品注册证',		width: 130 },
+			{field: 'lotatt07',	title: '灭菌批号',		width: 130 },
+			{field: 'lotatt08',	title: '供应商',		width: 130 },
+			{field: 'lotatt09',	title: '样品属性',		width: 130 },
+			{field: 'lotatt10',	title: '质量状态',		width: 130 },
+			{field: 'lotatt11',	title: '存储条件',		width: 130 },
+			{field: 'descrc',	title: '规格型号',		width: 130 },
+			{field: 'lotatt13',	title: '双证',		width: 130 },
+			{field: 'lotatt14',	title: '入库单号',		width: 130 },
+			{field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
+			/*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
+            {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
+            {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
+		]],
+		onDblClickCell: function(index,field,value){
+			detailsEdit();
+		},
+		onRowContextMenu : function(event, rowIndex, rowData) {
+		},
+		onLoadSuccess:function(data){
+			$(this).datagrid('unselectAll');
+			$(this).datagrid("resize",{height:300});
+			$('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
+				{skuName:'合计:',
+					qtyorderedEach:computea("qtyorderedEach"),
+					qtyordered:computea("qtyordered"),
+					qtyallocatedEach:computea("qtyallocatedEach"),
+					qtyallocated:computea("qtyallocated"),
+					qtypickedEach:computea("qtypickedEach"),
+					qtypicked:computea("qtypicked"),
+					qtyshippedEach:computea("qtyshippedEach"),
+					qtyshipped:computea("qtyshipped")},
+				{skuName:'总合计:',
+					qtyorderedEach:computeall("qtyorderedEach"),
+					qtyordered:computeall("qtyordered"),
+					qtyallocatedEach:computeall("qtyallocatedEach"),
+					qtyallocated:computeall("qtyallocated"),
+					qtypickedEach:computeall("qtypickedEach"),
+					qtypicked:computeall("qtypicked"),
+					qtyshippedEach:computeall("qtyshippedEach"),
+					qtyshipped:computeall("qtyshipped")
+				}]);
+
+		}
+	});
+}
+//出库明细总合计
+function  computeall(colNameall) {
+    var rows=$('#ezuiDetailsDatagridAll').datagrid('getRows');
+    var totalall = 0;
+    for(var i=0;i<rows.length;i++){
+        if(rows[i][colNameall]!=null && rows[i][colNameall]!=""){
+            totalall  += parseFloat(rows[i][colNameall]);
+        }
+    }
+    return totalall ;
+}
+//分配明细合计
+function  compute(colName) {
+	var rows=$('#allocationDetailsDatagrid').datagrid("getRows");
+    var total = 0;
+    for(var i=0;i<rows.length;i++){
+        if(rows[i][colName]!=null && rows[i][colName]!=""){
+            total  += parseFloat(rows[i][colName]);
+        }
+    }
+    return total ;
 }
 function  jishu(){
     row = ezuiDatagrid.datagrid("getSelections");
@@ -2356,7 +2382,7 @@ function copyDodetails() {
 			try {
 				if(result.success){
 					$('#ezuiBtn_copyDetailGo').linkbutton('disable');
-					$('#ezuiDetailsDatagrid').datagrid('load',{orderno : newOrderno});
+					$('#s').datagrid('load',{orderno : newOrderno});
 					reuseDialogGo.dialog("close");
                     $('#refInNoGo').textbox('clear');
 				}
@@ -2731,6 +2757,8 @@ var writeBackExpressBtnCommit = function(){
 			<table id='ezuiDatagrid' ></table>
 		</div>
 	</div>
+	<!--查询所有数据datagrid隐藏-->
+	<table id='ezuiDetailsDatagridAll' hidden="true"></table>
 	<div id='ezuiDialogBtn'>
 		<%-- <a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a> --%>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
