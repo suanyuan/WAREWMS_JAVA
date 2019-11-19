@@ -79,7 +79,7 @@
     <!-- 插入记录 -->
     <insert id="add" parameterType="Object">
   INSERT INTO
-  `warewms_dev`.`doc_qsm_header`
+  `doc_qsm_header`
   (`qcudocno`,`status`,`warehouseid`,`customerid`,`notes`,`userdefine1`,`userdefine2`,
   `userdefine3`,`userdefine4`,`userdefine5`,`addtime`,`addwho`,
   `edittime`,`editwho`,`h_edi_01`,`h_edi_02`,`h_edi_03`,`h_edi_04`,`h_edi_05`
@@ -93,7 +93,7 @@ VALUES
     <!-- 根据id，修改记录-->
     <update id="update" parameterType="Object">
      UPDATE
-      `warewms_dev`.`doc_qsm_header`
+      `doc_qsm_header`
     SET
       `qcudocno` = 'qcudocno',
       `status` = 'status',
