@@ -61,6 +61,31 @@ public class OrderDetailsForNormalService extends BaseService {
 		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
 			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
 			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);
+
+			Map<String, Object> param2 = new HashMap<>();
+			param2.put("customerid", orderDetailsForNormal.getCustomerid());
+			param2.put("sku", orderDetailsForNormal.getSku());
+			BasSku basSku1 = basSkuMybatisDao.queryById(param2);
+			orderDetailsForNormalVO.setSkuName(basSku1.getReservedfield01()); //产品名
+			orderDetailsForNormalVO.setDescrc(basSku1.getDescrC());//规格
+			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
+
+		}
+		datagrid.setTotal((long) orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(orderDetailsForNormalVOList);
+		return datagrid;
+	}
+	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagridAll(OrderDetailsForNormalQuery query) {
+		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<OrderDetailsForNormal> orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+		OrderDetailsForNormalVO orderDetailsForNormalVO = null;
+		List<OrderDetailsForNormalVO> orderDetailsForNormalVOList = new ArrayList<OrderDetailsForNormalVO>();
+		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
+			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
+			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);
+
 			Map<String, Object> param2 = new HashMap<>();
 			param2.put("customerid", orderDetailsForNormal.getCustomerid());
 			param2.put("sku", orderDetailsForNormal.getSku());

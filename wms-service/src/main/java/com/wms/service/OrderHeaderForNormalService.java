@@ -1116,7 +1116,15 @@ public class OrderHeaderForNormalService extends BaseService {
         ohForNormal.setExcaddress1(ohForNormal.getCAddress1());
         //客户单号 ohForNormal.getSoreference1();
         //发货凭证号 ohForNormal.getSoreference4();
-        //发货日期
+        //发货日期 ohForNormal.getEdittime();
+        //快递结算方式
+        Map<String, Object> param2 = new HashMap<>();
+        param2.put("codeid", "JS_FS");
+        param2.put("code", ohForNormal.getStop());
+        BasCodes bascodes1 = basCodesMybatisDao.queryById(param2);
+        if (bascodes1 != null) {
+            ohForNormal.setEndmode(bascodes1.getCodenameC());
+        }
         //供应商
         BasCustomer basCustomerList = basCustomerMybatisDao.queryByIdType(ohForNormal.getCustomerid(), Constant.CODE_CUS_TYP_OW);
         if (basCustomerList != null) {
@@ -1194,6 +1202,11 @@ public class OrderHeaderForNormalService extends BaseService {
             }
             if (basSku1 != null) {
                 //实拣数 null
+                BasPackage basPackage = basPackageMybatisDao.queryById(basSku1.getPackid());
+                //换算率
+                if (basPackage != null) {
+                    docOrderDetail.setDescr(basPackage.getDescr());
+                }
                 //规格型号
                 docOrderDetail.setDescrc(basSku1.getDescrE());
                 //产品双证

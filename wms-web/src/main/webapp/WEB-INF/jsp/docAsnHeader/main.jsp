@@ -2035,12 +2035,7 @@ function printTaskList() {
     }
 }
 
-
-
-
-
-
-//打印收货结果清单
+//打印收货记录
 function printResultList(){
 	var row = $('#ezuiDatagrid').datagrid('getSelections');
 	var asnno;
@@ -2143,7 +2138,7 @@ function printResultList(){
 				</div>
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
-                    <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货结果清单</a>
+                    <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货记录</a>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>

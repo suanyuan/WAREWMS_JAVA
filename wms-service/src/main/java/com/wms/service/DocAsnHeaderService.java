@@ -10,8 +10,6 @@ import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
-import com.wms.mybatis.entity.pda.PdaGspProductRegister;
-import com.wms.query.BasSkuQuery;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
 import com.wms.query.OrderDetailsForNormalQuery;
@@ -22,7 +20,6 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
-import com.wms.vo.DocAsnDetailVO;
 import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.DocAsnDetailForm;
@@ -30,7 +27,6 @@ import com.wms.vo.form.DocAsnHeaderForm;
 import com.wms.vo.form.pda.PageForm;
 import com.wms.vo.pda.PdaDocAsnHeaderVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.hibernate.Transaction;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("docAsnHeaderService")
@@ -1035,7 +1029,9 @@ public class DocAsnHeaderService extends BaseService {
         return json;
     }
 
-
+    /**
+     * 打印收货任务清单
+      */
     public List<DocAsnHeader> printTaskList(String asnno) {
         String[] noarr = asnno.split(",");
         Double expectedqtySum = 0.0;
@@ -1112,7 +1108,7 @@ public class DocAsnHeaderService extends BaseService {
         }
         return docAsnHeaderList;
     }
-
+    //打印收货记录
     public List<DocAsnHeader> printTaskResult(String asnno) {
         Double expectedqtySum = 0.0;
         Double expectedqtyEachSum = 0.0;
