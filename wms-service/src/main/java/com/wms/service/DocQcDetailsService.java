@@ -91,6 +91,7 @@ public class DocQcDetailsService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        mybatisCriteria.setOrderByClause("d.sku desc, d.userdefine3 desc, d.userdefine4 desc");
         if (query.getQcno() == null || query.getQcno() == "") {
             datagrid.setRows(docQcDetailsVOList);
             datagrid.setTotal((long) 0);
