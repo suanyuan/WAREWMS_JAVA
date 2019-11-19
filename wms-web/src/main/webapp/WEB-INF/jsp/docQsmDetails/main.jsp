@@ -982,7 +982,7 @@ var doExport = function(){
             $('#ezuiBtn_export').linkbutton('disable');
             //--导出Excel
             // window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);
-            var formId = ajaxDownloadFile(sy.bp()+ "/docQsmDetailsController.do?exportDocQsmDataToPdf&qcudocno="+qcudocno);
+            var formId = window.open(sy.bp()+ "/docQsmDetailsController.do?exportDocQsmDataToPdf&qcudocno="+qcudocno);
             downloadCheckTimer = window.setInterval(function () {
                 window.clearInterval(downloadCheckTimer);
                 // $('#' + formId).remove();
