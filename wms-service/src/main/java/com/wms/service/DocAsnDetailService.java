@@ -239,14 +239,19 @@ public class DocAsnDetailService extends BaseService {
     private DocAsnDetail adaptSuitableRegisterNo(BasSku basSku, String lotatt01) {
 
         GspProductRegister register = gspProductRegisterService.queryByRegisterNo(basSku.getReservedfield03());
-        if (register == null) register = new GspProductRegister();//防止为空之后get报错
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-        historyQuery.setVersion(register.getVersion());
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-        mybatisCriteria.setOrderByClause("create_date desc");
-        List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
-        return adaptSuitableRegisterNo(allRegister, basSku, lotatt01);
+        if (register == null) {
+
+            return adaptSuitableRegisterNo(new ArrayList<PdaGspProductRegister>(), basSku, lotatt01);
+        } else {
+
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+            historyQuery.setVersion(register.getVersion());
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+            mybatisCriteria.setOrderByClause("create_date desc");
+            List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+            return adaptSuitableRegisterNo(allRegister, basSku, lotatt01);
+        }
     }
 
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {
