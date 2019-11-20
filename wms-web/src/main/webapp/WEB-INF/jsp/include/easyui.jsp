@@ -27,7 +27,10 @@
     //客户档案显示文件链接
 	function showUrlFile(value,row,index){
 		  var supContractNo=row.supContractNo;
-		return "<a onclick=\"showUrl('"+value+"','"+supContractNo+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+		  if (supContractNo) {
+			  return "<a onclick=\"showUrl('"+value+"','"+supContractNo+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+		  }
+		  return '';
 	}
 
     //注册证/备案附件  显示文件链接
