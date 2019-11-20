@@ -1070,8 +1070,6 @@ public class DocAsnHeaderService extends BaseService {
                 skuMap.put("sku", docAsnDetail1.getSku());
                 BasSku basSku = basSkuMybatisDao.queryById(skuMap);
                 if (basSku != null) {
-                    //产品名称
-                    docAsnDetail1.setSkudescrc(basSku.getDescrC());
                     docAsnDetail1.setDescre(basSku.getDescrE());
                 } else {
                     docAsnDetail1.setDescre(null);
@@ -1144,6 +1142,8 @@ public class DocAsnHeaderService extends BaseService {
             skuMap.put("sku", docAsnDetail1.getSku());
             BasSku basSku = basSkuMybatisDao.queryById(skuMap);
             if (basSku != null) {
+                //产品名称
+                docAsnDetail1.setSkudescrc(docAsnDetail1.getLotatt12());
                 docAsnDetail1.setDescre(basSku.getDescrE());
             } else {
                 docAsnDetail1.setDescre(null);

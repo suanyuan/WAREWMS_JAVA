@@ -851,7 +851,6 @@ where 1=1
         ${limitClause}
     </if>
 </select>
-
 <!--订单明细行号-->
 <select id="getOrderLineNoById" resultType="java.lang.Integer"  parameterType="Object">
 	select ifnull(max(orderlineno),0) from doc_order_details where orderno = #{orderno,jdbcType=VARCHAR}

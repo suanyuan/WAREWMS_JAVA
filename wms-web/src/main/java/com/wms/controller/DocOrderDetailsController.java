@@ -43,12 +43,7 @@ public class DocOrderDetailsController {
 	public EasyuiDatagrid<OrderDetailsForNormalVO> showDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
 		return orderDetailsForNormalService.getPagedDatagrid(pager, query);
 	}
-	@Login
-	@RequestMapping(params = "showDatagridAll")
-	@ResponseBody
-	public EasyuiDatagrid<OrderDetailsForNormalVO> showDatagridAll(OrderDetailsForNormalQuery query) {
-		return orderDetailsForNormalService.getPagedDatagridAll(query);
-	}
+
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
