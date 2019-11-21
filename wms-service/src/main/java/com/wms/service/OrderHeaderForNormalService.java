@@ -2595,12 +2595,9 @@ public class OrderHeaderForNormalService extends BaseService {
                 BasSerialNum basSerialNum = basSerialNumMybatisDao.queryExistBySerialNum(docSerialNumRecord.getSerialNum());
                 if (null == basSerialNum) continue;
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                basSerialNum.setUserdefine2(dateFormat.format(new Date()));
                 basSerialNum.setUserdefine3(orderno);
                 basSerialNum.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                basSerialNum.setEdittime(dateFormat.format(new Date()));
-                basSerialNumMybatisDao.update(basSerialNum);
+                basSerialNumMybatisDao.recordSerialNumOut(basSerialNum);
             }
         }
     }

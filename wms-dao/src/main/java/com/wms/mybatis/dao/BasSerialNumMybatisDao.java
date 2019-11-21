@@ -45,4 +45,9 @@ public interface BasSerialNumMybatisDao extends BaseDao {
      * 查询可用的序列号记录（没出库的）
      */
     List<BasSerialNum> queryValidatedId(@Param("serialNum") String serialNum);
+
+    /**
+     * 记录序列号出库的出库单号+出库时间
+     */
+    void recordSerialNumOut(BasSerialNum basSerialNum);
 }

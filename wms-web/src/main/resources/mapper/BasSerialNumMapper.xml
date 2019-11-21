@@ -245,5 +245,14 @@ where 1=1
 		LEFT JOIN doc_order_header doh ON doh.soreference2 = dah.asnno
 		WHERE doh.orderno = #{orderno}
 	</select>
+
+	<update id="recordSerialNumOut" parameterType="Object">
+		update bas_serial_num set
+		userdefine2 = now(),
+		userdefine3 = #{userdefine3},
+		editwho = #{editwho},
+		edittime = now()
+		where serial_num = #{serialNum} and (userdefine2 is null or userdefine2 = '')
+	</update>
   	
 </mapper>   
