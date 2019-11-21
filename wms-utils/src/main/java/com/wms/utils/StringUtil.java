@@ -1,12 +1,11 @@
 package com.wms.utils;
 
-import javax.xml.crypto.Data;
-import java.text.DateFormat;
+import com.wms.utils.vo.MailVO;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StringUtil {
 
@@ -70,12 +69,20 @@ public class StringUtil {
 
     public static void main(String[] args) {
 
-        String date = "";
-        System.out.println(isyMdDate(date));
+        MailVO mailVO = new MailVO();
+        mailVO.setTo("JSML");
+        List<String> customerids = new ArrayList<>();
+        customerids.add("jsml");
+        customerids.add("JSJY");
+        boolean isExist = customerids.contains(mailVO.getTo());
+        System.out.println(isExist);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("123", "12");
-        System.out.println("12"+ null);
+//        String date = "";
+//        System.out.println(isyMdDate(date));
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("123", "12");
+//        System.out.println("12"+ null);
 
 //        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 //        try {

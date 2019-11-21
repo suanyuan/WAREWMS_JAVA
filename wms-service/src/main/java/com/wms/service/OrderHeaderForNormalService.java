@@ -788,12 +788,17 @@ public class OrderHeaderForNormalService extends BaseService {
         BasCodes basCodes = basCodesMybatisDao.queryById(basCodesQuery);
         //月结账号  不是顺丰的不进行接口下单，暂未定义如何区分；不是顺丰的发运方式也不能下单;已经回写过快递单号的也不用下单；
         // TODO 目前只开放嘉事国润、嘉事明伦的顺丰下单功能 && !"JSJY".equals(orderHeaderForNormal.getCustomerid())
-        if ((!"JSGR".equals(orderHeaderForNormal.getCustomerid()) && !"JSML".equals(orderHeaderForNormal.getCustomerid())) ||
+        List<String> customerids = new ArrayList<>();
+        customerids.add("JSGR");
+        customerids.add("JSML");
+        customerids.add("WQ");
+        customerids.add("HQ");
+        if (!customerids.contains(orderHeaderForNormal.getCustomerid()) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
-                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK")) ||
-                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1") ||
-                StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress4())) {
+                (!orderHeaderForNormal.getRoute().equals("TH") && !orderHeaderForNormal.getRoute().equals("BK")) ||//发运方式
+                StringUtil.fixNull(orderHeaderForNormal.getCarriercountry()).equals("1") ||//是否回写快递单
+                StringUtil.isNotEmpty(orderHeaderForNormal.getCAddress4())) {//快递单号
 
             return Json.success("不用下顺丰单");
         }
@@ -818,8 +823,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
         //效验响应报文是否反馈二维码、目的地区域代码是否存在
         if (shunFengResponse.getOrderResponse() == null && shunFengResponse.isResultFlag()) {
-            ShunFengResponse ShunFengResponseAbo = CancelShunFengOrder(sfOrderHeader.getOrderno());
-            //TODO 这里消单成功反馈该怎么显示呢
+
             json.setSuccess(false);
             json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认");
             return json;
@@ -2531,9 +2535,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 回写快递单号/签回单号
-     *
-     * @param orderHeaderForNormalForm
-     * @return
      */
     public Json writeBackExpressBtnCommit(OrderHeaderForNormalForm orderHeaderForNormalForm) {
         Json json = new Json();
