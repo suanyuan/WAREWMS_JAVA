@@ -56,6 +56,11 @@ public class OrderDetailsForNormalService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<OrderDetailsForNormal> orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+
+		OrderDetailsForNormal orderDetailsForNormalSum = new OrderDetailsForNormal();
+		if(query.getOrderno()!=null){
+			orderDetailsForNormalSum = orderDetailsForNormalMybatisDao.queryBySum(query.getOrderno());
+        }
 		OrderDetailsForNormalVO orderDetailsForNormalVO = null;
 		List<OrderDetailsForNormalVO> orderDetailsForNormalVOList = new ArrayList<OrderDetailsForNormalVO>();
 		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
@@ -68,14 +73,23 @@ public class OrderDetailsForNormalService extends BaseService {
 			BasSku basSku1 = basSkuMybatisDao.queryById(param2);
 			orderDetailsForNormalVO.setSkuName(basSku1.getReservedfield01()); //产品名
 			orderDetailsForNormalVO.setDescrc(basSku1.getDescrC());//规格
+			if(orderDetailsForNormalSum!=null){
+				orderDetailsForNormalVO.setQtyorderedSum(orderDetailsForNormalSum.getQtyordered());//qtyordered 订货件数
+				orderDetailsForNormalVO.setQtyallocatedSum(orderDetailsForNormalSum.getQtyallocated());//allocated 分配件数
+				orderDetailsForNormalVO.setQtypickedSum(orderDetailsForNormalSum.getQtypicked());//picked 拣货件数
+				orderDetailsForNormalVO.setQtyshippedSum(orderDetailsForNormalSum.getQtyshipped());//shipped 发货件数
+				orderDetailsForNormalVO.setQtyorderedEachSum(orderDetailsForNormalSum.getQtyorderedEach());//qtyorderedEach 订货数量
+				orderDetailsForNormalVO.setQtyallocatedEachSum(orderDetailsForNormalSum.getQtyallocatedEach());//allocatedEach 分配数量
+				orderDetailsForNormalVO.setQtypickedEachSum(orderDetailsForNormalSum.getQtypickedEach());//pickedEach 拣货数量
+				orderDetailsForNormalVO.setQtyshippedEachSum(orderDetailsForNormalSum.getQtyshippedEach());//shippedEach 发货数量
+			}
 			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
-
 		}
+
 		datagrid.setTotal((long) orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(orderDetailsForNormalVOList);
 		return datagrid;
 	}
-
 	public Json add(OrderDetailsForNormalForm orderDetailsForNormalForm) throws Exception {
 		Json json = new Json();
 		String orderNo = orderDetailsForNormalForm.getOrderno();

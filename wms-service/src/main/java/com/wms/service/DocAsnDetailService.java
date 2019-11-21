@@ -79,11 +79,23 @@ public class DocAsnDetailService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByPageList(mybatisCriteria);
+
+        DocAsnDetail docAsnDetailSum = new DocAsnDetail();
+        if(query.getAsnno()!=null){
+            docAsnDetailSum = docAsnDetailsMybatisDao.queryBySum(query.getAsnno());
+        }
+
 		DocAsnDetailVO docAsnDetailVO = null;
 		List<DocAsnDetailVO> docAsnDetailVOList = new ArrayList<DocAsnDetailVO>();
 		for (DocAsnDetail docAsnDetail : docAsnDetailList) {
 			docAsnDetailVO = new DocAsnDetailVO();
 			BeanUtils.copyProperties(docAsnDetail, docAsnDetailVO);
+
+            if(docAsnDetailSum != null){
+                docAsnDetailVO.setExpectedqtySum(docAsnDetailSum.getExpectedqty().doubleValue());
+                docAsnDetailVO.setReceivedqtySum(docAsnDetailSum.getReceivedqty().doubleValue());
+            }
+
 			docAsnDetailVOList.add(docAsnDetailVO);
 		}
 		datagrid.setTotal((long) docAsnDetailsMybatisDao.queryByCount(mybatisCriteria));

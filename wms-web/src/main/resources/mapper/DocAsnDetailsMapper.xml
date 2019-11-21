@@ -887,7 +887,13 @@ insert into doc_asn_details
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from Doc_Asn_Details where asnno = #{condition.asnno,jdbcType=VARCHAR}
 </select>
-  	
+
+	<!-- 订单明细 列表总数-->
+<select id="queryBySum" resultMap="DocAsnDetailMap"  parameterType="Object">
+	select sum(expectedqty) expectedqty,sum(receivedqty) receivedqty
+	from Doc_Asn_Details
+	where asnno = #{asnno}
+</select>
 <!-- 查询入库单明细列表 -->
 <select id="queryByPageList" resultMap="ExtendDetailMap"  parameterType="Object">
 	select *

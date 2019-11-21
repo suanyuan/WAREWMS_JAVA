@@ -1657,7 +1657,14 @@ insert into doc_asn_header
 	select <include refid="Base_Column_List" />
 	 from Doc_Asn_Header where asnno = #{asnno}
 </select>
-
+	<!-- 订单明细 列表总数-->
+<select id="queryBySum" resultMap="DocAsnDetailResultMap"  parameterType="Object">
+       select sum(tr.FMQTY) as fmqty,sum(tr.FMQTY_EACH) fmqty_each
+		 from act_transaction_log tr,inv_lot_att lt,bas_sku bs
+		where tr.FMLOTNUM = lt.lotnum and tr.FMSKU = bs.sku and tr.FMCUSTOMERID = bs.customerid
+			and tr.transactiontype = 'IN' and tr.status = '99'
+			and tr.docno = #{asnNo}
+</select>
 <!--订单列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from (

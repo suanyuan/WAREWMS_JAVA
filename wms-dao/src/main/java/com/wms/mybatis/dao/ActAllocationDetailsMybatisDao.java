@@ -5,7 +5,6 @@ import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.ActAllocationDetailsQuery;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 
@@ -43,4 +42,6 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	int queryPackedNum(ActAllocationDetailsQuery query);
 
 //	int  queryByorder (Map<String, Object> map);
+
+	<T> T queryBySum(String orderno);
 }

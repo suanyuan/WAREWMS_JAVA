@@ -29,4 +29,7 @@ public class AsnDetailResult implements Serializable {
     private String fmLocation;
     private String addTime;
     private String addWho;
+
+    private Double fmqtySum;
+    private Double fmqtyEachSum;
 }

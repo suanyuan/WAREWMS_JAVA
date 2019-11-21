@@ -837,7 +837,13 @@ where 1=1
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from doc_order_details where orderno = #{condition.orderno,jdbcType=VARCHAR}
 </select>
-
+    <!-- 订单明细 列表总数-->
+<select id="queryBySum" resultMap="OrderDetailsForNormalMap"  parameterType="Object">
+	select sum(qtyordered) qtyordered,sum(qtyallocated) qtyallocated,sum(qtypicked) qtypicked,sum(qtyshipped) qtyshipped
+	        ,sum(qtyordered_each) qtyorderedEach,sum(qtyallocated_each) qtyallocatedEach,sum(qtypicked_each) qtypickedEach,sum(qtyshipped_each) qtyshippedEach
+	from doc_order_details
+	where orderno = #{orderno}
+</select>
 <!-- 查询订单明细列表 -->
 <select id="queryByPageList" resultMap="ExtendResultMap"  parameterType="Object">
     select
@@ -851,6 +857,7 @@ where 1=1
         ${limitClause}
     </if>
 </select>
+
 <!--订单明细行号-->
 <select id="getOrderLineNoById" resultType="java.lang.Integer"  parameterType="Object">
 	select ifnull(max(orderlineno),0) from doc_order_details where orderno = #{orderno,jdbcType=VARCHAR}

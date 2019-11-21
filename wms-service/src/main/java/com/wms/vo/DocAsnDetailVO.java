@@ -104,7 +104,26 @@ public class DocAsnDetailVO {
 	private java.lang.String userdefine5;
 	private java.lang.String userdefine6;
 	private String coldName;
-	
+
+	private Double expectedqtySum;//预期到货数
+	private Double receivedqtySum;//实际到货
+
+
+	public Double getExpectedqtySum() {
+		return expectedqtySum;
+	}
+
+	public void setExpectedqtySum(Double expectedqtySum) {
+		this.expectedqtySum = expectedqtySum;
+	}
+
+	public Double getReceivedqtySum() {
+		return receivedqtySum;
+	}
+
+	public void setReceivedqtySum(Double receivedqtySum) {
+		this.receivedqtySum = receivedqtySum;
+	}
 	public Integer getSeq() {
 		return seq;
 	}

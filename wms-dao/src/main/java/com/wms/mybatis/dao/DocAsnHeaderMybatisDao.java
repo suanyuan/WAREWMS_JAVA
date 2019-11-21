@@ -1,15 +1,14 @@
 package com.wms.mybatis.dao;
 
 
-import java.util.List;
-import java.util.Map;
-
 import com.wms.entity.DocAsnDetail;
 import com.wms.entity.DocAsnHeader;
-import com.wms.mybatis.dao.BaseDao;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.result.AsnDetailResult;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -65,4 +64,7 @@ public  interface  DocAsnHeaderMybatisDao extends BaseDao {
 	 *  明细复用查询orderno
 	*/
 	<T> List<T> queryAsnno(MybatisCriteria criteria);
+
+
+	<T> T queryBySum(String asnno);
 }

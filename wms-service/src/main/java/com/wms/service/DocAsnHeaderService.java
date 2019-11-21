@@ -985,6 +985,19 @@ public class DocAsnHeaderService extends BaseService {
     public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo) {
         EasyuiDatagrid<AsnDetailResult> datagrid = new EasyuiDatagrid<>();
         List<AsnDetailResult> asnDetailResultList = docAsnHeaderMybatisDao.queryAsnDetailResult(asnNo);
+
+        AsnDetailResult asnDetailResult = new AsnDetailResult();
+        if(asnNo!=null){
+            asnDetailResult = docAsnHeaderMybatisDao.queryBySum(asnNo);
+        }
+
+        for(AsnDetailResult asnDetailResultSum :asnDetailResultList){
+            if(asnDetailResult!=null){
+                asnDetailResultSum.setFmqtySum(Double.valueOf(asnDetailResult.getFmqty()));
+                asnDetailResultSum.setFmqtyEachSum(Double.valueOf(asnDetailResult.getFmqty_each()));
+            }
+        }
+
         datagrid.setTotal((long) asnDetailResultList.size());
         datagrid.setRows(asnDetailResultList);
         return datagrid;

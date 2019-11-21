@@ -50,4 +50,7 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
      * @return
      */
     int queryLeakLotatt4YYAsn(@Param("asnno") String asnno);
+
+
+    <T> T queryBySum(String asnno);
 }

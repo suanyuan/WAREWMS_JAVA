@@ -100,10 +100,13 @@ $(function() {
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
+
 		},
 		onDblClickRow: function(index,row){
+			/*computeall(row);*/
             edit(row);
 			qlOrderDetails(row);
+
         },
 		/* 鼠标右键 */
 		onRowContextMenu : function(event, rowIndex, rowData) {
@@ -125,87 +128,85 @@ $(function() {
             var a = row.length;
             // alert(a);
             $('#nummm').html(a);
-
-
         }
 	});
 
-
-	/* 订单明细列表*/
+        /* 订单明细列表*/
         ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
             url : '<c:url value="/docOrderDetailsController.do?showDatagrid"/>',
-			method : 'POST',
-			toolbar : '#detailToolbar',
-			idField : 'orderlineno',
-			title : '',
-			pageSize : 5,
-			pageList : [5, 10, 20],
-			border : false,
-			fitColumns : false,
-			nowrap : false,
-			striped : true,
-			showFooter: true,
-			collapsible : false,
-			pagination:true,
-			rownumbers : true,
-			singleSelect : true,
-			checkOnSelect:true,
-			selectOnCheck: false,
-			columns : [[
-				{field: 'orderlineno',		title: '行号',		width: 130 },
-				{field: 'sku',				title: '商品编码',		width: 130 },
-				{field: 'lotatt04',	title: '生产批号',		width: 130 },
-				{field: 'lotatt05',	title: '序列号',		width: 130 },
-				{field: 'skuName',			title: '产品名称',		width: 130 },
-				{field: 'linestatus',	title: '状态',		width: 130 ,formatter:sostatusFormatter},
-				{field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
-				{field: 'qtyordered',		title: '订货件数',		width: 130 },
-				{field: 'qtyallocatedEach',		title: '分配数量',		width: 130 },
-				{field: 'qtyallocated',		title: '分配件数',		width: 130 },
-				{field: 'qtypickedEach',		title: '拣货数量',		width: 130 },
-				{field: 'qtypicked',		title: '拣货件数',		width: 130 },
-				{field: 'qtyshippedEach',		title: '发货数量',		width: 130 },
-				{field: 'qtyshipped',		title: '发货件数',		width: 130 },
-				{field: 'alternativesku',	title: '商品条码',		width: 130 },
-				{field: 'lotatt01',	title: '生产日期',		width: 130 },
-				{field: 'lotatt02',	title: '效期',		width: 130 },
-				{field: 'lotatt03',	title: '入库日期',		width: 130 },
+            method : 'POST',
+            toolbar : '#detailToolbar',
+            idField : 'orderlineno',
+            title : '',
+            pageSize : 50,
+            pageList : [50, 100, 200],
+            border : false,
+            fitColumns : false,
+            nowrap : false,
+            striped : true,
+            showFooter: true,
+            collapsible : false,
+            pagination:true,
+            rownumbers : true,
+            singleSelect : true,
+            checkOnSelect:true,
+            selectOnCheck: false,
+            columns : [[
+                {field: 'orderlineno',		title: '行号',		width: 130 },
+                {field: 'sku',				title: '商品编码',		width: 130 },
+                {field: 'lotatt04',	title: '生产批号',		width: 130 },
+                {field: 'lotatt05',	title: '序列号',		width: 130 },
+                {field: 'skuName',			title: '产品名称',		width: 130 },
+                {field: 'linestatus',	title: '状态',		width: 130 ,formatter:sostatusFormatter},
+                {field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
+                {field: 'qtyordered',		title: '订货件数',		width: 130 },
+                {field: 'qtyallocatedEach',		title: '分配数量',		width: 130 },
+                {field: 'qtyallocated',		title: '分配件数',		width: 130 },
+                {field: 'qtypickedEach',		title: '拣货数量',		width: 130 },
+                {field: 'qtypicked',		title: '拣货件数',		width: 130 },
+                {field: 'qtyshippedEach',		title: '发货数量',		width: 130 },
+                {field: 'qtyshipped',		title: '发货件数',		width: 130 },
+                {field: 'alternativesku',	title: '商品条码',		width: 130 },
+                {field: 'lotatt01',	title: '生产日期',		width: 130 },
+                {field: 'lotatt02',	title: '效期',		width: 130 },
+                {field: 'lotatt03',	title: '入库日期',		width: 130 },
 
-				{field: 'lotatt06',	title: '产品注册证',		width: 130 },
-				{field: 'lotatt07',	title: '灭菌批号',		width: 130 },
-				{field: 'lotatt08',	title: '供应商',		width: 130 },
-				{field: 'lotatt09',	title: '样品属性',		width: 130 },
-				{field: 'lotatt10',	title: '质量状态',		width: 130 },
-				{field: 'lotatt11',	title: '存储条件',		width: 130 },
-				{field: 'descrc',	title: '规格型号',		width: 130 },
-				{field: 'lotatt13',	title: '双证',		width: 130 },
-				{field: 'lotatt14',	title: '入库单号',		width: 130 },
-				{field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
-				/*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
-				{field: 'lotatt17',	title: '自定义批属2',		width: 130 },
-				{field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
-			]],
-			onDblClickCell: function(index,field,value){
-				detailsEdit();
-			},
-			onRowContextMenu : function(event, rowIndex, rowData) {
-			},
-			onLoadSuccess:function(data){
-				$(this).datagrid('unselectAll');
-				$(this).datagrid("resize",{height:300});
-/*				$('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
-					{skuName:'总合计:',
-						qtyorderedEach:computeall("qtyorderedEach"),
-						qtyordered:computeall("qtyordered"),
-						qtyallocatedEach:computeall("qtyallocatedEach"),
-						qtyallocated:computeall("qtyallocated"),
-						qtypickedEach:computeall("qtypickedEach"),
-						qtypicked:computeall("qtypicked"),
-						qtyshippedEach:computeall("qtyshippedEach"),
-						qtyshipped:computeall("qtyshipped")
-					}]);*/
-			}
-	});
+                {field: 'lotatt06',	title: '产品注册证',		width: 130 },
+                {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
+                {field: 'lotatt08',	title: '供应商',		width: 130 },
+                {field: 'lotatt09',	title: '样品属性',		width: 130 },
+                {field: 'lotatt10',	title: '质量状态',		width: 130 },
+                {field: 'lotatt11',	title: '存储条件',		width: 130 },
+                {field: 'descrc',	title: '规格型号',		width: 130 },
+                {field: 'lotatt13',	title: '双证',		width: 130 },
+                {field: 'lotatt14',	title: '入库单号',		width: 130 },
+                {field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
+                /*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
+                {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
+                {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
+            ]],
+            onDblClickCell: function(index,field,value){
+                detailsEdit();
+            },
+            onRowContextMenu : function(event, rowIndex, rowData) {
+            },
+            onLoadSuccess:function(data){
+                console.log(data.total);
+                $(this).datagrid('unselectAll');
+                $(this).datagrid("resize",{height:300});
+                $('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
+                    {skuName:'总合计:',
+                        qtyorderedEach:data.rows[0].qtyorderedEachSum,
+						qtyordered:data.rows[0].qtyorderedSum,
+						qtyallocatedEach:data.rows[0].qtyallocatedEachSum,
+						qtyallocated:data.rows[0].qtyallocatedSum,
+						qtypickedEach:data.rows[0].qtypickedEachSum,
+						qtypicked:data.rows[0].qtypickedSum,
+						qtyshippedEach:data.rows[0].qtyshippedEachSum,
+						qtyshipped:data.rows[0].qtyshippedSum
+                    }]);
+            }
+        });
 	/* 分配明细列表*/
     allocationDetailsDatagrid = $('#allocationDetailsDatagrid').datagrid({
         url : '<c:url value="/docOrderHeaderController.do?showAllocation"/>',
@@ -245,6 +246,13 @@ $(function() {
         onLoadSuccess:function(data){
             $(this).datagrid('unselectAll');
             $(this).datagrid("resize",{height:300});
+			$('#allocationDetailsDatagrid').datagrid('reloadFooter',[
+				{skuName:'总合计:',
+					qty:data.rows[0].qtysum,
+					qtyEach:data.rows[0].qtyEachsum,
+					qtypickedEach:data.rows[0].qtypickedEachsum,
+					qtyshippedEach:data.rows[0].qtyshippedEachsum
+				}]);
         }
     });
 
@@ -2686,8 +2694,6 @@ var writeBackExpressBtnCommit = function(){
 			<table id='ezuiDatagrid' ></table>
 		</div>
 	</div>
-	<!--查询所有数据datagrid隐藏-->
-	<table id='ezuiDetailsDatagridAll' hidden="true"></table>
 	<div id='ezuiDialogBtn'>
 		<%-- <a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a> --%>
 		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>

@@ -115,4 +115,6 @@ public class ActAllocationDetails  implements Serializable {
 
 	private String udfprintflag1;
 
+
+
 }

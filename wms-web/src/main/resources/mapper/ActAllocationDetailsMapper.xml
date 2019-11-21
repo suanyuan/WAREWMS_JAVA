@@ -416,7 +416,12 @@ where 1=1
 	select count(1) from act_allocation_details 
 	<include refid="Example_Where_Clause"/>
 </select>
-  	
+	<!-- 订单明细 列表总数-->
+<select id="queryBySum" resultMap="BaseResultMap"  parameterType="Object">
+	select sum(qty) qty,sum(qty_each) qtyEach,sum(qtypicked_each) qtypickedEach,sum(qtyshipped_each) qtyshippedEach
+	from act_allocation_details
+	where orderno = #{orderno}
+</select>
 <!-- 查询分配明细列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 

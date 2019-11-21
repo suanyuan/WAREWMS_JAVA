@@ -206,4 +206,14 @@ public class OrderDetailsForNormalVO {
     private String consigneeid;
     private String skuName;
     private String descrc;   //规格/型号
+
+
+    private Double qtyorderedEachSum;//订货数量
+    private Double qtyorderedSum;//订货件数
+    private Double qtyallocatedEachSum;//分配数量
+    private Double qtyallocatedSum;//分配件数
+    private Double qtypickedEachSum;//拣货数量
+    private Double qtypickedSum;//拣货件数
+    private Double qtyshippedEachSum;//发货数量
+    private Double qtyshippedSum;//发货件数
 }

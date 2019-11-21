@@ -141,6 +141,12 @@ public class OrderHeaderForNormalService extends BaseService {
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         List<ActAllocationDetails> orderHeaderForNormalList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
         List<ActAllocationDetailsVO> actAllocationDetailsVOList = new ArrayList<>();
+
+        ActAllocationDetails actAllocationDetailslSum = new ActAllocationDetails();
+        if(query.getOrderno()!=null){
+            actAllocationDetailslSum = actAllocationDetailsMybatisDao.queryBySum(query.getOrderno());
+        }
+
         ActAllocationDetailsVO vo = null;
         for (ActAllocationDetails act : orderHeaderForNormalList) {
             vo = new ActAllocationDetailsVO();
@@ -151,6 +157,13 @@ public class OrderHeaderForNormalService extends BaseService {
             BasPackage basPackage = basPackageService.queryBasPackBy(packQuery);
             vo.setSkuName(basSku.getReservedfield01());
             vo.setPickName(basPackage.getDescr());
+
+            if(actAllocationDetailslSum != null){
+                vo.setQtysum(actAllocationDetailslSum.getQty());//qty 分配数
+                vo.setQtyEachsum(actAllocationDetailslSum.getQtyEach());//qtyEach分配件数
+                vo.setQtypickedEachsum(actAllocationDetailslSum.getQtypickedEach());//qtypicked 拣货数
+                vo.setQtyshippedEachsum(actAllocationDetailslSum.getQtyshippedEach());//qtyshippedEach 发货数
+            }
             actAllocationDetailsVOList.add(vo);
         }
         datagrid.setTotal((long) actAllocationDetailsMybatisDao.queryByCount(mybatisCriteria));

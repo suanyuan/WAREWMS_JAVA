@@ -132,12 +132,13 @@ $(function() {
 		toolbar : '#detailToolbar',
 		idField : 'asnlineno',
 		title : '入库单明细',
-		pageSize : 200,
+		pageSize : 50,
 		pageList : [50, 100, 200],
 		border : false,
 		fitColumns : false,
 		nowrap : false,
 		striped : true,
+		showFooter: true,
 		collapsible : false,
 		pagination:true,
 		rownumbers : true,
@@ -205,6 +206,11 @@ $(function() {
 		onLoadSuccess:function(data){
 			$(this).datagrid('unselectAll');
 			$(this).datagrid("resize",{height:300});
+			$('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
+				{linestatusName:'总合计:',
+					expectedqty:data.rows[0].expectedqtySum,
+					receivedqty:data.rows[0].receivedqtySum
+				}]);
 		}
 	});
     /* 收货明细列表*/
@@ -213,14 +219,20 @@ $(function() {
         method : 'POST',
         toolbar : '',
         idField : 'docNo',
-        title : '',
-        border : false,
-        fitColumns : false,
-        nowrap : false,
-        striped : true,
-        collapsible : false,
-        rownumbers : true,
-        singleSelect : true,
+		title : '收货明细',
+		pageSize : 50,
+		pageList : [50, 100, 200],
+		border : false,
+		fitColumns : false,
+		nowrap : false,
+		striped : true,
+		showFooter: true,
+		collapsible : false,
+		pagination:true,
+		rownumbers : true,
+		singleSelect : true,
+		checkOnSelect:true,
+		selectOnCheck: false,
         columns : [[
             //{field: 'docNo',	title: '产品代码',		width: 120 },
             {field: 'docLineNo',				title: '行号',		width: 130 },
@@ -245,7 +257,13 @@ $(function() {
         onRowContextMenu : function(event, rowIndex, rowData) {
         },
         onLoadSuccess:function(data){
-
+			$(this).datagrid('unselectAll');
+			$(this).datagrid("resize",{height:300});
+			$('#asnDetailsDatagrid').datagrid('reloadFooter',[
+				{lotatt02:'总合计:',
+					fmqty:data.rows[0].fmqtySum,
+					fmqty_each:data.rows[0].fmqtyEachSum
+				}]);
         }
     });
 
