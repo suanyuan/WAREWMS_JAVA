@@ -993,11 +993,7 @@ where 1=1
 	 from Bas_Sku where 1 = 1
 </select>
 
-<!-- 商品档案 列表总数-->
-<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from Bas_Sku 
-	<include refid="Example_Where_Clause"/>
-</select>
+
 <!-- 商品档案 列表总数ByInvLot-->
 <select id="queryByCountByInvLot" resultType="java.lang.Integer"  parameterType="Object">
 	SELECT count(1)
@@ -1009,7 +1005,20 @@ where 1=1
 	GROUP BY a.sku,a.customerid
 	) as tt
 </select>
-  	
+	<!-- 商品档案 列表总数-->
+	<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+		SELECT count(1)
+		from
+		(select t1.*
+		from Bas_Sku t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
+		<include refid="Example_Where_Clause_ByPage"/>) as a
+		LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
+		LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
+		LEFT JOIN bas_package c ON a.packid=c.packid
+		left join product_line d on a.sku_group1 =  d.product_line_id
+		left join bas_codes iv on a.reservedfield04 = iv.code
+		left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = a.defaultreceivinguom
+	</select>
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 

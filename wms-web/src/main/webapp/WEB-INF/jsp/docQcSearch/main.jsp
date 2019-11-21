@@ -42,7 +42,9 @@ $(function() {
 		singleSelect: false,
 		columns: [[
 			{field: 'qcno', title: '验收单号', width: 124},
-			// {field: 'pano',		title: '上架单号',	width: 124 },
+            {field: 'lotatt03', title: '入库日期', width: 100},
+
+            // {field: 'pano',		title: '上架单号',	width: 124 },
 			// {field: 'qclineno',		title: '验收行号',	width: 80 },
 			{field: 'linestatus', title: '行状态', width: 80, formatter: AcceptancestatusFormatter},
 			{field: 'lotatt10', title: '质量状态', width: 80, formatter: ZL_TYPstatusFormatter},
@@ -58,9 +60,8 @@ $(function() {
             {field: 'lotatt07',title: '灭菌批号',	width: 110 },
 			{field: 'lotatt05', title: '序列号', width: 110},
 			{field: 'lotatt01', title: '生产日期', width: 100},
-			{field: 'lotatt03', title: '入库日期', width: 100},
 			{field: 'lotatt02', title: '有效期/失效期', width: 100},
-			{field: 'lotatt11', title: '存储条件', width: 100},
+			{field: 'lotatt11', title: '储存条件', width: 100},
 			{field: 'lotatt15', title: '生产企业', width: 200},
 			{field: 'reservedfield06', title: '生产许可证号/备案号', width: 150},
 			{field: 'qcqtyExpected', title: '待验收件数', width: 100},

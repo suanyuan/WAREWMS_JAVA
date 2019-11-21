@@ -59,12 +59,15 @@ public class BasSkuHistory  implements Serializable {
 	private String shelflifetype;
 
 	private BigDecimal outboundlifedays;
-
+	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date addtime;
+    private String addtimeDc;
 
 	private String addwho;
-
+	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date edittime;
+
+    private String edittimeDc;
 
 	private String editwho;
 
@@ -254,4 +257,10 @@ public class BasSkuHistory  implements Serializable {
 
 	private String defaultsupplierid;
 
+
+	private String descr;//包装规格
+	private String productLineName;//产品线名称
+	private String clientName;	 //货主名称
+	private String unit;  		//分类目录
+	private String skuGroup6Name;//默认供应商名称
 }

@@ -619,7 +619,67 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
+	<!-- 主页面分页显示 查询条件 -->
+	<sql id="Example_Where_Clause_Type">
+		where 1=1
+		<trim  suffixOverrides="," >
+
+			<!--<if test="condition.customer != null and condition.customer != ''" >-->
+			<!--and s.costomerid = #{condition.customer} and s.is_use='1'-->
+			<!--</if>-->
+
+
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and (t1.customerid like CONCAT('%',#{condition.customerid,jdbcType=VARCHAR},'%') or t1.descr_c like CONCAT('%',#{condition.customerid,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="condition.receivingAddressId != null and condition.receivingAddressId != ''" >
+				and t1.receiving_address_id =  #{condition.receivingAddressId,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.descrC != null and condition.descrC != ''" >
+				and  t1.DESCR_C  like  '%${condition.descrC}%'
+			</if>
+			<if test="condition.enterpriseNo != null and condition.enterpriseNo != ''" >
+				and t2.enterprise_no like  '%${condition.enterpriseNo}%'
+			</if>
+			<!--<if test="condition.shorthandName != null and condition.shorthandName != ''" >
+                and shorthand_name =  #{condition.shorthandName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
+                and enterprise_name =  #{condition.enterpriseName,jdbcType=VARCHAR}
+            </if>-->
+			<if test="condition.supContractNo != null and condition.supContractNo != ''" >
+				and t1.sup_contract_no =  #{condition.supContractNo,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.operateType != null and condition.operateType != ''" >
+				and t1.operate_type =  #{condition.operateType,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.isChineseLabel != null and condition.isChineseLabel != ''" >
+				and t1.is_chinese_label =  #{condition.isChineseLabel,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+				and t1.client_start_date =  #{condition.clientStartDate,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+				and t1.client_end_date =  #{condition.clientEndDate,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.customerType != null and condition.customerType != ''" >
+				and t1.customer_type =  #{condition.customerType,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+				and t1.active_flag =  #{condition.activeFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.customerSet != null" >
+				<if test="condition.customerSet.isEmpty() == false" >
+					and t1.customerid in (
+					<foreach collection="condition.customerSet" item="customerSet" index="index" separator="," >
+						#{customerSet.id,jdbcType=VARCHAR}
+					</foreach>
+					)
+					and t1.customer_type = 'OW'
+				</if>
+			</if>
+		</trim>
+	</sql>
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -1099,22 +1159,32 @@ where 1=1
 
 <!-- 客户档案历史 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from bas_customer_history 
-	<include refid="Example_Where_Clause"/>
+	select count(1) from (
+	select a.*,b.codename_c as customerTypeName
+	from (select t1.*,t2.enterprise_no
+	from bas_customer_history t1  LEFT JOIN (select * from gsp_enterprise_info where is_use ='1') t2
+	on t1.enterprise_id = t2.enterprise_id
+	<include refid="Example_Where_Clause_Type"/>
+	) a, Bas_Codes b
+	where a.customer_type = b.code
+	and b.codeid = 'CUS_TYP'
+	) c
 </select>
   	
 <!-- 查询客户档案历史列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from bas_customer_history 
-	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
+	select * from (
+	select a.*,b.codename_c as customerTypeName
+	from (select t1.*,t2.enterprise_no
+	from bas_customer_history t1  LEFT JOIN (select * from gsp_enterprise_info where is_use ='1') t2
+	on t1.enterprise_id = t2.enterprise_id
+	<include refid="Example_Where_Clause_Type"/>
+	) a, Bas_Codes b
+	where a.customer_type = b.code
+	and b.codeid = 'CUS_TYP'
+	) c
+	where 1 = 1
+	order by ADDTIME desc
 </select>
   	
 </mapper>   

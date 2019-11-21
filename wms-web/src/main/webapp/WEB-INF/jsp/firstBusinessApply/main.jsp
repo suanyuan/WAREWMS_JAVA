@@ -406,7 +406,7 @@ var reApply = function () {
     }
     if(!flag){
         $.messager.show({
-            msg : '只有审核通过的申请才能发起新申请', title : '提示'
+            msg : '只有审核通过和已报废的申请才能发起新申请', title : '提示'
         });
         return;
     }

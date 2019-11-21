@@ -211,4 +211,32 @@ public class BasSkuController {
 		return json;
 	}
 
+
+	/**************************************产品档案历史****************************************/
+
+	@Login
+	@RequestMapping(params = "toHistoryMain")
+	public ModelAndView toHistoryMain(String menuId) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuId", menuId);
+		return new ModelAndView("basSkuHistory/main", model);
+	}
+	//显示主页datagrid
+	@Login
+	@RequestMapping(params = "showHistoryDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<BasSkuVO> showHistoryDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
+		return basSkuService.getHistoryPagedDatagrid(pager, query);
+	}
+
+	@Login
+	@RequestMapping(params = "exportSkuHistoryDataToExcel")
+	public void exportSkuHistoryDataToExcel(HttpServletResponse response, BasSkuExportForm form) throws Exception {
+		basSkuExportService.exportSkuHistoryDataToExcel(response, form);
+	}
+//	@Login
+//	@RequestMapping(params = "exportSkuDataToExcel")
+//	public void exportSkuDataToExcel(HttpServletResponse response, BasSkuExportForm form) throws Exception {
+//		basSkuExportService.exportSkuDataToExcel(response, form);
+//	}
 }

@@ -460,6 +460,9 @@ public class DataPublishService extends BaseService {
                 if(basSku!=null){
                     BasSkuHistory basSkuHistory = new BasSkuHistory();
                     BeanUtils.copyProperties(basSku,basSkuHistory);
+                    basSkuHistory.setActiveFlag(Constant.IS_USE_NO);
+                    basSkuHistory.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+//                  basSkuHistory.setAddtime();
                     basSkuHistoryMybatisDao.add(basSkuHistory);
                 }
 
@@ -544,9 +547,13 @@ public class DataPublishService extends BaseService {
             return Json.error("产品注册证不存在");
         }
 
-        //1.失效bas_sku
+        //1.失效bas_sku   老注册证下关联的已下发产品
         List<BasSku> basSkuList = basSkuService.queryBasSkuBySku(gspProductRegister.getProductRegisterNo());
         for(BasSku b : basSkuList){
+            //TODO
+             if(b.getActiveFlag()=="1"){
+                 //失效bas_sku
+             }
             BasSkuForm form = new BasSkuForm();
             BeanUtils.copyProperties(b,form);
             form.setActiveFlag(Constant.IS_USE_NO);
@@ -581,7 +588,7 @@ public class DataPublishService extends BaseService {
             }
         }
 
-        //3.更新产品基础信息关联产品注册证
+        //3.更新产品基础信息关联产品注册证    老注册证下的产品
         List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
         if(list!=null && list.size()>0){
             for(GspProductRegisterSpecs specs : list){

@@ -153,6 +153,9 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#qcMeteringDeviceId').val(0);
+    // $('#file').filebox(0);
+    $('#file').filebox({prompt:""});
+    $('#calCardUrl').val("");
 	ezuiDialog.dialog('open');
 };
 

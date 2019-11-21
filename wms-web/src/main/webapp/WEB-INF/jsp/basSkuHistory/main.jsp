@@ -28,7 +28,7 @@ $(function() {
 	ezuiForm = $('#ezuiForm').form();
 	ezuiImportDataForm=$('#ezuiImportDataForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/basSkuController.do?showDatagrid"/>',
+		url : '<c:url value="/basSkuController.do?showHistoryDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '产品档案',
@@ -91,7 +91,7 @@ $(function() {
 
             {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
             // {field: 'supplierNum',		title: '产品供应商数量',	width: 250 },
-            // {field: 'supplierNames',		title: '所有产品供应商',	width: 250 },
+            {field: 'supplierNames',		title: '所有产品供应商',	width: 250 },
 
             {field: 'addtime',		title: '创建时间',	width: 100},
             {field: 'addwho',		title: '创建人',	width: 100},
@@ -694,7 +694,7 @@ var doExport = function(){
 
 
         //--导出Excel
-		var formId = ajaxDownloadFile(sy.bp()+"/basSkuController.do?exportSkuDataToExcel", param);
+		var formId = ajaxDownloadFile(sy.bp()+"/basSkuController.do?exportSkuHistoryDataToExcel", param);
 		downloadCheckTimer = window.setInterval(function () {
 			window.clearInterval(downloadCheckTimer);
 			$('#'+formId).remove();
@@ -904,13 +904,13 @@ var downloadTemplate = function(){
 					</table>
 				</fieldset>
 				<div>
-					<a onclick='editActiveFlag();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>停止激活</a>
-					<a onclick='editYesActiveFlag();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>继续激活</a>
+					<%--<a onclick='editActiveFlag();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>停止激活</a>--%>
+					<%--<a onclick='editYesActiveFlag();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>继续激活</a>--%>
 
-					<a onclick='edit();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>详情</a>
-					<%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
-					<%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
-					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+					<%--<a onclick='edit();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>详情</a>--%>
+					<%--&lt;%&ndash;<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>&ndash;%&gt;--%>
+					<%--&lt;%&ndash;<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>&ndash;%&gt;--%>
+					<%--<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>--%>
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table> 

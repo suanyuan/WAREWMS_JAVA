@@ -15,6 +15,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wms.constant.Constant;
+import com.wms.entity.BasSkuHistory;
+import com.wms.mybatis.dao.BasSkuHistoryMybatisDao;
 import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
 import com.wms.vo.BasSkuVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,9 @@ public class BasSkuExportService {
 	private BasSkuMybatisDao basSkuMybatisDao;
 	@Autowired
 	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
+
+	@Autowired
+	private BasSkuHistoryMybatisDao basSkuHistoryMybatisDao;
 	
 	private static final String ORDER_HEAD = "客户代码,产品,是否激活,中文名称,英文名称,条形码,包装代码,单位,首次入库,重量,体积,单价";
 	public void exportSkuData(HttpServletResponse response, BasSkuExportForm form) throws IOException {
@@ -142,7 +147,7 @@ public class BasSkuExportService {
 	        }else {
 
 				for (BasSku basSku : basSkuList) {
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					Date date=null;
 
 					if("1".equals(basSku.getActiveFlag())){
@@ -292,5 +297,106 @@ public class BasSkuExportService {
 
 		return superClassMap;
 	}
+
+
+	/**************************************产品档案历史导出****************************************/
+
+	public void exportSkuHistoryDataToExcel(HttpServletResponse response, BasSkuExportForm form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+
+		BasSkuForm basSkuForm = new BasSkuForm();
+
+		basSkuForm.setCustomerid(form.getCustomerid());
+		basSkuForm.setSku(form.getSku());
+		basSkuForm.setActiveFlag(form.getActiveFlag());
+
+		try {
+			// 获取前台传来的数据
+			//String cutomerid = form.getCustomerid();
+			//String sku = form.getSku();
+			//String cutomeridId = new String(cutomerid.getBytes("iso-8859-1"), "utf-8");
+			//String skuId = new String(sku.getBytes("iso-8859-1"), "utf-8");
+			BasSkuQuery query = new BasSkuQuery();
+			BeanUtils.copyProperties(basSkuForm, query);
+			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "产品档案历史";
+			// excel要导出的数据
+			List<BasSkuHistory> basSkuHistoryList = basSkuHistoryMybatisDao.queryByList(mybatisCriteria);
+			// 导出
+			if (basSkuHistoryList == null || basSkuHistoryList.size() == 0) {
+				//System.out.println("题库为空");
+			}else {
+
+				for (BasSkuHistory basSkuHistory : basSkuHistoryList) {
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date=null;
+
+					if("1".equals(basSkuHistory.getActiveFlag())){
+						basSkuHistory.setActiveFlag("是");
+					}else if("0".equals(basSkuHistory.getActiveFlag())){
+						basSkuHistory.setActiveFlag("否");
+					}
+					if(Constant.CODE_CATALOG_FIRSTSTATE_PASS.equals(basSkuHistory.getFirstop())){
+						basSkuHistory.setFirstop("审核通过");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_USELESS.equals(basSkuHistory.getFirstop())){
+						basSkuHistory.setFirstop("已报废");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_NEW.equals(basSkuHistory.getFirstop())){
+						basSkuHistory.setFirstop("新建");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_STOP.equals(basSkuHistory.getFirstop())){
+						basSkuHistory.setFirstop("已停止");
+					}else if(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING.equals(basSkuHistory.getFirstop())){
+						basSkuHistory.setFirstop("审核中");
+					}
+					if("1".equals(basSkuHistory.getReservedfield09())){
+						basSkuHistory.setReservedfield09("是");
+					}else if("0".equals(basSkuHistory.getReservedfield09())){
+						basSkuHistory.setReservedfield09("否");
+					}
+					if("1".equals(basSkuHistory.getSkuGroup7())){
+						basSkuHistory.setSkuGroup7("是");
+					}else if("0".equals(basSkuHistory.getSkuGroup7())){
+						basSkuHistory.setSkuGroup7("否");
+					}
+					if("1".equals(basSkuHistory.getSkuGroup8())){
+						basSkuHistory.setSkuGroup8("是");
+					}else if("0".equals(basSkuHistory.getSkuGroup8())){
+						basSkuHistory.setSkuGroup8("否");
+					}
+					if("FLL".equals(basSkuHistory.getReservedfield07())){
+						basSkuHistory.setReservedfield07("非冷链");
+					}else if("LC".equals(basSkuHistory.getReservedfield07())){
+						basSkuHistory.setReservedfield07("冷藏");
+					}else if("LD".equals(basSkuHistory.getReservedfield07())){
+						basSkuHistory.setReservedfield07("冷冻");
+					}
+					System.out.println();
+					if(basSkuHistory.getReservedfield10()!=null){
+						basSkuHistory.setReservedfield10(basSkuHistory.getReservedfield10()+"天");
+					}
+					if(basSkuHistory.getAddtime()!=null) {
+						basSkuHistory.setAddtimeDc(sdf.format(basSkuHistory.getAddtime()));
+					}
+					if(basSkuHistory.getEdittime()!=null) {
+						basSkuHistory.setEdittimeDc(sdf.format(basSkuHistory.getEdittime()));
+					}
+				}
+				ExcelUtil.listToExcel(basSkuHistoryList, fieldMap, sheetName, response);
+				//System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 
 }

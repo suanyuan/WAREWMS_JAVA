@@ -111,8 +111,8 @@ public class BasSkuService extends BaseService {
 			basSkuVO.setSupplierNames(content);
             basSkuVO.setClientName(basSku.getClientName());
 
-			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
-			basSkuVO.setSupplierNum(num);
+//			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
+//			basSkuVO.setSupplierNum(num);
 			basSkuVO.setAddtime(simpleDateFormat.format(basSku.getAddtime()));
 			basSkuVO.setEdittime(simpleDateFormat.format(basSku.getEdittime()));
 			basSkuVOList.add(basSkuVO);
@@ -156,15 +156,12 @@ public class BasSkuService extends BaseService {
 		this.validateSku(basSkuForm, resultMsg);// 验证商品是否存在
 
 		if (resultMsg.length() == 0) {
-
-			//
 			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setAddtime(today);
 			basSku.setEdittime(today);
 			basSkuMybatisDao.add(basSku);
 		}else{
-
 			basSku.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			basSku.setAddtime(today);
@@ -518,5 +515,60 @@ public class BasSkuService extends BaseService {
 		}
 		return json;
 	}
+
+
+
+
+	/**************************************产品档案历史****************************************/
+
+//显示主页datagrid
+	public EasyuiDatagrid<BasSkuVO> getHistoryPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
+		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+//		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("addtime desc");
+		System.out.println(query.getAddTimeStart()+"=====query.getAddTimeStart()====== query.getAddTimeStart()======"+query.getAddTimeEnd());
+		List<BasSkuHistory> basSkuHistoryList = basSkuHistoryMybatisDao.queryByList(mybatisCriteria);
+
+		BasSkuVO basSkuVO = null;
+		List<BasSkuVO> basSkuVOList = new ArrayList<BasSkuVO>();
+
+		for (BasSkuHistory basSkuHistory : basSkuHistoryList) {
+			basSkuVO = new BasSkuVO();
+			BeanUtils.copyProperties(basSkuHistory, basSkuVO);
+
+			String content = "";
+			BasSku bs = new BasSku();
+			bs.setSku(basSkuVO.getSku());
+			bs.setCustomerid(basSkuVO.getCustomerid());
+			List<String> sup =  firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
+			int a =1;
+			for(String supNanme : sup){
+				if(a ==1){
+					content = supNanme;
+				}
+				if(supNanme!=null && a!=1 ){
+					content =content+","+ supNanme;
+				}
+				a++;
+			}
+			basSkuVO.setSupplierNames(content);
+			basSkuVO.setClientName(basSkuHistory.getClientName());
+
+//			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
+////			basSkuVO.setSupplierNum(num);
+			basSkuVO.setAddtime(simpleDateFormat.format(basSkuHistory.getAddtime()));
+			basSkuVO.setEdittime(simpleDateFormat.format(basSkuHistory.getEdittime()));
+			basSkuVOList.add(basSkuVO);
+		}
+		datagrid.setTotal((long) basSkuHistoryMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(basSkuVOList);
+		return datagrid;
+	}
+
 
 }

@@ -337,7 +337,7 @@ public class BasCustomerService extends BaseService {
 	public Json clientAddCustomer(BasCustomerForm basCustomerForm,String flag) {
 		//try{
 			boolean fff = true;
-//			int supNum =0;
+			int supNum =0;
 			Json json = new Json();
 			BasCustomer basCustomerQuery = new BasCustomer();
 			basCustomerQuery.setCustomerType(basCustomerForm.getCustomerType());
@@ -348,7 +348,7 @@ public class BasCustomerService extends BaseService {
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
-//				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
 
 			}else if("Client".equals(flag)){
 				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);

@@ -230,8 +230,8 @@ where 1=1
 	LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
 	LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
 	LEFT JOIN bas_customer t4 on t1.supplier_id = t4.CUSTOMERID
-	where t1.first_state = '40' and  t3.product_code = #{sku}  and t1.client_id = #{customerid};
-
+	where t1.first_state = '40' and  t3.product_code = #{sku}  and t1.client_id = #{customerid}
+	and t1.is_use= '1'
 	</select>
 
 	<!--通过产品注册证id查询其下的产品的首营申请-->

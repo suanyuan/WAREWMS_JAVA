@@ -271,11 +271,20 @@ public class BasCustomerController {
 		return new ModelAndView("basCustomer/receivingAddress", model);
 	}
 
-
-
 	@Login
 	@RequestMapping(params = "exportBasCustomerDataToExcel")
 	public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCustomerForm form) throws Exception {
 		basCustomerService.exportBasCustomerDataToExcel(response, form);
 	}
+
+//	/******************************   历史客户档案   *********************************/
+//
+//	@Login
+//	@RequestMapping(params = "toMain")
+//	public ModelAndView toMain(String menuId) {
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		model.put("menuId", menuId);
+//		return new ModelAndView("basCustomer/main", model);
+//	}
+
 }
