@@ -45,7 +45,11 @@ $(function() {
 		idField : 'codenameC',
 		columns : [[
 			{field: 'codenameC',		title: '历史文档名称',	width: 100 },
-			{field: 'codenameE',		title: '文件',	width: 100,formatter:showHistoryContextFile }
+			{field: 'codenameE',		title: '文件',	width: 100,formatter:showHistoryContextFile },
+            {field: 'editwho',		title: '编辑人',	width: 100 },
+            {field: 'edittime',		title: '编辑时间',	width: 100 },
+
+
 
 		]],
 		onDblClickCell: function(index,field,value){

@@ -44,6 +44,9 @@ public class BasCodesService {
     @Autowired
     private GspReceivingMybatisDao gspReceivingMybatisDao;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
     public EasyuiDatagrid<BasCodesVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
         EasyuiDatagrid<BasCodesVO> datagrid = new EasyuiDatagrid<BasCodesVO>();
         query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
@@ -144,7 +147,19 @@ public class BasCodesService {
 //		List<Remind> basGtnVOList = new ArrayList<Remind>();
 //		System.out.println();
 //		List<Remind> remindList = .queryByList(criteria);
+        List<BasCodesVO> basCodesVOList = new ArrayList<BasCodesVO>();
         List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+        for (BasCodes basCodes : list) {
+            BasCodesVO basCodesVO = new BasCodesVO();
+//            BeanUtils.copyProperties(basCodes, basCodesVO);
+            basCodesVO.setCodenameC(basCodes.getCodenameC());
+            basCodesVO.setCodenameE(basCodes.getCodenameE());
+            basCodesVO.setEditwho(basCodes.getEditwho());
+            if(basCodes.getEdittime()!=null){
+                basCodesVO.setEdittime(sdf.format(basCodes.getEdittime()));
+            }
+            basCodesVOList.add(basCodesVO);
+        }
 //		int total = basGtnMybatisDao.queryByCount(criteria);
         datagrid.setTotal((long)list.size() );
         datagrid.setRows(list);
@@ -163,6 +178,7 @@ public class BasCodesService {
         Json json = new Json();
         //DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.findById(docAsnCertificateForm.getSku());
         //BeanUtils.copyProperties(docAsnCertificateForm, docAsnCertificate);
+        basCodesForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
         basCodesMybatisDao.updateCodenameCBySelective(basCodesForm);
         json.setSuccess(true);
         return json;

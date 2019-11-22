@@ -13,11 +13,30 @@ public class BasCodesVO {
 	private String udf1;
 	private String udf2;
 	private String udf3;
-	private java.sql.Date addtime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String addtime;
 	private String addwho;
-	private java.sql.Date edittime;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String edittime;
 	private String editwho;
 	private String udfOprChk;
+
+
+	public String getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(String addtime) {
+		this.addtime = addtime;
+	}
+
+	public String getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(String edittime) {
+		this.edittime = edittime;
+	}
 
 	public String getCodeid() {
 		return codeid;
@@ -83,14 +102,7 @@ public class BasCodesVO {
 		this.udf3 = udf3;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(java.sql.Date addtime) {
-		this.addtime = addtime;
-	}
 
 	public String getAddwho() {
 		return addwho;
@@ -100,14 +112,7 @@ public class BasCodesVO {
 		this.addwho = addwho;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getEdittime() {
-		return edittime;
-	}
 
-	public void setEdittime(java.sql.Date edittime) {
-		this.edittime = edittime;
-	}
 
 	public String getEditwho() {
 		return editwho;
