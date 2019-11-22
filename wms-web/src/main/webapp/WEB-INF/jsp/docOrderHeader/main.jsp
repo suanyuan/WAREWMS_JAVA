@@ -105,7 +105,6 @@ $(function() {
 
 		},
 		onDblClickRow: function(index,row){
-			/*computeall(row);*/
             edit(row);
 			qlOrderDetails(row);
 
@@ -193,7 +192,6 @@ $(function() {
             onRowContextMenu : function(event, rowIndex, rowData) {
             },
             onLoadSuccess:function(data){
-                console.log(data.total);
                 $(this).datagrid('unselectAll');
                 $(this).datagrid("resize",{height:300});
                 $('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
@@ -666,6 +664,17 @@ var edit = function(srow){
 			$("#ezuiForm #ordertype").combo('readonly', false);
 			$("#ezuiForm #ezuiBtn_orderCommit").linkbutton('enable');
 		}
+		$("#ezuiForm #consigneeid").textbox({
+			editable:false,
+			icons:[{
+				iconCls:'icon-search',
+				handler: function(e){
+					$("#ezuiReceDataDialog #consigneeid").textbox('clear');
+					ezuiReceDataDialogClick();
+					ezuiReceDataDialogSearch();
+				}
+			}]
+		});
 		ezuiDetailsDatagrid.datagrid('load',{orderno:row.orderno});
         allocationDetailsDatagrid.datagrid('load',{ordero:row.orderno});
 		$('#ezuiDetailsDatagrid').parent().parent().parent().show();
@@ -2000,6 +2009,26 @@ var selectDialogCust = function(){
 /* 收货单位选择 */
 var selectDialogRece = function(){
     var row = ezuiReceDataDialogId.datagrid('getSelected');
+	$.ajax({
+		url : 'gspReceivingAddressController.do?gspReceivingInfo',
+		data : {customerid:row.customerid},
+		type : 'POST',
+		dataType : 'JSON',
+		success : function(result){
+			try {
+					if(result.success){
+						var dat = $.parseJSON(result.msg);
+						console.log("dat");
+						console.log(dat);
+						$("#ezuiDialog #cContact").textbox('setValue', dat.contacts);
+						$("#ezuiDialog #cTel1").textbox('setValue',dat.phone);
+						$("#ezuiDialog #cAddress1").textbox('setValue',dat.deliveryAddress);
+					}
+			} catch (e) {
+				return;
+			};
+		}
+	});
     if(row){
         $("#ezuiDialog #consigneeid").textbox('setValue',row.descrC);
         ezuiReceDataDialog.dialog('close');

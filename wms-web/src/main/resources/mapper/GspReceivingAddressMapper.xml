@@ -210,4 +210,13 @@ where 1=1
 <select id="findPCDByPid"  resultMap="areasResultMap" parameterType="Object">
 		select *  from bas_province_city_district where pid = #{pid}
 </select>
+
+	<!-- 根据customerid查询 所有信息 -->
+	<select id="qyReceivingInfo"  resultMap="BaseResultMap" parameterType="Object">
+		select c.*
+		from bas_customer a
+			LEFT JOIN gsp_receiving b on a.enterprise_id=b.enterprise_id
+			LEFT JOIN gsp_receiving_address c on c.receiving_id = b.receiving_id
+		where a.CUSTOMER_TYPE = 'CO' AND a.CUSTOMERID = #{condition.customerid,jdbcType=VARCHAR}
+	</select>
 </mapper>   
