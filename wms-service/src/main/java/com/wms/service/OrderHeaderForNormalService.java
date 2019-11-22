@@ -1268,6 +1268,7 @@ public class OrderHeaderForNormalService extends BaseService {
             for(int j=odList.size()-1;j>i;j--){
                 if(odList.get(i).getAlocation().equals(odList.get(j).getAlocation())
                         && odList.get(i).getLotatt04().equals(odList.get(j).getLotatt04())
+                        && odList.get(i).getLotatt05().equals(odList.get(j).getLotatt05())
                         && odList.get(i).getSku().equals(odList.get(j).getSku())){
                     //合并数量，件数
                     odList.get(i).setQty(odList.get(i).getQty()+odList.get(j).getQty());
