@@ -91,11 +91,13 @@ $(function() {
             		{field: 'cAddress4',			title: '快递单号',	    width: 120 },
 					{field: 'notes',				title: '备注',		    width: 150 },
 					{field: 'edisendflag',			title: '回传标识',		width: 70 },
-					{field: 'ordertime',			title: '创建时间',		width: 145 },
 					{field: 'cContact',		        title: '收货方',		    width: 75 },
 					{field: 'cAddress1',			title: '收货地址',		width: 250 },
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
+					{field: 'addtime',				title: '创建时间',		width: 145 },
 					{field: 'addwho',				title: '创建人',		    width: 70 },
+					{field: 'edittime',				title: '编辑时间',		width: 145 },
+					{field: 'editwho',				title: '编辑人',		    width: 70 },
 					{field: 'courierComplaint' ,    title: '快递投诉内容' , 	width:150}
 		]],
 		onDblClickCell: function(index,field,value){
