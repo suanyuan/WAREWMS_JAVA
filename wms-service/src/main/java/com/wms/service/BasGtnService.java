@@ -66,7 +66,7 @@ public class BasGtnService extends BaseService {
 		datagrid.setRows(basGtnVOList);
 		return datagrid;
 	}
-
+	//提醒管理
 	public EasyuiDatagrid<BasCodes> getPagedDatagrid1(EasyuiDatagridPager pager, BasCodesQuery query) {
 		EasyuiDatagrid<BasCodes> datagrid = new EasyuiDatagrid<BasCodes>();
 		MybatisCriteria criteria = new MybatisCriteria();
@@ -84,6 +84,10 @@ public class BasGtnService extends BaseService {
 		datagrid.setRows(list);
 		return datagrid;
 	}
+
+
+
+
 
 	public Json addBasGtn(BasGtnForm basGtnForm) throws Exception {
 		System.out.println(basGtnForm.getSku()+"============================="+basGtnForm.getGtncode());

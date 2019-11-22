@@ -24,6 +24,23 @@
 		var newwin=window.open(sy.bp()+"/fileUpload/"+url);
 		newwin.document.title=fileName;
     }
+    function fileDownLoad(url,fileName) {
+        if(!fileName){
+            fileName="";
+        }
+        var newwin=window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url);
+        // $.ajax({
+        //     url : sy.bp()+"/commonController.do?fileDownLoad&url="+url,
+        //     // data : {"url":url},
+        //     type : 'POST',
+        //     dataType : 'JSON',
+        //     success : function(result){
+        //     }
+        // });
+
+        // newwin.document.title=fileName;
+    }
+
     //客户档案显示文件链接
 	function showUrlFile(value,row,index){
 		  var supContractNo=row.supContractNo;
@@ -47,6 +64,15 @@
         var certificateContext=row.certificateContext;
         if(certificateContext!=null && certificateContext!=""){
             return "<a onclick=\"showUrl('"+value+"','"+certificateContext+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>查看</a>";
+        }else{
+            return "<a>无</a>";
+        }
+    }
+    //历史文档  下载
+    function showHistoryContextFile(value,row,index){
+        var codenameE=row.codenameE;
+        if(codenameE!=null && codenameE!=""){
+            return "<a onclick=\"fileDownLoad('"+codenameE+"','"+codenameE+"')\" class='easyui-linkbutton' data-options='plain:true,iconCls:\"icon-search\"' href='javascript:void(0);'>下载</a>";
         }else{
             return "<a>无</a>";
         }

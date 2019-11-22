@@ -125,6 +125,49 @@ public class BasCodesService {
         return basCodesMybatisDao.queryById(query);
     }
 
+
+
+    /**
+     * 分页查询 历史档案管理页面
+     * @param
+     * @return
+     */
+    //历史档案管理
+    public EasyuiDatagrid<BasCodes> showHistoryFileDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+        EasyuiDatagrid<BasCodes> datagrid = new EasyuiDatagrid<BasCodes>();
+        MybatisCriteria criteria = new MybatisCriteria();
+        criteria.setCurrentPage(pager.getPage());
+        criteria.setPageSize(pager.getRows());
+        query.setCodeid("HIS_FILE");
+        criteria.setCondition(query);
+        BasCodes basGtnVO = null;
+//		List<Remind> basGtnVOList = new ArrayList<Remind>();
+//		System.out.println();
+//		List<Remind> remindList = .queryByList(criteria);
+        List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+//		int total = basGtnMybatisDao.queryByCount(criteria);
+        datagrid.setTotal((long)list.size() );
+        datagrid.setRows(list);
+        return datagrid;
+    }
+//历史档案管理
+    public Json getHistoryFileInfo(BasCodesQuery query){
+        BasCodes basCodes = basCodesMybatisDao.queryByIdAndCodenameC(query);
+        if(basCodes == null){
+            return Json.error("历史文档不存在！");
+        }
+        return Json.success("",basCodes);
+    }
+//历史档案管理
+    public Json editDocAsnCertificate(BasCodesForm basCodesForm) {
+        Json json = new Json();
+        //DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.findById(docAsnCertificateForm.getSku());
+        //BeanUtils.copyProperties(docAsnCertificateForm, docAsnCertificate);
+        basCodesMybatisDao.updateCodenameCBySelective(basCodesForm);
+        json.setSuccess(true);
+        return json;
+    }
+
     /**
      * 根据codeid查询code
      * @param codeid
