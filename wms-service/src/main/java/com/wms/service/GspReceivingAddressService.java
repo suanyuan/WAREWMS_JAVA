@@ -1,27 +1,25 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wms.constant.Constant;
-import com.wms.entity.PCD;
-import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.utils.RandomUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.wms.dao.GspReceivingAddressDao;
-import com.wms.entity.GspReceivingAddress;
-import com.wms.vo.GspReceivingAddressVO;
-import com.wms.vo.Json;
+import com.alibaba.fastjson.JSON;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.GspReceivingAddressForm;
+import com.wms.entity.GspReceivingAddress;
+import com.wms.entity.PCD;
+import com.wms.mybatis.dao.GspReceivingAddressMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.GspReceivingAddressQuery;
+import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.GspReceivingAddressVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.GspReceivingAddressForm;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("gspReceivingAddressService")
 public class GspReceivingAddressService extends BaseService {
@@ -35,6 +33,16 @@ public class GspReceivingAddressService extends BaseService {
 	@Autowired
 	private CommonService commonService;
 
+
+	public Json qyReceivingInfo(String customerid){
+
+		List<GspReceivingAddress> gspReceivingInfo = gspReceivingAddressMybatisDao.qyReceivingInfo(customerid);
+		GspReceivingAddress gspReceivingAddress =gspReceivingInfo.get(0);
+		Json json = new Json();
+		json.setMsg(JSON.toJSONString(gspReceivingAddress));
+		json.setSuccess(true);
+		return json;
+	}
 	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, String receivingId) {
 		EasyuiDatagrid<GspReceivingAddressVO> datagrid = new EasyuiDatagrid<GspReceivingAddressVO>();
 		GspReceivingAddressQuery query =new GspReceivingAddressQuery();
