@@ -115,6 +115,8 @@ public class GspVerifyService {
             Date expiryDate = format.parse(lotatt02);
             if (prdDate.getTime() >= expiryDate.getTime()) {
                 return Json.error("有效期/失效期不可小于生产日期");
+            } else if (prdDate.getTime() >= (new Date()).getTime()) {
+                return Json.error("生产日期应小于当前时间");
             }
         } catch (Exception e) {
             e.printStackTrace();
