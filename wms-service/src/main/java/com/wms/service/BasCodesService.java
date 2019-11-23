@@ -44,6 +44,9 @@ public class BasCodesService {
     @Autowired
     private GspReceivingMybatisDao gspReceivingMybatisDao;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
     public EasyuiDatagrid<BasCodesVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
         EasyuiDatagrid<BasCodesVO> datagrid = new EasyuiDatagrid<BasCodesVO>();
         query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
@@ -123,6 +126,62 @@ public class BasCodesService {
         query.setCodeid(codeid);
         query.setCode(code);
         return basCodesMybatisDao.queryById(query);
+    }
+
+
+
+    /**
+     * 分页查询 历史档案管理页面
+     * @param
+     * @return
+     */
+    //历史档案管理
+    public EasyuiDatagrid<BasCodes> showHistoryFileDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+        EasyuiDatagrid<BasCodes> datagrid = new EasyuiDatagrid<BasCodes>();
+        MybatisCriteria criteria = new MybatisCriteria();
+        criteria.setCurrentPage(pager.getPage());
+        criteria.setPageSize(pager.getRows());
+        query.setCodeid("HIS_FILE");
+        criteria.setCondition(query);
+        BasCodes basGtnVO = null;
+//		List<Remind> basGtnVOList = new ArrayList<Remind>();
+//		System.out.println();
+//		List<Remind> remindList = .queryByList(criteria);
+        List<BasCodesVO> basCodesVOList = new ArrayList<BasCodesVO>();
+        List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+        for (BasCodes basCodes : list) {
+            BasCodesVO basCodesVO = new BasCodesVO();
+//            BeanUtils.copyProperties(basCodes, basCodesVO);
+            basCodesVO.setCodenameC(basCodes.getCodenameC());
+            basCodesVO.setCodenameE(basCodes.getCodenameE());
+            basCodesVO.setEditwho(basCodes.getEditwho());
+            if(basCodes.getEdittime()!=null){
+                basCodesVO.setEdittime(sdf.format(basCodes.getEdittime()));
+            }
+            basCodesVOList.add(basCodesVO);
+        }
+//		int total = basGtnMybatisDao.queryByCount(criteria);
+        datagrid.setTotal((long)list.size() );
+        datagrid.setRows(list);
+        return datagrid;
+    }
+//历史档案管理
+    public Json getHistoryFileInfo(BasCodesQuery query){
+        BasCodes basCodes = basCodesMybatisDao.queryByIdAndCodenameC(query);
+        if(basCodes == null){
+            return Json.error("历史文档不存在！");
+        }
+        return Json.success("",basCodes);
+    }
+//历史档案管理
+    public Json editDocAsnCertificate(BasCodesForm basCodesForm) {
+        Json json = new Json();
+        //DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.findById(docAsnCertificateForm.getSku());
+        //BeanUtils.copyProperties(docAsnCertificateForm, docAsnCertificate);
+        basCodesForm.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+        basCodesMybatisDao.updateCodenameCBySelective(basCodesForm);
+        json.setSuccess(true);
+        return json;
     }
 
     /**

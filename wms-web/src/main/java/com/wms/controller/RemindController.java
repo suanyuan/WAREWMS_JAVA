@@ -43,12 +43,12 @@ public class RemindController {
 		return new ModelAndView("remind/main", model);
 	}
 
-	@Login
-	@RequestMapping(params = "showDatagrid")
-	@ResponseBody
-	public EasyuiDatagrid<BasGtnVO> showDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
-		return basGtnService.getPagedDatagrid(pager, query);
-	}
+//	@Login
+//	@RequestMapping(params = "showDatagrid")
+//	@ResponseBody
+//	public EasyuiDatagrid<BasGtnVO> showDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
+//		return basGtnService.getPagedDatagrid(pager, query);
+//	}
 
 	@Login
 	@RequestMapping(params = "showDatagrid1")

@@ -139,7 +139,7 @@ public class OrderHeaderForNormalService extends BaseService {
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<ActAllocationDetails> orderHeaderForNormalList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+        List<ActAllocationDetails> actAllocationDetails = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
         List<ActAllocationDetailsVO> actAllocationDetailsVOList = new ArrayList<>();
 
         ActAllocationDetails actAllocationDetailslSum = new ActAllocationDetails();
@@ -148,7 +148,7 @@ public class OrderHeaderForNormalService extends BaseService {
         }
 
         ActAllocationDetailsVO vo = null;
-        for (ActAllocationDetails act : orderHeaderForNormalList) {
+        for (ActAllocationDetails act : actAllocationDetails) {
             vo = new ActAllocationDetailsVO();
             BeanUtils.copyProperties(act, vo);
             BasSku basSku = basSkuService.getSkuInfo(act.getCustomerid(), act.getSku());

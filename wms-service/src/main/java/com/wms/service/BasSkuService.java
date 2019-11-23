@@ -558,11 +558,14 @@ public class BasSkuService extends BaseService {
 			}
 			basSkuVO.setSupplierNames(content);
 			basSkuVO.setClientName(basSkuHistory.getClientName());
-
 //			int num =firstBusinessApplyMybatisDao.selectSupplierNumByProductAndState(basSkuVO.getSku());
 ////			basSkuVO.setSupplierNum(num);
-			basSkuVO.setAddtime(simpleDateFormat.format(basSkuHistory.getAddtime()));
-			basSkuVO.setEdittime(simpleDateFormat.format(basSkuHistory.getEdittime()));
+            if(basSkuHistory.getAddtime()!=null){
+                basSkuVO.setAddtime(simpleDateFormat.format(basSkuHistory.getAddtime()));
+            }
+            if(basSkuHistory.getEdittime()!=null){
+                basSkuVO.setEdittime(simpleDateFormat.format(basSkuHistory.getEdittime()));
+            }
 			basSkuVOList.add(basSkuVO);
 		}
 		datagrid.setTotal((long) basSkuHistoryMybatisDao.queryByCount(mybatisCriteria));

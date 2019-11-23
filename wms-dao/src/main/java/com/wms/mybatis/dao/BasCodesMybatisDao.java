@@ -24,4 +24,9 @@ public interface BasCodesMybatisDao extends BaseDao {
     BasCodes query4UOM(@Param("code")String code);
 
     void delByIDCode(@Param("codeid") String codeid,@Param("code") String code);
+
+
+    public <T> T queryByIdAndCodenameC(Object id);
+
+    public <T> void updateCodenameCBySelective(T t);
 }
