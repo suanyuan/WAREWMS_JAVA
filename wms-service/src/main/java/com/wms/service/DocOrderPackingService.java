@@ -1139,6 +1139,9 @@ public class DocOrderPackingService extends BaseService {
         }
         try {
 
+        	//结束复核的时候把装箱头档的packingflag设为1
+			docOrderPackingMybatisDao.endCartonPackingflag(form.getOrderno());
+
             //查询包装明细包装总数，回写到act_allocation_details中,用price记录装箱件数
             Map<String, Object> condition = new HashMap<>();
             condition.put("orderno", form.getOrderno());
