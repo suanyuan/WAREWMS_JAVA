@@ -185,5 +185,13 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+	<delete id="removeDoublecByContext2" parameterType="Object">
+		DELETE FROM `doc_asn_doublec` WHERE context2 IN (
+			SELECT dod.lotatt05 FROM `doc_order_details` dod
+			LEFT JOIN `bas_sku` bs ON dod.`customerid`  = bs.`customerid` AND dod.`sku`  = bs.`sku`
+			WHERE bs.sku_group7 = 1 and dod.`orderno` = #{orderno}
+		)
+	</delete>
   	
 </mapper>   
