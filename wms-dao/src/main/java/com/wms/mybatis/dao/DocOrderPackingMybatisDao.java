@@ -108,4 +108,9 @@ public interface DocOrderPackingMybatisDao extends BaseDao {
      * @return ~
      */
     int getMaxPacklineno(@Param("orderno") String orderno);
+
+	/**
+	 * 当结束复核时，结束所有装箱记录头档的装箱完成flag
+	 */
+	void endCartonPackingflag(@Param("orderno") String orderno);
 }

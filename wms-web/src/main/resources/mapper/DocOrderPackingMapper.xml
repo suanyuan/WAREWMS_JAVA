@@ -688,6 +688,10 @@ select a.orderno as orderNo,
     </select>
 
     <select id="getMaxPacklineno" resultType="int"  parameterType="Object">
-	select ifnull(max(packlineno),0) from doc_order_packing_carton where orderno = #{orderno,jdbcType=VARCHAR}
-</select>
+		select ifnull(max(packlineno),0) from doc_order_packing_carton where orderno = #{orderno,jdbcType=VARCHAR}
+	</select>
+
+	<update id="endCartonPackingflag" parameterType="Object">
+		update doc_order_packing_carton_info set packingflag = 1 where orderno = #{orderno}
+	</update>
 </mapper>   

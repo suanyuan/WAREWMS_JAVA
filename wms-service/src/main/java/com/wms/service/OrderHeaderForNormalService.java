@@ -283,7 +283,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         orderHeaderForNormal.getSostatus().equals("30")) {// || orderHeaderForNormal.getSostatus().equals("40")
 
                     //判断双证/质量合格证
-                    json = fixCertificateFlag(orderHeaderForNormalForm.getOrderno());
+                    json = docOrderUtilService.fixCertificateFlag(orderHeaderForNormalForm.getOrderno());
                     if (!json.isSuccess()) return json;
 
                     /*进行顺丰下单  下单报文*/
@@ -347,60 +347,6 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 遍历子单查看产品是否需要质量合格证或者双证，
-     * 如果没有匹配或者导入的，则不可进行分配操作
-     *
-     * @param orderno 出库单号
-     * @return ~
-     */
-    private Json fixCertificateFlag(String orderno) {
-
-        Json json = new Json();
-        json.setSuccess(true);
-
-        StringBuilder message = new StringBuilder();
-        List<OrderDetailsForNormal> docOrderDetailList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-        for (OrderDetailsForNormal docOrderDetail : docOrderDetailList) {
-
-            BasSku basSku = docOrderDetail.getBasSku() == null ? new BasSku() : docOrderDetail.getBasSku();
-            if (StringUtil.fixNull(basSku.getSkuGroup7()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt05())) {
-
-                InvLotLocId invLotLocId = invLotLocIdMybatisDao.queryByLotatt05(docOrderDetail.getLotatt05(), docOrderDetail.getCustomerid());
-                if (invLotLocId == null) {
-
-                    json.setSuccess(false);
-                    message.append(" ").
-                            append("序列号:").
-                            append(docOrderDetail.getLotatt05()).
-                            append("，无库存;");
-                } else if (!invLotLocId.isDoublecflag()) {
-
-                    json.setSuccess(false);
-                    message.append(" ").
-                            append("序列号:").
-                            append(docOrderDetail.getLotatt05()).
-                            append("，未匹配双证;");
-                }
-            }
-            /*else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1") && StringUtil.isNotEmpty(docOrderDetail.getLotatt04())) {
-
-                DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryBylotatt04(docOrderDetail.getCustomerid(), docOrderDetail.getSku(), docOrderDetail.getLotatt04());
-                if (docAsnCertificate == null) {
-
-                    json.setSuccess(false);
-                    message.append(" ").
-                            append("生产批号:").
-                            append(docOrderDetail.getLotatt04()).
-                            append("，未导入质量合格证;");
-                }
-            }*/
-        }
-
-        json.setMsg(message.toString());
-        return json;
-    }
-
-    /**
      * 取消分配
      */
     public Json deAllocation(String orderNo) {
@@ -448,7 +394,7 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json picking(String orderNo) {
 
-        Json json = fixLLPackage(orderNo);
+        Json json = docOrderUtilService.fixLLPackage(orderNo);
         if (!json.isSuccess()) return json;
 
         json = docOrderUtilService.validateSerialNumRecords(orderNo, 1);
@@ -719,7 +665,9 @@ public class OrderHeaderForNormalService extends BaseService {
                         if (shippmentResult.equals("000")) {
 
                             //发运成功之后记录序列号出库
-                            recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
+                            docOrderUtilService.recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
+                            //发运成功之后删除双证导入记录
+                            docOrderUtilService.removeAsnDoublecOutStorage(orderHeaderForNormal.getOrderno());
 
                             orderHeaderForNormalQuery.setCurrentTime(new Date());
                             orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
@@ -806,6 +754,8 @@ public class OrderHeaderForNormalService extends BaseService {
         customerids.add("JSML");
         customerids.add("WQ");
         customerids.add("HQ");
+        customerids.add("BDL");
+        customerids.add("JSJY");
         if (!customerids.contains(orderHeaderForNormal.getCustomerid()) ||
                 !basCodes.getUdf1().equals(sfOrderHeader.getCarrierid()) ||
                 StringUtil.isEmpty(orderHeaderForNormal.getRoute()) ||
@@ -907,6 +857,130 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 取消订单
+     * else if (orderHeaderForNormal.getSostatus().equals("30") ||
+     *                         orderHeaderForNormal.getSostatus().equals("40")) {
+     *                     //分配状态订单先取消分配再取消订单
+     *                     Map<String, Object> map = new HashMap<String, Object>();
+     *                     map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+     *                     map.put("orderNo", orderNo);
+     *                     map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+     *                     orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
+     *                     String allocationResult = map.get("result").toString();
+     *                     if (allocationResult != null && allocationResult.length() > 0) {
+     *                         if (allocationResult.equals("000")) {
+     *                             Map<String, Object> cancelMap = new HashMap<String, Object>();
+     *                             cancelMap.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+     *                             cancelMap.put("orderNo", orderNo);
+     *                             cancelMap.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+     *                             orderHeaderForNormalMybatisDao.cancelByOrder(map);
+     *                             String cancelResult = map.get("result").toString();
+     *                             if (cancelResult != null && cancelResult.length() > 0) {
+     *                                 if (cancelResult.equals("000")) {
+     *                                     orderHeaderForNormalQuery.setCurrentTime(new Date());
+     *                                     orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+     *                                     json.setSuccess(true);
+     *                                     json.setMsg("出库取消成功！");
+     *                                     json.setObj(orderHeaderForNormal);
+     *                                     return json;
+     *                                 } else {
+     *                                     json.setSuccess(false);
+     *                                     json.setMsg("出库取消失败：" + cancelResult);
+     *                                     return json;
+     *                                 }
+     *                             } else {
+     *                                 json.setSuccess(false);
+     *                                 json.setMsg("出库取消失败！");
+     *                                 return json;
+     *                             }
+     *                         } else {
+     *                             json.setSuccess(false);
+     *                             json.setMsg("出库取消失败：" + allocationResult);
+     *                             return json;
+     *                         }
+     *                     } else {
+     *                         json.setSuccess(false);
+     *                         json.setMsg("出库取消失败！");
+     *                         return json;
+     *                     }
+     *                 } else if (orderHeaderForNormal.getSostatus().equals("50") ||
+     *                         orderHeaderForNormal.getSostatus().equals("60") ||
+     *                         orderHeaderForNormal.getSostatus().equals("62") ||
+     *                         orderHeaderForNormal.getSostatus().equals("63")) {
+     *                     //拣货/装箱状态订单先取消拣货再取消分配最后取消订单
+     *                     List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
+     *                     if (allocationDetailsIdList != null) {
+     *                         //取消拣货
+     *                         for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
+     *                             Map<String, Object> map = new HashMap<String, Object>();
+     *                             map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+     *                             map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
+     *                             map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+     *                             orderHeaderForNormalMybatisDao.unPickingByOrder(map);
+     *                             String pickResult = map.get("result").toString();
+     *                             if (pickResult != null && pickResult.length() > 0) {
+     *                                 if (pickResult.equals("000")) {
+     *                                     continue;
+     *                                 } else {
+     *                                     json.setSuccess(false);
+     *                                     json.setMsg("出库取消失败：" + pickResult);
+     *                                     return json;
+     *                                 }
+     *                             } else {
+     *                                 json.setSuccess(false);
+     *                                 json.setMsg("出库取消失败！");
+     *                                 return json;
+     *                             }
+     *                         }
+     *                         //取消分配
+     *                         Map<String, Object> map = new HashMap<String, Object>();
+     *                         map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+     *                         map.put("orderNo", orderNo);
+     *                         map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+     *                         orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
+     *                         String allocationResult = map.get("result").toString();
+     *                         if (allocationResult != null && allocationResult.length() > 0) {
+     *                             if (allocationResult.equals("000")) {
+     *                                 //取消订单
+     *                                 Map<String, Object> cancelMap = new HashMap<String, Object>();
+     *                                 cancelMap.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+     *                                 cancelMap.put("orderNo", orderNo);
+     *                                 cancelMap.put("userId", SfcUserLoginUtil.getLoginUser().getId());
+     *                                 orderHeaderForNormalMybatisDao.cancelByOrder(map);
+     *                                 String cancelResult = map.get("result").toString();
+     *                                 if (cancelResult != null && cancelResult.length() > 0) {
+     *                                     if (cancelResult.equals("000")) {
+     *                                         orderHeaderForNormalQuery.setCurrentTime(new Date());
+     *                                         orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+     *                                         json.setSuccess(true);
+     *                                         json.setMsg("出库取消成功！");
+     *                                         json.setObj(orderHeaderForNormal);
+     *                                         return json;
+     *                                     } else {
+     *                                         json.setSuccess(false);
+     *                                         json.setMsg("出库取消失败：" + cancelResult);
+     *                                         return json;
+     *                                     }
+     *                                 } else {
+     *                                     json.setSuccess(false);
+     *                                     json.setMsg("出库取消失败！");
+     *                                     return json;
+     *                                 }
+     *                             } else {
+     *                                 json.setSuccess(false);
+     *                                 json.setMsg("出库取消失败：" + allocationResult);
+     *                                 return json;
+     *                             }
+     *                         } else {
+     *                             json.setSuccess(false);
+     *                             json.setMsg("出库取消失败！");
+     *                             return json;
+     *                         }
+     *                     } else {
+     *                         json.setSuccess(false);
+     *                         json.setMsg("出库取消失败！");
+     *                         return json;
+     *                     }
+     *                 }
      */
     public Json cancel(String orderNo) {
         Json json = new Json();
@@ -941,144 +1015,21 @@ public class OrderHeaderForNormalService extends BaseService {
                         json.setMsg("出库取消失败！");
                         return json;
                     }
-                } else if (orderHeaderForNormal.getSostatus().equals("30") ||
-                        orderHeaderForNormal.getSostatus().equals("40")) {
-                    //分配状态订单先取消分配再取消订单
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                    map.put("orderNo", orderNo);
-                    map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                    orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
-                    String allocationResult = map.get("result").toString();
-                    if (allocationResult != null && allocationResult.length() > 0) {
-                        if (allocationResult.equals("000")) {
-                            Map<String, Object> cancelMap = new HashMap<String, Object>();
-                            cancelMap.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                            cancelMap.put("orderNo", orderNo);
-                            cancelMap.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                            orderHeaderForNormalMybatisDao.cancelByOrder(map);
-                            String cancelResult = map.get("result").toString();
-                            if (cancelResult != null && cancelResult.length() > 0) {
-                                if (cancelResult.equals("000")) {
-                                    orderHeaderForNormalQuery.setCurrentTime(new Date());
-                                    orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                                    json.setSuccess(true);
-                                    json.setMsg("出库取消成功！");
-                                    json.setObj(orderHeaderForNormal);
-                                    return json;
-                                } else {
-                                    json.setSuccess(false);
-                                    json.setMsg("出库取消失败：" + cancelResult);
-                                    return json;
-                                }
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("出库取消失败！");
-                                return json;
-                            }
-                        } else {
-                            json.setSuccess(false);
-                            json.setMsg("出库取消失败：" + allocationResult);
-                            return json;
-                        }
-                    } else {
-                        json.setSuccess(false);
-                        json.setMsg("出库取消失败！");
-                        return json;
-                    }
-                } else if (orderHeaderForNormal.getSostatus().equals("50") ||
-                        orderHeaderForNormal.getSostatus().equals("60") ||
-                        orderHeaderForNormal.getSostatus().equals("62") ||
-                        orderHeaderForNormal.getSostatus().equals("63")) {
-                    //拣货/装箱状态订单先取消拣货再取消分配最后取消订单
-                    List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
-                    if (allocationDetailsIdList != null) {
-                        //取消拣货
-                        for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
-                            Map<String, Object> map = new HashMap<String, Object>();
-                            map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                            map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
-                            map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                            orderHeaderForNormalMybatisDao.unPickingByOrder(map);
-                            String pickResult = map.get("result").toString();
-                            if (pickResult != null && pickResult.length() > 0) {
-                                if (pickResult.equals("000")) {
-                                    continue;
-                                } else {
-                                    json.setSuccess(false);
-                                    json.setMsg("出库取消失败：" + pickResult);
-                                    return json;
-                                }
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("出库取消失败！");
-                                return json;
-                            }
-                        }
-                        //取消分配
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                        map.put("orderNo", orderNo);
-                        map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                        orderHeaderForNormalMybatisDao.deAllocationByOrder(map);
-                        String allocationResult = map.get("result").toString();
-                        if (allocationResult != null && allocationResult.length() > 0) {
-                            if (allocationResult.equals("000")) {
-                                //取消订单
-                                Map<String, Object> cancelMap = new HashMap<String, Object>();
-                                cancelMap.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                                cancelMap.put("orderNo", orderNo);
-                                cancelMap.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                                orderHeaderForNormalMybatisDao.cancelByOrder(map);
-                                String cancelResult = map.get("result").toString();
-                                if (cancelResult != null && cancelResult.length() > 0) {
-                                    if (cancelResult.equals("000")) {
-                                        orderHeaderForNormalQuery.setCurrentTime(new Date());
-                                        orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
-                                        json.setSuccess(true);
-                                        json.setMsg("出库取消成功！");
-                                        json.setObj(orderHeaderForNormal);
-                                        return json;
-                                    } else {
-                                        json.setSuccess(false);
-                                        json.setMsg("出库取消失败：" + cancelResult);
-                                        return json;
-                                    }
-                                } else {
-                                    json.setSuccess(false);
-                                    json.setMsg("出库取消失败！");
-                                    return json;
-                                }
-                            } else {
-                                json.setSuccess(false);
-                                json.setMsg("出库取消失败：" + allocationResult);
-                                return json;
-                            }
-                        } else {
-                            json.setSuccess(false);
-                            json.setMsg("出库取消失败！");
-                            return json;
-                        }
-                    } else {
-                        json.setSuccess(false);
-                        json.setMsg("出库取消失败！");
-                        return json;
-                    }
-                } else {
+                }  else {
                     json.setSuccess(false);
                     json.setMsg("出库取消失败：当前状态订单,不能操作取消！");
                     return json;
                 }
             } else {
                 json.setSuccess(false);
-                json.setMsg("出库取消成功！");
+                json.setMsg("出库取消失败：查无当前单号数据！");
                 return json;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             json.setSuccess(false);
-            json.setMsg("出库取消异常！");
+            json.setMsg("出库取消异常:" + e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return json;
         }
     }
@@ -1539,136 +1490,6 @@ public class OrderHeaderForNormalService extends BaseService {
             e.printStackTrace();
         }*/
     }
-//	public void exportReceiptPdf(HttpServletResponse response, String orderNo) {
-//		StringBuilder sb = new StringBuilder();
-//		try (OutputStream os = response.getOutputStream()){
-//			sb.append("inline; filename=")
-//			  .append(URLEncoder.encode("拣货单PDF","UTF-8"))
-//			  .append(".pdf");
-//			response.setHeader("Content-disposition", sb.toString());sb.setLength(0);
-//			response.setContentType(ContentTypeEnum.pdf.getContentType());
-//
-//			Document document = null;
-//			AcroFields form = null;
-//			PdfStamper stamper = null;
-//			PdfImportedPage page = null;
-//			ByteArrayOutputStream baos = null;
-//
-//			if (StringUtils.isNotEmpty(orderNo)) {
-//
-//				OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-//				orderHeaderForNormalQuery.setOrderNo(orderNo);
-//
-//				OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryPrintTemplate(orderHeaderForNormalQuery);
-//
-//				if (orderHeaderForNormal.getPrintTemplate() != null && orderHeaderForNormal.getPrintTemplate().length() > 0) {
-//					//贝业签收单打印模板
-//					if (orderHeaderForNormal.getPrintTemplate().equals("wms_receipt_beiye.pdf")) {
-//
-//
-//						document = new Document(PDFUtil.getTemplate("wms_receipt_beiye.pdf").getPageSize(1));
-//						PdfCopy pdfCopy = new PdfCopy(document, os);
-//						document.open();
-//
-//						int totalNum = 0;
-//						int row = 10;
-//						int pageSize = 0;
-//						DocOrderImportQuery docOrderImportQuery = new DocOrderImportQuery();
-//						docOrderImportQuery.setOrderNo(orderNo);
-//
-//						DocReceiptHeader docReceiptHeader = docOrderImportMybatisDao.queryReceiptByBeiYe(docOrderImportQuery);
-//						List<DocReceiptDetails> docReceiptDetailsList = new ArrayList<DocReceiptDetails>();
-//
-//						for(DocReceiptDetails docReceiptDetails : docReceiptHeader.getDocReceiptDetailsList()){
-//							totalNum++;
-//							docReceiptDetailsList.add(docReceiptDetails);
-//						}
-//
-//						pageSize = (int)Math.ceil((double)totalNum / row);
-//						for(int i = 0 ; i < pageSize ; i++){
-//							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//							baos = new ByteArrayOutputStream();
-//							stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_beiye.pdf"), baos);
-//							form = stamper.getAcroFields();
-//							form.setField("customerOrderCode", docReceiptHeader.getCustomerOrderCode() == null ? "" : docReceiptHeader.getCustomerOrderCode());
-//							form.setField("externalOrderCode", docReceiptHeader.getExternalOrderCode() == null ? "" : docReceiptHeader.getExternalOrderCode());
-//							form.setField("orderDate", sdf.format(new Date()));
-//							form.setField("city", docReceiptHeader.getCity() == null ? "" : docReceiptHeader.getCity());
-//							form.setField("name", docReceiptHeader.getName() == null ? "" : docReceiptHeader.getName());
-//							form.setField("address", docReceiptHeader.getAddress() == null ? "" : docReceiptHeader.getAddress());
-//							form.setField("tel", docReceiptHeader.getTel() == null ? "" : docReceiptHeader.getTel());
-//							for(int j = 0 ; j < row ; j++){
-//								if(totalNum > (row * i + j)){
-//									form.setField("seq"+(j+1), String.valueOf(j+1));
-//									form.setField("itemCode"+(j+1), docReceiptDetailsList.get(row * i + j).getItemCode());
-//									form.setField("itemName"+(j+1), docReceiptDetailsList.get(row * i + j).getItemName());
-//									form.setField("cartons"+(j+1), docReceiptDetailsList.get(row * i + j).getQty());
-//									form.setField("quantity"+(j+1), docReceiptDetailsList.get(row * i + j).getQty());
-//									form.setField("lotnum"+(j+1), "*");
-//								}
-//							}
-//							stamper.setFormFlattening(true);
-//							stamper.close();
-//							page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
-//							pdfCopy.addPage(page);
-//						}
-//						document.close();
-//					}
-//				} else {
-//
-//					document = new Document(PDFUtil.getTemplate("wms_receipt.pdf").getPageSize(1));
-//					PdfCopy pdfCopy = new PdfCopy(document, os);
-//					document.open();
-//
-//					int totalNum = 0;
-//					int row = 10;
-//					int pageSize = 0;
-//					List<OrderDetailsForNormal> detailsList = new ArrayList<OrderDetailsForNormal>();
-//					OrderHeaderForNormal orderHeader = orderHeaderForNormalMybatisDao.queryByReceiptList(orderHeaderForNormalQuery);
-//					for(OrderDetailsForNormal orderDetails : orderHeader.getOrderDetailsForNormalList()){
-//						totalNum++;
-//						detailsList.add(orderDetails);
-//					}
-//
-//					pageSize = (int)Math.ceil((double)totalNum / row);
-//					for(int i = 0 ; i < pageSize ; i++){
-//						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//						baos = new ByteArrayOutputStream();
-//						stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt.pdf"), baos);
-//						form = stamper.getAcroFields();
-//						form.setField("orderCode", orderHeader.getOrderCode() == null ? "" : orderHeader.getOrderCode());
-//						form.setField("custName", orderHeader.getCustomerShortName());
-//						form.setField("cartonQty", orderHeader.getBoxQty() == null ? "0" : String.valueOf(orderHeader.getBoxQty()));
-//						form.setField("name", orderHeader.getConsigneeName() == null ? "" : orderHeader.getConsigneeName());
-//						form.setField("address", orderHeader.getAddress() == null ? "" : orderHeader.getAddress());
-//						form.setField("tel", orderHeader.getTel() == null ? "" : orderHeader.getTel());
-//						form.setField("requiredTime", orderHeader.getRequiredDeliveryTime() == null ? "" : format.format(orderHeader.getRequiredDeliveryTime()));
-//						form.setField("notes", orderHeader.getNotes() == null ? "" : orderHeader.getNotes());
-//						form.setField("totalAmt", String.valueOf(orderHeader.getTotalPrice()));
-//						for(int j = 0 ; j < row ; j++){
-//							if(totalNum > (row * i + j)){
-//								form.setField("seq"+(j+1), String.valueOf(detailsList.get(row * i + j).getOrderLineNo()));
-//								form.setField("skuCode"+(j+1), detailsList.get(row * i + j).getSku());
-//								form.setField("skuName"+(j+1), detailsList.get(row * i + j).getSkuName());
-//								form.setField("qty"+(j+1), String.valueOf(detailsList.get(row * i + j).getQtyOrdered()));
-//								form.setField("unit"+(j+1), detailsList.get(row * i + j).getUnit() == null ? "" : detailsList.get(row * i + j).getUnit());
-//								form.setField("price"+(j+1), String.valueOf(detailsList.get(row * i + j).getTotalPrice()));
-//								form.setField("totalPrice"+(j+1), String.valueOf(detailsList.get(row * i + j).getQtyOrdered() * detailsList.get(row * i + j).getTotalPrice()));
-//							}
-//						}
-//						form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(orderHeader.getOrderCode(), 800)));
-//						stamper.setFormFlattening(true);
-//						stamper.close();
-//						page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
-//						pdfCopy.addPage(page);
-//					}
-//					document.close();
-//				}
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
     public List<EasyuiCombobox> getOrderTypeCombobox() {
         List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
@@ -1718,107 +1539,6 @@ public class OrderHeaderForNormalService extends BaseService {
         return comboboxList;
     }
 
-    public OrderHeaderForNormal getOrderHeader(OrderHeaderForNormalQuery query) {
-        query.setOrderno(query.getOrderno().replace(",", ""));
-        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query);
-        return orderHeaderForNormal;
-    }
-
-    public void exportBatchPdf(HttpServletResponse response, String orderCodeList) {
-        StringBuilder sb = new StringBuilder();
-        try (OutputStream os = response.getOutputStream()) {
-            sb.append("inline; filename=")
-                    .append(URLEncoder.encode("PDF", "UTF-8"))
-                    .append(".pdf");
-            response.setHeader("Content-disposition", sb.toString());
-            sb.setLength(0);
-            response.setContentType(ContentTypeEnum.pdf.getContentType());
-
-            Document document = null;
-            AcroFields form = null;
-            PdfStamper stamper = null;
-            PdfImportedPage page = null;
-            ByteArrayOutputStream baos = null;
-
-            if (StringUtils.isNotEmpty(orderCodeList)) {
-
-                document = new Document(PDFUtil.getTemplate("wms_packing_jhck.pdf").getPageSize(1));
-                PdfCopy pdfCopy = new PdfCopy(document, os);
-                document.open();
-                //分割orderCodeList中的主单号pano
-                String[] orderCodeArray = orderCodeList.split(",");
-
-                for (String orderCode : orderCodeArray) {
-                    //根据主单pano查询对象DocPaHeader
-					/*DocPaHeader docPaHeader = docPaHeaderDao.queryById(orderCode);
-					if(docPaHeader!=null){
-
-						int totalNum = 0;
-						int row = 15;//每页条数
-						int pageSize = 0;
-
-						DocPaDetailsQuery query = new DocPaDetailsQuery();
-						query.setAsnno(orderCode);
-						//根据主单pano获取子单所有的产品 orderCode==pano
-						List<DocPaDetails> detailsList =  docPaDetailsService.queryDocPdaDetails(orderCode);
-
-						totalNum = detailsList.size();//总条数
-						pageSize = (int)Math.ceil( (double) totalNum / row);//总页数
-						for(int i=0;i<pageSize;i++){//单头内容
-							baos = new ByteArrayOutputStream();
-							stamper = new PdfStamper(PDFUtil.getTemplate("wms_receipt_jhck.pdf"), baos);
-							form = stamper.getAcroFields();
-							form.setField("putwayCode",docPaHeader.getPano());
-							form.setField("receviedDdate", DateUtil.format(docPaHeader.getAddtime(),"yyyy-MM-dd"));
-							form.setField("warehouseid", docPaHeader.getWarehouseid());
-							form.setField("custName", docPaHeader.getCustomerid());
-							form.setField("supplier", "");
-							form.setField("notes", docPaHeader.getNotes());
-							form.setField("page", "第"+(i+1)+"页,共"+pageSize+"页");
-							//form.setField("barCode1", docPaHeader.getAsnno());
-							form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(docPaHeader.getPano(), 800)));
-							//form.replacePushbuttonField("orderCodeImg1", PDFUtil.genPdfButton(form, "orderCodeImg1", BarcodeGeneratorUtil.genBarcode(docPaHeader.getAsnno(), 800)));
-
-							for(int j=0;j<row;j++){//主单产品明细
-								if(totalNum > (row*i+j)){
-									DocPaDetails docPaDetails = detailsList.get(row * i + j);
-									BasSku basSku = basSkuService.getSkuInfo(docPaHeader.getCustomerid(),detailsList.get(row * i + j).getSku());
-									//根据某一个订单明细查询关联的Doc_Asn_Details
-									DocAsnDetailQuery queryDetail = new DocAsnDetailQuery();
-									queryDetail.setAsnno(docPaDetails.getAsnno());
-									queryDetail.setAsnlineno(docPaDetails.getAsnlineno());
-									DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(queryDetail);
-
-									form.setField("sku."+j, docPaDetails.getSku());
-									form.setField("skuN."+j, basSku.getDescrC());
-									form.setField("regNo."+j, basSku.getReservedfield03());
-									form.setField("desc."+j, basSku.getDescrE());
-									form.setField("batchNo."+j, docPaDetails.getUserdefine3());
-									form.setField("seriNo."+j, docPaDetails.getUserdefine4());
-									form.setField("ill."+j, detailVO.getLotatt07());
-									form.setField("lot01."+j, detailVO.getLotatt01());
-									form.setField("lot02."+j, detailVO.getLotatt02());
-									form.setField("qtyE."+j, docPaDetails.getAsnqtyExpected().toString());
-									form.setField("uom."+j, basSku.getDefaultreceivinguom());
-									form.setField("qty."+j, docPaDetails.getPutwayqtyExpected().toString());
-									form.setField("qtyA."+j, docPaDetails.getPutwayqtyCompleted().toString());
-								}
-							}
-							stamper.setFormFlattening(true);
-							stamper.close();
-							page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
-							pdfCopy.addPage(page);
-						}
-					}*/
-
-                }
-                document.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
 
         List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryPackageList(form.getStart(), form.getPageSize());
@@ -1852,10 +1572,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 根据sku和customerid
-     *
-     * @param sku
-     * @param customerId
-     * @return
      */
     public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku, String customerId) {
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -1903,9 +1619,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 引用出库
-     *
-     * @param orderno
-     * @return
      */
     public Json doRefOut(String orderno, String refOrderno) throws Exception {
         OrderHeaderForNormal head = orderHeaderForNormalMybatisDao.queryById(orderno);
@@ -1972,10 +1685,8 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 检验双证
-     *
-     * @param orderno
-     * @return
      */
+    @Deprecated
     public Json reqDouble(String orderno) {
         try {
             OrderHeaderForNormal head = orderHeaderForNormalMybatisDao.queryById(orderno);
@@ -2054,9 +1765,6 @@ public class OrderHeaderForNormalService extends BaseService {
 
     /**
      * 打印质量合格证
-     *
-     * @param response
-     * @param orderCodeList
      */
     public void printH(HttpServletResponse response, String orderCodeList) {
         StringBuilder sb = new StringBuilder();
@@ -2568,73 +2276,11 @@ public class OrderHeaderForNormalService extends BaseService {
         return json;
     }
 
-
-    /* ********************* J **********************
-     * ********************* U **********************
-     * ********************* D **********************
-     * ********************* G **********************
-     * ********************* E **********************
-     * 判断是否是冷链出库，如果是的话，只能通过PDA/打包台进行转有的冷链出库操作，不可再PC上进行复核
-     */
-    private Json fixLLPackage(String orderno) {
-
-        List<OrderDetailsForNormal> docOrderDetailsList = orderDetailsForNormalMybatisDao.queryByOrderNo(orderno);
-        if (docOrderDetailsList.size() == 0) return Json.success("");
-
-        BasSku basSku = basSkuService.getSkuInfo(docOrderDetailsList.get(0).getCustomerid(), docOrderDetailsList.get(0).getSku());
-        if (basSku == null || StringUtil.isEmpty(basSku.getReservedfield06())) return Json.success("");
-
-        if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC"))
-            return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");
-
-        return Json.success("");
-    }
-
-    /**
-     * 记录序列号出库记录 for bas_serial_num
-     *
-     * @param orderno 发运的订单号
-     */
-    private void recordSerialNumOutStorage(String orderno) {
-
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        DocSerialNumRecord recordQuery = new DocSerialNumRecord();
-        recordQuery.setOrderNo(orderno);
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(recordQuery));
-        List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
-        if (docSerialNumRecordList.size() > 0) {
-
-            for (DocSerialNumRecord docSerialNumRecord : docSerialNumRecordList) {
-
-                //记录出库时间和出库单号
-                BasSerialNum basSerialNum = basSerialNumMybatisDao.queryExistBySerialNum(docSerialNumRecord.getSerialNum());
-                if (null == basSerialNum) continue;
-
-                basSerialNum.setUserdefine3(orderno);
-                basSerialNum.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-                basSerialNumMybatisDao.recordSerialNumOut(basSerialNum);
-            }
-        }
-    }
-
     private String getKey(OrderDetailsForNormal detail) {
         return detail.getSku() + "" + detail.getLotatt01() + detail.getLotatt02() + detail.getLotatt03() + detail.getLotatt04()
                 + detail.getLotatt05() + detail.getLotatt06() + detail.getLotatt07() + detail.getLotatt08() + detail.getLotatt09()
                 + detail.getLotatt10() + detail.getLotatt11() + detail.getLotatt12() + detail.getLotatt13() + detail.getLotatt13();
     }
 
-    private String getYesNo(String obj) {
-        if (obj == null || obj.equals("0")) {
-            return "否";
-        } else {
-            return "是";
-        }
-    }
 
-    public static String doubleTrans(double d) {
-        if (Math.round(d) - d == 0) {
-            return String.valueOf((long) d);
-        }
-        return String.valueOf(d);
-    }
 }
