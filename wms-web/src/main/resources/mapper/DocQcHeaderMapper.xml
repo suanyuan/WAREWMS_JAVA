@@ -319,7 +319,7 @@ where 1=1
 		left JOIN doc_pa_header t2 on t2.PANO = t1.pano
 		LEFT JOIN doc_asn_header t3 on t3.asnno = t2.ASNNO
 		<include refid="Example_Where_Clause_Type"/>
-		order by  qcstatus
+		ORDER BY  qcstatus,`qcno` DESC
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
