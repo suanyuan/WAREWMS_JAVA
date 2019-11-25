@@ -2096,7 +2096,7 @@ var aaa = function(){
 	ezuiCustomerDataDialogId = $('#ezuiCustomerDataDialogId').datagrid({
 		url : '<c:url value="/gspReceivingAddressController.do?gspReceivingInfo"/>',
 		method:'POST',
-		title: '收获详情',
+		title: '收货单位详情',
 		pageSize : 50,
 		pageList : [50, 100, 200],
 		fit: true,
