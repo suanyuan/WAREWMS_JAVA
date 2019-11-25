@@ -283,11 +283,11 @@ public class BasCustomerService extends BaseService {
 				basCustomer.setDescrC(gspEnterpriseInfo.getEnterpriseName());
                 basCustomer.setCustomerid(commonService.generateSeq(Constant.BASRECNO, SfcUserLoginUtil.getLoginUser().getId()));
                 basCustomer.setActiveFlag(Constant.IS_USE_YES);
-                if(basCustomerForm.getIsUse()=="1"){
+//                if(basCustomerForm.getIsUse()=="1"){
 					basCustomer.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
-				}else{
-					basCustomer.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
-				}
+//				}else if(basCustomerForm.getIsUse()=="0"){
+//					basCustomer.setBillclass(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+//				}
                 basCustomerMybatisDao.add(basCustomer);
 
 				json.setSuccess(true);

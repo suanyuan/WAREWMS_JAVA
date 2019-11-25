@@ -44,7 +44,7 @@ public class BasCodesService {
     @Autowired
     private GspReceivingMybatisDao gspReceivingMybatisDao;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     public EasyuiDatagrid<BasCodesVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
@@ -136,8 +136,8 @@ public class BasCodesService {
      * @return
      */
     //历史档案管理
-    public EasyuiDatagrid<BasCodes> showHistoryFileDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
-        EasyuiDatagrid<BasCodes> datagrid = new EasyuiDatagrid<BasCodes>();
+    public EasyuiDatagrid<BasCodesVO> showHistoryFileDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+        EasyuiDatagrid<BasCodesVO> datagrid = new EasyuiDatagrid<BasCodesVO>();
         MybatisCriteria criteria = new MybatisCriteria();
         criteria.setCurrentPage(pager.getPage());
         criteria.setPageSize(pager.getRows());
@@ -161,8 +161,8 @@ public class BasCodesService {
             basCodesVOList.add(basCodesVO);
         }
 //		int total = basGtnMybatisDao.queryByCount(criteria);
-        datagrid.setTotal((long)list.size() );
-        datagrid.setRows(list);
+        datagrid.setTotal((long)basCodesVOList.size() );
+        datagrid.setRows(basCodesVOList);
         return datagrid;
     }
 //历史档案管理

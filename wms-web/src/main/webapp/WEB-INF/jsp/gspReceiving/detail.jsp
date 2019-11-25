@@ -1036,7 +1036,8 @@
  function binaji() {
 
     if (processType == 'add') {
-    $("#ezuiFormAddress input[name='isCheck']").val('0');
+        $("#ezuiFormAddress input[name='isCheck']").val('0');
+        $("#ezuiFormAddress input[name='isUse']").val('1');
     }
     if (processType != "newAdd"){
     var a = $("#first").val();

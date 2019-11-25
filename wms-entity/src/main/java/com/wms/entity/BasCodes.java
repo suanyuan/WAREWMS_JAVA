@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -25,11 +26,11 @@ public class BasCodes  implements Serializable {
 
 	private String udf3;
 
-	private java.sql.Date addtime;
+	private Date addtime;
 
 	private String addwho;
 
-	private java.sql.Date edittime;
+	private Date edittime;
 
 	private String editwho;
 

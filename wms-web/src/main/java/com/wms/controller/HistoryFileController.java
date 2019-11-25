@@ -14,6 +14,7 @@ import com.wms.service.DocAsnCertificateService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.annotation.Login;
+import com.wms.vo.BasCodesVO;
 import com.wms.vo.BasGtnVO;
 import com.wms.vo.DocAsnCertificateVO;
 import com.wms.vo.Json;
@@ -74,7 +75,7 @@ public class HistoryFileController {
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<BasCodes> showDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+	public EasyuiDatagrid<BasCodesVO> showDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
 		return basCodesService.showHistoryFileDatagrid(pager, query);
 	}
 
