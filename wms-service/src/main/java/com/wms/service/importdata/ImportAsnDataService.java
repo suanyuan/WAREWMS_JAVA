@@ -730,7 +730,7 @@ public class ImportAsnDataService {
                                     asnDetails.setExpectedqty(new BigDecimal(qty));
                                 } else {
                                     json.setSuccess(false);
-                                    resultMsg.append("序号：").append(importDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
+                                    resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append("数量计算件数失败，不是整数").append(" ");
                                     continue;
                                 }
                             }

@@ -61,8 +61,21 @@ public class OrderDetailsForNormalService extends BaseService {
 		if(query.getOrderno()!=null){
 			orderDetailsForNormalSum = orderDetailsForNormalMybatisDao.queryBySum(query.getOrderno());
         }
+		double zero = 0;
 		OrderDetailsForNormalVO orderDetailsForNormalVO = null;
 		List<OrderDetailsForNormalVO> orderDetailsForNormalVOList = new ArrayList<OrderDetailsForNormalVO>();
+		if(orderDetailsForNormalList.size()==0){
+			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
+			orderDetailsForNormalVO.setQtyorderedSum(zero);//qtyordered 订货件数
+			orderDetailsForNormalVO.setQtyallocatedSum(zero);//allocated 分配件数
+			orderDetailsForNormalVO.setQtypickedSum(zero);//picked 拣货件数
+			orderDetailsForNormalVO.setQtyshippedSum(zero);//shipped 发货件数
+			orderDetailsForNormalVO.setQtyorderedEachSum(zero);//qtyorderedEach 订货数量
+			orderDetailsForNormalVO.setQtyallocatedEachSum(zero);//allocatedEach 分配数量
+			orderDetailsForNormalVO.setQtypickedEachSum(zero);//pickedEach 拣货数量
+			orderDetailsForNormalVO.setQtyshippedEachSum(zero);//shippedEach 发货数量
+			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
+		}
 		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
 			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
 			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);

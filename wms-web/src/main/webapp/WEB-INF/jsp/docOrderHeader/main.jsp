@@ -39,7 +39,8 @@ var ezuiOutToExcel1Form;
 var ezuiOperateResultDataDialog;
 var ezuiOperateResultDataForm;
 var allocationDetailsDatagrid;
-
+var ezuiCustomerDataDialogId;
+var ezuiCustomerDataDialog;
 
 var courierComplaintForm;       //快递投诉dialog form
 var courierComplaintDialog;     //快递投诉dialog
@@ -338,7 +339,17 @@ $(function() {
 
         }
     }).dialog('close');
+	ezuiCustomerDataDialog = $('#ezuiCustomerDataDialog').dialog({
+		modal : true,
+		title : '<spring:message code="common.dialog.title"/>',
+		buttons : '',
+		onOpen : function() {
 
+		},
+		onClose : function() {
+
+		}
+	}).dialog('close');
 	//商品选择弹框
 	ezuiSkuDataDialog = $('#ezuiSkuDataDialog').dialog({
 		modal : true,
@@ -1887,11 +1898,11 @@ var ezuiCustDataDialogSearch = function(){
 
 /* 收货单位选择弹框查询 */
 var ezuiReceDataDialogSearch = function(){
-    ezuiReceDataDialogId.datagrid('load', {
-        customerid : $("#ezuiReceDataDialog #customerid").textbox("getValue"),
-        customerType : $("#ezuiReceDataDialog #customerType").combobox('getValue'),
-        activeFlag : $("#ezuiReceDataDialog #activeFlag").combobox('getValue')
-    });
+	ezuiReceDataDialogId.datagrid('load', {
+		customerid : $("#ezuiReceDataDialog #customerid").textbox("getValue"),
+		customerType : $("#ezuiReceDataDialog #customerType").combobox('getValue'),
+		activeFlag : $("#ezuiReceDataDialog #activeFlag").combobox('getValue')
+	});
 };
 /* 客户选择弹框清空 */
 var ezuiCustToolbarClear = function(){
@@ -2006,7 +2017,7 @@ var selectDialogCust = function(){
 	};
 };
 
-/* 收货单位选择 */
+/*/!* 收货单位选择 *!/
 var selectDialogRece = function(){
     var row = ezuiReceDataDialogId.datagrid('getSelected');
 	$.ajax({
@@ -2018,8 +2029,6 @@ var selectDialogRece = function(){
 			try {
 					if(result.success){
 						var dat = $.parseJSON(result.msg);
-						console.log("dat");
-						console.log(dat);
 						$("#ezuiDialog #cContact").textbox('setValue', dat.contacts);
 						$("#ezuiDialog #cTel1").textbox('setValue',dat.phone);
 						$("#ezuiDialog #cAddress1").textbox('setValue',dat.deliveryAddress);
@@ -2033,7 +2042,7 @@ var selectDialogRece = function(){
         $("#ezuiDialog #consigneeid").textbox('setValue',row.descrC);
         ezuiReceDataDialog.dialog('close');
     };
-};
+};*/
 
 /*收货单位选择*/
 /* 客户选择弹框-订单信息界面 */
@@ -2071,7 +2080,7 @@ var ezuiReceDataDialogClick = function(){
                 }}
         ]],
         onDblClickCell: function(index,field,value){
-            selectDialogRece();
+            aaa();
         },
         onRowContextMenu : function(event, rowIndex, rowData) {
         },onLoadSuccess:function(data){
@@ -2082,7 +2091,47 @@ var ezuiReceDataDialogClick = function(){
     ezuiReceDataDialog.dialog('open');
 };
 
-
+var aaa = function(){
+	var rows = ezuiReceDataDialogId.datagrid('getSelected');
+	ezuiCustomerDataDialogId = $('#ezuiCustomerDataDialogId').datagrid({
+		url : '<c:url value="/gspReceivingAddressController.do?gspReceivingInfo"/>',
+		method:'POST',
+		title: '收获详情',
+		pageSize : 50,
+		pageList : [50, 100, 200],
+		fit: true,
+		border: false,
+		fitColumns : true,
+		nowrap: false,
+		striped: true,
+		collapsible:false,
+		pagination:true,
+		rownumbers:true,
+		singleSelect:true,
+		idField : 'customerid',
+		queryParams:{
+			customerid : rows.customerid
+		},
+		columns : [[
+			{field: 'contacts',		title: '联系人',	width: 20},
+			{field: 'phone',			title: '联系电话',	width: 20},
+			{field: 'deliveryAddress',			title: '收货地址',	width: 80}
+		]],
+		onDblClickCell: function(index,field,value){
+		},onDblClickRow: function(index,row){
+			$("#ezuiDialog #cContact").textbox('setValue', row.contacts);
+			$("#ezuiDialog #cTel1").textbox('setValue',row.phone);
+			$("#ezuiDialog #cAddress1").textbox('setValue',row.deliveryAddress);
+			$("#ezuiDialog #consigneeid").textbox('setValue',rows.descrC);
+			ezuiCustomerDataDialog.dialog('close');
+		},
+		onRowContextMenu : function(event, rowIndex, rowData) {
+		},onLoadSuccess:function(data){
+			$(this).datagrid('unselectAll');
+		}
+	});
+	ezuiCustomerDataDialog.dialog('open');
+};
 /* 商品选择弹框查询 */
 var ezuiSkuDataSearch = function(){
 	ezuiSkuDataDialogId.datagrid('load', {
@@ -2934,5 +2983,6 @@ var writeBackExpressBtnCommit = function(){
 	<c:import url='/WEB-INF/jsp/docOrderHeader/detailsDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/skuDialog.jsp' />
 	<c:import url='/WEB-INF/jsp/docOrderHeader/locDialog.jsp' />
+	<c:import url='/WEB-INF/jsp/docOrderHeader/customerDialog.jsp' />
 </body>
 </html>

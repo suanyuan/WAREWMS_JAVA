@@ -1,8 +1,10 @@
 package com.wms.controller.gsp;
+
 import com.alibaba.fastjson.JSON;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.GspReceivingAddress;
 import com.wms.entity.PCD;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspReceivingAddressService;
@@ -38,12 +40,8 @@ public class GspReceivingAddressController {
 	@Login
 	@RequestMapping(params = "gspReceivingInfo")
 	@ResponseBody
-	public Json gspReceivingInfo(String customerid) {
-		Json json = gspReceivingAddressService.qyReceivingInfo(customerid);;
-		if(json == null){
-			json = new Json();
-			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
-		}
+	public List<GspReceivingAddress> gspReceivingInfo(String customerid) {
+		List<GspReceivingAddress> json = gspReceivingAddressService.qyReceivingInfo(customerid);
 		return json;
 	}
 	@InitBinder
