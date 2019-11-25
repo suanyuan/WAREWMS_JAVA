@@ -1,7 +1,9 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.Date;
 
 public class BasCodesVO {
 
@@ -14,27 +16,27 @@ public class BasCodesVO {
 	private String udf2;
 	private String udf3;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	private String addtime;
+	private Date addtime;
 	private String addwho;
 	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	private String edittime;
+	private Date edittime;
 	private String editwho;
 	private String udfOprChk;
 
 
-	public String getAddtime() {
+	public Date getAddtime() {
 		return addtime;
 	}
 
-	public void setAddtime(String addtime) {
+	public void setAddtime(Date addtime) {
 		this.addtime = addtime;
 	}
 
-	public String getEdittime() {
+	public Date getEdittime() {
 		return edittime;
 	}
 
-	public void setEdittime(String edittime) {
+	public void setEdittime(Date edittime) {
 		this.edittime = edittime;
 	}
 

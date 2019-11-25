@@ -7,7 +7,6 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasCodes;
 import com.wms.entity.GspReceiving;
 import com.wms.mybatis.dao.BasCodesMybatisDao;
-import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
 import com.wms.mybatis.dao.GspReceivingMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.query.BasCodesQuery;
@@ -17,7 +16,6 @@ import com.wms.utils.BeanUtils;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.BasCodesVO;
-import com.wms.vo.BaseCodesVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +53,10 @@ public class BasCodesService {
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         List<BasCodes> basCodesList = basCodesMybatisDao.queryByList(mybatisCriteria);
-        BasCodesVO basCodesVO = null;
+
         List<BasCodesVO> basCodesVOList = new ArrayList<BasCodesVO>();
         for (BasCodes basCodes : basCodesList) {
-            basCodesVO = new BasCodesVO();
+            BasCodesVO basCodesVO = new BasCodesVO();
             BeanUtils.copyProperties(basCodes, basCodesVO);
             basCodesVOList.add(basCodesVO);
         }
@@ -156,7 +154,7 @@ public class BasCodesService {
             basCodesVO.setCodenameE(basCodes.getCodenameE());
             basCodesVO.setEditwho(basCodes.getEditwho());
             if(basCodes.getEdittime()!=null){
-                basCodesVO.setEdittime(sdf.format(basCodes.getEdittime()));
+                basCodesVO.setEdittime(basCodes.getEdittime());
             }
             basCodesVOList.add(basCodesVO);
         }

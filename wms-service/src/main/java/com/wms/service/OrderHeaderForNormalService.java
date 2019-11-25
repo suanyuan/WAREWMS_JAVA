@@ -147,7 +147,16 @@ public class OrderHeaderForNormalService extends BaseService {
             actAllocationDetailslSum = actAllocationDetailsMybatisDao.queryBySum(query.getOrderno());
         }
 
+        double zero = 0;
         ActAllocationDetailsVO vo = null;
+        if(actAllocationDetails.size()==0){
+            vo = new ActAllocationDetailsVO();
+            vo.setQtysum(zero);//qty 分配数
+            vo.setQtyEachsum(zero);//qtyEach分配件数
+            vo.setQtypickedEachsum(zero);//qtypicked 拣货数
+            vo.setQtyshippedEachsum(zero);//qtyshippedEach 发货数
+            actAllocationDetailsVOList.add(vo);
+        }
         for (ActAllocationDetails act : actAllocationDetails) {
             vo = new ActAllocationDetailsVO();
             BeanUtils.copyProperties(act, vo);

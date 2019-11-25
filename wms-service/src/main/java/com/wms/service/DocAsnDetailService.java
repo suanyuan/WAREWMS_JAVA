@@ -85,8 +85,15 @@ public class DocAsnDetailService extends BaseService {
             docAsnDetailSum = docAsnDetailsMybatisDao.queryBySum(query.getAsnno());
         }
 
-		DocAsnDetailVO docAsnDetailVO = null;
-		List<DocAsnDetailVO> docAsnDetailVOList = new ArrayList<DocAsnDetailVO>();
+        double zero = 0;
+        DocAsnDetailVO docAsnDetailVO = null;
+        List<DocAsnDetailVO> docAsnDetailVOList = new ArrayList<DocAsnDetailVO>();
+        if(docAsnDetailList.size()==0){
+            docAsnDetailVO = new DocAsnDetailVO();
+            docAsnDetailVO.setExpectedqtySum(zero);
+            docAsnDetailVO.setReceivedqtySum(zero);
+            docAsnDetailVOList.add(docAsnDetailVO);
+        }
 		for (DocAsnDetail docAsnDetail : docAsnDetailList) {
 			docAsnDetailVO = new DocAsnDetailVO();
 			BeanUtils.copyProperties(docAsnDetail, docAsnDetailVO);

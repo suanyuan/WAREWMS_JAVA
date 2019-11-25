@@ -1,6 +1,5 @@
 package com.wms.service;
 
-import com.alibaba.fastjson.JSON;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -34,14 +33,10 @@ public class GspReceivingAddressService extends BaseService {
 	private CommonService commonService;
 
 
-	public Json qyReceivingInfo(String customerid){
+	public List<GspReceivingAddress> qyReceivingInfo(String customerid){
 
 		List<GspReceivingAddress> gspReceivingInfo = gspReceivingAddressMybatisDao.qyReceivingInfo(customerid);
-		GspReceivingAddress gspReceivingAddress =gspReceivingInfo.get(0);
-		Json json = new Json();
-		json.setMsg(JSON.toJSONString(gspReceivingAddress));
-		json.setSuccess(true);
-		return json;
+		return gspReceivingInfo;
 	}
 	public EasyuiDatagrid<GspReceivingAddressVO> getPagedDatagrid(EasyuiDatagridPager pager, String receivingId) {
 		EasyuiDatagrid<GspReceivingAddressVO> datagrid = new EasyuiDatagrid<GspReceivingAddressVO>();
