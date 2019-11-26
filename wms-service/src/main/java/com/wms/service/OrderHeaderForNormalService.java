@@ -1133,8 +1133,11 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
             }
         }
-        //备注ohForNormal.getNotes();
-
+        //soreference1 百多力出库关联 嘉事嘉意的出
+        if (ohForNormal.getCustomerid().equals("JSJY") ||
+                ohForNormal.getCustomerid().equals("BDL")) {
+            ohForNormal.setSoreference1(ohForNormal.getSoreference1() + "/" + ohForNormal.getSoreference3());
+        }
 
         List<OrderDetailsForNormal> odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo1(orderno);
         List<OrderDetailsForNormal> odForNormalListMerge = this.odForNormalListShow(odForNormalList);
