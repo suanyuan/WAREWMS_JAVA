@@ -594,7 +594,7 @@ public class ImportGspProductRegisterDataService {
 				gspProductRegister.setIsUse(Constant.IS_USE_YES);
 				gspProductRegister.setVersion(i);
 				//保存订单主信息
-			    gspProductRegisterMybatisDao.add(gspProductRegister);
+
 
 
 				GspInstrumentCatalog gspInstrumentCatalog1 = new GspInstrumentCatalog();
@@ -602,6 +602,18 @@ public class ImportGspProductRegisterDataService {
 				gspInstrumentCatalog1.setVersion(gspProductRegister.getProductRegisterVersion());   	 //版本
 				gspInstrumentCatalog1.setInstrumentCatalogName(gspProductRegister.getClassifyCatalog()); //名称
 				GspInstrumentCatalog gspInstrumentCatalog = gspInstrumentCatalogMybatisDao.queryByCPC1(gspInstrumentCatalog1);
+				String fenlei = "";
+				if(Constant.CODE_CATALOG_CLASSIFY_ONE.equals(importDataVO.getClassifyId())){
+					fenlei = "I";
+				}else if(Constant.CODE_CATALOG_CLASSIFY_TWO.equals(importDataVO.getClassifyId())){
+					fenlei = "II";
+				}else if(Constant.CODE_CATALOG_CLASSIFY_THREE.equals(importDataVO.getClassifyId())){
+					fenlei = "III";
+				}
+
+				gspProductRegister.setClassifyCatalog("["+fenlei+"]"+importDataVO.getClassifyCatalog());
+				gspProductRegisterMybatisDao.add(gspProductRegister);
+
 
 				GspOperateDetail gspOperateDetail = new GspOperateDetail();
 				gspOperateDetail.setOperateId(gspInstrumentCatalog.getInstrumentCatalogId());

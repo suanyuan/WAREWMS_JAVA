@@ -39,8 +39,6 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<RptSoAsnDailyLocation> rptSoAsnDailyLocationList = statisticalAnalysisMybatisDao.querySoAsnInvLocation(mybatisCriteria);
 		for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
-			//上海仓
-			s.setWarehouse("上海仓");
 			//计算数量
 			if(s.getQty1()!=null&&s.getSoqty()!=null){
 				s.setSoqtyeach(s.getQty1()*s.getSoqty());

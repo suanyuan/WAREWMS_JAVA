@@ -355,5 +355,14 @@ where 1=1
        order by fmcustomerid,fmsku,fmlocation
 
 </select>
-  	
+  	<!-- 查询库所有列表 不分页 -->
+<select id="queryByListSum" resultType="com.wms.entity.ViewInvLocation"  parameterType="Object">
+	SELECT
+	SUM(fmqty)  fmqtySum,SUM(fmqty_each) fmqtyEachSum,SUM(qtyallocated) qtyallocatedSum,SUM(qtyallocated_each) qtyallocatedEachSum,
+	SUM(QTYAVAILED) qtyavailedSum,SUM(QTYAVAILED_EACH) qtyavailedEachSum,SUM(qtyholded) qtyholdedSum,SUM(qtyholded_each) qtyholdedEachSum
+	FROM view_inv_location
+	<include refid="Example_Where_Clause"/>
+
+</select>
+
 </mapper>   
