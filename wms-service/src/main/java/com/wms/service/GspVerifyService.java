@@ -340,11 +340,18 @@ public class GspVerifyService {
                 }
             }
 
-            GspProductRegister gspProductRegister;
+            GspProductRegister gspProductRegister = new GspProductRegister();
+            String gspProductRegisterId = "";
             List<PdaGspProductRegister> pdaGspProductRegisterList = gspProductRegisterMybatisDao.queryAllByNo(registerNo);
-            if(pdaGspProductRegisterList != null && pdaGspProductRegisterList.size() > 0){
 
-                gspProductRegister = pdaGspProductRegisterList.get(0);
+            if(pdaGspProductRegisterList != null && pdaGspProductRegisterList.size() > 0){
+                for(PdaGspProductRegister p:pdaGspProductRegisterList){
+                    if("1".equals(p.getIsUse())){
+//                        gspProductRegisterId = p.getProductRegisterId();
+                        gspProductRegister = p;
+                    }
+                }
+//                gspProductRegister = pdaGspProductRegisterList.get(0);
 //                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
 //                    return Json.error("关联产品注册证已过期："+sku);
 //                }
