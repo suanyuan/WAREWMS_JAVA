@@ -51,8 +51,8 @@ public class CouRequestHeaderController {
 	@Login
 	@RequestMapping(params = "getcouRequestInfo")
 	@ResponseBody
-	public List<InvLotLocId> getInvCheckInfo(CouRequestDetailsQuery query) {
-		return couRequestHeaderService.getcouRequestInfo(query);
+	public EasyuiDatagrid<InvLotLocId> getInvCheckInfo(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+		return couRequestHeaderService.getcouRequestInfo(pager,query);
 	}
 //生成盘点信息
 	@Login

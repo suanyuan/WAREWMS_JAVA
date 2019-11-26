@@ -105,6 +105,8 @@ $(function() {
 		url: '<c:url value="/couRequestHeaderController.do?getcouRequestInfo"/>',
 		method: 'POST',
 		toolbar: '#ezuiToolbar',
+		pageSize : 2000,
+		pageList : [2000, 3000, 5000],
 		fit: true,
 		border: false,
 		fitColumns: false,
@@ -113,6 +115,7 @@ $(function() {
 		collapsible: false,
 		rownumbers: true,
 		singleSelect: false,
+		pagination:true,
 		columns: [[
 			{field:'ck',checkbox:true},
 			{field: 'customerid', title: '货主', width: 71},

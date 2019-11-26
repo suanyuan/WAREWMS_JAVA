@@ -318,7 +318,7 @@
           and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
     </select>
 	<!--获得盘点任务-->
-	<select id="queryByListByCouRequest" resultMap="BaseResultMap" >
+	<select id="queryByListByCouRequest" resultMap="BaseResultMap" parameterType="Object">
 		SELECT aa.*,p.name  FROM
 		(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
 		FROM `inv_lot_loc_id` i
@@ -328,23 +328,58 @@
 		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 		where 1=1
 		<trim  suffixOverrides="," >
-			<if test="lotatt04 != null and lotatt04 != ''" >
-				and aa.lotatt04 like concat('%',#{lotatt04},'%')
+			<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+				and aa.lotatt04 like concat('%',#{condition.lotatt04},'%')
 			</if>
-			<if test="lotatt05 != null and lotatt05 != ''" >
-				and aa.lotatt05 like concat('%',#{lotatt05},'%')
+			<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+				and aa.lotatt05 like concat('%',#{condition.lotatt05},'%')
 			</if>
-			<if test="customerid != null and customerid != ''" >
-				and aa.customerid like concat('%',#{customerid},'%')
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and aa.customerid like concat('%',#{condition.customerid},'%')
 			</if>
-			<if test="sku != null and sku != ''" >
-				and aa.sku  like concat('%',#{sku},'%')
+			<if test="condition.sku != null and condition.sku != ''" >
+				and aa.sku  like concat('%',#{condition.sku},'%')
 			</if>
-			<if test="productLineName != null and productLineName != ''" >
-				and p.name  like concat('%',#{productLineName},'%')
+			<if test="condition.productLineName != null and condition.productLineName != ''" >
+				and p.name  like concat('%',#{condition.productLineName},'%')
 			</if>
-			<if test="locationid != null and locationid != ''" >
-				and aa.locationid like concat('%',#{locationid},'%')
+			<if test="condition.locationid != null and condition.locationid != ''" >
+				and aa.locationid like concat('%',#{condition.locationid},'%')
+			</if>
+		</trim>
+		ORDER BY aa.locationid DESC
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
+	<!--获得盘点任务数量-->
+	<select id="queryByListByCouRequestCount" resultType="java.lang.Integer"  parameterType="Object" >
+		SELECT count(1) FROM
+		(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
+		FROM `inv_lot_loc_id` i
+		INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
+		GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
+		LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
+		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+				and aa.lotatt04 like concat('%',#{condition.lotatt04},'%')
+			</if>
+			<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+				and aa.lotatt05 like concat('%',#{condition.lotatt05},'%')
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and aa.customerid like concat('%',#{condition.customerid},'%')
+			</if>
+			<if test="condition.sku != null and condition.sku != ''" >
+				and aa.sku  like concat('%',#{condition.sku},'%')
+			</if>
+			<if test="condition.productLineName != null and condition.productLineName != ''" >
+				and p.name  like concat('%',#{condition.productLineName},'%')
+			</if>
+			<if test="condition.locationid != null and condition.locationid != ''" >
+				and aa.locationid like concat('%',#{condition.locationid},'%')
 			</if>
 		</trim>
 		ORDER BY aa.locationid DESC

@@ -38,7 +38,8 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 查出in_lot_att_id的list 盘点任务
      * @return ~
      */
-    List<InvLotLocId> queryByListByCouRequest(CouRequestDetailsQuery query);
+    List<InvLotLocId> queryByListByCouRequest(MybatisCriteria criteria);
+    public int queryByListByCouRequestCount(MybatisCriteria criteria);
 
     /**
      * 获取在库的产品记录，多库位, 多货主

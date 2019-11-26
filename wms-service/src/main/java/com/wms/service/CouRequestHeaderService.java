@@ -65,10 +65,16 @@ public class CouRequestHeaderService extends BaseService {
     }
 
     //获得盘点计划
-    public List<InvLotLocId> getcouRequestInfo(CouRequestDetailsQuery query) {
-        List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(query);
-
-        return lotLocIdList;
+    public EasyuiDatagrid<InvLotLocId> getcouRequestInfo(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+        EasyuiDatagrid<InvLotLocId> datagrid = new EasyuiDatagrid<InvLotLocId>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
+        datagrid.setTotal((long)invLotLocIdMybatisDao.queryByListByCouRequestCount(mybatisCriteria));
+        datagrid.setRows(lotLocIdList);
+        return datagrid;
     }
 
     //生成盘点计划
@@ -76,7 +82,7 @@ public class CouRequestHeaderService extends BaseService {
         Json json = new Json();
         //json转集合
         List<InvLotLocId> list = JSON.parseArray(forms, InvLotLocId.class);
-        List<InvLotLocId> listAll=getcouRequestInfo(null);
+        List<InvLotLocId> listAll=null;
         List<InvLotLocId> listAdd=new ArrayList<>();
          for(InvLotLocId locId:list){
              for(InvLotLocId locIdAll:listAll){
