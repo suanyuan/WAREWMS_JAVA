@@ -862,7 +862,7 @@ var close1 = function(){
             data : {'asnnos' : arr.join(",")},
             type : 'POST',
             dataType : 'JSON',
-            async: false,
+            async: true,
             success : function(result){
                 $.messager.progress('close');
                 var msg = '';
