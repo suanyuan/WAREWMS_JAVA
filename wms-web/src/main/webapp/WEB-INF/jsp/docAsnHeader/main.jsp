@@ -793,7 +793,7 @@ var mergeReceiving = function () {
 
 }
 
-/* 关闭按钮 */
+// /* 关闭按钮 */  关闭订单
 
 var closeCheck = function(){
     var row = ezuiDatagrid.datagrid('getSelections');
@@ -810,7 +810,7 @@ var closeCheck = function(){
             data : {'asnnos' : asnnos.join(",")},
             type : 'GET',
             dataType : 'JSON',
-            async: false,
+            async: true,
             success : function(result){
                 $.messager.progress('close');
                 var msg = '';
@@ -849,6 +849,10 @@ var closeCheck = function(){
 var close1 = function(){
 	var row = ezuiDatagrid.datagrid('getSelections');
 	if(row){
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
+
         var arr = new Array();
         for(var i=0;i<row.length;i++){
             arr.push(row[i].asnno);
@@ -858,7 +862,9 @@ var close1 = function(){
             data : {'asnnos' : arr.join(",")},
             type : 'POST',
             dataType : 'JSON',
+            async: false,
             success : function(result){
+                $.messager.progress('close');
                 var msg = '';
                 try {
                     msg = result.msg;
