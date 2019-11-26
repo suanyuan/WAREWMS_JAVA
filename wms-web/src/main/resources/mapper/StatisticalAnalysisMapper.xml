@@ -141,15 +141,16 @@
 <!-- 出入库流水 -->
     <select id="querySoAsnInvLocation"  resultType="com.wms.entity.RptSoAsnDailyLocation" parameterType="Object">
         SELECT * FROM
-        ((SELECT
+        (SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
         s.`descr_c` descrc,d.qcqty_expected asnqty,NULL soqty,
         bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
@@ -157,12 +158,8 @@
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
         WHERE aa.asnstatus='99'
-        <if test="limitClause != null and limitClause != ''" >
-            ${limitClause}
-        </if>
-         )
         UNION ALL
-        (SELECT
+        SELECT
         aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
         s.`descr_c` descrc,NULL asnqty,b.qty soqty,
         bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
@@ -176,49 +173,48 @@
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
         WHERE aa.sostatus='99'
+         )aaa
+        <include refid="Example_Where_Clause"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
-        ) )aaa
-        <include refid="Example_Where_Clause"/>
     </select>
 <!-- 出入库流水 列表总数-->
     <select id="querySoAsnInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
         select count(1) from
-        ((SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c
-        documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,NULL soqty,bb.codename_c
-        uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
+        (SELECT
+        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,d.qcqty_expected asnqty,NULL soqty,
+        bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='ASN_TYP') bb1 ON bb1.code=aa.asntype
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
         WHERE aa.asnstatus='99'
-        )
         UNION ALL
-        (SELECT
-        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c
-        documentType,a.`customerid`,a.`sku`,c.lotatt12,
-        s.`descr_c` descrc,NULL asnqty,b.qty soqty,bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
-        FROM `doc_order_details` a
+        SELECT
+        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
+        s.`descr_c` descrc,NULL asnqty,b.qty soqty,
+        bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
+        FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
-        LEFT JOIN `act_allocation_details` b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
         LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='SO_TYP') bb1 ON bb1.code=aa.ordertype
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
         WHERE aa.sostatus='99'
-        ) )aaa
+        )aaa
         <include refid="Example_Where_Clause"/>
     </select>
 
@@ -230,9 +226,10 @@
         s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
@@ -250,9 +247,10 @@
         select count(1)
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
@@ -272,9 +270,10 @@
         s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
@@ -292,9 +291,10 @@
         select count(1)
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON a.asnno = b.ASNNO AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
+        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
