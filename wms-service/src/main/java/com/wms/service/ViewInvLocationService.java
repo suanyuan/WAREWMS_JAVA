@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,19 @@ public class ViewInvLocationService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<ViewInvLocation> viewInvLocationList = viewInvLocationMybatisDao.queryByPageList(mybatisCriteria);
+		ViewInvLocation viewInvLocationSum=viewInvLocationMybatisDao.queryByListSum(mybatisCriteria);
 		ViewInvLocationVO viewInvLocationVO = null;
 		List<ViewInvLocationVO> viewInvLocationVOList = new ArrayList<ViewInvLocationVO>();
 		for (ViewInvLocation viewInvLocation : viewInvLocationList) {
 			viewInvLocationVO = new ViewInvLocationVO();
 			BeanUtils.copyProperties(viewInvLocation, viewInvLocationVO);
+			//总计
+			viewInvLocationVO.setFmqtySum(viewInvLocationSum.getFmqtySum());
+			viewInvLocationVO.setFmqtyEachSum(viewInvLocationSum.getFmqtyEachSum());
+			viewInvLocationVO.setQtyallocatedSum(viewInvLocationSum.getQtyallocatedSum());
+			viewInvLocationVO.setQtyallocatedEachSum(viewInvLocationSum.getQtyallocatedEachSum());
+			viewInvLocationVO.setQtyavailedSum(viewInvLocationSum.getQtyavailedSum());
+			viewInvLocationVO.setQtyavailedEachSum(viewInvLocationSum.getQtyavailedEachSum());
 			viewInvLocationVOList.add(viewInvLocationVO);
 		}
 		datagrid.setTotal((long)viewInvLocationMybatisDao.queryByCount(mybatisCriteria));

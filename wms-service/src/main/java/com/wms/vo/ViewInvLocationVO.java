@@ -92,6 +92,61 @@ public class ViewInvLocationVO {
 	private String productRegisterNo;
 	private String name;
 
+	//总计
+	private BigDecimal fmqtySum;
+	private BigDecimal fmqtyEachSum;
+	private BigDecimal qtyallocatedSum;
+	private BigDecimal qtyallocatedEachSum;
+	private BigDecimal qtyavailedSum;
+	private BigDecimal qtyavailedEachSum;
+	public BigDecimal getFmqtySum() {
+		return fmqtySum;
+	}
+
+	public void setFmqtySum(BigDecimal fmqtySum) {
+		this.fmqtySum = fmqtySum;
+	}
+
+	public BigDecimal getFmqtyEachSum() {
+		return fmqtyEachSum;
+	}
+
+	public void setFmqtyEachSum(BigDecimal fmqtyEachSum) {
+		this.fmqtyEachSum = fmqtyEachSum;
+	}
+
+	public BigDecimal getQtyallocatedSum() {
+		return qtyallocatedSum;
+	}
+
+	public void setQtyallocatedSum(BigDecimal qtyallocatedSum) {
+		this.qtyallocatedSum = qtyallocatedSum;
+	}
+
+	public BigDecimal getQtyallocatedEachSum() {
+		return qtyallocatedEachSum;
+	}
+
+	public void setQtyallocatedEachSum(BigDecimal qtyallocatedEachSum) {
+		this.qtyallocatedEachSum = qtyallocatedEachSum;
+	}
+
+	public BigDecimal getQtyavailedSum() {
+		return qtyavailedSum;
+	}
+
+	public void setQtyavailedSum(BigDecimal qtyavailedSum) {
+		this.qtyavailedSum = qtyavailedSum;
+	}
+
+	public BigDecimal getQtyavailedEachSum() {
+		return qtyavailedEachSum;
+	}
+
+	public void setQtyavailedEachSum(BigDecimal qtyavailedEachSum) {
+		this.qtyavailedEachSum = qtyavailedEachSum;
+	}
+
 	public String getLotatt13() {
 		return lotatt13;
 	}

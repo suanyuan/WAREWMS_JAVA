@@ -91,15 +91,16 @@
                 ,onDblClickCell: function(index,field,value){
                     edit();
                 },
-                onLoadSuccess: function (index,field,value) {
+                onLoadSuccess: function (data) {
                     getTotalInit=getTotal();
                     ezuiDatagrid.datagrid('reloadFooter',[
                         {lotatt05:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
                             qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
                             qtyholdedEach:getTotalInit.qtyholdedEach},
-                        {lotatt05:'总计:',fmqty:0,fmqtyEach:0,qtyallocated:0,
-                            qtyallocatedEach:0,qtyavailed:0,qtyavailedEach:0,qtyholded:0,
-                            qtyholdedEach:0}
+                        {lotatt05:'总计:',fmqty:data.rows[0].fmqtySum,fmqtyEach:data.rows[0].fmqtyEachSum,
+                            qtyallocated:data.rows[0].qtyallocatedSum,qtyallocatedEach:data.rows[0].qtyallocatedEachSum,
+                            qtyavailed:data.rows[0].qtyavailedSum,qtyavailedEach:data.rows[0].qtyavailedEachSum,
+                            qtyholded:0, qtyholdedEach:0}
                     ]);
                 }
                 // onDblClickCell: function(index,field,value){
