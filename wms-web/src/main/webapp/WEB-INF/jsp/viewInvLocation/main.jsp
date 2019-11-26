@@ -33,34 +33,90 @@
         $(function () {
             ezuiMenu = $('#ezuiMenu').menu();
             ezuiForm = $('#ezuiForm').form();
-            //隐藏的datagrid  用于总计的数据获取
-            ezuiDatagridAll = $('#ezuiDatagridAll').datagrid({
-                url: '<c:url value="/viewInvLocationController.do?showDatagridAll"/>',
+            //主页datagrid
+            ezuiDatagrid = $('#ezuiDatagrid').datagrid({
+                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
                 method: 'POST',
-                onLoadSuccess:function (index,field,value) {
-                    //判断ezuiDatagrid是否初始化
-                    if(ezuiDatagrid){
-                        ezuiDatagrid.datagrid('load', {
-                            fmcustomerid: $('#fmcustomerid').val(),//货主编码
-                            fmlocation: $('#fmlocation').val(),  //库位
-                            fmsku: $('#fmsku').val(),           //产品代码
-                            lotatt12: $('#skudescrc').val(),  //产品名称
-                            name: $('#name').combobox('getText'),          //产品线
-                            lotatt04: $('#lotatt04').val(),//批号
-                            lotatt05: $('#lotatt05').val(),//序列号
-                            lotatt14: $('#lotatt14').val(),//入库单号
-                            lotatt02Start: $('#lotatt02Start').datebox('getValue'),//时间查询
-                            lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
-                            lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
-                            lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
-                            lotatt10 : $('#lotatt10').combobox('getValue')
-                        });
-                    }else{
-                            initDateGrid();//隐藏的datagrif初始化成功 然后初始化主页的datagrid
-                        }
-
-
+                toolbar: '#toolbar',
+                title: '库存余量_按产品/库位',
+                pageSize:50,
+                pageList: [50, 100, 200],
+                fit: true,
+                border: false,
+                fitColumns: false,
+                nowrap: true,
+                striped: true,
+                collapsible: false,
+                pagination: true,
+                rownumbers: true,
+                singleSelect: true,
+                showFooter:true,
+                idField: 'customerid',
+                columns: [[
+                    {field: 'customerid', title: '货主', width: 100},
+                    {field: 'lotatt14', title: '入库单号', width:150},
+                    {field: 'fmlocation', title: '库位', width: 100},
+                    {field: 'fmsku', title: '产品代码', width: 100},
+                    {field: 'lotatt04', title: '生产批号', width: 95},
+                    {field: 'lotatt05', title: '序列号', width: 110},
+                    {field: 'qtyavailed', title: '可用件数', width: 100},
+                    {field: 'qtyavailedEach', title: '可用数量', width: 100},
+                    {field: 'fmqty', title: '库存件数', width: 100},
+                    {field: 'fmqtyEach', title: '库存数量', width: 100},
+                    {field: 'qtyallocated', title: '分配件数', width: 100},
+                    {field: 'qtyallocatedEach', title: '分配数量', width: 100},
+                    {field: 'lotatt01', title: '生产日期', width: 112},
+                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
+                    {field: 'lotatt03', title: '入库日期', width: 91},
+                    {field: 'lotatt12', title: '产品名称', width: 250},
+                    {field: 'skudescre', title: '规格型号', width: 150},
+                    {field: 'name', title: '产品线', width: 100},
+                    {field: 'lotatt06', title: '注册证号', width: 170},//加个字段
+                    {field: 'qtyholded', title: '冻结件数', width: 100,hidden:true},
+                    {field: 'qtyholdedEach', title: '冻结数量', width: 100,hidden:true},
+                    {field: 'defaultreceivinguom', title: '单位', width: 100,formatter:unitFormatter},
+                    {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
+                    {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
+                    // {field: 'lotatt07', title: '灭菌批号', width: 120},
+                    //
+                    //
+                    // {field: 'lotatt08', title: '供应商', width: 120},
+                    // {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
+                    //
+                    // {field: 'lotatt11', title: '存储条件', width: 150},
+                    //
+                    // {field: 'enterpriseName', title: '生产厂家', width: 100},
+                    // {field: 'lotatt10',		title: '备注',	width: 71 },
+                ]]
+                ,onDblClickCell: function(index,field,value){
+                    edit();
+                },
+                onLoadSuccess: function (index,field,value) {
+                    getTotalInit=getTotal();
+                    ezuiDatagrid.datagrid('reloadFooter',[
+                        {lotatt05:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
+                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
+                            qtyholdedEach:getTotalInit.qtyholdedEach},
+                        {lotatt05:'总计:',fmqty:0,fmqtyEach:0,qtyallocated:0,
+                            qtyallocatedEach:0,qtyavailed:0,qtyavailedEach:0,qtyholded:0,
+                            qtyholdedEach:0}
+                    ]);
                 }
+                // onDblClickCell: function(index,field,value){
+                // 	edit();
+                // },
+// 		onRowContextMenu : function(event, rowIndex, rowData) {
+// 			event.preventDefault();
+// 			$(this).datagrid('unselectAll');
+// 			$(this).datagrid('selectRow', rowIndex);
+// 			ezuiMenu.menu('show', {
+// 				left : event.pageX,
+// 				top : event.pageY
+// 			});
+// 		},onLoadSuccess:function(data){
+// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLocationController.do?getBtn"/>', ezuiMenu);
+// 			$(this).datagrid('unselectAll');
+// 		}
             });
 
 
@@ -234,95 +290,6 @@
             }
         };
 
-        //主页datagrid 等隐藏datagrid加载完毕之后加载
-        var initDateGrid=function(){
-            ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-                url: '<c:url value="/viewInvLocationController.do?showDatagrid"/>',
-                method: 'POST',
-                toolbar: '#toolbar',
-                title: '库存余量_按产品/库位',
-                pageSize:50,
-                pageList: [50, 100, 200],
-                fit: true,
-                border: false,
-                fitColumns: false,
-                nowrap: true,
-                striped: true,
-                collapsible: false,
-                pagination: true,
-                rownumbers: true,
-                singleSelect: true,
-                showFooter:true,
-                idField: 'customerid',
-                columns: [[
-                    {field: 'customerid', title: '货主', width: 100},
-                    {field: 'lotatt14', title: '入库单号', width:150},
-                    {field: 'fmlocation', title: '库位', width: 100},
-                    {field: 'fmsku', title: '产品代码', width: 100},
-                    {field: 'lotatt04', title: '生产批号', width: 95},
-                    {field: 'lotatt05', title: '序列号', width: 110},
-                    {field: 'qtyavailed', title: '可用件数', width: 100},
-                    {field: 'qtyavailedEach', title: '可用数量', width: 100},
-                    {field: 'fmqty', title: '库存件数', width: 100},
-                    {field: 'fmqtyEach', title: '库存数量', width: 100},
-                    {field: 'qtyallocated', title: '分配件数', width: 100},
-                    {field: 'qtyallocatedEach', title: '分配数量', width: 100},
-                    {field: 'lotatt01', title: '生产日期', width: 112},
-                    {field: 'lotatt02', title: '有效期/失效期', width: 113},
-                    {field: 'lotatt03', title: '入库日期', width: 91},
-                    {field: 'lotatt12', title: '产品名称', width: 250},
-                    {field: 'skudescre', title: '规格型号', width: 150},
-                    {field: 'name', title: '产品线', width: 100},
-                    {field: 'lotatt06', title: '注册证号', width: 170},//加个字段
-                    {field: 'qtyholded', title: '冻结件数', width: 100,hidden:true},
-                    {field: 'qtyholdedEach', title: '冻结数量', width: 100,hidden:true},
-                    {field: 'defaultreceivinguom', title: '单位', width: 100,formatter:unitFormatter},
-                    {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
-                    {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
-                    // {field: 'lotatt07', title: '灭菌批号', width: 120},
-                    //
-                    //
-                    // {field: 'lotatt08', title: '供应商', width: 120},
-                    // {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
-                    //
-                    // {field: 'lotatt11', title: '存储条件', width: 150},
-                    //
-                    // {field: 'enterpriseName', title: '生产厂家', width: 100},
-                    // {field: 'lotatt10',		title: '备注',	width: 71 },
-                ]]
-                ,onDblClickCell: function(index,field,value){
-                    edit();
-                },
-                onLoadSuccess: function (index,field,value) {
-                    getTotalInit=getTotal();
-                    getTotalAllInit=getTotalAll();
-                    ezuiDatagrid.datagrid('reloadFooter',[
-                        {lotatt05:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
-                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
-                            qtyholdedEach:getTotalInit.qtyholdedEach},
-                        {lotatt05:'总计:',fmqty:getTotalAllInit.fmqty,fmqtyEach:getTotalAllInit.fmqtyEach,qtyallocated:getTotalAllInit.qtyallocated,
-                            qtyallocatedEach:getTotalAllInit.qtyallocatedEach,qtyavailed:getTotalAllInit.qtyavailed,qtyavailedEach:getTotalAllInit.qtyavailedEach,qtyholded:getTotalAllInit.qtyholded,
-                            qtyholdedEach:getTotalAllInit.qtyholdedEach}
-                    ]);
-                }
-                // onDblClickCell: function(index,field,value){
-                // 	edit();
-                // },
-// 		onRowContextMenu : function(event, rowIndex, rowData) {
-// 			event.preventDefault();
-// 			$(this).datagrid('unselectAll');
-// 			$(this).datagrid('selectRow', rowIndex);
-// 			ezuiMenu.menu('show', {
-// 				left : event.pageX,
-// 				top : event.pageY
-// 			});
-// 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLocationController.do?getBtn"/>', ezuiMenu);
-// 			$(this).datagrid('unselectAll');
-// 		}
-            });
-        }
-
 
         //货主查询弹框弹出start=========================
         var ezuiCustDataClick = function () {
@@ -439,7 +406,7 @@
 
         var doSearch = function () {
             //隐藏datagridAll加载  主页datagrid查询在datagridAll初始化中
-            ezuiDatagridAll.datagrid('load', {
+            ezuiDatagrid.datagrid('load', {
                 fmcustomerid: $('#fmcustomerid').val(),//货主编码
                 fmlocation: $('#fmlocation').val(),  //库位
                 fmsku: $('#fmsku').val(),           //产品代码
@@ -452,7 +419,7 @@
                 lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
                 lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
                 lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
-                lotatt10 : $('#lotatt10').combobox('getValue')
+                lotatt10: $('#lotatt10').combobox('getValue')
             });
         };
 
@@ -649,43 +616,43 @@
 
         // 统计合计 end
         // 统计总计 start
-        var getTotalAll = function(){
-           var sums=new Object();
-             var rows = ezuiDatagridAll.datagrid('getRows');//获取当前页的数据行
-            sums.fmqty = 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.fmqty  += rows[i]['fmqty']; //获取指定列
-            }
-            sums.fmqtyEach = 0;
-            for (var i = 0; i < rows.length; i++) {
-             sums.fmqtyEach += rows[i]['fmqtyEach']; //获取指定列
-            }
-            sums.qtyallocated= 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyallocated+= rows[i]['qtyallocated']; //获取指定列
-            }
-            sums.qtyallocatedEach= 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyallocatedEach+= rows[i]['qtyallocatedEach']; //获取指定列
-            }
-            sums.qtyholded = 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyholded += rows[i]['qtyholded']; //获取指定列
-            }
-            sums.qtyholdedEach = 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyholdedEach+= rows[i]['qtyholdedEach']; //获取指定列
-            }
-            sums.qtyavailed = 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
-            }
-            sums.qtyavailedEach = 0;
-            for (var i = 0; i < rows.length; i++) {
-                sums.qtyavailedEach += rows[i]['qtyavailedEach']; //获取指定列
-            }
-            return sums;
-        }
+        // var getTotalAll = function(){
+        //    var sums=new Object();
+        //      var rows = ezuiDatagridAll.datagrid('getRows');//获取当前页的数据行
+        //     sums.fmqty = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.fmqty  += rows[i]['fmqty']; //获取指定列
+        //     }
+        //     sums.fmqtyEach = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //      sums.fmqtyEach += rows[i]['fmqtyEach']; //获取指定列
+        //     }
+        //     sums.qtyallocated= 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyallocated+= rows[i]['qtyallocated']; //获取指定列
+        //     }
+        //     sums.qtyallocatedEach= 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyallocatedEach+= rows[i]['qtyallocatedEach']; //获取指定列
+        //     }
+        //     sums.qtyholded = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyholded += rows[i]['qtyholded']; //获取指定列
+        //     }
+        //     sums.qtyholdedEach = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyholdedEach+= rows[i]['qtyholdedEach']; //获取指定列
+        //     }
+        //     sums.qtyavailed = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyavailed += rows[i]['qtyavailed']; //获取指定列
+        //     }
+        //     sums.qtyavailedEach = 0;
+        //     for (var i = 0; i < rows.length; i++) {
+        //         sums.qtyavailedEach += rows[i]['qtyavailedEach']; //获取指定列
+        //     }
+        //     return sums;
+        // }
 
         // 统计总计 end
 
