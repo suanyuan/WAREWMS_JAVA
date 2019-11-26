@@ -810,7 +810,7 @@ var closeCheck = function(){
             data : {'asnnos' : asnnos.join(",")},
             type : 'GET',
             dataType : 'JSON',
-            async: false,
+            async: true,
             success : function(result){
                 $.messager.progress('close');
                 var msg = '';
@@ -858,6 +858,7 @@ var close1 = function(){
             data : {'asnnos' : arr.join(",")},
             type : 'POST',
             dataType : 'JSON',
+			async: false,
             success : function(result){
                 var msg = '';
                 try {
