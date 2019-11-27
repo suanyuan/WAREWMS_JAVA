@@ -333,7 +333,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     } else {
 
                         json.setSuccess(false);
-                        json.setMsg("分配失败");
+                        json.setMsg("分配失败:" + result);
                         return json;
                     }
                 } else {
@@ -348,9 +348,10 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            String message = e.getMessage();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             json.setSuccess(false);
-            json.setMsg("分配失败");
+            json.setMsg("分配失败:" + message);
             return json;
         }
     }

@@ -245,8 +245,8 @@ $(function() {
             {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
             {field: 'lotatt01',	title: '生产日期',		width: 130 },
             {field: 'lotatt02',	title: '效期',		width: 130 },
-            {field: 'fmqty',	title: '数量',		width: 130 },
-            {field: 'fmqty_each',	title: '件数',		width: 130 },
+            {field: 'fmqty',	title: '件数',		width: 130 },
+            {field: 'fmqty_each',	title: '数量',		width: 130 },
             {field: 'fmLocation',	title: '库位',		width: 130 },
             {field: 'addTime',	title: '制单日期',		width: 200 },
             {field: 'addWho',	title: '制单人',		width: 130 }
