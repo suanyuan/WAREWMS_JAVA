@@ -1023,7 +1023,7 @@ var downloadTemplate = function(){
 					<td><input type='text' name='reservedfield04' class='easyui-textbox' size='16' /></td>
 
 					<th>长</th>
-					<td><input type='text' name='skulength' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='skulength' class='easyui-textbox' size='13' />(m)</td>
 
 				</tr>
 
@@ -1032,7 +1032,7 @@ var downloadTemplate = function(){
 					<td><input type='text' name='reservedfield05' class='easyui-textbox' size='16' /></td>
 
 					<th>宽</th>
-					<td><input type='text' name='skuwidth' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='skuwidth' class='easyui-textbox' size='13' />(m)</td>
 				</tr>
 
 
@@ -1041,7 +1041,7 @@ var downloadTemplate = function(){
 					<td><input type='text' name='skuGroup5' class='easyui-textbox' size='16' /></td>
 
 					<th>高</th>
-					<td><input type='text' name='skuhigh' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='skuhigh' class='easyui-textbox' size='13' />(m)</td>
 				</tr>
 
 
@@ -1052,7 +1052,7 @@ var downloadTemplate = function(){
 
 
 					<th>重量</th>
-					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='16' /></td>
+					<td><input type='text' name='reservedfield11' class='easyui-textbox' size='13' />(kg)</td>
 
 				</tr>
 
@@ -1160,7 +1160,7 @@ var downloadTemplate = function(){
 																															]" readonly/></td>
 
 
-					<th>增加人</th>
+					<th>创建人</th>
 					<td><input type='text' name='addwho' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
 				</tr>
@@ -1175,7 +1175,7 @@ var downloadTemplate = function(){
 																																{id: '1', value: '是'},
 																																{id: '0', value: '否'}
 																															]" readonly/></td>
-					<th>增加时间</th>
+					<th>创建时间</th>
 					<td><input type='text' name='addtime' id='addtime' class='easyui-textbox' size='16' data-options='required:true'/></td>
 
 				</tr>

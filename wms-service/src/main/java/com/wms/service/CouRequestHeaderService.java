@@ -24,6 +24,7 @@ import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
@@ -82,31 +83,14 @@ public class CouRequestHeaderService extends BaseService {
         Json json = new Json();
         //json转集合
         List<InvLotLocId> list = JSON.parseArray(forms, InvLotLocId.class);
-        List<InvLotLocId> listAll=null;
+        List<InvLotLocId> listAll=new ArrayList<>();
         List<InvLotLocId> listAdd=new ArrayList<>();
          for(InvLotLocId locId:list){
+             MybatisCriteria mybatisCriteria = new MybatisCriteria();
+             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(locId));
+             listAll=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
              for(InvLotLocId locIdAll:listAll){
-                 //判断空值
-                  if(locId.getLotatt04()==null){
-                      locId.setLotatt04("");
-                  }
-                  if(locId.getLotatt05()==null){
-                      locId.setLotatt05("");
-                  }
-                  if(locIdAll.getLotatt04()==null){
-                      locIdAll.setLotatt04("");
-                  }
-                  if(locIdAll.getLotatt05()==null){
-                      locIdAll.setLotatt05("");
-                  }
-                 if(locId.getCustomerid().equals(locIdAll.getCustomerid())
-                    &&locId.getSku().equals(locIdAll.getSku())
-                    &&locId.getLocationid().equals(locIdAll.getLocationid())
-                    &&locId.getLotatt04().equals(locIdAll.getLotatt04())
-                    &&locId.getLotatt05().equals(locIdAll.getLotatt05())){
-                     listAdd.add(locIdAll);
-                     break;
-                 }
+                 listAdd.add(locIdAll);
              }
          }
          if(listAdd.size()<=0){
@@ -114,58 +98,64 @@ public class CouRequestHeaderService extends BaseService {
              json.setMsg("生成计划失败,没有匹配的产品!");
              return json;
          }
-        /*获取新的号 生成主单*/
-        Map<String, Object> map = new HashMap<>();
-        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-        couRequestHeaderMybatisDao.getIdSequence(map);
-        String resultCode="";
-        String resultNo="";
-        if(map.get("resultCode")!=null) {
-            resultCode = map.get("resultCode").toString();
-        }
-        if(map.get("resultNo")!=null) {
-            resultNo = map.get("resultNo").toString();
-        }
-        if (resultCode.substring(0, 3).equals("000")) {
-            CouRequestHeader couRequestHeader = new CouRequestHeader();
-            couRequestHeader.setCycleCountno(resultNo);
-            couRequestHeader.setStatus("00");
-            couRequestHeader.setFuzzyc(null);
-            couRequestHeader.setAddtime(new Date());  //申请时间
-            couRequestHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());//申请人
-            couRequestHeader.setStarttime(new Date());
+       try {
+           /*获取新的号 生成主单*/
+           Map<String, Object> map = new HashMap<>();
+           map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+           couRequestHeaderMybatisDao.getIdSequence(map);
+           String resultCode = "";
+           String resultNo = "";
+           if (map.get("resultCode") != null) {
+               resultCode = map.get("resultCode").toString();
+           }
+           if (map.get("resultNo") != null) {
+               resultNo = map.get("resultNo").toString();
+           }
+           if (resultCode.substring(0, 3).equals("000")) {
+               CouRequestHeader couRequestHeader = new CouRequestHeader();
+               couRequestHeader.setCycleCountno(resultNo);
+               couRequestHeader.setStatus("00");
+               couRequestHeader.setFuzzyc(null);
+               couRequestHeader.setAddtime(new Date());  //申请时间
+               couRequestHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());//申请人
+               couRequestHeader.setStarttime(new Date());
 //            CouRequestHeader.setEndtime(null);
-            couRequestHeaderMybatisDao.add(couRequestHeader);
-            if (couRequestHeaderMybatisDao.queryById(couRequestHeader) == null) {
-                json.setSuccess(true);
-                json.setMsg("生成计划失败!");
-                return json;
-            }
+               couRequestHeaderMybatisDao.add(couRequestHeader);
+               if (couRequestHeaderMybatisDao.queryById(couRequestHeader) == null) {
+                   json.setSuccess(true);
+                   json.setMsg("生成计划失败!");
+                   return json;
+               }
 
 //循环加入细单
-            for (InvLotLocId invLotLocId : listAdd) {
-                CouRequestDetails couRequestDetails = new CouRequestDetails();
-                couRequestDetails.setCycleCountno(resultNo);
-                couRequestDetails.setCycleCountlineno(couRequestDetailsMybatisDao.getCycleCountlineno(resultNo) + 1);
-                couRequestDetails.setCustomerid(invLotLocId.getCustomerid());
-                couRequestDetails.setSku(invLotLocId.getSku());
-                couRequestDetails.setLocationid(invLotLocId.getLocationid());
-                couRequestDetails.setQtyInv(invLotLocId.getQty()==null?0:invLotLocId.getQty());
-                couRequestDetails.setQtyAct(0);
-                couRequestDetails.setLotatt04(invLotLocId.getLotatt04());
-                couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
-                couRequestDetails.setAddtime(new Date());
-                couRequestDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+               for (InvLotLocId invLotLocId : listAdd) {
+                   CouRequestDetails couRequestDetails = new CouRequestDetails();
+                   couRequestDetails.setCycleCountno(resultNo);
+                   couRequestDetails.setCycleCountlineno(couRequestDetailsMybatisDao.getCycleCountlineno(resultNo) + 1);
+                   couRequestDetails.setCustomerid(invLotLocId.getCustomerid());
+                   couRequestDetails.setSku(invLotLocId.getSku());
+                   couRequestDetails.setLocationid(invLotLocId.getLocationid());
+                   couRequestDetails.setQtyInv(invLotLocId.getQty() == null ? 0 : invLotLocId.getQty());
+                   couRequestDetails.setQtyAct(0);
+                   couRequestDetails.setLotatt04(invLotLocId.getLotatt04());
+                   couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
+                   couRequestDetails.setAddtime(new Date());
+                   couRequestDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 //                couRequestDetails.setEdittime(null);
 //                couRequestDetails.setEditwho(null);
-                couRequestDetailsMybatisDao.add(couRequestDetails);
-            }
-            json.setSuccess(true);
-            json.setMsg("生成任务成功!");
-        } else {
-            json.setSuccess(true);
-            json.setMsg("生成任务失败!未获取到主单号!");
-        }
+                   couRequestDetailsMybatisDao.add(couRequestDetails);
+               }
+               json.setSuccess(true);
+               json.setMsg("生成任务成功!");
+           } else {
+               json.setSuccess(true);
+               json.setMsg("生成任务失败!未获取到主单号!");
+               throw new Exception();
+           }
+       }catch (Exception e){
+           e.printStackTrace();
+           TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+       }
         return json;
     }
     //导入

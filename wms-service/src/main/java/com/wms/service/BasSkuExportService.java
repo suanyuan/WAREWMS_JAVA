@@ -202,7 +202,13 @@ public class BasSkuExportService {
 						basSku.setEdittimeDc(sdf.format(basSku.getEdittime()));
 					}
 
-
+					if(Constant.CODE_CATALOG_CLASSIFY_ONE.equals(basSku.getReservedfield04())){
+						basSku.setReservedfield04("I");
+					}else if(Constant.CODE_CATALOG_CLASSIFY_TWO.equals(basSku.getReservedfield04())){
+						basSku.setReservedfield04("II");
+					}else if(Constant.CODE_CATALOG_CLASSIFY_THREE.equals(basSku.getReservedfield04())){
+						basSku.setReservedfield04("III");
+					}
 
 					//所有供应商
 //					String content = "";
@@ -249,6 +255,10 @@ public class BasSkuExportService {
 		superClassMap.put("productLineName", "产品线");
 		superClassMap.put("reservedfield09", "医疗器械标志");
 		superClassMap.put("reservedfield03", "注册证");
+		superClassMap.put("reservedfield04", "管理分类");
+		superClassMap.put("reservedfield05", "分类目录");
+
+
 		superClassMap.put("sku", "产品代码");
 		superClassMap.put("reservedfield01", "产品名称");
 		superClassMap.put("reservedfield02", "产品描述");
@@ -355,6 +365,16 @@ public class BasSkuExportService {
 					}else if(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING.equals(basSkuHistory.getFirstop())){
 						basSkuHistory.setFirstop("审核中");
 					}
+
+					if(Constant.CODE_CATALOG_CLASSIFY_ONE.equals(basSkuHistory.getReservedfield04())){
+						basSkuHistory.setReservedfield04("I");
+					}else if(Constant.CODE_CATALOG_CLASSIFY_TWO.equals(basSkuHistory.getReservedfield04())){
+						basSkuHistory.setReservedfield04("II");
+					}else if(Constant.CODE_CATALOG_CLASSIFY_THREE.equals(basSkuHistory.getReservedfield04())){
+						basSkuHistory.setReservedfield04("III");
+					}
+
+
 					if("1".equals(basSkuHistory.getReservedfield09())){
 						basSkuHistory.setReservedfield09("是");
 					}else if("0".equals(basSkuHistory.getReservedfield09())){

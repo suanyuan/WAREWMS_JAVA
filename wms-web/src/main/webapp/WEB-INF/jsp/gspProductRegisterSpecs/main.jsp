@@ -61,7 +61,7 @@ $(function() {
             {field: 'enterpriseName',		title: '生产企业',	width: 100 },
             {field: 'packingUnit',		title: '包装规格',	width: 80 },
             {field: 'storageCondition',		title: '储存条件',	width: 100 },
-            {field: 'unit',		title: '单位',	width: 50 ,formatter : unitFormatter },
+            {field: 'unit',		title: '单位',	width: 50  },
 
             {field: 'maintenanceCycle',		title: '养护周期',	width: 50 ,formatter:day },
             {field: 'isDoublec',		title: '双证',	width: 50 ,formatter:yesOrNoFormatter },
