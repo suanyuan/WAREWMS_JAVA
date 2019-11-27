@@ -142,6 +142,7 @@ public class GspSupplierController {
 			BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(supplier.getCostomerid(),"OW");
 			if(basCustomer!=null){
 				model.put("clientEnterpriseId", basCustomer.getEnterpriseId());
+				model.put("clientEnterpriseName", basCustomer.getDescrC());
 			}
 		}
 

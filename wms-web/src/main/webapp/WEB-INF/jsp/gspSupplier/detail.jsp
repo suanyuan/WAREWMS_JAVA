@@ -76,9 +76,11 @@
                        data-options='required:false,width:200'/></td>
 
             <th>货主</th>
-            <td><input type='text' data="1" value="${gspSupplier.costomerid}" id='costomerid' name='costomerid' class='easyui-textbox'
-                       data-options='required:false,width:200'/></td>
-
+            <td><input type='text' data="1" id='costomerName' name='costomerName' value="${clientEnterpriseName}" class='easyui-textbox' data-options='required:true,width:200'/>
+                <input type='hidden' data="1" id='costomerid' name='costomerid' value="${gspSupplier.costomerid}"  />
+                <input type="hidden" name="cli_enterpriseId" id="cli_enterpriseId" value="${clientEnterpriseId}" />
+                <a  href="javascript:void(0);" class="easyui-linkbutton" data-options="" onclick="viewClientEnterpriseUrl()">查看</a>
+            </td>
         </tr>
         <tr>
             <th>合同附件</th>
