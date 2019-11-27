@@ -54,6 +54,9 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
+	private BasCodesService basCodesService;
+
+	@Autowired
 	private DataPublishService dataPublishService;
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
@@ -68,7 +71,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecsVO gspProductRegisterSpecsVO = null;
 		List<GspProductRegisterSpecsVO> basGtnVOList = new ArrayList<GspProductRegisterSpecsVO>();
 		List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(criteria);
-
+		List<EasyuiCombobox> EasyuiCombobox =  basCodesService.getBy(Constant.CODE_CATALOG_UOM);
 
 		//System.out.println(query.getSpecsName()+"==============query================================"+query.getProductRegisterNo());
 		for (GspProductRegisterSpecs gspProductRegisterSpecs : gspProductRegisterSpecsList) {
@@ -80,6 +83,13 @@ public class GspProductRegisterSpecsService extends BaseService {
 			}
 			if(gspProductRegisterSpecs.getEditDate()!=null){
 				gspProductRegisterSpecsVO.setEditDate(simpleDateFormat.format(gspProductRegisterSpecs.getEditDate()));
+			}
+			;
+			for(EasyuiCombobox unit:EasyuiCombobox){
+				if(unit.getId().equals(gspProductRegisterSpecsVO.getUnit())){
+					gspProductRegisterSpecsVO.setUnit(unit.getValue());
+
+				}
 			}
 			//System.out.println(gspProductRegisterSpecs.getCreateDate()+"=============================================="+gspProductRegisterSpecsVO.getCreateDate());
 			basGtnVOList.add(gspProductRegisterSpecsVO);

@@ -391,6 +391,12 @@ public class GspProductRegisterService extends BaseService {
 				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 				gspProductRegisterSpecs.setSpecsId(str);
 				gspProductRegisterSpecs.setProductRegisterId(gspProductRegisterId);
+				if(gspProductRegister.getStorageConditions()!=null){
+					gspProductRegisterSpecs.setStorageCondition(gspProductRegister.getStorageConditions());
+				}
+				gspProductRegisterSpecs.setEnterpriseName(gspProductRegister.getEnterpriseName());
+				gspProductRegisterSpecs.setLicenseOrRecordNo(gspProductRegister.getLicenseOrRecordNol());
+				gspProductRegisterSpecs.setProductionAddress(gspProductRegister.getProductionAddress());
 				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
 			}
 			return Json.success("绑定成功");
