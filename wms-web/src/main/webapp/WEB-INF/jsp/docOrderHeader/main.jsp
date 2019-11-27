@@ -549,7 +549,7 @@ var add = function(){
 	});
 
     $("#ezuiForm #consigneeid").textbox({
-        editable:false,
+        editable:true,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -676,7 +676,7 @@ var edit = function(srow){
 			$("#ezuiForm #ezuiBtn_orderCommit").linkbutton('enable');
 		}
 		$("#ezuiForm #consigneeid").textbox({
-			editable:false,
+			editable:true,
 			icons:[{
 				iconCls:'icon-search',
 				handler: function(e){
@@ -2124,6 +2124,7 @@ var aaa = function(){
 			$("#ezuiDialog #cAddress1").textbox('setValue',row.deliveryAddress);
 			$("#ezuiDialog #consigneeid").textbox('setValue',rows.descrC);
 			ezuiCustomerDataDialog.dialog('close');
+            ezuiReceDataDialog.dialog('close');
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 		},onLoadSuccess:function(data){
