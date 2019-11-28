@@ -121,6 +121,8 @@ public class Constant {
     public static final String uploadUrl = "/Users/quendi/fileUpload";
 //    public static final String uploadUrl = "/root/uploadDir";
 
+    public static final String jasperUrl = "F:/report/";
+
 
 
 

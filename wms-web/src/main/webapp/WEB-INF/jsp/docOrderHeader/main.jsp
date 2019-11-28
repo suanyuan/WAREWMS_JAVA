@@ -1198,12 +1198,12 @@ var printAccompanying = function () {
     if (rows.length > 0) {
         for (var i = 0; i < rows.length; i++) {
             orderno += rows[i].orderno+",";
-            if(i>0){
-                if(rows[0].customerid != rows[i].customerid){
-                    showMsg("同时只支持同一客户编码(类型)的随货单打印......");
-                    return;
-                }
-            }
+            // if(i>0){
+            //     if(rows[0].customerid != rows[i].customerid){
+            //         showMsg("同时只支持同一客户编码(类型)的随货单打印......");
+            //         return;
+            //     }
+            // }
         }
         /*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
         window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderno="+orderno);

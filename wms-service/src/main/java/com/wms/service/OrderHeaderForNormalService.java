@@ -1,6 +1,9 @@
 package com.wms.service;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
@@ -26,8 +29,10 @@ import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.OrderHeaderForNormalForm;
 import com.wms.vo.form.pda.PageForm;
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -38,13 +43,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1243,6 +1248,88 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         }
         return  odList;
+    }
+
+    /**
+     * 一个页面打印多张Jasper模板
+     * @param response
+     * @param orderHeaderForNormal 打印PDF的内容
+     * @throws JRException
+     * @throws IOException
+     */
+    public void printOrderHeaderForNormalJasper(HttpServletResponse response,List<OrderHeaderForNormal> orderHeaderForNormal) throws JRException, IOException {
+        OrderHeaderForNormal printBean = null;
+        JasperPrint jasperPrint = null;
+        List<JasperPrint> jasperPrintList = new ArrayList<>();
+        for (int i = 0; i < orderHeaderForNormal.size(); i++) {
+            printBean = orderHeaderForNormal.get(i);
+            HashMap<String, Object> params = new HashMap<>();// 建立参数表
+            String customer = printBean.getCustomerid();
+            if (customer.equals("JSGR")) {
+                //1 国润
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingJSGR.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("JSML")) {
+                //2 明伦
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingJSML.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("MY")) {
+                //3 妙有
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingMY.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("JSJY")) {
+                //4 嘉意
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingJSJY.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("BLJG")) {
+                //5 佰礼
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingBLJG.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("YG")) {
+                //6 亦舸
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingYG.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("WQ")) {
+                //7 稳勤
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingWQ.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("BDL")) {
+                //8 百多力
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingBDL.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("BZ")) {
+                //9 标准
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingBZ.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else if (customer.equals("HQ")) {
+                //10 宏确
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportAcoompanyingHQ.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            } else {
+                //原随货单
+                jasperPrint = getJasperPrint(printBean ,Constant.jasperUrl +"reportOrderHeader1.jasper", params);
+                jasperPrintList.add(jasperPrint);
+            }
+        }
+
+        ServletOutputStream out = response.getOutputStream();
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);
+        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+        exporter.exportReport();
+
+    }
+    private JasperPrint getJasperPrint(OrderHeaderForNormal user, String url, Map<String, Object> params) {
+        JasperPrint jasperPrint = null;
+        JRDataSource source = null;
+        try {
+            source = new JRBeanCollectionDataSource(Arrays.asList(user));
+            jasperPrint = JasperFillManager.fillReport(url, params, source);
+            return jasperPrint;
+        } catch (JRException e) {
+            System.out.print(e);
+        }
+        return null;
     }
     /**
      * 打印随货清单
