@@ -1,6 +1,9 @@
 package com.wms.service;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
@@ -44,7 +47,6 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
@@ -1244,6 +1246,7 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return  odList;
     }
+
     /**
      * 打印随货清单
      */
