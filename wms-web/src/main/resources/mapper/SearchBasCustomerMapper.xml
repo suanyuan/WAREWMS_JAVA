@@ -287,7 +287,7 @@
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
         SELECT
-        r.descr_c enterpriseName,r.active_flag activeFlag,
+        d.qcno,d.qclineno,r.descr_c enterpriseName,r.active_flag activeFlag,
         d.qcqty_expected qty,d.userdefine1 locationid,
         p.`qty1`,
         CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
@@ -297,40 +297,49 @@
         bb.codename_c uom,`bb1`.codename_c type,aa.notes
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
+        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND b.userdefine3 =d.userdefine3 AND b.userdefine4= d.userdefine4
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
         WHERE  aa.asnstatus='99'
-        <include refid="Example_Where_Clause2"/>   ORDER BY lotatt03 DESC
+        <include refid="Example_Where_Clause2"/>
+        group by d.qcno,d.qclineno,r.descr_c,r.active_flag,
+        d.qcqty_expected,d.userdefine1,
+        p.`qty1`,e.`lotatt04`,e.`lotatt05`,e.`lotatt01`,e.`lotatt02`,
+        e.`lotatt03`,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
+        s.`descr_c`,bb.codename_c,`bb1`.codename_c,aa.notes
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
     </select>
 <!-- 入库信息 列表总数-->
     <select id="querySearchEnterInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
-        SELECT
+        select count(1) from
+        (SELECT
         count(1)
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND d.palineno = b.PALINENO
+        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND b.userdefine3 =d.userdefine3 AND b.userdefine4= d.userdefine4
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'
+        WHERE  aa.asnstatus='99'
         <include refid="Example_Where_Clause2"/>
+        group by d.qcno,d.qclineno,r.descr_c,r.active_flag,
+        d.qcqty_expected,d.userdefine1,
+        p.`qty1`,e.`lotatt04`,e.`lotatt05`,e.`lotatt01`,e.`lotatt02`,
+        e.`lotatt03`,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
+        s.`descr_c`,bb.codename_c,`bb1`.codename_c,aa.notes) as aaa
     </select>
 
 

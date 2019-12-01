@@ -113,6 +113,7 @@ var doExport = function(){
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
 		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+		param.put("reservedfield09",$('#reservedfield09').combobox('getValue'));
 
 		//--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchEnterInvLocationDataToExcel", param);
