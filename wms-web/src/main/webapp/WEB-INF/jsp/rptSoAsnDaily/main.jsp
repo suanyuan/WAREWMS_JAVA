@@ -48,6 +48,7 @@ $(function() {
 			{field: 'soqty',		    title: '出库件数',	width: 100 },
 			{field: 'uom',              title: '主计量单位',	width: 100 },
 			{field: 'lotatt04',		    title: '批号',	width: 130 },
+			{field: 'lotatt05',		    title: '序列号',	width: 130 },
 			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
 			{field: 'notes',	        title: '备注',	width: 100},
 			{field: 'planPrice',		        title: '计划价',	width: 200},
@@ -79,9 +80,11 @@ var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
+		soStartDate:$('#soStartDate').datebox('getValue'),
+		soEndDate:$('#soEndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
+		sku : $('#sku').val(),
 		lotatt12:$('#lotatt12').val(),
-		descrc:$('#descrc').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 	});
@@ -96,9 +99,11 @@ var doExport = function(){
 		param.put("token", token);
 		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
 		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
+		param.put("soStartDate",$('#soStartDate').datebox('getValue'));
+		param.put("soEndDate",$('#soEndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
+		param.put("sku",$('#sku').val());
 		param.put("lotatt12",$('#lotatt12').val());
-		param.put("descrc",$('#descrc').val());
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
         //--导出Excel
@@ -135,13 +140,17 @@ var doExport = function(){
 					<table style="text-align: right">
 						<tr >
 	                        <th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>存货编码</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+	                        <th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr >
 							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr >
+							<th>出库日期(开始)</th><td><input type='text' id='soStartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>出库日期(结束)</th><td><input type='text' id='soEndDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>

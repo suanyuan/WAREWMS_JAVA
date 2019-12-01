@@ -35,7 +35,7 @@ public class StatisticalAnalysisService extends BaseService {
 		EasyuiDatagrid<RptSoAsnDailyLocation> datagrid = new EasyuiDatagrid<RptSoAsnDailyLocation>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
-		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setPageSize(pager.getRows()/2);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<RptSoAsnDailyLocation> rptSoAsnDailyLocationList = statisticalAnalysisMybatisDao.querySoAsnInvLocation(mybatisCriteria);
 		for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
@@ -47,7 +47,9 @@ public class StatisticalAnalysisService extends BaseService {
 				s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
 			}
 		}
-		datagrid.setTotal((long) statisticalAnalysisMybatisDao.querySoAsnInvLocationCount(mybatisCriteria));
+		long a=(long) statisticalAnalysisMybatisDao.queryAsnInvLocationCount(mybatisCriteria);
+		long b=(long) statisticalAnalysisMybatisDao.querySoInvLocationCount(mybatisCriteria);
+		datagrid.setTotal(a>b?a:b);
 		datagrid.setRows(rptSoAsnDailyLocationList);
 		return datagrid;
 	}
@@ -70,8 +72,6 @@ public class StatisticalAnalysisService extends BaseService {
 				System.out.println("题库为空");
 			}else {
 				for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
-                //上海仓
-					s.setWarehouse("上海仓");
 				//计算数量
 				    if(s.getQty1()!=null&&s.getSoqty()!=null){
 				    	s.setSoqtyeach(s.getQty1()*s.getSoqty());
@@ -109,6 +109,7 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("soqty", "出库件数");
 		superClassMap.put("uom", "主计量单位");
 		superClassMap.put("lotatt04", "批号");
+		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("purchaseOrderNumber", "采购订单号");
 		superClassMap.put("notes", "备注");
 		superClassMap.put("planPrice", "计划价");
@@ -196,6 +197,7 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("soqty", "出库件数");
 		superClassMap.put("uom", "主计量单位");
 		superClassMap.put("lotatt04", "批号");
+		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("purchaseOrderNumber", "采购订单号");
 		superClassMap.put("notes", "备注");
 		superClassMap.put("planPrice", "计划价");

@@ -18,6 +18,8 @@ public class RptSoAsnDailyLocation implements Serializable {
     private String soasndate;            //日期
     private String lotatt03StartDate;            //开始日期
     private String lotatt03EndDate;            //结束日期
+    private String soStartDate;            //开始日期
+    private String soEndDate;            //结束日期
     private String lotatt05;            //序列号
     private String documentType;         //单据类型
     private String warehouse;            //仓库

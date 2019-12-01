@@ -14,7 +14,8 @@ public interface StatisticalAnalysisMybatisDao extends BaseDao {
 
 	//出入库流水
 	List<RptSoAsnDailyLocation> querySoAsnInvLocation(MybatisCriteria criteria);
-	int querySoAsnInvLocationCount(MybatisCriteria criteria);
+	int queryAsnInvLocationCount(MybatisCriteria criteria);
+	int querySoInvLocationCount(MybatisCriteria criteria);
 
 	//入库单列表
 	List<RptAsnList> queryAsnList(MybatisCriteria criteria);
