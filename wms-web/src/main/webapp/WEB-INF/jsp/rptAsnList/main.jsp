@@ -48,6 +48,7 @@ $(function() {
 			{field: 'soqty',		    title: '出库件数',	width: 100 },
 			{field: 'uom',              title: '主计量单位',	width: 100 },
 			{field: 'lotatt04',		    title: '批号',	width: 130 },
+			{field: 'lotatt05',		    title: '序列号',	width: 130 },
 			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
 			{field: 'notes',	        title: '备注',	width: 100},
 			{field: 'planPrice',		title: '计划价',	width: 200},
@@ -81,7 +82,7 @@ var doSearch = function(){
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
 		lotatt12:$('#lotatt12').val(),
-		descrc:$('#descrc').val(),
+		sku:$('#sku').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 		documentNo : $('#documentNo').val(),
@@ -99,7 +100,7 @@ var doExport = function(){
 		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
 		param.put("lotatt12",$('#lotatt12').val());
-		param.put("descrc",$('#descrc').val());
+		param.put("sku",$('#sku').val());
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
 		param.put("documentNo",$('#documentNo').val());
@@ -137,10 +138,10 @@ var doExport = function(){
 					<table style="text-align: right">
 						<tr >
 	                        <th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>存货编码</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
+	                        <th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
 	                        <th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>
+<%--							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
 
 						</tr>
 						<tr >

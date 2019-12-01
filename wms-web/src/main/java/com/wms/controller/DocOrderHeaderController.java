@@ -284,18 +284,9 @@ public class DocOrderHeaderController {
      */
     @Login
     @RequestMapping(params = "exportAccompanyingPdf")
-    public void exportAccompanyingPdf(HttpServletResponse response, @RequestParam(value = "orderno") String orderno) throws Exception {
+    public String exportAccompanyingPdf(Model model, @RequestParam(value = "orderno") String orderno) throws Exception {
 
         String[] s = orderno.split(",");
-        List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
-        for (String a : s) {
-            orderHeaderForNormal.add(orderHeaderForNormalService.exportAccompanyingPdf(a));
-        }
-        orderHeaderForNormalService.printOrderHeaderForNormalJasper(response,orderHeaderForNormal);
-
-
-
-/*        String[] s = orderno.split(",");
         List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
         for (String a : s) {
             orderHeaderForNormal.add(orderHeaderForNormalService.exportAccompanyingPdf(a));
@@ -338,7 +329,7 @@ public class DocOrderHeaderController {
         }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
-        return "iReportView";*/
+        return "iReportView";
     }
 
     @Login

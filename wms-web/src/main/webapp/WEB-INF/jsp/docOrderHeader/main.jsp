@@ -1198,12 +1198,12 @@ var printAccompanying = function () {
     if (rows.length > 0) {
         for (var i = 0; i < rows.length; i++) {
             orderno += rows[i].orderno+",";
-            // if(i>0){
-            //     if(rows[0].customerid != rows[i].customerid){
-            //         showMsg("同时只支持同一客户编码(类型)的随货单打印......");
-            //         return;
-            //     }
-            // }
+            if(i>0){
+                if(rows[0].customerid != rows[i].customerid){
+                    showMsg("同时只支持同一客户编码(类型)的随货单打印......");
+                    return;
+                }
+            }
         }
         /*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
         window.open(sy.bp()+"/docOrderHeaderController.do?exportAccompanyingPdf&orderno="+orderno);
@@ -2017,32 +2017,6 @@ var selectDialogCust = function(){
 	};
 };
 
-/*/!* 收货单位选择 *!/
-var selectDialogRece = function(){
-    var row = ezuiReceDataDialogId.datagrid('getSelected');
-	$.ajax({
-		url : 'gspReceivingAddressController.do?gspReceivingInfo',
-		data : {customerid:row.customerid},
-		type : 'POST',
-		dataType : 'JSON',
-		success : function(result){
-			try {
-					if(result.success){
-						var dat = $.parseJSON(result.msg);
-						$("#ezuiDialog #cContact").textbox('setValue', dat.contacts);
-						$("#ezuiDialog #cTel1").textbox('setValue',dat.phone);
-						$("#ezuiDialog #cAddress1").textbox('setValue',dat.deliveryAddress);
-					}
-			} catch (e) {
-				return;
-			};
-		}
-	});
-    if(row){
-        $("#ezuiDialog #consigneeid").textbox('setValue',row.descrC);
-        ezuiReceDataDialog.dialog('close');
-    };
-};*/
 
 /*收货单位选择*/
 /* 客户选择弹框-订单信息界面 */

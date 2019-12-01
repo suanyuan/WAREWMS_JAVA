@@ -8,29 +8,34 @@
 
 <!-- 查询条件 出入库流水 -->
     <sql id="Example_Where_Clause">
-         where 1=1
         <trim  suffixOverrides="," >
             <if test="condition.customerid != null and condition.customerid != ''" >
-                and aaa.customerid like concat('%', #{condition.customerid},'%')
+                and a.customerid like concat('%', #{condition.customerid},'%')
+            </if>
+            <if test="condition.sku != null and condition.sku != ''" >
+                and a.sku like concat('%', #{condition.sku},'%')
             </if>
 
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-                and aaa.lotatt12 like concat('%', #{condition.lotatt12},'%')
-            </if>
-            <if test="condition.descrc != null and condition.descrc != ''" >
-                and aaa.`descrc` like concat('%', #{condition.descrc},'%')
+                and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-                and aaa.lotatt04 like concat('%', #{condition.lotatt04},'%')
+                and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
             </if>
             <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-                and aaa.lotatt05 like concat('%', #{condition.lotatt05},'%')
+                and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
             <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
-                and aaa.soasndate &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+                and e.`lotatt03` &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
             </if>
             <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
-                and aaa.soasndate &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+                and e.`lotatt03` &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.soStartDate != null and condition.soStartDate != ''" >
+                and aa.`edittime` &gt;=  #{condition.soStartDate,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.soEndDate != null and condition.soEndDate != ''" >
+                and aa.`edittime` &lt;=  #{condition.soEndDate,jdbcType=VARCHAR}
             </if>
         </trim>
     </sql>
@@ -44,8 +49,8 @@
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
-            <if test="condition.descrc != null and condition.descrc != ''" >
-                and s.`descr_c` like concat('%', #{condition.descrc},'%')
+            <if test="condition.sku != null and condition.sku != ''" >
+                and a.sku like concat('%', #{condition.sku},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
@@ -140,123 +145,101 @@
 
 <!-- 出入库流水 -->
     <select id="querySoAsnInvLocation"  resultType="com.wms.entity.RptSoAsnDailyLocation" parameterType="Object">
-        SELECT * FROM
-        (SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,NULL soqty,
+       (SELECT
+        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c
+        documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,b.PUTWAYQTY_COMPLETED asnqty,NULL soqty,
         bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='ASN_TYP') bb1 ON bb1.code=aa.asntype
         WHERE aa.asnstatus='99'
-        UNION ALL
-        SELECT
-        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
-        s.`descr_c` descrc,NULL asnqty,b.qty soqty,
-        bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
-        FROM  `doc_order_details` a
-        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
-        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
-        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE aa.sostatus='99'
-         )aaa
         <include refid="Example_Where_Clause"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
-    </select>
-<!-- 出入库流水 列表总数-->
-    <select id="querySoAsnInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
-        select count(1) from
+         )
+        UNION ALL
         (SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,NULL soqty,
-        bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
+        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c
+        documentType,a.`customerid`,a.`sku`,e.lotatt12,
+        s.`descr_c` descrc,NULL asnqty,b.qty soqty,
+        bb.codename_c uom,e.lotatt04,e.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
+        FROM `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details` b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='SO_TYP') bb1 ON bb1.code=aa.ordertype
+        WHERE aa.sostatus='99'
+        <include refid="Example_Where_Clause"/>
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+        )
+
+    </select>
+<!-- 入库流水 列表总数-->
+    <select id="queryAsnInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT
+        count(1)
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        LEFT JOIN doc_pa_details b  ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
         WHERE aa.asnstatus='99'
-        UNION ALL
-        SELECT
-        aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,c.lotatt12,
-        s.`descr_c` descrc,NULL asnqty,b.qty soqty,
-        bb.codename_c uom,c.lotatt04,c.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
-        FROM  `doc_order_details` a
-        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
-        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
-        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
-        WHERE aa.sostatus='99'
-        )aaa
         <include refid="Example_Where_Clause"/>
     </select>
-
+    <!-- 出库流水 列表总数-->
+    <select id="querySoInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
+        SELECT
+        count(1)
+        FROM `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details` b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
+        WHERE aa.sostatus='99'
+        <include refid="Example_Where_Clause"/>
+    </select>
 
 <!-- 入库单列表 -->
     <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
         SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,d.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='ASN_TYP') bb1 ON bb1.code=aa.asntype
         WHERE aa.asnstatus='99'
         <include refid="Example_Where_Clause1"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
+
     </select>
 <!-- 入库单列表 列表总数-->
     <select id="queryAsnListCount" resultType="java.lang.Integer" parameterType="Object">
-        select count(1)
+        SELECT
+        count(1)
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN `doc_pa_header` dph ON dph.`ASNNO`  = aa.`asnno`
-        LEFT JOIN doc_pa_details b  ON dph.`PANO` = b.`PANO` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON dph.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND IFNULL(b.userdefine3, '') = IFNULL(d.userdefine3, '') AND IFNULL(b.userdefine4, '') = IFNULL(d.userdefine4, '')
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aa.asntype
+        LEFT JOIN doc_pa_details b  ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
         WHERE aa.asnstatus='99'
         <include refid="Example_Where_Clause1"/>
     </select>
