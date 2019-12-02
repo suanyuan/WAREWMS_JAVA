@@ -75,6 +75,7 @@
                     {field: 'qtyholded', title: '冻结件数', width: 100,hidden:true},
                     {field: 'qtyholdedEach', title: '冻结数量', width: 100,hidden:true},
                     {field: 'defaultreceivinguom', title: '单位', width: 100,formatter:unitFormatter},
+                    {field: 'reservedfield02', title: '产品描述', width: 200},
                     {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
                     {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
                     // {field: 'lotatt07', title: '灭菌批号', width: 120},

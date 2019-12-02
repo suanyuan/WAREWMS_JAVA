@@ -10,6 +10,7 @@ public class ViewInvLocationVO {
 	private String enterpriseName;
 	private String enterpriseId;
 	private String defaultreceivinguom;
+	private String reservedfield02;//产品描述
 	private String skuGroup1;
 	private String lotnum;
 
@@ -619,4 +620,11 @@ public class ViewInvLocationVO {
 		this.warehouseid = warehouseid;
 	}
 
+	public String getReservedfield02() {
+		return reservedfield02;
+	}
+
+	public void setReservedfield02(String reservedfield02) {
+		this.reservedfield02 = reservedfield02;
+	}
 }

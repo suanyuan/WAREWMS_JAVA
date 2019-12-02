@@ -83,6 +83,7 @@ public class ViewInvLocation implements Serializable {
 	private String productRegisterNo;
 	private String enterpriseName;
 	private String defaultreceivinguom;
+	private String reservedfield02;//产品描述
 
 //	bas_package
 
@@ -96,6 +97,14 @@ public class ViewInvLocation implements Serializable {
 	private BigDecimal qtyavailedSum;
 	private BigDecimal qtyavailedEachSum;
 
+
+	public String getReservedfield02() {
+		return reservedfield02;
+	}
+
+	public void setReservedfield02(String reservedfield02) {
+		this.reservedfield02 = reservedfield02;
+	}
 
 	public BigDecimal getFmqtySum() {
 		return fmqtySum;

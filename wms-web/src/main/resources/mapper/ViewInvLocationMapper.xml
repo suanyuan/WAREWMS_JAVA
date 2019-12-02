@@ -45,6 +45,7 @@
 	<result column="name" property="name"/>
 	<result column="enterprise_name" property="enterpriseName"/>
 	<result column="defaultreceivinguom" property="defaultreceivinguom"/>
+	<result column="reservedfield02" property="reservedfield02"/>
 <!--	bas_package-->
 	<result column="qty1" property="qty1"/>
 
@@ -52,7 +53,7 @@
        
 <!-- View_Inv_Location table all fields -->
 <sql id="Base_Column_List" >
-	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyavailed_each,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt13,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt09,lotatt10,lotatt14,customerid,enterprise_name,`name`
+	 fmcustomerid,fmlocation,fmqty,fmsku,fmuom_name,i_mv,i_pa,i_rp,o_mv,o_rp,fmqty_each,qtyallocated,qtyallocated_each,defaultreceivinguom,qtyavailed,qtyavailed_each,qtyholded,qtyholded_each,skudescrc,skudescre,totalcubic,totalgrossweight,warehouseid,lotatt01,lotatt02,lotatt03,lotatt11,lotatt12,lotatt13,lotatt07,lotatt04,lotatt05,lotatt06,lotatt08,lotatt09,lotatt10,lotatt14,customerid,enterprise_name,`name`,reservedfield02
 </sql>
    
 
@@ -311,16 +312,12 @@ where 1=1
   	
 <!-- 查询库存余量按批次库位列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
-	select * from (
-	select a.* from (
+
 	select
 	<include refid="Base_Column_List"/>
 	from view_inv_location
 	<include refid="Example_Where_Clause"/>
     order by fmcustomerid,fmsku,fmlocation
-    ) a 
-	) b
-	where 1 = 1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>

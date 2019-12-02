@@ -146,6 +146,7 @@ public class ViewInvLocationExportService {
         superClassMap.put("fmqtyEach", "库存数量");
         superClassMap.put("qty1", "换算率");
         superClassMap.put("defaultreceivinguom", "单位");
+        superClassMap.put("reservedfield02", "产品描述");
         superClassMap.put("lotatt11", "存储条件");
         superClassMap.put("enterpriseName", "生产企业");
         superClassMap.put("lotatt10", "质量状态");
