@@ -981,7 +981,7 @@ public class DocAsnHeaderService extends BaseService {
         return json;
     }
 
-
+    /* 收货明细列表 求总合计*/
     public EasyuiDatagrid<AsnDetailResult> getAsnDetail(String asnNo) {
         EasyuiDatagrid<AsnDetailResult> datagrid = new EasyuiDatagrid<>();
         List<AsnDetailResult> asnDetailResultList = docAsnHeaderMybatisDao.queryAsnDetailResult(asnNo);
@@ -992,12 +992,16 @@ public class DocAsnHeaderService extends BaseService {
         }
 
         for(AsnDetailResult asnDetailResultSum :asnDetailResultList){
-            if(asnDetailResult!=null){
-                asnDetailResultSum.setFmqtySum(Double.valueOf(asnDetailResult.getFmqty()));
-                asnDetailResultSum.setFmqtyEachSum(Double.valueOf(asnDetailResult.getFmqty_each()));
-            }
+            asnDetailResultSum.setFmqtySum(Double.valueOf(asnDetailResult.getFmqty()));
+            asnDetailResultSum.setFmqtyEachSum(Double.valueOf(asnDetailResult.getFmqty_each()));
         }
-
+        double zero =0;
+        if(asnDetailResultList.size()==0){
+            asnDetailResult = new AsnDetailResult();
+            asnDetailResult.setFmqtySum(zero);
+            asnDetailResult.setFmqtyEachSum(zero);
+            asnDetailResultList.add(asnDetailResult);
+        }
         datagrid.setTotal((long) asnDetailResultList.size());
         datagrid.setRows(asnDetailResultList);
         return datagrid;
