@@ -12,6 +12,7 @@ import com.wms.query.OrderDetailsForNormalQuery;
 import com.wms.service.BasPackageService;
 import com.wms.service.CommonService;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.DateUtil;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
@@ -126,7 +127,7 @@ public class ImportOrderDataService {
         OrderDetailsForNormalVO importDetailsDataVO = null;
         String quantityData = null;
         Integer count = 1;
-        String customerId = "", soreference1 = "", requiredDeliveryTime = "", cContact = "", address = "", tel = "";
+        String customerId = "", soreference1 = "", requiredDeliveryTime = "", consigneeid = "", address = "", tel = "";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
         format.setLenient(false);
@@ -143,49 +144,29 @@ public class ImportOrderDataService {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[客户代码]，未输入").append(" ");
+                rowResult.append("[货主代码]，未输入").append(" ");
             }
             try {
-                if (StringUtils.isEmpty(dataArray.getCustomerid())) {
+                if (StringUtils.isEmpty(dataArray.getSoreference1())) {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                rowResult.append("[订单号]，未输入").append(" ");
+                rowResult.append("[客户单号1]，未输入").append(" ");
             }
-			/*try {
-				if (StringUtils.isEmpty(dataArray.getRequiredDeliveryTime())) {//判日期是否为
-					throw new Exception();
+			try {
+				if (StringUtils.isEmpty(dataArray.getOrderTypeName())) {
+				throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[预计送达时间]，未输入").append(" ");
-			}
+			rowResult.append("[订单类型]，未输入").append(" ");
+		  }
 			try {
-				 format.parse(dataArray.getRequiredDeliveryTime());
-			} catch (ParseException e) {
-				 //如果throw java.text.ParseException或者NullPointerException，就说明格式不对
-				 rowResult.append("[预计送达时间]，格式错误").append(" ");
-			}*/
-            try {
-                if (StringUtils.isEmpty(dataArray.getcContact())) {
+                if (StringUtils.isEmpty(dataArray.getConsigneeid())) {
                     throw new Exception();
                 }
-            } catch (Exception e) {
-                rowResult.append("[收货人]，未输入").append(" ");
-            }
-            try {
-                if (StringUtils.isEmpty(dataArray.getcAddress1())) {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                rowResult.append("[收货地址]，未输入").append(" ");
-            }
-            try {
-                if (StringUtils.isEmpty(dataArray.getcTel1())) {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                rowResult.append("[联系电话]，未输入").append(" ");
-            }
+			} catch (Exception e) {
+				 rowResult.append("[收货单位]，未输入").append(" ");
+			}
             try {
                 if (StringUtils.isEmpty(dataArray.getSku())) {
                     throw new Exception();
@@ -193,27 +174,35 @@ public class ImportOrderDataService {
             } catch (Exception e) {
                 rowResult.append("[产品代码]，未输入").append(" ");
             }
+//日期
             try {
-                if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {
-                    BasCustomer customer = null;
-                    BasCustomerQuery customerQuery = new BasCustomerQuery();
-                    customerQuery.setCustomerid(dataArray.getLotatt08());
-                    customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
-                    customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
-                    if (customer == null) {// 是否有供应商资料
-                        throw new Exception();
-                    }
-                    try {
-                        if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
-                            throw new Exception();
-                        }
-                    } catch (Exception e) {
-                        rowResult.append("[供应商代码],合作状态为未合作").append(" ");
-                    }
-                }
+                DateUtil.parse(dataArray.getLotatt01(),"yyyy-MM-dd");
+                DateUtil.parse(dataArray.getLotatt02(),"yyyy-MM-dd");
             } catch (Exception e) {
-                rowResult.append("[供应商代码],查无供应商资料").append(" ");
+                rowResult.append("[生产日期/效期],格式错误:格式应为yyyy-MM-dd").append(" ");
+
             }
+//            try {
+//                if (StringUtils.isNotEmpty(dataArray.getLotatt08())) {
+//                    BasCustomer customer = null;
+//                    BasCustomerQuery customerQuery = new BasCustomerQuery();
+//                    customerQuery.setCustomerid(dataArray.getLotatt08());
+//                    customerQuery.setCustomerType(Constant.CODE_CUS_TYP_VE);
+//                    customer = basCustomerMybatisDao.queryByIdType(customerQuery.getCustomerid(), customerQuery.getCustomerType());
+//                    if (customer == null) {// 是否有供应商资料
+//                        throw new Exception();
+//                    }
+//                    try {
+//                        if (customer.getActiveFlag().equals(Constant.IS_USE_NO)) {
+//                            throw new Exception();
+//                        }
+//                    } catch (Exception e) {
+//                        rowResult.append("[供应商代码],合作状态为未合作").append(" ");
+//                    }
+//                }
+//            } catch (Exception e) {
+//                rowResult.append("[供应商代码],查无供应商资料").append(" ");
+//            }
 
             try {
                 if ((dataArray.getQtyordered() == null || dataArray.getQtyordered().equals("")) && (dataArray.getQtyorderedEach() == null || dataArray.getQtyorderedEach().equals(""))) {
@@ -250,6 +239,7 @@ public class ImportOrderDataService {
 						 rowResult.append("[预计送达时间]，格式错误").append(" ");
 					}*/
                     importDataVO.setOrderTypeName(dataArray.getOrderTypeName());
+                    importDataVO.setConsigneeid(dataArray.getConsigneeid());
                     importDataVO.setCContact(dataArray.getcContact());
                     importDataVO.setCAddress1(dataArray.getcAddress1());
                     importDataVO.setCTel1(dataArray.getcTel1());
@@ -262,7 +252,7 @@ public class ImportOrderDataService {
                 } else if (dataArray.getCustomerid().equals(customerId) &&
                         dataArray.getSoreference1().equals(soreference1) &&
                         //dataArray.getRequiredDeliveryTime().equals(requiredDeliveryTime) &&
-                        dataArray.getcContact().equals(cContact) &&
+                        dataArray.getConsigneeid().equals(consigneeid) &&
                         dataArray.getcAddress1().equals(address) &&
                         dataArray.getcTel1().equals(tel)) {
                     //表头信息一致则只增加明细信息
@@ -281,9 +271,13 @@ public class ImportOrderDataService {
                     importDataVO.setSoreference2(dataArray.getSoreference2());
 
                     importDataVO.setOrderTypeName(dataArray.getOrderTypeName());
+                    importDataVO.setConsigneeid(dataArray.getConsigneeid());
                     importDataVO.setCContact(dataArray.getcContact());
                     importDataVO.setCAddress1(dataArray.getcAddress1());
                     importDataVO.setCTel1(dataArray.getcTel1());
+                    importDataVO.setCarrierid(dataArray.getCarrierid());
+                    importDataVO.setUserdefine1(dataArray.getUserdefine1());
+                    importDataVO.setUserdefine2(dataArray.getUserdefine2());
 
                     importDetailsDataVO = initOrderDetails(dataArray);
                     importDetailsDataVOList.add(importDetailsDataVO);
@@ -296,7 +290,7 @@ public class ImportOrderDataService {
                 customerId = importDataVO.getCustomerid();
                 soreference1 = importDataVO.getSoreference1();
                 //requiredDeliveryTime = dataArray.getRequiredDeliveryTime();
-                cContact = importDataVO.getCContact();
+                consigneeid = importDataVO.getConsigneeid();
                 address = importDataVO.getCAddress1();
                 tel = importDataVO.getCTel1();
                 count = count + 1;
@@ -319,6 +313,7 @@ public class ImportOrderDataService {
         map.put("客户单号1", "soreference1");
         map.put("定向入库单号", "soreference2");
         map.put("订单类型", "orderTypeName");
+        map.put("收货单位", "consigneeid");
         map.put("收货人", "cContact");
         map.put("收货地址", "cAddress1");
         map.put("收货人电话", "cTel1");
@@ -328,21 +323,22 @@ public class ImportOrderDataService {
         map.put("快递结算方式", "userdefine2");
         map.put("订单件数", "qtyordered");
         map.put("订单数量", "qtyorderedEach");
+        map.put("库位", "locationid");
         map.put("生产日期", "lotatt01");
         map.put("效期", "lotatt02");
-        map.put("入库日期", "lotatt03");
+//        map.put("入库日期", "lotatt03");
         map.put("生产批号", "lotatt04");
         map.put("序列号", "lotatt05");
         map.put("产品注册证号", "lotatt06");
-        map.put("灭菌批号", "lotatt07");
-        map.put("供应商", "lotatt08");
+//        map.put("灭菌批号", "lotatt07");
+//        map.put("供应商", "lotatt08");
         map.put("样品属性", "lotatt09");
         map.put("质量状态", "lotatt10");
-        map.put("存储条件", "lotatt11");
-        map.put("产品名称", "lotatt12");
-        map.put("双证", "lotatt13");
+//        map.put("存储条件", "lotatt11");
+//        map.put("产品名称", "lotatt12");
+//        map.put("双证", "lotatt13");
         map.put("入库单号", "lotatt14");
-        map.put("生产厂商名称", "lotatt15");
+//        map.put("生产厂商名称", "lotatt15");
         return map;
     }
 
@@ -420,6 +416,7 @@ public class ImportOrderDataService {
                     orderHeader.setOrdertype(importDataVO.getOrderTypeName());
                     orderHeader.setOrdertime(new Date());
                     orderHeader.setConsigneeid(importDataVO.getConsigneeid());
+                    orderHeader.setCContact(importDataVO.getCContact());
                     orderHeader.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     orderHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
                     orderHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
@@ -431,7 +428,6 @@ public class ImportOrderDataService {
                     orderHeader.setReleasestatus("Y");
                     orderHeader.setSoreference1(importDataVO.getSoreference1());
                     orderHeader.setSoreference2(importDataVO.getSoreference2());
-                    orderHeader.setConsigneeid(importDataVO.getConsigneeid());
                     BasCodes basCodes = new BasCodes();
                     basCodes.setCode("EXP_CO");
                     basCodes.setCode("SF");
@@ -466,7 +462,7 @@ public class ImportOrderDataService {
                                 orderDetails.setQtyorderedEach(importDetailsDataVO.getQtyorderedEach());
                                 orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
                             } else {
-                                //有件数计算
+                                //有件数计算数量
                                 if (importDetailsDataVO.getQtyordered() > 0) {
                                     orderDetails.setQtyorderedEach(basPackage.getQty1().doubleValue() * (importDetailsDataVO.getQtyordered()));
                                     orderDetails.setQtyordered(importDetailsDataVO.getQtyordered());
@@ -526,10 +522,12 @@ public class ImportOrderDataService {
         importDetailsDataVO.setSeq(dataArray.getSeq());
         importDetailsDataVO.setOrderno(dataArray.getOrderno());
         importDetailsDataVO.setCustomerid(dataArray.getCustomerid());
-        importDetailsDataVO.setConsigneeid(dataArray.getcContact());
+        importDetailsDataVO.setConsigneeid(dataArray.getConsigneeid());
+        importDetailsDataVO.setCContact(dataArray.getcContact());
         importDetailsDataVO.setSku(dataArray.getSku());
         importDetailsDataVO.setSoreference1(dataArray.getSoreference1());
         importDetailsDataVO.setSoreference2(dataArray.getSoreference2());
+        importDetailsDataVO.setLocation(dataArray.getLocationid());  //库位
         if (!StringUtils.isEmpty(dataArray.getQtyorderedEach()) || !dataArray.getQtyorderedEach().equals("")) {
             importDetailsDataVO.setQtyorderedEach(Double.parseDouble(dataArray.getQtyorderedEach()));
         } else {

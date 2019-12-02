@@ -28,7 +28,8 @@ public class ImportOrderData implements Serializable {
 	 */
 	private String orderTypeName;
 
-	private String cContact;
+	private String cContact;    //收货人
+	private String consigneeid; //收货单位
 
 	private String cAddress1;
 
@@ -44,6 +45,7 @@ public class ImportOrderData implements Serializable {
 
 	private String qtyordered;
 	private String qtyorderedEach;
+	private String locationid; //库位
 
 	private String lotatt01;
 	private String lotatt02;
@@ -307,5 +309,21 @@ public class ImportOrderData implements Serializable {
 
 	public void setSoreference1(String soreference1) {
 		this.soreference1 = soreference1;
+	}
+
+	public String getConsigneeid() {
+		return consigneeid;
+	}
+
+	public void setConsigneeid(String consigneeid) {
+		this.consigneeid = consigneeid;
+	}
+
+	public String getLocationid() {
+		return locationid;
+	}
+
+	public void setLocationid(String locationid) {
+		this.locationid = locationid;
 	}
 }
