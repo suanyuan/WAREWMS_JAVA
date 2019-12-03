@@ -105,8 +105,12 @@ public class GspVerifyService {
 
         if (StringUtil.isEmpty(lotatt01)) {
             return Json.error("请选择生产日期");
-        }else if (StringUtil.isEmpty(lotatt02   )) {
+        } else if (StringUtil.isEmpty(lotatt02   )) {
             return Json.error("请选择有效期/失效期");
+        } else if (lotatt01.length() != 10) {
+            return Json.error("生产日期格式错误！");
+        } else if (lotatt02.length() != 10) {
+            return Json.error("有效期/失效期格式错误！");
         }
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
