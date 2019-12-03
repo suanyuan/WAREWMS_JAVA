@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.wms.constant.Constant;
 import com.wms.dao.GspBusinessLicenseDao;
 import com.wms.entity.GspBusinessLicense;
@@ -59,6 +60,10 @@ public class BasCarrierLicenseService extends BaseService {
 		EasyuiDatagrid<BasCarrierLicenseVO> datagrid = new EasyuiDatagrid<BasCarrierLicenseVO>();
 
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		if(query.getIdList()!=null&&query.getIdList()!="" ){
+			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
+			mybatisCriteria.setIdList(enterpriseIdList);
+		}
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
@@ -232,4 +237,12 @@ public class BasCarrierLicenseService extends BaseService {
 		return basCarrierLicenseMybatisDao.queryByEnterId(BasCarrierLicense);
 	}
 
+	/**
+	 * json 转 List<T>
+	 */
+	public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+		@SuppressWarnings("unchecked")
+		List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+		return ts;
+	}
 }

@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -77,9 +78,15 @@ public class BasCustomerService extends BaseService {
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
 
+
 		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		if(query.getIdList()!=null&&query.getIdList()!="" ){
+			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
+			mybatisCriteria.setIdList(enterpriseIdList);
+		}
+
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
@@ -135,7 +142,8 @@ public class BasCustomerService extends BaseService {
 
 			basCustomerVOList.add(basCustomerVO);
 		}
-		datagrid.setTotal((long) basCustomerMybatisDao.queryByCount(mybatisCriteria));
+		Long total  = Long.parseLong(basCustomerList.size()+"");
+		datagrid.setTotal(total);
 		datagrid.setRows(basCustomerVOList);
 		return datagrid;
 	}
@@ -872,4 +880,14 @@ public class BasCustomerService extends BaseService {
 		return basCustomerMybatisDao.querySupplierByCustomer(customerId);
 	}
 
+
+
+	/**
+	 * json 转 List<T>
+	 */
+	public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+		@SuppressWarnings("unchecked")
+		List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+		return ts;
+	}
 }

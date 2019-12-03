@@ -297,6 +297,17 @@ where 1=1
 
 	</select>
 
+	<!-- 查询  有效审核通过的 供应商和货主的 单号， 名称 列表 -->
+	<select id="querySupplierAndClient" resultMap="BaseResultMap"  parameterType="Object">
+
+		select supplier_id,enterprise_id,client_end_date,empower_end_date
+		from gsp_supplier where is_use='1' and first_state ='40'
+		union
+		select client_id supplier_id,enterprise_id,client_end_date,empower_end_date
+		from gsp_customer where is_use='1' and first_state ='40';
+
+
+	</select>
 
 
 <!-- 根据id，修改记录-->

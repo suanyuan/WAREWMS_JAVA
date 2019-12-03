@@ -33,4 +33,6 @@ public interface GspSupplierMybatisDao extends BaseDao {
 
     public <T> List<T> querySupNameListByAll();
 
+    public List<GspSupplier> querySupplierAndClient();
+
 }

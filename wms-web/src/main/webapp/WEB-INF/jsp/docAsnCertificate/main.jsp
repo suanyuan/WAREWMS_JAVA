@@ -542,6 +542,10 @@ var ezuiCustToolbarClearC = function () {
                 },
                 onload:function(data){
                     //alert(data.comment);
+					if(data.comment.indexOf(".pdf")==-1){
+                        showMsg("请上传pdf");
+						return;
+					}
                     $("#certificateContext").val(data.comment);
                 },
                 onerror:function(er){

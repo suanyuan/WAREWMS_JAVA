@@ -248,6 +248,14 @@ where 1=1
 	 where lotatt05 = #{lotatt05}
 </select>
 
+	<!-- 查询所有 -->
+	<select id="queryAll"  resultMap="BaseResultMap" parameterType="Object">
+	select a.*
+	 from inv_lot_loc_id  i
+	 left join inv_lot_att a on i.lotnum=a.lotnum
+
+	</select>
+
 <!-- 批次属性 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from inv_lot_att 

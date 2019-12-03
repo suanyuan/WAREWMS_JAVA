@@ -50,4 +50,10 @@ public interface GspEnterpriseInfoMybatisDao extends BaseDao {
 
 	List<GspEnterpriseInfo> queryIsUse1ByAll();
 
+	//查询所有企业的enterpriseNo 去重
+	List<String> queryEnterpriseNo();
+
+	public <T> T queryByEnterpriseNo(Object id);
+
+
 }

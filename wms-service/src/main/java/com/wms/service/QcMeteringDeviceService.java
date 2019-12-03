@@ -3,6 +3,7 @@ package com.wms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.QcMeteringDeviceMybatisDao;
 import com.wms.utils.RandomUtil;
@@ -28,6 +29,11 @@ public class QcMeteringDeviceService extends BaseService {
 	public EasyuiDatagrid<QcMeteringDeviceVO> getPagedDatagrid(EasyuiDatagridPager pager, QcMeteringDeviceQuery query) {
 		EasyuiDatagrid<QcMeteringDeviceVO> datagrid = new EasyuiDatagrid<QcMeteringDeviceVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
+
+		if(query.getIdList()!=null&&query.getIdList()!="" ){
+			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
+			criteria.setIdList(enterpriseIdList);
+		}
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setCondition(query);
@@ -104,5 +110,16 @@ public class QcMeteringDeviceService extends BaseService {
 			return Json.success("",list);
 		}
 		return Json.error("");
+	}
+
+
+
+	/**
+	 * json 转 List<T>
+	 */
+	public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+		@SuppressWarnings("unchecked")
+		List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+		return ts;
 	}
 }

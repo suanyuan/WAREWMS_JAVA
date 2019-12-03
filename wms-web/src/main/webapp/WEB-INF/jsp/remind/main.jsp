@@ -20,6 +20,19 @@
         var ezuiDatagrid;
         var ezuiImportDataDialog;
         var ezuiImportDataForm;
+        var enterpriseDatagrid;
+        var ezuiDialogEnterprise;
+        var idlist1;
+        var htAndSqDatagrid;
+        var ezuiDialogHtAndSq;
+        var ezuiDialogBasCarrier;
+        var basCarrierDatagrid;
+        var qcMeteringDeviceDatagrid;
+        var ezuiDialogQcMeteringDevice;
+        var basSkuLeakDatagrid;
+        var ezuiDialogBasSkuLeak;
+        var MtDatagrid;
+        var ezuiDialogMt;
         $(function () {
             ezuiMenu = $('#ezuiMenu').menu();
             ezuiForm = $('#ezuiForm').form();
@@ -33,8 +46,8 @@
                 pageList: [10, 50, 100],
                 fit: true,
                 border: false,
-                fitColumns: true,
-                nowrap: true,
+                fitColumns: false,
+                nowrap: false,
                 striped: true,
                 collapsible: false,
                 pagination: true,
@@ -43,13 +56,15 @@
                 idField: 'id',
                 columns: [[
                     // {field: 'sku',		title: '序号',	width: 100 },
-                    {field: 'codenameC', title: '提醒模块', width: 300},
-                    {field: 'codenameE', title: '提醒内容', width: 400},
-                    {field: 'showSequence', title: '个数', width: 100}
+                    {field: 'codenameC', title: '提醒模块', width: 500},
+                    {field: 'codenameE', title: '提醒内容', width:600},
+                    {field: 'showSequence', title: '个数', width: 200},
+                    // {field: 'udf1', title: '企业idJson', width: 1000,hidden:false},
+
                 ]],
-                // onDblClickCell: function(index,field,value){
-                // 	edit();
-                // },
+                onDblClickCell: function(index,field,value){
+                	edit();
+                },
                 onRowContextMenu: function (event, rowIndex, rowData) {
                     event.preventDefault();
                     $(this).datagrid('unselectAll');
@@ -59,7 +74,7 @@
                         top: event.pageY
                     });
                 }, onLoadSuccess: function (data) {
-                    ajaxBtn($('#menuId').val(), '<c:url value="/basGtnController.do?getBtn"/>', ezuiMenu);
+                    <%--ajaxBtn($('#menuId').val(), '<c:url value="/basGtnController.do?getBtn"/>', ezuiMenu);--%>
                     $(this).datagrid('unselectAll');
                 }
             });
@@ -71,6 +86,63 @@
                     ezuiFormClear(ezuiForm);
                 }
             }).dialog('close');
+            var row = ezuiDatagrid.datagrid('getSelected');
+
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            //企业
+            enterpriseDatagrid = $("#dataGridEnterprise").datagrid({
+                url : sy.bp()+'/gspEnterpriseInfoController.do?showDatagrid',
+                method:'POST',
+                toolbar : '',
+                title: '',
+                pageSize : 50,
+                pageList : [50, 100, 200],
+                border: false,
+                fitColumns : false,
+                nowrap: true,
+                striped: true,
+                queryParams:{
+                    idList : idlist1,
+                    // activeFlag : '1',
+                    // customerType:'OW'
+                },
+                fit:true,
+                collapsible:false,
+                pagination:true,
+                rownumbers:true,
+                singleSelect:true,
+                idField : 'enterpriseId',
+                columns : [[
+                    {field: 'enterpriseId',		title: '主键',	width:160 ,hidden:true},
+                    {field: 'isUse',		title: '是否有效',	width: 160,formatter:isUseFormatter },
+                    {field: 'enterpriseNo',		title: '企业代码',	width: 160 },
+                    {field: 'shorthandName',		title: '简称',	width: 160},
+                    {field: 'enterpriseName',		title: '企业名称',	width: 160 },
+                    {field: 'enterpriseType',		title: '企业类型',	width: 160 ,formatter: entTypeFormatter},
+
+                ]],
+                // onDblClickCell: function(index,field,value){
+                //     choseClientSelect();
+                // },
+                onRowContextMenu : function(event, rowIndex, rowData) {
+
+                },
+                onSelect: function(rowIndex, rowData) {
+
+                },
+                onLoadSuccess:function(data){
+                    $(this).datagrid('unselectAll');
+                    $(this).datagrid("resize",{height:540});
+                }
+            });
+
+
+
+
 
             //导入
             ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
@@ -88,15 +160,436 @@
             $('#basGtnId').val(0);
             ezuiDialog.dialog('open');
         };
+
+
+        var jiekou = function () {
+            $.ajax({
+                url: 'remindController.do?remind',
+                // data: {id: row.sku},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (result) {
+
+                }
+            });
+            ezuiDatagrid.datagrid('reload');
+        };
+
         var edit = function () {
-            processType = 'edit';
+
             var row = ezuiDatagrid.datagrid('getSelected');
-            if (row) {
-                ezuiForm.form('load', {
-                    sku: row.sku,
-                    gtncode: row.gtncode
+
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            if(row.showSequence==0){
+                $.messager.show({
+                    msg: '无详情列表',
+                    title: '<spring:message code="common.message.prompt"/>'
                 });
-                ezuiDialog.dialog('open');
+                return;
+            }
+            processType = 'edit';
+            // var row = ezuiDatagrid.datagrid('getSelected');
+            if (row) {
+                console.log(row.code);
+
+                if(row.code==11||row.code==12||row.code==13||row.code==14){
+                    //库内货品近效期
+
+
+
+                }else if(row.code==15||row.code==16||row.code==17||row.code==18||row.code==19||row.code==20
+                    ||row.code==21||row.code==22){
+
+
+                    ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+                    enterpriseDatagrid.datagrid('load', {
+                        idList : idlist1,
+                    });
+                }else if(row.code==23||row.code==24||row.code==25||row.code==26 ){
+
+                    htAndSqDatagrid = $("#dataGridHtAndSq").datagrid({
+                        url : sy.bp()+'/basCustomerController.do?showDatagrid',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        border: false,
+                        fitColumns : false,
+                        nowrap: true,
+                        striped: true,
+                        queryParams:{
+                            idList : idlist1,
+
+                        },
+                        fit:true,
+                        collapsible:false,
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        idField : 'firstop',
+                        columns : [[
+                            {field: 'activeFlag',		title: '是否合作 ',	width: 71,formatter:function(value,rowData,rowIndex){
+                                    return rowData.activeFlag == '1' ? '是' : '否';
+                                }},
+                            {field: 'billclass',		title: '首营状态 ',	width: 71,formatter:firstStateFormatter
+                            },
+                            {field: 'customerType',		title: '客户类型 ',	width: 80,formatter:function(value,rowData,rowIndex){
+                                    if (rowData.customerType=='CO') {
+                                        return rowData.customerType='收货单位';
+                                    }else if (rowData.customerType=='VE'){
+                                        return rowData.customerType='供应商';
+                                    }else if (rowData.customerType=='CA'){
+                                        return rowData.customerType='承运商';
+                                    }else if (rowData.customerType=='OT'){
+                                        return rowData.customerType='其他';
+                                    }else if (rowData.customerType=='OW'){
+                                        return rowData.customerType='货主';
+                                    }else if (rowData.customerType=='PR'){
+                                        return rowData.customerType='生产企业';
+                                    }else if (rowData.customerType=='WH'){
+                                        return rowData.customerType='主体';
+                                    }
+                                } },
+
+                            {field: 'customerid',		title: '客户代码',	width: 100 },
+                            {field: 'descrC',		title: '客户名称',	width: 250 },
+                            {field: 'enterpriseNo',		title: '企业代码 ',	width: 100 },
+                            {field: 'shorthandName',		title: '简称 ',	width: 100 },
+                            // {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
+                            {field: 'allClient',		title: '供应商对应货主 ',	width: 250 },
+                            {field: 'receivingAllClient',		title: '收货单位对应货主 ',	width: 250 },
+
+
+                            {field: 'contacts',		title: '联系人 ',	width: 80 },
+                            {field: 'contactsPhone',		title: '联系人电话 ',	width: 100 },
+                            {field: 'supContractNo',		title: '合同编号 ',	width: 120 },
+                            /* {field: 'operateType',		title: '类型 ',	width: 12, formatter:function(value,rowData,rowIndex){
+                                     return rowData.operateType;
+                                 }},*/
+                            {field: 'contractUrl',		title: '合同文件 ',	width: 80,formatter:showUrlFile},
+                            {field: 'clientContent',		title: '委托/合同内容',	width: 120 },
+                            {field: 'clientStartDate',		title: '委托/合同开始时间 ',	width: 130 ,formatter:dateFormat2},
+                            {field: 'clientEndDate',		title: '委托/合同结束时间 ',	width: 130 ,formatter:dateFormat2},
+                            {field: 'clientTerm',		title: '委托/合同期限',	width: 130 ,formatter:day},
+                            /*{field: 'overreceiving',		title: '允许超收',	width: 12, formatter:function(value,rowData,rowIndex){
+                                return rowData.overreceiving == 'Y' ? '是' : '否';
+                            }},*/
+                            {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110,formatter:yesOrNoFormatter},
+
+                            {field: 'notes',		title: '备注 ',	width: 200 },
+
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     choseClientSelect();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+                    ezuiDialogHtAndSq = $('#ezuiDialogHtAndSq').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+                }else if(row.code==27||row.code==28||row.code==29||row.code==30||row.code==31||row.code==32){
+                    //承运商
+
+                    basCarrierDatagrid = $('#dataGridBasCarrier').datagrid({
+                        url : '<c:url value="/basCarrierLicenseController.do?showDatagrid"/>',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : false,
+                        nowrap: true,
+                        striped: true,
+                        collapsible:false,
+                        queryParams:{
+                            idList : idlist1,
+                        },
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        idField : 'carrierLicenseId',
+                        columns : [[
+                            {field: 'carrierLicenseId',		title: '承运商名称',	width: 120,hidden:true },
+                            {field: 'enterpriseName',		title: '承运商名称',	width: 120 },
+                            {field: 'roadNumber',		title: '道路运营许可证编号',	width: 140 },
+                            {field: 'roadNumberTerm',		title: '证件有效期',	width: 120 },
+                            {field: 'roadAuthorityPermit',		title: '核发机关',	width: 120 },
+                            {field: 'roadBusinessScope',		title: '经营范围',	width: 120 },
+                            {field: 'carrierNo',		title: '快递经营许可证编号',	width: 120 },
+                            {field: 'carrierDate',		title: '发证日期',	width: 125 },
+                            {field: 'carrierAuthorityPermit',		title: '发证机关',	width: 125 },
+                            {field: 'carrierEndDate',		title: '有效期至',	width: 125 },
+                            {field: 'carrierBusinessScope',		title: '业务范围',	width: 120 },
+                            {field: 'contractNo',		title: '合同编号',	width: 38 ,hidden:true},
+                            {field: 'contractUrl',		title: '合同文件',	width: 38 ,hidden:true},
+                            {field: 'clientContent',		title: '合同内容',	width: 38 ,hidden:true},
+                            {field: 'clientStartDate',		title: '合同开始时间',	width: 38 ,hidden:true},
+                            {field: 'clientEndDate',		title: '合同结束时间',	width: 38 ,hidden:true},
+                            {field: 'clientTerm',		title: '合同期限',	width: 38,hidden:true },
+                            {field: 'createId',		title: '录入人',	width: 120 },
+                            {field: 'createDate',	title: '录入时间',	width: 125 },
+                            {field: 'editId',		title: '修改人',	width: 120 },
+                            {field: 'editDate',		title: '修改时间',	width: 125 },
+                            {field: 'activeFlag',	title: '是否合作',	width: 120 ,formatter:function(value,rowData,rowIndex){
+                                    return rowData.activeFlag == '1' ? '是' : '否';
+                                } }
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     choseClientSelect();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+                    ezuiDialogBasCarrier = $('#ezuiDialogBasCarrier').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+
+                }else if(row.code==33){
+                    //库内货品 养护提醒
+                    MtDatagrid = $('#dataGridMt').datagrid({
+                        // url : sy.bp()+"/commonController.do?queryMtList",
+                        url : '<c:url value="/commonController.do?queryMtList"/>',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : false,
+                        nowrap: true,
+                        striped: true,
+                        collapsible:false,
+                        // queryParams:{
+                        //     idList : idlist1,
+                        // },
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        columns : [[
+                            {field: 'sku',		title: '产品代码',	width: 200 },
+                            {field: 'locationid',		title: '库位',	width: 220 },
+                            {field: 'customerid',		title: '客户代码',	width: 220 },
+                            {field: 'qty',		title: '库存',	width: 140 }
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     choseClientSelect();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+                    ezuiDialogMt = $('#ezuiDialogMt').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+
+
+                }else if(row.code==34||row.code==35){
+                    //计量设备
+                    qcMeteringDeviceDatagrid = $('#dataGridQcMeteringDevice').datagrid({
+                        url : '<c:url value="/qcMeteringDeviceController.do?showDatagrid"/>',
+                        method:'POST',
+                        toolbar : '#toolbar',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : true,
+                        nowrap: true,
+                        striped: true,
+                        queryParams:{
+                            idList : idlist1,
+                        },
+                        collapsible:false,
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        idField : 'calId',
+                        columns : [[
+                            {field: 'calId',		title: '待输入栏位0',	width: 80,hidden:true },
+                            {field: 'calName',		title: '名称',	width: 80 },
+                            {field: 'calNumber',	title: '编号',	width: 80 },
+                            {field: 'calTerm',		title: '校期',	width: 80 },
+                            {field: 'calCardUrl',	title: '证件',	width: 80 },
+                            {field: 'activeFlag',	title: '是否有效',	width: 80 ,formatter:function (value,rowData,rowIndex) {
+                                    return rowData.activeFlag=='1'? '是':'否'
+                                }},
+                            {field: 'createId',		title: '创建人',	width: 80 },
+                            {field: 'createDate',	title: '创建日期',	width: 80 },
+                            {field: 'editId',		title: '修改人',	width: 80 },
+                            {field: 'editDate',		title: '修改日期',	width: 80 }
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     edit();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+
+                    ezuiDialogQcMeteringDevice = $('#ezuiDialogQcMeteringDevice').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+
+                }else if(row.code==36){
+                    //未备案商品
+                    basSkuLeakDatagrid = $('#dataGridBasSkuLeak').datagrid({
+                        url : '<c:url value="/basSkuLeakController.do?showDatagrid"/>',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : true,
+                        nowrap: true,
+                        striped: true,
+                        // queryParams:{
+                        //     idList : idlist1,
+                        // },
+                        collapsible:false,
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        idField : 'customerid',
+                        columns : [[
+                            {field: 'customerid',		title: '货主',	width: 42 },
+                            {field: 'sku',		title: '产品代码',	width: 42 },
+                            {field: 'standard',		title: '规格',	width: 42 },
+                            {field: 'lotatt06',		title: '注册证',	width: 42 },
+                            {field: 'lotatt11',		title: '储存条件',	width: 42 },
+                            {field: 'conversionRatio',		title: '换算率',	width: 42 },
+                            {field: 'unit',		title: '单位',	width: 42 },
+                            {field: 'productline',		title: '产品线',	width: 42 },
+                            {field: 'supplier',		title: '供应商',	width: 42 },
+                            // {field: 'userdefine1',		title: '待输入栏位9',	width: 42 },
+                            // {field: 'userdefine2',		title: '待输入栏位10',	width: 42 },
+                            // {field: 'userdefine3',		title: '待输入栏位11',	width: 42 },
+                            // {field: 'userdefine4',		title: '待输入栏位12',	width: 42 },
+                            // {field: 'userdefine5',		title: '待输入栏位13',	width: 42 },
+                            // {field: 'addwho',		title: '待输入栏位14',	width: 42 },
+                            // {field: 'addtime',		title: '待输入栏位15',	width: 42 },
+                            // {field: 'editwho',		title: '待输入栏位16',	width: 42 },
+                            // {field: 'edittime',		title: '待输入栏位17',	width: 42 }
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     edit();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+
+                    ezuiDialogBasSkuLeak = $('#ezuiDialogBasSkuLeak').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+                }
+
+
+
+                // ezuiDialog.dialog('open');
+
+
+
+
+
+
             } else {
                 $.messager.show({
                     msg: '<spring:message code="common.message.selectRecord"/>',
@@ -104,6 +597,19 @@
                 });
             }
         };
+        //细单
+
+
+
+
+
+
+
+
+
+
+
+
         var del = function () {
             var row = ezuiDatagrid.datagrid('getSelected');
             if (row) {
@@ -280,12 +786,15 @@
             <%--</tr>--%>
             <%--</table>--%>
             <%--</fieldset>--%>
-            <%--<div>--%>
-            <%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
-            <%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
-            <%--&lt;%&ndash;<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>&ndash;%&gt;--%>
-            <%--<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>--%>
-            <%--</div>--%>
+            <div>
+
+            <a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
+            <a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+            <%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
+            <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+            <a onclick='jiekou();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>接口</a>
+
+            </div>
         </div>
         <table id='ezuiDatagrid'></table>
     </div>
@@ -293,17 +802,17 @@
 <div id='ezuiDialog' style='padding: 10px;'>
     <form id='ezuiForm' method='post'>
         <input type='hidden' id='basGtnId' name='basGtnId'/>
-        <table>
-            <tr>
-                <th>产品代码</th>
-                <td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>
-            </tr>
-            <tr>
-                <th>GTIN码</th>
-                <td><input type='text' name='gtncode' class='easyui-textbox' size='16' data-options='required:true'/>
-                </td>
-            </tr>
-        </table>
+        <%--<table>--%>
+            <%--<tr>--%>
+                <%--<th>产品代码</th>--%>
+                <%--<td><input type='text' name='sku' class='easyui-textbox' size='16' data-options='required:true'/></td>--%>
+            <%--</tr>--%>
+            <%--<tr>--%>
+                <%--<th>GTIN码</th>--%>
+                <%--<td><input type='text' name='gtncode' class='easyui-textbox' size='16' data-options='required:true'/>--%>
+                <%--</td>--%>
+            <%--</tr>--%>
+        <%--</table>--%>
     </form>
 </div>
 <div id='ezuiDialogBtn'>
@@ -323,32 +832,167 @@
 </div>
 
 <!-- 导入start -->
-<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>
-    <form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>
-        <table>
-            <tr>
-                <th>档案</th>
-                <td>
-                    <input type="text" id="uploadData" name="uploadData" class="easyui-filebox" size="36"
-                           data-options="buttonText:'选择',validType:['filenameExtension[\'xls\']']"/>
-                    <a onclick='downloadTemplate();' id='ezuiBtn_downloadTemplate' class='easyui-linkbutton'
-                       href='javascript:void(0);'>下载档案模版</a>
-                </td>
-            </tr>
-            <tr>
-                <th>执行结果</th>
-                <td><input id='importResult' class="easyui-textbox" size='100' style="height:150px"
-                           data-options="editable:false,multiline:true"/></td>
-            </tr>
-        </table>
-    </form>
-</div>
-<div id='ezuiImportDataDialogBtn'>
-    <a onclick='commitImportData1();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton'
-       href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
-    <a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton'
-       href='javascript:void(0);'><spring:message code='common.button.close'/></a>
-</div>
+<%--<div id='ezuiImportDataDialog' class='easyui-dialog' style='padding: 10px;'>--%>
+    <%--<form id='ezuiImportDataForm' method='post' enctype='multipart/form-data'>--%>
+        <%--<table>--%>
+            <%--<tr>--%>
+                <%--<th>档案</th>--%>
+                <%--<td>--%>
+                    <%--<input type="text" id="uploadData" name="uploadData" class="easyui-filebox" size="36"--%>
+                           <%--data-options="buttonText:'选择',validType:['filenameExtension[\'xls\']']"/>--%>
+                    <%--<a onclick='downloadTemplate();' id='ezuiBtn_downloadTemplate' class='easyui-linkbutton'--%>
+                       <%--href='javascript:void(0);'>下载档案模版</a>--%>
+                <%--</td>--%>
+            <%--</tr>--%>
+            <%--<tr>--%>
+                <%--<th>执行结果</th>--%>
+                <%--<td><input id='importResult' class="easyui-textbox" size='100' style="height:150px"--%>
+                           <%--data-options="editable:false,multiline:true"/></td>--%>
+            <%--</tr>--%>
+        <%--</table>--%>
+    <%--</form>--%>
+<%--</div>--%>
+<%--<div id='ezuiImportDataDialogBtn'>--%>
+    <%--<a onclick='commitImportData1();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton'--%>
+       <%--href='javascript:void(0);'><spring:message code='common.button.commit'/></a>--%>
+    <%--<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton'--%>
+       <%--href='javascript:void(0);'><spring:message code='common.button.close'/></a>--%>
+<%--</div>--%>
 <!-- 导入end -->
+
+
+<div id='ezuiDialogEnterprise' style='padding: 10px;display: none'>
+    <div id='clientTB' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+            <%--<legend>企业信息</legend>--%>
+            <%--<table>--%>
+                <%--<tr>--%>
+                    <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+                    <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+                    <%--<td>--%>
+                        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+                        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
+            <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridEnterprise">
+
+    </table>
+</div>
+
+<div id='ezuiDialogHtAndSq' style='padding: 10px;display: none'>
+    <div id='clientTB2' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridHtAndSq">
+
+    </table>
+</div>
+
+<div id='ezuiDialogBasCarrier' style='padding: 10px;display: none'>
+    <div id='clientTB3' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridBasCarrier">
+
+    </table>
+</div>
+<div id='ezuiDialogQcMeteringDevice' style='padding: 10px;display: none'>
+    <div id='clientTB4' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridQcMeteringDevice">
+
+    </table>
+</div>
+
+<div id='ezuiDialogBasSkuLeak' style='padding: 10px;display: none'>
+    <div id='clientTB5' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridBasSkuLeak">
+
+    </table>
+</div>
+
+<div id='ezuiDialogMt' style='padding: 10px;display: none'>
+    <div id='clientTB6' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridMt">
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
 </body>
 </html>

@@ -20,4 +20,7 @@ public class GspEnterpriseInfoQuery implements IQuery {
 
 
 	private String select;
+
+
+	private String idList;
 }

@@ -1,20 +1,22 @@
 package com.wms.utils.generator;
 
 import com.wms.entity.BasCodes;
+import com.wms.entity.BasCustomerHistory;
+import com.wms.entity.BasSkuLeak;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 
 public class CodeGenerator {
-	//windows路径
-	private static final String VO_PATH = "F:\\codesG";
-	private static final String FORM_PATH = "F:\\codesG";
-	private static final String QUERY_PATH = "F:\\codesG";
-	private static final String DAO_PATH = "F:\\codesG";
-	private static final String SERVICE_PATH = "F:\\codesG";
-	private static final String CONTROLLER_PATH = "F:\\codesG";
-	private static final String JSP_PATH = "F:\\codesG";
+	//windows路径D:\InsertList\CodeGenerator
+	private static final String VO_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String FORM_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String QUERY_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String DAO_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String SERVICE_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String CONTROLLER_PATH = "D:\\InsertList\\CodeGenerator\\";
+	private static final String JSP_PATH = "D:\\InsertList\\CodeGenerator\\";
 
 	//mac路径
 
@@ -36,7 +38,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new BasCodes());
+		CodeGenerator generator = new CodeGenerator(new BasSkuLeak());
 		generator.genData();
 	}
 	

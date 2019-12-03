@@ -55,8 +55,8 @@
 
     <!-- gsp_enterprise_info table all fields -->
     <sql id="Base_Column_List">
-	 enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state,user_define1,user_define2,user_define3,user_define4
-</sql>
+	  enterprise_id,enterprise_no,shorthand_name,enterprise_name,enterprise_type,contacts,contacts_phone,remark,create_id,create_date,edit_id,edit_date,is_use,state,user_define1,user_define2,user_define3,user_define4
+    </sql>
 
 
     <!-- 查询条件 -->
@@ -115,6 +115,15 @@
             <if test="condition.state != null and condition.state != ''">
                 and state = #{condition.state}
             </if>
+
+
+            <if test="condition.idList != null and condition.idList != ''">
+                and enterprise_id in
+                <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+
         </trim>
     </sql>
 
@@ -354,6 +363,20 @@
       select * from gsp_enterprise_info where is_use = '1'
 
     </select>
+
+    <!-- 查询所有有效企业的信息列表 -->
+    <select id="queryEnterpriseNo" resultType="java.lang.String" parameterType="Object">
+      select DISTINCT enterprise_no from gsp_enterprise_info;
+
+    </select>
+
+    <!-- 通过enterpriseNo 查询一条最新的企业 -->
+    <select id="queryByEnterpriseNo" resultMap="BaseResultMap" parameterType="Object">
+      select  * from gsp_enterprise_info where enterprise_no = #{condition.enterpriseNo}
+      ORDER BY create_date desc LIMIT 1
+
+    </select>
+
 
 
     <!-- 查询企业信息列表 -->

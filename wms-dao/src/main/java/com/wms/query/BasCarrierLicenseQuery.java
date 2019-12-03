@@ -38,6 +38,17 @@ public class BasCarrierLicenseQuery implements IQuery {
 
 	private Date clientEndDate;
 
+
+	private String idList;
+
+	public String getIdList() {
+		return idList;
+	}
+
+	public void setIdList(String idList) {
+		this.idList = idList;
+	}
+
 	public String getContractNo() {
 		return contractNo;
 	}

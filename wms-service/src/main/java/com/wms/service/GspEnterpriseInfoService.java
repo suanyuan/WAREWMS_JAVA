@@ -1,5 +1,7 @@
 package com.wms.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
@@ -13,6 +15,7 @@ import com.wms.utils.SfcUserLoginUtil;
 import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.GspEnterpriseInfoForm;
+import com.wms.vo.form.GspProductRegisterSpecsForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service("gspEnterpriseInfoService")
 public class GspEnterpriseInfoService extends BaseService {
@@ -36,7 +41,16 @@ public class GspEnterpriseInfoService extends BaseService {
 
 	public EasyuiDatagrid<GspEnterpriseInfoVO> getPagedDatagrid(EasyuiDatagridPager pager, GspEnterpriseInfoQuery query) throws Exception{
 		EasyuiDatagrid<GspEnterpriseInfoVO> datagrid = new EasyuiDatagrid<GspEnterpriseInfoVO>();
+//		GspProductRegisterSpecsForm gspProductRegisterSpecsForm = JSON.parseObject(query.getIdList(),GspProductRegisterSpecsForm.class);
+
+//		String s1 = query.getIdList().replace("[","");
+//		String s2 = s1.replace("]","");
+//		String enterpriseId = new String();
 		MybatisCriteria criteria = new MybatisCriteria();
+		if(query.getIdList()!=null&&query.getIdList()!="" ){
+			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
+			criteria.setIdList(enterpriseIdList);
+		}
 		criteria.setCurrentPage(pager.getPage());
 		criteria.setPageSize(pager.getRows());
 		criteria.setOrderByClause("create_date desc");
@@ -54,11 +68,12 @@ public class GspEnterpriseInfoService extends BaseService {
 			BeanUtils.copyProperties(gspEnterpriseInfo, gspEnterpriseInfoVO);
 			gspEnterpriseInfoVOList.add(gspEnterpriseInfoVO);
 		}
+
 		Long total = 0L;
 		if(StringUtils.isEmpty(query.getType())){
-			total = Long.parseLong(gspEnterpriseInfoMybatisDao.queryByCount(criteria)+"");
+			total = Long.parseLong(gspEnterpriseInfoList.size()+"");
 		}else {
-			total  = gspEnterpriseInfoMybatisDao.queryByCountByType(criteria);
+			total  = Long.parseLong(gspEnterpriseInfoList.size()+"");
 		}
 
 		datagrid.setTotal(Long.parseLong(total+""));
@@ -206,5 +221,15 @@ public class GspEnterpriseInfoService extends BaseService {
 		}else{
 			return false;
 		}
+	}
+
+
+	/**
+	 * json 转 List<T>
+	 */
+	public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+		@SuppressWarnings("unchecked")
+		List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+		return ts;
 	}
 }
