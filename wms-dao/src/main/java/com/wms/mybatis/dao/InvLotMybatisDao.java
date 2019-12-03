@@ -2,6 +2,8 @@ package com.wms.mybatis.dao;
 
 import com.wms.entity.InvLot;
 
+import java.util.List;
+
 /**
  * 
  * <br>
@@ -17,8 +19,7 @@ public interface InvLotMybatisDao extends BaseDao {
 	int updateQty(InvLot invLot);
 
     /**
-     * 删除0库存的记录
-     * @return ~
+     * 查询零库存记录
      */
-	int deleteEmptyInv();
+	List<InvLot> queryZeroInv();
 }

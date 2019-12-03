@@ -81,4 +81,14 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * @return 双证是否匹配
      */
     InvLotLocId queryByLotatt05(@Param("lotatt05") String lotatt05, @Param("customerId") String customerId);
+
+    /**
+     * 查询0库存记录
+     */
+    List<InvLotLocId> queryZeroInventory();
+
+    /**
+     * 根据关联主键删除（4个）
+     */
+    int deleteByPrimaryKeys(InvLotLocId invLotLocId);
 }

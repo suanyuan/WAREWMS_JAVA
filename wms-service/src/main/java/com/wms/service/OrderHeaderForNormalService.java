@@ -281,11 +281,13 @@ public class OrderHeaderForNormalService extends BaseService {
      */
     public Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 
-        Json json = docOrderUtilService.validateAllocation(orderHeaderForNormalForm.getOrderno());
+        //清除0库存
+        Json json = docOrderUtilService.deleteZeroInventory();
         if (!json.isSuccess()) return json;
 
-//        json = placeSFExpressOrder(orderHeaderForNormal, orderHeaderForNormalForm);
-//        return json;
+        json = docOrderUtilService.validateAllocation(orderHeaderForNormalForm.getOrderno());
+        if (!json.isSuccess()) return json;
+
         try {
             OrderHeaderForNormal orderHeaderForNormal = (OrderHeaderForNormal) json.getObj();
             if (orderHeaderForNormal != null) {

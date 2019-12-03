@@ -143,7 +143,7 @@ where 1=1
 
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
-	delete 	 from inv_lot where lotnum = #{lotnum}
+	delete from inv_lot where lotnum = #{lotnum}
 </delete>
  
 <!-- 根据id查询 批次库存表 -->
@@ -178,8 +178,11 @@ where 1=1
         where lotnum = #{lotnum, jdbcType=VARCHAR} and customerid = #{customerid, jdbcType=VARCHAR} and sku = #{sku, jdbcType=VARCHAR}
     </update>
 
-    <delete id="deleteEmptyInv">
-        delete from inv_lot where qty = 0
-    </delete>
+	<select id="queryZeroInv" parameterType="Object" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from inv_lot where IFNULL(qty,0) = 0
+		and IFNULL(qtypreallocated,0) = 0 and IFNULL(qtyallocated,0) = 0 and IFNULL(qtyonhold,0) = 0
+	</select>
   	
 </mapper>   

@@ -441,4 +441,17 @@
         LEFT JOIN inv_lot_att b ON a.lotnum = b.lotnum
         WHERE b.lotatt05 = #{lotatt05} and b.customerId = #{customerId}
     </select>
+
+	<select id="queryZeroInventory" parameterType="Object" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from inv_lot_loc_id where IFNULL(qty,0) = 0 and IFNULL(qtyallocated,0) = 0
+		and IFNULL(qtyrpin,0) = 0 and IFNULL(qtyrpout,0) = 0 and IFNULL(qtymvin,0) = 0 and IFNULL(qtymvout,0) = 0
+		and IFNULL(qtyonhold,0) = 0 and IFNULL(qtypa,0) = 0
+	</select>
+
+	<delete id="deleteByPrimaryKeys" parameterType="Object">
+		delete from inv_lot_loc_id
+		where lotnum = #{lotnum} and locationid = #{locationid} and sku = #{sku} and customerid = #{customerid}
+	</delete>
 </mapper>   

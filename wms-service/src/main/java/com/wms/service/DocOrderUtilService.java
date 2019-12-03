@@ -1,9 +1,6 @@
 package com.wms.service;
 
-import com.wms.entity.BasSerialNum;
-import com.wms.entity.BasSku;
-import com.wms.entity.DocSerialNumRecord;
-import com.wms.entity.InvLotLocId;
+import com.wms.entity.*;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
@@ -14,6 +11,7 @@ import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
@@ -37,6 +35,8 @@ public class DocOrderUtilService {
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
     @Autowired
     private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+    @Autowired
+    private InvLotMybatisDao invLotMybatisDao;
     @Autowired
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
 
@@ -160,6 +160,37 @@ public class DocOrderUtilService {
         if (basSku.getReservedfield06().equals("LL") || basSku.getReservedfield06().equals("LC"))
             return Json.error("冷链产品出库不可PC一键操作，请使用PDA/打包台，扫码出库");
 
+        return Json.success("");
+    }
+
+    /* ********************* 很 **********************
+     * ********************* 重 **********************
+     * ********************* 要 **********************
+     * ********************* ！ **********************
+     * 清除0库存
+     */
+    Json deleteZeroInventory() {
+
+        try {
+            List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryZeroInventory();
+            if (invLotLocIdList.size() > 0) {
+                for (InvLotLocId invLotLocId : invLotLocIdList) {
+                    invLotLocIdMybatisDao.deleteByPrimaryKeys(invLotLocId);
+                }
+            }
+
+            List<InvLot> invLotList = invLotMybatisDao.queryZeroInv();
+            if (invLotList.size() > 0) {
+                for (InvLot invLot : invLotList) {
+                    invLotMybatisDao.delete(invLot);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Json.error(StringUtil.fixNull(message));
+        }
         return Json.success("");
     }
 

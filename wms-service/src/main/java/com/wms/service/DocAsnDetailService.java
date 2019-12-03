@@ -464,6 +464,8 @@ public class DocAsnDetailService extends BaseService {
 				//docAsnDetail.setPlantoloc("STAGE01");
 				docAsnDetail.setReceivinglocation("STAGE01");
 			}
+			BasSku basSku = basSkuService.getSkuInfo(docAsnDetail.getCustomerid(), docAsnDetail.getSku());
+			docAsnDetail.setPackid(basSku.getPackid());
 			docAsnDetail.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			docAsnDetail.setReceivedtime(new Date());
 			docAsnDetail.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
