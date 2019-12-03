@@ -81,6 +81,8 @@ public class ViewInvLocationExportService {
             List<EasyuiCombobox> Lotatt10List = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
             for (ViewInvLocation viewInvLocation : vList)
             {
+
+               //数量类型去小数点
                 if(viewInvLocation.getFmqty()!=null) {
                     viewInvLocation.setFmqty(viewInvLocation.getFmqty().setScale(1));
                 }
@@ -90,7 +92,7 @@ public class ViewInvLocationExportService {
                 if(viewInvLocation.getQty1()!=null) {
                     viewInvLocation.setQty1(viewInvLocation.getQty1().setScale(1));
                 }
-
+               //双证
                 if(viewInvLocation.getLotatt13()!=null) {
                     if (viewInvLocation.getLotatt13().equals("1")) {
                         viewInvLocation.setLotatt13("已匹配");
@@ -105,6 +107,18 @@ public class ViewInvLocationExportService {
                             break;
                         }
                     }
+                }
+                //样品属性
+                if(viewInvLocation.getLotatt09()!=null){
+                   String lotatt09=viewInvLocation.getLotatt09();
+                   if(lotatt09.equals("ZC")){
+                       viewInvLocation.setLotatt09("正常");
+                   }else if(lotatt09.equals("TS")){
+                       viewInvLocation.setLotatt09("投诉");
+                   }else if(lotatt09.equals("YP")){
+                       viewInvLocation.setLotatt09("样品");
+
+                   }
                 }
             }
             // 导出
@@ -149,6 +163,7 @@ public class ViewInvLocationExportService {
         superClassMap.put("reservedfield02", "产品描述");
         superClassMap.put("lotatt11", "存储条件");
         superClassMap.put("enterpriseName", "生产企业");
+        superClassMap.put("lotatt09", "样品属性");
         superClassMap.put("lotatt10", "质量状态");
         superClassMap.put("fmlocation", "库位");
         superClassMap.put("name", "产品线");

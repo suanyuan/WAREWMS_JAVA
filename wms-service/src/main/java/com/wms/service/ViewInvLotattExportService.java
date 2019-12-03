@@ -109,6 +109,18 @@ public class ViewInvLotattExportService {
 				}else{
 					viewInvLotatt.setOnholdlockerEx("库存解冻");
 				}
+				//样品属性
+				if(viewInvLotatt.getLotatt09()!=null){
+					String lotatt09=viewInvLotatt.getLotatt09();
+					if(lotatt09.equals("ZC")){
+						viewInvLotatt.setLotatt09("正常");
+					}else if(lotatt09.equals("TS")){
+						viewInvLotatt.setLotatt09("投诉");
+					}else if(lotatt09.equals("YP")){
+						viewInvLotatt.setLotatt09("样品");
+
+					}
+				}
 			}
 	        // 导出  
 	        if (vList == null || vList.size() == 0) {  
@@ -156,6 +168,7 @@ public class ViewInvLotattExportService {
 		superClassMap.put("lotatt04", "生产批号");
 		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("lotatt06", "注册证号/备案凭证号");
+		superClassMap.put("lotatt09", "样品属性");
 		superClassMap.put("lotatt10", "质量状态");
 		superClassMap.put("onholdlockerEx", "冻结状态");
 		superClassMap.put("lpn", "LPN");
