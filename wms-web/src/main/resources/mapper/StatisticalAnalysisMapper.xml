@@ -93,12 +93,23 @@
 <!-- 查询条件 销售出库单列表 -->
     <sql id="Example_Where_Clause3">
         <trim  suffixOverrides="," >
+            <if test="condition.soOrderNo != null and condition.soOrderNo != ''" >
+                and aa.`orderno` like concat('%', #{condition.soOrderNo},'%')
+            </if>
+            <if test="condition.customerid != null and condition.customerid != ''" >
+                and a.customerid like concat('%', #{condition.customerid},'%')
+            </if>
             <if test="condition.sku != null and condition.sku != ''" >
                 and a.sku like concat('%', #{condition.sku},'%')
             </if>
-
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and c.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and c.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-                and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
+                and c.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
             <if test="condition.descrc != null and condition.descrc != ''" >
                 and s.`descr_c` like concat('%', #{condition.descrc},'%')
@@ -294,7 +305,7 @@
     <select id="querySalesSoList"  resultType="com.wms.entity.RptSalesSo" parameterType="Object">
         SELECT
          c.lotatt14 sourceOrder,aa.soreference1 soOrderNum,aa.`orderno` soOrderNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soDate,bb1.codename_c soType,
-         a.`customerid`,a.`sku`,c.lotatt12,s.`descr_c` descrc,b.qty,bb.codename_c uom,c.lotatt04,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
+         a.`customerid`,a.`sku`,c.lotatt12,s.`descr_c` descrc,b.qty,bb.codename_c uom,c.lotatt04,c.lotatt05,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
          aa.addwho,aa.editwho reviewWho,aa.c_address4 trackingNumber,aa.consigneeid,p.qty1
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`

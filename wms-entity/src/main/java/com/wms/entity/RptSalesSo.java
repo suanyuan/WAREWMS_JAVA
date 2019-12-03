@@ -31,6 +31,7 @@ public class RptSalesSo implements Serializable {
     private Double qty;                 //件数
     private String uom;                 //主计量单位
     private String lotatt04;            //批号
+    private String lotatt05;            //序列号
     private String lotatt02;            //失效日期
     private String addwho;              //制单人
     private String reviewWho;          //审核人

@@ -50,6 +50,7 @@ $(function() {
 			{field: 'qty',              title: '件数',	width: 100 },
 			{field: 'uom',		        title: '主计量单位',	width: 100 },
 			{field: 'lotatt04',         title: '批号',	width: 150 },
+			{field: 'lotatt05',         title: '序列号',	width: 150 },
 			{field: 'lotatt02',	        title: '失效日期',	width: 100},
 			{field: 'addwho',		    title: '制单人',	width: 100},
 			{field: 'reviewWho',		title: '审核人',	width: 100},
@@ -80,12 +81,14 @@ $(function() {
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
+		soOrderNo : $('#soOrderNo').val(),
 		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
-		lotatt12:$('#lotatt12').val(),
+		sku:$('#sku').val(),
 		descrc:$('#descrc').val(),
 		lotatt04 : $('#lotatt04').val(),
+		lotatt05 : $('#lotatt05').val(),
 	});
 };
 
@@ -96,12 +99,14 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
+		param.put("soOrderNo",$('#soOrderNo').val());
 		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
 		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
-		param.put("lotatt12",$('#lotatt12').val());
+		param.put("sku",$('#sku').val());
 		param.put("descrc",$('#descrc').val());
 		param.put("lotatt04",$('#lotatt04').val());
+		param.put("lotatt05",$('#lotatt05').val());
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/statisticalAnalysisController.do?exportSalesSoListDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -135,14 +140,16 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-	                        <th>客户名称</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>存货编码</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>单据号</th><td><input type='text' id='soOrderNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户名称</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+	                        <th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr >
-							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>出库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>出库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

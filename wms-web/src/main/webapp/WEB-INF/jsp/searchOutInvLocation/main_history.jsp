@@ -171,6 +171,7 @@ var doExport = function(){
 									<option value=""></option>
 									<option value="1">是</option>
 									<option value="0">否</option>
+									<option value="2">历史数据</option>
 								</select>
 							</td>
 							<td>
