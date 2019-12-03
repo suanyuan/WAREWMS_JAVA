@@ -20,6 +20,20 @@ public interface InvLotAttMybatisDao extends BaseDao {
 	 * @return ~
 	 */
 	List<InvLotAtt> queryByLotatts05(InvLotAttQuery query);
+
+
+
+
+	/**
+	 * 查询所有
+	 * @param
+	 * @return ~
+	 */
+	List<InvLotAtt> queryAll();
+
+
+
+
 	/**
 	 *根据LotAtt05查询 质量状态不为dj 修改 lotatt13为1
 	 * @param query 如上参数

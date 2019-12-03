@@ -177,9 +177,12 @@ var commit = function(){
     //}
     var enterpriceId = "";
     var row = ezuiDatagrid.datagrid('getSelected');
-    if(row){
-        enterpriceId = row.enterpriseId;
-    }
+    if(processType != "add"){
+        if(row){
+            enterpriceId = row.enterpriseId;
+        }
+	}
+
 
 
 

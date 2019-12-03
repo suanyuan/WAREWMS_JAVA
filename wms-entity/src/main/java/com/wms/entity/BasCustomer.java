@@ -150,21 +150,7 @@ public class BasCustomer  implements Serializable {
 //
 //	}
 
-	public Date getAddtime() {
-		return addtime;
-	}
 
-	public void setAddtime(Date addtime) {
-		this.addtime = addtime;
-	}
-
-	public Date getEdittime() {
-		return edittime;
-	}
-
-	public void setEdittime(Date edittime) {
-		this.edittime = edittime;
-	}
 
 	private java.util.Date edittime;
 
@@ -336,6 +322,26 @@ public class BasCustomer  implements Serializable {
 
 	private String skuanalysisfields;
 
+
+
+
+
+
+	public Date getAddtime() {
+		return addtime;
+	}
+
+	public void setAddtime(Date addtime) {
+		this.addtime = addtime;
+	}
+
+	public Date getEdittime() {
+		return edittime;
+	}
+
+	public void setEdittime(Date edittime) {
+		this.edittime = edittime;
+	}
 	public String getReceivingAddressId() {
 		return receivingAddressId;
 	}

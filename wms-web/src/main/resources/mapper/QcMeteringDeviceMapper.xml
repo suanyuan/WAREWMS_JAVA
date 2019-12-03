@@ -63,6 +63,15 @@ where 1=1
 	<if test="condition.activeFlag != null and condition.activeFlag != ''" >
 	    and active_flag =  #{condition.activeFlag}
 	</if>
+
+	<if test="condition.idList != null and condition.idList != ''">
+		and cal_id in
+		<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</if>
+
+
 </trim>
 </sql>
    

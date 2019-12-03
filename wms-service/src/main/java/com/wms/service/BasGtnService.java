@@ -2,16 +2,13 @@ package com.wms.service;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.itextpdf.text.log.SysoCounter;
-import com.wms.entity.BasCodes;
-import com.wms.entity.BasGtn;
-import com.wms.entity.Remind;
+import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.BasCodesMybatisDao;
-import com.wms.mybatis.dao.BasGtnMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.*;
 import com.wms.query.BasCodesQuery;
 import com.wms.service.importdata.ImportBasGtnDataService;
 import com.wms.utils.ResourceUtil;
@@ -46,6 +43,21 @@ public class BasGtnService extends BaseService {
 	private ImportBasGtnDataService importBasGtnDataService;
 	@Autowired
 	private BasCodesMybatisDao basCodesMybatisDao;
+	@Autowired
+	private GspEnterpriceService gspEnterpriceService;
+	@Autowired
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+	@Autowired
+	private GspBusinessLicenseMybatisDao gspBusinessLicenseMybatisDao;
+	@Autowired
+	private GspOperateLicenseMybatisDao gspOperateLicenseMybatisDao;
+
+	@Autowired
+	private GspFirstRecordMybatisDao gspFirstRecordMybatisDao;
+	@Autowired
+	private GspSecondRecordMybatisDao gspSecondRecordMybatisDao;
+	@Autowired
+	private GspMedicalRecordMybatisDao gspMedicalRecordMybatisDao;
 
 	public EasyuiDatagrid<BasGtnVO> getPagedDatagrid(EasyuiDatagridPager pager, BasGtnQuery query) {
 		EasyuiDatagrid<BasGtnVO> datagrid = new EasyuiDatagrid<BasGtnVO>();
@@ -79,6 +91,8 @@ public class BasGtnService extends BaseService {
 //		System.out.println();
 //		List<Remind> remindList = .queryByList(criteria);
 		List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+
+
 //		int total = basGtnMybatisDao.queryByCount(criteria);
 		datagrid.setTotal((long)list.size() );
 		datagrid.setRows(list);

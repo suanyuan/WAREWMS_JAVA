@@ -8,6 +8,7 @@ import com.wms.entity.Remind;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.BasCodesQuery;
 import com.wms.query.BasGtnQuery;
+import com.wms.service.BasCodesService;
 import com.wms.service.BasGtnService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
@@ -35,6 +36,8 @@ public class RemindController {
 	@Autowired
 	private BasGtnService basGtnService;
 
+	@Autowired
+	private BasCodesService basCodesService;
 	@Login
 	@RequestMapping(params = "toMain")
 	public ModelAndView toMain(String menuId) {
@@ -55,6 +58,18 @@ public class RemindController {
 	@ResponseBody
 	public EasyuiDatagrid<BasCodes> showDatagrid1(EasyuiDatagridPager pager, BasCodesQuery query) {
 		return basGtnService.getPagedDatagrid1(pager, query);
+	}
+
+
+
+
+
+	//查询赋值接口  查询提醒模块信息   赋值给提醒模块表
+	@Login
+	@RequestMapping(params = "remind")
+	@ResponseBody
+	public void remind() throws Exception {
+		 basCodesService.remind();
 	}
 
 

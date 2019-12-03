@@ -287,6 +287,16 @@ where 1=1
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and t1.active_flag =  #{condition.activeFlag,jdbcType=VARCHAR}
             </if>
+
+			<if test="condition.idList != null and condition.idList != ''">
+				and t1.bankaccount in
+				<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+
+
+
             <if test="condition.customerSet != null" >
                 <if test="condition.customerSet.isEmpty() == false" >
                     and t1.customerid in (

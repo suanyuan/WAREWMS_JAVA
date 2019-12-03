@@ -5,6 +5,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.beans.PropertyDescriptor;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +29,8 @@ public class MybatisCriteria {
 	private int pageSize = 0; // 页大小
 	private boolean doPage = true;//是否启动分页
 
+
+	private List<String> idList;
 	/**
 	 * 排序字段
 	 */
@@ -169,5 +172,13 @@ public class MybatisCriteria {
 
 	public void setDoPage(boolean doPage) {
 		this.doPage = doPage;
+	}
+
+	public List<String> getIdList() {
+		return idList;
+	}
+
+	public void setIdList(List<String> idList) {
+		this.idList = idList;
 	}
 }

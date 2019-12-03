@@ -163,6 +163,13 @@ public class GspSupplierController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		GspSupplier gspSupplier =gspSupplierMybatisDao.queryById(id);
 		model.put("gspSupplier", gspSupplier);
+        if(gspSupplier!=null){
+            BasCustomer basCustomer =  basCustomerMybatisDao.queryByIdType(gspSupplier.getCostomerid(),"OW");
+            if(basCustomer!=null){
+                model.put("clientEnterpriseId", basCustomer.getEnterpriseId());
+                model.put("clientEnterpriseName", basCustomer.getDescrC());
+            }
+        }
 		model.put("createId", SfcUserLoginUtil.getLoginUser().getId());
 		model.put("createDate",df.format(new Date()));
 		model.put("isCheck",1);

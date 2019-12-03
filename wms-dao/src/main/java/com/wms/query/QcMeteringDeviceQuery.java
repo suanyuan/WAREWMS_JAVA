@@ -20,6 +20,16 @@ public class QcMeteringDeviceQuery implements IQuery {
 	private String editDateEnd;
 	private String activeFlag;
 
+	private String idList;
+
+	public String getIdList() {
+		return idList;
+	}
+
+	public void setIdList(String idList) {
+		this.idList = idList;
+	}
+
 	public String getCreateDateStart() {
 		return createDateStart;
 	}

@@ -3,6 +3,8 @@ package com.wms.vo.form;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
+import java.util.List;
+
 public class GspEnterpriseInfoForm {
 	private String basCustomerId;
 
@@ -28,6 +30,16 @@ public class GspEnterpriseInfoForm {
 	private String userDefine3;
 
 	private String userDefine4;
+
+	private List<String> idList;
+
+	public List<String> getIdList() {
+		return idList;
+	}
+
+	public void setIdList(List<String> idList) {
+		this.idList = idList;
+	}
 
 	public String getBasCustomerId() {
 		return basCustomerId;

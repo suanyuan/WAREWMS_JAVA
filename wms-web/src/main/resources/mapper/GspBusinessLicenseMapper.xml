@@ -227,6 +227,28 @@ where 1=1
     </if>
 </select>
 
+
+	<!-- 查询营业执照列表 -->
+	<select id="queryNewByList" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from gsp_business_license
+		<include refid="Example_Where_Clause"/>
+		<if test="orderByClause != null and orderByClause != ''" >
+			order by  ${orderByClause}
+		</if>
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
+
+
+
+
+
+
+
+
 <!-- 删除记录 -->
 <update id="updateGspBusinessLicenseActiveTag" parameterType="Object">
 	update gsp_business_license set is_use=#{tag}  where enterprise_id = #{enterpriseId}
