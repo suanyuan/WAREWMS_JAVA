@@ -137,16 +137,16 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-	                        <th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
-	                        <th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-<%--							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
 
 						</tr>
 						<tr >
 							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
