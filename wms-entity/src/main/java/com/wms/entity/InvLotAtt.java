@@ -51,4 +51,6 @@ public class InvLotAtt extends BaseLotatt  implements Serializable {
 
 	private String qcreportfilename;
 
+	private String locationid;
+	private String specsName;
 }

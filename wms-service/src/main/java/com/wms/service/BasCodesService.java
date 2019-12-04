@@ -12,6 +12,7 @@ import com.wms.query.BasCodesQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.*;
 import com.wms.vo.BasCodesVO;
+import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -323,16 +324,16 @@ public class BasCodesService {
             enterpriseIdList.add(g.getEnterpriseId());
         }
         long num11=0 ;
-        List<String> enterpriseIdList11 = new ArrayList<>() ;
+        List<InvLotAtt> enterpriseIdList11 = new ArrayList<>() ;
         String enterpriseIdList11Str ="";
         long num12=0 ;
-        List<String> enterpriseIdList12 = new ArrayList<>() ;
+        List<InvLotAtt> enterpriseIdList12 = new ArrayList<>() ;
         String enterpriseIdList12Str ="";
         long num13=0 ;
-        List<String> enterpriseIdList13 = new ArrayList<>() ;
+        List<InvLotAtt> enterpriseIdList13 = new ArrayList<>() ;
         String enterpriseIdList13Str ="";
         long num14=0 ;
-        List<String> enterpriseIdList14 = new ArrayList<>() ;
+        List<InvLotAtt> enterpriseIdList14 = new ArrayList<>() ;
         String enterpriseIdList14Str ="";
         long num15=0 ;
         List<String> enterpriseIdList15 = new ArrayList<>() ;
@@ -418,24 +419,24 @@ public class BasCodesService {
                             long days = diff / (1000 * 60 * 60 * 24);
                             if(days<180){
                                 //近效期30天
-//                                enterpriseIdList11.add(enterpriseId);
+                                enterpriseIdList11.add(invLotAtt);
                                 num11++;
                                 enterpriseIdList11Str =  JSON.toJSONString(enterpriseIdList11);
                             }
                             if(days<90){
-//                                enterpriseIdList11.add(enterpriseId);
+                                enterpriseIdList12.add(invLotAtt);
                                 num12++;
-                                enterpriseIdList11Str =  JSON.toJSONString(enterpriseIdList12);
+                                enterpriseIdList12Str =  JSON.toJSONString(enterpriseIdList12);
                             }
                             if(days<30){
-//                                enterpriseIdList11.add(enterpriseId);
+                                enterpriseIdList13.add(invLotAtt);
                                 num13++;
-                                enterpriseIdList11Str =  JSON.toJSONString(enterpriseIdList13);
+                                enterpriseIdList13Str =  JSON.toJSONString(enterpriseIdList13);
                             }
                         }else{
                             //已过期
                             num14++;
-//                            enterpriseIdList14.add(enterpriseId);
+                            enterpriseIdList14.add(invLotAtt);
                             enterpriseIdList14Str =  JSON.toJSONString(enterpriseIdList14);
                         }
                     }
@@ -807,7 +808,23 @@ public class BasCodesService {
 
     }
 
+    public EasyuiDatagrid<InvLotAtt> getInvLotLocPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+        EasyuiDatagrid<InvLotAtt> datagrid = new EasyuiDatagrid<InvLotAtt>();
+//        query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+//        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//        mybatisCriteria.setCurrentPage(pager.getPage());
+//        mybatisCriteria.setPageSize(pager.getRows());
+//        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+//        List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryAll();
 
+
+        List<InvLotAtt> invLotAttList = jsonToList(query.getIdList(),InvLotAtt.class);
+
+
+        datagrid.setTotal((long)invLotAttList.size());
+        datagrid.setRows(invLotAttList);
+        return datagrid;
+    }
 
 
     /**
@@ -850,6 +867,13 @@ public class BasCodesService {
         return Json.success("");
     }
 
-
+    /**
+     * json 转 List<T>
+     */
+    public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+        @SuppressWarnings("unchecked")
+        List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+        return ts;
+    }
 
 }

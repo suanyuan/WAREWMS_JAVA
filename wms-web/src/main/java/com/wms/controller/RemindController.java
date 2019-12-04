@@ -4,6 +4,7 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasCodes;
+import com.wms.entity.InvLotAtt;
 import com.wms.entity.Remind;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.BasCodesQuery;
@@ -13,6 +14,7 @@ import com.wms.service.BasGtnService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.BasGtnVO;
+import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasGtnForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +63,12 @@ public class RemindController {
 	}
 
 
-
+	@Login
+	@RequestMapping(params = "showInvLotLocDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<InvLotAtt> showInvLotLocDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
+		return basCodesService.getInvLotLocPagedDatagrid(pager, query);
+	}
 
 
 	//查询赋值接口  查询提醒模块信息   赋值给提醒模块表
