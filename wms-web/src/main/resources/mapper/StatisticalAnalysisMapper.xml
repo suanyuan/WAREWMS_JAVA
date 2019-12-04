@@ -226,11 +226,14 @@
     <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
         SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,s.reservedfield02,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,s.reservedfield02,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,
+        e.lotatt06,e.`lotatt01`,e.`lotatt02`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
+        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
+        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND b.userdefine3 =d.userdefine3 AND b.userdefine4= d.userdefine4
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
         LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
