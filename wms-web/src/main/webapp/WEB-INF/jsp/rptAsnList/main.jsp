@@ -48,6 +48,7 @@ $(function() {
 			{field: 'soqty',		    title: '出库件数',	width: 100 },
 			{field: 'uom',              title: '主计量单位',	width: 100 },
 			{field: 'lotatt04',		    title: '批号',	width: 130 },
+			{field: 'reservedfield02',	title: '产品描述',	width: 200 },
 			{field: 'lotatt05',		    title: '序列号',	width: 130 },
 			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
 			{field: 'notes',	        title: '备注',	width: 100},

@@ -197,6 +197,7 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("soqty", "出库件数");
 		superClassMap.put("uom", "主计量单位");
 		superClassMap.put("lotatt04", "批号");
+		superClassMap.put("reservedfield02", "产品描述");
 		superClassMap.put("lotatt05", "序列号");
 		superClassMap.put("purchaseOrderNumber", "采购订单号");
 		superClassMap.put("notes", "备注");

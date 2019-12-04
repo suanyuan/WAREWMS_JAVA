@@ -226,7 +226,7 @@
     <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
         SELECT
         aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
+        s.`descr_c` descrc,s.reservedfield02,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`
         FROM doc_asn_details a
         LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
         LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
