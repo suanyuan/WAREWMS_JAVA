@@ -51,6 +51,8 @@ public class DocPaService {
     private CommonService commonService;
     @Autowired
     private BasSkuService basSkuService;
+    @Autowired
+    private DocOrderUtilService docOrderUtilService;
 
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
@@ -183,6 +185,12 @@ public class DocPaService {
         if (StringUtils.isEmpty(asnNos)) {
             return Json.error("请选择需要操作的单据");
         }
+
+        Json json = docOrderUtilService.deleteZeroInventory();
+        if (!json.isSuccess()) {
+            return json;
+        }
+
         try {
             String[] arr = asnNos.split(",");
             SfcUserLogin login = SfcUserLoginUtil.getLoginUser();
@@ -197,7 +205,7 @@ public class DocPaService {
                         return Json.error("只有创建状态的通知单才能确认收货:" + docPaDTO.getAsnno());
                     }
 
-                    Json json = checkLeakLotatt(docPaDTO);
+                    json = checkLeakLotatt(docPaDTO);
                     if (!json.isSuccess()) return json;
 
                     json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
