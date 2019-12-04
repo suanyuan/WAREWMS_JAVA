@@ -33,6 +33,9 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:true,
+		queryParams:{
+			reservedfield09:1,
+		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100 },

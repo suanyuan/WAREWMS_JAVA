@@ -40,7 +40,9 @@ $(function() {
 		singleSelect:true,
 		idField : 'enterpriseName',
 		queryParams: {
-			customerType:'OW'
+			customerType:'OW',
+			reservedfield09:1,
+
 		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
