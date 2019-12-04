@@ -172,17 +172,17 @@ $(function() {
                 {field: 'lotatt01',	title: '生产日期',		width: 130 },
                 {field: 'lotatt02',	title: '效期',		width: 130 },
                 {field: 'lotatt03',	title: '入库日期',		width: 130 },
-
                 {field: 'lotatt06',	title: '产品注册证',		width: 130 },
                 {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
                 {field: 'lotatt08',	title: '供应商',		width: 130 },
-                {field: 'lotatt09',	title: '样品属性',		width: 130 },
-                {field: 'lotatt10',	title: '质量状态',		width: 130 },
+                {field: 'lotatt09',	title: '样品属性',		width: 130, formatter:YP_TYPstatusFormatter},
+                {field: 'lotatt10',	title: '质量状态',		width: 130 , formatter:ZL_TYPstatusFormatter},
                 {field: 'lotatt11',	title: '存储条件',		width: 130 },
                 {field: 'descrc',	title: '规格型号',		width: 130 },
                 {field: 'lotatt13',	title: '双证',		width: 130 },
                 {field: 'lotatt14',	title: '入库单号',		width: 130 },
-                {field: 'lotatt15',	title: '生产厂商名称',		width: 130 }
+                {field: 'lotatt15',	title: '生产厂商名称',		width: 130 },
+                {field: 'dEdi04',	title: '样品/投诉单号',		width: 100 }
                 /*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
                 {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
                 {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
