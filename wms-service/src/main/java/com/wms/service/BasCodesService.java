@@ -597,9 +597,11 @@ public class BasCodesService {
         List<GspSupplier> supplierAndclient =gspSupplierMybatisDao.querySupplierAndClient();
         for(GspSupplier customer:supplierAndclient){
             if(customer!=null){
-                if(customer.getClientEndDate()!=null){
-                    if(customer.getClientEndDate().getTime()-now.getTime()>0){
-                        long diff =customer.getClientEndDate().getTime()-now.getTime();
+
+
+                if(customer.getEmpowerEnddate()!=null){
+                    if(customer.getEmpowerEnddate().getTime()-now.getTime()>0){
+                        long diff =customer.getEmpowerEnddate().getTime()-now.getTime();
                         long days = diff / (1000 * 60 * 60 * 24);
                         if(days<30){
                             //近效期30天
@@ -615,9 +617,10 @@ public class BasCodesService {
                     }
                 }
 
-                if(customer.getEmpowerEnddate()!=null){
-                    if(customer.getEmpowerEnddate().getTime()-now.getTime()>0){
-                        long diff =customer.getEmpowerEnddate().getTime()-now.getTime();
+
+                if(customer.getClientEndDate()!=null){
+                    if(customer.getClientEndDate().getTime()-now.getTime()>0){
+                        long diff =customer.getClientEndDate().getTime()-now.getTime();
                         long days = diff / (1000 * 60 * 60 * 24);
                         if(days<30){
                             //近效期30天
@@ -634,7 +637,7 @@ public class BasCodesService {
                 }
             }
         }
-        //合同
+        //授权
         b.setCode("23");
         b.setShowSequence(num23);
         b.setUdf1(enterpriseIdList23Str);
@@ -643,7 +646,7 @@ public class BasCodesService {
         b.setShowSequence(num24);
         b.setUdf1(enterpriseIdList24Str);
         basCodesMybatisDao.updateBySelective(b);
-        //授权
+        //合同
         b.setCode("25");
         b.setShowSequence(num25);
         b.setUdf1(enterpriseIdList25Str);

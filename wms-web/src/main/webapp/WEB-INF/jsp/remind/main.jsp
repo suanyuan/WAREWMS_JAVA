@@ -206,8 +206,8 @@
                         method:'POST',
                         toolbar : '',
                         title: '',
-                        pageSize : 50,
-                        pageList : [50, 100, 200],
+                        // pageSize : 50,
+                        // pageList : [50, 100, 200],
                         fit: true,
                         border: false,
                         fitColumns : false,
@@ -217,7 +217,7 @@
                         queryParams:{
                             idList : idlist1,
                         },
-                        pagination:true,
+                        // pagination:true,
                         rownumbers:true,
                         singleSelect:true,
                         columns : [[
@@ -467,7 +467,7 @@
                         // queryParams:{
                         //     idList : idlist1,
                         // },
-                        pagination:true,
+                        // pagination:true,
                         rownumbers:true,
                         singleSelect:true,
                         columns : [[
