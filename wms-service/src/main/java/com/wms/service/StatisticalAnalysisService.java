@@ -49,7 +49,7 @@ public class StatisticalAnalysisService extends BaseService {
 		}
 		long a=(long) statisticalAnalysisMybatisDao.queryAsnInvLocationCount(mybatisCriteria);
 		long b=(long) statisticalAnalysisMybatisDao.querySoInvLocationCount(mybatisCriteria);
-		datagrid.setTotal(a>b?a:b);
+		datagrid.setTotal(a>b?a*2:b*2);
 		datagrid.setRows(rptSoAsnDailyLocationList);
 		return datagrid;
 	}

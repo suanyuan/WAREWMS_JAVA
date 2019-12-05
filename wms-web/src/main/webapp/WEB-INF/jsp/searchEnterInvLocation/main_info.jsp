@@ -39,6 +39,7 @@ $(function() {
 			}
 		},
 		columns : [[
+			{field: 'lotatt14',		title: '单据号',	width: 150 },
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100 },
 			{field: 'type',		            title: '入库类型',	width: 100 },

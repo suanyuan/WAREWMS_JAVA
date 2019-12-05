@@ -32,9 +32,6 @@ public class RptAsnList implements Serializable {
     private String uom;               //主计量单位
     private String lotatt04;               //批号
     private String lotatt05;            //序列号
-    private String lotatt06;            //注册证号
-    private String lotatt01;            //生产日期
-    private String lotatt02;            //效期
     private String purchaseOrderNumber;   //采购订单号
     private String notes;             //备注
     private Double planPrice;          //计划价

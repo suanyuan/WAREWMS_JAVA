@@ -430,6 +430,7 @@ public class DrugControlService extends BaseService {
 	 */
 	public LinkedHashMap<String, String> getSearchEnterInvLocationLeadToFiledPublicQuestionBank() {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("lotatt14", "单据号");
 		superClassMap.put("enterpriseName", "委托方企业名称");
 		superClassMap.put("lotatt03", "入库日期");
 		superClassMap.put("type", "入库类型");

@@ -99,6 +99,9 @@
     <!-- 查询条件 入库信息 -->
     <sql id="Example_Where_Clause2">
         <trim  suffixOverrides="," >
+            <if test="condition.asnno!= null and condition.asnno != ''" >
+                and e.lotatt14 like concat('%', #{condition.asnno},'%')
+            </if>
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and r.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
@@ -286,22 +289,23 @@
 <!-- *******************************入库信息********************************** -->
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
+       select aaa.*,ccc.codename_c type from (
         SELECT
-        r.descr_c enterpriseName,r.active_flag activeFlag,
+        e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
         dd.qcqty_expected qty,dd.userdefine1 locationid,
         p.`qty1`,
         CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
         CONCAT(IFNULL(DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
         DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
         s.`descr_c` descrc,
-        bb.codename_c uom,`bb1`.codename_c 'type'
+        bb.codename_c uom
         from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
         from `doc_asn_details` a
         left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
         left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
         WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype) aaa
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
         left join `doc_qc_header` d on d.pano=aaa.`PANO`
         left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
@@ -309,22 +313,27 @@
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
         where 1=1
         <include refid="Example_Where_Clause2"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
-        </if>
+        </if>)  aaa
+
+        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaa.lotatt14
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
     </select>
 <!-- 入库信息 列表总数-->
     <select id="querySearchEnterInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
-        select count(1) from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype
+
+        SELECT
+        count(1)
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
         from `doc_asn_details` a
         left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
         left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
         WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype) aaa
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
         left join `doc_qc_header` d on d.pano=aaa.`PANO`
         left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
@@ -332,7 +341,6 @@
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
         where 1=1
         <include refid="Example_Where_Clause2"/>
 

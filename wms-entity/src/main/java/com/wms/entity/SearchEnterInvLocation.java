@@ -19,6 +19,7 @@ public class SearchEnterInvLocation implements Serializable {
     private String type;              //入库类型
     private String lotatt12;          //产品名称
     private String descrc;           //规格/型号
+    private String lotatt14;          //入库日期
     private String lotatt15;          //生产企业
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
