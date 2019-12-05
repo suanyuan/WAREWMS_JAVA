@@ -1,28 +1,43 @@
-package com.wms.vo;
+package com.wms.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.Date;
 
-public class QcMeteringDeviceVO {
+/**
+ * The persistent class for the DOC_ASN_HEADER database table.
+ * 
+ */
+@Entity
+public class ImportQMDData implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private int seq;
+	@Id
+	private String seq;
 	private String calId;
+
 	private String calName;
+
 	private String calNumber;
+
 	private String calTerm;
+
 	private String calCardUrl;
+
 	private String createId;
+
 	private java.util.Date createDate;
+
 	private String editId;
+
 	private java.util.Date editDate;
-	private String activeFlag;
 
-
-	public int getSeq() {
+	public String getSeq() {
 		return seq;
 	}
 
-	public void setSeq(int seq) {
+	public void setSeq(String seq) {
 		this.seq = seq;
 	}
 
@@ -74,12 +89,11 @@ public class QcMeteringDeviceVO {
 		this.createId = createId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
@@ -91,21 +105,11 @@ public class QcMeteringDeviceVO {
 		this.editId = editId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.util.Date getEditDate() {
+	public Date getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(java.util.Date editDate) {
+	public void setEditDate(Date editDate) {
 		this.editDate = editDate;
 	}
-
-	public String getActiveFlag() {
-		return activeFlag;
-	}
-
-	public void setActiveFlag(String activeFlag) {
-		this.activeFlag = activeFlag;
-	}
-
 }

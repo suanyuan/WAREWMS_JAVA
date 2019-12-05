@@ -1,13 +1,19 @@
 package com.wms.service;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.dao.QcMeteringDeviceMybatisDao;
+import com.wms.service.importdata.ImportQcMeteringDeviceDataService;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +25,28 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.QcMeteringDeviceForm;
 import com.wms.query.QcMeteringDeviceQuery;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Service("qcMeteringDeviceService")
 public class QcMeteringDeviceService extends BaseService {
 
 	@Autowired
 	private QcMeteringDeviceMybatisDao qcMeteringDeviceMybatisDao;
+	@Autowired
+	private ImportQcMeteringDeviceDataService importQcMeteringDeviceDataService;
+
+
 
 	public EasyuiDatagrid<QcMeteringDeviceVO> getPagedDatagrid(EasyuiDatagridPager pager, QcMeteringDeviceQuery query) {
 		EasyuiDatagrid<QcMeteringDeviceVO> datagrid = new EasyuiDatagrid<QcMeteringDeviceVO>();
 		MybatisCriteria criteria = new MybatisCriteria();
 
-		if(query.getIdList()!=null&&query.getIdList()!="" ){
+		if(query.getIdList()!=null&&query.getIdList()!=""){
 			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
 			criteria.setIdList(enterpriseIdList);
 		}
@@ -99,6 +115,47 @@ public class QcMeteringDeviceService extends BaseService {
 		}
 		return comboboxList;
 	}
+
+
+	public void exportTemplate(HttpServletResponse response, String token) {
+		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
+			File file = new File(ResourceUtil.getImportRootPath("qcMeteringDevice_template.xls"));
+			response.reset();
+			Cookie cookie = new Cookie("downloadToken",token);
+			cookie.setMaxAge(60);
+			response.addCookie(cookie);
+			response.setContentType(ContentTypeEnum.stream.getContentType());
+			response.addHeader("Content-Disposition", "attachment;filename=" + new String(file.getName().getBytes()));
+			response.addHeader("Content-Length", "" + file.length());
+
+			try(InputStream fis = new BufferedInputStream(new FileInputStream(file))){
+				byte[] buffer = new byte[fis.available()];
+				fis.read(buffer);
+				System.out.println();
+				toClient.write(buffer);
+				toClient.flush();
+			}catch(IOException ex){
+//				log.error(ExceptionUtil.getExceptionMessage(ex));
+			}
+		} catch (Exception e) {
+//			log.error(ExceptionUtil.getExceptionMessage(e));
+		}
+	}
+
+
+
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+		Json json = null;
+		MultipartFile excelFile = mhsr.getFile("uploadData");
+		System.out.println("======excelFile.getSize()=="+excelFile.getSize()+"======="+excelFile.getInputStream().getClass().getName());
+
+		if(excelFile != null && excelFile.getSize() > 0){
+			json = importQcMeteringDeviceDataService.importExcelData(excelFile);
+		}
+		return json;
+	}
+
+
 	/**
 	 * 获取营业执照过期数据
 	 *

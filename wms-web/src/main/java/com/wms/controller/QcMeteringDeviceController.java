@@ -2,6 +2,7 @@ package com.wms.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.wms.constant.Constant;
@@ -9,7 +10,9 @@ import com.wms.entity.QcMeteringDevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.QcMeteringDeviceService;
@@ -95,6 +98,22 @@ public class QcMeteringDeviceController {
 		return qcMeteringDeviceService.getQcMeteringDeviceCombobox();
 	}
 
+
+	@Login
+	@RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
+	public void exportTemplate(HttpServletResponse response, String token) throws Exception {
+		qcMeteringDeviceService.exportTemplate(response, token);
+	}
+
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return qcMeteringDeviceService.importExcelData(mhsr);
+	}
+
+
+
 	/**
 	 * 校期临近提醒
 	 */
@@ -105,5 +124,7 @@ public class QcMeteringDeviceController {
 		Json json = qcMeteringDeviceService.getQcMeteringDeviceOutTime(1);
 		return json;
 	}
+
+
 
 }
