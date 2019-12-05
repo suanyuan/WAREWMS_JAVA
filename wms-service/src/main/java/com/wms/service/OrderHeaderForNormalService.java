@@ -440,9 +440,7 @@ public class OrderHeaderForNormalService extends BaseService {
                             orderHeaderForNormalMybatisDao.pickingByOrder(map);
                             String pickResult = map.get("result").toString();
                             if (pickResult != null && pickResult.length() > 0) {
-                                if (pickResult.equals("000")) {
-                                    continue;
-                                } else {
+                                if (!pickResult.equals("000")) {
                                     json.setSuccess(false);
                                     json.setMsg("出库处理失败：" + pickResult);
                                     return json;
