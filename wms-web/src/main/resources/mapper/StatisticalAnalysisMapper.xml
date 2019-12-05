@@ -10,10 +10,10 @@
     <sql id="Example_Where_Clause">
         <trim  suffixOverrides="," >
             <if test="condition.customerid != null and condition.customerid != ''" >
-                and a.customerid like concat('%', #{condition.customerid},'%')
+                and e.customerid like concat('%', #{condition.customerid},'%')
             </if>
             <if test="condition.sku != null and condition.sku != ''" >
-                and a.sku like concat('%', #{condition.sku},'%')
+                and e.sku like concat('%', #{condition.sku},'%')
             </if>
 
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
@@ -43,14 +43,14 @@
     <sql id="Example_Where_Clause1">
         <trim  suffixOverrides="," >
             <if test="condition.customerid != null and condition.customerid != ''" >
-                and a.customerid like concat('%', #{condition.customerid},'%')
+                and e.customerid like concat('%', #{condition.customerid},'%')
             </if>
 
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
             <if test="condition.sku != null and condition.sku != ''" >
-                and a.sku like concat('%', #{condition.sku},'%')
+                and e.sku like concat('%', #{condition.sku},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
@@ -59,7 +59,7 @@
                 and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
             <if test="condition.documentNo != null and condition.documentNo != ''" >
-                and aa.`asnno` like concat('%', #{condition.documentNo},'%')
+                and aaa.`asnno` like concat('%', #{condition.documentNo},'%')
             </if>
             <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
                 and e.`lotatt03` &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
@@ -157,20 +157,26 @@
 <!-- 出入库流水 -->
     <select id="querySoAsnInvLocation"  resultType="com.wms.entity.RptSoAsnDailyLocation" parameterType="Object">
        (SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c
-        documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,b.PUTWAYQTY_COMPLETED asnqty,NULL soqty,
-        bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,aa.`notes`,p.`qty1`,'上海仓' warehouse
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        aaa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') soasndate,bb1.codename_c
+        documentType,e.`customerid`,e.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,dd.qcqty_expected asnqty,NULL soqty,
+        bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,p.`qty1`,'上海仓' warehouse
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
+        from `doc_asn_details` a
+        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
+        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
+        WHERE  b.asnstatus='99'
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
+        left join `doc_qc_header` d on d.pano=aaa.`PANO`
+        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='ASN_TYP') bb1 ON bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
+        where 1=1
         <include refid="Example_Where_Clause"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
@@ -179,9 +185,9 @@
         UNION ALL
         (SELECT
         aa.`orderno` documentNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soasndate,bb1.codename_c
-        documentType,a.`customerid`,a.`sku`,e.lotatt12,
+        documentType,e.`customerid`,e.`sku`,e.lotatt12,
         s.`descr_c` descrc,NULL asnqty,b.qty soqty,
-        bb.codename_c uom,e.lotatt04,e.lotatt05,aa.`notes`,p.`qty1`,'上海仓' warehouse
+        bb.codename_c uom,e.lotatt04,e.lotatt05,p.`qty1`,'上海仓' warehouse
         FROM `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
         LEFT JOIN `act_allocation_details` b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
@@ -203,11 +209,21 @@
     <select id="queryAsnInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT
         count(1)
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b  ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
-        WHERE aa.asnstatus='99'
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
+        from `doc_asn_details` a
+        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
+        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
+        WHERE  b.asnstatus='99'
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
+        left join `doc_qc_header` d on d.pano=aaa.`PANO`
+        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
         <include refid="Example_Where_Clause"/>
     </select>
     <!-- 出库流水 列表总数-->
@@ -225,36 +241,50 @@
 <!-- 入库单列表 -->
     <select id="queryAsnList"  resultType="com.wms.entity.RptAsnList" parameterType="Object">
         SELECT
-        aa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,a.`customerid`,a.`sku`,e.`lotatt12`,
-        s.`descr_c` descrc,s.reservedfield02,b.PUTWAYQTY_COMPLETED asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,
-        e.lotatt06,e.`lotatt01`,e.`lotatt02`,aa.`notes`,p.`qty1`
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN doc_qc_header c ON b.PANO = c.pano
-        LEFT JOIN doc_qc_details d ON d.qcno = c.qcno AND b.userdefine3 =d.userdefine3 AND b.userdefine4= d.userdefine4
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=d.`lotnum`
-        LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+        aaa.`asnno` documentNo,DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') asndate,bb1.codename_c documentType,e.`customerid`,e.`sku`,e.`lotatt12`,
+        s.`descr_c` descrc,s.reservedfield02,dd.qcqty_expected asnqty,bb.codename_c uom,e.`lotatt04`,e.`lotatt05`,
+        e.lotatt06,e.`lotatt01`,e.`lotatt02`,p.`qty1`
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
+        from `doc_asn_details` a
+        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
+        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
+        WHERE  b.asnstatus='99'
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
+        left join `doc_qc_header` d on d.pano=aaa.`PANO`
+        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom') bb ON s.defaultreceivinguom=bb.code
-        LEFT JOIN(SELECT * FROM bas_codes WHERE codeid='ASN_TYP') bb1 ON bb1.code=aa.asntype
-        WHERE aa.asnstatus='99'
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
+        where 1=1
         <include refid="Example_Where_Clause1"/>
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
-
     </select>
 <!-- 入库单列表 列表总数-->
     <select id="queryAsnListCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT
         count(1)
-        FROM doc_asn_details a
-        LEFT JOIN doc_asn_header aa ON aa.asnno=a.asnno
-        LEFT JOIN doc_pa_details b  ON aa.`asnno` = b.`asnno` AND a.asnlineno = b.ASNLINENO
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=b.`lotnum`
-        WHERE aa.asnstatus='99'
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
+        from `doc_asn_details` a
+        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
+        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
+        WHERE  b.asnstatus='99'
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
+        left join `doc_qc_header` d on d.pano=aaa.`PANO`
+        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') bb1 ON  bb1.code=aaa.asntype
+        where 1=1
         <include refid="Example_Where_Clause1"/>
     </select>
 
