@@ -22,6 +22,16 @@ public class BasCodesQuery implements IQuery {
 	private java.lang.String warehouseid;
 	private Set<SfcCustomer> customerSet;
 
+	private String idList;
+
+	public String getIdList() {
+		return idList;
+	}
+
+	public void setIdList(String idList) {
+		this.idList = idList;
+	}
+
 	public java.lang.String getWarehouseid() {
 		return warehouseid;
 	}

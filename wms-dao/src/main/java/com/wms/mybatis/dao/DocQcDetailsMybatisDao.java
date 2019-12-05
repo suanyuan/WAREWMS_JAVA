@@ -77,11 +77,11 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
      */
 	int queryCompletedQcQty(@Param("qcno") String qcno);
 
-    /**
-     * 清除0库存
-     * @param cleanInventory ~
-     */
-	void cleanInventory(CleanInventory cleanInventory);
+//    /**
+//     * 清除0库存
+//     * @param cleanInventory ~
+//     */
+//	void cleanInventory(CleanInventory cleanInventory);
 
 	int queryMaxLineNo(@Param("qcNo")String qcNo);
 

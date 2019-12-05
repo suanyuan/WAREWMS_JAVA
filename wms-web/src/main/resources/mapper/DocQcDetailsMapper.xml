@@ -580,10 +580,10 @@ where 1=1
         where  qcno = #{qcno, jdbcType=VARCHAR}
     </select>
 
-    <select id="cleanInventory" statementType="CALLABLE" parameterType="java.util.Map">
-        {call spcom_clean_inventory(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{language,mode=IN,jdbcType=VARCHAR},
-        #{userid,mode=IN,jdbcType=VARCHAR},#{returnCode,mode=INOUT,jdbcType=VARCHAR})}
-    </select>
+<!--    <select id="cleanInventory" statementType="CALLABLE" parameterType="java.util.Map">-->
+<!--        {call spcom_clean_inventory(#{warehouseid,mode=IN,jdbcType=VARCHAR},#{language,mode=IN,jdbcType=VARCHAR},-->
+<!--        #{userid,mode=IN,jdbcType=VARCHAR},#{returnCode,mode=INOUT,jdbcType=VARCHAR})}-->
+<!--    </select>-->
 
 	<select id="queryMaxLineNo" parameterType="Object" resultType="int">
        SELECT ifnull(MAX(QCLINENO + 0),0) FROM doc_qc_details WHERE QCNO = #{qcNo};

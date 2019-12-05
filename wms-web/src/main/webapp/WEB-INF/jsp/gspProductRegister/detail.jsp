@@ -870,11 +870,20 @@
         enterpriseDatagrid.datagrid("reload",
             {"enterpriseNo":$("#ezuiEnterpriseToolbar #enterpriseNo").textbox("getValue"),
                 "shorthandName":$("#ezuiEnterpriseToolbar #shorthandName").textbox("getValue"),
+                "enterpriseType":"SCQY",
+                "type":"1",
                 "isUse":"1"})
+
+
+
+
+
     }
 
     function productChose() {
         selectEnterprise();
+
+
     }
     
     function detailsCopyRegister() {

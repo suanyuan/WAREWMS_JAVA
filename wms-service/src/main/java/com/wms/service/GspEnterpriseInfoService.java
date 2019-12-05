@@ -71,9 +71,9 @@ public class GspEnterpriseInfoService extends BaseService {
 
 		Long total = 0L;
 		if(StringUtils.isEmpty(query.getType())){
-			total = Long.parseLong(gspEnterpriseInfoList.size()+"");
+			total = Long.parseLong(gspEnterpriseInfoMybatisDao.queryByCount(criteria)+"");
 		}else {
-			total  = Long.parseLong(gspEnterpriseInfoList.size()+"");
+			total  = Long.parseLong(gspEnterpriseInfoMybatisDao.queryByCountByType(criteria)+"");
 		}
 
 		datagrid.setTotal(Long.parseLong(total+""));

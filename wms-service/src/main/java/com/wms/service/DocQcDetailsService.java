@@ -657,8 +657,8 @@ public class DocQcDetailsService extends BaseService {
             docQcHeaderMybatisDao.updateTaskStatus(statusForm);
 
             /* ********************************清除0库存******************************** */
-            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", form.getEditwho());
-            docQcDetailsDao.cleanInventory(cleanInventory);
+//            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", form.getEditwho());
+//            docQcDetailsDao.cleanInventory(cleanInventory);
 
         } catch (Exception e) {
 

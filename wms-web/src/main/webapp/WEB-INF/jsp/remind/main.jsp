@@ -33,6 +33,8 @@
         var ezuiDialogBasSkuLeak;
         var MtDatagrid;
         var ezuiDialogMt;
+        var invlotlocDatagrid;
+        var ezuiDialogInvlotloc;
         $(function () {
             ezuiMenu = $('#ezuiMenu').menu();
             ezuiForm = $('#ezuiForm').form();
@@ -46,7 +48,7 @@
                 pageList: [10, 50, 100],
                 fit: true,
                 border: false,
-                fitColumns: false,
+                fitColumns: true,
                 nowrap: false,
                 striped: true,
                 collapsible: false,
@@ -198,7 +200,60 @@
 
                 if(row.code==11||row.code==12||row.code==13||row.code==14){
                     //库内货品近效期
+                    invlotlocDatagrid = $('#dataGridInvlotloc').datagrid({
+                        // url : sy.bp()+"/commonController.do?queryMtList",
+                        url : '<c:url value="/remindController.do?showInvLotLocDatagrid"/>',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : false,
+                        nowrap: true,
+                        striped: true,
+                        collapsible:false,
+                        queryParams:{
+                            idList : idlist1,
+                        },
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        columns : [[
+                            {field: 'locationid',		title: '货位',	width: 220 },
+                            {field: 'sku',		title: '产品代码',	width: 200 },
+                            {field: 'specsName',		title: '规格',	width: 200 },
+                            {field: 'lotatt02',		title: '效期',	width: 200 },
+                            {field: 'lotatt01',		title: '生产日期',	width: 200 },
+                            {field: 'lotatt04',		title: '批号',	width: 200 },
+                            {field: 'lotatt05',		title: '序列号',	width: 200 },
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     choseClientSelect();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
 
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+                    ezuiDialogInvlotloc = $('#ezuiDialogInvlotloc').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
 
 
                 }else if(row.code==15||row.code==16||row.code==17||row.code==18||row.code==19||row.code==20
@@ -453,7 +508,7 @@
                     qcMeteringDeviceDatagrid = $('#dataGridQcMeteringDevice').datagrid({
                         url : '<c:url value="/qcMeteringDeviceController.do?showDatagrid"/>',
                         method:'POST',
-                        toolbar : '#toolbar',
+                        toolbar : '',
                         title: '',
                         pageSize : 50,
                         pageList : [50, 100, 200],
@@ -791,8 +846,8 @@
             <%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>--%>
             <%--<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
             <%--<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>--%>
-            <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
-            <a onclick='jiekou();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>接口</a>
+            <%--<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>--%>
+            <%--<a onclick='jiekou();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>接口</a>--%>
 
             </div>
         </div>
@@ -986,7 +1041,26 @@
     </table>
 </div>
 
+<div id='ezuiDialogInvlotloc' style='padding: 10px;display: none'>
+    <div id='clientTB7' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridInvlotloc">
 
+    </table>
+</div>
 
 
 
