@@ -334,11 +334,15 @@ where 1=1
 </select>
 <!-- 导出查询 -->
 <select id="queryByListExport" resultMap="BaseResultMap"  parameterType="Object">
+
+
 	SELECT
-	i.*,p.qty1
+	p.qty1,c.codename_c defaultreceivinguom,i.*
 	FROM view_inv_location i
 	INNER JOIN `bas_sku` s ON i.fmsku=s.sku AND i.fmcustomerid=s.customerid
 	INNER JOIN `bas_package` p ON s.packid=p.packid
+	LEFT JOIN (select * from bas_codes where codeid = 'uom') c on c.codename_e = i.defaultreceivinguom
+
 	<include refid="Example_Where_Clause1"/>
     order by fmcustomerid,fmsku,fmlocation
 

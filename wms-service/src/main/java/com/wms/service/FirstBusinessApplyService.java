@@ -95,7 +95,7 @@ public class FirstBusinessApplyService extends BaseService {
 			firstBusinessApplyVO.setCreateDate(DateUtil.format(firstBusinessApply.getCreateDate(),"yyyy-MM-dd HH:mm:ss"));
 			firstBusinessApplyVOList.add(firstBusinessApplyVO);
 		}
-		Long count = (long)firstBusinessApplyList.size();
+		Long count = firstBusinessApplyMybatisDao.queryPageListCount(criteria);
 		datagrid.setTotal(count);
 		datagrid.setRows(firstBusinessApplyVOList);
 		return datagrid;
