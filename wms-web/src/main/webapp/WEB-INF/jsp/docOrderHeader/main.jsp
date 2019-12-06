@@ -1338,7 +1338,10 @@ var doSearch = function(){
 		orderTypeName : $('#ordertype').combobox('getValue'),
 		releasestatus : $('#releasestatus').combobox('getValue'),
 		sostatusCheck : $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
+        cAddress4 : $('#cAddress4Q').val(),
 
+
+        carriercontact:$('#carrierContact').val(),
         /*cProvince : $("#cc1").textbox("getValue"),
         cCity : $("#cc2").textbox("getValue"),
         cAddress2 : $("#cc3").textbox("getValue")*/
@@ -2651,8 +2654,8 @@ var writeBackExpressBtnCommit = function(){
 <%--
 							<th>收货电话</th><td><input type='text' id='cTel1' class='easyui-textbox' size='16' data-options=''/></td>
 --%>
-							<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>快递单号</th><td><input type='text' id='cAddress4' class='easyui-textbox' size='16' data-options=''/></td>
+							<%--<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>快递单号</th><td><input type='text' id='cAddress4Q' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品线</th>
 							<td>
 								<input id="productLineOrder" name="productLineOrder" size='16'  type="text" class='easyui-combobox' data-options="

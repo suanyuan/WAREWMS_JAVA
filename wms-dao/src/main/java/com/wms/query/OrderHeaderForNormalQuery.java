@@ -50,6 +50,25 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String outtype;
     private String token;
 
+    private String cAddress4;//快递单号
+    private String carriercontact;//运输公司
+
+
+    public String getCarriercontact() {
+        return carriercontact;
+    }
+
+    public void setCarriercontact(String carriercontact) {
+        this.carriercontact = carriercontact;
+    }
+
+    public String getcAddress4() {
+        return cAddress4;
+    }
+
+    public void setcAddress4(String cAddress4) {
+        this.cAddress4 = cAddress4;
+    }
 
     public String getOuttype() {
         return outtype;

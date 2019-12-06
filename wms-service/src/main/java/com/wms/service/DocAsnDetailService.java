@@ -88,6 +88,7 @@ public class DocAsnDetailService extends BaseService {
         double zero = 0;
         DocAsnDetailVO docAsnDetailVO = null;
         List<DocAsnDetailVO> docAsnDetailVOList = new ArrayList<DocAsnDetailVO>();
+        //没有数据的话 总合计设为0
         if(docAsnDetailList.size()==0){
             docAsnDetailVO = new DocAsnDetailVO();
             docAsnDetailVO.setExpectedqtySum(zero);

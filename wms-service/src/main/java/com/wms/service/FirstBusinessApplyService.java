@@ -231,8 +231,11 @@ public class FirstBusinessApplyService extends BaseService {
 					Json.error("单号不存在");
 				}
 //				BasSku oldSku =basSkuMybatisDao.queryById();
-				oldProduct  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(oldApply.getSpecsId());
-
+				oldProduct = gspProductRegisterSpecsMybatisDao.queryById(oldApply.getSpecsId());
+//				oldProduct  = gspProductRegisterSpecsMybatisDao.selectProductByCompare(oldApply.getSpecsId());
+				if(oldProduct==null){
+					Json.error("产品已经失效");
+				}
 				oldProduct=	gspProductRegisterSpecsMybatisDao.selectBasSkuByCompare(clientId,oldProduct.getProductCode());
 				GspProductRegisterSpecs oldProductR =gspProductRegisterSpecsMybatisDao.queryById(oldApply.getSpecsId());
 

@@ -252,7 +252,7 @@ public class OrderHeaderForNormalService extends BaseService {
             OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
             if (orderHeaderForNormal != null) {
                 if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("90")) {
-                    if (orderHeaderForNormal.getAddwho().equals("EDI")) {
+                    if (orderHeaderForNormal.getAddwho().contains("EDI")) {
                         json.setSuccess(false);
                         json.setMsg("EDI订单,不能删除!");
                         return json;
