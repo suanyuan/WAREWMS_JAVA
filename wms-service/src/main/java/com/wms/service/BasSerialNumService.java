@@ -1,5 +1,7 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasSerialNum;
@@ -10,7 +12,9 @@ import com.wms.mybatis.dao.OrderDetailsForNormalMybatisDao;
 import com.wms.query.BasSerialNumQuery;
 import com.wms.service.importdata.ImportBasSerialNumDataService;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.ResourceUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasSerialNumVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasSerialNumForm;
@@ -26,7 +30,10 @@ import org.xml.sax.SAXException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service("basSerialNumService")
@@ -131,6 +138,75 @@ public class BasSerialNumService extends BaseService {
 		}
 		return json;
 	}
+
+	//导出
+	public void exportDataToExcel(HttpServletResponse response, BasSerialNumQuery form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "入库序列号管理";
+			// excel要导出的数据
+			List<BasSerialNum> gspProductRegisterSpecsList = basSerialNumDao.queryByList(mybatisCriteria);
+			// 导出
+
+
+			if (gspProductRegisterSpecsList == null || gspProductRegisterSpecsList.size() == 0) {
+				System.out.println("入库序列号管理为空");
+			}else {
+				for (BasSerialNum s: gspProductRegisterSpecsList) {
+//                    FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
+//                    BeanUtils.copyProperties(s, firstReviewLogForm);
+
+
+					//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date=null;
+
+
+//
+				}
+//                List<FirstReviewLog> searchBasCustomerFormList  = new ArrayList<FirstReviewLog>();
+
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(gspProductRegisterSpecsList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("deliveryNum", "发货凭证号");
+		superClassMap.put("materialNum", "产品代码");
+		superClassMap.put("batchNum", "批号");
+		superClassMap.put("serialNum", "序列号");
+		superClassMap.put("userdefine1", "入库时间");
+		superClassMap.put("userdefine2", "出库时间");
+		superClassMap.put("userdefine3", "出库单号");
+		superClassMap.put("addtime", "创建时间");
+		superClassMap.put("addwho", "创建人");
+		superClassMap.put("edittime", "编辑时间");
+		superClassMap.put("editwho", "编辑人");
+
+
+		return superClassMap;
+	}
+
+
 
 	/**
 	 * 通过发运订单号，查看关联的发货凭证号是否导入了入库序列号

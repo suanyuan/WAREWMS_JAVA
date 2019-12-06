@@ -115,6 +115,14 @@ public class BasSerialNumController {
 
 	}
 
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, BasSerialNumQuery form) throws Exception {
+		basSerialNumService.exportDataToExcel(response, form);
+	}
+
+
 //	@Login
 //	@RequestMapping(params = "getCombobox")
 //	@ResponseBody

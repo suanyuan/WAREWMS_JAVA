@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class BasSerialNumQuery implements IQuery {
 
+	private String token;
 	private String serialNum;
 	private String batchNum;
 	private String materialNum;
