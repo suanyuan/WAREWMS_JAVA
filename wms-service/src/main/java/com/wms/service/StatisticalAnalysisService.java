@@ -199,13 +199,10 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("uom", "主计量单位");
 		superClassMap.put("lotatt04", "批号");
 		superClassMap.put("lotatt05", "序列号");
-		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
-		superClassMap.put("lotatt01", "生产日期");
-		superClassMap.put("lotatt02", "有效期/失效期");
 		superClassMap.put("qty1", "换算率");
 		superClassMap.put("purchaseOrderNumber", "采购订单号");
-		superClassMap.put("notes", "备注");
 		superClassMap.put("planPrice", "计划价");
+		superClassMap.put("notes", "备注");
 		return superClassMap;
 	}
 

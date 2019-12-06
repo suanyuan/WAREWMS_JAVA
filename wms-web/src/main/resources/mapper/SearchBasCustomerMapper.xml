@@ -99,8 +99,8 @@
     <!-- 查询条件 入库信息 -->
     <sql id="Example_Where_Clause2">
         <trim  suffixOverrides="," >
-            <if test="condition.asnno!= null and condition.asnno != ''" >
-                and e.lotatt14 like concat('%', #{condition.asnno},'%')
+            <if test="condition.lotatt14!= null and condition.lotatt14 != ''" >
+                and e.lotatt14 like concat('%', #{condition.lotatt14},'%')
             </if>
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and r.descr_c like concat('%', #{condition.enterpriseName},'%')
@@ -328,12 +328,12 @@
         SELECT
         count(1)
         from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
         from `doc_asn_details` a
         left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
         left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
         WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`,b.asntype,b.asnno) aaa
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
         left join `doc_qc_header` d on d.pano=aaa.`PANO`
         left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`

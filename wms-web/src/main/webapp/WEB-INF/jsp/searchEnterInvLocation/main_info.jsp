@@ -89,6 +89,7 @@ var doSearch = function(){
 		lotatt12:$('#lotatt12').val(),
 		descrc:$('#descrc').val(),
 		lotatt15:$('#lotatt15').val(),
+		lotatt14:$('#lotatt14').val(),
 		lotatt06 : $('#lotatt06').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
@@ -110,6 +111,7 @@ var doExport = function(){
 		param.put("lotatt12",$('#lotatt12').val());
 		param.put("descrc",$('#descrc').val());
 		param.put("lotatt15",$('#lotatt15').val());
+		param.put("lotatt14",$('#lotatt14').val());
 		param.put("lotatt06",$('#lotatt06').val());
 		param.put("lotatt04",$('#lotatt04').val());
 		param.put("lotatt05",$('#lotatt05').val());
@@ -149,7 +151,8 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>单据号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+
 							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
 						</tr>
@@ -165,6 +168,8 @@ var doExport = function(){
 							<td >
 						</tr>
 						<tr>
+							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+
 							<th >是否合作</th>
 							<td>
 								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
