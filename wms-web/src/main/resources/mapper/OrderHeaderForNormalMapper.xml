@@ -278,13 +278,13 @@
             </if>
 
             <if test="condition.orderno != null and condition.orderno != ''">
-                and a.orderno = #{condition.orderno}
+                and a.orderno like  '%${condition.orderno}%'
             </if>
             <if test="condition.customerid != null and condition.customerid != ''">
                 and a.customerid = #{condition.customerid}
             </if>
             <if test="condition.soreference1 != null and condition.soreference1 != ''">
-                and a.soreference1 = #{condition.soreference1}
+                and a.soreference1 like '%${condition.soreference1}%'
             </if>
             <if test="condition.psName != null and condition.psName != ''">
                 and ps.name = #{condition.psName}
@@ -308,7 +308,7 @@
                 and consigneeid = #{condition.consigneeid}
             </if>
             <if test="condition.cContact != null and condition.cContact != ''">
-                and c_contact = #{condition.cContact}
+                and c_contact  like '%${condition.cContact}%'
             </if>
             <if test="condition.consigneename != null and condition.consigneename != ''">
                 and consigneename = #{condition.consigneename}
@@ -323,7 +323,7 @@
                 and c_address3 = #{condition.cAddress3}
             </if>
             <if test="condition.cAddress4 != null and condition.cAddress4 != ''">
-                and c_address4 = #{condition.cAddress4}
+                and c_address4 like '%${condition.cAddress4}%'
             </if>
             <if test="condition.cCity != null and condition.cCity != ''">
                 and c_city = #{condition.cCity}
@@ -452,7 +452,7 @@
                 and notes = #{condition.notes}
             </if>
             <if test="condition.soreference2 != null and condition.soreference2 != ''">
-                and soreference2 = #{condition.soreference2}
+                and soreference2 like '%${condition.soreference2}%'
             </if>
             <if test="condition.soreference3 != null and condition.soreference3 != ''">
                 and soreference3 = #{condition.soreference3}
@@ -551,7 +551,7 @@
                 and b_tel2 = #{condition.bTel2}
             </if>
             <if test="condition.carriercontact != null and condition.carriercontact != ''">
-                and carriercontact = #{condition.carriercontact}
+                and carriercontact like '%${condition.carriercontact}%'
             </if>
             <if test="condition.carriermail != null and condition.carriermail != ''">
                 and carriermail = #{condition.carriermail}
