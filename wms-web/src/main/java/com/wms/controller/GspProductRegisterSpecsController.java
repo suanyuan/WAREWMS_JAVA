@@ -144,17 +144,26 @@ public class GspProductRegisterSpecsController {
 		return gspProductRegisterSpecsService.getInfoByProductCode(productCode);
 	}
 
+
+	//下载导入模板
     @Login
     @RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
     public void exportTemplate(HttpServletResponse response, String token) throws Exception {
         gspProductRegisterSpecsService.exportTemplate(response, token);
     }
-
+	//导入
 	@Login
 	@RequestMapping(params = "importExcelData")
 	@ResponseBody
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterSpecsService.importExcelData(mhsr);
+	}
+
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, GspProductRegisterSpecsQuery form) throws Exception {
+		gspProductRegisterSpecsService.exportDataToExcel(response, form);
 	}
 
 

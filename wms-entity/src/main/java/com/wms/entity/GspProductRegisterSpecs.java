@@ -71,11 +71,15 @@ public class GspProductRegisterSpecs implements Serializable {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date createDate;
+  private String createDateDC;
+
 
   private String editId;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date editDate;
+  private String editDateDC;
+
   private String isUse;
   private String isCertificate;
   private String isDoublec;
@@ -109,6 +113,21 @@ public class GspProductRegisterSpecs implements Serializable {
   private String type;
 
 
+  public String getCreateDateDC() {
+    return createDateDC;
+  }
+
+  public void setCreateDateDC(String createDateDC) {
+    this.createDateDC = createDateDC;
+  }
+
+  public String getEditDateDC() {
+    return editDateDC;
+  }
+
+  public void setEditDateDC(String editDateDC) {
+    this.editDateDC = editDateDC;
+  }
 
   public String getLicenseOrRecordNo() {
     return licenseOrRecordNo;

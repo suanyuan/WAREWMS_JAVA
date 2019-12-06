@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspProductRegisterSpecsQuery implements IQuery {
 
+	private String token;
 	private String specsId;
 	private String productRegisterId;
 
@@ -52,6 +53,14 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 
 	private String type;
 	private String supplierId;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public String getSupplierId() {
 		return supplierId;
