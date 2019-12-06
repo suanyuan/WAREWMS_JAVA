@@ -88,6 +88,7 @@ public class DrugInspectionController {
 		model.put("menuId", menuId);
 		return new ModelAndView("searchInvLocation/main", model);
 	}
+	//库存信息-统计
 	@Login
 	@RequestMapping(params = "toSearchInvLocationMainInfo")
 	public ModelAndView toSearchInvLocationMainInfo(String menuId) {
@@ -102,15 +103,25 @@ public class DrugInspectionController {
 	public EasyuiDatagrid<SearchInvLocation> showSearchInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
 		return drugControlService.showSearchInvLocationDatagrid(pager, query);
 	}
-
+	//库存信息-统计
+	@Login
+	@RequestMapping(params = "showSearchInvLocationDatagridSum")
+	@ResponseBody
+	public EasyuiDatagrid<SearchInvLocation> showSearchInvLocationDatagridSum(EasyuiDatagridPager pager, SearchInvLocation query) {
+		return drugControlService.showSearchInvLocationDatagridSum(pager, query);
+	}
 
 	@Login
 	@RequestMapping(params = "exportSearchInvLocationDataToExcel")
 	public void exportSearchInvLocationDataToExcel(HttpServletResponse response,SearchInvLocation form) throws Exception {
 		drugControlService.exportSearchInvLocationDataToExcel(response, form);
 	}
-
-
+	//库存信息-统计
+	@Login
+	@RequestMapping(params = "exportSearchInvLocationDataToExcelSum")
+	public void exportSearchInvLocationDataToExcelSum(HttpServletResponse response,SearchInvLocation form) throws Exception {
+		drugControlService.exportSearchInvLocationDataToExcelSum(response, form);
+	}
 
     /**************************************入库信息****************************************/
 

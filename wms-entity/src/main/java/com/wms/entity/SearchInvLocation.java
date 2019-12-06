@@ -14,6 +14,7 @@ public class SearchInvLocation implements Serializable {
     private String token;
 
     private String enterpriseName;    //委托方企业名称
+    private String supplierName;      //供应商
     @JSONField(format = "yyyy-MM-dd")
     private String lotatt03;          //入库日期
     private String lotatt12;          //产品名称
@@ -22,6 +23,8 @@ public class SearchInvLocation implements Serializable {
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
     private String lotatt05;         //序列号
+    private String lotatt01;         //生产日期
+    private String lotatt02;         //有效期/失效期
     private String lotatt01Andlotatt02;         //生产日期和有效期(或者失效期)
     private Double qty;              //件数
     private Double qtyeach;          //数量
@@ -32,6 +35,13 @@ public class SearchInvLocation implements Serializable {
     private String notes;             //备注
     private Double qty1;             //换算率
     private String reservedfield09;//是否是医疗器械
+
+
+    //库存信息统计查询
+    private String lotatt01Start;         //生产日期
+    private String lotatt01End;         //生产日期
+    private String lotatt02Start;         //效期
+    private String lotatt02End;         //效期
 
 
 }

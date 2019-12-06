@@ -73,6 +73,21 @@
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and b.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
+            <if test="condition.supplierName != null and condition.supplierName != ''" >
+                and bve.descr_c like concat('%', #{condition.supplierName},'%')
+            </if>
+            <if test="condition.lotatt01Start != null and condition.lotatt01Start != ''" >
+                and a.lotatt01 &gt;= #{condition.lotatt01Start}
+            </if>
+            <if test="condition.lotatt01End != null and condition.lotatt01End != ''" >
+                and a.lotatt01 &lt;= #{condition.lotatt01End}
+            </if>
+            <if test="condition.lotatt02Start != null and condition.lotatt02Start != ''" >
+                and a.lotatt02 &gt;= #{condition.lotatt02Start}
+            </if>
+            <if test="condition.lotatt02End != null and condition.lotatt02End != ''" >
+                and a.lotatt02 &lt;= #{condition.lotatt02End}
+            </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and a.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
@@ -270,6 +285,30 @@
             ${limitClause}
         </if>
     </select>
+<!-- 查询库存信息列表 统计 -->
+    <select id="querySearchInvLocationSum"  resultType="com.wms.entity.SearchInvLocation" parameterType="Object">
+        SELECT
+        i.locationid,i.`qty`,
+        p.`qty1`,
+        b.descr_c enterpriseName,
+        a.`lotatt04`,a.`lotatt05`,
+        DATE_FORMAT(a.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(a.`lotatt02`,'%Y-%m-%d') lotatt02,
+        a.`lotatt03`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
+        s.`descr_c` descrc,s.defaultreceivinguom,
+        bb.codename_c uom,bve.descr_c  supplierName
+        FROM `inv_lot_loc_id` i
+        LEFT JOIN `inv_lot_att` a ON a.lotnum=i.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
+        WHERE 1=1
+        <include refid="Example_Where_Clause1"/>
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
 <!-- 库存信息 列表总数-->
     <select id="querySearchInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
         SELECT
@@ -280,6 +319,7 @@
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
     </select>

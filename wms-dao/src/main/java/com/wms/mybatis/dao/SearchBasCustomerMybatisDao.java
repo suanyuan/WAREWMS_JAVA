@@ -21,6 +21,8 @@ public interface SearchBasCustomerMybatisDao extends BaseDao {
 
     //库存信息
     List<SearchInvLocation> querySearchInvLocation(MybatisCriteria criteria);
+    //库存信息-统计
+    List<SearchInvLocation> querySearchInvLocationSum(MybatisCriteria criteria);
 
     int querySearchInvLocationCount(MybatisCriteria criteria);
 
