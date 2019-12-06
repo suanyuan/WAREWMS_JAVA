@@ -38,6 +38,9 @@ $(function() {
 				return 'color:red;';
 			}
 		},
+		queryParams:{
+			activeFlag:1
+		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100,formatter:dateFormat2 },
@@ -166,7 +169,7 @@ var doExport = function(){
 							<td>
 								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
 									<option value=""></option>
-									<option value="1">是</option>
+									<option value="1"  selected="true">是</option>
 									<option value="0">否</option>
 									<option value="2">历史数据</option>
 								</select>

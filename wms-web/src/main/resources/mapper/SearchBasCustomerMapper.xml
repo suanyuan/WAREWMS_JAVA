@@ -355,10 +355,10 @@
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         where 1=1
         <include refid="Example_Where_Clause2"/>
+        ORDER BY e.`lotatt03` DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>)  aaa
-
         LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaa.lotatt14
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
     </select>
@@ -557,6 +557,10 @@
             </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
                 and activeflag =#{condition.activeFlag}
+                <if test="condition.activeFlag != 2" >
+                    order by  lotatt03 desc
+
+                </if>
             </if>
         </trim>
     </sql>
@@ -648,7 +652,6 @@
         history_enter_invlocation
 
         <include refid="Example_Where_Clause_History3"/>
-
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
