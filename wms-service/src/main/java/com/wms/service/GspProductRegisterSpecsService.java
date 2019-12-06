@@ -4,6 +4,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.wms.constant.Constant;
@@ -14,8 +15,11 @@ import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.service.importdata.ImportAsnDataService;
 import com.wms.service.importdata.ImportGspProductRegisterSpecsDataService;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.ResourceUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.GspEnterpriseInfoVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
@@ -229,6 +233,118 @@ public class GspProductRegisterSpecsService extends BaseService {
 		}
 		return json;
 	}
+
+	public void exportDataToExcel(HttpServletResponse response, GspProductRegisterSpecsQuery form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "产品基础信息";
+			// excel要导出的数据
+			List<GspProductRegisterSpecs> gspProductRegisterSpecsList = gspProductRegisterSpecsMybatisDao.queryByList(mybatisCriteria);
+			// 导出
+
+
+			if (gspProductRegisterSpecsList == null || gspProductRegisterSpecsList.size() == 0) {
+				System.out.println("产品基础信息为空");
+			}else {
+				for (GspProductRegisterSpecs s: gspProductRegisterSpecsList) {
+//                    FirstReviewLogForm firstReviewLogForm = new FirstReviewLogForm();
+//                    BeanUtils.copyProperties(s, firstReviewLogForm);
+
+
+					//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date=null;
+
+					if("1".equals(s.getIsUse())){
+						s.setIsUse("是");
+					}else if("0".equals(s.getIsUse())){
+						s.setIsUse("否");
+					}
+					if("1".equals(s.getIsCertificate())){
+						s.setIsCertificate("是");
+					}else if("0".equals(s.getIsCertificate())){
+						s.setIsCertificate("否");
+					}
+					if("1".equals(s.getIsDoublec())){
+						s.setIsDoublec("是");
+					}else if("0".equals(s.getIsDoublec())){
+						s.setIsDoublec("否");
+					}
+					List<EasyuiCombobox> unitList =  basCodesService.getBy(Constant.CODE_CATALOG_UOM);
+					for(EasyuiCombobox box:unitList){
+						if(box.getId().equals(s.getUnit())){
+							s.setUnit(box.getValue());
+						}
+					}
+
+					if(s.getCreateDate()!=null) {
+						s.setCreateDateDC(sdf.format(s.getCreateDate()));
+					}
+					if(s.getEditDate()!=null) {
+						s.setEditDateDC(sdf.format(s.getEditDate()));
+					}
+
+					if(s.getMaintenanceCycle()!=null){
+						s.setMaintenanceCycle(s.getMaintenanceCycle()+"天");
+					}
+//
+				}
+//                List<FirstReviewLog> searchBasCustomerFormList  = new ArrayList<FirstReviewLog>();
+
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(gspProductRegisterSpecsList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("isUse", "是否有效");
+		superClassMap.put("productCode", "产品代码");
+		superClassMap.put("productRegisterNo", "注册证编号");
+		superClassMap.put("productName", "产品名称");
+		superClassMap.put("productRemark", "产品描述");
+		superClassMap.put("specsName", "规格");
+		superClassMap.put("productModel", "型号");
+		superClassMap.put("enterpriseName", "生产企业");
+		superClassMap.put("packingUnit", "包装规格");
+		superClassMap.put("storageCondition", "储存条件");
+		superClassMap.put("unit", "单位");
+		superClassMap.put("maintenanceCycle", "养护周期");
+		superClassMap.put("isDoublec", "双证");
+		superClassMap.put("isCertificate", "产品合格证");
+		superClassMap.put("createId", "创建人");
+		superClassMap.put("createDateDC", "创建时间");
+		superClassMap.put("editId", "编辑人");
+		superClassMap.put("editDateDC", "编辑时间");
+
+		return superClassMap;
+	}
+
+
+
+
+
+
+
+
+
 
 	public Json deleteGspProductRegisterSpecs(String id) {
 		Json json = new Json();

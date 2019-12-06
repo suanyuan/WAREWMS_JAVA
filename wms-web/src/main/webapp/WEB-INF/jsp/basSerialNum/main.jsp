@@ -291,6 +291,47 @@ var downloadTemplate = function(){
 var toImportData = function(){
 	ezuiImportDataDialog.dialog('open');
 };
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        param.put("serialNum", $('#serialNum').val());
+        param.put("batchNum",$('#batchNum').val());
+        // param.put("productCode",$('#productCode').val());
+        // param.put("productName",$('#productName').val());
+        // param.put("productRemark", $('#productRemark').val());
+        // param.put("productModel", $('#productModel').val());
+        // param.put("productionAddress", $('#productionAddress').val());
+        // param.put("createDateEnd", $("#createDateEnd").datebox("getValue"));
+        // param.put("createDateStart",$("#createDateStart").datebox("getValue"));
+        // param.put("editDateStart", $("#editDateStart").datebox("getValue"));
+        // param.put("editDateEnd", $("#editDateEnd").datebox("getValue"));
+        // param.put("createId", $('#createId').val());
+        // param.put("editId",$('#editId').val());
+        // param.put("isUse", $('#isUse').combobox('getValue'));
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/basSerialNumController.do?exportDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+
+
 </script>
 </head>
 <body>
@@ -309,6 +350,8 @@ var toImportData = function(){
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
 							</td>
 						</tr>
 					</table>
