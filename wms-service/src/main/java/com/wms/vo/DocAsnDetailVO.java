@@ -106,8 +106,17 @@ public class DocAsnDetailVO {
 	private String coldName;
 
 	private Double expectedqtySum;//预期到货数
+	private Double expectedqtyEachSum;//预期到货数量
 	private Double receivedqtySum;//实际到货
 
+
+	public Double getExpectedqtyEachSum() {
+		return expectedqtyEachSum;
+	}
+
+	public void setExpectedqtyEachSum(Double expectedqtyEachSum) {
+		this.expectedqtyEachSum = expectedqtyEachSum;
+	}
 
 	public Double getExpectedqtySum() {
 		return expectedqtySum;

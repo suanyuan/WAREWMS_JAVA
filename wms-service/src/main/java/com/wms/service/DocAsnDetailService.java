@@ -91,6 +91,7 @@ public class DocAsnDetailService extends BaseService {
         if(docAsnDetailList.size()==0){
             docAsnDetailVO = new DocAsnDetailVO();
             docAsnDetailVO.setExpectedqtySum(zero);
+            docAsnDetailVO.setExpectedqtyEachSum(zero);
             docAsnDetailVO.setReceivedqtySum(zero);
             docAsnDetailVOList.add(docAsnDetailVO);
         }
@@ -100,6 +101,7 @@ public class DocAsnDetailService extends BaseService {
 
             if(docAsnDetailSum != null){
                 docAsnDetailVO.setExpectedqtySum(docAsnDetailSum.getExpectedqty().doubleValue());
+                docAsnDetailVO.setExpectedqtyEachSum(docAsnDetailSum.getExpectedqtyEach().doubleValue());
                 docAsnDetailVO.setReceivedqtySum(docAsnDetailSum.getReceivedqty().doubleValue());
             }
 

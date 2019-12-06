@@ -154,6 +154,7 @@ $(function() {
             {field: 'coldName',				title: '冷链标记',		width: 60 },
 			{field: 'linestatusName',		title: '行状态',			width: 60 },
 			{field: 'expectedqty',			title: '预期件数',		width: 60 },
+			{field: 'expectedqtyEach',			title: '预期数量',		width: 60 },
 			{field: 'receivedqty',			title: '到货件数',		width: 60 },
 			{field: 'receivinglocation',	title: '收货库位',		width: 80 },
 			// {field: 'totalgrossweight',		title: '重量',		width: 50 },
@@ -210,6 +211,7 @@ $(function() {
 			$('#ezuiDetailsDatagrid').datagrid('reloadFooter',[
 				{linestatusName:'总合计:',
 					expectedqty:data.rows[0].expectedqtySum,
+					expectedqtyEach:data.rows[0].expectedqtyEachSum,
 					receivedqty:data.rows[0].receivedqtySum
 				}]);
 		}

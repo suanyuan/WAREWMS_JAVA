@@ -890,7 +890,7 @@ insert into doc_asn_details
 
 	<!-- 订单明细 列表总数-->
 <select id="queryBySum" resultMap="DocAsnDetailMap"  parameterType="Object">
-	select sum(expectedqty) expectedqty,sum(receivedqty) receivedqty
+	select sum(expectedqty) expectedqty,sum(receivedqty) receivedqty,sum(expectedqty_each) expectedqty_each
 	from Doc_Asn_Details
 	where asnno = #{asnno}
 </select>
@@ -907,6 +907,7 @@ insert into doc_asn_details
 	               a.alternativesku,
 	               a.packid,
 	               a.expectedqty,
+	               a.expectedqty_each,
 	               a.receivedqty,
 	               a.totalcubic,
 	               a.totalgrossweight,
