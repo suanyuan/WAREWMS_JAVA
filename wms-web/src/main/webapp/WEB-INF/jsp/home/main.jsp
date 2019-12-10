@@ -27,76 +27,76 @@
 
 	<script>
 		$(function () {
-            $.ajax({
-                url : sy.bp()+"/gspEnterpriseInfoController.do?getBusinessLicenseOutTime",
-                type : 'POST', dataType : 'JSON',async  :true,
-                success : function(result){
-                    if(result.obj){
-                        $('#tb').datagrid({
-                            data:result.obj,
-                            columns:[[
-                                {field:'enterpriseNo',title:'企业信息代码',width:100},
-                                {field:'shorthandName',title:'简称',width:100},
-                                {field:'enterpriseName',title:'企业名称',width:100},
-                                {field:'outTime',title:'是否过期',width:100,formatter:outTimeFormatter}
-                            ]]
-                        });
-                        $('#show').dialog({
-                            modal : true,
-                            title : '主体证照过期提醒',
-                            left:0,
-                            top:0,
-                            maximizable:true,
-                            width:450,
-                            height:350,
-                            cache: false,
-                            onClose : function() {
+            // $.ajax({
+            //     url : sy.bp()+"/gspEnterpriseInfoController.do?getBusinessLicenseOutTime",
+            //     type : 'POST', dataType : 'JSON',async  :true,
+            //     success : function(result){
+            //         if(result.obj){
+            //             $('#tb').datagrid({
+            //                 data:result.obj,
+            //                 columns:[[
+            //                     {field:'enterpriseNo',title:'企业信息代码',width:100},
+            //                     {field:'shorthandName',title:'简称',width:100},
+            //                     {field:'enterpriseName',title:'企业名称',width:100},
+            //                     {field:'outTime',title:'是否过期',width:100,formatter:outTimeFormatter}
+            //                 ]]
+            //             });
+            //             $('#show').dialog({
+            //                 modal : true,
+            //                 title : '主体证照过期提醒',
+            //                 left:0,
+            //                 top:0,
+            //                 maximizable:true,
+            //                 width:450,
+            //                 height:350,
+            //                 cache: false,
+            //                 onClose : function() {
+			//
+            //                 }
+            //             })
+			// 		}
+            //     }
+            // });
 
-                            }
-                        })
-					}
-                }
-            });
-
-            $('#tbMt').datagrid({
-                url : sy.bp()+"/commonController.do?queryMtList",
-                method:'POST',
-                title: '养护计划',
-                pageSize : 100,
-                pageList : [50, 100, 200],
-                fit: true,
-                border: false,
-                fitColumns : false,
-                nowrap: true,
-                striped: true,
-                collapsible:false,
-                pagination:true,
-                rownumbers:true,
-                singleSelect:false,
-                columns : [[
-                    {field: 'sku',		title: '产品代码',	width: 100 },
-                    {field: 'locationid',		title: '库位',	width: 120 },
-                    {field: 'customerid',		title: '客户代码',	width: 120 },
-                    {field: 'qty',		title: '库存',	width: 71 }
-                ]],
-                onLoadSuccess:function(data){
-                    if(data.total>0){
-                        $('#showMt').dialog({
-                            modal : true,
-                            title : '养护提醒',
-							left:450,
-							right:0,
-                            maximizable:true,
-                            width:450,
-                            height:350,
-                            cache: false,
-                            onClose : function() {
-
-                            }
-                        })
-					}
-                }
-            });
+            // $('#tbMt').datagrid({
+            //     url : sy.bp()+"/commonController.do?queryMtList",
+            //     method:'POST',
+            //     title: '养护计划',
+            //     pageSize : 100,
+            //     pageList : [50, 100, 200],
+            //     fit: true,
+            //     border: false,
+            //     fitColumns : false,
+            //     nowrap: true,
+            //     striped: true,
+            //     collapsible:false,
+            //     pagination:true,
+            //     rownumbers:true,
+            //     singleSelect:false,
+            //     columns : [[
+            //         {field: 'sku',		title: '产品代码',	width: 100 },
+            //         {field: 'locationid',		title: '库位',	width: 120 },
+            //         {field: 'customerid',		title: '客户代码',	width: 120 },
+            //         {field: 'qty',		title: '库存',	width: 71 }
+            //     ]],
+            //     onLoadSuccess:function(data){
+            //         if(data.total>0){
+            //             $('#showMt').dialog({
+            //                 modal : true,
+            //                 title : '养护提醒',
+			// 				left:450,
+			// 				right:0,
+            //                 maximizable:true,
+            //                 width:450,
+            //                 height:350,
+            //                 cache: false,
+            //                 onClose : function() {
+			//
+            //                 }
+            //             })
+			// 		}
+            //     }
+            // });
         })
 	</script>
 </body>
