@@ -9,6 +9,7 @@ import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.pda.PdaDocAsnEndForm;
 import com.wms.query.DocAsnDetailQuery;
 import com.wms.query.DocAsnHeaderQuery;
@@ -72,6 +73,9 @@ public class DocAsnHeaderService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
+    @Autowired
+    private SfcUserMybatisDao sfcUserMybatisDao;
+
 
     public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
         EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -1023,9 +1027,24 @@ public class DocAsnHeaderService extends BaseService {
             DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
             resultMsg.append(asnno);
 
+
+            SfcUserLogin sfcUserLogin = new SfcUserLogin();
+            sfcUserLogin.setId(SfcUserLoginUtil.getLoginUser().getId());//获取登录用户的ID
+/*            SfcUser sfcUser = sfcUserMybatisDao.queryListById(sfcUserLogin);//查询登录用户的角色
+            Set<SfcRole> roleSet = sfcUser.getRoleSet();//获取角色数据
+            List<SfcRole> list=new ArrayList(roleSet);
+            String sysAdmin = "No";
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getId().equals("1")){
+                    sysAdmin = "Yes";
+                    break;
+                }
+            }*/
+
+
             if (docAsnHeader != null) {
                 if (docAsnHeader.getAsnstatus().equals("00") || docAsnHeader.getAsnstatus().equals("90")) {
-                    if (docAsnHeader.getAddwho().contains("EDI")) {
+                    if (docAsnHeader.getAddwho().contains("EDI") && !sfcUserLogin.getId().equals("admin")) {
                         json.setSuccess(false);
                         resultMsg.append(": 接口订单,不可删除!").append("</br>");
                     } else {

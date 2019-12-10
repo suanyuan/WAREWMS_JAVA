@@ -21,8 +21,8 @@
 		if(!fileName){
 			fileName="";
 		}
-		var newwin=window.open(sy.bp()+"/fileUpload/"+url);
-		newwin.document.title=fileName;
+		var newwin=ajaxDownloadFile(sy.bp()+"/fileUpload/"+url);
+		// newwin.document.title=fileName;
     }
     function fileDownLoad(url,fileName) {
         if(!fileName){
