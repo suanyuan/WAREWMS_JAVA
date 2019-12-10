@@ -15,6 +15,7 @@ import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.entity.sfExpress.SFOrderHeader;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
@@ -104,7 +105,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
     private DocOrderUtilService docOrderUtilService;
-
+    @Autowired
+    private SfcUserMybatisDao sfcUserMybatisDao;
     /**
      * 订单列表显示
      */
@@ -250,9 +252,23 @@ public class OrderHeaderForNormalService extends BaseService {
             OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
             orderHeaderForNormalQuery.setOrderno(orderno);
             OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+
+            SfcUserLogin sfcUserLogin = new SfcUserLogin();
+            sfcUserLogin.setId(SfcUserLoginUtil.getLoginUser().getId());//获取登录用户的ID
+/*            SfcUser sfcUser = sfcUserMybatisDao.queryListById(sfcUserLogin);//查询登录用户的角色
+            Set<SfcRole> roleSet = sfcUser.getRoleSet();//获取角色数据
+            List<SfcRole> list=new ArrayList(roleSet);
+            String sysAdmin = "No";
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getId().equals("1")){
+                    sysAdmin = "Yes";
+                    break;
+                }
+            }*/
+
             if (orderHeaderForNormal != null) {
                 if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("90")) {
-                    if (orderHeaderForNormal.getAddwho().contains("EDI")) {
+                    if (orderHeaderForNormal.getAddwho().contains("EDI") && !sfcUserLogin.getId().equals("admin")) {
                         json.setSuccess(false);
                         json.setMsg("EDI订单,不能删除!");
                         return json;
