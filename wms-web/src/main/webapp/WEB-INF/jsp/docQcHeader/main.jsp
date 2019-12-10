@@ -488,7 +488,7 @@ var commitAcceptanceS = function(type){
 		data.lotatt05=$('#ezuiAcceptanceFormS #lotatt05').textbox('getValue');
 		data.lotatt06=$('#ezuiAcceptanceFormS #lotatt06').combobox('getValue');
 		data.lotatt11=escEncode($('#ezuiAcceptanceFormS #lotatt11').textbox('getValue'));
-		data.lotatt15=$('#ezuiAcceptanceFormS #lotatt15').textbox('getValue');
+		data.lotatt15=escEncode($('#ezuiAcceptanceFormS #lotatt15').textbox('getValue'));
 		forms.push(data);
 
 	}
