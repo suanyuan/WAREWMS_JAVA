@@ -152,12 +152,19 @@ public class GspEnterpriseInfoController {
 		 json.setMsg("解除成功！");
 		return json;
 	}
-
+	//获取企业是否存在 首营申请
 	@Login
 	@RequestMapping(params = "verify")
 	@ResponseBody
 	public Object verify(String enterpriseId) {
 		return gspEnterpriceService.verify(enterpriseId);
+	}
+	//查询6个证照是否存在,提示手动初始化（点击）
+	@Login
+	@RequestMapping(params = "selectSixLicense")
+	@ResponseBody
+	public Object selectSixLicense(String enterpriseId) {
+		return gspEnterpriceService.selectSixLicense(enterpriseId);
 	}
 
 	@Login

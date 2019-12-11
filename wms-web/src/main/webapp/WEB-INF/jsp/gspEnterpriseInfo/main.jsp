@@ -171,7 +171,11 @@ var commit = function(){
     var url = '';
     var isVal = true;
     var isVal1 =true;
-
+    var operateLicenseFlag=0 ;
+    var secondRecordFlag=0;
+    var prodLicenseFlag=0;
+    var firstRecordFlag=0;
+    var medicalRecordFlag=0;
     var ffff=false;
     url = sy.bp()+"/gspEnterpriseInfoController.do?add";
     //}
@@ -183,8 +187,25 @@ var commit = function(){
         }
 	}
 
-
-
+    if(enterpriceId!=null||enterpriceId!=""){
+        //查询证照,手动点击初始化
+        $.ajax({
+            url : sy.bp()+"/gspEnterpriseInfoController.do?selectSixLicense",
+            data : {"enterpriseId":enterpriceId},
+            type : 'POST', dataType : 'JSON',
+            async  :false,
+            success : function(result) {
+                // $.messager.progress('close');
+                alert(result.obj.operateLicenseFlag+"="+result.obj.secondRecordFlag+"="
+                    +result.obj.prodLicenseFlag+"="+result.obj.firstRecordFlag+"="+result.obj.medicalRecordFlag);
+                operateLicenseFlag = result.obj.operateLicenseFlag;
+                secondRecordFlag = result.obj.secondRecordFlag;
+                prodLicenseFlag = result.obj.prodLicenseFlag;
+                firstRecordFlag = result.obj.firstRecordFlag;
+                medicalRecordFlag = result.obj.medicalRecordFlag;
+            }
+        })
+    }
 
 
 
@@ -201,6 +222,7 @@ var commit = function(){
         showMsg("企业基础信息未填全！");
         return;
 	}
+
     console.log(infoObj.enterpriseType+"============="+CODE_ENT_TYP.CODE_ENT_TYP_GW);
 	//判断营业执照信息
 	isVal = checkFormData("ezuiFormBusiness",businessObj);
@@ -242,6 +264,8 @@ var commit = function(){
 
     //第二备案凭证
     isVal1 = checkFormData("ezuiFormRecord",secondRecord);
+
+
 
 	//判断经营许可证
     isVal = checkFormData("ezuiFormOperate",operateobj);
@@ -286,8 +310,14 @@ var commit = function(){
             return;
         }
 
-
-
+        if(!checkObjIsEmpty(secondRecord) && secondRecordFlag=="1"){
+            showMsg("请检查第二类经营备案！");
+            return;
+        }
+        if(!checkObjIsEmpty(operateobj) && operateLicenseFlag=="1"){
+            showMsg("请检查经营许可证！");
+            return;
+        }
 
         if(isVal1==false   || !checkObjIsEmpty(secondRecord)){
         }else{
@@ -348,6 +378,18 @@ var commit = function(){
             showMsg("第一类生产备案凭证证填写不完全！");
             return;
         }
+
+        if(!checkObjIsEmpty(firstRecord) && firstRecordFlag=="1"){
+            showMsg("请检查第一类生产备案凭证！");
+            return;
+        }
+        if(!checkObjIsEmpty(prodObj) && prodLicenseFlag=="1"){
+            showMsg("请检查生产许可证！");
+            return;
+        }
+
+
+
         if(isVal1==false   || !checkObjIsEmpty(firstRecord)){
         }else{
             if(judgeDate($("#ezuiFormFirstRecord #approveDate").datebox("getValue"))){
@@ -377,6 +419,10 @@ var commit = function(){
 
     //判断医疗机构执业许可证
     isVal = checkFormData("ezuiFormMedical",medicalObj);
+        if(!checkObjIsEmpty(medicalObj) && medicalRecordFlag=="1"){
+        showMsg("请检查医疗机构执业许可证！");
+        return;
+    }
     //企业判断
     if(infoObj.enterpriseType == CODE_ENT_TYP.CODE_ENT_TYP_YL ){
         if(!checkObjIsEmpty(medicalObj) || isVal == false){

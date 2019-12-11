@@ -54,6 +54,11 @@ public class GspEnterpriseInfo implements Serializable {
 	private String grecordNo;//生产第一类备案
 	private String customerTypeName;
 
+	private String prodLicenseFlag;
+	private String operateLicenseFlag;
+	private String firstRecordFlag;
+	private String secondRecordFlag;
+	private String medicalRecordFlag;
 
 	@Override
 	public boolean equals(Object o) {

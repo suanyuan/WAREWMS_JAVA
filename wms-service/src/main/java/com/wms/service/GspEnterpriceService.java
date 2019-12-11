@@ -227,7 +227,8 @@ public class GspEnterpriceService extends BaseService {
                         boolean flag = true;
                         String operateId = s.getOperateId();
                         for(String str : scopeArr){             //新分类目录
-                            if(str.equals(operateId)){
+
+                            if(str.trim().equals(operateId.trim())){
                                 flag = false;
                             }
                         }
@@ -297,19 +298,19 @@ public class GspEnterpriceService extends BaseService {
                         String operateId = s.getOperateId();
                         System.out.println();
                         for(String str : scopeArr){             //新分类目录
-                            if(str.equals(operateId)){
+                            if(str.trim().equals(operateId.trim())){
                                 flag = false;
                             }
                         }
                         if(flag){
                             //分类目录减少了  创建新版本  正常换证流程
-//                                    enterpriseIsNewVersion = true;
+//                          enterpriseIsNewVersion = true;
                             Flist.add(operateId);
                             ProdResult = true;
 //                            break;
                         }else{
                             //不报废企业不报废关联申请不创建新版本   创建新企业证照版本
-//                                    enterpriseIsNewVersion = false;
+//                          enterpriseIsNewVersion = false;
                         }
 
                     }
@@ -332,7 +333,7 @@ public class GspEnterpriceService extends BaseService {
                         boolean flag = true;
                         String operateId = s.getOperateId();
                         for(String str : scopeArr){             //新分类目录
-                            if(str.equals(operateId)){
+                            if(str.trim().equals(operateId.trim())){
                                 flag = false;
                             }
                         }
@@ -413,7 +414,6 @@ public class GspEnterpriceService extends BaseService {
                                         if(firstBusinessApplyLista.size()>0){
                                             dataPublishService.cancelData(ent.getApplyNo());
                                         }
-
                                     }
 
 
@@ -694,7 +694,51 @@ public class GspEnterpriceService extends BaseService {
         return Json.success("",flag);
     }
 
+    /**
+     * 查询6个证照是否存在,提示手动初始化（点击）
+     * @param enterpriceId 企业信息流水号
+     * @return
+     */
+    public Json selectSixLicense(String enterpriceId){
+//        String flag = "0";
+        GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoService.getGspEnterpriseInfo(enterpriceId);
+        if(gspEnterpriseInfo == null){
+            return Json.error("企业信息不存在！");
+        }
+        GspEnterpriseInfo flag = new GspEnterpriseInfo();
 
+        GspOperateLicense prodLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(enterpriceId,Constant.LICENSE_TYPE_PROD);
+        GspOperateLicense operateLicense = gspOperateLicenseMybatisDao.selectCompareByEnterprisId(enterpriceId,Constant.LICENSE_TYPE_OPERATE);
+        GspFirstRecord firstRecord = gspFirstRecordMybatisDao.selectCompareByEnterprisId(enterpriceId);
+        GspSecondRecord secondRecord = gspSecondRecordMybatisDao.selectCompareByEnterprisId(enterpriceId);
+        GspMedicalRecord medicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(enterpriceId);
+        if(prodLicense!=null){
+            flag.setProdLicenseFlag("1");
+        }else{
+            flag.setProdLicenseFlag("0");
+        }
+        if(operateLicense!=null){
+            flag.setOperateLicenseFlag("1");
+        }else{
+            flag.setOperateLicenseFlag("0");
+        }
+        if(firstRecord!=null){
+            flag.setFirstRecordFlag("1");
+        }else{
+            flag.setFirstRecordFlag("0");
+        }
+        if(secondRecord!=null){
+            flag.setSecondRecordFlag("1");
+        }else{
+            flag.setSecondRecordFlag("0");
+        }
+        if(medicalRecord!=null){
+            flag.setMedicalRecordFlag("1");
+        }else{
+            flag.setMedicalRecordFlag("0");
+        }
+        return Json.success("",flag);
+    }
 
 
 
