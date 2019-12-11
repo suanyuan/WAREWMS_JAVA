@@ -1,11 +1,10 @@
 package com.wms.mybatis.dao;
 
 
-import java.util.List;
-
-import com.wms.mybatis.dao.BaseDao;
 import com.wms.mybatis.entity.SfcRole;
 import com.wms.query.SfcRoleQuery;
+
+import java.util.List;
 /**
  * 
  * <br>
@@ -22,6 +21,8 @@ public interface SfcRoleMybatisDao extends BaseDao {
 	public Long queryByCount();
 
 	public List<SfcRole> queryRoleListByAll();
+
+	public List<SfcRole> queryRoleByID(String userID);
 
 	public void addBtnByRole(SfcRole sfcRole);
 

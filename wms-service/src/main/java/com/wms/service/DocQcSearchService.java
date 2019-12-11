@@ -5,9 +5,11 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcRole;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocQcDetailsQuery;
 import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.DocQcDetailsVO;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +36,8 @@ public class DocQcSearchService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
-
+    @Autowired
+    private SfcRoleMybatisDao sfcRoleMybatisDao;
     /**
      * 显示细单 分页 pano
      * @param pager
@@ -44,6 +47,15 @@ public class DocQcSearchService extends BaseService {
 	public EasyuiDatagrid<DocQcDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
         EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
         List<DocQcDetailsVO> docQcDetailsVOList = new ArrayList<>();
+
+        //登录用户角色是货主就只显示该货主的数据
+        List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+        for (SfcRole sfcRole:sfcUsersList){
+            if(sfcRole.getRoleName().equals("货主")){
+                query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+            }
+        }
+
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());

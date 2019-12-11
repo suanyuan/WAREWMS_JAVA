@@ -1,13 +1,10 @@
 package com.wms.query;
 
+import com.wms.mybatis.entity.SfcCustomer;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import com.wms.mybatis.entity.SfcCustomer;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class ViewInvLocationQuery implements IQuery {
 
@@ -41,9 +38,16 @@ public class ViewInvLocationQuery implements IQuery {
 	private  Date lotatt03Start;      //入库日期查询开始
 	private  Date lotatt03End;      //入库日期查询结束
 	private  String lotatt10;      //质量状态
-
+	private  String customerid;      //货主
 	private Set<SfcCustomer> customerSet;
 
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 	public BigDecimal getiMv() {
 		return iMv;
 	}

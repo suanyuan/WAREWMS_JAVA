@@ -4,7 +4,9 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.ViewInvLocation;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.SfcRoleMybatisDao;
 import com.wms.mybatis.dao.ViewInvLocationMybatisDao;
+import com.wms.mybatis.entity.SfcRole;
 import com.wms.query.ViewInvLocationQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -13,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +23,22 @@ public class ViewInvLocationService extends BaseService {
 
 	@Autowired
 	private ViewInvLocationMybatisDao viewInvLocationMybatisDao;
+	@Autowired
+	private SfcRoleMybatisDao sfcRoleMybatisDao;
 
 	public EasyuiDatagrid<ViewInvLocationVO> getPagedDatagrid(EasyuiDatagridPager pager, ViewInvLocationQuery query) {
 		EasyuiDatagrid<ViewInvLocationVO> datagrid = new EasyuiDatagrid<ViewInvLocationVO>();
 		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+
+		//登录用户角色是货主就只显示该货主的数据
+		List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+		for (SfcRole sfcRole:sfcUsersList){
+			if(sfcRole.getRoleName().equals("货主")){
+				query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+			}
+		}
+
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());

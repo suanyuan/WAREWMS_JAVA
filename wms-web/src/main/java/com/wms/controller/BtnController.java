@@ -1,16 +1,4 @@
 package com.wms.controller;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -22,6 +10,16 @@ import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
 import com.wms.vo.SfcBtnVO;
 import com.wms.vo.form.BtnForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("btnController")
@@ -93,7 +91,12 @@ public class BtnController {
 	public Json findAll() {
 		return btnService.findAll();
 	}
-	
+	@Login
+	@RequestMapping(params = "find")
+	@ResponseBody
+	public Json find(String btnArray,String btns,String roleid,String menuId) {
+		return btnService.find(btnArray,btns,roleid,menuId);
+	}
 	@Login
 	@RequestMapping(params = "getCombobox")
 	@ResponseBody
