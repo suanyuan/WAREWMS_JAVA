@@ -2,6 +2,7 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.query.DocQsmDetailsQuery;
+import com.wms.query.DocQsmProcedureQuery;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public interface DocQsmDetailsMybatisDao extends BaseDao {
 
-    void qualityStatus(Map<String, Object> map);
+    void qualityStatus(DocQsmProcedureQuery query);
 
     public <T> List<T> queryByqcudocno(Object id);
 //根据行号删除

@@ -43,13 +43,13 @@
 	<result column="userdefine2" property="userdefine2"/>
 	<result column="userdefine3" property="userdefine3"/>
 </resultMap>
-       
+
 <!-- doc_qsm_details table all fields -->
 <sql id="Base_Column_List" >
 	 qcudocno,qcudoclineno,qcustatus,lotatt14,customerid,lotatt03,lotatt08,businesstype,sku,lotatt12,lotatt06,descrc,lotatt04,lotatt05,lotatt07,lotatt01,lotatt02,locqty,qty,qtyeach,lotatt15,reservedfield06,lotatt10,locationid,finddate,failed_description,customerid_treatment,treatment_date,remarks,recording_date,recording_people,change_process,lotnum,userdefine1,userdefine2,userdefine3
 </sql>
-   
-   
+
+
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
 where 1=1
@@ -140,7 +140,7 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
+
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -148,16 +148,16 @@ where 1=1
  values(#{qcudocno},#{qcudoclineno},#{qcustatus},#{lotatt14},#{customerid},#{lotatt03},#{lotatt08},#{businesstype},#{sku},#{lotatt12},#{lotatt06},#{descrc},#{lotatt04},#{lotatt05},#{lotatt07},#{lotatt01},#{lotatt02},#{locqty},#{qty},#{qtyeach},#{lotatt15},#{reservedfield06},#{lotatt10},#{locationid},#{finddate},#{failedDescription},#{customeridTreatment},#{treatmentDate},#{remarks},#{recordingDate},#{recordingPeople},#{lotnum},#{changeProcess},#{userdefine3})
 </insert>
 
-<!-- 根据id，修改记录-->  
+<!-- 根据id，修改记录-->
  <update id="update" parameterType="Object" >
   update doc_qsm_details
    set qcustatus=#{qcustatus}
    where qcudocno=#{qcudocno}
  </update>
- 
+
  <!-- 修改记录，只修改只不为空的字段 -->
 <update id="updateBySelective" parameterType="Object" >
-	update doc_qsm_details set 
+	update doc_qsm_details set
 	<trim  suffixOverrides="," >
 	<if test="qcustatus != null  ">
 		qcustatus=#{qcustatus},
@@ -267,7 +267,7 @@ where 1=1
 <delete id="deletelineno" parameterType="Object">
 	delete 	 from doc_qsm_details where qcudocno = #{qcudocno} and qcudoclineno=#{qcudoclineno}
 </delete>
- 
+
 <!-- 根据id查询 质量状态管理 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
 	select <include refid="Base_Column_List" />
@@ -288,7 +288,7 @@ where 1=1
 	select count(1) from doc_qsm_details q
 	<include refid="Example_Where_Clause"/>
 </select>
-  	
+
 <!-- 查询质量状态管理列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
@@ -304,9 +304,16 @@ where 1=1
 </select>
 <!--提交质量状态管理-->
 
-<select id="qualityStatus" statementType="CALLABLE" parameterType="java.util.Map">
-   {call SPINV_QcstatusUpdate_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'0','0',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},#{lotnum,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{fmqcstatus,mode=IN,jdbcType=VARCHAR},#{locqty,mode=IN,jdbcType=VARCHAR},#{locationid,mode=IN,jdbcType=VARCHAR},#{toqcstatus,mode=IN,jdbcType=VARCHAR},#{qty,mode=IN,jdbcType=VARCHAR},'0','0','now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
+<update id="qualityStatus" statementType="CALLABLE" parameterType="java.util.Map">
+   {call SPINV_QcstatusUpdate_Process(
+   #{warehouseid,mode=IN,jdbcType=VARCHAR},
+   '0','0',#{customerid,mode=IN,jdbcType=VARCHAR},#{sku,mode=IN,jdbcType=VARCHAR},
+   #{lotnum,mode=IN,jdbcType=VARCHAR},#{fmlocationid,mode=IN,jdbcType=VARCHAR},
+   #{fmqcstatus,mode=IN,jdbcType=VARCHAR},#{locqty,mode=IN,jdbcType=DECIMAL},
+   #{tolocationid,mode=IN,jdbcType=VARCHAR},#{toqcstatus,mode=IN,jdbcType=VARCHAR},
+   #{qty,mode=IN,jdbcType=DECIMAL},'0','0','now()','CN',
+   #{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</update>
 
 <!--行号-->
 	<select id="getqcudoclinenoById" resultType="java.lang.Long"  parameterType="Object">
