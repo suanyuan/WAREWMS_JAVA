@@ -36,6 +36,7 @@ public class BaseService {
 				SfcRoleQuery sfcRoleQuery = new SfcRoleQuery();
 				sfcRoleQuery.setId(sfcRole.getId());
 				SfcRole subRole = sfcRoleMybatisDao.queryBtnListById(sfcRoleQuery);
+                json.setMsg(subRole.getId());//登录用户属于的角色ID
 				for(SfcBtn sfcBtn : subRole.getBtnSet()){
 					sb.append(sfcBtn.getBtnName()).append(",");
 				}

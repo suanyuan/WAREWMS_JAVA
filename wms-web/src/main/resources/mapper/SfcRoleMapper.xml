@@ -93,7 +93,7 @@ where 1=1
 
 <!-- 插入角色按钮记录 -->
 <insert id="addBtnByRole" parameterType="Object" >
-	insert into sfc_role_btn(role_id,btn_id) 
+	insert into sfc_role_btn(role_id,btn_id)
 	<foreach collection="btnSet" item="btnSet" index="index" separator="union all" >  
 		select #{id,jdbcType=VARCHAR},#{btnSet.id,jdbcType=VARCHAR} from dual   
 	</foreach>  
@@ -217,5 +217,8 @@ where 1=1
 	  from sfc_role a
 	 where a.role_name = #{roleName,jdbcType=VARCHAR}
 </select>
-  	
+<select id="queryRoleByID" resultMap="queryForAllListMap"  parameterType="Object">
+	select sr.* from sfc_role sr,sfc_user_role sur
+	where sur.USER_ID like CONCAT('%',#{userID},'%') and sr.ROLE_ID=sur.ROLE_ID
+</select>
 </mapper>   

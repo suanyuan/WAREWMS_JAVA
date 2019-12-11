@@ -1,12 +1,5 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
@@ -18,6 +11,12 @@ import com.wms.utils.BeanConvertUtil;
 import com.wms.vo.Json;
 import com.wms.vo.SfcBtnVO;
 import com.wms.vo.form.BtnForm;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("BtnService")
 public class BtnService extends BaseService {
@@ -105,4 +104,50 @@ public class BtnService extends BaseService {
 		}
 		return json;
 	}
+    public Json find(String btnArray,String btns,String roleId,String menuId) {
+        Json json = new Json();
+        StringBuilder sb = new StringBuilder();
+
+        String[] btlListAll = btnArray.split(",");//全部按钮
+//        List<SfcBtn> btlList = sfcBtnMybatisDao.queryListRole(menuId,roleId);
+//		int num= 0;
+//		for(int i=0;i<btlListAll.length;i++){
+//			for(int j=0;j<btlList.size();j++){
+//				if(btlListAll[i].equals(btlList.get(j).getBtnName())){
+//					break;
+//				}else {
+//					num +=1;
+//				}
+//			}
+//			if(num==btlList.size()){
+//				sb.append(btlListAll[i]).append(",");
+//			}
+//			num=0;
+//		}
+
+        String[] btlListS = btns.split(",");//用户可用按钮
+		//遍历出 用户不可用的按钮
+		int num= 0;
+		for(int i=0;i<btlListAll.length;i++){
+			for(int j=0;j<btlListS.length;j++){
+				if(btlListAll[i].equals(btlListS[j])){
+					break;
+				}else {
+					num +=1;
+				}
+			}
+			if(num==btlListS.length){
+				sb.append(btlListAll[i]).append(",");
+			}
+			num=0;
+		}
+
+
+        if(sb.length() > 0){
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            json.setSuccess(true);
+            json.setObj(sb.toString());
+        }
+        return json;
+    }
 }
