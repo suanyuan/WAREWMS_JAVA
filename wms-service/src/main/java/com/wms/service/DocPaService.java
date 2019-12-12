@@ -11,6 +11,7 @@ import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.DateUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
@@ -209,7 +210,7 @@ public class DocPaService {
                     if (!json.isSuccess()) return json;
 
                     json = docAsnDetailService.receiveDocAsnDetail(docPaDTO.getAsnno(),docPaDTO.getAsnlineno());
-                    if(!json.isSuccess()){
+                    if(!json.isSuccess()) {
                         throw new Exception(json.getMsg());
                     }
                     //定向订单预期到货通知单（一键收货）时，往DOCQCHEAD 质检表插入一个质检任务 + 上架任务插入
@@ -392,10 +393,25 @@ public class DocPaService {
      */
     private Json checkLeakLotatt(DocPaDTO docPaDTO) {
 
+        //生产日期、效期校验
+        try {
+            Date lotatt01 = DateUtil.parse(docPaDTO.getLotatt01(), "yyyy-MM-dd");
+            Date lotatt02 = DateUtil.parse(docPaDTO.getLotatt02(), "yyyy-MM-dd");
+            if (lotatt01 == null || lotatt02 == null) {
+                return Json.error("入库单：" + docPaDTO.getAsnno() + "(批号/序列号："+ docPaDTO.getLotatt04() + "/" + docPaDTO.getLotatt05() + "，日期属性-不可为空)");
+            }
+            if (lotatt01.getTime() >= lotatt02.getTime()) {
+                return Json.error("入库单：" + docPaDTO.getAsnno() + "(批号/序列号："+ docPaDTO.getLotatt04() + "/" + docPaDTO.getLotatt05() + "，日期属性-生产日期需小于效期)");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Json.error("入库单：" + docPaDTO.getAsnno() + "(批号/序列号："+ docPaDTO.getLotatt04() + "/" + docPaDTO.getLotatt05() + "，日期属性-校验失败)");
+        }
+
         if (!docPaDTO.getAsntype().equals(DocAsnHeader.ASN_TYPE_YY)) return Json.success("");
         int count = docAsnDetailsMybatisDao.queryLeakLotatt4YYAsn(docPaDTO.getAsnno());
         if (count > 0) {
-            return Json.error("引用入库单：" + docPaDTO.getAsnno() + "：缺失必要的批次属性，请前往明细中查看并填写!");
+            return Json.error("入库单：" + docPaDTO.getAsnno() + "：缺失必要的批次属性，请前往明细中查看并填写!");
         }
         return Json.success("");
     }
