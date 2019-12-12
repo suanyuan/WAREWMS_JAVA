@@ -17,18 +17,28 @@
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/lightbox/css/lightbox.min.css"/>'>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/swCss.css"/>"/>
 <script>
-	function showUrl(url,fileName) {
-		if(!fileName){
-			fileName="";
-		}
-		var newwin=ajaxDownloadFile(sy.bp()+"/fileUpload/"+url);
-		// newwin.document.title=fileName;
+	// function showUrl1(url,fileName) {
+	// 	if(!fileName){
+	// 		fileName="";
+	// 	}
+	// 	var newwin=ajaxDownloadFile(sy.bp()+"/fileUpload/"+url);
+	// 	// newwin.document.title=fileName;
+    // }
+
+
+    function showUrl(url,fileName) {
+        if(!fileName){
+            fileName="";
+        }
+        var newwin=window.open(sy.bp()+"/fileUpload/"+url);
+        newwin.document.title=fileName;
     }
+
     function fileDownLoad(url,fileName) {
         if(!fileName){
             fileName="";
         }
-        var newwin=window.open(sy.bp()+"/commonController.do?fileDownLoad&url="+url);
+        var newwin=ajaxDownloadFile(sy.bp()+"/commonController.do?fileDownLoad&url="+url);
         // $.ajax({
         //     url : sy.bp()+"/commonController.do?fileDownLoad&url="+url,
         //     // data : {"url":url},

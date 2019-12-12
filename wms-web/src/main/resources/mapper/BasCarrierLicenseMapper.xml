@@ -149,9 +149,16 @@ where 1=1
 	<if test="roadNumber != null  ">
 		road_number=#{roadNumber},
 	</if>
-		<if test="enterpriseId != null  ">
-			enterprise_id=#{enterpriseId},
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
 	</if>
+		<if test="roadNumberUrl != null  ">
+			road_number_url=#{roadNumberUrl},
+		</if>
+		<if test="licenseUrl != null  ">
+			license_url=#{licenseUrl},
+		</if>
+
 	<if test="roadNumberTerm != null  ">
 		road_number_term=#{roadNumberTerm},
 	</if>

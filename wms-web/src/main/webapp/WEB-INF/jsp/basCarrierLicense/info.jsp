@@ -416,7 +416,7 @@
                 //多文件
                 "file":{
                     //file为name字段 后台可以通过$_FILES["file"]获得
-                    "file":document.getElementsByName("licenseUrlFile")[0].files[0]//文件数组
+                    "file":document.getElementsByName("bfile")[0].files[0]//文件数组
                 }
             },
             onload:function(data){
