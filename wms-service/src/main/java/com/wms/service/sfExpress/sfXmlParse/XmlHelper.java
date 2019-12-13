@@ -36,7 +36,7 @@ public class XmlHelper {
             String head = root.elementTextTrim("Head");
             if ("OK".equals(head)) {
                 response.setResultFlag(true);
-                if ("OrderService".equals(serviceValue)) {
+                if ("OrderSearchService".equals(serviceValue)) {
                     // 下单返回结果处理 <元素>响应
                     Element orderResponse = root.element("Body").element("OrderResponse");
                     Element rlsInfo = orderResponse.element("rls_info");

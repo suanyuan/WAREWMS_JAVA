@@ -44,7 +44,6 @@ public class RequestXmlUtil {
          请查阅https://qiao.sf-express.com/pages/developDoc/index.html?level2=689001选择符合您需求的产品。
          1 - 顺丰标快
          2 - 顺丰特惠
-         TODO 现在顺丰下单都是标快，不对，需要区分特惠、标快（丰桥）根据发运方式下不同的类型，还要区分快递公司，如果是顺丰的才去下顺丰的单子。其他的快递公司最好提供一个填写快递单号的地方用来记录一下。
          */
         if (sfOrderHeader.getRoute().equals("TH")) {
             strBuilder.append("express_type='2'").append(" ");
@@ -114,6 +113,25 @@ public class RequestXmlUtil {
         strBuilder.append("name='医药器械'>").append(" ");
         strBuilder.append("</Cargo>").append(" ");
         strBuilder.append("</Order>");
+        strBuilder.append("</Body>");
+        strBuilder.append("</Request>");
+        return strBuilder.toString();
+    }
+
+    /**
+     * 查询顺丰订单请求体
+     * @param orderNo 订单号
+     */
+    public static String getOrderSearchServiceRequestXml(String orderNo) {
+
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.append("<Request service='OrderSearchService' lang='zh-CN'>");
+        strBuilder.append("<Head>" + CLIENT_CODE + "</Head>");
+        strBuilder.append("<Body>");
+        strBuilder.append("<OrderSearch").append(" ");
+        strBuilder.append("orderid='" + orderNo + "'").append(" ");
+        strBuilder.append("dealtype='2'");
+        strBuilder.append(" /> ");
         strBuilder.append("</Body>");
         strBuilder.append("</Request>");
         return strBuilder.toString();

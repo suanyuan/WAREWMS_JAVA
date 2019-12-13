@@ -821,23 +821,31 @@ public class OrderHeaderForNormalService extends BaseService {
         //响应报文
         String callRequestXml = CallExpressServiceTools.callSfExpressServiceByCSIM(requestXml);
         //解析响应报文
-        ShunFengResponse shunFengResponse = XmlHelper.xmlToBeanForSF(callRequestXml);
+        ShunFengResponse shunFengResponseTmp = XmlHelper.xmlToBeanForSF(callRequestXml);
 
+        ShunFengResponse shunFengResponse;//查询下单详情
 
-        //效验响应报文是否反馈二维码、目的地区域代码是否存在
-        if (shunFengResponse.getOrderResponse() == null && shunFengResponse.isResultFlag()) {
-
-            json.setSuccess(false);
-            json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认");
-            return json;
-        }
-
-        if (!shunFengResponse.isResultFlag()) {
+        if (!shunFengResponseTmp.isResultFlag()) {
 
             json.setSuccess(false);
-            json.setMsg("顺丰下单失败,原因:" + shunFengResponse.getErrorMsg());
+            json.setMsg("顺丰下单失败,原因:" + shunFengResponseTmp.getErrorMsg());
             return json;
+        } else {
+
+            //订单xml查询
+            String searchXml = RequestXmlUtil.getOrderSearchServiceRequestXml(orderHeaderForNormal.getOrderno());
+            String callSearchXml = CallExpressServiceTools.callSfExpressServiceByCSIM(searchXml);
+            shunFengResponse = XmlHelper.xmlToBeanForSF(callSearchXml);
+
+            //效验响应报文是否反馈二维码、目的地区域代码是否存在
+            if (shunFengResponse.getOrderResponse() == null) {
+
+                json.setSuccess(false);
+                json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认，" + shunFengResponse.getErrorMsg());
+                return json;
+            }
         }
+
         List<RlsInfoDto> rlsInfoDtoList = shunFengResponse.getOrderResponse().getRlsInfoDtoList();
         //解析后修改到表中
         OrderHeaderForNormal orderHeaderForNormalSf = new OrderHeaderForNormal();
