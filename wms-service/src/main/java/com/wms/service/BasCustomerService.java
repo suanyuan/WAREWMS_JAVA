@@ -8,31 +8,33 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcRole;
 import com.wms.query.BasCustomerQuery;
-import com.wms.query.GspEnterpriseInfoQuery;
-import com.wms.query.ViewInvTranQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.RandomUtil;
 import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCustomerVO;
-import com.wms.vo.GspEnterpriseVO;
 import com.wms.vo.Json;
-import com.wms.vo.form.*;
+import com.wms.vo.form.BasCustomerForm;
+import com.wms.vo.form.GspReceivingForm;
+import com.wms.vo.form.GspSupplierForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service("basCustomerService")
 public class BasCustomerService extends BaseService {
@@ -74,6 +76,8 @@ public class BasCustomerService extends BaseService {
     private GspSecondRecordMybatisDao gspSecondRecordMybatisDao;
     @Autowired
     private GspMedicalRecordMybatisDao gspMedicalRecordMybatisDao;
+	@Autowired
+	private SfcRoleMybatisDao sfcRoleMybatisDao;
 
 	public EasyuiDatagrid<BasCustomerVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCustomerQuery query) {
 		EasyuiDatagrid<BasCustomerVO> datagrid = new EasyuiDatagrid<BasCustomerVO>();
@@ -81,18 +85,44 @@ public class BasCustomerService extends BaseService {
 
 		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+
+		//登录用户角色是货主就只显示该货主的数据
+		List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+		for (SfcRole sfcRole:sfcUsersList){
+			if(sfcRole.getRoleName().equals("货主") && query.getCustomerType().equals("OW")){
+				query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+			}
+			if(sfcRole.getRoleName().equals("货主") && query.getCustomerType().equals("VE")){
+                BasCustomerVO basCustomerVO = null;
+                List<BasCustomerVO> basCustomerVOList = new ArrayList<BasCustomerVO>();
+                List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryListByCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+                for(BasCustomer basCustomer:basCustomerList){
+                    basCustomerVO = new BasCustomerVO();
+                    basCustomerVO.setCustomerType(basCustomer.getCustomerType());
+                    basCustomerVO.setCustomerid(basCustomer.getCustomerid());
+                    basCustomerVO.setDescrC(basCustomer.getDescrC());
+                    basCustomerVO.setDescrE(basCustomer.getDescrE());
+                    basCustomerVO.setActiveFlag(basCustomer.getActiveFlag());
+                    basCustomerVOList.add(basCustomerVO);
+                }
+                Long total  = Long.parseLong(basCustomerList.size()+"");
+                datagrid.setTotal(total);
+                datagrid.setRows(basCustomerVOList);
+                return datagrid;
+            }
+		}
+
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		if(query.getIdList()!=null&&query.getIdList()!="" ){
 			List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
 			mybatisCriteria.setIdList(enterpriseIdList);
 		}
-
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-
 		mybatisCriteria.setOrderByClause("addtime desc");
+
 		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByPageList(mybatisCriteria);
 		BasCustomerVO basCustomerVO = null;
 		List<BasCustomerVO> basCustomerVOList = new ArrayList<BasCustomerVO>();
@@ -153,6 +183,7 @@ public class BasCustomerService extends BaseService {
 
         query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());

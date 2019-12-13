@@ -1,13 +1,12 @@
 package com.wms.mybatis.dao;
 
 
-import java.util.List;
-import java.util.Map;
-
 import com.wms.entity.BasCustomer;
 import com.wms.entity.GspReceivingAddress;
-import com.wms.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -19,7 +18,7 @@ public interface BasCustomerMybatisDao extends BaseDao {
 	public List<BasCustomer> queryCustomerTypeByAll();
 
 	public List<BasCustomer> queryOperateTypeByAll();
-
+	public List<BasCustomer> queryListByCustomerid(Object customerid);
 	public String basCustomerCheck(Map<String, Object> map);
 
 	GspReceivingAddress getReceivingAddressInfo(String receivingAddressId);

@@ -515,7 +515,7 @@ var clearParentName = function(){
 																															editable:false,
 																															url:'<c:url value="/roleController.do?getCombobox"/>',
 																															valueField:'id',  
-																															textField:'value'" />  
+																															textField:'value'" />
 					</td>
 				</tr>
 				<tr>

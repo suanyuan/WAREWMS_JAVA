@@ -1414,7 +1414,23 @@ var ezuiCustDataClick = function(customerType){
 				{field: 'customerid',	title: '客户代码',	width: 50},
 				{field: 'descrC',		title: '中文名称',	width: 50},
 				{field: 'descrE',		title: '英文名称',	width: 25},
-				{field: 'customerTypeName',	title: '类型',	width: 15},
+				{field: 'customerType',	title: '类型',	width: 15 ,formatter:function(value,rowData,rowIndex){
+                        if (rowData.customerType=='CO') {
+                            return rowData.customerType='收货单位';
+                        }else if (rowData.customerType=='VE'){
+                            return rowData.customerType='供应商';
+                        }else if (rowData.customerType=='CA'){
+                            return rowData.customerType='承运商';
+                        }else if (rowData.customerType=='OT'){
+                            return rowData.customerType='其他';
+                        }else if (rowData.customerType=='OW'){
+                            return rowData.customerType='货主';
+                        }else if (rowData.customerType=='PR'){
+                            return rowData.customerType='生产企业';
+                        }else if (rowData.customerType=='WH'){
+                            return rowData.customerType='主体';
+                        }
+                    } },
 				{field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
 					return rowData.activeFlag == '1' ? '是' : '否';
 	            }}
@@ -1435,9 +1451,9 @@ var ezuiCustDataClick = function(customerType){
 var selectCust = function(){
 	var row = ezuiCustDataDialogId.datagrid('getSelected');
 	if(row){
-		if(row.customerType == "OW"){
+		if(row.customerType == "货主"){
             $("#customerid").textbox('setValue',row.customerid);
-		}else if(row.customerType == "VE"){
+		}else if(row.customerType == "供应商"){
             $("#supplierId").textbox('setValue',row.customerid);
 		}
 		ezuiCustDataDialog.dialog('close');

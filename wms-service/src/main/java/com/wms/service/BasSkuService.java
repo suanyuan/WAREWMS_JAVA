@@ -1,29 +1,26 @@
 package com.wms.service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.*;
 import com.wms.constant.Constant;
-import com.wms.entity.*;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasSku;
+import com.wms.entity.BasSkuHistory;
+import com.wms.entity.GspProductRegister;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcRole;
+import com.wms.query.BasSkuQuery;
+import com.wms.service.importdata.ImportSkuDataService;
+import com.wms.utils.BarcodeGeneratorUtil;
+import com.wms.utils.PDFUtil;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.BasSkuVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.BasSkuForm;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
@@ -33,26 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.query.BasSkuQuery;
-import com.wms.service.importdata.ImportSkuDataService;
-import com.wms.utils.BarcodeGeneratorUtil;
-import com.wms.utils.BeanConvertUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.utils.PDFUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.vo.BasSkuVO;
-import com.wms.vo.Json;
-import com.wms.vo.form.BasSkuForm;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("basSkuService")
 public class BasSkuService extends BaseService {
@@ -70,11 +54,22 @@ public class BasSkuService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
 	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+	@Autowired
+	private SfcRoleMybatisDao sfcRoleMybatisDao;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	//显示主页datagrid
 	public EasyuiDatagrid<BasSkuVO> getPagedDatagrid(EasyuiDatagridPager pager, BasSkuQuery query) {
 		EasyuiDatagrid<BasSkuVO> datagrid = new EasyuiDatagrid<BasSkuVO>();
+
+		//登录用户角色是货主就只显示该货主的数据
+		List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+		for (SfcRole sfcRole:sfcUsersList){
+			if(sfcRole.getRoleName().equals("货主")){
+				query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+			}
+		}
+
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 //		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 //		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
@@ -408,6 +403,15 @@ public class BasSkuService extends BaseService {
 //		query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 //		query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 		query.setActiveFlag(Constant.IS_USE_YES);
+
+		//登录用户角色是货主就只显示该货主的数据
+		List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+		for (SfcRole sfcRole:sfcUsersList){
+			if(sfcRole.getRoleName().equals("货主")){
+				query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+			}
+		}
+
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(query);

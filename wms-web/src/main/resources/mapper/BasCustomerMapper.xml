@@ -808,7 +808,13 @@ where 1=1
 	where 1 = 1
 	order by ADDTIME desc
 </select>
-
+	<!-- 根据customer查询 供应商列表 -->
+	<select id="queryListByCustomerid"  resultMap="BaseResultMap" parameterType="Object">
+		select t3.* from bas_customer t1
+		LEFT JOIN (select * from gsp_supplier where first_state = '40') t2 on t1.customerid = t2.costomerid
+		LEFT JOIN (select * from bas_customer where customer_type='ve' ) t3 on t3.enterprise_id = t2.enterprise_id
+		where  t1.customerid = #{costomerid}
+	</select>
 	<!--查询客户档案分页列表-->
 	<select id="queryByPageListByCustomer" resultMap="BaseResultMap"  parameterType="Object">
 		select * from (
