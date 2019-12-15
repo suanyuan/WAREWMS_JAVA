@@ -106,14 +106,6 @@ public class BasLocationService extends BaseService {
 			        basLocation.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
 			        basLocation.setAddtime(today);
 			        basLocation.setEdittime(today);
-			        //basLocation.setMixFlag("N");
-			        //basLocation.setMixLotflag("N");
-			        //basLocation.setLoseidFlag("N");
-			        //basLocation.setFacilityId("001");
-			        //basLocation.setStatus("OK");
-			        //basLocation.setCscount(0);
-					
-			        //basLocationDao.save(basLocation);
 			        basLocationMybatisDao.add(basLocation);
 				}else {
 					json.setSuccess(false);
@@ -122,7 +114,8 @@ public class BasLocationService extends BaseService {
 				}
 				
 				json.setSuccess(true);
-				return json;
+		        json.setMsg("资料处理成功!");
+		return json;
 			}
 		
 	private void validateLocation(BasLocationForm basLocationForm, StringBuilder resultMsg) {

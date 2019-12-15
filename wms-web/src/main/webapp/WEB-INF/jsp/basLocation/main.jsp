@@ -119,9 +119,14 @@ $(function() {
 var add = function(){
 	processType = 'add';
 	$('#basLocationId').val(0);
-	$("#ezuiForm #mixFlag").combobox('setValue','N').combobox('setText','否 ');
-	$("#ezuiForm #mixLotflag").combobox('setValue','N').combobox('setText','否 ');
-	$("#ezuiForm #loseidFlag").combobox('setValue','N').combobox('setText','否 ');
+	$("#ezuiForm #locationusage").combobox('setValue','EA'); //库位使用
+	$("#ezuiForm #locationcategory").combobox('setValue','RK'); //库位类型
+	$("#ezuiForm #locationattribute").combobox('setValue','OK'); //库位属性
+	$("#ezuiForm #locationhandling").combobox('setValue','OT'); //库位处理
+	$("#ezuiForm #demand").combobox('setValue','A'); //周转需求
+	$("#ezuiForm #mixFlag").combobox('setValue','Y');//允许混放产品
+	$("#ezuiForm #mixLotflag").combobox('setValue','Y');//允许混放批次
+	$("#ezuiForm #loseidFlag").combobox('setValue','Y');//忽略ID
 	$("#ezuiForm #cubiccapacity").textbox("setValue",0);
 	$("#ezuiForm #weightcapacity").textbox("setValue",0);
 	$("#ezuiForm #cscount").textbox("setValue",0);
@@ -460,7 +465,7 @@ var downloadTemplate = function(){
 				</fieldset>
 				<div>
 					<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>
-					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>
+<%--					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a>--%>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
 				</div>
@@ -519,7 +524,7 @@ var downloadTemplate = function(){
 																												valueField: 'id',
 																												textField: 'value'"/></td>
 					<th>上架区</th>
-					<td><input type='text' id='putawayzone' name='putawayzone' class='easyui-combobox' size='16' data-options="required:true,
+					<td><input type='text' id='putawayzone' name='putawayzone' class='easyui-combobox' size='16' data-options="
 																												panelHeight:'auto',
 																											    editable:false,
 																												url:'<c:url value="/basLocationController.do?getPtzoneTypeCombobox"/>',
@@ -528,7 +533,7 @@ var downloadTemplate = function(){
 				</tr>
 				<tr>
 				    <th>拣货区</th>
-					<td><input type='text' id='pickzone' name='pickzone' class='easyui-combobox' size='16' data-options="required:true,
+					<td><input type='text' id='pickzone' name='pickzone' class='easyui-combobox' size='16' data-options="
 																												panelHeight:'auto',
 																											    editable:false,
 																												url:'<c:url value="/basLocationController.do?getPizoneTypeCombobox"/>',

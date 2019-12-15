@@ -213,27 +213,17 @@ where 1=1
                           ydistance)
                        values(
                           #{locationid},
-                           <if test="length != null  ">
 		                       #{length},
-	                       </if>
-	                      <if test="width != null  ">
 		                       #{width},
-	                      </if>
-						  <if test="height != null  ">
 							   #{height},
-						  </if>
                           #{locationusage},
                           #{putawayzone},
                           #{locationattribute},
                           #{locationcategory},
                           #{logicalsequence},
                           '',
-                           <if test="cubiccapacity != null  ">
 							   #{cubiccapacity},
-						  </if>
-                           <if test="weightcapacity != null  ">
 							   #{weightcapacity},
-						  </if>
                           'OK',
                           '001',
                           '',
@@ -246,18 +236,14 @@ where 1=1
                           #{addwho},
                           now(),
                           #{editwho},
-                          <if test="countcapacity != null  ">
-							   #{countcapacity},
-						  </if>
+						  #{countcapacity},
 						  '',
                           #{demand},
                           #{mixFlag},
                           #{loseidFlag},
                           #{mixLotflag},
                           #{locationhandling},
-                          <if test="plcount != null  ">
-		                       #{plcount},
-	                      </if>
+		                  #{plcount},
 						  #{picklogicalsequence},
 						  0,
 						  0,
