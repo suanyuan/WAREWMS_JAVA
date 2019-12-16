@@ -305,7 +305,7 @@
                 and priority = #{condition.priority}
             </if>
             <if test="condition.consigneeid != null and condition.consigneeid != ''">
-                and consigneeid = #{condition.consigneeid}
+                and consigneeid like concat('%',#{condition.consigneeid},'%')
             </if>
             <if test="condition.cContact != null and condition.cContact != ''">
                 and c_contact  like '%${condition.cContact}%'

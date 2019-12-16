@@ -91,8 +91,8 @@ $(function() {
 					{field: 'soreference2',			title: '定向入库单号',	width: 120 },
             		{field: 'cAddress4',			title: '快递单号',	    width: 120 },
 					{field: 'notes',				title: '备注',		    width: 150 },
-					{field: 'edisendflag',			title: '回传标识',		width: 70 },
-					{field: 'cContact',		        title: '收货方',		    width: 75 },
+					{field: 'edisendflag',			title: '回传标识',		width: 70,formatter:edisendflag },
+					{field: 'consigneeid',		    title: '公司抬头',		    width: 200 },
 					{field: 'cAddress1',			title: '收货地址',		width: 250 },
 					{field: 'cTel1',				title: '联系方式',		width: 100 },
 					{field: 'addtime',				title: '创建时间',		width: 145 },
@@ -498,13 +498,15 @@ var ezuiToolbarClear = function(){
 	$("#sostatusTo").combobox('clear');
 	$("#ordertype").combobox('clear');
 	$("#releasestatus").combobox('clear');
+	$("#edisendflag").combobox('clear');
 
     $('#soreference2').textbox('clear');
    /* $("#cc1").combobox('clear');
     $("#cc2").combobox('clear');
     $("#cc3").combobox('clear');*/
     $("#cAddress1").textbox('clear');
-    $("#cContact").textbox('clear');
+    $("#consigneeid").textbox('clear');
+    $("#cAddress4Q").textbox('clear');
     //$("#cTel1").textbox('clear');
     $("#cAddress4").textbox('clear');
     $("#carrierContact").textbox('clear');
@@ -1322,9 +1324,10 @@ var doSearch = function(){
 		customerid : $('#customerid').val(),
 		soreference1 : $('#soreference1').val(),
         soreference2 : $('#soreference2').val(),
-		//收货人
-		 cContact : $('#cContact').val(),
+		//收货单位
+		consigneeid : $('#consigneeid').val(),
 		psName :$("#toolbar #productLineOrder").combobox('getText'),
+		edisendflag :$("#toolbar #edisendflag").combobox('getValue'), //回传标识
 		//收货电话
 		//  cTel1 : $('#cTel1').val(),
 		//订单状态
@@ -2095,10 +2098,10 @@ var ezuiReceDataDialogClick = function(){
         },
         idField : 'customerid',
         columns : [[
-            {field: 'customerid',		title: '客户代码',	width: 15},
+            {field: 'customerid',		title: '客户代码',	width: 35},
             {field: 'descrC',			title: '中文名称',	width: 50},
             {field: 'descrE',			title: '英文名称',	width: 50},
-            {field: 'customerTypeName',	title: '类型',	width: 15},
+            {field: 'customerTypeName',	title: '类型',	width: 20},
             {field: 'activeFlag',	title: '激活',	width: 15, formatter:function(value,rowData,rowIndex){
                     return rowData.activeFlag == '1' ? '是' : '否';
                 }}
@@ -2697,7 +2700,7 @@ var writeBackExpressBtnCommit = function(){
 							<th>地址</th><td><input type='text' id='cAddress1' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>--%>
 						<tr>
-							<th>收货方</th><td><input type='text' id='cContact' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>公司抬头</th><td><input type='text' id='consigneeid' class='easyui-textbox' size='16' data-options=''/></td>
 <%--
 							<th>收货电话</th><td><input type='text' id='cTel1' class='easyui-textbox' size='16' data-options=''/></td>
 --%>
@@ -2709,6 +2712,17 @@ var writeBackExpressBtnCommit = function(){
 																										url:'<c:url value="/productLineController.do?getCombobox"/>',
 																										valueField: 'id',
 																										textField: 'value'" />
+							</td>
+							<th>回传标识</th>
+							<td>
+								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '已回传'},
+																																{id: '0', value: '未回传'}
+																															]"/>
 							</td>
 
 						</tr>

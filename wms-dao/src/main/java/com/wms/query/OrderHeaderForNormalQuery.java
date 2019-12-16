@@ -52,7 +52,25 @@ public class OrderHeaderForNormalQuery implements IQuery {
 
     private String cAddress4;//快递单号
     private String carriercontact;//运输公司
+    private String edisendflag;//回传标识
+    private String consigneeid;//收货单位 公司抬头
 
+
+    public String getConsigneeid() {
+        return consigneeid;
+    }
+
+    public void setConsigneeid(String consigneeid) {
+        this.consigneeid = consigneeid;
+    }
+
+    public String getEdisendflag() {
+        return edisendflag;
+    }
+
+    public void setEdisendflag(String edisendflag) {
+        this.edisendflag = edisendflag;
+    }
 
     public String getCarriercontact() {
         return carriercontact;

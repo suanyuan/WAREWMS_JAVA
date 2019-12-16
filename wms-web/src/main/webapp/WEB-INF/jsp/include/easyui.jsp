@@ -421,5 +421,12 @@
 			case "99" : return "任务关闭";
 		}
 	}
-
+//发运订单-回传标识
+    var edisendflag = function(value,row,index) {
+		value+="";
+		switch (value) {
+			case "1" : return "已回传";
+			case "0" : return "未回传";
+		}
+	}
 </script>
