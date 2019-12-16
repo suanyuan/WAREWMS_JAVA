@@ -413,16 +413,61 @@ public class DocOrderHeaderController {
         orderHeaderForNormalService.exportbasSerialNumToExcel(response, orderNofrom);
     }
 
-    //导出
+    //导出随货
     @Login
     @RequestMapping(params = "exportOrderNoToExcel")
-    public String exportOrderDataToExcel(Model model, String orderno) {
-        List<OrderHeaderForNormal> orderHeaderForNormalList = docOrderExportService.docOrderToExcel(orderno);
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormalList);
-        model.addAttribute("url", "WEB-INF/jasper/reportDocOrderDetails.jasper");
+    public String exportOrderDataToExcel(Model model, @RequestParam(value = "orderno")String orderno) {
+        String[] s = orderno.split(",");
+        List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
+        for (String a : s) {
+            orderHeaderForNormal.add(orderHeaderForNormalService.exportAccompanyingPdf(a));
+        }
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
+        String customer = orderHeaderForNormal.get(0).getCustomerid();
+        if (customer.equals("JSGR")) {
+            //1 国润
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");
+        } else if (customer.equals("JSML")) {
+            //2 明伦
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");
+        } else if (customer.equals("MY")) {
+            //3 妙有
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingMY.jasper");
+        } else if (customer.equals("JSJY")) {
+            //4 嘉意
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSJY.jasper");
+        } else if (customer.equals("BLJG")) {
+            //5 佰礼
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBLJG.jasper");
+        } else if (customer.equals("YG")) {
+            //6 亦舸
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingYG.jasper");
+        } else if (customer.equals("WQ")) {
+            //7 稳勤
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingWQ.jasper");
+        } else if (customer.equals("BDL")) {
+            //8 百多力
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBDL.jasper");
+        } else if (customer.equals("BZ")) {
+            //9 标准
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBZ.jasper");
+        } else if (customer.equals("HQ")) {
+            //10 宏确
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingHQ.jasper");
+        } else {
+            //原随货单
+            model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+        }
         model.addAttribute("format", Constant.JASPER_XLS);
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
+
+//
+//        List<OrderHeaderForNormal> orderHeaderForNormalList = docOrderExportService.docOrderToExcel(orderno);
+//        model.addAttribute("url", "WEB-INF/jasper/reportDocOrderDetails.jasper");
+//        model.addAttribute("format", Constant.JASPER_XLS);
+//        model.addAttribute("jrMainDataSource", jrDataSource);
+//        return "iReportView";
     }
 
     //导出Excel格式所有信息
