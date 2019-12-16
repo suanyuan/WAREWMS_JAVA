@@ -352,7 +352,7 @@
 	}
 //冻结状态
 	var holdStatusFormatter = function (value,row,index) {
-		switch (value.toString()) {
+		switch (value+"") {
 			case "99" : return "库存冻结";
 			case "0" : return "库存解冻";
 			default: return "库存解冻";

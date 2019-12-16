@@ -51,6 +51,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:false,
+		showFooter:true,
 		columns : [[
 			{field:'ck',checkbox:true},
 			{field: 'fmlocation', title: '库位', width: 100},
@@ -95,18 +96,17 @@ $(function() {
 		onDblClickCell: function(index,field,value){
 			edit();
 		},
-// 		onRowContextMenu : function(event, rowIndex, rowData) {
-// 			event.preventDefault();
-// 			$(this).datagrid('unselectAll');
-// 			$(this).datagrid('selectRow', rowIndex);
-// 			ezuiMenu.menu('show', {
-// 				left : event.pageX,
-// 				top : event.pageY
-// 			});
-// 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLotattController.do?getBtn"/>', ezuiMenu);
-// 			$(this).datagrid('unselectAll');
-// 		}
+		 onLoadSuccess:function(data){
+			 ezuiDatagrid.datagrid('reloadFooter',[
+				 {lotatt12:'总计:',fmqty:data.rows[0].fmqtySum,fmqtyEach:data.rows[0].fmqtyEachSum,
+					 qtyallocated:data.rows[0].qtyallocatedSum,qtyallocatedEach:data.rows[0].qtyallocatedEachSum,
+					 qtyavailed:data.rows[0].qtyavailedSum,qtyavailedEach:data.rows[0].qtyavailedEachSum,
+					 qtyholded:0, qtyholdedEach:0}
+			 ]);
+
+			 ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLotattController.do?getBtn"/>', ezuiMenu);
+			 $(this).datagrid('unselectAll');
+ 		}
 	});
 //查询条件货主字段初始化
 	$("#fmcustomerid").textbox({

@@ -2,6 +2,8 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.InvLotLocIdSkuInvLotAtt;
+import com.wms.entity.ViewInvLocation;
+import com.wms.entity.ViewInvLotatt;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,4 +29,8 @@ public interface ViewInvLotattMybatisDao extends BaseDao {
     List<InvLotLocIdSkuInvLotAtt> getInvLotLocIdSkuInvLotAttList(@Param("sku") String sku,
                                                                  @Param("lotatt04") String lotatt04,
                                                                  @Param("lotatt05") String lotatt05);
+
+    //计算库存总计
+
+    public ViewInvLotatt queryByListSum(MybatisCriteria criteria);
 }

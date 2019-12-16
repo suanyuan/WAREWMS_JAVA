@@ -50,11 +50,21 @@ public class ViewInvLotattService extends BaseService {
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         List<ViewInvLotatt> viewInvLotattList = viewInvLotattMybatisDao.queryByPageList(mybatisCriteria);
+        //总计
+        ViewInvLotatt viewInvLotattSum=viewInvLotattMybatisDao.queryByListSum(mybatisCriteria);
+
         ViewInvLotattVO viewInvLotattVO = null;
         List<ViewInvLotattVO> viewInvLotattVOList = new ArrayList<ViewInvLotattVO>();
         for (ViewInvLotatt viewInvLotatt : viewInvLotattList) {//james
             viewInvLotattVO = new ViewInvLotattVO();
             BeanUtils.copyProperties(viewInvLotatt, viewInvLotattVO);
+            //总计
+            viewInvLotattVO.setFmqtySum(viewInvLotattSum.getFmqtySum());
+            viewInvLotattVO.setFmqtyEachSum(viewInvLotattSum.getFmqtyEachSum());
+            viewInvLotattVO.setQtyallocatedSum(viewInvLotattSum.getQtyallocatedSum());
+            viewInvLotattVO.setQtyallocatedEachSum(viewInvLotattSum.getQtyallocatedEachSum());
+            viewInvLotattVO.setQtyavailedSum(viewInvLotattSum.getQtyavailedSum());
+            viewInvLotattVO.setQtyavailedEachSum(viewInvLotattSum.getQtyavailedEachSum());
             //供应商名称
             if(viewInvLotattVO.getLotatt08()!=null) {
                 String loatt08=viewInvLotattVO.getLotatt08();
