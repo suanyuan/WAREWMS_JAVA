@@ -123,7 +123,9 @@
             <if test="condition.productionAddress != null and condition.productionAddress != ''">
                 and t1.production_address like '%${condition.productionAddress}%'
             </if>
-
+            <if test="condition.enterpriseName != null and condition.enterpriseName != ''">
+                and t1.product_enterprise_name like '%${condition.enterpriseName}%'
+            </if>
 
             <if test="condition.createId != null and condition.createId != ''">
                 and t1.create_id like '%${condition.createId}%'

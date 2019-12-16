@@ -428,7 +428,7 @@ var doSearch = function(){
 		// hight : $('#hight').val(),
 		// productLine : $('#productLine').val(),
 		// manageCategories : $('#manageCategories').val(),
-		// packing_Require : $('#packing_Require').val(),
+		enterpriseName : $('#enterpriseName').val(),
 		// storageCondition : $('#storageCondition').val(),
 		// transportCondition : $('#transportCondition').val(),
 		createId : $('#createId').val(),
@@ -522,6 +522,10 @@ var doExport = function(){
         param.put("productCode",$('#productCode').val());
         param.put("productName",$('#productName').val());
         param.put("productRemark", $('#productRemark').val());
+
+        param.put("enterpriseName", $('#enterpriseName').val());
+
+
         param.put("productModel", $('#productModel').val());
         param.put("productionAddress", $('#productionAddress').val());
         param.put("createDateEnd", $("#createDateEnd").datebox("getValue"));
@@ -567,7 +571,7 @@ var doExport = function(){
 						   <th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
-						   <%--<th>产品名称</th><td><input type='text' id='productNameMain' class='easyui-textbox' size='16' data-options=''/></td>--%>
+						   <th>生产企业</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
 
 						<td>
 

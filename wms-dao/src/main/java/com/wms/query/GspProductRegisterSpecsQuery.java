@@ -16,7 +16,7 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 	private String createDateEnd;
 	private String editDateStart;
 	private String editDateEnd;
-
+	private String enterpriseName;
 
 
 	private String specsName;
@@ -53,6 +53,15 @@ public class GspProductRegisterSpecsQuery implements IQuery {
 
 	private String type;
 	private String supplierId;
+
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
 
 	public String getToken() {
 		return token;
