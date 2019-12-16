@@ -1134,7 +1134,7 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 				<input type='hidden' id='qty1' name="qty1" />
 				<tr>
 				   <th>产品代码</th><td><input type='text' id='sku' name="sku" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
-				   <th>存储条件</th><td><input type='text' id='lotatt11' name="lotatt11" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
+				   <th>存储条件</th><td><input type='text' id='lotatt11' name="lotatt11" class='easyui-textbox' size='20' data-options=""/></td>
 				</tr>
 				<tr>
 				   <th>批号</th><td><input type='text' id='lotatt04' name="lotatt04" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
