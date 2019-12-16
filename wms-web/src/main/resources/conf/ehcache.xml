@@ -21,12 +21,12 @@
 								     預設策略是LRU（最近最少使用）。你可以設置為FIFO（先進先出）或是LFU（較少使用）。 
 		clearOnFlush：內存數量最大時是否清除。 
 	-->
-	
-<!-- 	<diskStore path="java.io.tmpdir" /> -->
-<!-- 	<diskStore path="/home/473103093/Backup/cachetmpdir" /> -->
-<!-- <diskStore path="d:/cachetmpdir" />  -->
-	<diskStore path="/Users/quendi/cachetmpdir" />
-	<defaultCache 
+
+<!--	todo 部署 修改 -->
+ <diskStore path="/root/cachetmpdir" />
+<!--	测试 -->
+<!--	<diskStore path="/Users/gizmo/JavaProjectsFiles/CacheTmpDir" />-->
+	<defaultCache
 		maxElementsInMemory="10000" 
 		eternal="false"
 		timeToIdleSeconds="120" 
