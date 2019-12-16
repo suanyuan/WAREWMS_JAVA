@@ -89,6 +89,9 @@ $(function() {
     });
 
     function doUpload(data) {
+        $.messager.progress({
+            text : '<spring:message code="common.message.data.processing"/>', interval : 100
+        });
         var ajaxFile = new uploadFile({
             "url":sy.bp()+"/commonController.do?uploadFileLocal",
             "dataType":"json",
@@ -102,9 +105,11 @@ $(function() {
                 }
             },
             onload:function(data){
+                $.messager.progress('close');
                 $("#calCardUrl").val(data.comment);
             },
             onerror:function(er){
+                $.messager.progress('close');
                 console.log(er);
             }
         });
