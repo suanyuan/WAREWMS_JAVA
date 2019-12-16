@@ -83,7 +83,7 @@ $(function() {
 		},
 		columns : [[
 		            {field: 'chk',                  checkbox:true,          width: 6},
-					{field: 'customerid',			title: '客户编码',		width: 75 },
+					{field: 'customerid',			title: '客户编码',		width: 85 },
 					{field: 'orderno',				title: 'SO编号',		    width: 120 },
 					{field: 'orderTypeName',		title: '订单类型',		width: 80 },
                     {field: 'orderStatusName',		title: '订单状态',		width: 80 },
@@ -2011,7 +2011,14 @@ var ezuiCustDataClick = function(){
 var selectCust = function(){
 	var row = ezuiCustDataDialogId.datagrid('getSelected');
 	if(row){
-		$("#customerid").textbox('setValue',row.customerid);
+		var customerids=$("#toolbar #customerid").textbox('getValue');
+		console.log(customerids);
+		if(customerids!=""&&customerids!=undefined){
+			customerids=customerids+","+row.customerid;
+		}else{
+			customerids=row.customerid;
+		}
+		$("#toolbar #customerid").textbox('setValue',customerids);
 		ezuiCustDataDialog.dialog('close');
 	};
 };

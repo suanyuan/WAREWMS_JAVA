@@ -15,6 +15,7 @@ import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.entity.sfExpress.SFOrderHeader;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcCustomer;
 import com.wms.mybatis.entity.SfcRole;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.*;
@@ -118,14 +119,27 @@ public class OrderHeaderForNormalService extends BaseService {
         query.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 
-        //登录用户角色是货主就只显示该货主的数据
+        //主界面多货主查询
+        if(query.getCustomerid()!=null&&query.getCustomerid()!="") {
+            String   customerid=query.getCustomerid();
+            String[] customerids=customerid.split(",");
+            Set<SfcCustomer> customers = new HashSet<>();
+            SfcCustomer customer=null;
+            for (String s : customerids) {
+                 customer=new SfcCustomer();
+                 customer.setId(s);
+                 customers.add(customer);
+            }
+            query.setCustomers(customers);
+            query.setCustomerid(null);
+        }
+       //登录用户角色是货主就只显示该货主的数据
         List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
         for (SfcRole sfcRole:sfcUsersList){
             if(sfcRole.getRoleName().equals("货主")){
                 query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
             }
         }
-
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());

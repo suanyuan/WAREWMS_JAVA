@@ -19,6 +19,7 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private java.util.Date currentTime;
     private String warehouseId;
     private Set<SfcCustomer> customerSet;
+    private Set<SfcCustomer> customers;//多货主查询
     //省
     private String cProvince;
     //市
@@ -55,6 +56,14 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String edisendflag;//回传标识
     private String consigneeid;//收货单位 公司抬头
 
+
+    public Set<SfcCustomer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<SfcCustomer> customers) {
+        this.customers = customers;
+    }
 
     public String getConsigneeid() {
         return consigneeid;

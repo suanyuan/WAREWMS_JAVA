@@ -763,6 +763,24 @@
             <if test="condition.hEdi15 != null and condition.hEdi15 != ''">
                 and h_edi_15 = #{condition.hEdi15}
             </if>
+            <if test="condition.customerSet != null" >
+                <if test="condition.customerSet.isEmpty() == false" >
+                    and a.customerid  in (
+                    <foreach collection="condition.customerSet" item="customer" index="index" separator="," >
+                        #{customer.id,jdbcType=VARCHAR}
+                    </foreach>
+                    )
+                </if>
+            </if>
+            <if test="condition.customers != null" >
+                <if test="condition.customers.isEmpty() == false" >
+                    and a.customerid  in (
+                    <foreach collection="condition.customers" item="customer" index="index" separator="," >
+                        #{customer.id,jdbcType=VARCHAR}
+                    </foreach>
+                    )
+                </if>
+            </if>
         </trim>
     </sql>
 
