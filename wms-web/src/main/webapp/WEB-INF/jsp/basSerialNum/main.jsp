@@ -41,7 +41,7 @@ $(function() {
 			{field: 'deliveryNum',		title: '发货凭证号',	width:100 },
 			{field: 'materialNum',		title: '产品代码',	width: 100 },
 			{field: 'batchNum',		title: '批号',	width: 100 },
-			{field: 'serialNum',		title: '序列号',	width:100 },
+			{field: 'serialNum',		title: '序列号',	width:130 },
 			{field: 'userdefine1',		title: '入库时间',	width: 150 },
 			{field: 'userdefine2',		title: '出库时间',	width: 150 },
 			{field: 'userdefine3',		title: '出库单号',	width: 150 },
@@ -205,25 +205,25 @@ var commit = function(){
 //主页查询
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		serialNum : $('#serialNum').val(),
-		batchNum : $('#batchNum').val(),
-		materialNum : $('#materialNum').val(),
-		expireDate : $('#expireDate').val(),
-		productDate : $('#productDate').val(),
-		batchFlag : $('#batchFlag').val(),
-		uom : $('#uom').val(),
-		purchaseOrder : $('#purchaseOrder').val(),
-		packageNum : $('#packageNum').val(),
-		deliveryNum : $('#deliveryNum').val(),
-		userdefine1 : $('#userdefine1').val(),
-		userdefine2 : $('#userdefine2').val(),
-		userdefine3 : $('#userdefine3').val(),
-		userdefine4 : $('#userdefine4').val(),
-		userdefine5 : $('#userdefine5').val(),
-		addwho : $('#addwho').val(),
-		addtime : $('#addtime').val(),
-		editwho : $('#editwho').val(),
-		edittime : $('#edittime').val()
+		deliveryNum : $('#deliveryNum').val(), //发货凭证号
+		materialNum : $('#materialNum').val(), //产品代码
+		serialNum : $('#serialNum').val(),     //序列号
+		userdefine3 : $('#userdefine3').val(), //出库单号
+		batchNum : $('#batchNum').val(),       //批号
+		// expireDate : $('#expireDate').val(),
+		// productDate : $('#productDate').val(),
+		// userdefine1 : $('#userdefine1').val(),
+		// batchFlag : $('#batchFlag').val(),
+		// userdefine2 : $('#userdefine2').val(),
+		// userdefine4 : $('#userdefine4').val(),
+		// userdefine5 : $('#userdefine5').val(),
+		// addwho : $('#addwho').val(),
+		// addtime : $('#addtime').val(),
+		// editwho : $('#editwho').val(),
+		// edittime : $('#edittime').val()
+		// uom : $('#uom').val(),
+		// purchaseOrder : $('#purchaseOrder').val(),
+		// packageNum : $('#packageNum').val(),
 	});
 };
 /* 导入提交按钮 */
@@ -299,20 +299,11 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
+        param.put("deliveryNum", $('#deliveryNum').val());
+        param.put("materialNum", $('#materialNum').val());
         param.put("serialNum", $('#serialNum').val());
+        param.put("userdefine3", $('#userdefine3').val());
         param.put("batchNum",$('#batchNum').val());
-        // param.put("productCode",$('#productCode').val());
-        // param.put("productName",$('#productName').val());
-        // param.put("productRemark", $('#productRemark').val());
-        // param.put("productModel", $('#productModel').val());
-        // param.put("productionAddress", $('#productionAddress').val());
-        // param.put("createDateEnd", $("#createDateEnd").datebox("getValue"));
-        // param.put("createDateStart",$("#createDateStart").datebox("getValue"));
-        // param.put("editDateStart", $("#editDateStart").datebox("getValue"));
-        // param.put("editDateEnd", $("#editDateEnd").datebox("getValue"));
-        // param.put("createId", $('#createId').val());
-        // param.put("editId",$('#editId').val());
-        // param.put("isUse", $('#isUse').combobox('getValue'));
         //--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/basSerialNumController.do?exportDataToExcel", param);
         downloadCheckTimer = window.setInterval(function () {
@@ -347,10 +338,10 @@ var doExport = function(){
 							<th>发货凭证号</th><td><input type='text' id='deliveryNum' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='materialNum' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>序列号</th><td><input type='text' id='serialNum' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>批号</th><td><input type='text' id='batchNum' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<th>出库单号</th><td><input type='text' id='userdefine3' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>批号</th><td><input type='text' id='batchNum' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="3">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

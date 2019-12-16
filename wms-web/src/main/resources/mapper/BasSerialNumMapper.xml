@@ -45,7 +45,7 @@ where 1=1
 	    and batch_num  like concat('%',#{condition.batchNum},'%')
 	</if>
 	<if test="condition.materialNum != null and condition.materialNum != ''" >
-	    and material_num =  #{condition.materialNum}
+	    and material_num like concat('%',#{condition.materialNum},'%')
 	</if>
 	<if test="condition.expireDate != null and condition.expireDate != ''" >
 	    and expire_date =  #{condition.expireDate}
@@ -69,7 +69,7 @@ where 1=1
 	    and package_num =  #{condition.packageNum}
 	</if>
 	<if test="condition.deliveryNum != null and condition.deliveryNum != ''" >
-	    and delivery_num =  #{condition.deliveryNum}
+	    and delivery_num like concat('%',#{condition.deliveryNum},'%')
 	</if>
 	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
 	    and userdefine1 =  #{condition.userdefine1}
@@ -78,7 +78,7 @@ where 1=1
 	    and userdefine2 =  #{condition.userdefine2}
 	</if>
 	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
-	    and userdefine3 =  #{condition.userdefine3}
+	    and userdefine3 like concat('%',#{condition.userdefine3},'%')
 	</if>
 	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
 	    and userdefine4 =  #{condition.userdefine4}

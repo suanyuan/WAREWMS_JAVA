@@ -78,15 +78,10 @@
                     {field: 'reservedfield02', title: '产品描述', width: 200},
                     {field: 'lotatt09', title: '样品属性', width: 100,formatter:YP_TYPstatusFormatter},
                     {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
-                    {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
+                    {field: 'lotatt11', title: '存储条件', width: 150},
                     // {field: 'lotatt07', title: '灭菌批号', width: 120},
-                    //
-                    //
                     // {field: 'lotatt08', title: '供应商', width: 120},
-                    // {field: 'lotatt09', title: '样品属性', width: 200,formatter:YP_TYPstatusFormatter},
-                    //
-                    // {field: 'lotatt11', title: '存储条件', width: 150},
-                    //
+                    {field: 'lotatt13', title: '双证', width: 100,formatter:Asn_DoublecstatusFormatter},
                     // {field: 'enterpriseName', title: '生产厂家', width: 100},
                     // {field: 'lotatt10',		title: '备注',	width: 71 },
                 ]]
