@@ -196,13 +196,16 @@ var commit = function(){
             async  :false,
             success : function(result) {
                 // $.messager.progress('close');
-                alert(result.obj.operateLicenseFlag+"="+result.obj.secondRecordFlag+"="
-                    +result.obj.prodLicenseFlag+"="+result.obj.firstRecordFlag+"="+result.obj.medicalRecordFlag);
-                operateLicenseFlag = result.obj.operateLicenseFlag;
-                secondRecordFlag = result.obj.secondRecordFlag;
-                prodLicenseFlag = result.obj.prodLicenseFlag;
-                firstRecordFlag = result.obj.firstRecordFlag;
-                medicalRecordFlag = result.obj.medicalRecordFlag;
+                if(result.obj!=null){
+                    alert(result.obj.operateLicenseFlag+"="+result.obj.secondRecordFlag+"="
+                        +result.obj.prodLicenseFlag+"="+result.obj.firstRecordFlag+"="+result.obj.medicalRecordFlag);
+                    operateLicenseFlag = result.obj.operateLicenseFlag;
+                    secondRecordFlag = result.obj.secondRecordFlag;
+                    prodLicenseFlag = result.obj.prodLicenseFlag;
+                    firstRecordFlag = result.obj.firstRecordFlag;
+                    medicalRecordFlag = result.obj.medicalRecordFlag;
+                }
+
             }
         })
     }
