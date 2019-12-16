@@ -154,20 +154,20 @@ $(function() {
             checkOnSelect:true,
             selectOnCheck: false,
             columns : [[
-                {field: 'orderlineno',		title: '行号',		width: 130 },
+                {field: 'orderlineno',		title: '行号',		width: 70 },
                 {field: 'sku',				title: '商品编码',		width: 130 },
                 {field: 'lotatt04',	title: '生产批号',		width: 130 },
                 {field: 'lotatt05',	title: '序列号',		width: 130 },
                 {field: 'skuName',			title: '产品名称',		width: 130 },
                 {field: 'linestatus',	title: '状态',		width: 130 ,formatter:sostatusFormatter},
-                {field: 'qtyorderedEach',		title: '订货数量',		width: 130 },
-                {field: 'qtyordered',		title: '订货件数',		width: 130 },
-                {field: 'qtyallocatedEach',		title: '分配数量',		width: 130 },
-                {field: 'qtyallocated',		title: '分配件数',		width: 130 },
-                {field: 'qtypickedEach',		title: '拣货数量',		width: 130 },
-                {field: 'qtypicked',		title: '拣货件数',		width: 130 },
-                {field: 'qtyshippedEach',		title: '发货数量',		width: 130 },
-                {field: 'qtyshipped',		title: '发货件数',		width: 130 },
+                {field: 'qtyorderedEach',		title: '订货数量',		width: 100 },
+                {field: 'qtyordered',		title: '订货件数',		width: 100 },
+                {field: 'qtyallocatedEach',		title: '分配数量',		width: 100 },
+                {field: 'qtyallocated',		title: '分配件数',		width: 100 },
+                {field: 'qtypickedEach',		title: '拣货数量',		width: 100 },
+                {field: 'qtypicked',		title: '拣货件数',		width: 100 },
+                {field: 'qtyshippedEach',		title: '发货数量',		width: 100 },
+                {field: 'qtyshipped',		title: '发货件数',		width: 100 },
                 {field: 'alternativesku',	title: '商品条码',		width: 130 },
                 {field: 'lotatt01',	title: '生产日期',		width: 130 },
                 {field: 'lotatt02',	title: '效期',		width: 130 },
@@ -176,10 +176,10 @@ $(function() {
                 {field: 'lotatt07',	title: '灭菌批号',		width: 130 },
                 {field: 'lotatt08',	title: '供应商',		width: 130 },
                 {field: 'lotatt09',	title: '样品属性',		width: 130, formatter:YP_TYPstatusFormatter},
-                {field: 'lotatt10',	title: '质量状态',		width: 130 , formatter:ZL_TYPstatusFormatter},
+                {field: 'lotatt10',	title: '质量状态',		width: 100 , formatter:ZL_TYPstatusFormatter},
                 {field: 'lotatt11',	title: '存储条件',		width: 130 },
                 {field: 'descrc',	title: '规格型号',		width: 130 },
-                {field: 'lotatt13',	title: '双证',		width: 130 },
+                {field: 'lotatt13',	title: '双证',		width: 100 },
                 {field: 'lotatt14',	title: '入库单号',		width: 130 },
                 {field: 'lotatt15',	title: '生产厂商名称',		width: 130 },
                 {field: 'dEdi04',	title: '样品/投诉单号',		width: 100 }
@@ -218,7 +218,7 @@ $(function() {
         pageSize : 50,
         pageList : [50, 100, 200],
         border : false,
-        fitColumns : false,
+        fitColumns : true,
         nowrap : false,
         striped : true,
         showFooter: true,
@@ -1374,10 +1374,19 @@ var doExport = function(){
 /* 导出end */
 
 /* 导出随货start */
-var doExportGoodsList = function(){
-	var row = ezuiDatagrid.datagrid('getSelected');
+var doExportGoodsList = function () {
+	var rows = $('#ezuiDatagrid').datagrid('getSelections');
 	var orderno="";
-	if(row) {
+	if (rows.length > 0) {
+		for (var i = 0; i < rows.length; i++) {
+			orderno += rows[i].orderno+",";
+			if(i>0){
+				if(rows[0].customerid != rows[i].customerid){
+					showMsg("同时只支持同一客户编码(类型)的随货单导出......");
+					return;
+				}
+			}
+		}
 		if (navigator.cookieEnabled) {
 			$('#ezuiBtn_export_goods_list').linkbutton('disable');
 			//--导出Excel
@@ -1385,7 +1394,6 @@ var doExportGoodsList = function(){
 			var token = new Date().getTime();
 			var param = new HashMap();
 			param.put("token", token);
-			orderno = row.orderno;
 			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel&orderno=" + orderno);
 			downloadCheckTimer = window.setInterval(function () {
 				window.clearInterval(downloadCheckTimer);
@@ -1405,12 +1413,51 @@ var doExportGoodsList = function(){
 			});
 		}
 		;
-	}else{
+	} else {
 		$.messager.show({
 			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
 		});
 	}
-};
+
+}
+
+<%--var doExportGoodsList1 = function(){--%>
+<%--	var row = ezuiDatagrid.datagrid('getSelected');--%>
+<%--	var orderno="";--%>
+<%--	if(row) {--%>
+<%--		if (navigator.cookieEnabled) {--%>
+<%--			$('#ezuiBtn_export_goods_list').linkbutton('disable');--%>
+<%--			//--导出Excel--%>
+<%--			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);--%>
+<%--			var token = new Date().getTime();--%>
+<%--			var param = new HashMap();--%>
+<%--			param.put("token", token);--%>
+<%--			orderno = row.orderno;--%>
+<%--			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel&orderno=" + orderno);--%>
+<%--			downloadCheckTimer = window.setInterval(function () {--%>
+<%--				window.clearInterval(downloadCheckTimer);--%>
+<%--				// $('#' + formId).remove();--%>
+<%--				$('#ezuiBtn_export_goods_list').linkbutton('enable');--%>
+<%--				$.messager.progress('close');--%>
+<%--				$.messager.show({--%>
+<%--					msg: "<spring:message code='common.message.export.success'/>",--%>
+<%--					title: "<spring:message code='common.message.prompt'/>"--%>
+<%--				});--%>
+<%--			}, 1000);--%>
+
+<%--		} else {--%>
+<%--			$.messager.show({--%>
+<%--				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",--%>
+<%--				title: "<spring:message code='common.message.prompt'/>"--%>
+<%--			});--%>
+<%--		}--%>
+<%--		;--%>
+<%--	}else{--%>
+<%--		$.messager.show({--%>
+<%--			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'--%>
+<%--		});--%>
+<%--	}--%>
+<%--};--%>
 /* 导出随货end */
 
 /* 导入start */
