@@ -299,17 +299,17 @@ var doExport = function(){
 		param.put("pickzone", $('#pickzone').combobox('getValue'));
 		var formId = ajaxDownloadFile(sy.bp()+"/basLocationController.do?exportLocationDataToExcel", param);
 		downloadCheckTimer = window.setInterval(function () {
-			var list = new cookieList('exportToken');
-			if (list.items() == token){
+			// var list = new cookieList('exportToken');
+			// if (list.items() == token){
 				window.clearInterval(downloadCheckTimer);
-				list.clear();
+				// list.clear();
 				$('#'+formId).remove();
 				$('#ezuiBtn_export').linkbutton('enable');
 				$.messager.progress('close');
 				$.messager.show({
 					msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
 				});
-			}
+			// }
 		}, 1000);
 	}else{
 		$.messager.show({

@@ -327,7 +327,12 @@ public class ImportLocationDataService {
 		}
 		return importData;
 	}
-	
+
+	/**
+	 * 导入库位
+ 	 * @param excelFile
+	 * @return
+	 */
 	public Json importExcelData(MultipartFile excelFile) {
 		Json json = new Json();
 		boolean isSuccess = false;
@@ -432,7 +437,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setPicklogicalsequence(dataArray.getPicklogicalsequence());
 				if (StringUtils.isEmpty(importDataVO.getPicklogicalsequence())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setPicklogicalsequence(dataArray.getLocationid());
 				}
 			} catch (Exception e) {
 				rowResult.append("[拣货顺序]，未输入").append(" ");
@@ -440,7 +446,9 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLocationusage(dataArray.getLocationusage());
 				if (StringUtils.isEmpty(importDataVO.getLocationusage())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setLocationusage("EA");
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[库位使用]，未输入").append(" ");
@@ -448,7 +456,7 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLocationcategory(dataArray.getLocationcategory());
 				if (StringUtils.isEmpty(importDataVO.getLocationcategory())) {
-					throw new Exception();
+					importDataVO.setLocationcategory("RK");
 				}
 			} catch (Exception e) {
 				rowResult.append("[库位类型]，未输入").append(" ");
@@ -456,7 +464,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLogicalsequence(dataArray.getLogicalsequence());
 				if (StringUtils.isEmpty(importDataVO.getLogicalsequence())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setLogicalsequence(dataArray.getLocationid());
 				}
 			} catch (Exception e) {
 				rowResult.append("[上架顺序]，未输入").append(" ");
@@ -464,7 +473,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLocationattribute(dataArray.getLocationattribute());
 				if (StringUtils.isEmpty(importDataVO.getLocationattribute())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setLocationattribute("OK");
 				}
 			} catch (Exception e) {
 				rowResult.append("[库位属性]，未输入").append(" ");
@@ -472,7 +482,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLocationhandling(dataArray.getLocationhandling());
 				if (StringUtils.isEmpty(importDataVO.getLocationhandling())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setLocationhandling("OT");
 				}
 			} catch (Exception e) {
 				rowResult.append("[库位处理]，未输入").append(" ");
@@ -480,7 +491,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setDemand(dataArray.getDemand());
 				if (StringUtils.isEmpty(importDataVO.getDemand())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setDemand("A");
 				}
 			} catch (Exception e) {
 				rowResult.append("[周转需求]，未输入").append(" ");
@@ -488,7 +500,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setPutawayzone(dataArray.getPutawayzone());
 				if (StringUtils.isEmpty(importDataVO.getPutawayzone())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setPutawayzone("1B");
 				}
 			} catch (Exception e) {
 				rowResult.append("[上架区]，未输入").append(" ");
@@ -496,7 +509,8 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setPickzone(dataArray.getPickzone());
 				if (StringUtils.isEmpty(importDataVO.getPickzone())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setPickzone("1B");
 				}
 			} catch (Exception e) {
 				rowResult.append("[拣货区]，未输入").append(" ");
@@ -508,6 +522,8 @@ public class ImportLocationDataService {
 					if (importDataVO.getCubiccapacity().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setCubiccapacity(BigDecimal.ZERO);
 				}
 			} catch (Exception e) {
 				rowResult.append("[体积限制]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -519,6 +535,8 @@ public class ImportLocationDataService {
 					if (importDataVO.getWeightcapacity().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setWeightcapacity(BigDecimal.ZERO);
 				}
 			} catch (Exception e) {
 				rowResult.append("[重量限制]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -530,6 +548,9 @@ public class ImportLocationDataService {
 					if (importDataVO.getCscount().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setCscount(BigDecimal.ZERO);
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[箱数限制]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -541,6 +562,9 @@ public class ImportLocationDataService {
 					if (importDataVO.getCountcapacity().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setCountcapacity(BigDecimal.ZERO);
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[数量限制]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -552,6 +576,8 @@ public class ImportLocationDataService {
 					if (importDataVO.getPlcount().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setPlcount(BigDecimal.ZERO);
 				}
 			} catch (Exception e) {
 				rowResult.append("[托盘限制]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -559,7 +585,9 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setMixFlag(dataArray.getMixFlag());
 				if (StringUtils.isEmpty(importDataVO.getMixFlag())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setMixFlag("Y");
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[允许混放产品]，未输入").append(" ");
@@ -567,7 +595,9 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setMixLotflag(dataArray.getMixLotflag());
 				if (StringUtils.isEmpty(importDataVO.getMixLotflag())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setMixLotflag("Y");
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[允许混放批次]，未输入").append(" ");
@@ -575,7 +605,9 @@ public class ImportLocationDataService {
 			try {
 				importDataVO.setLoseidFlag(dataArray.getLoseidFlag());
 				if (StringUtils.isEmpty(importDataVO.getLoseidFlag())) {
-					throw new Exception();
+//					throw new Exception();
+					importDataVO.setLoseidFlag("Y");
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[忽略ID]，未输入").append(" ");
@@ -587,6 +619,9 @@ public class ImportLocationDataService {
 					if (importDataVO.getLength().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setLength(BigDecimal.ZERO);
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[长度]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -598,6 +633,9 @@ public class ImportLocationDataService {
 					if (importDataVO.getWidth().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else {
+					importDataVO.setWidth(BigDecimal.ZERO);
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[宽度]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
@@ -609,6 +647,9 @@ public class ImportLocationDataService {
 					if (importDataVO.getHeight().compareTo(BigDecimal.ZERO)==-1) {
 						throw new Exception();
 					}
+				}else{
+					importDataVO.setHeight(BigDecimal.ZERO);
+
 				}
 			} catch (Exception e) {
 				rowResult.append("[高度]，资料格式转换失败，请输入不小于0的数字格式").append(" ");
