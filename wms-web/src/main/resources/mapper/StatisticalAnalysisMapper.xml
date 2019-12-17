@@ -274,6 +274,7 @@
         <include refid="Example_Where_Clause1"/>
         GROUP BY  aa.`asnno`,e.`lotatt03`,bb1.codename_c,r.descr_c,e.`sku`,e.`lotatt12`,
         s.`descr_c`,s.reservedfield02,bb.codename_c,e.`lotatt04`,e.`lotatt05`,p.`qty1`,aa.notes
+        order by e.`lotatt03` desc
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -362,6 +363,7 @@
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
         WHERE aa.sostatus='99'
         <include refid="Example_Where_Clause3"/>
+        order by aa.`edittime` desc
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>

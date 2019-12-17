@@ -281,6 +281,7 @@
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
+        ORDER BY a.`lotatt03` DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -305,6 +306,7 @@
         LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
+        ORDER BY a.`lotatt03` DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -411,8 +413,8 @@
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
         WHERE aa.sostatus='99'
-        <include refid="Example_Where_Clause3"/>   ORDER BY lotatt03 DESC
-
+        <include refid="Example_Where_Clause3"/>
+        ORDER BY aa.edittime DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>
@@ -596,7 +598,10 @@
                 and consigneeID like concat('%', #{condition.consigneeID},'%')
             </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
-                and activeFlag =#{condition.activeFlag}
+                and activeflag =#{condition.activeFlag}
+                <if test="condition.activeFlag != 2" >
+                    order by  lotatt03 desc
+                </if>
             </if>
         </trim>
     </sql>
