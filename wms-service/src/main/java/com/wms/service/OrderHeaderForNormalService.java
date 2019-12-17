@@ -1132,7 +1132,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 打印拣货单
+     * 打印拣货单-增加拣货单打印次数
      *
      * @param orderno
      * @return
@@ -1273,9 +1273,33 @@ public class OrderHeaderForNormalService extends BaseService {
         }
 
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
+        //增加拣货单打印次数
+        addPickingNum(orderno);
         return ohForNormal;
     }
 
+    /**
+     * 增加拣货单打印次数
+     * @param orderno
+     */
+    public void addPickingNum(String orderno){
+        OrderHeaderForNormal orderHeaderForNormal=orderHeaderForNormalMybatisDao.queryById(orderno);
+        if(orderHeaderForNormal!=null){
+            if(orderHeaderForNormal.getUdfprintflag2()!=null&&!orderHeaderForNormal.getUdfprintflag2().isEmpty()){
+                String num=orderHeaderForNormal.getUdfprintflag2();
+                num=(Integer.valueOf(num)+1)+"";
+                OrderHeaderForNormal form=new OrderHeaderForNormal();
+                form.setOrderno(orderno);
+                form.setUdfprintflag2(num);
+                orderHeaderForNormalMybatisDao.updateBySelective(form);
+            }else{
+                OrderHeaderForNormal form=new OrderHeaderForNormal();
+                form.setOrderno(orderno);
+                form.setUdfprintflag2("1");
+                orderHeaderForNormalMybatisDao.updateBySelective(form);
+            }
+        }
+    }
     /**
      * 合并货位，产品代码，生产批号相同的数据
      * @param odList
@@ -1300,7 +1324,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 打印随货清单
+     * 打印随货清单-增加打印随货清单次数
      */
     public OrderHeaderForNormal exportAccompanyingPdf(String orderno) {
         OrderHeaderForNormal ohForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
@@ -1451,6 +1475,8 @@ public class OrderHeaderForNormalService extends BaseService {
         }
 
         ohForNormal.setOrderDetailsForNormalList(orderDetailsForNormalList);
+        //增加随货单打印次数
+        addAccompanyingNum(orderno);
         return ohForNormal;
        /* StringBuilder sb = new StringBuilder();
         try (OutputStream os = response.getOutputStream()) {
@@ -1558,7 +1584,28 @@ public class OrderHeaderForNormalService extends BaseService {
             e.printStackTrace();
         }*/
     }
-
+    /**
+     * 增加随货单打印次数
+     * @param orderno
+     */
+    public void addAccompanyingNum(String orderno){
+        OrderHeaderForNormal orderHeaderForNormal=orderHeaderForNormalMybatisDao.queryById(orderno);
+        if(orderHeaderForNormal!=null){
+            if(orderHeaderForNormal.getUdfprintflag3()!=null&&!orderHeaderForNormal.getUdfprintflag3().isEmpty()){
+                String num=orderHeaderForNormal.getUdfprintflag3();
+                num=(Integer.valueOf(num)+1)+"";
+                OrderHeaderForNormal form=new OrderHeaderForNormal();
+                form.setOrderno(orderno);
+                form.setUdfprintflag3(num);
+                orderHeaderForNormalMybatisDao.updateBySelective(form);
+            }else{
+                OrderHeaderForNormal form=new OrderHeaderForNormal();
+                form.setOrderno(orderno);
+                form.setUdfprintflag3("1");
+                orderHeaderForNormalMybatisDao.updateBySelective(form);
+            }
+        }
+    }
     public List<EasyuiCombobox> getOrderTypeCombobox() {
         List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
         EasyuiCombobox combobox = null;
