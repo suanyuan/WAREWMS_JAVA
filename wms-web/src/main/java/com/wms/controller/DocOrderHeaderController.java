@@ -317,15 +317,12 @@ public class DocOrderHeaderController {
         } else if (customer.equals("BDL")) {
             //8 百多力
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBDL.jasper");
-        } else if (customer.equals("BZ")) {
-            //9 标准
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBZ.jasper");
-        } else if (customer.equals("HQ")) {
+        }else if (customer.equals("HQ")) {
             //10 宏确
             model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingHQ.jasper");
         } else {
-            //原随货单
-            model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+            //标准随货单
+            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBZ.jasper");
         }
         model.addAttribute("format", Constant.JASPER_PDF);
         model.addAttribute("jrMainDataSource", jrDataSource);
@@ -463,7 +460,7 @@ public class DocOrderHeaderController {
             //10 宏确
             model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingHQ.jasper");
         } else {
-            //标准货单
+            //标准随货单
             model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingBZ.jasper");
         }
         model.addAttribute("format", Constant.JASPER_XLS);
