@@ -1639,7 +1639,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
 
     /**
-     * 根据sku和customerid
+     * 根据sku和customerid查询批号
      */
     public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku, String customerId) {
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -1657,6 +1657,9 @@ public class OrderHeaderForNormalService extends BaseService {
 				option.put("lotatt10",i.getLotatt10());
 				option.put("lotatt14",i.getLotatt14());
 				option.put("lotatt15",i.getLotatt15());*/
+				if(i.getLotatt04()==null||i.getLotatt04().equals("")){
+				    continue;
+                }
                 EasyuiCombobox com = new EasyuiCombobox();
                 com.setId(i.getLotatt04());
                 com.setValue(i.getLotatt04());
@@ -1666,7 +1669,37 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return comboboxList;
     }
-
+    /**
+     * 根据sku和customerid查询序列号
+     */
+    public List<EasyuiCombobox> getLotAtt05BySkuCustomerId(String sku, String customerId) {
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        InvLotAttQuery query = new InvLotAttQuery();
+        query.setCustomerid(customerId);
+        query.setSku(sku);
+        mybatisCriteria.setCondition(query);
+        mybatisCriteria.setDistinct(true);
+        List<EasyuiCombobox> comboboxList = new ArrayList<>();
+        List<InvLotAtt> list = invLotAttMybatisDao.queryLotNoRepet(mybatisCriteria);
+        if (list != null && list.size() > 0) {
+            for (InvLotAtt i : list) {
+				/*Map<String,Object> option = new HashMap<>();
+				option.put("lotatt09",i.getLotatt09());
+				option.put("lotatt10",i.getLotatt10());
+				option.put("lotatt14",i.getLotatt14());
+				option.put("lotatt15",i.getLotatt15());*/
+                if(i.getLotatt05()==null||i.getLotatt05().equals("")){
+                    continue;
+                }
+                EasyuiCombobox com = new EasyuiCombobox();
+                com.setId(i.getLotatt05());
+                com.setValue(i.getLotatt05());
+                //com.setOption(option);
+                comboboxList.add(com);
+            }
+        }
+        return comboboxList;
+    }
     public List<EasyuiCombobox> getRefOut() {
         MybatisCriteria criteria = new MybatisCriteria();
         OrderHeaderForNormalQuery query = new OrderHeaderForNormalQuery();

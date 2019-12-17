@@ -2243,13 +2243,13 @@ var selectSku = function(){
 		$("#ezuiDetailsForm #grossweight").numberbox('clear');
 		$("#ezuiDetailsForm #cubic").numberbox('clear');
 		$("#ezuiDetailsForm #price").numberbox('clear');
-
+        //选择产品生产批号下拉
 		$("#ezuiDetailsForm #lotatt04").combobox({
             panelHeight: 'auto',
             url:sy.bp()+'/docOrderHeaderController.do?getLotAttBySkuCustomerId&sku='+row.sku+"&customerId="+$("#ezuiDetailsForm #customerid").textbox("getValue"),
             valueField:'id',
             textField:'value',
-            width:110,
+            width: 135,
             onSelect:function (record) {
                /* console.log(record);
                 $("#ezuiDetailsForm #lotatt09").combobox('setValue',record.option.lotatt09);
@@ -2258,6 +2258,21 @@ var selectSku = function(){
                 $("#ezuiDetailsForm #lotatt14").textbox('setValue',record.option.lotatt14);*/
             }
 		});
+        //选择产品序列号下拉
+        $("#ezuiDetailsForm #lotatt05").combobox({
+            panelHeight: 'auto',
+            url:sy.bp()+'/docOrderHeaderController.do?getLotAtt05BySkuCustomerId&sku='+row.sku+"&customerId="+$("#ezuiDetailsForm #customerid").textbox("getValue"),
+            valueField:'id',
+            textField:'value',
+            width: 135,
+            onSelect:function (record) {
+                /* console.log(record);
+                 $("#ezuiDetailsForm #lotatt09").combobox('setValue',record.option.lotatt09);
+                 $("#ezuiDetailsForm #lotatt10").textbox('setValue',record.option.lotatt10);
+                 $("#ezuiDetailsForm #lotatt08").textbox('setValue',record.option.lotatt15);
+                 $("#ezuiDetailsForm #lotatt14").textbox('setValue',record.option.lotatt14);*/
+            }
+        });
 		ezuiSkuDataDialog.dialog('close');
 	};
 };

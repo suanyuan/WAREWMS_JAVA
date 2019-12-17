@@ -72,7 +72,7 @@
                 <td>
                     <!--<input type='text' name='lotatt10' id='lotatt10'/>-->
                     <select name='lotatt10' id='lotatt10' class="easyui-combobox"
-                            data-options='width:110,editable:false'>
+                            data-options='width:135,editable:false'>
                         <option value="HG">合格</option>
                         <option value="BHG">不合格</option>
                     </select>
@@ -158,7 +158,7 @@
             url: sy.bp() + '/commonController.do?sampleAttr',
             valueField: 'id',
             textField: 'value',
-            width: 110
+            width: 135
         });
 
         $("#lotatt10").combobox("setValue", "HG").combobox("readonly", true);
@@ -173,7 +173,7 @@
         });*/
         /* 控件初始化start */
         $("#ezuiDetailsForm #supplierIdChose").textbox({
-            width: 110,
+            width: 135,
             icons: [{
                 iconCls: 'icon-search',
                 handler: function (e) {

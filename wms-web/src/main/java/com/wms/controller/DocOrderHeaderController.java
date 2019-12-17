@@ -331,12 +331,23 @@ public class DocOrderHeaderController {
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
     }
-
+    /**
+     * 根据sku和customerid查询批号
+     */
     @Login
     @RequestMapping(params = "getLotAttBySkuCustomerId", method = RequestMethod.POST)
     @ResponseBody
     public List<EasyuiCombobox> getLotAttBySkuCustomerId(String sku, String customerId) {
         return orderHeaderForNormalService.getLotAttBySkuCustomerId(sku, customerId);
+    }
+    /**
+     * 根据sku和customerid查询序列号
+     */
+    @Login
+    @RequestMapping(params = "getLotAtt05BySkuCustomerId", method = RequestMethod.POST)
+    @ResponseBody
+    public List<EasyuiCombobox> getLotAtt05BySkuCustomerId(String sku, String customerId) {
+        return orderHeaderForNormalService.getLotAtt05BySkuCustomerId(sku, customerId);
     }
 
     @Login

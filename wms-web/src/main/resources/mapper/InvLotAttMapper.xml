@@ -337,11 +337,11 @@ where 1=1
 	<!-- 查询批次属性列表 -->
 	<select id="queryLotNoRepet" resultMap="BaseResultMap"  parameterType="Object">
 		select
-		LotAtt04
+		LotAtt04,lotatt05
 		from inv_lot_att
 		<include refid="Example_Where_Clause"/>
 		and LotAtt10 = 'HG'
-		group by LotAtt04
+		group by LotAtt04,lotatt05
 	</select>
   	
 </mapper>   
