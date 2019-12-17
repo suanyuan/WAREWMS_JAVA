@@ -426,37 +426,34 @@ public class DocOrderHeaderController {
         String customer = orderHeaderForNormal.get(0).getCustomerid();
         if (customer.equals("JSGR")) {
             //1 国润
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSGR.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingJSGR.jasper");
         } else if (customer.equals("JSML")) {
             //2 明伦
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSML.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingJSML.jasper");
         } else if (customer.equals("MY")) {
             //3 妙有
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingMY.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingMY.jasper");
         } else if (customer.equals("JSJY")) {
             //4 嘉意
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingJSJY.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingJSJY.jasper");
         } else if (customer.equals("BLJG")) {
             //5 佰礼
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBLJG.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingBLJG.jasper");
         } else if (customer.equals("YG")) {
             //6 亦舸
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingYG.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingYG.jasper");
         } else if (customer.equals("WQ")) {
             //7 稳勤
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingWQ.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingWQ.jasper");
         } else if (customer.equals("BDL")) {
             //8 百多力
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBDL.jasper");
-        } else if (customer.equals("BZ")) {
-            //9 标准
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingBZ.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingBDL.jasper");
         } else if (customer.equals("HQ")) {
             //10 宏确
-            model.addAttribute("url", "WEB-INF/jasper/reportAcoompanyingHQ.jasper");
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingHQ.jasper");
         } else {
-            //原随货单
-            model.addAttribute("url", "WEB-INF/jasper/reportOrderHeader1.jasper");
+            //标准货单
+            model.addAttribute("url", "WEB-INF/jasper/reportXLSAcoompanyingBZ.jasper");
         }
         model.addAttribute("format", Constant.JASPER_XLS);
         model.addAttribute("jrMainDataSource", jrDataSource);
