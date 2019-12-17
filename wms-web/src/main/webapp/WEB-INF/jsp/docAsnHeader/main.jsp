@@ -62,7 +62,7 @@ $(function() {
 			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
 			{field: 'userdefine2',		    title: '上架单号',	    width: 101 },
             {field: 'coldTag',		        title: '冷链标记',	    width: 71 },
-			{field: 'edisendflag',			title: '回传标识',		width: 70 },
+			{field: 'edisendflag',			title: '回传标识',		width: 70,formatter:edisendflag },
 			{field: 'expectedarrivetime1',	title: '预期到货时间',	width: 101 ,formatter:dateFormat2},
 			{field: 'addtime',		        title: '创建时间',	    width: 137 },
 			{field: 'addwho',		        title: '创建人',	        width: 71 },
@@ -435,7 +435,7 @@ $(function() {
     });
 
     $("#supplierId").textbox({
-        width:110,
+        width:135,
         icons:[{
             iconCls:'icon-search',
             handler: function(e){
@@ -486,6 +486,7 @@ var ezuiToolbarClear = function(){
 	$('#asnstatus').combobox('clear');
 	$('#userdefinea').combobox('clear');
 	$('#asntype').combobox('clear');
+	$("#edisendflag").combobox('clear');
 	$('#asnreference1').textbox('clear');
 	$('#asnreference2').textbox('clear');
 	$('#asnreference3').textbox('clear');
@@ -494,7 +495,7 @@ var ezuiToolbarClear = function(){
 	$('#addtime').datetimebox('clear');
 	$('#edisendtime5').datetimebox('clear');
 	$('#addwho').textbox('clear');
-	$("#asnstatusCheck").attr("checked",false);
+	// $("#asnstatusCheck").attr("checked",false);//显示关闭/取消订单
     $('#productId').textbox('clear');
     $('#supplierId').textbox('clear');
     $('#notes').textbox('clear');
@@ -896,6 +897,7 @@ var doSearch = function(){
         asnstatus : $('#asnstatus').combobox('getValue'),
 		userdefinea : $('#userdefinea').combobox('getValue'),
 		asntype : $('#asntype').combobox('getValue'),
+		edisendflag :$("#toolbar #edisendflag").combobox('getValue'), //回传标识
 		asnreference1 : $('#asnreference1').val(),
 		asnreference2 : $('#asnreference2').val(),
 		asnreference3 : $('#asnreference3').val(),
@@ -2133,6 +2135,17 @@ function printResultList(){
 																															url:'<c:url value="/docAsnHeaderController.do?getAsnTypeCombobox"/>',
 																															valueField: 'id',
 																															textField: 'value'"/></td>
+							<th>回传标识</th>
+							<td>
+								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='20' data-options="panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '已回传'},
+																																{id: '0', value: '未回传'}
+																															]"/>
+							</td>
 
 						</tr>
 						<tr>

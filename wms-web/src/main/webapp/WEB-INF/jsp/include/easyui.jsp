@@ -427,6 +427,7 @@
 		switch (value) {
 			case "1" : return "已回传";
 			case "0" : return "未回传";
+			default: return "";
 		}
 	}
 </script>

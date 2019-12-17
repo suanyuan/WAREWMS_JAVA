@@ -99,7 +99,9 @@ $(function() {
 					{field: 'addwho',				title: '创建人',		    width: 70 },
 					{field: 'edittime',				title: '编辑时间',		width: 145 },
 					{field: 'editwho',				title: '编辑人',		    width: 70 },
-					{field: 'courierComplaint' ,    title: '快递投诉内容' , 	width:150}
+					{field: 'courierComplaint' ,    title: '快递投诉内容' , 	width:150},
+					{field: 'udfprintflag2' ,       title: '拣货单打印次数' , width:120,align:'center'},
+					{field: 'udfprintflag3' ,       title: '随货单打印次数' , width:120,align:'center'}
 		]],
 		onDblClickCell: function(index,field,value){
 			//edit();
