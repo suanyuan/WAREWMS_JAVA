@@ -147,6 +147,18 @@ where 1=1
 	delete from sfc_menu where menu_id = #{id,jdbcType=VARCHAR}
 </delete>
 
+
+<!-- 删除MenuBtn 表单按钮 -->
+<delete id="deleteMenuBtn" parameterType="Object">
+	delete from sfc_menu_btn where menu_id = #{menuID} and id=#{roleID}
+</delete>
+<!-- 添加MenuBtn 表单按钮 -->
+<insert id="addMenuBtn" parameterType="Object" >
+	insert into sfc_menu_btn(menu_id,btn_id,id)
+	values (#{menuID},#{btnID},#{roleID})
+</insert>
+
+
 <!-- 删除角色权限记录 -->
 <delete id="deleteRoleByMenu" parameterType="Object">
 	delete from sfc_role_menu where menu_id = #{id,jdbcType=VARCHAR}

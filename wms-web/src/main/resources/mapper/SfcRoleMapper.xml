@@ -43,6 +43,13 @@
 		<result column="url" property="url"/>
 		<result column="parent_id" property="parentId"/>
 		<result column="display_seq" property="displaySeq"/>
+        <result column="role_id" property="roleIDMenu"/>
+		<collection property="btnSetMenu" javaType="java.util.Set" ofType="com.wms.mybatis.entity.SfcBtn">
+			<result column="btn_id" property="id"/>
+			<result column="btn_name" property="btnName"/>
+			<result column="btn_chs_name" property="btnChsName"/>
+			<result column="btn_level" property="btnLevel"/>
+		</collection>
 	</collection>
 	<collection property="btnSet" javaType="java.util.Set" ofType="com.wms.mybatis.entity.SfcBtn">
 		<result column="btn_id" property="id"/>
@@ -188,9 +195,8 @@ where 1=1
 	  left outer join sfc_menu c on b.menu_id = c.menu_id
 	 where a.role_id = #{id,jdbcType=VARCHAR}
 </select>
-
 <!-- 查询权限按钮菜单 -->
-<select id="queryRoleListByAll" resultMap="queryForAllListMap"  parameterType="Object">
+<!--<select id="queryRoleListByAll" resultMap="queryForAllListMap"  parameterType="Object">
 	select a.role_id,
 	       a.role_name,
 	       c.btn_id,
@@ -208,6 +214,27 @@ where 1=1
 	  left outer join sfc_btn c on b.btn_id = c.btn_id
 	  left outer join sfc_role_menu d on a.role_id = d.role_id
 	  left outer join sfc_menu e on d.menu_id = e.menu_id
+	 order by a.role_id
+</select>-->
+<!-- 查询权限按钮菜单 -->
+<select id="queryRoleListByAll" resultMap="queryForAllListMap"  parameterType="Object">
+	select a.role_id,
+	       a.role_name,
+	       c.btn_id,
+	       c.btn_chs_name,
+	       c.btn_level,
+	       c.btn_name,
+	       e.menu_id,
+	       e.display_seq,
+	       e.menu_name,
+	       e.menu_type,
+	       e.parent_id,
+	       e.url
+	  from sfc_role a
+	  left outer join sfc_role_menu d on a.role_id = d.role_id
+	  left outer join sfc_menu e on d.menu_id = e.menu_id
+	  left outer join sfc_menu_btn b on a.role_id = b.id and b.MENU_ID=e.MENU_ID
+	  left outer join sfc_btn c on b.BTN_ID = c.btn_id
 	 order by a.role_id
 </select>
 

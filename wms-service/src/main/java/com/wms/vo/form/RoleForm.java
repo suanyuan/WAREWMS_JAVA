@@ -4,6 +4,15 @@ public class RoleForm {
 	private String roleId;
 	private String roleName;
 	private String btns;
+	private String roleIDMenu;
+
+	public String getRoleIDMenu() {
+		return roleIDMenu;
+	}
+
+	public void setRoleIDMenu(String roleIDMenu) {
+		this.roleIDMenu = roleIDMenu;
+	}
 
 	public String getRoleId() {
 		return roleId;

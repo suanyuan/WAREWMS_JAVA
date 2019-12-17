@@ -1,11 +1,10 @@
 package com.wms.mybatis.entity;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author 
@@ -24,7 +23,7 @@ public class SfcRole implements Serializable {
 	private java.lang.String roleName;
 
 	private Set<SfcMenu> menuSet;
-	
+
 	private Set<SfcBtn> btnSet;
 	
 	public java.lang.String getId() {

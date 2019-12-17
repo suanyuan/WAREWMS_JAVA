@@ -1,21 +1,9 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.mybatis.dao.SfcBtnMybatisDao;
+import com.wms.mybatis.dao.SfcMenuMybatisDao;
 import com.wms.mybatis.dao.SfcRoleMybatisDao;
 import com.wms.mybatis.entity.SfcBtn;
 import com.wms.mybatis.entity.SfcMenu;
@@ -26,6 +14,14 @@ import com.wms.utils.comparator.SfcMenuComparator;
 import com.wms.vo.Json;
 import com.wms.vo.SfcRoleVO;
 import com.wms.vo.form.RoleForm;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service("roleService")
 public class RoleService extends BaseService {
@@ -34,6 +30,8 @@ public class RoleService extends BaseService {
 	private SfcRoleMybatisDao sfcRoleMybatisDao;
 	@Autowired
 	private SfcBtnMybatisDao sfcBtnMybatisDao;
+	@Autowired
+	private SfcMenuMybatisDao sfcMenuMybatisDao;
 	
 	public EasyuiDatagrid<SfcRoleVO> getRoleDatagrid() {
 		EasyuiDatagrid<SfcRoleVO> datagrid = new EasyuiDatagrid<SfcRoleVO>();
@@ -83,7 +81,21 @@ public class RoleService extends BaseService {
 		json.setSuccess(true);
 		return json;
 	}
+	@CacheEvict(value = "btnCache", allEntries = true)
+	@Transactional
+	public Json editMenuBtn(RoleForm roleForm) {
+		Json json = new Json();
+		String menuID=roleForm.getRoleId();
+		String roleID=roleForm.getRoleIDMenu();
+		String[] btnId= roleForm.getBtns().split(",");
+		sfcMenuMybatisDao.deleteMenuBtn(menuID,roleID);
+		for (String btnID : btnId) {
+			sfcMenuMybatisDao.addMenuBtn(menuID,btnID,roleID);
+		}
 
+		json.setSuccess(true);
+		return json;
+	}
 	@CacheEvict(value = "btnCache", allEntries = true)
 	@Transactional
 	public Json editRole(RoleForm roleForm) {
@@ -105,10 +117,10 @@ public class RoleService extends BaseService {
 		sfcRole.setBtnSet(sfcBtnSet);
 		
 		sfcRoleMybatisDao.updateBySelective(sfcRole);
-		if(StringUtils.isNotEmpty(roleForm.getBtns())){
-			sfcRoleMybatisDao.deleteBtnByRole(sfcRole);
-			sfcRoleMybatisDao.addBtnByRole(sfcRole);
-		}
+//		if(StringUtils.isNotEmpty(roleForm.getBtns())){
+//			sfcRoleMybatisDao.deleteBtnByRole(sfcRole);
+//			sfcRoleMybatisDao.addBtnByRole(sfcRole);
+//		}
 		json.setSuccess(true);
 		return json;
 	}

@@ -30,23 +30,11 @@ $(function() {
 	    striped: true,  
 	    collapsible:false,
 	    pagination:false,  
-		rownumbers:true, 
+		rownumbers:true,
 		singleSelect:true,
 		idField : 'id',
 		columns : [[
-			{field: 'roleName',		title: '角色名稱',	width: 120 },
-			{field: 'btnSet',		title: '可使用按钮',	width: 120, formatter:function(value,rowData,rowIndex){
-				var result = "";
-				if(value){
-					for(var i = 0; i < value.length; i++){
-						result = result + value[i].btnChsName;
-						if(i != (value.length-1)){
-							result = result + ",";
-						}
-                    }
-				}
-                   return result;
-            }}
+			{field: 'roleName',		title: '角色名稱',	width: 120 }
 	    ]],
 	    view: detailview,  
 	    detailFormatter: function(rowIndex, rowData){  
@@ -69,11 +57,26 @@ $(function() {
 	        	data : dataArray,
 	            fitColumns:true, singleSelect:true,rownumbers:true,height:'auto',
 	            columns:[[
-	                {field:'menuName',title:'可使用表單',width:100}
+	                {field:'menuName',title:'可使用表單',width:100},
+                    {field: 'btnSetMenu',title: '可使用按钮',	width: 120, formatter:function(value,rowData,rowIndex){
+                            var result = "";
+                            if(value){
+                                for(var i = 0; i < value.length; i++){
+                                    result = result + value[i].btnChsName;
+                                    if(i != (value.length-1)){
+                                        result = result + ",";
+                                    }
+                                }
+                            }
+                            return result;
+                        }}
 	            ]],
 	            onResize:function(){
 	                $('#ezuiDatagrid').datagrid('fixDetailRowHeight',index);
 	            },
+				onDblClickCell: function(index,field,value){
+                    editMenuBtn(dataArray[index]);
+				},
 	            onLoadSuccess:function(){
 	                setTimeout(function(){
 	                    $('#ezuiDatagrid').datagrid('fixDetailRowHeight',index);
@@ -94,6 +97,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
+			$('#editMenu').hide();
 			rowCount = data.rows.length;
 			ajaxBtn($('#menuId').val(), '<c:url value="/roleController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
@@ -117,11 +121,39 @@ $(function() {
 
 var add = function(){
 	processType = 'add';
+	$('#reName').text("角色名称");
+	$('#editMenu').hide();
 	ezuiDialog.dialog('open');
 };
 
+var editMenuBtn = function(row){
+	$('#reName').text("表单名称");
+	processType = 'editMenuBtn';
+	$('#editMenu').show();
+    if(row){
+        ezuiForm.form('load',{
+            roleId : row.id,
+            roleName : row.menuName,
+			roleIDMenu : row.roleIDMenu
+        });
+        var btn = row.btnSetMenu;
+        if(btn){
+            var btnArray = [];
+            for(var i = 0; i < btn.length; i++){
+                btnArray[i] = btn[i].id;
+            }
+            $('#btnCombobox').combobox('setValues',btnArray);
+        }
+        ezuiDialog.dialog('open');
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.message.selectRecord'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
 var edit = function(){
 	processType = 'edit';
+	$('#reName').text("角色名称");
 	var row = ezuiDatagrid.datagrid('getSelected');
 	if(row){
 		ezuiForm.form('load',{
@@ -136,7 +168,7 @@ var edit = function(){
 		    }
 			$('#btnCombobox').combobox('setValues',btnArray);
 		}
-		
+		$('#editMenu').hide();
 		ezuiDialog.dialog('open');
 	}else{
 		$.messager.show({
@@ -144,10 +176,9 @@ var edit = function(){
 		});
 	}
 };
-
 var del = function(){
 	var row = ezuiDatagrid.datagrid('getSelected');
-	if(row.roleName == "ROLE_AD"){
+	if(row.id == "1"){
 		$.messager.show({
 			msg : 'ROLE_AD角色無法刪除！', title : "<spring:message code='common.message.prompt'/>"
 		});
@@ -188,7 +219,10 @@ var commit = function(){
 	var url = "";
 	if (processType == "edit") {
 		url = '<c:url value="/roleController.do?edit"/>';
-	}else{
+	}else if(processType == "editMenuBtn"){
+		url = '<c:url value="/roleController.do?editMenuBtn"/>';
+	}
+	else{
 		url = '<c:url value="/roleController.do?add"/>';
 	}
 	ezuiForm.form('submit', {
@@ -242,12 +276,13 @@ var commit = function(){
 	<div id="ezuiDialog" style="padding: 10px;">
 		<form id="ezuiForm" method="post">
 			<input type="hidden" name="roleId"/>
+			<input type="hidden" name="roleIDMenu"/>
 			<table>
 				<tr>
-					<th nowrap="nowrap">角色名稱</th>
+					<th nowrap="nowrap" id="reName">角色名稱</th>
 					<td><input type="text" name="roleName" class="easyui-textbox" size='16' data-options='required:true'/></td>
 				</tr>
-				<tr>
+				<tr id="editMenu" >
 					<th nowrap="nowrap">可使用按钮</th>
 					<td><input type="text" id="btnCombobox" name="btns" class="easyui-combobox" size='16' style='height:80px' data-options="panelHeight:'auto',
 									 																										multiple:'multiple',

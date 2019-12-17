@@ -1,11 +1,10 @@
 package com.wms.mybatis.entity;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author OwenHuang
@@ -32,6 +31,24 @@ public class SfcMenu implements Serializable{
 	private java.lang.Integer displaySeq;
 	
 	private Set<SfcRole> roleSet;
+	private Set<SfcBtn> btnSetMenu;
+	private java.lang.String roleIDMenu;
+
+	public String getRoleIDMenu() {
+		return roleIDMenu;
+	}
+
+	public void setRoleIDMenu(String roleIDMenu) {
+		this.roleIDMenu = roleIDMenu;
+	}
+
+	public Set<SfcBtn> getBtnSetMenu() {
+		return btnSetMenu;
+	}
+
+	public void setBtnSetMenu(Set<SfcBtn> btnSetMenu) {
+		this.btnSetMenu = btnSetMenu;
+	}
 
 	public java.lang.String getId() {
 		return id;

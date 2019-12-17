@@ -1,11 +1,11 @@
 package com.wms.mybatis.dao;
 
 
-import java.util.List;
-
-import com.wms.mybatis.dao.BaseDao;
 import com.wms.mybatis.entity.SfcMenu;
 import com.wms.query.SfcMenuQuery;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 /**
  * 
  * <br>
@@ -20,6 +20,8 @@ public interface SfcMenuMybatisDao extends BaseDao {
 	public void deleteRoleByMenu(SfcMenu sfcMenu);
 
 	public List<SfcMenu> queryByParentId(SfcMenuQuery sfcMenuQuery);
-	
-	
+
+	public void deleteMenuBtn(@Param("menuID")String menuID, @Param("roleID")String roleID);
+
+	public void addMenuBtn(@Param("menuID")String menuID, @Param("btnID")String btnID,@Param("roleID")String roleID);
 }
