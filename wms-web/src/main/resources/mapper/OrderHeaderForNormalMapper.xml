@@ -289,9 +289,6 @@
             <if test="condition.psName != null and condition.psName != ''">
                 and ps.name = #{condition.psName}
             </if>
-            <if test="condition.ordertime != null and condition.ordertime != ''">
-                and ordertime = #{condition.ordertime}
-            </if>
             <if test="condition.expectedshipmenttime1 != null and condition.expectedshipmenttime1 != ''">
                 and expectedshipmenttime1 = #{condition.expectedshipmenttime1}
             </if>
@@ -444,6 +441,12 @@
             </if>
 			<if test="condition.edittimeTo != null and condition.edittimeTo != ''">
 				and edittime &lt;= #{condition.edittimeTo} and sostatus=99
+			</if>
+            <if test="condition.ordertime != null and condition.ordertime != ''">
+                and ordertime &gt;= #{condition.ordertime}
+            </if>
+			<if test="condition.ordertimeTo != null and condition.ordertimeTo != ''">
+				and ordertime &lt;= #{condition.ordertimeTo}
 			</if>
             <if test="condition.editwho != null and condition.editwho != ''">
                 and editwho = #{condition.editwho}

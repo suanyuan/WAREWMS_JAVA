@@ -2775,11 +2775,11 @@ var writeBackExpressBtnCommit = function(){
 																																	textField: 'value'"/></td>
 						</tr>
 						<tr>
-							<th>订单创建时间</th><td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options="editable:false,
+							<th>订单创建时间</th><td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options="
 																																	required:true,
 																																	showSeconds:false,
 																																	value:ordertimeDate(new Date())"/></td>
-							<th>至</th><td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options="editable:false,
+							<th>至</th><td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options="
 																																required:true,
 																																showSeconds:false,
 																																value:ordertimeDateTo(new Date())"/></td>
