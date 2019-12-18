@@ -107,12 +107,12 @@ where 1=1
 	from sfc_btn
 	where 1 = 1
 </select>
-<!--<select id="queryListRole"  resultMap="BaseResultMap" parameterType="Object">
+<select id="queryListRole"  resultMap="BaseResultMap" parameterType="Object">
 	select BTN_NAME from sfc_btn sb,sfc_menu_btn smb
 	where sb.BTN_ID=smb.BTN_ID
 	and smb.MENU_ID=#{menuId}
 	and smb.ID=#{roleId}
-</select>-->
+</select>
 <!-- 按钮 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from sfc_btn 

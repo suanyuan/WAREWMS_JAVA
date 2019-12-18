@@ -1,6 +1,9 @@
 package com.wms.mybatis.dao;
 
 
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 /**
  * 
  * <br>
@@ -8,7 +11,7 @@ package com.wms.mybatis.dao;
  */
 public interface SfcBtnMybatisDao extends BaseDao {
 
-  /*  <T> List<T> queryListRole(@Param("menuId")Object menuId,@Param("roleId")Object roleId);*/
+    <T> List<T> queryListRole(@Param("menuId")Object menuId, @Param("roleId")Object roleId);
 
 	
 }
