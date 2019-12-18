@@ -709,13 +709,39 @@ var generatemanagementT=function () {
 	if(row){
 		//判断处理的状态
 		if(row.lotatt10=='DCL'){
-			$("#qualityStatusForm #userdefine3").combobox('readonly',false);
+			$("#qualityStatusForm #userdefine3").combobox({
+				panelHeight: 'auto',required:true,
+				editable:'false',
+				valueField: 'label',
+				textField: 'value',
+				data: [{label: 'HG',
+					value: '合格'},
+					{label: 'BHG',
+						value: '不合格'}]
+			});
 		}else if(row.lotatt10=='HG'){
-			$("#qualityStatusForm #userdefine3").combobox('setValue','BHG');
-			$("#qualityStatusForm #userdefine3").combobox('readonly',true);
+			$("#qualityStatusForm #userdefine3").combobox({
+				panelHeight: 'auto',required:true,
+				editable:'false',
+				valueField: 'label',
+				textField: 'value',
+				data: [
+					{label: 'BHG',
+						value: '不合格'},
+					{label: 'DCL',
+						value: '待处理'}]
+			});
 		}else{
-		    $("#qualityStatusForm #userdefine3").combobox('setValue','HG');
-			$("#qualityStatusForm #userdefine3").combobox('readonly',true);
+		    $("#qualityStatusForm #userdefine3").combobox({
+				panelHeight: 'auto',required:true,
+				editable:'false',
+				valueField: 'label',
+				textField: 'value',
+				data: [{label: 'HG',
+					value: '合格'},
+					{label: 'DCL',
+						value: '待处理'}]
+			});
 
 
 		}
@@ -1270,7 +1296,9 @@ var ezuiCustToolbarClear = function () {
 																																data: [{label: 'HG',
 																																        value: '合格'},
 																																       {label: 'BHG',
-																																         value: '不合格'}]"/></td>
+																																         value: '不合格'},
+																																          {label: 'DCL',
+																																         value: '待处理'}]"/></td>
 			<tr>
 			  <th>备注</th><td><input type='text' id='remarks' name="remarks" class='easyui-textbox' size='20' data-options=""/></td>
 
