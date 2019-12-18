@@ -52,11 +52,11 @@
             <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
                 and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
-            <if test="condition.soStartDate != null and condition.soStartDate != ''" >
-                and aa.`edittime` &gt;=  #{condition.soStartDate,jdbcType=VARCHAR}
+            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
+                and aa.`edittime` &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
             </if>
-            <if test="condition.soEndDate != null and condition.soEndDate != ''" >
-                and aa.`edittime` &lt;=  #{condition.soEndDate,jdbcType=VARCHAR}
+            <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
+                and aa.`edittime` &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
             </if>
         </trim>
     </sql>
