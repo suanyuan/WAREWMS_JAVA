@@ -345,7 +345,9 @@
 			case "DJ" : return "待检";
 			case "HG" : return "合格";
 			case "HG>BHG":return "合格>不合格";
+			case "HG>DCL":return "合格>待处理";
 			case "BHG>HG":return "不合格>合格";
+			case "BHG>DCL":return "不合格>待处理";
 			case "DCL>HG":return "待处理>合格";
 			case "DCL>BHG":return "待处理>不合格";
 		}

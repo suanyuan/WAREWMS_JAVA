@@ -47,6 +47,10 @@ public class OrderHeaderForNormalQuery implements IQuery {
     private String edittime;
     //订单发运时间    结束时间
     private String edittimeTo;
+    //订单创建时间
+    private String ordertime;
+    //订单创建时间
+    private String ordertimeTo;
     //导出类型
     private String outtype;
     private String token;
@@ -63,6 +67,22 @@ public class OrderHeaderForNormalQuery implements IQuery {
 
     public void setCustomers(Set<SfcCustomer> customers) {
         this.customers = customers;
+    }
+
+    public String getOrdertime() {
+        return ordertime;
+    }
+
+    public void setOrdertime(String ordertime) {
+        this.ordertime = ordertime;
+    }
+
+    public String getOrdertimeTo() {
+        return ordertimeTo;
+    }
+
+    public void setOrdertimeTo(String ordertimeTo) {
+        this.ordertimeTo = ordertimeTo;
     }
 
     public String getConsigneeid() {

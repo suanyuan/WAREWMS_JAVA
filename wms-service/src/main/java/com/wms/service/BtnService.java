@@ -109,23 +109,23 @@ public class BtnService extends BaseService {
         StringBuilder sb = new StringBuilder();
 
         String[] btlListAll = btnArray.split(",");//全部按钮
-//        List<SfcBtn> btlList = sfcBtnMybatisDao.queryListRole(menuId,roleId);
-//		int num= 0;
-//		for(int i=0;i<btlListAll.length;i++){
-//			for(int j=0;j<btlList.size();j++){
-//				if(btlListAll[i].equals(btlList.get(j).getBtnName())){
-//					break;
-//				}else {
-//					num +=1;
-//				}
-//			}
-//			if(num==btlList.size()){
-//				sb.append(btlListAll[i]).append(",");
-//			}
-//			num=0;
-//		}
+        List<SfcBtn> btlList = sfcBtnMybatisDao.queryListRole(menuId,roleId);
+		int num= 0;
+		for(int i=0;i<btlListAll.length;i++){
+			for(int j=0;j<btlList.size();j++){
+				if(btlListAll[i].equals(btlList.get(j).getBtnName())){
+					break;
+				}else {
+					num +=1;
+				}
+			}
+			if(num==btlList.size()){
+				sb.append(btlListAll[i]).append(",");
+			}
+			num=0;
+		}
 
-        String[] btlListS = btns.split(",");//用户可用按钮
+/*        String[] btlListS = btns.split(",");//用户可用按钮
 		//遍历出 用户不可用的按钮
 		int num= 0;
 		for(int i=0;i<btlListAll.length;i++){
@@ -140,7 +140,7 @@ public class BtnService extends BaseService {
 				sb.append(btlListAll[i]).append(",");
 			}
 			num=0;
-		}
+		}*/
 
 
         if(sb.length() > 0){
