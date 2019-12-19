@@ -142,10 +142,11 @@ $(function() {
 // 				left : event.pageX,
 // 				top : event.pageY
 // 			});
-// 		},onLoadSuccess:function(data){
-// 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvTranController.do?getBtn"/>', ezuiMenu);
-// 			$(this).datagrid('unselectAll');
-// 		}
+// 		},
+ 		onLoadSuccess:function(data){
+ 			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvTranController.do?getBtn"/>', ezuiMenu);
+ 			$(this).datagrid('unselectAll');
+ 		}
 	});
 	
 	$('#transactiontime').datetimebox('calendar').calendar({
@@ -452,8 +453,8 @@ var doSearch = function(){
 							<th>TO产品编码</th><td><input type='text' id='tosku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>TO库位</th><td><input type='text' id='tolocation' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
 							</td>
 						</tr>

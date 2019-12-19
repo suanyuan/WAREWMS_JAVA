@@ -510,8 +510,8 @@ function enterpriseInfo(enterpriseId){
 							<th>申请单号</th><td><input type='text' id='applyIdQ' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>首营状态</th><td><input type='text' id='firstStateQ' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="4">
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 
 						</tr>

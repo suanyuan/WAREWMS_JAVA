@@ -88,10 +88,11 @@ $(function() {
 				<%--left : event.pageX,--%>
 				<%--top : event.pageY--%>
 			<%--});--%>
-		<%--},onLoadSuccess:function(data){--%>
-			<%--ajaxBtn($('#menuId').val(), '<c:url value="/gspSupplierController.do?getBtn"/>', ezuiMenu);--%>
-			<%--$(this).datagrid('unselectAll');--%>
-		<%--}--%>
+		// },
+		onLoadSuccess:function(data){
+			ajaxBtn($('#menuId').val(), '<c:url value="/gspSupplierController.do?getBtn"/>', ezuiMenu);
+			$(this).datagrid('unselectAll');
+		}
 	});
     ezuiDialog = $('#ezuiDialog').dialog({
         modal : true,
@@ -562,8 +563,8 @@ function enterpriseInfo(enterpriseId){
 						</tr>
 						<tr >
 							<td colspan="10">
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 					</table>

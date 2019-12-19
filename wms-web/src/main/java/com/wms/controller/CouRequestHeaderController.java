@@ -4,10 +4,12 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.CouRequestHeader;
 import com.wms.entity.InvLotLocId;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
 import com.wms.service.CouRequestExportService;
 import com.wms.service.CouRequestHeaderService;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.CouRequestHeaderVO;
 import com.wms.vo.Json;
@@ -20,8 +22,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -120,13 +122,13 @@ public void exportViewInvLotattDataToExcel(HttpServletResponse response, CouRequ
 		Json json = couRequestHeaderService.deleteCouRequstHeader(cycleCountno);
 		return json;
 	}
-//
-//	@Login
-//	@RequestMapping(params = "getBtn")
-//	@ResponseBody
-//	public Json getBtn(String id, HttpSession session) {
-//		return couRequestHeaderService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
-//	}
+
+	@Login
+	@RequestMapping(params = "getBtn")
+	@ResponseBody
+	public Json getBtn(String id, HttpSession session) {
+		return couRequestHeaderService.getBtn(id, (SfcUserLogin)session.getAttribute(ResourceUtil.getUserInfo()));
+	}
 //
 //	@Login
 //	@RequestMapping(params = "getCombobox")

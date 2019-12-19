@@ -5,10 +5,13 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocOrderPackingCarton;
 import com.wms.entity.DocOrderPackingCartonInfo;
-import com.wms.entity.DocQcHeader;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.DocOrderPackingCartonSearchExportService;
 import com.wms.service.DocOrderPackingCartonSearchService;
+import com.wms.service.OrderHeaderForNormalService;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
+import com.wms.vo.Json;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,10 @@ public class DocOrderPackingCartonSearchController {
     private DocOrderPackingCartonSearchService docOrderPackingCartonSearchService;
     @Autowired
     private DocOrderPackingCartonSearchExportService docOrderPackingCartonSearchExportService;
+	@Autowired
+	private OrderHeaderForNormalService orderHeaderForNormalService;
+
+
 
 	@Login
 	@RequestMapping(params = "toMain")
@@ -72,5 +80,12 @@ public class DocOrderPackingCartonSearchController {
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
     }
+
+	@Login
+	@RequestMapping(params = "getBtn")
+	@ResponseBody
+	public Json getBtn(String id, HttpSession session) {
+		return orderHeaderForNormalService.getBtn(id, (SfcUserLogin) session.getAttribute(ResourceUtil.getUserInfo()));
+	}
 
 }

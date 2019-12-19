@@ -3,8 +3,12 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.service.OrderHeaderForNormalService;
 import com.wms.service.StatisticalAnalysisService;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
+import com.wms.vo.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +27,15 @@ public class StatisticalAnalysisController {
 	@Autowired
 	private StatisticalAnalysisService statisticalAnalysisService;
 
+	@Autowired
+	private OrderHeaderForNormalService orderHeaderForNormalService;
 
+	@Login
+	@RequestMapping(params = "getBtn")
+	@ResponseBody
+	public Json getBtn(String id, HttpSession session) {
+		return orderHeaderForNormalService.getBtn(id, (SfcUserLogin) session.getAttribute(ResourceUtil.getUserInfo()));
+	}
 
 	/**************************************出入库流水****************************************/
 

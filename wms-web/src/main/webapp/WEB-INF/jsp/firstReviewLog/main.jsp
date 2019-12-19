@@ -70,8 +70,8 @@ $(function() {
                 top: event.pageY
             });
         }, onLoadSuccess: function (data) {
-            $(this).datagrid('unselectAll');
-
+			ajaxBtn($('#menuId').val(), '<c:url value="/firstReviewLogController.do?getBtn"/>', ezuiMenu);
+			$(this).datagrid('unselectAll');
             // row = ezuiDatagrid.datagrid("getSelections");
             // var a = row.length;
             // alert(ezuiDatagrid.datagrid("getSelections"));
@@ -368,8 +368,8 @@ var doExport = function(){
 							<th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' data-options='width:150'/></td>
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' data-options='width:150'/></td>
 							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
 
 							</td>

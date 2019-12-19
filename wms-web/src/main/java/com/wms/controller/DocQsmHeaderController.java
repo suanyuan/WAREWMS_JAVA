@@ -3,7 +3,9 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.DocQsmHeader;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.DocQsmHeaderService;
+import com.wms.service.OrderHeaderForNormalService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
 import com.wms.vo.Json;
@@ -12,15 +14,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("docQsmHeaderController")
 public class DocQsmHeaderController {
 
 	@Autowired
 	private DocQsmHeaderService docQsmHeaderService;
+	@Autowired
+	private OrderHeaderForNormalService orderHeaderForNormalService;
 
-
-
+	@Login
+	@RequestMapping(params = "getBtn")
+	@ResponseBody
+	public Json getBtn(String id, HttpSession session) {
+		return orderHeaderForNormalService.getBtn(id, (SfcUserLogin) session.getAttribute(ResourceUtil.getUserInfo()));
+	}
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody

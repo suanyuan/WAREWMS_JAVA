@@ -75,7 +75,7 @@ $(function() {
 			// {field: 'userdefine5',		title: '待输入栏位12',	width: 61 }
 		]],
 		onDblClickCell: function(index,field,value){
-
+			ajaxBtn($('#menuId').val(), '<c:url value="/couRequestHeaderController.do?getBtn"/>', ezuiMenu);
 		},
 		onRowContextMenu : function(event, rowIndex, rowData) {
 			event.preventDefault();
@@ -1086,10 +1086,10 @@ function choseSelect_product_couRequestHeaderS(row) {
 																																	valueField: 'id',
 																																    textField: 'value'"/></td>
 							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExportM();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
-								<a onclick='toImportData();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
+								<a onclick='toImportData();' id='ezuiBtn_export1' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 
 							</td>
 						</tr>

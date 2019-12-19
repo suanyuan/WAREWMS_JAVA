@@ -67,7 +67,9 @@ $(function() {
 					$('#ezuiBtn_hold').linkbutton('enable');
 				};
 			};
-		},
+		},onLoadSuccess:function(data){
+			ajaxBtn($('#menuId').val(), '<c:url value="/viewInvHoldController.do?getBtn"/>', ezuiMenu);
+		}
 	});
 	
 	$('#fromtime').datetimebox('calendar').calendar({
@@ -426,8 +428,8 @@ var doSearch = function(){
 							<th>商品编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>库位</th><td><input type='text' id='locationid' class='easyui-textbox' size='16' data-options=''/></td>
 							<td>
-								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 							</td>
 						</tr>
 					</table>

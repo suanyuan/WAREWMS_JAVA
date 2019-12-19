@@ -64,7 +64,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			<%--ajaxBtn($('#menuId').val(), '<c:url value="/docAsnCertificateController.do?getBtn"/>', ezuiMenu);--%>
+			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnCertificateController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
 	});

@@ -154,85 +154,34 @@ var clearTreegridSelected = function(treegridId){
 	$(treegridId).treegrid('unselectAll');
 };
 var ajaxBtn = function(menuId, url, datagridMenu){
-	var btnArray;
-	$.ajax({
-		url : 'btnController.do?findAll',
-		type : 'POST', dataType : 'JSON',async  :false,
-		success : function(result){
-			btnArray = result.obj.split(",");
-		}
-	});
-
-	$.ajax({
-		url : url,
-		data : {id : menuId},type : 'POST', dataType : 'JSON',async  :false,
-		success : function(result){
-			var flag = "";
-			for(var i = 0 ; i < btnArray.length ; i++){
-				flag = result.obj.indexOf(btnArray[i]) == -1 ? 'disable' : 'enable';
-				if($('#ezuiBtn_'+btnArray[i]).length > 0){
-					$('#ezuiBtn_'+btnArray[i]).linkbutton(result.obj.indexOf(btnArray[i]) == -1 ? "disable" : "enable");
-				}
-				if($('#menu_'+btnArray[i]).length > 0){
-					$(datagridMenu).menu(flag+'Item', $('#menu_'+btnArray[i])[0]);
-				}
-				if($('#ezuiDatagrid').length > 0){
-					if(flag == 'disable'){
-						$('#ezuiDatagrid').datagrid('hideColumn', btnArray[i]);
-					}
-				}
-			}
-		}
-	});
-/*	var btnArray ;
-	var btns ;
+	var btnArray ;
 	var roleid;
 	var btnlist = new Array();
 	$.ajax({
 		url : 'btnController.do?findAll',
-		type : 'POST', dataType : 'JSON',async  :false,
+		type : 'POST', dataType : 'JSON',async  :false,cache:false,
 		success : function(result){
 			btnArray = result.obj;
 		}
 	});
-
 	$.ajax({
 		url : url,
-		data : {id : menuId},type : 'POST', dataType : 'JSON',async  :false,
+		data : {id : menuId},type : 'POST', dataType : 'JSON',async  :false,cache:false,
 		success : function(result){
-            btns = result.obj;
             roleid = result.msg;
-/!*			var flag = "";
-			for(var i = 0 ; i < btnArray.length ; i++){
-				// flag = result.obj.indexOf(btnArray[i]) == -1 ? 'disable' : 'enable';
-				if($('#ezuiBtn_'+btnArray[i]).length > 0){
-					$('#ezuiBtn_'+btnArray[i]).linkbutton(result.obj.indexOf(btnArray[i]) == -1 ? "disable" : "enable");
-				}
-				if($('#menu_'+btnArray[i]).length > 0){
-					$(datagridMenu).menu(flag+'Item', $('#menu_'+btnArray[i])[0]);
-				}
-				if($('#ezuiDatagrid').length > 0){
-					if(flag == 'disable'){
-						$('#ezuiDatagrid').datagrid('hideColumn', btnArray[i]);
-					}
-				}
-			 }*!/
 		}
 	});
     $.ajax({
         url : 'btnController.do?find',
-        data : {btnArray : btnArray,btns:btns,roleid:roleid,menuId:menuId},
-        type : 'POST', dataType : 'JSON',async  :false,
+        data : {btnArray:btnArray,roleid:roleid,menuId:menuId},
+        type : 'POST', dataType : 'JSON',async  :false,cache:false,
         success : function(result){
             btnlist = result.obj.split(",");
             for(var i=0;i<btnlist.length;i++){
                 $('#ezuiBtn_'+btnlist[i]).linkbutton("disable" );
-				// $('#menu'+btnlist[i]).linkbutton("disable" );
             }
         }
-    });*/
-
-
+    });
 };
 
 var getObjArrayValues = function(objArray){

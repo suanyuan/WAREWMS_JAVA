@@ -1236,9 +1236,9 @@
                         <td><input type='text' id='poreference1'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>
                             <%--一级datagrid查询--%>
-                            <a onclick='doSearch();' class='easyui-linkbutton'
+                            <a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton'
                                data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-                            <a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton'
+                            <a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton'
                                data-options='plain:true,iconCls:"icon-remove"'
                                href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
                         </td>

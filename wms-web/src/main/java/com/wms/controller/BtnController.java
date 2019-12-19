@@ -94,8 +94,8 @@ public class BtnController {
 	@Login
 	@RequestMapping(params = "find")
 	@ResponseBody
-	public Json find(String btnArray,String btns,String roleid,String menuId) {
-		return btnService.find(btnArray,btns,roleid,menuId);
+	public Json find(String btnArray,String roleid,String menuId) {
+		return btnService.find(btnArray,roleid,menuId);
 	}
 	@Login
 	@RequestMapping(params = "getCombobox")

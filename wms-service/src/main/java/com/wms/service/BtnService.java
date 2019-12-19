@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service("BtnService")
@@ -104,46 +105,25 @@ public class BtnService extends BaseService {
 		}
 		return json;
 	}
-    public Json find(String btnArray,String btns,String roleId,String menuId) {
+    public Json find(String btnArray,String roleId,String menuId) {
         Json json = new Json();
         StringBuilder sb = new StringBuilder();
 
-        String[] btlListAll = btnArray.split(",");//全部按钮
+        String[] btlAll = btnArray.split(",");//全部按钮
+        List<String> btnListAll = Arrays.asList(btlAll);
         List<SfcBtn> btlList = sfcBtnMybatisDao.queryListRole(menuId,roleId);
-		int num= 0;
-		for(int i=0;i<btlListAll.length;i++){
-			for(int j=0;j<btlList.size();j++){
-				if(btlListAll[i].equals(btlList.get(j).getBtnName())){
-					break;
-				}else {
-					num +=1;
-				}
-			}
-			if(num==btlList.size()){
-				sb.append(btlListAll[i]).append(",");
-			}
-			num=0;
-		}
-
-/*        String[] btlListS = btns.split(",");//用户可用按钮
-		//遍历出 用户不可用的按钮
-		int num= 0;
-		for(int i=0;i<btlListAll.length;i++){
-			for(int j=0;j<btlListS.length;j++){
-				if(btlListAll[i].equals(btlListS[j])){
-					break;
-				}else {
-					num +=1;
-				}
-			}
-			if(num==btlListS.length){
-				sb.append(btlListAll[i]).append(",");
-			}
-			num=0;
-		}*/
-
-
-        if(sb.length() > 0){
+        List<String> btnLists = new ArrayList<>();//用户在该表单可用按钮
+        for (SfcBtn btnlist:btlList){
+            btnLists.add(btnlist.getBtnName());
+        }
+        for(int i=0;i<btnListAll.size();i++){
+            if(btnLists.contains(btnListAll.get(i))){
+                continue;
+            }else {
+                sb.append(btnListAll.get(i)).append(",");
+            }
+        }
+        if(sb.length() > 0 &&  !roleId.equals("1")){
             sb.deleteCharAt(sb.lastIndexOf(","));
             json.setSuccess(true);
             json.setObj(sb.toString());
