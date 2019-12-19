@@ -206,7 +206,7 @@ public class OrderDetailsForNormalVO {
     private String consigneeid;
     private String skuName;
     private String descrc;   //规格/型号
-
+    private Double qty1;
 
     private Double qtyorderedEachSum;//订货数量
     private Double qtyorderedSum;//订货件数

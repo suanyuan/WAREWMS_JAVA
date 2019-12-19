@@ -184,7 +184,8 @@ $(function() {
                 // {field: 'lotatt13',			title: '双证',			width: 100 },
                 {field: 'lotatt14',			title: '入库单号',		width: 80 },
                 // {field: 'lotatt15',			title: '生产厂商名称',	width: 130 },
-                {field: 'dEdi04',			title: '样品/投诉单号',	width: 100 }
+                {field: 'dEdi04',			title: '样品/投诉单号',	width: 100 },
+                {field: 'qty1',			title: '换算率',	width: 100 }
                 /*{field: 'lotatt16',	title: '自定义批属1',		width: 130 },
                 {field: 'lotatt17',	title: '自定义批属2',		width: 130 },
                 {field: 'lotatt18',	title: '自定义批属3',		width: 130 }*/
@@ -1627,7 +1628,8 @@ var detailsAdd = function(){
 			$("#ezuiDetailsForm #qtyallocated").numberbox('setValue', 0);
 			$("#ezuiDetailsForm #qtypicked").numberbox('setValue', 0);
 			$("#ezuiDetailsForm #qtyshipped").numberbox('setValue', 0);
-			$('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
+			// $('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
+			// $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:true});
 			$('#ezuiDetailsForm #grossweight').numberbox({editable:true});
 			$('#ezuiDetailsForm #cubic').numberbox({editable:true});
 			$('#ezuiDetailsForm #price').numberbox({editable:true});
@@ -1697,6 +1699,7 @@ var detailsEdit = function(){
 		$("#ezuiDetailsForm #linestatus").combo('readonly', true);
 		var row = ezuiDetailsDatagrid.datagrid('getSelected');
 		if(row){
+			$("#ezuiDetailsForm #qty1").val(row.qty1);
 			ezuiDetailsForm.form('load',{
 				customerid : row.customerid,
 				orderno : row.orderno,
@@ -1708,6 +1711,7 @@ var detailsEdit = function(){
 				alternativesku : row.alternativesku,
 				packid : row.packid,
 	            qtyordered : row.qtyordered,
+	            qtyorderedEach : row.qtyorderedEach,
 	            qtyallocated : row.qtyallocated,
 	            qtypicked : row.qtypicked,
 	            qtyshipped : row.qtyshipped,
@@ -1751,7 +1755,7 @@ var detailsEdit = function(){
 						}
 					}]
 				});
-				$('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
+				// $('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
 				$('#ezuiDetailsForm #grossweight').numberbox({editable:true});
 				$('#ezuiDetailsForm #cubic').numberbox({editable:true});
 				$('#ezuiDetailsForm #price').numberbox({editable:true});
@@ -2216,7 +2220,8 @@ var ezuiSkuDataClick = function(){
 			        {field: 'qty',			title: '库存数',	width: 60},
 			        {field: 'qtyallocated',	title: '分配数',	width: 60},
 		         	{field: 'qtyonhold',	title: '冻结数',	width: 60},
-					{field: 'packid',		title: '包装代码',	width: 80}
+					{field: 'packid',		title: '包装代码',	width: 80},
+					{field: 'qty1',		    title: '换算率',	width: 80}
 
 				]],
 		onDblClickCell: function(index,field,value){
@@ -2241,6 +2246,7 @@ var selectSku = function(){
 		$("#ezuiDetailsForm #skuNameE").textbox('setValue',row.descrE);
 		$("#ezuiDetailsForm #alternativesku").textbox('setValue',row.alternateSku1);
 		$("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
+		$("#ezuiDetailsForm #qty1").val(row.qty1);
 		$("#ezuiDetailsForm #qtyordered").numberbox('clear');
 		$("#ezuiDetailsForm #grossweight").numberbox('clear');
 		$("#ezuiDetailsForm #cubic").numberbox('clear');

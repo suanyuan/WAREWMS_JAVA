@@ -189,6 +189,7 @@ public class BasSku implements Serializable {
 	private String supplierNames; //多供应商
 
 	private String unit;
+	private Double qty1;
 
 
 	public String getAddtimeDc() {
@@ -909,5 +910,13 @@ public class BasSku implements Serializable {
 
 	public void setOrderbysql(String orderbysql) {
 		this.orderbysql = orderbysql;
+	}
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
 	}
 }

@@ -211,6 +211,7 @@ public class OrderDetailsForNormal implements Serializable {
     private BasSku basSku;
 
     private String skuName;
+    private Double qty1;
 
 
 //    导出带出字段

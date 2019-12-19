@@ -4,6 +4,7 @@
 <div id='ezuiDetailsDialog' class='easyui-dialog' style='padding: 10px;'>
     <form id='ezuiDetailsForm' method='post'>
         <input type='hidden' id='docOrderDetailsId' name='docOrderDetailsId'/>
+        <input type='hidden' id='qty1'  name='qty1'/>
         <table>
             <tr>
                 <th>SO编号</th>
@@ -31,8 +32,10 @@
                 <th>中文名称</th>
                 <td><input type='text' name=skuName id='skuName' class='easyui-textbox' size='16'
                            data-options="editable:false"/></td>
-                <th>产品条码</th>
-                <td><input type='text' name='alternativesku' id='alternativesku' class='easyui-textbox' size='16'
+                <td style="display: none"><input type='text' name='alternativesku' id='alternativesku' class='easyui-textbox' size='16'
+                           data-options='editable:false'/></td>
+                <th>包装代码</th>
+                <td><input type='text' name='packid' id='packid' class='easyui-textbox' size='16'
                            data-options='editable:false'/></td>
                 <th>规格型号</th>
                 <td><input type='text' name='skuNameE' id='skuNameE' class='easyui-textbox' size='16'
@@ -42,11 +45,12 @@
                 <th>订货件数</th>
                 <td><input type='text' name='qtyordered' id='qtyordered' class='easyui-numberbox' size='16'
                            data-options='required:true,min:1,precision:0'/></td>
+                <th>订货数量</th>
+                <td><input type='text' name='qtyorderedEach' id='qtyorderedEach' class='easyui-numberbox' size='16'
+                           data-options='required:true,min:1,precision:0'/></td>
                 <th>库位</th>
                 <td><input type='text' name='location' id='location' class='easyui-textbox' size='16'/></td>
-                <th>包装代码</th>
-                <td><input type='text' name='packid' id='packid' class='easyui-textbox' size='16'
-                           data-options='editable:false'/></td>
+
                 <th>序列号</th>
                 <td><input type='text' name='lotatt05' id='lotatt05' class='easyui-textbox' size='16' data-options=''/>
                 </td>
@@ -242,6 +246,17 @@
             ;
         };
 
-
+//通过件数算数量
+        $("input",$("#ezuiDetailsForm #qtyordered").next("span")).keyup(function(event){
+            var v = $('#ezuiDetailsForm #qtyordered').next().children().val();
+            var qty1=$("#ezuiDetailsForm #qty1").val();
+            $("#ezuiDetailsForm #qtyorderedEach").textbox('setValue',v*qty1);
+        });
+//通过件数算件数
+        $("input",$("#ezuiDetailsForm #qtyorderedEach").next("span")).keyup(function(event){
+            var v = $('#ezuiDetailsForm #qtyorderedEach').next().children().val();
+            var qty1=$("#ezuiDetailsForm #qty1").val();
+            $("#ezuiDetailsForm #qtyordered").textbox('setValue',v/qty1);
+        });
     })
 </script>

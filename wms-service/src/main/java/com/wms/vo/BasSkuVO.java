@@ -86,7 +86,7 @@ public class BasSkuVO {
 	private java.lang.String skuGroup8;
 	private java.lang.String productLineName;
 
-
+    private Double qty1;
 	public String getClientName() {
 		return clientName;
 	}
@@ -731,5 +731,13 @@ public class BasSkuVO {
 
 	public void setFirstop(String firstop) {
 		this.firstop = firstop;
+	}
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
 	}
 }

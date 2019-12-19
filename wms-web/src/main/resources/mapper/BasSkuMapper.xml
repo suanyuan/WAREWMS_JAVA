@@ -92,6 +92,7 @@
 	<result column="clientName" property="clientName"/>
 
 	<result column="unit" property="unit"/>
+	<result column="qty1" property="qty1"/>
 </resultMap>
 
 <resultMap id="SkuInfoMap" type="com.wms.entity.BasSku" >
@@ -1043,9 +1044,10 @@ where 1=1
 <!-- 和inv_lot联接查询带出库存件数 -->
 <select id="queryByPageListByInvLot" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT a.*,IFNULL(SUM(l.qty),'0') qty,IFNULL(SUM(l.`qtyallocated`),'0') qtyallocated,IFNULL(SUM(l.`qtyonhold`),'0') qtyonhold
+	SELECT a.*,IFNULL(SUM(l.qty),'0') qty,IFNULL(SUM(l.`qtyallocated`),'0') qtyallocated,IFNULL(SUM(l.`qtyonhold`),'0') qtyonhold,p.qty1
 	FROM Bas_Sku a
 	LEFT JOIN `inv_lot` l ON a.sku=l.`sku` AND a.customerid=l.`customerid`
+	left join bas_package p on p.packid=a.packid
 	<include refid="Example_Where_Clause1"/>
 	GROUP BY a.sku,a.customerid
 	<if test="orderByClause != null and orderByClause != ''" >

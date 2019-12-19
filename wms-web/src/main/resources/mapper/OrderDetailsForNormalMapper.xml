@@ -101,6 +101,7 @@
     <result column="qtyreleased" property="qtyreleased"/>
     <result column="freegift" property="freegift"/>
     <result column="qty" property="qty"/>
+    <result column="qty1" property="qty1"/>
     <result column="qty_each" property="qtyeach"/>
     <result column="a_location" property="alocation"/>
 </resultMap>
@@ -846,7 +847,8 @@ where 1=1
 </select>
 <!-- 查询订单明细列表 -->
 <select id="queryByPageList" resultMap="ExtendResultMap"  parameterType="Object">
-    select
+   select aa.*,p.qty1  from
+    (select
     <include refid="Base_Column_List"/>
     from doc_order_details
     <include refid="Example_Where_Clause"/>
@@ -855,7 +857,9 @@ where 1=1
     </if>
     <if test="limitClause != null and limitClause != ''" >
         ${limitClause}
-    </if>
+    </if>) aa
+     left join bas_sku s on s.sku=aa.sku and s.customerid=aa.customerid
+     left join bas_package p on p.packid=s.packid
 </select>
 
 <!--订单明细行号-->
