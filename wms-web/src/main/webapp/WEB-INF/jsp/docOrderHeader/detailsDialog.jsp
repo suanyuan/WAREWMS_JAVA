@@ -39,7 +39,7 @@
                            data-options='editable:false'/></td>
             </tr>
             <tr>
-                <th>订货数</th>
+                <th>订货件数</th>
                 <td><input type='text' name='qtyordered' id='qtyordered' class='easyui-numberbox' size='16'
                            data-options='required:true,min:1,precision:0'/></td>
                 <th>库位</th>
