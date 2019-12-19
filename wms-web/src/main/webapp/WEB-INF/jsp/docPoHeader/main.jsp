@@ -1230,8 +1230,8 @@
 																																	valueField: 'id',
 																																	textField: 'value'"/>
                         </td>
-                        <th>产品代码</th>
-                        <td><input type='text' id='sku'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
+                        <th style="display: none">产品代码</th>
+                        <td style="display: none"><input type='text' id='sku'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>客户单号</th>
                         <td><input type='text' id='poreference1'  name='sku' class='easyui-textbox' size='16' data-options=''/></td>
                         <td>

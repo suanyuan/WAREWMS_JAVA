@@ -70,7 +70,7 @@
 </sql>
 <!-- doc_po_header table all fields -->
 <sql id="Base_Column_List1" >
-	 e.pono,e.potype,e.postatus,e.pocreationtime,e.expectedarrivetime1,e.expectedarrivetime2,e.poreference1,e.poreference2,e.poreference3,e.poreference4,e.poreference5,e.supplierid,e.supplierName,e.supplier_address1,e.supplier_address2,e.supplier_address3,e.supplier_address4,e.suppliercity,e.supplier_province,e.supplier_country,e.supplier_zip,e.customerid,e.edisendflag,e.supplier_contact,e.supplier_mail,e.supplier_fax,e.supplier_tel1,e.supplier_tel2,e.userdefine1,e.userdefine2,e.userdefine3,e.userdefine4,e.userdefine5,e.notes,e.addtime,e.addwho,e.edittime,e.editwho,e.edisendtime,e.hedi01,e.hedi02,e.hedi03,e.hedi04,e.hedi05,e.hedi06,e.hedi07,e.hedi08,e.hedi09,e.hedi10,e.warehouseid,e.createsource,e.releasestatus,e.userdefinea,e.userdefineb
+	 e.pono,e.potype,e.postatus,e.pocreationtime,e.expectedarrivetime1,e.expectedarrivetime2,e.poreference1,e.poreference2,e.poreference3,e.poreference4,e.poreference5,e.supplierid,bve.descr_c  supplierName,e.supplier_address1,e.supplier_address2,e.supplier_address3,e.supplier_address4,e.suppliercity,e.supplier_province,e.supplier_country,e.supplier_zip,e.customerid,e.edisendflag,e.supplier_contact,e.supplier_mail,e.supplier_fax,e.supplier_tel1,e.supplier_tel2,e.userdefine1,e.userdefine2,e.userdefine3,e.userdefine4,e.userdefine5,e.notes,e.addtime,e.addwho,e.edittime,e.editwho,e.edisendtime,e.hedi01,e.hedi02,e.hedi03,e.hedi04,e.hedi05,e.hedi06,e.hedi07,e.hedi08,e.hedi09,e.hedi10,e.warehouseid,e.createsource,e.releasestatus,e.userdefinea,e.userdefineb
 
 </sql>
 <!-- 分页查询条件 -->
@@ -414,9 +414,6 @@
 				and sku =  #{condition.sku}
 
 			</if>
-				<if test="true">
-					group by e.pono
-				</if>
 		</trim>
 	</sql>
    
@@ -614,9 +611,11 @@
 	select
 	count(1) from(
 	select
-	<include refid="Base_Column_List1"/>
+	count(1)
 	from doc_po_header AS e
 	LEFT JOIN doc_po_details f ON e.pono=f.pono
+	LEFT JOIN bas_sku s ON s.sku=f.sku AND s.customerid=f.customerid
+	LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
 	<include refid="Example_Where_Clause1"/>) as g
 </select>
   	
@@ -627,7 +626,7 @@
 	from (select
 	<include refid="Base_Column_List1"/>
 	from doc_po_header AS e
-	LEFT JOIN doc_po_details f ON e.pono=f.pono
+	LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=e.supplierid
 	<include refid="Example_Where_Clause1"/>
 	) as a,
 	Bas_Codes b,
@@ -639,9 +638,6 @@
 	and c.codeid = 'PO_STS'
 	) as t
 	where 1 = 1
-    <!--<if test="orderByClause != null and orderByClause != ''" >-->
-       <!--order by  ${orderByClause}-->
-    <!--</if>-->
 	order by edittime desc
 	<if test="limitClause != null and limitClause != ''" >
        ${limitClause}
