@@ -68,8 +68,8 @@ public class DataPublishService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
-
-
+    @Autowired
+    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
     /**
      * 下发数据
      * @param no
@@ -303,6 +303,7 @@ public class DataPublishService extends BaseService {
                 skuForm.setFirstop(form.getFirstState());
                 skuForm.setPutawayrule(no);//申请单号
                 skuForm.setCustomerid(customerId.getCustomerid());
+
 
 
                 //skuForm
@@ -542,6 +543,7 @@ public class DataPublishService extends BaseService {
      * @throws Exception
      */
     public Json cancelPubilseDataByRegisterId(String registerId,String newRegisterId) throws Exception{
+        //老证
         GspProductRegister gspProductRegister = gspProductRegisterService.queryById(registerId);
         if(gspProductRegister == null){
             return Json.error("产品注册证不存在");
@@ -592,13 +594,14 @@ public class DataPublishService extends BaseService {
         List<GspProductRegisterSpecs> list = gspProductRegisterSpecsService.querySpecByRegisterId(gspProductRegister.getProductRegisterId());
         if(list!=null && list.size()>0){
             for(GspProductRegisterSpecs specs : list){
+                //报废原产品
                 GspProductRegisterSpecsForm form = new GspProductRegisterSpecsForm();
                 //BeanUtils.copyProperties(specs,form);
                 form.setSpecsId(specs.getSpecsId());
                 form.setIsUse(Constant.IS_USE_NO);
                 //form.setProductRegisterId(newRegisterId);
-                gspProductRegisterSpecsService.editGspProductRegisterSpecs(form,newRegisterId);
-
+//                gspProductRegisterSpecsService.editGspProductRegisterSpecs(form,newRegisterId);//?????
+                gspProductRegisterSpecsMybatisDao.updateBySelective(form);
 
 
                 //保存新基础信息
