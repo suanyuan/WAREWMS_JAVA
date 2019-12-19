@@ -854,7 +854,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //效验响应报文是否反馈二维码、目的地区域代码是否存在
             if (shunFengResponse.getOrderResponse() == null) {
 
-                orderHeaderForNormal.setHEdi08(callSearchXml);
+                orderHeaderForNormal.setHEdi08("requestXml:" + requestXml + "  callRequestXml:" + callRequestXml + "  searchXml:" + searchXml + "  callSearchXml:" + callSearchXml);
                 orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
                 json.setSuccess(false);
                 json.setMsg("顺丰下单失败,原因:详细地址填写有误请确认，" + shunFengResponse.getErrorMsg());
