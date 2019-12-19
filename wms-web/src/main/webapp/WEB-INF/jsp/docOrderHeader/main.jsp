@@ -1628,8 +1628,8 @@ var detailsAdd = function(){
 			$("#ezuiDetailsForm #qtyallocated").numberbox('setValue', 0);
 			$("#ezuiDetailsForm #qtypicked").numberbox('setValue', 0);
 			$("#ezuiDetailsForm #qtyshipped").numberbox('setValue', 0);
-			// $('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
-			// $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:true});
+            // $('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
+            // $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:true});
 			$('#ezuiDetailsForm #grossweight').numberbox({editable:true});
 			$('#ezuiDetailsForm #cubic').numberbox({editable:true});
 			$('#ezuiDetailsForm #price').numberbox({editable:true});
@@ -1756,6 +1756,7 @@ var detailsEdit = function(){
 					}]
 				});
 				// $('#ezuiDetailsForm #qtyordered').numberbox({editable:true});
+				// $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:true});
 				$('#ezuiDetailsForm #grossweight').numberbox({editable:true});
 				$('#ezuiDetailsForm #cubic').numberbox({editable:true});
 				$('#ezuiDetailsForm #price').numberbox({editable:true});
@@ -1802,7 +1803,8 @@ var detailsEdit = function(){
 					editable:false,
 					icons:[]
 				});
-				$('#ezuiDetailsForm #qtyordered').numberbox({editable:false});
+				// $('#ezuiDetailsForm #qtyordered').numberbox({editable:false});
+				// $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:false});
 				$('#ezuiDetailsForm #grossweight').numberbox({editable:false});
 				$('#ezuiDetailsForm #cubic').numberbox({editable:false});
 				$('#ezuiDetailsForm #price').numberbox({editable:false});
@@ -1818,7 +1820,8 @@ var detailsEdit = function(){
 					editable:false,
 					icons:[]
 				});
-				$('#ezuiDetailsForm #qtyordered').numberbox({editable:false});
+				// $('#ezuiDetailsForm #qtyordered').numberbox({editable:false});
+				// $('#ezuiDetailsForm #qtyorderedEach').numberbox({editable:false});
 				$('#ezuiDetailsForm #grossweight').numberbox({editable:false});
 				$('#ezuiDetailsForm #cubic').numberbox({editable:false});
 				$('#ezuiDetailsForm #price').numberbox({editable:false});
