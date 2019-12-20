@@ -22,8 +22,7 @@ public class XmlHelper {
     /**
      * 顺丰快递返回xml解析为实体bean
      *
-     * @param content
-     * @return
+     * @param content xml内容
      */
     public static ShunFengResponse xmlToBeanForSF(String content) {
         ShunFengResponse response = new ShunFengResponse();
@@ -36,7 +35,8 @@ public class XmlHelper {
             String head = root.elementTextTrim("Head");
             if ("OK".equals(head)) {
                 response.setResultFlag(true);
-                if ("OrderSearchService".equals(serviceValue)) {
+                if ("OrderSearchService".equals(serviceValue) ||
+                        "OrderService".equals(serviceValue)) {
                     // 下单返回结果处理 <元素>响应
                     Element orderResponse = root.element("Body").element("OrderResponse");
                     Element rlsInfo = orderResponse.element("rls_info");
