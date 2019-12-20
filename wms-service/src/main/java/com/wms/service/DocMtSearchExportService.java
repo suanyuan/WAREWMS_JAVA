@@ -125,7 +125,7 @@ public class DocMtSearchExportService {
         superClassMap.put("mtqty_Completed", "已养护件数");
         superClassMap.put("mtqty_Each_Expected", "待养护数量");
         superClassMap.put("mtqty_Each_Completed", "已养护数量");
-        superClassMap.put("uom", "单位");
+        superClassMap.put("uomName", "单位");
         superClassMap.put("check_Flag", "检查结论");
         superClassMap.put("conclusion", "养护结论");
         superClassMap.put("conversewho", "养护人");

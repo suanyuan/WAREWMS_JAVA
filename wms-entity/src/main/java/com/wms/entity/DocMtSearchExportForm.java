@@ -24,6 +24,7 @@ public class DocMtSearchExportForm {
   private double mtqty_Completed;
   private double mtqty_Each_Completed;
   private String uom;                  //单位
+  private String uomName;                  //单位
   private String check_Flag;              //检查内容（外观、包装等）
   private String conclusion;          //养护结论
   private String conversedate; //养护日期

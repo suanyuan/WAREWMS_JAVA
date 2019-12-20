@@ -53,7 +53,7 @@
                     {field: 'mtqtyCompleted', title: '已养护件数', width: 100},
                     {field: 'mtqtyEachExpected', title: '待养护数量', width: 100},
                     {field: 'mtqtyEachCompleted', title: '已养护数量', width: 100},
-                    {field: 'uom', title: '单位', width: 100},
+                    {field: 'uomName', title: '单位', width: 100},
                     {field: 'checkFlag', title: '检查结论', width: 100, formatter: QualifiedOrFailed},
                     {field: 'conclusion', title: '养护结论', width: 100, formatter: QualifiedOrFailed},
                     {field: 'conversewho', title: '养护人', width: 100},

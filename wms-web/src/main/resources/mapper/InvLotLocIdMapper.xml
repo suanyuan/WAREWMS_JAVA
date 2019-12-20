@@ -299,7 +299,7 @@
     </update>
 	<!-- 查出in_lot_att_id的list  养护计划	-->
 	<select id="getLotLocIdistListByMaintenanceTime" resultMap="BaseResultMap" >
-      SELECT i.*,a.lotatt03,DATE_ADD(a.lotatt03,INTERVAL s.reservedfield10 DAY)  lotatt03test,s.reservedfield10,p.qty1,p.packuom1
+      SELECT i.*,a.lotatt03,DATE_ADD(a.lotatt03,INTERVAL s.reservedfield10 DAY)  lotatt03test,s.reservedfield10,p.qty1,s.defaultreceivinguom packuom1
          FROM `inv_lot_loc_id`  i
         INNER JOIN `bas_sku` s ON i.customerid=s.customerid AND i.sku=s.sku
         INNER JOIN`inv_lot_att`   a ON  a.lotnum=i.lotnum

@@ -46,6 +46,7 @@
 	<result column="name" property="productLineName"/>
 	<result column="reservedfield06" property="reservedfield06"/>
 	<result column="qty1" property="qty1"/>
+	<result column="uomName" property="uomName"/>
 </resultMap>
 
     <resultMap id="MtProgressMap" type="com.wms.entity.DocMtProgressDetail">
@@ -352,12 +353,13 @@ where 1=1
 <!-- 查询养护计划管理列表Lotatt -->
 <select id="queryByListLotatt" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name,b.qty1
+	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name,b.qty1,bb.codename_c uomName
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
 	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 	LEFT JOIN `bas_package` b ON b.packid=s.`packid`
+	LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
 	<include refid="Example_Where_Clause1"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
@@ -369,12 +371,13 @@ where 1=1
 	<!-- 查询养护记录 -->
 <select id="queryByListSearch" resultMap="BaseResultMap"  parameterType="Object">
 	SELECT
-	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name,b.qty1
+	  d.*,a.*,s.descr_c,s.descr_e,s.reservedfield06,p.name,b.qty1,bb.codename_c uomName
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
 	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 	LEFT JOIN `bas_package` b ON b.packid=s.`packid`
+	LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
 	<include refid="Example_Where_Clause1"/>
      order by  d.mtno desc
     <if test="limitClause != null and limitClause != ''" >
@@ -384,12 +387,13 @@ where 1=1
 	<!-- 查询养护计划管理列表Lotatt -->
 <select id="queryByListExport" resultType="com.wms.entity.DocMtSearchExportForm"  parameterType="Object">
 	SELECT
-	  d.*,a.*,s.descr_c descrc,s.reservedfield06,p.name productLineName,b.qty1
+	  d.*,a.*,s.descr_c descrc,s.reservedfield06,p.name productLineName,b.qty1,bb.codename_c uomName
 	FROM doc_mt_details  d
 	LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
 	LEFT JOIN `bas_sku` s ON d.`sku`=s.`sku` AND d.`customerid`=s.`customerid`
 	LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 	LEFT JOIN `bas_package` b ON b.packid=s.`packid`
+	LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
 	<include refid="Example_Where_Clause1"/>
      order by  d.mtno desc
     <if test="limitClause != null and limitClause != ''" >
