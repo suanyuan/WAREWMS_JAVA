@@ -122,6 +122,7 @@ public class DocPaHeaderService extends BaseService {
                 DocAsnHeader docAsnHeader = new DocAsnHeader();
                 docAsnHeader.setAsnPrintFlag("N");
                 docAsnHeader.setAsnno(s);
+                docAsnHeader.setUserdefine2("");
                 docAsnHeaderMybatisDao.updateBySelective(docAsnHeader);
             }
             docPaHeaderDao.delete(docPaHeader);

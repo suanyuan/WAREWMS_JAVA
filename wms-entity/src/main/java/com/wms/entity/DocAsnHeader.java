@@ -297,7 +297,7 @@ public class DocAsnHeader implements Serializable {
 
 	private String qcstatus;
 
-	private double receiveid;
+	private Double receiveid;
 
 	private String releasestatus;
 	private String releasestatusName;
@@ -1296,11 +1296,11 @@ public class DocAsnHeader implements Serializable {
 		this.qcstatus = qcstatus;
 	}
 
-	public double getReceiveid() {
+	public Double getReceiveid() {
 		return this.receiveid;
 	}
 
-	public void setReceiveid(double receiveid) {
+	public void setReceiveid(Double receiveid) {
 		this.receiveid = receiveid;
 	}
 

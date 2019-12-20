@@ -117,7 +117,7 @@ public class DocAsnHeaderVO {
 	private java.lang.String pono;
 	private java.lang.String priority;
 	private java.lang.String qcstatus;
-	private double receiveid;
+	private Double receiveid;
 	private java.lang.String releasestatus;
 	private java.lang.String releasestatusName;
 	private java.lang.String reserveFlag;
@@ -1053,11 +1053,11 @@ public class DocAsnHeaderVO {
 		this.qcstatus = qcstatus;
 	}
 
-	public double getReceiveid() {
+	public Double getReceiveid() {
 		return receiveid;
 	}
 
-	public void setReceiveid(double receiveid) {
+	public void setReceiveid(Double receiveid) {
 		this.receiveid = receiveid;
 	}
 
