@@ -273,18 +273,18 @@ var commit = function(){
 		</div>
 	</div>
 	
-	<div id="ezuiDialog" style="padding: 10px;">
+	<div id="ezuiDialog" style="padding: 10px;width: 400px">
 		<form id="ezuiForm" method="post">
 			<input type="hidden" name="roleId"/>
 			<input type="hidden" name="roleIDMenu"/>
 			<table>
 				<tr>
 					<th nowrap="nowrap" id="reName">角色名稱</th>
-					<td><input type="text" name="roleName" class="easyui-textbox" size='16' data-options='required:true'/></td>
+					<td><input type="text" name="roleName" class="easyui-textbox" size='16' style='width:300px' data-options='required:true'/></td>
 				</tr>
 				<tr id="editMenu" >
 					<th nowrap="nowrap">可使用按钮</th>
-					<td><input type="text" id="btnCombobox" name="btns" class="easyui-combobox" size='16' style='height:80px' data-options="panelHeight:'auto',
+					<td><input type="text" id="btnCombobox" name="btns" class="easyui-combobox" size='16' style='height:80px;width:300px' data-options="panelHeight:'300',
 									 																										multiple:'multiple',
 									 																										multiline:true,
 									 																										editable:false,

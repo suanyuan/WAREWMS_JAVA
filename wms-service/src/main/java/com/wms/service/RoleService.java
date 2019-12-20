@@ -87,12 +87,14 @@ public class RoleService extends BaseService {
 		Json json = new Json();
 		String menuID=roleForm.getRoleId();
 		String roleID=roleForm.getRoleIDMenu();
-		String[] btnId= roleForm.getBtns().split(",");
 		sfcMenuMybatisDao.deleteMenuBtn(menuID,roleID);
-		for (String btnID : btnId) {
-			sfcMenuMybatisDao.addMenuBtn(menuID,btnID,roleID);
-		}
 
+		if(roleForm.getBtns()!=null){
+			String[] btnId= roleForm.getBtns().split(",");
+			for (String btnID : btnId) {
+				sfcMenuMybatisDao.addMenuBtn(menuID,btnID,roleID);
+			}
+		}
 		json.setSuccess(true);
 		return json;
 	}
