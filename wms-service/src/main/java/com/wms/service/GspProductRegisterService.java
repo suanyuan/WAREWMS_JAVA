@@ -5,15 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.wms.constant.Constant;
 import com.wms.entity.FirstBusinessApply;
 import com.wms.entity.GspOperateDetail;
 import com.wms.entity.GspProductRegisterSpecs;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.FirstBusinessApplyMybatisDao;
-import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
-import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.importdata.ImportGspProductRegisterDataService;
@@ -69,6 +67,12 @@ public class GspProductRegisterService extends BaseService {
 	public EasyuiDatagrid<GspProductRegisterVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
 		EasyuiDatagrid<GspProductRegisterVO> datagrid = new EasyuiDatagrid<GspProductRegisterVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        if(query.getIdList()!=null&&query.getIdList()!="" ){
+            List<String> enterpriseIdList = jsonToList(query.getIdList(),String.class);
+            mybatisCriteria.setIdList(enterpriseIdList);
+        }
+
+
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setCondition(query);
@@ -634,7 +638,14 @@ public class GspProductRegisterService extends BaseService {
 	}
 
 
-
+    /**
+     * json 转 List<T>
+     */
+    public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+        @SuppressWarnings("unchecked")
+        List<T> ts = (List<T>) JSONArray.parseArray(jsonString, clazz);
+        return ts;
+    }
 
 
 }

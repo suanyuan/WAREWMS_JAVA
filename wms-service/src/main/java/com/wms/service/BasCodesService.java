@@ -66,6 +66,10 @@ public class BasCodesService {
     private GspOperateDateTimeService gspOperateDateTimeService;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
+    @Autowired
+    private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+
+
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -401,6 +405,12 @@ public class BasCodesService {
         long num36=0 ;
         String enterpriseIdList36Str ="";
         List<String> enterpriseIdList36 = new ArrayList<>() ;
+        long num37=0 ;
+        String enterpriseIdList37Str ="";
+        List<String> enterpriseIdList37 = new ArrayList<>() ;
+        long num38=0 ;
+        String enterpriseIdList38Str ="";
+        List<String> enterpriseIdList38 = new ArrayList<>() ;
         java.util.Date now = new java.util.Date();
 
 
@@ -808,6 +818,35 @@ public class BasCodesService {
         basCodesMybatisDao.updateBySelective(b);
 
 
+
+        //注册证
+        List<GspProductRegister> gpr =gspProductRegisterMybatisDao.queryByList(criteria);
+        for(GspProductRegister g:gpr){
+            if(g.getProductRegisterExpiryDate().getTime()-now.getTime()>0){
+                long diff =g.getProductRegisterExpiryDate().getTime()-now.getTime();
+                long days = diff / (1000 * 60 * 60 * 24);
+                if(days<30){
+                    //近效期30天
+                    enterpriseIdList37.add(g.getProductRegisterId());
+                    num37++;
+                    enterpriseIdList37Str =  JSON.toJSONString(enterpriseIdList37);
+                }
+            }else{
+                //已过期
+                enterpriseIdList38.add(g.getProductRegisterId());
+                enterpriseIdList38Str =  JSON.toJSONString(enterpriseIdList38);
+                num38++;
+            }
+        }
+        //注册证
+        b.setCode("37");
+        b.setShowSequence(num37);
+        b.setUdf1(enterpriseIdList37Str);
+        basCodesMybatisDao.updateBySelective(b);
+        b.setCode("38");
+        b.setShowSequence(num38);
+        b.setUdf1(enterpriseIdList38Str);
+        basCodesMybatisDao.updateBySelective(b);
 
     }
 

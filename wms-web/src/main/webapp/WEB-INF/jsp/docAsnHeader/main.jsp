@@ -796,6 +796,52 @@ var mergeReceiving = function () {
     }
 
 }
+//取消收货
+var nomergeReceiving = function () {
+	var row = ezuiDatagrid.datagrid('getSelections');
+	if(row.length>0) {
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否取消收货？', function(confirm) {
+			if (confirm) {
+
+				$.messager.progress({
+					text : '<spring:message code="common.message.data.processing"/>', interval : 100
+				});
+				var arr = new Array();
+				for(var i=0;i<row.length;i++){
+					arr.push(row[i].asnno);
+				}
+				$.ajax({
+					url : sy.bp()+"/docAsnHeaderController.do?noconfirmReveiving",
+					data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
+					success : function(result){
+						$.messager.progress('close');
+						console.log(result);
+						var msg='';
+						try{
+							if(result.success){
+								msg = result.msg;
+							}else{
+								msg = '<font color="red">' + result.msg + '</font>';
+							}
+						}catch (e) {
+							//msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+							msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+						} finally {
+							$.messager.alert('操作提示', result.msg);
+							$.messager.progress('close');
+							ezuiDatagrid.datagrid('reload');
+						}
+					}
+				});
+			}
+		})
+	}else{
+		$.messager.show({
+			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+		});
+	}
+
+}
 
 // /* 关闭按钮 */  关闭订单
 
@@ -2186,6 +2232,7 @@ function printResultList(){
 					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
 					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
+					<a onclick='nomergeReceiving();' id='ezuiBtn_noreceiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>取消收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
                     <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
 					<div style="float: right">

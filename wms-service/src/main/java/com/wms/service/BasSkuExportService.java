@@ -123,7 +123,8 @@ public class BasSkuExportService {
 		basSkuForm.setCustomerid(form.getCustomerid());
 		basSkuForm.setSku(form.getSku());
 		basSkuForm.setActiveFlag(form.getActiveFlag());
-		
+//		basSkuForm.setEditwho();
+		BeanUtils.copyProperties(form, basSkuForm);
 		try {  
 	        // 获取前台传来的数据
 	        //String cutomerid = form.getCustomerid();  
