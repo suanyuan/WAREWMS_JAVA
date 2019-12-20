@@ -203,8 +203,8 @@
             <if test="conversionRate != null  ">
                 conversion_rate=#{conversionRate},
             </if>
-            <if test="long != null  ">
-                `long`=#{long},
+            <if test="llong != null  ">
+                `long`=#{llong},
             </if>
             <if test="wide != null  ">
                 wide=#{wide},
