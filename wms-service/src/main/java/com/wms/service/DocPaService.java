@@ -3,22 +3,16 @@ package com.wms.service;
 import com.wms.constant.Constant;
 import com.wms.dto.DocPaDTO;
 import com.wms.entity.*;
-import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
-import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.mybatis.dao.InvLotAttMybatisDao;
+import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.IdSequence;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.pda.PdaDocQcDetailForm;
+import com.wms.query.ActAllocationDetailsQuery;
+import com.wms.query.ActTransactionLogQuery;
 import com.wms.result.PdaResult;
-import com.wms.utils.BeanUtils;
-import com.wms.utils.DateUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.utils.StringUtil;
+import com.wms.utils.*;
 import com.wms.vo.Json;
-import com.wms.vo.form.DocPaDetailsForm;
-import com.wms.vo.form.DocPaHeaderForm;
-import com.wms.vo.form.DocQcDetailsForm;
-import com.wms.vo.form.DocQcHeaderForm;
+import com.wms.vo.form.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +54,10 @@ public class DocPaService {
 
     @Autowired
     private InvLotAttService invLotAttService;
+    @Autowired
+    private ActTransactionLogMybatisDao actTransactionLogMybatisDao;
+    @Autowired
+    private ViewInvTranService viewInvTranService;
 
     /**
      * 编号列表
@@ -384,6 +382,67 @@ public class DocPaService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Json.error("确认收货系统异常"+e.getMessage());
         }
+    }
+
+    /**
+     * 取消收货
+     * @param asnNos
+     * @return
+     */
+    public Json noconfirmReceiving(String asnNos){
+        Json json =new Json();
+
+        if (StringUtils.isEmpty(asnNos)) {
+            return Json.error("请选择需要操作的单据");
+        }
+
+        try {
+            String[] arr = asnNos.split(",");
+           //判断主单单据是否为收货状态
+            for (String s : arr) {
+                DocAsnHeader asnHeader=docAsnHeaderMybatisDao.queryById(s);
+                if(asnHeader!=null){
+                    if(asnHeader.getAsnstatus().equals("30")||asnHeader.getAsnstatus().equals("40")){
+
+                    }else{
+                        return Json.error("单号:"+s+",没有收货不可取消收货!");
+                    }
+                }else{
+                    return Json.error("单号:"+s+",不存在!");
+                }
+            }
+            //取消收货
+            for (String s : arr) {
+                //根据主单号查询出所有状态为收货的事务
+                ActTransactionLogQuery query=new ActTransactionLogQuery();
+                query.setDocno(s);
+                query.setTransactiontype("IN");
+                query.setStatus("99");
+                query.setDoctype("ASN");
+                MybatisCriteria mybatisCriteria = new MybatisCriteria();
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+                List<ActTransactionLog> list=actTransactionLogMybatisDao.queryByList(mybatisCriteria);
+                if(list.size()>0){
+                    for (ActTransactionLog actTransactionLog : list) {
+                        ViewInvTranForm viewInvTranForm=new ViewInvTranForm();
+                        viewInvTranForm.setTransactionid(actTransactionLog.getTransactionid());
+                        Json result=viewInvTranService.cancelReceive(viewInvTranForm);
+                        json.setMsg(json.getMsg() + "<br/>" + "单号:" + actTransactionLog.getDocno() + ",行号" + actTransactionLog.getDoclineno() + "," + result.getMsg());
+                        if(result.isSuccess()) {
+                            json.setSuccess(true);
+                        }else{
+                            json.setSuccess(false);
+                        }
+                    }
+
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Json.error("确认收货系统异常"+e.getMessage());
+        }
+        return  json;
     }
 
     /**

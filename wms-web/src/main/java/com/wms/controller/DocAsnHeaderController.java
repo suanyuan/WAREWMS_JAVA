@@ -214,6 +214,18 @@ public class DocAsnHeaderController {
 		return docPaService.confirmReceiving(asnNos);
 	}
 
+	/**
+	 * 取消收货
+	 * @param asnNos
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "noconfirmReveiving",method = RequestMethod.POST)
+	@ResponseBody
+	public Json noconfirmReveiving(String asnNos){
+		return docPaService.noconfirmReceiving(asnNos);
+	}
+
 	@Login
 	@RequestMapping(params = "doRefIn",method = RequestMethod.POST)
 	@ResponseBody
