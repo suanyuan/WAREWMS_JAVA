@@ -181,6 +181,14 @@
 			<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
 				and r.create_Date &lt;= #{condition.createDateEnd}
 			</if>
+
+
+			<if test="condition.idList != null and condition.idList != ''">
+				and r.product_register_id in
+				<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
 		</trim>
 	</sql>
 

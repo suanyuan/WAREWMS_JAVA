@@ -92,7 +92,7 @@ where 1=1
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into first_business_apply(apply_id,client_id,supplier_id,create_id,create_date,edit_id,edit_date,is_use,first_state,productline)
- values(#{applyId},#{clientId},#{supplierId},#{createId},now(),#{editId},#{editDate},#{isUse},#{firstState},#{productline})
+ values(#{applyId},#{clientId},#{supplierId},#{createId},now(),#{editId},now(),#{isUse},#{firstState},#{productline})
 </insert>
 
 <!-- 根据id，修改记录-->  
@@ -120,7 +120,7 @@ where 1=1
 		edit_id=#{editId},
 	</if>
 	<if test="editDate != null  ">
-		edit_date=#{editDate},
+		edit_date=now(),
 	</if>
 	<if test="isUse != null  ">
 		is_use=#{isUse},
@@ -276,11 +276,12 @@ where 1=1
 
 <!-- 查询产品首营申请记录列表 -->
 <select id="queryPageList" resultMap="PageResultMap"  parameterType="Object">
-	select sp.product_code,sp.specs_id,sp.product_name,t1.apply_id,client_id,eic.descr_c client_name,supplier_id,eis.descr_c supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state,t1.productline,gpr.product_register_no
+	select sp.product_code,sp.specs_id,sp.product_name,t1.apply_id,client_id,eic.descr_c client_name,supplier_id,eis.descr_c supplier_name,t1.create_id,t1.create_date,t1.edit_id,t1.edit_date,t1.is_use,t1.first_state,pl.`name` productline,gpr.product_register_no
 	from first_business_apply t1
 	left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
 	left join gsp_product_register_specs sp on t2.specs_id = sp.specs_id
 	left join gsp_product_register gpr on sp.product_register_id = gpr.product_register_id
+	left join product_line pl on pl.product_line_id = t1.productline
 	left join
 	((select customerid,descr_c from bas_customer where  customer_type = 'OW')
 	union

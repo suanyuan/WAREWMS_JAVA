@@ -93,8 +93,9 @@ public class BasSkuService extends BaseService {
 			bs.setSku(basSkuVO.getSku());
 			bs.setCustomerid(basSkuVO.getCustomerid());
 			List<String> sup =  firstBusinessApplyMybatisDao.selectSupplierNamesByProductAndState(bs);
+			List<String> supQUCHONG = new ArrayList<String>(new HashSet(sup));
 			int a =1;
-			for(String supNanme : sup){
+			for(String supNanme : supQUCHONG){
 				if(a ==1){
 					content = supNanme;
 				}

@@ -35,6 +35,8 @@
         var ezuiDialogMt;
         var invlotlocDatagrid;
         var ezuiDialogInvlotloc;
+        var gspProductRegisterDatagrid;
+        var ezuiDialogProductRegister;
         $(function () {
             ezuiMenu = $('#ezuiMenu').menu();
             ezuiForm = $('#ezuiForm').form();
@@ -598,15 +600,7 @@
                             {field: 'unit',		title: '单位',	width: 42 },
                             {field: 'productline',		title: '产品线',	width: 42 },
                             {field: 'supplier',		title: '供应商',	width: 42 },
-                            // {field: 'userdefine1',		title: '待输入栏位9',	width: 42 },
-                            // {field: 'userdefine2',		title: '待输入栏位10',	width: 42 },
-                            // {field: 'userdefine3',		title: '待输入栏位11',	width: 42 },
-                            // {field: 'userdefine4',		title: '待输入栏位12',	width: 42 },
-                            // {field: 'userdefine5',		title: '待输入栏位13',	width: 42 },
-                            // {field: 'addwho',		title: '待输入栏位14',	width: 42 },
-                            // {field: 'addtime',		title: '待输入栏位15',	width: 42 },
-                            // {field: 'editwho',		title: '待输入栏位16',	width: 42 },
-                            // {field: 'edittime',		title: '待输入栏位17',	width: 42 }
+
                         ]],
                         // onDblClickCell: function(index,field,value){
                         //     edit();
@@ -625,6 +619,77 @@
 
 
                     ezuiDialogBasSkuLeak = $('#ezuiDialogBasSkuLeak').dialog({
+                        modal : true,
+                        title : '<spring:message code="common.dialog.title"/>',
+                        width:850,
+                        height:600,
+                        cache: false,
+                        onClose : function() {
+                            ezuiFormClear(ezuiForm);
+                        }
+                    })
+                }else if(row.code==37||row.code==38){
+                    //注册证
+                    gspProductRegisterDatagrid = $('#dataGridProductRegister').datagrid({
+                        url : '<c:url value="/gspProductRegisterController.do?showDatagrid"/>',
+                        method:'POST',
+                        toolbar : '',
+                        title: '',
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        fit: true,
+                        border: false,
+                        fitColumns : false,
+                        nowrap: true,
+                        striped: true,
+                        queryParams:{
+                            idList : idlist1,
+                        },
+                        collapsible:false,
+                        pagination:true,
+                        rownumbers:true,
+                        singleSelect:true,
+                        idField : 'customerid',
+                        columns : [[
+                            {field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
+                            {field: 'isUse',		title: '是否有效',	width: 100 ,formatter:isUseFormatter},
+                            {field: 'productRegisterNo',		title: '注册证编号/备案号',	width: 150 },
+                            {field: 'attachmentUrl',		title: '注册证编号/备案附件',	width: 150,formatter:showProductRegisteUrlFile },
+
+                            {field: 'classifyId',		title: '管理分类',	width: 60 },
+                            {field: 'classifyCatalog',		title: '分类目录',	width: 280 },
+                            {field: 'productNameMain',		title: '产品名称',	width: 170 },
+                            {field: 'approveDate',		title: '批准日期',	width: 150,formatter:function (value,row,index) {
+                                    return dateFormat2(value);
+                                } },
+                            {field: 'productRegisterExpiryDate',		title: '有效期至',	width: 150 ,formatter:function (value,row,index) {
+                                    return dateFormat2(value);
+                                }},
+
+                            {field: 'productRegisterVersionName',		title: '注册证/备案版本',	width: 100 },
+                            {field: 'checkerId',		title: '审核人',	width: 100 },
+                            {field: 'checkDate',		title: '审核时间',	width: 150 },
+                            {field: 'createId',		title: '创建人',	width: 100 },
+                            {field: 'createDate',		title: '创建时间',	width: 150 },
+
+                        ]],
+                        // onDblClickCell: function(index,field,value){
+                        //     edit();
+                        // },
+                        onRowContextMenu : function(event, rowIndex, rowData) {
+
+                        },
+                        onSelect: function(rowIndex, rowData) {
+
+                        },
+                        onLoadSuccess:function(data){
+                            $(this).datagrid('unselectAll');
+                            $(this).datagrid("resize",{height:540});
+                        }
+                    });
+
+
+                    ezuiDialogProductRegister = $('#ezuiDialogProductRegister').dialog({
                         modal : true,
                         title : '<spring:message code="common.dialog.title"/>',
                         width:850,
@@ -1064,6 +1129,26 @@
 
 
 
+<div id='ezuiDialogProductRegister' style='padding: 10px;display: none'>
+    <div id='clientTB8' class='datagrid-toolbar' style=''>
+        <%--<fieldset >--%>
+        <%--<legend>企业信息</legend>--%>
+        <%--<table>--%>
+        <%--<tr>--%>
+        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
+        <%--<td>--%>
+        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
+        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+        <%--</td>--%>
+        <%--</tr>--%>
+        <%--</table>--%>
+        <%--</fieldset>--%>
+    </div>
+    <table id="dataGridProductRegister">
+
+    </table>
+</div>
 
 
 

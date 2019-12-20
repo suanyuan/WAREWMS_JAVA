@@ -21,7 +21,16 @@ public class FirstBusinessApplyQuery implements IQuery {
 	private String createDateStart;//附加
 	private String createDateEnd;//附加
 	private String productRegisterNo;
+	private String productline;		//产品线
 
+
+	public String getProductline() {
+		return productline;
+	}
+
+	public void setProductline(String productline) {
+		this.productline = productline;
+	}
 
 	public String getSupplierName() {
 		return supplierName;

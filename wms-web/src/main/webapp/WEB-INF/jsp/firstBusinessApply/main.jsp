@@ -53,6 +53,7 @@ $(function() {
             {field: 'productCode',		title: '产品代码',	width: 180 },
             {field: 'productName',		title: '产品名称',	width: 200 },
             {field: 'productRegisterNo',		title: '注册证号',	width: 180 },
+            {field: 'productline',		title: '产品线',	width: 150 },
 
             {field: 'createId',		title: '创建人',	width: 100 },
 			{field: 'createDate',		title: '创建时间',	width: 150 },
@@ -71,7 +72,15 @@ $(function() {
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/firstBusinessApplyController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
-		},
+		}, onClickRow: function (index, row) {
+
+            row = ezuiDatagrid1.datagrid("getSelections");
+            var a = row.length;
+            // alert(a);
+            $('#nummm').html(a);
+
+
+        },
         onSelect: function(rowIndex, rowData) {
             if (rowIndex - 1){
                 console.log(rowData);
@@ -128,6 +137,27 @@ $(function() {
         valueField:'id',
         textField:'value'
     });
+
+
+
+    $("#productlineQ").combobox({
+        // panelHeight: 'auto',
+        url:'/productLineController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+    })
+
+    $("input").each(function () {
+        // alert($(this));
+        $(this).click(function () {
+            jishu();
+            // 全选中
+        });
+    })
+    $('div').on('click','tbody>tr',function(){
+        jishu();
+
+    })
 });
 var add = function(){
 	processType = 'add';
@@ -315,7 +345,12 @@ var commit = function(){
 	}
 };
 
-
+function  jishu(){
+    row = ezuiDatagrid1.datagrid("getSelections");
+    var a = row.length;
+    // alert(a);
+    $('#nummm').html(a);
+}
 //主页查询
 var doSearch = function(){
     ezuiDatagrid1.datagrid('load', {
@@ -330,6 +365,10 @@ var doSearch = function(){
         productRegisterNo :  $('#productRegisterNoQ').val(),
         applyId :  $('#applyIdQ').val(),
         firstState:  $('#firstStateQ').combobox('getValue'),
+
+        productline:  $('#productlineQ').combobox('getValue'),
+
+
 	});
 };
 
@@ -509,6 +548,9 @@ function enterpriseInfo(enterpriseId){
 						<tr>
 							<th>申请单号</th><td><input type='text' id='applyIdQ' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>首营状态</th><td><input type='text' id='firstStateQ' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th><td><input type='text' id='productlineQ' class='easyui-textbox' size='16' data-options=''/></td>
+
+
 							<td colspan="4">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
@@ -524,6 +566,10 @@ function enterpriseInfo(enterpriseId){
 					<a onclick='doConfirm();' id='ezuiBtn_confirm' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>提交审核</a>
 					<a onclick='reApply();' id='ezuiBtn_reApply' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-redo"' href='javascript:void(0);'>发起新申请</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid1");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
+
+					<div style="float: right">
+						<a class='easyui-linkbutton' data-options='plain:true'>已选择</a><a id="nummm" class='easyui-linkbutton' data-options='plain:true'>0</a><a class='easyui-linkbutton' data-options='plain:true'>条</a>
+					</div>
 				</div>
 			</div>
 			<table id='ezuiDatagrid1'></table>
