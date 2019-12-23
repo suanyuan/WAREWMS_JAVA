@@ -731,6 +731,7 @@ var ezuiAccDataDialogSearch = function () {
 	ezuiAccDataDialogId.datagrid('load', {
 		pano: $("#ezuiAccDataDialog #pano").textbox("getValue"),
 		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue"),
+		qcstatus: $("#ezuiAccDataDialog #qcstatus").textbox("getValue"),
 		customerid: $("#ezuiAccDataDialog #customerid").textbox("getValue"),
         asnreference1: $("#ezuiAccDataDialog #asnreference1").textbox("getValue"),
 
@@ -742,6 +743,7 @@ var ezuiAccToolbarClear = function () {
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
     $("#ezuiAccDataDialog #customerid").textbox('clear');
     $("#ezuiAccDataDialog #asnreference1").textbox('clear');
+    $("#ezuiAccDataDialog #qcstatus").combobox('clear');
     // $("#ezuiAccDataDialog #skuQ").textbox('clear');
 	// $('#descrcQ').textbox('clear');
 	// $('#lotatt04Q').textbox('clear');
@@ -1049,16 +1051,27 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 							<tr>
 								<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-								<td>
-									<a onclick='ezuiAccDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-									<a onclick='selectAcceptance();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
-									<a onclick='ezuiAccToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								</td>
+								<th>验收状态</th><td><input type='text' id='qcstatus' class='easyui-combobox' size='16' data-options=" panelHeight: 'auto',
+							                                                                                                        editable: false,
+							                                                                                                        valueField: 'label',
+																																	textField: 'value',
+																																data: [{label: '00',
+																																        value: '未验收'},
+																																        {label: '30',
+																																        value: '部分验收'},
+																																       {label: '40',
+																																         value: '完全验收'}]"/></td>
+
 							</tr>
 							<tr>
 
 								<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+								<td colspan="3">
+									<a onclick='ezuiAccDataDialogSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+									<a onclick='selectAcceptance();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
+									<a onclick='ezuiAccToolbarClear();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								</td>
 
 
 							</tr>
