@@ -25,6 +25,7 @@
         <result column="client_content" property="clientContent"/>
 
         <result column="active_flag" property="activeFlag"/>
+        <result column="product_code" property="productCode"/>
 
 
     </resultMap>
@@ -45,7 +46,7 @@
         <result column="unit" property="unit"/>
         <result column="storage_condition" property="storageCondition"/>
         <result column="active_flag" property="activeFlag"/>
-
+        <result column="product_code" property="productCode"/>
 
 
     </resultMap>
@@ -234,6 +235,9 @@
             </if>
             <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
                 AND t1.reservedfield09=#{condition.reservedfield09}
+            </if>
+            <if test="condition.productCode != null and condition.productCode != ''" >
+                AND t3.product_code    like   concat('%', #{condition.productCode},'%')
             </if>
         </trim>
     </sql>
@@ -525,7 +529,7 @@
 
 <!-- 查询客户档案列表 -->
     <select id="queryCustomerProduct"  resultMap="BaseResultMap1" parameterType="Object">
-        select DISTINCT t2.enterprise_name,t3.product_name,t3.specs_name,t3.product_model,t4.product_register_no,t4.product_register_expiry_date,
+        select DISTINCT t2.enterprise_name,t3.product_code,t3.product_name,t3.specs_name,t3.product_model,t4.product_register_no,t4.product_register_expiry_date,
         t4.approve_date,t5.enterprise_name enterprise_sc,t3.LicenseOrRecordNo license_or_record_no,t6.codename_c unit,t3.storage_condition,t7.active_flag
         from bas_sku t1
         LEFT JOIN (select * from gsp_enterprise_info where is_use = 1) t2 on t1.customerid = t2.enterprise_no

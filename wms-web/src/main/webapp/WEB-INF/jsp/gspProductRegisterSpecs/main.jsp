@@ -111,7 +111,7 @@ $(function() {
 				top : event.pageY
 			});
 		},onLoadSuccess:function(data){
-			ajaxBtn($('#menuId').val(), '<c:url value="/gspProductRegisterSpecsController.do?getBtn"/>', ezuiMenu);
+			<%--ajaxBtn($('#menuId').val(), '<c:url value="/gspProductRegisterSpecsController.do?getBtn"/>', ezuiMenu);--%>
 			$(this).datagrid('unselectAll');
 		}
 	});
@@ -428,7 +428,7 @@ var doSearch = function(){
 		// hight : $('#hight').val(),
 		// productLine : $('#productLine').val(),
 		// manageCategories : $('#manageCategories').val(),
-		enterpriseName : $('#enterpriseName').val(),
+		enterpriseName : $('#enterpriseNameQ').val(),
 		// storageCondition : $('#storageCondition').val(),
 		// transportCondition : $('#transportCondition').val(),
 		createId : $('#createId').val(),
@@ -523,7 +523,7 @@ var doExport = function(){
         param.put("productName",$('#productName').val());
         param.put("productRemark", $('#productRemark').val());
 
-        param.put("enterpriseName", $('#enterpriseName').val());
+        param.put("enterpriseName", $('#enterpriseNameQ').val());
 
 
         param.put("productModel", $('#productModel').val());
@@ -571,7 +571,7 @@ var doExport = function(){
 						   <th>产品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
-						   <th>生产企业</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+						   <th>生产企业</th><td><input type='text' id='enterpriseNameQ' class='easyui-textbox' size='16' data-options=''/></td>
 
 						<td>
 

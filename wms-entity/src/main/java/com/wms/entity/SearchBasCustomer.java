@@ -34,7 +34,7 @@ public class SearchBasCustomer implements Serializable {
 	private String clientContent;  //委托业务范围
 	private String activeFlag;  //是否合作
 
-
+	private String productCode;	//产品代码
 
 
 

@@ -214,6 +214,7 @@ public class DrugControlService extends BaseService {
 
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
         superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("productCode", "产品代码");
         superClassMap.put("productName", "委托方货品名称");
         superClassMap.put("specsName", "规格/型号");
 //        superClassMap.put("productModel", "型号");

@@ -44,7 +44,9 @@ $(function() {
 		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
-			{field: 'productName',		title: '委托方货品名称',	width: 150 },
+            {field: 'productCode',		title: '产品代码 ',	width: 250 },
+
+            {field: 'productName',		title: '委托方货品名称',	width: 150 },
 			{field: 'specsName',		    title: '规格/型号',	width: 150 },
 			// {field: 'productModel',		title: '型号',	width: 150 },
 			{field: 'productRegisterNo',		        title: '产品注册证号/备案凭证号 ',	width: 200 },
@@ -81,19 +83,29 @@ $(function() {
 		}
 	});
 
+
+
+    //委托方下拉框
+    $('#enterpriseName').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox&type=client',
+        valueField:'id',
+        textField:'value'
+    });
 });
 
 
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseName : $('#enterpriseName').val(),
+		enterpriseName : $('#enterpriseName').combobox('getValue'),
 		productName : $('#productName').val(),
 		specsName : $('#specsName').val(),
 		productRegisterNo : $('#productRegisterNo').val(),
 		enterpriseSc : $('#enterpriseSc').val(),
 		activeFlag : $('#activeFlag').combobox('getValue'),
-		reservedfield09 : $('#reservedfield09').combobox('getValue')
+		reservedfield09 : $('#reservedfield09').combobox('getValue'),
+        productCode: $('#productCode').val(),
 	});
 };
 
@@ -104,12 +116,13 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        param.put("enterpriseName",$('#enterpriseName').val());
+        param.put("enterpriseName",$('#enterpriseName').combobox('getValue'));
         param.put("productName",$('#productName').val());
         param.put("specsName",$('#specsName').val());
         param.put("productRegisterNo",$('#productRegisterNo').val());
         param.put("enterpriseSc",$('#enterpriseSc').val());
 		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+        param.put("productCode",$('#productCode').val());
 
 		//--导出Excel
         var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportCustomerProductDataToExcel", param);
@@ -147,6 +160,8 @@ var doExport = function(){
 							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>委托方货品名称</th><td><input type='text' id='productName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='specsName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='productCode' class='easyui-textbox' size='16' data-options=''/></td>
+
 						</tr>
 						<tr>
 							<th>产品注册证号/备案凭证号</th><td><input type='text' id='productRegisterNo' class='easyui-textbox' size='16' data-options=''/></td>

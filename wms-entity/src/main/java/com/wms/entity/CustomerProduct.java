@@ -34,7 +34,7 @@ public class CustomerProduct implements Serializable {
     private String activeFlag; //是否激活
 	private String reservedfield09;//是否是医疗器械
 
-
+	private String productCode;
 
 
 }
