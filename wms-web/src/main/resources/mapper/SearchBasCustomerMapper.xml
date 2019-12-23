@@ -150,6 +150,15 @@
             <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
                 AND s.reservedfield09=#{condition.reservedfield09}
             </if>
+            <if test="condition.sku!= null and condition.sku != ''" >
+                and dd.sku like concat('%', #{condition.sku},'%')
+            </if>
+            <if test="condition.locationid!= null and condition.locationid != ''" >
+                and dd.userdefine1 like concat('%', #{condition.locationid},'%')
+            </if>
+            <if test="condition.lotatt10!= null and condition.lotatt10 != ''" >
+                and e.`lotatt10` = #{condition.lotatt10}
+            </if>
         </trim>
     </sql>
     <!-- 查询条件 出库信息 -->
@@ -357,7 +366,42 @@
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         where 1=1
         <include refid="Example_Where_Clause2"/>
-        ORDER BY e.`lotatt03` DESC
+        ORDER BY e.`lotatt03` DESC,e.lotatt14
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>)  aaa
+        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaa.lotatt14
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
+    </select>
+<!-- 查询入库信息列表 -统计 -->
+    <select id="querySearchEnterInvLocationSum"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
+        select aaa.*,ccc.codename_c type from (
+        SELECT
+        e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
+        dd.qcqty_expected qty,dd.userdefine1 locationid,dd.sku,
+        p.`qty1`,
+        e.`lotatt04`,e.`lotatt05`,
+        DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d') lotatt02,
+        DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
+        s.`descr_c` descrc,s.reservedfield06,
+        bb.codename_c uom
+        from
+        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
+        from `doc_asn_details` a
+        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
+        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
+        WHERE  b.asnstatus='99'
+        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
+        left join `doc_qc_header` d on d.pano=aaa.`PANO`
+        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
+        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        where 1=1
+        <include refid="Example_Where_Clause2"/>
+        ORDER BY e.`lotatt03` DESC,e.lotatt14
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
         </if>)  aaa

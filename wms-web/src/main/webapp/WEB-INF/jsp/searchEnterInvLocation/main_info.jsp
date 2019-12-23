@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/drugInspectionController.do?showSearchEnterInvLocationDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showSearchEnterInvLocationDatagridSum"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -39,18 +39,21 @@ $(function() {
 			}
 		},
 		columns : [[
-			{field: 'lotatt14',		title: '单据号',	width: 150 },
+			{field: 'lotatt14',		title: '入库单号',	width: 150 },
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '入库日期',	width: 100 },
 			{field: 'type',		            title: '入库类型',	width: 100 },
+			{field: 'sku',		            title: '产品代码',	width: 100 },
 			{field: 'lotatt12',		        title: '产品名称',	width: 150 },
 			{field: 'descrc',		        title: '规格/型号',	width: 150 },
 			{field: 'lotatt15',		        title: '生产企业',	width: 150 },
+			{field: 'reservedfield06',		title: '生产企业许可证号/备案凭证号',	width: 170 },
 			{field: 'lotatt06',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
-			{field: 'lotatt04',		        title: '生产批号/序列号',	width: 100 },
-			// {field: 'lotatt05',		        title: '序列号',	width: 100 },
-			{field: 'lotatt01Andlotatt02',		        title: '生产日期和有效期(或者失效期)',	width: 200 },
-			// {field: 'qty',                  title: '库存件数 ',	width: 100 },
+			{field: 'lotatt04',		        title: '生产批号',	width: 100 },
+			{field: 'lotatt05',		        title: '序列号',	width: 100 },
+			{field: 'lotatt01',		        title: '生产日期',	width: 100 },
+			{field: 'lotatt02',		        title: '有效期/失效期',	width: 100 },
+			{field: 'qty',                  title: '件数 ',	width: 100 },
 			{field: 'qtyeach',		        title: '数量 ',	width: 100 },
 			{field: 'uom',                  title: '单位 ',	width: 100 },
 			{field: 'lotatt11',		        title: '储存条件',	width: 130 },
@@ -77,13 +80,21 @@ $(function() {
 		}
 	});
 
+
+	//委托方下拉框
+	$('#toolbar #enterpriseName').combobox({
+		// panelHeight: 'auto',
+		url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox&type=client',
+		valueField:'id',
+		textField:'value'
+	});
 });
 
 
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseName:$('#enterpriseName').val(),
+		enterpriseName:$('#enterpriseName').combobox('getValue'),
 		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		lotatt12:$('#lotatt12').val(),
@@ -94,7 +105,10 @@ var doSearch = function(){
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
 		activeFlag : $('#activeFlag').combobox('getValue'),
-		reservedfield09 : $('#reservedfield09').combobox('getValue')
+		reservedfield09 : $('#reservedfield09').combobox('getValue'),
+		sku : $('#sku').val(),
+		locationid : $('#locationid').val(),
+		lotatt10 : $('#lotatt10').combobox('getValue')
 	});
 };
 
@@ -105,7 +119,7 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
-		param.put("enterpriseName",$('#enterpriseName').val());
+		param.put("enterpriseName",$('#enterpriseName').combobox('getValue'));
 		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
 		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("lotatt12",$('#lotatt12').val());
@@ -117,9 +131,12 @@ var doExport = function(){
 		param.put("lotatt05",$('#lotatt05').val());
 		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
 		param.put("reservedfield09",$('#reservedfield09').combobox('getValue'));
+		param.put("sku",$('#sku').val());
+		param.put("locationid",$('#locationid').val());
+		param.put("lotatt10",$('#lotatt10').combobox('getValue'));
 
 		//--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchEnterInvLocationDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchEnterInvLocationDataToExcelSum", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();
@@ -151,7 +168,7 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-							<th>单据号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 
 							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
@@ -186,7 +203,17 @@ var doExport = function(){
 									<option value="0">非医疗器械</option>
 								</select>
 							</td>
-							<td colspan="1">
+
+						</tr>
+						<tr>
+							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>库存地点(货架号)</th><td><input type='text' id='locationid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

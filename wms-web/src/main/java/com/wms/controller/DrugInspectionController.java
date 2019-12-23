@@ -159,14 +159,25 @@ public class DrugInspectionController {
 	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
 		return drugControlService.showSearchEnterInvLocationDatagrid(pager, query);
 	}
-
+	//统计分析-入库信息
+	@Login
+	@RequestMapping(params = "showSearchEnterInvLocationDatagridSum")
+	@ResponseBody
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagridSum(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		return drugControlService.showSearchEnterInvLocationDatagridSum(pager, query);
+	}
 
 	@Login
 	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcel")
 	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
 		drugControlService.exportSearchEnterInvLocationDataToExcel(response, form);
 	}
-
+	//统计分析-入库信息
+	@Login
+	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcelSum")
+	public void exportSearchEnterInvLocationDataToExcelSum(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
+		drugControlService.exportSearchEnterInvLocationDataToExcelSum(response, form);
+	}
 
     /**************************************出库信息****************************************/
 

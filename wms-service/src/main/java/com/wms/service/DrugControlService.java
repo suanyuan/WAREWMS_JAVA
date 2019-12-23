@@ -228,6 +228,10 @@ public class DrugControlService extends BaseService {
         return superClassMap;
     }
 
+
+
+
+
 	/**************************************库存信息****************************************/
 	public EasyuiDatagrid<SearchInvLocation> showSearchInvLocationDatagrid(EasyuiDatagridPager pager, SearchInvLocation query) {
 		EasyuiDatagrid<SearchInvLocation> datagrid = new EasyuiDatagrid<SearchInvLocation>();
@@ -334,7 +338,7 @@ public class DrugControlService extends BaseService {
 			e.printStackTrace();
 		}
 	}
-	//出库信息-统计
+	//库存信息-统计
 	public void exportSearchInvLocationDataToExcelSum(HttpServletResponse response,SearchInvLocation form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
 		cookie.setMaxAge(60);
@@ -430,7 +434,7 @@ public class DrugControlService extends BaseService {
 //		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
-     /*出库信息-统计*/
+     /*库存信息-统计*/
 	public LinkedHashMap<String, String> getSearchInvLocationLeadToFiledPublicQuestionBankSum() {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 		superClassMap.put("enterpriseName", "委托方企业名称");
@@ -454,6 +458,13 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
+
+
+
+
+
+
+
 	/**************************************入库信息****************************************/
 	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
 		EasyuiDatagrid<SearchEnterInvLocation> datagrid = new EasyuiDatagrid<SearchEnterInvLocation>();
@@ -472,6 +483,25 @@ public class DrugControlService extends BaseService {
 		datagrid.setRows(searchEnterInvLocationList);
 		return datagrid;
 	}
+	//统计分析-入库信息
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagridSum(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		EasyuiDatagrid<SearchEnterInvLocation> datagrid = new EasyuiDatagrid<SearchEnterInvLocation>();
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(pager.getPage());
+		mybatisCriteria.setPageSize(pager.getRows());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationSum(mybatisCriteria);
+		for (SearchEnterInvLocation searchEnterInvLocation : searchEnterInvLocationList) {
+			//计算数量
+			if(searchEnterInvLocation.getQty()!=null&&searchEnterInvLocation.getQty1()!=null) {
+				searchEnterInvLocation.setQtyeach(searchEnterInvLocation.getQty() * searchEnterInvLocation.getQty1());
+			}
+		}
+		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationCount(mybatisCriteria));
+		datagrid.setRows(searchEnterInvLocationList);
+		return datagrid;
+	}
+
 
 	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
@@ -533,6 +563,67 @@ public class DrugControlService extends BaseService {
 			e.printStackTrace();
 		}
 	}
+	//统计分析-入库信息
+	public void exportSearchEnterInvLocationDataToExcelSum(HttpServletResponse response,SearchEnterInvLocation form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getSearchEnterInvLocationLeadToFiledPublicQuestionBankSum();
+			// excel的sheetName
+			String sheetName = "入库信息";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="入库信息"+timeNow;
+			// excel要导出的数据
+			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationSum(mybatisCriteria);
+			// 导出
+			if (searchEnterInvLocationList == null || searchEnterInvLocationList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+				for (SearchEnterInvLocation s: searchEnterInvLocationList) {
+//					//时间格式转换
+//					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+//					Date date=null;
+//					try {
+//						if(s.getLicenseExpiryDate()!=null) {
+//							date = sdf.parse(s.getLicenseExpiryDate());
+//						}
+//					} catch (ParseException e) {
+//						continue;
+//					}finally {
+//						if(date!=null) {
+//							s.setLicenseExpiryDate(sdf.format(date));
+//						}
+//					}
+//
+					//库存数量
+					if(s.getQty()!=null&&s.getQty1()!=null) {
+						s.setQtyeach(s.getQty() * s.getQty1());
+					}
+					//质量状态
+					if (s.getLotatt10() != null) {
+						List<EasyuiCombobox> comboboxList = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
+						for (EasyuiCombobox easyuiCombobox : comboboxList) {
+							if(s.getLotatt10().equals(easyuiCombobox.getId())){
+								s.setLotatt10(easyuiCombobox.getValue());
+								break;
+							}
+						}
+					}
+				}
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 得到导出Excle时题型的英中文map
@@ -561,6 +652,36 @@ public class DrugControlService extends BaseService {
 //		superClassMap.put("qty1", "换算率");
 		return superClassMap;
 	}
+    //统计分析-入库信息
+	public LinkedHashMap<String, String> getSearchEnterInvLocationLeadToFiledPublicQuestionBankSum() {
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("lotatt14", "入库单号");
+		superClassMap.put("enterpriseName", "委托方企业名称");
+		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("type", "入库类型");
+		superClassMap.put("sku", "产品代码");
+		superClassMap.put("lotatt12", "产品名称");
+		superClassMap.put("descrc", "规格/型号");
+		superClassMap.put("lotatt15", "生产企业");
+		superClassMap.put("reservedfield06", "生产企业许可证号/备案凭证号");
+		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
+		superClassMap.put("lotatt04", "生产批号");
+		superClassMap.put("lotatt05", "序列号");
+		superClassMap.put("lotatt01", "生产日期");
+		superClassMap.put("lotatt02", "有效期/失效期");
+ 		superClassMap.put("qty", "件数");
+		superClassMap.put("qtyeach", "数量");
+		superClassMap.put("uom", "单位");
+		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("locationid", "库存地点(货架号)");
+		superClassMap.put("lotatt10", "质量状态");
+		superClassMap.put("notes", "备注");
+//		superClassMap.put("qty1", "换算率");
+		return superClassMap;
+	}
+
+
+
 
 
     /**************************************出库信息****************************************/

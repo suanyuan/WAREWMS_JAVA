@@ -28,6 +28,8 @@ public interface SearchBasCustomerMybatisDao extends BaseDao {
 
     //入库信息
     List<SearchEnterInvLocation> querySearchEnterInvLocation(MybatisCriteria criteria);
+    //入库信息-统计
+    List<SearchEnterInvLocation> querySearchEnterInvLocationSum(MybatisCriteria criteria);
 
     int querySearchEnterInvLocationCount(MybatisCriteria criteria);
 

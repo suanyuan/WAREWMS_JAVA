@@ -21,9 +21,12 @@ public class SearchEnterInvLocation implements Serializable {
     private String descrc;           //规格/型号
     private String lotatt14;          //入库单号
     private String lotatt15;          //生产企业
+    private String reservedfield06;          //生产企业许可证号/备案凭证号
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
     private String lotatt05;         //序列号
+    private String lotatt01;         //生产日期
+    private String lotatt02;         //有效期(或者失效期)
     private String lotatt01Andlotatt02;         //生产日期和有效期(或者失效期)
     private Double qty;              //件数
     private Double qtyeach;          //数量
@@ -42,5 +45,6 @@ public class SearchEnterInvLocation implements Serializable {
     private String lotatt03EndDate;           //入库日期结束
     private String activeFlag;  //是否合作
     private String reservedfield09;//是否是医疗器械
+    private String sku;//产品代码
 
 }
