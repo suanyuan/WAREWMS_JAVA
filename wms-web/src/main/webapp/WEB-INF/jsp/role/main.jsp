@@ -57,8 +57,8 @@ $(function() {
 	        	data : dataArray,
 	            fitColumns:true, singleSelect:true,rownumbers:true,height:'auto',
 	            columns:[[
-	                {field:'menuName',title:'可使用表單',width:100},
-                    {field: 'btnSetMenu',title: '可使用按钮',	width: 120, formatter:function(value,rowData,rowIndex){
+	                {field:'menuName',title:'可使用表單',width:20},
+                    {field: 'btnSetMenu',title: '可使用按钮',width: 120, formatter:function(value,rowData,rowIndex){
                             var result = "";
                             if(value){
                                 for(var i = 0; i < value.length; i++){
