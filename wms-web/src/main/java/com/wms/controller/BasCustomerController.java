@@ -189,6 +189,15 @@ public class BasCustomerController {
 		return basCustomerService.getOperateTypeCombobox();
 	}
 
+	//所有客户
+	@Login
+	@RequestMapping(params = "getCustomerNameCombobox")
+	@ResponseBody
+	public List<EasyuiCombobox> getCustomerNameCombobox(String type) {
+		return basCustomerService.getCustomerNameCombobox(type);
+	}
+
+
 
 
 

@@ -79,14 +79,20 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-
+	//委托方下拉框
+    $('#enterpriseName').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox&type=client',
+        valueField:'id',
+        textField:'value'
+    });
 });
 
 
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseName : $('#enterpriseName').val(),
+		enterpriseName : $('#enterpriseName').combobox('getValue'),
 		clientStartDate : $('#clientStartDate').datebox('getValue'),
 		clientEndDate : $('#clientEndDate').datebox('getValue'),
 		activeFlag : $('#activeFlag').combobox('getValue')
@@ -101,7 +107,7 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        param.put("enterpriseName",$('#enterpriseName').val());
+        param.put("enterpriseName",$('#enterpriseName').combobox('getValue'));
         param.put("clientStartDate",$('#clientStartDate').datebox('getValue'));
         param.put("clientEndDate",$('#clientEndDate').datebox('getValue'));
         param.put("activeFlag",$('#activeFlag').combobox('getValue'));

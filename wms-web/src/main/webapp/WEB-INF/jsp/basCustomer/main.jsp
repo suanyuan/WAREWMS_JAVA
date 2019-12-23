@@ -134,6 +134,16 @@ $(function() {
 			<%--ezuiFormClear(ezuiForm);--%>
 		<%--}--%>
 	<%--}).dialog('close');--%>
+
+
+
+    $('#descrCQ').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
 });
 
 /* 新增 */
@@ -567,7 +577,7 @@ var doSearch = function(){
         /*operateType : $('#operateType').combobox('getValue'),*/
 		activeFlag : $('#activeFlagQ').combobox('getValue'),
 
-        descrC : $('#descrCQ').val(),
+        descrC : $('#descrCQ').combobox('getValue'),
         enterpriseNo :$('#enterpriseNoQ').val(),
 	});
 };

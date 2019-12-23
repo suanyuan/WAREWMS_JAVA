@@ -16,6 +16,11 @@ import java.util.Map;
 public interface BasCustomerMybatisDao extends BaseDao {
 
 	public List<BasCustomer> queryCustomerTypeByAll();
+	//所有客户名称
+	public List<BasCustomer> queryCustomerNameByAll(@Param("type") String type);
+
+
+
 
 	public List<BasCustomer> queryOperateTypeByAll();
 	public List<BasCustomer> queryListByCustomerid(Object customerid);

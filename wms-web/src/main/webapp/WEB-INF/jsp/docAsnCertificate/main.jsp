@@ -111,6 +111,18 @@ $(function() {
 
 
 //查询条件货主字段初始化放大镜 在info页面
+
+
+
+	//货主代码下拉框
+    $('#customerid').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/gspCustomerController.do?getCustomerNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
+
+
 });
 
 var add = function(){
@@ -227,7 +239,7 @@ var commit = function(){
 
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		customerid : $('#customerid').val(),
+		customerid : $('#customerid').combobox('getValue'),
 		sku : $('#sku').val(),
 		lotatt04 : $('#lotatt04').val(),
 		//addtime : $('#addtime').val(),

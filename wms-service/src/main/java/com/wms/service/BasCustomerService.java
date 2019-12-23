@@ -31,10 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("basCustomerService")
 public class BasCustomerService extends BaseService {
@@ -669,6 +666,25 @@ public class BasCustomerService extends BaseService {
 		}
 		return comboboxList;
 	}
+	public List<EasyuiCombobox> getCustomerNameCombobox(String type) {
+		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+		EasyuiCombobox combobox = null;
+		if(type==null ){
+			type="";
+		}
+		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryCustomerNameByAll(type);
+		if(basCustomerList != null && basCustomerList.size() > 0){
+			for(BasCustomer basCustomer : basCustomerList){
+				combobox = new EasyuiCombobox();
+				combobox.setId(basCustomer.getDescrC());
+				combobox.setValue(basCustomer.getDescrC());
+				comboboxList.add(combobox);
+			}
+		}
+		return comboboxList;
+	}
+
+
 	public List<EasyuiCombobox> getOperateTypeCombobox() {
 		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
 		EasyuiCombobox combobox = null;

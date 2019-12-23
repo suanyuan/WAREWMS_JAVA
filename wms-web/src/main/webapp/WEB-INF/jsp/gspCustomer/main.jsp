@@ -368,7 +368,7 @@ function enterpriseInfo(enterpriseId){
             striped: true,
             queryParams:{
                 isUse : '1',
-                // enterpriseType:'default',
+                enterpriseType:'default',
                 <%--enterpriseType:'${enterpriseType}'--%>
             },
             fit:true,
@@ -434,7 +434,7 @@ function enterpriseInfo(enterpriseId){
             shorthandName : $('#enterpriseSearchGridToolbar_gspCustomer #shorthandName1').textbox("getValue"),
             // type:'noCustomer',
             // enterpriseType:'default',
-
+            enterpriseType:'default',
             isUse : '1'
 
         });

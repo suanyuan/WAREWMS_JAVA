@@ -894,7 +894,17 @@ where 1=1
 	where codeid = 'ENT_TYP'
     order by show_sequence
 </select>
+	<!-- 查询所有客户名称名称 -->
+	<select id="queryCustomerNameByAll" resultMap="BaseResultMap"  parameterType="Object">
+		select DISTINCT descr_c from bas_customer where 1=1
+		<if test="type == 'client' " >
+			and customer_type = 'OW'
+		</if>
+		<if test="type == 'supplier' " >
+			and customer_type = 'VE'
+		</if>
 
+	</select>
 <!-- 删除客户记录判断 -->
 <select id="basCustomerCheck" statementType="CALLABLE" parameterType="java.util.Map">
 	   {call SPBAS_Check(#{warehouseid,mode=IN,jdbcType=VARCHAR},'Delete','BAS_CUSTOMER',#{enterpriseId,mode=IN,jdbcType=VARCHAR},#{customerType,mode=IN,jdbcType=VARCHAR},'','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
