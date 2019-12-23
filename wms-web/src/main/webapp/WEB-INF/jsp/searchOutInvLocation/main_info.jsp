@@ -18,7 +18,7 @@ $(function() {
 
 
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
-		url : '<c:url value="/drugInspectionController.do?showSearchOutInvLocationDatagrid"/>',
+		url : '<c:url value="/drugInspectionController.do?showSearchOutInvLocationDatagridSum"/>',
 		method:'POST',
 		toolbar : '#toolbar',
 		title: '',
@@ -39,20 +39,26 @@ $(function() {
 			}
 		},
 		columns : [[
+			{field: 'orderno',		      title: '出库单号',	width: 150 },
 			{field: 'enterpriseName',		title: '委托方企业名称',	width: 150 },
 			{field: 'lotatt03',		        title: '出库日期',	width: 100 },
 			{field: 'type',		            title: '出库类型',	width: 100 },
+			{field: 'sku',		        title: '产品代码',	width: 100 },
 			{field: 'lotatt12',		        title: '产品名称',	width: 150 },
 			{field: 'descrc',		        title: '规格/型号',	width: 150 },
 			{field: 'lotatt15',		        title: '生产企业',	width: 150 },
+			{field: 'reservedfield06',		title: '生产企业许可证号/备案凭证号',	width: 170 },
 			{field: 'lotatt06',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
-			{field: 'lotatt04',		        title: '生产批号/序列号',	width: 100 },
-			{field: 'lotatt01Andlotatt02',		        title: '生产日期和有效期(或者失效期)',	width: 200 },
-			// {field: 'lotatt05',		        title: '序列号',	width: 100 },
+			{field: 'lotatt04',		        title: '生产批号',	width: 100 },
+			{field: 'lotatt05',		        title: '序列号',	width: 100 },
+			{field: 'lotatt01',		        title: '生产日期',	width: 100 },
+			{field: 'lotatt02',		        title: '有效期/失效期',	width: 100 },
 			{field: 'lotatt11',		        title: '储存条件',	width: 130 },
-			{field: 'uom',                  title: '单位 ',	width: 100 },
-			// {field: 'qty',                  title: '库存件数 ',	width: 100 },
+			{field: 'qty',                  title: '库存件数 ',	width: 100 },
 			{field: 'qtyeach',		        title: '数量 ',	width: 100 },
+			{field: 'uom',                  title: '单位 ',	width: 100 },
+			{field: 'locationid',           title: '库存地点(货架号)',	width: 120 },
+			{field: 'lotatt10',             title: '质量状态 ',	width: 100,formatter:ZL_TYPstatusFormatter},
 			{field: 'consigneeID',		    title: '收货客户名称',	width: 100 },
 			{field: 'caddress1',	        title: '收货地址',	width: 250 },
 			{field: 'contact',		            title: '联系人',	width: 100 },
@@ -77,14 +83,21 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-
+//委托方下拉框
+	$('#toolbar #enterpriseName').combobox({
+		// panelHeight: 'auto',
+		url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox&type=client',
+		valueField:'id',
+		textField:'value'
+	});
 });
 
 
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseName:$('#enterpriseName').val(),
+		orderno:$('#orderno').val(),
+		enterpriseName:$('#enterpriseName').combobox('getValue'),
 		outStartDate:$('#outStartDate').datebox('getValue'),
 		outEndDate:$('#outEndDate').datebox('getValue'),
 		lotatt12:$('#lotatt12').val(),
@@ -94,7 +107,10 @@ var doSearch = function(){
 		lotatt05 : $('#lotatt05').val(),
 		consigneeID:$('#consigneeID').val(),
 		activeFlag : $('#activeFlag').combobox('getValue'),
-		reservedfield09 : $('#reservedfield09').combobox('getValue')
+		reservedfield09 : $('#reservedfield09').combobox('getValue'),
+		sku : $('#sku').val(),
+		locationid : $('#locationid').val(),
+		lotatt10 : $('#lotatt10').combobox('getValue')
 
 	});
 };
@@ -106,7 +122,8 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
-		param.put("enterpriseName",$('#enterpriseName').val());
+		param.put("orderno",$('#orderno').val());
+		param.put("enterpriseName",$('#enterpriseName').combobox('getValue'));
 		param.put("outStartDate",$('#outStartDate').datebox('getValue'));
 		param.put("outEndDate",$('#outEndDate').datebox('getValue'));
 		param.put("lotatt12",$('#lotatt12').val());
@@ -116,9 +133,13 @@ var doExport = function(){
 		param.put("lotatt05",$('#lotatt05').val());
 		param.put("consigneeID",$('#consigneeID').val());
 		param.put("activeFlag",$('#activeFlag').combobox('getValue'));
+		param.put("reservedfield09",$('#reservedfield09').combobox('getValue'));
+		param.put("sku",$('#sku').val());
+		param.put("locationid",$('#locationid').val());
+		param.put("lotatt10",$('#lotatt10').combobox('getValue'));
 
 		//--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchOutInvLocationDataToExcel", param);
+        var formId = ajaxDownloadFile(sy.bp()+"/drugInspectionController.do?exportSearchOutInvLocationDataToExcelSum", param);
         downloadCheckTimer = window.setInterval(function () {
             window.clearInterval(downloadCheckTimer);
             $('#'+formId).remove();
@@ -150,7 +171,7 @@ var doExport = function(){
 					<legend><spring:message code='common.button.query'/></legend>
 					<table style="text-align: right">
 						<tr >
-							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>出库单号</th><td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>出库日期(开始)</th><td><input type='text' id='outStartDate' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>出库日期(结束)</th><td><input type='text' id='outEndDate' class='easyui-datebox' size='16' data-options=''/></td>
 						</tr>
@@ -165,6 +186,8 @@ var doExport = function(){
 							<th>收货客户名称</th><td><input type='text' id='consigneeID' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
+							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-combobox' size='16' data-options=''/></td>
+
 							<th >是否合作</th>
 							<td>
 								<select id="activeFlag" class="easyui-combobox"  style="width:135px;" data-options="panelHeight:'auto',">
@@ -181,7 +204,16 @@ var doExport = function(){
 									<option value="0">非医疗器械</option>
 								</select>
 							</td>
-							<td colspan="1">
+						</tr>
+						<tr>
+							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>库存地点(货架号)</th><td><input type='text' id='locationid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
+							<td colspan="2">
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

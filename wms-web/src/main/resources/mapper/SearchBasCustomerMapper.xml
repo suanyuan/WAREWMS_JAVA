@@ -164,14 +164,17 @@
     <!-- 查询条件 出库信息 -->
     <sql id="Example_Where_Clause3">
         <trim  suffixOverrides="," >
+            <if test="condition.orderno != null and condition.orderno != ''" >
+                and a.orderno like concat('%', #{condition.orderno},'%')
+            </if>
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and r.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.outStartDate != null and condition.outStartDate != ''" >
-                and c.lotatt03 &gt;=  #{condition.outStartDate,jdbcType=VARCHAR}
+                and DATE_FORMAT(aa.edittime,'%Y-%m-%d') &gt;=  #{condition.outStartDate,jdbcType=VARCHAR}
             </if>
             <if test="condition.outEndDate != null and condition.outEndDate != ''" >
-                and c.lotatt03 &lt;=  #{condition.outEndDate,jdbcType=VARCHAR}
+                and DATE_FORMAT(aa.edittime,'%Y-%m-%d') &lt;=  #{condition.outEndDate,jdbcType=VARCHAR}
             </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and c.lotatt12 like concat('%', #{condition.lotatt12},'%')
@@ -196,6 +199,15 @@
             </if>
             <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
                 AND s.reservedfield09=#{condition.reservedfield09}
+            </if>
+            <if test="condition.sku!= null and condition.sku != ''" >
+                and a.sku like concat('%', #{condition.sku},'%')
+            </if>
+            <if test="condition.locationid!= null and condition.locationid != ''" >
+                and b.location like concat('%', #{condition.locationid},'%')
+            </if>
+            <if test="condition.lotatt10!= null and condition.lotatt10 != ''" >
+                and c.`lotatt10` = #{condition.lotatt10}
             </if>
         </trim>
     </sql>
@@ -443,6 +455,33 @@
         b.qty, p.`qty1`,
         CONCAT(IFNULL(c.`lotatt04`,''),'/',IFNULL(c.`lotatt05`,'')) AS lotatt04,
         CONCAT(IFNULL(DATE_FORMAT(c.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
+        c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
+        s.`descr_c` descrc,
+        bb.codename_c uom,`bb1`.codename_c type,aa.notes,DATE_FORMAT(aa.edittime,'%Y-%m-%d') lotatt03,
+        aa.consigneeid consigneeID,aa.`c_address1` caddress1,aa.C_Contact contact,aa.`c_tel1` ctel1
+        FROM  `doc_order_details` a
+        LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
+        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
+        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
+        LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
+        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='SO_TYP') bb1 ON  bb1.code=aa.ordertype
+        WHERE aa.sostatus='99'
+        <include refid="Example_Where_Clause3"/>
+        ORDER BY aa.edittime DESC
+        <if test="limitClause != null and limitClause != ''" >
+            ${limitClause}
+        </if>
+    </select>
+<!-- 查询出库信息列表-统计 -->
+    <select id="querySearchOutInvLocationSum"  resultType="com.wms.entity.SearchOutInvLocation" parameterType="Object">
+        SELECT
+        r.descr_c enterpriseName,r.active_flag activeFlag,a.sku,a.orderno,s.reservedfield06,
+        b.qty,b.location locationid,p.`qty1`,
+        c.`lotatt04`,c.`lotatt05`,
+        DATE_FORMAT(c.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
         c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
         s.`descr_c` descrc,
         bb.codename_c uom,`bb1`.codename_c type,aa.notes,DATE_FORMAT(aa.edittime,'%Y-%m-%d') lotatt03,

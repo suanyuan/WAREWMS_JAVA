@@ -185,7 +185,7 @@ var doExport = function(){
 							<td >
 						</tr>
 						<tr>
-							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>委托方企业名称</th><td><input type='text' id='enterpriseName' class='easyui-combobox' size='16' data-options=''/></td>
 
 							<th >是否合作</th>
 							<td>
