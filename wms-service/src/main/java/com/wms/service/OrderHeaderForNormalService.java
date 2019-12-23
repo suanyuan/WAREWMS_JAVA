@@ -1389,6 +1389,8 @@ public class OrderHeaderForNormalService extends BaseService {
         for (int i = 0; i < odForNormalList.size(); i++) {
             docOrderDetail = new OrderDetailsForNormal();
             BeanUtils.copyProperties(odForNormalList.get(i), docOrderDetail);
+            //样品/投诉单号
+            docOrderDetail.setRededi04(docOrderDetail.getDEdi04());
             //产品代码 odForNormal.getSku();
             Map<String, Object> param2 = new HashMap<>();
             param2.put("customerid", docOrderDetail.getCustomerid());
