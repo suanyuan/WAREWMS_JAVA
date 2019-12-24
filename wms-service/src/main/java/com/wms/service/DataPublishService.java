@@ -68,7 +68,7 @@ public class DataPublishService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
-    @Autowired
+//    @Autowired
 //    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
     /**
      * 下发数据
