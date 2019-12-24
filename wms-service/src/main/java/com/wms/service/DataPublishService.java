@@ -279,11 +279,11 @@ public class DataPublishService extends BaseService {
                     skuForm.setOrderbysql(register.getProductRegisterId());
 
                     //下发注册证关系
-                    ProductRegisterRelation relation = new ProductRegisterRelation();
-                    relation.setSpecsId(f.getSpecsId());
-                    relation.setProductRegisterId(register.getProductRegisterId());
-                    relation.setActiveFlag("1");
-                    productRegisterRelationMybatisDao.updateSelectiveByspecsIdAndproductRegisterId(relation);
+//                    ProductRegisterRelation relation = new ProductRegisterRelation();
+//                    relation.setSpecsId(f.getSpecsId());
+//                    relation.setProductRegisterId(register.getProductRegisterId());
+//                    relation.setActiveFlag("1");
+//                    productRegisterRelationMybatisDao.updateSelectiveByspecsIdAndproductRegisterId(relation);
                 }
                 skuForm.setReservedfield06(specObj.getLicenseOrRecordNo());
                 skuForm.setReservedfield07(specObj.getColdHainMark());
