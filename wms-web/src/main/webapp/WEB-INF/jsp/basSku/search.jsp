@@ -50,6 +50,7 @@
                 {field: 'sku',		title: '代码',	width: '20%' },
                 {field: 'descrC',		title: '名称',	width: '20%' },
                 {field: 'descrE',		title: '型号规格',	width: '20%' },
+                {field: 'clientName',		title: '货主',	width: '20%' },
                 {field: '_operate',		title: '操作',	width: '20%',
                     formatter: formatOperProductSearch_${target}
                 }

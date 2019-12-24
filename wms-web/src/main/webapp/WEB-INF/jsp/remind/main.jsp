@@ -223,6 +223,8 @@
                         rownumbers:true,
                         singleSelect:true,
                         columns : [[
+                            {field: 'enterpriseName',		title: '货主',	width: 220 },
+
                             {field: 'locationid',		title: '货位',	width: 220 },
                             {field: 'sku',		title: '产品代码',	width: 200 },
                             {field: 'specsName',		title: '规格',	width: 200 },
@@ -1108,19 +1110,19 @@
 
 <div id='ezuiDialogInvlotloc' style='padding: 10px;display: none'>
     <div id='clientTB7' class='datagrid-toolbar' style=''>
-        <%--<fieldset >--%>
-        <%--<legend>企业信息</legend>--%>
-        <%--<table>--%>
-        <%--<tr>--%>
-        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<td>--%>
-        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-        <%--</td>--%>
-        <%--</tr>--%>
-        <%--</table>--%>
-        <%--</fieldset>--%>
+        <fieldset >
+        <legend>企业信息</legend>
+        <table>
+        <tr>
+        <th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>
+        <th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>
+        <td>
+        <a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+        <a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
+        </td>
+        </tr>
+        </table>
+        </fieldset>
     </div>
     <table id="dataGridInvlotloc">
 

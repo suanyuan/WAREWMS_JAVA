@@ -85,6 +85,16 @@ $(function() {
 		}
 	});
 
+
+
+
+    //货主代码下拉框
+    $('#customerid').combobox({
+        // panelHeight: 'auto',
+        url:sy.bp()+'/gspCustomerController.do?getCustomerNoCombobox',
+        valueField:'id',
+        textField:'value'
+    });
 });
 
 
@@ -93,7 +103,7 @@ var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		// lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		// lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
-		customerid : $('#customerid').val(),
+		customerid : $('#customerid').combobox('getValue'),
 		lotatt12:$('#lotatt12').val(),
 		skudescrc:$('#descrc').val(),
 		lotatt04 : $('#lotatt04').val(),
@@ -109,7 +119,7 @@ var doExport = function(){
 		param.put("token", token);
 		// param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
 		// param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
-		param.put("customerid",$('#customerid').val());
+		param.put("customerid",$('#customerid').combobox('getValue'));
 		param.put("lotatt12",$('#lotatt12').val());
 		param.put("skudescrc",$('#descrc').val());
 		param.put("lotatt04",$('#lotatt04').val());

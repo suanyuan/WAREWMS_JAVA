@@ -110,10 +110,13 @@ public class GspInstrumentCatalogController {
 
 	@Login
 	@RequestMapping(params = "toSearch")
-	public ModelAndView toSearch(String target,String id){
+	public ModelAndView toSearch(String target,String id,String version,String classifyId){
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("id", id);
 		model.put("target",target);
+		model.put("version",version);
+		model.put("classifyId",classifyId);
+
 		return new ModelAndView("gspInstrumentCatalog/search",model);
 	}
 
