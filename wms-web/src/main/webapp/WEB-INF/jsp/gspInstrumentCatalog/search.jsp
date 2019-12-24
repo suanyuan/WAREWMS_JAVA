@@ -50,7 +50,7 @@
             nowrap: true,
             striped: true,
             collapsible:false,
-            queryParams:{'enterpriseId':'${id}'},
+            queryParams:{'enterpriseId':'${id}',version:'${version}',classifyId:'${classifyId}'},
             pagination:true,
             rownumbers:true,
             singleSelect : false,
