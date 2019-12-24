@@ -69,7 +69,7 @@ public class DataPublishService extends BaseService {
     @Autowired
     private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
     @Autowired
-    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
+//    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
     /**
      * 下发数据
      * @param no
