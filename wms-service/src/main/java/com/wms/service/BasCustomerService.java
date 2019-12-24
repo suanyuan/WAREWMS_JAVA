@@ -683,6 +683,23 @@ public class BasCustomerService extends BaseService {
 		}
 		return comboboxList;
 	}
+	public List<EasyuiCombobox> getCustomerNameComboboxAA(String type) {
+		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
+		EasyuiCombobox combobox = null;
+		if(type==null ){
+			type="";
+		}
+		List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryCustomerNameByAll(type);
+		if(basCustomerList != null && basCustomerList.size() > 0){
+			for(BasCustomer basCustomer : basCustomerList){
+				combobox = new EasyuiCombobox();
+				combobox.setId(basCustomer.getCustomerid());
+				combobox.setValue(basCustomer.getDescrC());
+				comboboxList.add(combobox);
+			}
+		}
+		return comboboxList;
+	}
 
 
 	public List<EasyuiCombobox> getOperateTypeCombobox() {

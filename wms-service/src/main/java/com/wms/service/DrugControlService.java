@@ -440,10 +440,14 @@ public class DrugControlService extends BaseService {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 		superClassMap.put("enterpriseName", "委托方企业名称");
 		superClassMap.put("supplierName", "供应商");
+		superClassMap.put("lotatt14", "入库单号");
 		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("inventoryage", "库龄(天)");
+		superClassMap.put("sku", "产品代码");
 		superClassMap.put("lotatt12", "产品名称");
 		superClassMap.put("descrc", "规格/型号");
 		superClassMap.put("lotatt15", "生产企业");
+		superClassMap.put("reservedfield06", "生产企业许可证号/备案凭证号");
 		superClassMap.put("lotatt06", "产品注册证号/备案凭证号");
 		superClassMap.put("lotatt04", "生产批号");
 		superClassMap.put("lotatt05", "序列号");
@@ -455,6 +459,7 @@ public class DrugControlService extends BaseService {
 		superClassMap.put("locationid", "库存地点(货架号)");
 		superClassMap.put("lotatt11", "储存条件");
 		superClassMap.put("lotatt10", "质量状态");
+		superClassMap.put("productLineName", "产品线");
 		superClassMap.put("notes", "备注");
 		superClassMap.put("qty1", "换算率");
 		return superClassMap;

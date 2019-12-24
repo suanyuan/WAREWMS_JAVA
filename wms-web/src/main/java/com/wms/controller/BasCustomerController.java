@@ -196,6 +196,13 @@ public class BasCustomerController {
 	public List<EasyuiCombobox> getCustomerNameCombobox(String type) {
 		return basCustomerService.getCustomerNameCombobox(type);
 	}
+//所有客户
+	@Login
+	@RequestMapping(params = "getCustomerNameComboboxAA")
+	@ResponseBody
+	public List<EasyuiCombobox> getCustomerNameComboboxAA(String type) {
+		return basCustomerService.getCustomerNameComboboxAA(type);
+	}
 
 
 

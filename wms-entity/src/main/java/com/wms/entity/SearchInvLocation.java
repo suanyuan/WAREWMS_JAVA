@@ -17,9 +17,11 @@ public class SearchInvLocation implements Serializable {
     private String supplierName;      //供应商
     @JSONField(format = "yyyy-MM-dd")
     private String lotatt03;          //入库日期
+    private String lotatt14;          //入库单号
     private String lotatt12;          //产品名称
     private String descrc;           //规格/型号
     private String lotatt15;          //生产企业
+    private String reservedfield06;          //生产企业许可证号/备案凭证号
     private String lotatt06;          //产品注册证号/备案凭证号
     private String lotatt04;          //生产批号
     private String lotatt05;         //序列号
@@ -42,6 +44,9 @@ public class SearchInvLocation implements Serializable {
     private String lotatt01End;         //生产日期
     private String lotatt02Start;         //效期
     private String lotatt02End;         //效期
+    private Integer inventoryage;         //库龄
+    private String productLineName;         //产品线
+    private String sku;         //产品代码
 
 
 }

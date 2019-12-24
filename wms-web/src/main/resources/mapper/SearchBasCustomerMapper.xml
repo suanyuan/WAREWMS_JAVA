@@ -74,8 +74,11 @@
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
                 and b.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
-            <if test="condition.supplierName != null and condition.supplierName != ''" >
-                and bve.descr_c like concat('%', #{condition.supplierName},'%')
+            <if test="condition.sku != null and condition.sku != ''" >
+                and s.sku like concat('%', #{condition.sku},'%')
+            </if>
+            <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
+                and a.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
             <if test="condition.lotatt01Start != null and condition.lotatt01Start != ''" >
                 and a.lotatt01 &gt;= #{condition.lotatt01Start}
@@ -89,26 +92,41 @@
             <if test="condition.lotatt02End != null and condition.lotatt02End != ''" >
                 and a.lotatt02 &lt;= #{condition.lotatt02End}
             </if>
-            <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-                and a.lotatt12 like concat('%', #{condition.lotatt12},'%')
-            </if>
-            <if test="condition.descrc != null and condition.descrc != ''" >
-                and s.`descr_c` like concat('%', #{condition.descrc},'%')
-            </if>
             <if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
                 and a.lotatt15 like concat('%', #{condition.lotatt15},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
                 and a.lotatt04 like concat('%', #{condition.lotatt04},'%')
             </if>
-            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-                and a.lotatt05 like concat('%', #{condition.lotatt05},'%')
-            </if>
             <if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
                 and a.lotatt06 like concat('%', #{condition.lotatt06},'%')
             </if>
+            <if test="condition.supplierName != null and condition.supplierName != ''" >
+                and bve.descr_c like concat('%', #{condition.supplierName},'%')
+            </if>
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and a.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
             <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
                 AND s.reservedfield09=#{condition.reservedfield09}
+            </if>
+            <if test="condition.lotatt14 != null and condition.lotatt14 != ''" >
+                and a.lotatt14 like concat('%', #{condition.lotatt14},'%')
+            </if>
+            <if test="condition.descrc != null and condition.descrc != ''" >
+                and s.`descr_c` like concat('%', #{condition.descrc},'%')
+            </if>
+            <if test="condition.productLineName != null and condition.productLineName != ''" >
+                and l.product_line_id like concat('%', #{condition.productLineName},'%')
+            </if>
+            <if test="condition.locationid != null and condition.locationid != ''" >
+                and i.locationid like concat('%', #{condition.locationid},'%')
+            </if>
+            <if test="condition.lotatt10 != null and condition.lotatt10 != ''" >
+                and a.`lotatt10` like concat('%', #{condition.lotatt10},'%')
+            </if>
+            <if test="condition.inventoryage != null and condition.inventoryage != ''" >
+                and DATEDIFF(NOW(),a.`lotatt03`) &lt;= #{condition.inventoryage}
             </if>
         </trim>
     </sql>
@@ -314,17 +332,18 @@
 <!-- 查询库存信息列表 统计 -->
     <select id="querySearchInvLocationSum"  resultType="com.wms.entity.SearchInvLocation" parameterType="Object">
         SELECT
-        i.locationid,i.`qty`,
-        p.`qty1`,
+        i.locationid,i.`qty`,p.`qty1`,
         b.descr_c enterpriseName,
-        a.`lotatt04`,a.`lotatt05`,
+        a.`lotatt04`,a.`lotatt05`,a.lotatt14,
         DATE_FORMAT(a.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(a.`lotatt02`,'%Y-%m-%d') lotatt02,
         a.`lotatt03`,a.`lotatt06`,a.`lotatt10`,a.`lotatt11`,a.`lotatt12`,a.`lotatt15`,
-        s.`descr_c` descrc,s.defaultreceivinguom,
-        bb.codename_c uom,bve.descr_c  supplierName
+        s.`descr_c` descrc,s.defaultreceivinguom,s.sku,s.reservedfield06,l.name productLineName,
+        bb.codename_c uom,bve.descr_c  supplierName,
+        DATEDIFF(NOW(),a.`lotatt03`) inventoryage
         FROM `inv_lot_loc_id` i
         LEFT JOIN `inv_lot_att` a ON a.lotnum=i.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
@@ -343,6 +362,7 @@
         FROM `inv_lot_loc_id` i
         LEFT JOIN `inv_lot_att` a ON a.lotnum=i.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` b ON s.`customerid`=b.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code

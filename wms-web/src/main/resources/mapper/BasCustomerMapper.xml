@@ -896,7 +896,7 @@ where 1=1
 </select>
 	<!-- 查询所有客户名称名称 -->
 	<select id="queryCustomerNameByAll" resultMap="BaseResultMap"  parameterType="Object">
-		select DISTINCT descr_c from bas_customer where 1=1
+		select customerid,descr_c from bas_customer where 1=1
 		<if test="type == 'client' " >
 			and customer_type = 'OW'
 		</if>
