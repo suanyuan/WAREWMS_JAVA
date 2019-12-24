@@ -712,7 +712,7 @@ var del = function(){
             $.each(checkedItems, function(index, item){
                 console.log(item);
                 $.ajax({
-                    async: false,
+                    async: true,
                     url : 'docOrderHeaderController.do?delete',
                     data : {orderno : item.orderno},
                     type : 'POST',
@@ -728,9 +728,12 @@ var del = function(){
                                 operateResult = operateResult + "订单编号：" + item.orderno + ",";
                                 operateResult = operateResult + "处理时错误：" + msg + "\n";
                             };
+
+                            ezuiDatagrid.datagrid('clearSelections');
                         } catch (e) {
                             msg = '<spring:message code="common.message.data.delete.failed"/>';
                         };
+
                     }
                 });
             })
@@ -822,7 +825,7 @@ var allocation = function(){
             });
 
 			$.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?allocation',
 				data : {orderno : item.orderno, returnSfOrder : returnSfOrder},
 				type : 'POST',
@@ -873,7 +876,7 @@ var deAllocation = function(){
 
 
             $.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?deAllocation',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -924,7 +927,7 @@ var picking = function(){
             });
 
             $.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?picking',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -974,7 +977,7 @@ var unPicking = function(){
                 text : '<spring:message code="common.message.data.processing"/>', interval : 100
             });
 			$.ajax({
-				async: false,
+				async: true,
 				url : 'docOrderHeaderController.do?unPicking',
 				data : {orderNo : item.orderno},
 				type : 'POST',
@@ -1025,7 +1028,7 @@ var unPacking = function(){
                     });
 
 					$.ajax({
-						async: false,
+						async: true,
 						url : 'docOrderHeaderController.do?unPacking',
 						data : {orderno : item.orderno},
 						type : 'POST',
@@ -1081,7 +1084,7 @@ var shipment = function(){
                 text : '<spring:message code="common.message.data.processing"/>', interval : 100
             });
             $.ajax({
-                async: false,
+                async: true,
                 url: 'docOrderHeaderController.do?shipment',
                 data: {orderno: item.orderno},
                 type: 'POST',
@@ -1140,7 +1143,7 @@ var cancel = function(){
                         text : '<spring:message code="common.message.data.processing"/>', interval : 100
                     });
 					$.ajax({
-						async: false,
+						async: true,
 						url : 'docOrderHeaderController.do?cancel',
 						data : {orderno : item.orderno},
 						type : 'POST',
