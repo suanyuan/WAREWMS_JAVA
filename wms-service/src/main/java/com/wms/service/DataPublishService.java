@@ -567,6 +567,12 @@ public class DataPublishService extends BaseService {
             form.setActiveFlag(Constant.IS_USE_NO);
             form.setOrderbysql(gspProductRegister.getProductRegisterId());
             basSkuService.editBasSku(form);
+
+            //如果已下发产品上一层的产品首营被删了  那就跳过
+            FirstBusinessApply firstBusinessApply =  firstBusinessApplyMybatisDao.queryById(b.getPutawayrule());
+            if(firstBusinessApply==null){
+                continue;
+            }
             firstBusinessApplyService.updateFirstState(b.getPutawayrule(),Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
 
             //2.失效产品首营申请
