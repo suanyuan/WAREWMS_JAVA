@@ -422,7 +422,7 @@ public class ImportOrderDataService {
                     orderHeader.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
                     orderHeader.setOrdertime(new Date());
                     orderHeader.setEdittime(new Date());
-                    orderHeader.setEdisendflag(Constant.IS_USE_YES);
+                    orderHeader.setEdisendflag(Constant.IS_USE_NO);
                     orderHeader.setArchiveflag(Constant.IS_USE_YES);
                     orderHeader.setSostatus("00");
                     orderHeader.setReleasestatus("Y");
