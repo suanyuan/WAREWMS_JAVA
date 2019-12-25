@@ -344,6 +344,9 @@ where 1=1
 	LEFT JOIN (select * from bas_codes where codeid = 'uom') c on c.codename_e = i.defaultreceivinguom
 
 	<include refid="Example_Where_Clause1"/>
+	and (IFNULL(fmqty,0) != 0 OR IFNULL(qtyallocated,0) != 0
+	OR IFNULL(I_RP,0) != 0 OR IFNULL(O_RP,0) != 0 OR IFNULL(I_MV,0) != 0 OR IFNULL(O_MV,0) != 0
+	OR IFNULL(QTYHOLDED,0) != 0 OR IFNULL(I_PA,0) != 0)
     order by fmcustomerid,fmsku,fmlocation
 
 </select>

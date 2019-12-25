@@ -324,6 +324,10 @@
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
+        AND (IFNULL(qty,0) != 0 OR IFNULL(qtyallocated,0) != 0 OR IFNULL(qtyrpin,0) != 0
+        OR IFNULL(qtyrpout,0) != 0 OR IFNULL(qtymvin,0) !=0
+        OR IFNULL(qtymvout,0) !=0
+        OR IFNULL(qtyonhold,0) != 0 OR IFNULL(qtypa,0) != 0)
         ORDER BY a.`lotatt03` DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
@@ -350,6 +354,10 @@
         LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
+        AND (IFNULL(qty,0) != 0 OR IFNULL(qtyallocated,0) != 0 OR IFNULL(qtyrpin,0) != 0
+        OR IFNULL(qtyrpout,0) != 0 OR IFNULL(qtymvin,0) !=0
+        OR IFNULL(qtymvout,0) !=0
+        OR IFNULL(qtyonhold,0) != 0 OR IFNULL(qtypa,0) != 0)
         ORDER BY a.`lotatt03` DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
@@ -369,6 +377,10 @@
         LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='ve'  AND ACTIVE_FLAG='1') bve ON bve.customerid=s.`sku_group6`
         WHERE 1=1
         <include refid="Example_Where_Clause1"/>
+        AND (IFNULL(qty,0) != 0 OR IFNULL(qtyallocated,0) != 0 OR IFNULL(qtyrpin,0) != 0
+        OR IFNULL(qtyrpout,0) != 0 OR IFNULL(qtymvin,0) !=0
+        OR IFNULL(qtymvout,0) !=0
+        OR IFNULL(qtyonhold,0) != 0 OR IFNULL(qtypa,0) != 0)
     </select>
 
 
