@@ -440,12 +440,17 @@
      */
     function selectProductRegisterScope() {
 
+        var classifyId =  $("#ezuiFormDetail input[id='classifyId']").combobox("getValue");
+        var productRegisterVersion = $("#ezuiFormDetail input[id='productRegisterVersion']").textbox("getValue");
+
+        console.log(classifyId+"===="+productRegisterVersion);
         ezuidialogChoseScope = $('#dialogChoseScope').dialog({
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             width:800,
             height:500,
-            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=productRegister&id=${gspProductRegister.productRegisterId}',
+            // data:{classifyId:classifyId,productRegisterVersion:productRegisterVersion},
+            href:sy.bp()+'/gspInstrumentCatalogController.do?toSearch&target=productRegister&classifyId='+classifyId+'&version='+productRegisterVersion+'&id=${gspProductRegister.productRegisterId}' ,
             onClose : function() {
                 ezuidialogChoseScope.dialog('clear');
             }
