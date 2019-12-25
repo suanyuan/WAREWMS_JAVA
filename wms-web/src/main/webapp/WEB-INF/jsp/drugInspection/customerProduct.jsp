@@ -45,7 +45,7 @@ $(function() {
 
 		},
 		columns : [[
-			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
+			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 200 },
 			{field: 'productName',		title: '委托方货品名称',	width: 150 },
 			{field: 'specsName',		    title: '规格/型号',	width: 150 },
 			// {field: 'productModel',		title: '型号',	width: 150 },
