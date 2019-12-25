@@ -147,12 +147,23 @@
     <sql id="Example_Where_Clause4">
           where 1=1
         <trim  suffixOverrides="," >
+            <if test="condition.orderno != null and condition.orderno != ''" >
+                and c.orderno like concat('%', #{condition.orderno},'%')
+            </if>
+            <if test="condition.sku != null and condition.sku != ''" >
+                and c.sku like concat('%', #{condition.sku},'%')
+            </if>
+            <if test="condition.packingflag != null and condition.packingflag != ''" >
+                and info.packingflag like concat('%', #{condition.packingflag},'%')
+            </if>
+            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+                and c.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            </if>
+            <if test="condition.traceid != null and condition.traceid != ''" >
+                and c.traceid like concat('%', #{condition.traceid},'%')
+            </if>
             <if test="condition.customerid != null and condition.customerid != ''" >
                 and c.customerid like concat('%', #{condition.customerid},'%')
-            </if>
-            <if test="condition.sku != null and condition.sku != ''"
-            >
-                and c.sku like concat('%', #{condition.sku},'%')
             </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
                 and c.lotatt12 like concat('%', #{condition.lotatt12},'%')
@@ -160,8 +171,11 @@
             <if test="condition.skudescrc != null and condition.skudescrc != ''" >
                 and s.descr_c like concat('%', #{condition.skudescrc},'%')
             </if>
-            <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-                and c.lotatt04 like concat('%', #{condition.lotatt04},'%')
+            <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+                and c.lotatt05 like concat('%', #{condition.lotatt05},'%')
+            </if>
+            <if test="condition.traceid1 != null and condition.traceid1 != ''" >
+                and c.traceid like concat('%', #{condition.traceid1},'%')
             </if>
             <!--            <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >-->
             <!--                and aaa.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}-->

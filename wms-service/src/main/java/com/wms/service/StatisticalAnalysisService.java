@@ -473,10 +473,10 @@ public class StatisticalAnalysisService extends BaseService {
 		superClassMap.put("lotatt06", "注册证号");
 		superClassMap.put("skudescrc", "规格/型号");
 		superClassMap.put("lotatt04", "生产批号");
-		superClassMap.put("lotatt07", "灭菌批号");
 		superClassMap.put("lotatt05", "序列号");
-		superClassMap.put("lotatt01", "生产日期");
+		superClassMap.put("lotatt07", "灭菌批号");
 		superClassMap.put("lotatt03", "入库日期");
+		superClassMap.put("lotatt01", "生产日期");
 		superClassMap.put("lotatt02", "有效期/失效期");
 		superClassMap.put("lotatt11", "存储条件");
 		superClassMap.put("lotatt15", "生产企业");
