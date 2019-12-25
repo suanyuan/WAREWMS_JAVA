@@ -43,8 +43,8 @@ $(function() {
 			customerType:'OW'
 		},
 		columns : [[
-			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 250 },
-            {field: 'productCode',		title: '产品代码 ',	width: 250 },
+			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 200 },
+            {field: 'productCode',		title: '产品代码 ',	width: 150 },
 
             {field: 'productName',		title: '委托方货品名称',	width: 150 },
 			{field: 'specsName',		    title: '规格/型号',	width: 150 },
