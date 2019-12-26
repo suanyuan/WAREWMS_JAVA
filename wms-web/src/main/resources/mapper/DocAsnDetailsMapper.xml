@@ -100,6 +100,7 @@
 	<result column="userdefine5" property="userdefine5"/>
 	<result column="userdefine6" property="userdefine6"/>
 	<result column="codename_c" property="coldName"/>
+	<result column="qty1" property="qty1"/>
 </resultMap>
     
     <resultMap id="ExtendDetailMap" type="com.wms.entity.DocAsnDetail" extends="DocAsnDetailMap">
@@ -936,13 +937,14 @@ insert into doc_asn_details
 	a.d_edi_03,
 	a.d_edi_04,
 	a.d_edi_05,
-	bc.descr_c as cusdescr,
+	bc.descr_c as cusdescr,p.qty1,
 	cold.codename_c,
 				   	(@rowNum:=@rowNum+1) as row_num
 	          from Doc_Asn_Details a
                    	LEFT OUTER JOIN Bas_Sku b on a.customerid = b.customerid
 					AND a.sku = b.sku
 					LEFT OUTER JOIN bas_customer bc ON a.lotatt08 = bc.customerid
+					left join bas_package p on p.packid=b.packid
 					LEFT JOIN bas_codes CODE ON code.code = a.linestatus
 					LEFT JOIN bas_codes cold on cold.code = b.reservedfield07 and cold.codeid='LL_TYP',
 					Bas_Codes c,(Select (@rowNum :=0)) d

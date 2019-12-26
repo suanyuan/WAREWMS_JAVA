@@ -53,7 +53,7 @@
                 showFooter:true,
                 idField: 'customerid',
                 columns: [[
-                    {field: 'customerid', title: '货主', width: 100},
+                    {field: 'fmcustomerid', title: '货主', width: 100},
                     {field: 'lotatt14', title: '入库单号', width:150},
                     {field: 'fmlocation', title: '库位', width: 100},
                     {field: 'fmsku', title: '产品代码', width: 100},

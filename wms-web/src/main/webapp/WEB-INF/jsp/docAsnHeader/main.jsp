@@ -174,7 +174,8 @@ $(function() {
             {field: 'lotatt12',				title: '产品名称',		width: 80 },
             // {field: 'lotatt13',				title: '双证',			width: 80 },
             // {field: 'lotatt14',				title: '入库单号',		width: 80 },
-            {field: 'dEdi04',				title: '样品/投诉单号',		width: 100 }
+            {field: 'dEdi04',				title: '样品/投诉单号',		width: 100 },
+            {field: 'qty1',				title: '换算率',		width: 80 }
 		]],
 		onDblClickCell: function(index,field,value){
 			detailsEdit();
@@ -1252,6 +1253,7 @@ var detailsEdit = function(){
 	var row = ezuiDetailsDatagrid.datagrid('getSelected');
 	console.log(row);
 	if(row){
+		$("#ezuiDetailsForm #qty1").val(row.qty1);
 		ezuiDetailsForm.form('load',{
 			asnno : row.asnno,
 			customerid : row.customerid,
@@ -1259,6 +1261,7 @@ var detailsEdit = function(){
 			sku : row.sku,
 			skudescrc : row.skudescrc,
 			expectedqty : row.expectedqty,
+			expectedqtyEach : row.expectedqtyEach,
 			receivedqty : row.receivedqty,
 			receivinglocation : row.receivinglocation,
 			 lotatt01 : row.lotatt01,
@@ -1593,7 +1596,7 @@ var ezuiSkuDataClick = function(){
     $("#ezuiSkuDataDialog #customerid").textbox('setValue',$("#ezuiDetailsForm #customerid").textbox("getValue")).textbox('readonly', true);
     $("#ezuiSkuDataDialog #activeFlag").combobox('setValue','1').combo('readonly', true);
 	ezuiSkuDataDialogId = $('#ezuiSkuDataDialogId').datagrid({
-	url:'<c:url value="/basSkuController.do?showDatagrid"/>',
+	url:'<c:url value="/basSkuController.do?showDatagridByInvLot"/>',
 	method:'POST',
 	toolbar:'#ezuiSkuToolbar',
 	title:'产品档案',
@@ -1625,8 +1628,10 @@ var ezuiSkuDataClick = function(){
 				{field: 'packid',		title: '包装代码',	width: 80},
 				{field: 'qty',			title: '库存数',	width: 60},
 				{field: 'qtyallocated',	title: '分配数',	width: 60},
-				{field: 'qtyonhold',	title: '冻结数',	width: 60}
-			]],
+				{field: 'qtyonhold',	title: '冻结数',	width: 60},
+		        {field: 'qty1',		    title: '换算率',	width: 80}
+
+	]],
 	onDblClickCell: function(index,field,value){
 		selectSku();
 	},
@@ -1648,6 +1653,7 @@ var selectSku = function(){
 		$("#ezuiDetailsForm #skudescrc").textbox('setValue',row.reservedfield01);
 		$("#ezuiDetailsForm #alternativesku").textbox('setValue',row.alternateSku1);
 		$("#ezuiDetailsForm #packid").textbox('setValue',row.packid);
+		$("#ezuiDetailsForm #qty1").val(row.qty1);
 		$("#ezuiDetailsForm #expectedqty").numberbox('clear');
 		$("#ezuiDetailsForm #totalgrossweight").numberbox('clear');
 		$("#ezuiDetailsForm #totalcubic").numberbox('clear');

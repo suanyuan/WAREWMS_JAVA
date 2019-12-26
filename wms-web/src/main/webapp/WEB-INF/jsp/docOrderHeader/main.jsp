@@ -2197,7 +2197,7 @@ var ezuiSkuDataClick = function(){
 		url:'<c:url value="/basSkuController.do?showDatagridByInvLot"/>',
 		method:'POST',
 		toolbar:'#ezuiSkuToolbar',
-		title:'商品档案',
+		title:'产品档案',
 		pageSize:50,
 		pageList:[50, 100, 200],
 		fit:true,
@@ -2222,7 +2222,7 @@ var ezuiSkuDataClick = function(){
 					{field: 'activeFlag',	title: '激活',	width: 40, formatter:function(value,rowData,rowIndex){
 						return rowData.activeFlag == '1' ? '是' : '否';
 		            }},
-					{field: 'alternateSku1',title: '商品条码',	width: 120},
+					{field: 'alternateSku1',title: '产品条码',	width: 120},
 			        {field: 'qty',			title: '库存数',	width: 60},
 			        {field: 'qtyallocated',	title: '分配数',	width: 60},
 		         	{field: 'qtyonhold',	title: '冻结数',	width: 60},

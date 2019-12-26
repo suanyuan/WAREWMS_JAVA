@@ -176,10 +176,12 @@ var ajaxBtn = function(menuId, url, datagridMenu){
         data : {btnArray:btnArray,roleid:roleid,menuId:menuId},
         type : 'POST', dataType : 'JSON',async  :false,cache:false,
         success : function(result){
-            btnlist = result.obj.split(",");
-            for(var i=0;i<btnlist.length;i++){
-                $('#ezuiBtn_'+btnlist[i]).linkbutton("disable" );
-            }
+        	if(result.obj!=null) {
+				btnlist = result.obj.split(",");
+				for (var i = 0; i < btnlist.length; i++) {
+					$('#ezuiBtn_' + btnlist[i]).linkbutton("disable");
+				}
+			}
         }
     });
 };

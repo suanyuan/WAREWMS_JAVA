@@ -4,6 +4,7 @@
 <div id='ezuiDetailsDialog' class='easyui-dialog' style='padding: 10px;'>
     <form id='ezuiDetailsForm' method='post'>
         <input type='hidden' id='docAsnDetailsId' name='docAsnDetailsId'/>
+        <input type='hidden' id='qty1'  name='qty1'/>
         <table>
             <tr>
                 <th>入库单编号</th>
@@ -30,11 +31,13 @@
                                        data-options="editable:false"/></td>
             </tr>
             <tr>
-                <th>预计到货数</th>
+                <th>预计件数</th>
                 <td><input type='text' name='expectedqty' id='expectedqty' class='easyui-numberbox' size='16'
                            data-options='required:true,min:1,precision:0'/></td>
-                <th>实际到货数</th>
-                <td><input type='text' name='receivedqty' id='receivedqty' class='easyui-numberbox' size='16'
+                <th>预计数量</th>
+                <td><input type='text' name='expectedqtyEach' id='expectedqtyEach' class='easyui-numberbox' size='16'
+                           data-options='required:true,min:1,precision:0'/></td>
+                <td style="display: none"><input type='text' name='receivedqty' id='receivedqty' class='easyui-numberbox' size='16'
                            data-options='editable:false,min:0,precision:0'/></td>
                 <th>收货库位</th>
                 <td><input type='text' name='receivinglocation' id='location' class='easyui-textbox' size='16'/></td>
@@ -133,6 +136,17 @@
             width: 110,
             required: true
         });
-
+//通过件数算数量
+        $("input",$("#ezuiDetailsForm #expectedqty").next("span")).keyup(function(event){
+            var v = $('#ezuiDetailsForm #expectedqty').next().children().val();
+            var qty1=$("#ezuiDetailsForm #qty1").val();
+            $("#ezuiDetailsForm #expectedqtyEach").textbox('setValue',v*qty1);
+        });
+//通过件数算件数
+        $("input",$("#ezuiDetailsForm #expectedqtyEach").next("span")).keyup(function(event){
+            var v = $('#ezuiDetailsForm #expectedqtyEach').next().children().val();
+            var qty1=$("#ezuiDetailsForm #qty1").val();
+            $("#ezuiDetailsForm #expectedqty").textbox('setValue',v/qty1);
+        });
     })
 </script>

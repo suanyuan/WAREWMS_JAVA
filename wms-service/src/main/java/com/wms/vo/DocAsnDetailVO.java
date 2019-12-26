@@ -108,7 +108,16 @@ public class DocAsnDetailVO {
 	private Double expectedqtySum;//预期到货数
 	private Double expectedqtyEachSum;//预期到货数量
 	private Double receivedqtySum;//实际到货
+	private Double qty1;
 
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
+	}
 
 	public Double getExpectedqtyEachSum() {
 		return expectedqtyEachSum;

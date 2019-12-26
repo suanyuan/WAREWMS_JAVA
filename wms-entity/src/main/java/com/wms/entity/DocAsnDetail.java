@@ -251,6 +251,7 @@ public class DocAsnDetail implements Serializable {
     private String coldName;
 
     private Double expectedqtyEachSum;
+    private Double qty1;
 
 //导出
     private BigDecimal expectedqtySum;  //总计
@@ -261,6 +262,14 @@ public class DocAsnDetail implements Serializable {
 
 
 	public DocAsnDetail() {
+	}
+
+	public Double getQty1() {
+		return qty1;
+	}
+
+	public void setQty1(Double qty1) {
+		this.qty1 = qty1;
 	}
 
 	public String getDescre() {
