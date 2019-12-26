@@ -1325,6 +1325,7 @@ var commit = function(){
 
 /* 查询按钮 */
 var doSearch = function(){
+    ezuiDatagrid.datagrid('unselectAll');
 	ezuiDatagrid.datagrid('load', {
 		orderno : $('#orderno').val(),
 		customerid : $('#customerid').val(),
@@ -1355,6 +1356,8 @@ var doSearch = function(){
         cCity : $("#cc2").textbox("getValue"),
         cAddress2 : $("#cc3").textbox("getValue")*/
 	});
+
+
 };
 
 /* 导出start */
