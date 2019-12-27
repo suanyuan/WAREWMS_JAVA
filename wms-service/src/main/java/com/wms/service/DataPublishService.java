@@ -3,6 +3,7 @@ package com.wms.service;
 import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
@@ -627,13 +628,17 @@ public class DataPublishService extends BaseService {
                 }
                 GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gPR.getEnterpriseId());
 //                formNew.setProductEnterpriseName(g.getEnterpriseName());
-                formNew.setLicenseOrRecordNo(gPR.getLicenseOrRecordNol());
-                formNew.setEnterpriseName(g.getEnterpriseName());
-                formNew.setStorageCondition(gPR.getStorageConditions());
-                formNew.setSpecsId(RandomUtil.getUUID());
-                if(specs.getProductName() ==null || specs.getProductName().equals("")){
-                    formNew.setProductName(specs.getProductNameMain());
-                }
+                formNew.setLicenseOrRecordNo(gPR.getLicenseOrRecordNol());  //生产许可证号/备案号
+                formNew.setEnterpriseName(g.getEnterpriseName());       //生产企业
+                formNew.setStorageCondition(gPR.getStorageConditions());//储存条件
+                formNew.setEditDate(new Date());
+                formNew.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+                formNew.setSpecsId(RandomUtil.getUUID());               //产品id
+//                if(gPR.getProductNameMain() ==null || gPR.getProductNameMain().equals("")){
+//                    formNew.setProductName(specs.getProductNameMain());//
+                    formNew.setProductNameMain(gPR.getProductNameMain());
+                    formNew.setProductName(gPR.getProductNameMain());
+//                }
                 gspProductRegisterSpecsMybatisDao.add(formNew);
                 //gspProductRegisterSpecsService.addGspProductRegisterSpecs(formNew);
             }
