@@ -58,8 +58,9 @@ $(function() {
 // 			{field: 'pkey',		title: 'No.',	width: 41 },        
 			{field: 'fmcustomerid',		title: '货主',	width: 71 },
 			{field: 'fmsku',		title: '产品代码',	width: 150 },
-			{field: 'lotatt12', title: '产品名称', width: 330},
-
+			{field: 'lotatt12', title: '产品名称', width: 250},
+			{field: 'lotatt04', title: '生产批号', width: 110},
+			{field: 'lotatt05', title: '序列号', width: 110},
 			{field: 'fmqty',		title: '库存件数',	width: 71 },
 			{field: 'fmqtyEach',		title: '库存数量',	width: 71 },
 			{field: 'qtyallocated',		title: '分配件数',	width: 71 },
@@ -76,8 +77,6 @@ $(function() {
 
 			{field: 'lotatt06', title: '注册证号', width: 150},//加个字段
 			{field: 'skudescre', title: '规格型号', width: 103},
-			{field: 'lotatt05', title: '序列号', width: 110},
-			{field: 'lotatt04', title: '生产批号', width: 95},
 			{field: 'lotatt07', title: '灭菌批号', width: 120},
 			{field: 'lotatt03', title: '入库日期', width: 91},
 			{field: 'lotatt01', title: '生产日期', width: 112},
