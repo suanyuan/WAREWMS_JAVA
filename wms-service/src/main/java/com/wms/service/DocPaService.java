@@ -423,18 +423,24 @@ public class DocPaService {
                 mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
                 List<ActTransactionLog> list=actTransactionLogMybatisDao.queryByList(mybatisCriteria);
                 if(list.size()>0){
+                    StringBuilder resultMsg = new StringBuilder();
+                    int i=1;
                     for (ActTransactionLog actTransactionLog : list) {
                         ViewInvTranForm viewInvTranForm=new ViewInvTranForm();
                         viewInvTranForm.setTransactionid(actTransactionLog.getTransactionid());
                         Json result=viewInvTranService.cancelReceive(viewInvTranForm);
-                        json.setMsg(json.getMsg() + "<br/>" + "单号:" + actTransactionLog.getDocno() + ",行号" + actTransactionLog.getDoclineno() + "," + result.getMsg());
-                        if(result.isSuccess()) {
-                            json.setSuccess(true);
-                        }else{
-                            json.setSuccess(false);
+                        if(!result.isSuccess()) {
+                            i=0;
+                            resultMsg.append("单号:" + actTransactionLog.getDocno() + ",行号" + actTransactionLog.getDoclineno() + "," + result.getMsg()).append(" ");
                         }
                     }
-
+                    if(i==1) {
+                        json.setSuccess(true);
+                        json.setMsg("全部取消收货成功!");
+                    }else{
+                        json.setSuccess(false);
+                        json.setMsg(resultMsg.toString());
+                    }
                 }
             }
         }catch (Exception e){

@@ -24,6 +24,8 @@ var ezuiLocDataDialog;
 var ezuiLocDataDialogId;
 var ezuiImportDataDialog;
 var ezuiImportDataForm;
+var nomergeReceivingDialog;
+var nomergeReceivingForm;
 var productDialog_docAsnHeader;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
@@ -31,6 +33,7 @@ $(function() {
 	ezuiForm = $('#ezuiForm').form();
 	ezuiDetailsForm = $('#ezuiDetailsForm').form();
 	ezuiImportDataForm=$('#ezuiImportDataForm').form();
+	nomergeReceivingForm=$('#nomergeReceivingForm').form();
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/docAsnHeaderController.do?showDatagrid"/>',
 		method:'POST',
@@ -412,6 +415,15 @@ $(function() {
 		buttons : '#ezuiImportDataDialogBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiImportDataForm);
+		}
+	}).dialog('close');
+	//取消收货结果
+	nomergeReceivingDialog = $('#nomergeReceivingDialog').dialog({
+		modal : true,
+		title : '取消收货',
+		buttons : '',
+		onClose : function() {
+			ezuiFormClear(nomergeReceivingForm);
 		}
 	}).dialog('close');
 
@@ -820,15 +832,16 @@ var nomergeReceiving = function () {
 						var msg='';
 						try{
 							if(result.success){
-								msg = result.msg;
-							}else{
-								msg = '<font color="red">' + result.msg + '</font>';
+								msg = result.msg.replace(/ /g, '\n');
+							}else {
+								msg = result.msg.replace(/ /g, '\n');
 							}
 						}catch (e) {
 							//msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
 							msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
 						} finally {
-							$.messager.alert('操作提示', result.msg);
+							$("#nomergeReceivingResult").textbox("setValue",msg);
+							nomergeReceivingDialog.dialog("open");
 							$.messager.progress('close');
 							ezuiDatagrid.datagrid('reload');
 						}
@@ -2357,6 +2370,17 @@ function printResultList(){
 	<c:import url='/WEB-INF/jsp/docAsnHeader/refAdd.jsp' />
 
 
+<!-- 取消收货结果模板-->
+	<div id='nomergeReceivingDialog' class='easyui-dialog' style='padding: 10px;'>
+		<form id='nomergeReceivingForm' method='post' enctype='multipart/form-data'>
+			<table>
+				<tr>
+					<th>结果</th>
+					<td><input id='nomergeReceivingResult' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 	<!--产品查询 -->
 	<div id="ezuiProductSearchDialog">
 
