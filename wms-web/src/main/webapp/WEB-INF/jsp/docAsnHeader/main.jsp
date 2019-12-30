@@ -697,14 +697,14 @@ var cancel = function(){
                         $.messager.progress('close');
 						var msg = '';
 						try {
-                            msg = result.msg;
+                            msg = result.msg.replace(/ /g, '\n');
 						} catch (e) {
 							msg = '取消异常';
 						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
-							ezuiDatagrid.datagrid('reload');
+                            $("#nomergeReceivingResult").textbox("setValue",msg);
+                            nomergeReceivingDialog.dialog("open");
+                            $.messager.progress('close');
+                            ezuiDatagrid.datagrid('reload');
 						}
 					}
 				});
@@ -891,9 +891,8 @@ var closeCheck = function(){
                         });
                     } else {
 
-                        $.messager.show({
-                            msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                        });
+                        $.messager.alert('操作提示', result.msg);
+
                     }
                 }
             }
@@ -926,13 +925,12 @@ var close1 = function(){
                 $.messager.progress('close');
                 var msg = '';
                 try {
-                    msg = result.msg;
+                    msg = result.msg.replace(/ /g, '\n');
                 } catch (e) {
                     msg = '关单异常';
                 } finally {
-                    $.messager.show({
-                        msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                    });
+                    $("#nomergeReceivingResult").textbox("setValue",msg);
+                    nomergeReceivingDialog.dialog("open");
                     ezuiDatagrid.datagrid('reload');
                 }
             }

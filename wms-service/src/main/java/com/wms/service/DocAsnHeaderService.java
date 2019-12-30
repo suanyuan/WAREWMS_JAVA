@@ -350,8 +350,7 @@ public class DocAsnHeaderService extends BaseService {
         if (StringUtil.isNotEmpty(asnnos)) {
 
             String[] asnnoList = asnnos.split(",");
-            int count = 0;
-            String lineBreak = "<br/>";
+            int count = 1;
             for (String asnno : asnnoList) {
 
                 if (StringUtil.isNotEmpty(asnno)) {
@@ -369,19 +368,21 @@ public class DocAsnHeaderService extends BaseService {
                         String result = map.get("result").toString();
                         message.append("[").append(asnno).append("]");
                         if (result.substring(0, 3).equals("000")) {
-                            message.append(" 关单成功").append(";").append(lineBreak);
+                            message.append("关单成功").append(";").append(" ");
                         } else {
-                            message.append(" 关单失败：").append(result).append(";").append(lineBreak);
+                            count = 0;
+                            message.append("关单失败：").append(result).append(";").append(" ");
                         }
                     }
-                    if (count == asnnoList.length - 1) {
-                        message = new StringBuilder(message.substring(0, message.length() - lineBreak.length()));
-                    }
                 }
-                count++;
             }
-            json.setSuccess(true);
-            json.setMsg(message.toString());
+            if(count==1) {
+                json.setSuccess(true);
+                json.setMsg("全部关单成功!");
+            }else{
+                json.setSuccess(false);
+                json.setMsg(message.toString());
+            }
         } else {
 
             json.setSuccess(false);
@@ -416,8 +417,7 @@ public class DocAsnHeaderService extends BaseService {
         if (StringUtil.isNotEmpty(asnnos)) {
 
             String[] asnnoList = asnnos.split(",");
-            int count = 0;
-            String lineBreak = "<br/>";
+            int count = 1;
             for (String asnno : asnnoList) {
 
                 if (StringUtil.isNotEmpty(asnno)) {
@@ -435,19 +435,21 @@ public class DocAsnHeaderService extends BaseService {
                         String result = map.get("result").toString();
                         message.append("[").append(asnno).append("]");
                         if (result.substring(0, 3).equals("000")) {
-                            message.append(" 取消成功：").append(";").append(lineBreak);
+                            message.append("取消成功").append(";").append(" ");
                         } else {
-                            message.append(" 取消失败：").append(result).append(";").append(lineBreak);
+                            count=0;
+                            message.append("取消失败：").append(result).append(";").append(" ");
                         }
                     }
-                    if (count == asnnoList.length - 1) {
-                        message = new StringBuilder(message.substring(0, message.length() - lineBreak.length()));
-                    }
                 }
-                count++;
             }
-            json.setSuccess(true);
-            json.setMsg(message.toString());
+            if(count==1) {
+                json.setSuccess(true);
+                json.setMsg("全部取消成功!");
+            }else{
+                json.setSuccess(false);
+                json.setMsg(message.toString());
+            }
         } else {
 
             json.setSuccess(false);
