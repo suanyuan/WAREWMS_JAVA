@@ -210,12 +210,12 @@
                         title: '',
                         // pageSize : 50,
                         // pageList : [50, 100, 200],
-                        fit: true,
+                        fit: false,
                         border: false,
                         fitColumns : false,
                         nowrap: true,
                         striped: true,
-                        collapsible:false,
+                        collapsible:true,
                         queryParams:{
                             idList : idlist1,
                         },
@@ -226,6 +226,8 @@
                             {field: 'enterpriseName',		title: '货主',	width: 220 },
 
                             {field: 'locationid',		title: '货位',	width: 220 },
+                            {field: 'productName',		title: '产品名称',	width: 220 },
+
                             {field: 'sku',		title: '产品代码',	width: 200 },
                             {field: 'specsName',		title: '规格',	width: 200 },
                             {field: 'lotatt02',		title: '效期',	width: 200 },
@@ -249,10 +251,11 @@
                     });
 
                     ezuiDialogInvlotloc = $('#ezuiDialogInvlotloc').dialog({
-                        modal : true,
+                        modal : false,
+                        fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
-                        width:850,
-                        height:600,
+                        width: 1000,
+                        height:670,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
@@ -886,7 +889,78 @@
             ezuiImportDataDialog.dialog('open');
         };
 
-    </script>
+
+
+        //查询库内货品信息
+        function doSearchClient() {
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            invlotlocDatagrid.datagrid('load', {
+                idList:idlist1,
+                enterpriseName : $('#enterpriseNameQ').val(),
+                locationid : $('#locationidQ').val(),
+                productName : $('#productNameQ').val(),
+                sku : $('#skuQ').val(),
+                specsName : $('#specsNameQ').val(),
+                lotatt02:$('#lotatt02Q').val(),
+                lotatt01 : $('#lotatt01Q').val(),
+                lotatt04 : $('#lotatt04Q').val(),
+                lotatt05 : $('#lotatt05Q').val(),
+            });
+        }
+
+
+        /* 导出start */
+        var doExport = function(){
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            if(navigator.cookieEnabled){
+                $('#ezuiBtn_export').linkbutton('disable');
+                var token = new Date().getTime();
+                var param = new HashMap();
+                param.put("token", token);
+                param.put("idList", idlist1);
+
+                param.put("enterpriseName", $('#enterpriseNameQ').val());
+                param.put("locationid", $('#locationidQ').val());
+                param.put("productName",$('#productNameQ').val());
+                param.put("sku", $('#skuQ').val());
+                param.put("specsName", $('#specsNameQ').val());
+                param.put("lotatt02", $('#lotatt02Q').val());
+                param.put("lotatt01", $('#lotatt01Q').val());
+                param.put("lotatt04", $('#lotatt04Q').val());
+                param.put("lotatt05", $('#lotatt05Q').val());
+
+
+                //--导出Excel
+                var formId = ajaxDownloadFile(sy.bp()+"/remindController.do?exportInvLotAttDataToExcel", param);
+                downloadCheckTimer = window.setInterval(function () {
+                    window.clearInterval(downloadCheckTimer);
+                    $('#'+formId).remove();
+                    $('#ezuiBtn_export').linkbutton('enable');
+                    $.messager.progress('close');
+                    $.messager.show({
+                        msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                    });
+                }, 1000);
+            }else{
+                $.messager.show({
+                    msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            }
+        };
+        /* 导出end */
+
+
+</script>
 </head>
 <body>
 <input type='hidden' id='menuId' name='menuId' value='${menuId}'/>
@@ -1113,14 +1187,30 @@
         <fieldset >
         <legend>企业信息</legend>
         <table>
-        <tr>
-        <th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>
-        <th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>
-        <td>
-        <a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
-        <a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>
-        </td>
-        </tr>
+            <tr>
+                <th>货主：</th><td><input type='text' id='enterpriseNameQ'  class='easyui-textbox'    data-options='width:150'/></td>
+                <th>货位：</th><td><input type='text' id='locationidQ' class='easyui-textbox'    data-options='width:150'/></td>
+                <th>产品名称：</th><td><input type='text' id='productNameQ' class='easyui-textbox'    data-options='width:150'/></td>
+                <th>产品代码：</th><td><input type='text' id='skuQ' class='easyui-textbox'    data-options='width:150'/></td>
+                <th>规格：</th><td><input type='text' id='specsNameQ' class='easyui-textbox'    data-options='width:150'/></td>
+
+            </tr>
+            <tr>
+                <th>效期：</th><td><input type='text' id='lotatt02Q'  class='easyui-textbox'    data-options='width:150'/></td>
+                <th>生产日期：</th><td><input type='text' id='lotatt01Q' class='easyui-textbox'    data-options='width:150'/></td>
+                <th>批号：</th><td><input type='text' id='lotatt04Q' class='easyui-textbox'    data-options='width:150'/></td>
+                <th>序列号：</th><td><input type='text' id='lotatt05Q' class='easyui-textbox'    data-options='width:150'/></td>
+
+
+                <td rowspan="1">
+                <a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+                <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+                    <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
+                    <a onclick='ezuiToolbarClear("#clientTB7");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+
+                </td>
+            </tr>
         </table>
         </fieldset>
     </div>

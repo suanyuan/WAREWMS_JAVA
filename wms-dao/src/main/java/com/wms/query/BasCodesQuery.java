@@ -2,10 +2,12 @@ package com.wms.query;
 
 import com.wms.mybatis.entity.SfcCustomer;
 
+import java.sql.Date;
 import java.util.Set;
 
 public class BasCodesQuery implements IQuery {
 
+	private String token;
 	private String codeid;
 	private String code;
 	private String codenameC;
@@ -23,6 +25,99 @@ public class BasCodesQuery implements IQuery {
 	private Set<SfcCustomer> customerSet;
 
 	private String idList;
+	private  String enterpriseName;
+	private String locationid;
+	private String specsName;
+	private String productName;
+	private String sku;
+
+	private String lotatt02;	//效期
+	private String lotatt01;	//生产日期
+	private String lotatt04;	//批号
+	private String lotatt05;	//序列号
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getLotatt02() {
+		return lotatt02;
+	}
+
+	public void setLotatt02(String lotatt02) {
+		this.lotatt02 = lotatt02;
+	}
+
+	public String getLotatt01() {
+		return lotatt01;
+	}
+
+	public void setLotatt01(String lotatt01) {
+		this.lotatt01 = lotatt01;
+	}
+
+	public String getLotatt04() {
+		return lotatt04;
+	}
+
+	public void setLotatt04(String lotatt04) {
+		this.lotatt04 = lotatt04;
+	}
+
+	public String getLotatt05() {
+		return lotatt05;
+	}
+
+	public void setLotatt05(String lotatt05) {
+		this.lotatt05 = lotatt05;
+	}
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+
+	public String getLocationid() {
+		return locationid;
+	}
+
+	public void setLocationid(String locationid) {
+		this.locationid = locationid;
+	}
+
+	public String getSpecsName() {
+		return specsName;
+	}
+
+	public void setSpecsName(String specsName) {
+		this.specsName = specsName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+
 
 	public String getIdList() {
 		return idList;

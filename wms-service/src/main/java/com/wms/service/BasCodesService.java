@@ -7,23 +7,29 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasCodesQuery;
+import com.wms.query.BasCustomerQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.*;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCodesVO;
+import com.wms.vo.BasCustomerVO;
 import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
+import com.wms.vo.form.BasCustomerForm;
+import com.wms.vo.form.InvLotAttForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -308,7 +314,7 @@ public class BasCodesService {
     }
 
     /**
-     * 企业过期
+     * 提醒接口更新
 
      * @param
      * @return
@@ -852,21 +858,109 @@ public class BasCodesService {
 
     public EasyuiDatagrid<InvLotAtt> getInvLotLocPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
         EasyuiDatagrid<InvLotAtt> datagrid = new EasyuiDatagrid<InvLotAtt>();
-//        query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
-//        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-//        mybatisCriteria.setCurrentPage(pager.getPage());
-//        mybatisCriteria.setPageSize(pager.getRows());
-//        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-//        List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryAll();
-
-
+        if(query.getLocationid()==null)query.setLocationid("");
+        if(query.getEnterpriseName()==null)query.setEnterpriseName("");
+        if(query.getProductName()==null)query.setProductName("");
+        if(query.getSpecsName()==null)query.setSpecsName("");
+        if(query.getSku()==null)query.setSku("");
+        if(query.getLotatt01()==null)query.setLotatt01("");
+        if(query.getLotatt02()==null)query.setLotatt02("");
+        if(query.getLotatt04()==null)query.setLotatt04("");
+        if(query.getLotatt05()==null)query.setLotatt05("");
         List<InvLotAtt> invLotAttList = jsonToList(query.getIdList(),InvLotAtt.class);
-
-
-        datagrid.setTotal((long)invLotAttList.size());
-        datagrid.setRows(invLotAttList);
+        List<InvLotAtt> invLotAttList1 = new ArrayList<InvLotAtt>();
+        for(InvLotAtt InvLotAtt:invLotAttList){
+            if(InvLotAtt.getLocationid().indexOf(query.getLocationid())==-1)continue;
+            if(InvLotAtt.getEnterpriseName().indexOf(query.getEnterpriseName())==-1)continue;
+            if(InvLotAtt.getProductName().indexOf(query.getProductName())==-1)continue;
+            if(InvLotAtt.getSpecsName().indexOf(query.getSpecsName())==-1)continue;
+            if(InvLotAtt.getSku().indexOf(query.getSku())==-1)continue;
+            if(InvLotAtt.getLotatt01().indexOf(query.getLotatt01())==-1)continue;
+            if(InvLotAtt.getLotatt02().indexOf(query.getLotatt02())==-1)continue;
+            if(InvLotAtt.getLotatt04().indexOf(query.getLotatt04())==-1)continue;
+            if(InvLotAtt.getLotatt05().indexOf(query.getLotatt05())==-1)continue;
+            invLotAttList1.add(InvLotAtt);
+        }
+        datagrid.setTotal((long)invLotAttList1.size());
+        datagrid.setRows(invLotAttList1);
         return datagrid;
     }
+
+
+    public void exportInvLotAttDataToExcel(HttpServletResponse response, BasCodesQuery form) throws IOException {
+        Cookie cookie = new Cookie("exportToken",form.getToken());
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        response.setContentType(ContentTypeEnum.csv.getContentType());
+
+        InvLotAttForm invLotAttForm = new InvLotAttForm();
+//        invLotAttForm.setIdList(form.getIdList());
+
+//        basCustomerForm.setCustomerType(form.getCustomerType());
+//        basCustomerForm.setCustomerid(form.getCustomerid());
+//        basCustomerForm.setDescrC(form.getDescrC());
+//        basCustomerForm.setActiveFlag(form.getActiveFlag());
+//        basCustomerForm.setEnterpriseNo(form.getEnterpriseNo());
+        try {
+            BasCodesQuery query = new BasCodesQuery();
+            //权限控制
+            query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+            com.wms.utils.BeanUtils.copyProperties(form, query);
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+            // excel表格的表头，map
+            LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+            // excel的sheetName
+            String sheetName = "提醒-库内货品查询结果";
+            // excel要导出的数据
+//            List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
+
+
+            EasyuiDatagridPager page = new EasyuiDatagridPager();
+            EasyuiDatagrid<InvLotAtt> pagedDatagrid = getInvLotLocPagedDatagrid(page, query);
+            List<InvLotAtt> InvLotAttList = pagedDatagrid.getRows();
+
+
+            // 导出
+            if (InvLotAttList == null || InvLotAttList.size() == 0) {
+                System.out.println("题库为空");
+            }else {
+                //将list集合转化为excle
+                for (InvLotAtt invLotAtt : InvLotAttList) {
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+
+                }
+
+                ExcelUtil.listToExcel(InvLotAttList, fieldMap, sheetName, response);
+                System.out.println("导出成功~~~~");
+            }
+        } catch (ExcelException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 得到导出Excle时题型的英中文map
+     *
+     * @return 返回题型的属性map
+     */
+    public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
+
+        LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+        superClassMap.put("enterpriseName", "货主");
+        superClassMap.put("locationid", "货位");
+        superClassMap.put("productName", "产品名称");
+        superClassMap.put("sku", "产品代码");
+        superClassMap.put("specsName", "规格");
+        superClassMap.put("lotatt02", "效期");
+        superClassMap.put("lotatt01", "生产日期");
+        superClassMap.put("lotatt04", "批号");
+        superClassMap.put("lotatt05", "序列号");
+
+
+        return superClassMap;
+    }
+
 
 
     /**

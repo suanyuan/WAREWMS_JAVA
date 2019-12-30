@@ -6,6 +6,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class InvLotAttForm extends BaseLotatt {
 
+	private String token;
 	private String lotnum;
 	private String customerid;
 	private String sku;
@@ -27,6 +28,23 @@ public class InvLotAttForm extends BaseLotatt {
 	private String editwho;
 	private java.sql.Date receivingtime;
 	private String qcreportfilename;
+	private String idList;
+
+	public String getIdList() {
+		return idList;
+	}
+
+	public void setIdList(String idList) {
+		this.idList = idList;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public String getLotnum() {
 		return lotnum;
