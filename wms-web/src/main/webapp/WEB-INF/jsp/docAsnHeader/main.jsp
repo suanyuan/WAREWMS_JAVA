@@ -749,10 +749,8 @@ var mergeOrder = function () {
                                 //msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
                                 msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
                             } finally {
-                                $.messager.show({
-                                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
-                                });
-                                $.messager.progress('close');
+								$.messager.alert('操作提示', result.msg);
+								$.messager.progress('close');
                             }
                         }
                     });
@@ -815,7 +813,6 @@ var nomergeReceiving = function () {
 	if(row.length>0) {
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否取消收货？', function(confirm) {
 			if (confirm) {
-
 				$.messager.progress({
 					text : '<spring:message code="common.message.data.processing"/>', interval : 100
 				});
