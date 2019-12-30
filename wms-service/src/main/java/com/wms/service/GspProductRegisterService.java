@@ -131,7 +131,6 @@ public class GspProductRegisterService extends BaseService {
 					}
 				}
 			}
-
 			return Json.success("操作成功",gspProductRegister.getProductRegisterId());
 		}catch (Exception e){
 			e.printStackTrace();
@@ -139,7 +138,7 @@ public class GspProductRegisterService extends BaseService {
 			return Json.success("保存失败");
 		}
 	}
-//修改
+	//修改
 	public Json editGspProductRegister(GspProductRegisterForm gspProductRegisterForm) throws Exception{
 		try{
 			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
@@ -181,17 +180,17 @@ public class GspProductRegisterService extends BaseService {
 				}
 
 
-                //失效原数据
+                //失效原注册证，数据
                 gspProductRegister.setIsUse(Constant.IS_USE_NO);
                 gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
-
+				//失效注册证分类范围
                 List<GspOperateDetailVO> gspOperateDetailList = gspOperateDetailService.queryOperateDetailByLicense(gspProductRegister.getProductRegisterId());
                 if(gspOperateDetailList!=null && gspOperateDetailList.size()>0){
                     for(GspOperateDetailVO v : gspOperateDetailList){
                         gspOperateDetailService.invalidGspOperateDetail(v.getLicenseId(),Constant.LICENSE_TYPE_REGISTER);
                     }
                 }
-
+				//新建注册证
                 GspProductRegister newGspProductRegister = new GspProductRegister();
                 BeanUtils.copyProperties(gspProductRegisterForm, newGspProductRegister);
                 newGspProductRegister.setProductRegisterId(RandomUtil.getUUID());
@@ -446,12 +445,15 @@ public class GspProductRegisterService extends BaseService {
 
 
 	public boolean checkRep(String registerNo){
-		MybatisCriteria criteria = new MybatisCriteria();
-		GspProductRegisterQuery query = new GspProductRegisterQuery();
-		query.setProductRegisterNo(registerNo);
-		query.setIsUse(Constant.IS_USE_YES);
-		criteria.setCondition(query);
-		List<GspProductRegister> list = gspProductRegisterMybatisDao.queryByList(criteria);
+//		MybatisCriteria criteria = new MybatisCriteria();
+//		GspProductRegisterQuery query = new GspProductRegisterQuery();
+//		query.setProductRegisterNo(registerNo);
+//		query.setIsUse(Constant.IS_USE_YES);
+//		criteria.setCondition(query);
+//		List<GspProductRegister> list = gspProductRegisterMybatisDao.queryByList(criteria);
+
+        List<PdaGspProductRegister> list = gspProductRegisterMybatisDao.queryAllByNo(registerNo);
+
 		if(list!=null && list.size()>0){
 			return false;
 		}
