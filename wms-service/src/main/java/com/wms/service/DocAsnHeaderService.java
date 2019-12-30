@@ -1057,22 +1057,22 @@ public class DocAsnHeaderService extends BaseService {
                 if (docAsnHeader.getAsnstatus().equals("00") || docAsnHeader.getAsnstatus().equals("90")) {
                     if (docAsnHeader.getAddwho().contains("EDI") && !sfcUserLogin.getId().equals("admin")) {
                         json.setSuccess(false);
-                        resultMsg.append(": 接口订单,不可删除!").append("</br>");
+                        resultMsg.append(":接口订单,不可删除!").append(" ");
                     } else {
                         docAsnHeaderMybatisDao.delete(docAsnHeader);
                         docAsnDetailsMybatisDao.deleteByHead(docAsnHeader.getAsnno());
-                        resultMsg.append(": 删除成功;").append("</br>");
+                        resultMsg.append(":删除成功;").append(" ");
                     }
                 } else {
                     json.setSuccess(false);
-                    resultMsg.append(": 只有订单创建和订单取消状态才可删除!").append("</br>");
+                    resultMsg.append(":只有订单创建和订单取消状态才可删除!").append(" ");
                 }
             } else {
                 json.setSuccess(false);
-                resultMsg.append(": 订单不存在!").append("</br>");
+                resultMsg.append(":订单不存在!").append(" ");
             }
-            json.setMsg(resultMsg.toString());
         }
+        json.setMsg(resultMsg.toString());
         return json;
     }
 

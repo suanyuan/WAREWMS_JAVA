@@ -417,7 +417,7 @@ $(function() {
 			ezuiFormClear(ezuiImportDataForm);
 		}
 	}).dialog('close');
-	//取消收货结果
+	//按钮执行结果
 	nomergeReceivingDialog = $('#nomergeReceivingDialog').dialog({
 		modal : true,
 		title : '取消收货',
@@ -2109,13 +2109,12 @@ function deleteMain() {
 					success : function(result){
 						var msg = '';
 						try {
-							msg = result.msg;
+							msg = result.msg.replace(/ /g, '\n');
 						} catch (e) {
 							msg = '删除订单异常';
 						} finally {
-							$.messager.show({
-								msg : msg, title : '<spring:message code="common.message.prompt"/>'
-							});
+							$("#nomergeReceivingResult").textbox("setValue",msg);
+							nomergeReceivingDialog.dialog("open");
 							ezuiDatagrid.datagrid('reload');
 						}
 					}
@@ -2370,7 +2369,7 @@ function printResultList(){
 	<c:import url='/WEB-INF/jsp/docAsnHeader/refAdd.jsp' />
 
 
-<!-- 取消收货结果模板-->
+<!-- 按钮执行结果结果模板-->
 	<div id='nomergeReceivingDialog' class='easyui-dialog' style='padding: 10px;'>
 		<form id='nomergeReceivingForm' method='post' enctype='multipart/form-data'>
 			<table>
