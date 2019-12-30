@@ -412,6 +412,7 @@ public class DocPaService {
                 }
             }
             //取消收货
+            StringBuilder resultMsg = new StringBuilder();
             for (String s : arr) {
                 //根据主单号查询出所有状态为收货的事务
                 ActTransactionLogQuery query=new ActTransactionLogQuery();
@@ -423,7 +424,6 @@ public class DocPaService {
                 mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
                 List<ActTransactionLog> list=actTransactionLogMybatisDao.queryByList(mybatisCriteria);
                 if(list.size()>0){
-                    StringBuilder resultMsg = new StringBuilder();
                     int i=1;
                     for (ActTransactionLog actTransactionLog : list) {
                         ViewInvTranForm viewInvTranForm=new ViewInvTranForm();
