@@ -11,9 +11,9 @@ public class InvLotAtt extends BaseLotatt  implements Serializable {
 
 	private String lotnum;
 
-	private String customerid;
+    private String customerid;
 
-	private String sku;
+    private String sku;
 
 //	private String lotatt01;
 //

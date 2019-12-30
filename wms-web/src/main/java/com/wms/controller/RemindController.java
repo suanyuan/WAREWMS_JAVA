@@ -16,7 +16,9 @@ import com.wms.utils.annotation.Login;
 import com.wms.vo.BasGtnVO;
 import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
+import com.wms.vo.form.BasCodesForm;
 import com.wms.vo.form.BasGtnForm;
+import com.wms.vo.form.InvLotAttForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,6 +132,13 @@ public class RemindController {
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
 	}
+
+    @Login
+    @RequestMapping(params = "exportInvLotAttDataToExcel")
+    public void exportBasCustomerDataToExcel(HttpServletResponse response, BasCodesQuery form) throws Exception {
+        basCodesService.exportInvLotAttDataToExcel(response, form);
+    }
+
 
 	@Login
 	@RequestMapping(params = "getBtn")
