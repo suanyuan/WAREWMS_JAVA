@@ -409,7 +409,8 @@ var adj = function(){
 			qtyavailed : rows[0].qtyavailed,
 			qtyholded : rows[0].qtyholded,
 			skudescrc:rows[0].skudescrc,
-			lotatt04:rows[0].lotatt04
+			lotatt04:rows[0].lotatt04,
+			lotatt05:rows[0].lotatt05
 
 		});
 		ezuiDialogAdj.dialog('open');
@@ -473,6 +474,9 @@ var mov = function(){
 			lotatt12Show:rows[0].lotatt12,
 			fmlocation : rows[0].fmlocation,
 			fmlotnum : rows[0].fmlotnum,
+			lotatt01 : rows[0].lotatt01,
+			lotatt02 : rows[0].lotatt02,
+			lotatt04 : rows[0].lotatt04,
 			fmqty : rows[0].fmqty,
 			fmsku : rows[0].fmsku,
 			qtyallocated : rows[0].qtyallocated,
@@ -1180,8 +1184,9 @@ var ismove=function (location) {
 				<tr>
 					<th>冻结件数</th>
 					<td><input type='text' name='qtyholded' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-					<th>批次</th>
-					<td><input type='text' name='fmlotnum' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
+					<td style="display: none"><input type='text' name='fmlotnum' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
+					<th>序列号</th>
+					<td><input type='text' name='lotatt05' class='easyui-textbox' size='16' data-options='editable:false'/></td>
 
 
 				</tr>
@@ -1239,9 +1244,9 @@ var ismove=function (location) {
 				<tr>
 					<th>分配件数</th>
 					<td><input type='text' name='qtyallocated' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-					<th>批次</th>
-					<td><input type='text' name='fmlotnum' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-
+					<td style="display: none"><input type='text' name='fmlotnum' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
+					<th>批号</th>
+					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 
 				</tr>
 				<tr>
@@ -1277,6 +1282,12 @@ var ismove=function (location) {
 																										]"/></td>
 					<th>原因描述</th>
 					<td><input type='text' name='lotatt12text' class='easyui-textbox' size='16' data-options=''/></td>
+				</tr>
+				<tr>
+					<th>生产日期</th>
+					<td><input type='text'  id='lotatt01' name='lotatt01' class='easyui-datebox' size='16' data-options=''/></td>
+					<th>有效期/失效期</th>
+					<td><input type='text' id="lotatt02" name='lotatt02' class='easyui-datebox' size='16' data-options=''/></td>
 				</tr>
 			</table>
 		</form>
