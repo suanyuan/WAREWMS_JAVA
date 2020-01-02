@@ -310,11 +310,12 @@ var commit = function(){
             onSubmit: function () {
 
                 if (ezuiForm.form('validate')) {
-                    $.messager.progress({
-                        text: '<spring:message code="common.message.data.processing"/>', interval: 100
-                    });
+                    <%--$.messager.progress({--%>
+                        <%--text: '<spring:message code="common.message.data.processing"/>', interval: 100--%>
+                    <%--});--%>
                     return true;
                 } else {
+                    $.messager.progress('close');
                     return false;
                 }
             },

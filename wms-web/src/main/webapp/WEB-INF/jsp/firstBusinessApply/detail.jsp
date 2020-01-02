@@ -538,6 +538,7 @@
         if(processType == 'edit'){
             var rowMain = ezuiDatagrid.datagrid('getSelected');
             if(rowMain.firstState == '10' || rowMain.firstState =='40'){
+                $.messager.progress('close');
                 $.messager.show({
                     msg : '审核中与审核通过的申请无法修改', title : '提示'
                 });
@@ -545,6 +546,7 @@
             }
         }
         if($("#clientId").val() == ""){
+            $.messager.progress('close');
             $.messager.show({
                 msg : "请选择委托客户", title : '<spring:message code="common.message.prompt"/>'
             });
@@ -552,6 +554,7 @@
             return;
         }
         if($("#productLine").combobox("getValue") == ""){
+            $.messager.progress('close');
             $.messager.show({
                 msg : "请选择产品线", title : '<spring:message code="common.message.prompt"/>'
             });
@@ -560,6 +563,7 @@
         // var row = ezuiDatagridDetail.datagrid('getSelected');
 
         if(arr.length==0){
+            $.messager.progress('close');
             $.messager.show({
                 msg : "请选择要首营的产品", title : '<spring:message code="common.message.prompt"/>'
             });
@@ -610,6 +614,8 @@
                     });
                     $.messager.progress('close');
                 }
+            },error:function(result){
+                $.messager.progress('close');
             }
         });
     }
