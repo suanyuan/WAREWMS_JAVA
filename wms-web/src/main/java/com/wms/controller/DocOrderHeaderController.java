@@ -106,8 +106,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "delete")
     @ResponseBody
-    public Json delete(String orderno) {
-        Json json = orderHeaderForNormalService.delete(orderno);
+    public Json delete(String ordernos) {
+        Json json = orderHeaderForNormalService.delete(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -119,7 +119,7 @@ public class DocOrderHeaderController {
     @RequestMapping(params = "allocation")
     @ResponseBody
     public Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
-        Json json = orderHeaderForNormalService.allocation(orderHeaderForNormalForm);
+        Json json = orderHeaderForNormalService.batchAllocation(orderHeaderForNormalForm);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -130,8 +130,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "deAllocation")
     @ResponseBody
-    public Json deAllocation(String orderNo) {
-        Json json = orderHeaderForNormalService.deAllocation(orderNo);
+    public Json deAllocation(String ordernos) {
+        Json json = orderHeaderForNormalService.batchDEAllocation(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

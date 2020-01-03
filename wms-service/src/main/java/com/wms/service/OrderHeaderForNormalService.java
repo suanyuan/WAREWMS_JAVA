@@ -17,7 +17,6 @@ import com.wms.entity.sfExpress.SFOrderHeader;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.SfcCustomer;
 import com.wms.mybatis.entity.SfcRole;
-import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.*;
 import com.wms.result.OrderStatusResult;
 import com.wms.service.importdata.ImportOrderDataService;
@@ -35,7 +34,6 @@ import com.wms.vo.form.pda.PageForm;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,9 +52,9 @@ import java.util.*;
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
 
-    static Logger logger = Logger.getLogger(OrderHeaderForNormalService.class.getName());
+//    static Logger logger = Logger.getLogger(OrderHeaderForNormalService.class.getName());
 
-    private static final String END_POINT = ResourceUtil.geteEndpoint();
+//    private static final String END_POINT = ResourceUtil.geteEndpoint();
 
     @Autowired
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
@@ -79,8 +77,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
-    @Autowired
-    private BasSerialNumMybatisDao basSerialNumMybatisDao;
+//    @Autowired
+//    private BasSerialNumMybatisDao basSerialNumMybatisDao;
     @Autowired
     private ImportOrderDataService importOrderDataService;
     @Autowired
@@ -95,8 +93,8 @@ public class OrderHeaderForNormalService extends BaseService {
     private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
     @Autowired
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
-    @Autowired
-    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
+//    @Autowired
+//    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
@@ -107,24 +105,24 @@ public class OrderHeaderForNormalService extends BaseService {
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
     private DocOrderUtilService docOrderUtilService;
-    @Autowired
-    private SfcUserMybatisDao sfcUserMybatisDao;
+//    @Autowired
+//    private SfcUserMybatisDao sfcUserMybatisDao;
     @Autowired
     private SfcRoleMybatisDao sfcRoleMybatisDao;
     /**
      * 订单列表显示
      */
     public EasyuiDatagrid<OrderHeaderForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query) {
-        EasyuiDatagrid<OrderHeaderForNormalVO> datagrid = new EasyuiDatagrid<OrderHeaderForNormalVO>();
+        EasyuiDatagrid<OrderHeaderForNormalVO> datagrid = new EasyuiDatagrid<>();
         query.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
         query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 
         //主界面多货主查询
-        if(query.getCustomerid()!=null&&query.getCustomerid()!="") {
+        if(query.getCustomerid()!=null&& !query.getCustomerid().equals("")) {
             String   customerid=query.getCustomerid();
             String[] customerids=customerid.split(",");
             Set<SfcCustomer> customers = new HashSet<>();
-            SfcCustomer customer=null;
+            SfcCustomer customer;
             for (String s : customerids) {
                  customer=new SfcCustomer();
                  customer.setId(s);
@@ -146,8 +144,8 @@ public class OrderHeaderForNormalService extends BaseService {
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         mybatisCriteria.setOrderByClause("orderno desc");
         List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
-        OrderHeaderForNormalVO orderHeaderForNormalVO = null;
-        List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<OrderHeaderForNormalVO>();
+        OrderHeaderForNormalVO orderHeaderForNormalVO;
+        List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<>();
         for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
@@ -164,7 +162,7 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     public EasyuiDatagrid<ActAllocationDetailsVO> getPageAllocation(EasyuiDatagridPager pager, ActAllocationDetailsQuery query) {
-        EasyuiDatagrid<ActAllocationDetailsVO> datagrid = new EasyuiDatagrid<ActAllocationDetailsVO>();
+        EasyuiDatagrid<ActAllocationDetailsVO> datagrid = new EasyuiDatagrid<>();
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
@@ -178,7 +176,7 @@ public class OrderHeaderForNormalService extends BaseService {
         }
 
         double zero = 0;
-        ActAllocationDetailsVO vo = null;
+        ActAllocationDetailsVO vo;
         if(actAllocationDetails.size()==0){
             vo = new ActAllocationDetailsVO();
             vo.setQtysum(zero);//qty 分配数
@@ -272,56 +270,95 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 删除订单
      */
-    public Json delete(String orderno) {
+    public Json delete(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+
         Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
         try {
-            OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-            orderHeaderForNormalQuery.setOrderno(orderno);
-            OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 
-            SfcUserLogin sfcUserLogin = new SfcUserLogin();
-            sfcUserLogin.setId(SfcUserLoginUtil.getLoginUser().getId());//获取登录用户的ID
-/*            SfcUser sfcUser = sfcUserMybatisDao.queryListById(sfcUserLogin);//查询登录用户的角色
-            Set<SfcRole> roleSet = sfcUser.getRoleSet();//获取角色数据
-            List<SfcRole> list=new ArrayList(roleSet);
-            String sysAdmin = "No";
-            for(int i=0;i<list.size();i++){
-                if(list.get(i).getId().equals("1")){
-                    sysAdmin = "Yes";
-                    break;
-                }
-            }*/
+            String[] ordernolist = ordernos.split(",");
 
-            if (orderHeaderForNormal != null) {
-                if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("90")) {
-                    if (orderHeaderForNormal.getAddwho().contains("EDI") && !sfcUserLogin.getId().equals("admin")) {
-                        json.setSuccess(false);
-                        json.setMsg("EDI订单,不能删除!");
-                        return json;
+            for (String orderno : ordernolist) {
+                if (StringUtil.isNotEmpty(orderno)) {
+
+                    resultMsg.append("出库单号：").append(orderno).append("，");
+
+                    OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+                    orderHeaderForNormalQuery.setOrderno(orderno);
+                    OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+
+                    if (orderHeaderForNormal != null) {
+
+                        if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("90")) {
+
+                            if (orderHeaderForNormal.getAddwho().contains("EDI") && !SfcUserLoginUtil.getLoginUser().getId().equals("admin")) {
+
+                                json.setSuccess(false);
+                                resultMsg.append("接口订单,不能删除!");
+                            } else {
+
+                                orderHeaderForNormalMybatisDao.delete(orderHeaderForNormal);
+                                orderDetailsForNormalMybatisDao.orderHeaderdelete(orderno);
+                                resultMsg.append("订单删除成功！");
+                            }
+                        } else {
+
+                            json.setSuccess(false);
+                            resultMsg.append("当前状态订单,不能删除!");
+                        }
                     } else {
-                        orderHeaderForNormalMybatisDao.delete(orderHeaderForNormal);
-                        orderDetailsForNormalMybatisDao.orderHeaderdelete(orderno);
-                        return Json.success("000");
+
+                        json.setSuccess(false);
+                        resultMsg.append("查无此定单数据！");
                     }
-                } else {
-                    json.setSuccess(false);
-                    json.setMsg("当前状态订单,不能删除!");
-                    return json;
+                    resultMsg.append("\n");
                 }
             }
         } catch (Exception e) {
+
             e.printStackTrace();
+            json.setMsg("系统错误：" + e.getMessage());
+            json.setSuccess(false);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return json;
         }
+
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
+     * 批量处理分配
+     */
+    public Json batchAllocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+
+        if (orderHeaderForNormalForm.getOrderno().length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
         json.setSuccess(true);
-        json.setMsg("资料处理成功！");
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = orderHeaderForNormalForm.getOrderno().split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                orderHeaderForNormalForm.setOrderno(orderno);
+                json = allocation(orderHeaderForNormalForm);
+
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
         return json;
     }
 
     /**
      * 分配
      */
-    public Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
+    private Json allocation(OrderHeaderForNormalForm orderHeaderForNormalForm) {
 
         //清除0库存
         Json json = docOrderUtilService.deleteZeroInventory();
@@ -346,10 +383,9 @@ public class OrderHeaderForNormalService extends BaseService {
                     if (!json.isSuccess()) return json;
 
                     Map<String, Object> map = new HashMap<>();
-                    //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                    map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     map.put("orderNo", orderHeaderForNormalForm.getOrderno());
                     map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
-                    //map.put("result", "");
                     orderHeaderForNormalMybatisDao.allocationByOrder(map);
 
                     String result = map.get("result").toString();
@@ -367,13 +403,13 @@ public class OrderHeaderForNormalService extends BaseService {
                             } else {
 
                                 json.setSuccess(true);
-                                json.setMsg("000");
+                                json.setMsg("处理完毕");
                                 return json;
                             }
                         } else {
 
                             json.setSuccess(true);
-                            json.setMsg("000");
+                            json.setMsg("处理完毕");
                             return json;
                         }
                     } else {
@@ -394,18 +430,41 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            String message = e.getMessage();
+            json.setMsg("系统错误:" + e.getLocalizedMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             json.setSuccess(false);
-            json.setMsg("分配失败:" + message);
             return json;
         }
     }
 
     /**
+     * 批量处理取消分配
+     */
+    public Json batchDEAllocation(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = deAllocation(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
      * 取消分配
      */
-    public Json deAllocation(String orderNo) {
+    private Json deAllocation(String orderNo) {
+
         Json json = new Json();
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
         orderHeaderForNormalQuery.setOrderno(orderNo);
@@ -413,7 +472,7 @@ public class OrderHeaderForNormalService extends BaseService {
         if (orderHeaderForNormal != null) {
             if (orderHeaderForNormal.getSostatus().equals("00") || orderHeaderForNormal.getSostatus().equals("30") || orderHeaderForNormal.getSostatus().equals("40")) {
                 try {
-                    Map<String, Object> map = new HashMap<String, Object>();
+                    Map<String, Object> map = new HashMap<>();
                     //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     map.put("orderNo", orderNo);
                     map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
@@ -424,23 +483,24 @@ public class OrderHeaderForNormalService extends BaseService {
                         docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
                     }
                     json.setSuccess(true);
-                    json.setMsg(result);
+                    json.setMsg("取消分配成功");
                     return json;
                 } catch (Exception e) {
+
                     e.printStackTrace();
+                    json.setMsg("系统错误:" + e.getLocalizedMessage());
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    json.setSuccess(true);
-                    json.setMsg("订单取消分配错误!");
+                    json.setSuccess(false);
                     return json;
                 }
             } else {
-                json.setSuccess(true);
+                json.setSuccess(false);
                 json.setMsg("当前状态订单,不能取消分配!");
                 return json;
             }
         } else {
-            json.setSuccess(true);
-            json.setMsg("000");
+            json.setSuccess(false);
+            json.setMsg("查无出库单数据");
             return json;
         }
     }
@@ -475,7 +535,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 if (allocationDetailsIdList != null && allocationDetailsIdList.size() > 0) {
                     try {
                         for (OrderHeaderForNormal allocationDetailsId : allocationDetailsIdList) {
-                            Map<String, Object> map = new HashMap<String, Object>();
+                            Map<String, Object> map = new HashMap<>();
                             //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                             map.put("allocationDetailsId", allocationDetailsId.getAllocationDetailsId());
                             map.put("userId", SfcUserLoginUtil.getLoginUser().getId());

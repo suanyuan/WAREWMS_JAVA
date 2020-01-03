@@ -448,10 +448,23 @@ public class DocAsnDetailService extends BaseService {
 		docAsnDetailQuery.setAsnlineno(asnlineno);
 		DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryById(docAsnDetailQuery);
 		if(docAsnDetail != null){
-			docAsnDetailsMybatisDao.delete(docAsnDetail);
-		}
-		json.setSuccess(true);
-		json.setMsg("删除成功");
+            if (docAsnDetail.getLinestatus().equals("00")) {
+                if (docAsnDetail.getAddwho().contains("EDI") && !SfcUserLoginUtil.getLoginUser().getId().equals("admin")) {
+                    json.setSuccess(false);
+                    json.setMsg("接口订单,不可删除!");
+                } else {
+                    docAsnDetailsMybatisDao.delete(docAsnDetail);
+                    json.setSuccess(true);
+                    json.setMsg("删除成功");
+                }
+            } else {
+                json.setSuccess(false);
+                json.setMsg("新建状态的行明细才可删除!");
+            }
+		} else {
+            json.setSuccess(false);
+            json.setMsg("行明细查无数据");
+        }
 		return json;
 	}
 	
