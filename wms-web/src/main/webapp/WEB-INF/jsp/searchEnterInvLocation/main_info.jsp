@@ -46,6 +46,7 @@ $(function() {
 			{field: 'sku',		            title: '产品代码',	width: 100 },
 			{field: 'lotatt12',		        title: '产品名称',	width: 150 },
 			{field: 'descrc',		        title: '规格/型号',	width: 150 },
+			{field: 'productLineName',		title: '产品线',	width: 100 },
 			{field: 'lotatt15',		        title: '生产企业',	width: 150 },
 			{field: 'reservedfield06',		title: '生产企业许可证号/备案凭证号',	width: 170 },
 			{field: 'lotatt06',		        title: '产品注册证号/备案凭证号 ',	width: 150 },
@@ -84,9 +85,34 @@ $(function() {
 	//委托方下拉框
 	$('#toolbar #enterpriseName').combobox({
 		// panelHeight: 'auto',
-		url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox&type=client',
+		url:sy.bp()+'/basCustomerController.do?getCustomerNameComboboxAA&type=client',
 		valueField:'id',
 		textField:'value'
+	});
+	//货主带出产品线
+	$("#toolbar #enterpriseName").combobox({
+		onChange:function(){
+			var customerid = $("#toolbar #enterpriseName").combobox('getValue');
+			if(customerid !=null && ($.trim(customerid).length>0)){
+				$("#toolbar #productLineName").combobox({
+					panelHeight: 'auto',
+					url:'/firstBusinessApplyController.do?getProductLineByEnterpriseId&customerId='+customerid,
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
+			}else{
+				$("#toolbar #productLineName").combobox({
+					panelHeight: 'auto',
+					url:"/productLineController.do?getCombobox",
+					valueField:'id',
+					textField:'value',
+					onLoadSuccess:function () {
+					}
+				});
+			}
+		}
 	});
 });
 
@@ -94,12 +120,12 @@ $(function() {
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		enterpriseName:$('#enterpriseName').combobox('getValue'),
+		enterpriseName:$('#enterpriseName').combobox('getText'),
 		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		lotatt12:$('#lotatt12').val(),
 		descrc:$('#descrc').val(),
-		lotatt15:$('#lotatt15').val(),
+		productLineName:$('#productLineName').combobox('getValue'),
 		lotatt14:$('#lotatt14').val(),
 		lotatt06 : $('#lotatt06').val(),
 		lotatt04 : $('#lotatt04').val(),
@@ -119,12 +145,12 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
-		param.put("enterpriseName",$('#enterpriseName').combobox('getValue'));
+		param.put("enterpriseName",$('#enterpriseName').combobox('getText'));
 		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
 		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("lotatt12",$('#lotatt12').val());
 		param.put("descrc",$('#descrc').val());
-		param.put("lotatt15",$('#lotatt15').val());
+		param.put("productLineName",$('#productLineName').combobox('getValue'));//产品线
 		param.put("lotatt14",$('#lotatt14').val());
 		param.put("lotatt06",$('#lotatt06').val());
 		param.put("lotatt04",$('#lotatt04').val());
@@ -176,7 +202,8 @@ var doExport = function(){
 						<tr>
 							<th>产品名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>规格</th><td><input type='text' id='descrc' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>生产企业</th><td><input type='text' id='lotatt15' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+
 						</tr>
 						<tr>
 							<th>产品注册证号/备案凭证号</th><td><input type='text' id='lotatt06' class='easyui-textbox' size='16' data-options=''/></td>
@@ -206,7 +233,11 @@ var doExport = function(){
 
 						</tr>
 						<tr>
-							<th>产品代码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th>
+							<td><input type='text' id='productLineName' class='easyui-combobox' size='16' data-options="editable:false,
+																										url:'<c:url value="/productLineController.do?getCombobox"/>',
+																										valueField: 'id',
+																										textField: 'value'"/></td>
 							<th>库存地点(货架号)</th><td><input type='text' id='locationid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																	editable: false,

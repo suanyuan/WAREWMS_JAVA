@@ -49,6 +49,8 @@ public class SearchOutInvLocation implements Serializable {
     private String reservedfield09;//是否是医疗器械
     private String sku;//产品代码
     private String locationid;//库位
+    private String productLineName;         //产品线
+
 
 
 }

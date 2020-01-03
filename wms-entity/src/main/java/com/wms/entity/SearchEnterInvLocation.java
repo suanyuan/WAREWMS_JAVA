@@ -46,5 +46,7 @@ public class SearchEnterInvLocation implements Serializable {
     private String activeFlag;  //是否合作
     private String reservedfield09;//是否是医疗器械
     private String sku;//产品代码
+    private String productLineName;         //产品线
+
 
 }
