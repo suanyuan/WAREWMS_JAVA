@@ -178,6 +178,9 @@
             <if test="condition.lotatt10!= null and condition.lotatt10 != ''" >
                 and e.`lotatt10` = #{condition.lotatt10}
             </if>
+            <if test="condition.productLineName != null and condition.productLineName != ''" >
+                and l.product_line_id like concat('%', #{condition.productLineName},'%')
+            </if>
         </trim>
     </sql>
     <!-- 查询条件 出库信息 -->
@@ -227,6 +230,9 @@
             </if>
             <if test="condition.lotatt10!= null and condition.lotatt10 != ''" >
                 and c.`lotatt10` = #{condition.lotatt10}
+            </if>
+            <if test="condition.productLineName != null and condition.productLineName != ''" >
+                and l.product_line_id like concat('%', #{condition.productLineName},'%')
             </if>
         </trim>
     </sql>
@@ -388,7 +394,7 @@
 <!-- *******************************入库信息********************************** -->
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
-       select aaa.*,ccc.codename_c type from (
+       select aaaa.*,ccc.codename_c type from (
         SELECT
         e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
         dd.qcqty_expected qty,dd.userdefine1 locationid,
@@ -414,19 +420,20 @@
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         where 1=1
         <include refid="Example_Where_Clause2"/>
-        ORDER BY e.`lotatt03` DESC,e.lotatt14
+        ORDER BY e.`lotatt03` DESC,e.lotatt14 desc
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
-        </if>)  aaa
-        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaa.lotatt14
+        </if>)  aaaa
+        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaaa.lotatt14
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
+        ORDER BY aaaa.`lotatt03` DESC,aaaa.lotatt14 desc
     </select>
 <!-- 查询入库信息列表 -统计 -->
     <select id="querySearchEnterInvLocationSum"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
-        select aaa.*,ccc.codename_c type from (
+        select aaaa.*,ccc.codename_c type from (
         SELECT
         e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
-        dd.qcqty_expected qty,dd.userdefine1 locationid,dd.sku,
+        dd.qcqty_expected qty,dd.userdefine1 locationid,dd.sku,l.name productLineName,
         p.`qty1`,
         e.`lotatt04`,e.`lotatt05`,
         DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d') lotatt02,
@@ -444,17 +451,19 @@
         left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
         where 1=1
         <include refid="Example_Where_Clause2"/>
-        ORDER BY e.`lotatt03` DESC,e.lotatt14
+        ORDER BY e.`lotatt03` DESC,e.lotatt14 desc
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
-        </if>)  aaa
-        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaa.lotatt14
+        </if>)  aaaa
+        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaaa.lotatt14
         LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
+        ORDER BY aaaa.`lotatt03` DESC,aaaa.lotatt14 desc
     </select>
 <!-- 入库信息 列表总数-->
     <select id="querySearchEnterInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
@@ -472,6 +481,7 @@
         left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
         LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
@@ -515,7 +525,7 @@
     <select id="querySearchOutInvLocationSum"  resultType="com.wms.entity.SearchOutInvLocation" parameterType="Object">
         SELECT
         r.descr_c enterpriseName,r.active_flag activeFlag,a.sku,a.orderno,s.reservedfield06,
-        b.qty,b.location locationid,p.`qty1`,
+        b.qty,b.location locationid,p.`qty1`,l.name productLineName,
         c.`lotatt04`,c.`lotatt05`,
         DATE_FORMAT(c.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
         c.`lotatt06`,c.`lotatt10`,c.`lotatt11`,c.`lotatt12`,c.`lotatt15`,
@@ -527,6 +537,7 @@
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
         LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
@@ -547,6 +558,7 @@
         LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
         LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
         LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        left join product_line l on l.product_line_id=s.sku_group1
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(select * from `bas_codes` where codeid='uom')  bb ON s.defaultreceivinguom=bb.code
