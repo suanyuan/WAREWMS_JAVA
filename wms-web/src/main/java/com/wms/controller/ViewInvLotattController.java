@@ -10,6 +10,7 @@ import com.wms.utils.SfcUserLoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -98,7 +99,7 @@ public class ViewInvLotattController {
 	}
 
 	/**
-	 * 单条库位移动
+	 * 单条库存移动
  	 * @param viewInvLotattForm
 	 * @return
 	 * @throws Exception
@@ -117,7 +118,7 @@ public class ViewInvLotattController {
 		return json;
 	}
 	/**
-	 * 多条库位移动
+	 * 多条库存移动
  	 * @param forms
 	 * @return
 	 * @throws Exception
@@ -127,6 +128,24 @@ public class ViewInvLotattController {
 	@ResponseBody
 	public Json mov(String forms) throws Exception {
 		Json json = viewInvLotattService.movViewInvLotattList(forms);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+		}
+		return json;
+	}
+	/**
+	 * 库位移动
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
+	@Login
+	@RequestMapping(params = "movLoc")
+	@ResponseBody
+	public Json movLoc(@RequestParam("fmlocation") String fmlocation, @RequestParam("tolocation")String tolocation) throws Exception {
+        Json json=new Json();
+		json = viewInvLotattService.movViewInvLotattLoc(fmlocation,tolocation);
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

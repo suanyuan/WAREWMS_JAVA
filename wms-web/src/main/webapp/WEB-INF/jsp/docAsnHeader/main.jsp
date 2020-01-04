@@ -420,7 +420,7 @@ $(function() {
 	//按钮执行结果
 	nomergeReceivingDialog = $('#nomergeReceivingDialog').dialog({
 		modal : true,
-		title : '取消收货',
+		title : '结果',
 		buttons : '',
 		onClose : function() {
 			ezuiFormClear(nomergeReceivingForm);

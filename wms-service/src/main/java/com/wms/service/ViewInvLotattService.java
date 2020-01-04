@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -224,9 +225,16 @@ public class ViewInvLotattService extends BaseService {
                     json.setSuccess(false);
                     String loc = map.get("fmlocation") + "";
                     String sku = map.get("fmsku") + "";
-                    String loattt05 = viewInvLotatt.getLotatt05() + "";
-                    String loattt04 = viewInvLotatt.getLotatt04() + "";
-                    json.setMsg("库位:" + loc + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
+                    String customerid = map.get("fmcustomerid") + "";
+                    String loattt05=null;
+                    String loattt04=null;
+                    if(viewInvLotatt.getLotatt05()!=null) {
+                       loattt05 = viewInvLotatt.getLotatt05() + "";
+                    }
+                    if(viewInvLotatt.getLotatt04()!=null) {
+                        loattt04 = viewInvLotatt.getLotatt04() + "";
+                    }
+                    json.setMsg("库位:" + loc +",货主:" + customerid + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
                 }
 
             }else{
@@ -279,6 +287,81 @@ public class ViewInvLotattService extends BaseService {
         } else {
             json.setSuccess(false);
             json.setMsg("部分库存移动失败!<br/>" + results.toString());
+        }
+
+
+        return json;
+    }
+
+    /**
+     * 库位移动
+     *
+     * @param
+     * @return
+     */
+
+    public Json movViewInvLotattLoc(String fmlocation,String tolocation) {
+        Json json = new Json();
+        StringBuffer results = new StringBuffer();
+        //原始库位
+         String[] arr=fmlocation.split(",");
+         if(arr.length<=0){
+             return  json.error("请输入起始库位!");
+         }
+        //判断目标库位是否存在
+        if(!islocationid(tolocation)) {
+
+            json.setSuccess(false);
+            json.setMsg("目标库位不存在");
+            return json;
+        }
+        //根据库位查出所有库存
+        List<InvLotLocId> lotLocIdList=new ArrayList<>();
+        List<ViewInvLotattForm> list=new ArrayList();
+        ViewInvLotattForm viewInvLotattForm=null;
+        for (String s : arr) {
+            lotLocIdList=invLotLocIdMybatisDao.queryAllInvLotLocByLocationid(s);
+            if(lotLocIdList.size()>0){
+                for (InvLotLocId invLotLocId : lotLocIdList) {
+                    viewInvLotattForm=new ViewInvLotattForm();
+                    viewInvLotattForm.setFmcustomerid(invLotLocId.getCustomerid());
+                    viewInvLotattForm.setFmsku(invLotLocId.getSku());
+                    viewInvLotattForm.setFmlotnum(invLotLocId.getLotnum());
+                    viewInvLotattForm.setFmlocation(invLotLocId.getLocationid());
+                    viewInvLotattForm.setFmqty(new BigDecimal(invLotLocId.getQty()));
+                    viewInvLotattForm.setLotatt11(invLotLocId.getQtyallocated()+"");
+                    viewInvLotattForm.setLotatt11text(tolocation);
+                    viewInvLotattForm.setLotatt12("");
+                    viewInvLotattForm.setLotatt12text("");
+                   list.add(viewInvLotattForm);
+                }
+            }
+        }
+       //判断是否有可移动库存
+        if(list.size()<=0){
+            return json.error("库位没有可移动的库存!");
+        }
+        Boolean con = true;
+
+        for (ViewInvLotattForm form : list) {
+
+            form.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+            form.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            Json json1 = movViewInvLotatt(form);
+            if (json1.isSuccess()) {
+
+            } else {
+                con = false;
+                results.append(json1.getMsg()).append(" ");
+            }
+
+        }
+        if (con) {
+            json.setSuccess(true);
+            json.setMsg("库存移动成功!");
+        } else {
+            json.setSuccess(false);
+            json.setMsg("移动失败库存: " + results.toString());
         }
 
 

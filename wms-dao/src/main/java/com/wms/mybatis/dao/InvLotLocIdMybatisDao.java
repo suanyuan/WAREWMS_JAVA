@@ -2,6 +2,7 @@ package com.wms.mybatis.dao;
 
 
 import com.wms.entity.InvLotLocId;
+import com.wms.entity.ViewInvLotatt;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.pda.PdaInventoryQuery;
 import org.apache.ibatis.annotations.Param;
@@ -91,4 +92,10 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 根据关联主键删除（4个）
      */
     int deleteByPrimaryKeys(InvLotLocId invLotLocId);
+
+    /**
+     * 根据库位查出所有库存和批次属性
+     */
+    List<InvLotLocId> queryAllInvLotLocByLocationid(String locationid);
+
 }

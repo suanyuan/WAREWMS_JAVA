@@ -14,6 +14,8 @@ var ezuiDialogMov;     //库存移动
 var ezuiFormMov;       //库存移动
 var ezuiDialogMovAll;     //库存移动 多条
 var ezuiFormMovAll;       //库存移动 多条
+var ezuiDialogMovLoc;     //库位移动
+var ezuiFormMovLoc;       //库位移动
 
 var ezuiDialogAdj;     //库存调整
 var ezuiFormAdj;       //库存调整
@@ -29,12 +31,17 @@ var ezuiSkuDataDialog;         //产品名称选择框
 var ezuiSkuDataDialogId;       //产品名称选择框
 var productDialog_viewInvLotatt;//主页产品代码选择框
 
+
+var resultDialog;//结果模板
+var resultForm;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();            //右键菜单
 	ezuiFormAdj = $('#ezuiFormAdj').form();      //库存调整
 	ezuiFormMov = $('#ezuiFormMov').form();      //库存移动
 	ezuiFormMovAll = $('#ezuiFormMovAll').form();//库存移动 多条
+	ezuiFormMovLoc = $('#ezuiFormMovLoc').form();//库位移动
 	ezuiFormHold = $('#ezuiFormHold').form();    //库存冻结
+	resultForm = $('#resultForm').form();    //结果模板
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/viewInvLotattController.do?showDatagrid"/>',
 		method:'POST',
@@ -244,6 +251,15 @@ $(function() {
 			ezuiFormClear(ezuiFormMovAll);
 		}
 	}).dialog('close');
+//库存多条移动页面初始化
+	ezuiDialogMovLoc = $('#ezuiDialogMovLoc').dialog({
+		modal : true,
+		title : '库位移动',
+		buttons : '#ezuiDialogMovLocBtn',
+		onClose : function() {
+			ezuiFormClear(ezuiFormMovLoc);
+		}
+	}).dialog('close');
 //库存冻结初始化
 	ezuiDialogHold = $('#ezuiDialogHold').dialog({
 		modal : true,
@@ -251,6 +267,15 @@ $(function() {
 		buttons : '#ezuiDialogHoldBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiFormHold);
+		}
+	}).dialog('close');
+//按钮执行结果
+	resultDialog = $('#resultDialog').dialog({
+		modal : true,
+		title : '结果',
+		buttons : '',
+		onClose : function() {
+			ezuiFormClear(resultForm);
 		}
 	}).dialog('close');
 });
@@ -518,6 +543,33 @@ var mov = function(){
 		});
 	}
 };
+//库位移动
+var movLoc=function () {
+	//库位移动放大镜
+	$("#ezuiDialogMovLoc #fmlocation").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiLocDataDialog #locationid").textbox('clear');
+				ezuiLocDataClick('FM');
+				ezuiLocDataSearch();
+			}
+		}]
+	});
+	//库位移动放大镜
+	$("#ezuiDialogMovLoc #tolocation").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiLocDataDialog #locationid").textbox('clear');
+				ezuiLocDataClick('TO');
+				ezuiLocDataSearch();
+			}
+		}]
+	});
+	ezuiDialogMovLoc.dialog('open');
+
+}
 //库存冻结
 var hold = function(){
 	var rows = ezuiDatagrid.datagrid('getChecked');
@@ -842,6 +894,73 @@ var commitMovAll = function(){
 
 
 };
+//库位移动提交
+var commitMovLoc = function(){
+	var fmlocation=$('#ezuiDialogMovLoc #fmlocation').val();
+	var tolocation=$('#ezuiDialogMovLoc #tolocation').val();
+	var msg='';
+	url = '<c:url value="/viewInvLotattController.do?movLoc"/>';
+	//判断原始库位是否可以移动
+	if(ismoveFM(fmlocation)!=""){
+		$.messager.show({
+			msg :'原始库位不可移动:'+ismoveFM(fmlocation), title : '<spring:message code="common.message.prompt"/>'
+		});
+		$.messager.progress('close');
+		return;
+	}
+	//判断目标库位是否可以移动
+	if(!ismove(tolocation)){
+		$.messager.show({
+			msg :'目标库位不可移动', title : '<spring:message code="common.message.prompt"/>'
+		});
+		$.messager.progress('close');
+		return;
+	}
+
+	if(ezuiFormMovLoc.form('validate')) {
+		$.messager.progress({
+			text: '<spring:message code="common.message.data.processing"/>', interval: 100
+		});
+
+		$.ajax({
+			url: url,
+			data:{"fmlocation":fmlocation,"tolocation":tolocation},
+			type : 'POST',
+			dataType: 'json',
+			error: function (a,b,c) {
+				//alert(a+b+c);
+			},
+			success: function (result) {
+				try{
+					if(result.success){
+						msg = result.msg.replace(/ /g, '\n');
+						ezuiDialogMovLoc.dialog('close');
+					}else{
+						msg = result.msg.replace(/ /g, '\n');
+					}
+				}catch (e) {
+					$.messager.show({
+						msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+				}finally {
+					ezuiDatagrid.datagrid('reload');
+					$.messager.progress('close');
+					$("#result").textbox("setValue",msg);
+					resultDialog.dialog("open");
+				}
+			}
+		});
+
+	}else{
+		msg = '<font color="red">' +'请输入完整!'+ '</font>';
+		$.messager.show({
+			msg : msg, title : '<spring:message code="common.message.prompt"/>'
+		});
+		$.messager.progress('close');
+	}
+
+};
 //库存冻结提交
 var commitHold = function(){
 	url = '<c:url value="/viewInvLotattController.do?hold"/>';
@@ -960,8 +1079,20 @@ var selectLocation = function (type) {
 		}else if(type=='M'){
 			$("#ezuiDialogMovAll #lotatt11text").textbox('setValue', row.locationid);
 			ezuiLocDataDialog.dialog('close');
-		}else{
+		}else if(type=='S'){
 			$("#toolbar #fmlocation").textbox('setValue', row.locationid);
+			ezuiLocDataDialog.dialog('close');
+		}else if(type=='FM'){
+			var result='';
+			result=	$("#ezuiDialogMovLoc #fmlocation").textbox('getValue');
+			if(result!=''&&result!=undefined) {
+				$("#ezuiDialogMovLoc #fmlocation").textbox('setValue',row.locationid+","+result);
+			}else{
+				$("#ezuiDialogMovLoc #fmlocation").textbox('setValue',row.locationid);
+			}
+			ezuiLocDataDialog.dialog('close');
+		}else if(type=='TO'){
+			$("#ezuiDialogMovLoc #tolocation").textbox('setValue', row.locationid);
 			ezuiLocDataDialog.dialog('close');
 		}
 	}
@@ -1058,7 +1189,15 @@ function choseSelect_product_viewInvLotatt(row) {
 	}
 	productDialog_viewInvLotatt.dialog("close");
 }
-//判断库位可否移动
+//判断原始库位可否移动
+var ismoveFM=function (location) {
+	var con="";
+	if(location.indexOf("SORTATION01")!=-1){
+		con="SORTATION01";
+	}
+	return con;
+}
+//判断目标库位可否移动
 var ismove=function (location) {
     var con=true;
 	if(location=='DX-01-01-01'||location=='YY-01-01-01'||location=='STAGE01'||location=='SORTATION01'){
@@ -1134,6 +1273,7 @@ var ismove=function (location) {
 				<div>
 					<a onclick='adj();' id='ezuiBtn_adj' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.adj'/></a>
 					<a onclick='mov();' id='ezuiBtn_mov' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.mov'/></a>
+					<a onclick='movLoc();' id='ezuiBtn_movLoc' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>库位移动</a>
   			        <a onclick='hold();' id='ezuiBtn_hold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.hold'/></a>
   			        <a onclick='nohold();' id='ezuiBtn_nohold' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>库存解冻</a>
 					<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>
@@ -1339,6 +1479,24 @@ var ismove=function (location) {
 		<a onclick='commitMovAll();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiDialogMovAll");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
+<%--库位移动页面--%>
+	<div id='ezuiDialogMovLoc' style='padding: 10px;'>
+		<form id='ezuiFormMovLoc' method='post'>
+<%--			<input type='hidden' id='viewInvLotattId' name='viewInvLotattId'/>--%>
+			<table>
+				<tr>
+					<th>起始库位</th>
+					<td><input type='text' id="fmlocation" name='fmlocation' class='easyui-textbox' size='16' data-options='required:true'/></td>
+					<th>目标库位</th>
+					<td><input type='text' id="tolocation" name='tolocation' class='easyui-textbox' size='16' data-options='required:true'/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id='ezuiDialogMovLocBtn'>
+		<a onclick='commitMovLoc();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiDialogMovLoc");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+	</div>
 <%--库存冻结页面--%>
 	<div id='ezuiDialogHold' style='padding: 10px;'>
 		<form id='ezuiFormHold' method='post'>
@@ -1484,6 +1642,18 @@ var ismove=function (location) {
 
 	</div>
 
+
+	<!-- 按钮执行结果结果模板-->
+	<div id='resultDialog' class='easyui-dialog' style='padding: 10px;'>
+		<form id='resultForm' method='post' enctype='multipart/form-data'>
+			<table>
+				<tr>
+					<th>结果</th>
+					<td><input id='result' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 	<%--导入页面--%>
 	<c:import url='/WEB-INF/jsp/viewInvLotatt/skuDialog.jsp'/>
 </body>
