@@ -200,51 +200,48 @@ public class ViewInvLotattService extends BaseService {
     public Json movViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
         Json json = new Json();
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("warehouseid", viewInvLotattForm.getWarehouseid());//仓库
-        map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());//货主
-        map.put("fmsku", viewInvLotattForm.getFmsku());             //产品代码
-        map.put("fmlotnum", viewInvLotattForm.getFmlotnum());       //批次
-        map.put("fmlocation", viewInvLotattForm.getFmlocation());   //库位
-        map.put("fmid", '*');               //跟踪号
-        map.put("fmqty", String.valueOf(viewInvLotattForm.getFmqty()));//可用件数
-        map.put("lotatt11text", viewInvLotattForm.getLotatt11text());//目标库位
-        map.put("lotatt11", viewInvLotattForm.getLotatt11());//移动数量
-        map.put("lotatt12", viewInvLotattForm.getLotatt12());//移动原因
-        map.put("lotatt12text", viewInvLotattForm.getLotatt12text());//原因描述
-        map.put("userid", viewInvLotattForm.getEditwho());
-        ViewInvLotatt viewInvLotatt = viewInvLotattMybatisDao.queryById(map);
-        if (viewInvLotatt != null) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("warehouseid", viewInvLotattForm.getWarehouseid());//仓库
+//        map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());//货主
+//        map.put("fmsku", viewInvLotattForm.getFmsku());             //产品代码
+//        map.put("fmlotnum", viewInvLotattForm.getFmlotnum());       //批次
+//        map.put("fmlocation", viewInvLotattForm.getFmlocation());   //库位
+//        map.put("fmid", '*');               //跟踪号
+//        map.put("fmqty", String.valueOf(viewInvLotattForm.getFmqty()));//可用件数
+//        map.put("lotatt11text", viewInvLotattForm.getLotatt11text());//目标库位
+//        map.put("lotatt11", viewInvLotattForm.getLotatt11());//移动数量
+//        map.put("lotatt12", viewInvLotattForm.getLotatt12());//移动原因
+//        map.put("lotatt12text", viewInvLotattForm.getLotatt12text());//原因描述
+//        map.put("userid", viewInvLotattForm.getEditwho());
             if(islocationid(viewInvLotattForm.getLotatt11text())) {
-                viewInvLotattMybatisDao.invMov(map);
-                String result = map.get("result").toString();
-                if (result.substring(0, 3).equals("000")) {
+                ViewInvLotattQuery query=new ViewInvLotattQuery();
+                BeanUtils.copyProperties(viewInvLotattForm, query);
+                viewInvLotattMybatisDao.invMov(query);
+//                String result = map.get("result").toString();
+                if (query.getResult().substring(0, 3).equals("000")) {
                     json.setSuccess(true);
                     json.setMsg("库存移动成功！");
                 } else {
                     json.setSuccess(false);
-                    String loc = map.get("fmlocation") + "";
-                    String sku = map.get("fmsku") + "";
-                    String customerid = map.get("fmcustomerid") + "";
+                    String loc =viewInvLotattForm.getFmcustomerid();
+                    String sku =viewInvLotattForm.getFmsku();
+                    String customerid =viewInvLotattForm.getFmcustomerid();
                     String loattt05=null;
                     String loattt04=null;
-                    if(viewInvLotatt.getLotatt05()!=null) {
-                       loattt05 = viewInvLotatt.getLotatt05() + "";
+                    if(viewInvLotattForm.getLotatt05()!=null) {
+                       loattt05 = viewInvLotattForm.getLotatt05() + "";
                     }
-                    if(viewInvLotatt.getLotatt04()!=null) {
-                        loattt04 = viewInvLotatt.getLotatt04() + "";
+                    if(viewInvLotattForm.getLotatt04()!=null) {
+                        loattt04 = viewInvLotattForm.getLotatt04() + "";
                     }
-                    json.setMsg("库位:" + loc +",货主:" + customerid + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + result);
+                    json.setMsg("库位:" + loc +",货主:" + customerid + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + query.getResult());
                 }
 
             }else{
                 json.setSuccess(false);
                 json.setMsg("目标库位不存在");
             }
-        } else {
-            json.setSuccess(false);
-            json.setMsg("查无此库存数据");
-        }
+
         return json;
     }
 
@@ -309,12 +306,12 @@ public class ViewInvLotattService extends BaseService {
              return  json.error("请输入起始库位!");
          }
         //判断目标库位是否存在
-        if(!islocationid(tolocation)) {
-
-            json.setSuccess(false);
-            json.setMsg("目标库位不存在");
-            return json;
-        }
+//        if(!islocationid(tolocation)) {
+//
+//            json.setSuccess(false);
+//            json.setMsg("目标库位不存在");
+//            return json;
+//        }
         //根据库位查出所有库存
         List<InvLotLocId> lotLocIdList=new ArrayList<>();
         List<ViewInvLotattForm> list=new ArrayList();
@@ -333,6 +330,8 @@ public class ViewInvLotattService extends BaseService {
                     viewInvLotattForm.setLotatt11text(tolocation);
                     viewInvLotattForm.setLotatt12("");
                     viewInvLotattForm.setLotatt12text("");
+                    viewInvLotattForm.setLotatt04(invLotLocId.getLotatt04());
+                    viewInvLotattForm.setLotatt05(invLotLocId.getLotatt05());
                    list.add(viewInvLotattForm);
                 }
             }

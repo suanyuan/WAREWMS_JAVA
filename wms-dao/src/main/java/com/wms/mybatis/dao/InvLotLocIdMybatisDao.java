@@ -97,5 +97,4 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 根据库位查出所有库存和批次属性
      */
     List<InvLotLocId> queryAllInvLotLocByLocationid(String locationid);
-
 }

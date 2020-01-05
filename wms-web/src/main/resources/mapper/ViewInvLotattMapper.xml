@@ -589,9 +589,9 @@ where 1=1
 </select>
 
 
-<select id="invMov" statementType="CALLABLE" parameterType="java.util.Map">
-	   {call SPINV_Movement_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11text,mode=IN,jdbcType=VARCHAR},'*',#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'now()','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
-</select>
+<update id="invMov" statementType="CALLABLE" parameterType="java.util.Map">
+	   {call SPINV_Movement_Process(#{warehouseid,mode=IN,jdbcType=VARCHAR},'*','0',#{fmcustomerid,mode=IN,jdbcType=VARCHAR},#{fmsku,mode=IN,jdbcType=VARCHAR},#{fmlotnum,mode=IN,jdbcType=VARCHAR},#{fmlocation,mode=IN,jdbcType=VARCHAR},#{fmid,mode=IN,jdbcType=VARCHAR},#{fmqty,mode=IN,jdbcType=VARCHAR},#{lotatt11text,mode=IN,jdbcType=VARCHAR},'*',#{lotatt11,mode=IN,jdbcType=VARCHAR},#{lotatt12,mode=IN,jdbcType=VARCHAR},#{lotatt12text,mode=IN,jdbcType=VARCHAR},'now()','CN',#{editwho,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
+</update>
 
 
 <select id="invHold" statementType="CALLABLE" parameterType="java.util.Map">

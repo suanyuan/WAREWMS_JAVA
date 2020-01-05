@@ -4,6 +4,7 @@ package com.wms.mybatis.dao;
 import com.wms.entity.InvLotLocIdSkuInvLotAtt;
 import com.wms.entity.ViewInvLocation;
 import com.wms.entity.ViewInvLotatt;
+import com.wms.query.ViewInvLotattQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ViewInvLotattMybatisDao extends BaseDao {
 
     void invAdj(Map<String, Object> map);
 
-    void invMov(Map<String, Object> map);
+    void invMov(ViewInvLotattQuery viewInvLotattQuery);
 
     void invHold(Map<String, Object> map);
 

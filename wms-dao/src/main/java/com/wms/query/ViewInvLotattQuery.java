@@ -6,6 +6,8 @@ import com.wms.mybatis.entity.SfcCustomer;
 
 public class ViewInvLotattQuery implements IQuery {
 
+	private  String result;
+	private String editwho;
 	private java.lang.String allocationrule;
 	private java.lang.String alternatesku1;
 	private java.lang.String alternatesku2;
@@ -79,6 +81,14 @@ public class ViewInvLotattQuery implements IQuery {
 	private java.lang.String warehouseid;
 	private String onholdlocker;
 	private Set<SfcCustomer> customerSet;
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
 
 	public String getOnholdlocker() {
 		return onholdlocker;
@@ -662,5 +672,13 @@ public class ViewInvLotattQuery implements IQuery {
 
 	public void setCustomerSet(Set<SfcCustomer> customerSet) {
 		this.customerSet = customerSet;
+	}
+
+	public String getEditwho() {
+		return editwho;
+	}
+
+	public void setEditwho(String editwho) {
+		this.editwho = editwho;
 	}
 }
