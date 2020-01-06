@@ -99,8 +99,74 @@ where 1=1
 
 </trim>
 </sql>
-   
 
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause_Type">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null and condition.id != ''" >
+				and id =  #{condition.id}
+			</if>
+			<if test="condition.customerid != null and condition.customerid != ''" >
+				and customerid  like '%${condition.customerid}%'
+			</if>
+			<if test="condition.sku != null and condition.sku != ''" >
+				and sku like '%${condition.sku}%'
+			</if>
+			<if test="condition.standard != null and condition.standard != ''" >
+				and standard like '%${condition.standard}%'
+			</if>
+			<if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
+				and lotatt06 like '%${condition.lotatt06}%'
+			</if>
+			<if test="condition.lotatt11 != null and condition.lotatt11 != ''" >
+				and lotatt11  like '%${condition.lotatt11}%'
+			</if>
+			<if test="condition.conversionRatio != null and condition.conversionRatio != ''" >
+				and conversionRatio like '%${condition.conversionRatio}%'
+			</if>
+			<if test="condition.unit != null and condition.unit != ''" >
+				and unit like '%${condition.unit}%'
+			</if>
+			<if test="condition.productline != null and condition.productline != ''" >
+				and productline like '%${condition.productline}%'
+			</if>
+			<if test="condition.supplier != null and condition.supplier != ''" >
+				and supplier like '%${condition.supplier}%'
+			</if>
+			<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+				and userdefine1 =  #{condition.userdefine1}
+			</if>
+			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+				and userdefine2 =  #{condition.userdefine2}
+			</if>
+			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+				and userdefine3 =  #{condition.userdefine3}
+			</if>
+			<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+				and userdefine4 =  #{condition.userdefine4}
+			</if>
+			<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+				and userdefine5 =  #{condition.userdefine5}
+			</if>
+			<if test="condition.addwho != null and condition.addwho != ''" >
+				and addwho =  #{condition.addwho}
+			</if>
+			<if test="condition.addtime != null and condition.addtime != ''" >
+				and addtime =  #{condition.addtime}
+			</if>
+			<if test="condition.editwho != null and condition.editwho != ''" >
+				and editwho =  #{condition.editwho}
+			</if>
+			<if test="condition.edittime != null and condition.edittime != ''" >
+				and edittime =  #{condition.edittime}
+			</if>
+
+
+
+
+		</trim>
+	</sql>
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
   insert into bas_sku_leak(id,customerid,sku,standard,lotatt06,lotatt11,conversionRatio,unit,productline,supplier,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5,addwho,addtime,editwho,edittime)
@@ -187,7 +253,7 @@ where 1=1
 <!-- 未备案产品档案 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from bas_sku_leak 
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause_Type"/>
 </select>
   	
 <!-- 查询未备案产品档案列表 -->
@@ -195,7 +261,7 @@ where 1=1
 	select 
 	<include refid="Base_Column_List"/>
 	from bas_sku_leak 
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause_Type"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
     </if>

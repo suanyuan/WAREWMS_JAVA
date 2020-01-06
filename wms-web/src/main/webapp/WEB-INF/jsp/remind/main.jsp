@@ -582,9 +582,9 @@
                         title: '',
                         pageSize : 50,
                         pageList : [50, 100, 200],
-                        fit: true,
+                        fit: false,
                         border: false,
-                        fitColumns : true,
+                        fitColumns : false,
                         nowrap: true,
                         striped: true,
                         // queryParams:{
@@ -596,15 +596,15 @@
                         singleSelect:true,
                         idField : 'customerid',
                         columns : [[
-                            {field: 'customerid',		title: '货主',	width: 42 },
-                            {field: 'sku',		title: '产品代码',	width: 42 },
-                            {field: 'standard',		title: '规格',	width: 42 },
-                            {field: 'lotatt06',		title: '注册证',	width: 42 },
-                            {field: 'lotatt11',		title: '储存条件',	width: 42 },
-                            {field: 'conversionRatio',		title: '换算率',	width: 42 },
-                            {field: 'unit',		title: '单位',	width: 42 },
-                            {field: 'productline',		title: '产品线',	width: 42 },
-                            {field: 'supplier',		title: '供应商',	width: 42 },
+                            {field: 'customerid',		title: '货主',	width: 142 },
+                            {field: 'sku',		title: '产品代码',	width: 142 },
+                            {field: 'standard',		title: '规格',	width: 142 },
+                            {field: 'lotatt06',		title: '注册证',	width: 142 },
+                            {field: 'lotatt11',		title: '储存条件',	width: 142 },
+                            {field: 'conversionRatio',		title: '换算率',	width: 142 },
+                            {field: 'unit',		title: '单位',	width: 142 },
+                            {field: 'productline',		title: '产品线',	width: 142 },
+                            {field: 'supplier',		title: '供应商',	width: 142 },
 
                         ]],
                         // onDblClickCell: function(index,field,value){
@@ -625,9 +625,10 @@
 
                     ezuiDialogBasSkuLeak = $('#ezuiDialogBasSkuLeak').dialog({
                         modal : true,
+                        fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
                         width:850,
-                        height:600,
+                        height:660,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
@@ -912,9 +913,27 @@
                 lotatt05 : $('#lotatt05Q').val(),
             });
         }
+        //查询未备案产品信息
+        function doSearchBasSkuLeak() {
+            // var row = ezuiDatagrid.datagrid('getSelected');
+            // if(row!=null){
+            //     idlist1 = row.udf1;
+            // }else{
+            //     idlist1='';
+            // }
+            basSkuLeakDatagrid.datagrid('load', {
+                // idList:idlist1,
+                customerid : $('#customerid').val(),
+                sku : $('#sku').val(),
+                standard : $('#standard').val(),
+                lotatt06 : $('#lotatt06').val(),
+                productline : $('#productline').val(),
+                supplier:$('#supplier').val(),
 
+            });
+        }
 
-        /* 导出start */
+        /* 导出库内货品start */
         var doExport = function(){
             var row = ezuiDatagrid.datagrid('getSelected');
             if(row!=null){
@@ -959,6 +978,52 @@
         };
         /* 导出end */
 
+
+
+
+        /* 导出未备案产品start */
+        var doBasSkuLeakExport = function(){
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            if(navigator.cookieEnabled){
+                $('#ezuiBtn_export').linkbutton('disable');
+                var token = new Date().getTime();
+                var param = new HashMap();
+                param.put("token", token);
+                // param.put("idList", idlist1);
+
+                param.put("customerid", $('#customerid').val());
+                param.put("sku", $('#sku').val());
+                param.put("standard",$('#standard').val());
+                param.put("lotatt06", $('#lotatt06').val());
+                param.put("specsName", $('#specsName').val());
+                param.put("productline", $('#productline').val());
+                param.put("supplier", $('#supplier').val());
+
+
+
+                //--导出Excel
+                var formId = ajaxDownloadFile(sy.bp()+"/basSkuLeakController.do?exportSkuDataToExcel", param);
+                downloadCheckTimer = window.setInterval(function () {
+                    window.clearInterval(downloadCheckTimer);
+                    $('#'+formId).remove();
+                    $('#ezuiBtn_export').linkbutton('enable');
+                    $.messager.progress('close');
+                    $.messager.show({
+                        msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                    });
+                }, 1000);
+            }else{
+                $.messager.show({
+                    msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            }
+        };
+        /* 导出end */
 
 </script>
 </head>
@@ -1142,19 +1207,30 @@
 
 <div id='ezuiDialogBasSkuLeak' style='padding: 10px;display: none'>
     <div id='clientTB5' class='datagrid-toolbar' style=''>
-        <%--<fieldset >--%>
-        <%--<legend>企业信息</legend>--%>
-        <%--<table>--%>
-        <%--<tr>--%>
-        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<td>--%>
-        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-        <%--</td>--%>
-        <%--</tr>--%>
-        <%--</table>--%>
-        <%--</fieldset>--%>
+        <fieldset >
+        <legend>未备案产品</legend>
+        <table>
+        <tr>
+            <th>货主：</th><td><input type='text' id='customerid'  class='easyui-textbox'    data-options='width:200'/></td>
+            <th>产品代码：</th><td><input type='text' id='sku' class='easyui-textbox'    data-options='width:200'/></td>
+            <th>规格：</th><td><input type='text' id='standard' class='easyui-textbox'    data-options='width:200'/></td>
+            <th>注册证：</th><td><input type='text' id='lotatt06' class='easyui-textbox'    data-options='width:200'/></td>
+        </tr>
+        <tr>
+            <th>产品线：</th><td><input type='text' id='productline' class='easyui-textbox'    data-options='width:200'/></td>
+            <th>供应商：</th><td><input type='text' id='supplier' class='easyui-textbox'    data-options='width:200'/></td>
+
+
+            <td colspan="2">
+            <a onclick='doSearchBasSkuLeak()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+            <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+            <a onclick='ezuiToolbarClear("#clientTB5");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+            <a onclick='doBasSkuLeakExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
+        </td>
+        </tr>
+        </table>
+        </fieldset>
     </div>
     <table id="dataGridBasSkuLeak">
 
@@ -1185,7 +1261,7 @@
 <div id='ezuiDialogInvlotloc' style='padding: 10px;display: none'>
     <div id='clientTB7' class='datagrid-toolbar' style=''>
         <fieldset >
-        <legend>企业信息</legend>
+        <legend>库内货品</legend>
         <table>
             <tr>
                 <th>货主：</th><td><input type='text' id='enterpriseNameQ'  class='easyui-textbox'    data-options='width:150'/></td>
@@ -1202,7 +1278,7 @@
                 <th>序列号：</th><td><input type='text' id='lotatt05Q' class='easyui-textbox'    data-options='width:150'/></td>
 
 
-                <td rowspan="1">
+                <td colspan="2">
                 <a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
                 <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
                     <a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
