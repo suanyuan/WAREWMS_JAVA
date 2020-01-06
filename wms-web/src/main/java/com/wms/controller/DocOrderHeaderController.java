@@ -142,8 +142,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "picking")
     @ResponseBody
-    public Json picking(String orderNo) {
-        Json json = orderHeaderForNormalService.picking(orderNo);
+    public Json picking(String ordernos) {
+        Json json = orderHeaderForNormalService.batchRecheck(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -154,8 +154,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "unPicking")
     @ResponseBody
-    public Json unPicking(String orderNo) {
-        Json json = orderHeaderForNormalService.unPicking(orderNo);
+    public Json unPicking(String ordernos) {
+        Json json = orderHeaderForNormalService.batchUnRecheck(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -166,8 +166,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "shipment")
     @ResponseBody
-    public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
-        Json json = orderHeaderForNormalService.shipment(orderHeaderForNormalForm);
+    public Json shipment(String ordernos) {
+        Json json = orderHeaderForNormalService.batchShipment(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -178,8 +178,8 @@ public class DocOrderHeaderController {
     @Login
     @RequestMapping(params = "cancel")
     @ResponseBody
-    public Json cancel(String orderno) {
-        Json json = orderHeaderForNormalService.cancel(orderno);
+    public Json cancel(String ordernos) {
+        Json json = orderHeaderForNormalService.batchCancel(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

@@ -506,9 +506,32 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
-     * 拣货/确认复核
+     * 批量处理复核
      */
-    public Json picking(String orderNo) {
+    public Json batchRecheck(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = recheck(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
+     * 复核
+     */
+    private Json recheck(String orderNo) {
 
         Json json = docOrderUtilService.fixLLPackage(orderNo);
         if (!json.isSuccess()) return json;
@@ -544,20 +567,21 @@ public class OrderHeaderForNormalService extends BaseService {
                             if (pickResult != null && pickResult.length() > 0) {
                                 if (!pickResult.equals("000")) {
                                     json.setSuccess(false);
-                                    json.setMsg("出库处理失败：" + pickResult);
+                                    json.setMsg("复核处理失败：" + pickResult);
                                     return json;
                                 }
                             } else {
                                 json.setSuccess(false);
-                                json.setMsg("出库处理失败：订单数据异常！");
+                                json.setMsg("复核处理失败：订单数据异常！");
                                 return json;
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                        json.setMsg("系统异常：" + e.getMessage());
                         json.setSuccess(false);
-                        json.setMsg("出库处理失败：订单数据异常！");
+//                        json.setMsg("复核处理失败：订单数据异常！");
                         return json;
                     }
                     return Json.success("拣货成功");
@@ -566,20 +590,43 @@ public class OrderHeaderForNormalService extends BaseService {
                 }
             } else {
                 json.setSuccess(false);
-                json.setMsg("拣货处理失败：当前状态订单,不能操作拣货!");
+                json.setMsg("当前状态订单,不能操作拣货!");
                 return json;
             }
         } else {
             json.setSuccess(false);
-            json.setMsg("拣货处理失败：订单数据异常！");
+            json.setMsg("查无此订单数据");
             return json;
         }
     }
 
     /**
-     * 取消拣货/取消复核
+     * 批量处理取消复核
      */
-    public Json unPicking(String orderNo) {
+    public Json batchUnRecheck(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = unRecheck(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
+     * 取消复核
+     */
+    private Json unRecheck(String orderNo) {
         Json json = new Json();
         //
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
@@ -591,7 +638,7 @@ public class OrderHeaderForNormalService extends BaseService {
             //判断订单状态
             if (sosStatus <= 40 || sosStatus > 60) {
                 json.setSuccess(false);
-                json.setMsg("取消拣货处理失败：当前状态订单,不能操作取消拣货!");
+                json.setMsg("当前状态订单,不可取消复核!");
                 return json;
             } else {
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
@@ -609,12 +656,12 @@ public class OrderHeaderForNormalService extends BaseService {
                                     continue;
                                 } else {
                                     json.setSuccess(false);
-                                    json.setMsg("取消拣货处理失败：" + pickResult);
+                                    json.setMsg("取消拣货处理失败，" + pickResult);
                                     return json;
                                 }
                             } else {
                                 json.setSuccess(false);
-                                json.setMsg("取消拣货处理失败：订单数据异常！");
+                                json.setMsg("取消拣货处理失败，订单数据异常！");
                                 return json;
                             }
                         }
@@ -632,9 +679,32 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         } else {
             json.setSuccess(false);
-            json.setMsg("取消拣货处理失败：订单数据异常！");
+            json.setMsg("查无此订单数据！");
             return json;
         }
+    }
+
+    /**
+     * 批量处理发运
+     */
+    public Json batchShipment(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = shipment(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
     }
 
     /**
@@ -756,12 +826,12 @@ public class OrderHeaderForNormalService extends BaseService {
      * <p>
      * } else
      */
-    public Json shipment(OrderHeaderForNormalForm orderHeaderForNormalForm) throws Exception {
+    private Json shipment(String orderno) {
 
-        Json json = docOrderUtilService.validateSerialNumRecords(orderHeaderForNormalForm.getOrderno(), 2);
+        Json json = docOrderUtilService.validateSerialNumRecords(orderno, 2);
         if (!json.isSuccess()) return json;
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-        orderHeaderForNormalQuery.setOrderno(orderHeaderForNormalForm.getOrderno());
+        orderHeaderForNormalQuery.setOrderno(orderno);
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
 
         if (orderHeaderForNormal != null) {
@@ -771,7 +841,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     //拣货/装箱状态订单直接操作发运
                     Map<String, Object> map = new HashMap<>();
                     map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                    map.put("orderNo", orderHeaderForNormalForm.getOrderno());
+                    map.put("orderNo", orderno);
                     map.put("userId", SfcUserLoginUtil.getLoginUser().getId());
                     orderHeaderForNormalMybatisDao.shipmentByOrder(map);
                     String shippmentResult = map.get("result").toString();
@@ -779,7 +849,7 @@ public class OrderHeaderForNormalService extends BaseService {
                         if (shippmentResult.equals("000")) {
 
                             //发运成功之后记录序列号出库
-                            docOrderUtilService.recordSerialNumOutStorage(orderHeaderForNormalForm.getOrderno());
+                            docOrderUtilService.recordSerialNumOutStorage(orderno);
                             //发运成功之后删除双证导入记录
                             docOrderUtilService.removeAsnDoublecOutStorage(orderHeaderForNormal.getOrderno());
 
@@ -818,7 +888,7 @@ public class OrderHeaderForNormalService extends BaseService {
         } else {
 
             json.setSuccess(false);
-            json.setMsg("出库处理失败：订单数据异常！");
+            json.setMsg("查无此订单数据！");
             return json;
         }
     }
@@ -987,6 +1057,29 @@ public class OrderHeaderForNormalService extends BaseService {
     }
 
     /**
+     * 批量处理取消订单
+     */
+    public Json batchCancel(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = cancel(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
      * 取消订单
      * else if (orderHeaderForNormal.getSostatus().equals("30") ||
      *                         orderHeaderForNormal.getSostatus().equals("40")) {
@@ -1133,33 +1226,33 @@ public class OrderHeaderForNormalService extends BaseService {
                             orderHeaderForNormalQuery.setCurrentTime(new Date());
                             orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
                             json.setSuccess(true);
-                            json.setMsg("出库取消成功！");
+                            json.setMsg("订单作废成功！");
                             json.setObj(orderHeaderForNormal);
                             return json;
                         } else {
                             json.setSuccess(false);
-                            json.setMsg("出库取消失败：" + cancelResult);
+                            json.setMsg("订单作废失败，" + cancelResult);
                             return json;
                         }
                     } else {
                         json.setSuccess(false);
-                        json.setMsg("出库取消失败！");
+                        json.setMsg("订单作废失败，系统异常");
                         return json;
                     }
                 }  else {
                     json.setSuccess(false);
-                    json.setMsg("出库取消失败：当前状态订单,不能操作取消！");
+                    json.setMsg("当前状态订单,不可作废！");
                     return json;
                 }
             } else {
                 json.setSuccess(false);
-                json.setMsg("出库取消失败：查无当前单号数据！");
+                json.setMsg("查无当前订单数据！");
                 return json;
             }
         } catch (Exception e) {
             e.printStackTrace();
             json.setSuccess(false);
-            json.setMsg("出库取消异常:" + e.getMessage());
+            json.setMsg("系统异常:" + e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return json;
         }
@@ -1876,11 +1969,9 @@ public class OrderHeaderForNormalService extends BaseService {
             if (result.isSuccess()) {
                 head = orderHeaderForNormalMybatisDao.queryById(orderno);
                 if (head.getSostatus().equals("40")) {
-                    Json json = picking(orderno);
+                    Json json = recheck(orderno);
                     if (json.isSuccess()) {
-                        OrderHeaderForNormalForm form = new OrderHeaderForNormalForm();
-                        form.setOrderno(orderno);
-                        result = shipment(form);
+                        result = shipment(orderno);
                         if (result.isSuccess()) {
                             return Json.error("发运成功");
                         } else {
