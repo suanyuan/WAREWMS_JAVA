@@ -21,9 +21,9 @@ public class InvLotLocId  implements Serializable {
 
 	private String sku;
 
-	private Double qty;
+	private Double qty;   //库存件数
 
-	private Double qtyallocated;
+	private Double qtyallocated;//分配件数
 
 	private Double qtyrpin;
 
@@ -34,6 +34,7 @@ public class InvLotLocId  implements Serializable {
 	private Double qtymvout;
 
 	private Double qtyonhold;
+	private Double qtyavailed;//可用件数
 
 	private Date addtime;
 

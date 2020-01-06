@@ -321,17 +321,17 @@ public class ViewInvLotattService extends BaseService {
             if(lotLocIdList.size()>0){
                 for (InvLotLocId invLotLocId : lotLocIdList) {
                     viewInvLotattForm=new ViewInvLotattForm();
-                    viewInvLotattForm.setFmcustomerid(invLotLocId.getCustomerid());
-                    viewInvLotattForm.setFmsku(invLotLocId.getSku());
-                    viewInvLotattForm.setFmlotnum(invLotLocId.getLotnum());
-                    viewInvLotattForm.setFmlocation(invLotLocId.getLocationid());
-                    viewInvLotattForm.setFmqty(new BigDecimal(invLotLocId.getQty()));
-                    viewInvLotattForm.setLotatt11(invLotLocId.getQtyallocated()+"");
-                    viewInvLotattForm.setLotatt11text(tolocation);
-                    viewInvLotattForm.setLotatt12("");
-                    viewInvLotattForm.setLotatt12text("");
-                    viewInvLotattForm.setLotatt04(invLotLocId.getLotatt04());
-                    viewInvLotattForm.setLotatt05(invLotLocId.getLotatt05());
+                    viewInvLotattForm.setFmcustomerid(invLotLocId.getCustomerid()); //货主
+                    viewInvLotattForm.setFmsku(invLotLocId.getSku());               //产品代码
+                    viewInvLotattForm.setFmlotnum(invLotLocId.getLotnum());         //批次
+                    viewInvLotattForm.setFmlocation(invLotLocId.getLocationid());   //起始库位
+                    viewInvLotattForm.setFmqty(new BigDecimal(invLotLocId.getQty()));//库存件数
+                    viewInvLotattForm.setLotatt11(invLotLocId.getQtyavailed()+"");   //可用件数
+                    viewInvLotattForm.setLotatt11text(tolocation);                   //目标库位
+                    viewInvLotattForm.setLotatt12("");                               //移动原因
+                    viewInvLotattForm.setLotatt12text("");                            //原因描述
+                    viewInvLotattForm.setLotatt04(invLotLocId.getLotatt04());        //批号
+                    viewInvLotattForm.setLotatt05(invLotLocId.getLotatt05());        //序列号
                    list.add(viewInvLotattForm);
                 }
             }
