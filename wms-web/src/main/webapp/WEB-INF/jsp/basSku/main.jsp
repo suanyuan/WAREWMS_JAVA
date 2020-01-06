@@ -173,10 +173,10 @@ $(function() {
 
 
 
-    $("#skuGroup1").combobox({
-        panelHeight: 'auto',
+    $("#sku_group1").combobox({
+        // panelHeight: 'auto',
         url:'/productLineController.do?getCombobox',
-        valueField:'id',
+        valueField:'value',
         textField:'value',
         onLoadSuccess:function () {
             <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
@@ -534,7 +534,7 @@ var doSearch = function(){
 
         reservedfield14 : $("#reservedfield14").val(),
 
-        skuGroup1 : $("#sku_group1").val(),
+        skuGroup1 : $("#sku_group1").combobox('getValue'),
         skuGroup2 : $("#sku_group2").val(),
         skuGroup6 : $("#skuGroup6Q").val(),
 
@@ -870,7 +870,7 @@ var downloadTemplate = function(){
 
                             <tr>
                             <th>产品线</th>
-							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options=''/>
+							<td><input type='text' id='sku_group1' name="sku_group1" class='easyui-textbox' size='16' data-options='editable:false'/>
 
 							</td>
 							<th>附卡类别</th>

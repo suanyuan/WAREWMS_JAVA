@@ -580,8 +580,11 @@ where 1=1
 			</if>
 
 
+			<!--<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >-->
+			<!--and t1.sku_group1  like  '%${condition.skuGroup1}%'-->
+			<!--</if>-->
 			<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
-				and t1.sku_group1  like  '%${condition.skuGroup1}%'
+				and t3.name  like  '%${condition.skuGroup1}%'
 			</if>
 			<if test="condition.skuGroup2 != null and condition.skuGroup2 != ''" >
 				and t1.sku_group2  like  '%${condition.skuGroup2}%'
@@ -995,6 +998,8 @@ where 1=1
 	from
 	(select t1.*
 	from bas_sku_history t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
+	left JOIN product_line t3 on t1.sku_group1 = t3.product_line_id
+
 	<include refid="Example_Where_Clause_ByPage"/>) as a
 	LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
 	LEFT JOIN (select DISTINCT(customerid),t1.descr_c from bas_customer t1 UNION
@@ -1012,6 +1017,8 @@ where 1=1
 	from
 	(select t1.*
 	from bas_sku_history t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
+	left JOIN product_line t3 on t1.sku_group1 = t3.product_line_id
+
 	<include refid="Example_Where_Clause_ByPage"/>) as a
 	LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
 	LEFT JOIN (select DISTINCT(customerid),t1.descr_c from bas_customer t1 UNION
