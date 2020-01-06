@@ -1,11 +1,20 @@
 package com.wms.service;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.BasSkuLeakMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.exception.ExcelException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +27,9 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.vo.form.BasSkuLeakForm;
 import com.wms.query.BasSkuLeakQuery;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Service("basSkuLeakService")
 public class BasSkuLeakService extends BaseService {
@@ -92,6 +104,80 @@ public class BasSkuLeakService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+
+
+	public void exportSkuDataToExcel(HttpServletResponse response, BasSkuLeakForm form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+
+		BasSkuLeakForm basSkuForm = new BasSkuLeakForm();
+
+//		basSkuForm.setCustomerid(form.getCustomerid());
+//		basSkuForm.setSku(form.getSku());
+//		basSkuForm.setActiveFlag(form.getActiveFlag());
+//		basSkuForm.setEditwho();
+		BeanUtils.copyProperties(form, basSkuForm);
+		try {
+			// 获取前台传来的数据
+			//String cutomerid = form.getCustomerid();
+			//String sku = form.getSku();
+			//String cutomeridId = new String(cutomerid.getBytes("iso-8859-1"), "utf-8");
+			//String skuId = new String(sku.getBytes("iso-8859-1"), "utf-8");
+			BasSkuLeakQuery query = new BasSkuLeakQuery();
+			BeanUtils.copyProperties(basSkuForm, query);
+//			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "未备案产品档案";
+			// excel要导出的数据
+			List<BasSkuLeak> basSkuList = basSkuLeakMybatisDao.queryByList(mybatisCriteria);
+			// 导出
+			if (basSkuList == null || basSkuList.size() == 0) {
+				//System.out.println("题库为空");
+			}else {
+
+				for (BasSkuLeak basSku : basSkuList) {
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date=null;
+
+				}
+
+
+				ExcelUtil.listToExcel(basSkuList, fieldMap, sheetName, response);
+				//System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("customerid", "货主");
+		superClassMap.put("sku", "产品代码");
+		superClassMap.put("standard", "规格");
+		superClassMap.put("lotatt06", "注册证");
+		superClassMap.put("lotatt11", "储存条件");
+		superClassMap.put("conversionRatio", "换算率");
+		superClassMap.put("unit", "单位");
+		superClassMap.put("productline", "产品线");
+		superClassMap.put("supplier", "供应商");
+
+
+		return superClassMap;
 	}
 
 

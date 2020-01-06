@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class BasSkuLeakForm {
 
+	private String token;
 	private long basSkuLeakId;
 	private String customerid;
 	private String sku;
@@ -24,6 +25,15 @@ public class BasSkuLeakForm {
 	private java.util.Date addtime;
 	private String editwho;
 	private java.util.Date edittime;
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public long getBasSkuLeakId() {
 		return basSkuLeakId;

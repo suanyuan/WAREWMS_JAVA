@@ -2,6 +2,7 @@ package com.wms.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,6 +77,12 @@ public class BasSkuLeakController {
 		}
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+	}
+
+	@Login
+	@RequestMapping(params = "exportSkuDataToExcel")
+	public void exportSkuDataToExcel(HttpServletResponse response, BasSkuLeakForm form) throws Exception {
+		basSkuLeakService.exportSkuDataToExcel(response, form);
 	}
 
 	@Login
