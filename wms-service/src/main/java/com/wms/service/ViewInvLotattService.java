@@ -9,6 +9,7 @@ import com.wms.mybatis.dao.*;
 import com.wms.query.ViewInvLotattQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import com.wms.vo.ViewInvLotattVO;
 import com.wms.vo.form.ViewInvLotattForm;
@@ -138,7 +139,7 @@ public class ViewInvLotattService extends BaseService {
             viewInvLotattVO = new ViewInvLotattVO();
             BeanUtils.copyProperties(viewInvLotatt, viewInvLotattVO);
             //供应商名称
-            if(viewInvLotattVO.getLotatt08()!=null) {
+            if(StringUtil.isNotEmpty(viewInvLotattVO.getLotatt08())) {
                 String loatt08=viewInvLotattVO.getLotatt08();
                 BasCustomer basCustomer = basCustomerMybatisDao.queryByCustomerId(loatt08);
                 if(basCustomer!=null) {

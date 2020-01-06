@@ -92,12 +92,22 @@
                     ajaxBtn($('#menuId').val(), '<c:url value="/viewInvLocationController.do?getBtn"/>', ezuiMenu);
                     getTotalInit=getTotal();
                     ezuiDatagrid.datagrid('reloadFooter',[
-                        {lotatt05:'合计:',fmqty:getTotalInit.fmqty,fmqtyEach:getTotalInit.fmqtyEach,qtyallocated:getTotalInit.qtyallocated,
-                            qtyallocatedEach:getTotalInit.qtyallocatedEach,qtyavailed:getTotalInit.qtyavailed,qtyavailedEach:getTotalInit.qtyavailedEach,qtyholded:getTotalInit.qtyholded,
-                            qtyholdedEach:getTotalInit.qtyholdedEach},
-                        {lotatt05:'总计:',fmqty:data.rows[0].fmqtySum,fmqtyEach:data.rows[0].fmqtyEachSum,
-                            qtyallocated:data.rows[0].qtyallocatedSum,qtyallocatedEach:data.rows[0].qtyallocatedEachSum,
-                            qtyavailed:data.rows[0].qtyavailedSum,qtyavailedEach:data.rows[0].qtyavailedEachSum,
+                        {lotatt05:'合计:',
+                            fmqty: data.rows.length === 0 ? 0 : getTotalInit.fmqty,
+                            fmqtyEach: data.rows.length === 0 ? 0 : getTotalInit.fmqtyEach,
+                            qtyallocated: data.rows.length === 0 ? 0 : getTotalInit.qtyallocated,
+                            qtyallocatedEach: data.rows.length === 0 ? 0 : getTotalInit.qtyallocatedEach,
+                            qtyavailed: data.rows.length === 0 ? 0 : getTotalInit.qtyavailed,
+                            qtyavailedEach: data.rows.length === 0 ? 0 : getTotalInit.qtyavailedEach,
+                            qtyholded: data.rows.length === 0 ? 0 : getTotalInit.qtyholded,
+                            qtyholdedEach: data.rows.length === 0 ? 0 : getTotalInit.qtyholdedEach},
+                        {lotatt05:'总计:',
+                            fmqty: data.rows.length === 0 ? 0 : data.rows[0].fmqtySum,
+                            fmqtyEach: data.rows.length === 0 ? 0 : data.rows[0].fmqtyEachSum,
+                            qtyallocated: data.rows.length === 0 ? 0 : data.rows[0].qtyallocatedSum,
+                            qtyallocatedEach: data.rows.length === 0 ? 0 : data.rows[0].qtyallocatedEachSum,
+                            qtyavailed: data.rows.length === 0 ? 0 : data.rows[0].qtyavailedSum,
+                            qtyavailedEach: data.rows.length === 0 ? 0 : data.rows[0].qtyavailedEachSum,
                             qtyholded:0, qtyholdedEach:0}
                     ]);
                 }
