@@ -1,14 +1,12 @@
 package com.wms.service.importdata;
 
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
-import com.wms.service.BasGtnLotattService;
-import com.wms.service.DocAsnDetailService;
-import com.wms.service.GspVerifyService;
-import com.wms.service.InvLotAttService;
+import com.wms.service.*;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -60,6 +58,8 @@ public class ImportAsnDataService {
     private GspVerifyService gspVerifyService;
     @Autowired
     private DocAsnDetailService docAsnDetailService;
+    @Autowired
+    private BasCodesMybatisDao basCodesMybatisDao;
 
     /**
      * 1，导入有供应商代码
@@ -237,16 +237,21 @@ public class ImportAsnDataService {
                 rowResult.append("[单价]，须为数字").append(" ");
             }
 
-            //库存状态
-			/*try {
-				if (StringUtils.isNotEmpty(dataArray.getLotatt04())){
-					if(!(dataArray.getLotatt04().equals("HG") || dataArray.getLotatt04().equals("CP"))){
-						throw new Exception();
-					}
-				}
-			} catch (Exception e) {
-				rowResult.append("[库存状态]，输入异常").append(" ");
-			}*/
+            //样品属性
+             try {
+			    if (StringUtils.isNotEmpty(dataArray.getLotatt09())){
+                    String  lotatt09=dataArray.getLotatt09();
+                    BasCodesQuery query=new BasCodesQuery();
+                    query.setCodeid(Constant.CODE_CATALOG_SAMPLEATTR);
+                    query.setCode(lotatt09);
+                    BasCodes basCodes = basCodesMybatisDao.queryById(query);
+                    if(basCodes==null) {
+                        throw new Exception();
+                    }
+                }
+ 		   } catch (Exception e) {
+ 			rowResult.append("[样品属性]，输入错误,系统中不存在对应的样品属性").append(" ");
+  		  }
             /*try {
                 quantityData = dataArray.getExpectedqty();
                 if (StringUtils.isNotEmpty(quantityData)) {
