@@ -364,13 +364,12 @@
     <select id="querySalesSoList"  resultType="com.wms.entity.RptSalesSo" parameterType="Object">
         SELECT
          c.lotatt14 sourceOrder,aa.soreference1 soOrderNum,aa.`orderno` soOrderNo,DATE_FORMAT(aa.`edittime`,'%Y-%m-%d') soDate,bb1.codename_c soType,
-        r.descr_c customerid,a.`sku`,c.lotatt12,s.`descr_c` descrc,b.qty,bb.codename_c uom,c.lotatt04,c.lotatt05,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
+        r.descr_c customerid,a.`sku`,c.lotatt12,s.`descr_c` descrc,a.qtyordered qty,bb.codename_c uom,c.lotatt04,c.lotatt05,DATE_FORMAT(c.`lotatt02`,'%Y-%m-%d') lotatt02,
          aa.addwho,aa.editwho reviewWho,aa.c_address4 trackingNumber,aa.consigneeid,p.qty1
         FROM  `doc_order_details` a
         LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
-        LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
-        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+        LEFT JOIN `inv_lot_att` c ON c.`lotnum`=a.`lotnum`
+        LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
         LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
         LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
         LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
@@ -387,9 +386,8 @@
    select count(1)
     FROM  `doc_order_details` a
     LEFT JOIN `doc_order_header` aa ON aa.orderno=a.`orderno`
-    LEFT JOIN `act_allocation_details`   b ON b.`orderno`=a.`orderno` AND b.`orderlineno`=a.`orderlineno`
-    LEFT JOIN `inv_lot_att` c ON c.`lotnum`=b.`lotnum`
-    LEFT JOIN `bas_sku` s   ON s.`sku`=b.`sku` AND s.`customerid`=b.`customerid`
+    LEFT JOIN `inv_lot_att` c ON c.`lotnum`=a.`lotnum`
+    LEFT JOIN `bas_sku` s   ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
     LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
     LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
     LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
