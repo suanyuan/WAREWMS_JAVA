@@ -518,12 +518,8 @@
             $("#cAddress4").textbox('clear');
             $("#carrierContact").textbox('clear');
 
-            $("#ordertime").datetimebox({
-                value: ordertimeDate(new Date())
-            });
-            $("#ordertimeTo").datetimebox({
-                value: ordertimeDateTo(new Date())
-            });
+            $("#ordertime").datetimebox('clear');
+            $("#ordertimeTo").datetimebox('clear');
             $("#toolbar #productLineOrder").combobox('clear');  //清空option选项
             // $("#sostatusCheck").attr("checked",false);
         };
@@ -2778,16 +2774,10 @@
                     </tr>
                     <tr>
                         <th>订单创建时间</th>
-                        <td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options="
-																																	required:true,
-																																	showSeconds:false,
-																																	value:ordertimeDate(new Date())"/>
+                        <td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options=""/>
                         </td>
                         <th>至</th>
-                        <td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options="
-																																required:true,
-																																showSeconds:false,
-																																value:ordertimeDateTo(new Date())"/>
+                        <td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options=""/>
                         </td>
                         <th>订单发运时间</th>
                         <td><input type='text' id='edittime' class='easyui-datetimebox' size='16' data-options=""/></td>
