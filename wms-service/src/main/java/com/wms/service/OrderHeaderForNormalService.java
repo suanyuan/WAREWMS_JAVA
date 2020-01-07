@@ -862,27 +862,27 @@ public class OrderHeaderForNormalService extends BaseService {
                         } else {
 
                             json.setSuccess(false);
-                            json.setMsg("出库处理失败：" + shippmentResult);
+                            json.setMsg("出库处理失败，" + shippmentResult);
                             return json;
                         }
                     } else {
 
                         json.setSuccess(false);
-                        json.setMsg("出库处理失败：订单数据异常！");
+                        json.setMsg("出库处理失败，订单数据异常！");
                         return json;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    json.setMsg("系统异常，" + e.getMessage());
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     json.setSuccess(false);
-                    json.setMsg("出库处理失败：订单数据异常！");
                     return json;
                 }
 
             } else {
 
                 json.setSuccess(false);
-                json.setMsg("出库处理失败：当前状态订单,不能操作出库!");
+                json.setMsg("当前状态订单,不能操作出库!");
                 return json;
             }
         } else {
@@ -1252,7 +1252,7 @@ public class OrderHeaderForNormalService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
             json.setSuccess(false);
-            json.setMsg("系统异常:" + e.getMessage());
+            json.setMsg("系统异常，" + e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return json;
         }

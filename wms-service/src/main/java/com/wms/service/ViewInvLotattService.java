@@ -36,6 +36,8 @@ public class ViewInvLotattService extends BaseService {
     private BasLocationMybatisDao basLocationMybatisDao;
     @Autowired
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
+    @Autowired
+    private DocOrderUtilService docOrderUtilService;
 
     /**
      * 根据分页显示
@@ -183,6 +185,7 @@ public class ViewInvLotattService extends BaseService {
             if (result.substring(0, 3).equals("000")) {
                 json.setSuccess(true);
                 json.setMsg("库存调整成功！");
+                docOrderUtilService.deleteZeroInventory();
             } else {
                 json.setSuccess(false);
                 json.setMsg("库存调整失败！" + result);
@@ -282,6 +285,7 @@ public class ViewInvLotattService extends BaseService {
         if (con) {
             json.setSuccess(true);
             json.setMsg("库存移动成功!");
+            docOrderUtilService.deleteZeroInventory();
         } else {
             json.setSuccess(false);
             json.setMsg("部分库存移动失败!<br/>" + results.toString());
@@ -359,6 +363,7 @@ public class ViewInvLotattService extends BaseService {
         if (con) {
             json.setSuccess(true);
             json.setMsg("库存移动成功!");
+            docOrderUtilService.deleteZeroInventory();
         } else {
             json.setSuccess(false);
             json.setMsg("移动失败库存: " + results.toString());
