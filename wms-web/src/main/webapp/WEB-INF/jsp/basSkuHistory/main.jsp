@@ -192,6 +192,16 @@ $(function() {
         }
     })
 
+    $("#skuGroup1").combobox({
+        // panelHeight: 'auto',
+        url:'/productLineController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+        onLoadSuccess:function () {
+            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+        }
+    })
+
     $("#packid").combobox({
         panelHeight: 'auto',
         url:'/basPackageController.do?getCombobox',

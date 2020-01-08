@@ -299,13 +299,22 @@ where 1=1
 
 	<!-- 查询  有效审核通过的 供应商和货主的 单号， 名称 列表 -->
 	<select id="querySupplierAndClient" resultMap="BaseResultMap"  parameterType="Object">
+--
+-- 		select supplier_id,enterprise_id,client_end_date,empower_end_date
+-- 		from gsp_supplier where is_use='1' and first_state ='40'
+-- 		union
+-- 		select client_id supplier_id,enterprise_id,client_end_date,empower_end_date
+-- 		from gsp_customer where is_use='1' and first_state ='40';
 
-		select supplier_id,enterprise_id,client_end_date,empower_end_date
-		from gsp_supplier where is_use='1' and first_state ='40'
+		select supplier_id,t1.enterprise_id,t1.client_end_date,t1.empower_end_date
+		from gsp_supplier t1
+		LEFT JOIN (select * from bas_customer where active_flag ='1' and customer_type = 'VE') t2 on t1.enterprise_id = t2.enterprise_id
+		where t1.is_use='1' and t1.first_state ='40'
 		union
-		select client_id supplier_id,enterprise_id,client_end_date,empower_end_date
-		from gsp_customer where is_use='1' and first_state ='40';
-
+		select client_id supplier_id,t1.enterprise_id,t1.client_end_date,t1.empower_end_date
+		from gsp_customer t1
+		LEFT JOIN (select * from bas_customer where active_flag = '1' and customer_type = 'CO') t2 on t1.enterprise_id = t2.enterprise_id
+		where t1.is_use='1' and t1.first_state ='40';
 
 	</select>
 
