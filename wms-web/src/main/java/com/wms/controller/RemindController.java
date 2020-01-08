@@ -74,7 +74,6 @@ public class RemindController {
 
 
 	//查询赋值接口  查询提醒模块信息   赋值给提醒模块表
-	@Login
 	@RequestMapping(params = "remind")
 	@ResponseBody
 	public void remind() throws Exception {
