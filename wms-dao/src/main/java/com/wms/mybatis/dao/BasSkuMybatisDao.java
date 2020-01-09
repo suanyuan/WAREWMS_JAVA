@@ -16,6 +16,8 @@ import com.wms.query.pda.PdaBasSkuQuery;
  */
 public interface BasSkuMybatisDao extends BaseDao {
 
+    List<BasSku> queryBySku(String sku);
+
     void basSkuCheck(Map<String, Object> map);
 
 	BasSku queryBySkuInfo(BasSkuQuery skuQuery);

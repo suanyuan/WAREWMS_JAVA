@@ -1064,6 +1064,15 @@ where 1=1
 	</if>
 </select>
 
+
+	<!-- 查询商品档案列表 -->
+	<select id="queryBySku" resultMap="BaseResultMap"  parameterType="Object">
+		select
+		<include refid="Base_Column_List"/>
+		from Bas_Sku where sku = #{sku} and active_flag ='1'
+
+	</select>
+
 <!-- 查询商品档案列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
 	select 
