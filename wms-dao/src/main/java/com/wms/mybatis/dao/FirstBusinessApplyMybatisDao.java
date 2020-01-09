@@ -47,4 +47,10 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	//通过 产品首营申请单号 和 产品的分类目录 找产品首营申请
 	List<FirstBusinessApply> selectByOperateId(@Param("operateId") String id,@Param("applyId") String applyId);
 
+
+
+	//通过产品代码  查询该产品的所有首营
+	List<String> queryListByProductCode(String productCode);
+
+
 }
