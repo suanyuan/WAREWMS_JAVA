@@ -139,7 +139,7 @@ public class DocAsnHeaderQuery implements IQuery {
 	private java.lang.String supplierZip;
 	private java.lang.String supplierid;
 	private java.lang.String userdefine1;
-	private java.lang.String userdefine2;
+	private java.lang.String userdefine2; //上架单号
 	private java.lang.String userdefine3;
 	private java.lang.String userdefine4;
 	private java.lang.String userdefine5;
