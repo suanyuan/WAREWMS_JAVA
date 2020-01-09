@@ -732,10 +732,14 @@ var mergeOrder = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?addDocPa",
-                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
+                    data : {
+                    	"asnNos":arr.join(",")
+					},
+					type : 'POST',
+					dataType : 'JSON',
+					async  :true,
                         success : function(result){
                             $.messager.progress('close');
-                            console.log(result);
                             var msg='';
                             try{
                                 if(result.success){
@@ -778,10 +782,14 @@ var mergeReceiving = function () {
                 }
                 $.ajax({
                     url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
-                    data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
+                    data : {
+                    	"asnNos":arr.join(",")
+					},
+					type : 'POST',
+					dataType : 'JSON',
+					async  :true,
                     success : function(result){
                         $.messager.progress('close');
-                        console.log(result);
                         var msg='';
                         try{
                             if(result.success){
@@ -820,10 +828,14 @@ var nomergeReceiving = function () {
 				}
 				$.ajax({
 					url : sy.bp()+"/docAsnHeaderController.do?noconfirmReveiving",
-					data : {"asnNos":arr.join(",")},type : 'POST', dataType : 'JSON',async  :false,
+					data : {
+						"asnNos":arr.join(",")
+					},
+					type : 'POST',
+					dataType : 'JSON',
+					async  :true,
 					success : function(result){
 						$.messager.progress('close');
-						console.log(result);
 						var msg='';
 						try{
 							if(result.success){
@@ -1334,6 +1346,7 @@ var detailsReceive = function(){
 	var checkedItems = $('#ezuiDetailsDatagrid').datagrid('getChecked');
 	var rowcount = checkedItems.length;
 // 	alert(rowcount);
+    // todo 如果要开放明细收货功能，确认收货需要把明细行号一次性传回去，async再改到true.
 	if(rowcount > 0) {
 		$.each(checkedItems ,function(index, item){
 			if (item.linestatus != '00') {
