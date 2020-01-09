@@ -69,6 +69,10 @@ public class DataPublishService extends BaseService {
     private BasCustomerMybatisDao basCustomerMybatisDao;
     @Autowired
     private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
+
+    @Autowired
+    private FirstBusinessProductApplyMybatisDao firstBusinessProductApplyMybatisDao;
+
 //    @Autowired
 //    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
     /**
@@ -569,6 +573,8 @@ public class DataPublishService extends BaseService {
             form.setOrderbysql(gspProductRegister.getProductRegisterId());
             basSkuService.editBasSku(form);
 
+
+
             //如果已下发产品上一层的产品首营被删了  那就跳过
             FirstBusinessApply firstBusinessApply =  firstBusinessApplyMybatisDao.queryById(b.getPutawayrule());
             if(firstBusinessApply==null){
@@ -649,7 +655,9 @@ public class DataPublishService extends BaseService {
 
     public Json cancelDataBySpecsId(GspProductRegisterSpecs oldSpecs){
         //1.失效bas_sku
-        List<BasSku> basSkuList = basSkuService.getSkuListBySku(oldSpecs.getProductCode());
+//        List<BasSku> basSkuList = basSkuService.getSkuListBySku(oldSpecs.getProductCode());
+        List<BasSku> basSkuList = basSkuMybatisDao.queryBySku(oldSpecs.getProductCode());
+
         if(basSkuList!=null && basSkuList.size()>0){
             for(BasSku b : basSkuList){
                 BasSkuForm form = new BasSkuForm();
