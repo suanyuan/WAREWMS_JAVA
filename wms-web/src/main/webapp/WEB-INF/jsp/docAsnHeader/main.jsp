@@ -512,7 +512,9 @@ var ezuiToolbarClear = function(){
     $('#productId').textbox('clear');
     $('#supplierId').textbox('clear');
     $('#notes').textbox('clear');
-    $('#warehouseId').textbox('clear');
+    $('#warehouseId').combobox('clear');
+    $('#pano').textbox('clear');
+    $('#editwho').textbox('clear');
 };
 
 /* 新增按钮 */
@@ -971,12 +973,14 @@ var doSearch = function(){
 		addtime : $('#addtime').datetimebox('getValue'),
 		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
 		addwho : $('#addwho').val(),
+		editwho : $('#editwho').val(),
 		asnstatusCheck : $('#asnstatusCheck').is(':checked') == true ? "Y" : "N",
         supplierid:$('#supplierId').val(),
         notes:$('#notes').val(),
         warehouseid:$('#warehouseId').combobox('getValue'),
 
         productId:$('#productId').val(),
+		userdefine2:$('#pano').val()//上架单号
 
 	});
 };
@@ -2188,6 +2192,8 @@ function printResultList(){
 																																	url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
 																																	valueField: 'id',
 																																textField: 'value'"/></td>
+							<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
+
 						</tr>
 						<tr>
 							<th>单据状态</th><td><input type='text' id='asnstatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
@@ -2207,7 +2213,7 @@ function printResultList(){
 																															textField: 'value'"/></td>
 							<th>回传标识</th>
 							<td>
-								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='20' data-options="panelHeight:'auto',
+								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='16' data-options="panelHeight:'auto',
 																															editable:false,
 																															valueField: 'id',
 																															textField: 'value',
@@ -2224,18 +2230,19 @@ function printResultList(){
 							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<th>供应商</th><td><input type="text" id="supplierId"/></td>
 							<%--仓库在js中设置--%>
-							<th style="text-align: right">仓库</th><td><input type="text" id="warehouseId"/></td>
+							<th style="text-align: right">仓库</th><td><input type="text" class='easyui-combobox' size='16' id="warehouseId"/></td>
 						</tr>
 						<tr>
 							<th>预计入库时间</th><td><input type='text' id='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='expectedarrivetime2' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>备注</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
-							<th style="text-align: right">产品代码</th>	<td><input type="text" id="productId"/></td>
+							<th>产品代码</th><td><input type="text" class='easyui-textbox' size='16' id="productId"/></td>
 						</tr>
 						<tr>
 							<th>创建时间</th><td><input type='text' id='addtime' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th colspan="2">
 								<input id="asnstatusCheck" type="checkbox" onclick="" checked="checked"><label for="asnstatusCheck">显示关闭/取消</label>
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
