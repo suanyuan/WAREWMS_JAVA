@@ -56,6 +56,9 @@ public class DocQcDetailsService extends BaseService {
     private GspProductRegisterMybatisDao productRegisterMybatisDao;
 
     @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
+
+    @Autowired
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
 
     @Autowired
@@ -294,7 +297,7 @@ public class DocQcDetailsService extends BaseService {
                 if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
 
                     numberList.add(pdaGspProductRegister.getProductRegisterNo());
-                    returnRgisterList.add(pdaGspProductRegister);
+                    returnRgisterList.add(JSONObject.parseObject(JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect), PdaGspProductRegister.class));
                 }
             }
             pdaDocQcDetailVO.setProductRegisterList(returnRgisterList);
