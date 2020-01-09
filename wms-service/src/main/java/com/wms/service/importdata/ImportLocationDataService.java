@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wms.entity.BasLocation;
@@ -356,7 +357,7 @@ public class ImportLocationDataService {
             try {
             	
                 //调用excle共用类，转化成list
-            	basLocationList = ExcelUtil.excelToList(in, sheetName, basLocation, map, uniqueFields);
+            	basLocationList = ExcelUtil.excelToList(in, sheetName, basLocation, map, null);
             	
             } catch (ExcelException e) {
                 e.printStackTrace();
@@ -430,9 +431,15 @@ public class ImportLocationDataService {
 				importDataVO.setLocationid(dataArray.getLocationid());
 				if (StringUtils.isEmpty(importDataVO.getLocationid())) {
 					throw new Exception();
+				}else{
+					for (ImportLocationDataVO vo : importData) {
+						if(dataArray.getLocationid().equals(vo.getLocationid())){
+							throw new Exception();
+						}
+					}
 				}
 			} catch (Exception e) {
-				rowResult.append("[库位编码]，未输入").append(" ");
+				rowResult.append("[库位编码]，未输入或者和列表中其他库位编码重复!请检查!").append(" ");
 			}
 			try {
 				importDataVO.setPicklogicalsequence(dataArray.getPicklogicalsequence());
@@ -683,20 +690,25 @@ public class ImportLocationDataService {
 	private void saveLocation(List<ImportLocationDataVO> importDataList, StringBuilder resultMsg) {
 		BasLocation basLocation = null;
 		Date today = new Date();
-		for(ImportLocationDataVO importDataVO : importDataList){
-			basLocation = new BasLocation();
-			BeanUtils.copyProperties(importDataVO, basLocation);
-			
-			//赋默认值
-			 basLocation.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-		     basLocation.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
-		     basLocation.setAddtime(today);
-		     basLocation.setEdittime(today);
-		     basLocation.setFacilityId("001");
-		     basLocation.setStatus("OK");
-			
-			basLocationMybatisDao.add(basLocation);
-			resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+		try {
+			for (ImportLocationDataVO importDataVO : importDataList) {
+				basLocation = new BasLocation();
+				BeanUtils.copyProperties(importDataVO, basLocation);
+
+				//赋默认值
+				basLocation.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+				basLocation.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+				basLocation.setAddtime(today);
+				basLocation.setEdittime(today);
+				basLocation.setFacilityId("001");
+				basLocation.setStatus("OK");
+
+				basLocationMybatisDao.add(basLocation);
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 	}
 
