@@ -573,6 +573,17 @@ public class DataPublishService extends BaseService {
             form.setOrderbysql(gspProductRegister.getProductRegisterId());
             basSkuService.editBasSku(form);
 
+            //失效所有该产品的所有 产品首营申请
+            List<String> applyIdList=firstBusinessApplyMybatisDao.queryListByProductCode(b.getSku());
+            if(applyIdList!=null && applyIdList.size()>0){
+                for(String applyId:applyIdList){
+                    FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
+                    firstBusinessApply.setApplyId(applyId);
+                    firstBusinessApply.setFirstState("90");
+                    firstBusinessApply.setIsUse(Constant.IS_USE_NO);
+                    firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
+                }
+            }
 
 
             //如果已下发产品上一层的产品首营被删了  那就跳过

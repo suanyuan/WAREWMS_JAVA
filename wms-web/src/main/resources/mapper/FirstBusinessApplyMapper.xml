@@ -257,6 +257,18 @@ where 1=1
 
 
 
+
+	<!--通过产品代码  查询该产品的所有首营-->
+	<select id="queryListByProductCode" resultType="java.lang.String"  parameterType="Object">
+
+		select t1.apply_id from first_business_apply t1
+		LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
+		LEFT JOIN gsp_product_register_specs t3 on t3.specs_id = t2.specs_id
+		where t3.product_code = #{productCode}  and t1.is_use = '1'
+
+	</select>
+
+
 	<select id="selectFirstBusinessBySupplierAndProduct" resultType="java.lang.Integer"  parameterType="Object">
 		select  count(1) from first_business_apply t1
 		left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
