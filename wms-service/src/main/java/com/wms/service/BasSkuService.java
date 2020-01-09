@@ -438,7 +438,7 @@ public class BasSkuService extends BaseService {
 	}
 
 	/**
-	 * 根据sku查询
+	 * 根据注册证号查询 产品档案
 	 * @return
 	 */
 	public List<BasSku> queryBasSkuBySku(String registerNo){
