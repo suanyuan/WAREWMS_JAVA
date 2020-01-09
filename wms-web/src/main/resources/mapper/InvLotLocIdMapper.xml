@@ -258,6 +258,16 @@
 	   and customerid=#{customerid}
 	   and sku=#{sku}
 </select>
+	<!-- 根据id查询 库位库存表 -->
+	<select id="queryByKeyInvloatatt"  resultMap="BaseResultMap" parameterType="Object">
+	 select a.customerid,a.sku,a.lotnum,a.locationid,a.onholdlocker,qty,(qty-qtyallocated-qtyonhold-qtyrpout-qtymvout) qtyavailed,b.lotatt04,b.lotatt05,b.lotatt10
+	 from inv_lot_loc_id a
+	 left join inv_lot_att b on b.lotnum=a.lotnum
+	   where a.lotnum = #{lotnum}
+	   and a.locationid=#{locationid}
+	   and a.customerid=#{customerid}
+	   and a.sku=#{sku}
+</select>
 	<!-- 根据id查询 库位库存表 带出lotatt-->
 	<select id="queryByKeyLotatt"  resultMap="BaseResultMap" parameterType="Object">
 	select a.*,
@@ -459,7 +469,7 @@
 
 	<!-- 根据库位查出所有库存和批次属性 -->
 	<select id="queryAllInvLotLocByLocationid"  resultMap="BaseResultMap" parameterType="Object">
-	select a.customerid,a.sku,a.lotnum,a.locationid,qty,(qty-qtyallocated-qtyonhold-qtyrpout-qtymvout) qtyavailed,b.lotatt04,b.lotatt05
+	select a.customerid,a.sku,a.lotnum,a.locationid,qty,(qty-qtyallocated-qtyonhold-qtyrpout-qtymvout) qtyavailed,b.lotatt04,b.lotatt05,b.lotatt10
 	 from inv_lot_loc_id a
 	 left join inv_lot_att b on b.lotnum=a.lotnum
 	 where a.locationid=#{Locationid}

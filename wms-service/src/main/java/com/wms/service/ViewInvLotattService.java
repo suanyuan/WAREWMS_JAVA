@@ -203,7 +203,9 @@ public class ViewInvLotattService extends BaseService {
 
     public Json movViewInvLotatt(ViewInvLotattForm viewInvLotattForm) {
         Json json = new Json();
-
+        String loattt05=null;
+        String loattt04=null;
+        String loattt10=null;
 //        Map<String, Object> map = new HashMap<String, Object>();
 //        map.put("warehouseid", viewInvLotattForm.getWarehouseid());//仓库
 //        map.put("fmcustomerid", viewInvLotattForm.getFmcustomerid());//货主
@@ -217,6 +219,30 @@ public class ViewInvLotattService extends BaseService {
 //        map.put("lotatt12", viewInvLotattForm.getLotatt12());//移动原因
 //        map.put("lotatt12text", viewInvLotattForm.getLotatt12text());//原因描述
 //        map.put("userid", viewInvLotattForm.getEditwho());
+        //判断移动的库存是否已经冻结
+              InvLotLocId invLotLocId=new InvLotLocId();
+              invLotLocId.setCustomerid(viewInvLotattForm.getFmcustomerid());
+              invLotLocId.setSku(viewInvLotattForm.getFmsku());
+              invLotLocId.setLotnum(viewInvLotattForm.getFmlotnum());
+              invLotLocId.setLocationid(viewInvLotattForm.getFmlocation());
+              InvLotLocId locId=invLotLocIdMybatisDao.queryByKeyInvloatatt(invLotLocId);
+                if(locId.getLotatt05()!=null) {
+                    loattt05 = locId.getLotatt05() + "";
+                    }
+                if(locId.getLotatt04()!=null) {
+                    loattt04 = locId.getLotatt04() + "";
+                 }
+                if(locId.getLotatt10()!=null) {
+                    loattt10 = locId.getLotatt10() + "";
+                     }
+              if(locId!=null&&(locId.getOnholdlocker()==99||loattt10.equals("DJ"))){
+                  return json.error("库位:" +viewInvLotattForm.getFmlocation() +",货主:" + viewInvLotattForm.getFmcustomerid()+
+                          ",产品代码:" +viewInvLotattForm.getFmsku()+ ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败,此库存已经冻结或者状态为待检不可移动!");
+              }else if(locId==null){
+                  return json.error("库位:" +viewInvLotattForm.getFmlocation() +",货主:" + viewInvLotattForm.getFmcustomerid()+
+                          ",产品代码:" +viewInvLotattForm.getFmsku()+ ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败,此库存不存在!");
+              }
+         //1.判断目标库位是否存在    2.调用移库存储过程
             if(islocationid(viewInvLotattForm.getLotatt11text())) {
                 ViewInvLotattQuery query=new ViewInvLotattQuery();
                 BeanUtils.copyProperties(viewInvLotattForm, query);
@@ -227,17 +253,9 @@ public class ViewInvLotattService extends BaseService {
                     json.setMsg("库存移动成功！");
                 } else {
                     json.setSuccess(false);
-                    String loc =viewInvLotattForm.getFmcustomerid();
+                    String loc =viewInvLotattForm.getFmlocation();
                     String sku =viewInvLotattForm.getFmsku();
                     String customerid =viewInvLotattForm.getFmcustomerid();
-                    String loattt05=null;
-                    String loattt04=null;
-                    if(viewInvLotattForm.getLotatt05()!=null) {
-                       loattt05 = viewInvLotattForm.getLotatt05() + "";
-                    }
-                    if(viewInvLotattForm.getLotatt04()!=null) {
-                        loattt04 = viewInvLotattForm.getLotatt04() + "";
-                    }
                     json.setMsg("库位:" + loc +",货主:" + customerid + ",产品代码:" + sku + ",序列号:" + loattt05 + "生产批号:" + loattt04 + ",移动失败！" + query.getResult());
                 }
 
@@ -278,7 +296,7 @@ public class ViewInvLotattService extends BaseService {
 
             } else {
                 con = false;
-                results.append(json1.getMsg()).append("<br/>");
+                results.append(json1.getMsg()).append(" ");
             }
 
         }
@@ -288,7 +306,7 @@ public class ViewInvLotattService extends BaseService {
             docOrderUtilService.deleteZeroInventory();
         } else {
             json.setSuccess(false);
-            json.setMsg("部分库存移动失败!<br/>" + results.toString());
+            json.setMsg("移动失败库存: " + results.toString());
         }
 
 
@@ -337,6 +355,7 @@ public class ViewInvLotattService extends BaseService {
                     viewInvLotattForm.setLotatt12text("");                            //原因描述
                     viewInvLotattForm.setLotatt04(invLotLocId.getLotatt04());        //批号
                     viewInvLotattForm.setLotatt05(invLotLocId.getLotatt05());        //序列号
+                    viewInvLotattForm.setLotatt10(invLotLocId.getLotatt10());        //质量状态
                    list.add(viewInvLotattForm);
                 }
             }

@@ -416,9 +416,9 @@ var adj = function(){
 	//单条调整
 	if(num==1){
 		//待检产品库位不可移动
-		if(rows[0].lotatt10=="DJ"){
+		if(rows[0].lotatt10=="DJ"||rows[0].onholdlocker=='99'){
 			$.messager.show({
-				msg : '产品质量状态为待检不可调整!', title : '<spring:message code="common.message.prompt"/>'
+				msg : '库位状态为[库存冻结]或产品质量状态为[待检]不可调整!', title : '<spring:message code="common.message.prompt"/>'
 			});
 			return;
 		}
@@ -466,7 +466,7 @@ var mov = function(){
 			var lotatt10=rows[i].lotatt10;
 			if(lotatt10=='DJ'||onholdlocker=='99'){
 				$.messager.show({
-					msg :"库位状态为[库存冻结]或产品质量状态为[待检]不可调整!", title : '<spring:message code="common.message.prompt"/>'
+					msg :"库位状态为[库存冻结]或产品质量状态为[待检]不可移动!", title : '<spring:message code="common.message.prompt"/>'
 				});
 				return;
 			}
@@ -824,27 +824,23 @@ var commitMovAll = function(){
 				success: function (result) {
 					try{
 					  if(result.success){
-					  	  msg=result.msg;
-						  ezuiDatagrid.datagrid('reload');
-						  ezuiDialogMovAll.dialog('close');
-						  $.messager.show({
-							  msg:msg, title : '<spring:message code="common.message.prompt"/>'
-						  });
-						  $.messager.progress('close');
+						  msg = result.msg.replace(/ /g, '\n');
+
 					  }else{
-						  msg=result.msg;
-						  ezuiDatagrid.datagrid('reload');
-						  ezuiDialogMovAll.dialog('close');
-						  $.messager.show({
-							  msg :msg, title : '<spring:message code="common.message.prompt"/>'
-						  });
-						  $.messager.progress('close');
+						  msg = result.msg.replace(/ /g, '\n');
+
 					  }
 					}catch (e) {
 						$.messager.show({
 							msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
 						});
 						$.messager.progress('close');
+					}finally {
+						$.messager.progress('close');
+						ezuiDatagrid.datagrid('reload');
+						ezuiDialogMovAll.dialog('close');
+						$("#result").textbox("setValue",msg);
+						resultDialog.dialog("open");
 					}
 				}
 			});
@@ -900,10 +896,10 @@ var commitMovLoc = function(){
 	var tolocation=$('#ezuiDialogMovLoc #tolocation').val();
 	var msg='';
 	url = '<c:url value="/viewInvLotattController.do?movLoc"/>';
-	//判断原始库位是否可以移动
+	//判断起始库位是否可以移动
 	if(ismoveFM(fmlocation)!=""){
 		$.messager.show({
-			msg :'原始库位不可移动:'+ismoveFM(fmlocation), title : '<spring:message code="common.message.prompt"/>'
+			msg :'起始库位不可移动:'+ismoveFM(fmlocation), title : '<spring:message code="common.message.prompt"/>'
 		});
 		$.messager.progress('close');
 		return;
