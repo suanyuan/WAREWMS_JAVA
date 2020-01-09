@@ -460,6 +460,7 @@ public class BasCodesService {
             }
         }
         BasCodes b= new BasCodes();
+        b.setEdittime(new java.util.Date());
         b.setCodeid("remind");
         b.setUdf1(enterpriseIdList11Str);
         b.setShowSequence(num11);
@@ -933,7 +934,7 @@ public class BasCodesService {
                 }
 
                 ExcelUtil.listToExcel(InvLotAttList, fieldMap, sheetName, response);
-                System.out.println("导出成功~~~~");
+//                System.out.println("导出成功~~~~");
             }
         } catch (ExcelException e) {
             e.printStackTrace();

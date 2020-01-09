@@ -2265,7 +2265,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     map.put("deliverCounty", "浦东新区");
                     map.put("deliverAddress", "上海市上海市浦东新区施湾八路1026号2号楼 201108");
                     //备注
-                    map.put("remark", orderHeaderForNormal.getOrderno());
+                    map.put("remark", orderHeaderForNormal.getOrderno() + "(拼箱)");
                     //托寄物
                     map.put("cargo", "医疗器械");
                     //计费重量

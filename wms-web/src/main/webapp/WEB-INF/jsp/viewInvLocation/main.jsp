@@ -743,7 +743,7 @@
                 <%-- 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.delete'/></a> --%>
                 <a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
-                <a onclick='clearDatagridSelected("#ezuiDatagrid");' id='ezuiBtn_cancelsel' class='easyui-linkbutton'
+                <a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
                         code='common.button.cancelSelect'/></a>
             </div>

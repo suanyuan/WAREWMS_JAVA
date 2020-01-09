@@ -1,36 +1,33 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.wms.constant.Constant;
-import com.wms.dao.UserLoginDao;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.UserSession;
+import com.wms.mybatis.dao.SfcRoleMybatisDao;
 import com.wms.mybatis.dao.SfcUserLoginMybatisDao;
-import com.wms.mybatis.dao.SfcUserMybatisDao;
 import com.wms.mybatis.dao.UserSessionMybatisDao;
-import com.wms.mybatis.entity.SfcUser;
+import com.wms.mybatis.entity.SfcRole;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.query.SfcUserLoginQuery;
+import com.wms.query.UserSessionQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.EncryptUtil;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.SfcUserLoginUtil;
+import com.wms.vo.Json;
+import com.wms.vo.UserSessionVO;
+import com.wms.vo.form.UserSessionForm;
 import com.wms.vo.form.pda.LoginForm;
 import com.wms.vo.form.pda.WereHouseForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.dao.UserSessionDao;
-import com.wms.entity.UserSession;
-import com.wms.vo.UserSessionVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.UserSessionForm;
-import com.wms.query.UserSessionQuery;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("userSessionService")
 public class UserSessionService extends BaseService {
@@ -39,6 +36,8 @@ public class UserSessionService extends BaseService {
     private UserSessionMybatisDao userSessionMybatisDao;
     @Autowired
     private SfcUserLoginMybatisDao sfcUserLoginMybatisDao;
+    @Autowired
+    private SfcRoleMybatisDao sfcRoleMybatisDao;
 
     public EasyuiDatagrid<UserSessionVO> getPagedDatagrid(EasyuiDatagridPager pager, UserSessionQuery query) {
 //		EasyuiDatagrid<UserSessionVO> datagrid = new EasyuiDatagrid<UserSessionVO>();
@@ -98,8 +97,19 @@ public class UserSessionService extends BaseService {
             Map<String,Object> userInfo = new HashMap<>();
             userInfo.put("token", RandomUtil.getUUID());
             userInfo.put("userInfo", sfcUserLogin);
+
+            boolean qcRoleFlag = false;
+            List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(sfcUserLogin.getId());
+            for (SfcRole sfcRole:sfcUsersList){
+                if(sfcRole.getRoleName().contains("质量") || sfcRole.getRoleName().equals("系统管理员")){
+                    qcRoleFlag = true;
+                    break;
+                }
+            }
+            userInfo.put("qcRoleFlag", qcRoleFlag);
             result.put(Constant.DATA, userInfo);
             result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+
         }else{
             result.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "密码不正确"));
         }

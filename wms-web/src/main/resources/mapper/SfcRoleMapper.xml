@@ -246,6 +246,6 @@ where 1=1
 </select>
 <select id="queryRoleByID" resultMap="queryForAllListMap"  parameterType="Object">
 	select sr.* from sfc_role sr,sfc_user_role sur
-	where sur.USER_ID like CONCAT('%',#{userID},'%') and sr.ROLE_ID=sur.ROLE_ID
+	where sur.USER_ID = #{userID} and sr.ROLE_ID=sur.ROLE_ID
 </select>
 </mapper>   
