@@ -877,7 +877,7 @@ where 1=1
 				and edittime =  #{condition.edittime}
 			</if>
 			<if test="condition.editwho != null and condition.editwho != ''" >
-				and editwho =  #{condition.editwho}
+				and editwho like concat('%',#{condition.editwho},'%')
 			</if>
 			<if test="condition.followup != null and condition.followup != ''" >
 				and followup =  #{condition.followup}
@@ -1060,7 +1060,7 @@ where 1=1
 				and userdefine1 =  #{condition.userdefine1}
 			</if>
 			<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
-				and userdefine2 =  #{condition.userdefine2}
+				and userdefine2 like concat('%',#{condition.userdefine2},'%')
 			</if>
 			<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
 				and userdefine3 =  #{condition.userdefine3}
