@@ -150,7 +150,7 @@ $(function() {
 	ezuiAcceptanceDialogS = $('#ezuiAcceptanceDialogS').dialog({
 		modal : true,
 		width:570,
-		height:280,
+		height:300,
 		title : '验收作业',
 		buttons : '#ezuiAcceptanceDialogSBtn',
 		onClose : function() {
@@ -488,6 +488,7 @@ var commitAcceptanceS = function(type){
 		data.lotatt05=$('#ezuiAcceptanceFormS #lotatt05').textbox('getValue');
 		data.lotatt06=$('#ezuiAcceptanceFormS #lotatt06').combobox('getValue');
 		data.lotatt11=escEncode($('#ezuiAcceptanceFormS #lotatt11').textbox('getValue'));
+		data.lotatt12=$('#ezuiAcceptanceFormS #lotatt12').textbox('getValue');
 		data.lotatt15=escEncode($('#ezuiAcceptanceFormS #lotatt15').textbox('getValue'));
 		forms.push(data);
 
@@ -623,6 +624,7 @@ var acceptanceWork = function(){
 			lotatt01:rows[0].lotatt01,
 			lotatt02:rows[0].lotatt02,
 			lotatt06:rows[0].lotatt06,
+			lotatt12:rows[0].lotatt12,
 			lotatt15:rows[0].reservedfield14,
 			reservedfield06:rows[0].reservedfield06,
 			qcqtyExpected:rows[0].qcqtyExpected,
@@ -898,9 +900,10 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 			if(result!=null){
 				console.log(result.enterpriseInfo.enterpriseName)
 
-				$("#ezuiAcceptanceFormS #lotatt15").textbox('setValue',result.enterpriseInfo.enterpriseName);
-				$("#ezuiAcceptanceFormS #lotatt11").textbox('setValue',result.storageConditions);
-				$("#ezuiAcceptanceFormS #reservedfield06").textbox('setValue',result.licenseOrRecordNol);
+				$("#ezuiAcceptanceFormS #lotatt15").textbox('setValue',result.enterpriseInfo.enterpriseName); //生产企业
+				$("#ezuiAcceptanceFormS #lotatt11").textbox('setValue',result.storageConditions);             //存储条件
+				$("#ezuiAcceptanceFormS #reservedfield06").textbox('setValue',result.licenseOrRecordNol);     //生产许可证号/备案号
+				$("#ezuiAcceptanceFormS #lotatt12").textbox('setValue',result.productNameMain);     //产品名称
 			}
 		}
 	});
@@ -1163,8 +1166,19 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 				</tr>
 				<tr>
 				   <th>生产许可证号/备案号</th><td><input type='text' id='reservedfield06' name="reservedfield06" class='easyui-textbox' size='20' data-options="readonly:true"/></td>
-				   <th>验收说明</th>
-				   <td><input type='text' id='qcdescr' name="qcdescr" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
+					<th>产品名称</th><td><input type='text' id='lotatt12' name="lotatt12" class='easyui-textbox' size='20' data-options=""/></td>
+				</tr>
+				<tr>
+					<th>待验件数</th><td><input type='text' id='qcqtyExpected' name="qcqtyExpected" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+					<th>验收件数</th><td><input type='text' id='qcqty' name="qcqty" class='easyui-textbox' size='20' data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th>待验数量</th><td><input type='text' id='qcqtyExpectedEach' name="qcqtyExpectedEach" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
+					<th>验收数量</th><td><input type='text' id='qcqtyEach' name="qcqtyEach" class='easyui-textbox' size='20' data-options="required:true"/></td>
+				</tr>
+				<tr>
+					<th>验收说明</th>
+					<td><input type='text' id='qcdescr' name="qcdescr" class='easyui-combobox' size='20' data-options="required:true,panelHeight: 'auto',
 
 							                                                                                                        valueField: 'label',
 																																	textField: 'value',
@@ -1186,14 +1200,6 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 																																         value: '产品经检验后判定不合格'},
 
 																																         ]"/></td>
-				</tr>
-				<tr>
-					<th>待验件数</th><td><input type='text' id='qcqtyExpected' name="qcqtyExpected" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
-					<th>验收件数</th><td><input type='text' id='qcqty' name="qcqty" class='easyui-textbox' size='20' data-options="required:true" /></td>
-				</tr>
-				<tr>
-					<th>待验数量</th><td><input type='text' id='qcqtyExpectedEach' name="qcqtyExpectedEach" class='easyui-textbox' size='20' data-options="required:true,readonly:true"/></td>
-					<th>验收数量</th><td><input type='text' id='qcqtyEach' name="qcqtyEach" class='easyui-textbox' size='20' data-options="required:true"/></td>
 				</tr>
 			</table>
 		</form>
