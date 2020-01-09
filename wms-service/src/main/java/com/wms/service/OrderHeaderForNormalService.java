@@ -1563,6 +1563,7 @@ public class OrderHeaderForNormalService extends BaseService {
                 docOrderDetail.setLotatt02(invLotAtt.getLotatt02());
                 //产品名称
                 docOrderDetail.setLotatt12(invLotAtt.getLotatt12());
+                docOrderDetail.setReservedfield01(invLotAtt.getLotatt12());
                 //注册证号/备案凭证书
                 docOrderDetail.setLotatt06(invLotAtt.getLotatt06());
                 //生产批号
@@ -1576,13 +1577,16 @@ public class OrderHeaderForNormalService extends BaseService {
             }
 
             //备注
-            String rf07 = basSku1.getReservedfield07();
-            if (rf07.equals("LD")) {
-                ohForNormal.setReservedfield07("冷冻");
-            } else if (rf07.equals("FLL")) {
-                ohForNormal.setReservedfield07("非冷链");
-            } else if (rf07.equals("LC")) {
-                ohForNormal.setReservedfield07("冷藏");
+            switch (basSku1.getReservedfield07()) {
+                case "LD":
+                    ohForNormal.setReservedfield07("冷冻");
+                    break;
+                case "FLL":
+                    ohForNormal.setReservedfield07("非冷链");
+                    break;
+                case "LC":
+                    ohForNormal.setReservedfield07("冷藏");
+                    break;
             }
             if (basSku1 != null) {
                 //规格型号
@@ -1607,7 +1611,9 @@ public class OrderHeaderForNormalService extends BaseService {
                 //商品描述
                 docOrderDetail.setReservedfield02(basSku1.getReservedfield02());
                 //商品名称
-                docOrderDetail.setReservedfield01(basSku1.getReservedfield01());
+                if (StringUtil.isEmpty(docOrderDetail.getReservedfield01())) {
+                    docOrderDetail.setReservedfield01(basSku1.getReservedfield01());
+                }
                 //生产许可证号/备案号
                 docOrderDetail.setReservedfield06(basSku1.getReservedfield06());
 
@@ -1622,9 +1628,9 @@ public class OrderHeaderForNormalService extends BaseService {
             //运输条件
             docOrderDetail.setSkugroup5(basSku1.getSkuGroup5());
 
-            docOrderDetail.getAlocation();//库位
-            docOrderDetail.getQty(); //件数
-            docOrderDetail.getQtyeach(); //数量
+//            docOrderDetail.getAlocation();//库位
+//            docOrderDetail.getQty(); //件数
+//            docOrderDetail.getQtyeach(); //数量
             a = a + docOrderDetail.getQty(); //件数
             b = b + docOrderDetail.getQtyeach();  //数量
             docOrderDetail.setQtyorderedEachSum(b);//数量和
@@ -1640,122 +1646,16 @@ public class OrderHeaderForNormalService extends BaseService {
         //增加随货单打印次数
         addAccompanyingNum(orderno);
         return ohForNormal;
-       /* StringBuilder sb = new StringBuilder();
-        try (OutputStream os = response.getOutputStream()) {
-            sb.append("inline; filename=")
-                    .append(URLEncoder.encode("出库随货同行单PDF", "UTF-8"))
-                    .append(".pdf");
-            response.setHeader("Content-disposition", sb.toString());
-            sb.setLength(0);
-            response.setContentType(ContentTypeEnum.pdf.getContentType());
-
-            Document document = null;
-            AcroFields form = null;
-            PdfStamper stamper = null;
-            PdfImportedPage page = null;
-            ByteArrayOutputStream baos = null;
-
-            if (StringUtils.isNotEmpty(orderNo)) {
-
-                document = new Document(PDFUtil.getTemplate("wms_shipped_jhck.pdf").getPageSize(1));
-                PdfCopy pdfCopy = new PdfCopy(document, os);
-                document.open();
-
-                String[] orderNos = orderNo.split(",");
-
-                for (String s : orderNos) {
-
-                    int totalNum = 0;
-                    List<ReceiptResult> detailsList = null;
-                    int row = 7;
-                    int pageSize = 0;
-                    int totalQtyE = 0;
-                    int totalQty = 0;
-
-                    detailsList = new ArrayList<ReceiptResult>();
-                    OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
-                    orderHeaderForNormalQuery.setOrderno(s);
-                    List<ReceiptResult> receiptResult = orderHeaderForNormalMybatisDao.queryByReceiptList(orderHeaderForNormalQuery);
-                    if (receiptResult == null || receiptResult.size() == 0) {
-                        return;
-                    }
-
-                    for (ReceiptResult result : receiptResult) {
-                        totalNum++;
-                        detailsList.add(result);
-                    }
-                    int index = 0;
-                    pageSize = (int) Math.ceil((double) totalNum / row);
-                    for (int i = 0; i < pageSize; i++) {
-                        ReceiptResult obj = receiptResult.get(0);
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        baos = new ByteArrayOutputStream();
-                        stamper = new PdfStamper(PDFUtil.getTemplate("wms_shipped_jhck.pdf"), baos);
-                        form = stamper.getAcroFields();
-                        form.setField("orderNo", obj.getOrderno());
-                        //basCustomerService.selectCustomerById(orderHeaderForNormal.getCustomerId(), Constant.);
-                        form.setField("expectedShipmentTime", DateUtil.format(obj.getEdittime(), "yyyy-MM-dd"));
-                        form.setField("carrierName", obj.getCarrierName());
-                        form.setField("consigneeName", obj.getConsigneeCompany());
-                        form.setField("cContact", obj.getCContact());
-                        form.setField("userdefine1", obj.getUserdefine1());
-                        form.setField("cAddress1", obj.getAddress());
-                        form.setField("c_Tel1", obj.getCTel1());
-                        form.setField("userdefine2", obj.getUserdefine2());
-                        form.setField("sOReference1", obj.getSoreference1());
-                        form.setField("notes", obj.getNotes());
-                        form.setField("page", "第" + (i + 1) + "页,共" + pageSize + "页");
-
-                        for (int j = 0; j < row; j++) {
-                            if (totalNum > (row * i + j)) {
-                                index++;
-                                BasSku basSku = basSkuService.getSkuInfo(obj.getCustomerid(), detailsList.get(row * i + j).getSku());
-                                form.setField("lineNo." + j, index + "");
-                                form.setField("location." + (j), detailsList.get(row * i + j).getDescrC());
-                                form.setField("sku." + (j), detailsList.get(row * i + j).getSku());
-                                form.setField("skuN." + (j), detailsList.get(row * i + j).getLotatt12());
-                                form.setField("regNo." + (j), basSku.getReservedfield03());
-                                form.setField("desc." + (j), basSku.getDescrE());
-                                form.setField("batchNo." + (j), detailsList.get(row * i + j).getLotatt04());
-                                form.setField("seriNo." + (j), detailsList.get(row * i + j).getLotatt05());
-                                form.setField("ill." + (j), detailsList.get(row * i + j).getLotatt07());
-                                form.setField("lot01." + (j), detailsList.get(row * i + j).getLotatt02());
-                                form.setField("qtyE." + (j), detailsList.get(row * i + j).getQty());
-                                form.setField("uom." + (j), detailsList.get(row * i + j).getQtyEach());
-                                form.setField("qty." + (j), detailsList.get(row * i + j).getLotatt11());
-                                form.setField("double." + (j), detailsList.get(row * i + j).getLotatt15());
-                                form.setField("card." + (j), detailsList.get(row * i + j).getDoubleCertificate());
-                                form.setField("report." + (j), detailsList.get(row * i + j).getCertificate());
-                                form.setField("remark." + (j), "");
-                                totalQtyE += Integer.parseInt(detailsList.get(row * i + j).getQtyEach());
-                                totalQty += Integer.parseInt(detailsList.get(row * i + j).getQty());
-                            }
-                        }
-                        form.setField("sumqtyPage", "件数合计：" + totalQtyE);
-                        form.setField("sumqty", "数量合计：" + totalQty);
-                        form.replacePushbuttonField("orderCodeImg", PDFUtil.genPdfButton(form, "orderCodeImg", BarcodeGeneratorUtil.genBarcode(obj.getOrderno(), 800)));
-                        stamper.setFormFlattening(true);
-                        stamper.close();
-                        page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
-                        pdfCopy.addPage(page);
-                    }
-                }
-                document.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
     /**
      * 增加随货单打印次数
-     * @param orderno
      */
-    public void addAccompanyingNum(String orderno){
+    private void addAccompanyingNum(String orderno){
         OrderHeaderForNormal orderHeaderForNormal=orderHeaderForNormalMybatisDao.queryById(orderno);
         if(orderHeaderForNormal!=null){
             if(orderHeaderForNormal.getUdfprintflag3()!=null&&!orderHeaderForNormal.getUdfprintflag3().isEmpty()){
                 String num=orderHeaderForNormal.getUdfprintflag3();
-                num=(Integer.valueOf(num)+1)+"";
+                num=(Integer.parseInt(num)+1)+"";
                 OrderHeaderForNormal form=new OrderHeaderForNormal();
                 form.setOrderno(orderno);
                 form.setUdfprintflag3(num);

@@ -459,6 +459,7 @@ public class DocQcDetailsService extends BaseService {
                 lotAttQuery.setLotatt06(form.getLotatt06());
                 lotAttQuery.setLotatt10("HG");
                 lotAttQuery.setLotatt11(form.getLotatt11());
+                lotAttQuery.setLotatt12(form.getLotatt12());
                 lotAttQuery.setLotatt15(form.getLotatt15());
                 mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(lotAttQuery));
                 List<InvLotAtt> invLotAttList = invLotAttMybatisDao.queryByList(mybatisCriteria);
@@ -481,6 +482,7 @@ public class DocQcDetailsService extends BaseService {
                     lotatt_hg.setLotatt06(form.getLotatt06());
                     lotatt_hg.setLotatt10("HG");
                     lotatt_hg.setLotatt11(form.getLotatt11());
+                    lotatt_hg.setLotatt12(form.getLotatt12());
                     lotatt_hg.setLotatt15(form.getLotatt15());
                     lotatt_hg.setAddwho(form.getEditwho());
                     lotatt_hg.setAddtime(new java.sql.Date((new Date()).getTime()));
