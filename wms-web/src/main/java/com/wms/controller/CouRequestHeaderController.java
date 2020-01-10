@@ -17,6 +17,7 @@ import com.wms.vo.form.CouRequestExportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,6 +57,13 @@ public class CouRequestHeaderController {
 	public EasyuiDatagrid<InvLotLocId> getInvCheckInfo(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
 		return couRequestHeaderService.getcouRequestInfo(pager,query);
 	}
+//获得盘点任务 骨科
+	@Login
+	@RequestMapping(params = "getcouRequestInfoGuKe")
+	@ResponseBody
+	public EasyuiDatagrid<InvLotLocId> getInvCheckInfoGuKe(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+		return couRequestHeaderService.getcouRequestInfoGuKe(pager,query);
+	}
 //生成盘点信息
 	@Login
 	@RequestMapping(params = "ToGenerateInventoryPlan")
@@ -63,6 +71,17 @@ public class CouRequestHeaderController {
 	public Json ToGenerationInfo(String forms) {
 		return couRequestHeaderService.ToGenerateInventoryPlan(forms);
 	}
+//生成盘点信息 骨科
+	@Login
+	@RequestMapping(params = "ToGenerateInventoryPlanGuKe")
+	@ResponseBody
+	public Json ToGenerationInfoGuKe(CouRequestDetailsQuery data) {
+		return couRequestHeaderService.ToGenerateInventoryPlanGuKe(data);
+	}
+
+
+
+
 //导出
 	@Login
 	@RequestMapping(params = "exportCouRequestDataToExcel")

@@ -14,6 +14,10 @@ var ezuiForm;        //生成盘点任务dialog form
 var ezuiDialog;      //生成盘点任务dialog
 var ezuiDetailsDatagrid;//生成盘点任务datagrid
 
+var ezuiDialogGuKe;      //生成盘点任务dialog 骨科
+var ezuiDetailsDatagridGuKe;      //生成盘点任务dialog 骨科
+
+
 var ShowEzuiDialog;//按钮查看盘点任务datagrid
 var ShowEzuiDetailsDatagrid;//按钮查看盘点任务datagrid
 
@@ -38,8 +42,6 @@ $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();   //右键菜单
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
 	ezuiImportDataForm=$('#ezuiImportDataForm').form();  //导入form
-
-//主页datagird
 	closeDialogForm = $('#closeDialogForm').form();   //关闭计划dialog form
 //主页Datagrid
 	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
@@ -89,52 +91,6 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-//生成盘点任务dialog初始化
-	ezuiDialog = $('#ezuiDialog').dialog({
-		modal : true,
-		top:0,
-		left:200,
-		title : '生成任务',
-		buttons : '#ezuiDialogBtn',
-		onClose : function() {
-			ezuiFormClear(ezuiToolbar);
-		}
-	}).dialog('close');
-//生成盘点任务datagrid初始化
-	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
-		url: '<c:url value="/couRequestHeaderController.do?getcouRequestInfo"/>',
-		method: 'POST',
-		toolbar: '#ezuiToolbar',
-		pageSize : 2000,
-		pageList : [2000, 3000, 5000],
-		fit: true,
-		border: false,
-		fitColumns: false,
-		nowrap: false,
-		striped: true,
-		collapsible: false,
-		rownumbers: true,
-		singleSelect: false,
-		pagination:true,
-		columns: [[
-			{field:'ck',checkbox:true},
-			{field: 'customerid', title: '货主', width: 71},
-			{field: 'sku', title: '产品代码', width: 150},
-			{field: 'locationid', title: '库位', width: 100},
-			{field: 'qty', title: '盘点件数', width: 100},
-			{field: 'lotatt04', title: '生产批号', width: 100},
-			{field: 'lotatt05', title: '序列号', width: 100},
-			{field: 'productLineName', title: '产品线', width: 100},
-		]],
-		onDblClickCell: function (index, field, value) {
-
-		},
-		onLoadSuccess: function (data) {
-			$(this).datagrid('unselectAll');
-		},onClose:function(){
-			$(this).datagrid('unselectAll');
-		}
-	});
 //按钮查看盘点任务datagrid初始化
 	ShowEzuiDetailsDatagrid = $('#ShowEzuiDetailsDatagrid').datagrid({
 		url: '<c:url value="/couRequestDetailsController.do?getcouRequestInfoBycycleCountno"/>',
@@ -176,6 +132,28 @@ $(function() {
 		onClose:function(){
 		}
 	});
+//生成盘点任务dialog初始化
+	ezuiDialog = $('#ezuiDialog').dialog({
+		modal : true,
+		top:0,
+		left:200,
+		title : '生成任务',
+		buttons : '#ezuiDialogBtn',
+		onClose : function() {
+			ezuiFormClear(ezuiToolbar);
+		}
+	}).dialog('close');
+//生成盘点任务dialog初始化 骨科
+	ezuiDialogGuKe = $('#ezuiDialogGuKe').dialog({
+		modal : true,
+		top:0,
+		left:200,
+		title : '生成任务(骨科)',
+		buttons : '#ezuiDialogGuKeBtn',
+		onClose : function() {
+			ezuiFormClear(ezuiToolbarGuKe);
+		}
+	}).dialog('close');
 //按钮查看盘点任务dialog初始化
 	ShowEzuiDialog = $('#ShowEzuiDialog').dialog({
 		modal : true,
@@ -500,8 +478,87 @@ var cancel = function(){
 };
 //生成任务
 var GenerateInventoryPlan = function(){
-	doxDialogSearch();//清空datagrid
+	//生成盘点任务datagrid初始化
+	ezuiDetailsDatagrid = $('#ezuiDetailsDatagrid').datagrid({
+		url: '<c:url value="/couRequestHeaderController.do?getcouRequestInfo"/>',
+		method: 'POST',
+		toolbar: '#ezuiToolbar',
+		pageSize : 2000,
+		pageList : [2000, 3000, 5000],
+		fit: true,
+		border: false,
+		fitColumns: false,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		rownumbers: true,
+		singleSelect: false,
+		pagination:true,
+		columns: [[
+			{field:'ck',checkbox:true},
+			{field: 'customerid', title: '货主', width: 71},
+			{field: 'sku', title: '产品代码', width: 150},
+			{field: 'locationid', title: '库位', width: 100},
+			{field: 'qty', title: '盘点件数', width: 100},
+			{field: 'lotatt04', title: '生产批号', width: 100},
+			{field: 'lotatt05', title: '序列号', width: 100},
+			{field: 'productLineName', title: '产品线', width: 100},
+		]],
+		onDblClickCell: function (index, field, value) {
+
+		},
+		onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		},onClose:function(){
+			$(this).datagrid('unselectAll');
+		}
+	});
 	ezuiDialog.dialog('open');
+};
+//生成任务 骨科盘点
+var GuKeInventory = function(){
+	//时间初始化
+	$("#SoTimeStart").datetimebox('setValue',ordertimeDate(new Date()));
+	$("#SoTimeEnd").datetimebox('setValue',ordertimeDateTo(new Date()));
+	//生成盘点任务datagrid初始化
+	ezuiDetailsDatagridGuKe = $('#ezuiDetailsDatagridGuKe').datagrid({
+		url: '<c:url value="/couRequestHeaderController.do?getcouRequestInfoGuKe"/>',
+		method: 'POST',
+		toolbar: '#ezuiToolbarGuKe',
+		pageSize : 2000,
+		pageList : [2000, 3000, 5000],
+		fit: true,
+		border: false,
+		fitColumns: false,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		rownumbers: true,
+		singleSelect: false,
+		pagination:true,
+		queryParams:{
+			SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
+			SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue')
+         },
+		columns: [[
+			{field: 'customerid', title: '货主', width: 71},
+			{field: 'sku', title: '产品代码', width: 150},
+			{field: 'locationid', title: '库位', width: 100},
+			{field: 'qty', title: '盘点件数', width: 100},
+			{field: 'lotatt04', title: '生产批号', width: 100},
+			{field: 'lotatt05', title: '序列号', width: 100},
+			{field: 'productLineName', title: '产品线', width: 100},
+		]],
+		onDblClickCell: function (index, field, value) {
+
+		},
+		onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		},onClose:function(){
+			$(this).datagrid('unselectAll');
+		}
+	});
+	ezuiDialogGuKe.dialog('open');
 };
 //生成任务 选择条数之后
 var GenerateInventoryPlanT = function(){
@@ -568,6 +625,49 @@ var GenerateInventoryPlanT = function(){
 		$.messager.progress('close');
 
 	}
+};
+//生成任务 骨科
+var GuKeInventoryT = function(){
+	url = '<c:url value="/couRequestHeaderController.do?ToGenerateInventoryPlanGuKe"/>';
+	var data=[];
+	var msg='';
+	data.SoTimeStart=$("#SoTimeStart").datetimebox('getValue')+"";
+	data.SoTimeEnd=$("#SoTimeEnd").datetimebox('getValue')+"";
+
+	$.messager.progress({
+			text: '<spring:message code="common.message.data.processing"/>', interval: 100
+		});
+
+		$.ajax({
+			url: url,
+			data:{SoTimeStart:data.SoTimeStart,SoTimeEnd:data.SoTimeEnd},
+			dataType:"json",
+			error: function (a,b,c) {
+				//alert(a+b+c);
+			},
+			success: function (result) {
+				try{
+					if(result.success){
+						msg=result.msg;
+					}else{
+						msg=result.msg;
+
+					}
+				}catch (e) {
+					$.messager.show({
+						msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+				}finally {
+					ezuiDatagrid.datagrid('reload');
+					$.messager.show({
+						msg :msg, title : '<spring:message code="common.message.prompt"/>'
+					});
+					$.messager.progress('close');
+				}
+			}
+		});
+
 };
 //查看盘点信息
 var ShowGenerateInventory = function(){
@@ -695,6 +795,13 @@ var doxDialogSearch = function(){
         locationid : $('#ezuiToolbar #locationid').textbox('getValue'),
 	});
 };
+//生成盘点任务datagrid查询 骨科
+var doxDialogSearchGuKe = function(){
+	ezuiDetailsDatagridGuKe.datagrid('load', {
+		SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
+		SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue')
+	});
+};
 //按钮盘点任务datagrid查询
 var dosDialogSearch = function(){
 	ShowEzuiDetailsDatagrid.datagrid('load', {
@@ -708,15 +815,7 @@ var dosDialogSearch = function(){
 		locationid : $('#ShowEzuiToolbar #locationid').textbox('getText'),
 	});
 };
-//生成盘点任务datagrid清除
-var ezuiDialogxToolbarClear= function(){
-	$("#ezuiToolbar #customerid").textbox('clear');
-	$("#ezuiToolbar #sku").textbox('clear');
-	$("#ezuiToolbar #lotatt04").textbox('clear');
-	$("#ezuiToolbar #lotatt05").textbox('clear');
-	$("#ezuiToolbar #productLineName").combobox('clear');
-	$("#ezuiToolbar #locationid").textbox('clear');
-};
+
 //按钮盘点任务datagrid清除
 var ezuiDialogsToolbarClear= function(){
 	$("#ShowEzuiToolbar #customerid").textbox('clear');
@@ -726,6 +825,11 @@ var ezuiDialogsToolbarClear= function(){
 	$("#ShowEzuiToolbar #productLineName").combobox('clear');
 	$("#ShowEzuiToolbar #reservedfield01").textbox('clear');
 	$("#ShowEzuiToolbar #locationid").textbox('clear');
+};
+//生成盘点任务datagrid清除 骨科
+var ezuiDialogGuKeClear= function(){
+	$("#SoTimeStart").datetimebox('clear');
+	$("#SoTimeEnd").datetimebox('clear');
 };
 /* 导出start */
 var doExport = function(cycleCountno){
@@ -1067,6 +1171,21 @@ function choseSelect_product_couRequestHeaderS(row) {
 	}
 	productDialog_couRequestHeaderS.dialog("close");
 }
+
+
+
+/* 获取起始日期 */
+var ordertimeDate = function (date) {
+	var day = date.getDate() - 1> 9 ? date.getDate() - 1: "0" + date.getDate() - 1;
+	var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0" + (date.getMonth() + 1);
+	return date.getFullYear() + '-' + month + '-' + day + ' 00:00:00';
+};
+/* 获取结束日期 */
+var ordertimeDateTo = function (date) {
+	var day = date.getDate() -1> 9 ? date.getDate() -1: "0" + date.getDate()-1;
+	var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0" + (date.getMonth() + 1);
+	return date.getFullYear() + '-' + month + '-' + day + ' 23:59:59';
+};
 </script>
 </head>
 <body>
@@ -1099,6 +1218,7 @@ function choseSelect_product_couRequestHeaderS(row) {
 					<a onclick='ShowGenerateInventory();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查看</a>
 
 					<a onclick='GenerateInventoryPlan();' id='ezuiBtn_plan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>生成盘点任务</a>
+					<a onclick='GuKeInventory();' id='ezuiBtn_inventory' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>骨科盘点</a>
 					<a onclick='closeC();' id='ezuiBtn_closeplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>关闭任务单</a>
 					<a onclick='cancel();' id='ezuiBtn_cancelplan' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>取消任务单</a>
 					<a onclick='del();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除任务单</a>
@@ -1223,6 +1343,7 @@ function choseSelect_product_couRequestHeaderS(row) {
 	</div>
 
 	<c:import url='/WEB-INF/jsp/couRequestHeader/dialog.jsp'/>
+	<c:import url='/WEB-INF/jsp/couRequestHeader/dialogGuKe.jsp'/>
 	<c:import url='/WEB-INF/jsp/couRequestHeader/ShowDialog.jsp'/>
 	<c:import url='/WEB-INF/jsp/couRequestHeader/skuDialog.jsp'/>
 	<c:import url='/WEB-INF/jsp/couRequestHeader/locDialog.jsp'/>
