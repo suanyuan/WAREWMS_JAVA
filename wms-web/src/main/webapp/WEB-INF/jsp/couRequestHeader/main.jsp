@@ -365,6 +365,22 @@ $(function() {
 			}
 		}
 	});
+//骨科盘点时间初始化
+    $('#SoTimeStart').datetimebox('calendar').calendar({
+        validator: function(date){
+            var now = new Date();
+            var validateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            return date <= validateDate;
+        }
+    });
+//骨科盘点时间初始化
+    $('#SoTimeEnd').datetimebox('calendar').calendar({
+        validator: function(date){
+            var now = new Date();
+            var validateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            return date <= validateDate;
+        }
+    });
 });
 //增加
 var add = function(){
