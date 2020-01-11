@@ -7,6 +7,7 @@
     <resultMap id="BaseResultMap" type="com.wms.entity.SearchBasCustomer">
         <result column="descr_c" property="enterpriseName"/>
         <result column="license_number" property="licenseNumber"/>
+        <result column="social_credit_code" property="socialCreditCode"/>
         <result column="residence" property="residence"/>
         <result column="juridical_person" property="juridicalPerson"/>
         <result column="head_name" property="headName"/>
@@ -270,7 +271,7 @@
 <!-- *******************************委托客户********************************** -->
 <!-- 查询委托客户列表 -->
     <select id="querySearchCustomer"  resultMap="BaseResultMap" parameterType="Object">
-        SELECT  b.descr_c,c.license_number,
+        SELECT  b.descr_c,c.license_number,c.social_credit_code,
         IFNULL(IFNULL(IFNULL(c.residence,pr.residence),IFNULL(op.residence,r.residence)),e.residence) AS residence,
         IFNULL(IFNULL(c.juridical_person,pr.juridical_person),IFNULL(op.juridical_person,e.juridical_person)) AS juridical_person,
         IFNULL(IFNULL(pr.head_name,op.head_name),IFNULL(e.head_name,r.head_name)) AS head_name,

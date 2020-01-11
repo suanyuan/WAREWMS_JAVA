@@ -423,5 +423,32 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+<!-- 查询库存事务列表 -->
+	<select id="queryByListByTypeAndTime" resultMap="BaseResultMap"  parameterType="Object">
+		select
+          docno
+		from act_transaction_log
+		where 1=1
+		<if test="transactiontype != null and transactiontype != ''" >
+			and transactiontype =  #{transactiontype}
+		</if>
+		<if test="doctype != null and doctype != ''" >
+			and doctype =  #{doctype}
+		</if>
+		<if test="status != null and status != ''" >
+			and status =  #{status}
+		</if>
+		<if test="transactiontime != null and transactiontime !=''" >
+			and transactiontime &gt;=  #{transactiontime}
+		</if>
+		<if test="addtime != null and addtime != '' " >
+			and transactiontime  &lt;= #{addtime}
+		</if>
+        group by docno
+
+
+
+	</select>
   	
 </mapper>   

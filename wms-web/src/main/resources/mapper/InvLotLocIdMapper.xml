@@ -355,7 +355,13 @@
 				and p.name  like concat('%',#{condition.productLineName},'%')
 			</if>
 			<if test="condition.locationid != null and condition.locationid != ''" >
-				and aa.locationid like concat('%',#{condition.locationid},'%')
+				and aa.locationid =#{condition.locationid}
+			</if>
+			<if test="condition.array!=null and condition.array.length>0">
+				and aa.locationid in
+				<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
 			</if>
 		</trim>
 		ORDER BY aa.locationid DESC
@@ -390,10 +396,15 @@
 				and p.name  like concat('%',#{condition.productLineName},'%')
 			</if>
 			<if test="condition.locationid != null and condition.locationid != ''" >
-				and aa.locationid like concat('%',#{condition.locationid},'%')
+				and aa.locationid =#{condition.locationid}
+			</if>
+			<if test="condition.array!=null and condition.array.length>0">
+				and aa.locationid in
+				<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
 			</if>
 		</trim>
-		ORDER BY aa.locationid DESC
 	</select>
 
 	<select id="queryInventoryForScan" parameterType="java.util.Map" resultMap="ExtendResultMap">

@@ -489,4 +489,13 @@ where 1=1
         <!--where orderno = #{orderno} and sku=#{sku}-->
     <!--</select>-->
 
+
+	<!-- 根据出库单号查出分配的出库库位 -->
+	<select id="queryByLocByOrderNo" resultMap="BaseResultMap"  parameterType="Object">
+		select
+          location
+		from act_allocation_details
+        WHERE  orderno=#{orderNo}
+        GROUP BY location
+	</select>
 </mapper>   

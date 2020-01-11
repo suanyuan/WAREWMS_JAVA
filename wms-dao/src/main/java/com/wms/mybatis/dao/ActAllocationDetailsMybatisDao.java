@@ -44,4 +44,13 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 //	int  queryByorder (Map<String, Object> map);
 
 	<T> T queryBySum(String orderno);
+
+	/**
+	 * 根据出库单号查出分配的出库库位
+	 * @param orderNo
+	 * @param <T>
+	 * @return
+	 */
+	public <T> List<T> queryByLocByOrderNo(String orderNo);
+
 }

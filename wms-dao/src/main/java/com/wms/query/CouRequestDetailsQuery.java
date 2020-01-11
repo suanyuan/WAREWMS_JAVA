@@ -25,8 +25,12 @@ public class CouRequestDetailsQuery{
 //盘点任务查询
 	private String productLineName;//产品线
 	private String reservedfield01;//产品名称
+	private String SoTimeStart;//出库日期
+	private String SoTimeEnd;//出库日期
+	private Object[] array;//用于存库位的数组
 
-    //pda 扫码查询
+
+	//pda 扫码查询
     private String GTIN;
     private String otherCode;
     private String version;

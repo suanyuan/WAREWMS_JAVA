@@ -4,13 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.CouRequestDetails;
-import com.wms.entity.CouRequestHeader;
-import com.wms.entity.InvLotLocId;
-import com.wms.mybatis.dao.CouRequestDetailsMybatisDao;
-import com.wms.mybatis.dao.CouRequestHeaderMybatisDao;
-import com.wms.mybatis.dao.InvLotLocIdMybatisDao;
-import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.entity.*;
+import com.wms.mybatis.dao.*;
+import com.wms.query.ActTransactionLogQuery;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
 import com.wms.service.importdata.ImportCouRequestDataService;
@@ -44,6 +40,10 @@ public class CouRequestHeaderService extends BaseService {
     private CouRequestDetailsMybatisDao couRequestDetailsMybatisDao;
   @Autowired
     private ImportCouRequestDataService importCouRequestDataService;
+    @Autowired
+    private ActTransactionLogMybatisDao actTransactionLogMybatisDao;
+    @Autowired
+    private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
 
     //分页查询
     public EasyuiDatagrid<CouRequestHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, CouRequestHeaderQuery query) {
@@ -158,6 +158,163 @@ public class CouRequestHeaderService extends BaseService {
        }
         return json;
     }
+
+    //获得盘点计划 骨科
+    public EasyuiDatagrid<InvLotLocId> getcouRequestInfoGuKe(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+        //根据时间查询出库事务
+        ActTransactionLogQuery logQuery=new ActTransactionLogQuery();
+        logQuery.setTransactiontype("SO");  //事务类型
+        logQuery.setDoctype("SO");  //单据类型
+        logQuery.setStatus("99");//事务状态99=close
+        logQuery.setTransactiontime(query.getSoTimeStart());//事务开始时间
+        logQuery.setAddtime(query.getSoTimeEnd());         //事务结束时间
+        List<ActTransactionLog> transactionLogList =actTransactionLogMybatisDao.queryByListByTypeAndTime(logQuery);
+        //根据事务查询出来的出库单号从分配表查询出所有分配明细
+        Map<String,String> map=new HashMap<>();
+        for (ActTransactionLog t: transactionLogList) {
+            String orderno=t.getDocno();  //出库单号
+            //根据出库单号查出分配库位
+            List<ActAllocationDetails>  detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(orderno);
+            for (ActAllocationDetails details : detailsList) {
+                map.put(details.getLocation(),"");
+            }
+        }
+        //根据出库库位查询出所有库存 封装库位查询条件 如果没有返回空数据
+        EasyuiDatagrid<InvLotLocId> datagrid = new EasyuiDatagrid<InvLotLocId>();
+        Object[] array =map.keySet().toArray();
+         if(array.length>0) {
+            query.setArray(array);
+         }else{
+             return datagrid;
+         }
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
+        datagrid.setTotal((long)invLotLocIdMybatisDao.queryByListByCouRequestCount(mybatisCriteria));
+        datagrid.setRows(lotLocIdList);
+        return datagrid;
+    }
+
+    //生成盘点计划 骨科
+    public Json ToGenerateInventoryPlanGuKe(CouRequestDetailsQuery query) {
+        Json json = new Json();
+        List<InvLotLocId> listAdd=new ArrayList<>();
+
+        //根据时间查询出库事务
+        ActTransactionLogQuery logQuery=new ActTransactionLogQuery();
+        logQuery.setTransactiontype("SO");  //事务类型
+        logQuery.setDoctype("SO");  //单据类型
+        logQuery.setStatus("99");//事务状态99=close
+        logQuery.setTransactiontime(query.getSoTimeStart());//事务开始时间
+        logQuery.setAddtime(query.getSoTimeEnd());         //事务结束时间
+        List<ActTransactionLog> transactionLogList =actTransactionLogMybatisDao.queryByListByTypeAndTime(logQuery);
+        //根据事务查询出来的出库单号从分配表查询出所有分配明细
+        Map<String,String> m=new HashMap<>();
+        for (ActTransactionLog t: transactionLogList) {
+            String orderno=t.getDocno();  //出库单号
+            //根据出库单号查出分配库位
+            List<ActAllocationDetails>  detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(orderno);
+            for (ActAllocationDetails details : detailsList) {
+                m.put(details.getLocation(),"");
+            }
+        }
+        //根据库位查出库存
+        for (String s : m.keySet()) {
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            CouRequestDetailsQuery q=new CouRequestDetailsQuery();
+            q.setLocationid(s);
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(q));
+            List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
+            if(lotLocIdList.size()>0){
+                listAdd.addAll(lotLocIdList);
+            }else{
+                //如果库位库存为空 插入一条为0的库存
+                InvLotLocId add=new InvLotLocId();
+                add.setLocationid(s);
+                add.setCustomerid("");
+                add.setSku("");
+                add.setLotatt04("");
+                add.setLotatt05("");
+                add.setLotatt05("");
+                add.setQty(0.0);
+                listAdd.add(add);
+            }
+        }
+
+        if(listAdd.size()<=0){
+            json.setSuccess(true);
+            json.setMsg("生成计划失败,没有匹配的库存!");
+            return json;
+        }
+        try {
+            /*获取新的号 生成主单*/
+            Map<String, Object> map = new HashMap<>();
+            map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            couRequestHeaderMybatisDao.getIdSequence(map);
+            String resultCode = "";
+            String resultNo = "";
+            if (map.get("resultCode") != null) {
+                resultCode = map.get("resultCode").toString();
+            }
+            if (map.get("resultNo") != null) {
+                resultNo = map.get("resultNo").toString();
+            }
+            if (resultCode.substring(0, 3).equals("000")) {
+                CouRequestHeader couRequestHeader = new CouRequestHeader();
+                couRequestHeader.setCycleCountno(resultNo);
+                couRequestHeader.setStatus("00");
+                couRequestHeader.setFuzzyc(null);
+                couRequestHeader.setAddtime(new Date());  //申请时间
+                couRequestHeader.setAddwho(SfcUserLoginUtil.getLoginUser().getId());//申请人
+                couRequestHeader.setStarttime(new Date());
+//            CouRequestHeader.setEndtime(null);
+                couRequestHeaderMybatisDao.add(couRequestHeader);
+                if (couRequestHeaderMybatisDao.queryById(couRequestHeader) == null) {
+                    json.setSuccess(true);
+                    json.setMsg("生成计划失败!");
+                    return json;
+                }
+
+//循环加入细单
+                for (InvLotLocId invLotLocId : listAdd) {
+                    CouRequestDetails couRequestDetails = new CouRequestDetails();
+                    couRequestDetails.setCycleCountno(resultNo);
+                    couRequestDetails.setCycleCountlineno(couRequestDetailsMybatisDao.getCycleCountlineno(resultNo) + 1);
+                    couRequestDetails.setCustomerid(invLotLocId.getCustomerid());
+                    couRequestDetails.setSku(invLotLocId.getSku());
+                    couRequestDetails.setLocationid(invLotLocId.getLocationid());
+                    couRequestDetails.setQtyInv(invLotLocId.getQty() == null ? 0 : invLotLocId.getQty());
+                    couRequestDetails.setQtyAct(0);
+                    couRequestDetails.setLotatt04(invLotLocId.getLotatt04());
+                    couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
+                    couRequestDetails.setAddtime(new Date());
+                    couRequestDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+//                couRequestDetails.setEdittime(null);
+//                couRequestDetails.setEditwho(null);
+                    couRequestDetailsMybatisDao.add(couRequestDetails);
+                }
+                json.setSuccess(true);
+                json.setMsg("生成任务成功!");
+            } else {
+                json.setSuccess(true);
+                json.setMsg("生成任务失败!未获取到主单号!");
+                throw new Exception();
+            }
+        }catch (Exception e){
+            json.setSuccess(true);
+            json.setMsg("生成任务失败!请重试!");
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return json;
+    }
+
+
+
+
+
     //导入
     public Json importExcelData(MultipartHttpServletRequest mhsr) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
         Json json = null;

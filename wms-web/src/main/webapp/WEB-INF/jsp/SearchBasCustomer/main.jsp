@@ -43,7 +43,7 @@ $(function() {
 		},
 		columns : [[
 			{field: 'enterpriseName',		title: '委托方企业名称 ',	width: 200 },
-			{field: 'licenseNumber',		title: '营业执照编号 ',	width: 150 },
+			{field: 'socialCreditCode',		title: '营业执照编号 ',	width: 150 },
 			{field: 'residence',		    title: '住所 ',	width: 150 },
 			{field: 'juridicalPerson',		title: '法定代表人 ',	width: 150 },
 			{field: 'headName',		        title: '企业负责人 ',	width: 150 },
