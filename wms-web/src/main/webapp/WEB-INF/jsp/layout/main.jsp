@@ -4,8 +4,8 @@
 <html>
 <head>
 <title>上海嘉和诚康医疗器械有限公司WMS系统</title>
-<c:import url="/WEB-INF/jsp/include/meta.jsp" /> 
-<c:import url="/WEB-INF/jsp/include/easyui.jsp" /> 
+<c:import url="/WEB-INF/jsp/include/meta.jsp" />
+<c:import url="/WEB-INF/jsp/include/easyui.jsp" />
 <script type="text/javascript" charset="UTF-8">
 var ezuiTabs;
 var logoutForm;
@@ -18,7 +18,7 @@ var modifyDialog;
 var forgetDialog;
 
 var menu;
-$(function () { 
+$(function () {
 	$('#loginDialog input').keyup(function(event) {
 		if (event.keyCode == '13') {
 			login();
@@ -45,7 +45,7 @@ $(function () {
 			ezuiFormClear(forgetPwdForm);
 		}
 	}).dialog('close');
-	
+
 	forgetPwdDialog = $('#forgetPwdDialog').show().dialog({
 		modal : true,
 		title : '忘记密码',
@@ -56,7 +56,7 @@ $(function () {
 			ezuiFormClear(forgetPwdForm);
 		}
 	}).dialog('close');
-	
+
 	modifyDialog = $('#modifyDialog').show().dialog({
 		modal : true,
 		cache: false,
@@ -133,7 +133,7 @@ var getMenu = function(){
 						closable : true
 					});
 				}
-			} 
+			}
 		},
 		onLoadSuccess : function(node, data) {
 			if (data) {
@@ -243,22 +243,33 @@ var modifyCommit = function(){
 				return false;
 			}
 		},
+		dataType : 'JSON',
 		success : function(data) {
-			var msg = "";
-			var result;
-			try {
-				result = $.parseJSON(data);
-				msg = result.msg;
+
+			$.messager.progress('close');
+			var result = $.parseJSON(data);
+			if (result.success === true) {
 				$("#northFrame").contents().find('#userInfo').text(sy.fs('您好！[{0}]', result.obj.warehouse.warehouseName + ':' + result.obj.userName));
-			} catch (e) {
-				msg = "<spring:message code='common.message.data.process.failed'/><br/><br/>"+ data;
-			} finally {
-				$.messager.show({
-					msg : msg, title : "<spring:message code='common.message.prompt'/>"
-				});
-				$.messager.progress('close');
 				modifyDialog.dialog('close');
 			}
+			$.messager.show({
+				msg : result.msg, title : "<spring:message code='common.message.prompt'/>"
+			});
+			<%--var msg = "";--%>
+			<%--var result;--%>
+			<%--try {--%>
+			<%--	result = $.parseJSON(data);--%>
+			<%--	msg = result.msg;--%>
+			<%--	--%>
+			<%--} catch (e) {--%>
+			<%--	msg = "<spring:message code='common.message.data.process.failed'/><br/><br/>"+ data;--%>
+			<%--} finally {--%>
+			<%--	$.messager.show({--%>
+			<%--		msg : msg, title : "<spring:message code='common.message.prompt'/>"--%>
+			<%--	});--%>
+
+			<%--	--%>
+			<%--}--%>
 		}
 	});
 };
@@ -297,13 +308,13 @@ var openForgetPwdDialog = function(){
 		<div data-options='region:"center",border:true' style="overflow: hidden;">
 			<div id="ezuiTabs" style="overflow: hidden;"></div>
 		</div>
-		<div id="west" data-options='region:"west",border:true,href:"<c:url value="/menu.html"/>"' title="菜单栏" style="width:180px;"></div>  
+		<div id="west" data-options='region:"west",border:true,href:"<c:url value="/menu.html"/>"' title="菜单栏" style="width:180px;"></div>
 <%-- 		<div id="south" data-options='region:"south",border:true,href:"<c:url value="/foot.html"/>"' style="overflow: hidden;height:27px;"></div> --%>
 	</div>
 	<div style="dispaly:none;">
 		<form id="logoutForm" method="post"></form>
 	</div>
-	<div id="loginDialog" style="padding: 10px;">
+	<div id="loginDialog" style="padding: 10px 40px;">
 		<form id="loginForm" method="post">
 			<table class="tableForm">
 				<tr>
@@ -324,7 +335,7 @@ var openForgetPwdDialog = function(){
 																															editable:false,
 																															valueField: 'id',
 																															textField: 'value'" />
-						<a onclick="openForgetPwdDialog();" href="javascript:void(0);">忘记密码</a>
+<%--						<a onclick="openForgetPwdDialog();" href="javascript:void(0);">忘记密码</a>--%>
 					</td>
 				</tr>
 			</table>
@@ -370,7 +381,7 @@ var openForgetPwdDialog = function(){
 																																	{id: 'M', value: '男'},
 																																	{id: 'F', value: '女'}
 																																]
-																															 "/>  
+																															 "/>
 					</td>
 				</tr>
 				<tr>
@@ -384,7 +395,7 @@ var openForgetPwdDialog = function(){
 																														url:'<c:url value="/countryController.do?getCountryCombobox"/>',
 																														valueField:'id',
 																														textField:'value'
-																													 "/>  
+																													 "/>
 					</td>
 				</tr>
 				<tr>
@@ -397,11 +408,11 @@ var openForgetPwdDialog = function(){
 				</tr>
 				<tr>
 					<th>新密码</th>
-					<td><input type="password" id="newPwd" name="newPwd" class="easyui-textbox" size="19" data-options="validType:['eqPassword[\'#rePwd\']']"/></td>
+					<td><input type="password" id="newPwd" name="newPwd" class="easyui-textbox" size="19" data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<th>密码确认</th>
-					<td><input type="password" id="rePwd" name="rePwd" class="easyui-textbox" size="19" data-options="validType:['eqPassword[\'#newPwd\']']"/></td>
+					<td><input type="password" id="rePwd" name="rePwd" class="easyui-textbox" size="19" data-options="required:true,validType:['eqPassword[\'#newPwd\']']"/></td>
 				</tr>
 			</table>
 		</form>

@@ -24,6 +24,36 @@ public class SfcUserVO implements Comparable<SfcUserVO> {
 	private SfcCountry country;
 	private String email;
 
+	private String createWho;
+
+	private Date editTime;
+
+	private String editWho;
+
+	public String getCreateWho() {
+		return createWho;
+	}
+
+	public void setCreateWho(String createWho) {
+		this.createWho = createWho;
+	}
+
+	public Date getEditTime() {
+		return editTime;
+	}
+
+	public void setEditTime(Date editTime) {
+		this.editTime = editTime;
+	}
+
+	public String getEditWho() {
+		return editWho;
+	}
+
+	public void setEditWho(String editWho) {
+		this.editWho = editWho;
+	}
+
 	public String getCreateTime() {
 		return createTime;
 	}

@@ -656,11 +656,6 @@ public class DocAsnHeaderService extends BaseService {
 
     /**
      * 引用入库
-     *
-     * @param orderno
-     * @param refOrderno
-     * @return
-     * @throws Exception
      */
     public Json doRefIn(String orderno, String refOrderno) throws Exception {
         DocAsnHeader head = docAsnHeaderMybatisDao.queryById(orderno);

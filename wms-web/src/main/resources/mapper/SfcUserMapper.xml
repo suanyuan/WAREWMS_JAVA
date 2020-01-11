@@ -21,6 +21,9 @@
 	<result column="session_id" property="sessionId"/>
 	<result column="user_type" property="userType"/>
 	<result column="user_grade" property="userGrade"/>
+	<result column="CREATE_WHO" property="createWho"/>
+	<result column="EDIT_TIME" property="editTime"/>
+	<result column="EDIT_WHO" property="editWho"/>
 </resultMap>
 
 <resultMap id="queryRoleForListMap" type="com.wms.mybatis.entity.SfcUser">
@@ -39,6 +42,9 @@
 	<result column="session_id" property="sessionId"/>
 	<result column="user_type" property="userType"/>
 	<result column="user_grade" property="userGrade"/>
+	<result column="CREATE_WHO" property="createWho"/>
+	<result column="EDIT_TIME" property="editTime"/>
+	<result column="EDIT_WHO" property="editWho"/>
 	<!-- <result column="country_id" property="countryId"/> -->
 	<association property="country" javaType="com.wms.mybatis.entity.SfcCountry">
         <result column="country_id" property="id"/>
@@ -81,7 +87,7 @@
        
 <!-- Sfc_User table all fields -->
 <sql id="Base_Column_List" >
-	 birthday,country_id,create_time,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type,user_grade
+	 birthday,country_id,create_time,CREATE_WHO,EDIT_TIME,EDIT_WHO,email,enable,gender,last_login_time,merchant_id,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type,user_grade
 </sql>
    
    
@@ -134,6 +140,15 @@ where 1=1
 	<if test="condition.userType != null and condition.userType != ''" >
 	    and user_type =  #{condition.userType}
 	</if>
+	<if test="condition.createWho != null and condition.createWho != ''" >
+		and CREATE_WHO =  #{condition.createWho}
+	</if>
+	<if test="condition.editTime != null and condition.editTime != ''" >
+		and EDIT_TIME =  #{condition.editTime}
+	</if>
+	<if test="condition.editWho != null and condition.editWho != ''" >
+		and EDIT_WHO =  #{condition.editWho}
+	</if>
 </trim>
 </sql>
 
@@ -185,7 +200,10 @@ where 1=1
 	<if test="userGrade != null  ">
 		user_grade,
 	</if>
-	create_time
+	<if test="createWho != null  ">
+		CREATE_WHO,EDIT_WHO,
+	</if>
+	create_time,EDIT_TIME
 	  )
   values (
 	<if test="birthday != null  ">
@@ -233,7 +251,10 @@ where 1=1
 	<if test="userGrade != null  ">
 		#{userGrade},
 	</if>
-	now()
+	<if test="createWho != null  ">
+		#{createWho},#{createWho},
+	</if>
+	now(),now()
   	)
 </insert>
 
@@ -263,7 +284,10 @@ where 1=1
 
 <!-- 根据id，修改记录-->  
 <update id="update" parameterType="Object" >
-	update Sfc_User set country_id=#{countryId},create_time=now(),email=#{email},enable=#{enable},gender=#{gender},last_login_time=#{lastLoginTime},merchant_id=#{merchantId},node_id=#{nodeId},parent_node_id=#{parentNodeId},pwd=#{pwd},session_id=#{sessionId},user_id=#{userId},user_name=#{userName},user_type=#{userType} where birthday=#{birthday}
+	update Sfc_User set country_id=#{countryId},create_time=now(),email=#{email},enable=#{enable},gender=#{gender},
+	last_login_time=#{lastLoginTime},merchant_id=#{merchantId},node_id=#{nodeId},parent_node_id=#{parentNodeId},
+	pwd=#{pwd},session_id=#{sessionId},user_id=#{userId},user_name=#{userName},user_type=#{userType}
+	where birthday=#{birthday}
 </update>
  
  <!-- 修改记录，只修改只不为空的字段 -->
@@ -279,6 +303,13 @@ where 1=1
 	<if test="createTime != null  ">
 		create_time=#{createTime},
 	</if>
+		<if test="createWho != null  ">
+			CREATE_WHO=#{createWho},
+		</if>
+		<if test="editWho != null  ">
+			EDIT_WHO=#{editWho},
+		</if>
+		EDIT_TIME=now(),
 	<if test="email != null  ">
 		email=#{email},
 	</if>
@@ -377,6 +408,9 @@ where 1=1
 	       f.country_name,
 	       f.country_eng_name,
 	       a.create_time,
+	       a.CREATE_WHO,
+	       a.EDIT_TIME,
+	       a.EDIT_WHO,
 	       a.email,
 	       a.enable,
 	       a.gender,
@@ -424,6 +458,9 @@ where 1=1
 	       f.country_name,
 	       f.country_eng_name,
 	       a.create_time,
+	       a.CREATE_WHO,
+	       a.EDIT_TIME,
+	       a.EDIT_WHO,
 	       a.email,
 	       a.enable,
 	       a.gender,

@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
 
@@ -15,6 +17,12 @@ public class StringUtil {
 
     public static boolean isNotEmpty(String input) {
         return !isEmpty(input);
+    }
+
+    public static boolean checkPassword(String password) {
+        Pattern Password_Pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(.{6,16})$");
+        Matcher matcher = Password_Pattern.matcher(password);
+        return matcher.matches();
     }
 
     /**

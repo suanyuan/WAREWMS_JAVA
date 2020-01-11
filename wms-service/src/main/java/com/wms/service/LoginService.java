@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.utils.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,6 @@ import com.wms.mybatis.entity.SfcUser;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.query.SfcUserLoginQuery;
-import com.wms.utils.EncryptUtil;
-import com.wms.utils.MailUtil;
-import com.wms.utils.RandomUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.vo.MailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.ForgetPwdForm;
@@ -85,6 +81,7 @@ public class LoginService extends BaseService{
 	}
 
 	public Json editUser(HttpSession session, UserOwenerForm userOwenerForm) throws Exception {
+
 		Json json = new Json();
 		SfcUserLoginQuery sfcUserLoginQuery = new SfcUserLoginQuery();
 		sfcUserLoginQuery.setId(userOwenerForm.getUserId());
@@ -92,6 +89,11 @@ public class LoginService extends BaseService{
 		SfcUserLogin sfcUserLogin = new SfcUserLogin();
 		sfcUserLogin = sfcUserLoginMybatisDao.queryById(sfcUserLoginQuery);
 		if(sfcUserLogin.getPwd().equals(EncryptUtil.md5AndSha(userOwenerForm.getPwd()))){
+
+			if (!StringUtil.checkPassword(userOwenerForm.getNewPwd())) {
+				return Json.error("密码需由6~16位数字和字母组成");
+			}
+
 			String oldPwd = sfcUserLogin.getPwd();
 			byte enable = sfcUserLogin.getEnable();
 			BeanUtils.copyProperties(userOwenerForm, sfcUserLogin);
@@ -112,7 +114,7 @@ public class LoginService extends BaseService{
 			json.setSuccess(true);
 			json.setMsg(ResourceUtil.getProcessResultMsg(true));
 		}else{
-			json.setMsg("密码输入错误！");
+			json.setMsg("旧密码输入错误！");
 		}
 		json.setObj(sfcUserLogin);
 		return json;

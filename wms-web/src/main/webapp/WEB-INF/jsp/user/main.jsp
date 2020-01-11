@@ -27,7 +27,7 @@ $(function() {
 		pagination:false,
 		fit:true,
 		border:false,
-		fitColumns:true,
+		fitColumns:false,
     	nowrap:true,  
     	striped:true, 
 		rownumbers:true, 
@@ -35,8 +35,8 @@ $(function() {
 		idField : 'id',
 		treeField : 'userName',
 		columns : [[
-			{field: 'id',		title: "用户ID",	width: 120 },
-			{field: 'userName',		title: "<spring:message code='adminUser.datagrid.userName'/>",	width: 120 },
+			{field: 'userName',		title: "<spring:message code='adminUser.datagrid.userName'/>",	width: 100 },
+			{field: 'id',		title: "用户ID",	width: 60 },
 			{field: 'gender',		title: "<spring:message code='adminUser.datagrid.gender'/>",	width: 40 ,
 				formatter:function(value,rowData,rowIndex){
 					if(value == "M"){
@@ -60,7 +60,7 @@ $(function() {
                 }
 			},
 			{field: 'birthday',		title: "<spring:message code='adminUser.datagrid.birthday'/>",	width: 100 },
-			{field: 'country',	title: "<spring:message code='adminUser.datagrid.country'/>",		width: 80 ,
+			{field: 'country',	title: "<spring:message code='adminUser.datagrid.country'/>",		width: 70 ,
 				formatter:function(value,rowData,rowIndex){
 					if(value){
 						return value.countryName;
@@ -69,9 +69,7 @@ $(function() {
 					}
                 }
 			},
-			{field: 'email',		title: "<spring:message code='adminUser.datagrid.email'/>",			width: 120 },
-			{field: 'createTime',	title: "<spring:message code='adminUser.datagrid.createTime'/>",	width: 120 },
-			{field: 'lastLoginTime',title: "<spring:message code='adminUser.datagrid.lastLoginTime'/>",	width: 120 },
+			{field: 'email',		title: "<spring:message code='adminUser.datagrid.email'/>",			width: 130 },
 			{field:	'roleSet',		title: "<spring:message code='adminUser.datagrid.roleList'/>",		width:70,
 				formatter:function(value,rowData,rowIndex){
 					var result = "";
@@ -86,7 +84,7 @@ $(function() {
                     return result;
                 }
 			},
-			{field:	'warehouseSet',		title: "<spring:message code='adminUser.datagrid.warehouseList'/>",		width:70,
+			{field:	'warehouseSet',		title: "<spring:message code='adminUser.datagrid.warehouseList'/>",		width:140,
 				formatter:function(value,rowData,rowIndex){
 					var result = "";
 					if(value){
@@ -100,20 +98,25 @@ $(function() {
                     return result;
                 }
 			},
-			{field:	'customerSet',		title: "<spring:message code='adminUser.datagrid.customerList'/>",		width:70,
-				formatter:function(value,rowData,rowIndex){
-					var result = "";
-					if(value){
-						for(var i = 0; i < value.length; i++){
-							result = result + value[i].customerName;
-							if(i != (value.length-1)){
-								result = result + "<br/>";
-							}
-	                    }
-					}
-                    return result;
-                }
-			}
+			<%--{field:	'customerSet',		title: "<spring:message code='adminUser.datagrid.customerList'/>",		width:70,--%>
+			<%--	formatter:function(value,rowData,rowIndex){--%>
+			<%--		var result = "";--%>
+			<%--		if(value){--%>
+			<%--			for(var i = 0; i < value.length; i++){--%>
+			<%--				result = result + value[i].customerName;--%>
+			<%--				if(i != (value.length-1)){--%>
+			<%--					result = result + "<br/>";--%>
+			<%--				}--%>
+	        <%--            }--%>
+			<%--		}--%>
+            <%--        return result;--%>
+            <%--    }--%>
+			<%--},--%>
+			{field: 'lastLoginTime',title: "<spring:message code='adminUser.datagrid.lastLoginTime'/>",	width: 110 },
+			{field: 'createTime',	title: "<spring:message code='adminUser.datagrid.createTime'/>",	width: 110 },
+			{field: 'createWho',title: "<spring:message code='adminUser.datagrid.createWho'/>",	width: 80 },
+			{field: 'editTime',title: "<spring:message code='adminUser.datagrid.editTime'/>",	width: 120 },
+			{field: 'editWho',title: "<spring:message code='adminUser.datagrid.editWho'/>",	width: 80 },
 	    ]],
 		onDblClickCell: function(index,field,value){
 			edit();
@@ -267,7 +270,7 @@ function sda() {
 var del = function(){
 	var row = ezuiTreegrid.treegrid('getSelected');
 	if(row){
-		if(row.userType == 0){
+		// if(row.userType == 0){
 			$.messager.confirm("<spring:message code='common.message.confirm'/>", "<spring:message code='common.message.confirm.delete'/>", function(confirm) {
 				if(confirm){
 					$.ajax({
@@ -291,11 +294,11 @@ var del = function(){
 					});
 				}
 			});
-		}else{
-			$.messager.show({
-				msg : "無法刪除使用者！", title : "<spring:message code='common.message.prompt'/>"
-			});
-		}
+		<%--}else{--%>
+		<%--	$.messager.show({--%>
+		<%--		msg : "無法刪除使用者！", title : "<spring:message code='common.message.prompt'/>"--%>
+		<%--	});--%>
+		<%--}--%>
 	}else{
 		$.messager.show({
 			msg : "<spring:message code='common.message.selectRecord'/>", title : "<spring:message code='common.message.prompt'/>"
@@ -369,6 +372,7 @@ var clearParentName = function(){
 				<div>
 					<a onclick="add();" 	id="ezuiBtn_add"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-add"'		href="javascript:void(0);"><spring:message code="common.button.add"/></a>
 					<a onclick="edit();" 	id="ezuiBtn_edit"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);"><spring:message code="common.button.edit"/></a>
+					<a onclick="del();" 	id="ezuiBtn_del"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"'		href="javascript:void(0);"><spring:message code="common.button.delete"/></a>
 					<a onclick="clearTreegridSelected('#ezuiTreegrid');" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-undo"'	href="javascript:void(0);"><spring:message code="common.button.cancelSelect"/></a>
 					<%--<a onclick="rePassword();" 	id="ezuiBtn_rePassword"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);">重置密码</a>--%>
 
@@ -561,6 +565,7 @@ var clearParentName = function(){
 	<div id="ezuiMenu" class="easyui-menu" style="width:120px;display: none;">
 		<div onclick="add();" id="menu_add"		data-options='plain:true,iconCls:"icon-add"'><spring:message code="common.button.add"/></div>
 		<div onclick="edit();"id="menu_edit" 	data-options='plain:true,iconCls:"icon-edit"'><spring:message code="common.button.edit"/></div>
-	</div> 
+		<div onclick="del();"id="menu_del" 		data-options='plain:true,iconCls:"icon-remove"'><spring:message code="common.button.delete"/></div>
+	</div>
 </body>
 </html>

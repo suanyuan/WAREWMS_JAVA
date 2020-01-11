@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.wms.mybatis.dao.*;
+import com.wms.utils.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,6 @@ import com.wms.query.SfcRoleQuery;
 import com.wms.query.SfcUserLoginQuery;
 import com.wms.query.SfcWarehouseQuery;
 import com.wms.query.UserQuery;
-import com.wms.utils.EncryptUtil;
-import com.wms.utils.MailUtil;
-import com.wms.utils.RandomUtil;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.SfcUserLoginUtil;
-import com.wms.utils.SmsUtil;
 import com.wms.utils.comparator.SfcUserComparator;
 import com.wms.utils.vo.MailVO;
 import com.wms.vo.Json;
@@ -235,7 +230,6 @@ public class UserService extends BaseService {
 	public Json addUser(UserForm userForm) throws Exception {
 		Json json = new Json();
 		SfcUserLoginQuery sfcUserLoginQuery = new SfcUserLoginQuery();
-		System.out.println(userForm+"=============");
 		sfcUserLoginQuery.setId(userForm.getUserId());
 		sfcUserLoginQuery.setWarehouseId(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());;
 		SfcUserLogin sfcUserLogin = sfcUserLoginMybatisDao.queryById(sfcUserLoginQuery);
@@ -299,7 +293,6 @@ public class UserService extends BaseService {
 					}
 				}
 				sfcUser.setCustomerSet(sfcCustomerSet);
-				System.out.println(pwd);
 				/*if(StringUtils.isNotEmpty(userForm.getEmail())){
 					MailVO mailVO = new MailVO();
 					mailVO.setTo(userForm.getEmail());
@@ -356,6 +349,7 @@ public class UserService extends BaseService {
 		sfcUserLogin.setId(userForm.getUserId());
 		SfcUser sfcUser = sfcUserMybatisDao.queryListById(sfcUserLogin);
 		BeanUtils.copyProperties(userForm, sfcUser);
+		sfcUser.setEditWho(SfcUserLoginUtil.getLoginUser().getId());
 		
 		if(userForm.getUserType() > 0){
 			if(StringUtils.isNotEmpty(userForm.getCosPassword())){
@@ -433,21 +427,27 @@ public class UserService extends BaseService {
 	}
 
 	public Json deleteUser(String id) {
-		Json json = new Json();
-		UserLogin userLogin = sfcUserLoginMybatisDao.queryById(id);
-		if(userLogin != null && userLogin.getUserType() == 0){
-			UserLogin tempUserLogin = sfcUserLoginMybatisDao.queryById("temp");
 
-			MybatisCriteria mybatisCriteria = new MybatisCriteria();
-			SfcUserLoginQuery query = new SfcUserLoginQuery();
-			query.setNodeId(userLogin.getNodeId());
-			mybatisCriteria.setCondition(query);
-			List<UserLogin> subUserLoginList = sfcUserLoginMybatisDao.queryByList(mybatisCriteria);
-			for(UserLogin subUserLogin : subUserLoginList){
-				subUserLogin.setParentNodeId(tempUserLogin.getNodeId());
-                sfcUserLoginMybatisDao.update(subUserLogin);
-			}
-            sfcUserLoginMybatisDao.delete(userLogin);
+		if (id.equals("admin")) {
+			return Json.error("无法删除系统管理员账号(admin)");
+		}
+
+		Json json = new Json();
+		SfcUser sfcUser = sfcUserMybatisDao.queryById(id);
+		if(sfcUser != null){
+			//更新节点用户的id吧，诚康项目中没有
+//			UserLogin tempUserLogin = sfcUserLoginMybatisDao.queryById("temp");
+//
+//			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//			SfcUserLoginQuery query = new SfcUserLoginQuery();
+//			query.setNodeId(userLogin.getNodeId());
+//			mybatisCriteria.setCondition(query);
+//			List<UserLogin> subUserLoginList = sfcUserLoginMybatisDao.queryByList(mybatisCriteria);
+//			for(UserLogin subUserLogin : subUserLoginList){
+//				subUserLogin.setParentNodeId(tempUserLogin.getNodeId());
+//                sfcUserLoginMybatisDao.update(subUserLogin);
+//			}
+            sfcUserMybatisDao.delete(sfcUser);
 		}
 		json.setSuccess(true);
 		return json;
@@ -459,6 +459,7 @@ public class UserService extends BaseService {
 			SfcUser sfcUser = sfcUserMybatisDao.queryListById(sfcUserLogin);
 			sfcUserVO = new SfcUserVO();
 			BeanUtils.copyProperties(sfcUser, sfcUserVO);
+			sfcUserVO.setBirthday(DateUtil.format(sfcUser.getBirthday(), "yyyy-MM-dd"));
 		}
 		return sfcUserVO;
 	}
