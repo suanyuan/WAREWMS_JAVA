@@ -742,6 +742,9 @@ public class DocQcDetailsService extends BaseService {
             if (invLotAtt.getLotatt11() != null) {
                 form.setLotatt11(invLotAtt.getLotatt11());
             }
+            if (invLotAtt.getLotatt12() != null) {
+                form.setLotatt12(invLotAtt.getLotatt12());
+            }
             if (invLotAtt.getLotatt15() != null) {
                 form.setLotatt15(invLotAtt.getLotatt15());
             }
