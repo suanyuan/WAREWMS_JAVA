@@ -57,6 +57,12 @@
 	<result column="palletize" property="palletize"/>
 	<result column="workstation" property="workstation"/>
 	<result column="udfprintflag1" property="udfprintflag1"/>
+	<result column="lotatt01" property="lotatt01"/>
+	<result column="lotatt02" property="lotatt02"/>
+	<result column="lotatt04" property="lotatt04"/>
+	<result column="lotatt05" property="lotatt05"/>
+	<result column="lotatt06" property="lotatt06"/>
+	<result column="productLineName" property="productLineName"/>
 </resultMap>
        
 <!-- act_allocation_details table all fields -->
@@ -490,12 +496,43 @@ where 1=1
     <!--</select>-->
 
 
-	<!-- 根据出库单号查出分配的出库库位 -->
+	<!-- 根据出库单号查出分配的location,sku,customerid,lotnum 产品线为骨科的 -->
 	<select id="queryByLocByOrderNo" resultMap="BaseResultMap"  parameterType="Object">
 		select
-          location
-		from act_allocation_details
-        WHERE  orderno=#{orderNo}
-        GROUP BY location
+          a.location,a.sku,a.customerid,sum(a.qty) qty,b.lotatt04,b.lotatt05,p.name productLineName
+		from act_allocation_details a
+		left join inv_lot_att b on a.lotnum=b.lotnum
+		LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+		WHERE  1=1
+		<if test="condition.array!=null and condition.array.length>0">
+			and a.orderno in
+			<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
+		GROUP BY a.location,a.sku,a.customerid,b.lotatt04,b.lotatt05,p.name
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+
+	</select>
+	<select id="queryByLocByOrderNoCount" resultType="int"  parameterType="Object">
+		select count(1) from
+		(select
+		count(1)
+		from act_allocation_details a
+		left join inv_lot_att b on a.lotnum=b.lotnum
+		LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
+		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
+		WHERE  1=1
+		<if test="condition.array!=null and condition.array.length>0">
+			and a.orderno in
+			<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
+		GROUP BY a.location,a.sku,a.customerid,b.lotatt04,b.lotatt05,p.name
+		) aa
 	</select>
 </mapper>   

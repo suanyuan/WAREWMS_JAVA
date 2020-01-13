@@ -148,7 +148,7 @@ $(function() {
 		modal : true,
 		top:0,
 		left:200,
-		title : '生成任务(骨科)',
+		title : '出库分配明细(骨科)',
 		buttons : '#ezuiDialogGuKeBtn',
 		onClose : function() {
 			ezuiFormClear(ezuiToolbarGuKe);
@@ -559,8 +559,8 @@ var GuKeInventory = function(){
 		columns: [[
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 150},
-			{field: 'locationid', title: '库位', width: 100},
-			{field: 'qty', title: '盘点件数', width: 100},
+			{field: 'location', title: '库位', width: 100},
+			{field: 'qty', title: '出库件数', width: 100},
 			{field: 'lotatt04', title: '生产批号', width: 100},
 			{field: 'lotatt05', title: '序列号', width: 100},
 			{field: 'productLineName', title: '产品线', width: 100},

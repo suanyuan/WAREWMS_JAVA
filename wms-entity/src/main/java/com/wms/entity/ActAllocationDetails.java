@@ -116,5 +116,11 @@ public class ActAllocationDetails  implements Serializable {
 	private String udfprintflag1;
 
 
+	private String lotatt01;
+	private String lotatt02;
+	private String lotatt04;
+	private String lotatt05;
+	private String lotatt06;
+	private String productLineName; //产品线名称
 
 }
