@@ -34,26 +34,27 @@ public class SfcUser implements Serializable {
 	private java.lang.String gender;
 	
 	private java.lang.Byte enable;
-	
+
 	private java.util.Date birthday;
-	
+
 	private java.lang.String email;
 	
 	private int userType;
 	
 	private java.util.Date createTime;
-	
+
 	private java.util.Date lastLoginTime;
-	
+
 	private java.lang.String sessionId;
 
 	private com.wms.mybatis.entity.SfcCountry country;
-	
+
 	private String merchantId;
 
 	private Set<SfcRole> roleSet;
 
 	private Set<SfcWarehouse> warehouseSet;
+
 
 	private com.wms.mybatis.entity.SfcWarehouse defaultWarehouse;
 
@@ -66,6 +67,82 @@ public class SfcUser implements Serializable {
 	private Date editTime;
 
 	private String editWho;
+
+
+	//导出
+	private String enableName;
+	private String birthdayName;
+	private String createTimeName;
+	private String lastLoginTimeName;
+	private String countryName;
+	private String roleName;
+	private String warehouseName;
+	private String editTimeName;
+
+
+	public String getCountryName() {
+		return countryName;
+	}
+
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+
+	public String getEnableName() {
+		return enableName;
+	}
+
+	public void setEnableName(String enableName) {
+		this.enableName = enableName;
+	}
+
+	public String getBirthdayName() {
+		return birthdayName;
+	}
+
+	public void setBirthdayName(String birthdayName) {
+		this.birthdayName = birthdayName;
+	}
+
+	public String getCreateTimeName() {
+		return createTimeName;
+	}
+
+	public void setCreateTimeName(String createTimeName) {
+		this.createTimeName = createTimeName;
+	}
+
+	public String getLastLoginTimeName() {
+		return lastLoginTimeName;
+	}
+
+	public void setLastLoginTimeName(String lastLoginTimeName) {
+		this.lastLoginTimeName = lastLoginTimeName;
+	}
+
+	public String getEditTimeName() {
+		return editTimeName;
+	}
+
+	public void setEditTimeName(String editTimeName) {
+		this.editTimeName = editTimeName;
+	}
 
 	public String getCreateWho() {
 		return createWho;

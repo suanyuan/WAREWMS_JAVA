@@ -330,76 +330,85 @@
     </select>
 	<!--获得盘点任务-->
 	<select id="queryByListByCouRequest" resultMap="BaseResultMap" parameterType="Object">
-		SELECT aa.*,p.name  FROM
-		(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
+
+		SELECT  a.lotatt01,a.lotatt02,a.`lotatt04`,a.`lotatt05`,a.lotatt06,i.locationid,i.`sku`,i.`customerid`,i.`qty`,p.name
 		FROM `inv_lot_loc_id` i
 		INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
-		GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
-		LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
+		LEFT JOIN `bas_sku` s ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
 		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-				and aa.lotatt04 like concat('%',#{condition.lotatt04},'%')
+				and a.lotatt04 like concat('%',#{condition.lotatt04},'%')
 			</if>
 			<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-				and aa.lotatt05 like concat('%',#{condition.lotatt05},'%')
+				and a.lotatt05 like concat('%',#{condition.lotatt05},'%')
 			</if>
 			<if test="condition.customerid != null and condition.customerid != ''" >
-				and aa.customerid like concat('%',#{condition.customerid},'%')
+				and i.customerid like concat('%',#{condition.customerid},'%')
 			</if>
 			<if test="condition.sku != null and condition.sku != ''" >
-				and aa.sku  like concat('%',#{condition.sku},'%')
+				and i.sku  like concat('%',#{condition.sku},'%')
 			</if>
 			<if test="condition.productLineName != null and condition.productLineName != ''" >
 				and p.name  like concat('%',#{condition.productLineName},'%')
 			</if>
 			<if test="condition.locationid != null and condition.locationid != ''" >
-				and aa.locationid =#{condition.locationid}
+				and i.locationid =#{condition.locationid}
+			</if>
+			<if test="condition.location != null and condition.location!= ''" >
+				and i.locationid =#{condition.location}
+			</if>
+			<if test="condition.lotnum != null and condition.lotnum != ''" >
+				and i.lotnum =#{condition.lotnum}
 			</if>
 			<if test="condition.array!=null and condition.array.length>0">
-				and aa.locationid in
+				and i.locationid in
 				<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
 					#{id}
 				</foreach>
 			</if>
 		</trim>
-		ORDER BY aa.locationid DESC
+		ORDER BY i.locationid
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
 	</select>
 	<!--获得盘点任务数量-->
 	<select id="queryByListByCouRequestCount" resultType="java.lang.Integer"  parameterType="Object" >
-		SELECT count(1) FROM
-		(SELECT  a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`,SUM(i.`qty`) AS qty
+		SELECT count(1)
 		FROM `inv_lot_loc_id` i
 		INNER JOIN `inv_lot_att` a ON a.`lotnum`=i.`lotnum`
-		GROUP BY a.`lotatt04`,a.`lotatt05`,i.locationid,i.`sku`,i.`customerid`) AS aa
-		LEFT JOIN `bas_sku` s ON s.`sku`=aa.`sku` AND s.`customerid`=aa.`customerid`
+		LEFT JOIN `bas_sku` s ON s.`sku`=i.`sku` AND s.`customerid`=i.`customerid`
 		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 		where 1=1
 		<trim  suffixOverrides="," >
 			<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-				and aa.lotatt04 like concat('%',#{condition.lotatt04},'%')
+				and a.lotatt04 like concat('%',#{condition.lotatt04},'%')
 			</if>
 			<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-				and aa.lotatt05 like concat('%',#{condition.lotatt05},'%')
+				and a.lotatt05 like concat('%',#{condition.lotatt05},'%')
 			</if>
 			<if test="condition.customerid != null and condition.customerid != ''" >
-				and aa.customerid like concat('%',#{condition.customerid},'%')
+				and i.customerid like concat('%',#{condition.customerid},'%')
 			</if>
 			<if test="condition.sku != null and condition.sku != ''" >
-				and aa.sku  like concat('%',#{condition.sku},'%')
+				and i.sku  like concat('%',#{condition.sku},'%')
 			</if>
 			<if test="condition.productLineName != null and condition.productLineName != ''" >
 				and p.name  like concat('%',#{condition.productLineName},'%')
 			</if>
 			<if test="condition.locationid != null and condition.locationid != ''" >
-				and aa.locationid =#{condition.locationid}
+				and i.locationid =#{condition.locationid}
+			</if>
+			<if test="condition.location != null and condition.location != ''" >
+				and i.locationid =#{condition.location}
+			</if>
+			<if test="condition.lotnum != null and condition.lotnum != ''" >
+				and i.lotnum =#{condition.lotnum}
 			</if>
 			<if test="condition.array!=null and condition.array.length>0">
-				and aa.locationid in
+				and i.locationid in
 				<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
 					#{id}
 				</foreach>

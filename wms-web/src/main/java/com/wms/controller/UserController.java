@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wms.entity.SearchOutInvLocation;
+import com.wms.query.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -61,7 +64,8 @@ public class UserController {
 	public Set<SfcUserVO> showTreegrid() {
 		return userService.getUserTreegrid();
 	}
-	
+
+
 	@Login
 	@RequestMapping(params = "add")
 	@ResponseBody
@@ -128,5 +132,13 @@ public class UserController {
 	@ResponseBody
 	public List<EasyuiCombobox> getSupervisorCombobox() {
 		return userService.getSupervisorCombobox();
+	}
+
+
+
+	@Login
+	@RequestMapping(params = "exportUserIdDataToExcel")
+	public void exportUserIdDataToExcel(HttpServletResponse response, UserQuery query) throws Exception {
+		userService.exportUserIdDataToExcel(response, query);
 	}
 }

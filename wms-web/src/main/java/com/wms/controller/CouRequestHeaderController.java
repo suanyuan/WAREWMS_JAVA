@@ -2,6 +2,7 @@ package com.wms.controller;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.ActAllocationDetails;
 import com.wms.entity.CouRequestHeader;
 import com.wms.entity.InvLotLocId;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -61,7 +62,7 @@ public class CouRequestHeaderController {
 	@Login
 	@RequestMapping(params = "getcouRequestInfoGuKe")
 	@ResponseBody
-	public EasyuiDatagrid<InvLotLocId> getInvCheckInfoGuKe(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+	public EasyuiDatagrid<ActAllocationDetails> getInvCheckInfoGuKe(EasyuiDatagridPager pager, CouRequestDetailsQuery query) {
 		return couRequestHeaderService.getcouRequestInfoGuKe(pager,query);
 	}
 //生成盘点信息

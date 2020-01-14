@@ -361,6 +361,33 @@ var commit = function(){
 var clearParentName = function(){
 	$('#parentNodeId').combotree('clear');
 };
+
+
+/* 导出start */
+var doExport = function(){
+	if(navigator.cookieEnabled){
+		$('#ezuiBtn_export').linkbutton('disable');
+		var token = new Date().getTime();
+		var param = new HashMap();
+		param.put("token", token);
+		//--导出Excel
+		var formId = ajaxDownloadFile(sy.bp()+"/userController.do?exportUserIdDataToExcel", param);
+		downloadCheckTimer = window.setInterval(function () {
+			window.clearInterval(downloadCheckTimer);
+			$('#'+formId).remove();
+			$('#ezuiBtn_export').linkbutton('enable');
+			$.messager.progress('close');
+			$.messager.show({
+				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+			});
+		}, 1000);
+	}else{
+		$.messager.show({
+			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+		});
+	}
+};
+/* 导出end */
 </script>
 
 </head>
@@ -374,7 +401,9 @@ var clearParentName = function(){
 					<a onclick="edit();" 	id="ezuiBtn_edit"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);"><spring:message code="common.button.edit"/></a>
 					<a onclick="del();" 	id="ezuiBtn_del"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-remove"'		href="javascript:void(0);"><spring:message code="common.button.delete"/></a>
 					<a onclick="clearTreegridSelected('#ezuiTreegrid');" class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-undo"'	href="javascript:void(0);"><spring:message code="common.button.cancelSelect"/></a>
-					<%--<a onclick="rePassword();" 	id="ezuiBtn_rePassword"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);">重置密码</a>--%>
+					<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
+				<%--<a onclick="rePassword();" 	id="ezuiBtn_rePassword"	class="easyui-linkbutton" data-options='plain:true,iconCls:"icon-edit"'		href="javascript:void(0);">重置密码</a>--%>
 
 				</div>
 			</div>

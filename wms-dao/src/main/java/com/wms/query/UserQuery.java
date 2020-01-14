@@ -4,7 +4,17 @@ public class UserQuery implements IQuery{
 	private String userName;
 	private String nodeId;
 	private String merchantId;
-	
+	private String token;
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getMerchantId() {
 		return merchantId;
 	}

@@ -47,10 +47,10 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 
 	/**
 	 * 根据出库单号查出分配的出库库位
-	 * @param orderNo
 	 * @param <T>
 	 * @return
 	 */
-	public <T> List<T> queryByLocByOrderNo(String orderNo);
+	public <T> List<T> queryByLocByOrderNo(MybatisCriteria criteria);
+	public Integer queryByLocByOrderNoCount(MybatisCriteria criteria);
 
 }

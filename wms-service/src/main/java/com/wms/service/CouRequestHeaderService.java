@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.ActTransactionLogQuery;
 import com.wms.query.CouRequestDetailsQuery;
 import com.wms.query.CouRequestHeaderQuery;
@@ -160,7 +161,11 @@ public class CouRequestHeaderService extends BaseService {
     }
 
     //获得盘点计划 骨科
-    public EasyuiDatagrid<InvLotLocId> getcouRequestInfoGuKe(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+    public EasyuiDatagrid<ActAllocationDetails> getcouRequestInfoGuKe(EasyuiDatagridPager pager,CouRequestDetailsQuery query) {
+        EasyuiDatagrid<ActAllocationDetails> datagrid = new EasyuiDatagrid<ActAllocationDetails>();
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
         //根据时间查询出库事务
         ActTransactionLogQuery logQuery=new ActTransactionLogQuery();
         logQuery.setTransactiontype("SO");  //事务类型
@@ -170,30 +175,23 @@ public class CouRequestHeaderService extends BaseService {
         logQuery.setAddtime(query.getSoTimeEnd());         //事务结束时间
         List<ActTransactionLog> transactionLogList =actTransactionLogMybatisDao.queryByListByTypeAndTime(logQuery);
         //根据事务查询出来的出库单号从分配表查询出所有分配明细
+        List<ActAllocationDetails>  detailsList=new ArrayList<>();
         Map<String,String> map=new HashMap<>();
         for (ActTransactionLog t: transactionLogList) {
-            String orderno=t.getDocno();  //出库单号
-            //根据出库单号查出分配库位
-            List<ActAllocationDetails>  detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(orderno);
-            for (ActAllocationDetails details : detailsList) {
-                map.put(details.getLocation(),"");
-            }
+            map.put(t.getDocno(),"");
         }
-        //根据出库库位查询出所有库存 封装库位查询条件 如果没有返回空数据
-        EasyuiDatagrid<InvLotLocId> datagrid = new EasyuiDatagrid<InvLotLocId>();
         Object[] array =map.keySet().toArray();
-         if(array.length>0) {
+        if(array.length>0) {
+            //根据出库单号查出分配明细
             query.setArray(array);
-         }else{
-             return datagrid;
-         }
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCurrentPage(pager.getPage());
-        mybatisCriteria.setPageSize(pager.getRows());
-        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-        List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
-        datagrid.setTotal((long)invLotLocIdMybatisDao.queryByListByCouRequestCount(mybatisCriteria));
-        datagrid.setRows(lotLocIdList);
+            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+            detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(mybatisCriteria);
+        }else{
+            return datagrid;
+        }
+
+        datagrid.setTotal((long)actAllocationDetailsMybatisDao.queryByLocByOrderNoCount(mybatisCriteria));
+        datagrid.setRows(detailsList);
         return datagrid;
     }
 
@@ -202,29 +200,20 @@ public class CouRequestHeaderService extends BaseService {
         Json json = new Json();
         List<InvLotLocId> listAdd=new ArrayList<>();
 
-        //根据时间查询出库事务
-        ActTransactionLogQuery logQuery=new ActTransactionLogQuery();
-        logQuery.setTransactiontype("SO");  //事务类型
-        logQuery.setDoctype("SO");  //单据类型
-        logQuery.setStatus("99");//事务状态99=close
-        logQuery.setTransactiontime(query.getSoTimeStart());//事务开始时间
-        logQuery.setAddtime(query.getSoTimeEnd());         //事务结束时间
-        List<ActTransactionLog> transactionLogList =actTransactionLogMybatisDao.queryByListByTypeAndTime(logQuery);
-        //根据事务查询出来的出库单号从分配表查询出所有分配明细
-        Map<String,String> m=new HashMap<>();
-        for (ActTransactionLog t: transactionLogList) {
-            String orderno=t.getDocno();  //出库单号
-            //根据出库单号查出分配库位
-            List<ActAllocationDetails>  detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(orderno);
-            for (ActAllocationDetails details : detailsList) {
-                m.put(details.getLocation(),"");
-            }
-        }
-        //根据库位查出库存
-        for (String s : m.keySet()) {
+        //根据时间查询拿到所有出库分配明细
+        EasyuiDatagridPager pager=new EasyuiDatagridPager();
+        pager.setRows(0);
+        EasyuiDatagrid<ActAllocationDetails>  datagrid=getcouRequestInfoGuKe(pager,query);
+        List<ActAllocationDetails> detailsList=datagrid.getRows();
+        //根据出库分配明细查出对应库存 如果没有插入0库存
+        for (ActAllocationDetails s: detailsList) {
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
-            CouRequestDetailsQuery q=new CouRequestDetailsQuery();
-            q.setLocationid(s);
+            ActAllocationDetailsQuery q=new ActAllocationDetailsQuery();
+            q.setSku(s.getSku());
+            q.setCustomerid(s.getCustomerid());
+            q.setLocation(s.getLocation());
+            q.setLotatt04(s.getLotatt04());
+            q.setLotatt05(s.getLotatt05());
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(q));
             List<InvLotLocId> lotLocIdList=invLotLocIdMybatisDao.queryByListByCouRequest(mybatisCriteria);
             if(lotLocIdList.size()>0){
@@ -232,16 +221,21 @@ public class CouRequestHeaderService extends BaseService {
             }else{
                 //如果库位库存为空 插入一条为0的库存
                 InvLotLocId add=new InvLotLocId();
-                add.setLocationid(s);
-                add.setCustomerid("");
-                add.setSku("");
-                add.setLotatt04("");
-                add.setLotatt05("");
-                add.setLotatt05("");
+                add.setLocationid(s.getLocation());
+                add.setCustomerid(s.getCustomerid());
+                add.setSku(s.getSku());
+                add.setLotatt01(s.getLotatt01());
+                add.setLotatt02(s.getLotatt02());
+                add.setLotatt04(s.getLotatt04());
+                add.setLotatt05(s.getLotatt05());
+                add.setLotatt06(s.getLotatt06());
+                add.setProductLineName(s.getProductLineName());
                 add.setQty(0.0);
                 listAdd.add(add);
             }
         }
+
+
 
         if(listAdd.size()<=0){
             json.setSuccess(true);
@@ -287,8 +281,11 @@ public class CouRequestHeaderService extends BaseService {
                     couRequestDetails.setLocationid(invLotLocId.getLocationid());
                     couRequestDetails.setQtyInv(invLotLocId.getQty() == null ? 0 : invLotLocId.getQty());
                     couRequestDetails.setQtyAct(0);
-                    couRequestDetails.setLotatt04(invLotLocId.getLotatt04());
-                    couRequestDetails.setLotatt05(invLotLocId.getLotatt05());
+//                    couRequestDetails.setLotatt01(invLotLocId.getLotatt01());
+//                    couRequestDetails.setLotatt02(invLotLocId.getLotatt02());
+                    couRequestDetails.setLotatt04(invLotLocId.getLotatt04());//批号
+                    couRequestDetails.setLotatt05(invLotLocId.getLotatt05());//序列号
+//                    couRequestDetails.setLotatt06(invLotLocId.getLotatt06());
                     couRequestDetails.setAddtime(new Date());
                     couRequestDetails.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
 //                couRequestDetails.setEdittime(null);
