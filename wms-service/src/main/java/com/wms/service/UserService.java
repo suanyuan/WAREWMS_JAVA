@@ -1,18 +1,22 @@
 package com.wms.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.easyui.EasyuiTree;
+import com.wms.entity.User;
+import com.wms.entity.UserLogin;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.*;
+import com.wms.query.*;
 import com.wms.utils.*;
+import com.wms.utils.comparator.SfcUserComparator;
+import com.wms.utils.exception.ExcelException;
+import com.wms.vo.Json;
+import com.wms.vo.SfcUserVO;
+import com.wms.vo.UserVO;
+import com.wms.vo.form.UserForm;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +25,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wms.dao.UserDao;
-import com.wms.dao.UserLoginDao;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.easyui.EasyuiTree;
-import com.wms.entity.User;
-import com.wms.entity.UserLogin;
-import com.wms.mybatis.entity.SfcCountry;
-import com.wms.mybatis.entity.SfcCustomer;
-import com.wms.mybatis.entity.SfcRole;
-import com.wms.mybatis.entity.SfcUser;
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.mybatis.entity.SfcWarehouse;
-import com.wms.query.SfcCustomerQuery;
-import com.wms.query.SfcRoleQuery;
-import com.wms.query.SfcUserLoginQuery;
-import com.wms.query.SfcWarehouseQuery;
-import com.wms.query.UserQuery;
-import com.wms.utils.comparator.SfcUserComparator;
-import com.wms.utils.vo.MailVO;
-import com.wms.vo.Json;
-import com.wms.vo.SfcUserVO;
-import com.wms.vo.UserVO;
-import com.wms.vo.form.UserForm;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("userService")
 public class UserService extends BaseService {
@@ -104,7 +88,7 @@ public class UserService extends BaseService {
 	
 	/**
 	 * 取得管理表單所有資料
-	 * @param session
+	 * @param
 	 * @return
 	 */
 	public Set<SfcUserVO> getUserTreegrid() {
@@ -125,7 +109,7 @@ public class UserService extends BaseService {
 
 	/**
 	 * 取得User TreeGrid所有子節點
-	 * @param user
+	 * @param
 	 * @param allUserList
 	 * @return
 	 */
@@ -189,7 +173,7 @@ public class UserService extends BaseService {
 
 	/**
 	 * 取得User Tree所有子節點
-	 * @param user
+	 * @param
 	 * @param allUserList 
 	 * @return
 	 */
@@ -546,5 +530,111 @@ public class UserService extends BaseService {
 			}
 		}
 		return comboboxList;
+	}
+
+
+
+	public void exportUserIdDataToExcel(HttpServletResponse response, UserQuery form) throws IOException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setOrderByClause("create_time desc");
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getUserIdLeadToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "账号管理";
+			//导出表格名称
+			String timeNow=sdf.format(new Date());
+			String fileName="账号管理"+timeNow;
+			// excel要导出的数据
+			List<SfcUser> userList = sfcUserMybatisDao.queryListByAll();
+			Collections.sort(userList, new SfcUserComparator());// 排序
+			// 导出
+			if (userList == null || userList.size() == 0) {
+				System.out.println("题库为空");
+			}else {
+
+					for(SfcUser u : userList){
+
+				//男女
+					if(u.getGender()!=null){
+						u.setGender(u.getGender().equals("M")?"男":"女");
+					}
+					//使用中
+					if(u.getEnable()!=null){
+						u.setEnableName(u.getEnable()==1?"是":"否");
+					}
+					//国籍
+						if(u.getCountry()!=null){
+                           u.setCountryName(u.getCountry().getCountryName());
+						}
+					//角色
+					    if(u.getRoleSet()!=null){
+							for (SfcRole sfcRole : u.getRoleSet()) {
+								u.setRoleName(sfcRole.getRoleName());
+								break;
+							}
+						}
+					//仓库
+						if(u.getWarehouseSet()!=null){
+							for (SfcWarehouse sfcWarehouse : u.getWarehouseSet()) {
+								u.setWarehouseName(sfcWarehouse.getWarehouseName());
+							}
+						}
+					//日期转换
+					if(u.getBirthday()!=null){
+                       u.setBirthdayName(sdf.format(u.getBirthday()));
+					}
+					if(u.getCreateTime()!=null){
+						u.setCreateTimeName(sdf.format(u.getCreateTime()));
+
+					}
+					if(u.getLastLoginTime()!=null){
+						u.setLastLoginTimeName(sdf.format(u.getLastLoginTime()));
+
+					}
+					if(u.getEditTime()!=null){
+						u.setEditTimeName(sdf.format(u.getEditTime()));
+
+					}
+				}
+			}
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(userList, fieldMap, sheetName,-1,response,fileName);
+				System.out.println("导出成功~~~~");
+
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getUserIdLeadToFiledPublicQuestionBank() {
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("userName", "名称");
+		superClassMap.put("id", "用户ID");
+		superClassMap.put("gender", "性别");
+		superClassMap.put("enableName", "使用中");
+		superClassMap.put("birthdayName", "生日");
+		superClassMap.put("countryName", "国籍");
+		superClassMap.put("email", "信箱");
+		superClassMap.put("roleName", "角色");
+		superClassMap.put("warehouseName", "仓库");
+		superClassMap.put("lastLoginTimeName", "最后登入日期");
+		superClassMap.put("createTimeName", "创建日期");
+		superClassMap.put("createWho", "创建人");
+		superClassMap.put("editTimeName", "编辑时间");
+		superClassMap.put("editWho", "编辑人");
+
+		return superClassMap;
 	}
 }
