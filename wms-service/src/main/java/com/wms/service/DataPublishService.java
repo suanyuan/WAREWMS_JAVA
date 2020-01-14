@@ -7,6 +7,7 @@ import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.BasCustomerQuery;
 import com.wms.query.BasPackageQuery;
 import com.wms.query.BasSkuQuery;
+import com.wms.query.FirstBusinessApplyQuery;
 import com.wms.result.FirstBusinessApplyResult;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.DateUtil;
@@ -567,11 +568,7 @@ public class DataPublishService extends BaseService {
              if(b.getActiveFlag()=="1"){
                  //失效bas_sku
              }
-            BasSkuForm form = new BasSkuForm();
-            BeanUtils.copyProperties(b,form);
-            form.setActiveFlag(Constant.IS_USE_NO);
-            form.setOrderbysql(gspProductRegister.getProductRegisterId());
-            basSkuService.editBasSku(form);
+
 
             //失效所有该产品的所有 产品首营申请
             List<String> applyIdList=firstBusinessApplyMybatisDao.queryListByProductCode(b.getSku());
@@ -584,7 +581,11 @@ public class DataPublishService extends BaseService {
                     firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
                 }
             }
-
+            BasSkuForm form = new BasSkuForm();
+            BeanUtils.copyProperties(b,form);
+            form.setActiveFlag(Constant.IS_USE_NO);
+            form.setOrderbysql(gspProductRegister.getProductRegisterId());
+            basSkuService.editBasSku(form);
 
             //如果已下发产品上一层的产品首营被删了  那就跳过
             FirstBusinessApply firstBusinessApply =  firstBusinessApplyMybatisDao.queryById(b.getPutawayrule());
