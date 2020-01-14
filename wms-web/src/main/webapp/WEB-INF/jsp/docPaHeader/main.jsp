@@ -37,7 +37,6 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:false,
-		idField : 'pano',
 		columns : [[
 			{field:'ck',checkbox:true},
 			{field: 'pano',		title: '上架任务单号',	width: 150 },
@@ -57,16 +56,16 @@ $(function() {
 		},
         onDblClickRow: function(index,row){
             edit(row);
-        },
-		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
-		},onLoadSuccess:function(data){
+        }
+		// onRowContextMenu : function(event, rowIndex, rowData) {
+		// 	event.preventDefault();
+		// 	$(this).datagrid('unselectAll');
+		// 	$(this).datagrid('selectRow', rowIndex);
+		// 	ezuiMenu.menu('show', {
+		// 		left : event.pageX,
+		// 		top : event.pageY
+		// 	});
+		,onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/docPaHeaderController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}
