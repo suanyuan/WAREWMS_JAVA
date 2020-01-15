@@ -502,12 +502,12 @@ var mov = function(){
 			lotatt01 : rows[0].lotatt01,
 			lotatt02 : rows[0].lotatt02,
 			lotatt04 : rows[0].lotatt04,
+			lotatt05 : rows[0].lotatt05,
 			fmqty : rows[0].fmqty,
 			fmsku : rows[0].fmsku,
 			qtyallocated : rows[0].qtyallocated,
 			qtyavailed : rows[0].qtyavailed,
-			qtyholded : rows[0].qtyholded,
-			skudescrc:rows[0].skudescrc,
+			qtyholded : rows[0].qtyholded
 
 		});
 		ezuiDialogMov.dialog('open');
@@ -1382,14 +1382,14 @@ var ismove=function (location) {
 					<td><input type='text' name='qtyallocated' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 					<td style="display: none"><input type='text' name='fmlotnum' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
 					<th>批号</th>
-					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
+					<td><input type='text' name='lotatt04' class='easyui-textbox' size='16' data-options='editable:false'/></td>
 
 				</tr>
 				<tr>
 					<th>可用件数</th>
 					<td><input type='text' name='qtyavailed' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
-					<th>规格型号</th>
-					<td><input type='text' name='skudescrc' class='easyui-textbox' size='16' data-options='required:true,editable:false'/></td>
+					<th>序列号</th>
+					<td><input type='text' name='lotatt05' class='easyui-textbox' size='16' data-options='editable:false'/></td>
 
 
 				</tr>
