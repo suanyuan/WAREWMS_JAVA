@@ -99,6 +99,7 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	 * @return
 	 */
 	<T> List<T> queryByListPano(MybatisCriteria criteria);
+	DocQcDetails queryByListPanoSum(MybatisCriteria criteria);
 
 	/**
 	 * 验收记录查询
