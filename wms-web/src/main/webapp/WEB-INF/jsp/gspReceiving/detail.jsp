@@ -389,7 +389,7 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'default'
+                // enterpriseType:'default'
             },
             fit:true,
             collapsible:false,
