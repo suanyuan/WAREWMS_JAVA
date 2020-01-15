@@ -747,7 +747,7 @@
             enterpriseName : $("#ezuiDialogDetail input[id='qiyemingcheng']").val(),
             enterpriseNo : $("#ezuiDialogDetail input[id='qiye']").val(),
 
-            enterpriseType:'default',
+            // enterpriseType:'default',
             // enterpriseName : $('#qiyemingcheng').val(),
             // enterpriseNo: $('#qiye').val(),
             isUse : '1'
