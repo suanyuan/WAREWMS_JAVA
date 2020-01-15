@@ -460,16 +460,40 @@ public class GspVerifyService {
      */
     private boolean checkOperateIsRight(List<GspOperateDetailVO> left,List<GspOperateDetailVO> right){
         List<String> arrregister = new ArrayList<>();
+        List<String> arrregisterName = new ArrayList<>();
+        List<String> arrregisterI = new ArrayList<>();
+
         List<String> arroperate = new ArrayList<>();
+        List<String> arroperateName = new ArrayList<>();
+        List<String> arroperateI = new ArrayList<>();
 
         for(GspOperateDetailVO v : left){
             arrregister.add(v.getOperateId());
+            arrregisterName.add(v.getOperateName());
+            if(v.getOperateName().split("]")[0].equals("[I")){
+                arrregisterI.add(v.getOperateName().split("]")[1]);
+            }
         }
         for(GspOperateDetailVO v : right){
             arroperate.add(v.getOperateId());
+            arroperateName.add(v.getOperateName());
+            System.out.println();
+            if(v.getOperateName().split("]")[0].equals("[I")){
+                arroperateI.add(v.getOperateName().split("]")[1]);
+            }
         }
         for(String s : arrregister){
             if(arroperate.toString().indexOf(s)!=-1){
+                return true;
+            }
+        }
+        for(String s : arroperateI){
+            if(arrregisterName.toString().indexOf(s)!=-1){
+                return true;
+            }
+        }
+        for(String s : arrregisterI){
+            if(arroperateName.toString().indexOf(s)!=-1){
                 return true;
             }
         }

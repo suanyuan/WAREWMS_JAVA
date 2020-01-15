@@ -246,6 +246,7 @@ public class ViewInvLotattService extends BaseService {
             if(islocationid(viewInvLotattForm.getLotatt11text())) {
                 ViewInvLotattQuery query=new ViewInvLotattQuery();
                 BeanUtils.copyProperties(viewInvLotattForm, query);
+                query.setFmid("*");
                 viewInvLotattMybatisDao.invMov(query);
 //                String result = map.get("result").toString();
                 if (query.getResult().substring(0, 3).equals("000")) {

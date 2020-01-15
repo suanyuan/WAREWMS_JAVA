@@ -447,15 +447,15 @@
         var address = row.productionAddress;
         var enterpriseId = row.enterpriseId;
         var enterpriseName = row.enterpriseName;
-        var licenseNo = row.licenseNo;
-        var recordNo = row.recordNo;
+        var licenseNo = row.licenseOrRecordNol;
+        // var recordNo = row.recordNo;
         var storageConditions = row.storageConditions;
         //console.log(1111111)
         //console.log(name)
         var enterpriceId;
         enterpriceId = id;
         //$("input[name='enterpriseId'][data='1']").val(id);
-        console.log(licenseNo+'======='+recordNo+'==='+enterpriseId);
+        console.log(licenseNo+'=========='+enterpriseId);
 
         $("#ezuiFormInfoProduct input[id='productNameMain']").textbox('setValue',name);
         $("#ezuiFormInfoProduct input[id='productionAddress']").textbox('setValue',address);
