@@ -61,6 +61,45 @@ public class DocQcDetailsVO {
 //bas_customer
 	private String shippershortname;  //货主简称
 
+	//合计
+	private Double qcqtyExpectedSum;
+	private Double qcqtyExpectedEachSum;
+
+	private Double qcqtyCompletedSum;
+	private Double qcqtyCompletedEachSum;
+
+	public Double getQcqtyExpectedSum() {
+		return qcqtyExpectedSum;
+	}
+
+	public void setQcqtyExpectedSum(Double qcqtyExpectedSum) {
+		this.qcqtyExpectedSum = qcqtyExpectedSum;
+	}
+
+	public Double getQcqtyExpectedEachSum() {
+		return qcqtyExpectedEachSum;
+	}
+
+	public void setQcqtyExpectedEachSum(Double qcqtyExpectedEachSum) {
+		this.qcqtyExpectedEachSum = qcqtyExpectedEachSum;
+	}
+
+	public Double getQcqtyCompletedSum() {
+		return qcqtyCompletedSum;
+	}
+
+	public void setQcqtyCompletedSum(Double qcqtyCompletedSum) {
+		this.qcqtyCompletedSum = qcqtyCompletedSum;
+	}
+
+	public Double getQcqtyCompletedEachSum() {
+		return qcqtyCompletedEachSum;
+	}
+
+	public void setQcqtyCompletedEachSum(Double qcqtyCompletedEachSum) {
+		this.qcqtyCompletedEachSum = qcqtyCompletedEachSum;
+	}
+
 	public String getReservedfield14() {
 		return reservedfield14;
 	}

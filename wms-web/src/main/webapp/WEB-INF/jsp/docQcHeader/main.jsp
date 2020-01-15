@@ -44,6 +44,7 @@ $(function() {
 		pagination:true,
 		rownumbers:true,
 		singleSelect:false,
+		showFooter:true,
 		columns : [[
 			{field:'ck',checkbox:true},
 			// {field: 'qcno',		title: '验收单号',	width: 124 },
@@ -88,6 +89,11 @@ $(function() {
 
 		},
 	     onLoadSuccess:function(data){
+			 ezuiDatagrid.datagrid('reloadFooter',[
+				 {reservedfield06:'合计:',qcqtyExpected:data.rows[0].qcqtyExpectedSum,qcqtyCompleted:data.rows[0].qcqtyCompletedSum,
+					 qcqtyExpectedEach:data.rows[0].qcqtyExpectedEachSum,qcqtyCompletedEach:data.rows[0].qcqtyCompletedEachSum
+					 }
+			 ]);
 			ajaxBtn($('#menuId').val(), '<c:url value="/docQcHeaderController.do?getBtn"/>', ezuiMenu);
 			$(this).datagrid('unselectAll');
 		}

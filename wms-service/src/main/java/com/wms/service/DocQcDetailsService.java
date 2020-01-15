@@ -101,6 +101,7 @@ public class DocQcDetailsService extends BaseService {
             return datagrid;
         }
         List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListPano(mybatisCriteria);
+         DocQcDetails docQcDetailsSum = docQcDetailsDao.queryByListPanoSum(mybatisCriteria);
         DocQcDetailsVO docQcDetailsVO = null;
         for (DocQcDetails docQcDetails : docQcDetailsList) {
             docQcDetailsVO = new DocQcDetailsVO();
@@ -110,6 +111,11 @@ public class DocQcDetailsService extends BaseService {
             docQcDetails.setQcqtyExpectedEach(docQcDetails.getQcqtyExpected() * docQcDetails.getQty1());
             docQcDetails.setQcqtyCompletedEach(docQcDetails.getQcqtyCompleted() * docQcDetails.getQty1());
             BeanUtils.copyProperties(docQcDetails, docQcDetailsVO);
+            //合计
+            docQcDetailsVO.setQcqtyExpectedSum(docQcDetailsSum.getQcqtyExpected());
+            docQcDetailsVO.setQcqtyExpectedEachSum(docQcDetailsSum.getQcqtyExpected());
+            docQcDetailsVO.setQcqtyCompletedSum(docQcDetailsSum.getQcqtyCompleted());
+            docQcDetailsVO.setQcqtyCompletedEachSum(docQcDetailsSum.getQcqtyCompletedEach());
             docQcDetailsVOList.add(docQcDetailsVO);
         }
         datagrid.setTotal((long) docQcDetailsDao.queryByCountPano(mybatisCriteria));
