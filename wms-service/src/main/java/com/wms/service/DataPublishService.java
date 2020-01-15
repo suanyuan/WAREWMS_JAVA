@@ -584,6 +584,7 @@ public class DataPublishService extends BaseService {
             BasSkuForm form = new BasSkuForm();
             BeanUtils.copyProperties(b,form);
             form.setActiveFlag(Constant.IS_USE_NO);
+            form.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
             form.setOrderbysql(gspProductRegister.getProductRegisterId());
             basSkuService.editBasSku(form);
 
