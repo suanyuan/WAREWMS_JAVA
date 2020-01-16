@@ -107,13 +107,21 @@ public interface DocQcDetailsMybatisDao extends BaseDao {
 	 * @return
 	 */
 	<T> List<T> queryByListSearch(MybatisCriteria criteria);
-
 	//用于导出
 	<T> List<T> queryByListExport(MybatisCriteria criteria);
 
 	int queryByCountPano(MybatisCriteria criteria);
+	/**
+	 * 显示细单 点击单号放大镜选择
+	 * @param criteria
+	 * @param <T>
+	 * @return
+	 */
+	<T> List<T> queryByListSearchByQcNo(MybatisCriteria criteria);
+	int queryByCountPanoByQcNo(MybatisCriteria criteria);
 
-    /**
+
+	/**
      * 查询同批号产品不同批次属性的记录(本次扫描的验收详情和已验收的详情进行比较)
      * @param query qcno, customerid, sku, lotatt04,
      *              lotatt01, lotatt02, lotatt06,

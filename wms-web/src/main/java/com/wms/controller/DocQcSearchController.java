@@ -54,6 +54,18 @@ public class DocQcSearchController {
 	public EasyuiDatagrid<DocQcDetailsVO> showDatagrid(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
 		return docQcSearchService.getPagedDatagrid(pager, query);
 	}
+	/**
+	 * 显示细单 点击单号放大镜选择
+	 * @param pager
+	 * @param query
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "showDatagridByQcNo")
+	@ResponseBody
+	public EasyuiDatagrid<DocQcDetailsVO> showDatagridByQcNo(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
+		return docQcSearchService.showDatagridByQcNo(pager, query);
+	}
 //	导出
 	@Login
 	@RequestMapping(params = "exportDocQcSearchDataToExcel")

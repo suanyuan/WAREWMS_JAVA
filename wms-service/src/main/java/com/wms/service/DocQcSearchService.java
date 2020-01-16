@@ -78,6 +78,43 @@ public class DocQcSearchService extends BaseService {
 	}
 
     /**
+     * 显示细单 点击单号放大镜选择
+     * @param pager
+     * @param query
+     * @return
+     */
+    public EasyuiDatagrid<DocQcDetailsVO> showDatagridByQcNo(EasyuiDatagridPager pager, DocQcDetailsQuery query) {
+        EasyuiDatagrid<DocQcDetailsVO> datagrid = new EasyuiDatagrid<>();
+        List<DocQcDetailsVO> docQcDetailsVOList = new ArrayList<>();
+
+        //登录用户角色是货主就只显示该货主的数据
+        List<SfcRole> sfcUsersList =sfcRoleMybatisDao.queryRoleByID(SfcUserLoginUtil.getLoginUser().getId());
+        for (SfcRole sfcRole:sfcUsersList){
+            if(sfcRole.getRoleName().equals("货主")){
+                query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
+            }
+        }
+
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByListSearchByQcNo(mybatisCriteria);
+        DocQcDetailsVO docQcDetailsVO = null;
+        for (DocQcDetails docQcDetails : docQcDetailsList) {
+            docQcDetailsVO = new DocQcDetailsVO();
+            BeanUtils.copyProperties(docQcDetails, docQcDetailsVO);
+            docQcDetailsVOList.add(docQcDetailsVO);
+        }
+        datagrid.setTotal((long) docQcDetailsDao.queryByCountPanoByQcNo(mybatisCriteria));
+        datagrid.setRows(docQcDetailsVOList);
+        return datagrid;
+    }
+
+
+
+
+    /**
      * 打印验收记录
      *
      * @return

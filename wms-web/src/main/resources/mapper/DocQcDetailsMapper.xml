@@ -466,6 +466,41 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+<!-- 点击主页单号放大镜选择 -->
+<select id="queryByListSearchByQcNo" resultMap="BaseResultMap"  parameterType="Object">
+
+		SELECT a.lotatt14,d.qcno,h.qcstatus linestatus,d.customerid
+		FROM doc_qc_details  d
+		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+		LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+		LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+		LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+		LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+		left join  `bas_customer` cc on a.lotatt08=cc.customerid
+		<include refid="Example_Where_Clause1"/>
+        group by a.lotatt14,d.qcno,h.qcstatus,d.customerid
+		order by  d.qcno desc
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+</select>
+<!-- 点击主页单号放大镜选择 数量-->
+<select id="queryByCountPanoByQcNo" resultType="java.lang.Integer"  parameterType="Object">
+	SELECT count(1) from(
+	    select count(1)
+		FROM doc_qc_details d
+		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
+		LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
+		LEFT JOIN `bas_sku` s ON s.`sku`=d.`sku` AND s.`customerid`=d.`customerid`
+		LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
+		LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
+		left join `bas_customer` cc on a.lotatt08=cc.customerid
+		<include refid="Example_Where_Clause1"/>
+	    group by a.lotatt14,d.qcno,h.qcstatus,d.customerid
+	    order by  d.qcno desc
+	    ) a
+
+</select>
 <!-- 用于导出 -->
 <select id="queryByListExport" resultType="com.wms.entity.DocQcSearchExportForm"  parameterType="Object">
 
