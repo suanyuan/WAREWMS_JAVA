@@ -100,7 +100,7 @@ $(function() {
 	/* 单号选择弹框 */
 	var ezuiAccDataClick = function () {
 		ezuiAccDataDialogId = $('#ezuiAccDataDialogId').datagrid({
-			url: '<c:url value="/docQcSearchController.do?showDatagrid"/>',
+			url: '<c:url value="/docQcSearchController.do?showDatagridByQcNo"/>',
 			method: 'POST',
 			toolbar: '#ezuiAccToolbar',
 			pageSize: 50,
@@ -683,15 +683,14 @@ var doExport = function () {
 							<tr>
 								<th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-								<td>
+
+
+								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+								<td colspan="2">
 									<a onclick='ezuiAccDataDialogSearch1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 									<a onclick='selectAcceptance1();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
 									<a onclick='ezuiAccToolbarClear1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								</td>
-							</tr>
-							<tr>
-								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-
 
 							</tr>
 						</table>
