@@ -389,7 +389,7 @@
             striped: true,
             queryParams:{
                 isUse : '1',
-                enterpriseType:'default'
+                // enterpriseType:'default'
             },
             fit:true,
             collapsible:false,
@@ -747,7 +747,7 @@
             enterpriseName : $("#ezuiDialogDetail input[id='qiyemingcheng']").val(),
             enterpriseNo : $("#ezuiDialogDetail input[id='qiye']").val(),
 
-            enterpriseType:'default',
+            // enterpriseType:'default',
             // enterpriseName : $('#qiyemingcheng').val(),
             // enterpriseNo: $('#qiye').val(),
             isUse : '1'
