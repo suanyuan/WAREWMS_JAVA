@@ -67,6 +67,8 @@ public class BasGtnLotattService extends BaseService {
 
 	    if (StringUtil.isNotEmpty(query.getLotatt04()) || StringUtil.isNotEmpty(query.getLotatt05())) {
 
+	        String asnno = query.getAddasnno();
+	        query.setAddasnno(null);
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
             List<BasGtnLotatt> basGtnLotattList = basGtnLotattMybatisDao.queryByList(mybatisCriteria);
@@ -76,6 +78,7 @@ public class BasGtnLotattService extends BaseService {
                 IdSequence idSequence = new IdSequence(SfcUserLoginUtil.getLoginUser().getWarehouse().getId(), "CN", IdSequence.SEQUENCE_TYPE_LOT_NUM);
                 invLotAttMybatisDao.getIdSequence(idSequence);
                 BeanUtils.copyProperties(query, basGtnLotatt);
+                basGtnLotatt.setAddasnno(asnno);
                 basGtnLotatt.setLotnum(idSequence.getResultNo());
                 basGtnLotatt.setAddtime(new java.sql.Date((new Date()).getTime()));
                 basGtnLotattMybatisDao.add(basGtnLotatt);
