@@ -67,7 +67,8 @@ public class BasCodesService {
     private QcMeteringDeviceMybatisDao qcMeteringDeviceMybatisDao;
     @Autowired
     private BasSkuLeakMybatisDao basSkuLeakMybatisDao;
-
+    @Autowired
+    private  WaybillStatisticsService waybillStatisticsService;
     @Autowired
     private GspOperateDateTimeService gspOperateDateTimeService;
     @Autowired
@@ -854,6 +855,11 @@ public class BasCodesService {
         b.setShowSequence(num38);
         b.setUdf1(enterpriseIdList38Str);
         basCodesMybatisDao.updateBySelective(b);
+
+
+
+        //承运商运单统计数据更新
+        waybillStatisticsService.wsUpdate();
 
     }
 

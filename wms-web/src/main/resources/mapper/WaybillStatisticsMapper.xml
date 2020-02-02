@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.WaybillStatisticsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.WaybillStatistics" >
+	<result column="id" property="id"/>
+	<result column="enterprise_id" property="enterpriseId"/>
+	<result column="carrier_name" property="carrierName"/>
+	<result column="year" property="year"/>
+	<result column="month" property="month"/>
+	<result column="day" property="day"/>
+	<result column="order_num" property="orderNum"/>
+	<result column="complaint_num" property="complaintNum"/>
+	<result column="missing_num" property="missingNum"/>
+	<result column="damage_num" property="damageNum"/>
+	<result column="lag_num" property="lagNum"/>
+	<result column="other_num" property="otherNum"/>
+	<result column="remark" property="remark"/>
+	<result column="create_date" property="createDate"/>
+	<result column="create_id" property="createId"/>
+	<result column="edit_date" property="editDate"/>
+	<result column="edit_id" property="editId"/>
+	<result column="userdefind1" property="userdefind1"/>
+	<result column="userdefind2" property="userdefind2"/>
+	<result column="userdefind3" property="userdefind3"/>
+	<result column="userdefind4" property="userdefind4"/>
+	<result column="userdefind5" property="userdefind5"/>
+</resultMap>
+       
+<!-- waybill_statistics table all fields -->
+<sql id="Base_Column_List" >
+	 id,enterprise_id,carrier_name,year,month,day,order_num,complaint_num,missing_num,damage_num,lag_num,other_num,remark,create_date,create_id,edit_date,edit_id,userdefind1,userdefind2,userdefind3,userdefind4,userdefind5
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+	    and enterprise_id =  #{condition.enterpriseId}
+	</if>
+	<if test="condition.carrierName != null and condition.carrierName != ''" >
+	    and carrier_name =  #{condition.carrierName}
+	</if>
+	<if test="condition.year != null and condition.year != ''" >
+	    and year =  #{condition.year}
+	</if>
+	<if test="condition.month != null and condition.month != ''" >
+	    and month =  #{condition.month}
+	</if>
+	<if test="condition.day != null and condition.day != ''" >
+	    and day =  #{condition.day}
+	</if>
+	<if test="condition.orderNum != null and condition.orderNum != ''" >
+	    and order_num =  #{condition.orderNum}
+	</if>
+	<if test="condition.complaintNum != null and condition.complaintNum != ''" >
+	    and complaint_num =  #{condition.complaintNum}
+	</if>
+	<if test="condition.missingNum != null and condition.missingNum != ''" >
+	    and missing_num =  #{condition.missingNum}
+	</if>
+	<if test="condition.damageNum != null and condition.damageNum != ''" >
+	    and damage_num =  #{condition.damageNum}
+	</if>
+	<if test="condition.lagNum != null and condition.lagNum != ''" >
+	    and lag_num =  #{condition.lagNum}
+	</if>
+	<if test="condition.otherNum != null and condition.otherNum != ''" >
+	    and other_num =  #{condition.otherNum}
+	</if>
+	<if test="condition.remark != null and condition.remark != ''" >
+	    and remark =  #{condition.remark}
+	</if>
+	<if test="condition.createDate != null and condition.createDate != ''" >
+	    and create_date =  #{condition.createDate}
+	</if>
+	<if test="condition.createId != null and condition.createId != ''" >
+	    and create_id =  #{condition.createId}
+	</if>
+	<if test="condition.editDate != null and condition.editDate != ''" >
+	    and edit_date =  #{condition.editDate}
+	</if>
+	<if test="condition.editId != null and condition.editId != ''" >
+	    and edit_id =  #{condition.editId}
+	</if>
+	<if test="condition.userdefind1 != null and condition.userdefind1 != ''" >
+	    and userdefind1 =  #{condition.userdefind1}
+	</if>
+	<if test="condition.userdefind2 != null and condition.userdefind2 != ''" >
+	    and userdefind2 =  #{condition.userdefind2}
+	</if>
+	<if test="condition.userdefind3 != null and condition.userdefind3 != ''" >
+	    and userdefind3 =  #{condition.userdefind3}
+	</if>
+	<if test="condition.userdefind4 != null and condition.userdefind4 != ''" >
+	    and userdefind4 =  #{condition.userdefind4}
+	</if>
+	<if test="condition.userdefind5 != null and condition.userdefind5 != ''" >
+	    and userdefind5 =  #{condition.userdefind5}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into waybill_statistics(id,enterprise_id,carrier_name,year,month,day,order_num,complaint_num,missing_num,damage_num,lag_num,other_num,remark,create_date,create_id,edit_date,edit_id,userdefind1,userdefind2,userdefind3,userdefind4,userdefind5)
+ values(#{id},#{enterpriseId},#{carrierName},#{year},#{month},#{day},#{orderNum},#{complaintNum},#{missingNum},#{damageNum},#{lagNum},#{otherNum},#{remark},now(),#{createId},#{editDate},#{editId},#{userdefind1},#{userdefind2},#{userdefind3},#{userdefind4},#{userdefind5})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update waybill_statistics set enterprise_id=#{enterpriseId},carrier_name=#{carrierName},year=#{year},month=#{month},day=#{day},order_num=#{orderNum},complaint_num=#{complaintNum},missing_num=#{missingNum},damage_num=#{damageNum},lag_num=#{lagNum},other_num=#{otherNum},remark=#{remark},create_date=#{createDate},create_id=#{createId},edit_date=#{editDate},edit_id=#{editId},userdefind1=#{userdefind1},userdefind2=#{userdefind2},userdefind3=#{userdefind3},userdefind4=#{userdefind4},userdefind5=#{userdefind5} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update waybill_statistics set 
+	<trim  suffixOverrides="," >
+	<if test="enterpriseId != null  ">
+		enterprise_id=#{enterpriseId},
+	</if>
+	<if test="carrierName != null  ">
+		carrier_name=#{carrierName},
+	</if>
+	<if test="year != null  ">
+		year=#{year},
+	</if>
+	<if test="month != null  ">
+		month=#{month},
+	</if>
+	<if test="day != null  ">
+		day=#{day},
+	</if>
+	<if test="orderNum != null  ">
+		order_num=#{orderNum},
+	</if>
+	<if test="complaintNum != null  ">
+		complaint_num=#{complaintNum},
+	</if>
+	<if test="missingNum != null  ">
+		missing_num=#{missingNum},
+	</if>
+	<if test="damageNum != null  ">
+		damage_num=#{damageNum},
+	</if>
+	<if test="lagNum != null  ">
+		lag_num=#{lagNum},
+	</if>
+	<if test="otherNum != null  ">
+		other_num=#{otherNum},
+	</if>
+	<if test="remark != null  ">
+		remark=#{remark},
+	</if>
+	<!--<if test="createDate != null  ">-->
+		<!--create_date=#{createDate},-->
+	<!--</if>-->
+	<!--<if test="createId != null  ">-->
+		<!--create_id=#{createId},-->
+	<!--</if>-->
+	<!--<if test="editDate != null  ">-->
+		edit_date=now(),
+
+	<if test="editId != null  ">
+		edit_id=#{editId},
+	</if>
+	<if test="userdefind1 != null  ">
+		userdefind1=#{userdefind1},
+	</if>
+	<if test="userdefind2 != null  ">
+		userdefind2=#{userdefind2},
+	</if>
+	<if test="userdefind3 != null  ">
+		userdefind3=#{userdefind3},
+	</if>
+	<if test="userdefind4 != null  ">
+		userdefind4=#{userdefind4},
+	</if>
+	<if test="userdefind5 != null  ">
+		userdefind5=#{userdefind5},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from waybill_statistics where id = #{id}
+</delete>
+ 
+<!-- 根据id查询 运单统计 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from waybill_statistics where id = #{id}
+</select>
+
+	<select id="queryByYear"  resultMap="BaseResultMap" parameterType="Object">
+		select *
+		from waybill_statistics where year = #{year}
+	</select>
+
+
+	<select id="selectByTimeAndCarrier"  resultMap="BaseResultMap" parameterType="Object">
+		select *
+		from waybill_statistics where year = #{year} and month = #{month}
+		and day = #{day} and carrier_name =  #{carrierName}
+	</select>
+
+
+
+
+<!-- 运单统计 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from waybill_statistics 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询运单统计列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from waybill_statistics 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   
