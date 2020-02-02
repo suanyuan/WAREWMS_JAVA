@@ -78,7 +78,7 @@ public class GspProductRegisterController {
 	@RequestMapping(params = "showDatagridSearch")
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterVO> showDatagridSearch(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
-		query.setIsUse(Constant.IS_USE_YES);
+//		query.setIsUse(Constant.IS_USE_YES);
 		query.setCheckerId("all");
 		return gspProductRegisterService.getPagedDatagrid(pager, query);
 	}

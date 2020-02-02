@@ -144,16 +144,18 @@
             </fieldset>
         </form>
         <div class="easyui-tabs" style="width:100%;height:200px">
-            <div title="证照历史数据" style="padding:3px">
-                    <div>
-                        <a onclick='registerUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>开始换证</a>
-                        <a onclick='detailsCopyRegister();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>信息复用</a>
-                    </div>
-                <table id='ezuiDetailsDatagrid'></table>
-            </div>
+
+            <%--  需要隐藏掉！！！！！！！！！！！！--%>
+            <%--<div title="证照历史数据" style="padding:3px">--%>
+                    <%--<div>--%>
+                        <%--<a onclick='registerUpdate();' id='ezuiDetailsBtn_update' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>开始换证</a>--%>
+                        <%--<a onclick='detailsCopyRegister();' id='ezuiDetailsBtn_copy' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"<c:if test="${gspProductRegister.checkerId ==null }">,disabled:true</c:if>' href='javascript:void(0);'>信息复用</a>--%>
+                    <%--</div>--%>
+                <%--<table id='ezuiDetailsDatagrid'></table>--%>
+            <%--</div>--%>
             <div title="绑定产品列表" style="padding:0px">
                     <div>
-                        <a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>
+                        <%--<a onclick='detailsBind();' id='ezuiDetailsBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>绑定产品</a>--%>
                         <a onclick='detailsUnBind();' id='ezuiDetailsBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>解除产品</a>
                     </div>
                 <table id='ezuiDatagridDetail' ></table>

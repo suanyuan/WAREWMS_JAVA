@@ -90,6 +90,23 @@ public class GspProductRegisterSpecsController {
 		return json;
 	}
 
+
+	@Login
+	@RequestMapping(params = "addrelation")
+	@ResponseBody
+	public Json addrelation() throws Exception {
+
+		Json json = gspProductRegisterSpecsService.addrelation();
+
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+
+		}
+		return json;
+	}
+
 	@Login
 	@RequestMapping(params = "edit")
 	@ResponseBody
@@ -158,6 +175,8 @@ public class GspProductRegisterSpecsController {
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterSpecsService.importExcelData(mhsr);
 	}
+
+
 
 	//导出
 	@Login
