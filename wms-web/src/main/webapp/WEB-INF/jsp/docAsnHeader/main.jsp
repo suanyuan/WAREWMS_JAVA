@@ -61,7 +61,9 @@ $(function() {
 			{field: 'asnno',		        title: '入库单编号',	    width: 131 },
 			{field: 'asntypeName',		    title: '入库类型',	    width: 71 },
 			{field: 'asnstatusName',		title: '入库状态',	    width: 71 },
-			{field: 'asnreference1',		title: '客户单号1',	    width: 131 },
+            {field: 'sup',		title: '供应商',	    width: 170	 },
+
+            {field: 'asnreference1',		title: '客户单号1',	    width: 131 },
 			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
 			{field: 'userdefine2',		    title: '上架单号',	    width: 101 },
             {field: 'coldTag',		        title: '冷链标记',	    width: 71 },

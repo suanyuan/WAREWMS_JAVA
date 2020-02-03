@@ -151,6 +151,7 @@ public class DocAsnHeaderVO {
 	private java.util.Set<DocAsnDetail> docAsnDetailSet;
 	private List<DocAsnDetailVO> docAsnDetailVOList;
 	private String coldTag;
+	private String sup;
 
 	public List<DocAsnDetailVO> getDocAsnDetailVOList() {
 		return docAsnDetailVOList;
@@ -158,6 +159,15 @@ public class DocAsnHeaderVO {
 
 	public void setDocAsnDetailVOList(List<DocAsnDetailVO> docAsnDetailVOList) {
 		this.docAsnDetailVOList = docAsnDetailVOList;
+	}
+
+
+	public String getSup() {
+		return sup;
+	}
+
+	public void setSup(String sup) {
+		this.sup = sup;
 	}
 
 	public Integer getSeq() {
