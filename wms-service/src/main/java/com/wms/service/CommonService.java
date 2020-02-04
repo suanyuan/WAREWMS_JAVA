@@ -130,6 +130,97 @@ public class CommonService extends BaseService{
     }
 
     /**
+     * 通过扫描的结果来匹配出批号序列号，再去各个模块的明细列表中匹配
+     * 收货 待定
+     * 上架 doc_pa_details
+     * 验收 doc_qc_details
+     * 拣货 doc_pk_details
+     * 复核 act_allocation_details
+     * 养护 doc_mt_details
+     */
+    CommonVO adjustScanResult(ScanResultForm form) {
+
+        CommonVO commonVO = new CommonVO();
+        //默认值
+        commonVO.setBatchNum(form.getLotatt04());
+        commonVO.setSerialNum(form.getLotatt05());
+        commonVO.setSerialManagement(false);
+
+        /*
+         * 情况1 扫描的是带序列号的GS1条码 / 单独的序列号条码
+         * 此情况匹配上则直接返回匹配出的批号，或者 在返回时去除扫描的序列号内容
+         */
+        BasSerialNum basSerialNum = null;
+        if (StringUtil.isNotEmpty(form.getLotatt05()) ||
+                StringUtil.isNotEmpty(form.getOtherCode())) {
+
+            List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryValidatedId(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
+            if (basSerialNumList != null && basSerialNumList.size() > 0) {
+
+                basSerialNum = basSerialNumList.get(0);
+                //返回批号，为之后的业务逻辑
+                commonVO.setBatchNum(basSerialNum.getBatchNum());
+                //如果匹配到序列号，则视为此产品是入库序列号管理的产品线产品。
+                commonVO.setSerialManagement(true);
+                commonVO.setSuccess(false);
+                return commonVO;
+            }
+        }
+
+        /*
+         * 情况2 扫描的是仅包含GTIN的GS1条码 / 自赋码（ZFM）
+         * 去bas_gtn中匹配，匹配到之后直接返回BasSku，但在匹配任务明细时，
+         * 如果匹配到多条，则提醒用户需要扫描带批号或者序列号的GS1条码，如果是一条那么直接返回任务明细
+         */
+        PdaBasSkuQuery pdaBasSkuQuery = new PdaBasSkuQuery(
+                form.getGTIN(),
+                form.getCustomerid(),
+                StringUtil.fixNull(form.getOtherCode()).contains(ScanResultForm.ALTERNATE_SKU_ID) ? form.getOtherCode() : "",//如果包含自赋码的规则字符串，则赋上自赋码
+                form.getLotatt04(),
+                basSerialNum != null ? "" : form.getLotatt05());//如果是序列号存在于序列号导入模块，则说明产品是批号入，出库记录序列号的.
+        BasSku basSku = basSkuMybatisDao.query4ScanInBasGtnLotatt(pdaBasSkuQuery);
+        if (null == basSku) basSku = basSkuMybatisDao.query4ScanInBasGtn(pdaBasSkuQuery);
+
+        //如果获取不到，可能属于适配情况3（基本上）
+        if (basSku == null) {
+
+            BasSkuQuery basSkuQuery = new BasSkuQuery(form.getCustomerid(), form.getOtherCode());
+            basSku = basSkuMybatisDao.queryById(basSkuQuery);
+        }
+
+        //如果还没有，就说明扫码错误
+        if (basSku == null) {
+
+            commonVO.setSuccess(false);
+            commonVO.setMessage("查无此产品档案数据！");
+            return commonVO;
+        }
+
+        commonVO.setBasSku(basSku);
+
+        //产品线(BasSku.skuGroup1) - 序列号管理flag
+        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+        if (productLine != null && productLine.getSerialFlag() == 1) {
+
+            commonVO.setSerialManagement(true);
+            commonVO.setSerialNum("");
+        }
+
+        commonVO.setSuccess(true);
+
+        return commonVO;
+    }
+
+    /**
+     * 判断上架扫码数据是否正确
+     */
+//    Json judgePaScan(PdaDocPaDetailQuery query) {
+//
+//
+//    }
+
+    /**
      * 判断获取的上架扫码数据是否齐全
      * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
      * @param query pano, sku

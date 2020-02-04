@@ -138,6 +138,9 @@ public class DrugInspectionController {
 
     /**************************************入库信息****************************************/
 
+	/**
+	 * 药监核查-入库信息-MV
+	 */
 	@Login
 	@RequestMapping(params = "toSearchEnterInvLocationMain")
 	public ModelAndView toSearchEnterInvLocationMain(String menuId) {
@@ -145,6 +148,29 @@ public class DrugInspectionController {
 		model.put("menuId", menuId);
 		return new ModelAndView("searchEnterInvLocation/main", model);
 	}
+
+	/**
+	 * 药监核查-入库信息-datagrid
+	 */
+	@Login
+	@RequestMapping(params = "showSearchEnterInvLocationDatagrid")
+	@ResponseBody
+	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
+		return drugControlService.showSearchEnterInvLocationDatagrid(pager, query);
+	}
+
+	/**
+	 * 药监核查-入库信息-导出
+	 */
+	@Login
+	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcel")
+	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
+		drugControlService.exportSearchEnterInvLocationDataToExcel(response, form);
+	}
+
+	/**
+	 * 统计分析-入库信息-MV
+	 */
 	@Login
 	@RequestMapping(params = "toSearchEnterInvLocationMainInfo")
 	public ModelAndView toSearchEnterInvLocationMainInfo(String menuId) {
@@ -153,13 +179,9 @@ public class DrugInspectionController {
 		return new ModelAndView("searchEnterInvLocation/main_info", model);
 	}
 
-	@Login
-	@RequestMapping(params = "showSearchEnterInvLocationDatagrid")
-	@ResponseBody
-	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
-		return drugControlService.showSearchEnterInvLocationDatagrid(pager, query);
-	}
-	//统计分析-入库信息
+	/**
+	 * 统计分析-入库信息-datagrid
+	 */
 	@Login
 	@RequestMapping(params = "showSearchEnterInvLocationDatagridSum")
 	@ResponseBody
@@ -167,12 +189,9 @@ public class DrugInspectionController {
 		return drugControlService.showSearchEnterInvLocationDatagridSum(pager, query);
 	}
 
-	@Login
-	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcel")
-	public void exportSearchEnterInvLocationDataToExcel(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
-		drugControlService.exportSearchEnterInvLocationDataToExcel(response, form);
-	}
-	//统计分析-入库信息
+	/**
+	 * 统计分析-入库信息-导出
+	 */
 	@Login
 	@RequestMapping(params = "exportSearchEnterInvLocationDataToExcelSum")
 	public void exportSearchEnterInvLocationDataToExcelSum(HttpServletResponse response,SearchEnterInvLocation form) throws Exception {
