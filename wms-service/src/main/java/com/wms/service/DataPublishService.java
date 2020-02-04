@@ -74,8 +74,8 @@ public class DataPublishService extends BaseService {
     @Autowired
     private FirstBusinessProductApplyMybatisDao firstBusinessProductApplyMybatisDao;
 
-//    @Autowired
-//    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
+    @Autowired
+    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
     /**
      * 下发数据
      * @param no
@@ -285,11 +285,11 @@ public class DataPublishService extends BaseService {
                     skuForm.setOrderbysql(register.getProductRegisterId());
 
                     //下发注册证关系
-//                    ProductRegisterRelation relation = new ProductRegisterRelation();
-//                    relation.setSpecsId(f.getSpecsId());
-//                    relation.setProductRegisterId(register.getProductRegisterId());
-//                    relation.setActiveFlag("1");
-//                    productRegisterRelationMybatisDao.updateSelectiveByspecsIdAndproductRegisterId(relation);
+                    ProductRegisterRelation relation = new ProductRegisterRelation();
+                    relation.setSpecsId(f.getSpecsId());
+                    relation.setProductRegisterId(register.getProductRegisterId());
+                    relation.setActiveFlag("1");
+                    productRegisterRelationMybatisDao.updateSelectiveByspecsIdAndproductRegisterId(relation);
                 }
                 skuForm.setReservedfield06(specObj.getLicenseOrRecordNo());
                 skuForm.setReservedfield07(specObj.getColdHainMark());
@@ -458,6 +458,18 @@ public class DataPublishService extends BaseService {
                 skuForm.setSkuGroup7(specObj.getIsDoublec());//是否需要双证
                 skuForm.setSkuGroup8(specObj.getIsCertificate());//是否需要产品合格证
                 skuForm.setSkuGroup9(specObj.getProductionAddress());*/
+
+                //查询产品首营申请  是否还有其他同产品同货主审核通过有效的数据（不同注册证不同供应商）
+                MybatisCriteria criteria = new MybatisCriteria();
+                FirstBusinessApplyQuery  query = new FirstBusinessApplyQuery();
+                query.setIsUse(Constant.IS_USE_YES);
+                query.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_PASS);
+                query.setProductCode(specObj.getProductCode());
+                query.setClientId(firstBusinessApply.getClientId());
+                criteria.setCondition(query);
+                List<FirstBusinessApplyResult> firstBusinessApplyList=firstBusinessApplyMybatisDao.queryPageList(criteria);
+
+
 
 
                 skuForm.setActiveFlag(Constant.IS_USE_NO);
